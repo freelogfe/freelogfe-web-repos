@@ -81,7 +81,7 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
   //   };
   // }, []);
 
-  if (nodeManagerPage.nodeInfoState === 'loading') {
+  if (nodeManagerPage.nodeInfoState === 'loading' || !nodeManagerPage.listFirstLoaded) {
     return (<FLoadingTip height={'calc(100vh - 70px)'} />);
   }
 

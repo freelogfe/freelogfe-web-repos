@@ -18,6 +18,7 @@ export interface NodeManagerModelState {
   showPage: 'exhibit' | 'theme';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
+  listFirstLoaded: boolean;
 
   exhibit_ResourceTypeOptions: { text: string, value: string }[];
   exhibit_ResourceStateOptions: { text: string, value: string }[];
@@ -240,6 +241,7 @@ const initStates: NodeManagerModelState = {
   showPage: 'exhibit',
   goToTestNodePage: '',
   nodeInfoState: 'loading',
+  listFirstLoaded: false,
 
   ...exhibitInitStates,
 
@@ -306,20 +308,16 @@ const Model: NodeManagerModelType = {
     //
     // },
     * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          showPage: payload.value,
-        },
-      });
-    },
-    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
-      // console.log('OnMount_ExhibitPage_Action###@4234234234234');
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
 
-      if (nodeManagerPage.nodeId !== -1) {
+
+      if (payload.value === 'exhibit') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showPage: payload.value,
+            ...themeInitStates,
+          },
+        });
         yield put<FetchExhibitsAction>({
           type: 'fetchExhibits',
           payload: {
@@ -328,33 +326,65 @@ const Model: NodeManagerModelType = {
         });
       }
 
-    },
-    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          ...exhibitInitStates,
-        },
-      });
-    },
-    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
-
-      if (nodeManagerPage.nodeId !== -1) {
+      if (payload.value === 'theme') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showPage: payload.value,
+            ...exhibitInitStates,
+          },
+        });
         yield put<FetchThemesAction>({
           type: 'fetchThemes',
+          payload: {
+            restart: true,
+          },
         });
       }
+
+    },
+    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
+      // console.log('OnMount_ExhibitPage_Action###@4234234234234');
+      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+      //   nodeManagerPage,
+      // }));
+      // console.log(nodeManagerPage.nodeId, 'nodeManagerPage.nodeIdnodeManagerPage.nodeId!@#$');
+      // if (nodeManagerPage.nodeId !== -1) {
+      //   yield put<FetchExhibitsAction>({
+      //     type: 'fetchExhibits',
+      //     payload: {
+      //       restart: true,
+      //     },
+      //   });
+      // }
+
+    },
+    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     ...exhibitInitStates,
+      //   },
+      // });
+    },
+    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+      //   nodeManagerPage,
+      // }));
+      //
+      // if (nodeManagerPage.nodeId !== -1) {
+      //   yield put<FetchThemesAction>({
+      //     type: 'fetchThemes',
+      //   });
+      // }
     },
     * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          ...themeInitStates,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     ...themeInitStates,
+      //   },
+      // });
     },
 
     // * fetchNodeInfo({}: FetchNodeInfoAction, { put, select, call }: EffectsCommandMap) {
@@ -535,8 +565,8 @@ const Model: NodeManagerModelType = {
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
-        // limit: FUtil.Predefined.pageSize,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
+        // limit: 10,
         skip: list.length,
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
@@ -607,6 +637,7 @@ const Model: NodeManagerModelType = {
           exhibit_List: exhibit_List,
           exhibit_ListState: 'loaded',
           exhibit_ListMore: data.totalItem > exhibit_List.length ? 'andMore' : 'noMore',
+          listFirstLoaded: true,
         },
       });
     },
@@ -615,6 +646,13 @@ const Model: NodeManagerModelType = {
       const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
       }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          theme_ListState: 'loading',
+        },
+      });
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
@@ -626,18 +664,39 @@ const Model: NodeManagerModelType = {
 
       const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
 
-      let batchAuthTs: any[] = [];
-      if (data.dataList.length > 0) {
-        const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
-          nodeId: nodeManagerPage.nodeId,
-          authType: 3,
-          presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
-            return dl.presentableId;
-          }).join(','),
-        };
-        const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
-        batchAuthTs = data1;
+      if (data.dataList.length === 0) {
+        if (nodeManagerPage.theme_InputFilter === '') {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              theme_ListState: 'noData',
+              theme_ListMore: 'noMore',
+              theme_List: [],
+            },
+          });
+        } else {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              theme_ListState: 'noSearchResult',
+              theme_ListMore: 'noMore',
+              theme_List: [],
+            },
+          });
+        }
+        return;
       }
+
+      let batchAuthTs: any[] = [];
+      const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+        authType: 3,
+        presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
+          return dl.presentableId;
+        }).join(','),
+      };
+      const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
+      batchAuthTs = data1;
 
       const theme_List: NodeManagerModelState['theme_List'] = (data.dataList as any[]).map<NodeManagerModelState['theme_List'][number]>((i: any) => {
         const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
@@ -661,10 +720,10 @@ const Model: NodeManagerModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          theme_List: theme_List,
-          theme_ListState: data.totalItem !== 0 ? 'loaded'
-            : nodeManagerPage.theme_InputFilter === '' ? 'noData' : 'noSearchResult',
+          theme_ListState: 'loaded',
           theme_ListMore: data.totalItem > theme_List.length ? 'andMore' : 'noMore',
+          theme_List: theme_List,
+          listFirstLoaded: true,
         },
       });
     },
