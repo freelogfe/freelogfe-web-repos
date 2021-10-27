@@ -1,10 +1,10 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
-import fMessage from "@/components/fMessage";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {router} from "umi";
+import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import fMessage from '@/components/fMessage';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { router } from 'umi';
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;
@@ -149,8 +149,8 @@ const Model: NodeManagerModelType = {
   namespace: 'nodeManagerPage',
   state: nodeManagerInitData,
   effects: {
-    * fetchNodeInfo({}: FetchNodeInfoAction, {put, select, call}: EffectsCommandMap) {
-      const {user, nodeManagerPage}: ConnectState = yield select(({user, nodeManagerPage}: ConnectState) => ({
+    * fetchNodeInfo({}: FetchNodeInfoAction, { put, select, call }: EffectsCommandMap) {
+      const { user, nodeManagerPage }: ConnectState = yield select(({ user, nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
         user,
       }));
@@ -159,7 +159,7 @@ const Model: NodeManagerModelType = {
         nodeId: nodeManagerPage.nodeId,
       };
 
-      const {data} = yield call(FServiceAPI.Node.details, params);
+      const { data } = yield call(FServiceAPI.Node.details, params);
 
       // console.log(data, 'DDDFa90jlkasdjf;lkasdf');
       // console.log(user.cookiesUserID, 'user.cookiesUserID23423434');
@@ -179,8 +179,8 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * fetchExhibits({payload = true}: FetchExhibitsAction, {call, select, put}: EffectsCommandMap) {
-      const {nodeManagerPage, user}: ConnectState = yield select(({nodeManagerPage, user}: ConnectState) => ({
+    * fetchExhibits({ payload = true }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
+      const { nodeManagerPage, user }: ConnectState = yield select(({ nodeManagerPage, user }: ConnectState) => ({
         nodeManagerPage,
         user,
       }));
@@ -199,7 +199,7 @@ const Model: NodeManagerModelType = {
         omitResourceType: 'theme',
       };
 
-      const {data} = yield call(FServiceAPI.Exhibit.presentables, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
 
 
       let batchAuthPs: any[] = [];
@@ -211,7 +211,7 @@ const Model: NodeManagerModelType = {
             return dl.presentableId;
           }).join(','),
         };
-        const {data: data1} = yield call(FServiceAPI.Exhibit.batchAuth, params1);
+        const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
         batchAuthPs = data1;
       }
       // console.log(batchAuthPs, 'batchAuthPs290uopasdf');
@@ -236,7 +236,7 @@ const Model: NodeManagerModelType = {
                 isAuth: authInfo.isAuth,
                 authErrorText: authInfo.error,
               };
-            })
+            }),
           ],
           totalNum: data.totalItem,
           exhibitDataState: data.totalItem !== 0 ? ''
@@ -245,7 +245,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onChangeExhibit({payload}: OnChangeExhibitAction, {put}: EffectsCommandMap) {
+    * onChangeExhibit({ payload }: OnChangeExhibitAction, { put }: EffectsCommandMap) {
       if (payload.pageCurrent) {
         yield put<ChangeAction>({
           type: 'change',
@@ -266,9 +266,9 @@ const Model: NodeManagerModelType = {
         type: 'fetchExhibits',
       });
     },
-    * fetchThemes({}: FetchThemesAction, {call, put, select}: EffectsCommandMap) {
+    * fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
       // console.log(23423423, '0923jfdslk');
-      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
       }));
 
@@ -280,7 +280,7 @@ const Model: NodeManagerModelType = {
         resourceType: 'theme',
       };
 
-      const {data} = yield call(FServiceAPI.Exhibit.presentables, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
 
       let batchAuthTs: any[] = [];
       if (data.dataList.length > 0) {
@@ -291,7 +291,7 @@ const Model: NodeManagerModelType = {
             return dl.presentableId;
           }).join(','),
         };
-        const {data: data1} = yield call(FServiceAPI.Exhibit.batchAuth, params1);
+        const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
         batchAuthTs = data1;
       }
 
@@ -322,9 +322,9 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onOnlineOrOffline({payload}: OnOnlineOrOfflineAction, {call, put, select}: EffectsCommandMap) {
+    * onOnlineOrOffline({ payload }: OnOnlineOrOfflineAction, { call, put, select }: EffectsCommandMap) {
       // console.log(payload, 'PPPPPP');
-      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
       }));
 
@@ -333,7 +333,7 @@ const Model: NodeManagerModelType = {
         onlineStatus: payload.onlineStatus,
       };
 
-      const {data} = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
 
       if (!data) {
         fMessage('上线失败', 'error');
@@ -350,7 +350,7 @@ const Model: NodeManagerModelType = {
               return {
                 ...el,
                 isOnline: payload.onlineStatus === 1,
-              }
+              };
             })
             .filter((el) => {
               if (nodeManagerPage.selectedStatus === '2') {
@@ -361,8 +361,8 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onActive({payload}: OnActiveAction, {call, select, put}: EffectsCommandMap) {
-      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+    * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
       }));
 
@@ -370,7 +370,7 @@ const Model: NodeManagerModelType = {
         presentableId: payload.id,
         onlineStatus: 1,
       };
-      const {data} = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
         fMessage('激活失败', 'error');
         return;
@@ -382,7 +382,7 @@ const Model: NodeManagerModelType = {
         type: 'fetchNodeInfo',
       });
     },
-    * onChangeTheme({payload}: OnChangeThemeAction, {put}: EffectsCommandMap) {
+    * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -395,18 +395,18 @@ const Model: NodeManagerModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
-  }
+    },
+  },
 };
 
 export default Model;
