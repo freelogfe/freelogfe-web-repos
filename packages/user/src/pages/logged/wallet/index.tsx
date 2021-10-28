@@ -570,7 +570,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
       <div className={styles.ActivateAccountContent}>
         <Space size={25} direction='vertical' style={{ width: 320 }}>
           <div>
-            <FTipText type='third' text={'支付密码'} />
+            <FTipText type='third' text={'新支付密码'} />
             <div style={{ height: 5 }} />
             <FPaymentPasswordInput
               value={walletPage.changingPassword_NewPasswordModal_Password1}
@@ -612,7 +612,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           </div>
 
           <div>
-            <FTipText type='third' text={'验证支付密码'} />
+            <FTipText type='third' text={'验证新支付密码'} />
             <div style={{ height: 5 }} />
             <FPaymentPasswordInput
               value={walletPage.changingPassword_NewPasswordModal_Password2}
