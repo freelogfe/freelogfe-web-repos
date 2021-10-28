@@ -308,8 +308,6 @@ const Model: NodeManagerModelType = {
     //
     // },
     * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
-
-
       if (payload.value === 'exhibit') {
         yield put<ChangeAction>({
           type: 'change',
