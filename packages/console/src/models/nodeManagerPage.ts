@@ -581,6 +581,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListState: 'noData',
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
+              listFirstLoaded: true,
             },
           });
         } else {
@@ -590,6 +591,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListState: 'noSearchResult',
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
+              listFirstLoaded: true,
             },
           });
         }
