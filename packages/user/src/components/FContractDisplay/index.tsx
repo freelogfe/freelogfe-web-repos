@@ -2,15 +2,14 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
-import FModal from '@/components/FModal';
-import FInput from '@/components/FInput';
-import FCodeFormatter from '@/components/FCodeFormatter';
-import FUtil1 from '@/utils';
-import fMessage from '@/components/fMessage';
-import { FDown, FUp } from '@/components/FIcons';
-import { policyCodeTranslationToText } from '@freelog/tools-lib/dist/utils/format';
+import { FContentText, FTipText, FTitleText } from '../FText';
+import { FRectBtn, FTextBtn } from '../FButton';
+import FModal from '../FModal';
+import FInput from '../FInput';
+import FCodeFormatter from '../FCodeFormatter';
+import fMessage from '../fMessage';
+import { FDown, FLoading, FUp } from '../FIcons';
+import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -61,12 +60,15 @@ interface IContractDisplayStates {
   modalAccountID: string;
   modalTransactionAmount: number;
   modalPassword: string;
+  modalIsPaying: boolean;
 
   text: string;
   code: string;
 }
 
 function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps) {
+
+  const inputEl = React.useRef<any>(null);
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
   const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
@@ -84,6 +86,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   const [modalAccountID, setModalAccountID] = React.useState<IContractDisplayStates['modalAccountID']>('');
   const [modalTransactionAmount, setModalTransactionAmount] = React.useState<IContractDisplayStates['modalTransactionAmount']>(-1);
   const [modalPassword, setModalPassword] = React.useState<IContractDisplayStates['modalPassword']>('');
+  const [modalIsPaying, setModalIsPaying] = React.useState<IContractDisplayStates['modalIsPaying']>(false);
 
   const [text, setText] = React.useState<IContractDisplayStates['text']>('');
   const [code, setCode] = React.useState<IContractDisplayStates['code']>('');
@@ -205,16 +208,21 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setModalVisible(true);
   }
 
-  async function confirmPay() {
+  async function confirmPay(password: string) {
+    setModalIsPaying(true);
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
       eventId: modalEventID,
       accountId: modalAccountID,
       transactionAmount: modalTransactionAmount,
-      password: modalPassword,
+      password: password,
     };
     const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
-    if (ret + (errCode || 0) + (errcode || 0) > 0) {
+
+    if (ret + (errCode || 0) > 0) {
+      setModalPassword('');
+      inputEl.current.focus();
+      setModalIsPaying(false);
       return fMessage(msg, 'error');
     }
 
@@ -229,6 +237,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     fMessage('支付成功');
     setModalVisible(false);
     setModalPassword('');
+    setModalIsPaying(false);
     onChangedEvent && onChangedEvent();
   }
 
@@ -270,6 +279,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     >
       {
         activated === 'record' && (<div className={styles.StateRecord}>
+          {/*{console.log(currentS, 'currentS!!!!!@#$@#$@#$@#$')}*/}
           {
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
@@ -434,7 +444,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       }
     </div>
 
-
     <FModal
       title={null}
       footer={null}
@@ -442,7 +451,9 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       width={600}
       onCancel={() => {
         setModalVisible(false);
+        setModalPassword('');
       }}
+      destroyOnClose={true}
     >
       <div className={styles.ModalTitle}>
         <FTitleText
@@ -483,29 +494,45 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             </div>
           </div>
 
-          <div>
-            <FInput
-              value={modalPassword}
-              onChange={(e) => {
-                setModalPassword(e.target.value);
-              }}
-              className={styles.paymentPassword}
-              wrapClassName={styles.paymentPassword}
-              type='password'
-              placeholder='输入6位支付密码'
-            />
-          </div>
-
-          <div>
-            <FRectBtn
-              style={{ width: '100%' }}
-              onClick={() => {
-                confirmPay();
-              }}
-            >确认支付</FRectBtn>
-          </div>
         </Space>
+
+        <div style={{ height: 40 }} />
+
+        <div className={styles.paymentPassword}>
+          {
+            modalIsPaying
+              ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
+              : (<FContentText text={'输入支付密码进行支付'} type='normal' />)
+          }
+
+
+          <div style={{ height: 20 }} />
+          <FPaymentPasswordInput
+            ref={inputEl}
+            autoFocus={true}
+            value={modalPassword}
+            onChange={async (value) => {
+              // console.log(value, '@#$@#$@#$@#$');
+              console.log(value, 'valuevalue9032klsdflksdfl');
+              setModalPassword(value);
+              if (value.length === 6) {
+                inputEl.current.blur();
+                confirmPay(value);
+              }
+            }}
+          />
+          <div style={{ height: 20 }} />
+          <FTextBtn
+            type='default'
+            onClick={() => {
+              window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.retrievePayPassword());
+            }}
+          >忘记支付密码</FTextBtn>
+        </div>
+
       </div>
+
+
       <div style={{ height: 40 }} />
     </FModal>
   </div>);

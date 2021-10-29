@@ -224,6 +224,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     <div style={{ height: 100 }} />
 
     <Modal
+      destroyOnClose
       title={<FTitleText text={'激活账户验证'} type='popup' />}
       visible={walletPage.activatingAccount}
       onCancel={() => {
@@ -382,6 +383,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     </Modal>
 
     <Modal
+      destroyOnClose
       title={<FTitleText text={'修改支付密码验证'} type='popup' />}
       visible={walletPage.changingPassword_CaptchaModal_Visible}
       // onOk={handleOk}
@@ -485,6 +487,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     </Modal>
 
     <Modal
+      destroyOnClose
       title={<FTitleText text={'验证原支付密码'} type='popup' />}
       visible={walletPage.changingPassword_OldPasswordModal_Visible}
       // onOk={handleOk}
@@ -513,6 +516,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             </div>
             <div style={{ height: 5 }} />
             <FPaymentPasswordInput
+              autoFocus
               value={walletPage.changingPassword_OldPasswordModal_PasswordInput}
               onChange={(value) => {
                 dispatch<OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action>({
@@ -556,6 +560,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     </Modal>
 
     <Modal
+      destroyOnClose
       title={<FTitleText text={'设置新支付密码'} type='popup' />}
       visible={walletPage.changingPassword_NewPasswordModal_Visible}
       // onOk={handleOk}
@@ -573,6 +578,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'新支付密码'} />
             <div style={{ height: 5 }} />
             <FPaymentPasswordInput
+              autoFocus
               value={walletPage.changingPassword_NewPasswordModal_Password1}
               onChange={(value) => {
                 dispatch<OnChange_ChangingPassword_NewPasswordModal_Password1_Action>({

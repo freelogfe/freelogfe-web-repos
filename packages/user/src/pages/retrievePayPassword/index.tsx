@@ -238,6 +238,7 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
               <FTipText type='third' text={'支付密码'} />
               <div style={{ height: 5 }} />
               <FPaymentPasswordInput
+                autoFocus
                 value={retrievePayPasswordPage.paymentPassword_Password1Input}
                 onChange={(value) => {
                   dispatch<OnChange_PaymentPassword_Password1Input_Action>({
