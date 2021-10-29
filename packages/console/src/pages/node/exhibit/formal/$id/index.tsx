@@ -25,6 +25,7 @@ import { FUtil } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
+import { Helmet } from 'react-helmet';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -53,6 +54,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
   }
 
   return (<div className={styles.styles}>
+    <Helmet>
+      <title>{`编辑展品信息 · ${exhibitInfoPage.pName} - Freelog`}</title>
+    </Helmet>
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>

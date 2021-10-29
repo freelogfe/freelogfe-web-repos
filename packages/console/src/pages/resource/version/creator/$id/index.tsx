@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from '@/components/FText';
+import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FRectBtn, FTextBtn} from '@/components/FButton';
-import {Space} from 'antd';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { Space } from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
-import {connect, Dispatch} from "dva";
+import { connect, Dispatch } from 'dva';
 import {
-  ConnectState,
+  ConnectState, ResourceInfoModelState,
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
@@ -24,26 +24,28 @@ import {
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import {router, withRouter} from 'umi';
+import { router, withRouter } from 'umi';
 import RouterTypes from 'umi/routerTypes';
-import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/components/FFormLayout";
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import Sider from '@/pages/resource/containers/Sider';
+import FFormLayout from '@/components/FFormLayout';
 import Prompt from 'umi/prompt';
-import * as H from "history";
-import fConfirmModal from "@/components/fConfirmModal";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {RouteComponentProps} from 'react-router';
-import * as AHooks from "ahooks";
-import CustomOptions from "./CustomOptions";
+import * as H from 'history';
+import fConfirmModal from '@/components/fConfirmModal';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import { RouteComponentProps } from 'react-router';
+import * as AHooks from 'ahooks';
+import CustomOptions from './CustomOptions';
+import { Helmet } from 'react-helmet';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState,
+  resourceInfo: ResourceInfoModelState,
 }
 
-function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: VersionCreatorProps & RouterTypes) {
+function VersionCreator({ dispatch, resourceInfo, resourceVersionCreatorPage, match }: VersionCreatorProps & RouterTypes) {
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -89,6 +91,10 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     });
 
   return (<>
+      <Helmet>
+        <title>{`创建版本 · ${resourceInfo.info?.resourceName || ''}  - Freelog`}</title>
+      </Helmet>
+
       <Prompt
         when={resourceVersionCreatorPage.promptLeavePath === '' && resourceVersionCreatorPage.dataIsDirty}
         message={(location: H.Location, action: H.Action) => {
@@ -112,7 +118,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             },
             onCancel() {
               dispatch<OnPromptPageLeaveCancelAction>({
-                type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel'
+                type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel',
               });
             },
           });
@@ -120,7 +126,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
         }}
       />
       <FLeftSiderLayout
-        sider={<Sider/>}
+        sider={<Sider />}
         header={<Header
           onClickCreate={() => {
             dispatch<OnClickCreateBtnAction>({
@@ -164,13 +170,13 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={true} title={FUtil1.I18n.message('release_object')}>
-            <FSelectObject/>
+            <FSelectObject />
 
-            <CustomOptions/>
+            <CustomOptions />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('rely')}>
-            <FDepPanel/>
+            <FDepPanel />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('version_description')}>
@@ -200,18 +206,18 @@ interface HeaderProps {
   disabledCreate?: boolean;
 }
 
-function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
+function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderProps) {
   return (<div className={styles.Header}>
     {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-    <FTitleText text={'创建版本'} type="h1"/>
+    <FTitleText text={'创建版本'} type='h1' />
 
     <Space size={30}>
       <FTextBtn
-        type="default"
+        type='default'
         onClick={onClickCache}
       >{FUtil1.I18n.message('save_as_draft')}</FTextBtn>
       <FRectBtn
-        style={{width: 108}}
+        style={{ width: 108 }}
         onClick={onClickCreate}
         disabled={disabledCreate}
       >{FUtil1.I18n.message('release_to_market')}</FRectBtn>
@@ -219,6 +225,7 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
   </div>);
 }
 
-export default withRouter(connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default withRouter(connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
+  resourceInfo: resourceInfo,
 }))(VersionCreator));

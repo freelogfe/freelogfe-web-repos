@@ -5,7 +5,7 @@ import { FTextBtn, FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, ResourceVersionEditorPageModelState } from '@/models/connect';
+import { ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState } from '@/models/connect';
 import {
   UpdateDataSourceAction,
   ChangeAction,
@@ -38,6 +38,7 @@ import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { RouteComponentProps } from 'react-router';
 import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+import { Helmet } from 'react-helmet';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -46,9 +47,10 @@ interface VersionEditorProps extends RouteComponentProps<{
   dispatch: Dispatch;
   // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
+  resourceInfo: ResourceInfoModelState,
 }
 
-function VersionEditor({ dispatch, route, resourceVersionEditorPage, match }: VersionEditorProps & RouterTypes) {
+function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps & RouterTypes) {
   // console.log(route, 'route!@#$@!#$@!#42134');
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
@@ -137,6 +139,10 @@ function VersionEditor({ dispatch, route, resourceVersionEditorPage, match }: Ve
   }
 
   return (<>
+    <Helmet>
+      <title>{`版本 ${resourceVersionEditorPage.version} · ${resourceInfo.info?.resourceName || ''}  - Freelog`}</title>
+    </Helmet>
+
     <FLeftSiderLayout
       sider={<Sider />}
       header={<Header
@@ -870,6 +876,7 @@ function VersionEditor({ dispatch, route, resourceVersionEditorPage, match }: Ve
 export default withRouter(connect(({ resourceVersionEditorPage, resourceInfo }: ConnectState) => ({
   // $version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
+  resourceInfo: resourceInfo,
 }))(VersionEditor));
 
 interface HeaderProps {
@@ -908,28 +915,28 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
   );
 }
 
-interface FieldProps {
-  dot?: boolean;
-  title: string;
-  topRight?: React.ReactNode;
-  children?: React.ReactNode;
-  className?: string;
-}
-
-function Field({ className, dot = false, title, topRight, children }: FieldProps) {
-  return (<div className={styles.Field + ' ' + (className || '')}>
-      <div className={styles.header}>
-        <div className={styles.FieldTitle}>
-          {dot && <i className={styles.dot} />}
-          <span>{title}</span>
-        </div>
-        <div>{topRight}</div>
-      </div>
-      <div style={{ height: 5 }} />
-      {children}
-    </div>
-  );
-}
+// interface FieldProps {
+//   dot?: boolean;
+//   title: string;
+//   topRight?: React.ReactNode;
+//   children?: React.ReactNode;
+//   className?: string;
+// }
+//
+// function Field({ className, dot = false, title, topRight, children }: FieldProps) {
+//   return (<div className={styles.Field + ' ' + (className || '')}>
+//       <div className={styles.header}>
+//         <div className={styles.FieldTitle}>
+//           {dot && <i className={styles.dot} />}
+//           <span>{title}</span>
+//         </div>
+//         <div>{topRight}</div>
+//       </div>
+//       <div style={{ height: 5 }} />
+//       {children}
+//     </div>
+//   );
+// }
 
 // 富文本内容预览
 /**

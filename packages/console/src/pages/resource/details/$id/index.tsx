@@ -24,6 +24,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import {router} from "umi";
 import {FUtil} from '@freelog/tools-lib';
 import {FTextBtn} from "@/components/FButton";
+import { Helmet } from 'react-helmet';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -63,7 +64,9 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
   }
 
   return (<div className={styles.style}>
-
+    <Helmet>
+      <title>{`${marketResourcePage.resourceInfo?.name || ''} - Freelog`}</title>
+    </Helmet>
     <div className={styles.wrap}>
 
       <div style={{height: 35}}/>

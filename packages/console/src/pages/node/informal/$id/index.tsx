@@ -19,6 +19,7 @@ import AddInformExhibitDrawer from './containers/AddInformExhibitDrawer';
 import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
+import { Helmet } from 'react-helmet';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -51,6 +52,10 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
   }, [dispatch, showPage]);
 
   return (<>
+    <Helmet>
+      <title>{`测试展品管理 · ${informalNodeManagerPage.nodeName} - Freelog`}</title>
+    </Helmet>
+
     <div>
       <div className={styles.headerTip}>
         <span>这里是测试节点管理页面，如需管理正式节点，你可以</span>

@@ -12,6 +12,7 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
+import { Helmet } from 'react-helmet';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -86,6 +87,9 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
   }
 
   return (<>
+    <Helmet>
+      <title>{`展品管理 · ${nodeManagerPage.nodeName} - Freelog`}</title>
+    </Helmet>
     {
       nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />
     }

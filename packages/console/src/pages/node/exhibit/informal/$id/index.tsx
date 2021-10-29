@@ -25,6 +25,7 @@ import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
+import { Helmet } from 'react-helmet';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -54,6 +55,9 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
   }
 
   return (<div className={styles.styles}>
+    <Helmet>
+      <title>{`编辑展品信息 · ${informExhibitInfoPage.informExhibitName} - Freelog`}</title>
+    </Helmet>
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
