@@ -50,7 +50,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   });
 
-  if (informalNodeManagerPage.themePageThemesTotal === -1) {
+  if (informalNodeManagerPage.theme_ListState === 'loading') {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
@@ -65,7 +65,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   return (<>
     {
-      informalNodeManagerPage.themePageDataState === 'noData'
+      informalNodeManagerPage.theme_ListState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前节点没有添加主题展品'}
@@ -110,7 +110,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               <div>
                 <FInput
                   theme={'dark'}
-                  value={informalNodeManagerPage.themePageFilterKeywords}
+                  value={informalNodeManagerPage.theme_FilterKeywords}
                   debounce={300}
                   onDebounceChange={(value) => {
                     dispatch<OnChangeThemeKeywordsAction>({
@@ -126,7 +126,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           </div>
 
           {
-            informalNodeManagerPage.themePageDataState === 'noSearchResult'
+            informalNodeManagerPage.theme_ListState === 'noSearchResult'
               ? (<FNoDataTip
                 height={'calc(100vh - 70px - 24px - 100px - 100px)'}
                 tipText={'无搜索结果'}
@@ -134,7 +134,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               : (<div className={styles.body}>
                 <div className={styles.list}>
                   {
-                    informalNodeManagerPage.themePageThemeList.map((t, index, arr) => {
+                    informalNodeManagerPage.theme_List.map((t, index, arr) => {
                       return (<div
                         key={t.id}
                         className={styles.item}

@@ -47,14 +47,14 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
 
   });
 
-  if (informalNodeManagerPage.exhibitPageExhibitsTotal === -1) {
+  if (informalNodeManagerPage.exhibit_ListState === 'loading') {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
   return (<>
     {
       // informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords === ''
-      informalNodeManagerPage.exhibitPageDataState === 'noData'
+      informalNodeManagerPage.exhibit_ListState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前测试节点没有添加展品'}
@@ -109,7 +109,7 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
               <div>
                 <span>类型：</span>
                 <FDropdownMenu
-                  options={informalNodeManagerPage.exhibitPageTypeOptions}
+                  options={informalNodeManagerPage.exhibit_TypeOptions}
                   onChange={(value) => {
                     dispatch<OnChangeExhibitTypeAction>({
                       type: 'informalNodeManagerPage/onChangeExhibitType',
@@ -120,14 +120,14 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                   }}
                 >
             <span
-              style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibitPageTypeOptions.find((rto) => rto.value === informalNodeManagerPage.exhibitPageSelectedType)?.text || ''}<FDown
+              style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibit_TypeOptions.find((rto) => rto.value === informalNodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
               style={{marginLeft: 8}}/></span>
                 </FDropdownMenu>
               </div>
               <div>
                 <span>状态：</span>
                 <FDropdownMenu
-                  options={informalNodeManagerPage.exhibitPageStatusOptions}
+                  options={informalNodeManagerPage.exhibit_StatusOptions}
                   onChange={(value) => {
                     dispatch<OnChangeExhibitStatusAction>({
                       type: 'informalNodeManagerPage/onChangeExhibitStatus',
@@ -137,15 +137,15 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                     });
                   }}
                 >
-            <span style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibitPageStatusOptions.find((rso) => {
-              return rso.value === informalNodeManagerPage.exhibitPageSelectedStatus.toString();
+            <span style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibit_StatusOptions.find((rso) => {
+              return rso.value === informalNodeManagerPage.exhibit_SelectedStatus.toString();
             })?.text}<FDown style={{marginLeft: 10}}/></span>
                 </FDropdownMenu>
               </div>
               <div>
                 <FInput
                   theme={'dark'}
-                  value={informalNodeManagerPage.exhibitPageFilterKeywords}
+                  value={informalNodeManagerPage.exhibit_FilterKeywords}
                   debounce={300}
                   onDebounceChange={async (value) => {
                     dispatch<OnChangeExhibitKeywordsAction>({
@@ -160,7 +160,7 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
             </Space>
           </div>
           {
-            informalNodeManagerPage.exhibitPageDataState === 'noSearchResult'
+            informalNodeManagerPage.exhibit_ListState === 'noSearchResult'
               ? (<FNoDataTip
                 height={'calc(100vh - 294px)'}
                 tipText={'无筛选结果'}

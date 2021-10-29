@@ -5,8 +5,6 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
-import { Simulate } from 'react-dom/test-utils';
-import timeUpdate = Simulate.timeUpdate;
 
 export interface NodeManagerModelState {
   nodeId: number;

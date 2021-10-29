@@ -27,7 +27,7 @@ interface ExhibitTableProps {
 
 function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
 
-  const columns: ColumnsType<InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]> = [
+  const columns: ColumnsType<InformalNodeManagerPageModelState['exhibit_List'][number]> = [
     {
       title: (<FTitleText type="table" text={'来源｜封面'}/>),
       dataIndex: 'cover',
@@ -135,7 +135,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               });
 
               await onChange({
-                exhibitPageExhibitList: informalNodeManagerPage.exhibitPageExhibitList.filter((e) => {
+                exhibit_List: informalNodeManagerPage.exhibit_List.filter((e) => {
                   // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
                   return e.name !== record.name;
                 }),
@@ -206,7 +206,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                 // console.log(value, 'value0923jrlkasdjflasdf');
 
                 await onChange({
-                  exhibitPageExhibitList: informalNodeManagerPage.exhibitPageExhibitList
+                  exhibit_List: informalNodeManagerPage.exhibit_List
                     .map((e) => {
                       // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
                       if (e.name !== record.name) {
@@ -247,7 +247,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
 
   return (<FTable
     className={styles.table}
-    dataSource={informalNodeManagerPage.exhibitPageExhibitList.map((el) => {
+    dataSource={informalNodeManagerPage.exhibit_List.map((el) => {
       return {
         key: el.id,
         ...el,

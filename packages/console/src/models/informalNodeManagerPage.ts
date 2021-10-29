@@ -127,14 +127,14 @@ export interface InformalNodeManagerPageModelState {
   replacedTreeData: TreeNode[];
   replacedCheckedKeys: string[];
 
-  exhibitPageTypeOptions: { value: string; text: string; }[];
-  exhibitPageSelectedType: '-1' | string;
-  exhibitPageStatusOptions: { value: string; text: string; }[];
-  exhibitPageSelectedStatus: '0' | '1' | '2';
-  exhibitPageFilterKeywords: string;
-  exhibitPageDataState: 'loading' | 'display' | 'noData' | 'noSearchResult';
-  exhibitPageExhibitsTotal: number;
-  exhibitPageExhibitList: {
+  exhibit_TypeOptions: { value: string; text: string; }[];
+  exhibit_SelectedType: '-1' | string;
+  exhibit_StatusOptions: { value: string; text: string; }[];
+  exhibit_SelectedStatus: '0' | '1' | '2';
+  exhibit_FilterKeywords: string;
+  exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
+  exhibit_List: {
     id: string;
     cover: string;
     associatedExhibitID: string;
@@ -153,10 +153,11 @@ export interface InformalNodeManagerPageModelState {
     authErrorText: string;
   }[];
 
-  themePageFilterKeywords: string;
-  themePageDataState: 'loading' | 'display' | 'noData' | 'noSearchResult';
-  themePageThemesTotal: number;
-  themePageThemeList: {
+  theme_FilterKeywords: string;
+  theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  theme_ListMore: 'loading' | 'andMore' | 'noMore';
+  // themePageThemesTotal: number;
+  theme_List: {
     id: string;
     name: string;
     identity: 'resource' | 'object' | 'exhibit';
@@ -659,6 +660,45 @@ interface InformalNodeManagerPageModelType {
   };
 }
 
+const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
+  'exhibit_TypeOptions' |
+  'exhibit_SelectedType' |
+  'exhibit_StatusOptions' |
+  'exhibit_SelectedStatus' |
+  'exhibit_FilterKeywords' |
+  'exhibit_ListState' |
+  'exhibit_ListMore' |
+  'exhibit_List'> = {
+  exhibit_TypeOptions: [
+    { text: '全部', value: '-1' },
+    ...FUtil.Predefined.resourceTypes
+      .filter((i) => i !== 'theme')
+      .map((i) => ({ value: i, text: i })),
+  ],
+  exhibit_SelectedType: '-1',
+  exhibit_StatusOptions: [
+    { text: '全部', value: '2' },
+    { text: '已上线', value: '1' },
+    { text: '已下线', value: '0' },
+  ],
+  exhibit_SelectedStatus: '2',
+  exhibit_FilterKeywords: '',
+  exhibit_ListState: 'loading',
+  exhibit_ListMore: 'loading',
+  exhibit_List: [],
+};
+
+const themeInitStates: Pick<InformalNodeManagerPageModelState,
+  'theme_FilterKeywords' |
+  'theme_ListState' |
+  'theme_ListMore' |
+  'theme_List'> = {
+  theme_FilterKeywords: '',
+  theme_ListState: 'loading',
+  theme_ListMore: 'loading',
+  theme_List: [],
+};
+
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   nodeID: -1,
@@ -701,28 +741,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacedTreeData: [],
   replacedCheckedKeys: [],
 
-  exhibitPageTypeOptions: [
-    { text: '全部', value: '-1' },
-    ...FUtil.Predefined.resourceTypes
-      .filter((i) => i !== 'theme')
-      .map((i) => ({ value: i, text: i })),
-  ],
-  exhibitPageSelectedType: '-1',
-  exhibitPageStatusOptions: [
-    { text: '全部', value: '2' },
-    { text: '已上线', value: '1' },
-    { text: '已下线', value: '0' },
-  ],
-  exhibitPageSelectedStatus: '2',
-  exhibitPageFilterKeywords: '',
-  exhibitPageDataState: 'loading',
-  exhibitPageExhibitList: [],
-  exhibitPageExhibitsTotal: -1,
+  ...exhibitInitStates,
 
-  themePageFilterKeywords: '',
-  themePageDataState: 'loading',
-  themePageThemesTotal: -1,
-  themePageThemeList: [],
+  ...themeInitStates,
 
   rulePageStatus: 'normal',
   ruleIndeterminate: false,
@@ -898,18 +919,18 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
-        onlineStatus: Number(informalNodeManagerPage.exhibitPageSelectedStatus) as 2,
+        onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: 'theme',
-        resourceType: informalNodeManagerPage.exhibitPageSelectedType === '-1' ? undefined : informalNodeManagerPage.exhibitPageSelectedType,
+        resourceType: informalNodeManagerPage.exhibit_SelectedType === '-1' ? undefined : informalNodeManagerPage.exhibit_SelectedType,
         limit: FUtil.Predefined.pageSize,
-        keywords: informalNodeManagerPage.exhibitPageFilterKeywords || undefined,
+        keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
 
       const { rules: rulesObj } = compile(data1.ruleText);
 
-      const exhibitList: InformalNodeManagerPageModelState['exhibitPageExhibitList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]>((dl) => {
+      const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
         const operations: string[] = dl.rules[0]?.operations || [];
         // console.log(operations, 'operations12334');
         const stateInfo = dl.stateInfo;
@@ -919,7 +940,7 @@ const Model: InformalNodeManagerPageModelType = {
           return ro.exhibitName === dl.testResourceName;
         });
 
-        const rule: InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]['rule'] = {
+        const rule: InformalNodeManagerPageModelState['exhibit_List'][number]['rule'] = {
           add: operations.includes('add') ? {
             exhibit: dl.testResourceName,
             source: {
@@ -1005,13 +1026,13 @@ const Model: InformalNodeManagerPageModelType = {
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
           }),
-          exhibitPageExhibitsTotal: data.totalItem,
-          exhibitPageExhibitList: exhibitList,
-          exhibitPageDataState: exhibitList.length > 0
-            ? 'display'
-            : informalNodeManagerPage.exhibitPageSelectedType === '-1'
-            && informalNodeManagerPage.exhibitPageSelectedStatus === '2'
-            && informalNodeManagerPage.exhibitPageFilterKeywords === ''
+          // exhibitPageExhibitsTotal: data.totalItem,
+          exhibit_List: exhibitList,
+          exhibit_ListState: exhibitList.length > 0
+            ? 'loaded'
+            : informalNodeManagerPage.exhibit_SelectedType === '-1'
+            && informalNodeManagerPage.exhibit_SelectedStatus === '2'
+            && informalNodeManagerPage.exhibit_FilterKeywords === ''
               ? 'noData'
               : 'noSearchResult',
         },
@@ -1035,7 +1056,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitPageSelectedType: payload.value,
+          exhibit_SelectedType: payload.value,
         },
       });
       yield put<FetchExhibitListAction>({
@@ -1051,7 +1072,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onChangeExhibitStatus({ payload }: OnChangeExhibitStatusAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { exhibitPageSelectedStatus: payload.value as '0' },
+        payload: { exhibit_SelectedStatus: payload.value as '0' },
       });
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
@@ -1064,7 +1085,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onChangeExhibitKeywords({ payload }: OnChangeExhibitKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { exhibitPageFilterKeywords: payload.value },
+        payload: { exhibit_FilterKeywords: payload.value },
       });
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
@@ -1107,7 +1128,7 @@ const Model: InformalNodeManagerPageModelType = {
         onlineStatus: 2,
         resourceType: 'theme',
         limit: FUtil.Predefined.pageSize,
-        keywords: informalNodeManagerPage.themePageFilterKeywords || undefined,
+        keywords: informalNodeManagerPage.theme_FilterKeywords || undefined,
       };
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
@@ -1120,7 +1141,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { rules: rulesObj } = compile(data1.ruleText);
       // console.log(rulesObj, 'rulesObjiosfjewwef');
 
-      const themePageThemeList: InformalNodeManagerPageModelState['themePageThemeList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['themePageThemeList'][number]>((dl) => {
+      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['theme_List'][number]>((dl) => {
         const operations: string[] = dl.rules[0]?.operations || [];
         // console.log(operations, 'operations12334');
         const stateInfo = dl.stateInfo;
@@ -1131,7 +1152,7 @@ const Model: InformalNodeManagerPageModelType = {
         });
 
         // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-        const rule: InformalNodeManagerPageModelState['themePageThemeList'][number]['rule'] = {
+        const rule: InformalNodeManagerPageModelState['theme_List'][number]['rule'] = {
           add: operations.includes('add') ? {
             exhibit: dl.testResourceName,
             source: {
@@ -1204,11 +1225,11 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           ruleText: data1.ruleText,
-          themePageThemesTotal: data.totalItem,
-          themePageThemeList: themePageThemeList,
-          themePageDataState: themePageThemeList.length > 0
-            ? 'display'
-            : informalNodeManagerPage.themePageFilterKeywords === ''
+          // themePageThemesTotal: data.totalItem,
+          theme_List: themePageThemeList,
+          theme_ListState: themePageThemeList.length > 0
+            ? 'loaded'
+            : informalNodeManagerPage.theme_FilterKeywords === ''
               ? 'noData'
               : 'noSearchResult',
         },
@@ -1292,7 +1313,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          themePageThemeList: informalNodeManagerPage.themePageThemeList.map((ttt) => {
+          theme_List: informalNodeManagerPage.theme_List.map((ttt) => {
             if (ttt.name !== payload.themeName) {
               return {
                 ...ttt,
