@@ -4,23 +4,25 @@ import { Space } from 'antd';
 
 interface FPaymentPasswordInputProps {
   value: string;
+  autoFocus?: boolean;
 
   onChange?(value: string): void;
 
   onBlur?(): void;
 }
 
-function FPaymentPasswordInput({ value, onChange, onBlur }: FPaymentPasswordInputProps) {
+function FPaymentPasswordInput({ value, autoFocus = false, onChange, onBlur }: FPaymentPasswordInputProps, ref: any) {
 
   const inputEl = React.useRef<any>(null);
   const [isFocus, setIsFocus] = React.useState<boolean>(false);
 
   return (<div className={styles.styles}>
     <input
+      autoFocus={autoFocus}
       type='password'
       minLength={6}
       maxLength={6}
-      ref={inputEl}
+      ref={ref || inputEl}
       value={value}
       onChange={(e) => {
         onChange && onChange(e.target.value.replace(/[^\d]/g, ''));
@@ -33,9 +35,9 @@ function FPaymentPasswordInput({ value, onChange, onBlur }: FPaymentPasswordInpu
         onBlur && onBlur();
       }}
     />
-    <Space size={8} onClick={() => {
+    <Space size={10} onClick={() => {
       // console.log('#####9832hrlkjfsd');
-      inputEl.current.focus();
+      (ref || inputEl).current.focus();
     }}>
       {
         Array(6).fill(null).map((_, inx) => {
@@ -45,7 +47,7 @@ function FPaymentPasswordInput({ value, onChange, onBlur }: FPaymentPasswordInpu
               isFocus && value.length === inx && (<span>|</span>)
             }
             {
-              value.length > inx && (<span>*</span>)
+              value.length > inx && (<span>●</span>)
             }
 
           </div>);
@@ -55,4 +57,5 @@ function FPaymentPasswordInput({ value, onChange, onBlur }: FPaymentPasswordInpu
   </div>);
 }
 
-export default FPaymentPasswordInput;
+export default React.forwardRef(FPaymentPasswordInput);
+// export default FPaymentPasswordInput;

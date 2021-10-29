@@ -66,11 +66,12 @@ export interface InformalNodeManagerPageModelState {
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
+  showPage: 'exhibit' | 'theme' | 'mappingRule';
+
   ruleText: string;
   allRuleResult: any;
   ruleAllAddedResourceNames: string[];
   ruleAllAddedObjectNames: string[];
-  showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
   addExhibitDrawerResourceOptions: { value: string; title: string }[];

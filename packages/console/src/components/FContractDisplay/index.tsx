@@ -8,7 +8,7 @@ import FModal from '../FModal';
 import FInput from '../FInput';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
-import { FDown, FUp } from '../FIcons';
+import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 
 interface FContractDisplayProps {
@@ -60,12 +60,15 @@ interface IContractDisplayStates {
   modalAccountID: string;
   modalTransactionAmount: number;
   modalPassword: string;
+  modalIsPaying: boolean;
 
   text: string;
   code: string;
 }
 
 function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps) {
+
+  const inputEl = React.useRef<any>(null);
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
   const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
@@ -83,6 +86,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   const [modalAccountID, setModalAccountID] = React.useState<IContractDisplayStates['modalAccountID']>('');
   const [modalTransactionAmount, setModalTransactionAmount] = React.useState<IContractDisplayStates['modalTransactionAmount']>(-1);
   const [modalPassword, setModalPassword] = React.useState<IContractDisplayStates['modalPassword']>('');
+  const [modalIsPaying, setModalIsPaying] = React.useState<IContractDisplayStates['modalIsPaying']>(false);
 
   const [text, setText] = React.useState<IContractDisplayStates['text']>('');
   const [code, setCode] = React.useState<IContractDisplayStates['code']>('');
@@ -204,16 +208,21 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setModalVisible(true);
   }
 
-  async function confirmPay() {
+  async function confirmPay(password: string) {
+    setModalIsPaying(true);
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
       eventId: modalEventID,
       accountId: modalAccountID,
       transactionAmount: modalTransactionAmount,
-      password: modalPassword,
+      password: password,
     };
     const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
-    if (ret + (errCode || 0) + (errcode || 0) > 0) {
+
+    if (ret + (errCode || 0) > 0) {
+      setModalPassword('');
+      inputEl.current.focus();
+      setModalIsPaying(false);
       return fMessage(msg, 'error');
     }
 
@@ -228,6 +237,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     fMessage('支付成功');
     setModalVisible(false);
     setModalPassword('');
+    setModalIsPaying(false);
     onChangedEvent && onChangedEvent();
   }
 
@@ -434,7 +444,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       }
     </div>
 
-
     <FModal
       title={null}
       footer={null}
@@ -444,6 +453,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         setModalVisible(false);
         setModalPassword('');
       }}
+      destroyOnClose={true}
     >
       <div className={styles.ModalTitle}>
         <FTitleText
@@ -484,29 +494,45 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             </div>
           </div>
 
-          <div className={styles.paymentInfoRow}>
-            <div><FContentText text={'支付密码'} type='normal' /></div>
-            <div>
-              <FPaymentPasswordInput
-                value={modalPassword}
-                onChange={(value) => {
-                  // console.log(value, '@#$@#$@#$@#$');
-                  setModalPassword(value);
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <FRectBtn
-              style={{ width: '100%' }}
-              onClick={() => {
-                confirmPay();
-              }}
-            >确认支付</FRectBtn>
-          </div>
         </Space>
+
+        <div style={{ height: 40 }} />
+
+        <div className={styles.paymentPassword}>
+          {
+            modalIsPaying
+              ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
+              : (<FContentText text={'输入支付密码进行支付'} type='normal' />)
+          }
+
+
+          <div style={{ height: 20 }} />
+          <FPaymentPasswordInput
+            ref={inputEl}
+            autoFocus={true}
+            value={modalPassword}
+            onChange={async (value) => {
+              // console.log(value, '@#$@#$@#$@#$');
+              console.log(value, 'valuevalue9032klsdflksdfl');
+              setModalPassword(value);
+              if (value.length === 6) {
+                inputEl.current.blur();
+                confirmPay(value);
+              }
+            }}
+          />
+          <div style={{ height: 20 }} />
+          <FTextBtn
+            type='default'
+            onClick={() => {
+              window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.retrievePayPassword());
+            }}
+          >忘记支付密码</FTextBtn>
+        </div>
+
       </div>
+
+
       <div style={{ height: 40 }} />
     </FModal>
   </div>);
