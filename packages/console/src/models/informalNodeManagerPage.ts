@@ -233,6 +233,30 @@ export interface OnChangePageAction extends AnyAction {
   };
 }
 
+// export interface OnMount_ExhibitPage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onMount_ExhibitPage';
+// }
+//
+// export interface OnUnmount_ExhibitPage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onUnmount_ExhibitPage';
+// }
+//
+// export interface OnMount_ThemePage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onMount_ThemePage';
+// }
+//
+// export interface OnUnmount_ThemePage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onUnmount_ThemePage';
+// }
+//
+// export interface OnMount_RulePage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onMount_ThemePage';
+// }
+//
+// export interface OnUnmount_RulePage_Action extends AnyAction {
+//   type: 'informalNodeManagerPage/onUnmount_ThemePage';
+// }
+
 export interface OnMountExhibitPageAction extends AnyAction {
   type: 'informalNodeManagerPage/onMountExhibitPage';
 }
@@ -699,6 +723,31 @@ const themeInitStates: Pick<InformalNodeManagerPageModelState,
   theme_List: [],
 };
 
+const ruleInitSates: Pick<InformalNodeManagerPageModelState,
+  'rule_PageStatus' |
+  'rule_Indeterminate' |
+  'rule_IndeterminateChecked' |
+  'rule_RuleList' |
+  'rule_CodeInput' |
+  'rule_CodeIsDirty' |
+  'rule_PromptLeavePath' |
+  'rule_CodeIsChecking' |
+  'rule_CodeCompileErrors' |
+  'rule_CodeExecutionError' |
+  'rule_CodeSaveSuccess'> = {
+  rule_PageStatus: 'normal',
+  rule_Indeterminate: false,
+  rule_IndeterminateChecked: false,
+  rule_RuleList: [],
+  rule_CodeInput: '',
+  rule_CodeIsDirty: false,
+  rule_PromptLeavePath: '',
+  rule_CodeIsChecking: false,
+  rule_CodeCompileErrors: null,
+  rule_CodeExecutionError: null,
+  rule_CodeSaveSuccess: false,
+};
+
 // const ruleInitStates: Pick<InformalNodeManagerPageModelState, any>
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
@@ -747,18 +796,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   ...themeInitStates,
 
-  rule_PageStatus: 'normal',
-  rule_Indeterminate: false,
-  rule_IndeterminateChecked: false,
-  rule_RuleList: [],
-  rule_CodeInput: '',
-  rule_CodeIsDirty: false,
-  rule_PromptLeavePath: '',
-  rule_CodeIsChecking: false,
-  rule_CodeCompileErrors: null,
-  rule_CodeExecutionError: null,
-  rule_CodeSaveSuccess: false,
-
+  ...ruleInitSates,
 };
 
 const Model: InformalNodeManagerPageModelType = {
@@ -804,7 +842,13 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, {}: EffectsCommandMap) {
+    * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...exhibitInitStates,
+        },
+      });
 
     },
 
@@ -816,8 +860,13 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onUnmountThemePage({}: OnUnmountThemePageAction, {}: EffectsCommandMap) {
-
+    * onUnmountThemePage({}: OnUnmountThemePageAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...themeInitStates,
+        },
+      });
     },
     * onMountRulePage({}: OnMountRulePageAction, { put }: EffectsCommandMap) {
       yield put<FetchRulesAction>({
@@ -829,17 +878,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rule_PromptLeavePath: '',
-
-          rule_Indeterminate: false,
-          rule_IndeterminateChecked: false,
-          rule_RuleList: [],
-          rule_CodeInput: '',
-          rule_CodeIsDirty: false,
-          rule_CodeIsChecking: false,
-          rule_CodeCompileErrors: null,
-          rule_CodeExecutionError: null,
-          rule_CodeSaveSuccess: false,
+          ...ruleInitSates,
         },
       });
     },
