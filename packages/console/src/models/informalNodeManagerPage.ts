@@ -843,6 +843,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, { put }: EffectsCommandMap) {
+      console.log('onUnmountExhibitPage9823yhdkujshfkasjdf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

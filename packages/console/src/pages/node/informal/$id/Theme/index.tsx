@@ -1,36 +1,36 @@
 import * as React from 'react';
 import styles from './index.less';
-import FNoDataTip from "@/components/FNoDataTip";
-import {FContentText, FTitleText} from "@/components/FText";
-import {Space} from "antd";
-import {FTextBtn} from "@/components/FButton";
+import FNoDataTip from '@/components/FNoDataTip';
+import { FContentText, FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import { FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   InformalNodeManagerPageModelState,
   OnChangeThemeKeywordsAction, OnClickActiveThemeBtnAction,
   OnClickThemesAddBtnAction,
   OnClickThemesReplaceBtnAction,
-  OnMountThemePageAction,
+  OnMountThemePageAction, OnUnmountThemePageAction,
   SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
-import FAdd from "@/components/FIcons/FAdd";
-import FInput from "@/components/FInput";
+import FAdd from '@/components/FIcons/FAdd';
+import FInput from '@/components/FInput';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {Dispatch, connect} from 'dva';
-import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
-import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
-import {ConnectState} from "@/models/connect";
-import FLoadingTip from "@/components/FLoadingTip";
-import FDivider from "@/components/FDivider";
-import FLink from "@/components/FLink";
-import {FUtil} from '@freelog/tools-lib';
-import FUtil1 from "@/utils";
+import { Dispatch, connect } from 'dva';
+import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
+import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
+import { ConnectState } from '@/models/connect';
+import FLoadingTip from '@/components/FLoadingTip';
+import FDivider from '@/components/FDivider';
+import FLink from '@/components/FLink';
+import { FUtil } from '@freelog/tools-lib';
+import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
-import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
+import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import fConfirmModal from '@/components/fConfirmModal';
 import { OnActiveAction } from '@/models/nodeManagerPage';
 
-const {compile} = require('@freelog/nmr_translator');
+const { compile } = require('@freelog/nmr_translator');
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -38,20 +38,22 @@ interface ThemeProps {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
+function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountThemePageAction>({
       type: 'informalNodeManagerPage/onMountThemePage',
-    })
+    });
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmountThemePageAction>({
+      type: 'informalNodeManagerPage/onUnmountThemePage',
+    });
   });
 
   if (informalNodeManagerPage.theme_ListState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
+    return (<FLoadingTip height={'calc(100vh - 94px)'} />);
   }
 
   function onChange(value: Partial<InformalNodeManagerPageModelState>) {
@@ -78,31 +80,31 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText text={'主题管理'}/>
+            <FTitleText text={'主题管理'} />
             <Space size={30}>
 
               <FTextBtn
-                type="default"
+                type='default'
                 onClick={() => {
                   dispatch<OnClickThemesAddBtnAction>({
                     type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
                   });
                 }}>
                 <Space size={5}>
-                  <FAdd/>
+                  <FAdd />
                   <span>{FUtil1.I18n.message('btn_add_test_theme')}</span>
                 </Space>
               </FTextBtn>
 
               <FTextBtn
-                type="default"
+                type='default'
                 onClick={() => {
                   dispatch<OnClickThemesReplaceBtnAction>({
                     type: 'informalNodeManagerPage/onClickExhibitsReplaceBtn',
                   });
                 }}>
                 <Space size={5}>
-                  <FMappingRuleReplace/>
+                  <FMappingRuleReplace />
                   <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
                 </Space>
               </FTextBtn>
@@ -140,7 +142,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                         className={styles.item}
                       >
                         <div className={styles.cover}>
-                          <img src={t.cover || imgSrc} alt=""/>
+                          <img src={t.cover || imgSrc} alt='' />
                           <div className={styles.coverLabel}>
                             {
                               t.isOnline
@@ -150,15 +152,15 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                           </div>
                           <div className={styles.coverFooter}>
                             <div>
-                              <div style={{width: 1}}/>
+                              <div style={{ width: 1 }} />
                               <a onClick={() => {
-                                window.open(FUtil.LinkTo.informExhibitManagement({exhibitID: t.id}));
+                                window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
                               }}>编辑</a>
-                              <FDivider/>
+                              <FDivider />
                               <a
                                 onClick={() => {
                                   window.open(t.originInfo.type === 'resource'
-                                    ? FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})
+                                    ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
                                     : FUtil.LinkTo.objectDetails({
                                       bucketName: t.originInfo.name.split('/')[0],
                                       objectID: t.originInfo.id,
@@ -167,7 +169,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                               >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
                               {
                                 !t.isOnline && (<>
-                                  <FDivider/>
+                                  <FDivider />
                                   <a onClick={() => {
                                     fConfirmModal({
                                       message: FUtil1.I18n.message('msg_change_theme_confirm'),
@@ -178,7 +180,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                           type: 'informalNodeManagerPage/onClickActiveThemeBtn',
                                           payload: {
                                             themeName: t.name,
-                                          }
+                                          },
                                         });
                                       },
                                     });
@@ -186,34 +188,34 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                 </>)
                               }
 
-                              <div style={{width: 1}}/>
+                              <div style={{ width: 1 }} />
                             </div>
                           </div>
                         </div>
-                        <div style={{height: 12}}/>
+                        <div style={{ height: 12 }} />
                         <div className={styles.itemTitle}>
                           {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
                           <FIdentityTypeBadge
                             status={t.identity}
                           />
-                          <div style={{width: 5}}/>
+                          <div style={{ width: 5 }} />
                           <FContentText
-                            type="highlight"
+                            type='highlight'
                             text={t.name}
                             singleRow
                           />
                         </div>
-                        <div style={{height: 6}}/>
+                        <div style={{ height: 6 }} />
                         <div className={styles.itemVersion}>
                           {
                             t.identity !== 'object' && (<FContentText
                               text={`展示版本 ${t.version}`}
-                              type="additional1"
+                              type='additional1'
                             />)
                           }
 
                         </div>
-                        <div style={{height: 10}}/>
+                        <div style={{ height: 10 }} />
                         <div className={styles.itemBar}>
                           <MappingRule
                             {...t.rule}
@@ -232,6 +234,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
   </>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(Theme);
