@@ -1,12 +1,12 @@
-import {DvaReducer} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from '@/models/connect';
+import { DvaReducer } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
 import moment from 'moment';
-import {RcFile} from 'antd/lib/upload/interface';
+import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {router} from "umi";
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { router } from 'umi';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -157,14 +157,14 @@ const Model: StorageHomePageModelType = {
     uploadPanelOpen: false,
   },
   effects: {
-    * fetchBuckets({payload}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+    * fetchBuckets({ payload }: FetchBucketsAction, { call, put, select }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
 
       const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
         // bucketType: 0,
         bucketType: 1,
       };
-      const {data} = yield call(FServiceAPI.Storage.bucketList, params);
+      const { data } = yield call(FServiceAPI.Storage.bucketList, params);
       const bucketList: NonNullable<StorageHomePageModelState['bucketList']> = data
         .map((i: any) => ({
           bucketName: i.bucketName,
@@ -185,15 +185,15 @@ const Model: StorageHomePageModelType = {
       } else {
         if (payload?.from !== 'header' && window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
           // console.log('!!!!!!!!!!!!0923480238402384032840923049');
-          router.push(FUtil.LinkTo.storageSpace({bucketName: bucketList[0].bucketName}));
+          router.push(FUtil.LinkTo.storageSpace({ bucketName: bucketList[0].bucketName }));
         }
       }
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
     },
-    * onChangeNewBucket({payload}: OnChangeNewBucketAction, {put, select, call}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+    * onChangeNewBucket({ payload }: OnChangeNewBucketAction, { put, select, call }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
 
       yield put<ChangeAction>({
         type: 'change',
@@ -214,7 +214,7 @@ const Model: StorageHomePageModelType = {
         const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
           bucketName: payload,
         };
-        const {data} = yield call(FServiceAPI.Storage.bucketIsExist, params);
+        const { data } = yield call(FServiceAPI.Storage.bucketIsExist, params);
         // console.log(data, '@@@@@Dddddddddddd====');
         yield put<ChangeAction>({
           type: 'change',
@@ -225,8 +225,8 @@ const Model: StorageHomePageModelType = {
       }
 
     },
-    * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+    * createBucket({}: CreateBucketAction, { call, select, put }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
 
       const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
         bucketName: storageHomePage.newBucketName,
@@ -244,8 +244,8 @@ const Model: StorageHomePageModelType = {
       });
       // router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
     },
-    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select, call}: EffectsCommandMap) {
-      const {storageHomePage, user}: ConnectState = yield select(({storageHomePage, user}: ConnectState) => ({
+    * onChangeActivatedBucket({ payload }: OnChangeActivatedBucketAction, { put, select, call }: EffectsCommandMap) {
+      const { storageHomePage, user }: ConnectState = yield select(({ storageHomePage, user }: ConnectState) => ({
         storageHomePage,
         user,
       }));
@@ -256,7 +256,7 @@ const Model: StorageHomePageModelType = {
       const params: Parameters<typeof FServiceAPI.Storage.bucketDetails>[0] = {
         bucketName: payload,
       };
-      const {data} = yield call(FServiceAPI.Storage.bucketDetails, params);
+      const { data } = yield call(FServiceAPI.Storage.bucketDetails, params);
       // console.log(data, '@!#@$!@#$@#$DDDDDDD');
 
       // if (!data || data.userId !== user.cookiesUserID) {
@@ -275,8 +275,8 @@ const Model: StorageHomePageModelType = {
         type: 'fetchObjects',
       });
     },
-    * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
-      const {data} = yield call(FServiceAPI.Storage.spaceStatistics);
+    * fetchSpaceStatistic({}: FetchSpaceStatisticAction, { put, call }: EffectsCommandMap) {
+      const { data } = yield call(FServiceAPI.Storage.spaceStatistics);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -285,8 +285,8 @@ const Model: StorageHomePageModelType = {
         },
       });
     },
-    * deleteBucketByName({payload}: DeleteBucketByNameAction, {call, put, select}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * deleteBucketByName({ payload }: DeleteBucketByNameAction, { call, put, select }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
       const params: Parameters<typeof FServiceAPI.Storage.deleteBucket>[0] = {
@@ -298,8 +298,8 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * createObject({payload}: CreateObjectAction, {call, select, put}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * createObject({ payload }: CreateObjectAction, { call, select, put }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
       const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
@@ -309,8 +309,8 @@ const Model: StorageHomePageModelType = {
       };
       yield call(FServiceAPI.Storage.createObject, params);
     },
-    * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
-      const {storageHomePage, user}: ConnectState = yield select(({storageHomePage, user}: ConnectState) => ({
+    * fetchObjects({ payload = 'restart' }: FetchObjectsAction, { select, call, put }: EffectsCommandMap) {
+      const { storageHomePage, user }: ConnectState = yield select(({ storageHomePage, user }: ConnectState) => ({
         storageHomePage,
         user,
       }));
@@ -333,7 +333,7 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.activatedBucket,
         limit,
         skip,
-        sort: 'updateDate:-1'
+        sort: 'updateDate:-1',
       };
       yield put<ChangeAction>({
         type: 'change',
@@ -341,7 +341,7 @@ const Model: StorageHomePageModelType = {
           isLoading: true,
         },
       });
-      const {data} = yield call(FServiceAPI.Storage.objectList, params);
+      const { data } = yield call(FServiceAPI.Storage.objectList, params);
       // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
 
       let objectListData: StorageHomePageModelState['objectList'] = [];
@@ -366,8 +366,8 @@ const Model: StorageHomePageModelType = {
         },
       });
     },
-    * deleteObject({payload}: DeleteObjectAction, {call, select, put}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * deleteObject({ payload }: DeleteObjectAction, { call, select, put }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
       const params: Parameters<typeof FServiceAPI.Storage.deleteObjects>[0] = {
@@ -389,10 +389,15 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * uploadFiles({payload}: UploadFilesAction, {select, put, call}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * uploadFiles({ payload }: UploadFilesAction, { select, put, call }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
+      console.log(payload, 'payload@!@#$!@#$@#!4213424');
+      if (payload[0].size > 50 * 1024 * 1024) {
+        fMessage('单个文件不能大于 50 M', 'warning');
+        return;
+      }
       const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
       if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
         fMessage('超出储存', 'warning');
@@ -403,14 +408,14 @@ const Model: StorageHomePageModelType = {
         type: 'change',
         payload: {
           uploadPanelVisible: true,
-        }
+        },
       });
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
 
       const params: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
         sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
       };
-      const {data} = yield call(FServiceAPI.Storage.fileIsExist, params);
+      const { data } = yield call(FServiceAPI.Storage.fileIsExist, params);
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
 
       const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
@@ -418,7 +423,7 @@ const Model: StorageHomePageModelType = {
         projection: 'objectId,objectName',
       };
 
-      const {data: data1} = yield call(FServiceAPI.Storage.batchObjectList, params1);
+      const { data: data1 } = yield call(FServiceAPI.Storage.batchObjectList, params1);
       const allExistObjectNames: string[] = data1.map((d: any) => d.objectName);
       // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({
@@ -434,12 +439,12 @@ const Model: StorageHomePageModelType = {
           ],
           uploadPanelOpen: true,
           uploadPanelVisible: true,
-        }
+        },
       });
     },
-    * updateAObject({payload}: UpdateAObjectAction, {select, put}: EffectsCommandMap) {
-      const {id, ...data} = payload;
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * updateAObject({ payload }: UpdateAObjectAction, { select, put }: EffectsCommandMap) {
+      const { id, ...data } = payload;
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
       yield put<ChangeAction>({
@@ -454,28 +459,28 @@ const Model: StorageHomePageModelType = {
               ...data,
             };
           }),
-        }
-      })
+        },
+      });
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
-    setup({dispatch}, done) {
+    setup({ dispatch }, done) {
       dispatch<FetchBucketsAction>({
         type: 'fetchBuckets',
         payload: {
           from: 'header',
         },
       });
-    }
-  }
+    },
+  },
 };
 
 export default Model;

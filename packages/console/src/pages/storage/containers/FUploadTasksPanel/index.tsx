@@ -138,9 +138,12 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
         ><FClose style={{fontSize: 12}}/></FTextBtn>
       </Space>
     </div>
-    <div
-      className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
-    </div>
+    {
+      storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
+        className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
+      </div>)
+    }
+
     {
       storageHomePage.uploadTaskQueue.length === 0
         ? (<FLoadingTip height={370}/>)
