@@ -1822,10 +1822,7 @@ const Model: InformalNodeManagerPageModelType = {
 
               if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
-                disabledReason = FUtil1.I18n.message('tag_added ');
-              } else if (rs.latestVersion === '') {
-                disabled = true;
-                disabledReason = FUtil1.I18n.message('msg_set_resource_type');
+                disabledReason = FUtil1.I18n.message('tag_added');
               }
 
               return {
@@ -1879,7 +1876,8 @@ const Model: InformalNodeManagerPageModelType = {
 
               if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
-                disabledReason = '已被使用';
+                // disabledReason = '已被使用';
+                disabledReason = FUtil1.I18n.message('tag_added');
               } else if (rs.latestVersion === '') {
                 disabled = true;
                 disabledReason = '无可用版本';
@@ -1935,7 +1933,8 @@ const Model: InformalNodeManagerPageModelType = {
 
               if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
-                disabledReason = '已被使用';
+                // disabledReason = '已被使用';
+                disabledReason = FUtil1.I18n.message('tag_added');
               } else if (rs.latestVersion === '') {
                 disabled = true;
                 disabledReason = '无可用版本';
@@ -1996,10 +1995,11 @@ const Model: InformalNodeManagerPageModelType = {
 
               if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.ruleAllAddedObjectNames.includes(objectName)) {
                 disabled = true;
-                disabledReason = '已被使用';
+                // disabledReason = '已被使用';
+                disabledReason = FUtil1.I18n.message('tag_added');
               } else if (ob.resourceType === '') {
                 disabled = true;
-                disabledReason = '无资源类型';
+                disabledReason = FUtil1.I18n.message('msg_set_resource_type');
               }
 
               return {
