@@ -16,7 +16,7 @@ interface ICandidate {
 export interface InformExhibitInfoPageModelState {
   nodeID: number;
   informExhibitID: string;
-  informExhibitIdentity: 'resource' | 'object';
+  informExhibitIdentity: 'exhibit' | 'resource' | 'object';
   resourceType: string;
   allRuleText: string;
   allRuleResult: any;
@@ -325,7 +325,7 @@ export interface UpdateRelationAction extends AnyAction {
 const initStates: InformExhibitInfoPageModelState = {
   nodeID: -1,
   informExhibitID: '',
-  informExhibitIdentity: 'resource',
+  informExhibitIdentity: 'exhibit',
   resourceType: '',
 
   allRuleText: '',
@@ -465,12 +465,13 @@ const Model: ExhibitInfoPageModelType = {
       const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
       const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
 
+      console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           pageLoading: false,
           nodeID: data.nodeId,
-          informExhibitIdentity: actualOriginInfo.type,
+          informExhibitIdentity: data.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
           resourceType: data.resourceType,
           nodeName: data4.nodeName,
           informExhibitName: data.testResourceName,
