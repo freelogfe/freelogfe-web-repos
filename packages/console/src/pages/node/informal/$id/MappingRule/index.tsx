@@ -42,6 +42,7 @@ import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
+import moment from 'moment';
 
 const { compile } = require('@freelog/nmr_translator');
 
@@ -305,7 +306,8 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-              const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+              // const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+              const fileName = `测试节点${informalNodeManagerPage.nodeName} - 映射规则 - ${moment().format(FUtil.Predefined.momentDateFormat)}.txt`;
               const text: string = informalNodeManagerPage.rule_RuleList
                 .filter((rl) => rl.checked)
                 .map((rl) => {

@@ -843,7 +843,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, { put }: EffectsCommandMap) {
-      console.log('onUnmountExhibitPage9823yhdkujshfkasjdf');
+      // console.log('onUnmountExhibitPage9823yhdkujshfkasjdf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1628,7 +1628,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onChangeRuleChecked({ payload }: OnChangeRuleCheckedAction, { put, select }: EffectsCommandMap) {
-      console.log(payload, 'payload09823u4oi32kj');
+      // console.log(payload, 'payload09823u4oi32kj');
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
