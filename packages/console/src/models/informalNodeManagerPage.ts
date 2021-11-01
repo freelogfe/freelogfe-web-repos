@@ -1880,7 +1880,7 @@ const Model: InformalNodeManagerPageModelType = {
                 disabledReason = FUtil1.I18n.message('tag_added');
               } else if (rs.latestVersion === '') {
                 disabled = true;
-                disabledReason = '无可用版本';
+                disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
               }
               return {
                 id: rs.resourceId,
@@ -1937,7 +1937,7 @@ const Model: InformalNodeManagerPageModelType = {
                 disabledReason = FUtil1.I18n.message('tag_added');
               } else if (rs.latestVersion === '') {
                 disabled = true;
-                disabledReason = '无可用版本';
+                disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
               }
 
               return {
