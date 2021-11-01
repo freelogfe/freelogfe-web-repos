@@ -151,7 +151,8 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                         }: FPolicyBuilderDrawerProps) {
-  const refContainer = React.useRef(null);
+  const refContainer = React.useRef<any>(null);
+  const refPolicyTitleInput = React.useRef<any>(null);
   const [showView, setShowView] = React.useState<FPolicyBuilderDrawerStates['showView']>('edit');
 
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>(initStates.title);
@@ -507,6 +508,8 @@ function FPolicyBuilder({
   function onChangeDrawerVisible(visible: boolean) {
     if (!visible) {
       resetAllStates();
+    } else {
+      refPolicyTitleInput.current.focus();
     }
   }
 
@@ -581,442 +584,6 @@ function FPolicyBuilder({
 
   </Space>);
 
-  const EditView = (<div className={styles.maskingContainer} ref={refContainer}>
-    <div className={styles.policyHeader}>
-      <FInput
-        className={styles.policyTitle}
-        // className={styles.newTitle}
-        value={title}
-        // errorText={titleError}
-        onChange={(e) => {
-          onChangeTitleInput(e.target.value);
-        }}
-        // placeholder={'请输入授权策略名称'}
-        placeholder={'输入策略名称…'}
-      />
-
-      <Space size={20}>
-        {
-          editMode === 'code'
-            ? (<FTextBtn
-              type='default'
-              onClick={() => {
-                setEditMode('composition');
-              }}>
-              <Space size={4}>
-                <FComposition />
-                <span>组合模式</span>
-              </Space>
-            </FTextBtn>)
-            : (<FTextBtn
-              type='default'
-              onClick={() => {
-                setEditMode('code');
-              }}>
-              <Space size={4}>
-                <FCode />
-                <span>代码模式</span>
-              </Space>
-            </FTextBtn>)
-        }
-
-        <FTextBtn
-          type='default'
-          onClick={() => setTemplateVisible(true)}>
-          <Space size={4}>
-            <FFileText />
-            <span>策略模板</span>
-          </Space>
-        </FTextBtn>
-      </Space>
-    </div>
-    {titleError && <>
-      <div style={{ height: 5 }} />
-      <div className={styles.textError}>{titleError}</div>
-    </>}
-    <div style={{ height: 20 }} />
-
-    {
-      editMode === 'composition'
-        ? (<div className={styles.compositionView}>
-          <div className={styles.compositionSelect}>
-            <Space size={10}>
-              <span>可签约人群</span>
-              <span>所有人</span>
-            </Space>
-
-            <FDown />
-          </div>
-
-          <div style={{ height: 20 }} />
-
-          <Space size={20} style={{ width: '100%' }} direction='vertical'>
-            {
-              combinationData.map((cd, stateIndex) => {
-                return (<div key={cd.randomID} className={styles.compositionState}>
-
-                  <div className={styles.compositionStateHeader}>
-                    <div style={{ height: 15 }} />
-                    {
-                      cd.type === 'initial'
-                        ? (<div className={styles.compositionStateHeader1}>
-                          <div>
-                            <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
-                            <div style={{ width: 15 }} />
-                            <FTitleText
-                              type='h3'
-                              text={cd.name}
-                            />
-                          </div>
-
-                          <FContentText
-                            text={'初始状态不可删除'}
-                            type='negative'
-                          />
-
-                        </div>)
-                        : (<>
-                          <div className={styles.compositionStateHeader1}>
-                            <div>
-                              <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
-                              <div style={{ width: 15 }} />
-                              <FInput
-                                placeholder='输入状态名称'
-                                style={{ width: 400 }}
-                                value={cd.name}
-                                onChange={(e) => {
-                                  const value: string = e.target.value;
-
-                                  onChangeCombinationData({
-                                    name: value,
-                                    nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
-                                  }, cd.randomID);
-                                }}
-                                onBlur={() => {
-                                  // handleTargetState(combinationData);
-                                }}
-                              />
-                            </div>
-                            <FTextBtn
-                              type='danger'
-                              onClick={() => {
-                                onClickDeleteStateBtn(cd.randomID);
-                              }}
-                            >删除</FTextBtn>
-                          </div>
-                          {
-                            cd.nameError
-                              ? (<div style={{
-                                color: '#EE4040',
-                                paddingLeft: 55,
-                                paddingTop: 5,
-                              }}>{cd.nameError}</div>)
-                              : cd.isNameDuplicate
-                                ? (<div style={{
-                                  color: '#EE4040',
-                                  paddingLeft: 55,
-                                  paddingTop: 5,
-                                }}>有重复的名称</div>)
-                                : null
-                          }
-
-                        </>)
-                    }
-
-                    <div style={{ height: 15 }} />
-
-                    <div className={styles.compositionStateHeader2}>
-                      <div style={{ width: 50 }} />
-                      <FCheckbox
-                        checked={cd.auth}
-                        onChange={(e) => {
-                          onChangeCombinationData({
-                            auth: e.target.checked,
-                          }, cd.randomID);
-                        }}
-                      />
-                      <div style={{ width: 5 }} />
-                      <FContentText text={'授权'} />
-                      <div style={{ width: 20 }} />
-                      <FCheckbox
-                        checked={cd.testAuth}
-                        onChange={(e) => {
-                          onChangeCombinationData({
-                            testAuth: e.target.checked,
-                          }, cd.randomID);
-                        }}
-                      />
-                      <div style={{ width: 5 }} />
-                      <FContentText text={'测试授权'} />
-                    </div>
-                  </div>
-
-                  <div style={{ height: 15 }} />
-
-                  <Space
-                    className={styles.compositionStateBody}
-                    size={15}
-                    direction='vertical'
-                  >
-                    {
-                      cd.events.map((et, eventIndex) => {
-                        return (<div key={et.randomID} className={styles.compositionStateBodyItem}>
-                          <div className={styles.compositionStateBodyEvent}>
-
-                            {
-                              et.type !== 'terminate' && (<>
-                                <div>
-                                  <FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
-                                </div>
-
-                                <div style={{ height: 10 }} />
-                              </>)
-                            }
-
-                            {
-                              et.type === 'payment' && (<div>
-                                <FContentText text={'支付'} type='normal' />
-                                <div style={{ width: 10 }} />
-                                <InputNumber
-                                  min={1}
-                                  // placeholder={'输入交易金额'}
-                                  placeholder={FUil1.I18n.message('hint_transaction_amount')}
-                                  style={{ width: 120 }}
-                                  value={et.amount as 0}
-                                  onChange={(value) => {
-                                    // console.log(value, 'valuevaluevalue980upoaisdjfl');
-                                    onChangeCombinationEvent({
-                                      amount: value,
-                                    }, cd.randomID, et.randomID);
-                                  }}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FSelect
-                                  value={'feather'}
-                                  disabled
-                                  style={{ width: 120 }}
-                                  dataSource={currencies}
-                                  // onChange={(value) => {
-                                  //   onChangeCombinationEvent({});
-                                  // }}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FContentText text={'至'} type='normal' />
-                                <div style={{ width: 10 }} />
-                                <FSelect
-                                  value={'my'}
-                                  disabled
-                                  style={{ width: 180 }}
-                                  dataSource={accounts}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FContentText
-                                  type='normal'
-                                  text={'之后'}
-                                />
-                              </div>)
-                            }
-
-                            {
-                              et.type === 'relativeTime' && (<div>
-                                <InputNumber
-                                  min={1}
-                                  // placeholder={'输入周期数目'}
-                                  placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
-                                  style={{ width: 250 }}
-                                  value={et.num as number}
-                                  onChange={(value) => {
-                                    onChangeCombinationEvent({
-                                      num: value,
-                                    }, cd.randomID, et.randomID);
-                                  }}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FSelect
-                                  placeholder={FUil1.I18n.message('hint_relativetime_unit')}
-                                  value={et.unit || null}
-                                  // value={''}
-                                  style={{ width: 250 }}
-                                  dataSource={timeUnits}
-                                  onChange={(value) => {
-                                    onChangeCombinationEvent({
-                                      unit: value as 'year',
-                                    }, cd.randomID, et.randomID);
-                                  }}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FContentText
-                                  type='normal'
-                                  text={'之后'}
-                                />
-                              </div>)
-                            }
-
-                            {
-                              et.type === 'absoluteTime' && (<div>
-                                <FContentText
-                                  type='normal'
-                                  text={'于'}
-                                />
-                                <div style={{ width: 10 }} />
-                                <DatePicker
-                                  // placeholder={'选择日期时间'}
-                                  placeholder={FUil1.I18n.message('hint_time_datetime')}
-                                  style={{ width: 480 }}
-                                  showTime={{ format: 'HH:mm' }}
-                                  format='YYYY-MM-DD HH:mm'
-                                  disabledDate={disabledDate}
-                                  allowClear={false}
-                                  value={et.dateTime}
-                                  disabledTime={disabledTime}
-                                  onChange={(value, dateString) => {
-                                    const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
-                                    onChangeCombinationEvent({
-                                      dateTime: mo,
-                                    }, cd.randomID, et.randomID);
-                                  }}
-                                />
-                                <div style={{ width: 10 }} />
-                                <FContentText
-                                  type='normal'
-                                  text={'之后'}
-                                />
-                              </div>)
-                            }
-
-                            {
-                              et.type === 'terminate' && (<div>
-                                <FContentText type='normal' text={'状态机终止，不再接受事件'} />
-                              </div>)
-                            }
-
-                            {
-                              et.type !== 'terminate' && (<>
-                                <div style={{ height: 10 }}></div>
-
-                                <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                  <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                                  </FTitleText>
-                                </Divider>
-
-                                <div style={{ height: 10 }}></div>
-
-                                <div>
-                                  <FTitleText type='h4' text={'目标状态'} />
-                                </div>
-
-                                <div style={{ height: 10 }}></div>
-
-                                <div>
-                                  <FSelect
-                                    value={et.target || undefined}
-                                    placeholder='选择目标状态'
-                                    style={{ width: '100%' }}
-                                    dataSource={enabledTargetState}
-                                    onChange={(value) => {
-                                      onChangeCombinationEvent({
-                                        target: value,
-                                      }, cd.randomID, et.randomID);
-                                    }}
-                                    getPopupContainer={() => {
-                                      return refContainer?.current || document.body;
-                                    }}
-                                    dropdownRender={menu => (<>
-                                      {menu}
-                                      <div className={styles.dropdownRenderAdd}>
-                                        <FCircleBtn
-                                          size='small'
-                                          type='minor'
-                                          onClick={onClickAddStateBtn}
-                                        >
-                                          <FPlus style={{ fontSize: 12 }} />
-                                        </FCircleBtn>
-                                        <div style={{ width: 5 }} />
-                                        <FTextBtn
-                                          type='primary'
-                                          onClick={onClickAddStateBtn}
-                                        >新建状态</FTextBtn>
-                                      </div>
-                                    </>)}
-                                  />
-                                </div>
-                              </>)
-                            }
-
-                          </div>
-
-                          <FCircleBtn
-                            type='danger'
-                            onClick={() => {
-                              onClickDeleteEventBtn(cd.randomID, et.randomID);
-                            }}
-                          />
-                        </div>);
-
-                      })
-                    }
-
-                  </Space>
-
-                  {
-                    !cd.events.some((et) => {
-                      return et.type === 'terminate';
-                    }) && (<>
-                      <div className={styles.compositionStateFooter}>
-                        <FCircleBtn
-                          type='minor'
-                          onClick={() => {
-                            setAddingEventStateID(cd.randomID);
-                          }}
-                        ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
-                        <div style={{ width: 5 }} />
-                        <FTextBtn
-                          type='primary'
-                          onClick={() => {
-                            setAddingEventStateID(cd.randomID);
-                          }}
-                        >添加事件或指令</FTextBtn>
-                      </div>
-
-                      <div style={{ height: 15 }} />
-                    </>)
-                  }
-
-                </div>);
-              })
-            }
-
-          </Space>
-
-          <div style={{ height: 15 }} />
-
-          <FRectBtn
-            type='default'
-            onClick={onClickAddStateBtn}
-          >新建状态</FRectBtn>
-
-        </div>)
-        : (<>
-          <FCodemirror
-            value={codeText}
-            onChange={(value) => {
-              // console.log(value, 'value1234231421344324');
-              onChangeCodemirror(value);
-            }}
-          />
-          {codeTextError && <>
-            <div style={{ height: 5 }} />
-            <div className={styles.textError}>{codeTextError}</div>
-          </>}
-        </>)
-    }
-
-    {
-      isVerifying && (<div className={styles.maskingBox} />)
-    }
-
-  </div>);
-
   return (<>
     <FDrawer
       title={'添加授权策略'}
@@ -1025,6 +592,7 @@ function FPolicyBuilder({
       width={720}
       topRight={DrawerTopRight}
       afterVisibleChange={onChangeDrawerVisible}
+      // destroyOnClose
     >
       {
         showView === 'success' && (<div>
@@ -1109,7 +677,442 @@ function FPolicyBuilder({
               <div style={{ height: 30 }} />
             </>)
           }
-          {EditView}
+          <div className={styles.maskingContainer} ref={refContainer}>
+            <div className={styles.policyHeader}>
+              <input
+                ref={refPolicyTitleInput}
+                className={styles.policyTitle}
+                // className={styles.newTitle}
+                value={title}
+                // errorText={titleError}
+                onChange={(e) => {
+                  onChangeTitleInput(e.target.value);
+                }}
+                // placeholder={'请输入授权策略名称'}
+                placeholder={'输入策略名称…'}
+              />
+
+              <Space size={20}>
+                {
+                  editMode === 'code'
+                    ? (<FTextBtn
+                      type='default'
+                      onClick={() => {
+                        setEditMode('composition');
+                      }}>
+                      <Space size={4}>
+                        <FComposition />
+                        <span>组合模式</span>
+                      </Space>
+                    </FTextBtn>)
+                    : (<FTextBtn
+                      type='default'
+                      onClick={() => {
+                        setEditMode('code');
+                      }}>
+                      <Space size={4}>
+                        <FCode />
+                        <span>代码模式</span>
+                      </Space>
+                    </FTextBtn>)
+                }
+
+                <FTextBtn
+                  type='default'
+                  onClick={() => setTemplateVisible(true)}>
+                  <Space size={4}>
+                    <FFileText />
+                    <span>策略模板</span>
+                  </Space>
+                </FTextBtn>
+              </Space>
+            </div>
+            {titleError && <>
+              <div style={{ height: 5 }} />
+              <div className={styles.textError}>{titleError}</div>
+            </>}
+            <div style={{ height: 20 }} />
+
+            {
+              editMode === 'composition'
+                ? (<div className={styles.compositionView}>
+                  <div className={styles.compositionSelect}>
+                    <Space size={10}>
+                      <span>可签约人群</span>
+                      <span>所有人</span>
+                    </Space>
+
+                    <FDown />
+                  </div>
+
+                  <div style={{ height: 20 }} />
+
+                  <Space size={20} style={{ width: '100%' }} direction='vertical'>
+                    {
+                      combinationData.map((cd, stateIndex) => {
+                        return (<div key={cd.randomID} className={styles.compositionState}>
+
+                          <div className={styles.compositionStateHeader}>
+                            <div style={{ height: 15 }} />
+                            {
+                              cd.type === 'initial'
+                                ? (<div className={styles.compositionStateHeader1}>
+                                  <div>
+                                    <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
+                                    <div style={{ width: 15 }} />
+                                    <FTitleText
+                                      type='h3'
+                                      text={cd.name}
+                                    />
+                                  </div>
+
+                                  <FContentText
+                                    text={'初始状态不可删除'}
+                                    type='negative'
+                                  />
+
+                                </div>)
+                                : (<>
+                                  <div className={styles.compositionStateHeader1}>
+                                    <div>
+                                      <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
+                                      <div style={{ width: 15 }} />
+                                      <FInput
+                                        placeholder='输入状态名称'
+                                        style={{ width: 400 }}
+                                        value={cd.name}
+                                        onChange={(e) => {
+                                          const value: string = e.target.value;
+
+                                          onChangeCombinationData({
+                                            name: value,
+                                            nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
+                                          }, cd.randomID);
+                                        }}
+                                        onBlur={() => {
+                                          // handleTargetState(combinationData);
+                                        }}
+                                      />
+                                    </div>
+                                    <FTextBtn
+                                      type='danger'
+                                      onClick={() => {
+                                        onClickDeleteStateBtn(cd.randomID);
+                                      }}
+                                    >删除</FTextBtn>
+                                  </div>
+                                  {
+                                    cd.nameError
+                                      ? (<div style={{
+                                        color: '#EE4040',
+                                        paddingLeft: 55,
+                                        paddingTop: 5,
+                                      }}>{cd.nameError}</div>)
+                                      : cd.isNameDuplicate
+                                        ? (<div style={{
+                                          color: '#EE4040',
+                                          paddingLeft: 55,
+                                          paddingTop: 5,
+                                        }}>有重复的名称</div>)
+                                        : null
+                                  }
+
+                                </>)
+                            }
+
+                            <div style={{ height: 15 }} />
+
+                            <div className={styles.compositionStateHeader2}>
+                              <div style={{ width: 50 }} />
+                              <FCheckbox
+                                checked={cd.auth}
+                                onChange={(e) => {
+                                  onChangeCombinationData({
+                                    auth: e.target.checked,
+                                  }, cd.randomID);
+                                }}
+                              />
+                              <div style={{ width: 5 }} />
+                              <FContentText text={'授权'} />
+                              <div style={{ width: 20 }} />
+                              <FCheckbox
+                                checked={cd.testAuth}
+                                onChange={(e) => {
+                                  onChangeCombinationData({
+                                    testAuth: e.target.checked,
+                                  }, cd.randomID);
+                                }}
+                              />
+                              <div style={{ width: 5 }} />
+                              <FContentText text={'测试授权'} />
+                            </div>
+                          </div>
+
+                          <div style={{ height: 15 }} />
+
+                          <Space
+                            className={styles.compositionStateBody}
+                            size={15}
+                            direction='vertical'
+                          >
+                            {
+                              cd.events.map((et, eventIndex) => {
+                                return (<div key={et.randomID} className={styles.compositionStateBodyItem}>
+                                  <div className={styles.compositionStateBodyEvent}>
+
+                                    {
+                                      et.type !== 'terminate' && (<>
+                                        <div>
+                                          <FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
+                                        </div>
+
+                                        <div style={{ height: 10 }} />
+                                      </>)
+                                    }
+
+                                    {
+                                      et.type === 'payment' && (<div>
+                                        <FContentText text={'支付'} type='normal' />
+                                        <div style={{ width: 10 }} />
+                                        <InputNumber
+                                          min={1}
+                                          // placeholder={'输入交易金额'}
+                                          placeholder={FUil1.I18n.message('hint_transaction_amount')}
+                                          style={{ width: 120 }}
+                                          value={et.amount as 0}
+                                          onChange={(value) => {
+                                            // console.log(value, 'valuevaluevalue980upoaisdjfl');
+                                            onChangeCombinationEvent({
+                                              amount: value,
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FSelect
+                                          value={'feather'}
+                                          disabled
+                                          style={{ width: 120 }}
+                                          dataSource={currencies}
+                                          // onChange={(value) => {
+                                          //   onChangeCombinationEvent({});
+                                          // }}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText text={'至'} type='normal' />
+                                        <div style={{ width: 10 }} />
+                                        <FSelect
+                                          value={'my'}
+                                          disabled
+                                          style={{ width: 180 }}
+                                          dataSource={accounts}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText
+                                          type='normal'
+                                          text={'之后'}
+                                        />
+                                      </div>)
+                                    }
+
+                                    {
+                                      et.type === 'relativeTime' && (<div>
+                                        <InputNumber
+                                          min={1}
+                                          // placeholder={'输入周期数目'}
+                                          placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
+                                          style={{ width: 250 }}
+                                          value={et.num as number}
+                                          onChange={(value) => {
+                                            onChangeCombinationEvent({
+                                              num: value,
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FSelect
+                                          placeholder={FUil1.I18n.message('hint_relativetime_unit')}
+                                          value={et.unit || null}
+                                          // value={''}
+                                          style={{ width: 250 }}
+                                          dataSource={timeUnits}
+                                          onChange={(value) => {
+                                            onChangeCombinationEvent({
+                                              unit: value as 'year',
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText
+                                          type='normal'
+                                          text={'之后'}
+                                        />
+                                      </div>)
+                                    }
+
+                                    {
+                                      et.type === 'absoluteTime' && (<div>
+                                        <FContentText
+                                          type='normal'
+                                          text={'于'}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <DatePicker
+                                          // placeholder={'选择日期时间'}
+                                          placeholder={FUil1.I18n.message('hint_time_datetime')}
+                                          style={{ width: 480 }}
+                                          showTime={{ format: 'HH:mm' }}
+                                          format='YYYY-MM-DD HH:mm'
+                                          disabledDate={disabledDate}
+                                          allowClear={false}
+                                          value={et.dateTime}
+                                          disabledTime={disabledTime}
+                                          onChange={(value, dateString) => {
+                                            const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
+                                            onChangeCombinationEvent({
+                                              dateTime: mo,
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText
+                                          type='normal'
+                                          text={'之后'}
+                                        />
+                                      </div>)
+                                    }
+
+                                    {
+                                      et.type === 'terminate' && (<div>
+                                        <FContentText type='normal' text={'状态机终止，不再接受事件'} />
+                                      </div>)
+                                    }
+
+                                    {
+                                      et.type !== 'terminate' && (<>
+                                        <div style={{ height: 10 }}></div>
+
+                                        <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
+                                          <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                          </FTitleText>
+                                        </Divider>
+
+                                        <div style={{ height: 10 }}></div>
+
+                                        <div>
+                                          <FTitleText type='h4' text={'目标状态'} />
+                                        </div>
+
+                                        <div style={{ height: 10 }}></div>
+
+                                        <div>
+                                          <FSelect
+                                            value={et.target || undefined}
+                                            placeholder='选择目标状态'
+                                            style={{ width: '100%' }}
+                                            dataSource={enabledTargetState}
+                                            onChange={(value) => {
+                                              onChangeCombinationEvent({
+                                                target: value,
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                            getPopupContainer={() => {
+                                              return refContainer?.current || document.body;
+                                            }}
+                                            dropdownRender={menu => (<>
+                                              {menu}
+                                              <div className={styles.dropdownRenderAdd}>
+                                                <FCircleBtn
+                                                  size='small'
+                                                  type='minor'
+                                                  onClick={onClickAddStateBtn}
+                                                >
+                                                  <FPlus style={{ fontSize: 12 }} />
+                                                </FCircleBtn>
+                                                <div style={{ width: 5 }} />
+                                                <FTextBtn
+                                                  type='primary'
+                                                  onClick={onClickAddStateBtn}
+                                                >新建状态</FTextBtn>
+                                              </div>
+                                            </>)}
+                                          />
+                                        </div>
+                                      </>)
+                                    }
+
+                                  </div>
+
+                                  <FCircleBtn
+                                    type='danger'
+                                    onClick={() => {
+                                      onClickDeleteEventBtn(cd.randomID, et.randomID);
+                                    }}
+                                  />
+                                </div>);
+
+                              })
+                            }
+
+                          </Space>
+
+                          {
+                            !cd.events.some((et) => {
+                              return et.type === 'terminate';
+                            }) && (<>
+                              <div className={styles.compositionStateFooter}>
+                                <FCircleBtn
+                                  type='minor'
+                                  onClick={() => {
+                                    setAddingEventStateID(cd.randomID);
+                                  }}
+                                ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                                <div style={{ width: 5 }} />
+                                <FTextBtn
+                                  type='primary'
+                                  onClick={() => {
+                                    setAddingEventStateID(cd.randomID);
+                                  }}
+                                >添加事件或指令</FTextBtn>
+                              </div>
+
+                              <div style={{ height: 15 }} />
+                            </>)
+                          }
+
+                        </div>);
+                      })
+                    }
+
+                  </Space>
+
+                  <div style={{ height: 15 }} />
+
+                  <FRectBtn
+                    type='default'
+                    onClick={onClickAddStateBtn}
+                  >新建状态</FRectBtn>
+
+                </div>)
+                : (<>
+                  <FCodemirror
+                    value={codeText}
+                    onChange={(value) => {
+                      // console.log(value, 'value1234231421344324');
+                      onChangeCodemirror(value);
+                    }}
+                  />
+                  {codeTextError && <>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.textError}>{codeTextError}</div>
+                  </>}
+                </>)
+            }
+
+            {
+              isVerifying && (<div className={styles.maskingBox} />)
+            }
+
+          </div>
         </>
       }
 
