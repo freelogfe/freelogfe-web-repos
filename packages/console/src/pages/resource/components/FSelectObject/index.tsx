@@ -1,27 +1,27 @@
 import * as React from 'react';
-import styles from "./index.less";
-import {Space} from "antd";
-import FObjectCard from "./ObjectCard";
-import {LoadingOutlined} from '@ant-design/icons';
-import FUpload from "@/components/FUpload";
-import {RcFile} from "antd/lib/upload/interface";
-import FObjectSelector from "@/containers/FObjectSelector";
-import FDrawer from "@/components/FDrawer";
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {FRectBtn, FTextBtn} from '@/components/FButton';
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionCreatorPageModelState, UserModelState} from "@/models/connect";
+import styles from './index.less';
+import { Space } from 'antd';
+import FObjectCard from './ObjectCard';
+import { LoadingOutlined } from '@ant-design/icons';
+import FUpload from '@/components/FUpload';
+import { RcFile } from 'antd/lib/upload/interface';
+import FObjectSelector from '@/containers/FObjectSelector';
+import FDrawer from '@/components/FDrawer';
+import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
   ChangeAction,
   FetchRawPropsAction,
   HandleObjectInfoAction,
-} from "@/models/resourceVersionCreatorPage";
-import FTable from "@/components/FTable";
-import {FContentText} from '@/components/FText';
+} from '@/models/resourceVersionCreatorPage';
+import FTable from '@/components/FTable';
+import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
 // import FLoadingTip from "@/components/FLoadingTip";
-import {FLoading} from "@/components/FIcons";
+import { FLoading } from '@/components/FIcons';
 
 const errorTexts = {
   duplicated: FUtil1.I18n.message('resource_exist'),
@@ -38,7 +38,7 @@ export interface FSelectObject {
 let uploadCancelHandler: any = null;
 let handleDataUploadOrImportObject: any = null;
 
-function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObject) {
+function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectObject) {
 
   const [progress, setProgress] = React.useState<number | null>(null);
 
@@ -57,7 +57,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
   function handleDataUploadOrImportObjectFunc(obj?: { id: string; name: string; }) {
 
-    return function () {
+    return function() {
       onChange({
         selectedFileStatus: -3,
       });
@@ -71,7 +71,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
           type: 'resourceVersionCreatorPage/fetchRawProps',
         });
       }
-    }
+    };
   }
 
   /**
@@ -83,14 +83,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
       objectIdOrName: obj.id,
     };
-    const {data} = await FServiceAPI.Storage.objectDetails(params);
+    const { data } = await FServiceAPI.Storage.objectDetails(params);
 
     const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
       sha1: data.sha1,
       resourceType: resourceVersionCreatorPage.resourceType,
     };
 
-    const {data: data4} = await FServiceAPI.Storage.fileProperty(params4);
+    const { data: data4 } = await FServiceAPI.Storage.fileProperty(params4);
     // console.log(data4, 'data4data4data4data4');
     if (!data4) {
       return onChange({
@@ -109,7 +109,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       fileSha1: data.sha1,
     };
 
-    const {data: data3} = await FServiceAPI.Resource.getResourceBySha1(params3);
+    const { data: data3 } = await FServiceAPI.Resource.getResourceBySha1(params3);
     // console.log(data3, 'data3data3data3data3data3@#########');
 
     // 如果之前已经被使用过，展示使用列表
@@ -138,7 +138,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                   resourceID: d.resourceId,
                   version: v.version,
                 }),
-            }
+            };
           });
         }).flat(),
       });
@@ -180,14 +180,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
     const sha1: string = await FUtil.Tool.getSHA1Hash(file);
 
-    const {data: isExists}: any = await FServiceAPI.Storage.fileIsExist({sha1});
+    const { data: isExists }: any = await FServiceAPI.Storage.fileIsExist({ sha1 });
     if (isExists[0].isExisting) {
 
       const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
         fileSha1: sha1,
       };
 
-      const {data: data3} = await FServiceAPI.Resource.getResourceBySha1(params3);
+      const { data: data3 } = await FServiceAPI.Resource.getResourceBySha1(params3);
       // console.log(data3, 'data3data3data3data3data3@#########');
 
       // 如果之前已经被使用过，展示使用列表
@@ -216,7 +216,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                     resourceID: d.resourceId,
                     version: v.version,
                   }),
-              }
+              };
             });
           }).flat(),
         });
@@ -236,7 +236,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       }, true);
       uploadCancelHandler = cancel;
       // console.log(returns, 'returnsreturns1234');
-      const {data} = await promise;
+      const { data } = await promise;
       uploadCancelHandler = null;
       // console.log(data, 'data1241234');
       // if (!data) {
@@ -275,12 +275,12 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     {
       resourceVersionCreatorPage.selectedFileStatus !== -3 && resourceVersionCreatorPage.selectedFileStatus !== -2
         ? (<div>
-          <Space size={50} style={{height: 38}}>
+          <Space size={50} style={{ height: 38 }}>
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
-                  <span>{FUtil1.I18n.message('verifying')}<FLoading style={{paddingLeft: 10}}/></span>
-                  <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
+                  <span>{FUtil1.I18n.message('verifying')}<FLoading style={{ paddingLeft: 10 }} /></span>
+                  <span style={{ color: '#666' }}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
                 : (<Space size={15}>
                   <FUpload
@@ -292,11 +292,11 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                     showUploadList={false}
                   >
                     <FRectBtn
-                      type="default"
+                      type='default'
                     >{FUtil1.I18n.message('upload_from_local')}</FRectBtn>
                   </FUpload>
                   <FRectBtn
-                    type="default"
+                    type='default'
                     onClick={() => {
                       // setModalVisible(true)
                       onChange({
@@ -349,11 +349,11 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
           </Space>
           {
             (resourceVersionCreatorPage.selectedFileStatus === 3 || resourceVersionCreatorPage.selectedFileStatus === 4) && (<>
-              <div style={{height: 20}}/>
+              <div style={{ height: 20 }} />
               <div className={styles.tableWrap}>
                 <FTable
                   rowClassName={styles.tableRowClassName}
-                  scroll={{y: 350}}
+                  scroll={{ y: resourceVersionCreatorPage.selectedFileUsedResource.length > 5 ? 350 : undefined }}
                   columns={[
                     {
                       title: '资源',
@@ -362,9 +362,9 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                       render(value: any, record: any, index: number) {
                         return (<FContentText
                           text={record.resourceName}
-                          style={{maxWidth: 370}}
+                          style={{ maxWidth: 370 }}
                         />);
-                      }
+                      },
                     },
                     {
                       title: '类型',
@@ -390,8 +390,8 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                       dataIndex: 'operation',
                       render(value: any, record: any, index: number) {
                         return (<FTextBtn onClick={() => {
-                          window.open(record.url)
-                        }}>查看</FTextBtn>)
+                          window.open(record.url);
+                        }}>查看</FTextBtn>);
                       },
                     },
                   ]}
@@ -437,7 +437,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
         // setModalVisible(false)
         onChange({
           selectedFileObjectDrawerVisible: false,
-        })
+        });
       }}
       visible={resourceVersionCreatorPage.selectedFileObjectDrawerVisible}
       width={820}
@@ -452,7 +452,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
   </div>);
 }
 
-export default connect(({resourceVersionCreatorPage, user}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage, user }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
   user: user,
 }))(FSelectObject);
