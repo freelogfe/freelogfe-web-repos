@@ -174,10 +174,10 @@ export interface InformalNodeManagerPageModelState {
     };
   }[];
 
-  rulePageStatus: 'normal' | 'export' | 'delete' | 'coding';
-  ruleIndeterminate: boolean;
-  ruleIndeterminateChecked: boolean;
-  rulePageRuleList: {
+  rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
+  rule_Indeterminate: boolean;
+  rule_IndeterminateChecked: boolean;
+  rule_RuleList: {
     id: string;
     checked: boolean;
     matchErrors: string[];
@@ -185,20 +185,20 @@ export interface InformalNodeManagerPageModelState {
     efficientInfos: any[];
   }[];
 
-  rulePageCodeInput: string;
-  rulePageCodeIsDirty: boolean;
-  rulePagePromptLeavePath: string;
-  rulePageCodeIsChecking: boolean;
-  rulePageCodeCompileErrors: null | {
+  rule_CodeInput: string;
+  rule_CodeIsDirty: boolean;
+  rule_PromptLeavePath: string;
+  rule_CodeIsChecking: boolean;
+  rule_CodeCompileErrors: null | {
     charPositionInLine: number;
     line: number;
     msg: string;
     offendingSymbol: string;
   }[];
-  rulePageCodeExecutionError: null | {
+  rule_CodeExecutionError: null | {
     msg: string;
   }[];
-  rulePageCodeSaveSuccess: boolean;
+  rule_CodeSaveSuccess: boolean;
 
 }
 
@@ -699,6 +699,8 @@ const themeInitStates: Pick<InformalNodeManagerPageModelState,
   theme_List: [],
 };
 
+// const ruleInitStates: Pick<InformalNodeManagerPageModelState, any>
+
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   nodeID: -1,
@@ -745,17 +747,17 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   ...themeInitStates,
 
-  rulePageStatus: 'normal',
-  ruleIndeterminate: false,
-  ruleIndeterminateChecked: false,
-  rulePageRuleList: [],
-  rulePageCodeInput: '',
-  rulePageCodeIsDirty: false,
-  rulePagePromptLeavePath: '',
-  rulePageCodeIsChecking: false,
-  rulePageCodeCompileErrors: null,
-  rulePageCodeExecutionError: null,
-  rulePageCodeSaveSuccess: false,
+  rule_PageStatus: 'normal',
+  rule_Indeterminate: false,
+  rule_IndeterminateChecked: false,
+  rule_RuleList: [],
+  rule_CodeInput: '',
+  rule_CodeIsDirty: false,
+  rule_PromptLeavePath: '',
+  rule_CodeIsChecking: false,
+  rule_CodeCompileErrors: null,
+  rule_CodeExecutionError: null,
+  rule_CodeSaveSuccess: false,
 
 };
 
@@ -786,7 +788,7 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onChangePage({ payload }: OnChangePageAction, { put }: EffectsCommandMap) {
       // console.log('onChangePage,9032hjkjadslkjflasd');
-      yield put({
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
           showPage: payload.value,
@@ -827,17 +829,17 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePagePromptLeavePath: '',
+          rule_PromptLeavePath: '',
 
-          ruleIndeterminate: false,
-          ruleIndeterminateChecked: false,
-          rulePageRuleList: [],
-          rulePageCodeInput: '',
-          rulePageCodeIsDirty: false,
-          rulePageCodeIsChecking: false,
-          rulePageCodeCompileErrors: null,
-          rulePageCodeExecutionError: null,
-          rulePageCodeSaveSuccess: false,
+          rule_Indeterminate: false,
+          rule_IndeterminateChecked: false,
+          rule_RuleList: [],
+          rule_CodeInput: '',
+          rule_CodeIsDirty: false,
+          rule_CodeIsChecking: false,
+          rule_CodeCompileErrors: null,
+          rule_CodeExecutionError: null,
+          rule_CodeSaveSuccess: false,
         },
       });
     },
@@ -846,7 +848,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePagePromptLeavePath: payload.href,
+          rule_PromptLeavePath: payload.href,
         },
       });
 
@@ -855,13 +857,13 @@ const Model: InformalNodeManagerPageModelType = {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
-      router.push(informalNodeManagerPage.rulePagePromptLeavePath);
+      router.push(informalNodeManagerPage.rule_PromptLeavePath);
     },
     * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePagePromptLeavePath: '',
+          rule_PromptLeavePath: '',
         },
       });
     },
@@ -1052,7 +1054,7 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
 
-      console.log('onChangeExhibitType 11111');
+      // console.log('onChangeExhibitType 11111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1066,7 +1068,7 @@ const Model: InformalNodeManagerPageModelType = {
           isRestart: true,
         },
       });
-      console.log('onChangeExhibitType 22222');
+      // console.log('onChangeExhibitType 22222');
 
     },
     * onChangeExhibitStatus({ payload }: OnChangeExhibitStatusAction, { put }: EffectsCommandMap) {
@@ -1344,18 +1346,18 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageCodeInput: data.ruleText,
-          rulePageCodeIsDirty: false,
-          ruleIndeterminate: false,
-          ruleIndeterminateChecked: false,
-          rulePageRuleList: data.testRules.map((tr: any) => {
+          rule_CodeInput: data.ruleText,
+          rule_CodeIsDirty: false,
+          rule_Indeterminate: false,
+          rule_IndeterminateChecked: false,
+          rule_RuleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
             };
           }),
-          rulePageCodeExecutionError: null,
-          rulePageCodeCompileErrors: null,
+          rule_CodeExecutionError: null,
+          rule_CodeCompileErrors: null,
         },
       });
     },
@@ -1367,7 +1369,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageCodeIsChecking: true,
+          rule_CodeIsChecking: true,
           // codeCompileErrors: null,
           // codeExecutionError: null,
           // codeSaveSuccess: null,
@@ -1376,7 +1378,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
-        testRuleText: informalNodeManagerPage.rulePageCodeInput,
+        testRuleText: informalNodeManagerPage.rule_CodeInput,
       };
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
 
@@ -1403,14 +1405,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageCodeIsDirty: false,
+          rule_CodeIsDirty: false,
           ruleText: data1.ruleText,
-          rulePageCodeIsChecking: false,
-          rulePageCodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
-          rulePageCodeSaveSuccess: codeExecutionError.length === 0,
-          ruleIndeterminate: false,
-          ruleIndeterminateChecked: false,
-          rulePageRuleList: data1.testRules.map((tr: any) => {
+          rule_CodeIsChecking: false,
+          rule_CodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
+          rule_CodeSaveSuccess: codeExecutionError.length === 0,
+          rule_Indeterminate: false,
+          rule_IndeterminateChecked: false,
+          rule_RuleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
@@ -1487,7 +1489,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put({
         type: 'change',
         payload: {
-          rulePageCodeInput: payload.value + '\n' + informalNodeManagerPage.rulePageCodeInput,
+          rulePageCodeInput: payload.value + '\n' + informalNodeManagerPage.rule_CodeInput,
           rulePageStatus: 'coding',
           rulePageCodeIsDirty: true,
           rulePageCodeCompileErrors: null,
@@ -1500,7 +1502,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageStatus: 'export',
+          rule_PageStatus: 'export',
         },
       });
     },
@@ -1508,7 +1510,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageStatus: 'delete',
+          rule_PageStatus: 'delete',
         },
       });
     },
@@ -1516,7 +1518,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageStatus: 'coding',
+          rule_PageStatus: 'coding',
         },
       });
     },
@@ -1529,14 +1531,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageStatus: 'normal',
+          rule_PageStatus: 'normal',
 
-          rulePageCodeInput: informalNodeManagerPage.ruleText,
-          rulePageCodeIsDirty: false,
-          rulePageCodeIsChecking: false,
-          rulePageCodeCompileErrors: null,
-          rulePageCodeExecutionError: null,
-          rulePageCodeSaveSuccess: false,
+          rule_CodeInput: informalNodeManagerPage.ruleText,
+          rule_CodeIsDirty: false,
+          rule_CodeIsChecking: false,
+          rule_CodeCompileErrors: null,
+          rule_CodeExecutionError: null,
+          rule_CodeSaveSuccess: false,
         },
       });
     },
@@ -1548,14 +1550,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageStatus: 'normal',
+          rule_PageStatus: 'normal',
 
-          rulePageCodeInput: informalNodeManagerPage.ruleText,
-          rulePageCodeIsDirty: false,
-          rulePageCodeIsChecking: false,
-          rulePageCodeCompileErrors: null,
-          rulePageCodeExecutionError: null,
-          rulePageCodeSaveSuccess: false,
+          rule_CodeInput: informalNodeManagerPage.ruleText,
+          rule_CodeIsDirty: false,
+          rule_CodeIsChecking: false,
+          rule_CodeCompileErrors: null,
+          rule_CodeExecutionError: null,
+          rule_CodeSaveSuccess: false,
         },
       });
     },
@@ -1574,9 +1576,9 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          ruleIndeterminate: false,
-          ruleIndeterminateChecked: payload.checked,
-          rulePageRuleList: informalNodeManagerPage.rulePageRuleList.map((rpr) => {
+          rule_Indeterminate: false,
+          rule_IndeterminateChecked: payload.checked,
+          rule_RuleList: informalNodeManagerPage.rule_RuleList.map((rpr) => {
             return {
               ...rpr,
               checked: payload.checked,
@@ -1586,12 +1588,12 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onChangeRuleChecked({ payload }: OnChangeRuleCheckedAction, { put, select }: EffectsCommandMap) {
+      console.log(payload, 'payload09823u4oi32kj');
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
-
-      const rulePageRuleList: InformalNodeManagerPageModelState['rulePageRuleList'] = informalNodeManagerPage.rulePageRuleList.map((rl) => {
+      const rulePageRuleList: InformalNodeManagerPageModelState['rule_RuleList'] = informalNodeManagerPage.rule_RuleList.map((rl) => {
         if (rl.id !== payload.ruleID) {
           return rl;
         }
@@ -1607,16 +1609,16 @@ const Model: InformalNodeManagerPageModelType = {
       })) {
         ruleIndeterminateChecked = true;
       }
-      yield put({
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
-          ruleIndeterminateChecked,
-          ruleIndeterminate: !(rulePageRuleList.every((rp) => {
+          rule_IndeterminateChecked: ruleIndeterminateChecked,
+          rule_Indeterminate: !(rulePageRuleList.every((rp) => {
             return !rp.checked;
           }) || rulePageRuleList.every((rp) => {
             return rp.checked;
           })),
-          rulePageRuleList: rulePageRuleList,
+          rule_RuleList: rulePageRuleList,
         },
       });
     },
@@ -1652,7 +1654,7 @@ const Model: InformalNodeManagerPageModelType = {
           },
         });
       } else {
-        yield put({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             addExhibitDrawerSelectValue: '!market',
@@ -2365,7 +2367,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const payloadValue: string = payload.value;
 
-      yield put({
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
           replacedKeywords: payloadValue,
