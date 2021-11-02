@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Checkbox, Space} from "antd";
-import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/marketResourcePage";
-import FContractStatusBadge from "@/components/FContractStatusBadge";
-import {FTextBtn} from "@/components/FButton";
-import {FUtil} from '@freelog/tools-lib';
+import { Checkbox, Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/marketResourcePage';
+import FContractStatusBadge from '@/components/FContractStatusBadge';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
 
 interface ContractsProps {
@@ -14,7 +14,7 @@ interface ContractsProps {
   marketResourcePage: MarketResourcePageModelState;
 }
 
-function Contracts({dispatch, marketResourcePage}: ContractsProps) {
+function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
 
   const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
 
@@ -26,7 +26,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '当前合约' : '可复用的合约'}</div>
-    <div style={{height: 5}}/>
+    <div style={{ height: 5 }} />
     {
       contracts.map((c) => {
         return (<div key={c.id} className={styles.Contracts}>
@@ -60,7 +60,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
                           }),
                         };
                       }),
-                    }
+                    },
                   });
                 }}
               />)
@@ -68,14 +68,14 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           </div>
           {/*<div style={{height: 10}}/>*/}
           {/*<pre>{c.text}</pre>*/}
-          <FContractDisplay contractID={c.id}/>
+          <FContractDisplay contractID={c.id} />
           {/*<div style={{height: 10}}/>*/}
           <div className={styles.footer}>
             <Space size={0}>
               <div>合约ID：</div>
               <div>{c.id}</div>
             </Space>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <Space size={0}>
               <div>签约时间：</div>
               <div>{c.createTime}</div>
@@ -84,16 +84,23 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
 
           <div className={styles.exhibit}>
             {/*<div style={{borderTop: '1px solid #E5E7EB'}}/>*/}
-            <div style={{height: 10}}/>
-            <div>当前合约在此节点上存在 <span style={{color: '#2784FF'}}>{c.exhibits.length}</span> 次复用：</div>
-            <div style={{height: 8}}/>
-            <Space size={5} direction="vertical" style={{width: '100%'}}>
+            <div style={{ height: 10 }} />
+            <div>当前合约在此节点上存在 <span style={{ color: '#2784FF' }}>{c.exhibits.length}</span> 次复用：</div>
+            <div style={{ height: 8 }} />
+            <Space size={5} direction='vertical' style={{ width: '100%' }}>
               {
                 c.exhibits.map((et) => {
-                  return (<Space key={et.exhibitID} size={2} style={{display: 'flex', alignItems: 'center'}}>
+                  return (<Space key={et.exhibitID} size={2} style={{ display: 'flex', alignItems: 'center' }}>
                     <div>展品</div>
                     <FTextBtn
-                      style={{fontSize: 12}}
+                      style={{
+                        fontSize: 12,
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        maxWidth: 200,
+                        display: 'block',
+                      }}
                       onClick={() => {
                         window.open(FUtil.LinkTo.exhibitManagement({
                           exhibitID: et.exhibitID,
@@ -105,7 +112,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
                 })
               }
             </Space>
-            <div style={{height: 10}}/>
+            <div style={{ height: 10 }} />
           </div>
         </div>);
       })
@@ -113,4 +120,4 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
   </div>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Contracts);
+export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Contracts);
