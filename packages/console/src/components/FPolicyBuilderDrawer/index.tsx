@@ -17,6 +17,7 @@ import { FUtil } from '@freelog/tools-lib';
 import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
+import FTooltip from '@/components/FTooltip';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
@@ -586,7 +587,28 @@ function FPolicyBuilder({
 
   return (<>
     <FDrawer
-      title={'添加授权策略'}
+      title={<Space size={10}>
+        <FTitleText type='h2' text={'添加授权策略'} />
+        <FTooltip title={<FTextBtn
+          type='default'
+          onClick={() => {
+            window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01')
+          }}
+        >点击查看帮助文档</FTextBtn>}>
+          <label style={{
+            cursor: 'pointer',
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#E9E9E9',
+            fontSize: 12,
+          }}>?
+          </label>
+        </FTooltip>
+      </Space>}
       onClose={() => onCancel && onCancel()}
       visible={visible}
       width={720}
