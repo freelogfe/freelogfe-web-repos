@@ -10,8 +10,6 @@ import Side from './Side';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
-  ChangeAction,
-  FetchInfoAction,
   OnMountPageAction,
   OnUnmountPageAction,
   UpdateStatusAction,
@@ -55,7 +53,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
   return (<div className={styles.styles}>
     <Helmet>
-      <title>{`编辑展品信息 · ${exhibitInfoPage.pName} - Freelog`}</title>
+      <title>{`编辑展品信息 · ${exhibitInfoPage.exhibit_Name} - Freelog`}</title>
     </Helmet>
     <div>
       <div className={styles.header}>
@@ -63,14 +61,14 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           {/*<FLink to={}>*/}
           <FTextBtn
             onClick={() => {
-              window.open(FUtil.LinkTo.nodeManagement({ nodeID: exhibitInfoPage.nodeId }));
+              window.open(FUtil.LinkTo.nodeManagement({ nodeID: exhibitInfoPage.exhibit_BelongNode_ID }));
             }}
             style={{ fontWeight: 600 }}
             type='default'
           >
             <FContentText
               type='negative'
-              text={exhibitInfoPage.nodeName}
+              text={exhibitInfoPage.exhibit_BelongNode_Name}
               className={styles.nodeName}
             />
           </FTextBtn>
@@ -82,7 +80,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           />
           <div style={{ width: 2 }} />
           <FTitleText
-            text={exhibitInfoPage.pName}
+            text={exhibitInfoPage.exhibit_Name}
             style={{
               maxWidth: 800,
             }}
@@ -91,18 +89,18 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         </div>
         <Space size={20}>
           {
-            exhibitInfoPage.resourceType === 'theme'
+            exhibitInfoPage.side_ResourceType === 'theme'
               ? (<span
-                style={{ color: exhibitInfoPage.isOnline ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('toggle_activate_theme')}</span>)
+                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('toggle_activate_theme')}</span>)
               : (<span
-                style={{ color: exhibitInfoPage.isOnline ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('btn_show_exhibit')}</span>)
+                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('btn_show_exhibit')}</span>)
           }
 
           <FSwitch
-            disabled={(!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0) && !exhibitInfoPage.isOnline}
-            checked={exhibitInfoPage.isOnline}
+            disabled={(!exhibitInfoPage.exhibit_IsAuth || exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0) && !exhibitInfoPage.exhibit_Online}
+            checked={exhibitInfoPage.exhibit_Online}
             onChange={(value) => {
-              if (exhibitInfoPage.resourceType !== 'theme' || !exhibitInfoPage.nodeThemeId || !value) {
+              if (exhibitInfoPage.side_ResourceType !== 'theme' || !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId || !value) {
                 dispatch<UpdateStatusAction>({
                   type: 'exhibitInfoPage/updateStatus',
                   payload: value ? 1 : 0,
@@ -127,8 +125,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             }}
           />
           {
-            !exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0 ? (
-              <FTooltip title={!exhibitInfoPage.isAuth ? exhibitInfoPage.authErrorText : '暂无上线策略'}>
+            !exhibitInfoPage.exhibit_IsAuth || exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0 ? (
+              <FTooltip title={!exhibitInfoPage.exhibit_IsAuth ? exhibitInfoPage.exhibit_AuthErrorText : '暂无上线策略'}>
                 <FWarning />
               </FTooltip>) : ''
           }

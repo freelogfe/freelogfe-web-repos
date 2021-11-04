@@ -1,20 +1,20 @@
 import * as React from 'react';
 import styles from './index.less';
-import {connect, Dispatch} from "dva";
-import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {FContentText, FTitleText} from "@/components/FText";
-import {FTextBtn} from "@/components/FButton";
-import {FUtil} from '@freelog/tools-lib';
-import {ChangeAction} from "@/models/exhibitInfoPage";
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
+import { FContentText, FTitleText } from '@/components/FText';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
+import { ChangeAction } from '@/models/exhibitInfoPage';
 
 interface ResourcesProps {
   dispatch: Dispatch;
   exhibitInfoPage: ExhibitInfoPageModelState;
 }
 
-function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
+function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
 
-  const [mainResource, ...otherResource] = exhibitInfoPage.associated;
+  const [mainResource, ...otherResource] = exhibitInfoPage.contract_Associated;
 
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
@@ -33,11 +33,13 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
   // }
 
   return (<>
-    <FTitleText type="h4">主资源</FTitleText>
+    <FTitleText type='h4'>主资源</FTitleText>
 
     <a
-      className={styles.signResource + ' ' + (mainResource.id === exhibitInfoPage.selectedAssociatedID ? styles.activatedSignResource : '')}
-      onClick={() => onChange({selectedAssociatedID: mainResource.id})}
+      className={styles.signResource + ' ' + (mainResource.id === exhibitInfoPage.contract_SelectedAssociatedID ? styles.activatedSignResource : '')}
+      onClick={() => {
+        onChange({ contract_SelectedAssociatedID: mainResource.id });
+      }}
     >
       <FTextBtn
         onClick={(e) => {
@@ -48,18 +50,18 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
         }}
       >
         <FContentText
-          type="highlight"
+          type='highlight'
           text={mainResource.name}
           singleRow
           className={styles.FContentText}
         />
       </FTextBtn>
-      <div style={{height: 5}}/>
+      <div style={{ height: 5 }} />
       <FContentText
-        type="additional2"
+        type='additional2'
         text={mainResource.type}
       />
-      <div style={{height: 5}}/>
+      <div style={{ height: 5 }} />
       <div className={styles.policeTags}>
         {
           mainResource.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
@@ -68,13 +70,15 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
     </a>
 
     {
-      otherResource.length > 0 && (<FTitleText type="h4">基础上抛</FTitleText>)
+      otherResource.length > 0 && (<FTitleText type='h4'>基础上抛</FTitleText>)
     }
 
     {
       otherResource.map((r) => (<a
-        className={styles.signResource + ' ' + (exhibitInfoPage.selectedAssociatedID === r.id ? styles.activatedSignResource : '')}
-        onClick={() => onChange({selectedAssociatedID: r.id})}
+        className={styles.signResource + ' ' + (exhibitInfoPage.contract_SelectedAssociatedID === r.id ? styles.activatedSignResource : '')}
+        onClick={() => {
+          onChange({ contract_SelectedAssociatedID: r.id });
+        }}
         key={r.id}
       >
         <FTextBtn
@@ -86,18 +90,18 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
           }}
         >
           <FContentText
-            type="highlight"
+            type='highlight'
             text={r.name}
             singleRow
             className={styles.FContentText}
           />
         </FTextBtn>
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <FContentText
-          type="additional2"
+          type='additional2'
           text={r.type}
         />
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <div className={styles.policeTags}>
           {
             r.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
@@ -108,6 +112,6 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
   </>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
+export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Resources);

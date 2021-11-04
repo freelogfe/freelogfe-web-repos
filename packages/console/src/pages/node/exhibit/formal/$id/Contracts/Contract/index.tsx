@@ -21,7 +21,7 @@ interface ContractProps {
 
 function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.id === exhibitInfoPage.selectedAssociatedID);
+  const selectedResource = exhibitInfoPage.contract_Associated.find((a) => a.id === exhibitInfoPage.contract_SelectedAssociatedID);
 
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
@@ -29,15 +29,17 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
       payload: payload,
     });
   }
-
+// contract_ExhibitAllContractIDs: [],
+  // contract_SelectedAssociatedID: '',
+  // contract_Associated: [],
   return (<div>
     <FTitleText type='h4'>{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
     <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>
       {
         selectedResource?.contracts.map((c) => {
-          const exhibitInfoExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
-            return eac.exhibitID === exhibitInfoPage.pID && eac.resourceID === selectedResource.id;
+          const exhibitInfoExhibit = exhibitInfoPage.contract_ExhibitAllContractIDs.find((eac) => {
+            return eac.exhibitID === exhibitInfoPage.exhibit_ID && eac.resourceID === selectedResource.id;
           });
           return (<div
             key={c.id}
@@ -90,7 +92,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                     await dispatch<UpdateContractUsedAction>({
                       type: 'exhibitInfoPage/updateContractUsed',
                       payload: {
-                        exhibitID: exhibitInfoPage.pID,
+                        exhibitID: exhibitInfoPage.exhibit_ID,
                         resourceID: selectedResource.id,
                         policyID: c.policyId,
                         isUsed: value,
@@ -110,7 +112,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
                     <FTextBtn onClick={() => {
                       onChange({
-                        associated: exhibitInfoPage.associated.map((asso) => {
+                        contract_Associated: exhibitInfoPage.contract_Associated.map((asso) => {
                           if (asso.id !== selectedResource.id) {
                             return asso;
                           }
@@ -146,7 +148,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                       ? (<div className={styles.otherActions}>
                         {
                           selectedResource.exhibits.map((ex) => {
-                            const currentExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
+                            const currentExhibit = exhibitInfoPage.contract_ExhibitAllContractIDs.find((eac) => {
                               return eac.exhibitID === ex.id && eac.resourceID === selectedResource.id;
                             });
                             const currentExhibitChecked = currentExhibit?.contractIDs.includes(c.id);

@@ -23,10 +23,10 @@ function Relation({exhibitInfoPage}: RelationProps) {
     <div className={styles.cover}>
       <img
         alt=""
-        src={exhibitInfoPage.resourceCover || imgSrc}
+        src={exhibitInfoPage.side_ResourceCover || imgSrc}
         onClick={() => {
           window.open(FUtil.LinkTo.resourceDetails({
-            resourceID: exhibitInfoPage.resourceId,
+            resourceID: exhibitInfoPage.side_ResourceID,
           }));
         }}
       />
@@ -36,17 +36,17 @@ function Relation({exhibitInfoPage}: RelationProps) {
     <FTextBtn
       type="default"
       onClick={() => {
-        window.open(FUtil.LinkTo.resourceDetails({resourceID: exhibitInfoPage.resourceId}));
+        window.open(FUtil.LinkTo.resourceDetails({resourceID: exhibitInfoPage.side_ResourceID}));
       }}
     >
       <FContentText
         style={{width: 220}}
         singleRow
-        text={exhibitInfoPage.resourceName}
+        text={exhibitInfoPage.side_ResourceName}
       />
     </FTextBtn>
     <div style={{height: 10}}/>
-    <div style={{fontSize: 12, color: '#666'}}>{exhibitInfoPage.resourceType}</div>
+    <div style={{fontSize: 12, color: '#666'}}>{exhibitInfoPage.side_ResourceType}</div>
   </div>);
 }
 

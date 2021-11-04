@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Space} from "antd";
-import {FContentText, FTitleText} from "../FText";
-import FInput from "../FInput";
-import {FCircleBtn, FRectBtn, FTextBtn} from "../FButton";
-import FDrawer from "../FDrawer";
-import {FUtil} from '@freelog/tools-lib';
+import { Space } from 'antd';
+import { FContentText, FTitleText } from '../FText';
+import FInput from '../FInput';
+import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
+import FDrawer from '../FDrawer';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FBasePropsEditorDrawerProps {
   visible: boolean;
@@ -19,14 +19,21 @@ interface FBasePropsEditorDrawerProps {
   }[];
   disabledKeys: string[];
 
-  onChange?(value: FBasePropsEditorDrawerProps['dataSource']): void
+  onChange?(value: FBasePropsEditorDrawerProps['dataSource']): void;
 
   onConfirm?(): void;
 
   onCancel?(): void;
 }
 
-function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, onConfirm, onCancel}: FBasePropsEditorDrawerProps) {
+function FBasePropsEditorDrawer({
+                                  visible,
+                                  dataSource,
+                                  disabledKeys,
+                                  onChange,
+                                  onConfirm,
+                                  onCancel,
+                                }: FBasePropsEditorDrawerProps) {
 
   function onChangeData(value: Partial<FBasePropsEditorDrawerProps['dataSource'][number]>, index: number) {
     const dd = dataSource.map((ds, i) => {
@@ -50,7 +57,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
         continue;
       }
       if (map.has(item.key)) {
-        map.set(item.key, map.get(item.key) as number + 1)
+        map.set(item.key, map.get(item.key) as number + 1);
       } else {
         map.set(item.key, 1);
       }
@@ -78,7 +85,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     width={720}
     topRight={<Space size={30}>
       <FTextBtn
-        type="default"
+        type='default'
         onClick={() => {
           onCancel && onCancel();
         }}
@@ -97,18 +104,18 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
   >
     <Space
       size={30}
-      direction="vertical"
-      style={{width: '100%'}}
+      direction='vertical'
+      style={{ width: '100%' }}
     >
       {
         dataSource.map((ds, index) => {
           return (<Space key={index} size={10}>
             <div className={styles.input}>
               <div className={styles.title}>
-                <i className={styles.dot}/>
-                <FTitleText type="h4">key</FTitleText>
+                <i className={styles.dot} />
+                <FTitleText type='h4'>key</FTitleText>
               </div>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               <FInput
                 value={ds.key}
                 errorText={ds.keyError}
@@ -133,10 +140,10 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             </div>
             <div className={styles.input}>
               <div className={styles.title}>
-                <i className={styles.dot}/>
-                <FTitleText type="h4">value</FTitleText>
+                <i className={styles.dot} />
+                <FTitleText type='h4'>value</FTitleText>
               </div>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               <FInput
                 value={ds.value}
                 errorText={ds.valueError}
@@ -159,9 +166,9 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             </div>
             <div className={styles.input}>
               <div className={styles.title}>
-                <FTitleText type="h4">属性说明</FTitleText>
+                <FTitleText type='h4'>属性说明</FTitleText>
               </div>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               <FInput
                 value={ds.description}
                 errorText={ds.descriptionError}
@@ -181,10 +188,10 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
               />
             </div>
             <div>
-              <div style={{height: 22}}/>
+              <div style={{ height: 22 }} />
               <div className={styles.delete}>
                 <FCircleBtn
-                  type="danger"
+                  type='danger'
                   onClick={() => {
                     onChange && onChange(dataSource.filter((eds, edsIndex) => {
                       return edsIndex !== index;
@@ -199,12 +206,12 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     </Space>
 
     {
-      dataSource.length > 0 && (<div style={{height: 30}}/>)
+      dataSource.length > 0 && (<div style={{ height: 30 }} />)
     }
 
     <Space size={10}>
       <FCircleBtn
-        size="small"
+        size='small'
         onClick={() => {
           onChange && onChange([
             ...dataSource,

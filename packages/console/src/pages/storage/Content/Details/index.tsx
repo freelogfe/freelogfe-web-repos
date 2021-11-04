@@ -452,35 +452,36 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           },
         });
       }}
-      dataSource={storageObjectEditor.customOptionsEditorDataSource}
+      // dataSource={storageObjectEditor.customOptionsEditorDataSource}
       disabledKeys={[
         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
         ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
         ...storageObjectEditor.customOptionsData.map<string>((cod) => cod.key),
       ]}
-      onChange={(value) => {
-        dispatch<ChangeAction>({
-          type: 'storageObjectEditor/change',
-          payload: {customOptionsEditorDataSource: value},
-        });
-      }}
-      onConfirm={() => {
+      // onChange={(value) => {
+      //   dispatch<ChangeAction>({
+      //     type: 'storageObjectEditor/change',
+      //     payload: {customOptionsEditorDataSource: value},
+      //   });
+      // }}
+      onConfirm={(value) => {
         dispatch<ChangeAction>({
           type: 'storageObjectEditor/change',
           payload: {
             customOptionsData: [
               ...storageObjectEditor.customOptionsData,
-              ...storageObjectEditor.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-                return {
-                  key: coeds.key,
-                  defaultValue: coeds.defaultValue,
-                  description: coeds.description,
-                  custom: coeds.custom,
-                  customOption: coeds.customOption,
-                };
-              })
+              ...value,
+              // ...storageObjectEditor.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+              //   return {
+              //     key: coeds.key,
+              //     defaultValue: coeds.defaultValue,
+              //     description: coeds.description,
+              //     custom: coeds.custom,
+              //     customOption: coeds.customOption,
+              //   };
+              // })
             ],
-            customOptionsEditorDataSource: [],
+            // customOptionsEditorDataSource: [],
             customOptionsEditorVisible: false,
           }
         })

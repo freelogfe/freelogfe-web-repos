@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Space} from 'antd';
+import { Space } from 'antd';
 import Property from './Property';
-import {FCircleBtn} from "../../FButton";
+import { FCircleBtn } from '../../FButton';
 
 export interface Data {
   key: string;
@@ -19,11 +19,12 @@ export interface Data {
 export interface FCustomOptionsProps {
   dataSource: Data[];
   disabledKeys: string[];
+  hideCustomOption?: boolean;
 
   onChange?(dataSource: FCustomOptionsProps['dataSource']): void;
 }
 
-function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProps) {
+function FCustomOptions({ dataSource, disabledKeys, hideCustomOption = false, onChange }: FCustomOptionsProps) {
 
   function onChangeProperty(value: Data, index: number) {
     // console.log(value, 'value38920jdskfj');
@@ -46,7 +47,7 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
         continue;
       }
       if (map.has(item.key)) {
-        map.set(item.key, map.get(item.key) as number + 1)
+        map.set(item.key, map.get(item.key) as number + 1);
       } else {
         map.set(item.key, 1);
       }
@@ -70,7 +71,7 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
       dataSource.length > 0 && <Space
         className={styles.styles}
         size={30}
-        direction="vertical"
+        direction='vertical'
       >
         {
           dataSource.map((i, j) => (<div
@@ -80,12 +81,13 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
             <div>
               <Property
                 data={i}
+                hideCustomOption={hideCustomOption}
                 onChange={(value) => onChangeProperty(value, j)}
               />
             </div>
-            <div style={{width: 30, flexShrink: 0}}/>
+            <div style={{ width: 30, flexShrink: 0 }} />
             <FCircleBtn
-              type="danger"
+              type='danger'
               onClick={() => {
                 const data: Data[] = dataSource.filter((ds, index) => index !== j);
                 onChange && onChange(verifyDuplication(data));

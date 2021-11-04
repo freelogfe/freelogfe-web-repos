@@ -9,8 +9,6 @@ import { UpdateRelationAction } from '@/models/exhibitInfoPage';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
-import FUtil1 from '@/utils';
-import FSwitch from '@/components/FSwitch';
 
 interface PolicyProps {
   dispatch: Dispatch;
@@ -20,7 +18,7 @@ interface PolicyProps {
 function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
 
   const [fullScreenVisibleID, setFullScreenVisibleID] = React.useState<string>('');
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.id === exhibitInfoPage.selectedAssociatedID);
+  const selectedResource = exhibitInfoPage.contract_Associated.find((a) => a.id === exhibitInfoPage.contract_SelectedAssociatedID);
 
   if (!selectedResource?.policies || selectedResource?.policies.length === 0) {
     return null;

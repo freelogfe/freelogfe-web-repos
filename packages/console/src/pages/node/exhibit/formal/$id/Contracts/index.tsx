@@ -1,23 +1,23 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from '@/components/FText';
-import {Space} from 'antd';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/exhibitInfoPage";
+import { FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/exhibitInfoPage';
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';
-import FUtil1 from "@/utils";
+import FUtil1 from '@/utils';
 
 interface ContractsProps {
   dispatch: Dispatch;
   exhibitInfoPage: ExhibitInfoPageModelState;
 }
 
-function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
+function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
 
-  if (exhibitInfoPage.associated.length === 0) {
+  if (exhibitInfoPage.contract_Associated.length === 0) {
     return null;
   }
 
@@ -29,21 +29,21 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   }
 
   return (<div>
-    <FTitleText text={FUtil1.I18n.message('title_relevant_contracts')} type="h3"/>
+    <FTitleText text={FUtil1.I18n.message('title_relevant_contracts')} type='h3' />
 
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
-        <Resources/>
+        <Resources />
       </div>
 
       <div className={styles.signRight}>
-        <Space style={{width: '100%'}} size={15} direction="vertical">
+        <Space style={{ width: '100%' }} size={15} direction='vertical'>
 
-          <Contract/>
+          <Contract />
 
-          <Policy/>
+          <Policy />
 
         </Space>
       </div>
@@ -51,6 +51,6 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   </div>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
+export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Contracts);

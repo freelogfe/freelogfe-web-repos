@@ -322,30 +322,31 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
           customOptionsEditorDataSource: [],
         });
       }}
-      dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
+      // dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
       disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
         ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
       ]}
-      onChange={(value) => {
-        onChange({customOptionsEditorDataSource: value});
-      }}
-      onConfirm={() => {
+      // onChange={(value) => {
+      //   onChange({customOptionsEditorDataSource: value});
+      // }}
+      onConfirm={(value) => {
         onChange({
           customOptionsData: [
             ...resourceVersionCreatorPage.customOptionsData,
-            ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-              return {
-                key: coeds.key,
-                defaultValue: coeds.defaultValue,
-                description: coeds.description,
-                custom: coeds.custom,
-                customOption: coeds.customOption,
-              };
-            }),
+            ...value,
+            // ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+            //   return {
+            //     key: coeds.key,
+            //     defaultValue: coeds.defaultValue,
+            //     description: coeds.description,
+            //     custom: coeds.custom,
+            //     customOption: coeds.customOption,
+            //   };
+            // }),
           ],
-          customOptionsEditorDataSource: [],
+          // customOptionsEditorDataSource: [],
           customOptionsEditorVisible: false,
         });
       }}

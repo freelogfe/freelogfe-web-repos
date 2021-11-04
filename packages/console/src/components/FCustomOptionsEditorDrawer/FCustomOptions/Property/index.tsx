@@ -1,19 +1,20 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Col, Row, Space, Switch} from 'antd';
+import { Col, Row, Space, Switch } from 'antd';
 import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
-import {Data} from '../index';
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FTitleText} from "../../../FText";
+import { Data } from '../index';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import { FTitleText } from '../../../FText';
 
 interface PropertyProps {
   data: Data;
+  hideCustomOption?: boolean;
   onChange?: (data: PropertyProps['data']) => void;
 }
 
-function Property({data, onChange}: PropertyProps) {
+function Property({ data, hideCustomOption = false, onChange }: PropertyProps) {
 
   function onChangeData(kv: Partial<PropertyProps['data']>) {
     return onChange && onChange({
@@ -26,10 +27,10 @@ function Property({data, onChange}: PropertyProps) {
     <Row gutter={10}>
       <Col span={12}>
         <Space size={5}>
-          <i className={styles.dot}/>
-          <FTitleText type="h4" text={FUtil1.I18n.message('key')}/>
+          <i className={styles.dot} />
+          <FTitleText type='h4' text={FUtil1.I18n.message('key')} />
         </Space>
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <FInput
           className={styles.input}
           wrapClassName={styles.input}
@@ -63,16 +64,16 @@ function Property({data, onChange}: PropertyProps) {
 
         {
           data.keyError && (<>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <div className={styles.errorTip}>{data.keyError}</div>
           </>)
         }
       </Col>
       <Col span={12}>
         <Space size={5}>
-          <FTitleText type="h4" text={FUtil1.I18n.message('property_remark')}/>
+          <FTitleText type='h4' text={FUtil1.I18n.message('property_remark')} />
         </Space>
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <FInput
           className={styles.input}
           wrapClassName={styles.input}
@@ -96,48 +97,51 @@ function Property({data, onChange}: PropertyProps) {
         />
         {
           data.descriptionError && (<>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <div className={styles.errorTip}>{data.descriptionError}</div>
           </>)
         }
       </Col>
     </Row>
-    <div style={{height: 10}}/>
+    <div style={{ height: 10 }} />
     <Row gutter={10}>
-      <Col span={6}>
-        <Space size={5}>
-          <i className={styles.dot}/>
-          <FTitleText type="h4" text={FUtil1.I18n.message('value_input_mode')}/>
-        </Space>
-        <div style={{height: 5}}/>
-        <FSelect
-          className={styles.input}
-          dataSource={[
-            {
-              value: 'input',
-              title: '文本框',
-            },
-            {
-              value: 'select',
-              title: '下拉框',
-            },
-          ]}
-          value={data.custom}
-          onChange={(value) => {
-            // onSelectChange && onSelectChange({
-            //   value,
-            // });
-            onChangeData({custom: value})
-          }}
-        />
-      </Col>
       {
-        data.custom === 'input' ? (<Col className="gutter-row" span={18}>
+        !hideCustomOption && (<Col span={6}>
+          <Space size={5}>
+            <i className={styles.dot} />
+            <FTitleText type='h4' text={FUtil1.I18n.message('value_input_mode')} />
+          </Space>
+          <div style={{ height: 5 }} />
+          <FSelect
+            className={styles.input}
+            dataSource={[
+              {
+                value: 'input',
+                title: '文本框',
+              },
+              {
+                value: 'select',
+                title: '下拉框',
+              },
+            ]}
+            value={data.custom}
+            onChange={(value) => {
+              // onSelectChange && onSelectChange({
+              //   value,
+              // });
+              onChangeData({ custom: value });
+            }}
+          />
+        </Col>)
+      }
+
+      {
+        data.custom === 'input' ? (<Col className='gutter-row' span={18}>
             <Space size={5}>
-              <i className={styles.dot}/>
-              <FTitleText type="h4" text={'自定义选项(填写一个默认值)'}/>
+              <i className={styles.dot} />
+              <FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />
             </Space>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
@@ -163,17 +167,17 @@ function Property({data, onChange}: PropertyProps) {
             />
             {
               data.defaultValueError && (<>
-                <div style={{height: 5}}/>
+                <div style={{ height: 5 }} />
                 <div className={styles.errorTip}>{data.defaultValueError}</div>
               </>)
             }
           </Col>)
           : (<Col span={18}>
             <Space size={5}>
-              <i className={styles.dot}/>
-              <FTitleText type="h4" text={'自定义选项(首个选项为默认值)'}/>
+              <i className={styles.dot} />
+              <FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
             </Space>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
@@ -210,7 +214,7 @@ function Property({data, onChange}: PropertyProps) {
             />
             {
               data.customOptionError && (<>
-                <div style={{height: 5}}/>
+                <div style={{ height: 5 }} />
                 <div className={styles.errorTip}>{data.customOptionError}</div>
               </>)
             }

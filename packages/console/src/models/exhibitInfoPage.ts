@@ -1,4 +1,4 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
@@ -8,39 +8,39 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 
-export type ExhibitInfoPageModelState = WholeReadonly<{
-  presentableId: string;
+export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
 
-  nodeId: number;
-  nodeName: string;
-  nodeThemeId: string;
-  pID: string;
-  pName: string;
-  isOnline: boolean;
-  isAuth: boolean;
-  authErrorText: string;
+  exhibit_ID: string;
+  exhibit_Name: string;
+  exhibit_Title: string;
+  exhibit_Online: boolean;
+  exhibit_IsAuth: boolean;
+  exhibit_AuthErrorText: string;
+  exhibit_BelongNode_ID: number;
+  exhibit_BelongNode_Name: string;
+  exhibit_BelongNode_ActiveThemeId: string;
 
-  policies: {
+  policy_List: {
     id: string;
     name: string;
     text: string;
     status: 0 | 1;
   }[];
-  addPolicyDrawerVisible: boolean;
+  policy_BuildDrawer_Visible: boolean;
 
-  exhibitAllContractIDs: {
+  contract_ExhibitAllContractIDs: {
     exhibitID: string;
     resourceID: string;
     contractIDs: string[];
   }[];
-
-  selectedAssociatedID: string;
-  associated: {
+  contract_SelectedAssociatedID: string;
+  contract_Associated: {
     // selected: boolean;
     id: string;
     name: string;
     type: string;
+
     exhibits: {
       id: string;
       name: string;
@@ -62,51 +62,9 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     }[];
   }[];
 
-  graphFullScreen: boolean;
-  viewportGraphShow: 'relationship' | 'authorization';
-
-  pCover: string;
-  pTitle: string;
-  pInputTitle: string | null;
-  pTags: string[];
-
-  allVersions: string[];
-  version: string;
-
-  settingUnfold: boolean;
-
-  pBaseAttrs: {
-    key: string;
-    value: string;
-  }[];
-
-  pCustomAttrs: {
-    defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
-    option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
-
-    value: string; // 最终向服务端提交的value数据
-
-    key: string;
-    newValue: string;  // 输入框显示的值
-    newValueError: string; // 输入框校验的实时提醒错误信息
-    remark: string;
-    isEditing: boolean; // 是否弹窗来编辑此属性
-  }[];
-
-  pAddCustomModalVisible: boolean;
-  pAddCustomKey: string;
-  pAddCustomKeyError: string;
-  pAddCustomValue: string;
-  pAddCustomValueError: string;
-  pAddCustomDescription: string;
-  pAddCustomDescriptionError: string;
-
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  resourceCover: string;
-}> & {
-  relationGraphNodes: Array<{
+  graph_FullScreen: boolean;
+  graph_Viewport_Show: 'relationship' | 'authorization';
+  graph_Viewport_RelationGraph_Nodes: Array<{
     id: string;
     resourceId: string;
     resourceName: string;
@@ -119,12 +77,11 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     nodeName: string;
     exhibitName: string;
   }>;
-  relationGraphEdges: {
+  graph_Viewport_RelationGraph_Edges: {
     source: string;
     target: string;
   }[];
-
-  authorizationGraphNodes: Array<{
+  graph_Viewport_AuthorizationGraph_Nodes: Array<{
     id: string;
     resourceId: string;
     resourceName: string;
@@ -145,11 +102,53 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
       updateDate: string;
     }[];
   }>;
-  authorizationGraphEdges: {
+  graph_Viewport_AuthorizationGraph_Edges: {
     source: string;
     target: string;
   }[];
-};
+
+  side_ExhibitCover: string;
+  side_ExhibitTitle: string;
+  side_ExhibitInputTitle: string | null;
+  side_ExhibitTags: string[];
+  side_AllVersions: string[];
+  side_Version: string;
+  side_SettingUnfold: boolean;
+  side_BaseAttrs: {
+    key: string;
+    value: string;
+  }[];
+  side_CustomOptions: {
+    defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
+    option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
+
+    value: string; // 最终向服务端提交的value数据
+
+    key: string;
+    newValue: string;  // 输入框显示的值
+    newValueError: string; // 输入框校验的实时提醒错误信息
+    remark: string;
+    isEditing: boolean; // 是否弹窗来编辑此属性
+  }[];
+  side_CustomOptionsDrawer_Visible: boolean;
+  side_CustomOptionsDrawer_DataSource: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  }[];
+  side_CustomOptionDrawer_Visible: boolean;
+  side_CustomOptionDrawer_DataSource: null;
+  side_ResourceID: string;
+  side_ResourceName: string;
+  side_ResourceType: string;
+  side_ResourceCover: string;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'exhibitInfoPage/change';
@@ -189,11 +188,7 @@ export interface UpdateAPolicyAction extends AnyAction {
 
 export interface UpdateBaseInfoAction extends AnyAction {
   type: 'exhibitInfoPage/updateBaseInfo';
-  payload: {
-    pCover?: string;
-    pTitle?: string;
-    pTags?: string[];
-  };
+  payload: Partial<Pick<ExhibitInfoPageModelState, 'side_ExhibitCover' | 'side_ExhibitTitle' | 'side_ExhibitTags'>>;
 }
 
 export interface UpdateStatusAction extends AnyAction {
@@ -228,6 +223,17 @@ export interface UpdateContractUsedAction {
   };
 }
 
+export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
+  type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
+}
+
+export interface OnChange_AddCustomOptions_Action extends AnyAction {
+  type: 'exhibitInfoPage/onChange_AddCustomOptions';
+  payload: {
+    value: ExhibitInfoPageModelState['side_CustomOptionsDrawer_DataSource'];
+  };
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
@@ -243,6 +249,8 @@ export interface ExhibitInfoPageModelType {
     updateRewrite: (action: UpdateRewriteAction, effects: EffectsCommandMap) => void;
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
+    onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_AddCustomOptions: (action: OnChange_AddCustomOptions_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -253,56 +261,75 @@ export interface ExhibitInfoPageModelType {
 }
 
 const initStates: ExhibitInfoPageModelState = {
-  presentableId: '',
   pageLoading: true,
 
-  nodeId: -1,
-  nodeName: '',
-  nodeThemeId: '',
-  pID: '',
-  pName: '',
-  isOnline: false,
-  isAuth: true,
-  authErrorText: '',
+  exhibit_ID: '',
+  exhibit_Name: '',
+  exhibit_Title: '',
+  exhibit_Online: false,
+  exhibit_IsAuth: true,
+  exhibit_AuthErrorText: '',
+  exhibit_BelongNode_ID: -1,
+  exhibit_BelongNode_Name: '',
+  exhibit_BelongNode_ActiveThemeId: '',
 
-  policies: [],
-  addPolicyDrawerVisible: false,
-  exhibitAllContractIDs: [],
-  selectedAssociatedID: '',
-  associated: [],
+  policy_List: [],
+  policy_BuildDrawer_Visible: false,
 
-  graphFullScreen: false,
-  viewportGraphShow: 'relationship',
-  relationGraphNodes: [],
-  relationGraphEdges: [],
-  authorizationGraphNodes: [],
-  authorizationGraphEdges: [],
+  contract_ExhibitAllContractIDs: [],
+  contract_SelectedAssociatedID: '',
+  contract_Associated: [],
 
-  pCover: '',
-  pTitle: '',
-  pInputTitle: null,
-  pTags: [],
+  graph_FullScreen: false,
+  graph_Viewport_Show: 'relationship',
+  graph_Viewport_RelationGraph_Nodes: [],
+  graph_Viewport_RelationGraph_Edges: [],
+  graph_Viewport_AuthorizationGraph_Nodes: [],
+  graph_Viewport_AuthorizationGraph_Edges: [],
 
-  allVersions: [],
-  version: '',
+  // side_ExhibitCover: string;
+  //   side_ExhibitTitle: string;
+  //   side_ExhibitInputTitle: string | null;
+  //   side_ExhibitTags: string[];
+  //   side_AllVersions: string[];
+  //   side_Version: string;
+  //   side_SettingUnfold: boolean;
+  //   side_BaseAttrs:
+  //   side_CustomOptions:
+  //   side_CustomOptionsDrawer_Visible: boolean;
+  //   side_CustomOptionsDrawer_DataSource:
+  //   side_CustomOptionDrawer_Visible: boolean;
+  //   side_CustomOptionDrawer_DataSource: null;
+  //   side_ResourceId: string;
+  //   side_ResourceName: string;
+  //   side_ResourceType: string;
+  //   side_ResourceCover: string;
+  side_ExhibitCover: '',
+  side_ExhibitTitle: '',
+  side_ExhibitInputTitle: null,
+  side_ExhibitTags: [],
+  side_AllVersions: [],
+  side_Version: '',
+  side_SettingUnfold: false,
+  side_BaseAttrs: [],
+  side_CustomOptions: [],
 
-  settingUnfold: false,
+  side_CustomOptionsDrawer_Visible: false,
+  side_CustomOptionsDrawer_DataSource: [],
+  side_CustomOptionDrawer_Visible: false,
+  side_CustomOptionDrawer_DataSource: null,
+  side_ResourceID: '',
+  side_ResourceName: '',
+  side_ResourceType: '',
+  side_ResourceCover: '',
 
-  pBaseAttrs: [],
-  pCustomAttrs: [],
-
-  pAddCustomModalVisible: false,
-  pAddCustomKey: '',
-  pAddCustomKeyError: '',
-  pAddCustomValue: '',
-  pAddCustomValueError: '',
-  pAddCustomDescription: '',
-  pAddCustomDescriptionError: '',
-
-  resourceId: '',
-  resourceName: '',
-  resourceType: '',
-  resourceCover: '',
+  // pAddCustomModalVisible: false,
+  // pAddCustomKey: '',
+  // pAddCustomKeyError: '',
+  // pAddCustomValue: '',
+  // pAddCustomValueError: '',
+  // pAddCustomDescription: '',
+  // pAddCustomDescriptionError: '',
 };
 
 const Model: ExhibitInfoPageModelType = {
@@ -310,10 +337,11 @@ const Model: ExhibitInfoPageModelType = {
   state: initStates,
   effects: {
     * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          presentableId: payload.exhibitID,
+          exhibit_ID: payload.exhibitID,
         },
       });
 
@@ -336,7 +364,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
       };
@@ -406,7 +434,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // 授权树数据
       const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
       };
 
       const { data: data4 } = yield call(FServiceAPI.Exhibit.authTree, params4);
@@ -454,25 +482,26 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           pageLoading: false,
-          nodeId: data.nodeId,
-          nodeName: data3.nodeName,
-          nodeThemeId: data3.nodeThemeId,
-          pID: data.presentableId,
-          pName: data.presentableName,
-          isOnline: data.onlineStatus === 1,
-          isAuth: data1[0].isAuth,
-          authErrorText: data1[0].error,
-          policies: data.policies.map((p: any) => ({
+          exhibit_BelongNode_ID: data.nodeId,
+          exhibit_BelongNode_Name: data3.nodeName,
+          exhibit_BelongNode_ActiveThemeId: data3.nodeThemeId,
+          exhibit_ID: data.presentableId,
+          exhibit_Name: data.presentableName,
+          exhibit_Online: data.onlineStatus === 1,
+          exhibit_IsAuth: data1[0].isAuth,
+          exhibit_AuthErrorText: data1[0].error,
+          policy_List: data.policies.map((p: any) => ({
             id: p.policyId,
             name: p.policyName,
             text: p.policyText,
             status: p.status,
           })),
-          exhibitAllContractIDs,
-          selectedAssociatedID: result.some((rr) => {
-            return rr.resourceId === exhibitInfoPage.selectedAssociatedID;
-          }) ? exhibitInfoPage.selectedAssociatedID : result[0].resourceId,
-          associated: result.map((r, index) => {
+
+          contract_ExhibitAllContractIDs: exhibitAllContractIDs,
+          contract_SelectedAssociatedID: result.some((rr) => {
+            return rr.resourceId === exhibitInfoPage.contract_SelectedAssociatedID;
+          }) ? exhibitInfoPage.contract_SelectedAssociatedID : result[0].resourceId,
+          contract_Associated: result.map((r, index) => {
             const exhibits = data5.filter((d5: any) => {
               return d5.resolveResources.some((rr: any) => {
                 return d5.presentableId !== data.presentableId && rr.resourceId === r.resourceId;
@@ -510,14 +539,19 @@ const Model: ExhibitInfoPageModelType = {
                 })),
             };
           }),
-          pCover: data.coverImages[0] || '',
-          pTitle: data.presentableTitle,
-          pTags: data.tags,
+          graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
+          graph_Viewport_RelationGraph_Edges: relationGraphEdges,
+          graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
+          graph_Viewport_AuthorizationGraph_Edges: authorizationGraphEdges,
 
-          allVersions: data2.resourceVersions.map((d2: any) => d2.version),
-          version: data.version,
+          side_ExhibitCover: data.coverImages[0] || '',
+          side_ExhibitTitle: data.presentableTitle,
+          side_ExhibitTags: data.tags,
 
-          pBaseAttrs: [
+          side_AllVersions: data2.resourceVersions.map((d2: any) => d2.version),
+          side_Version: data.version,
+
+          side_BaseAttrs: [
             ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
               key: s[0],
               value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
@@ -529,10 +563,10 @@ const Model: ExhibitInfoPageModelType = {
                 value: rd.defaultValue,
               })),
           ],
-          pCustomAttrs: [
+          side_CustomOptions: [
             ...(data.resourceCustomPropertyDescriptors as any[])
               .filter((rd: any) => rd.type !== 'readonlyText')
-              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
+              .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((rd: any) => {
                 const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
                 const value = prp ? prp.value : rd.defaultValue;
                 return {
@@ -548,7 +582,7 @@ const Model: ExhibitInfoPageModelType = {
               }),
             ...(data.presentableRewriteProperty as any[])
               .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
+              .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => ({
                 key: pr.key,
                 value: pr.value,
                 newValue: pr.value,
@@ -558,15 +592,10 @@ const Model: ExhibitInfoPageModelType = {
               })),
           ],
 
-          resourceId: data2.resourceId,
-          resourceName: data2.resourceName,
-          resourceType: data2.resourceType,
-          resourceCover: data2.coverImages[0] || '',
-
-          relationGraphNodes: relationGraphNodes,
-          relationGraphEdges: relationGraphEdges,
-          authorizationGraphNodes: authorizationGraphNodes,
-          authorizationGraphEdges: authorizationGraphEdges,
+          side_ResourceID: data2.resourceId,
+          side_ResourceName: data2.resourceName,
+          side_ResourceType: data2.resourceType,
+          side_ResourceCover: data2.coverImages[0] || '',
         },
       });
     },
@@ -575,7 +604,7 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         addPolicies: [{
           policyName: payload.title,
           policyText: payload.text,
@@ -592,7 +621,7 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         updatePolicies: [{
           policyId: payload.id,
           status: payload.status,
@@ -608,10 +637,10 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
-        presentableTitle: payload.pTitle,
-        tags: payload.pTags,
-        coverImages: payload.pCover ? [payload.pCover] : undefined,
+        presentableId: exhibitInfoPage.exhibit_ID,
+        presentableTitle: payload.side_ExhibitTitle,
+        tags: payload.side_ExhibitTags,
+        coverImages: payload.side_ExhibitCover ? [payload.side_ExhibitCover] : undefined,
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<ChangeAction>({
@@ -624,12 +653,12 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         onlineStatus: payload,
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
-        fMessage(exhibitInfoPage.resourceType === 'theme' ? '激活失败' : '上线失败', 'error');
+        fMessage(exhibitInfoPage.side_ResourceType === 'theme' ? '激活失败' : '上线失败', 'error');
         return;
       }
       // yield put<ChangeAction>({
@@ -646,12 +675,13 @@ const Model: ExhibitInfoPageModelType = {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
+
+      const resource = exhibitInfoPage.contract_Associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#');
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         resolveResources: yield call(handleFinalResolveResource, {
-          exhibitID: exhibitInfoPage.pID,
+          exhibitID: exhibitInfoPage.exhibit_ID,
           resourceID: payload.resourceId,
           policyID: payload.policyId,
           isUsed: true,
@@ -667,8 +697,8 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
-      const pCustomAttrs: ExhibitInfoPageModelState['pCustomAttrs'] = exhibitInfoPage.pCustomAttrs
-        .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pc) => {
+      const pCustomAttrs: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions
+        .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pc) => {
           return {
             ...pc,
             value: pc.newValueError ? pc.value : pc.newValue,
@@ -676,7 +706,7 @@ const Model: ExhibitInfoPageModelType = {
         });
 
       const params: Parameters<typeof FServiceAPI.Exhibit.updateRewriteProperty>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         rewriteProperty: pCustomAttrs
           .filter((pc) => pc.value !== pc.defaultValue)
           .map((pc) => ({
@@ -691,7 +721,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pCustomAttrs,
+          side_CustomOptions: pCustomAttrs,
         },
       });
     },
@@ -700,7 +730,7 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesVersion>[0] = {
-        presentableId: exhibitInfoPage.presentableId,
+        presentableId: exhibitInfoPage.exhibit_ID,
         version: payload,
       };
       yield call(FServiceAPI.Exhibit.presentablesVersion, params);
@@ -725,8 +755,9 @@ const Model: ExhibitInfoPageModelType = {
 
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        nodeId: exhibitInfoPage.nodeId,
-        resolveResourceIds: exhibitInfoPage.associated.map((rs) => {
+        nodeId: exhibitInfoPage.exhibit_BelongNode_ID,
+
+        resolveResourceIds: exhibitInfoPage.contract_Associated.map((rs) => {
           return rs.id;
         }).join(','),
       };
@@ -752,7 +783,23 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitAllContractIDs,
+          contract_ExhibitAllContractIDs: exhibitAllContractIDs,
+        },
+      });
+    },
+    * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionsDrawer_Visible: true,
+        },
+      });
+    },
+    * onChange_AddCustomOptions({ payload }: OnChange_AddCustomOptions_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionsDrawer_DataSource: payload.value,
         },
       });
     },
