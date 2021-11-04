@@ -18,7 +18,7 @@ interface FCustomOptionsEditorDrawerProps {
   onCancel?(): void;
 }
 
-interface FCustomOptionsEditorDrawerStates {
+export interface FCustomOptionsEditorDrawerStates {
   dataSource: Data[];
 }
 

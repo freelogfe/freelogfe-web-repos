@@ -8,7 +8,10 @@ import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ChangeVersionAction,
-  ExhibitInfoPageModelState, OnClick_Side_AddCustomOptionsBtn_Action,
+  ExhibitInfoPageModelState,
+  OnCancel_AddCustomOptionsDrawer_Action,
+  OnClick_Side_AddCustomOptionsBtn_Action,
+  OnConfirm_AddCustomOptionsDrawer_Action,
   UpdateRewriteAction,
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
@@ -234,7 +237,17 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}
       disabledKeys={[]}
       onConfirm={(value) => {
-        
+        dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
+          type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
+          payload: {
+            value: value,
+          },
+        });
+      }}
+      onCancel={() => {
+        dispatch<OnCancel_AddCustomOptionsDrawer_Action>({
+          type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer',
+        });
       }}
     />
 

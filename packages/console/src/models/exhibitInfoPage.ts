@@ -7,6 +7,7 @@ import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6Author
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
+import FCustomOptionsEditorDrawer, { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -121,9 +122,7 @@ export interface ExhibitInfoPageModelState {
   side_CustomOptions: {
     defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
     option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
-
     value: string; // 最终向服务端提交的value数据
-
     key: string;
     newValue: string;  // 输入框显示的值
     newValueError: string; // 输入框校验的实时提醒错误信息
@@ -131,17 +130,17 @@ export interface ExhibitInfoPageModelState {
     isEditing: boolean; // 是否弹窗来编辑此属性
   }[];
   side_CustomOptionsDrawer_Visible: boolean;
-  side_CustomOptionsDrawer_DataSource: {
-    key: string;
-    keyError: string;
-    description: string;
-    descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
-  }[];
+  // side_CustomOptionsDrawer_DataSource: {
+  //   key: string;
+  //   keyError: string;
+  //   description: string;
+  //   descriptionError: string;
+  //   custom: 'input' | 'select';
+  //   defaultValue: string;
+  //   defaultValueError: string;
+  //   customOption: string;
+  //   customOptionError: string;
+  // }[];
   side_CustomOptionDrawer_Visible: boolean;
   side_CustomOptionDrawer_DataSource: null;
   side_ResourceID: string;
@@ -205,7 +204,7 @@ export interface UpdateRelationAction extends AnyAction {
 }
 
 export interface UpdateRewriteAction extends AnyAction {
-  type: 'exhibitInfoPage/updateRewrite';
+  type: 'exhibitInfoPage/updateRewrite' | 'updateRewrite';
 }
 
 export interface ChangeVersionAction extends AnyAction {
@@ -227,11 +226,15 @@ export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
 }
 
-export interface OnChange_AddCustomOptions_Action extends AnyAction {
-  type: 'exhibitInfoPage/onChange_AddCustomOptions';
+export interface OnConfirm_AddCustomOptionsDrawer_Action extends AnyAction {
+  type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer';
   payload: {
-    value: ExhibitInfoPageModelState['side_CustomOptionsDrawer_DataSource'];
+    value: FCustomOptionsEditorDrawerStates['dataSource'];
   };
+}
+
+export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
+  type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
 }
 
 export interface ExhibitInfoPageModelType {
@@ -249,8 +252,10 @@ export interface ExhibitInfoPageModelType {
     updateRewrite: (action: UpdateRewriteAction, effects: EffectsCommandMap) => void;
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
+
     onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
-    onChange_AddCustomOptions: (action: OnChange_AddCustomOptions_Action, effects: EffectsCommandMap) => void;
+    onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -287,7 +292,7 @@ const initStates: ExhibitInfoPageModelState = {
   graph_Viewport_AuthorizationGraph_Nodes: [],
   graph_Viewport_AuthorizationGraph_Edges: [],
 
-  // side_ExhibitCover: string;
+  //   side_ExhibitCover: string;
   //   side_ExhibitTitle: string;
   //   side_ExhibitInputTitle: string | null;
   //   side_ExhibitTags: string[];
@@ -315,7 +320,7 @@ const initStates: ExhibitInfoPageModelState = {
   side_CustomOptions: [],
 
   side_CustomOptionsDrawer_Visible: false,
-  side_CustomOptionsDrawer_DataSource: [],
+  // side_CustomOptionsDrawer_DataSource: [],
   side_CustomOptionDrawer_Visible: false,
   side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',
@@ -795,11 +800,45 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onChange_AddCustomOptions({ payload }: OnChange_AddCustomOptions_Action, { put }: EffectsCommandMap) {
+    * onConfirm_AddCustomOptionsDrawer({ payload }: OnConfirm_AddCustomOptionsDrawer_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptionsDrawer_DataSource: payload.value,
+          side_CustomOptions: [
+            ...exhibitInfoPage.side_CustomOptions,
+            ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
+              return {
+                defaultValue: '',
+                option: [],
+                value: v.defaultValue, // 最终向服务端提交的value数据
+                key: v.key,
+                newValue: v.defaultValue,  // 输入框显示的值
+                newValueError: '', // 输入框校验的实时提醒错误信息
+                remark: v.description,
+                isEditing: false, // 是否弹窗来编辑此属性
+              };
+            }),
+          ],
+          side_CustomOptionsDrawer_Visible: false,
+        },
+      });
+
+      yield put<UpdateRewriteAction>({
+        type: 'updateRewrite',
+      });
+    },
+    * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionsDrawer_Visible: false,
         },
       });
     },
