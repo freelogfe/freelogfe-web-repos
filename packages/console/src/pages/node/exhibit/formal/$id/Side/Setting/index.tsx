@@ -8,14 +8,18 @@ import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ChangeVersionAction,
-  ExhibitInfoPageModelState, OnBlur_Side_CustomOptions_ValueInput_Action,
+  ExhibitInfoPageModelState,
+  OnBlur_Side_CustomOptions_ValueInput_Action,
   OnBlur_Side_InheritOptions_ValueInput_Action,
-  OnCancel_AddCustomOptionsDrawer_Action, OnChange_Side_CustomOptions_ValueInput_Action,
+  OnCancel_AddCustomOptionsDrawer_Action,
+  OnCancel_CustomOptionDrawer_Action,
+  OnChange_Side_CustomOptions_ValueInput_Action,
   OnChange_Side_InheritOptions_ValueInput_Action,
-  OnClick_Side_AddCustomOptionsBtn_Action, OnClick_Side_CustomOptions_DeleteBtn_Action,
+  OnClick_Side_AddCustomOptionsBtn_Action,
+  OnClick_Side_CustomOptions_DeleteBtn_Action,
   OnClick_Side_CustomOptions_EditBtn_Action,
   OnClick_Side_InheritOptions_ResetBtn_Action,
-  OnConfirm_AddCustomOptionsDrawer_Action,
+  OnConfirm_AddCustomOptionsDrawer_Action, OnConfirm_CustomOptionDrawer_Action,
   UpdateRewriteAction,
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
@@ -334,15 +338,29 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
     />
 
     <FCustomOptionEditorDrawer
-      keyInput={''}
-      keyInputError={''}
-      descriptionInput={''}
-      descriptionInputError={''}
-      typeSelect={'input'}
-      valueInput={''}
-      valueInputError={''}
-      optionsInput={''}
-      optionsInputError={''}
+      visible={exhibitInfoPage.side_CustomOptionDrawer_Visible}
+      disabledKeyInput
+      disabledValueTypeSelect
+      hideValueTypeSelect
+      dataSource={{
+        key: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.key || '',
+        value: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.value || '',
+        description: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.description || '',
+        valueType: 'input',
+      }}
+      onConfirm={(value) => {
+        dispatch<OnConfirm_CustomOptionDrawer_Action>({
+          type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
+          payload: {
+            value: value,
+          },
+        });
+      }}
+      onCancel={() => {
+        dispatch<OnCancel_CustomOptionDrawer_Action>({
+          type: 'exhibitInfoPage/onCancel_CustomOptionDrawer',
+        });
+      }}
     />
 
     {/*<FDrawer*/}

@@ -300,6 +300,22 @@ export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
 }
 
+export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
+  type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer';
+  payload: {
+    value: {
+      key: string;
+      value: string;
+      description: string;
+      valueType: 'input' | 'select';
+    };
+  };
+}
+
+export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
+  type: 'exhibitInfoPage/onCancel_CustomOptionDrawer';
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
@@ -326,6 +342,8 @@ export interface ExhibitInfoPageModelType {
     onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
+    onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -1101,6 +1119,47 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           side_CustomOptionsDrawer_Visible: false,
+        },
+      });
+    },
+    * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co) => {
+            if (co.key !== payload.value.key) {
+              return co;
+            }
+            return {
+              key: co.key,
+              value: payload.value.value,
+              description: payload.value.description,
+              valueInput: payload.value.value,
+              valueInputError: '',
+            };
+          }),
+          side_CustomOptionDrawer_Visible: false,
+          side_CustomOptionDrawer_DataSource: null,
+        },
+      });
+
+      yield put<UpdateRewriteAction>({
+        type: 'updateRewrite',
+      });
+    },
+    * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionDrawer_Visible: false,
+          side_CustomOptionDrawer_DataSource: null,
         },
       });
     },
