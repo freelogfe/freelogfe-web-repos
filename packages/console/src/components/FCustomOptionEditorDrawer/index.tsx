@@ -241,7 +241,7 @@ function FCustomOptionEditorDrawer({
                       errorText = '不超过30个字符';
                     }
                     setValueInput(value);
-                    setKeyInputError(errorText);
+                    setValueInputError(errorText);
                   }}
                 />
                 {
@@ -281,7 +281,7 @@ function FCustomOptionEditorDrawer({
                       }
                     }
                     setValueInput(value);
-                    setKeyInputError(errorText);
+                    setValueInputError(errorText);
                   }}
                 />
                 {

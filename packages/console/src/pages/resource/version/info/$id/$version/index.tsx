@@ -484,17 +484,24 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     </FDrawer>
 
     <FCustomOptionEditorDrawer
-      isLocking={true}
+      disabledKeyInput
+      disabledValueTypeSelect
       visible={resourceVersionEditorPage.customOptionEditorVisible}
-      keyInput={resourceVersionEditorPage.customOptionKey}
-      keyInputError={''}
-      descriptionInput={resourceVersionEditorPage.customOptionDescription || ''}
-      descriptionInputError={resourceVersionEditorPage.customOptionDescriptionError || ''}
-      typeSelect={resourceVersionEditorPage.customOptionCustom || 'input'}
-      valueInput={resourceVersionEditorPage.customOptionDefaultValue || ''}
-      valueInputError={resourceVersionEditorPage.customOptionDefaultValueError || ''}
-      optionsInput={resourceVersionEditorPage.customOptionCustomOption || ''}
-      optionsInputError={resourceVersionEditorPage.customOptionCustomOptionError || ''}
+      dataSource={{
+        key: resourceVersionEditorPage.customOptionKey,
+        value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',
+        description: resourceVersionEditorPage.customOptionDescription,
+        valueType: resourceVersionEditorPage.customOptionCustom || 'input',
+      }}
+      // keyInput={resourceVersionEditorPage.customOptionKey}
+      // keyInputError={''}
+      // descriptionInput={resourceVersionEditorPage.customOptionDescription || ''}
+      // descriptionInputError={resourceVersionEditorPage.customOptionDescriptionError || ''}
+      // typeSelect={resourceVersionEditorPage.customOptionCustom || 'input'}
+      // valueInput={resourceVersionEditorPage.customOptionDefaultValue || ''}
+      // valueInputError={resourceVersionEditorPage.customOptionDefaultValueError || ''}
+      // optionsInput={resourceVersionEditorPage.customOptionCustomOption || ''}
+      // optionsInputError={resourceVersionEditorPage.customOptionCustomOptionError || ''}
       // usedKeys={[
       //   ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
       //   ...resourceVersionEditorPage.baseProperties.map<string>((pp) => pp.key),
@@ -507,7 +514,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       onCancel={() => {
         onCloseCustomOptionDrawer();
       }}
-      onConfirm={async () => {
+      onConfirm={async (value) => {
         await onChange({
           customOptions: resourceVersionEditorPage.customOptions
             .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
@@ -516,9 +523,9 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               }
               return {
                 ...bp,
-                description: resourceVersionEditorPage.customOptionDescription,
-                defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
-                customOption: resourceVersionEditorPage.customOptionCustomOption,
+                description: value.description,
+                defaultValue: value.value,
+                customOption: value.value,
               };
             }),
           customOptionEditorVisible: false,
@@ -535,24 +542,24 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           type: 'resourceVersionEditorPage/syncAllProperties',
         });
       }}
-      onDescriptionInputChange={(data) => {
-        onChange({
-          customOptionDescription: data.value,
-          customOptionDescriptionError: data.errorText,
-        });
-      }}
-      onValueInputChange={(data) => {
-        onChange({
-          customOptionDefaultValue: data.value,
-          customOptionDefaultValueError: data.errorText,
-        });
-      }}
-      onOptionsInputChange={(data) => {
-        onChange({
-          customOptionCustomOption: data.value,
-          customOptionCustomOptionError: data.errorText,
-        });
-      }}
+      // onDescriptionInputChange={(data) => {
+      //   onChange({
+      //     customOptionDescription: data.value,
+      //     customOptionDescriptionError: data.errorText,
+      //   });
+      // }}
+      // onValueInputChange={(data) => {
+      //   onChange({
+      //     customOptionDefaultValue: data.value,
+      //     customOptionDefaultValueError: data.errorText,
+      //   });
+      // }}
+      // onOptionsInputChange={(data) => {
+      //   onChange({
+      //     customOptionCustomOption: data.value,
+      //     customOptionCustomOptionError: data.errorText,
+      //   });
+      // }}
     />
 
     {/*<FDrawer*/}

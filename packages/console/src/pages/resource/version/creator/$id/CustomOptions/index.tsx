@@ -1,32 +1,32 @@
 import * as React from 'react';
 import styles from './index.less';
-import {connect, Dispatch} from 'dva';
-import FBaseProperties from "@/components/FBaseProperties";
-import {Space} from "antd";
-import {FTextBtn} from "@/components/FButton";
+import { connect, Dispatch } from 'dva';
+import FBaseProperties from '@/components/FBaseProperties';
+import { Space } from 'antd';
+import { FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ImportLastVersionDataAction,
-  ResourceVersionCreatorPageModelState
-} from "@/models/resourceVersionCreatorPage";
-import FUp from "@/components/FIcons/FUp";
-import {FDown, FInfo} from "@/components/FIcons";
-import FTooltip from "@/components/FTooltip";
-import FUtil1 from "@/utils";
-import {FContentText} from "@/components/FText";
-import {ConnectState, StorageObjectEditorModelState} from "@/models/connect";
-import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
-import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
-import FCustomOptionsCards from "@/components/FCustomOptionsCards";
-import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
-import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
+  ResourceVersionCreatorPageModelState,
+} from '@/models/resourceVersionCreatorPage';
+import FUp from '@/components/FIcons/FUp';
+import { FDown, FInfo } from '@/components/FIcons';
+import FTooltip from '@/components/FTooltip';
+import FUtil1 from '@/utils';
+import { FContentText } from '@/components/FText';
+import { ConnectState, StorageObjectEditorModelState } from '@/models/connect';
+import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+import FCustomOptionsCards from '@/components/FCustomOptionsCards';
+import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
+import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProps) {
+function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsProps) {
 
 
   async function onChange(payload: ChangeAction['payload']) {
@@ -40,7 +40,7 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
   return (<>
     {
       resourceVersionCreatorPage.selectedFileStatus === -3 && (<>
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <FBaseProperties
           basics={resourceVersionCreatorPage.rawProperties}
           additions={resourceVersionCreatorPage.baseProperties}
@@ -52,7 +52,7 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
           }}
           rightTop={<Space size={20}>
             <FTextBtn
-              type="primary"
+              type='primary'
               onClick={() => {
                 onChange({
                   basePropertiesEditorVisible: true,
@@ -70,13 +70,13 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             {
               resourceVersionCreatorPage.preVersionBaseProperties.length > 0
                 ? (<FTextBtn
-                  type="primary"
+                  type='primary'
                   onClick={() => {
                     dispatch<ImportLastVersionDataAction>({
                       type: 'resourceVersionCreatorPage/importLastVersionData',
                       payload: 'baseProps',
                     });
-                    onChange({dataIsDirty: true})
+                    onChange({ dataIsDirty: true });
                   }}
                 >从上个版本导入</FTextBtn>)
                 : undefined
@@ -97,17 +97,17 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
                   value: cur.value,
                   valueError: '',
                   description: cur.description,
-                  descriptionError: ''
+                  descriptionError: '',
                 },
-            })
+            });
           }}
         />
 
-        <div style={{height: 20}}/>
+        <div style={{ height: 20 }} />
 
         <Space size={5}>
           <FTextBtn
-            type="default"
+            type='default'
             onClick={() => {
               onChange({
                 customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
@@ -115,17 +115,17 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             }}
           >
             <span>自定义选项（高级）</span>
-            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
+            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
           </FTextBtn>
           <FTooltip title={FUtil1.I18n.message('info_versionoptions')}>
-            <div><FInfo/></div>
+            <div><FInfo /></div>
           </FTooltip>
         </Space>
 
         {
           resourceVersionCreatorPage.customOptionsDataVisible && (<>
 
-            <div style={{height: 20}}/>
+            <div style={{ height: 20 }} />
 
             <Space size={40}>
               <FTextBtn
@@ -153,13 +153,13 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
                       type: 'resourceVersionCreatorPage/importLastVersionData',
                       payload: 'optionProps',
                     });
-                    onChange({dataIsDirty: true,});
+                    onChange({ dataIsDirty: true });
                   }}>从上个版本导入</FTextBtn>)
               }
 
             </Space>
 
-            <div style={{height: 20}}/>
+            <div style={{ height: 20 }} />
 
             {
               resourceVersionCreatorPage.customOptionsData.length > 0
@@ -202,7 +202,7 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
                     });
                   }}
                 />)
-                : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+                : (<FContentText text={'暂无自定义选项…'} type='negative' />)
             }
 
           </>)
@@ -354,16 +354,22 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
 
     <FCustomOptionEditorDrawer
       visible={resourceVersionCreatorPage.customOptionIndex !== -1}
-      keyInput={resourceVersionCreatorPage.customOptionEditorData?.key || ''}
-      keyInputError={resourceVersionCreatorPage.customOptionEditorData?.keyError || ''}
-      descriptionInput={resourceVersionCreatorPage.customOptionEditorData?.description || ''}
-      descriptionInputError={resourceVersionCreatorPage.customOptionEditorData?.descriptionError || ''}
-      typeSelect={resourceVersionCreatorPage.customOptionEditorData?.custom || 'input'}
-      valueInput={resourceVersionCreatorPage.customOptionEditorData?.defaultValue || ''}
-      valueInputError={resourceVersionCreatorPage.customOptionEditorData?.defaultValueError || ''}
-      optionsInput={resourceVersionCreatorPage.customOptionEditorData?.customOption || ''}
-      optionsInputError={resourceVersionCreatorPage.customOptionEditorData?.customOptionError || ''}
-      usedKeys={[
+      dataSource={{
+        key: resourceVersionCreatorPage.customOptionEditorData?.key || '',
+        description: resourceVersionCreatorPage.customOptionEditorData?.description || '',
+        value: (resourceVersionCreatorPage.customOptionEditorData?.custom === 'input' ? resourceVersionCreatorPage.customOptionEditorData?.defaultValue : resourceVersionCreatorPage.customOptionEditorData?.customOption) || '',
+        valueType: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',
+      }}
+      // keyInput={resourceVersionCreatorPage.customOptionEditorData?.key || ''}
+      // keyInputError={resourceVersionCreatorPage.customOptionEditorData?.keyError || ''}
+      // descriptionInput={resourceVersionCreatorPage.customOptionEditorData?.description || ''}
+      // descriptionInputError={resourceVersionCreatorPage.customOptionEditorData?.descriptionError || ''}
+      // typeSelect={resourceVersionCreatorPage.customOptionEditorData?.custom || 'input'}
+      // valueInput={resourceVersionCreatorPage.customOptionEditorData?.defaultValue || ''}
+      // valueInputError={resourceVersionCreatorPage.customOptionEditorData?.defaultValueError || ''}
+      // optionsInput={resourceVersionCreatorPage.customOptionEditorData?.customOption || ''}
+      // optionsInputError={resourceVersionCreatorPage.customOptionEditorData?.customOptionError || ''}
+      disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
         ...resourceVersionCreatorPage.customOptionsData.filter((cod, ind) => {
@@ -378,72 +384,72 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
           customOptionEditorData: null,
         });
       }}
-      onConfirm={() => {
+      onConfirm={(value) => {
         onChange({
           customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {
             if (ind !== resourceVersionCreatorPage.customOptionIndex) {
               return cod;
             }
             return {
-              key: resourceVersionCreatorPage.customOptionEditorData?.key || '',
-              description: resourceVersionCreatorPage.customOptionEditorData?.description || '',
-              custom: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',
-              defaultValue: resourceVersionCreatorPage.customOptionEditorData?.defaultValue || '',
-              customOption: resourceVersionCreatorPage.customOptionEditorData?.customOption || '',
+              key: value.key,
+              description: value.description,
+              custom: value.valueType,
+              defaultValue: value.value,
+              customOption: value.value,
             };
           }),
           customOptionIndex: -1,
           customOptionEditorData: null,
-        })
-      }}
-      onKeyInputChange={(value) => {
-        onChange({
-          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-            ...resourceVersionCreatorPage.customOptionEditorData,
-            key: value.value,
-            keyError: value.errorText,
-          } : null,
         });
       }}
-      onDescriptionInputChange={(value) => {
-        onChange({
-          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-            ...resourceVersionCreatorPage.customOptionEditorData,
-            description: value.value,
-            descriptionError: value.errorText,
-          } : null,
-        });
-      }}
-      onSelectChange={(value) => {
-        onChange({
-          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-            ...resourceVersionCreatorPage.customOptionEditorData,
-            custom: value.value,
-          } : null,
-        });
-      }}
-      onValueInputChange={(value) => {
-        onChange({
-          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-            ...resourceVersionCreatorPage.customOptionEditorData,
-            defaultValue: value.value,
-            defaultValueError: value.errorText,
-          } : null,
-        });
-      }}
-      onOptionsInputChange={(value) => {
-        onChange({
-          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-            ...resourceVersionCreatorPage.customOptionEditorData,
-            customOption: value.value,
-            customOptionError: value.errorText,
-          } : null,
-        });
-      }}
+      // onKeyInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+      //       ...resourceVersionCreatorPage.customOptionEditorData,
+      //       key: value.value,
+      //       keyError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onDescriptionInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+      //       ...resourceVersionCreatorPage.customOptionEditorData,
+      //       description: value.value,
+      //       descriptionError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onSelectChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+      //       ...resourceVersionCreatorPage.customOptionEditorData,
+      //       custom: value.value,
+      //     } : null,
+      //   });
+      // }}
+      // onValueInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+      //       ...resourceVersionCreatorPage.customOptionEditorData,
+      //       defaultValue: value.value,
+      //       defaultValueError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onOptionsInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+      //       ...resourceVersionCreatorPage.customOptionEditorData,
+      //       customOption: value.value,
+      //       customOptionError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
     />
   </>);
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage,
 }))(CustomOptions);

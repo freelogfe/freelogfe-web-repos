@@ -490,16 +490,22 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
     <FCustomOptionEditorDrawer
       visible={storageObjectEditor.customOptionIndex !== -1}
-      keyInput={storageObjectEditor.customOptionEditorData?.key || ''}
-      keyInputError={storageObjectEditor.customOptionEditorData?.keyError || ''}
-      descriptionInput={storageObjectEditor.customOptionEditorData?.description || ''}
-      descriptionInputError={storageObjectEditor.customOptionEditorData?.descriptionError || ''}
-      typeSelect={storageObjectEditor.customOptionEditorData?.custom || 'input'}
-      valueInput={storageObjectEditor.customOptionEditorData?.defaultValue || ''}
-      valueInputError={storageObjectEditor.customOptionEditorData?.defaultValueError || ''}
-      optionsInput={storageObjectEditor.customOptionEditorData?.customOption || ''}
-      optionsInputError={storageObjectEditor.customOptionEditorData?.customOptionError || ''}
-      usedKeys={[
+      dataSource={{
+        key: storageObjectEditor.customOptionEditorData?.key || '',
+        value: (storageObjectEditor.customOptionEditorData?.custom === 'input' ? storageObjectEditor.customOptionEditorData?.defaultValue : storageObjectEditor.customOptionEditorData?.customOption) || '',
+        description: storageObjectEditor.customOptionEditorData?.description || '',
+        valueType: storageObjectEditor.customOptionEditorData?.custom || 'input',
+      }}
+      // keyInput={storageObjectEditor.customOptionEditorData?.key || ''}
+      // keyInputError={storageObjectEditor.customOptionEditorData?.keyError || ''}
+      // descriptionInput={storageObjectEditor.customOptionEditorData?.description || ''}
+      // descriptionInputError={storageObjectEditor.customOptionEditorData?.descriptionError || ''}
+      // typeSelect={storageObjectEditor.customOptionEditorData?.custom || 'input'}
+      // valueInput={storageObjectEditor.customOptionEditorData?.defaultValue || ''}
+      // valueInputError={storageObjectEditor.customOptionEditorData?.defaultValueError || ''}
+      // optionsInput={storageObjectEditor.customOptionEditorData?.customOption || ''}
+      // optionsInputError={storageObjectEditor.customOptionEditorData?.customOptionError || ''}
+      disabledKeys={[
         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
         ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
         ...storageObjectEditor.customOptionsData.filter((cod, ind) => {
@@ -514,68 +520,68 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           customOptionEditorData: null,
         });
       }}
-      onConfirm={() => {
+      onConfirm={(value) => {
         onChange({
           customOptionsData: storageObjectEditor.customOptionsData.map((cod, ind) => {
             if (ind !== storageObjectEditor.customOptionIndex) {
               return cod;
             }
             return {
-              key: storageObjectEditor.customOptionEditorData?.key || '',
-              description: storageObjectEditor.customOptionEditorData?.description || '',
-              custom: storageObjectEditor.customOptionEditorData?.custom || 'input',
-              defaultValue: storageObjectEditor.customOptionEditorData?.defaultValue || '',
-              customOption: storageObjectEditor.customOptionEditorData?.customOption || '',
+              key: value.key,
+              description: value.description,
+              custom: value.valueType,
+              defaultValue: value.value,
+              customOption: value.value,
             };
           }),
           customOptionIndex: -1,
           customOptionEditorData: null,
         })
       }}
-      onKeyInputChange={(value) => {
-        onChange({
-          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
-            ...storageObjectEditor.customOptionEditorData,
-            key: value.value,
-            keyError: value.errorText,
-          } : null,
-        });
-      }}
-      onDescriptionInputChange={(value) => {
-        onChange({
-          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
-            ...storageObjectEditor.customOptionEditorData,
-            description: value.value,
-            descriptionError: value.errorText,
-          } : null,
-        });
-      }}
-      onSelectChange={(value) => {
-        onChange({
-          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
-            ...storageObjectEditor.customOptionEditorData,
-            custom: value.value,
-          } : null,
-        });
-      }}
-      onValueInputChange={(value) => {
-        onChange({
-          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
-            ...storageObjectEditor.customOptionEditorData,
-            defaultValue: value.value,
-            defaultValueError: value.errorText,
-          } : null,
-        });
-      }}
-      onOptionsInputChange={(value) => {
-        onChange({
-          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
-            ...storageObjectEditor.customOptionEditorData,
-            customOption: value.value,
-            customOptionError: value.errorText,
-          } : null,
-        });
-      }}
+      // onKeyInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+      //       ...storageObjectEditor.customOptionEditorData,
+      //       key: value.value,
+      //       keyError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onDescriptionInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+      //       ...storageObjectEditor.customOptionEditorData,
+      //       description: value.value,
+      //       descriptionError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onSelectChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+      //       ...storageObjectEditor.customOptionEditorData,
+      //       custom: value.value,
+      //     } : null,
+      //   });
+      // }}
+      // onValueInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+      //       ...storageObjectEditor.customOptionEditorData,
+      //       defaultValue: value.value,
+      //       defaultValueError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
+      // onOptionsInputChange={(value) => {
+      //   onChange({
+      //     customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+      //       ...storageObjectEditor.customOptionEditorData,
+      //       customOption: value.value,
+      //       customOptionError: value.errorText,
+      //     } : null,
+      //   });
+      // }}
     />
   </FDrawer>);
 }

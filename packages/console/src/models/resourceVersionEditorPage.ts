@@ -189,7 +189,7 @@ const Model: ResourceVersionEditorModelType = {
       const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
       if (!data) {
-        router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-;dskf'));
+        router.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 
