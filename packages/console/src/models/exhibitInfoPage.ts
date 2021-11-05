@@ -119,15 +119,22 @@ export interface ExhibitInfoPageModelState {
     key: string;
     value: string;
   }[];
-  side_CustomOptions: {
-    defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
-    option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
-    value: string; // 最终向服务端提交的value数据
+  side_InheritOptions: {
     key: string;
-    newValue: string;  // 输入框显示的值
-    newValueError: string; // 输入框校验的实时提醒错误信息
-    remark: string;
-    isEditing: boolean; // 是否弹窗来编辑此属性
+    value: string;
+    description: string;
+    type: 'input' | 'select';
+    options: string[];
+    resetValue: string;
+    valueInput: string;
+    valueInputError: string;
+  }[];
+  side_CustomOptions: {
+    key: string;
+    value: string;
+    description: string;
+    valueInput: string;
+    valueInputError: string;
   }[];
   side_CustomOptionsDrawer_Visible: boolean;
   // side_CustomOptionsDrawer_DataSource: {
@@ -142,7 +149,11 @@ export interface ExhibitInfoPageModelState {
   //   customOptionError: string;
   // }[];
   side_CustomOptionDrawer_Visible: boolean;
-  side_CustomOptionDrawer_DataSource: null;
+  side_CustomOptionDrawer_DataSource: {
+    key: string;
+    value: string;
+    description: string;
+  } | null;
   side_ResourceID: string;
   side_ResourceName: string;
   side_ResourceType: string;
@@ -222,6 +233,58 @@ export interface UpdateContractUsedAction {
   };
 }
 
+
+export interface OnClick_Side_InheritOptions_ResetBtn_Action extends AnyAction {
+  type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn';
+  payload: {
+    index: number;
+  };
+}
+
+export interface OnChange_Side_InheritOptions_ValueInput_Action extends AnyAction {
+  type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput';
+  payload: {
+    index: number;
+    value: string;
+  };
+}
+
+export interface OnBlur_Side_InheritOptions_ValueInput_Action extends AnyAction {
+  type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput';
+  payload: {
+    index: number;
+  };
+}
+
+export interface OnClick_Side_CustomOptions_EditBtn_Action extends AnyAction {
+  type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn';
+  payload: {
+    index: number;
+  };
+}
+
+export interface OnClick_Side_CustomOptions_DeleteBtn_Action extends AnyAction {
+  type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn';
+  payload: {
+    index: number;
+  };
+}
+
+export interface OnChange_Side_CustomOptions_ValueInput_Action extends AnyAction {
+  type: 'exhibitInfoPage/onChange_Side_CustomOptions_ValueInput';
+  payload: {
+    index: number;
+    value: string;
+  };
+}
+
+export interface OnBlur_Side_CustomOptions_ValueInput_Action extends AnyAction {
+  type: 'exhibitInfoPage/onBlur_Side_CustomOptions_ValueInput';
+  payload: {
+    index: number;
+  };
+}
+
 export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
 }
@@ -253,6 +316,13 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
 
+    onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Side_InheritOptions_ValueInput: (action: OnBlur_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Side_CustomOptions_DeleteBtn: (action: OnClick_Side_CustomOptions_DeleteBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Side_CustomOptions_ValueInput: (action: OnChange_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Side_CustomOptions_ValueInput: (action: OnBlur_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
@@ -317,6 +387,7 @@ const initStates: ExhibitInfoPageModelState = {
   side_Version: '',
   side_SettingUnfold: false,
   side_BaseAttrs: [],
+  side_InheritOptions: [],
   side_CustomOptions: [],
 
   side_CustomOptionsDrawer_Visible: false,
@@ -375,7 +446,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
-      // console.log(data, 'data@#Rasfdjou890ujewfra');
+      console.log(data, 'data@#Rasfdjou890ujewfra');
 
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
@@ -568,34 +639,35 @@ const Model: ExhibitInfoPageModelType = {
                 value: rd.defaultValue,
               })),
           ],
-          side_CustomOptions: [
-            ...(data.resourceCustomPropertyDescriptors as any[])
-              .filter((rd: any) => rd.type !== 'readonlyText')
-              .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((rd: any) => {
-                const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
-                const value = prp ? prp.value : rd.defaultValue;
-                return {
-                  key: rd?.key,
-                  option: rd.type === 'select' ? rd.candidateItems : [],
-                  defaultValue: rd.defaultValue,
-                  value: value,
-                  remark: rd.remark,
-                  newValue: value,
-                  newValueError: '',
-                  isEditing: false,
-                };
-              }),
-            ...(data.presentableRewriteProperty as any[])
-              .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-              .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => ({
+          side_InheritOptions: (data.resourceCustomPropertyDescriptors as any[])
+            .filter((rd: any) => rd.type !== 'readonlyText')
+            .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd: any) => {
+              const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+              const value = prp ? prp.value : rd.defaultValue;
+              // console.log(prp, 'rd1234234#####');
+              // console.log(rd, 'rd1234234******');
+              return {
+                key: rd?.key || '',
+                value: value,
+                type: rd.type === 'select' ? 'select' : 'input',
+                options: rd.type === 'select' ? rd.candidateItems : [],
+                resetValue: rd.defaultValue || '',
+                description: rd.remark || '',
+                valueInput: value,
+                valueInputError: '',
+              };
+            }),
+          side_CustomOptions: (data.presentableRewriteProperty as any[])
+            .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
+            .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => {
+              return {
                 key: pr.key,
                 value: pr.value,
-                newValue: pr.value,
-                newValueError: '',
-                remark: pr.remark,
-                isEditing: false,
-              })),
-          ],
+                description: pr.remark,
+                valueInput: pr.value,
+                valueInputError: '',
+              };
+            }),
 
           side_ResourceID: data2.resourceId,
           side_ResourceName: data2.resourceName,
@@ -702,33 +774,39 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
-      const pCustomAttrs: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions
-        .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pc) => {
-          return {
-            ...pc,
-            value: pc.newValueError ? pc.value : pc.newValue,
-          };
-        });
-
       const params: Parameters<typeof FServiceAPI.Exhibit.updateRewriteProperty>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
-        rewriteProperty: pCustomAttrs
-          .filter((pc) => pc.value !== pc.defaultValue)
-          .map((pc) => ({
-            key: pc.key,
-            value: pc.value,
-            remark: pc.remark,
-          })),
+        rewriteProperty: [
+          ...exhibitInfoPage.side_InheritOptions
+            // .filter((io) => {
+            //   return io.valueInputError === '' && (io.type === 'input' ? (io.value !== io.resetValue) : (io.value !== io.options[0]));
+            // })
+            .map((io) => {
+              return {
+                key: io.key,
+                value: io.value,
+                remark: io.description,
+              };
+            }),
+          ...exhibitInfoPage.side_CustomOptions
+            .map((io) => {
+              return {
+                key: io.key,
+                value: io.value,
+                remark: io.description,
+              };
+            }),
+        ],
       };
       yield call(FServiceAPI.Exhibit.updateRewriteProperty, params);
 
       // 同步数据
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptions: pCustomAttrs,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     side_CustomOptions: pCustomAttrs,
+      //   },
+      // });
     },
     * changeVersion({ payload }: ChangeVersionAction, { call, put, select }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
@@ -744,6 +822,7 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
     * updateContractUsed({ payload }: UpdateContractUsedAction, { select, call, put }: EffectsCommandMap) {
+
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
@@ -792,6 +871,191 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
+
+    * onClick_Side_InheritOptions_ResetBtn({ payload }: OnClick_Side_InheritOptions_ResetBtn_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
+            if (i !== payload.index) {
+              return io;
+            }
+            return {
+              ...io,
+              value: io.resetValue,
+              valueInput: io.resetValue,
+              valueInputError: '',
+            };
+          }),
+        },
+      });
+
+      yield put<UpdateRewriteAction>({
+        type: 'updateRewrite',
+      });
+    },
+    * onChange_Side_InheritOptions_ValueInput({ payload }: OnChange_Side_InheritOptions_ValueInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
+            if (i !== payload.index) {
+              return io;
+            }
+            return {
+              ...io,
+              valueInput: payload.value,
+            };
+          }),
+        },
+      });
+    },
+    * onBlur_Side_InheritOptions_ValueInput({ payload }: OnBlur_Side_InheritOptions_ValueInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      // (value.length > 30 || value === '') ? '1~30个字符' : ''
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      let currentHasError: boolean = false;
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
+            if (i !== payload.index) {
+              return io;
+            }
+            const valueInputError: string = (io.valueInput.length > 30 || io.valueInput === '') ? '1~30个字符' : '';
+            currentHasError = valueInputError !== '';
+            return {
+              ...io,
+              value: valueInputError === '' ? io.valueInput : io.value,
+              valueInputError: valueInputError,
+            };
+          }),
+        },
+      });
+
+      if (!currentHasError) {
+        yield put<UpdateRewriteAction>({
+          type: 'updateRewrite',
+        });
+      }
+
+    },
+    * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      const currentData = exhibitInfoPage.side_CustomOptions[payload.index];
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionDrawer_Visible: true,
+          side_CustomOptionDrawer_DataSource: {
+            key: currentData.key,
+            value: currentData.valueInput,
+            description: currentData.description,
+          },
+        },
+      });
+    },
+    * onClick_Side_CustomOptions_DeleteBtn({ payload }: OnClick_Side_CustomOptions_DeleteBtn_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptions: exhibitInfoPage.side_CustomOptions.filter((_, i) => {
+            return i !== payload.index;
+          }),
+        },
+      });
+
+      yield put<UpdateRewriteAction>({
+        type: 'updateRewrite',
+      });
+    },
+    * onChange_Side_CustomOptions_ValueInput({ payload }: OnChange_Side_CustomOptions_ValueInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co, i) => {
+            if (i !== payload.index) {
+              return co;
+            }
+            return {
+              ...co,
+              valueInput: payload.value,
+            };
+          }),
+        },
+      });
+    },
+    * onBlur_Side_CustomOptions_ValueInput({ payload }: OnBlur_Side_CustomOptions_ValueInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      let currentHasError: boolean = false;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co, i) => {
+            if (i !== payload.index) {
+              return co;
+            }
+            const valueInputError: string = (co.valueInput.length > 30 || co.valueInput === '') ? '1~30个字符' : '';
+            currentHasError = valueInputError !== '';
+            return {
+              ...co,
+              value: valueInputError === '' ? co.valueInput : co.value,
+              valueInputError: valueInputError,
+            };
+          }),
+        },
+      });
+      if (!currentHasError) {
+        yield put<UpdateRewriteAction>({
+          type: 'updateRewrite',
+        });
+      }
+    },
     * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -815,14 +1079,12 @@ const Model: ExhibitInfoPageModelType = {
             ...exhibitInfoPage.side_CustomOptions,
             ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
               return {
-                defaultValue: '',
-                option: [],
-                value: v.defaultValue, // 最终向服务端提交的value数据
                 key: v.key,
-                newValue: v.defaultValue,  // 输入框显示的值
-                newValueError: '', // 输入框校验的实时提醒错误信息
-                remark: v.description,
-                isEditing: false, // 是否弹窗来编辑此属性
+                value: v.defaultValue,
+                description: v.description,
+                option: [],
+                valueInput: v.defaultValue,
+                valueInputError: '',
               };
             }),
           ],

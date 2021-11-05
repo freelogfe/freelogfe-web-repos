@@ -19,12 +19,12 @@ export interface Data {
 export interface FCustomOptionsProps {
   dataSource: Data[];
   disabledKeys: string[];
-  hideCustomOption?: boolean;
+  hideTypeSelect?: boolean;
 
   onChange?(dataSource: FCustomOptionsProps['dataSource']): void;
 }
 
-function FCustomOptions({ dataSource, disabledKeys, hideCustomOption = false, onChange }: FCustomOptionsProps) {
+function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onChange }: FCustomOptionsProps) {
 
   function onChangeProperty(value: Data, index: number) {
     // console.log(value, 'value38920jdskfj');
@@ -81,7 +81,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideCustomOption = false, on
             <div>
               <Property
                 data={i}
-                hideCustomOption={hideCustomOption}
+                hideTypeSelect={hideTypeSelect}
                 onChange={(value) => onChangeProperty(value, j)}
               />
             </div>

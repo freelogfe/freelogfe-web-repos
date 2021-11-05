@@ -10,11 +10,11 @@ import { FTitleText } from '../../../FText';
 
 interface PropertyProps {
   data: Data;
-  hideCustomOption?: boolean;
+  hideTypeSelect?: boolean;
   onChange?: (data: PropertyProps['data']) => void;
 }
 
-function Property({ data, hideCustomOption = false, onChange }: PropertyProps) {
+function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
 
   function onChangeData(kv: Partial<PropertyProps['data']>) {
     return onChange && onChange({
@@ -106,7 +106,7 @@ function Property({ data, hideCustomOption = false, onChange }: PropertyProps) {
     <div style={{ height: 10 }} />
     <Row gutter={10}>
       {
-        !hideCustomOption && (<Col span={6}>
+        !hideTypeSelect && (<Col span={6}>
           <Space size={5}>
             <i className={styles.dot} />
             <FTitleText type='h4' text={FUtil1.I18n.message('value_input_mode')} />

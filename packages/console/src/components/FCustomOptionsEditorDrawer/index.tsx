@@ -8,10 +8,8 @@ import FDrawer from '../FDrawer';
 
 interface FCustomOptionsEditorDrawerProps {
   visible: boolean;
-  // dataSource: Data[];
   disabledKeys: string[];
-
-  // onChange?(value: FCustomOptionsEditorDrawerProps['dataSource']): void;
+  hideTypeSelect?: boolean;
 
   onConfirm?(value: FCustomOptionsEditorDrawerStates['dataSource']): void;
 
@@ -37,7 +35,7 @@ const initDataSource: FCustomOptionsEditorDrawerStates['dataSource'] = [{
 function FCustomOptionsEditorDrawer({
                                       visible,
                                       disabledKeys,
-                                      // onChange,
+                                      hideTypeSelect = false,
                                       onConfirm,
                                       onCancel,
                                     }: FCustomOptionsEditorDrawerProps) {
@@ -90,6 +88,7 @@ function FCustomOptionsEditorDrawer({
   >
 
     <FCustomOptions
+      hideTypeSelect={hideTypeSelect}
       dataSource={dataSource}
       disabledKeys={disabledKeys}
       onChange={onChange_DataSource}
