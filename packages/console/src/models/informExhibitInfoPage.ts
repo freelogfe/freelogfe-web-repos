@@ -82,23 +82,23 @@ export interface InformExhibitInfoPageModelState {
     }[];
   }[];
 
-  pCover: string;
-  pTitle: string;
-  pInputTitle: string | null;
-  pTags: string[];
-  pAllVersions: string[];
-  pVersion: string;
-  pOnlyReadAttrs: {
+  side_Exhibit_Cover: string;
+  side_Exhibit_Title: string;
+  side_Exhibit_InputTitle: string | null;
+  side_Exhibit_Tags: string[];
+  side_Exhibit_AllVersions: string[];
+  side_Exhibit_Version: string;
+  side_Exhibit_OnlyReadAttrs: {
     theKey: string;
     value: string;
   }[];
-  pOnlyEditAttrs: {
+  side_Exhibit_OnlyEditAttrs: {
     theKey: string;
     theValue: string;
     theValueError: string;
     remark: string;
   }[];
-  pEditDeleteAttrs: {
+  side_Exhibit_EditDeleteAttrs: {
     theKey: string;
     theValue: string;
     theValueError: string;
@@ -117,7 +117,7 @@ export interface InformExhibitInfoPageModelState {
   pCustomDescription: string;
   pCustomDescriptionError: string;
 
-  relation: {
+  side_Resource_Relation: {
     cardTitle: string;
     identity: 'resource' | 'object';
     id: string;
@@ -342,15 +342,15 @@ const initStates: InformExhibitInfoPageModelState = {
 
   associated: [],
 
-  pCover: '',
-  pTitle: '',
-  pInputTitle: null,
-  pTags: [],
-  pAllVersions: [],
-  pVersion: '',
-  pOnlyReadAttrs: [],
-  pOnlyEditAttrs: [],
-  pEditDeleteAttrs: [],
+  side_Exhibit_Cover: '',
+  side_Exhibit_Title: '',
+  side_Exhibit_InputTitle: null,
+  side_Exhibit_Tags: [],
+  side_Exhibit_AllVersions: [],
+  side_Exhibit_Version: '',
+  side_Exhibit_OnlyReadAttrs: [],
+  side_Exhibit_OnlyEditAttrs: [],
+  side_Exhibit_EditDeleteAttrs: [],
 
   pCustomModalVisible: false,
   pCustomModalTitle: '',
@@ -364,7 +364,7 @@ const initStates: InformExhibitInfoPageModelState = {
   pCustomDescription: '',
   pCustomDescriptionError: '',
 
-  relation: null,
+  side_Resource_Relation: null,
 };
 
 const Model: ExhibitInfoPageModelType = {
@@ -412,7 +412,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data4, 'data41234234123423412341234');
 
       let result: HandleRelationResult = [];
-      let relation: InformExhibitInfoPageModelState['relation'] = null;
+      let relation: InformExhibitInfoPageModelState['side_Resource_Relation'] = null;
 
       const actualOriginInfo = data.stateInfo.replaceInfo.rootResourceReplacer || data.originInfo;
 
@@ -465,7 +465,7 @@ const Model: ExhibitInfoPageModelType = {
       const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
       const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
 
-      console.log(data, 'data@#$!@#$@#$@#$234234');
+      // console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -483,26 +483,27 @@ const Model: ExhibitInfoPageModelType = {
               : FUtil1.I18n.message('btn_show_exhibit'),
             disabled: isDisabled,
           },
-          pCover: data.stateInfo.coverInfo.coverImages[0] || '',
-          pTitle: data.stateInfo.titleInfo.title || '',
-          pTags: data.stateInfo.tagInfo.tags || [],
-          pAllVersions: [...actualOriginInfo.versions].reverse(),
-          pVersion: actualOriginInfo.version,
-          pOnlyReadAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+
+          side_Exhibit_Cover: data.stateInfo.coverInfo.coverImages[0] || '',
+          side_Exhibit_Title: data.stateInfo.titleInfo.title || '',
+          side_Exhibit_Tags: data.stateInfo.tagInfo.tags || [],
+          side_Exhibit_AllVersions: [...actualOriginInfo.versions].reverse(),
+          side_Exhibit_Version: actualOriginInfo.version,
+          side_Exhibit_OnlyReadAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 1;
             })
-            .map<InformExhibitInfoPageModelState['pOnlyReadAttrs'][number]>((cr: any) => {
+            .map<InformExhibitInfoPageModelState['side_Exhibit_OnlyReadAttrs'][number]>((cr: any) => {
               return {
                 theKey: cr.key,
                 value: cr.key === 'fileSize' ? FUtil.Format.humanizeSize(cr.value) : cr.value,
               };
             }),
-          pOnlyEditAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+          side_Exhibit_OnlyEditAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 2;
             })
-            .map<InformExhibitInfoPageModelState['pOnlyEditAttrs'][number]>((cr: any) => {
+            .map<InformExhibitInfoPageModelState['side_Exhibit_OnlyEditAttrs'][number]>((cr: any) => {
               // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
               return {
                 theKey: cr.key,
@@ -511,11 +512,11 @@ const Model: ExhibitInfoPageModelType = {
                 remark: cr.remark,
               };
             }),
-          pEditDeleteAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+          side_Exhibit_EditDeleteAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 6;
             })
-            .map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][number]>((cr: any) => {
+            .map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][number]>((cr: any) => {
               return {
                 theKey: cr.key,
                 theValue: cr.value,
@@ -544,7 +545,7 @@ const Model: ExhibitInfoPageModelType = {
               })),
             };
           }),
-          relation: relation,
+          side_Resource_Relation: relation,
         },
       });
 
@@ -732,10 +733,11 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
+
     * onChangePCover({ payload }: OnChangePCoverAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { pCover: payload.value },
+        payload: { side_Exhibit_Cover: payload.value },
       });
       yield put<SyncRulesAction>({
         type: 'syncRules',
@@ -752,14 +754,15 @@ const Model: ExhibitInfoPageModelType = {
 
       yield put<ChangeAction>({
         type: 'change',
-        payload: { pInputTitle: informExhibitInfoPage.pTitle },
+        payload: { side_Exhibit_Title: informExhibitInfoPage.side_Exhibit_Title },
       });
     },
+
     * onChangePTitleInput({ payload }: OnChangePTitleInputAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pInputTitle: payload.value,
+          side_Exhibit_InputTitle: payload.value,
         },
       });
     },
@@ -769,13 +772,13 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const pInputTitle: string = informExhibitInfoPage.pInputTitle || '';
+      const pInputTitle: string = informExhibitInfoPage.side_Exhibit_InputTitle || '';
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pTitle: pInputTitle,
-          pInputTitle: null,
+          side_Exhibit_Title: pInputTitle,
+          side_Exhibit_InputTitle: null,
         },
       });
 
@@ -787,19 +790,21 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
     * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, { put }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pInputTitle: null,
+          side_Exhibit_InputTitle: null,
         },
       });
 
     },
     * onChangePLabels({ payload }: OnChangePLabelsAction, { put }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pTags: payload.value,
+          side_Exhibit_Tags: payload.value,
         },
       });
       yield put<SyncRulesAction>({
@@ -815,6 +820,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
 
       // console.log(payload, 'payloadpayloadpayloadpayload2214111111');
+
       const replace: {
         replaced: ICandidate;
         replacer: ICandidate;
@@ -824,23 +830,23 @@ const Model: ExhibitInfoPageModelType = {
           console.log(r, 'r!@#$!@#$!@!11RRRRRRRRR');
           const replacer = r.replacer;
           const replaced = r.replaced;
-          return !(replaced.name === informExhibitInfoPage.relation?.name
+          return !(replaced.name === informExhibitInfoPage.side_Resource_Relation?.name
             && replaced.versionRange === '*'
-            && replaced.type === informExhibitInfoPage.relation?.identity
-            && replacer.name === informExhibitInfoPage.relation?.name
-            && replacer.type === informExhibitInfoPage.relation?.identity
+            && replaced.type === informExhibitInfoPage.side_Resource_Relation?.identity
+            && replacer.name === informExhibitInfoPage.side_Resource_Relation?.name
+            && replacer.type === informExhibitInfoPage.side_Resource_Relation?.identity
             && !r.scopes);
         }),
         {
           replacer: {
-            name: informExhibitInfoPage.relation?.name,
+            name: informExhibitInfoPage.side_Resource_Relation?.name,
             versionRange: payload.value,
-            type: informExhibitInfoPage.relation?.identity,
+            type: informExhibitInfoPage.side_Resource_Relation?.identity,
           },
           replaced: {
-            name: informExhibitInfoPage.relation?.name,
+            name: informExhibitInfoPage.side_Resource_Relation?.name,
             versionRange: '*',
-            type: informExhibitInfoPage.relation?.identity,
+            type: informExhibitInfoPage.side_Resource_Relation?.identity,
           },
         },
       ];
@@ -875,7 +881,7 @@ const Model: ExhibitInfoPageModelType = {
           },
         });
       } else {
-        const attrT = informExhibitInfoPage.pEditDeleteAttrs.find((ea) => {
+        const attrT = informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.find((ea) => {
           return ea.theKey === payload.theKey;
         });
         yield put<ChangeAction>({
@@ -922,11 +928,11 @@ const Model: ExhibitInfoPageModelType = {
       if (payload.theKey !== undefined) {
         const valueText: string = payload.theKey;
         const customKeys: string[] = [
-          ...informExhibitInfoPage.pOnlyReadAttrs
+          ...informExhibitInfoPage.side_Exhibit_OnlyReadAttrs
             .map<string>((pc) => pc.theKey),
-          ...informExhibitInfoPage.pOnlyEditAttrs
+          ...informExhibitInfoPage.side_Exhibit_OnlyEditAttrs
             .map<string>((poe) => poe.theKey),
-          ...informExhibitInfoPage.pEditDeleteAttrs
+          ...informExhibitInfoPage.side_Exhibit_EditDeleteAttrs
             .map<string>((ped) => ped.theKey),
         ];
         let pAddCustomKeyError: string = '';
@@ -990,7 +996,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pOnlyEditAttrs: informExhibitInfoPage.pOnlyEditAttrs.map<InformExhibitInfoPageModelState['pOnlyEditAttrs'][number]>((poe) => {
+          side_Exhibit_OnlyEditAttrs: informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_OnlyEditAttrs'][number]>((poe) => {
             if (poe.theKey !== payload.theKey) {
               return poe;
             }
@@ -1000,7 +1006,7 @@ const Model: ExhibitInfoPageModelType = {
               theValueError: textError,
             };
           }),
-          pEditDeleteAttrs: informExhibitInfoPage.pEditDeleteAttrs.map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][0]>((ped) => {
+          side_Exhibit_EditDeleteAttrs: informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][0]>((ped) => {
             if (ped.theKey !== payload.theKey) {
               return ped;
             }
@@ -1018,9 +1024,9 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attr = informExhibitInfoPage.pOnlyEditAttrs.find((poe) => {
+      const attr = informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.find((poe) => {
         return poe.theKey === payload.theKey;
-      }) || informExhibitInfoPage.pEditDeleteAttrs.find((ped) => {
+      }) || informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.find((ped) => {
         return ped.theKey === payload.theKey;
       });
 
