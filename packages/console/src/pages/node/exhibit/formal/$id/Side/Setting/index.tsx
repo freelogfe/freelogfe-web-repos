@@ -314,7 +314,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
     </div>
 
     <FCustomOptionsEditorDrawer
-      hideTypeSelect={true}
+      hideTypeSelect
       visible={exhibitInfoPage.side_CustomOptionsDrawer_Visible}
       // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}
       disabledKeys={[
