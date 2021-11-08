@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
-import {GraphData} from "@antv/g6/lib";
-import {FTipText} from "../../FText";
+import { GraphData } from '@antv/g6/lib';
+import { FTipText } from '../../FText';
+import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 
 G6.registerNode('dependency-resource', {
-  jsx: (cfg) => `
+  jsx: (cfg: any) => `
   <group>
     <rect style={{
         width: 'fit-content',
@@ -14,7 +15,7 @@ G6.registerNode('dependency-resource', {
         stroke: '#EFEFEF',
         radius: 10,
       }}>
-      <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
+      <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${textOverflowEllipsis(cfg.resourceName)}&nbsp;</text>
       <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
     </rect>
   </group>
@@ -37,7 +38,7 @@ interface FAntvG6DependencyGraphProps extends GraphData {
   height?: number;
 }
 
-function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntvG6DependencyGraphProps) {
+function FAntvG6DependencyGraph({ nodes, edges, width = 920, height = 500 }: FAntvG6DependencyGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -121,9 +122,9 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
         // renderer: 'svg',
       });
 
-      graph.read({nodes, edges});
+      graph.read({ nodes, edges });
     } else {
-      graph.changeData({nodes, edges});
+      graph.changeData({ nodes, edges });
     }
 
     return () => {
@@ -138,11 +139,11 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
       className={styles.noEdges}
       style={{
         width: width,
-        height: height
+        height: height,
       }}
     >
       <FTipText
-        type="first"
+        type='first'
         text={'无依赖树'}
       />
     </div>);
@@ -151,7 +152,7 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
   return (<div
     style={{
       width: width,
-      height: height
+      height: height,
     }}
     ref={ref}
   />);
@@ -188,11 +189,11 @@ export function handleDependencyGraphData(data: DependencyTree): DependencyGraph
   traversal(data);
 
   return {
-    nodes, edges
+    nodes, edges,
   };
 
   function traversal(data: DependencyTree, parentID: string = ''): any {
-    const {dependencies, ...resource} = data;
+    const { dependencies, ...resource } = data;
     const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
     nodes.push({
       id,

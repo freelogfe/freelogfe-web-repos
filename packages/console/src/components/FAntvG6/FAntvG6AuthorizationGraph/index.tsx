@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
-import {GraphData} from "@antv/g6/lib";
-import {FTipText} from "../../FText";
-import {FServiceAPI} from '@freelog/tools-lib';
+import { GraphData } from '@antv/g6/lib';
+import { FTipText } from '../../FText';
+import { FServiceAPI } from '@freelog/tools-lib';
+import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 
 interface ResourceNode {
   id: string;
@@ -40,7 +41,7 @@ interface AuthorizationGraphData {
 }
 
 G6.registerNode('authorization-resource', {
-  jsx: (cfg) => `
+  jsx: (cfg: any) => `
   <group>
     <rect style={{
         width: 'fit-content',
@@ -49,7 +50,7 @@ G6.registerNode('authorization-resource', {
         stroke: '#EFEFEF',
         radius: 10,
       }}>
-      <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.resourceName}&nbsp;</text>
+      <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${textOverflowEllipsis(cfg.resourceName)}&nbsp;</text>
       <text style={{fontSize: 12, fontWeight: 400, fill: '#666', marginTop: 16, marginLeft: 10}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
     </rect>
   </group>
@@ -69,13 +70,13 @@ G6.registerNode('authorization-exhibit', {
         radius: 10,
       }}>
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${cfg.nodeName}&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${textOverflowEllipsis(cfg.nodeName)}&nbsp;</text>
 
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.exhibitName}&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${textOverflowEllipsis(cfg.exhibitName)}&nbsp;</text>
     </rect>
   </group>
-`
+`;
   },
 });
 
@@ -116,7 +117,7 @@ G6.registerNode('authorization-contract', {
       radius: 10,
       marginTop: 10,
     }}>
-      <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
+      <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${textOverflowEllipsis(contract.contractName)}&nbsp;</text>
       <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '已授权' : '未授权'}&nbsp;</text>
     </rect>
   </group>
@@ -155,7 +156,7 @@ interface FAntvG6AuthorizationGraphProps extends GraphData {
 }
 
 
-function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FAntvG6AuthorizationGraphProps) {
+function FAntvG6AuthorizationGraph({ nodes, edges, width = 920, height = 500 }: FAntvG6AuthorizationGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -281,11 +282,11 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
       className={styles.noEdges}
       style={{
         width: width,
-        height: height
+        height: height,
       }}
     >
       <FTipText
-        type="first"
+        type='first'
         text={'无授权树'}
       />
     </div>);
@@ -294,7 +295,7 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
   return (<div
     style={{
       width: width,
-      height: height
+      height: height,
     }}
     ref={ref}
   />);
@@ -334,7 +335,7 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
 
   let data3: any[] = [];
   if (contractIds) {
-    const {data: data2} = await FServiceAPI.Contract.batchContracts({
+    const { data: data2 } = await FServiceAPI.Contract.batchContracts({
       contractIds: contractIds,
     });
     data3 = data2;

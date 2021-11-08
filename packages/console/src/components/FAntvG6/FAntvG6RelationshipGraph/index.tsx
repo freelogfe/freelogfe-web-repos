@@ -3,6 +3,7 @@ import styles from './index.less';
 import G6 from '@antv/g6';
 import { GraphData } from '@antv/g6/lib';
 import { FTipText } from '../../FText';
+import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 
 // // <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '待执行' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
 G6.registerNode('relationship-resource', {
@@ -20,7 +21,7 @@ G6.registerNode('relationship-resource', {
           stroke: '#EFEFEF',
           radius: 10,
         }}>
-          <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
+          <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14,marginLeft: 10,}}>${textOverflowEllipsis(cfg.resourceName)}&nbsp;</text>
           <text style={{fontSize: 12, fontWeight: 400, fill: '#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
           <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '未授权' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
       </rect>
@@ -42,10 +43,10 @@ G6.registerNode('relationship-exhibit', {
         radius: 10,
       }}>
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${cfg.nodeName}&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${textOverflowEllipsis(cfg.nodeName)}&nbsp;</text>
 
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.exhibitName}&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${textOverflowEllipsis(cfg.exhibitName)}&nbsp;</text>
     </rect>
   </group>
 `;
