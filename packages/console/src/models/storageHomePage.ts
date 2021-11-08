@@ -24,7 +24,7 @@ export interface StorageHomePageModelState {
   totalStorage: number;
   usedStorage: number;
 
-  objectList: {
+  object_List: {
     key: string;
     id: string;
     name: string;
@@ -33,6 +33,8 @@ export interface StorageHomePageModelState {
     size: number;
     updateTime: string;
   }[];
+  object_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  object_ListMore: 'loading' | 'andMore' | 'noMore';
   isLoading: boolean;
   pageSize: number;
   total: number;
@@ -107,7 +109,7 @@ export interface UploadFilesAction extends AnyAction {
 
 export interface UpdateAObjectAction extends AnyAction {
   type: 'storageHomePage/updateAObject';
-  payload: Pick<StorageHomePageModelState['objectList'][number], 'id'> & Partial<Omit<StorageHomePageModelState['objectList'][number], 'id'>>;
+  payload: Pick<StorageHomePageModelState['object_List'][number], 'id'> & Partial<Omit<StorageHomePageModelState['object_List'][number], 'id'>>;
 }
 
 interface StorageHomePageModelType {
@@ -147,7 +149,9 @@ const Model: StorageHomePageModelType = {
     totalStorage: -1,
     usedStorage: -1,
 
-    objectList: [],
+    object_List: [],
+    object_ListState: 'loading',
+    object_ListMore: 'loading',
     isLoading: true,
     pageSize: 100,
     total: -1,
@@ -315,17 +319,18 @@ const Model: StorageHomePageModelType = {
         user,
       }));
       let skip: number = 0;
-      let limit: number = storageHomePage.pageSize;
+      let limit: number = FUtil.Predefined.pageSize;
+      // let limit: number = 5;
 
       if (payload === 'append') {
-        if (storageHomePage.objectList.length === storageHomePage.total) {
+        if (storageHomePage.object_List.length === storageHomePage.total) {
           return;
         }
-        skip = storageHomePage.objectList.length;
+        skip = storageHomePage.object_List.length;
       } else if (payload === 'insert') {
         const allNames: string[] = [
           ...storageHomePage.uploadTaskQueue.map<string>((utq) => utq.name),
-          ...storageHomePage.objectList.map<string>((ol) => ol.name),
+          ...storageHomePage.object_List.map<string>((ol) => ol.name),
         ];
         limit = new Set(allNames).size;
       }
@@ -338,19 +343,20 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          isLoading: true,
+          // object_ListState: 'loading',
+          object_ListMore: 'loading',
         },
       });
       const { data } = yield call(FServiceAPI.Storage.objectList, params);
       // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
 
-      let objectListData: StorageHomePageModelState['objectList'] = [];
+      let objectListData: StorageHomePageModelState['object_List'] = [];
 
       if (payload === 'restart') {
         objectListData = (data?.dataList || []).map(transformTableData);
       } else if (payload === 'append') {
         objectListData = [
-          ...storageHomePage.objectList,
+          ...storageHomePage.object_List,
           ...(data?.dataList || []).map(transformTableData),
         ];
       } else if (payload === 'insert') {
@@ -360,7 +366,9 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          objectList: objectListData,
+          object_List: objectListData,
+          object_ListState: 'loaded',
+          object_ListMore: (data?.totalItem || 0) > objectListData.length ? 'andMore' : 'noMore',
           total: data?.totalItem,
           isLoading: false,
         },
@@ -378,7 +386,7 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          objectList: storageHomePage.objectList.filter((ol) => ol.id !== payload),
+          object_List: storageHomePage.object_List.filter((ol) => ol.id !== payload),
           total: storageHomePage.total - 1,
         },
       });
@@ -450,7 +458,7 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          objectList: storageHomePage.objectList.map<StorageHomePageModelState['objectList'][number]>((ol) => {
+          object_List: storageHomePage.object_List.map<StorageHomePageModelState['object_List'][number]>((ol) => {
             if (ol.id !== id) {
               return ol;
             }

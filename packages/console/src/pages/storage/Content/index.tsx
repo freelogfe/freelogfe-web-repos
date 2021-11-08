@@ -28,6 +28,8 @@ import fConfirmModal from "@/components/fConfirmModal";
 import FUtil1 from "@/utils";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import NoBucket from "@/pages/storage/NoBucket";
+import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
+import FListFooter from '@/components/FListFooter';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -38,7 +40,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
 
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
-  const columns: ColumnsType<NonNullable<StorageHomePageModelState['objectList']>[number]> = [
+  const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
     {
       title: (<FTitleText type="table" text={FUtil1.I18n.message('object_name')}/>),
       dataIndex: 'name',
@@ -160,9 +162,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       </>)
     }
 
-    {
-      storageHomePage.total > 0 && (<InfiniteScroll
-        pageStart={0}
+    {/* pageStart={0}
         initialLoad={false}
         loadMore={() => {
           if (storageHomePage.isLoading || storageHomePage.total === -1) {
@@ -179,18 +179,29 @@ function Content({storageHomePage, dispatch}: ContentProps) {
             payload: 'append',
           });
         }}
-        hasMore={!storageHomePage.isLoading && storageHomePage.total !== -1 && storageHomePage.objectList.length < storageHomePage.total}
-      >
+        hasMore={!storageHomePage.isLoading && storageHomePage.total !== -1 && storageHomePage.objectList.length < storageHomePage.total}*/}
+    {/* {storageHomePage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>} */}
+    {
+      storageHomePage.total > 0 && (<>
         <div className={styles.body}>
           <FTable
             rowClassName={styles.rowClassName}
             columns={columns}
-            dataSource={storageHomePage.objectList}
+            dataSource={storageHomePage.object_List}
             pagination={false}
           />
+          <FListFooter
+            state={storageHomePage.object_ListMore}
+            onClickLoadMore={() => {
+              dispatch<FetchObjectsAction>({
+                type: 'storageHomePage/fetchObjects',
+                payload: 'append',
+              });
+            }}
+          />
         </div>
-        {storageHomePage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>}
-      </InfiniteScroll>)
+
+      </>)
     }
 
     <FUploadTasksPanel/>

@@ -74,10 +74,10 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
       sider={<Sider/>}
       type="table"
       contentStyles={{
-        backgroundColor: storageHomePage.objectList.length === 0 ? 'transparent' : undefined,
-        boxShadow: storageHomePage.objectList.length === 0 ? 'none' : undefined,
+        backgroundColor: storageHomePage.object_List.length === 0 ? 'transparent' : undefined,
+        boxShadow: storageHomePage.object_List.length === 0 ? 'none' : undefined,
       }}
-      hasBottom={storageHomePage.objectList.length !== 0}
+      hasBottom={storageHomePage.object_List.length !== 0}
     >
       <Content/>
     </FLeftSiderLayout>
