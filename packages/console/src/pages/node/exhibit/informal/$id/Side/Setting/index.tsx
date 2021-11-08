@@ -39,7 +39,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     <FTitleText text={'展示版本'} type="h4"/>
     <div style={{height: 15}}/>
     <FDropdownMenu
-      options={informExhibitInfoPage.pAllVersions.map((av: string) => ({value: av, text: av}))}
+      options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({value: av, text: av}))}
       onChange={(value) => {
         dispatch<OnChangePVersionAction>({
           type: 'informExhibitInfoPage/onChangePVersion',
@@ -49,7 +49,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         });
       }}
     >
-      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.pVersion}/><FSwap/></Space>
+      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.side_Exhibit_Version}/><FSwap/></Space>
     </FDropdownMenu>
 
     {/*{*/}
@@ -62,7 +62,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       <table>
         <tbody>
         {
-          informExhibitInfoPage.pOnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
+          informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
             <td><FContentText style={{width: 80}} singleRow text={pb.theKey}/></td>
             <td><FContentText style={{width: 100}} singleRow text={pb.value}/></td>
           </tr>))
@@ -81,7 +81,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
 
     <div className={styles.options}>
       {
-        informExhibitInfoPage.pOnlyEditAttrs.map((pc) => (<div key={pc.theKey}>
+        informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
             <FContentText text={pc.theKey}/>
 
@@ -130,7 +130,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       }
 
       {
-        informExhibitInfoPage.pEditDeleteAttrs.map((pc) => (<div key={pc.theKey}>
+        informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
             <FContentText text={pc.theKey}/>
 
