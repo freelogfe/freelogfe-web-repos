@@ -1,9 +1,14 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
+import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
+import {
+  OnCancel_AddCustomOptionsDrawer_Action,
+  OnConfirm_AddCustomOptionsDrawer_Action, UpdateRewriteAction,
+} from '@/models/exhibitInfoPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -104,18 +109,25 @@ export interface InformExhibitInfoPageModelState {
     theValueError: string;
     remark: string;
   }[];
+  side_CustomOptionsDrawer_Visible: boolean;
+  side_CustomOptionDrawer_Visible: boolean;
+  side_CustomOptionDrawer_DataSource: {
+    key: string;
+    value: string;
+    description: string;
+  } | null;
 
-  pCustomModalVisible: boolean;
-  pCustomModalTitle: string;
-  pCustomModalConfirmButtonDisabled: boolean;
-  pCustomMode: 'add' | 'edit';
-  pCustomKey: string;
-  pCustomKeyDisabled: boolean;
-  pCustomKeyError: string;
-  pCustomValue: string;
-  pCustomValueError: string;
-  pCustomDescription: string;
-  pCustomDescriptionError: string;
+  // pCustomModalVisible: boolean;
+  // pCustomModalTitle: string;
+  // pCustomModalConfirmButtonDisabled: boolean;
+  // pCustomMode: 'add' | 'edit';
+  // pCustomKey: string;
+  // pCustomKeyDisabled: boolean;
+  // pCustomKeyError: string;
+  // pCustomValue: string;
+  // pCustomValueError: string;
+  // pCustomDescription: string;
+  // pCustomDescriptionError: string;
 
   side_Resource_Relation: {
     cardTitle: string;
@@ -228,18 +240,18 @@ export interface OnHandleAttrModalAction extends AnyAction {
   };
 }
 
-export interface OnCancelHandleAttrModalAction extends AnyAction {
-  type: 'informExhibitInfoPage/onCancelHandleAttrModal';
-}
+// export interface OnCancelHandleAttrModalAction extends AnyAction {
+//   type: 'informExhibitInfoPage/onCancelHandleAttrModal';
+// }
 
-export interface OnAttrModalChangeAction extends AnyAction {
-  type: 'informExhibitInfoPage/onAttrModalChange';
-  payload: {
-    theKey?: string;
-    value?: string;
-    remark?: string;
-  };
-}
+// export interface OnAttrModalChangeAction extends AnyAction {
+//   type: 'informExhibitInfoPage/onAttrModalChange';
+//   payload: {
+//     theKey?: string;
+//     value?: string;
+//     remark?: string;
+//   };
+// }
 
 export interface OnChangeAttrsAction extends AnyAction {
   type: 'informExhibitInfoPage/onChangeAttrs';
@@ -256,9 +268,9 @@ export interface OnAttrBlurAction extends AnyAction {
   };
 }
 
-export interface OnClickAttrModalConfirmBtnAction extends AnyAction {
-  type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn';
-}
+// export interface OnClickAttrModalConfirmBtnAction extends AnyAction {
+//   type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn';
+// }
 
 export interface OnClickDeleteAttrAction extends AnyAction {
   type: 'informExhibitInfoPage/onClickDeleteAttr';
@@ -272,6 +284,33 @@ export interface OnClickResetAttrAction extends AnyAction {
   payload: {
     theKey: string;
   };
+}
+
+export interface OnConfirm_CustomOptionsDrawer_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onConfirm_CustomOptionsDrawer';
+  payload: {
+    value: FCustomOptionsEditorDrawerStates['dataSource'];
+  };
+}
+
+export interface OnCancel_CustomOptionsDrawer_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onCancel_CustomOptionsDrawer';
+}
+
+export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onConfirm_CustomOptionDrawer';
+  payload: {
+    value: {
+      key: string;
+      value: string;
+      description: string;
+      valueType: 'input' | 'select';
+    };
+  };
+}
+
+export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onCancel_CustomOptionDrawer';
 }
 
 export interface ExhibitInfoPageModelType {
@@ -298,13 +337,18 @@ export interface ExhibitInfoPageModelType {
     onChangePVersion: (action: OnChangePVersionAction, effects: EffectsCommandMap) => void;
 
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
-    onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
-    onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
+    // onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
+    // onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
     onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
     onAttrBlur: (action: OnAttrBlurAction, effects: EffectsCommandMap) => void;
-    onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
+    // onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
     onClickDeleteAttr: (action: OnClickDeleteAttrAction, effects: EffectsCommandMap) => void;
     onClickResetAttr: (action: OnClickResetAttrAction, effects: EffectsCommandMap) => void;
+
+    onConfirm_CustomOptionsDrawer: (action: OnConfirm_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    onCancel_CustomOptionsDrawer: (action: OnCancel_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
+    onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
@@ -351,18 +395,21 @@ const initStates: InformExhibitInfoPageModelState = {
   side_Exhibit_OnlyReadAttrs: [],
   side_Exhibit_OnlyEditAttrs: [],
   side_Exhibit_EditDeleteAttrs: [],
+  side_CustomOptionsDrawer_Visible: false,
+  side_CustomOptionDrawer_Visible: false,
+  side_CustomOptionDrawer_DataSource: null,
 
-  pCustomModalVisible: false,
-  pCustomModalTitle: '',
-  pCustomModalConfirmButtonDisabled: false,
-  pCustomMode: 'add',
-  pCustomKey: '',
-  pCustomKeyDisabled: false,
-  pCustomKeyError: '',
-  pCustomValue: '',
-  pCustomValueError: '',
-  pCustomDescription: '',
-  pCustomDescriptionError: '',
+  // pCustomModalVisible: false,
+  // pCustomModalTitle: '',
+  // pCustomModalConfirmButtonDisabled: false,
+  // pCustomMode: 'add',
+  // pCustomKey: '',
+  // pCustomKeyDisabled: false,
+  // pCustomKeyError: '',
+  // pCustomValue: '',
+  // pCustomValueError: '',
+  // pCustomDescription: '',
+  // pCustomDescriptionError: '',
 
   side_Resource_Relation: null,
 };
@@ -867,17 +914,18 @@ const Model: ExhibitInfoPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            pCustomModalVisible: true,
-            pCustomModalTitle: '添加自定义选项',
-            pCustomModalConfirmButtonDisabled: true,
-            pCustomMode: 'add',
-            pCustomKey: '',
-            pCustomKeyDisabled: false,
-            pCustomKeyError: '',
-            pCustomValue: '',
-            pCustomValueError: '',
-            pCustomDescription: '',
-            pCustomDescriptionError: '',
+            side_CustomOptionsDrawer_Visible: true,
+            // pCustomModalVisible: true,
+            // pCustomModalTitle: '添加自定义选项',
+            // pCustomModalConfirmButtonDisabled: true,
+            // pCustomMode: 'add',
+            // pCustomKey: '',
+            // pCustomKeyDisabled: false,
+            // pCustomKeyError: '',
+            // pCustomValue: '',
+            // pCustomValueError: '',
+            // pCustomDescription: '',
+            // pCustomDescriptionError: '',
           },
         });
       } else {
@@ -887,108 +935,114 @@ const Model: ExhibitInfoPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            pCustomModalVisible: true,
-            pCustomModalTitle: '编辑自定义选项',
-            pCustomModalConfirmButtonDisabled: true,
-            pCustomMode: 'edit',
-            pCustomKey: attrT?.theKey || '',
-            pCustomKeyDisabled: true,
-            pCustomKeyError: '',
-            pCustomValue: attrT?.theValue || '',
-            pCustomValueError: '',
-            pCustomDescription: attrT?.remark || '',
-            pCustomDescriptionError: '',
+            side_CustomOptionDrawer_Visible: true,
+            side_CustomOptionDrawer_DataSource: {
+              key: attrT?.theKey || '',
+              value: attrT?.theValue || '',
+              description: attrT?.remark || '',
+            },
+            // pCustomModalVisible: true,
+            // pCustomModalTitle: '编辑自定义选项',
+            // pCustomModalConfirmButtonDisabled: true,
+            // pCustomMode: 'edit',
+            // pCustomKey: attrT?.theKey || '',
+            // pCustomKeyDisabled: true,
+            // pCustomKeyError: '',
+            // pCustomValue: attrT?.theValue || '',
+            // pCustomValueError: '',
+            // pCustomDescription: attrT?.remark || '',
+            // pCustomDescriptionError: '',
           },
         });
       }
     },
-    * onCancelHandleAttrModal({}: OnCancelHandleAttrModalAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          pCustomModalVisible: false,
-          pCustomModalTitle: '',
-          pCustomModalConfirmButtonDisabled: false,
-          pCustomMode: 'add',
-          pCustomKey: '',
-          pCustomKeyDisabled: false,
-          pCustomKeyError: '',
-          pCustomValue: '',
-          pCustomValueError: '',
-          pCustomDescription: '',
-          pCustomDescriptionError: '',
-        },
-      });
-    },
-    * onAttrModalChange({ payload }: OnAttrModalChangeAction, { select, put, call }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
-
-      if (payload.theKey !== undefined) {
-        const valueText: string = payload.theKey;
-        const customKeys: string[] = [
-          ...informExhibitInfoPage.side_Exhibit_OnlyReadAttrs
-            .map<string>((pc) => pc.theKey),
-          ...informExhibitInfoPage.side_Exhibit_OnlyEditAttrs
-            .map<string>((poe) => poe.theKey),
-          ...informExhibitInfoPage.side_Exhibit_EditDeleteAttrs
-            .map<string>((ped) => ped.theKey),
-        ];
-        let pAddCustomKeyError: string = '';
-        if (!/^[a-zA-Z0-9_]{1,20}$/.test(valueText)) {
-          pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
-        } else if ([...customKeys].includes(valueText)) {
-          pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
-        }
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pCustomKey: valueText,
-            pCustomKeyError: pAddCustomKeyError,
-            pCustomModalConfirmButtonDisabled: !valueText || !!pAddCustomKeyError
-              || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
-              || !!informExhibitInfoPage.pCustomDescriptionError,
-          },
-        });
-      }
-
-      if (payload.value !== undefined) {
-        const valueText: string = payload.value;
-        const textError: string = (valueText.length > 30 || payload.value === '') ? '1~30个字符' : '';
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pCustomValue: valueText,
-            pCustomValueError: textError,
-            pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
-              || !valueText || !!textError
-              || !!informExhibitInfoPage.pCustomDescriptionError,
-          },
-        });
-      }
-
-      if (payload.remark !== undefined) {
-        const valueText: string = payload.remark;
-        const textError: string = (valueText.length > 50) ? '0~50个字符' : '';
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pCustomDescription: valueText,
-            pCustomDescriptionError: textError,
-            pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
-              || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
-              || !!textError,
-          },
-        });
-      }
-    },
+    // * onCancelHandleAttrModal({}: OnCancelHandleAttrModalAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       pCustomModalVisible: false,
+    //       pCustomModalTitle: '',
+    //       pCustomModalConfirmButtonDisabled: false,
+    //       pCustomMode: 'add',
+    //       pCustomKey: '',
+    //       pCustomKeyDisabled: false,
+    //       pCustomKeyError: '',
+    //       pCustomValue: '',
+    //       pCustomValueError: '',
+    //       pCustomDescription: '',
+    //       pCustomDescriptionError: '',
+    //     },
+    //   });
+    // },
+    // * onAttrModalChange({ payload }: OnAttrModalChangeAction, { select, put, call }: EffectsCommandMap) {
+    //   const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+    //     informExhibitInfoPage,
+    //   }));
+    //
+    //   if (payload.theKey !== undefined) {
+    //     const valueText: string = payload.theKey;
+    //     const customKeys: string[] = [
+    //       ...informExhibitInfoPage.side_Exhibit_OnlyReadAttrs
+    //         .map<string>((pc) => pc.theKey),
+    //       ...informExhibitInfoPage.side_Exhibit_OnlyEditAttrs
+    //         .map<string>((poe) => poe.theKey),
+    //       ...informExhibitInfoPage.side_Exhibit_EditDeleteAttrs
+    //         .map<string>((ped) => ped.theKey),
+    //     ];
+    //     let pAddCustomKeyError: string = '';
+    //     if (!/^[a-zA-Z0-9_]{1,20}$/.test(valueText)) {
+    //       pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
+    //     } else if ([...customKeys].includes(valueText)) {
+    //       pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
+    //     }
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         pCustomKey: valueText,
+    //         pCustomKeyError: pAddCustomKeyError,
+    //         pCustomModalConfirmButtonDisabled: !valueText || !!pAddCustomKeyError
+    //           || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
+    //           || !!informExhibitInfoPage.pCustomDescriptionError,
+    //       },
+    //     });
+    //   }
+    //
+    //   if (payload.value !== undefined) {
+    //     const valueText: string = payload.value;
+    //     const textError: string = (valueText.length > 30 || payload.value === '') ? '1~30个字符' : '';
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         pCustomValue: valueText,
+    //         pCustomValueError: textError,
+    //         pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
+    //           || !valueText || !!textError
+    //           || !!informExhibitInfoPage.pCustomDescriptionError,
+    //       },
+    //     });
+    //   }
+    //
+    //   if (payload.remark !== undefined) {
+    //     const valueText: string = payload.remark;
+    //     const textError: string = (valueText.length > 50) ? '0~50个字符' : '';
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         pCustomDescription: valueText,
+    //         pCustomDescriptionError: textError,
+    //         pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
+    //           || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
+    //           || !!textError,
+    //       },
+    //     });
+    //   }
+    // },
     * onChangeAttrs({ payload }: OnChangeAttrsAction, { select, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      console.log(payload, 'payload1234');
+      // console.log(payload, 'payload1234');
 
       const theValue: string = payload.theValue;
       const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
@@ -1086,54 +1140,54 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
-
-      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
-
-      // console.log(attrs, 'rules!!!!!!!');
-
-      let newAttrs = attrs.filter((rl: any) => {
-        return rl.key !== informExhibitInfoPage.pCustomKey;
-      });
-
-      newAttrs = [
-        {
-          operation: 'add',
-          key: informExhibitInfoPage.pCustomKey,
-          value: informExhibitInfoPage.pCustomValue,
-          description: informExhibitInfoPage.pCustomDescription,
-        },
-        ...newAttrs,
-      ];
-
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: newAttrs,
-        },
-      });
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          pCustomModalVisible: false,
-          pCustomModalTitle: '',
-          pCustomModalConfirmButtonDisabled: false,
-          pCustomMode: 'add',
-          pCustomKey: '',
-          pCustomKeyDisabled: false,
-          pCustomKeyError: '',
-          pCustomValue: '',
-          pCustomValueError: '',
-          pCustomDescription: '',
-          pCustomDescriptionError: '',
-        },
-      });
-
-    },
+    // * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
+    //   const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+    //     informExhibitInfoPage,
+    //   }));
+    //
+    //   const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+    //
+    //   // console.log(attrs, 'rules!!!!!!!');
+    //
+    //   let newAttrs = attrs.filter((rl: any) => {
+    //     return rl.key !== informExhibitInfoPage.pCustomKey;
+    //   });
+    //
+    //   newAttrs = [
+    //     {
+    //       operation: 'add',
+    //       key: informExhibitInfoPage.pCustomKey,
+    //       value: informExhibitInfoPage.pCustomValue,
+    //       description: informExhibitInfoPage.pCustomDescription,
+    //     },
+    //     ...newAttrs,
+    //   ];
+    //
+    //   yield put<SyncRulesAction>({
+    //     type: 'syncRules',
+    //     payload: {
+    //       attrs: newAttrs,
+    //     },
+    //   });
+    //
+    //   // yield put<ChangeAction>({
+    //   //   type: 'change',
+    //   //   payload: {
+    //   //     pCustomModalVisible: false,
+    //   //     pCustomModalTitle: '',
+    //   //     pCustomModalConfirmButtonDisabled: false,
+    //   //     pCustomMode: 'add',
+    //   //     pCustomKey: '',
+    //   //     pCustomKeyDisabled: false,
+    //   //     pCustomKeyError: '',
+    //   //     pCustomValue: '',
+    //   //     pCustomValueError: '',
+    //   //     pCustomDescription: '',
+    //   //     pCustomDescriptionError: '',
+    //   //   },
+    //   // });
+    //
+    // },
     * onClickDeleteAttr({ payload }: OnClickDeleteAttrAction, { select, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
@@ -1179,6 +1233,155 @@ const Model: ExhibitInfoPageModelType = {
         type: 'syncRules',
         payload: {
           attrs: newAttrs,
+        },
+      });
+    },
+
+    * onConfirm_CustomOptionsDrawer({ payload }: OnConfirm_CustomOptionsDrawer_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo?.attrs || [];
+
+      // console.log(attrs, 'rules!!!!!!!');
+
+      // let newAttrs = attrs.filter((rl: any) => {
+      //   return rl.key !== informExhibitInfoPage.pCustomKey;
+      // });
+      // newAttrs = [
+      //   {
+      //     operation: 'add',
+      //     key: informExhibitInfoPage.pCustomKey,
+      //     value: informExhibitInfoPage.pCustomValue,
+      //     description: informExhibitInfoPage.pCustomDescription,
+      //   },
+      //   ...newAttrs,
+      // ];
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionsDrawer_Visible: false,
+        },
+      });
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: [
+            ...payload.value.map((v) => {
+              return {
+                operation: 'add',
+                key: v.key,
+                value: v.defaultValue,
+                description: v.description,
+              };
+            }),
+            ...attrs,
+          ],
+        },
+      });
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     side_CustomOptions: [
+      //       ...exhibitInfoPage.side_CustomOptions,
+      //       ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
+      //         return {
+      //           key: v.key,
+      //           value: v.defaultValue,
+      //           description: v.description,
+      //           option: [],
+      //           valueInput: v.defaultValue,
+      //           valueInputError: '',
+      //         };
+      //       }),
+      //     ],
+      //     side_CustomOptionsDrawer_Visible: false,
+      //   },
+      // });
+      //
+      // yield put<UpdateRewriteAction>({
+      //   type: 'updateRewrite',
+      // });
+    },
+    * onCancel_CustomOptionsDrawer({}: OnCancel_CustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionsDrawer_Visible: false,
+        },
+      });
+    },
+    * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionDrawer_Visible: false,
+          side_CustomOptionDrawer_DataSource: null,
+        },
+      });
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: attrs.map((a: any) => {
+            if (a.key !== payload.value.key) {
+              return a;
+            }
+            return {
+              ...a,
+              value: payload.value.value,
+              description: payload.value.description,
+            };
+          }),
+        },
+      });
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co) => {
+      //       if (co.key !== payload.value.key) {
+      //         return co;
+      //       }
+      //       return {
+      //         key: co.key,
+      //         value: payload.value.value,
+      //         description: payload.value.description,
+      //         valueInput: payload.value.value,
+      //         valueInputError: '',
+      //       };
+      //     }),
+      //     side_CustomOptionDrawer_Visible: false,
+      //     side_CustomOptionDrawer_DataSource: null,
+      //   },
+      // });
+      //
+      // yield put<UpdateRewriteAction>({
+      //   type: 'updateRewrite',
+      // });
+    },
+    * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_CustomOptionDrawer_Visible: false,
+          side_CustomOptionDrawer_DataSource: null,
         },
       });
     },

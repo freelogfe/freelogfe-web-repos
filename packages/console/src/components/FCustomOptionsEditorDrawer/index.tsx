@@ -72,10 +72,11 @@ function FCustomOptionsEditorDrawer({
         }}
       >取消</FTextBtn>
       <FRectBtn
-        disabled={!!dataSource.find((eds) => {
-          return !eds.key || !!eds.keyError
-            || (eds.custom === 'select' ? (eds.customOption === '' || !!eds.customOptionError) : (eds.defaultValue === '' || !!eds.defaultValueError))
-            || !!eds.descriptionError;
+        disabled={dataSource.length === 0
+        || dataSource.some((eds) => {
+          return eds.key === '' || eds.keyError !== ''
+            || (eds.custom === 'select' ? (eds.customOption === '' || eds.customOptionError !== '') : (eds.defaultValue === '' || eds.defaultValueError !== ''))
+            || eds.descriptionError !== '';
         })}
         onClick={onClick_ConfirmBtn}
       >确定</FRectBtn>

@@ -137,17 +137,6 @@ export interface ExhibitInfoPageModelState {
     valueInputError: string;
   }[];
   side_CustomOptionsDrawer_Visible: boolean;
-  // side_CustomOptionsDrawer_DataSource: {
-  //   key: string;
-  //   keyError: string;
-  //   description: string;
-  //   descriptionError: string;
-  //   custom: 'input' | 'select';
-  //   defaultValue: string;
-  //   defaultValueError: string;
-  //   customOption: string;
-  //   customOptionError: string;
-  // }[];
   side_CustomOptionDrawer_Visible: boolean;
   side_CustomOptionDrawer_DataSource: {
     key: string;
@@ -409,7 +398,6 @@ const initStates: ExhibitInfoPageModelState = {
   side_CustomOptions: [],
 
   side_CustomOptionsDrawer_Visible: false,
-  // side_CustomOptionsDrawer_DataSource: [],
   side_CustomOptionDrawer_Visible: false,
   side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',

@@ -1,45 +1,48 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
-import {Space} from "antd";
-import {FDelete, FEdit, FRedo, FSwap} from "@/components/FIcons";
-import {FCircleBtn, FTextBtn} from "@/components/FButton";
+import { FContentText, FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import { FDelete, FEdit, FRedo, FSwap } from '@/components/FIcons';
+import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
-  OnAttrBlurAction,
-  OnAttrModalChangeAction,
-  OnCancelHandleAttrModalAction,
+  OnAttrBlurAction, OnCancel_CustomOptionDrawer_Action,
+  // OnAttrModalChangeAction,
+  OnCancel_CustomOptionsDrawer_Action,
+  // OnCancelHandleAttrModalAction,
   OnChangeAttrsAction,
   OnChangePVersionAction,
-  OnClickAttrModalConfirmBtnAction,
+  // OnClickAttrModalConfirmBtnAction,
   OnClickDeleteAttrAction,
-  OnClickResetAttrAction,
+  OnClickResetAttrAction, OnConfirm_CustomOptionDrawer_Action, OnConfirm_CustomOptionsDrawer_Action,
   OnHandleAttrModalAction,
-} from "@/models/informExhibitInfoPage";
-import FInput from "@/components/FInput";
-import {connect, Dispatch} from "dva";
-import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
-import FModal from "@/components/FModal";
-import FDropdownMenu from "@/components/FDropdownMenu";
+} from '@/models/informExhibitInfoPage';
+import FInput from '@/components/FInput';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
+import FModal from '@/components/FModal';
+import FDropdownMenu from '@/components/FDropdownMenu';
+import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 
 interface SettingProps {
   dispatch: Dispatch;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
+function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
 
   return (<>
     <FContentText
       text={'高级设置'}
-      type="highlight"
+      type='highlight'
     />
 
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
 
-    <FTitleText text={'展示版本'} type="h4"/>
-    <div style={{height: 15}}/>
+    <FTitleText text={'展示版本'} type='h4' />
+    <div style={{ height: 15 }} />
     <FDropdownMenu
-      options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({value: av, text: av}))}
+      options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({ value: av, text: av }))}
       onChange={(value) => {
         dispatch<OnChangePVersionAction>({
           type: 'informExhibitInfoPage/onChangePVersion',
@@ -49,60 +52,61 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         });
       }}
     >
-      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.side_Exhibit_Version}/><FSwap/></Space>
+      <Space style={{ cursor: 'pointer' }} size={15}><FContentText
+        text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
     </FDropdownMenu>
 
     {/*{*/}
     {/*  informExhibitInfoPage.settingUnfold && (<>*/}
-    <div style={{height: 30}}/>
+    <div style={{ height: 30 }} />
 
-    <FTitleText text={'基础属性'} type="h4"/>
-    <div style={{height: 15}}/>
+    <FTitleText text={'基础属性'} type='h4' />
+    <div style={{ height: 15 }} />
     <div className={styles.attr}>
       <table>
         <tbody>
         {
           informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
-            <td><FContentText style={{width: 80}} singleRow text={pb.theKey}/></td>
-            <td><FContentText style={{width: 100}} singleRow text={pb.value}/></td>
+            <td><FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>
+            <td><FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>
           </tr>))
         }
         </tbody>
       </table>
     </div>
-    <div style={{height: 30}}/>
+    <div style={{ height: 30 }} />
 
     <FTitleText
       text={'自定义选项'}
-      type="h4"
+      type='h4'
     />
 
-    <div style={{height: 15}}/>
+    <div style={{ height: 15 }} />
 
     <div className={styles.options}>
       {
         informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.theKey}/>
+            <FContentText text={pc.theKey} />
 
             <Space size={10}>
               <FTextBtn
-                type="primary"
+                type='primary'
                 onClick={() => {
                   dispatch<OnClickResetAttrAction>({
                     type: 'informExhibitInfoPage/onClickResetAttr',
                     payload: {
-                      theKey: pc.theKey
+                      theKey: pc.theKey,
                     },
-                  })
+                  });
 
                 }}
-              ><FRedo/></FTextBtn>
+              ><FRedo /></FTextBtn>
 
             </Space>
 
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FInput
             className={styles.FInput}
             value={pc.theValue}
@@ -132,11 +136,11 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       {
         informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.theKey}/>
+            <FContentText text={pc.theKey} />
 
             <Space size={10}>
               <FTextBtn
-                type="primary"
+                type='primary'
                 onClick={() => {
                   dispatch<OnHandleAttrModalAction>({
                     type: 'informExhibitInfoPage/onHandleAttrModal',
@@ -146,14 +150,14 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                     },
                   });
                 }}
-              ><FEdit/></FTextBtn>
+              ><FEdit /></FTextBtn>
               <FDelete
-                style={{color: '#EE4040', cursor: 'pointer'}}
+                style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
                   dispatch<OnClickDeleteAttrAction>({
                     type: 'informExhibitInfoPage/onClickDeleteAttr',
                     payload: {
-                      theKey: pc.theKey
+                      theKey: pc.theKey,
                     },
                   });
                 }}
@@ -161,7 +165,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
             </Space>
 
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FInput
             className={styles.FInput}
             value={pc.theValue}
@@ -187,10 +191,10 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         </div>))
       }
     </div>
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
     <Space className={styles.addCustomTitle}>
       <FCircleBtn
-        type="transparent"
+        type='transparent'
         onClick={() => {
           dispatch<OnHandleAttrModalAction>({
             type: 'informExhibitInfoPage/onHandleAttrModal',
@@ -202,6 +206,55 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       />
       <span>添加自定义选项</span>
     </Space>
+
+    <FCustomOptionsEditorDrawer
+      visible={informExhibitInfoPage.side_CustomOptionsDrawer_Visible}
+      disabledKeys={[
+        ...informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((or) => or.theKey),
+        ...informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map((oe) => oe.theKey),
+        ...informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map((ed) => ed.theKey),
+      ]}
+      hideTypeSelect
+      onCancel={() => {
+        dispatch<OnCancel_CustomOptionsDrawer_Action>({
+          type: 'informExhibitInfoPage/onCancel_CustomOptionsDrawer',
+        });
+      }}
+      onConfirm={(value) => {
+        dispatch<OnConfirm_CustomOptionsDrawer_Action>({
+          type: 'informExhibitInfoPage/onConfirm_CustomOptionsDrawer',
+          payload: {
+            value: value,
+          },
+        });
+      }}
+    />
+
+    <FCustomOptionEditorDrawer
+      visible={informExhibitInfoPage.side_CustomOptionDrawer_Visible}
+      dataSource={{
+        key: informExhibitInfoPage.side_CustomOptionDrawer_DataSource?.key || '',
+        value: informExhibitInfoPage.side_CustomOptionDrawer_DataSource?.value || '',
+        description: informExhibitInfoPage.side_CustomOptionDrawer_DataSource?.description || '',
+        valueType: 'input',
+      }}
+      disabledKeyInput
+      disabledValueTypeSelect
+      hideValueTypeSelect
+      onConfirm={(value) => {
+        dispatch<OnConfirm_CustomOptionDrawer_Action>({
+          type: 'informExhibitInfoPage/onConfirm_CustomOptionDrawer',
+          payload: {
+            value: value,
+          },
+        });
+      }}
+      onCancel={() => {
+        dispatch<OnCancel_CustomOptionDrawer_Action>({
+          type: 'informExhibitInfoPage/onCancel_CustomOptionDrawer',
+        });
+      }}
+    />
     {/*  </>)*/}
     {/*}*/}
 
@@ -217,90 +270,90 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     {/*  }}>{informExhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextButton>*/}
     {/*</div>*/}
 
-    <FModal
-      // title={'添加自定义选项'}
-      title={informExhibitInfoPage.pCustomModalTitle}
-      width={560}
-      visible={informExhibitInfoPage.pCustomModalVisible}
-      okText={'添加'}
-      okButtonProps={{
-        disabled: informExhibitInfoPage.pCustomModalConfirmButtonDisabled
-      }}
-      onCancel={() => {
-        dispatch<OnCancelHandleAttrModalAction>({
-          type: 'informExhibitInfoPage/onCancelHandleAttrModal',
-        });
-      }}
-      onOk={() => {
-        dispatch<OnClickAttrModalConfirmBtnAction>({
-          type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn',
-        });
-      }}
-    >
-      <div className={styles.modalBody}>
-        <div className={styles.modalBodyTitle}>
-          <i/>
-          <div style={{width: 5}}/>
-          <FTitleText type="h4">key</FTitleText>
-        </div>
-        <div style={{height: 5}}/>
-        <FInput
-          disabled={informExhibitInfoPage.pCustomKeyDisabled}
-          className={styles.modalBodyInput}
-          value={informExhibitInfoPage.pCustomKey}
-          errorText={informExhibitInfoPage.pCustomKeyError}
-          onChange={(e) => {
-            dispatch<OnAttrModalChangeAction>({
-              type: 'informExhibitInfoPage/onAttrModalChange',
-              payload: {
-                theKey: e.target.value,
-              },
-            });
-          }}
-        />
-        <div style={{height: 20}}/>
-        <div className={styles.modalBodyTitle}>
-          <i/>
-          <div style={{width: 5}}/>
-          <FTitleText type="h4">value</FTitleText>
-        </div>
-        <div style={{height: 5}}/>
-        <FInput
-          className={styles.modalBodyInput}
-          value={informExhibitInfoPage.pCustomValue}
-          errorText={informExhibitInfoPage.pCustomValueError}
-          onChange={(e) => {
-            dispatch<OnAttrModalChangeAction>({
-              type: 'informExhibitInfoPage/onAttrModalChange',
-              payload: {
-                value: e.target.value,
-              },
-            });
-          }}
-        />
-        <div style={{height: 20}}/>
-        <div>
-          <FTitleText type="h4">属性说明</FTitleText>
-        </div>
-        <div style={{height: 5}}/>
-        <FInput
-          className={styles.modalBodyInput}
-          value={informExhibitInfoPage.pCustomDescription}
-          errorText={informExhibitInfoPage.pCustomDescriptionError}
-          onChange={(e) => {
-            dispatch<OnAttrModalChangeAction>({
-              type: 'informExhibitInfoPage/onAttrModalChange',
-              payload: {
-                remark: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-    </FModal>
+    {/*<FModal*/}
+    {/*  // title={'添加自定义选项'}*/}
+    {/*  title={informExhibitInfoPage.pCustomModalTitle}*/}
+    {/*  width={560}*/}
+    {/*  visible={informExhibitInfoPage.pCustomModalVisible}*/}
+    {/*  okText={'添加'}*/}
+    {/*  okButtonProps={{*/}
+    {/*    disabled: informExhibitInfoPage.pCustomModalConfirmButtonDisabled*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    dispatch<OnCancelHandleAttrModalAction>({*/}
+    {/*      type: 'informExhibitInfoPage/onCancelHandleAttrModal',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onOk={() => {*/}
+    {/*    dispatch<OnClickAttrModalConfirmBtnAction>({*/}
+    {/*      type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*>*/}
+    {/*  <div className={styles.modalBody}>*/}
+    {/*    <div className={styles.modalBodyTitle}>*/}
+    {/*      <i/>*/}
+    {/*      <div style={{width: 5}}/>*/}
+    {/*      <FTitleText type="h4">key</FTitleText>*/}
+    {/*    </div>*/}
+    {/*    <div style={{height: 5}}/>*/}
+    {/*    <FInput*/}
+    {/*      disabled={informExhibitInfoPage.pCustomKeyDisabled}*/}
+    {/*      className={styles.modalBodyInput}*/}
+    {/*      value={informExhibitInfoPage.pCustomKey}*/}
+    {/*      errorText={informExhibitInfoPage.pCustomKeyError}*/}
+    {/*      onChange={(e) => {*/}
+    {/*        dispatch<OnAttrModalChangeAction>({*/}
+    {/*          type: 'informExhibitInfoPage/onAttrModalChange',*/}
+    {/*          payload: {*/}
+    {/*            theKey: e.target.value,*/}
+    {/*          },*/}
+    {/*        });*/}
+    {/*      }}*/}
+    {/*    />*/}
+    {/*    <div style={{height: 20}}/>*/}
+    {/*    <div className={styles.modalBodyTitle}>*/}
+    {/*      <i/>*/}
+    {/*      <div style={{width: 5}}/>*/}
+    {/*      <FTitleText type="h4">value</FTitleText>*/}
+    {/*    </div>*/}
+    {/*    <div style={{height: 5}}/>*/}
+    {/*    <FInput*/}
+    {/*      className={styles.modalBodyInput}*/}
+    {/*      value={informExhibitInfoPage.pCustomValue}*/}
+    {/*      errorText={informExhibitInfoPage.pCustomValueError}*/}
+    {/*      onChange={(e) => {*/}
+    {/*        dispatch<OnAttrModalChangeAction>({*/}
+    {/*          type: 'informExhibitInfoPage/onAttrModalChange',*/}
+    {/*          payload: {*/}
+    {/*            value: e.target.value,*/}
+    {/*          },*/}
+    {/*        });*/}
+    {/*      }}*/}
+    {/*    />*/}
+    {/*    <div style={{height: 20}}/>*/}
+    {/*    <div>*/}
+    {/*      <FTitleText type="h4">属性说明</FTitleText>*/}
+    {/*    </div>*/}
+    {/*    <div style={{height: 5}}/>*/}
+    {/*    <FInput*/}
+    {/*      className={styles.modalBodyInput}*/}
+    {/*      value={informExhibitInfoPage.pCustomDescription}*/}
+    {/*      errorText={informExhibitInfoPage.pCustomDescriptionError}*/}
+    {/*      onChange={(e) => {*/}
+    {/*        dispatch<OnAttrModalChangeAction>({*/}
+    {/*          type: 'informExhibitInfoPage/onAttrModalChange',*/}
+    {/*          payload: {*/}
+    {/*            remark: e.target.value,*/}
+    {/*          },*/}
+    {/*        });*/}
+    {/*      }}*/}
+    {/*    />*/}
+    {/*  </div>*/}
+    {/*</FModal>*/}
   </>);
 }
 
-export default connect(({informExhibitInfoPage}: ConnectState) => ({
+export default connect(({ informExhibitInfoPage }: ConnectState) => ({
   informExhibitInfoPage,
 }))(Setting);
