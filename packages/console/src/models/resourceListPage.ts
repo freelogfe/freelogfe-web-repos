@@ -8,7 +8,7 @@ export interface ResourceListPageModelState {
   resourceType: string;
   resourceStatus: string;
   inputText: string;
-  pageSize: number;
+  // pageSize: number;
   totalNum: number;
   dataSource: {
     id: string;
@@ -102,7 +102,7 @@ const initStates: ResourceListPageModelState = {
   resourceStatus: '2',
   inputText: '',
   dataSource: [],
-  pageSize: 20,
+  // pageSize: 20,
   totalNum: -1,
 };
 
@@ -135,9 +135,11 @@ const Model: ResourceListPageModelType = {
 
       let dataSource: ResourceListPageModelState['dataSource'] = [];
 
-      if (!payload) {
+      if (!payload.restart) {
         dataSource = resourceListPage.dataSource;
       }
+
+      // console.log(dataSource, 'dataSourcedataSource92834uoi');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
