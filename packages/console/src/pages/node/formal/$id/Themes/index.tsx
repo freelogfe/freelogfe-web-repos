@@ -26,6 +26,8 @@ import FDivider from '@/components/FDivider';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import informExhibitInfoPage from '@/models/informExhibitInfoPage';
+import exhibitInfoPage from '@/models/exhibitInfoPage';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -123,58 +125,64 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                         src={i.cover || imgSrc}
                       />
 
-                      <div
-                        className={styles.action}
-                        // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
-                      >
-                        <div style={{ width: 1 }} />
-                        {
-                          hasActiveBtn && (<>
-                            <a
-                              onClick={() => {
-                                if (!nodeManagerPage.nodeThemeId) {
-                                  dispatch<OnActiveAction>({
-                                    type: 'nodeManagerPage/onActive',
-                                    payload: {
-                                      id: i.id,
-                                    },
-                                  });
-                                  return;
-                                }
+                      {
+                        nodeManagerPage.theme_ActivatingThemeID === i.id
+                          ? (<div className={styles.processing}>
+                            <span>处理中…</span>
+                          </div>)
+                          : (<div
+                            className={styles.action}
+                            // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
+                          >
+                            <div style={{ width: 1 }} />
+                            {
+                              hasActiveBtn && (<>
+                                <a
+                                  onClick={() => {
+                                    if (!nodeManagerPage.nodeThemeId) {
+                                      dispatch<OnActiveAction>({
+                                        type: 'nodeManagerPage/onActive',
+                                        payload: {
+                                          id: i.id,
+                                        },
+                                      });
+                                      return;
+                                    }
 
-                                fConfirmModal({
-                                  message: FUtil1.I18n.message('msg_change_theme_confirm'),
-                                  // message: '激活该主题，将下线其它主题',
-                                  okText: FUtil1.I18n.message('active_new_theme'),
-                                  // okText: '激活',
-                                  cancelText: FUtil1.I18n.message('keep_current_theme'),
-                                  // cancelText: '保持当前主题',
-                                  onOk() {
-                                    dispatch<OnActiveAction>({
-                                      type: 'nodeManagerPage/onActive',
-                                      payload: {
-                                        id: i.id,
+                                    fConfirmModal({
+                                      message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                      // message: '激活该主题，将下线其它主题',
+                                      okText: FUtil1.I18n.message('active_new_theme'),
+                                      // okText: '激活',
+                                      cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                      // cancelText: '保持当前主题',
+                                      onOk() {
+                                        dispatch<OnActiveAction>({
+                                          type: 'nodeManagerPage/onActive',
+                                          payload: {
+                                            id: i.id,
+                                          },
+                                        });
                                       },
                                     });
-                                  },
-                                });
-                              }}>{FUtil1.I18n.message('btn_activate_theme')}</a>
+                                  }}>{FUtil1.I18n.message('btn_activate_theme')}</a>
 
+                                <FDivider />
+                              </>)
+                            }
+                            <a
+                              onClick={() => {
+                                window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));
+                              }}
+                            >{FUtil1.I18n.message('btn_edit_exhibit')}</a>
                             <FDivider />
-                          </>)
-                        }
-                        <a
-                          onClick={() => {
-                            window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));
-                          }}
-                        >{FUtil1.I18n.message('btn_edit_exhibit')}</a>
-                        <FDivider />
-                        <a
-                          onClick={() => {
-                            window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));
-                          }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>
-                        <div style={{ width: 1 }} />
-                      </div>
+                            <a
+                              onClick={() => {
+                                window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));
+                              }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>
+                            <div style={{ width: 1 }} />
+                          </div>)
+                      }
                     </div>
                     <div style={{ height: 12 }} />
                     <FContentText

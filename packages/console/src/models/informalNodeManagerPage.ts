@@ -153,6 +153,7 @@ export interface InformalNodeManagerPageModelState {
     authErrorText: string;
   }[];
 
+  theme_ActivatingThemeName: string;
   theme_FilterKeywords: string;
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
@@ -713,10 +714,12 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
 };
 
 const themeInitStates: Pick<InformalNodeManagerPageModelState,
+  'theme_ActivatingThemeName' |
   'theme_FilterKeywords' |
   'theme_ListState' |
   'theme_ListMore' |
   'theme_List'> = {
+  theme_ActivatingThemeName: '',
   theme_FilterKeywords: '',
   theme_ListState: 'loading',
   theme_ListMore: 'loading',
@@ -990,81 +993,81 @@ const Model: InformalNodeManagerPageModelType = {
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
         ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
-        const operations: string[] = dl.rules[0]?.operations || [];
-        // console.log(operations, 'operations12334');
-        const stateInfo = dl.stateInfo;
+          const operations: string[] = dl.rules[0]?.operations || [];
+          // console.log(operations, 'operations12334');
+          const stateInfo = dl.stateInfo;
 
-        const rulesObjRule = rulesObj.find((ro: any) => {
-          // console.log(ro, dl, '#############***********;ojsifw389');
-          return ro.exhibitName === dl.testResourceName;
-        });
+          const rulesObjRule = rulesObj.find((ro: any) => {
+            // console.log(ro, dl, '#############***********;ojsifw389');
+            return ro.exhibitName === dl.testResourceName;
+          });
 
-        const rule: InformalNodeManagerPageModelState['exhibit_List'][number]['rule'] = {
-          add: operations.includes('add') ? {
-            exhibit: dl.testResourceName,
-            source: {
-              type: dl.originInfo.type,
-              name: dl.originInfo.name,
-              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-              versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-            },
-          } : undefined,
-          alter: operations.includes('alter') ? dl.testResourceName : undefined,
-          // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-          labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-          title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-          cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-          online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
-          offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-          attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-            return {
-              type: a.operation,
-              theKey: a.key,
-              value: a.value,
-              description: a.description,
-            };
-          }) : undefined,
-          replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-            // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-            return {
-              replaced: {
-                ...rr.replaced,
-                versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+          const rule: InformalNodeManagerPageModelState['exhibit_List'][number]['rule'] = {
+            add: operations.includes('add') ? {
+              exhibit: dl.testResourceName,
+              source: {
+                type: dl.originInfo.type,
+                name: dl.originInfo.name,
+                version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+                versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
               },
-              replacer: {
-                ...rr.replacer,
-                versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-              },
-              scopes: rr.scopes && (rr.scopes as any[])
-                .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-                  // console.log(ss, 'ss!!!!@@@@##');
-                  return ss.map((sss: any) => {
-                    return {
-                      ...sss,
-                      versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                    };
-                  });
-                }),
-            };
-          }),
-        };
-        // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
-        return {
-          id: dl.testResourceId,
-          key: dl.testResourceId,
-          associatedExhibitID: dl.associatedPresentableId,
-          cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-          name: dl.testResourceName,
-          title: dl.stateInfo.titleInfo.title,
-          identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-          rule: rule,
-          version: dl.originInfo.version,
-          isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
-          originInfo: dl.originInfo,
-          isAuth: true,
-          authErrorText: '',
-        };
-      })
+            } : undefined,
+            alter: operations.includes('alter') ? dl.testResourceName : undefined,
+            // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+            labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+            title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+            cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+            online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
+            offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+            attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+              return {
+                type: a.operation,
+                theKey: a.key,
+                value: a.value,
+                description: a.description,
+              };
+            }) : undefined,
+            replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+              // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+              return {
+                replaced: {
+                  ...rr.replaced,
+                  versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+                },
+                replacer: {
+                  ...rr.replacer,
+                  versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+                },
+                scopes: rr.scopes && (rr.scopes as any[])
+                  .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+                    // console.log(ss, 'ss!!!!@@@@##');
+                    return ss.map((sss: any) => {
+                      return {
+                        ...sss,
+                        versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                      };
+                    });
+                  }),
+              };
+            }),
+          };
+          // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
+          return {
+            id: dl.testResourceId,
+            key: dl.testResourceId,
+            associatedExhibitID: dl.associatedPresentableId,
+            cover: dl.stateInfo.coverInfo.coverImages[0] || '',
+            name: dl.testResourceName,
+            title: dl.stateInfo.titleInfo.title,
+            identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
+            rule: rule,
+            version: dl.originInfo.version,
+            isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
+            originInfo: dl.originInfo,
+            isAuth: true,
+            authErrorText: '',
+          };
+        }),
       ];
 
       const allAddRule = data1.testRules.filter((tr: any) => {
@@ -1338,6 +1341,14 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
+      // console.log(payload, 'payload0923u4rjlksfdjflk');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          theme_ActivatingThemeName: payload.themeName,
+        },
+      });
+
       const { rules }: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
       // console.log(rules, 'rules1234234');
       const rule = rules.find((r) => r.themeName);
@@ -1532,6 +1543,12 @@ const Model: InformalNodeManagerPageModelType = {
           },
         });
       } else if (informalNodeManagerPage.showPage === 'theme') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            theme_ActivatingThemeName: '',
+          },
+        });
         yield put<FetchThemeListAction>({
           type: 'fetchThemeList',
           payload: {

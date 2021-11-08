@@ -39,6 +39,7 @@ export interface NodeManagerModelState {
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
 
+  theme_ActivatingThemeID: string;
   theme_InputFilter: string;
   theme_List: {
     id: string;
@@ -218,11 +219,13 @@ const exhibitInitStates: Pick<NodeManagerModelState,
 };
 
 const themeInitStates: Pick<NodeManagerModelState,
+  'theme_ActivatingThemeID' |
   'theme_InputFilter' |
   'theme_List' |
   'theme_ListState' |
   'theme_ListMore'> = {
   theme_InputFilter: '',
+  theme_ActivatingThemeID: '',
   theme_List: [],
   theme_ListState: 'loading',
   theme_ListMore: 'loading',
@@ -509,18 +512,33 @@ const Model: NodeManagerModelType = {
       //   nodeManagerPage,
       // }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          theme_ActivatingThemeID: payload.id,
+        },
+      });
+
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: payload.id,
         onlineStatus: 1,
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          theme_ActivatingThemeID: '',
+        },
+      });
       if (!data) {
         fMessage('激活失败', 'error');
-        return;
+      } else {
+        fMessage('激活成功', 'success');
+        yield put<FetchThemesAction>({
+          type: 'fetchThemes',
+        });
       }
-      yield put<FetchThemesAction>({
-        type: 'fetchThemes',
-      });
+
       // yield put<FetchNodeInfoAction>({
       //   type: 'fetchNodeInfo',
       // });

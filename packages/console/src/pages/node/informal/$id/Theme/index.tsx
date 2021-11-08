@@ -150,47 +150,55 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                 : null
                             }
                           </div>
-                          <div className={styles.coverFooter}>
-                            <div>
-                              <div style={{ width: 1 }} />
-                              <a onClick={() => {
-                                window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
-                              }}>编辑</a>
-                              <FDivider />
-                              <a
-                                onClick={() => {
-                                  window.open(t.originInfo.type === 'resource'
-                                    ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                    : FUtil.LinkTo.objectDetails({
-                                      bucketName: t.originInfo.name.split('/')[0],
-                                      objectID: t.originInfo.id,
-                                    }));
-                                }}
-                              >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
-                              {
-                                !t.isOnline && (<>
-                                  <FDivider />
+                          {/*{console.log(informalNodeManagerPage.theme_ActivatingThemeName, t.name, '######98988888')}*/}
+                          {
+                            informalNodeManagerPage.theme_ActivatingThemeName === t.name
+                              ? (<div className={styles.processing}>
+                                <span>处理中…</span>
+                              </div>)
+                              : (<div className={styles.coverFooter}>
+                                <div>
+                                  <div style={{ width: 1 }} />
                                   <a onClick={() => {
-                                    fConfirmModal({
-                                      message: FUtil1.I18n.message('msg_change_theme_confirm'),
-                                      okText: FUtil1.I18n.message('active_new_theme'),
-                                      cancelText: FUtil1.I18n.message('keep_current_theme'),
-                                      onOk() {
-                                        dispatch<OnClickActiveThemeBtnAction>({
-                                          type: 'informalNodeManagerPage/onClickActiveThemeBtn',
-                                          payload: {
-                                            themeName: t.name,
+                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
+                                  }}>编辑</a>
+                                  <FDivider />
+                                  <a
+                                    onClick={() => {
+                                      window.open(t.originInfo.type === 'resource'
+                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
+                                        : FUtil.LinkTo.objectDetails({
+                                          bucketName: t.originInfo.name.split('/')[0],
+                                          objectID: t.originInfo.id,
+                                        }));
+                                    }}
+                                  >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
+                                  {
+                                    !t.isOnline && (<>
+                                      <FDivider />
+                                      <a onClick={() => {
+                                        fConfirmModal({
+                                          message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                          okText: FUtil1.I18n.message('active_new_theme'),
+                                          cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                          onOk() {
+                                            dispatch<OnClickActiveThemeBtnAction>({
+                                              type: 'informalNodeManagerPage/onClickActiveThemeBtn',
+                                              payload: {
+                                                themeName: t.name,
+                                              },
+                                            });
                                           },
                                         });
-                                      },
-                                    });
-                                  }}>激活</a>
-                                </>)
-                              }
+                                      }}>激活</a>
+                                    </>)
+                                  }
 
-                              <div style={{ width: 1 }} />
-                            </div>
-                          </div>
+                                  <div style={{ width: 1 }} />
+                                </div>
+                              </div>)
+                          }
+
                         </div>
                         <div style={{ height: 12 }} />
                         <div className={styles.itemTitle}>
