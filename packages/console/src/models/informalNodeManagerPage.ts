@@ -951,6 +951,13 @@ const Model: InformalNodeManagerPageModelType = {
         return;
       }
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ListMore: 'loading',
+        },
+      });
+
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
         isRematch: isRematch,
@@ -958,13 +965,21 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { data: data1 } = yield call(ruleMatchStatus, params2);
       // console.log(data1, '2434234234234234');
+      let list: InformalNodeManagerPageModelState['exhibit_List'] = [];
+      if (!isRestart) {
+        list = [
+          ...informalNodeManagerPage.exhibit_List,
+        ];
+      }
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
+        skip: list.length,
+        limit: FUtil.Predefined.pageSize,
+        // limit: 5,
         nodeId: informalNodeManagerPage.nodeID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: 'theme',
         resourceType: informalNodeManagerPage.exhibit_SelectedType === '-1' ? undefined : informalNodeManagerPage.exhibit_SelectedType,
-        limit: FUtil.Predefined.pageSize,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
@@ -972,7 +987,9 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { rules: rulesObj } = compile(data1.ruleText);
 
-      const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
+      const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
+        ...list,
+        ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
         const operations: string[] = dl.rules[0]?.operations || [];
         // console.log(operations, 'operations12334');
         const stateInfo = dl.stateInfo;
@@ -1047,7 +1064,8 @@ const Model: InformalNodeManagerPageModelType = {
           isAuth: true,
           authErrorText: '',
         };
-      });
+      })
+      ];
 
       const allAddRule = data1.testRules.filter((tr: any) => {
         return tr.ruleInfo.operation === 'add';
@@ -1077,6 +1095,7 @@ const Model: InformalNodeManagerPageModelType = {
             && informalNodeManagerPage.exhibit_FilterKeywords === ''
               ? 'noData'
               : 'noSearchResult',
+          exhibit_ListMore: data.totalItem > exhibitList.length ? 'andMore' : 'noMore',
         },
       });
     },

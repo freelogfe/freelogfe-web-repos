@@ -15,6 +15,7 @@ import {
   InformalNodeManagerPageModelState,
 } from '@/models/connect';
 import {
+  FetchExhibitListAction,
 
   OnChangeExhibitKeywordsAction,
   OnChangeExhibitStatusAction,
@@ -29,6 +30,8 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
+import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
+import FListFooter from '@/components/FListFooter';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -67,14 +70,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
             });
           }}
         />)
-        : (<FInfiniteScroll
-          loadMore={() => {
-            dispatch<OnLoadMoreExhibitsAction>({
-              type: 'informalNodeManagerPage/onLoadMoreExhibits',
-            });
-          }}
-          hasMore={true}
-        >
+        : (<>
           <div className={styles.header}>
             <FTitleText text={'展品管理'} />
             <Space size={30}>
@@ -170,11 +166,23 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
               : (<div className={styles.body}>
                 <div>
                   <ExhibitTable />
+                  <FListFooter
+                    state={informalNodeManagerPage.exhibit_ListMore}
+                    onClickLoadMore={() => {
+                      dispatch<FetchExhibitListAction>({
+                        type: 'informalNodeManagerPage/fetchExhibitList',
+                        payload: {
+                          isRematch: false,
+                          isRestart: false,
+                        },
+                      });
+                    }}
+                  />
                 </div>
               </div>)
           }
 
-        </FInfiniteScroll>)
+        </>)
     }
 
 
