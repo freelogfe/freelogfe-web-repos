@@ -128,7 +128,7 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
                   })
                   .map((c) => {
                     return (<div key={c.id}>
-                      <span>{c.name}111</span>
+                      <span>{c.name}</span>
                       <div style={{ width: 5 }} />
                       <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
                     </div>);
