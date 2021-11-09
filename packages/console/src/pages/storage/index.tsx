@@ -16,6 +16,7 @@ import FInput from "@/components/FInput";
 import FModal from "@/components/FModal";
 import {ChangeAction as StorageHomePageChangeAction} from '@/models/storageHomePage';
 import FUtil1 from "@/utils";
+import { Modal } from 'antd';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -84,7 +85,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
 
     <Details/>
 
-    <FModal
+    <Modal
       title={FUtil1.I18n.message('create_bucket_popup_title')}
       visible={storageHomePage.newBucketModalVisible}
       width={640}
@@ -141,7 +142,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
         />
         <div style={{height: 100}}/>
       </div>
-    </FModal>
+    </Modal>
   </>);
 }
 
