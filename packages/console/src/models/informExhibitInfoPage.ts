@@ -74,7 +74,7 @@ export interface InformExhibitInfoPageModelState {
     type: string;
     contracts: {
       name: string;
-      status: 0 | 1;
+      status: 0 | 1 | 2;
       id: string;
       text: string;
       createTime: string;
@@ -1423,7 +1423,7 @@ type HandleRelationResult = {
     contractName: string;
     createDate: string
     policyText: string
-    status: 0 | 1;
+    status: 0 | 1 | 2;
     policyId: string;
   }[];
   policies: {
@@ -1457,7 +1457,7 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   const { data: data1 }: any = params1.contractIds ? (await FServiceAPI.Contract.batchContracts(params1)) : { data: [] };
   // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
 
-  const result = params.map((r) => {
+  const result: HandleRelationResult = params.map<HandleRelationResult[number]>((r) => {
     const contractPolicyIds: string[] = r.contracts.map((cs) => cs.policyId);
 
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
