@@ -3,12 +3,8 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
-// import { connect, Dispatch } from 'dva';
-// import { ConnectState, ResourceInfoModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
-// import FUtil1 from '@/utils';
-// import FSwitch from '@/components/FSwitch';
 import FModal from '@/components/FModal';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
@@ -81,28 +77,12 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
           <span>{title}</span>
         </Space>
 
-        {/*<Dropdown*/}
-        {/*  overlay={<MenuPanel*/}
-        {/*    versions={allVersions}*/}
-        {/*    onClickCancel={() => setDropdownVisible(false)}*/}
-        {/*    onClickConfirm={(versions) => onClickLicense && onClickLicense(versions)}*/}
-        {/*  />}*/}
-        {/*  trigger={['click']}*/}
-        {/*  placement='bottomRight'*/}
-        {/*  visible={dropdownVisible}*/}
-        {/*  onVisibleChange={(visible) => setDropdownVisible(visible)}*/}
-        {/*  // getPopupContainer={() => document.getElementById('DepPanelContent') as HTMLElement}*/}
-        {/*  arrow={true}*/}
-
-        {/*>*/}
         <FRectBtn
           size='small'
           onClick={() => {
             setDrawerVisible(true);
           }}
-          // onClick={() => onClickLicense && onClickLicense()}
         >获取授权</FRectBtn>
-        {/*</Dropdown>*/}
       </div>
       <FPolicyDisplay
         code={code}
@@ -130,26 +110,12 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
       <div className={styles.ModalTile}>
         <FTitleText text={title} type='h2' />
         <div style={{ width: 20 }} />
-        {/*<Dropdown*/}
-        {/*  overlay={<MenuPanel*/}
-        {/*    versions={allVersions}*/}
-        {/*    onClickCancel={() => setModalDropdownVisible(false)}*/}
-        {/*    onClickConfirm={(versions) => onClickLicense && onClickLicense(versions)}*/}
-        {/*  />}*/}
-        {/*  trigger={['click']}*/}
-        {/*  placement='bottomRight'*/}
-        {/*  visible={modalDropdownVisible}*/}
-        {/*  onVisibleChange={(visible) => setModalDropdownVisible(visible)}*/}
-        {/*  // getPopupContainer={() => document.getElementById('DepPanelContent') as HTMLElement}*/}
-        {/*  arrow={true}*/}
-        {/*>*/}
         <FRectBtn
           size='small'
           onClick={() => {
             setDrawerVisible(true);
           }}
         >获取授权</FRectBtn>
-        {/*</Dropdown>*/}
       </div>
 
       <FPolicyDisplay
@@ -213,54 +179,3 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
 
 
 export default PolicyCard;
-
-// interface MenuPanelProps {
-//   versions: string[];
-//
-//   onClickConfirm?(versions: string[]): void;
-//
-//   onClickCancel?(): void;
-// }
-//
-// function MenuPanel({ versions, onClickConfirm, onClickCancel }: MenuPanelProps) {
-//
-//   const [selectedVersions, setSelectedVersions] = React.useState<string[]>([]);
-//
-//   function onChangeSelected(version: string, checked: boolean) {
-//     if (checked) {
-//       setSelectedVersions([
-//         ...selectedVersions,
-//         version,
-//       ]);
-//     } else {
-//       setSelectedVersions(selectedVersions.filter((v: string) => v !== version));
-//     }
-//   }
-//
-//   return (<>
-//     <div className={styles.MenuPanel}>
-//       <FContentText text={'当前依赖资源被以下版本所用，请确认新合约应用的版本范围'} />
-//       <div style={{ height: 30 }} />
-//       <div className={styles.allVersions}>
-//         {
-//           versions.map((v) => (<Space size={8} key={v}>
-//             <Checkbox
-//               checked={selectedVersions.includes(v)}
-//               onChange={(e) => onChangeSelected(v, e.target.checked)}
-//             />
-//             <span>{v}</span>
-//           </Space>))
-//         }
-//       </div>
-//       <div style={{ height: 40 }} />
-//       <Space size={25}>
-//         <FTextBtn
-//           onClick={() => onClickCancel && onClickCancel()}>取消</FTextBtn>
-//         <FRectBtn
-//           disabled={selectedVersions.length === 0}
-//           onClick={() => onClickConfirm && onClickConfirm(selectedVersions)}
-//         >签约</FRectBtn>
-//       </Space>
-//     </div>
-//   </>);
-// }
