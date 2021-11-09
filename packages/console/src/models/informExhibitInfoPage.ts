@@ -579,6 +579,7 @@ const Model: ExhibitInfoPageModelType = {
               type: r.resourceType,
               contracts: r.contracts.map((c) => ({
                 name: c.contractName,
+                // status: c.status,
                 status: c.status,
                 id: c.contractId,
                 text: c.policyText,
@@ -1474,7 +1475,8 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
           contractName: contract.contractName,
           createDate: contract.createDate,
           policyText: contract.policyInfo.policyText,
-          status: contract.status,
+          // status: contract.status,
+          status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
           policyId: contract.policyId,
         };
       }),

@@ -83,7 +83,11 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
             <div style={{ height: 5 }} />
             <div className={styles.policeTags}>
               {
-                r.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
+                r.contracts.map((c) => (<div key={c.id}>
+                  <span>{c.name}</span>
+                  <div style={{ width: 5 }} />
+                  <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+                </div>))
               }
             </div>
           </a>))
@@ -112,15 +116,6 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                     <div style={{ height: 10 }} />
                     <FContractDisplay contractID={c.id} />
                     <div style={{ height: 10 }} />
-                    {/*</div>*/}
-                    {/*<div className={styles.footer}>*/}
-                    {/*  <div>*/}
-                    {/*    合约ID {c.id}*/}
-                    {/*  </div>*/}
-                    {/*  <div>*/}
-                    {/*    签约时间 {c.createTime}*/}
-                    {/*  </div>*/}
-                    {/*</div>*/}
 
                     <Space style={{ padding: '0 20px' }} size={5}>
                       <FContentText
