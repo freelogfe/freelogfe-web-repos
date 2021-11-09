@@ -116,10 +116,13 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
 
     const fsmInfos: any = data.policyInfo.translateInfo.fsmInfos;
+    // console.log(fsmInfos, 'fsmInfos9023u4k23jl');
     // console.log(data, fsmInfos, 'fsmInfos24123423423');
     const currentState: any = fsmInfos.find((fi: any) => {
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
+
+    // console.log(currentState, 'currentState0923u4kjl');
 
     // console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
     setIsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
@@ -513,7 +516,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             value={modalPassword}
             onChange={async (value) => {
               // console.log(value, '@#$@#$@#$@#$');
-              console.log(value, 'valuevalue9032klsdflksdfl');
+              // console.log(value, 'valuevalue9032klsdflksdfl');
               setModalPassword(value);
               if (value.length === 6) {
                 inputEl.current.blur();

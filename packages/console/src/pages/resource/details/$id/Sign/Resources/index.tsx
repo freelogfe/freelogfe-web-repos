@@ -1,50 +1,34 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
-import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/marketResourcePage";
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
-import {FTextBtn} from "@/components/FButton";
-import {FUtil} from '@freelog/tools-lib';
+import { FContentText, FTitleText } from '@/components/FText';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/marketResourcePage';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState;
 }
 
-function Resources({dispatch, marketResourcePage}: ResourcesProps) {
-
-  // const showResource: any = marketResourcePage.signedResources || marketResourcePage.signResources;
+function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
 
   function onChangeSelected(id: string) {
-    // console.log(id, 'id3209udsf');
-    // console.log(marketResourcePage.signedResources, 'id3209udsf');
-    // if (marketResourcePage.signedResources) {
-    //   dispatch<ChangeAction>({
-    //     type: 'marketResourcePage/change',
-    //     payload: {
-    //       signedResources: marketResourcePage.signedResources.map((sr) => ({
-    //         ...sr,
-    //         selected: id === sr.id,
-    //       })),
-    //     },
-    //   });
-    //   return;
-    // }
     dispatch<ChangeAction>({
       type: 'marketResourcePage/change',
       payload: {
         signResources: marketResourcePage.signResources.map((sr) => ({
           ...sr,
           selected: id === sr.id,
-        }))
-      }
+        })),
+      },
     });
   }
 
   return (<>
-    <div style={{height: 7}}/>
+    <div style={{ height: 7 }} />
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
       marketResourcePage.signResources
@@ -56,34 +40,38 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
         >
           <div className={styles.title}>
             <FContentText
-              type="highlight"
+              type='highlight'
               text={r.name}
               singleRow
               className={styles.titleText}
-              style={{maxWidth: r.status === 0 ? 170 : '100%'}}
+              style={{ maxWidth: r.status === 0 ? 170 : '100%' }}
             />
 
             {
               r.status === 0 && (<>
-                <FResourceStatusBadge status={'offline'}/>
-                <div style={{width: 5}}/>
+                <FResourceStatusBadge status={'offline'} />
+                <div style={{ width: 5 }} />
               </>)
             }
 
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FContentText
-            type="additional2"
+            type='additional2'
             text={r.type}
           />
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <div className={styles.policeTags}>
             {
               r.policies?.filter((p: any) => p.checked)
-                .map((p: any) => (<label key={p.id}>{p.name}</label>))
+                .map((p: any) => (<div key={p.id}>{p.name}</div>))
             }
             {
-              r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
+              r.contracts?.map((c: any) => (<div key={c.id}>
+                <span>{c.name}</span>
+                <div style={{ width: 5 }} />
+                <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+              </div>))
             }
           </div>
         </div>))
@@ -111,27 +99,27 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
                   }));
                 }}>
                 <FContentText
-                  type="highlight"
+                  type='highlight'
                   text={r.name}
                   singleRow
                   className={styles.titleText}
-                  style={{maxWidth: r.status === 0 ? 170 : 225}}
+                  style={{ maxWidth: r.status === 0 ? 170 : 225 }}
                 />
               </FTextBtn>
               {
                 r.status === 0 && (<>
-                  <FResourceStatusBadge status={'offline'}/>
-                  <div style={{width: 5}}/>
+                  <FResourceStatusBadge status={'offline'} />
+                  <div style={{ width: 5 }} />
                 </>)
               }
 
             </div>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <FContentText
-              type="additional2"
+              type='additional2'
               text={r.type}
             />
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <div className={styles.policeTags}>
               {
                 r.contracts
@@ -139,7 +127,11 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
                     return c.checked;
                   })
                   .map((c) => {
-                    return (<label key={c.id}>{c.name}</label>);
+                    return (<div key={c.id}>
+                      <span>{c.name}</span>
+                      <div />
+                      <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+                    </div>);
                   })
               }
               {
@@ -148,7 +140,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
                     return p.checked;
                   })
                   .map((p: any) => {
-                    return (<label key={p.id}>{p.name}</label>);
+                    return (<div key={p.id}>{p.name}</div>);
                   })
               }
             </div>
@@ -157,4 +149,4 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
   </>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Resources);
+export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Resources);
