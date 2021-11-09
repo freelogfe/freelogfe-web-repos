@@ -1,18 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/resourceAuthPage";
-import {FTextBtn} from "@/components/FButton";
-import {FUtil} from '@freelog/tools-lib';
+import { FContentText } from '@/components/FText';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceAuthPage';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
 }
 
-function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
+function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
 
   function onChangeActivated(id: number | string) {
     dispatch<ChangeAction>({
@@ -32,7 +32,7 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
     title: i.title,
     resourceType: i.resourceType,
     version: i.version,
-    labels: i.contracts.map((j) => j.title)
+    contracts: i.contracts,
   }));
 
   return (<div className={styles.styles}>
@@ -48,20 +48,20 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
                 style={{
                   flexShrink: 1,
                 }}
-                type="default"
+                type='default'
                 onClick={(event) => {
                   event.stopPropagation();
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: i.id,
-                  }))
+                  }));
                 }}
               >
                 <FContentText
                   text={i.title}
                   singleRow
-                  style={{maxWidth: 280}}
+                  style={{ maxWidth: 280 }}
                   className={styles.FContentText}
-                  type="highlight"
+                  type='highlight'
                 />
               </FTextBtn>
 
@@ -71,18 +71,21 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
               {/*  />*/}
               {/*</div>*/}
             </div>
-            <div style={{height: 9}}/>
-            <FContentText type="additional2">
+            <div style={{ height: 9 }} />
+            <FContentText type='additional2'>
               <span>{i.resourceType}</span>
             </FContentText>
             <>
-              <div style={{height: 9}}/>
+              <div style={{ height: 9 }} />
               <div className={styles.DepPanelLabels}>
                 {
-                  i.labels.map((j: string) => (<label
-                    key={j}
+                  i.contracts.map((j) => (<div
+                    key={j.id}
                     className={styles.labelInfo}
-                  >{j}</label>))
+                  >
+                    <span>{j.title}</span>
+                    <div style={{ width: 5 }} />
+                    <label style={{ backgroundColor: j.status === 1 ? '#42C28C' : '#E9A923'}} /></div>))
                 }
               </div>
             </>
@@ -93,6 +96,6 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
 }
 
 
-export default connect(({resourceAuthPage}: ConnectState) => ({
-  resourceAuthPage: resourceAuthPage
+export default connect(({ resourceAuthPage }: ConnectState) => ({
+  resourceAuthPage: resourceAuthPage,
 }))(Resources);
