@@ -23,15 +23,6 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
     });
   }
 
-  // function onChangeSelect(id: string) {
-  //   onChange({
-  //     associated: exhibitInfoPage.associated.map((a) => ({
-  //       ...a,
-  //       selected: a.id === id
-  //     })),
-  //   });
-  // }
-
   return (<>
     <FTitleText type='h4'>主资源</FTitleText>
 
@@ -64,7 +55,11 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
       <div style={{ height: 5 }} />
       <div className={styles.policeTags}>
         {
-          mainResource.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
+          mainResource.contracts.map((c) => (<div key={c.id}>
+            <span>{c.name}</span>
+            <div style={{ width: 5 }} />
+            <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+          </div>))
         }
       </div>
     </a>
@@ -104,7 +99,11 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         <div style={{ height: 5 }} />
         <div className={styles.policeTags}>
           {
-            r.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
+            r.contracts.map((c) => (<div key={c.id}>
+              <span>{c.name}</span>
+              <div style={{ width: 5 }} />
+              <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+            </div>))
           }
         </div>
       </a>))
