@@ -37,15 +37,15 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
     <div className={styles.title}>
       <label>test</label>
       &nbsp;&nbsp;
-      <span>{informalNodeManagerPage.nodeName}</span>
+      <span>{informalNodeManagerPage.node_Name}</span>
     </div>
     <div style={{ height: 15 }} />
     <Space size={5} className={styles.url}>
       <a onClick={() => {
-        window.open(informalNodeManagerPage.testNodeUrl);
-      }}>{informalNodeManagerPage.testNodeUrl.replace(/http(s)?:\/\//, '')}</a>
+        window.open(informalNodeManagerPage.node_TestUrl);
+      }}>{informalNodeManagerPage.node_TestUrl.replace(/http(s)?:\/\//, '')}</a>
       <FCopyToClipboard
-        text={informalNodeManagerPage.testNodeUrl}
+        text={informalNodeManagerPage.node_TestUrl}
         iconStyle={{fontSize: 14}}
         title={FUtil1.I18n.message('tip_copy_node_domain')}
       />
@@ -56,7 +56,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
         className={informalNodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
         onClick={() => {
           router.push(FUtil.LinkTo.informNodeManagement({
-            nodeID: informalNodeManagerPage.nodeID,
+            nodeID: informalNodeManagerPage.node_ID,
             showPage: 'exhibit',
           }));
         }}
@@ -66,7 +66,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
         className={informalNodeManagerPage.showPage === 'theme' ? styles.activated : ''}
         onClick={() => {
           router.push(FUtil.LinkTo.informNodeManagement({
-            nodeID: informalNodeManagerPage.nodeID,
+            nodeID: informalNodeManagerPage.node_ID,
             showPage: 'theme',
           }));
         }}
@@ -76,7 +76,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
         className={informalNodeManagerPage.showPage === 'mappingRule' ? styles.activated : ''}
         onClick={() => {
           router.push(FUtil.LinkTo.informNodeManagement({
-            nodeID: informalNodeManagerPage.nodeID,
+            nodeID: informalNodeManagerPage.node_ID,
             showPage: 'mappingRule',
           }));
         }}

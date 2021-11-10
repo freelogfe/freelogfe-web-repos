@@ -156,7 +156,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
         console.log(location, 'location12341234123411111111@@@@@@');
         const locationHref: string = location.pathname + location.search;
         if (locationHref === FUtil.LinkTo.informNodeManagement({
-          nodeID: informalNodeManagerPage.nodeID,
+          nodeID: informalNodeManagerPage.node_ID,
           showPage: 'mappingRule',
         })) {
           return true;
@@ -307,7 +307,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             type='primary'
             onClick={() => {
               // const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-              const fileName = `测试节点${informalNodeManagerPage.nodeName} - 映射规则 - ${moment().format(FUtil.Predefined.momentDateFormat)}.txt`;
+              const fileName = `测试节点${informalNodeManagerPage.node_Name} - 映射规则 - ${moment().format(FUtil.Predefined.momentDateFormat)}.txt`;
               const text: string = informalNodeManagerPage.rule_RuleList
                 .filter((rl) => rl.checked)
                 .map((rl) => {

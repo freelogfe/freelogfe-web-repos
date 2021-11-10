@@ -53,7 +53,7 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
 
   return (<>
     <Helmet>
-      <title>{`测试展品管理 · ${informalNodeManagerPage.nodeName} - Freelog`}</title>
+      <title>{`测试展品管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
     </Helmet>
 
     <div>

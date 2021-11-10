@@ -62,16 +62,16 @@ type IConfirmValue = {
 }[];
 
 export interface InformalNodeManagerPageModelState {
-  nodeID: number;
-  nodeName: string;
-  nodeUrl: string;
-  testNodeUrl: string;
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
-  ruleText: string;
-  allRuleResult: any;
-  ruleAllAddedResourceNames: string[];
-  ruleAllAddedObjectNames: string[];
+  node_ID: number;
+  node_Name: string;
+  node_Url: string;
+  node_TestUrl: string;
+  node_RuleText: string;
+  node_AllRuleResult: any;
+  node_RuleAllAddedResourceNames: string[];
+  node_RuleAllAddedObjectNames: string[];
 
   addExhibitDrawerVisible: boolean;
   addExhibitDrawerResourceOptions: { value: string; title: string }[];
@@ -755,15 +755,16 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
-  nodeID: -1,
-  nodeName: '',
-  nodeUrl: '',
-  testNodeUrl: '',
-  ruleText: '',
-  allRuleResult: null,
-  ruleAllAddedResourceNames: [],
-  ruleAllAddedObjectNames: [],
   showPage: 'exhibit',
+
+  node_ID: -1,
+  node_Name: '',
+  node_Url: '',
+  node_TestUrl: '',
+  node_RuleText: '',
+  node_AllRuleResult: null,
+  node_RuleAllAddedResourceNames: [],
+  node_RuleAllAddedObjectNames: [],
 
   addExhibitDrawerVisible: false,
   addExhibitDrawerResourceOptions: [
@@ -816,7 +817,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeID: payload.nodeID,
+          node_ID: payload.nodeID,
         },
       });
 
@@ -916,7 +917,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
       };
 
       const { data } = yield call(FServiceAPI.Node.details, params);
@@ -930,9 +931,9 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeName: data.nodeName,
-          nodeUrl: FUtil.Format.completeUrlByDomain(data.nodeDomain || ''),
-          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + data.nodeDomain),
+          node_Name: data.nodeName,
+          node_Url: FUtil.Format.completeUrlByDomain(data.nodeDomain || ''),
+          node_TestUrl: FUtil.Format.completeUrlByDomain('t.' + data.nodeDomain),
         },
       });
     },
@@ -950,7 +951,7 @@ const Model: InformalNodeManagerPageModelType = {
         nodes,
       }));
 
-      if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.nodeID)) {
+      if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.node_ID)) {
         return;
       }
 
@@ -962,7 +963,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const params2: RuleMatchStatusParams = {
-        nodeID: informalNodeManagerPage.nodeID,
+        nodeID: informalNodeManagerPage.node_ID,
         isRematch: isRematch,
       };
 
@@ -979,7 +980,7 @@ const Model: InformalNodeManagerPageModelType = {
         skip: list.length,
         limit: FUtil.Predefined.pageSize,
         // limit: 5,
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: 'theme',
         resourceType: informalNodeManagerPage.exhibit_SelectedType === '-1' ? undefined : informalNodeManagerPage.exhibit_SelectedType,
@@ -1077,14 +1078,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          ruleText: data1.ruleText,
-          allRuleResult: data1.testRules,
-          ruleAllAddedObjectNames: allAddRule.filter((tr: any) => {
+          node_RuleText: data1.ruleText,
+          node_AllRuleResult: data1.testRules,
+          node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
             return tr.ruleInfo.candidate.type === 'object';
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
           }),
-          ruleAllAddedResourceNames: allAddRule.filter((tr: any) => {
+          node_RuleAllAddedResourceNames: allAddRule.filter((tr: any) => {
             return tr.ruleInfo.candidate.type === 'resource';
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
@@ -1181,14 +1182,14 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const params2: RuleMatchStatusParams = {
-        nodeID: informalNodeManagerPage.nodeID,
+        nodeID: informalNodeManagerPage.node_ID,
         isRematch: isRematch,
       };
 
       const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: 2,
         resourceType: 'theme',
         limit: FUtil.Predefined.pageSize,
@@ -1288,7 +1289,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          ruleText: data1.ruleText,
+          node_RuleText: data1.ruleText,
           // themePageThemesTotal: data.totalItem,
           theme_List: themePageThemeList,
           theme_ListState: themePageThemeList.length > 0
@@ -1349,7 +1350,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      const { rules }: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
       // console.log(rules, 'rules1234234');
       const rule = rules.find((r) => r.themeName);
 
@@ -1407,7 +1408,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testNodeRules>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testNodeRules, params);
@@ -1447,13 +1448,13 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         testRuleText: informalNodeManagerPage.rule_CodeInput,
       };
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
 
       const params1: RuleMatchStatusParams = {
-        nodeID: informalNodeManagerPage.nodeID,
+        nodeID: informalNodeManagerPage.node_ID,
       };
       const { data: data1 } = yield call(ruleMatchStatus, params1);
 
@@ -1475,8 +1476,8 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          node_RuleText: data1.ruleText,
           rule_CodeIsDirty: false,
-          ruleText: data1.ruleText,
           rule_CodeIsChecking: false,
           rule_CodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           rule_CodeSaveSuccess: codeExecutionError.length === 0,
@@ -1503,20 +1504,20 @@ const Model: InformalNodeManagerPageModelType = {
 
       if (payload.type === 'append') {
         const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
-          nodeId: informalNodeManagerPage.nodeID,
+          nodeId: informalNodeManagerPage.node_ID,
           additionalTestRule: text,
         };
         const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
       } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
-          nodeId: informalNodeManagerPage.nodeID,
+          nodeId: informalNodeManagerPage.node_ID,
           testRuleText: text,
         };
         const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
       }
 
       const params2: RuleMatchStatusParams = {
-        nodeID: informalNodeManagerPage.nodeID,
+        nodeID: informalNodeManagerPage.node_ID,
         isRematch: true,
       };
 
@@ -1609,7 +1610,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_PageStatus: 'normal',
 
-          rule_CodeInput: informalNodeManagerPage.ruleText,
+          rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
           rule_CodeIsChecking: false,
           rule_CodeCompileErrors: null,
@@ -1628,7 +1629,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_PageStatus: 'normal',
 
-          rule_CodeInput: informalNodeManagerPage.ruleText,
+          rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
           rule_CodeIsChecking: false,
           rule_CodeCompileErrors: null,
@@ -1833,7 +1834,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, 'data!~!@#$@!#$@#!411111');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.nodeID,
+          nodeID: informalNodeManagerPage.node_ID,
           entityType: 'resource',
           entityIds: data.dataList.map((dl: any) => {
             return dl.resourceId;
@@ -1856,7 +1857,7 @@ const Model: InformalNodeManagerPageModelType = {
               let disabled: boolean = false;
               let disabledReason: string = '';
 
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
+              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
                 disabledReason = FUtil1.I18n.message('tag_added');
               }
@@ -1891,7 +1892,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, 'data13453');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.nodeID,
+          nodeID: informalNodeManagerPage.node_ID,
           entityType: 'resource',
           entityIds: data.dataList.map((dl: any) => {
             return dl.resourceId;
@@ -1910,7 +1911,7 @@ const Model: InformalNodeManagerPageModelType = {
               let disabled: boolean = false;
               let disabledReason: string = '';
 
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
+              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
                 // disabledReason = '已被使用';
                 disabledReason = FUtil1.I18n.message('tag_added');
@@ -1947,7 +1948,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, '@@@@@@ASEDFSADF');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.nodeID,
+          nodeID: informalNodeManagerPage.node_ID,
           entityType: 'resource',
           entityIds: data.dataList.map((dl: any) => {
             return dl.resourceId;
@@ -1967,7 +1968,7 @@ const Model: InformalNodeManagerPageModelType = {
               let disabled: boolean = false;
               let disabledReason: string = '';
 
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
+              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
                 // disabledReason = '已被使用';
                 disabledReason = FUtil1.I18n.message('tag_added');
@@ -2007,7 +2008,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, 'data1q2349ojmdfsl');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.nodeID,
+          nodeID: informalNodeManagerPage.node_ID,
           entityType: 'object',
           entityIds: data.dataList.map((dl: any) => {
             return dl.objectId;
@@ -2029,7 +2030,7 @@ const Model: InformalNodeManagerPageModelType = {
               let disabled: boolean = false;
               let disabledReason: string = '';
 
-              if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.ruleAllAddedObjectNames.includes(objectName)) {
+              if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.node_RuleAllAddedObjectNames.includes(objectName)) {
                 disabled = true;
                 // disabledReason = '已被使用';
                 disabledReason = FUtil1.I18n.message('tag_added');
@@ -2451,7 +2452,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTree>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         keywords: payloadValue,
         resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
@@ -2489,7 +2490,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
 
       const params3: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         dependentEntityId: replacedSelectDependency.id,
         resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
@@ -2534,7 +2535,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const params3: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
-        nodeId: informalNodeManagerPage.nodeID,
+        nodeId: informalNodeManagerPage.node_ID,
         dependentEntityId: informalNodeManagerPage.replacedSelectDependency.id,
         resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
@@ -2661,7 +2662,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // return results;
 
-      const rules: any[] = informalNodeManagerPage.allRuleResult.map((rr: any) => {
+      const rules: any[] = informalNodeManagerPage.node_AllRuleResult.map((rr: any) => {
         return rr.ruleInfo;
       });
       // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');

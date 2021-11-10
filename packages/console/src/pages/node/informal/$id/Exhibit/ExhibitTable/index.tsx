@@ -122,7 +122,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               }));
             }}
             onDelete={!!record.associatedExhibitID ? undefined : async () => {
-              const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+              const {rules}: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
               // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
               await dispatch<SaveDataRulesAction>({
                 type: 'informalNodeManagerPage/saveDataRules',
@@ -168,7 +168,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               disabled={false}
               checked={record.isOnline}
               onChange={async (value) => {
-                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
 
                 const rule = rules.find((r) => r.exhibitName === record.name);
 
