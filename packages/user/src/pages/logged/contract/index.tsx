@@ -134,6 +134,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
           <FTextBtn
+            className={styles.hoverVisible}
             type='primary'
             onClick={() => {
               dispatch<OnClickViewDetailsBtnAction>({
@@ -246,6 +247,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 },
               });
             }}
+            className={styles.hoverVisible}
           >查看合约详情</FTextBtn>
         </div>);
       },
@@ -371,6 +373,8 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 }
                 {
                   contractPage.authorize_ListState === 'loaded' && (<><FTable
+                    className={styles.table}
+                    rowClassName={styles.rowClassName}
                     columns={columns1}
                     dataSource={contractPage.authorize_List.map((al) => {
                       return {
@@ -495,6 +499,8 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 {
                   contractPage.authorized_ListState === 'loaded' && (<>
                     <FTable
+                      className={styles.table}
+                      rowClassName={styles.rowClassName}
                       columns={columns2}
                       dataSource={contractPage.authorized_List.map((al) => {
                         return {

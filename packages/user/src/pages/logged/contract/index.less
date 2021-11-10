@@ -107,13 +107,29 @@
       }
     }
 
-    .contentFooter {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100px;
-    }
+
   }
 
+  .contentFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+  }
+}
+
+.table {
+  .rowClassName {
+    .hoverVisible {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .hoverVisible {
+        visibility: visible;
+      }
+    }
+
+  }
 }
 
