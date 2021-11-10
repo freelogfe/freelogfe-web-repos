@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from "@/components/FText";
+import { FContentText, FTitleText } from '@/components/FText';
 import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
@@ -89,7 +89,7 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
   >
     <div className={styles.replaceHandler}>
       <div className={styles.replacer}>
-        <FContentText type="highlight" text={'选择替换资源'}/>
+        <FTitleText type="h3" text={'选择替换资源'}/>
         <div style={{height: 5}}/>
         <div className={styles.content}>
           <Replacer/>
@@ -101,8 +101,8 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
         />
       </div>
       <div className={styles.replaced}>
-        <FContentText
-          type="highlight"
+        <FTitleText
+          type="h3"
           text={'选择被替换资源'}
         />
         <div style={{height: 5}}/>
