@@ -56,7 +56,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
 
   return (<div className={styles.styles}>
     <Helmet>
-      <title>{`编辑展品信息 · ${informExhibitInfoPage.informExhibitName} - Freelog`}</title>
+      <title>{`编辑展品信息 · ${informExhibitInfoPage.exhibit_Name} - Freelog`}</title>
     </Helmet>
     <div>
       <div className={styles.header}>
@@ -65,14 +65,14 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
           <div style={{ width: 5 }} />
           <FTextBtn onClick={() => {
             router.push(FUtil.LinkTo.informNodeManagement({
-              nodeID: informExhibitInfoPage.nodeID,
+              nodeID: informExhibitInfoPage.node_ID,
               showPage: 'exhibit',
             }));
           }}>
             <FContentText
               type='negative'
               // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
-              text={informExhibitInfoPage.nodeName}
+              text={informExhibitInfoPage.node_Name}
             />
           </FTextBtn>
           <div style={{ width: 2 }} />
@@ -81,42 +81,42 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
             text={'>'}
           />
           <div style={{ width: 10 }} />
-          <FIdentityTypeBadge status={informExhibitInfoPage.informExhibitIdentity} />
+          <FIdentityTypeBadge status={informExhibitInfoPage.exhibit_Identity} />
           <div style={{ width: 10 }} />
           <FTitleText
             style={{ maxWidth: 600 }}
             singleRow
-            text={informExhibitInfoPage.informExhibitName}
+            text={informExhibitInfoPage.exhibit_Name}
           />
 
           <div style={{ width: 20 }} />
           {
-            informExhibitInfoPage.mappingRule
-            && Object.entries(informExhibitInfoPage.mappingRule)
+            informExhibitInfoPage.node_MappingRule
+            && Object.entries(informExhibitInfoPage.node_MappingRule)
               .filter((imr) => imr[1]).length > 0
             && (<MappingRule
-              add={informExhibitInfoPage.mappingRule.add}
-              alter={informExhibitInfoPage.mappingRule.alter}
-              version={informExhibitInfoPage.mappingRule?.version}
-              active={informExhibitInfoPage.mappingRule.active}
-              cover={informExhibitInfoPage.mappingRule.cover}
-              title={informExhibitInfoPage.mappingRule.title}
-              online={informExhibitInfoPage.mappingRule.online}
-              offline={informExhibitInfoPage.mappingRule.offline}
-              labels={informExhibitInfoPage.mappingRule.labels}
-              replaces={informExhibitInfoPage.mappingRule.replaces}
-              attrs={informExhibitInfoPage.mappingRule.attrs}
+              add={informExhibitInfoPage.node_MappingRule.add}
+              alter={informExhibitInfoPage.node_MappingRule.alter}
+              version={informExhibitInfoPage.node_MappingRule?.version}
+              active={informExhibitInfoPage.node_MappingRule.active}
+              cover={informExhibitInfoPage.node_MappingRule.cover}
+              title={informExhibitInfoPage.node_MappingRule.title}
+              online={informExhibitInfoPage.node_MappingRule.online}
+              offline={informExhibitInfoPage.node_MappingRule.offline}
+              labels={informExhibitInfoPage.node_MappingRule.labels}
+              replaces={informExhibitInfoPage.node_MappingRule.replaces}
+              attrs={informExhibitInfoPage.node_MappingRule.attrs}
             />)
           }
         </div>
         <Space size={20}>
           {
-            informExhibitInfoPage.onlineSwitchObj && (<>
+            informExhibitInfoPage.exhibit_OnlineSwitchObj && (<>
               <span
-                style={{ color: informExhibitInfoPage.onlineSwitchObj?.checked ? '#44C28C' : '#666' }}>{informExhibitInfoPage.onlineSwitchObj?.text}</span>
+                style={{ color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked ? '#44C28C' : '#666' }}>{informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}</span>
               <FSwitch
-                disabled={informExhibitInfoPage.onlineSwitchObj?.disabled}
-                checked={informExhibitInfoPage.onlineSwitchObj?.checked}
+                disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
+                checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
                 onChange={(value) => {
                   dispatch<OnOnlineSwitchChangeAction>({
                     type: 'informExhibitInfoPage/onOnlineSwitchChange',

@@ -5,10 +5,6 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
-import {
-  OnCancel_AddCustomOptionsDrawer_Action,
-  OnConfirm_AddCustomOptionsDrawer_Action, UpdateRewriteAction,
-} from '@/models/exhibitInfoPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -19,20 +15,14 @@ interface ICandidate {
 }
 
 export interface InformExhibitInfoPageModelState {
-  nodeID: number;
-  informExhibitID: string;
-  informExhibitIdentity: 'exhibit' | 'resource' | 'object';
-  resourceType: string;
-  allRuleText: string;
-  allRuleResult: any;
-  currentRuleResult: any;
-  theRuleID: string;
 
   pageLoading: boolean;
 
-  nodeName: string;
-  informExhibitName: string;
-  mappingRule: {
+  node_ID: number;
+  node_Name: string;
+  node_RuleText: string;
+  node_RuleResult: any;
+  node_MappingRule: {
     add?: {
       exhibit: string;
       source: {
@@ -61,13 +51,20 @@ export interface InformExhibitInfoPageModelState {
       description?: string;
     }[];
   } | null;
-  onlineSwitchObj: {
+
+  exhibit_ID: string;
+  exhibit_Name: string;
+  exhibit_Identity: 'exhibit' | 'resource' | 'object';
+  exhibit_ResourceType: string;
+  exhibit_RuleResult: any;
+  exhibit_RuleID: string;
+  exhibit_OnlineSwitchObj: {
     checked: boolean;
     text: string;
     disabled: boolean;
   } | null;
 
-  associated: {
+  contract_Associated: {
     selected: boolean;
     id: string;
     name: string;
@@ -367,24 +364,23 @@ export interface UpdateRelationAction extends AnyAction {
 }
 
 const initStates: InformExhibitInfoPageModelState = {
-  nodeID: -1,
-  informExhibitID: '',
-  informExhibitIdentity: 'exhibit',
-  resourceType: '',
-
-  allRuleText: '',
-  allRuleResult: null,
-  currentRuleResult: null,
-  theRuleID: '',
-
   pageLoading: true,
 
-  nodeName: '',
-  informExhibitName: '',
-  onlineSwitchObj: null,
-  mappingRule: null,
+  node_ID: -1,
+  node_Name: '',
+  node_RuleText: '',
+  node_RuleResult: null,
+  node_MappingRule: null,
 
-  associated: [],
+  exhibit_ID: '',
+  exhibit_Name: '',
+  exhibit_Identity: 'exhibit',
+  exhibit_ResourceType: '',
+  exhibit_RuleResult: null,
+  exhibit_RuleID: '',
+  exhibit_OnlineSwitchObj: null,
+
+  contract_Associated: [],
 
   side_Exhibit_Cover: '',
   side_Exhibit_Title: '',
@@ -423,7 +419,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          informExhibitID: payload.informExhibitID,
+          exhibit_ID: payload.informExhibitID,
         },
       });
 
@@ -442,7 +438,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const informExhibitID: string = payload?.informExhibitID !== undefined ? payload.informExhibitID : informExhibitInfoPage.informExhibitID;
+      const informExhibitID: string = payload?.informExhibitID !== undefined ? payload.informExhibitID : informExhibitInfoPage.exhibit_ID;
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
         testResourceId: informExhibitID,
@@ -506,7 +502,7 @@ const Model: ExhibitInfoPageModelType = {
 
       }
 
-      const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
+      const selectedID = informExhibitInfoPage.contract_Associated.find((a) => a.selected)?.id;
 
       // console.log(data, 'data@!!!!!!!!1111');
       const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
@@ -517,13 +513,13 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           pageLoading: false,
-          nodeID: data.nodeId,
-          informExhibitIdentity: data.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
-          resourceType: data.resourceType,
-          nodeName: data4.nodeName,
-          informExhibitName: data.testResourceName,
-          theRuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
-          onlineSwitchObj: {
+          node_ID: data.nodeId,
+          node_Name: data4.nodeName,
+          exhibit_Identity: data.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
+          exhibit_ResourceType: data.resourceType,
+          exhibit_Name: data.testResourceName,
+          exhibit_RuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
+          exhibit_OnlineSwitchObj: {
             checked: isChecked,
             text: data.resourceType === 'theme'
               ? FUtil1.I18n.message('toggle_activate_theme')
@@ -571,7 +567,7 @@ const Model: ExhibitInfoPageModelType = {
                 remark: cr.remark,
               };
             }),
-          associated: result.map<InformExhibitInfoPageModelState['associated'][number]>((r, index) => {
+          contract_Associated: result.map<InformExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
             return {
               selected: selectedID ? selectedID === r.resourceId : index === 0,
               id: r.resourceId,
@@ -644,13 +640,13 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          mappingRule: {
+          node_MappingRule: {
             ...eRule,
             ...tRule,
           },
-          allRuleText: data2.ruleText,
-          allRuleResult: data2.testRules,
-          currentRuleResult: data.rules.length > 0 ? data2.testRules.find((tr: any) => {
+          node_RuleText: data2.ruleText,
+          node_RuleResult: data2.testRules,
+          exhibit_RuleResult: data.rules.length > 0 ? data2.testRules.find((tr: any) => {
             return tr.id === data.rules[0].ruleId;
           }) : null,
         },
@@ -662,14 +658,14 @@ const Model: ExhibitInfoPageModelType = {
       }));
 
       const params2: RuleMatchStatusParams = {
-        nodeID: informExhibitInfoPage.nodeID,
+        nodeID: informExhibitInfoPage.node_ID,
         isRematch: false,
       };
 
       const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       // const {rules} = compile(data1.ruleText);
-      const rules = informExhibitInfoPage.allRuleResult.map((rr: any) => {
+      const rules = informExhibitInfoPage.node_RuleResult.map((rr: any) => {
         return rr.ruleInfo;
       });
 
@@ -684,7 +680,7 @@ const Model: ExhibitInfoPageModelType = {
           newRulesObj = [
             {
               operation: 'activate_theme',
-              themeName: informExhibitInfoPage.informExhibitName,
+              themeName: informExhibitInfoPage.exhibit_Name,
             },
             ...newRulesObj,
           ];
@@ -692,12 +688,12 @@ const Model: ExhibitInfoPageModelType = {
         // console.log(rules1, 'rules1!Q@#RFcdios89joe');
       } else {
         const currentRule = rules.find((ro: any) => {
-          return ro.exhibitName === informExhibitInfoPage.informExhibitName;
+          return ro.exhibitName === informExhibitInfoPage.exhibit_Name;
         });
 
         if (currentRule) {
           newRulesObj = rules.map((ro: any) => {
-            if (ro.exhibitName !== informExhibitInfoPage.informExhibitName) {
+            if (ro.exhibitName !== informExhibitInfoPage.exhibit_Name) {
               return ro;
             }
             return {
@@ -709,7 +705,7 @@ const Model: ExhibitInfoPageModelType = {
           newRulesObj = [
             {
               operation: 'alter',
-              exhibitName: informExhibitInfoPage.informExhibitName,
+              exhibitName: informExhibitInfoPage.exhibit_Name,
               ...payload,
             },
             ...rules,
@@ -722,7 +718,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(text, 'newRulesObj90ij32.dsfsdf');
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
-        nodeId: informExhibitInfoPage.nodeID,
+        nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
       // console.log(params, 'paramsparams!!@#$!@#$');
@@ -739,12 +735,12 @@ const Model: ExhibitInfoPageModelType = {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
-      const resource = informExhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
+      const resource = informExhibitInfoPage.contract_Associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#+++++++++++');
       // if (resource?.contracts && resource?.contracts.length > 0) {
       const params: Parameters<typeof FServiceAPI.InformalNode.updateTestResourceContracts>[0] = {
         // presentableId: informExhibitInfoPage?.presentableId || '',
-        testResourceId: informExhibitInfoPage.informExhibitID,
+        testResourceId: informExhibitInfoPage.exhibit_ID,
         resolveResources: [
           {
             resourceId: resource?.id || '',
@@ -765,7 +761,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      if (informExhibitInfoPage.resourceType === 'theme') {
+      if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
         yield put<SyncRulesAction>({
           type: 'syncRules',
           payload: {
@@ -874,7 +870,7 @@ const Model: ExhibitInfoPageModelType = {
         replacer: ICandidate;
         scopes?: ICandidate[][];
       }[] = [
-        ...(informExhibitInfoPage.currentRuleResult?.ruleInfo?.replaces || []).filter((r: any) => {
+        ...(informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.replaces || []).filter((r: any) => {
           console.log(r, 'r!@#$!@#$!@!11RRRRRRRRR');
           const replacer = r.replacer;
           const replaced = r.replaced;
@@ -1093,7 +1089,7 @@ const Model: ExhibitInfoPageModelType = {
 
       let theRule: any = [];
 
-      const currentRule = informExhibitInfoPage.currentRuleResult?.ruleInfo || null;
+      const currentRule = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo || null;
 
       if (currentRule) {
         const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
@@ -1194,7 +1190,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
 
       // console.log(attrs, 'rules!!!!!!!');
 
@@ -1222,7 +1218,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
 
       // console.log(attrs, 'rules!!!!!!!');
 
@@ -1246,7 +1242,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo?.attrs || [];
+      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.attrs || [];
 
       // console.log(attrs, 'rules!!!!!!!');
 
@@ -1327,7 +1323,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
 
       yield put<ChangeAction>({
         type: 'change',

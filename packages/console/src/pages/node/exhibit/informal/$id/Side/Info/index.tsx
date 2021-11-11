@@ -28,7 +28,7 @@ interface InfoProps {
 
 function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
 
-  if (informExhibitInfoPage.resourceType === 'theme') {
+  if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
     return null;
   }
 

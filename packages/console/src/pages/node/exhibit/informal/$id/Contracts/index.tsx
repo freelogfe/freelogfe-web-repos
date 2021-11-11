@@ -23,19 +23,19 @@ interface ContractsProps {
 
 function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
 
-  if (informExhibitInfoPage.associated.length === 0) {
+  if (informExhibitInfoPage.contract_Associated.length === 0) {
     return null;
   }
 
-  const otherResource = informExhibitInfoPage.associated;
+  const otherResource = informExhibitInfoPage.contract_Associated;
 
-  const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
+  const selectedResource = informExhibitInfoPage.contract_Associated.find((a) => a.selected);
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
       type: 'informExhibitInfoPage/change',
       payload: {
-        associated: informExhibitInfoPage.associated.map((a) => ({
+        contract_Associated: informExhibitInfoPage.contract_Associated.map((a) => ({
           ...a,
           selected: a.id === id,
         })),
