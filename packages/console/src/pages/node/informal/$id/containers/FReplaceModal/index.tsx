@@ -66,11 +66,11 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
   //     },
   //   });
   // }, [isTheme]);
-
+  // replaceModal_Replaced_
   return (<FModal
     title={null}
     width={947}
-    visible={informalNodeManagerPage.replaceModalVisible}
+    visible={informalNodeManagerPage.replaceModal_Visible}
     closable={false}
     destroyOnClose
     onCancel={() => {
@@ -79,7 +79,7 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
       });
     }}
     okButtonProps={{
-      disabled: !informalNodeManagerPage.replacerResourceList.some((rr) => rr.checked) || informalNodeManagerPage.replacedCheckedKeys.length === 0,
+      disabled: !informalNodeManagerPage.replaceModal_Replacer_ResourceList.some((rr) => rr.checked) || informalNodeManagerPage.replaceModal_Replaced_CheckedKeys.length === 0,
     }}
     onOk={async () => {
       dispatch<OnReplaceModalConfirmAction>({

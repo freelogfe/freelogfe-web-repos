@@ -37,8 +37,8 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
     <div style={{height: 15}}/>
     <div className={styles.filter}>
       <FAutoComplete
-        value={informalNodeManagerPage.replacedKeywords}
-        options={informalNodeManagerPage.replacedDependencyTreeList.map<{ value: string; }>((dt) => {
+        value={informalNodeManagerPage.replaceModal_Replaced_Keywords}
+        options={informalNodeManagerPage.replaceModal_Replaced_DependencyTreeList.map<{ value: string; }>((dt) => {
           return {
             value: dt,
           };
@@ -55,11 +55,11 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
         }}
       />
       {
-        informalNodeManagerPage.replacedSelectDependency?.versions &&
-        informalNodeManagerPage.replacedSelectDependency.versions.length > 0 &&
+        informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.versions &&
+        informalNodeManagerPage.replaceModal_Replaced_SelectDependency.versions.length > 0 &&
         (<FDropdownMenu
           // options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
-          options={informalNodeManagerPage.replacedTargetVersions}
+          options={informalNodeManagerPage.replaceModal_Replaced_TargetVersions}
           onChange={(value) => {
             // onChange({replacedTargetVersion: value});
             dispatch<OnReplacedEntityVersionChangeAction>({
@@ -73,7 +73,7 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
           <div style={{cursor: 'pointer'}}>
             <FContentText
               type="additional2"
-              text={informalNodeManagerPage.replacedTargetSelectedVersion?.text}
+              text={informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.text}
             />
           </div>
         </FDropdownMenu>)
@@ -90,17 +90,17 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
             payload: node,
           });
         }}
-        checkedKeys={informalNodeManagerPage.replacedCheckedKeys}
+        checkedKeys={informalNodeManagerPage.replaceModal_Replaced_CheckedKeys}
         onCheck={(checkedKeys) => {
           // console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
           dispatch<ChangeAction>({
             type: 'informalNodeManagerPage/change',
             payload: {
-              replacedCheckedKeys: checkedKeys as string[],
+              replaceModal_Replaced_CheckedKeys: checkedKeys as string[],
             },
           });
         }}
-        treeData={informalNodeManagerPage.replacedTreeData}
+        treeData={informalNodeManagerPage.replaceModal_Replaced_TreeData}
         // treeData={treeData}
       />
     </div>

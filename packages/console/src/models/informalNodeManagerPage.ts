@@ -73,12 +73,12 @@ export interface InformalNodeManagerPageModelState {
   node_RuleAllAddedResourceNames: string[];
   node_RuleAllAddedObjectNames: string[];
 
-  addExhibitDrawerVisible: boolean;
-  addExhibitDrawerResourceOptions: { value: string; title: string }[];
-  addExhibitDrawerBucketOptions: { value: string; title: string }[];
-  addExhibitDrawerSelectValue: string;
-  addExhibitDrawerInputValue: string;
-  addExhibitDrawerCheckedList: {
+  addExhibitDrawer_Visible: boolean;
+  addExhibitDrawer_ResourceOptions: { value: string; title: string }[];
+  addExhibitDrawer_BucketOptions: { value: string; title: string }[];
+  addExhibitDrawer_SelectValue: string;
+  addExhibitDrawer_InputValue: string;
+  addExhibitDrawer_CheckedList: {
     id: string;
     disabled: boolean;
     disabledReason: string;
@@ -89,14 +89,14 @@ export interface InformalNodeManagerPageModelState {
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
   }[];
-  addExhibitDrawerCheckedListTotalNum: number;
+  addExhibitDrawer_CheckedListTotalNum: number;
 
-  replaceModalVisible: boolean;
-  replacerResourceOptions: { value: string; title: string }[];
-  replacerBucketOptions: { value: string; title: string }[];
-  replacerOrigin: '!market' | '!resource' | '!collection' | string;
-  replacerKeywords: string;
-  replacerResourceList: {
+  replaceModal_Visible: boolean;
+  replaceModal_Replacer_ResourceOptions: { value: string; title: string }[];
+  replaceModal_Replacer_BucketOptions: { value: string; title: string }[];
+  replaceModal_Replacer_Origin: '!market' | '!resource' | '!collection' | string;
+  replaceModal_Replacer_Keywords: string;
+  replaceModal_Replacer_ResourceList: {
     checked: boolean;
     id: string;
     name: string;
@@ -108,24 +108,24 @@ export interface InformalNodeManagerPageModelState {
     versions: string[];
     versionRange: string;
   }[];
-  replacedKeywords: string;
-  replacedDependencyTreeList: string[];
-  replacedSelectDependency: null | {
+  replaceModal_Replaced_Keywords: string;
+  replaceModal_Replaced_DependencyTreeList: string[];
+  replaceModal_Replaced_SelectDependency: null | {
     id: string;
     name: string;
     type: 'resource' | 'object';
     versions: string[],
   };
-  replacedTargetVersions: {
+  replaceModal_Replaced_TargetVersions: {
     value: string;
     text: string;
   }[],
-  replacedTargetSelectedVersion: {
+  replaceModal_Replaced_TargetSelectedVersion: {
     value: string;
     text: string;
   } | null;
-  replacedTreeData: TreeNode[];
-  replacedCheckedKeys: string[];
+  replaceModal_Replaced_TreeData: TreeNode[];
+  replaceModal_Replaced_CheckedKeys: string[];
 
   exhibit_TypeOptions: { value: string; text: string; }[];
   exhibit_SelectedType: '-1' | string;
@@ -766,35 +766,35 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_RuleAllAddedResourceNames: [],
   node_RuleAllAddedObjectNames: [],
 
-  addExhibitDrawerVisible: false,
-  addExhibitDrawerResourceOptions: [
+  addExhibitDrawer_Visible: false,
+  addExhibitDrawer_ResourceOptions: [
     { value: '!market', title: '资源市场' },
     { value: '!resource', title: '我的资源' },
     { value: '!collection', title: '我的收藏' },
   ],
-  addExhibitDrawerBucketOptions: [],
-  addExhibitDrawerSelectValue: '!market',
-  addExhibitDrawerInputValue: '',
-  addExhibitDrawerCheckedList: [],
-  addExhibitDrawerCheckedListTotalNum: -1,
+  addExhibitDrawer_BucketOptions: [],
+  addExhibitDrawer_SelectValue: '!market',
+  addExhibitDrawer_InputValue: '',
+  addExhibitDrawer_CheckedList: [],
+  addExhibitDrawer_CheckedListTotalNum: -1,
 
-  replaceModalVisible: false,
-  replacerResourceOptions: [
+  replaceModal_Visible: false,
+  replaceModal_Replacer_ResourceOptions: [
     { value: '!market', title: '资源市场' },
     { value: '!resource', title: '我的资源' },
     { value: '!collection', title: '我的收藏' },
   ],
-  replacerBucketOptions: [],
-  replacerOrigin: '!market',
-  replacerKeywords: '',
-  replacerResourceList: [],
-  replacedKeywords: '',
-  replacedDependencyTreeList: [],
-  replacedSelectDependency: null,
-  replacedTargetVersions: [],
-  replacedTargetSelectedVersion: null,
-  replacedTreeData: [],
-  replacedCheckedKeys: [],
+  replaceModal_Replacer_BucketOptions: [],
+  replaceModal_Replacer_Origin: '!market',
+  replaceModal_Replacer_Keywords: '',
+  replaceModal_Replacer_ResourceList: [],
+  replaceModal_Replaced_Keywords: '',
+  replaceModal_Replaced_DependencyTreeList: [],
+  replaceModal_Replaced_SelectDependency: null,
+  replaceModal_Replaced_TargetVersions: [],
+  replaceModal_Replaced_TargetSelectedVersion: null,
+  replaceModal_Replaced_TreeData: [],
+  replaceModal_Replaced_CheckedKeys: [],
 
   ...exhibitInitStates,
 
@@ -1106,13 +1106,13 @@ const Model: InformalNodeManagerPageModelType = {
     * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { addExhibitDrawerVisible: true },
+        payload: { addExhibitDrawer_Visible: true },
       });
     },
     * onClickExhibitsReplaceBtn({}: OnClickExhibitsReplaceBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { replaceModalVisible: true },
+        payload: { replaceModal_Visible: true },
       });
     },
     * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
@@ -1304,14 +1304,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerVisible: true,
+          addExhibitDrawer_Visible: true,
         },
       });
     },
     * onClickThemesReplaceBtn({}: OnClickThemesReplaceBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { replaceModalVisible: true },
+        payload: { replaceModal_Visible: true },
       });
     },
     * onChangeThemeKeywords({ payload }: OnChangeThemeKeywordsAction, { put }: EffectsCommandMap) {
@@ -1722,7 +1722,7 @@ const Model: InformalNodeManagerPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            addExhibitDrawerBucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawerBucketOptions'][number]>((d: any) => {
+            addExhibitDrawer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawer_BucketOptions'][number]>((d: any) => {
               return {
                 value: d.bucketName,
                 title: d.bucketName,
@@ -1734,10 +1734,10 @@ const Model: InformalNodeManagerPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            addExhibitDrawerSelectValue: '!market',
-            addExhibitDrawerInputValue: '',
-            addExhibitDrawerCheckedList: [],
-            addExhibitDrawerCheckedListTotalNum: -1,
+            addExhibitDrawer_SelectValue: '!market',
+            addExhibitDrawer_InputValue: '',
+            addExhibitDrawer_CheckedList: [],
+            addExhibitDrawer_CheckedListTotalNum: -1,
           },
         });
       }
@@ -1746,7 +1746,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerVisible: false,
+          addExhibitDrawer_Visible: false,
         },
       });
     },
@@ -1756,12 +1756,12 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       let identity: 'resource' | 'object' = 'resource';
-      if (!informalNodeManagerPage.addExhibitDrawerSelectValue.startsWith('!')) {
+      if (!informalNodeManagerPage.addExhibitDrawer_SelectValue.startsWith('!')) {
         identity = 'object';
       }
       const value: { identity: 'resource' | 'object'; names: string[]; } = {
         identity,
-        names: informalNodeManagerPage.addExhibitDrawerCheckedList
+        names: informalNodeManagerPage.addExhibitDrawer_CheckedList
           .filter((ex) => ex.checked)
           .map<string>((ex) => {
             return ex.name;
@@ -1770,7 +1770,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerVisible: false,
+          addExhibitDrawer_Visible: false,
         },
       });
       yield put<SaveDataRulesAction>({
@@ -1806,19 +1806,19 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
+      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
       if (!payload.restart) {
-        inherentList = informalNodeManagerPage.addExhibitDrawerCheckedList;
+        inherentList = informalNodeManagerPage.addExhibitDrawer_CheckedList;
       }
       const inherentIDs: string[] = inherentList.map((il) => il.id);
 
-      let addExhibitDrawerCheckedList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
+      let addExhibitDrawerCheckedList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
       let addExhibitDrawerCheckedListTotalNum: number = -1;
 
       const skip: number = inherentList.length;
       const limit: number = FUtil.Predefined.pageSize;
-      const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawerSelectValue;
-      const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawerInputValue;
+      const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawer_SelectValue;
+      const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawer_InputValue;
 
       if (theOrigin === '!market') {
 
@@ -1851,7 +1851,7 @@ const Model: InformalNodeManagerPageModelType = {
             .filter((rs) => {
               return !inherentIDs.includes(rs.resourceId);
             })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
               // console.log(rs, 'rs!!!!@#$23423423423');
 
               let disabled: boolean = false;
@@ -1907,7 +1907,7 @@ const Model: InformalNodeManagerPageModelType = {
             .filter((rs) => {
               return !inherentIDs.includes(rs.resourceId);
             })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
               let disabled: boolean = false;
               let disabledReason: string = '';
 
@@ -1963,7 +1963,7 @@ const Model: InformalNodeManagerPageModelType = {
             .filter((rs) => {
               return !inherentIDs.includes(rs.resourceId);
             })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
 
               let disabled: boolean = false;
               let disabledReason: string = '';
@@ -2023,7 +2023,7 @@ const Model: InformalNodeManagerPageModelType = {
             .filter((ob) => {
               return !inherentIDs.includes(ob.objectId);
             })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((ob) => {
+            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((ob) => {
               // console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
               const objectName: string = ob.bucketName + '/' + ob.objectName;
               // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
@@ -2058,8 +2058,8 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerCheckedList,
-          addExhibitDrawerCheckedListTotalNum,
+          addExhibitDrawer_CheckedList: addExhibitDrawerCheckedList,
+          addExhibitDrawer_CheckedListTotalNum: addExhibitDrawerCheckedListTotalNum,
         },
       });
     },
@@ -2068,7 +2068,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerSelectValue: payload.value,
+          addExhibitDrawer_SelectValue: payload.value,
         },
       });
 
@@ -2085,7 +2085,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerInputValue: payload.value,
+          addExhibitDrawer_InputValue: payload.value,
         },
       });
 
@@ -2117,7 +2117,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawerCheckedList: informalNodeManagerPage.addExhibitDrawerCheckedList.map((a) => {
+          addExhibitDrawer_CheckedList: informalNodeManagerPage.addExhibitDrawer_CheckedList.map((a) => {
             if (a.id !== payload.id) {
               return a;
             }
@@ -2147,7 +2147,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerBucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['replacerBucketOptions'][number]>((d: any) => {
+          replaceModal_Replacer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_BucketOptions'][number]>((d: any) => {
             return {
               value: d.bucketName,
               title: d.bucketName,
@@ -2160,15 +2160,15 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerResourceOptions: [
+          replaceModal_Replacer_ResourceOptions: [
             { value: '!market', title: '资源市场' },
             { value: '!resource', title: '我的资源' },
             { value: '!collection', title: '我的收藏' },
           ],
-          replacerBucketOptions: [],
-          replacerOrigin: '!market',
-          replacerKeywords: '',
-          replacerResourceList: [],
+          replaceModal_Replacer_BucketOptions: [],
+          replaceModal_Replacer_Origin: '!market',
+          replaceModal_Replacer_Keywords: '',
+          replaceModal_Replacer_ResourceList: [],
         },
       });
     },
@@ -2177,7 +2177,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerOrigin: payload.value,
+          replaceModal_Replacer_Origin: payload.value,
         },
       });
 
@@ -2193,7 +2193,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerKeywords: payload.value,
+          replaceModal_Replacer_Keywords: payload.value,
         },
       });
 
@@ -2210,14 +2210,14 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const payloadOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.replacerOrigin;
-      const payloadKeywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.replacerKeywords;
+      const payloadOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.replaceModal_Replacer_Origin;
+      const payloadKeywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.replaceModal_Replacer_Keywords;
 
-      let replacerResourceList: InformalNodeManagerPageModelState['replacerResourceList'] = [];
+      let replacerResourceList: InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'] = [];
 
       if (!payload.restart) {
         replacerResourceList = [
-          ...informalNodeManagerPage.replacerResourceList,
+          ...informalNodeManagerPage.replaceModal_Replacer_ResourceList,
         ];
       }
 
@@ -2233,7 +2233,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         replacerResourceList = [
           ...replacerResourceList,
-          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
+          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rs) => {
             // console.log(rs, '######2341234');
             return {
               checked: false,
@@ -2268,7 +2268,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, 'data13453');
         replacerResourceList = [
           ...replacerResourceList,
-          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
+          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rs) => {
             return {
               checked: false,
               id: rs.resourceId,
@@ -2315,7 +2315,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         replacerResourceList = [
           ...replacerResourceList,
-          ...(data3 as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
+          ...(data3 as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rs) => {
             return {
               checked: false,
               id: rs.resourceId,
@@ -2345,7 +2345,7 @@ const Model: InformalNodeManagerPageModelType = {
         // console.log(data, 'data1q2349ojmdfsl');
         replacerResourceList = [
           ...replacerResourceList,
-          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((ob) => {
+          ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((ob) => {
             const objectName: string = ob.bucketName + '/' + ob.objectName;
             return {
               checked: false,
@@ -2366,7 +2366,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerResourceList: replacerResourceList,
+          replaceModal_Replacer_ResourceList: replacerResourceList,
         },
       });
 
@@ -2379,7 +2379,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerResourceList: informalNodeManagerPage.replacerResourceList.map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rr) => {
+          replaceModal_Replacer_ResourceList: informalNodeManagerPage.replaceModal_Replacer_ResourceList.map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rr) => {
             if (rr.id !== payload.id) {
               return {
                 ...rr,
@@ -2405,7 +2405,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerResourceList: informalNodeManagerPage.replacerResourceList.map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rr) => {
+          replaceModal_Replacer_ResourceList: informalNodeManagerPage.replaceModal_Replacer_ResourceList.map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rr) => {
             if (rr.id !== payload.id) {
               return rr;
             }
@@ -2427,13 +2427,13 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedKeywords: '',
-          replacedDependencyTreeList: [],
-          replacedSelectDependency: null,
-          replacedTargetVersions: [],
-          replacedTargetSelectedVersion: null,
-          replacedTreeData: [],
-          replacedCheckedKeys: [],
+          replaceModal_Replaced_Keywords: '',
+          replaceModal_Replaced_DependencyTreeList: [],
+          replaceModal_Replaced_SelectDependency: null,
+          replaceModal_Replaced_TargetVersions: [],
+          replaceModal_Replaced_TargetSelectedVersion: null,
+          replaceModal_Replaced_TreeData: [],
+          replaceModal_Replaced_CheckedKeys: [],
         },
       });
     },
@@ -2447,7 +2447,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedKeywords: payloadValue,
+          replaceModal_Replaced_Keywords: payloadValue,
         },
       });
 
@@ -2464,7 +2464,7 @@ const Model: InformalNodeManagerPageModelType = {
       let replacedSelectDependency = data.find((d: any) => d.name === payloadValue);
       // console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
 
-      const replacedTargetVersions: InformalNodeManagerPageModelState['replacedTargetVersions'] = replacedSelectDependency
+      const replacedTargetVersions: InformalNodeManagerPageModelState['replaceModal_Replaced_TargetVersions'] = replacedSelectDependency
         ? [
           { value: '', text: '全部版本' },
           ...replacedSelectDependency.versions.map((v: any) => {
@@ -2478,10 +2478,10 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedDependencyTreeList: data?.map((d: any) => d.name) || [],
-          replacedSelectDependency: replacedSelectDependency || null,
-          replacedTargetVersions: replacedTargetVersions,
-          replacedTargetSelectedVersion: replacedTargetVersions.length > 0 ? replacedTargetVersions[0] : null,
+          replaceModal_Replaced_DependencyTreeList: data?.map((d: any) => d.name) || [],
+          replaceModal_Replaced_SelectDependency: replacedSelectDependency || null,
+          replaceModal_Replaced_TargetVersions: replacedTargetVersions,
+          replaceModal_Replaced_TargetSelectedVersion: replacedTargetVersions.length > 0 ? replacedTargetVersions[0] : null,
         },
       });
 
@@ -2500,14 +2500,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedTreeData: (data3 as any[]).map<InformalNodeManagerPageModelState['replacedTreeData'][number]>((d: any) => {
+          replaceModal_Replaced_TreeData: (data3 as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replaced_TreeData'][number]>((d: any) => {
             return {
               key: `${FUtil.Tool.generateRandomCode()}:${d.testResourceName}`,
               id: d.testResourceId,
               title: `${d.entityName}(${d.testResourceName})`,
             };
           }),
-          replacedCheckedKeys: [],
+          replaceModal_Replaced_CheckedKeys: [],
         },
       });
     },
@@ -2521,14 +2521,14 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      if (!informalNodeManagerPage.replacedSelectDependency) {
+      if (!informalNodeManagerPage.replaceModal_Replaced_SelectDependency) {
         return;
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedTargetSelectedVersion: informalNodeManagerPage.replacedTargetVersions.find((rtv) => {
+          replaceModal_Replaced_TargetSelectedVersion: informalNodeManagerPage.replaceModal_Replaced_TargetVersions.find((rtv) => {
             return rtv.value === payload.value;
           }) || null,
         },
@@ -2536,7 +2536,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params3: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
-        dependentEntityId: informalNodeManagerPage.replacedSelectDependency.id,
+        dependentEntityId: informalNodeManagerPage.replaceModal_Replaced_SelectDependency.id,
         resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
         dependentEntityVersionRange: payload.value || undefined,
@@ -2546,14 +2546,14 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedTreeData: (data3 as any[]).map<InformalNodeManagerPageModelState['replacedTreeData'][number]>((d: any) => {
+          replaceModal_Replaced_TreeData: (data3 as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replaced_TreeData'][number]>((d: any) => {
             return {
               key: `${FUtil.Tool.generateRandomCode()}:${d.testResourceName}`,
               id: d.testResourceId,
               title: `${d.entityName}(${d.testResourceName})`,
             };
           }),
-          replacedCheckedKeys: [],
+          replaceModal_Replaced_CheckedKeys: [],
         },
       });
     },
@@ -2570,13 +2570,13 @@ const Model: InformalNodeManagerPageModelType = {
       }
       const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
         testResourceId: payload.id,
-        dependentEntityId: informalNodeManagerPage.replacedSelectDependency?.id || '',
-        dependentEntityVersionRange: informalNodeManagerPage.replacedTargetSelectedVersion?.value || undefined,
+        dependentEntityId: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.id || '',
+        dependentEntityVersionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || undefined,
       };
       const { data } = yield call(FServiceAPI.InformalNode.dependencyTreeFilter, params);
       // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
       const result = updateTreeData({
-        list: informalNodeManagerPage.replacedTreeData as TreeNode[],
+        list: informalNodeManagerPage.replaceModal_Replaced_TreeData as TreeNode[],
         key: payload.key,
         children: organizeData(data[0].dependencies, payload.key),
       });
@@ -2584,7 +2584,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedTreeData: result,
+          replaceModal_Replaced_TreeData: result,
         },
       });
     },
@@ -2592,7 +2592,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replaceModalVisible: false,
+          replaceModal_Visible: false,
         },
       });
     },
@@ -2601,7 +2601,7 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const simplifiedResults: string[][] = simplifiedRelationship(informalNodeManagerPage.replacedCheckedKeys)
+      const simplifiedResults: string[][] = simplifiedRelationship(informalNodeManagerPage.replaceModal_Replaced_CheckedKeys)
         .map<string[]>((r) => {
           return r.split(':')
             .filter((_, i) => {
@@ -2638,7 +2638,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
 
-      const replacerData = informalNodeManagerPage.replacerResourceList.find((rr) => {
+      const replacerData = informalNodeManagerPage.replaceModal_Replacer_ResourceList.find((rr) => {
         // return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
         return rr.checked;
       });
@@ -2648,9 +2648,9 @@ const Model: InformalNodeManagerPageModelType = {
         results.push({
           exhibitName: exhibitName,
           replaced: {
-            name: informalNodeManagerPage.replacedSelectDependency?.name || '',
-            versionRange: informalNodeManagerPage.replacedTargetSelectedVersion?.value || 'latest',
-            type: informalNodeManagerPage.replacedSelectDependency?.type || 'object',
+            name: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.name || '',
+            versionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || 'latest',
+            type: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.type || 'object',
           },
           replacer: {
             name: replacerData?.name || '',
@@ -2694,7 +2694,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replaceModalVisible: false,
+          replaceModal_Visible: false,
         },
       });
     },

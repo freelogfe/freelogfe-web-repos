@@ -36,7 +36,7 @@ function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInform
 
   return (<FDrawer
     title={informalNodeManagerPage.showPage === 'theme' ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
-    visible={informalNodeManagerPage.addExhibitDrawerVisible}
+    visible={informalNodeManagerPage.addExhibitDrawer_Visible}
     topRight={<Space size={30}>
       <FTextBtn type='default' onClick={() => {
         dispatch<OnAddExhibitDrawerCancelChangeAction>({
@@ -69,10 +69,10 @@ function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInform
     <div ref={containerRef} className={styles.container}>
       <div className={styles.filter}>
         <FSelect
-          value={informalNodeManagerPage.addExhibitDrawerSelectValue}
+          value={informalNodeManagerPage.addExhibitDrawer_SelectValue}
           dataSource={[
-            ...informalNodeManagerPage.addExhibitDrawerResourceOptions,
-            ...informalNodeManagerPage.addExhibitDrawerBucketOptions,
+            ...informalNodeManagerPage.addExhibitDrawer_ResourceOptions,
+            ...informalNodeManagerPage.addExhibitDrawer_BucketOptions,
           ]}
           onChange={(value: string) => {
             dispatch<OnAddExhibitDrawerOriginChangeAction>({
@@ -84,7 +84,7 @@ function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInform
           }}
         />
         <FInput
-          value={informalNodeManagerPage.addExhibitDrawerInputValue}
+          value={informalNodeManagerPage.addExhibitDrawer_InputValue}
           debounce={300}
           onDebounceChange={(value) => {
             dispatch<OnAddExhibitDrawerKeywordsChangeAction>({
@@ -100,7 +100,7 @@ function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInform
       <div style={{ height: 15 }} />
       <div className={styles.list}>
         {
-          informalNodeManagerPage.addExhibitDrawerCheckedList
+          informalNodeManagerPage.addExhibitDrawer_CheckedList
             .map((l, i, arr) => {
               return (<div key={l.id} className={styles.item}>
                 <FTooltip
@@ -152,7 +152,7 @@ function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInform
       <div style={{ height: 20 }} />
       <div className={styles.footer}>
         {
-          informalNodeManagerPage.addExhibitDrawerCheckedListTotalNum > informalNodeManagerPage.addExhibitDrawerCheckedList.length
+          informalNodeManagerPage.addExhibitDrawer_CheckedListTotalNum > informalNodeManagerPage.addExhibitDrawer_CheckedList.length
             ? (<FRectBtn
               onClick={() => {
                 dispatch<OnAddExhibitDrawerListLoadMoreAction>({

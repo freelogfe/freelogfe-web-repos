@@ -76,10 +76,10 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
   return (<>
     <div className={styles.replacerHeader}>
       <FSelect
-        value={informalNodeManagerPage.replacerOrigin}
+        value={informalNodeManagerPage.replaceModal_Replacer_Origin}
         dataSource={[
-          ...informalNodeManagerPage.replacerResourceOptions,
-          ...informalNodeManagerPage.replacerBucketOptions,
+          ...informalNodeManagerPage.replaceModal_Replacer_ResourceOptions,
+          ...informalNodeManagerPage.replaceModal_Replacer_BucketOptions,
         ]}
         onChange={(value: string) => {
           // onChange({replacerOrigin: value}, true);
@@ -98,7 +98,7 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
         <FInput
           theme="dark"
           wrapClassName={styles.replacerFilterInput}
-          value={informalNodeManagerPage.replacerKeywords}
+          value={informalNodeManagerPage.replaceModal_Replacer_Keywords}
           debounce={300}
           onDebounceChange={(value) => {
             // console.log(value, 'value!@#$');
@@ -115,7 +115,7 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
       <div style={{height: 15}}/>
       <Space size={10} direction="vertical" className={styles.replacerList}>
         {
-          informalNodeManagerPage.replacerResourceList.map((rl) => {
+          informalNodeManagerPage.replaceModal_Replacer_ResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
               <Radio
                 // checked={rl.name === informalNodeManagerPage.replacerCheckedResourceName}
