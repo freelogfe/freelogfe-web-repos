@@ -33,9 +33,9 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 interface FAddInformExhibitDrawerProps {
   visible: boolean;
   isTheme: boolean;
-
-  usedResourceNames: string[];
-  usedObjectNames: string[];
+  nodeID: number;
+  // usedResourceNames: string[];
+  // usedObjectNames: string[];
 
   onConfirmResources?(resourceNames: string[]): void;
 
@@ -87,8 +87,8 @@ const initStates: FAddInformExhibitDrawerStates = {
 function FAddInformExhibitDrawer({
                                    visible,
                                    isTheme,
-                                   usedResourceNames,
-                                   usedObjectNames,
+                                   // usedResourceNames,
+                                   // usedObjectNames,
                                    onCancel,
                                    onConfirmResources,
                                    onConfirmObjects,
@@ -124,8 +124,8 @@ function FAddInformExhibitDrawer({
       bucket: selectedBucket,
       keywords: inputValue,
       skip: formerList.length,
-      usedResourceNames: usedResourceNames,
-      usedObjectNames: usedObjectNames,
+      // usedResourceNames: usedResourceNames,
+      // usedObjectNames: usedObjectNames,
       ...payload,
     };
 
@@ -408,8 +408,8 @@ interface HandleListParams {
   bucket: string;
   keywords: string;
   skip: number;
-  usedObjectNames: string[];
-  usedResourceNames: string[];
+  // usedObjectNames: string[];
+  // usedResourceNames: string[];
 }
 
 async function handleList(payload: HandleListParams): Promise<{
@@ -454,10 +454,10 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        if (payload.usedResourceNames.includes(rs.resourceName)) {
-          disabled = true;
-          disabledReason = FUtil1.I18n.message('tag_added');
-        }
+        // if (payload.usedResourceNames.includes(rs.resourceName)) {
+        //   disabled = true;
+        //   disabledReason = FUtil1.I18n.message('tag_added');
+        // }
 
         return {
           id: rs.resourceId,
@@ -504,11 +504,12 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        if (payload.usedResourceNames.includes(rs.resourceName)) {
-          disabled = true;
-          // disabledReason = '已被使用';
-          disabledReason = FUtil1.I18n.message('tag_added');
-        } else if (rs.latestVersion === '') {
+        // if (payload.usedResourceNames.includes(rs.resourceName)) {
+        //   disabled = true;
+        //   // disabledReason = '已被使用';
+        //   disabledReason = FUtil1.I18n.message('tag_added');
+        // } else
+          if (rs.latestVersion === '') {
           disabled = true;
           disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
         }
@@ -557,11 +558,12 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        if (payload.usedResourceNames.includes(rs.resourceName)) {
-          disabled = true;
-          // disabledReason = '已被使用';
-          disabledReason = FUtil1.I18n.message('tag_added');
-        } else if (rs.latestVersion === '') {
+        // if (payload.usedResourceNames.includes(rs.resourceName)) {
+        //   disabled = true;
+        //   // disabledReason = '已被使用';
+        //   disabledReason = FUtil1.I18n.message('tag_added');
+        // } else
+          if (rs.latestVersion === '') {
           disabled = true;
           disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
         }
@@ -610,11 +612,12 @@ async function handleList(payload: HandleListParams): Promise<{
           let disabled: boolean = false;
           let disabledReason: string = '';
 
-          if (payload.usedObjectNames.includes(objectName)) {
-            disabled = true;
-            // disabledReason = '已被使用';
-            disabledReason = FUtil1.I18n.message('tag_added');
-          } else if (ob.resourceType === '') {
+          // if (payload.usedObjectNames.includes(objectName)) {
+          //   disabled = true;
+          //   // disabledReason = '已被使用';
+          //   disabledReason = FUtil1.I18n.message('tag_added');
+          // } else
+            if (ob.resourceType === '') {
             disabled = true;
             disabledReason = FUtil1.I18n.message('msg_set_resource_type');
           }
