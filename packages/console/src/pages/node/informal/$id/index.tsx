@@ -87,10 +87,11 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
     </div>
 
     <FAddInformExhibitDrawer
+      nodeID={informalNodeManagerPage.node_ID}
       visible={informalNodeManagerPage.addExhibitDrawer_Visible}
       isTheme={false}
-      usedResourceNames={[]}
-      usedObjectNames={[]}
+      // usedResourceNames={[]}
+      // usedObjectNames={[]}
       onCancel={() => {
         dispatch<OnAddExhibitDrawerCancelChangeAction>({
           type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
