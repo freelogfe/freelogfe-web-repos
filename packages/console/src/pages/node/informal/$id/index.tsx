@@ -5,6 +5,7 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import { connect, Dispatch } from 'dva';
 import {
+  OnAddExhibitDrawerCancelChangeAction,
   OnChangePageAction,
   OnMountPageAction,
   OnUnmountPageAction,
@@ -20,6 +21,7 @@ import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
+import FAddInformExhibitDrawer from './containers/AddInformExhibitDrawer';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -84,7 +86,17 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
       </div>
     </div>
 
-    <AddInformExhibitDrawer />
+    <FAddInformExhibitDrawer
+      visible={informalNodeManagerPage.addExhibitDrawer_Visible}
+      isTheme={false}
+      usedResourceNames={[]}
+      usedObjectNames={[]}
+      onCancel={() => {
+        dispatch<OnAddExhibitDrawerCancelChangeAction>({
+          type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
+        });
+      }}
+    />
 
     <FReplaceModal />
   </>);

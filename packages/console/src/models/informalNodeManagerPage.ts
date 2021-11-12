@@ -74,22 +74,24 @@ export interface InformalNodeManagerPageModelState {
   node_RuleAllAddedObjectNames: string[];
 
   addExhibitDrawer_Visible: boolean;
-  addExhibitDrawer_ResourceOptions: { value: string; title: string }[];
-  addExhibitDrawer_BucketOptions: { value: string; title: string }[];
-  addExhibitDrawer_SelectValue: string;
-  addExhibitDrawer_InputValue: string;
-  addExhibitDrawer_CheckedList: {
-    id: string;
-    disabled: boolean;
-    disabledReason: string;
-    checked: boolean;
-    name: string;
-    identity: 'resource' | 'object';
-    type: string;
-    updateTime: string;
-    status: 'online' | 'offline' | 'unreleased' | '';
-  }[];
-  addExhibitDrawer_CheckedListTotalNum: number;
+  // addExhibitDrawer_ResourceOptions: { value: string; title: string }[];
+  // addExhibitDrawer_BucketOptions: { value: string; title: string }[];
+  // addExhibitDrawer_SelectValue: string;
+  // addExhibitDrawer_InputValue: string;
+  // addExhibitDrawer_CheckedList: {
+  //   id: string;
+  //   disabled: boolean;
+  //   disabledReason: string;
+  //   checked: boolean;
+  //   name: string;
+  //   identity: 'resource' | 'object';
+  //   type: string;
+  //   updateTime: string;
+  //   status: 'online' | 'offline' | 'unreleased' | '';
+  // }[];
+  // addExhibitDrawer_CheckedListTotalNum: number;
+  // exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  // exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
 
   replaceModal_Visible: boolean;
   replaceModal_Replacer_ResourceOptions: { value: string; title: string }[];
@@ -463,12 +465,12 @@ export interface SaveDataRulesAction extends AnyAction {
   };
 }
 
-export interface OnAddExhibitDrawerAfterVisibleChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange';
-  payload: {
-    visible: boolean;
-  };
-}
+// export interface OnAddExhibitDrawerAfterVisibleChangeAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange';
+//   payload: {
+//     visible: boolean;
+//   };
+// }
 
 export interface OnAddExhibitDrawerCancelChangeAction extends AnyAction {
   type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange';
@@ -478,40 +480,40 @@ export interface OnAddExhibitDrawerConfirmChangeAction extends AnyAction {
   type: 'informalNodeManagerPage/onAddExhibitDrawerConfirmChange';
 }
 
-export interface FetchAddExhibitDrawerListAction extends AnyAction {
-  type: 'fetchAddExhibitDrawerList';
-  payload: {
-    restart: boolean;
-    origin?: string;
-    keywords?: string;
-  };
-}
+// export interface FetchAddExhibitDrawerListAction extends AnyAction {
+//   type: 'fetchAddExhibitDrawerList';
+//   payload: {
+//     restart: boolean;
+//     origin?: string;
+//     keywords?: string;
+//   };
+// }
 
-export interface OnAddExhibitDrawerOriginChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerOriginChange';
-  payload: {
-    value: string;
-  };
-}
+// export interface OnAddExhibitDrawerOriginChangeAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onAddExhibitDrawerOriginChange';
+//   payload: {
+//     value: string;
+//   };
+// }
 
-export interface OnAddExhibitDrawerKeywordsChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerKeywordsChange';
-  payload: {
-    value: string;
-  };
-}
+// export interface OnAddExhibitDrawerKeywordsChangeAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onAddExhibitDrawerKeywordsChange';
+//   payload: {
+//     value: string;
+//   };
+// }
 
-export interface OnAddExhibitDrawerListLoadMoreAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore';
-}
+// export interface OnAddExhibitDrawerListLoadMoreAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore';
+// }
 
-export interface OnAddExhibitDrawerListCheckedChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerListCheckedChange';
-  payload: {
-    id: string;
-    checked: boolean;
-  };
-}
+// export interface OnAddExhibitDrawerListCheckedChangeAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onAddExhibitDrawerListCheckedChange';
+//   payload: {
+//     id: string;
+//     checked: boolean;
+//   };
+// }
 
 export interface OnReplacerMountAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerMount';
@@ -651,14 +653,14 @@ interface InformalNodeManagerPageModelType {
     onChangeRuleIndeterminateCheckbox: (action: OnChangeRuleIndeterminateCheckboxAction, effects: EffectsCommandMap) => void;
     onChangeRuleChecked: (action: OnChangeRuleCheckedAction, effects: EffectsCommandMap) => void;
 
-    onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
+    // onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerCancelChange: (action: OnAddExhibitDrawerCancelChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerConfirmChange: (action: OnAddExhibitDrawerConfirmChangeAction, effects: EffectsCommandMap) => void;
-    fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerOriginChange: (action: OnAddExhibitDrawerOriginChangeAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerKeywordsChange: (action: OnAddExhibitDrawerKeywordsChangeAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerListLoadMore: (action: OnAddExhibitDrawerListLoadMoreAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerListCheckedChange: (action: OnAddExhibitDrawerListCheckedChangeAction, effects: EffectsCommandMap) => void;
+    // fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
+    // onAddExhibitDrawerOriginChange: (action: OnAddExhibitDrawerOriginChangeAction, effects: EffectsCommandMap) => void;
+    // onAddExhibitDrawerKeywordsChange: (action: OnAddExhibitDrawerKeywordsChangeAction, effects: EffectsCommandMap) => void;
+    // onAddExhibitDrawerListLoadMore: (action: OnAddExhibitDrawerListLoadMoreAction, effects: EffectsCommandMap) => void;
+    // onAddExhibitDrawerListCheckedChange: (action: OnAddExhibitDrawerListCheckedChangeAction, effects: EffectsCommandMap) => void;
 
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
@@ -767,16 +769,16 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_RuleAllAddedObjectNames: [],
 
   addExhibitDrawer_Visible: false,
-  addExhibitDrawer_ResourceOptions: [
-    { value: '!market', title: '资源市场' },
-    { value: '!resource', title: '我的资源' },
-    { value: '!collection', title: '我的收藏' },
-  ],
-  addExhibitDrawer_BucketOptions: [],
-  addExhibitDrawer_SelectValue: '!market',
-  addExhibitDrawer_InputValue: '',
-  addExhibitDrawer_CheckedList: [],
-  addExhibitDrawer_CheckedListTotalNum: -1,
+  // addExhibitDrawer_ResourceOptions: [
+  //   { value: '!market', title: '资源市场' },
+  //   { value: '!resource', title: '我的资源' },
+  //   { value: '!collection', title: '我的收藏' },
+  // ],
+  // addExhibitDrawer_BucketOptions: [],
+  // addExhibitDrawer_SelectValue: '!market',
+  // addExhibitDrawer_InputValue: '',
+  // addExhibitDrawer_CheckedList: [],
+  // addExhibitDrawer_CheckedListTotalNum: -1,
 
   replaceModal_Visible: false,
   replaceModal_Replacer_ResourceOptions: [
@@ -1701,47 +1703,47 @@ const Model: InformalNodeManagerPageModelType = {
     },
 
 
-    * onAddExhibitDrawerAfterVisibleChange({ payload }: OnAddExhibitDrawerAfterVisibleChangeAction, {
-      put,
-      call,
-    }: EffectsCommandMap) {
-      if (payload.visible) {
-        yield put<FetchAddExhibitDrawerListAction>({
-          type: 'fetchAddExhibitDrawerList',
-          payload: {
-            restart: true,
-          },
-        });
-
-        const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
-          bucketType: 1,
-        };
-
-        const { data } = yield call(FServiceAPI.Storage.bucketList, params);
-        // console.log(data, '!@#$!@#$#$!@111111111');
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            addExhibitDrawer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawer_BucketOptions'][number]>((d: any) => {
-              return {
-                value: d.bucketName,
-                title: d.bucketName,
-              };
-            }),
-          },
-        });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            addExhibitDrawer_SelectValue: '!market',
-            addExhibitDrawer_InputValue: '',
-            addExhibitDrawer_CheckedList: [],
-            addExhibitDrawer_CheckedListTotalNum: -1,
-          },
-        });
-      }
-    },
+    // * onAddExhibitDrawerAfterVisibleChange({ payload }: OnAddExhibitDrawerAfterVisibleChangeAction, {
+    //   put,
+    //   call,
+    // }: EffectsCommandMap) {
+    //   if (payload.visible) {
+    //     yield put<FetchAddExhibitDrawerListAction>({
+    //       type: 'fetchAddExhibitDrawerList',
+    //       payload: {
+    //         restart: true,
+    //       },
+    //     });
+    //
+    //     const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
+    //       bucketType: 1,
+    //     };
+    //
+    //     const { data } = yield call(FServiceAPI.Storage.bucketList, params);
+    //     // console.log(data, '!@#$!@#$#$!@111111111');
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         addExhibitDrawer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawer_BucketOptions'][number]>((d: any) => {
+    //           return {
+    //             value: d.bucketName,
+    //             title: d.bucketName,
+    //           };
+    //         }),
+    //       },
+    //     });
+    //   } else {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         addExhibitDrawer_SelectValue: '!market',
+    //         addExhibitDrawer_InputValue: '',
+    //         addExhibitDrawer_CheckedList: [],
+    //         addExhibitDrawer_CheckedListTotalNum: -1,
+    //       },
+    //     });
+    //   }
+    // },
     * onAddExhibitDrawerCancelChange({}: OnAddExhibitDrawerCancelChangeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1755,380 +1757,380 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      let identity: 'resource' | 'object' = 'resource';
-      if (!informalNodeManagerPage.addExhibitDrawer_SelectValue.startsWith('!')) {
-        identity = 'object';
-      }
-      const value: { identity: 'resource' | 'object'; names: string[]; } = {
-        identity,
-        names: informalNodeManagerPage.addExhibitDrawer_CheckedList
-          .filter((ex) => ex.checked)
-          .map<string>((ex) => {
-            return ex.name;
-          }),
-      };
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          addExhibitDrawer_Visible: false,
-        },
-      });
-      yield put<SaveDataRulesAction>({
-        type: 'saveDataRules',
-        payload: {
-          type: 'append',
-          data: value.names.map((n) => {
-            return {
-              operation: 'add',
-              exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-              candidate: {
-                name: n,
-                versionRange: 'latest',
-                type: value.identity,
-              },
-            };
-          }),
-        },
-      });
-      yield put<FetchExhibitListAction>({
-        type: 'fetchExhibitList',
-        payload: {
-          isRematch: false,
-        },
-      });
+      // let identity: 'resource' | 'object' = 'resource';
+      // if (!informalNodeManagerPage.addExhibitDrawer_SelectValue.startsWith('!')) {
+      //   identity = 'object';
+      // }
+      // const value: { identity: 'resource' | 'object'; names: string[]; } = {
+      //   identity,
+      //   names: informalNodeManagerPage.addExhibitDrawer_CheckedList
+      //     .filter((ex) => ex.checked)
+      //     .map<string>((ex) => {
+      //       return ex.name;
+      //     }),
+      // };
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     addExhibitDrawer_Visible: false,
+      //   },
+      // });
+      // yield put<SaveDataRulesAction>({
+      //   type: 'saveDataRules',
+      //   payload: {
+      //     type: 'append',
+      //     data: value.names.map((n) => {
+      //       return {
+      //         operation: 'add',
+      //         exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+      //         candidate: {
+      //           name: n,
+      //           versionRange: 'latest',
+      //           type: value.identity,
+      //         },
+      //       };
+      //     }),
+      //   },
+      // });
+      // yield put<FetchExhibitListAction>({
+      //   type: 'fetchExhibitList',
+      //   payload: {
+      //     isRematch: false,
+      //   },
+      // });
     },
-    * fetchAddExhibitDrawerList({ payload }: FetchAddExhibitDrawerListAction, {
-      select,
-      call,
-      put,
-    }: EffectsCommandMap) {
-      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
-
-      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
-      if (!payload.restart) {
-        inherentList = informalNodeManagerPage.addExhibitDrawer_CheckedList;
-      }
-      const inherentIDs: string[] = inherentList.map((il) => il.id);
-
-      let addExhibitDrawerCheckedList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
-      let addExhibitDrawerCheckedListTotalNum: number = -1;
-
-      const skip: number = inherentList.length;
-      const limit: number = FUtil.Predefined.pageSize;
-      const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawer_SelectValue;
-      const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawer_InputValue;
-
-      if (theOrigin === '!market') {
-
-        const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-          skip: skip,
-          limit: limit,
-          omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-          resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-          keywords: keywords,
-        };
-        // console.log(params, 'paramsparams1234');
-        const { data } = yield call(FServiceAPI.Resource.list, params);
-        // console.log(data, 'data!~!@#$@!#$@#!411111');
-
-        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.node_ID,
-          entityType: 'resource',
-          entityIds: data.dataList.map((dl: any) => {
-            return dl.resourceId;
-          }),
-        };
-
-        const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-
-        // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
-
-        addExhibitDrawerCheckedList = [
-          ...inherentList,
-          ...(data.dataList as any[])
-            .filter((rs) => {
-              return !inherentIDs.includes(rs.resourceId);
-            })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-              // console.log(rs, 'rs!!!!@#$23423423423');
-
-              let disabled: boolean = false;
-              let disabledReason: string = '';
-
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-                disabled = true;
-                disabledReason = FUtil1.I18n.message('tag_added');
-              }
-
-              return {
-                id: rs.resourceId,
-                disabled,
-                disabledReason,
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
-        ];
-        addExhibitDrawerCheckedListTotalNum = data.totalItem;
-
-      } else if (theOrigin === '!resource') {
-
-        const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-          skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize,
-          isSelf: 1,
-          omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-          resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-          keywords: keywords,
-        };
-        // console.log(params, 'paramsparams1234');
-        const { data } = yield call(FServiceAPI.Resource.list, params);
-        // console.log(data, 'data13453');
-
-        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.node_ID,
-          entityType: 'resource',
-          entityIds: data.dataList.map((dl: any) => {
-            return dl.resourceId;
-          }),
-        };
-
-        const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-
-        addExhibitDrawerCheckedList = [
-          ...inherentList,
-          ...(data.dataList as any[])
-            .filter((rs) => {
-              return !inherentIDs.includes(rs.resourceId);
-            })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-              let disabled: boolean = false;
-              let disabledReason: string = '';
-
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-                disabled = true;
-                // disabledReason = '已被使用';
-                disabledReason = FUtil1.I18n.message('tag_added');
-              } else if (rs.latestVersion === '') {
-                disabled = true;
-                disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
-              }
-              return {
-                id: rs.resourceId,
-                disabled,
-                disabledReason,
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
-        ];
-        addExhibitDrawerCheckedListTotalNum = data.totalItem;
-
-      } else if (theOrigin === '!collection') {
-
-        const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-          skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize,
-          keywords: keywords,
-          omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-          resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-        };
-
-        const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
-        // console.log(data, '@@@@@@ASEDFSADF');
-
-        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.node_ID,
-          entityType: 'resource',
-          entityIds: data.dataList.map((dl: any) => {
-            return dl.resourceId;
-          }),
-        };
-
-        const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-
-        addExhibitDrawerCheckedList = [
-          ...inherentList,
-          ...(data.dataList as any[])
-            .filter((rs) => {
-              return !inherentIDs.includes(rs.resourceId);
-            })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-
-              let disabled: boolean = false;
-              let disabledReason: string = '';
-
-              if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-                disabled = true;
-                // disabledReason = '已被使用';
-                disabledReason = FUtil1.I18n.message('tag_added');
-              } else if (rs.latestVersion === '') {
-                disabled = true;
-                disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
-              }
-
-              return {
-                id: rs.resourceId,
-                disabled,
-                disabledReason,
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
-        ];
-        addExhibitDrawerCheckedListTotalNum = data.totalItem;
-
-      } else {
-
-        const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
-          skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize,
-          bucketName: theOrigin,
-          keywords: keywords,
-          isLoadingTypeless: 0,
-          omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-          resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-        };
-
-        const { data } = yield call(FServiceAPI.Storage.objectList, params);
-        // console.log(data, 'data1q2349ojmdfsl');
-
-        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: informalNodeManagerPage.node_ID,
-          entityType: 'object',
-          entityIds: data.dataList.map((dl: any) => {
-            return dl.objectId;
-          }),
-        };
-
-        const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-
-        addExhibitDrawerCheckedList = [
-          ...inherentList,
-          ...(data.dataList as any[])
-            .filter((ob) => {
-              return !inherentIDs.includes(ob.objectId);
-            })
-            .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((ob) => {
-              // console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
-              const objectName: string = ob.bucketName + '/' + ob.objectName;
-              // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
-              let disabled: boolean = false;
-              let disabledReason: string = '';
-
-              if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.node_RuleAllAddedObjectNames.includes(objectName)) {
-                disabled = true;
-                // disabledReason = '已被使用';
-                disabledReason = FUtil1.I18n.message('tag_added');
-              } else if (ob.resourceType === '') {
-                disabled = true;
-                disabledReason = FUtil1.I18n.message('msg_set_resource_type');
-              }
-
-              return {
-                id: ob.objectId,
-                disabled,
-                disabledReason,
-                checked: false,
-                identity: 'object',
-                name: objectName,
-                type: ob.resourceType,
-                updateTime: FUtil.Format.formatDateTime(ob.updateDate),
-                status: '',
-              };
-            }),
-        ];
-        addExhibitDrawerCheckedListTotalNum = data.totalItem;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          addExhibitDrawer_CheckedList: addExhibitDrawerCheckedList,
-          addExhibitDrawer_CheckedListTotalNum: addExhibitDrawerCheckedListTotalNum,
-        },
-      });
-    },
-    * onAddExhibitDrawerOriginChange({ payload }: OnAddExhibitDrawerOriginChangeAction, { put }: EffectsCommandMap) {
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          addExhibitDrawer_SelectValue: payload.value,
-        },
-      });
-
-      yield put<FetchAddExhibitDrawerListAction>({
-        type: 'fetchAddExhibitDrawerList',
-        payload: {
-          restart: true,
-          keywords: payload.value,
-        },
-      });
-    },
-    * onAddExhibitDrawerKeywordsChange({ payload }: OnAddExhibitDrawerKeywordsChangeAction, { put }: EffectsCommandMap) {
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          addExhibitDrawer_InputValue: payload.value,
-        },
-      });
-
-      yield put<FetchAddExhibitDrawerListAction>({
-        type: 'fetchAddExhibitDrawerList',
-        payload: {
-          restart: true,
-          keywords: payload.value,
-        },
-      });
-    },
-    * onAddExhibitDrawerListLoadMore({}: OnAddExhibitDrawerListLoadMoreAction, { put }: EffectsCommandMap) {
-      yield put<FetchAddExhibitDrawerListAction>({
-        type: 'fetchAddExhibitDrawerList',
-        payload: {
-          restart: false,
-        },
-      });
-    },
-    * onAddExhibitDrawerListCheckedChange({ payload }: OnAddExhibitDrawerListCheckedChangeAction, {
-      put,
-      select,
-    }: EffectsCommandMap) {
-
-      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          addExhibitDrawer_CheckedList: informalNodeManagerPage.addExhibitDrawer_CheckedList.map((a) => {
-            if (a.id !== payload.id) {
-              return a;
-            }
-            return {
-              ...a,
-              checked: payload.checked,
-            };
-          }),
-        },
-      });
-    },
+    // * fetchAddExhibitDrawerList({ payload }: FetchAddExhibitDrawerListAction, {
+    //   select,
+    //   call,
+    //   put,
+    // }: EffectsCommandMap) {
+    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+    //     informalNodeManagerPage,
+    //   }));
+    //
+    //   let inherentList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
+    //   if (!payload.restart) {
+    //     inherentList = informalNodeManagerPage.addExhibitDrawer_CheckedList;
+    //   }
+    //   const inherentIDs: string[] = inherentList.map((il) => il.id);
+    //
+    //   let addExhibitDrawerCheckedList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
+    //   let addExhibitDrawerCheckedListTotalNum: number = -1;
+    //
+    //   const skip: number = inherentList.length;
+    //   const limit: number = FUtil.Predefined.pageSize;
+    //   const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawer_SelectValue;
+    //   const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawer_InputValue;
+    //
+    //   if (theOrigin === '!market') {
+    //
+    //     const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
+    //       skip: skip,
+    //       limit: limit,
+    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+    //       keywords: keywords,
+    //     };
+    //     // console.log(params, 'paramsparams1234');
+    //     const { data } = yield call(FServiceAPI.Resource.list, params);
+    //     // console.log(data, 'data!~!@#$@!#$@#!411111');
+    //
+    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+    //       nodeID: informalNodeManagerPage.node_ID,
+    //       entityType: 'resource',
+    //       entityIds: data.dataList.map((dl: any) => {
+    //         return dl.resourceId;
+    //       }),
+    //     };
+    //
+    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    //
+    //     // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
+    //
+    //     addExhibitDrawerCheckedList = [
+    //       ...inherentList,
+    //       ...(data.dataList as any[])
+    //         .filter((rs) => {
+    //           return !inherentIDs.includes(rs.resourceId);
+    //         })
+    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
+    //           // console.log(rs, 'rs!!!!@#$23423423423');
+    //
+    //           let disabled: boolean = false;
+    //           let disabledReason: string = '';
+    //
+    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
+    //             disabled = true;
+    //             disabledReason = FUtil1.I18n.message('tag_added');
+    //           }
+    //
+    //           return {
+    //             id: rs.resourceId,
+    //             disabled,
+    //             disabledReason,
+    //             checked: false,
+    //             identity: 'resource',
+    //             name: rs.resourceName,
+    //             type: rs.resourceType,
+    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+    //             status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+    //           };
+    //         }),
+    //     ];
+    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
+    //
+    //   } else if (theOrigin === '!resource') {
+    //
+    //     const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
+    //       skip: inherentList.length,
+    //       limit: FUtil.Predefined.pageSize,
+    //       isSelf: 1,
+    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+    //       keywords: keywords,
+    //     };
+    //     // console.log(params, 'paramsparams1234');
+    //     const { data } = yield call(FServiceAPI.Resource.list, params);
+    //     // console.log(data, 'data13453');
+    //
+    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+    //       nodeID: informalNodeManagerPage.node_ID,
+    //       entityType: 'resource',
+    //       entityIds: data.dataList.map((dl: any) => {
+    //         return dl.resourceId;
+    //       }),
+    //     };
+    //
+    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    //
+    //     addExhibitDrawerCheckedList = [
+    //       ...inherentList,
+    //       ...(data.dataList as any[])
+    //         .filter((rs) => {
+    //           return !inherentIDs.includes(rs.resourceId);
+    //         })
+    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
+    //           let disabled: boolean = false;
+    //           let disabledReason: string = '';
+    //
+    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
+    //             disabled = true;
+    //             // disabledReason = '已被使用';
+    //             disabledReason = FUtil1.I18n.message('tag_added');
+    //           } else if (rs.latestVersion === '') {
+    //             disabled = true;
+    //             disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
+    //           }
+    //           return {
+    //             id: rs.resourceId,
+    //             disabled,
+    //             disabledReason,
+    //             checked: false,
+    //             identity: 'resource',
+    //             name: rs.resourceName,
+    //             type: rs.resourceType,
+    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+    //             status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+    //           };
+    //         }),
+    //     ];
+    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
+    //
+    //   } else if (theOrigin === '!collection') {
+    //
+    //     const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
+    //       skip: inherentList.length,
+    //       limit: FUtil.Predefined.pageSize,
+    //       keywords: keywords,
+    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+    //     };
+    //
+    //     const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
+    //     // console.log(data, '@@@@@@ASEDFSADF');
+    //
+    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+    //       nodeID: informalNodeManagerPage.node_ID,
+    //       entityType: 'resource',
+    //       entityIds: data.dataList.map((dl: any) => {
+    //         return dl.resourceId;
+    //       }),
+    //     };
+    //
+    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    //
+    //     addExhibitDrawerCheckedList = [
+    //       ...inherentList,
+    //       ...(data.dataList as any[])
+    //         .filter((rs) => {
+    //           return !inherentIDs.includes(rs.resourceId);
+    //         })
+    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
+    //
+    //           let disabled: boolean = false;
+    //           let disabledReason: string = '';
+    //
+    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
+    //             disabled = true;
+    //             // disabledReason = '已被使用';
+    //             disabledReason = FUtil1.I18n.message('tag_added');
+    //           } else if (rs.latestVersion === '') {
+    //             disabled = true;
+    //             disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
+    //           }
+    //
+    //           return {
+    //             id: rs.resourceId,
+    //             disabled,
+    //             disabledReason,
+    //             checked: false,
+    //             identity: 'resource',
+    //             name: rs.resourceName,
+    //             type: rs.resourceType,
+    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+    //             status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+    //           };
+    //         }),
+    //     ];
+    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
+    //
+    //   } else {
+    //
+    //     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
+    //       skip: inherentList.length,
+    //       limit: FUtil.Predefined.pageSize,
+    //       bucketName: theOrigin,
+    //       keywords: keywords,
+    //       isLoadingTypeless: 0,
+    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+    //     };
+    //
+    //     const { data } = yield call(FServiceAPI.Storage.objectList, params);
+    //     // console.log(data, 'data1q2349ojmdfsl');
+    //
+    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+    //       nodeID: informalNodeManagerPage.node_ID,
+    //       entityType: 'object',
+    //       entityIds: data.dataList.map((dl: any) => {
+    //         return dl.objectId;
+    //       }),
+    //     };
+    //
+    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    //
+    //     addExhibitDrawerCheckedList = [
+    //       ...inherentList,
+    //       ...(data.dataList as any[])
+    //         .filter((ob) => {
+    //           return !inherentIDs.includes(ob.objectId);
+    //         })
+    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((ob) => {
+    //           // console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
+    //           const objectName: string = ob.bucketName + '/' + ob.objectName;
+    //           // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
+    //           let disabled: boolean = false;
+    //           let disabledReason: string = '';
+    //
+    //           if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.node_RuleAllAddedObjectNames.includes(objectName)) {
+    //             disabled = true;
+    //             // disabledReason = '已被使用';
+    //             disabledReason = FUtil1.I18n.message('tag_added');
+    //           } else if (ob.resourceType === '') {
+    //             disabled = true;
+    //             disabledReason = FUtil1.I18n.message('msg_set_resource_type');
+    //           }
+    //
+    //           return {
+    //             id: ob.objectId,
+    //             disabled,
+    //             disabledReason,
+    //             checked: false,
+    //             identity: 'object',
+    //             name: objectName,
+    //             type: ob.resourceType,
+    //             updateTime: FUtil.Format.formatDateTime(ob.updateDate),
+    //             status: '',
+    //           };
+    //         }),
+    //     ];
+    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
+    //   }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       addExhibitDrawer_CheckedList: addExhibitDrawerCheckedList,
+    //       addExhibitDrawer_CheckedListTotalNum: addExhibitDrawerCheckedListTotalNum,
+    //     },
+    //   });
+    // },
+    // * onAddExhibitDrawerOriginChange({ payload }: OnAddExhibitDrawerOriginChangeAction, { put }: EffectsCommandMap) {
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       addExhibitDrawer_SelectValue: payload.value,
+    //     },
+    //   });
+    //
+    //   yield put<FetchAddExhibitDrawerListAction>({
+    //     type: 'fetchAddExhibitDrawerList',
+    //     payload: {
+    //       restart: true,
+    //       keywords: payload.value,
+    //     },
+    //   });
+    // },
+    // * onAddExhibitDrawerKeywordsChange({ payload }: OnAddExhibitDrawerKeywordsChangeAction, { put }: EffectsCommandMap) {
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       addExhibitDrawer_InputValue: payload.value,
+    //     },
+    //   });
+    //
+    //   yield put<FetchAddExhibitDrawerListAction>({
+    //     type: 'fetchAddExhibitDrawerList',
+    //     payload: {
+    //       restart: true,
+    //       keywords: payload.value,
+    //     },
+    //   });
+    // },
+    // * onAddExhibitDrawerListLoadMore({}: OnAddExhibitDrawerListLoadMoreAction, { put }: EffectsCommandMap) {
+    //   yield put<FetchAddExhibitDrawerListAction>({
+    //     type: 'fetchAddExhibitDrawerList',
+    //     payload: {
+    //       restart: false,
+    //     },
+    //   });
+    // },
+    // * onAddExhibitDrawerListCheckedChange({ payload }: OnAddExhibitDrawerListCheckedChangeAction, {
+    //   put,
+    //   select,
+    // }: EffectsCommandMap) {
+    //
+    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+    //     informalNodeManagerPage,
+    //   }));
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       addExhibitDrawer_CheckedList: informalNodeManagerPage.addExhibitDrawer_CheckedList.map((a) => {
+    //         if (a.id !== payload.id) {
+    //           return a;
+    //         }
+    //         return {
+    //           ...a,
+    //           checked: payload.checked,
+    //         };
+    //       }),
+    //     },
+    //   });
+    // },
     * onReplacerMount({}: OnReplacerMountAction, { put, call }: EffectsCommandMap) {
       yield put<FetchReplacerListAction>({
         type: 'fetchReplacerList',
