@@ -130,19 +130,13 @@ export interface InformExhibitInfoPageModelState {
     source: string;
     target: string;
   }[];
-  graph_Viewport_DependencyGraph_Nodes: Array<{
+  graph_Viewport_DependencyGraph_Nodes: {
     id: string;
     resourceId: string;
     resourceName: string;
     resourceType: string;
     version: string;
-    pending: boolean;
-    exception: boolean;
-  } | {
-    id: string;
-    nodeName: string;
-    exhibitName: string;
-  }>;
+  }[];
   graph_Viewport_DependencyGraph_Edges: {
     source: string;
     target: string;
@@ -221,6 +215,21 @@ export interface OnOnlineSwitchChangeAction extends AnyAction {
   type: 'informExhibitInfoPage/onOnlineSwitchChange';
   payload: {
     checked: boolean;
+  };
+}
+
+export interface OnClick_Graph_FullScreenBtn_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onClick_Graph_FullScreenBtn';
+}
+
+export interface OnCancel_Graph_FullScreenDrawer_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onCancel_Graph_FullScreenDrawer';
+}
+
+export interface OnChange_Graph_Tab_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Graph_Tab';
+  payload: {
+    value: 'relationship' | 'authorization' | 'dependency';
   };
 }
 
@@ -388,6 +397,10 @@ export interface ExhibitInfoPageModelType {
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
 
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
+
+    onClick_Graph_FullScreenBtn: (action: OnClick_Graph_FullScreenBtn_Action, effects: EffectsCommandMap) => void;
+    onCancel_Graph_FullScreenDrawer: (action: OnCancel_Graph_FullScreenDrawer_Action, effects: EffectsCommandMap) => void;
+    onChange_Graph_Tab: (action: OnChange_Graph_Tab_Action, effects: EffectsCommandMap) => void;
 
     onChangePCover: (action: OnChangePCoverAction, effects: EffectsCommandMap) => void;
     onClickPTitleEditBtn: (action: OnClickPTitleEditBtnAction, effects: EffectsCommandMap) => void;
@@ -891,6 +904,31 @@ const Model: ExhibitInfoPageModelType = {
           },
         });
       }
+    },
+
+    * onClick_Graph_FullScreenBtn({}: OnClick_Graph_FullScreenBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          graph_FullScreen: true,
+        },
+      });
+    },
+    * onCancel_Graph_FullScreenDrawer({}: OnCancel_Graph_FullScreenDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          graph_FullScreen: false,
+        },
+      });
+    },
+    * onChange_Graph_Tab({ payload }: OnChange_Graph_Tab_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          graph_Viewport_Show: payload.value,
+        },
+      });
     },
 
     * onChangePCover({ payload }: OnChangePCoverAction, { put }: EffectsCommandMap) {
