@@ -132,6 +132,33 @@ export function dependencyTreeFilter({testResourceId, ...params}: DependencyTree
   });
 }
 
+// 查看测试资源依赖树
+interface TestResourcesDependencyTreeParamsType {
+  testResourceId: string;
+}
+
+export function TestResourcesDependencyTree({testResourceId}: TestResourcesDependencyTreeParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/testResources/${testResourceId}/dependencyTree`,
+    // params: params,
+  });
+}
+
+// 查看测试资源授权树
+interface TestResourcesAuthTreeParamsType {
+  testResourceId: string;
+}
+
+export function testResourcesAuthTree({testResourceId}: TestResourcesAuthTreeParamsType) {
+  // return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `https://api.freelog.com/v2/testNodes/testResources/${testResourceId}/authTree`,
+    // params: params,
+  });
+}
+
 // 查看测试资源详情
 interface TestResourceDetailsParamsType {
   testResourceId: string;

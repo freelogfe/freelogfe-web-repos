@@ -634,7 +634,11 @@ const Model: ExhibitInfoPageModelType = {
       //   exhibitName: data.presentableName,
       // });
 
-      //
+      // 依赖树
+      const params5: Parameters<typeof FServiceAPI.InformalNode.dependencyTree>[0] = {
+
+      }
+
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
