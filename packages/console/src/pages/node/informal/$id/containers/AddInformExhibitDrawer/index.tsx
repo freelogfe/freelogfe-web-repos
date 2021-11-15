@@ -87,6 +87,7 @@ const initStates: FAddInformExhibitDrawerStates = {
 function FAddInformExhibitDrawer({
                                    visible,
                                    isTheme,
+                                   nodeID,
                                    // usedResourceNames,
                                    // usedObjectNames,
                                    onCancel,
@@ -120,6 +121,7 @@ function FAddInformExhibitDrawer({
     }
     const params: HandleListParams = {
       isTheme: isTheme,
+      nodeID: nodeID,
       origin: activatedTab,
       bucket: selectedBucket,
       keywords: inputValue,
@@ -404,12 +406,11 @@ export default FAddInformExhibitDrawer;
 
 interface HandleListParams {
   isTheme: boolean;
+  nodeID: number;
   origin: FAddInformExhibitDrawerStates['activatedTab'];
   bucket: string;
   keywords: string;
   skip: number;
-  // usedObjectNames: string[];
-  // usedResourceNames: string[];
 }
 
 async function handleList(payload: HandleListParams): Promise<{
@@ -431,15 +432,15 @@ async function handleList(payload: HandleListParams): Promise<{
     const { data } = await FServiceAPI.Resource.list(params);
     // console.log(data, 'data!~!@#$@!#$@#!411111');
 
-    // const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //   nodeID: informalNodeManagerPage.node_ID,
-    //   entityType: 'resource',
-    //   entityIds: data.dataList.map((dl: any) => {
-    //     return dl.resourceId;
-    //   }),
-    // };
-    //
-    // const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+      nodeID: payload.nodeID,
+      entityType: 'resource',
+      entityIDs: data.dataList.map((dl: any) => {
+        return dl.resourceId;
+      }),
+    };
+
+    const usedResourceIDs: string[] = await getUsedTargetIDs(params1);
 
     // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
 
@@ -454,10 +455,10 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        // if (payload.usedResourceNames.includes(rs.resourceName)) {
-        //   disabled = true;
-        //   disabledReason = FUtil1.I18n.message('tag_added');
-        // }
+        if (usedResourceIDs.includes(rs.resourceId)) {
+          disabled = true;
+          disabledReason = FUtil1.I18n.message('tag_added');
+        }
 
         return {
           id: rs.resourceId,
@@ -486,15 +487,15 @@ async function handleList(payload: HandleListParams): Promise<{
     const { data } = await FServiceAPI.Resource.list(params);
     // console.log(data, 'data13453');
 
-    // const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //   nodeID: informalNodeManagerPage.node_ID,
-    //   entityType: 'resource',
-    //   entityIds: data.dataList.map((dl: any) => {
-    //     return dl.resourceId;
-    //   }),
-    // };
+    const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+      nodeID: payload.nodeID,
+      entityType: 'resource',
+      entityIDs: data.dataList.map((dl: any) => {
+        return dl.resourceId;
+      }),
+    };
     //
-    // const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    const usedResourceIDs: string[] = await getUsedTargetIDs(params1);
     totalItem = data.totalItem;
     list = (data.dataList as any[])
       // .filter((rs) => {
@@ -504,12 +505,11 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        // if (payload.usedResourceNames.includes(rs.resourceName)) {
-        //   disabled = true;
-        //   // disabledReason = '已被使用';
-        //   disabledReason = FUtil1.I18n.message('tag_added');
-        // } else
-          if (rs.latestVersion === '') {
+        if (usedResourceIDs.includes(rs.resourceId)) {
+          disabled = true;
+          // disabledReason = '已被使用';
+          disabledReason = FUtil1.I18n.message('tag_added');
+        } else if (rs.latestVersion === '') {
           disabled = true;
           disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
         }
@@ -539,15 +539,15 @@ async function handleList(payload: HandleListParams): Promise<{
     const { data } = await FServiceAPI.Collection.collectionResources(params);
     // console.log(data, '@@@@@@ASEDFSADF');
 
-    // const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //   nodeID: informalNodeManagerPage.node_ID,
-    //   entityType: 'resource',
-    //   entityIds: data.dataList.map((dl: any) => {
-    //     return dl.resourceId;
-    //   }),
-    // };
+    const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+      nodeID: payload.nodeID,
+      entityType: 'resource',
+      entityIDs: data.dataList.map((dl: any) => {
+        return dl.resourceId;
+      }),
+    };
     //
-    // const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+    const usedResourceIDs: string[] = await getUsedTargetIDs(params1);
     totalItem = data.totalItem;
     list = (data.dataList as any[])
       // .filter((rs) => {
@@ -558,12 +558,11 @@ async function handleList(payload: HandleListParams): Promise<{
         let disabled: boolean = false;
         let disabledReason: string = '';
 
-        // if (payload.usedResourceNames.includes(rs.resourceName)) {
-        //   disabled = true;
-        //   // disabledReason = '已被使用';
-        //   disabledReason = FUtil1.I18n.message('tag_added');
-        // } else
-          if (rs.latestVersion === '') {
+        if (usedResourceIDs.includes(rs.resourceId)) {
+          disabled = true;
+          // disabledReason = '已被使用';
+          disabledReason = FUtil1.I18n.message('tag_added');
+        } else if (rs.latestVersion === '') {
           disabled = true;
           disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
         }
@@ -595,6 +594,16 @@ async function handleList(payload: HandleListParams): Promise<{
 
     const { data } = await FServiceAPI.Storage.objectList(params);
 
+        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+          nodeID: payload.nodeID,
+          entityType: 'object',
+          entityIDs: data.dataList.map((dl: any) => {
+            return dl.objectId;
+          }),
+        };
+
+        const usedObjectIDs: string[] = await getUsedTargetIDs(params1);
+
     // console.log(data, 'dat903jlskdfjlka@#$#');
     if (!data) {
       totalItem = 0;
@@ -612,12 +621,11 @@ async function handleList(payload: HandleListParams): Promise<{
           let disabled: boolean = false;
           let disabledReason: string = '';
 
-          // if (payload.usedObjectNames.includes(objectName)) {
-          //   disabled = true;
-          //   // disabledReason = '已被使用';
-          //   disabledReason = FUtil1.I18n.message('tag_added');
-          // } else
-            if (ob.resourceType === '') {
+          if (usedObjectIDs.includes(ob.objectId)) {
+            disabled = true;
+            // disabledReason = '已被使用';
+            disabledReason = FUtil1.I18n.message('tag_added');
+          } else if (ob.resourceType === '') {
             disabled = true;
             disabledReason = FUtil1.I18n.message('msg_set_resource_type');
           }
@@ -642,6 +650,34 @@ async function handleList(payload: HandleListParams): Promise<{
     list,
     totalItem,
   };
+}
+
+interface GetUsedTargetIDsParams {
+  nodeID: number;
+  entityType: 'resource' | 'object';
+  entityIDs: string[];
+}
+
+async function getUsedTargetIDs({ nodeID, entityType, entityIDs }: GetUsedTargetIDsParams): Promise<string[]> {
+  // console.log(entityNames, 'entityNames24234234234');
+  if (entityIDs.length === 0) {
+    return [];
+  }
+
+  // console.log(entityNames.length, 'entityNames9023j4lk23qjlk');
+
+  const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+    nodeId: nodeID,
+    entityType: entityType,
+    entityIds: entityIDs.join(),
+  };
+
+  const { data } = await FServiceAPI.InformalNode.batchTestResources(params1);
+
+  // console.log(data, 'data98jhksjkdaf13453########');
+  return (data as any[]).map<string>((d1: any) => {
+    return d1.originInfo.id;
+  });
 }
 
 

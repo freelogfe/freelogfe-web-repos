@@ -2758,30 +2758,30 @@ async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusPar
   }
 }
 
-interface GetUsedTargetIDsParams {
-  nodeID: number;
-  entityType: 'resource' | 'object';
-  entityIds: string[];
-}
-
-async function getUsedTargetIDs({ nodeID, entityType, entityIds }: GetUsedTargetIDsParams): Promise<string[]> {
-  if (entityIds.length === 0) {
-    return [];
-  }
-
-  const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
-    nodeId: nodeID,
-    entityType: entityType,
-    entityIds: entityIds.join(),
-  };
-
-  const { data } = await FServiceAPI.InformalNode.batchTestResources(params1);
-
-  // console.log(data, 'data98jhksjkdaf13453');
-  return (data as any[]).map<string>((d1: any) => {
-    return d1.originInfo.id;
-  });
-}
+// interface GetUsedTargetIDsParams {
+//   nodeID: number;
+//   entityType: 'resource' | 'object';
+//   entityIds: string[];
+// }
+//
+// async function getUsedTargetIDs({ nodeID, entityType, entityIds }: GetUsedTargetIDsParams): Promise<string[]> {
+//   if (entityIds.length === 0) {
+//     return [];
+//   }
+//
+//   const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+//     nodeId: nodeID,
+//     entityType: entityType,
+//     entityIds: entityIds.join(),
+//   };
+//
+//   const { data } = await FServiceAPI.InformalNode.batchTestResources(params1);
+//
+//   // console.log(data, 'data98jhksjkdaf13453');
+//   return (data as any[]).map<string>((d1: any) => {
+//     return d1.originInfo.id;
+//   });
+// }
 
 interface UpdateTreeDataParams {
   list: TreeNode[];
