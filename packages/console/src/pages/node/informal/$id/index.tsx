@@ -98,7 +98,7 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
         });
       }}
       onConfirmObjects={(values) => {
-        console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
+        // console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
         dispatch<OnConfirm_AddExhibitDrawer_Action>({
           type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
           payload: {
@@ -108,7 +108,7 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
         });
       }}
       onConfirmResources={(values) => {
-        console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
+        // console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
         dispatch<OnConfirm_AddExhibitDrawer_Action>({
           type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
           payload: {
