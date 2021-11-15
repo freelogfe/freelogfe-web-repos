@@ -558,10 +558,10 @@ const Model: ExhibitInfoPageModelType = {
 
       const selectedID = informExhibitInfoPage.contract_Associated.find((a) => a.selected)?.id;
 
-      // // console.log(data, 'data@!!!!!!!!1111');
-      // const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
-      // const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
-      //
+      // console.log(data, 'data@!!!!!!!!1111');
+      const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
+
       // // 关系树数据
       // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
       //   presentableId: data.presentableId,
