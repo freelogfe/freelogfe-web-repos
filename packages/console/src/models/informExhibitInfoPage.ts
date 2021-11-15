@@ -87,7 +87,7 @@ export interface InformExhibitInfoPageModelState {
   }[];
 
   graph_FullScreen: boolean;
-  graph_Viewport_Show: 'relationship' | 'authorization';
+  graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
   graph_Viewport_RelationGraph_Nodes: Array<{
     id: string;
     resourceId: string;
@@ -127,6 +127,23 @@ export interface InformExhibitInfoPageModelState {
     }[];
   }>;
   graph_Viewport_AuthorizationGraph_Edges: {
+    source: string;
+    target: string;
+  }[];
+  graph_Viewport_DependencyGraph_Nodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+    pending: boolean;
+    exception: boolean;
+  } | {
+    id: string;
+    nodeName: string;
+    exhibitName: string;
+  }>;
+  graph_Viewport_DependencyGraph_Edges: {
     source: string;
     target: string;
   }[];
@@ -435,6 +452,8 @@ const initStates: InformExhibitInfoPageModelState = {
   graph_Viewport_RelationGraph_Edges: [],
   graph_Viewport_AuthorizationGraph_Nodes: [],
   graph_Viewport_AuthorizationGraph_Edges: [],
+  graph_Viewport_DependencyGraph_Nodes: [],
+  graph_Viewport_DependencyGraph_Edges: [],
 
   side_Exhibit_Cover: '',
   side_Exhibit_Title: '',
@@ -601,6 +620,8 @@ const Model: ExhibitInfoPageModelType = {
       //   exhibitId: data.presentableId,
       //   exhibitName: data.presentableName,
       // });
+
+      //
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
