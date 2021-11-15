@@ -125,32 +125,36 @@ G6.registerNode('authorization-contract', {
   },
 });
 
-interface FAntvG6AuthorizationGraphProps extends GraphData {
-  nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    nodeId: number;
-    nodeName: string;
-    exhibitId: string;
-    exhibitName: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  edges: {
-    source: string;
-    target: string;
+export type IGraph_Authorization_Nodes = Array<{
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+} | {
+  id: string;
+  nodeId: number;
+  nodeName: string;
+  exhibitId: string;
+  exhibitName: string;
+} | {
+  id: string;
+  contracts: {
+    contractId: string;
+    contractName: string;
+    isAuth: boolean;
+    updateDate: string;
   }[];
+}>;
+
+export type IGraph_Authorization_Edges = {
+  source: string;
+  target: string;
+}[];
+
+interface FAntvG6AuthorizationGraphProps extends GraphData {
+  nodes: IGraph_Authorization_Nodes;
+  edges: IGraph_Authorization_Edges;
   width?: number;
   height?: number;
 }

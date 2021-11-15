@@ -22,18 +22,22 @@ G6.registerNode('dependency-resource', {
 `,
 });
 
+export type IGraph_Dependency_Nodes = {
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+}[];
+
+export type IGraph_Dependency_Edges = {
+  source: string;
+  target: string;
+}[];
+
 interface FAntvG6DependencyGraphProps extends GraphData {
-  nodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  }[];
-  edges: {
-    source: string;
-    target: string;
-  }[];
+  nodes: IGraph_Dependency_Nodes;
+  edges: IGraph_Dependency_Edges;
   width?: number;
   height?: number;
 }

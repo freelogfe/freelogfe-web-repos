@@ -53,24 +53,28 @@ G6.registerNode('relationship-exhibit', {
   },
 });
 
+export type IGraph_Relationship_Nodes = Array<{
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  pending: boolean;
+  exception: boolean;
+} | {
+  id: string;
+  nodeName: string;
+  exhibitName: string;
+}>;
+
+export type IGraph_Relationship_Edges = {
+  source: string;
+  target: string;
+}[];
+
 interface FAntvG6RelationshipGraphProps extends GraphData {
-  nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-    pending: boolean;
-    exception: boolean;
-  } | {
-    id: string;
-    nodeName: string;
-    exhibitName: string;
-  }>;
-  edges: {
-    source: string;
-    target: string;
-  }[];
+  nodes: IGraph_Relationship_Nodes;
+  edges: IGraph_Relationship_Edges;
   width?: number;
   height?: number;
 }

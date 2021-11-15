@@ -137,7 +137,7 @@ interface TestResourcesDependencyTreeParamsType {
   testResourceId: string;
 }
 
-export function TestResourcesDependencyTree({testResourceId}: TestResourcesDependencyTreeParamsType) {
+export function testResourcesDependencyTree({testResourceId}: TestResourcesDependencyTreeParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testNodes/testResources/${testResourceId}/dependencyTree`,
@@ -154,7 +154,7 @@ export function testResourcesAuthTree({testResourceId}: TestResourcesAuthTreePar
   // return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}`);
   return FUtil.Request({
     method: 'GET',
-    url: `https://api.freelog.com/v2/testNodes/testResources/${testResourceId}/authTree`,
+    url: `/v2/testNodes/testResources/${testResourceId}/authTree`,
     // params: params,
   });
 }

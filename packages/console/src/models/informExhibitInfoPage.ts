@@ -5,8 +5,15 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
-import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
-import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+import {
+  handleExhibitRelationGraphData,
+  IGraph_Relationship_Edges, IGraph_Relationship_Nodes,
+} from '@/components/FAntvG6/FAntvG6RelationshipGraph';
+import {
+  handleAuthorizationGraphData,
+  IGraph_Authorization_Edges, IGraph_Authorization_Nodes,
+} from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+import { IGraph_Dependency_Edges, IGraph_Dependency_Nodes } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -88,59 +95,12 @@ export interface InformExhibitInfoPageModelState {
 
   graph_FullScreen: boolean;
   graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
-  graph_Viewport_RelationGraph_Nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-    pending: boolean;
-    exception: boolean;
-  } | {
-    id: string;
-    nodeName: string;
-    exhibitName: string;
-  }>;
-  graph_Viewport_RelationGraph_Edges: {
-    source: string;
-    target: string;
-  }[];
-  graph_Viewport_AuthorizationGraph_Nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    nodeId: number;
-    nodeName: string;
-    exhibitId: string;
-    exhibitName: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  graph_Viewport_AuthorizationGraph_Edges: {
-    source: string;
-    target: string;
-  }[];
-  graph_Viewport_DependencyGraph_Nodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  }[];
-  graph_Viewport_DependencyGraph_Edges: {
-    source: string;
-    target: string;
-  }[];
+  graph_Viewport_RelationGraph_Nodes: IGraph_Relationship_Nodes;
+  graph_Viewport_RelationGraph_Edges: IGraph_Relationship_Edges;
+  graph_Viewport_AuthorizationGraph_Nodes: IGraph_Authorization_Nodes;
+  graph_Viewport_AuthorizationGraph_Edges: IGraph_Authorization_Edges;
+  graph_Viewport_DependencyGraph_Nodes: IGraph_Dependency_Nodes;
+  graph_Viewport_DependencyGraph_Edges: IGraph_Dependency_Edges;
 
   side_Exhibit_Cover: string;
   side_Exhibit_Title: string;
@@ -615,14 +575,14 @@ const Model: ExhibitInfoPageModelType = {
       //
       // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
       //
-      // // 授权树数据
-      // const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
-      //   presentableId: exhibitInfoPage.exhibit_ID,
-      // };
-      //
-      // const { data: data4 } = yield call(FServiceAPI.Exhibit.authTree, params4);
-      //
-      // // console.log(data4, '@@@@@#4234234324234');
+      // 授权树数据
+      const params7: Parameters<typeof FServiceAPI.InformalNode.testResourcesAuthTree>[0] = {
+        testResourceId: informExhibitID,
+      };
+
+      const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
+      console.log(data7, 'data7data7data7data7');
+
       // const {
       //   nodes: authorizationGraphNodes,
       //   edges: authorizationGraphEdges,
@@ -635,9 +595,12 @@ const Model: ExhibitInfoPageModelType = {
       // });
 
       // 依赖树
-      const params5: Parameters<typeof FServiceAPI.InformalNode.dependencyTree>[0] = {
+      const params8: Parameters<typeof FServiceAPI.InformalNode.testResourcesDependencyTree>[0] = {
+        testResourceId: informExhibitID,
+      };
 
-      }
+      const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
+      console.log(data8, 'data8data8data8data8');
 
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
@@ -1684,3 +1647,12 @@ function sleep(ms: number = 200): Promise<void> {
     }, ms);
   });
 }
+
+
+// function recursiveDependencyTree(): InformExhibitInfoPageModelState['graph_Viewport_DependencyGraph_Edges']{
+// return
+// }
+//
+// function recursiveAuthTree() {
+//
+// }
