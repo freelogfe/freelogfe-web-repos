@@ -16,12 +16,12 @@ import MappingRule from './MappingRule';
 import { RouteComponentProps } from 'react-router';
 import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-import AddInformExhibitDrawer from './containers/AddInformExhibitDrawer';
+// import AddInformExhibitDrawer from './components/AddInformExhibitDrawer';
 import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-import FAddInformExhibitDrawer from './containers/AddInformExhibitDrawer';
+import FAddInformExhibitDrawer from './components/AddInformExhibitDrawer';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
