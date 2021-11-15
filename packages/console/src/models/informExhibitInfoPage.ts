@@ -5,6 +5,8 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
+import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
+import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -82,6 +84,51 @@ export interface InformExhibitInfoPageModelState {
       name: string;
       text: string;
     }[];
+  }[];
+
+  graph_FullScreen: boolean;
+  graph_Viewport_Show: 'relationship' | 'authorization';
+  graph_Viewport_RelationGraph_Nodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+    pending: boolean;
+    exception: boolean;
+  } | {
+    id: string;
+    nodeName: string;
+    exhibitName: string;
+  }>;
+  graph_Viewport_RelationGraph_Edges: {
+    source: string;
+    target: string;
+  }[];
+  graph_Viewport_AuthorizationGraph_Nodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  } | {
+    id: string;
+    nodeId: number;
+    nodeName: string;
+    exhibitId: string;
+    exhibitName: string;
+  } | {
+    id: string;
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
+  }>;
+  graph_Viewport_AuthorizationGraph_Edges: {
+    source: string;
+    target: string;
   }[];
 
   side_Exhibit_Cover: string;
@@ -382,6 +429,13 @@ const initStates: InformExhibitInfoPageModelState = {
 
   contract_Associated: [],
 
+  graph_FullScreen: false,
+  graph_Viewport_Show: 'relationship',
+  graph_Viewport_RelationGraph_Nodes: [],
+  graph_Viewport_RelationGraph_Edges: [],
+  graph_Viewport_AuthorizationGraph_Nodes: [],
+  graph_Viewport_AuthorizationGraph_Edges: [],
+
   side_Exhibit_Cover: '',
   side_Exhibit_Title: '',
   side_Exhibit_InputTitle: null,
@@ -504,9 +558,49 @@ const Model: ExhibitInfoPageModelType = {
 
       const selectedID = informExhibitInfoPage.contract_Associated.find((a) => a.selected)?.id;
 
-      // console.log(data, 'data@!!!!!!!!1111');
-      const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
-      const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
+      // // console.log(data, 'data@!!!!!!!!1111');
+      // const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      // const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
+      //
+      // // 关系树数据
+      // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
+      //   presentableId: data.presentableId,
+      // };
+      //
+      // const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
+      // // console.log(data, 'datadatadatadatadatadatadata');
+      // // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
+      //
+      // const {
+      //   nodes: relationGraphNodes,
+      //   edges: relationGraphEdges,
+      // } = yield call(handleExhibitRelationGraphData, data6, {
+      //   nodeId: data.nodeId,
+      //   nodeName: data3.nodeName,
+      //   exhibitId: data.presentableId,
+      //   exhibitName: data.presentableName,
+      // });
+      //
+      // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
+      //
+      // // 授权树数据
+      // const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
+      //   presentableId: exhibitInfoPage.exhibit_ID,
+      // };
+      //
+      // const { data: data4 } = yield call(FServiceAPI.Exhibit.authTree, params4);
+      //
+      // // console.log(data4, '@@@@@#4234234324234');
+      // const {
+      //   nodes: authorizationGraphNodes,
+      //   edges: authorizationGraphEdges,
+      // } = yield call(handleAuthorizationGraphData, data4, {
+      //   id: data.presentableId,
+      //   nodeId: data.nodeId,
+      //   nodeName: data3.nodeName,
+      //   exhibitId: data.presentableId,
+      //   exhibitName: data.presentableName,
+      // });
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
