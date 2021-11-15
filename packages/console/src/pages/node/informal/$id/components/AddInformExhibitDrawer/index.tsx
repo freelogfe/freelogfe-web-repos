@@ -187,7 +187,7 @@ function FAddInformExhibitDrawer({
   }
 
   function onConfirm_Drawer() {
-    if (activatedTab !== 'object') {
+    if (activatedTab === 'object') {
       onConfirmObjects && onConfirmObjects(list.filter((l) => l.checked).map((l) => l.name));
     } else {
       onConfirmResources && onConfirmResources(list.filter((l) => l.checked).map((l) => l.name));

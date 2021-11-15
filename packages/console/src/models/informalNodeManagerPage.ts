@@ -472,12 +472,16 @@ export interface SaveDataRulesAction extends AnyAction {
 //   };
 // }
 
-export interface OnAddExhibitDrawerCancelChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange';
+export interface OnCancel_AddExhibitDrawer_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onCancel_AddExhibitDrawer';
 }
 
-export interface OnAddExhibitDrawerConfirmChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onAddExhibitDrawerConfirmChange';
+export interface OnConfirm_AddExhibitDrawer_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer';
+  payload: {
+    identity: 'object' | 'resource';
+    names: string[];
+  };
 }
 
 // export interface FetchAddExhibitDrawerListAction extends AnyAction {
@@ -654,8 +658,8 @@ interface InformalNodeManagerPageModelType {
     onChangeRuleChecked: (action: OnChangeRuleCheckedAction, effects: EffectsCommandMap) => void;
 
     // onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerCancelChange: (action: OnAddExhibitDrawerCancelChangeAction, effects: EffectsCommandMap) => void;
-    onAddExhibitDrawerConfirmChange: (action: OnAddExhibitDrawerConfirmChangeAction, effects: EffectsCommandMap) => void;
+    onCancel_AddExhibitDrawer: (action: OnCancel_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
+    onConfirm_AddExhibitDrawer: (action: OnConfirm_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
     // fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
     // onAddExhibitDrawerOriginChange: (action: OnAddExhibitDrawerOriginChangeAction, effects: EffectsCommandMap) => void;
     // onAddExhibitDrawerKeywordsChange: (action: OnAddExhibitDrawerKeywordsChangeAction, effects: EffectsCommandMap) => void;
@@ -1744,7 +1748,7 @@ const Model: InformalNodeManagerPageModelType = {
     //     });
     //   }
     // },
-    * onAddExhibitDrawerCancelChange({}: OnAddExhibitDrawerCancelChangeAction, { put }: EffectsCommandMap) {
+    * onCancel_AddExhibitDrawer({}: OnCancel_AddExhibitDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1752,52 +1756,44 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerConfirmChange({}: OnAddExhibitDrawerConfirmChangeAction, { select, put }: EffectsCommandMap) {
-      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
+    * onConfirm_AddExhibitDrawer({ payload }: OnConfirm_AddExhibitDrawer_Action, { put }: EffectsCommandMap) {
+      // const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+      //   informalNodeManagerPage,
+      // }));
 
-      // let identity: 'resource' | 'object' = 'resource';
-      // if (!informalNodeManagerPage.addExhibitDrawer_SelectValue.startsWith('!')) {
-      //   identity = 'object';
-      // }
-      // const value: { identity: 'resource' | 'object'; names: string[]; } = {
-      //   identity,
-      //   names: informalNodeManagerPage.addExhibitDrawer_CheckedList
-      //     .filter((ex) => ex.checked)
-      //     .map<string>((ex) => {
-      //       return ex.name;
-      //     }),
-      // };
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     addExhibitDrawer_Visible: false,
-      //   },
-      // });
-      // yield put<SaveDataRulesAction>({
-      //   type: 'saveDataRules',
-      //   payload: {
-      //     type: 'append',
-      //     data: value.names.map((n) => {
-      //       return {
-      //         operation: 'add',
-      //         exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-      //         candidate: {
-      //           name: n,
-      //           versionRange: 'latest',
-      //           type: value.identity,
-      //         },
-      //       };
-      //     }),
-      //   },
-      // });
-      // yield put<FetchExhibitListAction>({
-      //   type: 'fetchExhibitList',
-      //   payload: {
-      //     isRematch: false,
-      //   },
-      // });
+      const value: { identity: 'resource' | 'object'; names: string[]; } = {
+        identity: payload.identity,
+        names: payload.names,
+      };
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawer_Visible: false,
+        },
+      });
+      yield put<SaveDataRulesAction>({
+        type: 'saveDataRules',
+        payload: {
+          type: 'append',
+          data: value.names.map((n) => {
+            return {
+              operation: 'add',
+              exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+              candidate: {
+                name: n,
+                versionRange: 'latest',
+                type: value.identity,
+              },
+            };
+          }),
+        },
+      });
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+        },
+      });
     },
     // * fetchAddExhibitDrawerList({ payload }: FetchAddExhibitDrawerListAction, {
     //   select,

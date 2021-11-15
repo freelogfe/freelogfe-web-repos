@@ -5,8 +5,8 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import { connect, Dispatch } from 'dva';
 import {
-  OnAddExhibitDrawerCancelChangeAction,
-  OnChangePageAction,
+  OnCancel_AddExhibitDrawer_Action,
+  OnChangePageAction, OnConfirm_AddExhibitDrawer_Action,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/informalNodeManagerPage';
@@ -93,8 +93,28 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
       // usedResourceNames={[]}
       // usedObjectNames={[]}
       onCancel={() => {
-        dispatch<OnAddExhibitDrawerCancelChangeAction>({
-          type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
+        dispatch<OnCancel_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onCancel_AddExhibitDrawer',
+        });
+      }}
+      onConfirmObjects={(values) => {
+        console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
+          payload: {
+            identity: 'object',
+            names: values,
+          },
+        });
+      }}
+      onConfirmResources={(values) => {
+        console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
+          payload: {
+            identity: 'resource',
+            names: values,
+          },
         });
       }}
     />
