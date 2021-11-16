@@ -4,8 +4,6 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
-import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -74,24 +72,6 @@ export interface InformalNodeManagerPageModelState {
   node_RuleAllAddedObjectNames: string[];
 
   addExhibitDrawer_Visible: boolean;
-  // addExhibitDrawer_ResourceOptions: { value: string; title: string }[];
-  // addExhibitDrawer_BucketOptions: { value: string; title: string }[];
-  // addExhibitDrawer_SelectValue: string;
-  // addExhibitDrawer_InputValue: string;
-  // addExhibitDrawer_CheckedList: {
-  //   id: string;
-  //   disabled: boolean;
-  //   disabledReason: string;
-  //   checked: boolean;
-  //   name: string;
-  //   identity: 'resource' | 'object';
-  //   type: string;
-  //   updateTime: string;
-  //   status: 'online' | 'offline' | 'unreleased' | '';
-  // }[];
-  // addExhibitDrawer_CheckedListTotalNum: number;
-  // exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
-  // exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
 
   replaceModal_Visible: boolean;
   replaceModal_Replacer_ResourceOptions: { value: string; title: string }[];
@@ -465,13 +445,6 @@ export interface SaveDataRulesAction extends AnyAction {
   };
 }
 
-// export interface OnAddExhibitDrawerAfterVisibleChangeAction extends AnyAction {
-//   type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange';
-//   payload: {
-//     visible: boolean;
-//   };
-// }
-
 export interface OnCancel_AddExhibitDrawer_Action extends AnyAction {
   type: 'informalNodeManagerPage/onCancel_AddExhibitDrawer';
 }
@@ -483,41 +456,6 @@ export interface OnConfirm_AddExhibitDrawer_Action extends AnyAction {
     names: string[];
   };
 }
-
-// export interface FetchAddExhibitDrawerListAction extends AnyAction {
-//   type: 'fetchAddExhibitDrawerList';
-//   payload: {
-//     restart: boolean;
-//     origin?: string;
-//     keywords?: string;
-//   };
-// }
-
-// export interface OnAddExhibitDrawerOriginChangeAction extends AnyAction {
-//   type: 'informalNodeManagerPage/onAddExhibitDrawerOriginChange';
-//   payload: {
-//     value: string;
-//   };
-// }
-
-// export interface OnAddExhibitDrawerKeywordsChangeAction extends AnyAction {
-//   type: 'informalNodeManagerPage/onAddExhibitDrawerKeywordsChange';
-//   payload: {
-//     value: string;
-//   };
-// }
-
-// export interface OnAddExhibitDrawerListLoadMoreAction extends AnyAction {
-//   type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore';
-// }
-
-// export interface OnAddExhibitDrawerListCheckedChangeAction extends AnyAction {
-//   type: 'informalNodeManagerPage/onAddExhibitDrawerListCheckedChange';
-//   payload: {
-//     id: string;
-//     checked: boolean;
-//   };
-// }
 
 export interface OnReplacerMountAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerMount';
@@ -657,14 +595,8 @@ interface InformalNodeManagerPageModelType {
     onChangeRuleIndeterminateCheckbox: (action: OnChangeRuleIndeterminateCheckboxAction, effects: EffectsCommandMap) => void;
     onChangeRuleChecked: (action: OnChangeRuleCheckedAction, effects: EffectsCommandMap) => void;
 
-    // onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     onCancel_AddExhibitDrawer: (action: OnCancel_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddExhibitDrawer: (action: OnConfirm_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
-    // fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
-    // onAddExhibitDrawerOriginChange: (action: OnAddExhibitDrawerOriginChangeAction, effects: EffectsCommandMap) => void;
-    // onAddExhibitDrawerKeywordsChange: (action: OnAddExhibitDrawerKeywordsChangeAction, effects: EffectsCommandMap) => void;
-    // onAddExhibitDrawerListLoadMore: (action: OnAddExhibitDrawerListLoadMoreAction, effects: EffectsCommandMap) => void;
-    // onAddExhibitDrawerListCheckedChange: (action: OnAddExhibitDrawerListCheckedChangeAction, effects: EffectsCommandMap) => void;
 
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
@@ -757,8 +689,6 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   rule_CodeSaveSuccess: false,
 };
 
-// const ruleInitStates: Pick<InformalNodeManagerPageModelState, any>
-
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   showPage: 'exhibit',
@@ -773,16 +703,6 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_RuleAllAddedObjectNames: [],
 
   addExhibitDrawer_Visible: false,
-  // addExhibitDrawer_ResourceOptions: [
-  //   { value: '!market', title: '资源市场' },
-  //   { value: '!resource', title: '我的资源' },
-  //   { value: '!collection', title: '我的收藏' },
-  // ],
-  // addExhibitDrawer_BucketOptions: [],
-  // addExhibitDrawer_SelectValue: '!market',
-  // addExhibitDrawer_InputValue: '',
-  // addExhibitDrawer_CheckedList: [],
-  // addExhibitDrawer_CheckedListTotalNum: -1,
 
   replaceModal_Visible: false,
   replaceModal_Replacer_ResourceOptions: [

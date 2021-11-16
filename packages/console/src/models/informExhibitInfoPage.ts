@@ -132,18 +132,6 @@ export interface InformExhibitInfoPageModelState {
     description: string;
   } | null;
 
-  // pCustomModalVisible: boolean;
-  // pCustomModalTitle: string;
-  // pCustomModalConfirmButtonDisabled: boolean;
-  // pCustomMode: 'add' | 'edit';
-  // pCustomKey: string;
-  // pCustomKeyDisabled: boolean;
-  // pCustomKeyError: string;
-  // pCustomValue: string;
-  // pCustomValueError: string;
-  // pCustomDescription: string;
-  // pCustomDescriptionError: string;
-
   side_Resource_Relation: {
     cardTitle: string;
     identity: 'resource' | 'object';
@@ -440,18 +428,6 @@ const initStates: InformExhibitInfoPageModelState = {
   side_CustomOptionsDrawer_Visible: false,
   side_CustomOptionDrawer_Visible: false,
   side_CustomOptionDrawer_DataSource: null,
-
-  // pCustomModalVisible: false,
-  // pCustomModalTitle: '',
-  // pCustomModalConfirmButtonDisabled: false,
-  // pCustomMode: 'add',
-  // pCustomKey: '',
-  // pCustomKeyDisabled: false,
-  // pCustomKeyError: '',
-  // pCustomValue: '',
-  // pCustomValueError: '',
-  // pCustomDescription: '',
-  // pCustomDescriptionError: '',
 
   side_Resource_Relation: null,
 };

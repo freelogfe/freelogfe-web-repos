@@ -2,9 +2,16 @@ import FUtil from '../utils';
 
 // 分页查询账户交易流水
 interface DetailsParamsType {
-  accountId: string;
   skip?: number;
   limit?: number;
+  accountId: string;
+  startCreatedDate?: string;
+  endCreatedDate?: string;
+  amountStartPoint?: number;
+  amountEndPoint?: number;
+  serialNo?: string;
+  status?: 1 | 2 | 3;
+  keywords?: string;
 }
 
 export function details({accountId, ...params}: DetailsParamsType) {
