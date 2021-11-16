@@ -139,7 +139,6 @@ export interface InformalNodeManagerPageModelState {
   theme_FilterKeywords: string;
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
-  // themePageThemesTotal: number;
   theme_List: {
     id: string;
     name: string;
@@ -167,7 +166,6 @@ export interface InformalNodeManagerPageModelState {
     ruleInfo: any;
     efficientInfos: any[];
   }[];
-
   rule_CodeInput: string;
   rule_CodeIsDirty: boolean;
   rule_PromptLeavePath: string;
