@@ -1,0 +1,79 @@
+/**
+* vue <transition> 过渡样式
+*/
+
+// fade
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// slide-down
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-down-enter-from,
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+// slide-up
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+// slide-left
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-left-enter-from,
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+// slide-left-bottom
+.slide-left-bottom-enter-active,
+.slide-left-bottom-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-left-bottom-enter-from,
+.slide-left-bottom-leave-to {
+  opacity: 0.1;
+  transform: translate(30px, -30px);
+}
+
+// slide-right-top
+.slide-right-top-enter-active,
+.slide-right-top-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-right-top-enter-from,
+.slide-right-top-leave-to {
+  opacity: 0.1;
+  transform: translate(-30px, 30px);
+}
+
+// rotate
+.rotate-enter-active,
+.rotate-leave-active {
+  transition: all 0.5s ease;
+}
+.rotate-enter-from,
+.rotate-leave-to {
+  opacity: 0;
+  transform: rotate(-360deg);
+}
