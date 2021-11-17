@@ -70,7 +70,6 @@
         .errorListItem {
           display: flex;
           color: #666;
-          font-size: 12px;
           line-height: 18px;
 
           & > div:first-child {
@@ -92,6 +91,43 @@
     .codeSaveSuccess {
       color: @f-primary-color;
       font-weight: 600;
+    }
+  }
+}
+
+.ResultListContainer {
+  width: 100%;
+
+  .ResultListItem {
+    display: flex;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    line-height: 18px;
+
+    .dot {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .right {
+      flex-shrink: 1;
+      width: 100%;
+
+      .rightItem{
+        display: flex;
+        .label {
+          flex-shrink: 0;
+        }
+
+        .content {
+          width: 100%;
+          flex-shrink: 1;
+        }
+      }
+
+
+
     }
   }
 }

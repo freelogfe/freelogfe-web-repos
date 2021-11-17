@@ -4,6 +4,8 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
+import moment from 'moment';
+import FileSaver from 'file-saver';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -157,8 +159,8 @@ export interface InformalNodeManagerPageModelState {
   }[];
 
   rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
-  rule_Indeterminate: boolean;
-  rule_IndeterminateChecked: boolean;
+  // rule_Indeterminate: boolean;
+  // rule_IndeterminateChecked: boolean;
   rule_RuleList: {
     id: string;
     checked: boolean;
@@ -170,17 +172,20 @@ export interface InformalNodeManagerPageModelState {
   rule_CodeIsDirty: boolean;
   rule_PromptLeavePath: string;
   rule_CodeIsChecking: boolean;
-  rule_CodeCompileErrors: null | {
+  rule_CodeCompileErrors: {
     charPositionInLine: number;
     line: number;
     msg: string;
     offendingSymbol: string;
   }[];
-  rule_CodeExecutionError: null | {
-    msg: string;
+  rule_CodeExecutionErrors: {
+    ruleText: string;
+    errors: string[];
   }[];
-  rule_CodeSaveSuccess: boolean;
-
+  rule_CodeEfficients: {
+    ruleText: string;
+    matchCount: number;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -361,53 +366,80 @@ export interface FetchRulesAction extends AnyAction {
 }
 
 export interface SaveRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/saveRules';
+  type: 'informalNodeManagerPage/saveRules' | 'saveRules';
 }
 
-export interface OnImportRulesBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onImportRulesBtn';
+export interface OnLoad_Rule_ImportFileInput_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onLoad_Rule_ImportFileInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnClickExportRulesBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickExportRulesBtn';
+export interface OnClick_Rule_ExportBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_ExportBtn';
 }
 
-export interface OnClickDeleteRulesBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickDeleteRulesBtn';
+export interface OnClick_Rule_Export_ConfirmBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_Export_ConfirmBtn';
 }
 
-export interface OnClickEntryCodingBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickEntryCodingBtn';
+export interface OnClick_Rule_Export_CancelBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_Export_CancelBtn';
 }
 
-export interface OnClickExitCodingBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickExitCodingBtn';
+export interface OnClick_Rule_DeleteBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_DeleteBtn';
 }
 
-export interface OnClickExitCodingConfirmBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickExitCodingConfirmBtn';
+export interface OnClick_Rule_Delete_ConfirmBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_Delete_ConfirmBtn';
 }
 
-export interface OnClickExitCodingCancelBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickExitCodingCancelBtn';
+export interface OnClick_Rule_Delete_CancelBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_Delete_CancelBtn';
 }
 
-export interface OnChangeRuleIndeterminateCheckboxAction extends AnyAction {
-  type: 'informalNodeManagerPage/onChangeRuleIndeterminateCheckbox';
+export interface OnClick_Rule_EntryCodingBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_EntryCodingBtn';
+}
+
+export interface OnClick_Rule_ExitCodingBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_ExitCodingBtn';
+}
+
+export interface OnClick_Rule_ExitCoding_ConfirmBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_ConfirmBtn';
+}
+
+export interface OnClick_Rule_ExitCoding_CancelBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_CancelBtn';
+}
+
+export interface OnChange_Rule_CheckAllCheckbox_Action extends AnyAction {
+  type: 'informalNodeManagerPage/OoChange_Rule_CheckAllCheckbox';
   payload: {
     checked: boolean;
   };
 }
 
-export interface OnChangeRuleCheckedAction extends AnyAction {
-  type: 'informalNodeManagerPage/onChangeRuleChecked';
+export interface OnChange_Rule_ListCheckbox_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onChange_Rule_ListCheckbox';
   payload: {
     ruleID: string;
     checked: boolean;
   };
+}
+
+export interface OnChange_Rule_Codemirror_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onChange_Rule_Codemirror';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClick_Rule_SaveBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Rule_SaveBtn';
 }
 
 interface ICandidate {
@@ -583,15 +615,21 @@ interface InformalNodeManagerPageModelType {
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
-    onImportRulesBtn: (action: OnImportRulesBtnAction, effects: EffectsCommandMap) => void;
-    onClickExportRulesBtn: (action: OnClickExportRulesBtnAction, effects: EffectsCommandMap) => void;
-    onClickDeleteRulesBtn: (action: OnClickDeleteRulesBtnAction, effects: EffectsCommandMap) => void;
-    onClickEntryCodingBtn: (action: OnClickEntryCodingBtnAction, effects: EffectsCommandMap) => void;
-    onClickExitCodingBtn: (action: OnClickExitCodingBtnAction, effects: EffectsCommandMap) => void;
-    onClickExitCodingConfirmBtn: (action: OnClickExitCodingConfirmBtnAction, effects: EffectsCommandMap) => void;
-    onClickExitCodingCancelBtn: (action: OnClickExitCodingCancelBtnAction, effects: EffectsCommandMap) => void;
-    onChangeRuleIndeterminateCheckbox: (action: OnChangeRuleIndeterminateCheckboxAction, effects: EffectsCommandMap) => void;
-    onChangeRuleChecked: (action: OnChangeRuleCheckedAction, effects: EffectsCommandMap) => void;
+    onLoad_Rule_ImportFileInput: (action: OnLoad_Rule_ImportFileInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_ExportBtn: (action: OnClick_Rule_ExportBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_Export_ConfirmBtn: (action: OnClick_Rule_Export_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_Export_CancelBtn: (action: OnClick_Rule_Export_CancelBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_DeleteBtn: (action: OnClick_Rule_DeleteBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_Delete_ConfirmBtn: (action: OnClick_Rule_Delete_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_Delete_CancelBtn: (action: OnClick_Rule_Delete_CancelBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_EntryCodingBtn: (action: OnClick_Rule_EntryCodingBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_ExitCodingBtn: (action: OnClick_Rule_ExitCodingBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_ExitCoding_ConfirmBtn: (action: OnClick_Rule_ExitCoding_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_ExitCoding_CancelBtn: (action: OnClick_Rule_ExitCoding_CancelBtn_Action, effects: EffectsCommandMap) => void;
+    OoChange_Rule_CheckAllCheckbox: (action: OnChange_Rule_CheckAllCheckbox_Action, effects: EffectsCommandMap) => void;
+    onChange_Rule_ListCheckbox: (action: OnChange_Rule_ListCheckbox_Action, effects: EffectsCommandMap) => void;
+    onChange_Rule_Codemirror: (action: OnChange_Rule_Codemirror_Action, effects: EffectsCommandMap) => void;
+    onClick_Rule_SaveBtn: (action: OnClick_Rule_SaveBtn_Action, effects: EffectsCommandMap) => void;
 
     onCancel_AddExhibitDrawer: (action: OnCancel_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddExhibitDrawer: (action: OnConfirm_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
@@ -664,27 +702,27 @@ const themeInitStates: Pick<InformalNodeManagerPageModelState,
 
 const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_PageStatus' |
-  'rule_Indeterminate' |
-  'rule_IndeterminateChecked' |
+  // 'rule_Indeterminate' |
+  // 'rule_IndeterminateChecked' |
   'rule_RuleList' |
   'rule_CodeInput' |
   'rule_CodeIsDirty' |
   'rule_PromptLeavePath' |
   'rule_CodeIsChecking' |
   'rule_CodeCompileErrors' |
-  'rule_CodeExecutionError' |
-  'rule_CodeSaveSuccess'> = {
+  'rule_CodeExecutionErrors' |
+  'rule_CodeEfficients'> = {
   rule_PageStatus: 'normal',
-  rule_Indeterminate: false,
-  rule_IndeterminateChecked: false,
+  // rule_Indeterminate: false,
+  // rule_IndeterminateChecked: false,
   rule_RuleList: [],
   rule_CodeInput: '',
   rule_CodeIsDirty: false,
   rule_PromptLeavePath: '',
   rule_CodeIsChecking: false,
-  rule_CodeCompileErrors: null,
-  rule_CodeExecutionError: null,
-  rule_CodeSaveSuccess: false,
+  rule_CodeCompileErrors: [],
+  rule_CodeExecutionErrors: [],
+  rule_CodeEfficients: [],
 };
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
@@ -1343,16 +1381,16 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_CodeInput: data.ruleText,
           rule_CodeIsDirty: false,
-          rule_Indeterminate: false,
-          rule_IndeterminateChecked: false,
+          // rule_Indeterminate: false,
+          // rule_IndeterminateChecked: false,
           rule_RuleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
             };
           }),
-          rule_CodeExecutionError: null,
-          rule_CodeCompileErrors: null,
+          rule_CodeExecutionErrors: [],
+          rule_CodeEfficients: [],
         },
       });
     },
@@ -1365,9 +1403,6 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           rule_CodeIsChecking: true,
-          // codeCompileErrors: null,
-          // codeExecutionError: null,
-          // codeSaveSuccess: null,
         },
       });
 
@@ -1376,26 +1411,39 @@ const Model: InformalNodeManagerPageModelType = {
         testRuleText: informalNodeManagerPage.rule_CodeInput,
       };
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      // console.log(data, 'data092u3jo4kj23l4kjl');
 
       const params1: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.node_ID,
       };
       const { data: data1 } = yield call(ruleMatchStatus, params1);
 
-      // console.log(data1, 'data1!@#$!@#$@#');
+      console.log(data1, 'data1!@#$!@#$@#');
 
-      const codeExecutionError = data1.testRules
+      const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = data1.testRules
         .filter((tr: any) => {
           return tr.matchErrors.length > 0;
         })
         .map((tr: any) => {
-          return tr.matchErrors.map((me: string) => {
-            return {
-              msg: me,
-            };
-          });
+          return {
+            ruleText: tr.ruleInfo.text,
+            errors: tr.matchErrors,
+          };
+        });
+
+      const rule_CodeEfficients: InformalNodeManagerPageModelState['rule_CodeEfficients'] = data1.testRules
+        .filter((tr: any) => {
+          return tr.efficientInfos.length > 0;
         })
-        .flat();
+        .map((tr: any) => {
+          return {
+            ruleText: tr.ruleInfo.text,
+            matchCount: tr.efficientInfos.reduce((accumulator: number, currentValue: any) => {
+              // console.log(accumulator, currentValue, currentIndex)
+              return accumulator + currentValue.count;
+            }, 0),
+          };
+        });
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1403,10 +1451,8 @@ const Model: InformalNodeManagerPageModelType = {
           node_RuleText: data1.ruleText,
           rule_CodeIsDirty: false,
           rule_CodeIsChecking: false,
-          rule_CodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
-          rule_CodeSaveSuccess: codeExecutionError.length === 0,
-          rule_Indeterminate: false,
-          rule_IndeterminateChecked: false,
+          rule_CodeExecutionErrors: rule_CodeExecutionErrors,
+          rule_CodeEfficients: rule_CodeEfficients,
           rule_RuleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,
@@ -1482,7 +1528,7 @@ const Model: InformalNodeManagerPageModelType = {
         });
       }
     },
-    * onImportRulesBtn({ payload }: OnImportRulesBtnAction, { put, select }: EffectsCommandMap) {
+    * onLoad_Rule_ImportFileInput({ payload }: OnLoad_Rule_ImportFileInput_Action, { put, select }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1499,7 +1545,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExportRulesBtn({}: OnClickExportRulesBtnAction, { put }: EffectsCommandMap) {
+    * onClick_Rule_ExportBtn({}: OnClick_Rule_ExportBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1507,7 +1553,30 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickDeleteRulesBtn({}: OnClickDeleteRulesBtnAction, { put }: EffectsCommandMap) {
+    * onClick_Rule_Export_ConfirmBtn({}: OnClick_Rule_Export_ConfirmBtn_Action, { select }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const fileName = `测试节点${informalNodeManagerPage.node_Name} - 映射规则 - ${moment().format(FUtil.Predefined.momentDateFormat)}.txt`;
+      const text: string = informalNodeManagerPage.rule_RuleList
+        .filter((rl) => rl.checked)
+        .map((rl) => {
+          return rl.ruleInfo.text;
+        })
+        .join('\n\n');
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      FileSaver.saveAs(blob, fileName);
+    },
+    * onClick_Rule_Export_CancelBtn({}: OnClick_Rule_Export_CancelBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rule_PageStatus: 'normal',
+        },
+      });
+    },
+    * onClick_Rule_DeleteBtn({}: OnClick_Rule_DeleteBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1515,7 +1584,36 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickEntryCodingBtn({}: OnClickEntryCodingBtnAction, { put }: EffectsCommandMap) {
+    * onClick_Rule_Delete_ConfirmBtn({}: OnClick_Rule_Delete_ConfirmBtn_Action, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const text: string = informalNodeManagerPage.rule_RuleList
+        .filter((rl) => !rl.checked)
+        .map((rl) => {
+          return rl.ruleInfo.text;
+        })
+        .join('\n\n');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rule_CodeInput: text,
+        },
+      });
+      yield put<SaveRulesAction>({
+        type: 'saveRules',
+      });
+    },
+    * onClick_Rule_Delete_CancelBtn({}: OnClick_Rule_Delete_CancelBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rule_PageStatus: 'normal',
+        },
+      });
+    },
+    * onClick_Rule_EntryCodingBtn({}: OnClick_Rule_EntryCodingBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1523,7 +1621,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, { put, select }: EffectsCommandMap) {
+    * onClick_Rule_ExitCodingBtn({}: OnClick_Rule_ExitCodingBtn_Action, { put, select }: EffectsCommandMap) {
 
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
@@ -1537,13 +1635,16 @@ const Model: InformalNodeManagerPageModelType = {
           rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
           rule_CodeIsChecking: false,
-          rule_CodeCompileErrors: null,
-          rule_CodeExecutionError: null,
-          rule_CodeSaveSuccess: false,
+          rule_CodeCompileErrors: [],
+          rule_CodeExecutionErrors: [],
+          rule_CodeEfficients: [],
         },
       });
     },
-    * onClickExitCodingConfirmBtn({}: OnClickExitCodingConfirmBtnAction, { put, select }: EffectsCommandMap) {
+    * onClick_Rule_ExitCoding_ConfirmBtn({}: OnClick_Rule_ExitCoding_ConfirmBtn_Action, {
+      put,
+      select,
+    }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1556,16 +1657,16 @@ const Model: InformalNodeManagerPageModelType = {
           rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
           rule_CodeIsChecking: false,
-          rule_CodeCompileErrors: null,
-          rule_CodeExecutionError: null,
-          rule_CodeSaveSuccess: false,
+          rule_CodeCompileErrors: [],
+          rule_CodeExecutionErrors: [],
+          rule_CodeEfficients: [],
         },
       });
     },
-    * onClickExitCodingCancelBtn({}: OnClickExitCodingCancelBtnAction, {}: EffectsCommandMap) {
+    * onClick_Rule_ExitCoding_CancelBtn({}: OnClick_Rule_ExitCoding_CancelBtn_Action, {}: EffectsCommandMap) {
 
     },
-    * onChangeRuleIndeterminateCheckbox({ payload }: OnChangeRuleIndeterminateCheckboxAction, {
+    * OoChange_Rule_CheckAllCheckbox({ payload }: OnChange_Rule_CheckAllCheckbox_Action, {
       put,
       select,
     }: EffectsCommandMap) {
@@ -1577,8 +1678,8 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rule_Indeterminate: false,
-          rule_IndeterminateChecked: payload.checked,
+          // rule_Indeterminate: false,
+          // rule_IndeterminateChecked: payload.checked,
           rule_RuleList: informalNodeManagerPage.rule_RuleList.map((rpr) => {
             return {
               ...rpr,
@@ -1588,7 +1689,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onChangeRuleChecked({ payload }: OnChangeRuleCheckedAction, { put, select }: EffectsCommandMap) {
+    * onChange_Rule_ListCheckbox({ payload }: OnChange_Rule_ListCheckbox_Action, { put, select }: EffectsCommandMap) {
       // console.log(payload, 'payload09823u4oi32kj');
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
@@ -1613,59 +1714,48 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rule_IndeterminateChecked: ruleIndeterminateChecked,
-          rule_Indeterminate: !(rulePageRuleList.every((rp) => {
-            return !rp.checked;
-          }) || rulePageRuleList.every((rp) => {
-            return rp.checked;
-          })),
+          // rule_IndeterminateChecked: ruleIndeterminateChecked,
+          // rule_Indeterminate: !(rulePageRuleList.every((rp) => {
+          //   return !rp.checked;
+          // }) || rulePageRuleList.every((rp) => {
+          //   return rp.checked;
+          // })),
           rule_RuleList: rulePageRuleList,
         },
       });
     },
+    * onChange_Rule_Codemirror({ payload }: OnChange_Rule_Codemirror_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rule_CodeInput: payload.value,
+          rule_CodeIsDirty: true,
+          rule_CodeCompileErrors: [],
+          rule_CodeExecutionErrors: [],
+          rule_CodeEfficients: [],
+        },
+      });
+    },
+    * onClick_Rule_SaveBtn({}: OnClick_Rule_SaveBtn_Action, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
 
+      const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
+      if (errorObjects.length > 0) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rule_CodeCompileErrors: errorObjects,
+          },
+        });
+      }
+      // console.log('onClick_Rule_SaveBtn', '@#$@#$90u3o4ijlk');
+      yield put<SaveRulesAction>({
+        type: 'saveRules',
+      });
+    },
 
-    // * onAddExhibitDrawerAfterVisibleChange({ payload }: OnAddExhibitDrawerAfterVisibleChangeAction, {
-    //   put,
-    //   call,
-    // }: EffectsCommandMap) {
-    //   if (payload.visible) {
-    //     yield put<FetchAddExhibitDrawerListAction>({
-    //       type: 'fetchAddExhibitDrawerList',
-    //       payload: {
-    //         restart: true,
-    //       },
-    //     });
-    //
-    //     const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
-    //       bucketType: 1,
-    //     };
-    //
-    //     const { data } = yield call(FServiceAPI.Storage.bucketList, params);
-    //     // console.log(data, '!@#$!@#$#$!@111111111');
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         addExhibitDrawer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawer_BucketOptions'][number]>((d: any) => {
-    //           return {
-    //             value: d.bucketName,
-    //             title: d.bucketName,
-    //           };
-    //         }),
-    //       },
-    //     });
-    //   } else {
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         addExhibitDrawer_SelectValue: '!market',
-    //         addExhibitDrawer_InputValue: '',
-    //         addExhibitDrawer_CheckedList: [],
-    //         addExhibitDrawer_CheckedListTotalNum: -1,
-    //       },
-    //     });
-    //   }
-    // },
     * onCancel_AddExhibitDrawer({}: OnCancel_AddExhibitDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1713,338 +1803,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    // * fetchAddExhibitDrawerList({ payload }: FetchAddExhibitDrawerListAction, {
-    //   select,
-    //   call,
-    //   put,
-    // }: EffectsCommandMap) {
-    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-    //     informalNodeManagerPage,
-    //   }));
-    //
-    //   let inherentList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
-    //   if (!payload.restart) {
-    //     inherentList = informalNodeManagerPage.addExhibitDrawer_CheckedList;
-    //   }
-    //   const inherentIDs: string[] = inherentList.map((il) => il.id);
-    //
-    //   let addExhibitDrawerCheckedList: InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'] = [];
-    //   let addExhibitDrawerCheckedListTotalNum: number = -1;
-    //
-    //   const skip: number = inherentList.length;
-    //   const limit: number = FUtil.Predefined.pageSize;
-    //   const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawer_SelectValue;
-    //   const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawer_InputValue;
-    //
-    //   if (theOrigin === '!market') {
-    //
-    //     const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-    //       skip: skip,
-    //       limit: limit,
-    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-    //       keywords: keywords,
-    //     };
-    //     // console.log(params, 'paramsparams1234');
-    //     const { data } = yield call(FServiceAPI.Resource.list, params);
-    //     // console.log(data, 'data!~!@#$@!#$@#!411111');
-    //
-    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //       nodeID: informalNodeManagerPage.node_ID,
-    //       entityType: 'resource',
-    //       entityIds: data.dataList.map((dl: any) => {
-    //         return dl.resourceId;
-    //       }),
-    //     };
-    //
-    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-    //
-    //     // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
-    //
-    //     addExhibitDrawerCheckedList = [
-    //       ...inherentList,
-    //       ...(data.dataList as any[])
-    //         .filter((rs) => {
-    //           return !inherentIDs.includes(rs.resourceId);
-    //         })
-    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-    //           // console.log(rs, 'rs!!!!@#$23423423423');
-    //
-    //           let disabled: boolean = false;
-    //           let disabledReason: string = '';
-    //
-    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-    //             disabled = true;
-    //             disabledReason = FUtil1.I18n.message('tag_added');
-    //           }
-    //
-    //           return {
-    //             id: rs.resourceId,
-    //             disabled,
-    //             disabledReason,
-    //             checked: false,
-    //             identity: 'resource',
-    //             name: rs.resourceName,
-    //             type: rs.resourceType,
-    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-    //             status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-    //           };
-    //         }),
-    //     ];
-    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
-    //
-    //   } else if (theOrigin === '!resource') {
-    //
-    //     const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-    //       skip: inherentList.length,
-    //       limit: FUtil.Predefined.pageSize,
-    //       isSelf: 1,
-    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-    //       keywords: keywords,
-    //     };
-    //     // console.log(params, 'paramsparams1234');
-    //     const { data } = yield call(FServiceAPI.Resource.list, params);
-    //     // console.log(data, 'data13453');
-    //
-    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //       nodeID: informalNodeManagerPage.node_ID,
-    //       entityType: 'resource',
-    //       entityIds: data.dataList.map((dl: any) => {
-    //         return dl.resourceId;
-    //       }),
-    //     };
-    //
-    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-    //
-    //     addExhibitDrawerCheckedList = [
-    //       ...inherentList,
-    //       ...(data.dataList as any[])
-    //         .filter((rs) => {
-    //           return !inherentIDs.includes(rs.resourceId);
-    //         })
-    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-    //           let disabled: boolean = false;
-    //           let disabledReason: string = '';
-    //
-    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-    //             disabled = true;
-    //             // disabledReason = '已被使用';
-    //             disabledReason = FUtil1.I18n.message('tag_added');
-    //           } else if (rs.latestVersion === '') {
-    //             disabled = true;
-    //             disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
-    //           }
-    //           return {
-    //             id: rs.resourceId,
-    //             disabled,
-    //             disabledReason,
-    //             checked: false,
-    //             identity: 'resource',
-    //             name: rs.resourceName,
-    //             type: rs.resourceType,
-    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-    //             status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-    //           };
-    //         }),
-    //     ];
-    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
-    //
-    //   } else if (theOrigin === '!collection') {
-    //
-    //     const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-    //       skip: inherentList.length,
-    //       limit: FUtil.Predefined.pageSize,
-    //       keywords: keywords,
-    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-    //     };
-    //
-    //     const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
-    //     // console.log(data, '@@@@@@ASEDFSADF');
-    //
-    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //       nodeID: informalNodeManagerPage.node_ID,
-    //       entityType: 'resource',
-    //       entityIds: data.dataList.map((dl: any) => {
-    //         return dl.resourceId;
-    //       }),
-    //     };
-    //
-    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-    //
-    //     addExhibitDrawerCheckedList = [
-    //       ...inherentList,
-    //       ...(data.dataList as any[])
-    //         .filter((rs) => {
-    //           return !inherentIDs.includes(rs.resourceId);
-    //         })
-    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((rs) => {
-    //
-    //           let disabled: boolean = false;
-    //           let disabledReason: string = '';
-    //
-    //           if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.node_RuleAllAddedResourceNames.includes(rs.resourceName)) {
-    //             disabled = true;
-    //             // disabledReason = '已被使用';
-    //             disabledReason = FUtil1.I18n.message('tag_added');
-    //           } else if (rs.latestVersion === '') {
-    //             disabled = true;
-    //             disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
-    //           }
-    //
-    //           return {
-    //             id: rs.resourceId,
-    //             disabled,
-    //             disabledReason,
-    //             checked: false,
-    //             identity: 'resource',
-    //             name: rs.resourceName,
-    //             type: rs.resourceType,
-    //             updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-    //             status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-    //           };
-    //         }),
-    //     ];
-    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
-    //
-    //   } else {
-    //
-    //     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
-    //       skip: inherentList.length,
-    //       limit: FUtil.Predefined.pageSize,
-    //       bucketName: theOrigin,
-    //       keywords: keywords,
-    //       isLoadingTypeless: 0,
-    //       omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
-    //       resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
-    //     };
-    //
-    //     const { data } = yield call(FServiceAPI.Storage.objectList, params);
-    //     // console.log(data, 'data1q2349ojmdfsl');
-    //
-    //     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-    //       nodeID: informalNodeManagerPage.node_ID,
-    //       entityType: 'object',
-    //       entityIds: data.dataList.map((dl: any) => {
-    //         return dl.objectId;
-    //       }),
-    //     };
-    //
-    //     const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
-    //
-    //     addExhibitDrawerCheckedList = [
-    //       ...inherentList,
-    //       ...(data.dataList as any[])
-    //         .filter((ob) => {
-    //           return !inherentIDs.includes(ob.objectId);
-    //         })
-    //         .map<InformalNodeManagerPageModelState['addExhibitDrawer_CheckedList'][number]>((ob) => {
-    //           // console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
-    //           const objectName: string = ob.bucketName + '/' + ob.objectName;
-    //           // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
-    //           let disabled: boolean = false;
-    //           let disabledReason: string = '';
-    //
-    //           if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.node_RuleAllAddedObjectNames.includes(objectName)) {
-    //             disabled = true;
-    //             // disabledReason = '已被使用';
-    //             disabledReason = FUtil1.I18n.message('tag_added');
-    //           } else if (ob.resourceType === '') {
-    //             disabled = true;
-    //             disabledReason = FUtil1.I18n.message('msg_set_resource_type');
-    //           }
-    //
-    //           return {
-    //             id: ob.objectId,
-    //             disabled,
-    //             disabledReason,
-    //             checked: false,
-    //             identity: 'object',
-    //             name: objectName,
-    //             type: ob.resourceType,
-    //             updateTime: FUtil.Format.formatDateTime(ob.updateDate),
-    //             status: '',
-    //           };
-    //         }),
-    //     ];
-    //     addExhibitDrawerCheckedListTotalNum = data.totalItem;
-    //   }
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       addExhibitDrawer_CheckedList: addExhibitDrawerCheckedList,
-    //       addExhibitDrawer_CheckedListTotalNum: addExhibitDrawerCheckedListTotalNum,
-    //     },
-    //   });
-    // },
-    // * onAddExhibitDrawerOriginChange({ payload }: OnAddExhibitDrawerOriginChangeAction, { put }: EffectsCommandMap) {
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       addExhibitDrawer_SelectValue: payload.value,
-    //     },
-    //   });
-    //
-    //   yield put<FetchAddExhibitDrawerListAction>({
-    //     type: 'fetchAddExhibitDrawerList',
-    //     payload: {
-    //       restart: true,
-    //       keywords: payload.value,
-    //     },
-    //   });
-    // },
-    // * onAddExhibitDrawerKeywordsChange({ payload }: OnAddExhibitDrawerKeywordsChangeAction, { put }: EffectsCommandMap) {
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       addExhibitDrawer_InputValue: payload.value,
-    //     },
-    //   });
-    //
-    //   yield put<FetchAddExhibitDrawerListAction>({
-    //     type: 'fetchAddExhibitDrawerList',
-    //     payload: {
-    //       restart: true,
-    //       keywords: payload.value,
-    //     },
-    //   });
-    // },
-    // * onAddExhibitDrawerListLoadMore({}: OnAddExhibitDrawerListLoadMoreAction, { put }: EffectsCommandMap) {
-    //   yield put<FetchAddExhibitDrawerListAction>({
-    //     type: 'fetchAddExhibitDrawerList',
-    //     payload: {
-    //       restart: false,
-    //     },
-    //   });
-    // },
-    // * onAddExhibitDrawerListCheckedChange({ payload }: OnAddExhibitDrawerListCheckedChangeAction, {
-    //   put,
-    //   select,
-    // }: EffectsCommandMap) {
-    //
-    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-    //     informalNodeManagerPage,
-    //   }));
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       addExhibitDrawer_CheckedList: informalNodeManagerPage.addExhibitDrawer_CheckedList.map((a) => {
-    //         if (a.id !== payload.id) {
-    //           return a;
-    //         }
-    //         return {
-    //           ...a,
-    //           checked: payload.checked,
-    //         };
-    //       }),
-    //     },
-    //   });
-    // },
+
     * onReplacerMount({}: OnReplacerMountAction, { put, call }: EffectsCommandMap) {
       yield put<FetchReplacerListAction>({
         type: 'fetchReplacerList',
