@@ -171,7 +171,7 @@ export interface InformalNodeManagerPageModelState {
   rule_CodeInput: string;
   rule_CodeIsDirty: boolean;
   rule_PromptLeavePath: string;
-  rule_CodeIsChecking: boolean;
+  rule_CodeState: 'editing' | 'checking' | 'compileError' | 'executionError' | 'noError';
   rule_CodeCompileErrors: {
     charPositionInLine: number;
     line: number;
@@ -708,7 +708,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_CodeInput' |
   'rule_CodeIsDirty' |
   'rule_PromptLeavePath' |
-  'rule_CodeIsChecking' |
+  'rule_CodeState' |
   'rule_CodeCompileErrors' |
   'rule_CodeExecutionErrors' |
   'rule_CodeEfficients'> = {
@@ -719,7 +719,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   rule_CodeInput: '',
   rule_CodeIsDirty: false,
   rule_PromptLeavePath: '',
-  rule_CodeIsChecking: false,
+  rule_CodeState: 'editing',
   rule_CodeCompileErrors: [],
   rule_CodeExecutionErrors: [],
   rule_CodeEfficients: [],
@@ -1402,7 +1402,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rule_CodeIsChecking: true,
+          rule_CodeState: 'checking',
         },
       });
 
@@ -1418,7 +1418,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const { data: data1 } = yield call(ruleMatchStatus, params1);
 
-      console.log(data1, 'data1!@#$!@#$@#');
+      // console.log(data1, 'data1!@#$!@#$@#');
 
       const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = data1.testRules
         .filter((tr: any) => {
@@ -1450,7 +1450,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           node_RuleText: data1.ruleText,
           rule_CodeIsDirty: false,
-          rule_CodeIsChecking: false,
+          rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
           rule_CodeExecutionErrors: rule_CodeExecutionErrors,
           rule_CodeEfficients: rule_CodeEfficients,
           rule_RuleList: data1.testRules.map((tr: any) => {
@@ -1634,7 +1634,7 @@ const Model: InformalNodeManagerPageModelType = {
 
           rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
-          rule_CodeIsChecking: false,
+          rule_CodeState: 'editing',
           rule_CodeCompileErrors: [],
           rule_CodeExecutionErrors: [],
           rule_CodeEfficients: [],
@@ -1656,7 +1656,7 @@ const Model: InformalNodeManagerPageModelType = {
 
           rule_CodeInput: informalNodeManagerPage.node_RuleText,
           rule_CodeIsDirty: false,
-          rule_CodeIsChecking: false,
+          rule_CodeState: 'editing',
           rule_CodeCompileErrors: [],
           rule_CodeExecutionErrors: [],
           rule_CodeEfficients: [],
@@ -1730,6 +1730,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_CodeInput: payload.value,
           rule_CodeIsDirty: true,
+          rule_CodeState: 'editing',
           rule_CodeCompileErrors: [],
           rule_CodeExecutionErrors: [],
           rule_CodeEfficients: [],
@@ -1742,13 +1743,16 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
+      // console.log(errorObjects, 'errorObjects234234');
       if (errorObjects.length > 0) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             rule_CodeCompileErrors: errorObjects,
+            rule_CodeState: 'compileError',
           },
         });
+        return;
       }
       // console.log('onClick_Rule_SaveBtn', '@#$@#$90u3o4ijlk');
       yield put<SaveRulesAction>({

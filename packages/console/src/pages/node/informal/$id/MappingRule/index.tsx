@@ -369,119 +369,99 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             <div style={{ height: 15 }} />
             <FRectBtn
               // loading={informalNodeManagerPage.codeIsChecking}
-              disabled={!informalNodeManagerPage.rule_CodeIsDirty || informalNodeManagerPage.rule_CodeIsChecking}
+              disabled={!informalNodeManagerPage.rule_CodeIsDirty || informalNodeManagerPage.rule_CodeState === 'checking'}
               onClick={() => {
                 dispatch<OnClick_Rule_SaveBtn_Action>({
                   type: 'informalNodeManagerPage/onClick_Rule_SaveBtn',
                 });
               }}
-            >{informalNodeManagerPage.rule_CodeIsChecking ? FUtil1.I18n.message('msg_verifying') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FUtil1.I18n.message('msg_verifying') : '校验并保存'}</FRectBtn>
+
+            <div style={{ height: 20 }} />
+
             {
-              informalNodeManagerPage.rule_CodeCompileErrors.length !== 0 && (<div className={styles.codeCompileErrors}>
+              informalNodeManagerPage.rule_CodeState === 'compileError' && (<>
+                <div className={styles.CompileErrorTip}>编译错误，请检查更正后提交。</div>
                 <div style={{ height: 20 }} />
-                <div className={styles.errorTitle}>编译错误，请检查更正后提交。</div>
-                <div style={{ height: 20 }} />
-                <Space className={styles.errorList} size={5} direction='vertical'>
-                  {
-                    informalNodeManagerPage.rule_CodeCompileErrors.map((cme, index) => {
-                      return (<div key={index} className={styles.errorListItem}>
-                        <div>•</div>
-                        <div style={{ width: 5 }} />
-                        <div>
+                <ResultList
+                  list={informalNodeManagerPage.rule_CodeCompileErrors.map((cce) => {
+                    return [
+                      {
+                        label: '错误提示：',
+                        content: cce.msg,
+                      },
+                    ];
+                  })}
+                />
+              </>)
+            }
+
+            {
+              informalNodeManagerPage.rule_CodeState === 'executionError' && (<>
+                <div className={styles.CodeExecutionErrorTip}>校验并保存成功，但存在预执行错误。</div>
+                {
+                  informalNodeManagerPage.rule_CodeEfficients.length > 0 && (<>
+                    <div style={{ height: 20 }} />
+                    <div className={styles.CodeExecutionErrorTip1}>有效预执行结果：</div>
+                    <div style={{ height: 15 }} />
+                    <ResultList
+                      list={informalNodeManagerPage.rule_CodeEfficients.map((ce) => {
+                        return [
                           {
-                            !!cme.offendingSymbol && (<div>
-                              <div>规则语句：</div>
-                              <div>{`${cme.line}:${cme.charPositionInLine} ${cme.offendingSymbol}`}</div>
-                            </div>)
-                          }
+                            label: '规则语句：',
+                            content: ce.ruleText,
+                          },
+                          {
+                            label: '匹配数量：',
+                            content: String(ce.matchCount),
+                          },
+                        ];
+                      })}
+                    />
+                  </>)
+                }
 
-                          <div>
-                            <div>错误提示：</div>
-                            <div>{cme.msg}</div>
-                          </div>
-                        </div>
-                      </div>);
-                    })
-                  }
-                </Space>
-              </div>)
+                <div style={{ height: 20 }} />
+                <div className={styles.CodeExecutionErrorTip2}>无效预执行结果：</div>
+                <div style={{ height: 15 }} />
+                <ResultList
+                  list={informalNodeManagerPage.rule_CodeExecutionErrors.map((cee) => {
+                    return [
+                      {
+                        label: '规则语句：',
+                        content: cee.ruleText,
+                      },
+                      {
+                        label: '错误提示：',
+                        content: cee.errors,
+                      },
+                    ];
+                  })}
+                />
+              </>)
             }
 
             {
-              informalNodeManagerPage.rule_CodeExecutionErrors.length !== 0 && (
-                <div className={styles.codeExecutionError}>
-                  <div style={{ height: 20 }} />
-                  <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
-                  <div style={{ height: 20 }} />
-                  <Space className={styles.errorList} size={5} direction='vertical'>
-                    {
-                      informalNodeManagerPage.rule_CodeExecutionErrors.map((cme, index) => {
-                        return (<div key={index} className={styles.errorListItem}>
-                          <div>•</div>
-                          <div style={{ width: 5 }} />
-                          <div>
-                            <div>
-                              <div>错误提示：</div>
-                              <div>{cme.errors}</div>
-                            </div>
-                          </div>
-                        </div>);
-                      })
-                    }
-                  </Space>
-                </div>)
+              informalNodeManagerPage.rule_CodeState === 'noError' && (<>
+                <div className={styles.CodeEfficientTip}>校验并保存成功。</div>
+                <div style={{ height: 20 }} />
+                <ResultList
+                  list={informalNodeManagerPage.rule_CodeEfficients.map((ce) => {
+                    return [
+                      {
+                        label: '规则语句：',
+                        content: ce.ruleText,
+                      },
+                      {
+                        label: '匹配数量：',
+                        content: String(ce.matchCount),
+                      },
+                    ];
+                  })}
+                />
+              </>)
             }
 
-            <ResultList
-              list={informalNodeManagerPage.rule_CodeCompileErrors.map((cce) => {
-                return [
-                  {
-                    label: '错误提示：',
-                    content: cce.msg,
-                  },
-                ]
-              })}
-            />
-
-            <ResultList
-              list={informalNodeManagerPage.rule_CodeExecutionErrors.map((cee) => {
-                return [
-                  {
-                    label: '规则语句：',
-                    content: cee.ruleText,
-                  },
-                  {
-                    label: '错误提示：',
-                    content: cee.errors,
-                  },
-                ];
-              })}
-            />
-
-            <ResultList
-              list={informalNodeManagerPage.rule_CodeEfficients.map((ce) => {
-                return [
-                  {
-                    label: '规则语句：',
-                    content: ce.ruleText,
-                  },
-                  {
-                    label: '匹配数量：',
-                    content: String(ce.matchCount),
-                  },
-                ];
-              })}
-            />
-
-
-            {/*{*/}
-            {/*  informalNodeManagerPage.rule_CodeEfficients.length  && (<>*/}
-            {/*    <div style={{ height: 20 }} />*/}
-            {/*    <div className={styles.codeSaveSuccess}>*/}
-            {/*      校验并保存成功。*/}
-            {/*    </div>*/}
-            {/*  </>)*/}
-            {/*}*/}
           </div>
         </div>)
         : (<div className={styles.ruleListBody}>
@@ -617,8 +597,8 @@ function ResultList({ list }: ResultListProps) {
                     {
                       typeof ll.content === 'string'
                         ? (<div>{ll.content}</div>)
-                        : ll.content.map((c) => {
-                          return (<div>{c}</div>);
+                        : ll.content.map((c, iii) => {
+                          return (<div key={iii}>{c}</div>);
                         })
                     }
                   </Space>
