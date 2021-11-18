@@ -13,7 +13,7 @@ export interface WalletPageModelState {
   userEmail: string;
   accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
   // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze';
-  accountId: string;
+  accountID: string;
   accountBalance: number;
   transactionRecord: {
     serialNo: string;
@@ -282,6 +282,13 @@ export interface OnClick_Table_LoadMoreBtn_Action extends AnyAction {
   type: 'walletPage/onClick_Table_LoadMoreBtn';
 }
 
+export interface Fetch_TableData_Action extends AnyAction {
+  type: 'walletPage/fetch_TableData';
+  payload: {
+    andMore: boolean;
+  };
+}
+
 interface WalletPageModelType {
   namespace: 'walletPage';
   state: WalletPageModelState;
@@ -328,6 +335,7 @@ interface WalletPageModelType {
     onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
     onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
+    fetch_TableData: (action: Fetch_TableData_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<WalletPageModelState, ChangeAction>;
@@ -404,7 +412,7 @@ const initStates: WalletPageModelState = {
   userPhone: '',
   userEmail: '',
   accountStatus: -1,
-  accountId: '',
+  accountID: '',
   accountBalance: -1,
   transactionRecord: [],
 
@@ -442,19 +450,6 @@ const Model: WalletPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Transaction.individualAccounts, params);
 
-      let transactionRecord = [];
-      if (data.status !== 0) {
-        const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
-          accountId: data.accountId,
-          skip: 0,
-          limit: 100,
-        };
-
-        const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
-        console.log(data2, 'data2@$!@#$@3909uoiuoi');
-        transactionRecord = data2.dataList;
-      }
-
       // console.log(data1.email, 'data1.emaildata1.email111');
       yield put<ChangeAction>({
         type: 'change',
@@ -464,23 +459,17 @@ const Model: WalletPageModelType = {
           userPhone: data1.mobile,
           accountStatus: data.status,
           accountBalance: data.balance,
-          transactionRecord: transactionRecord.map((dl: any) => {
-            const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
-            return {
-              serialNo: dl.serialNo,
-              date: date,
-              time: time,
-              digest: dl.digest,
-              reciprocalAccountId: dl.reciprocalAccountId,
-              reciprocalAccountName: dl.reciprocalAccountName,
-              reciprocalAccountType: dl.reciprocalAccountType,
-              transactionAmount: dl.transactionAmount,
-              afterBalance: dl.afterBalance,
-              status: dl.status,
-            };
-          }),
         },
       });
+
+      if (data.status !== 0) {
+        yield put<Fetch_TableData_Action>({
+          type: 'walletPage/fetch_TableData',
+          payload: {
+            andMore: false,
+          },
+        });
+      }
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -907,6 +896,41 @@ const Model: WalletPageModelType = {
     },
     * onClick_Table_LoadMoreBtn(action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) {
 
+    },
+    * fetch_TableData({}: Fetch_TableData_Action, { select, call, put }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+
+      const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
+        accountId: walletPage.accountID,
+        skip: 0,
+        limit: FUtil.Predefined.pageSize,
+      };
+
+      const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
+      console.log(data2, 'data2@$!@#$@3909uoiuoi');
+      // transactionRecord = data2.dataList;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          transactionRecord: data2.dataList.map((dl: any) => {
+            const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
+            return {
+              serialNo: dl.serialNo,
+              date: date,
+              time: time,
+              digest: dl.digest,
+              reciprocalAccountId: dl.reciprocalAccountId,
+              reciprocalAccountName: dl.reciprocalAccountName,
+              reciprocalAccountType: dl.reciprocalAccountType,
+              transactionAmount: dl.transactionAmount,
+              afterBalance: dl.afterBalance,
+              status: dl.status,
+            };
+          }),
+        },
+      });
     },
   },
   reducers: {
