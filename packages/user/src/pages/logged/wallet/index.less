@@ -53,6 +53,81 @@
     font-weight: 400;
     font-size: 14px;
   }
+
+  .TableBody {
+    background-color: white;
+
+    .filter1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+
+      .filter1Date {
+        display: flex;
+        align-items: center;
+
+        .dateRange {
+          padding: 0 15px;
+          display: flex;
+          height: 32px;
+          border: none;
+          background-color: transparent;
+          font-size: 14px;
+          color: #666;
+          align-items: center;
+          justify-content: center;
+
+          &.active {
+            background-color: #EEF6FF;
+            color: #2784FF;
+          }
+
+        }
+      }
+
+      .filter1Keyword {
+
+      }
+    }
+
+    .filter2 {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0 20px;
+
+      .filterAmount {
+        width: 80px;
+      }
+
+      .filterAmountTo {
+        color: #BEBEBE;
+        display: inline-block;
+        padding: 0 5px;
+      }
+    }
+
+    .totalAmount {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+
+      .totalAmountExpenditure {
+        color: #42C28C;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+
+      .totalAmountIncome {
+        color: #E9A923;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+    }
+  }
 }
 
 .ActivateAccountContent {

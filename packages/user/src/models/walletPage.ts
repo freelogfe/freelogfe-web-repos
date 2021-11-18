@@ -354,6 +354,7 @@ const Model: WalletPageModelType = {
         };
 
         const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
+        console.log(data2, 'data2@$!@#$@3909uoiuoi');
         transactionRecord = data2.dataList;
       }
 
@@ -524,9 +525,9 @@ const Model: WalletPageModelType = {
         messageAddress: walletPage.activatingAccountType === 'phone' ? walletPage.activatingAccountMobile : walletPage.activatingAccountEmail,
       };
 
-      const { data, msg, errCode, errcode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
+      const { data, msg, errCode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
-      if (errCode !== 0 || errcode !== 0) {
+      if (errCode !== 0) {
         return fMessage(msg, 'error');
       }
 

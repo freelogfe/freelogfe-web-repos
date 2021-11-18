@@ -5,7 +5,7 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
-import { Modal, Space, Radio, message } from 'antd';
+import { Modal, Space, Radio, message, DatePicker, Input } from 'antd';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
@@ -45,12 +45,22 @@ import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil } from '@freelog/tools-lib';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
+import FDropdownMenu from '@/components/FDropdownMenu';
+import FListFooter from '@/components/FListFooter';
 
 interface WalletProps {
   dispatch: Dispatch;
   walletPage: WalletPageModelState;
   user: UserModelState;
 }
+
+//1.交易确认中 2:交易成功 3:交易关闭
+const stateOptions = [
+  { value: '0', text: '全部' },
+  { value: '1', text: '交易确认中' },
+  { value: '2', text: '交易成功' },
+  { value: '3', text: '交易关闭' },
+];
 
 function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
@@ -207,15 +217,75 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               <div style={{ height: 40 }} />
               <FTitleText type='h1' text={'交易记录'} />
               <div style={{ height: 20 }} />
-              <FTable
-                columns={columns}
-                dataSource={walletPage.transactionRecord.map((tr) => {
-                  return {
-                    key: tr.serialNo,
-                    ...tr,
-                  };
-                })}
-              />
+              <div className={styles.TableBody}>
+                <div style={{ height: 20 }} />
+                <div className={styles.filter1}>
+                  <div className={styles.filter1Date}>
+                    <FContentText
+                      text={'日期区间：'}
+                    />
+                    <div style={{ width: 5 }} />
+                    <DatePicker.RangePicker />
+                    <div style={{ width: 15 }} />
+                    <a className={[styles.dateRange, styles.active].join(' ')}>近一周</a>
+                    <a className={styles.dateRange}>近一月</a>
+                    <a className={styles.dateRange}>近一年</a>
+                  </div>
+                  <div className={styles.filter1Keyword}>
+                    <FInput theme='dark' />
+                  </div>
+                </div>
+                <div style={{ height: 15 }} />
+                <div className={styles.filter2}>
+                  <FContentText
+                    text={'金额区间：'}
+                  />
+                  <div style={{ width: 5 }} />
+                  <FInput
+                    size='small'
+                    placeholder={'最低金额'}
+                    className={styles.filterAmount}
+                    wrapClassName={styles.filterAmount}
+                  />
+                  <span className={styles.filterAmountTo}>-</span>
+                  <FInput
+                    size='small'
+                    placeholder={'最高金额'}
+                    className={styles.filterAmount}
+                    wrapClassName={styles.filterAmount}
+                  />
+                  <div style={{ width: 50 }} />
+                  <FContentText text={'交易状态：'} />
+                  <div style={{ width: 5 }} />
+                  <FDropdownMenu
+                    options={stateOptions}
+                    text={'全部'}
+                  />
+                </div>
+                <div style={{ height: 30 }} />
+                <div className={styles.totalAmount}>
+                  <FTitleText text={'支出'} type='table' />
+                  <div style={{ width: 10 }} />
+                  <div className={styles.totalAmountExpenditure}>20.00</div>
+                  <div style={{ width: 20 }} />
+                  <FTitleText text={'收入'} type='table' />
+                  <div style={{ width: 10 }} />
+                  <div className={styles.totalAmountIncome}>130.00</div>
+                </div>
+                <div style={{ height: 10 }} />
+
+                <FTable
+                  columns={columns}
+                  dataSource={walletPage.transactionRecord.map((tr) => {
+                    return {
+                      key: tr.serialNo,
+                      ...tr,
+                    };
+                  })}
+                />
+
+                <FListFooter state={'andMore'} />
+              </div>
             </>)
           }
 
@@ -527,22 +597,6 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                 });
               }}
             />
-            {/*<FInput*/}
-            {/*  type='password'*/}
-            {/*  className={styles.blockInput}*/}
-            {/*  wrapClassName={styles.blockInput}*/}
-            {/*  size='middle'*/}
-            {/*  value={walletPage.changingPassword_OldPasswordModal_PasswordInput}*/}
-            {/*  // errorText={walletPage.changingPasswordPasswordOldError}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action>({*/}
-            {/*      type: 'walletPage/onChange_ChangingPassword_OldPasswordModal_PasswordInput',*/}
-            {/*      payload: {*/}
-            {/*        value: e.target.value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
           </div>
         </Space>
 
@@ -594,27 +648,6 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                 });
               }}
             />
-            {/*<FInput*/}
-            {/*  type='password'*/}
-            {/*  className={styles.blockInput}*/}
-            {/*  wrapClassName={styles.blockInput}*/}
-            {/*  size='middle'*/}
-            {/*  value={walletPage.changingPassword_NewPasswordModal_Password1}*/}
-            {/*  errorText={walletPage.changingPassword_NewPasswordModal_Password1Error}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<OnChange_ChangingPassword_NewPasswordModal_Password1_Action>({*/}
-            {/*      type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password1Input',*/}
-            {/*      payload: {*/}
-            {/*        value: e.target.value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  onBlur={() => {*/}
-            {/*    dispatch<OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action>({*/}
-            {/*      type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password1Input',*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
           </div>
 
           <div>
@@ -638,27 +671,6 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             />
 
             <div style={{ color: 'red' }}>{walletPage.changingPassword_NewPasswordModal_Password2Error}</div>
-            {/*<FInput*/}
-            {/*  type='password'*/}
-            {/*  className={styles.blockInput}*/}
-            {/*  wrapClassName={styles.blockInput}*/}
-            {/*  size='middle'*/}
-            {/*  value={walletPage.changingPassword_NewPasswordModal_Password2}*/}
-            {/*  errorText={walletPage.changingPassword_NewPasswordModal_Password2Error}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action>({*/}
-            {/*      type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password2Input',*/}
-            {/*      payload: {*/}
-            {/*        value: e.target.value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  onBlur={() => {*/}
-            {/*    dispatch<OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action>({*/}
-            {/*      type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password2Input',*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
           </div>
         </Space>
 

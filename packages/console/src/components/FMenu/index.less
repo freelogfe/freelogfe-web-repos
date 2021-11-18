@@ -10,10 +10,14 @@
 .MenuItem {
   padding: 0 70px 0 20px !important;
 
-  &:hover, &:active {
-    background-color: #2784FF;
-    color: #fff;
+  &:global(.ant-menu-item) {
+
+    &:hover, &:active {
+      background-color: #2784FF;
+      color: #fff;
+    }
   }
+
 }
 
 .active {
