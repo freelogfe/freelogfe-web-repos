@@ -15,18 +15,18 @@ export interface WalletPageModelState {
   // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze';
   accountID: string;
   accountBalance: number;
-  transactionRecord: {
-    serialNo: string;
-    date: string;
-    time: string;
-    digest: string;
-    reciprocalAccountId: string;
-    reciprocalAccountName: string;
-    reciprocalAccountType: string;
-    transactionAmount: string;
-    afterBalance: string;
-    status: 1 | 2 | 3 | 4; // 1:交易确认中 2:交易成功 3:交易取消 4:交易失败
-  }[];
+  // transactionRecord: {
+  //   serialNo: string;
+  //   date: string;
+  //   time: string;
+  //   digest: string;
+  //   reciprocalAccountId: string;
+  //   reciprocalAccountName: string;
+  //   reciprocalAccountType: string;
+  //   transactionAmount: string;
+  //   afterBalance: string;
+  //   status: 1 | 2 | 3 | 4; // 1:交易确认中 2:交易成功 3:交易取消 4:交易失败
+  // }[];
 
   activatingAccount: boolean;
   activatingAccountMobile: string;
@@ -414,7 +414,7 @@ const initStates: WalletPageModelState = {
   accountStatus: -1,
   accountID: '',
   accountBalance: -1,
-  transactionRecord: [],
+  // transactionRecord: [],
 
   ...activatingAccountInitStates,
 
@@ -914,7 +914,7 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          transactionRecord: data2.dataList.map((dl: any) => {
+          table_DateSource: data2.dataList.map((dl: any) => {
             const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
             return {
               serialNo: dl.serialNo,

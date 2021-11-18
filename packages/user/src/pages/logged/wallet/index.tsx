@@ -213,7 +213,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             </div>
           </div>
           {
-            walletPage.transactionRecord.length > 0 && (<>
+            walletPage.table_DateSource.length > 0 && (<>
               <div style={{ height: 40 }} />
               <FTitleText type='h1' text={'交易记录'} />
               <div style={{ height: 20 }} />
@@ -282,7 +282,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
                 <FTable
                   columns={columns}
-                  dataSource={walletPage.transactionRecord.map((tr) => {
+                  dataSource={walletPage.table_DateSource.map((tr) => {
                     return {
                       key: tr.serialNo,
                       ...tr,
