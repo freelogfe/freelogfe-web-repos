@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
+import { Moment } from 'moment';
 
 export interface WalletPageModelState {
   userID: number;
@@ -55,6 +56,19 @@ export interface WalletPageModelState {
   changingPassword_NewPasswordModal_Password1Error: string;
   changingPassword_NewPasswordModal_Password2: string;
   changingPassword_NewPasswordModal_Password2Error: string;
+
+  table_Filter_Date_Type: 'week' | 'month' | 'year' | 'custom';
+  table_Filter_Date_Custom: [Moment, Moment] | null;
+  table_Filter_Keywords: string;
+  table_Filter_MinAmount: number;
+  table_Filter_MaxAmount: number;
+  table_Filter_StateOptions: { value: WalletPageModelState['table_Filter_StateSelected'], text: string }[];
+  table_Filter_StateSelected: '0' | '1' | '2' | '3';
+  table_TotalAmountExpenditure: number;
+  table_TotalAmountIncome: number;
+  table_DateSource: number;
+  table_State: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  table_More: 'loading' | 'andMore' | 'noMore';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -332,6 +346,9 @@ const initStates: WalletPageModelState = {
   ...activatingAccountInitStates,
 
   ...changingPasswordInitStates,
+
+  //a week's, a month's and a year'
+
 };
 
 const Model: WalletPageModelType = {
