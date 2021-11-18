@@ -278,6 +278,10 @@ export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Table_LoadMoreBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Table_LoadMoreBtn';
+}
+
 interface WalletPageModelType {
   namespace: 'walletPage';
   state: WalletPageModelState;
@@ -316,6 +320,14 @@ interface WalletPageModelType {
     onChange_ChangingPassword_NewPasswordModal_Password2Input: (action: OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action, effects: EffectsCommandMap) => void;
     onBlur_ChangingPassword_NewPasswordModal_Password2Input: (action: OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action, effects: EffectsCommandMap) => void;
     onClick_ChangingPassword_NewPasswordModal_ConfirmBtn: (action: OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+
+    onChange_Table_Filter_Date_Type: (action: OnChange_Table_Filter_Date_Type_Action, effects: EffectsCommandMap) => void;
+    onChange_Table_Filter_Date_Custom: (action: OnChange_Table_Filter_Date_Custom_Action, effects: EffectsCommandMap) => void;
+    onChange_Table_Filter_Keywords: (action: OnChange_Table_Filter_Keywords_Action, effects: EffectsCommandMap) => void;
+    onChange_Table_Filter_MinAmount: (action: OnChange_Table_Filter_MinAmount_Action, effects: EffectsCommandMap) => void;
+    onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
+    onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
+    onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<WalletPageModelState, ChangeAction>;
@@ -873,6 +885,28 @@ const Model: WalletPageModelType = {
       });
 
       successMessage();
+    },
+
+    * onChange_Table_Filter_Date_Type(action: OnChange_Table_Filter_Date_Type_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_Table_Filter_Date_Custom(action: OnChange_Table_Filter_Date_Custom_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_Table_Filter_Keywords(action: OnChange_Table_Filter_Keywords_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_Table_Filter_MinAmount(action: OnChange_Table_Filter_MinAmount_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_Table_Filter_MaxAmount(action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_Table_Filter_StateSelected(action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) {
+
+    },
+    * onClick_Table_LoadMoreBtn(action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) {
+
     },
   },
   reducers: {
