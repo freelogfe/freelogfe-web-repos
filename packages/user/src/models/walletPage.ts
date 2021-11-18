@@ -60,13 +60,24 @@ export interface WalletPageModelState {
   table_Filter_Date_Type: 'week' | 'month' | 'year' | 'custom';
   table_Filter_Date_Custom: [Moment, Moment] | null;
   table_Filter_Keywords: string;
-  table_Filter_MinAmount: number;
-  table_Filter_MaxAmount: number;
+  table_Filter_MinAmount: number | null;
+  table_Filter_MaxAmount: number | null;
   table_Filter_StateOptions: { value: WalletPageModelState['table_Filter_StateSelected'], text: string }[];
   table_Filter_StateSelected: '0' | '1' | '2' | '3';
   table_TotalAmountExpenditure: number;
   table_TotalAmountIncome: number;
-  table_DateSource: number;
+  table_DateSource: {
+    serialNo: string;
+    date: string;
+    time: string;
+    digest: string;
+    reciprocalAccountId: string;
+    reciprocalAccountName: string;
+    reciprocalAccountType: string;
+    transactionAmount: string;
+    afterBalance: string;
+    status: 1 | 2 | 3 | 4; // 1:交易确认中 2:交易成功 3:交易取消 4:交易失败
+  }[];
   table_State: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   table_More: 'loading' | 'andMore' | 'noMore';
 }
@@ -225,6 +236,48 @@ export interface OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action ext
   type: 'walletPage/onClick_ChangingPassword_NewPasswordModal_ConfirmBtn';
 }
 
+export interface OnChange_Table_Filter_Date_Type_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_Date_Type';
+  payload: {
+    value: 'week' | 'month' | 'year';
+  };
+}
+
+export interface OnChange_Table_Filter_Date_Custom_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_Date_Custom';
+  payload: {
+    value: WalletPageModelState['table_Filter_Date_Custom'];
+  };
+}
+
+export interface OnChange_Table_Filter_Keywords_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_Keywords';
+  payload: {
+    value: WalletPageModelState['table_Filter_Keywords'];
+  };
+}
+
+export interface OnChange_Table_Filter_MinAmount_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_MinAmount';
+  payload: {
+    value: WalletPageModelState['table_Filter_MinAmount'];
+  };
+}
+
+export interface OnChange_Table_Filter_MaxAmount_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_MaxAmount';
+  payload: {
+    value: WalletPageModelState['table_Filter_MaxAmount'];
+  };
+}
+
+export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
+  type: 'walletPage/onChange_Table_Filter_StateSelected';
+  payload: {
+    value: WalletPageModelState['table_Filter_StateSelected'];
+  };
+}
+
 interface WalletPageModelType {
   namespace: 'walletPage';
   state: WalletPageModelState;
@@ -347,8 +400,23 @@ const initStates: WalletPageModelState = {
 
   ...changingPasswordInitStates,
 
-  //a week's, a month's and a year'
-
+  table_Filter_Date_Type: 'week',
+  table_Filter_Date_Custom: null,
+  table_Filter_Keywords: '',
+  table_Filter_MinAmount: null,
+  table_Filter_MaxAmount: null,
+  table_Filter_StateOptions: [
+    { value: '0', text: '全部' },
+    { value: '1', text: '交易确认中' },
+    { value: '2', text: '交易成功' },
+    { value: '3', text: '交易关闭' },
+  ],
+  table_Filter_StateSelected: '0',
+  table_TotalAmountExpenditure: 0,
+  table_TotalAmountIncome: 0,
+  table_DateSource: [],
+  table_State: 'loading',
+  table_More: 'loading',
 };
 
 const Model: WalletPageModelType = {

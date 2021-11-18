@@ -246,6 +246,9 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                     placeholder={'最低金额'}
                     className={styles.filterAmount}
                     wrapClassName={styles.filterAmount}
+                    onChange={() => {
+
+                    }}
                   />
                   <span className={styles.filterAmountTo}>-</span>
                   <FInput
@@ -253,6 +256,9 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                     placeholder={'最高金额'}
                     className={styles.filterAmount}
                     wrapClassName={styles.filterAmount}
+                    onChange={() => {
+
+                    }}
                   />
                   <div style={{ width: 50 }} />
                   <FContentText text={'交易状态：'} />
