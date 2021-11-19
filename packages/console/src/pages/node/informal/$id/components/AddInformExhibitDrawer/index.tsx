@@ -24,7 +24,7 @@ import FDrawer from '@/components/FDrawer';
 // } from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
-import FListFooter from '@/components/FListFooter';
+import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -681,36 +681,4 @@ async function getUsedTargetIDs({ nodeID, entityType, entityIDs }: GetUsedTarget
 }
 
 
-interface listStateAndListMoreParams {
-  list_Length: number;
-  total_Length: number;
-  has_FilterCriteria: boolean;
-}
 
-function listStateAndListMore(payload: listStateAndListMoreParams): {
-  state: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
-  more: 'loading' | 'andMore' | 'noMore';
-} {
-  let state: ReturnType<typeof listStateAndListMore>['state'];
-  let more: ReturnType<typeof listStateAndListMore>['more'];
-
-  if (payload.list_Length === 0) {
-    if (!payload.has_FilterCriteria) {
-      state = 'noData';
-    } else {
-      state = 'noSearchResult';
-    }
-    more = 'noMore';
-  } else {
-    if (payload.list_Length < payload.total_Length) {
-      more = 'andMore';
-    } else {
-      more = 'noMore';
-    }
-    state = 'loaded';
-  }
-  return {
-    state,
-    more,
-  };
-}
