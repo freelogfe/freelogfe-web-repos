@@ -13,6 +13,8 @@ import { ConnectState, UserModelState, WalletPageModelState } from '@/models/con
 import {
   OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action,
   OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action,
+  OnBlur_Table_Filter_MaxAmount_Action,
+  OnBlur_Table_Filter_MinAmount_Action,
   OnBlurActivateAccountPassword1Action,
   OnBlurActivateAccountPassword2Action,
   OnCancel_ChangingPassword_CaptchaModal_Action,
@@ -25,6 +27,11 @@ import {
   OnChange_ChangingPassword_NewPasswordModal_Password1_Action,
   OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action,
   OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action,
+  OnChange_Table_Filter_Date_Custom_Action,
+  OnChange_Table_Filter_Date_Type_Action,
+  OnChange_Table_Filter_Keywords_Action,
+  OnChange_Table_Filter_MaxAmount_Action,
+  OnChange_Table_Filter_MinAmount_Action, OnChange_Table_Filter_StateSelected_Action,
   OnChangeActivateAccountCaptchaInputAction,
   OnChangeActivateAccountModeAction,
   OnChangeActivateAccountPassword1Action,
@@ -35,6 +42,7 @@ import {
   OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action,
   OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action,
   OnClick_ChangingPasswordBtn_Action,
+  OnClick_Table_LoadMoreBtn_Action,
   OnClickActivateAccountBtnAction,
   OnClickActivateAccountCaptchaBtnAction,
   OnClickActivateAccountConfirmBtnAction,
@@ -47,6 +55,8 @@ import { FUtil } from '@freelog/tools-lib';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
+import FNoDataTip from '@/components/FNoDataTip';
+import moment, { Moment } from 'moment';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -212,91 +222,223 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               <div style={{ color: '#333', fontSize: 13 }}>修改支付密码</div>
             </div>
           </div>
-          {
-            walletPage.table_DateSource.length > 0 && (<>
-              <div style={{ height: 40 }} />
-              <FTitleText type='h1' text={'交易记录'} />
-              <div style={{ height: 20 }} />
-              <div className={styles.TableBody}>
-                <div style={{ height: 20 }} />
-                <div className={styles.filter1}>
-                  <div className={styles.filter1Date}>
+
+          <div style={{ height: 40 }} />
+          <FTitleText type='h1' text={'交易记录'} />
+          <div style={{ height: 20 }} />
+
+          <div className={styles.TableBody}>
+
+
+            {
+              walletPage.table_State === 'noData'
+                ? (<FNoDataTip height={600} tipText={'无数据'} />)
+                : (<>
+                  <div style={{ height: 20 }} />
+                  <div className={styles.filter1}>
+                    <div className={styles.filter1Date}>
+                      <FContentText
+                        text={'日期区间：'}
+                      />
+                      <div style={{ width: 5 }} />
+                      <DatePicker.RangePicker
+                        allowClear={false}
+                        value={walletPage.table_Filter_Date_Custom}
+                        onChange={(values: any) => {
+                          // console.log(values, 'values2423');
+                          dispatch<OnChange_Table_Filter_Date_Custom_Action>({
+                            type: 'walletPage/onChange_Table_Filter_Date_Custom',
+                            payload: {
+                              value: values,
+                            },
+                          });
+                        }}
+                        disabledDate={(date) => {
+                          // console.log(date, 'date234234234');
+                          return moment().isBefore(date);
+                        }}
+                      />
+                      <div style={{ width: 15 }} />
+                      <a
+                        className={[styles.dateRange, walletPage.table_Filter_Date_Type === 'week' ? styles.active : ''].join(' ')}
+                        onClick={() => {
+                          dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                            type: 'walletPage/onChange_Table_Filter_Date_Type',
+                            payload: {
+                              value: 'week',
+                            },
+                          });
+                        }}
+                      >近一周</a>
+                      <a
+                        className={[styles.dateRange, walletPage.table_Filter_Date_Type === 'month' ? styles.active : ''].join(' ')}
+                        onClick={() => {
+                          dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                            type: 'walletPage/onChange_Table_Filter_Date_Type',
+                            payload: {
+                              value: 'month',
+                            },
+                          });
+                        }}
+                      >近一月</a>
+                      <a
+                        className={[styles.dateRange, walletPage.table_Filter_Date_Type === 'year' ? styles.active : ''].join(' ')}
+                        onClick={() => {
+                          dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                            type: 'walletPage/onChange_Table_Filter_Date_Type',
+                            payload: {
+                              value: 'year',
+                            },
+                          });
+                        }}
+                      >近一年</a>
+                    </div>
+                    <div className={styles.filter1Keyword}>
+                      <FInput
+                        theme='dark'
+                        debounce={300}
+                        onDebounceChange={(value) => {
+                          dispatch<OnChange_Table_Filter_Keywords_Action>({
+                            type: 'walletPage/onChange_Table_Filter_Keywords',
+                            payload: {
+                              value: value,
+                            },
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ height: 15 }} />
+                  <div className={styles.filter2}>
                     <FContentText
-                      text={'日期区间：'}
+                      text={'金额区间：'}
                     />
                     <div style={{ width: 5 }} />
-                    <DatePicker.RangePicker />
-                    <div style={{ width: 15 }} />
-                    <a className={[styles.dateRange, styles.active].join(' ')}>近一周</a>
-                    <a className={styles.dateRange}>近一月</a>
-                    <a className={styles.dateRange}>近一年</a>
+                    <FInput
+                      min={0}
+                      max={walletPage.table_Filter_MaxAmount || Number.POSITIVE_INFINITY}
+                      value={walletPage.table_Filter_MinAmount}
+                      onChange={(e) => {
+                        dispatch<OnChange_Table_Filter_MinAmount_Action>({
+                          type: 'walletPage/onChange_Table_Filter_MinAmount',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Table_Filter_MinAmount_Action>({
+                          type: 'walletPage/onBlur_Table_Filter_MinAmount',
+                        });
+                      }}
+                      type='number'
+                      size='small'
+                      placeholder={'最低金额'}
+                      className={styles.filterAmount}
+                      wrapClassName={styles.filterAmount}
+                    />
+                    <span className={styles.filterAmountTo}>-</span>
+                    <FInput
+                      type='number'
+                      size='small'
+                      value={walletPage.table_Filter_MaxAmount}
+                      onChange={(e) => {
+                        dispatch<OnChange_Table_Filter_MaxAmount_Action>({
+                          type: 'walletPage/onChange_Table_Filter_MaxAmount',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Table_Filter_MaxAmount_Action>({
+                          type: 'walletPage/onBlur_Table_Filter_MaxAmount',
+                        });
+                      }}
+                      placeholder={'最高金额'}
+                      className={styles.filterAmount}
+                      wrapClassName={styles.filterAmount}
+                      // debounce={300}
+                      // onDebounceChange={(value) => {
+                      //   // console.log(typeof value, 'Maxvalue23423');
+                      //   dispatch<OnChange_Table_Filter_MaxAmount_Action>({
+                      //     type: 'walletPage/onChange_Table_Filter_MaxAmount',
+                      //     payload: {
+                      //       value: value,
+                      //     },
+                      //   });
+                      // }}
+                    />
+                    <div style={{ width: 50 }} />
+                    <FContentText text={'交易状态：'} />
+                    <div style={{ width: 5 }} />
+                    <FDropdownMenu
+                      options={stateOptions}
+                      text={'全部'}
+                      onChange={(value) => {
+                        dispatch<OnChange_Table_Filter_StateSelected_Action>({
+                          type: 'walletPage/onChange_Table_Filter_StateSelected',
+                          payload: {
+                            value: value as '0',
+                          },
+                        });
+                      }}
+                    />
                   </div>
-                  <div className={styles.filter1Keyword}>
-                    <FInput theme='dark' />
-                  </div>
-                </div>
-                <div style={{ height: 15 }} />
-                <div className={styles.filter2}>
-                  <FContentText
-                    text={'金额区间：'}
-                  />
-                  <div style={{ width: 5 }} />
-                  <FInput
-                    size='small'
-                    placeholder={'最低金额'}
-                    className={styles.filterAmount}
-                    wrapClassName={styles.filterAmount}
-                    onChange={() => {
 
-                    }}
-                  />
-                  <span className={styles.filterAmountTo}>-</span>
-                  <FInput
-                    size='small'
-                    placeholder={'最高金额'}
-                    className={styles.filterAmount}
-                    wrapClassName={styles.filterAmount}
-                    onChange={() => {
+                  {
+                    walletPage.table_State === 'loading'
+                      ? (<FLoadingTip height={600} />)
+                      : (<>
+                        <div style={{ height: 30 }} />
+                        <div className={styles.totalAmount}>
+                          <FTitleText text={'支出'} type='table' />
+                          <div style={{ width: 10 }} />
+                          <div className={styles.totalAmountExpenditure}>20.00</div>
+                          <div style={{ width: 20 }} />
+                          <FTitleText text={'收入'} type='table' />
+                          <div style={{ width: 10 }} />
+                          <div className={styles.totalAmountIncome}>130.00</div>
+                        </div>
+                        <div style={{ height: 10 }} />
+                        {
+                          walletPage.table_State === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无交易记录'} />)
+                        }
 
-                    }}
-                  />
-                  <div style={{ width: 50 }} />
-                  <FContentText text={'交易状态：'} />
-                  <div style={{ width: 5 }} />
-                  <FDropdownMenu
-                    options={stateOptions}
-                    text={'全部'}
-                  />
-                </div>
-                <div style={{ height: 30 }} />
-                <div className={styles.totalAmount}>
-                  <FTitleText text={'支出'} type='table' />
-                  <div style={{ width: 10 }} />
-                  <div className={styles.totalAmountExpenditure}>20.00</div>
-                  <div style={{ width: 20 }} />
-                  <FTitleText text={'收入'} type='table' />
-                  <div style={{ width: 10 }} />
-                  <div className={styles.totalAmountIncome}>130.00</div>
-                </div>
-                <div style={{ height: 10 }} />
+                        {
+                          walletPage.table_State === 'loaded' && (<>
+                            <FTable
+                              columns={columns}
+                              dataSource={walletPage.table_DateSource.map((tr) => {
+                                return {
+                                  key: tr.serialNo,
+                                  ...tr,
+                                };
+                              })}
+                            />
 
-                <FTable
-                  columns={columns}
-                  dataSource={walletPage.table_DateSource.map((tr) => {
-                    return {
-                      key: tr.serialNo,
-                      ...tr,
-                    };
-                  })}
-                />
+                            <FListFooter
+                              state={walletPage.table_More}
+                              onClickLoadMore={() => {
+                                dispatch<OnClick_Table_LoadMoreBtn_Action>({
+                                  type: 'walletPage/onClick_Table_LoadMoreBtn',
+                                });
+                              }}
+                            />
+                          </>)
+                        }
+                      </>)
+                  }
 
-                <FListFooter state={'andMore'} />
-              </div>
-            </>)
-          }
+                </>)
+            }
 
+          </div>
         </>)
     }
+
+
     <div style={{ height: 100 }} />
 
     <Modal

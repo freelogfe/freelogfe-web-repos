@@ -5,7 +5,8 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
+import { listStateAndListMore } from '@/components/FListFooter';
 
 export interface WalletPageModelState {
   userID: number;
@@ -60,8 +61,8 @@ export interface WalletPageModelState {
   table_Filter_Date_Type: 'week' | 'month' | 'year' | 'custom';
   table_Filter_Date_Custom: [Moment, Moment] | null;
   table_Filter_Keywords: string;
-  table_Filter_MinAmount: number | null;
-  table_Filter_MaxAmount: number | null;
+  table_Filter_MinAmount: string;
+  table_Filter_MaxAmount: string;
   table_Filter_StateOptions: { value: WalletPageModelState['table_Filter_StateSelected'], text: string }[];
   table_Filter_StateSelected: '0' | '1' | '2' | '3';
   table_TotalAmountExpenditure: number;
@@ -264,11 +265,19 @@ export interface OnChange_Table_Filter_MinAmount_Action extends AnyAction {
   };
 }
 
+export interface OnBlur_Table_Filter_MinAmount_Action extends AnyAction {
+  type: 'walletPage/onBlur_Table_Filter_MinAmount';
+}
+
 export interface OnChange_Table_Filter_MaxAmount_Action extends AnyAction {
   type: 'walletPage/onChange_Table_Filter_MaxAmount';
   payload: {
     value: WalletPageModelState['table_Filter_MaxAmount'];
   };
+}
+
+export interface OnBlur_Table_Filter_MaxAmount_Action extends AnyAction {
+  type: 'walletPage/onBlur_Table_Filter_MaxAmount';
 }
 
 export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
@@ -283,7 +292,7 @@ export interface OnClick_Table_LoadMoreBtn_Action extends AnyAction {
 }
 
 export interface Fetch_TableData_Action extends AnyAction {
-  type: 'walletPage/fetch_TableData';
+  type: 'fetch_TableData';
   payload: {
     andMore: boolean;
   };
@@ -332,7 +341,9 @@ interface WalletPageModelType {
     onChange_Table_Filter_Date_Custom: (action: OnChange_Table_Filter_Date_Custom_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_Keywords: (action: OnChange_Table_Filter_Keywords_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_MinAmount: (action: OnChange_Table_Filter_MinAmount_Action, effects: EffectsCommandMap) => void;
+    onBlur_Table_Filter_MinAmount: (action: OnBlur_Table_Filter_MinAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
+    onBlur_Table_Filter_MaxAmount: (action: OnBlur_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
     onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
     fetch_TableData: (action: Fetch_TableData_Action, effects: EffectsCommandMap) => void;
@@ -423,8 +434,8 @@ const initStates: WalletPageModelState = {
   table_Filter_Date_Type: 'week',
   table_Filter_Date_Custom: null,
   table_Filter_Keywords: '',
-  table_Filter_MinAmount: null,
-  table_Filter_MaxAmount: null,
+  table_Filter_MinAmount: '',
+  table_Filter_MaxAmount: '',
   table_Filter_StateOptions: [
     { value: '0', text: '全部' },
     { value: '1', text: '交易确认中' },
@@ -449,7 +460,7 @@ const Model: WalletPageModelType = {
         userId: data1.userId,
       };
       const { data } = yield call(FServiceAPI.Transaction.individualAccounts, params);
-
+      // console.log(data, 'data@#$@#$');
       // console.log(data1.email, 'data1.emaildata1.email111');
       yield put<ChangeAction>({
         type: 'change',
@@ -457,6 +468,7 @@ const Model: WalletPageModelType = {
           userID: data1.userId,
           userEmail: data1.email,
           userPhone: data1.mobile,
+          accountID: data.accountId,
           accountStatus: data.status,
           accountBalance: data.balance,
         },
@@ -464,7 +476,7 @@ const Model: WalletPageModelType = {
 
       if (data.status !== 0) {
         yield put<Fetch_TableData_Action>({
-          type: 'walletPage/fetch_TableData',
+          type: 'fetch_TableData',
           payload: {
             andMore: false,
           },
@@ -876,59 +888,206 @@ const Model: WalletPageModelType = {
       successMessage();
     },
 
-    * onChange_Table_Filter_Date_Type(action: OnChange_Table_Filter_Date_Type_Action, effects: EffectsCommandMap) {
-
-    },
-    * onChange_Table_Filter_Date_Custom(action: OnChange_Table_Filter_Date_Custom_Action, effects: EffectsCommandMap) {
-
-    },
-    * onChange_Table_Filter_Keywords(action: OnChange_Table_Filter_Keywords_Action, effects: EffectsCommandMap) {
-
-    },
-    * onChange_Table_Filter_MinAmount(action: OnChange_Table_Filter_MinAmount_Action, effects: EffectsCommandMap) {
-
-    },
-    * onChange_Table_Filter_MaxAmount(action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) {
-
-    },
-    * onChange_Table_Filter_StateSelected(action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) {
-
-    },
-    * onClick_Table_LoadMoreBtn(action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) {
-
-    },
-    * fetch_TableData({}: Fetch_TableData_Action, { select, call, put }: EffectsCommandMap) {
-      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
-        walletPage,
-      }));
-
-      const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
-        accountId: walletPage.accountID,
-        skip: 0,
-        limit: FUtil.Predefined.pageSize,
-      };
-
-      const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
-      console.log(data2, 'data2@$!@#$@3909uoiuoi');
-      // transactionRecord = data2.dataList;
+    * onChange_Table_Filter_Date_Type({ payload }: OnChange_Table_Filter_Date_Type_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          table_DateSource: data2.dataList.map((dl: any) => {
-            const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
-            return {
-              serialNo: dl.serialNo,
-              date: date,
-              time: time,
-              digest: dl.digest,
-              reciprocalAccountId: dl.reciprocalAccountId,
-              reciprocalAccountName: dl.reciprocalAccountName,
-              reciprocalAccountType: dl.reciprocalAccountType,
-              transactionAmount: dl.transactionAmount,
-              afterBalance: dl.afterBalance,
-              status: dl.status,
-            };
-          }),
+          table_Filter_Date_Type: payload.value,
+          table_Filter_Date_Custom: null,
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+
+    },
+    * onChange_Table_Filter_Date_Custom({ payload }: OnChange_Table_Filter_Date_Custom_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_Date_Type: 'custom',
+          table_Filter_Date_Custom: payload.value,
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+    },
+    * onChange_Table_Filter_Keywords({ payload }: OnChange_Table_Filter_Keywords_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_Keywords: payload.value,
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+    },
+    * onChange_Table_Filter_MinAmount({ payload }: OnChange_Table_Filter_MinAmount_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_MinAmount: payload.value,
+        },
+      });
+    },
+    * onBlur_Table_Filter_MinAmount({}: OnBlur_Table_Filter_MinAmount_Action, { select, put }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_MinAmount: walletPage.table_Filter_MinAmount === ''
+            ? ''
+            : String(Math.min(Math.max(0, Number(walletPage.table_Filter_MinAmount)), walletPage.table_Filter_MaxAmount !== '' ? Number(walletPage.table_Filter_MaxAmount) : Number.POSITIVE_INFINITY)),
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+    },
+    * onChange_Table_Filter_MaxAmount({ payload }: OnChange_Table_Filter_MaxAmount_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_MaxAmount: payload.value,
+        },
+      });
+    },
+    * onBlur_Table_Filter_MaxAmount({}: OnBlur_Table_Filter_MaxAmount_Action, { select, put }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_MaxAmount: walletPage.table_Filter_MaxAmount === ''
+            ? ''
+            : String(Math.max(Number(walletPage.table_Filter_MaxAmount), walletPage.table_Filter_MinAmount !== '' ? Number(walletPage.table_Filter_MinAmount) : 0)),
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+    },
+    * onChange_Table_Filter_StateSelected({ payload }: OnChange_Table_Filter_StateSelected_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_StateSelected: payload.value,
+        },
+      });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
+    },
+    * onClick_Table_LoadMoreBtn({}: OnClick_Table_LoadMoreBtn_Action, { put }: EffectsCommandMap) {
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: true,
+        },
+      });
+    },
+    * fetch_TableData({ payload }: Fetch_TableData_Action, { select, call, put }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+      let table_DateSource: WalletPageModelState['table_DateSource'] = [];
+      if (payload.andMore) {
+        table_DateSource = [
+          ...walletPage.table_DateSource,
+        ];
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            table_More: 'loading',
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            table_State: 'loading',
+          },
+        });
+      }
+      const [startCreatedDate, endCreatedDate] = getStartAndEndDate(walletPage.table_Filter_Date_Type, walletPage.table_Filter_Date_Custom);
+      // console.log(walletPage.accountID, 'walletPage.accountID23423');
+
+      const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
+        accountId: walletPage.accountID,
+        skip: table_DateSource.length,
+        // limit: FUtil.Predefined.pageSize,
+        limit: 5,
+        startCreatedDate: startCreatedDate || undefined,
+        endCreatedDate: endCreatedDate || undefined,
+        amountStartPoint: walletPage.table_Filter_MinAmount === '' ? undefined : Number(walletPage.table_Filter_MinAmount),
+        amountEndPoint: walletPage.table_Filter_MaxAmount === '' ? undefined : Number(walletPage.table_Filter_MaxAmount),
+        status: walletPage.table_Filter_StateSelected === '0' ? undefined : Number(walletPage.table_Filter_StateSelected) as 1,
+        keywords: walletPage.table_Filter_Keywords || undefined,
+      };
+
+      const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
+
+      table_DateSource = [
+        ...table_DateSource,
+        ...(data2?.dataList || []).map((dl: any) => {
+          const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
+          return {
+            serialNo: dl.serialNo,
+            date: date,
+            time: time,
+            digest: dl.digest,
+            reciprocalAccountId: dl.reciprocalAccountId,
+            reciprocalAccountName: dl.reciprocalAccountName,
+            reciprocalAccountType: dl.reciprocalAccountType,
+            transactionAmount: dl.transactionAmount,
+            afterBalance: dl.afterBalance,
+            status: dl.status,
+          };
+        }),
+      ];
+      // console.log(data2, 'data2@$!@#$@3909uoiuoi');
+      const { more, state } = listStateAndListMore({
+        list_Length: table_DateSource.length,
+        total_Length: data2?.totalItem || 0,
+        has_FilterCriteria: true,
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_TotalAmountExpenditure: Math.abs(Number(data2?.totalExpenditure || 0)),
+          table_TotalAmountIncome: Math.abs(Number(data2?.totalIncome || 0)),
+          table_State: state,
+          table_More: more,
+          table_DateSource: table_DateSource,
         },
       });
     },
@@ -949,3 +1108,17 @@ const Model: WalletPageModelType = {
 };
 
 export default Model;
+
+function getStartAndEndDate(type: WalletPageModelState['table_Filter_Date_Type'], startAndEndMoments: WalletPageModelState['table_Filter_Date_Custom']): [string, string] {
+  const momentDateFormat: string = FUtil.Predefined.momentDateFormat;
+  switch (type) {
+    case 'week':
+      return [moment().subtract(1, 'weeks').format(momentDateFormat), moment().format(momentDateFormat)];
+    case 'month':
+      return [moment().subtract(1, 'months').format(momentDateFormat), moment().format(momentDateFormat)];
+    case 'year':
+      return [moment().subtract(1, 'years').format(momentDateFormat), moment().format(momentDateFormat)];
+    default:
+      return startAndEndMoments ? [startAndEndMoments[0].format(momentDateFormat), startAndEndMoments[1].format(momentDateFormat)] : ['', ''];
+  }
+}
