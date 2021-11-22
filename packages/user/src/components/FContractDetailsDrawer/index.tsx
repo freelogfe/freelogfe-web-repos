@@ -23,11 +23,11 @@ interface BaseInfo {
 
   licensorId: string;
   licensorName: string;
-  licensorIdentityType: 1 | 2 | 3;
+  licensorIdentityType: 'resource' | 'node' | 'user';
 
   licenseeId: string;
   licenseeName: string;
-  licenseeIdentityType: 1 | 2 | 3;
+  licenseeIdentityType: 'resource' | 'node' | 'user';
 
   contractId: string;
   contractName: string;
@@ -50,11 +50,28 @@ interface FContractDetailsDrawerProps {
   onClose?: () => void;
 }
 
+interface FContractDetailsDrawerStates {
+  baseInfo: BaseInfo | null;
+  associateContracts: AssociateContracts | null;
+  versionAllContractIDs: {
+    version: string;
+    contractIDs: string[];
+  }[];
+  exhibitAllContractIDs: {
+    exhibitID: string;
+    exhibitName: string;
+    resourceID: string;
+    contractIDs: string[];
+  };
+}
+
 function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDrawerProps) {
   // console.log(contractID, 'contractID!!!!2341234');
 
-  const [baseInfo, setBaseInfo] = React.useState<BaseInfo | null>(null);
-  const [associateContracts, setAssociateContracts] = React.useState<AssociateContracts | null>(null);
+  const [baseInfo, setBaseInfo] = React.useState<FContractDetailsDrawerStates['baseInfo']>(null);
+  const [associateContracts, setAssociateContracts] = React.useState<FContractDetailsDrawerStates['associateContracts']>(null);
+  const [versionAllContractIDs, setVersionAllContractIDs] = React.useState<FContractDetailsDrawerStates['versionAllContractIDs']>([]);
+  const [exhibitAllContractIDs, setExhibitAllContractIDs] = React.useState<FContractDetailsDrawerStates['exhibitAllContractIDs']>([]);
 
   React.useEffect(() => {
     if (!contractID) {
@@ -79,11 +96,11 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
       licensorId: data.licensorId,
       licensorName: data.licensorName,
-      licensorIdentityType: data.subjectType === 1 ? 1 : 2,
+      licensorIdentityType: data.subjectType === 1 ? 'resource' : data.subjectType === 2 ? 'node' : 'user',
 
       licenseeId: data.licenseeId,
       licenseeName: data.licenseeName,
-      licenseeIdentityType: data.licenseeIdentityType,
+      licenseeIdentityType: data.licenseeIdentityType === 1 ? 'resource' : data.licenseeIdentityType === 2 ? 'node' : 'user',
 
       contractId: data.contractId,
       contractName: data.contractName,
@@ -91,6 +108,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
       contractText: data.policyInfo.policyText,
     };
+
+    console.log(data, 'data12432433333########');
 
     if (data.subjectType === 1) {
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -103,6 +122,60 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         baseInfoData.subjectCover = data1.coverImages[0];
       }
     }
+
+    if (baseInfoData.licenseeIdentityType === 'resource') {
+      const params9: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
+        resourceId: baseInfoData.licenseeId,
+      };
+      const { data: data9 } = await FServiceAPI.Resource.resolveResources(params9);
+      console.log(data9, 'data92938429342394');
+      console.log(baseInfoData.licensorId, 'licensorId23423423');
+      const result: FContractDetailsDrawerStates['versionAllContractIDs'] = (data9 as any[])
+        .find((d: any) => {
+          return d.resourceId === baseInfoData.licensorId;
+        })?.versions.map((d: any) => {
+          return {
+            version: d.version,
+            contractIDs: d.contracts.map((c: any) => {
+              return c.contractId;
+            }),
+          };
+        }) || [];
+
+      // console.log(result, 'resultresultresult23980423ioRRRRRR');
+      setVersionAllContractIDs(result);
+    }
+
+    // console.log(baseInfoData, 'baseInfoData234234234');
+    if (baseInfoData.licenseeIdentityType === 'node') {
+      // 根据资源 id 批量查询所有合同
+      const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+        nodeId: data.licenseeId,
+        resolveResourceIds: baseInfoData.licensorId,
+      };
+
+      // console.log(params5, 'params5!@$@!#$@#$@#');
+
+      const { data: data5 } = await FServiceAPI.Exhibit.presentableList(params5);
+
+      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      const result: FContractDetailsDrawerStates['exhibitAllContractIDs'] = data5.map((d5: any) => {
+        return d5.resolveResources?.map((resvr: any) => {
+          return {
+            exhibitID: d5.presentableId,
+            exhibitName: d5.presentableName,
+            resourceID: resvr.resourceId,
+            contractIDs: resvr.contracts.map((cccc: any) => {
+              return cccc.contractId;
+            }),
+          };
+        });
+      }).flat();
+
+      // console.log(exhibitAllContractIDs, 'data598213jlk');
+      setExhibitAllContractIDs(result);
+    }
+
 
     // console.log(data, '@!#$!@#$@#!$@');
     setBaseInfo(baseInfoData);
@@ -169,13 +242,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               </div>
               <Space size={10}>
                 {
-                  baseInfo?.licensorIdentityType === 1 && (<FResource />)
+                  baseInfo?.licensorIdentityType === 'resource' && (<FResource />)
                 }
                 {
-                  baseInfo?.licensorIdentityType === 2 && (<FNodes />)
+                  baseInfo?.licensorIdentityType === 'node' && (<FNodes />)
                 }
                 {
-                  baseInfo?.licensorIdentityType === 3 && (<FUser />)
+                  baseInfo?.licensorIdentityType === 'user' && (<FUser />)
                 }
                 <FContentText
                   type='highlight'
@@ -193,13 +266,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               </div>
               <Space size={10}>
                 {
-                  baseInfo?.licenseeIdentityType === 1 && (<FResource />)
+                  baseInfo?.licenseeIdentityType === 'resource' && (<FResource />)
                 }
                 {
-                  baseInfo?.licenseeIdentityType === 2 && (<FNodes />)
+                  baseInfo?.licenseeIdentityType === 'node' && (<FNodes />)
                 }
                 {
-                  baseInfo?.licenseeIdentityType === 3 && (<FUser />)
+                  baseInfo?.licenseeIdentityType === 'user' && (<FUser />)
                 }
                 <FContentText
                   type='highlight'
@@ -211,7 +284,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
           <FFormLayout.FBlock title={'所签授权策略'}>
             <div className={styles.currentContract}>
-              <div style={{ padding: '15px 20px' }}>
+              <div style={{ height: 15 }} />
+              <div style={{ padding: '0 20px' }}>
                 <Space size={10}>
                   <FContentText
                     text={baseInfo?.contractName}
@@ -222,7 +296,22 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                   {/*/>*/}
                 </Space>
               </div>
+              <div style={{ height: 10 }} />
 
+              <div style={{ padding: '0 20px' }}>
+                <Space size={5}>
+                  <FContentText
+                    type='additional2'
+                    text={`签约时间：${baseInfo?.contractCreateDate}`}
+                  />
+                  <FDivider style={{ fontSize: 14 }} />
+                  <FContentText
+                    type='additional2'
+                    text={`合约ID：${baseInfo?.contractId}`}
+                  />
+                </Space>
+              </div>
+              <div style={{ height: 10 }} />
               {/*<div style={{ height: 10 }} />*/}
 
               {/*{baseInfo && (<FPolicyDisplay*/}
@@ -237,20 +326,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                 />)
               }
 
-              <div style={{ height: 10 }} />
-              <div style={{ padding: '0 20px' }}>
-                <Space size={5}>
-                  <FContentText
-                    type='additional2'
-                    text={`签约时间：${baseInfo?.contractCreateDate}`}
-                  />
-                  <FDivider style={{ fontSize: 14 }} />
-                  <FContentText
-                    type='additional2'
-                    text={`合约ID：${baseInfo?.contractId}`}
-                  />
-                </Space>
-              </div>
+
               <div style={{ height: 10 }} />
 
             </div>
@@ -324,7 +400,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       {/*  />)*/}
                       {/*}*/}
 
-                      <div style={{ display: ac.expansion ? 'block' : 'none'}}>
+                      <div style={{ display: ac.expansion ? 'block' : 'none' }}>
                         <FContractDisplay
                           contractID={ac.contractId}
                         />

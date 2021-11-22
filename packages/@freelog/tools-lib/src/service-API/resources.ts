@@ -370,7 +370,7 @@ export function resolveResources(params: ResolveResourcesParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/${params.resourceId}/resolveResources`,
-    params: params,
+    // params: params,
   });
 }
 

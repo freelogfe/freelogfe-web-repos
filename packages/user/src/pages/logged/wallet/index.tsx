@@ -65,12 +65,12 @@ interface WalletProps {
 }
 
 //1.交易确认中 2:交易成功 3:交易关闭
-const stateOptions = [
-  { value: '0', text: '全部' },
-  { value: '1', text: '交易确认中' },
-  { value: '2', text: '交易成功' },
-  { value: '3', text: '交易关闭' },
-];
+// const stateOptions = [
+//   { value: '0', text: '全部' },
+//   { value: '1', text: '交易确认中' },
+//   { value: '2', text: '交易成功' },
+//   { value: '3', text: '交易关闭' },
+// ];
 
 function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
@@ -229,7 +229,6 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
           <div className={styles.TableBody}>
 
-
             {
               walletPage.table_State === 'noData'
                 ? (<FNoDataTip height={600} tipText={'无数据'} />)
@@ -374,8 +373,8 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                     <FContentText text={'交易状态：'} />
                     <div style={{ width: 5 }} />
                     <FDropdownMenu
-                      options={stateOptions}
-                      text={'全部'}
+                      options={walletPage.table_Filter_StateOptions}
+                      text={walletPage.table_Filter_StateOptions.find((so) => so.value === walletPage.table_Filter_StateSelected)?.text || ''}
                       onChange={(value) => {
                         dispatch<OnChange_Table_Filter_StateSelected_Action>({
                           type: 'walletPage/onChange_Table_Filter_StateSelected',

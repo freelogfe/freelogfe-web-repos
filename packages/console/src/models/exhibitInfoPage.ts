@@ -7,7 +7,7 @@ import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6Author
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
-import FCustomOptionsEditorDrawer, { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
+import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -452,7 +452,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
-      console.log(data, 'data@#Rasfdjou890ujewfra');
+      // console.log(data, 'data@#Rasfdjou890ujewfra');
 
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
