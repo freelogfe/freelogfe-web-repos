@@ -3,7 +3,7 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import { FContentText } from '@/components/FText';
+import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
@@ -14,6 +14,8 @@ import FResource from '@/components/FIcons/FResource';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
+import FCheckbox from '@/components/FCheckbox';
+import FSwitch from '@/components/FSwitch';
 
 interface BaseInfo {
   subjectId: string;
@@ -25,6 +27,7 @@ interface BaseInfo {
   licensorName: string;
   licensorIdentityType: 'resource' | 'node' | 'user';
 
+  licenseeOwnerIsCurrentUser: boolean;
   licenseeId: string;
   licenseeName: string;
   licenseeIdentityType: 'resource' | 'node' | 'user';
@@ -62,7 +65,7 @@ interface FContractDetailsDrawerStates {
     exhibitName: string;
     resourceID: string;
     contractIDs: string[];
-  };
+  }[];
 }
 
 function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDrawerProps) {
@@ -88,6 +91,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
+    console.log(data, 'data90234oi');
     const baseInfoData: BaseInfo = {
       subjectId: data.subjectId,
       subjectName: data.subjectName,
@@ -98,6 +102,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       licensorName: data.licensorName,
       licensorIdentityType: data.subjectType === 1 ? 'resource' : data.subjectType === 2 ? 'node' : 'user',
 
+      licenseeOwnerIsCurrentUser: data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies(),
       licenseeId: data.licenseeId,
       licenseeName: data.licenseeName,
       licenseeIdentityType: data.licenseeIdentityType === 1 ? 'resource' : data.licenseeIdentityType === 2 ? 'node' : 'user',
@@ -123,7 +128,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       }
     }
 
-    if (baseInfoData.licenseeIdentityType === 'resource') {
+    if (baseInfoData.licenseeIdentityType === 'resource' && baseInfoData.licenseeOwnerIsCurrentUser) {
       const params9: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
         resourceId: baseInfoData.licenseeId,
       };
@@ -144,10 +149,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
       // console.log(result, 'resultresultresult23980423ioRRRRRR');
       setVersionAllContractIDs(result);
+    } else {
+      setVersionAllContractIDs([]);
     }
 
     // console.log(baseInfoData, 'baseInfoData234234234');
-    if (baseInfoData.licenseeIdentityType === 'node') {
+    if (baseInfoData.licenseeIdentityType === 'node' && baseInfoData.licenseeOwnerIsCurrentUser) {
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         nodeId: data.licenseeId,
@@ -158,22 +165,29 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
       const { data: data5 } = await FServiceAPI.Exhibit.presentableList(params5);
 
-      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
-      const result: FContractDetailsDrawerStates['exhibitAllContractIDs'] = data5.map((d5: any) => {
-        return d5.resolveResources?.map((resvr: any) => {
-          return {
-            exhibitID: d5.presentableId,
-            exhibitName: d5.presentableName,
-            resourceID: resvr.resourceId,
-            contractIDs: resvr.contracts.map((cccc: any) => {
-              return cccc.contractId;
-            }),
-          };
+      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      const result: FContractDetailsDrawerStates['exhibitAllContractIDs'] = data5
+        .map((d5: any) => {
+          return d5.resolveResources?.map((resvr: any) => {
+            return {
+              exhibitID: d5.presentableId,
+              exhibitName: d5.presentableName,
+              resourceID: resvr.resourceId,
+              contractIDs: resvr.contracts.map((cccc: any) => {
+                return cccc.contractId;
+              }),
+            };
+          });
+        })
+        .flat()
+        .filter((d5: any) => {
+          return baseInfoData.licensorId !== d5.resourceID;
         });
-      }).flat();
-
-      // console.log(exhibitAllContractIDs, 'data598213jlk');
+      console.log(result, 'resultresultresult2342980348uoi');
+      // console.log(exhibitAllContractIDs, 'exhibitAllContractIDs32dsfsdffs');
       setExhibitAllContractIDs(result);
+    } else {
+      setExhibitAllContractIDs([]);
     }
 
 
@@ -291,9 +305,6 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                     text={baseInfo?.contractName}
                     type='highlight'
                   />
-                  {/*<FContractStatusBadge*/}
-                  {/*  status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}*/}
-                  {/*/>*/}
                 </Space>
               </div>
               <div style={{ height: 10 }} />
@@ -312,14 +323,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                 </Space>
               </div>
               <div style={{ height: 10 }} />
-              {/*<div style={{ height: 10 }} />*/}
 
-              {/*{baseInfo && (<FPolicyDisplay*/}
-              {/*  code={baseInfo.contractText}*/}
-              {/*  containerHeight={170}*/}
-              {/*/>)}*/}
-
-              {/*{console.log(contractID, 'contractID12342342ojlksdfjlasdkfsdf')}*/}
               {
                 contractID && (<FContractDisplay
                   contractID={contractID}
@@ -327,7 +331,31 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               }
 
 
-              <div style={{ height: 10 }} />
+              {
+                versionAllContractIDs.length > 0 && (<>
+                  <div style={{ height: 10 }} />
+                  <div style={{ padding: '0 20px' }}>
+                    <FVersions
+                      versionAllContractIDs={versionAllContractIDs}
+                      resourceName={baseInfo.licenseeName}
+                      currentContractID={contractID}
+                    />
+                  </div>
+                </>)
+              }
+
+              {
+                exhibitAllContractIDs.length > 0 && (<>
+                  <div style={{ height: 10 }} />
+                  <div style={{ padding: '0 20px' }}>
+                    <FExhibits
+                      nodeName={baseInfo.licenseeName}
+                      exhibitAllContractIDs={exhibitAllContractIDs}
+                      currentContractID={contractID}
+                    />
+                  </div>
+                </>)
+              }
 
             </div>
           </FFormLayout.FBlock>
@@ -361,10 +389,6 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                               text={ac.contractName}
                               type='highlight'
                             />
-                            {/*<FContractStatusBadge*/}
-                            {/*  // status={ac.contractStatus === 1 ? 'authorized' : 'stopped'}*/}
-                            {/*  status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}*/}
-                            {/*/>*/}
                           </Space>
                           <div style={{ height: 10 }} />
                           <Space size={40}>
@@ -393,18 +417,41 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         }
 
                       </div>
-                      {/*{*/}
-                      {/*  ac.expansion && (<FPolicyDisplay*/}
-                      {/*    code={ac.contractText}*/}
-                      {/*    containerHeight={170}*/}
-                      {/*  />)*/}
-                      {/*}*/}
 
                       <div style={{ display: ac.expansion ? 'block' : 'none' }}>
                         <FContractDisplay
                           contractID={ac.contractId}
                         />
                       </div>
+
+
+                      {
+                        versionAllContractIDs.length > 0 && (<>
+                          <div style={{ height: 10 }} />
+                          <div style={{ padding: '0 20px' }}>
+                            <FVersions
+                              versionAllContractIDs={versionAllContractIDs}
+                              resourceName={baseInfo.licenseeName}
+                              currentContractID={ac.contractId}
+                            />
+
+                          </div>
+                          <div style={{ height: 10 }} />
+                        </>)
+                      }
+
+                      {
+                        exhibitAllContractIDs.length > 0 && (<>
+                          <div style={{ height: 10 }} />
+                          <div style={{ padding: '0 20px' }}>
+                            <FExhibits
+                              nodeName={baseInfo.licenseeName}
+                              exhibitAllContractIDs={exhibitAllContractIDs}
+                              currentContractID={ac.contractId}
+                            />
+                          </div>
+                        </>)
+                      }
 
                     </div>);
                   })
@@ -421,4 +468,76 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
 export default FContractDetailsDrawer;
 
+interface FVersionsProps {
+  resourceName: string;
+  versionAllContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'];
+  currentContractID: string;
+  // onChange()
+}
 
+function FVersions({ resourceName, versionAllContractIDs, currentContractID }: FVersionsProps) {
+  return (<>
+    <FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' />
+
+    <div style={{ height: 10 }} />
+
+    <div className={styles.resourceVersions}>
+
+      {
+        versionAllContractIDs.map((vai) => {
+          return (<div key={vai.version}>
+            <FCheckbox
+              checked={vai.contractIDs.includes(currentContractID)}
+            />
+            <span>{vai.version}</span>
+          </div>);
+        })
+      }
+    </div>
+  </>);
+}
+
+interface FExhibitsProps {
+  nodeName: string;
+  exhibitAllContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs'];
+  currentContractID: string;
+}
+
+function FExhibits({ nodeName, exhibitAllContractIDs, currentContractID }: FExhibitsProps) {
+  return (<>
+    <FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' />
+    {/*<div style={{ height: 10 }} />*/}
+    <div className={styles.nodeExhibits}>
+      {
+        exhibitAllContractIDs.map((eac) => {
+          return (<div key={eac.exhibitID} className={styles.nodeExhibit}>
+            <FContentText
+              text={eac.exhibitName}
+              type='highlight'
+            />
+            <FSwitch
+              checked={eac.contractIDs.includes(currentContractID)}
+              // disabled={currentExhibitChecked && currentExhibit && (currentExhibit.contractIDs.length <= 1)}
+              onChange={(value) => {
+                // await dispatch<UpdateContractUsedAction>({
+                //   type: 'exhibitInfoPage/updateContractUsed',
+                //   payload: {
+                //     exhibitID: ex.id,
+                //     resourceID: selectedResource.id,
+                //     policyID: c.policyId,
+                //     isUsed: value,
+                //   },
+                // });
+                //
+                // await dispatch<FetchInfoAction>({
+                //   type: 'exhibitInfoPage/fetchInfo',
+                // });
+              }}
+            />
+          </div>);
+        })
+      }
+
+    </div>
+  </>);
+}
