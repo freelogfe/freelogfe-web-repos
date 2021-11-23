@@ -36,7 +36,9 @@ interface BaseInfo {
   contractName: string;
   contractCreateDate: string;
   contractStatus: 0 | 1 | 2;
-  contractText: string;
+
+  policyID: string;
+  policyText: string;
 }
 
 type AssociateContracts = {
@@ -45,7 +47,9 @@ type AssociateContracts = {
   contractName: string;
   contractCreateDate: string;
   contractStatus: 0 | 1 | 2;
-  contractText: string;
+
+  policyID: string;
+  policyText: string;
 }[];
 
 interface FContractDetailsDrawerProps {
@@ -58,13 +62,13 @@ interface FContractDetailsDrawerStates {
   associateContracts: AssociateContracts | null;
   versionAllContractIDs: {
     version: string;
-    contractIDs: string[];
+    policyIDs: string[];
   }[];
   exhibitAllContractIDs: {
     exhibitID: string;
     exhibitName: string;
     resourceID: string;
-    contractIDs: string[];
+    policyIDs: string[];
   }[];
 }
 
@@ -111,10 +115,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       contractName: data.contractName,
       contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
       contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
-      contractText: data.policyInfo.policyText,
+
+      policyID: data.policyId,
+      policyText: data.policyInfo.policyText,
     };
 
-    console.log(data, 'data12432433333########');
+    // console.log(data, 'data12432433333########');
 
     if (data.subjectType === 1) {
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -134,15 +140,15 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       };
       const { data: data9 } = await FServiceAPI.Resource.resolveResources(params9);
       console.log(data9, 'data92938429342394');
-      console.log(baseInfoData.licensorId, 'licensorId23423423');
+      // console.log(baseInfoData.licensorId, 'licensorId23423423');
       const result: FContractDetailsDrawerStates['versionAllContractIDs'] = (data9 as any[])
         .find((d: any) => {
           return d.resourceId === baseInfoData.licensorId;
         })?.versions.map((d: any) => {
           return {
             version: d.version,
-            contractIDs: d.contracts.map((c: any) => {
-              return c.contractId;
+            policyIDs: d.contracts.map((c: any) => {
+              return c.policyId;
             }),
           };
         }) || [];
@@ -161,11 +167,11 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         resolveResourceIds: baseInfoData.licensorId,
       };
 
-      console.log(params5, 'params5!@$@!#$@#$@#');
+      // console.log(params5, 'params5!@$@!#$@#$@#');
 
       const { data: data5 } = await FServiceAPI.Exhibit.presentableList(params5);
 
-      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const result: FContractDetailsDrawerStates['exhibitAllContractIDs'] = data5
         .map((d5: any) => {
           return d5.resolveResources?.map((resvr: any) => {
@@ -174,7 +180,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               exhibitName: d5.presentableName,
               resourceID: resvr.resourceId,
               contractIDs: resvr.contracts.map((cccc: any) => {
-                return cccc.contractId;
+                return cccc.policyId;
               }),
             };
           });
@@ -183,7 +189,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         .filter((d5: any) => {
           return baseInfoData.licensorId === d5.resourceID;
         });
-      console.log(result, 'resultresultresult2342980348uoi');
+      // console.log(result, 'resultresultresult2342980348uoi');
       // console.log(exhibitAllContractIDs, 'exhibitAllContractIDs32dsfsdffs');
       setExhibitAllContractIDs(result);
     } else {
@@ -204,8 +210,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     };
     const { data: data2 } = await FServiceAPI.Contract.batchContracts(params2);
     // console.log(data2, '#$##$@$##$');
-
-    setAssociateContracts(data2
+    const AssociateContractsResult: FContractDetailsDrawerStates['associateContracts'] = (data2 as any)
       .filter((d: any) => d.contractId !== data.contractId)
       .map((d: any) => {
         return {
@@ -213,11 +218,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
           contractId: d.contractId,
           contractName: d.contractName,
           contractCreateDate: FUtil.Format.formatDateTime(d.createDate, true),
-          // contractStatus: d.status,
           contractStatus: d.status === 1 ? 2 : ((d.authStatus & 1) === 1) ? 1 : 0,
-          contractText: d.policyInfo.policyText,
+          policyID: d.policyId,
+          policyText: d.policyInfo.policyText,
         };
-      }));
+      });
+    setAssociateContracts(AssociateContractsResult);
   }
 
   return (<FDrawer
@@ -338,7 +344,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                     <FVersions
                       versionAllContractIDs={versionAllContractIDs}
                       resourceName={baseInfo.licenseeName}
-                      currentContractID={contractID}
+                      currentPolicyID={baseInfo.policyID}
+                      onChangeVersionAllContractIDs={(value) => {
+                        console.log(value, '@#$@#$@#');
+                      }}
+                      onChangeVersionContractIDs={(value) => {
+                        console.log(value, '##$@#$@#$');
+                      }}
                     />
                   </div>
                 </>)
@@ -351,7 +363,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                     <FExhibits
                       nodeName={baseInfo.licenseeName}
                       exhibitAllContractIDs={exhibitAllContractIDs}
-                      currentContractID={contractID}
+                      currentPolicyID={baseInfo.policyID}
+                      onChangeExhibitAllContractIDs={(value) => {
+                        console.log(value, '@#$@#$@#$@#09sdj');
+                      }}
+                      onChangeExhibitContractIDs={(value) => {
+                        console.log(value, '@#$@#098jsdlfkjl');
+                      }}
                     />
                   </div>
                 </>)
@@ -448,6 +466,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                               nodeName={baseInfo.licenseeName}
                               exhibitAllContractIDs={exhibitAllContractIDs}
                               currentContractID={ac.contractId}
+                              currentPolicyID={''}
                             />
                           </div>
                         </>)
@@ -471,23 +490,54 @@ export default FContractDetailsDrawer;
 interface FVersionsProps {
   resourceName: string;
   versionAllContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'];
-  currentContractID: string;
-  // onChange()
+  currentPolicyID: string;
+
+  onChangeVersionAllContractIDs?(value: FContractDetailsDrawerStates['versionAllContractIDs']): void;
+
+  onChangeVersionContractIDs?(value: FContractDetailsDrawerStates['versionAllContractIDs'][number]): void;
 }
 
-function FVersions({ resourceName, versionAllContractIDs, currentContractID }: FVersionsProps) {
+function FVersions({
+                     resourceName,
+                     versionAllContractIDs,
+                     currentPolicyID,
+                     onChangeVersionAllContractIDs,
+                     onChangeVersionContractIDs,
+                   }: FVersionsProps) {
   return (<>
     <FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' />
 
     <div style={{ height: 10 }} />
 
     <div className={styles.resourceVersions}>
-
       {
-        versionAllContractIDs.map((vai) => {
+        versionAllContractIDs.map((vai, ind, list) => {
+          const checked: boolean = vai.policyIDs.includes(currentPolicyID);
           return (<div key={vai.version}>
             <FCheckbox
-              checked={vai.contractIDs.includes(currentContractID)}
+              checked={checked}
+              disabled={checked && vai.policyIDs.length === 1}
+              onChange={(value) => {
+                const versionContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'][number] = {
+                  ...vai,
+                  policyIDs: value
+                    ? [
+                      ...vai.policyIDs,
+                      currentPolicyID,
+                    ]
+                    : vai.policyIDs.filter((c) => c !== currentPolicyID),
+                };
+
+                const all: FContractDetailsDrawerStates['versionAllContractIDs'] = list.map((ea) => {
+                  if (ea.version !== vai.version) {
+                    return ea;
+                  }
+                  return versionContractIDs;
+                });
+
+                onChangeVersionContractIDs && onChangeVersionContractIDs(versionContractIDs);
+                onChangeVersionAllContractIDs && onChangeVersionAllContractIDs(all);
+              }}
             />
             <span>{vai.version}</span>
           </div>);
@@ -500,38 +550,58 @@ function FVersions({ resourceName, versionAllContractIDs, currentContractID }: F
 interface FExhibitsProps {
   nodeName: string;
   exhibitAllContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs'];
-  currentContractID: string;
+  currentPolicyID: string;
+
+  onChangeExhibitAllContractIDs?(value: FContractDetailsDrawerStates['exhibitAllContractIDs']): void;
+
+  onChangeExhibitContractIDs?(value: FContractDetailsDrawerStates['exhibitAllContractIDs'][number]): void;
 }
 
-function FExhibits({ nodeName, exhibitAllContractIDs, currentContractID }: FExhibitsProps) {
+function FExhibits({
+                     nodeName,
+                     exhibitAllContractIDs,
+                     // currentContractID,
+                     currentPolicyID,
+                     onChangeExhibitAllContractIDs,
+                     onChangeExhibitContractIDs,
+                   }: FExhibitsProps) {
+
   return (<>
     <FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' />
     {/*<div style={{ height: 10 }} />*/}
     <div className={styles.nodeExhibits}>
       {
-        exhibitAllContractIDs.map((eac) => {
+        exhibitAllContractIDs.map((eac, ind, list) => {
+          const checked: boolean = eac.policyIDs.includes(currentPolicyID);
           return (<div key={eac.exhibitID} className={styles.nodeExhibit}>
             <FContentText
               text={eac.exhibitName}
               type='highlight'
             />
             <FSwitch
-              checked={eac.contractIDs.includes(currentContractID)}
-              // disabled={currentExhibitChecked && currentExhibit && (currentExhibit.contractIDs.length <= 1)}
+              checked={checked}
+              disabled={checked && eac.policyIDs.length === 1}
               onChange={(value) => {
-                // await dispatch<UpdateContractUsedAction>({
-                //   type: 'exhibitInfoPage/updateContractUsed',
-                //   payload: {
-                //     exhibitID: ex.id,
-                //     resourceID: selectedResource.id,
-                //     policyID: c.policyId,
-                //     isUsed: value,
-                //   },
-                // });
-                //
-                // await dispatch<FetchInfoAction>({
-                //   type: 'exhibitInfoPage/fetchInfo',
-                // });
+                const exhibitContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs'][number] = {
+                  ...eac,
+                  policyIDs: value
+                    ? [
+                      ...eac.policyIDs,
+                      currentPolicyID,
+                    ]
+                    : eac.policyIDs.filter((c) => c !== currentPolicyID),
+                };
+
+                const all: FContractDetailsDrawerStates['exhibitAllContractIDs'] = list.map((ea) => {
+                  if (ea.exhibitID !== eac.exhibitID) {
+                    return ea;
+                  }
+                  return exhibitContractIDs;
+                });
+
+                onChangeExhibitContractIDs && onChangeExhibitContractIDs(exhibitContractIDs);
+                onChangeExhibitAllContractIDs && onChangeExhibitAllContractIDs(all);
+
               }}
             />
           </div>);
