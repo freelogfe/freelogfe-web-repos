@@ -161,7 +161,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         resolveResourceIds: baseInfoData.licensorId,
       };
 
-      // console.log(params5, 'params5!@$@!#$@#$@#');
+      console.log(params5, 'params5!@$@!#$@#$@#');
 
       const { data: data5 } = await FServiceAPI.Exhibit.presentableList(params5);
 
@@ -181,7 +181,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         })
         .flat()
         .filter((d5: any) => {
-          return baseInfoData.licensorId !== d5.resourceID;
+          return baseInfoData.licensorId === d5.resourceID;
         });
       console.log(result, 'resultresultresult2342980348uoi');
       // console.log(exhibitAllContractIDs, 'exhibitAllContractIDs32dsfsdffs');
