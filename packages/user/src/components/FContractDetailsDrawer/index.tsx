@@ -7,11 +7,11 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
+// import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FResource from '@/components/FIcons/FResource';
-import FPolicyDisplay from '@/components/FPolicyDisplay';
+// import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
@@ -98,7 +98,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
-    console.log(data, 'data90234oi');
+    // console.log(data, 'data90234oi');
     const baseInfoData: BaseInfo = {
       subjectId: data.subjectId,
       subjectName: data.subjectName,
