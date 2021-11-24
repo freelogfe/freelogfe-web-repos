@@ -50,6 +50,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
     });
   });
 
+
   if (informExhibitInfoPage.pageLoading) {
     return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }

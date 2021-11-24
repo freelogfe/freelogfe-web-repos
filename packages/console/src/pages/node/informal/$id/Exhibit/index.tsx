@@ -52,8 +52,12 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
     });
   });
 
+  if (informalNodeManagerPage.exhibit_PageError) {
+    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.exhibit_PageError}/>);
+  }
+
   if (informalNodeManagerPage.exhibit_ListState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 94px)'} />);
+    return (<FLoadingTip height={'calc(100vh - 194px)'} />);
   }
 
   return (<>

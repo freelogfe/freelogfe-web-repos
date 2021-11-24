@@ -52,18 +52,24 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
     });
   });
 
-  if (informalNodeManagerPage.theme_ListState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 94px)'} />);
+  if (informalNodeManagerPage.theme_PageError) {
+    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.theme_PageError}/>);
   }
 
-  function onChange(value: Partial<InformalNodeManagerPageModelState>) {
-    dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload: {
-        ...value,
-      },
-    });
+  if (informalNodeManagerPage.theme_ListState === 'loading') {
+    return (<FLoadingTip height={'calc(100vh - 194px)'} />);
   }
+
+  // function onChange(value: Partial<InformalNodeManagerPageModelState>) {
+  //   dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload: {
+  //       ...value,
+  //     },
+  //   });
+  // }
+
+
 
   return (<>
     {

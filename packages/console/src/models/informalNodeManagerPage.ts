@@ -6,6 +6,8 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
+import fMessage from '@/components/fMessage';
+import { listStateAndListMore } from '@/components/FListFooter';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -136,6 +138,7 @@ export interface InformalNodeManagerPageModelState {
     isAuth: boolean;
     authErrorText: string;
   }[];
+  exhibit_PageError: string;
 
   theme_ActivatingThemeName: string;
   theme_FilterKeywords: string;
@@ -157,6 +160,7 @@ export interface InformalNodeManagerPageModelState {
       type: 'resource' | 'object';
     };
   }[];
+  theme_PageError: string;
 
   rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
   // rule_Indeterminate: boolean;
@@ -667,7 +671,8 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_FilterKeywords' |
   'exhibit_ListState' |
   'exhibit_ListMore' |
-  'exhibit_List'> = {
+  'exhibit_List' |
+  'exhibit_PageError'> = {
   exhibit_TypeOptions: [
     { text: '全部', value: '-1' },
     ...FUtil.Predefined.resourceTypes
@@ -685,6 +690,7 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
   exhibit_List: [],
+  exhibit_PageError: '',
 };
 
 const themeInitStates: Pick<InformalNodeManagerPageModelState,
@@ -692,12 +698,14 @@ const themeInitStates: Pick<InformalNodeManagerPageModelState,
   'theme_FilterKeywords' |
   'theme_ListState' |
   'theme_ListMore' |
-  'theme_List'> = {
+  'theme_List' |
+  'theme_PageError'> = {
   theme_ActivatingThemeName: '',
   theme_FilterKeywords: '',
   theme_ListState: 'loading',
   theme_ListMore: 'loading',
   theme_List: [],
+  theme_PageError: '',
 };
 
 const ruleInitSates: Pick<InformalNodeManagerPageModelState,
@@ -913,9 +921,9 @@ const Model: InformalNodeManagerPageModelType = {
         nodes,
       }));
 
-      if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.node_ID)) {
-        return;
-      }
+      // if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.node_ID)) {
+      //   return;
+      // }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -929,7 +937,18 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: isRematch,
       };
 
-      const { data: data1 } = yield call(ruleMatchStatus, params2);
+      const { error, result } = yield call(ruleMatchStatus, params2);
+
+      if (error) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_PageError: error,
+          },
+        });
+        return;
+      }
+
       // console.log(data1, '2434234234234234');
       let list: InformalNodeManagerPageModelState['exhibit_List'] = [];
       if (!isRestart) {
@@ -950,9 +969,10 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
-
-      const { rules: rulesObj } = compile(data1.ruleText);
-
+      // console.log('###1111111111111');
+      // console.log(result, 'result.ruleTextresult.ruleText2309482309');
+      const { rules: rulesObj } = compile(result.ruleText);
+      // console.log('###2222222222222');
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
         ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
@@ -1033,15 +1053,24 @@ const Model: InformalNodeManagerPageModelType = {
         }),
       ];
 
-      const allAddRule = data1.testRules.filter((tr: any) => {
+      // console.log('###3333333333333');
+      const allAddRule = result.testRules.filter((tr: any) => {
         return tr.ruleInfo.operation === 'add';
       });
 
+      const { state, more } = listStateAndListMore({
+        list_Length: exhibitList.length,
+        total_Length: data.totalItem,
+        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType === '-1'
+          && informalNodeManagerPage.exhibit_SelectedStatus === '2'
+          && informalNodeManagerPage.exhibit_FilterKeywords === '',
+      });
+      // console.log('###444444444444');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: data1.ruleText,
-          node_AllRuleResult: data1.testRules,
+          node_RuleText: result.ruleText,
+          node_AllRuleResult: result.testRules,
           node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
             return tr.ruleInfo.candidate.type === 'object';
           }).map((tr: any) => {
@@ -1054,14 +1083,8 @@ const Model: InformalNodeManagerPageModelType = {
           }),
           // exhibitPageExhibitsTotal: data.totalItem,
           exhibit_List: exhibitList,
-          exhibit_ListState: exhibitList.length > 0
-            ? 'loaded'
-            : informalNodeManagerPage.exhibit_SelectedType === '-1'
-            && informalNodeManagerPage.exhibit_SelectedStatus === '2'
-            && informalNodeManagerPage.exhibit_FilterKeywords === ''
-              ? 'noData'
-              : 'noSearchResult',
-          exhibit_ListMore: data.totalItem > exhibitList.length ? 'andMore' : 'noMore',
+          exhibit_ListState: state,
+          exhibit_ListMore: more,
         },
       });
     },
@@ -1148,7 +1171,17 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: isRematch,
       };
 
-      const { data: data1 } = yield call(ruleMatchStatus, params2);
+      const { error, result } = yield call(ruleMatchStatus, params2);
+
+      if (error) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            theme_PageError: error,
+          },
+        });
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
@@ -1165,7 +1198,7 @@ const Model: InformalNodeManagerPageModelType = {
       })?.testResourceName || null;
 
       // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
-      const { rules: rulesObj } = compile(data1.ruleText);
+      const { rules: rulesObj } = compile(result.ruleText);
       // console.log(rulesObj, 'rulesObjiosfjewwef');
 
       const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['theme_List'][number]>((dl) => {
@@ -1251,7 +1284,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: data1.ruleText,
+          node_RuleText: result.ruleText,
           // themePageThemesTotal: data.totalItem,
           theme_List: themePageThemeList,
           theme_ListState: themePageThemeList.length > 0
@@ -1416,11 +1449,11 @@ const Model: InformalNodeManagerPageModelType = {
       const params1: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.node_ID,
       };
-      const { data: data1 } = yield call(ruleMatchStatus, params1);
+      const { error, result } = yield call(ruleMatchStatus, params1);
 
       // console.log(data1, 'data1!@#$!@#$@#');
 
-      const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = data1.testRules
+      const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = result.testRules
         .filter((tr: any) => {
           return tr.matchErrors.length > 0;
         })
@@ -1431,7 +1464,7 @@ const Model: InformalNodeManagerPageModelType = {
           };
         });
 
-      const rule_CodeEfficients: InformalNodeManagerPageModelState['rule_CodeEfficients'] = data1.testRules
+      const rule_CodeEfficients: InformalNodeManagerPageModelState['rule_CodeEfficients'] = result.testRules
         .filter((tr: any) => {
           return tr.efficientInfos.length > 0;
         })
@@ -1448,12 +1481,12 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: data1.ruleText,
+          node_RuleText: result.ruleText,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
           rule_CodeExecutionErrors: rule_CodeExecutionErrors,
           rule_CodeEfficients: rule_CodeEfficients,
-          rule_RuleList: data1.testRules.map((tr: any) => {
+          rule_RuleList: result.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
@@ -1491,9 +1524,13 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: true,
       };
 
-      const { data: data1 } = yield call(ruleMatchStatus, params2);
+      const { error, result } = yield call(ruleMatchStatus, params2);
 
-      const codeExecutionError = data1.testRules
+      if (error) {
+        return;
+      }
+
+      const codeExecutionError = result.testRules
         .filter((tr: any) => {
           return tr.matchErrors.length > 0;
         })
@@ -2404,13 +2441,21 @@ interface RuleMatchStatusParams {
   isRematch?: boolean;
 }
 
-async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<any> {
+async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<{
+  error: string | null;
+  result?: any;
+}> {
   // const params: RulesRematchParamsType = {
   //   nodeId: nodeID,
   // };
 
   if (isRematch) {
-    await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
+    const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
+    if (errCode !== 0 || !data) {
+      return {
+        error: '匹配失败',
+      };
+    }
   }
 
   while (true) {
@@ -2420,9 +2465,14 @@ async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusPar
       await sleep();
     } else {
       if (response.data.status === 2) {
-        throw new Error('匹配失败');
+        return {
+          error: '匹配失败',
+        };
       }
-      return response;
+      return {
+        error: null,
+        result: response.data,
+      };
     }
   }
 
