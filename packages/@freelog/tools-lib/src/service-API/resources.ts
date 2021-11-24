@@ -337,7 +337,7 @@ interface ResourcesDownloadParamsType {
 }
 
 export function resourcesDownload(params: ResourcesDownloadParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi', true) + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
   // return request.get(`/v2/resources/${params.resourceId}/versions/${params.$version}/download`, {
   //   responseType: 'arraybuffer',
   // });

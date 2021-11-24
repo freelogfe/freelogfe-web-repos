@@ -39,6 +39,9 @@ interface BaseInfo {
 
   policyID: string;
   policyText: string;
+
+  // resourceInfo: null | {};
+  // exhibitInfo: null | {};
 }
 
 type AssociateContracts = {
@@ -118,6 +121,9 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
       policyID: data.policyId,
       policyText: data.policyInfo.policyText,
+
+      // resourceInfo: null,
+      // exhibitInfo: null,
     };
 
     // console.log(data, 'data12432433333########');
@@ -179,7 +185,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               exhibitID: d5.presentableId,
               exhibitName: d5.presentableName,
               resourceID: resvr.resourceId,
-              contractIDs: resvr.contracts.map((cccc: any) => {
+              policyIDs: resvr.contracts.map((cccc: any) => {
                 return cccc.policyId;
               }),
             };
@@ -224,6 +230,52 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         };
       });
     setAssociateContracts(AssociateContractsResult);
+  }
+
+  async function syncVersionUsedContracts(value: FContractDetailsDrawerStates['versionAllContractIDs'][number]) {
+
+    const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
+      version: value.version,
+      resourceId: baseInfo?.licenseeId || '',
+      resolveResources: [{
+        resourceId: baseInfo?.licensorId || '',
+        contracts: value.policyIDs.map((p) => {
+          return {
+            policyId: p,
+          };
+        }),
+      }],
+    };
+
+    const { data, errCode } = await FServiceAPI.Resource.updateResourceVersionInfo(params);
+    if (errCode !== 0 || !data) {
+      setVersionAllContractIDs(versionAllContractIDs);
+    }
+    // console.log(data, 'updateResourceVersionInfo@#$@#$@#$@#$@34234234');
+  }
+
+  async function syncExhibitUsedContracts(value: FContractDetailsDrawerStates['exhibitAllContractIDs'][number]) {
+    const params: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+      nodeId: Number(baseInfo?.licenseeId) || 0,
+      resourceIds: baseInfo?.licensorId || '',
+    };
+
+    const { data } = await FServiceAPI.Exhibit.presentableList(params);
+    console.log(data[0].presentableId, '!!!!234234');
+
+    const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+      presentableId: data[0].presentableId,
+      resolveResources: [{
+        resourceId: baseInfo?.licensorId || '',
+        contracts: value.policyIDs.map((p) => {
+          return {
+            policyId: p,
+          };
+        }),
+      }],
+    };
+    const { data: data2 } = await FServiceAPI.Exhibit.updatePresentable(params2);
+    console.log(data2, '@@@@#$23498');
   }
 
   return (<FDrawer
@@ -346,10 +398,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       resourceName={baseInfo.licenseeName}
                       currentPolicyID={baseInfo.policyID}
                       onChangeVersionAllContractIDs={(value) => {
-                        console.log(value, '@#$@#$@#');
+                        // console.log(value, '@#$@#$@#');
+                        setVersionAllContractIDs(value);
                       }}
                       onChangeVersionContractIDs={(value) => {
-                        console.log(value, '##$@#$@#$');
+                        // console.log(value, '##$@#$@#$');
+                        syncVersionUsedContracts(value);
                       }}
                     />
                   </div>
@@ -365,10 +419,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       exhibitAllContractIDs={exhibitAllContractIDs}
                       currentPolicyID={baseInfo.policyID}
                       onChangeExhibitAllContractIDs={(value) => {
-                        console.log(value, '@#$@#$@#$@#09sdj');
+                        // console.log(value, '@#$@#$@#$@#09sdj');
+                        setExhibitAllContractIDs(value);
                       }}
                       onChangeExhibitContractIDs={(value) => {
-                        console.log(value, '@#$@#098jsdlfkjl');
+                        // console.log(value, '@#$@#098jsdlfkjl');
+                        syncExhibitUsedContracts(value);
                       }}
                     />
                   </div>
@@ -442,7 +498,6 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         />
                       </div>
 
-
                       {
                         versionAllContractIDs.length > 0 && (<>
                           <div style={{ height: 10 }} />
@@ -450,7 +505,15 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                             <FVersions
                               versionAllContractIDs={versionAllContractIDs}
                               resourceName={baseInfo.licenseeName}
-                              currentContractID={ac.contractId}
+                              currentPolicyID={ac.policyID}
+                              onChangeVersionAllContractIDs={(value) => {
+                                // console.log(value, '@#$@#$@#');
+                                setVersionAllContractIDs(value);
+                              }}
+                              onChangeVersionContractIDs={(value) => {
+                                // console.log(value, '##$@#$@#$');
+                                syncVersionUsedContracts(value);
+                              }}
                             />
 
                           </div>
@@ -465,8 +528,15 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                             <FExhibits
                               nodeName={baseInfo.licenseeName}
                               exhibitAllContractIDs={exhibitAllContractIDs}
-                              currentContractID={ac.contractId}
-                              currentPolicyID={''}
+                              currentPolicyID={ac.policyID}
+                              onChangeExhibitAllContractIDs={(value) => {
+                                // console.log(value, '@#$@#$@#$@#09sdj');
+                                setExhibitAllContractIDs(value);
+                              }}
+                              onChangeExhibitContractIDs={(value) => {
+                                // console.log(value, '@#$@#098jsdlfkjl');
+                                syncExhibitUsedContracts(value);
+                              }}
                             />
                           </div>
                         </>)
@@ -517,10 +587,10 @@ function FVersions({
             <FCheckbox
               checked={checked}
               disabled={checked && vai.policyIDs.length === 1}
-              onChange={(value) => {
+              onChange={(e) => {
                 const versionContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'][number] = {
                   ...vai,
-                  policyIDs: value
+                  policyIDs: e.target.checked
                     ? [
                       ...vai.policyIDs,
                       currentPolicyID,
