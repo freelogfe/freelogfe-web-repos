@@ -75,13 +75,20 @@ interface FContractDetailsDrawerStates {
   }[];
 }
 
+const initStates: FContractDetailsDrawerStates = {
+  baseInfo: null,
+  associateContracts: null,
+  versionAllContractIDs: [],
+  exhibitAllContractIDs: [],
+};
+
 function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDrawerProps) {
   // console.log(contractID, 'contractID!!!!2341234');
 
-  const [baseInfo, setBaseInfo] = React.useState<FContractDetailsDrawerStates['baseInfo']>(null);
-  const [associateContracts, setAssociateContracts] = React.useState<FContractDetailsDrawerStates['associateContracts']>(null);
-  const [versionAllContractIDs, setVersionAllContractIDs] = React.useState<FContractDetailsDrawerStates['versionAllContractIDs']>([]);
-  const [exhibitAllContractIDs, setExhibitAllContractIDs] = React.useState<FContractDetailsDrawerStates['exhibitAllContractIDs']>([]);
+  const [baseInfo, setBaseInfo] = React.useState<FContractDetailsDrawerStates['baseInfo']>(initStates['baseInfo']);
+  const [associateContracts, setAssociateContracts] = React.useState<FContractDetailsDrawerStates['associateContracts']>(initStates['associateContracts']);
+  const [versionAllContractIDs, setVersionAllContractIDs] = React.useState<FContractDetailsDrawerStates['versionAllContractIDs']>(initStates['versionAllContractIDs']);
+  const [exhibitAllContractIDs, setExhibitAllContractIDs] = React.useState<FContractDetailsDrawerStates['exhibitAllContractIDs']>(initStates['exhibitAllContractIDs']);
 
   React.useEffect(() => {
     if (!contractID) {
@@ -89,6 +96,15 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     }
     fetchHandleData();
   }, [contractID]);
+
+  function onChange_DrawerVisible(visible: boolean) {
+    if (!visible) {
+      setBaseInfo(initStates['baseInfo']);
+      setAssociateContracts(initStates['associateContracts']);
+      setVersionAllContractIDs(initStates['versionAllContractIDs']);
+      setExhibitAllContractIDs(initStates['exhibitAllContractIDs']);
+    }
+  }
 
   async function fetchHandleData() {
 
@@ -285,6 +301,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     visible={!!contractID}
     title={'合约详情'}
     onClose={() => onClose && onClose()}
+    afterVisibleChange={onChange_DrawerVisible}
   >
     {
       !baseInfo
