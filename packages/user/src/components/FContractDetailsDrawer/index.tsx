@@ -145,7 +145,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         resourceId: baseInfoData.licenseeId,
       };
       const { data: data9 } = await FServiceAPI.Resource.resolveResources(params9);
-      console.log(data9, 'data92938429342394');
+      // console.log(data9, 'data92938429342394');
       // console.log(baseInfoData.licensorId, 'licensorId23423423');
       const result: FContractDetailsDrawerStates['versionAllContractIDs'] = (data9 as any[])
         .find((d: any) => {
