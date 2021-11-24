@@ -104,18 +104,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     });
   }, walletPage.changingPassword_CaptchaModal_SentCaptchaWait === 0 ? null : 1000);
 
-  const columns: ColumnsType<{
-    serialNo: string;
-    date: string;
-    time: string;
-    digest: string;
-    reciprocalAccountId: string;
-    reciprocalAccountName: string;
-    reciprocalAccountType: string;
-    transactionAmount: string;
-    afterBalance: string;
-    status: 1 | 2 | 3 | 4;
-  }> = [
+  const columns: ColumnsType<WalletPageModelState['table_DateSource'][number]> = [
     {
       title: (<FTitleText text={'时间'} type='table' />),
       dataIndex: 'dataTime',
@@ -129,9 +118,25 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         </div>);
       },
     }, {
-      title: (<FTitleText text={'交易说明｜对方｜流水号'} type='table' />),
-      dataIndex: 'num',
-      key: 'num',
+      title: (<FTitleText text={'交易方｜支付方式｜流水号'} type='table' />),
+      dataIndex: 'payment',
+      key: 'payment',
+      render(_, record) {
+        return (<div>
+          <FContentText
+            text={`${record.reciprocalAccountName} | 羽币支付`}
+            type='highlight'
+          />
+          <FContentText
+            text={`流水号 ${record.serialNo}`}
+            type='additional1'
+          />
+        </div>);
+      },
+    }, {
+      title: (<FTitleText text={'金额（枚）'} type='table' />),
+      dataIndex: 'money',
+      key: 'money',
       render(_, record) {
         return (<div>
           <FContentText
@@ -139,12 +144,12 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             type='highlight'
           />
           <FContentText
-            text={`${record.reciprocalAccountName}｜${record.serialNo}`}
+            text={`合约编号 ${record.contractID}`}
             type='additional1'
           />
         </div>);
       },
-    }, {
+    },{
       title: (<FTitleText text={'金额'} type='table' />),
       dataIndex: 'amount',
       key: 'amount',
@@ -401,6 +406,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                           <div className={styles.totalAmountIncome}>{walletPage.table_TotalAmountIncome}</div>
                         </div>
                         <div style={{ height: 10 }} />
+
                         {
                           walletPage.table_State === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无交易记录'} />)
                         }

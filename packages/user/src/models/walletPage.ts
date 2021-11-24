@@ -72,6 +72,7 @@ export interface WalletPageModelState {
     date: string;
     time: string;
     digest: string;
+    contractID: string;
     reciprocalAccountId: string;
     reciprocalAccountName: string;
     reciprocalAccountType: string;
@@ -1065,6 +1066,7 @@ const Model: WalletPageModelType = {
             date: date,
             time: time,
             digest: dl.digest,
+            contractID: dl.attachInfo.contractId,
             reciprocalAccountId: dl.reciprocalAccountId,
             reciprocalAccountName: dl.reciprocalAccountName,
             reciprocalAccountType: dl.reciprocalAccountType,
