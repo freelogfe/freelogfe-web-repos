@@ -261,7 +261,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     };
 
     const { data } = await FServiceAPI.Exhibit.presentableList(params);
-    console.log(data[0].presentableId, '!!!!234234');
+    // console.log(data[0].presentableId, '!!!!234234');
 
     const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
       presentableId: data[0].presentableId,
@@ -274,8 +274,11 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         }),
       }],
     };
-    const { data: data2 } = await FServiceAPI.Exhibit.updatePresentable(params2);
-    console.log(data2, '@@@@#$23498');
+    const { data: data2, errCode: errCode2 } = await FServiceAPI.Exhibit.updatePresentable(params2);
+    // console.log(data2, '@@@@#$23498');
+    if (errCode2 !== 0 || !data2) {
+      setExhibitAllContractIDs(exhibitAllContractIDs);
+    }
   }
 
   return (<FDrawer
