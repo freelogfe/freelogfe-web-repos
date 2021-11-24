@@ -394,11 +394,11 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                         <div className={styles.totalAmount}>
                           <FTitleText text={'支出'} type='table' />
                           <div style={{ width: 10 }} />
-                          <div className={styles.totalAmountExpenditure}>20.00</div>
+                          <div className={styles.totalAmountExpenditure}>{walletPage.table_TotalAmountExpenditure}</div>
                           <div style={{ width: 20 }} />
                           <FTitleText text={'收入'} type='table' />
                           <div style={{ width: 10 }} />
-                          <div className={styles.totalAmountIncome}>130.00</div>
+                          <div className={styles.totalAmountIncome}>{walletPage.table_TotalAmountIncome}</div>
                         </div>
                         <div style={{ height: 10 }} />
                         {

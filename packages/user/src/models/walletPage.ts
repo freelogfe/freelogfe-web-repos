@@ -431,7 +431,7 @@ const initStates: WalletPageModelState = {
 
   ...changingPasswordInitStates,
 
-  table_Filter_Date_Type: 'week',
+  table_Filter_Date_Type: 'month',
   table_Filter_Date_Custom: null,
   table_Filter_Keywords: '',
   table_Filter_MinAmount: '',
@@ -1044,8 +1044,8 @@ const Model: WalletPageModelType = {
       const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
         accountId: walletPage.accountID,
         skip: table_DateSource.length,
-        // limit: FUtil.Predefined.pageSize,
-        limit: 5,
+        limit: FUtil.Predefined.pageSize,
+        // limit: 5,
         startCreatedDate: startCreatedDate || undefined,
         endCreatedDate: endCreatedDate || undefined,
         amountStartPoint: walletPage.table_Filter_MinAmount === '' ? undefined : Number(walletPage.table_Filter_MinAmount),
