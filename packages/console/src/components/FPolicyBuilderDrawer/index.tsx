@@ -476,9 +476,10 @@ function FPolicyBuilder({
     if (editMode === 'code') {
       code = codeText;
     } else {
+      console.log(combinationData, 'combinationData234234');
       code = dataToCode(combinationData);
     }
-    console.log(code, 'code823u423u4ooij');
+    // console.log(code, 'code823u423u4ooij');
     const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
     if (err) {
       setIsVerifying(false);
@@ -1392,7 +1393,7 @@ function dataToCode(data: CombinationStructureType): string {
       } else if (et.type === 'relativeTime') {
         result += `~freelog.RelativeTimeEvent("${et.num}","${et.unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {
-        result += `~freelog.TimeEvent("${et.dateTime}") => ${targetStateName}`;
+        result += `~freelog.TimeEvent("${et.dateTime?.format(FUtil.Predefined.momentDateTimeFormat)}") => ${targetStateName}`;
       } else {
         result += 'terminate';
       }
