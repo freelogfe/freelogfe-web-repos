@@ -53,7 +53,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
   });
 
   if (informalNodeManagerPage.theme_PageError) {
-    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.theme_PageError}/>);
+    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.theme_PageError} />);
   }
 
   if (informalNodeManagerPage.theme_ListState === 'loading') {
@@ -68,7 +68,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
   //     },
   //   });
   // }
-
 
 
   return (<>
@@ -165,23 +164,9 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                               : (<div className={styles.coverFooter}>
                                 <div>
                                   <div style={{ width: 1 }} />
-                                  <a onClick={() => {
-                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
-                                  }}>编辑</a>
-                                  <FDivider />
-                                  <a
-                                    onClick={() => {
-                                      window.open(t.originInfo.type === 'resource'
-                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                        : FUtil.LinkTo.objectDetails({
-                                          bucketName: t.originInfo.name.split('/')[0],
-                                          objectID: t.originInfo.id,
-                                        }));
-                                    }}
-                                  >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
+
                                   {
                                     !t.isOnline && (<>
-                                      <FDivider />
                                       <a onClick={() => {
                                         fConfirmModal({
                                           message: FUtil1.I18n.message('msg_change_theme_confirm'),
@@ -197,8 +182,24 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                           },
                                         });
                                       }}>激活</a>
+                                      <FDivider />
                                     </>)
                                   }
+                                  <a
+                                    onClick={() => {
+                                      window.open(t.originInfo.type === 'resource'
+                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
+                                        : FUtil.LinkTo.objectDetails({
+                                          bucketName: t.originInfo.name.split('/')[0],
+                                          objectID: t.originInfo.id,
+                                        }));
+                                    }}
+                                  >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
+                                  <FDivider />
+
+                                  <a onClick={() => {
+                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
+                                  }}>编辑</a>
 
                                   <div style={{ width: 1 }} />
                                 </div>
