@@ -592,7 +592,7 @@ function FPolicyBuilder({
         <FTooltip title={<FTextBtn
           type='default'
           onClick={() => {
-            window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01')
+            window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
           }}
         >点击查看帮助文档</FTextBtn>}>
           <label style={{
@@ -1294,9 +1294,9 @@ async function verifyCodeText(text: string, allTexts: string[], targetType = 're
   } else {
     try {
       // TODO:
-      console.log('@@@@@@@############');
+      // console.log([text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev'], '@@@@@@@############');
       const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
-      console.log(result, 'resultresult@$!@$#@#$');
+      // console.log(result, 'resultresult@$!@$#@#$');
     } catch (err) {
       console.log(err.message, 'err234234234');
       error = err.message;
