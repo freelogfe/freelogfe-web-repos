@@ -419,7 +419,7 @@ export default {
 
     .application-senarios-desc {
       color: #5260bb;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 20px;
       margin-top: 20px;
     }
