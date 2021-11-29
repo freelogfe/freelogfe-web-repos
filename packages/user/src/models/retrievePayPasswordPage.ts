@@ -296,8 +296,8 @@ const Model: RetrievePayPasswordPageModelType = {
         authCodeType: 'updateTransactionAccountPwd',
       };
 
-      const { data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (!data) {
+      const { errCode, data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
 
