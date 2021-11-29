@@ -626,7 +626,7 @@ const Model: WalletPageModelType = {
 
       const { data, msg, errCode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
-      if (errCode !== 0) {
+      if (errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
 
