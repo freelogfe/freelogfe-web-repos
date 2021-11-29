@@ -744,9 +744,9 @@ const Model: WalletPageModelType = {
         authCodeType: 'updateTransactionAccountPwd',
       };
 
-      const { data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      const { data, errCode } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
 
-      if (!data) {
+      if (errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
 

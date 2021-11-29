@@ -4,7 +4,6 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
-import { history } from 'umi';
 
 export type RetrievePageModelState = WholeReadonly<{
   showView: 'reset' | 'success';
@@ -265,7 +264,7 @@ const Model: RetrievePageModelType = {
 
       let verifyCodeError: string = '';
 
-      if (!retrievePage.emailInput) {
+      if (retrievePage.verifyCode === '') {
         verifyCodeError = '验证码不能为空';
       }
 
@@ -380,10 +379,11 @@ const Model: RetrievePageModelType = {
         authCode: retrievePage.verifyCode,
       };
 
-      const { data, msg } = yield call(FServiceAPI.User.resetPassword, params);
+      const { errCode, data, msg } = yield call(FServiceAPI.User.resetPassword, params);
       // console.log(data, 'DDDDDDDdd123423');
-      if (!data) {
-        return fMessage(msg, 'error');
+      if (errCode !== 0 || !data) {
+        // return fMessage(msg, 'error');
+        return fMessage('验证码错误', 'error');
       }
       // history.replace(FUtil.LinkTo.resetPasswordSuccessResult());
       yield put<ChangeAction>({
