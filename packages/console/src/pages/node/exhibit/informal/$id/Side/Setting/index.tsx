@@ -19,7 +19,7 @@ import {
 import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
-import FModal from '@/components/FModal';
+// import FModal from '@/components/FModal';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
@@ -194,7 +194,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     <div style={{ height: 20 }} />
     <Space className={styles.addCustomTitle}>
       <FCircleBtn
-        type='transparent'
+        // type='transparent'
         onClick={() => {
           dispatch<OnHandleAttrModalAction>({
             type: 'informExhibitInfoPage/onHandleAttrModal',
@@ -204,7 +204,17 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
           });
         }}
       />
-      <span>添加自定义选项</span>
+      <span
+        style={{ cursor: 'pointer', display: 'inline-block' }}
+        onClick={() => {
+          dispatch<OnHandleAttrModalAction>({
+            type: 'informExhibitInfoPage/onHandleAttrModal',
+            payload: {
+              type: 'add',
+            },
+          });
+        }}
+      >添加自定义选项</span>
     </Space>
 
     <FCustomOptionsEditorDrawer

@@ -104,9 +104,14 @@ function FCustomOptionsEditorDrawer({
         size='small'
         onClick={onClick_AddNewItem}
       />
-      <FContentText
-        text={'新增一项属性'}
-      />
+      <div
+        style={{ cursor: 'pointer', display: 'inline-block' }}
+        onClick={onClick_AddNewItem}
+      >
+        <FContentText
+          text={'新增一项属性'}
+        />
+      </div>
     </Space>
 
   </FDrawer>);

@@ -26,14 +26,14 @@ import FSelect from '@/components/FSelect';
 import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
-import FModal from '@/components/FModal';
+// import FModal from '@/components/FModal';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
-import FDrawer from '@/components/FDrawer';
-import {
-  OnAddExhibitDrawerCancelChangeAction,
-  OnAddExhibitDrawerConfirmChangeAction,
-} from '@/models/informalNodeManagerPage';
+// import FDrawer from '@/components/FDrawer';
+// import {
+//   OnAddExhibitDrawerCancelChangeAction,
+//   OnAddExhibitDrawerConfirmChangeAction,
+// } from '@/models/informalNodeManagerPage';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 
@@ -292,7 +292,14 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               });
             }}
           />
-          <span>添加自定义选项</span>
+          <span
+            style={{ cursor: 'pointer', display: 'inline-block' }}
+            onClick={() => {
+              dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
+                type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
+              });
+            }}
+          >添加自定义选项</span>
         </Space>
       </>)
     }
