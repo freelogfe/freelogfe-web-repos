@@ -16,30 +16,19 @@ export interface WalletPageModelState {
   // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze';
   accountID: string;
   accountBalance: number;
-  // transactionRecord: {
-  //   serialNo: string;
-  //   date: string;
-  //   time: string;
-  //   digest: string;
-  //   reciprocalAccountId: string;
-  //   reciprocalAccountName: string;
-  //   reciprocalAccountType: string;
-  //   transactionAmount: string;
-  //   afterBalance: string;
-  //   status: 1 | 2 | 3 | 4; // 1:交易确认中 2:交易成功 3:交易取消 4:交易失败
-  // }[];
 
-  activatingAccount: boolean;
-  activatingAccountMobile: string;
-  activatingAccountEmail: string;
-  activatingAccountType: 'phone' | 'email';
-  activatingAccountCaptcha: string;
-  activatingAccountCaptchaError: string;
-  activatingAccountSentCaptchaWait: number;
-  activatingAccountPasswordOne: string;
-  activatingAccountPasswordOneError: string;
-  activatingAccountPasswordTwo: string;
-  activatingAccountPasswordTwoError: string;
+  activating_VisibleModal: '' | 'captcha' | 'password';
+  // activatingAccount: boolean;
+  activating_AccountMobile: string;
+  activating_AccountEmail: string;
+  activating_AccountType: 'phone' | 'email';
+  activating_Captcha: string;
+  activating_CaptchaError: string;
+  activating_SentCaptchaWait: number;
+  activating_PasswordOne: string;
+  activating_PasswordOneError: string;
+  activating_PasswordTwo: string;
+  activating_PasswordTwoError: string;
 
   changingPassword_CaptchaModal_Visible: boolean;
   changingPassword_CaptchaModal_Phone: string;
@@ -97,63 +86,67 @@ export interface OnUnmountPageAction extends AnyAction {
   type: 'walletPage/onUnmountPage';
 }
 
-export interface OnClickActivateAccountBtnAction extends AnyAction {
-  type: 'walletPage/onClickActivateAccountBtn';
+export interface OnClick_Activate_AccountBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Activate_AccountBtn';
 }
 
-export interface OnCancelActivateAccountModalAction extends AnyAction {
-  type: 'walletPage/onCancelActivateAccountModal';
+export interface OnCancel_Activate_CaptchaModal_Action extends AnyAction {
+  type: 'walletPage/onCancel_Activate_CaptchaModal';
 }
 
-export interface OnChangeActivateAccountModeAction extends AnyAction {
-  type: 'walletPage/onChangeActivateAccountMode';
+export interface OnChange_Activate_AccountMode_Action extends AnyAction {
+  type: 'walletPage/onChange_Activate_AccountMode';
   payload: {
     value: 'phone' | 'email';
   };
 }
 
-export interface OnChangeActivateAccountCaptchaInputAction extends AnyAction {
-  type: 'walletPage/onChangeActivateAccountCaptchaInput';
+export interface OnChange_Activate_CaptchaInput_Action extends AnyAction {
+  type: 'walletPage/onChange_Activate_CaptchaInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnClickActivateAccountCaptchaBtnAction extends AnyAction {
-  type: 'walletPage/onClickActivateAccountCaptchaBtn';
+export interface OnClick_Activate_SentCaptchaBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Activate_SentCaptchaBtn';
 }
 
-export interface OnChangeActivatingAccountSentCaptchaWaitAction extends AnyAction {
-  type: 'walletPage/onChangeActivatingAccountSentCaptchaWait';
+export interface OnChange_Activate_SentCaptchaWait_Action extends AnyAction {
+  type: 'walletPage/onChange_Activate_SentCaptchaWait';
   payload: {
     value: number;
   };
 }
 
-export interface OnChangeActivateAccountPassword1Action extends AnyAction {
-  type: 'walletPage/onChangeActivateAccountPassword1';
+export interface OnClick_Activate_NextBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Activate_NextBtn';
+}
+
+export interface OnChange_Activate_Password1_Action extends AnyAction {
+  type: 'walletPage/onChange_Activate_Password1';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurActivateAccountPassword1Action extends AnyAction {
-  type: 'walletPage/onBlurActivateAccountPassword1';
+export interface OnBlur_Activate_Password1_Action extends AnyAction {
+  type: 'walletPage/onBlur_Activate_Password1';
 }
 
-export interface OnChangeActivateAccountPassword2Action extends AnyAction {
-  type: 'walletPage/onChangeActivateAccountPassword2';
+export interface OnChange_Activate_Password2_Action extends AnyAction {
+  type: 'walletPage/onChange_Activate_Password2';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurActivateAccountPassword2Action extends AnyAction {
-  type: 'walletPage/onBlurActivateAccountPassword2';
+export interface OnBlur_Activate_Password2_Action extends AnyAction {
+  type: 'walletPage/onBlur_Activate_Password2';
 }
 
-export interface OnClickActivateAccountConfirmBtnAction extends AnyAction {
-  type: 'walletPage/onClickActivateAccountConfirmBtn';
+export interface OnClick_Activate_ConfirmBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Activate_ConfirmBtn';
 }
 
 export interface OnClick_ChangingPasswordBtn_Action extends AnyAction {
@@ -306,17 +299,18 @@ interface WalletPageModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
 
-    onClickActivateAccountBtn: (action: OnClickActivateAccountBtnAction, effects: EffectsCommandMap) => void;
-    onCancelActivateAccountModal: (action: OnCancelActivateAccountModalAction, effects: EffectsCommandMap) => void;
-    onChangeActivateAccountMode: (action: OnChangeActivateAccountModeAction, effects: EffectsCommandMap) => void;
-    onChangeActivateAccountCaptchaInput: (action: OnChangeActivateAccountCaptchaInputAction, effects: EffectsCommandMap) => void;
-    onClickActivateAccountCaptchaBtn: (action: OnClickActivateAccountCaptchaBtnAction, effects: EffectsCommandMap) => void;
-    onChangeActivatingAccountSentCaptchaWait: (action: OnChangeActivatingAccountSentCaptchaWaitAction, effects: EffectsCommandMap) => void;
-    onChangeActivateAccountPassword1: (action: OnChangeActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
-    onBlurActivateAccountPassword1: (action: OnBlurActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
-    onChangeActivateAccountPassword2: (action: OnChangeActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
-    onBlurActivateAccountPassword2: (action: OnBlurActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
-    onClickActivateAccountConfirmBtn: (action: OnClickActivateAccountConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClick_Activate_AccountBtn: (action: OnClick_Activate_AccountBtn_Action, effects: EffectsCommandMap) => void;
+    onCancel_Activate_CaptchaModal: (action: OnCancel_Activate_CaptchaModal_Action, effects: EffectsCommandMap) => void;
+    onChange_Activate_AccountMode: (action: OnChange_Activate_AccountMode_Action, effects: EffectsCommandMap) => void;
+    onChange_Activate_CaptchaInput: (action: OnChange_Activate_CaptchaInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Activate_SentCaptchaBtn: (action: OnClick_Activate_SentCaptchaBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Activate_SentCaptchaWait: (action: OnChange_Activate_SentCaptchaWait_Action, effects: EffectsCommandMap) => void;
+    onClick_Activate_NextBtn: (action: OnClick_Activate_NextBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Activate_Password1: (action: OnChange_Activate_Password1_Action, effects: EffectsCommandMap) => void;
+    onBlur_Activate_Password1: (action: OnBlur_Activate_Password1_Action, effects: EffectsCommandMap) => void;
+    onChange_Activate_Password2: (action: OnChange_Activate_Password2_Action, effects: EffectsCommandMap) => void;
+    onBlur_Activate_Password2: (action: OnBlur_Activate_Password2_Action, effects: EffectsCommandMap) => void;
+    onClick_Activate_ConfirmBtn: (action: OnClick_Activate_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
 
     onClick_ChangingPasswordBtn: (action: OnClick_ChangingPasswordBtn_Action, effects: EffectsCommandMap) => void;
 
@@ -358,28 +352,28 @@ interface WalletPageModelType {
 }
 
 const activatingAccountInitStates: Pick<WalletPageModelState,
-  'activatingAccount'
-  | 'activatingAccountMobile'
-  | 'activatingAccountEmail'
-  | 'activatingAccountType'
-  | 'activatingAccountCaptcha'
-  | 'activatingAccountCaptchaError'
-  | 'activatingAccountSentCaptchaWait'
-  | 'activatingAccountPasswordOne'
-  | 'activatingAccountPasswordOneError'
-  | 'activatingAccountPasswordTwo'
-  | 'activatingAccountPasswordTwoError'> = {
-  activatingAccount: false,
-  activatingAccountMobile: '',
-  activatingAccountEmail: '',
-  activatingAccountType: 'phone',
-  activatingAccountCaptcha: '',
-  activatingAccountCaptchaError: '',
-  activatingAccountSentCaptchaWait: 0,
-  activatingAccountPasswordOne: '',
-  activatingAccountPasswordOneError: '',
-  activatingAccountPasswordTwo: '',
-  activatingAccountPasswordTwoError: '',
+  'activating_VisibleModal'
+  | 'activating_AccountMobile'
+  | 'activating_AccountEmail'
+  | 'activating_AccountType'
+  | 'activating_Captcha'
+  | 'activating_CaptchaError'
+  | 'activating_SentCaptchaWait'
+  | 'activating_PasswordOne'
+  | 'activating_PasswordOneError'
+  | 'activating_PasswordTwo'
+  | 'activating_PasswordTwoError'> = {
+  activating_VisibleModal: '',
+  activating_AccountMobile: '',
+  activating_AccountEmail: '',
+  activating_AccountType: 'phone',
+  activating_Captcha: '',
+  activating_CaptchaError: '',
+  activating_SentCaptchaWait: 0,
+  activating_PasswordOne: '',
+  activating_PasswordOneError: '',
+  activating_PasswordTwo: '',
+  activating_PasswordTwoError: '',
 };
 
 const changingPasswordInitStates: Pick<WalletPageModelState,
@@ -490,21 +484,23 @@ const Model: WalletPageModelType = {
         payload: initStates,
       });
     },
-    * onClickActivateAccountBtn(action: OnClickActivateAccountBtnAction, { select, put }: EffectsCommandMap) {
+
+    * onClick_Activate_AccountBtn(action: OnClick_Activate_AccountBtn_Action, { select, put }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccount: true,
-          activatingAccountMobile: walletPage.userPhone,
-          activatingAccountEmail: walletPage.userEmail,
-          activatingAccountType: walletPage.userEmail ? 'email' : 'phone',
+          activating_VisibleModal: 'captcha',
+          activating_AccountMobile: walletPage.userPhone,
+          activating_AccountEmail: walletPage.userEmail,
+          activating_AccountType: walletPage.userEmail ? 'email' : 'phone',
         },
       });
     },
-    * onCancelActivateAccountModal(action: OnCancelActivateAccountModalAction, { put }: EffectsCommandMap) {
+    * onCancel_Activate_CaptchaModal(action: OnCancel_Activate_CaptchaModal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -512,23 +508,23 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onChangeActivateAccountMode({ payload }: OnChangeActivateAccountModeAction, { put }: EffectsCommandMap) {
+    * onChange_Activate_AccountMode({ payload }: OnChange_Activate_AccountMode_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountType: payload.value,
+          activating_AccountType: payload.value,
         },
       });
     },
-    * onChangeActivateAccountCaptchaInput({ payload }: OnChangeActivateAccountCaptchaInputAction, { put }: EffectsCommandMap) {
+    * onChange_Activate_CaptchaInput({ payload }: OnChange_Activate_CaptchaInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountCaptcha: payload.value,
+          activating_Captcha: payload.value,
         },
       });
     },
-    * onClickActivateAccountCaptchaBtn(action: OnClickActivateAccountCaptchaBtnAction, {
+    * onClick_Activate_SentCaptchaBtn(action: OnClick_Activate_SentCaptchaBtn_Action, {
       select,
       put,
       call,
@@ -540,12 +536,12 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountSentCaptchaWait: 60,
+          activating_SentCaptchaWait: 60,
         },
       });
 
       const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: walletPage.activatingAccountType === 'email' ? walletPage.activatingAccountEmail : walletPage.activatingAccountMobile,
+        loginName: walletPage.activating_AccountType === 'email' ? walletPage.activating_AccountEmail : walletPage.activating_AccountMobile,
         authCodeType: 'activateTransactionAccount',
       };
       const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
@@ -556,60 +552,99 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountSentCaptchaWait: 0,
+          activating_SentCaptchaWait: 0,
         },
       });
     },
-    * onChangeActivatingAccountSentCaptchaWait({ payload }: OnChangeActivatingAccountSentCaptchaWaitAction, { put }: EffectsCommandMap) {
+    * onChange_Activate_SentCaptchaWait({ payload }: OnChange_Activate_SentCaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountSentCaptchaWait: payload.value,
+          activating_SentCaptchaWait: payload.value,
         },
       });
     },
-    * onChangeActivateAccountPassword1({ payload }: OnChangeActivateAccountPassword1Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          activatingAccountPasswordOne: payload.value,
-        },
-      });
-    },
-    * onBlurActivateAccountPassword1(action: OnBlurActivateAccountPassword1Action, { select, put }: EffectsCommandMap) {
+    * onClick_Activate_NextBtn({}: OnClick_Activate_NextBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
 
-      yield put({
-        type: 'change',
-        payload: {
-          activatingAccountPasswordOneError: FUtil.Regexp.PAY_PASSWORD.test(walletPage.activatingAccountPasswordOne) ? '' : '必须为6为数字',
-          activatingAccountPasswordTwoError: (walletPage.activatingAccountPasswordTwo && walletPage.activatingAccountPasswordOne !== walletPage.activatingAccountPasswordTwo) ? '两次密码必须一致' : '',
-        },
-      });
-    },
-    * onChangeActivateAccountPassword2({ payload }: OnChangeActivateAccountPassword2Action, { put }: EffectsCommandMap) {
+      const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
+        authCode: walletPage.activating_Captcha,
+        address: walletPage.activating_AccountType === 'email' ? walletPage.activating_AccountEmail : walletPage.activating_AccountMobile,
+        authCodeType: 'activateTransactionAccount',
+      };
+
+      const { data, errCode } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+
+      if (errCode !== 0 || !data) {
+        return fMessage('验证码错误', 'error');
+      }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountPasswordTwo: payload.value,
+          activating_VisibleModal: 'password',
         },
       });
     },
-    * onBlurActivateAccountPassword2({}: OnBlurActivateAccountPassword2Action, { select, put }: EffectsCommandMap) {
+    * onChange_Activate_Password1({ payload }: OnChange_Activate_Password1_Action, { put }: EffectsCommandMap) {
+      // console.log(payload, 'payloadpayload234234234');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activating_PasswordOne: payload.value,
+        },
+      });
+    },
+    * onBlur_Activate_Password1(action: OnBlur_Activate_Password1_Action, { select, put }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     changingPassword_NewPasswordModal_Password1Error: FUtil.Regexp.PAY_PASSWORD.test(walletPage.changingPassword_NewPasswordModal_Password1) ? '' : '必须为6为数字',
+      //     changingPassword_NewPasswordModal_Password2Error: (walletPage.changingPassword_NewPasswordModal_Password2 && walletPage.changingPassword_NewPasswordModal_Password1 !== walletPage.changingPassword_NewPasswordModal_Password2) ? '两次密码必须一致' : '',
+      //   },
+      // });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activating_PasswordOneError: FUtil.Regexp.PAY_PASSWORD.test(walletPage.activating_PasswordOne) ? '' : '必须为6为数字',
+          activating_PasswordTwoError: (walletPage.activating_PasswordTwo && walletPage.activating_PasswordOne !== walletPage.activating_PasswordTwo) ? '两次密码必须一致' : '',
+        },
+      });
+    },
+    * onChange_Activate_Password2({ payload }: OnChange_Activate_Password2_Action, { put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activating_PasswordTwo: payload.value,
+        },
+      });
+    },
+    * onBlur_Activate_Password2({}: OnBlur_Activate_Password2_Action, { select, put }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccountPasswordTwoError: walletPage.activatingAccountPasswordTwo === walletPage.activatingAccountPasswordOne ? '' : '两次密码必须一致',
+          activating_PasswordTwoError: walletPage.activating_PasswordTwo === walletPage.activating_PasswordOne ? '' : '两次密码必须一致',
         },
       });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     activating_PasswordTwoError: walletPage.activating_PasswordTwo === walletPage.activating_PasswordOne ? '' : '两次密码必须一致',
+      //   },
+      // });
     },
-    * onClickActivateAccountConfirmBtn(action: OnClickActivateAccountConfirmBtnAction, {
+    * onClick_Activate_ConfirmBtn(action: OnClick_Activate_ConfirmBtn_Action, {
       select,
       call,
       put,
@@ -619,9 +654,9 @@ const Model: WalletPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Transaction.activateIndividualAccounts>[0] = {
-        password: walletPage.activatingAccountPasswordOne,
-        authCode: walletPage.activatingAccountCaptcha,
-        messageAddress: walletPage.activatingAccountType === 'phone' ? walletPage.activatingAccountMobile : walletPage.activatingAccountEmail,
+        password: walletPage.activating_PasswordOne,
+        authCode: walletPage.activating_Captcha,
+        messageAddress: walletPage.activating_AccountType === 'phone' ? walletPage.activating_AccountMobile : walletPage.activating_AccountEmail,
       };
 
       const { data, msg, errCode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
@@ -644,6 +679,7 @@ const Model: WalletPageModelType = {
         },
       });
     },
+
     * onClick_ChangingPasswordBtn({}: OnClick_ChangingPasswordBtn_Action, {
       select,
       put,

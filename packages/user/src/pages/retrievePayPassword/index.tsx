@@ -254,28 +254,6 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                   });
                 }}
               />
-              {/*<FInput*/}
-              {/*  placeholder='支付密码由6位数字组成'*/}
-              {/*  type='password'*/}
-              {/*  className={styles.blockInput}*/}
-              {/*  wrapClassName={styles.blockInput}*/}
-              {/*  size='middle'*/}
-              {/*  value={retrievePayPasswordPage.paymentPassword_Password1Input}*/}
-              {/*  errorText={retrievePayPasswordPage.paymentPassword_Password1InputError}*/}
-              {/*  onChange={(e) => {*/}
-              {/*    dispatch<OnChange_PaymentPassword_Password1Input_Action>({*/}
-              {/*      type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password1Input',*/}
-              {/*      payload: {*/}
-              {/*        value: e.target.value,*/}
-              {/*      },*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  onBlur={() => {*/}
-              {/*    dispatch<OnBlur_PaymentPassword_Password1Input_Action>({*/}
-              {/*      type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password1Input',*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*/>*/}
             </div>
 
             <div>
@@ -297,29 +275,8 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                   });
                 }}
               />
-              <div style={{ color: 'red' }}>{retrievePayPasswordPage.paymentPassword_Password2InputError}</div>
-              {/*<FInput*/}
-              {/*  placeholder='重复输入支付密码'*/}
-              {/*  type='password'*/}
-              {/*  className={styles.blockInput}*/}
-              {/*  wrapClassName={styles.blockInput}*/}
-              {/*  size='middle'*/}
-              {/*  value={retrievePayPasswordPage.paymentPassword_Password2Input}*/}
-              {/*  errorText={retrievePayPasswordPage.paymentPassword_Password2InputError}*/}
-              {/*  onChange={(e) => {*/}
-              {/*    dispatch<OnChange_PaymentPassword_Password2Input_Action>({*/}
-              {/*      type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password2Input',*/}
-              {/*      payload: {*/}
-              {/*        value: e.target.value,*/}
-              {/*      },*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  onBlur={() => {*/}
-              {/*    dispatch<OnBlur_PaymentPassword_Password2Input_Action>({*/}
-              {/*      type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password2Input',*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*/>*/}
+              <div style={{ color: '#EE4040' }}>{retrievePayPasswordPage.paymentPassword_Password2InputError}</div>
+
             </div>
           </Space>
           <div style={{ height: 40 }} />

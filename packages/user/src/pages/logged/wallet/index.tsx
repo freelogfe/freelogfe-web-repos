@@ -5,7 +5,7 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
-import { Modal, Space, Radio, message, DatePicker, Input } from 'antd';
+import { Modal, Space, Radio, message, DatePicker } from 'antd';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
@@ -15,12 +15,12 @@ import {
   OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action,
   OnBlur_Table_Filter_MaxAmount_Action,
   OnBlur_Table_Filter_MinAmount_Action,
-  OnBlurActivateAccountPassword1Action,
-  OnBlurActivateAccountPassword2Action,
+  OnBlur_Activate_Password1_Action,
+  OnBlur_Activate_Password2_Action,
   OnCancel_ChangingPassword_CaptchaModal_Action,
   OnCancel_ChangingPassword_NewPasswordModal_Action,
   OnCancel_ChangingPassword_OldPasswordModal_Action,
-  OnCancelActivateAccountModalAction,
+  OnCancel_Activate_CaptchaModal_Action,
   OnChange_ChangingPassword_CaptchaModal_CaptchaInput_Action,
   OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action,
   OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action,
@@ -32,22 +32,22 @@ import {
   OnChange_Table_Filter_Keywords_Action,
   OnChange_Table_Filter_MaxAmount_Action,
   OnChange_Table_Filter_MinAmount_Action, OnChange_Table_Filter_StateSelected_Action,
-  OnChangeActivateAccountCaptchaInputAction,
-  OnChangeActivateAccountModeAction,
-  OnChangeActivateAccountPassword1Action,
-  OnChangeActivateAccountPassword2Action,
-  OnChangeActivatingAccountSentCaptchaWaitAction,
+  OnChange_Activate_CaptchaInput_Action,
+  OnChange_Activate_AccountMode_Action,
+  OnChange_Activate_Password1_Action,
+  OnChange_Activate_Password2_Action,
+  OnChange_Activate_SentCaptchaWait_Action,
   OnClick_ChangingPassword_CaptchaModal_NextBtn_Action,
   OnClick_ChangingPassword_CaptchaModal_SendBtn_Action,
   OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action,
   OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action,
   OnClick_ChangingPasswordBtn_Action,
   OnClick_Table_LoadMoreBtn_Action,
-  OnClickActivateAccountBtnAction,
-  OnClickActivateAccountCaptchaBtnAction,
-  OnClickActivateAccountConfirmBtnAction,
+  OnClick_Activate_AccountBtn_Action,
+  OnClick_Activate_SentCaptchaBtn_Action,
+  OnClick_Activate_ConfirmBtn_Action,
   OnMountPageAction,
-  OnUnmountPageAction,
+  OnUnmountPageAction, OnClick_Activate_NextBtn_Action,
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -56,7 +56,11 @@ import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
+import {
+  OnBlur_PaymentPassword_Password2Input_Action,
+  OnChange_PaymentPassword_Password2Input_Action,
+} from '@/models/retrievePayPasswordPage';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -72,7 +76,7 @@ interface WalletProps {
 //   { value: '3', text: '交易关闭' },
 // ];
 
-function Wallet({ dispatch, walletPage, user }: WalletProps) {
+function Wallet({ dispatch, walletPage }: WalletProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -87,13 +91,13 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
   });
 
   AHooks.useInterval(() => {
-    dispatch<OnChangeActivatingAccountSentCaptchaWaitAction>({
-      type: 'walletPage/onChangeActivatingAccountSentCaptchaWait',
+    dispatch<OnChange_Activate_SentCaptchaWait_Action>({
+      type: 'walletPage/onChange_Activate_SentCaptchaWait',
       payload: {
-        value: walletPage.activatingAccountSentCaptchaWait - 1,
+        value: walletPage.activating_SentCaptchaWait - 1,
       },
     });
-  }, walletPage.activatingAccountSentCaptchaWait === 0 ? null : 1000);
+  }, walletPage.activating_SentCaptchaWait === 0 ? null : 1000);
 
   AHooks.useInterval(() => {
     dispatch<OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action>({
@@ -149,7 +153,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           />
         </div>);
       },
-    },{
+    }, {
       title: (<FTitleText text={'金额'} type='table' />),
       dataIndex: 'amount',
       key: 'amount',
@@ -198,8 +202,8 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-              dispatch<OnClickActivateAccountBtnAction>({
-                type: 'walletPage/onClickActivateAccountBtn',
+              dispatch<OnClick_Activate_AccountBtn_Action>({
+                type: 'walletPage/onClick_Activate_AccountBtn',
               });
             }}
           >激活账户</FRectBtn>
@@ -449,10 +453,10 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     <Modal
       destroyOnClose
       title={<FTitleText text={'激活账户验证'} type='popup' />}
-      visible={walletPage.activatingAccount}
+      visible={walletPage.activating_VisibleModal === 'captcha'}
       onCancel={() => {
-        dispatch<OnCancelActivateAccountModalAction>({
-          type: 'walletPage/onCancelActivateAccountModal',
+        dispatch<OnCancel_Activate_CaptchaModal_Action>({
+          type: 'walletPage/onCancel_Activate_CaptchaModal',
         });
       }}
       footer={null}
@@ -463,42 +467,42 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           <Space size={15} direction='vertical'>
             <FTipText type='third' text={'验证方式'} />
             {
-              walletPage.activatingAccountMobile && (<Space size={2}>
+              walletPage.activating_AccountMobile && (<Space size={2}>
                 <Radio
-                  checked={walletPage.activatingAccountType === 'phone'}
-                  onChange={(e) => {
+                  checked={walletPage.activating_AccountType === 'phone'}
+                  onChange={() => {
                     // onChange({
                     //   activatingAccountType: 'phone',
                     // });
-                    dispatch<OnChangeActivateAccountModeAction>({
-                      type: 'walletPage/onChangeActivateAccountMode',
+                    dispatch<OnChange_Activate_AccountMode_Action>({
+                      type: 'walletPage/onChange_Activate_AccountMode',
                       payload: {
                         value: 'phone',
                       },
                     });
                   }}
                 />
-                <FContentText text={walletPage.activatingAccountMobile} type='normal' />
+                <FContentText text={walletPage.activating_AccountMobile} type='normal' />
               </Space>)
             }
 
             {
-              walletPage.activatingAccountEmail && (<Space size={2}>
+              walletPage.activating_AccountEmail && (<Space size={2}>
                 <Radio
-                  checked={walletPage.activatingAccountType === 'email'}
-                  onChange={(e) => {
+                  checked={walletPage.activating_AccountType === 'email'}
+                  onChange={() => {
                     // onChange({
                     //   activatingAccountType: 'email',
                     // });
-                    dispatch<OnChangeActivateAccountModeAction>({
-                      type: 'walletPage/onChangeActivateAccountMode',
+                    dispatch<OnChange_Activate_AccountMode_Action>({
+                      type: 'walletPage/onChange_Activate_AccountMode',
                       payload: {
                         value: 'email',
                       },
                     });
                   }}
                 />
-                <FContentText text={walletPage.activatingAccountEmail} type='normal' />
+                <FContentText text={walletPage.activating_AccountEmail} type='normal' />
               </Space>)
             }
 
@@ -512,10 +516,10 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                 className={styles.verificationCodeInput}
                 wrapClassName={styles.verificationCodeInput}
                 size='middle'
-                value={walletPage.activatingAccountCaptcha}
+                value={walletPage.activating_Captcha}
                 onChange={(e) => {
-                  dispatch<OnChangeActivateAccountCaptchaInputAction>({
-                    type: 'walletPage/onChangeActivateAccountCaptchaInput',
+                  dispatch<OnChange_Activate_CaptchaInput_Action>({
+                    type: 'walletPage/onChange_Activate_CaptchaInput',
                     payload: {
                       value: e.target.value,
                     },
@@ -525,37 +529,83 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               <FRectBtn
                 style={{ width: 110 }}
                 type='primary'
-                disabled={walletPage.activatingAccountSentCaptchaWait > 0}
+                disabled={walletPage.activating_SentCaptchaWait > 0}
                 onClick={() => {
-                  dispatch<OnClickActivateAccountCaptchaBtnAction>({
-                    type: 'walletPage/onClickActivateAccountCaptchaBtn',
+                  dispatch<OnClick_Activate_SentCaptchaBtn_Action>({
+                    type: 'walletPage/onClick_Activate_SentCaptchaBtn',
                   });
                 }}
-              >{walletPage.activatingAccountSentCaptchaWait === 0 ? '获取验证码' : `${walletPage.activatingAccountSentCaptchaWait}秒`}</FRectBtn>
+              >{walletPage.activating_SentCaptchaWait === 0 ? '获取验证码' : `${walletPage.activating_SentCaptchaWait}秒`}</FRectBtn>
             </Space>
           </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <FRectBtn
+          type='primary'
+          disabled={!walletPage.activating_Captcha}
+          onClick={() => {
+            dispatch<OnClick_Activate_NextBtn_Action>({
+              type: 'walletPage/onClick_Activate_NextBtn',
+            });
+          }}
+        >下一步</FRectBtn>
+      </div>
+
+    </Modal>
+
+    <Modal
+      destroyOnClose
+      title={<FTitleText text={'设置支付密码'} type='popup' />}
+      visible={walletPage.activating_VisibleModal === 'password'}
+      onCancel={() => {
+        dispatch<OnCancel_Activate_CaptchaModal_Action>({
+          type: 'walletPage/onCancel_Activate_CaptchaModal',
+        });
+      }}
+      footer={null}
+      width={500}
+    >
+      <div className={styles.ActivateAccountContent}>
+        <Space size={25} direction='vertical' style={{ width: 320 }}>
 
           <div>
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
-              className={styles.blockInput}
-              wrapClassName={styles.blockInput}
-              size='middle'
-              value={walletPage.activatingAccountPasswordOne}
-              errorText={walletPage.activatingAccountPasswordOneError}
-              onChange={(e) => {
-                dispatch<OnChangeActivateAccountPassword1Action>({
-                  type: 'walletPage/onChangeActivateAccountPassword1',
+            {/*<FInput*/}
+            {/*  type='password'*/}
+            {/*  className={styles.blockInput}*/}
+            {/*  wrapClassName={styles.blockInput}*/}
+            {/*  size='middle'*/}
+            {/*  value={walletPage.activating_PasswordOne}*/}
+            {/*  errorText={walletPage.activating_PasswordOneError}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<OnChange_Activate_Password1_Action>({*/}
+            {/*      type: 'walletPage/onChange_Activate_Password1',*/}
+            {/*      payload: {*/}
+            {/*        value: e.target.value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  onBlur={() => {*/}
+            {/*    dispatch<OnBlur_Activate_Password1_Action>({*/}
+            {/*      type: 'walletPage/onBlur_Activate_Password1',*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <FPaymentPasswordInput
+              // autoFocus
+              value={walletPage.activating_PasswordOne}
+              onChange={(value) => {
+                dispatch<OnChange_Activate_Password1_Action>({
+                  type: 'walletPage/onChange_Activate_Password1',
                   payload: {
-                    value: e.target.value,
+                    value: value,
                   },
                 });
               }}
               onBlur={() => {
-                dispatch<OnBlurActivateAccountPassword1Action>({
-                  type: 'walletPage/onBlurActivateAccountPassword1',
+                dispatch<OnBlur_Activate_Password1_Action>({
+                  type: 'walletPage/onBlur_Activate_Password1',
                 });
               }}
             />
@@ -564,40 +614,56 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           <div>
             <FTipText type='third' text={'验证支付密码'} />
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
-              className={styles.blockInput}
-              wrapClassName={styles.blockInput}
-              size='middle'
-              value={walletPage.activatingAccountPasswordTwo}
-              errorText={walletPage.activatingAccountPasswordTwoError}
-              onChange={(e) => {
-                dispatch<OnChangeActivateAccountPassword2Action>({
-                  type: 'walletPage/onChangeActivateAccountPassword2',
+            <FPaymentPasswordInput
+              value={walletPage.activating_PasswordTwo}
+              onChange={(value) => {
+                dispatch<OnChange_Activate_Password2_Action>({
+                  type: 'walletPage/onChange_Activate_Password2',
                   payload: {
-                    value: e.target.value,
+                    value: value,
                   },
                 });
               }}
               onBlur={() => {
-                dispatch<OnBlurActivateAccountPassword2Action>({
-                  type: 'walletPage/onBlurActivateAccountPassword2',
+                dispatch<OnBlur_Activate_Password2_Action>({
+                  type: 'walletPage/onBlur_Activate_Password2',
                 });
               }}
             />
+            <div style={{ color: '#EE4040' }}>{walletPage.activating_PasswordTwoError}</div>
+            {/*<FInput*/}
+            {/*  type='password'*/}
+            {/*  className={styles.blockInput}*/}
+            {/*  wrapClassName={styles.blockInput}*/}
+            {/*  size='middle'*/}
+            {/*  value={walletPage.activating_PasswordTwo}*/}
+            {/*  errorText={walletPage.activating_PasswordTwoError}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<OnChange_Activate_Password2_Action>({*/}
+            {/*      type: 'walletPage/onChange_Activate_Password2',*/}
+            {/*      payload: {*/}
+            {/*        value: e.target.value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  onBlur={() => {*/}
+            {/*    dispatch<OnBlur_Activate_Password2_Action>({*/}
+            {/*      type: 'walletPage/onBlur_Activate_Password2',*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
         </Space>
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          disabled={!walletPage.activatingAccountCaptcha
-          || !walletPage.activatingAccountPasswordOne
-          || !walletPage.activatingAccountPasswordTwo
-          || !!walletPage.activatingAccountPasswordOneError
-          || !!walletPage.activatingAccountPasswordTwoError}
+          disabled={walletPage.activating_PasswordOne === ''
+          || walletPage.activating_PasswordTwo === ''
+          || walletPage.activating_PasswordOneError !== ''
+          || walletPage.activating_PasswordTwoError !== ''}
           onClick={() => {
-            dispatch<OnClickActivateAccountConfirmBtnAction>({
-              type: 'walletPage/onClickActivateAccountConfirmBtn',
+            dispatch<OnClick_Activate_ConfirmBtn_Action>({
+              type: 'walletPage/onClick_Activate_ConfirmBtn',
             });
           }}
         >激活feth账户</FRectBtn>
@@ -626,7 +692,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               walletPage.changingPassword_CaptchaModal_Phone && (<Space size={2}>
                 <Radio
                   checked={walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'phone'}
-                  onChange={(e) => {
+                  onChange={() => {
                     dispatch<OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action>({
                       type: 'walletPage/onChange_ChangingPassword_CaptchaModal_TypeCheckbox',
                       payload: {
@@ -646,7 +712,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               walletPage.changingPassword_CaptchaModal_Email && (<Space size={2}>
                 <Radio
                   checked={walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'email'}
-                  onChange={(e) => {
+                  onChange={() => {
                     dispatch<OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action>({
                       type: 'walletPage/onChange_ChangingPassword_CaptchaModal_TypeCheckbox',
                       payload: {
