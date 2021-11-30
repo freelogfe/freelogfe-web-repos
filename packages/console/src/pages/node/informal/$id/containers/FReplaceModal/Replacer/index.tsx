@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from "@/components/FInput";
-import {Radio, Space} from "antd";
-import {FContentText} from "@/components/FText";
-import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
-import {FTextBtn} from "@/components/FButton";
-import {connect, Dispatch} from 'dva';
+import FInput from '@/components/FInput';
+import { Radio, Space } from 'antd';
+import { FContentText } from '@/components/FText';
+import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
+import { FTextBtn } from '@/components/FButton';
+import { connect, Dispatch } from 'dva';
 import {
   ConnectState, InformalNodeManagerPageModelState,
   // ReplaceInformExhibitState,
-} from "@/models/connect";
+} from '@/models/connect';
 import {
   ChangeAction,
   OnReplacerMountAction,
@@ -17,19 +17,20 @@ import {
   OnReplacerUnmountAction,
   FetchReplacerListAction,
   OnReplacerKeywordsChangeAction,
-  OnReplacerListCheckedChangeAction, OnReplacerListVersionRangeChangeAction
-} from "@/models/informalNodeManagerPage";
+  OnReplacerListCheckedChangeAction, OnReplacerListVersionRangeChangeAction, OnReplacerBucketChangeAction,
+} from '@/models/informalNodeManagerPage';
 // import {} from "@/models/replaceInformExhibitModal";
-import FSelect from "@/components/FSelect";
-import {FDown} from "@/components/FIcons";
+// import FSelect from '@/components/FSelect';
+import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface ReplacerProps {
   dispatch: Dispatch,
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
+function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
 
   // AHooks.useMount(() => {
   //   console.log('replacer**************');
@@ -67,7 +68,7 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
         type: 'informalNodeManagerPage/fetchReplacerList',
         payload: {
           restart: false,
-          origin: '!market',
+          // origin: 'market',
         },
       });
     }
@@ -75,28 +76,70 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
 
   return (<>
     <div className={styles.replacerHeader}>
-      <FSelect
-        value={informalNodeManagerPage.replaceModal_Replacer_Origin}
-        dataSource={[
-          ...informalNodeManagerPage.replaceModal_Replacer_ResourceOptions,
-          ...informalNodeManagerPage.replaceModal_Replacer_BucketOptions,
-        ]}
-        onChange={(value: string) => {
-          // onChange({replacerOrigin: value}, true);
-          dispatch<OnReplacerOriginChangeAction>({
-            type: 'informalNodeManagerPage/onReplacerOriginChange',
-            payload: {
-              value: value,
-            },
-          });
-        }}
-      />
+      {
+        informalNodeManagerPage.replaceModal_Replacer_ResourceOptions.map((rr, ri) => {
+          return (<React.Fragment key={rr.value}>
+            {ri !== 0 && (<div style={{ width: 20 }} />)}
+            <a
+              className={informalNodeManagerPage.replaceModal_Replacer_Origin === rr.value ? styles.activated : ''}
+              onClick={() => {
+                dispatch<OnReplacerOriginChangeAction>({
+                  type: 'informalNodeManagerPage/onReplacerOriginChange',
+                  payload: {
+                    value: rr.value,
+                  },
+                });
+              }}
+            >{rr.title}</a>
+          </React.Fragment>);
+        })
+      }
     </div>
-    <div style={{height: 15}}/>
+
+    {
+      informalNodeManagerPage.replaceModal_Replacer_Origin === 'object' && (<>
+        <div style={{ height: 15 }} />
+        <div style={{ padding: '0 15px' }}>
+          <FDropdownMenu
+            options={informalNodeManagerPage.replaceModal_Replacer_BucketOptions}
+            text={informalNodeManagerPage.replaceModal_Replacer_BucketOptions.find((b) => {
+              return b.value === informalNodeManagerPage.replaceModal_Replacer_Bucket;
+            })?.text || ''}
+            onChange={(value) => {
+              dispatch<OnReplacerBucketChangeAction>({
+                type: 'informalNodeManagerPage/onReplacerBucketChange',
+                payload: {
+                  value: value,
+                },
+              });
+            }}
+          />
+        </div>
+      </>)
+    }
+
+    {/*<FSelect*/}
+    {/*  value={informalNodeManagerPage.replaceModal_Replacer_Origin}*/}
+    {/*  dataSource={[*/}
+    {/*    ...informalNodeManagerPage.replaceModal_Replacer_ResourceOptions,*/}
+    {/*    ...informalNodeManagerPage.replaceModal_Replacer_BucketOptions,*/}
+    {/*  ]}*/}
+    {/*  onChange={(value: string) => {*/}
+    {/*    // onChange({replacerOrigin: value}, true);*/}
+    {/*    dispatch<OnReplacerOriginChangeAction>({*/}
+    {/*      type: 'informalNodeManagerPage/onReplacerOriginChange',*/}
+    {/*      payload: {*/}
+    {/*        value: value,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
+    <div style={{ height: 15 }} />
+
     <div className={styles.replacerBody}>
       <div className={styles.replacerFilter}>
         <FInput
-          theme="dark"
+          theme='dark'
           wrapClassName={styles.replacerFilterInput}
           value={informalNodeManagerPage.replaceModal_Replacer_Keywords}
           debounce={300}
@@ -112,8 +155,8 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
           }}
         />
       </div>
-      <div style={{height: 15}}/>
-      <Space size={10} direction="vertical" className={styles.replacerList}>
+      <div style={{ height: 15 }} />
+      <Space size={10} direction='vertical' className={styles.replacerList}>
         {
           informalNodeManagerPage.replaceModal_Replacer_ResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
@@ -136,22 +179,22 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
                   <div>
                     <FContentText
                       text={rl.name}
-                      type="highlight"
-                      style={{width: 270}}
+                      type='highlight'
+                      style={{ width: 270 }}
                       singleRow
                     />
                   </div>
-                  <div style={{height: 2}}/>
+                  <div style={{ height: 2 }} />
                   <div>
                     {
                       rl.identity === 'resource'
                         ? (<FContentText
                           text={`${rl.type} | ${rl.latestVersion || '暂无版本'} | ${rl.updateTime}`}
-                          type="additional2"
+                          type='additional2'
                         />)
                         : (<FContentText
                           text={`${rl.type || '未设置类型'} | ${rl.updateTime}`}
-                          type="additional2"
+                          type='additional2'
                         />)
                     }
 
@@ -172,12 +215,12 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
                           }}
                         >
                           <FTextBtn
-                            type="default"
-                            style={{fontSize: 12}}
+                            type='default'
+                            style={{ fontSize: 12 }}
                           >
                             {rl.versionRange || '最新版本'}
                             &nbsp;
-                            <FDown/>
+                            <FDown />
                           </FTextBtn>
 
                         </FVersionHandlerPopover>)
@@ -196,6 +239,6 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
   </>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(Replacer);

@@ -1,39 +1,21 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
+import { FTitleText } from '@/components/FText';
 import Replacer from './Replacer';
 import Replaced from './Replaced';
 import FModal from '@/components/FModal';
 import { connect, Dispatch } from 'dva';
-import { OnReplaceModalCancelAction, OnReplaceModalConfirmAction } from '@/models/informalNodeManagerPage';
+import {
+  OnClose_ReplaceModal_Action,
+  OnReplaceModalCancelAction,
+  OnReplaceModalConfirmAction,
+} from '@/models/informalNodeManagerPage';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
-import * as AHooks from 'ahooks';
-
-interface ICandidate {
-  name: string;
-  versionRange?: string;
-  type: 'resource' | 'object';
-}
-
-type IConfirmValue = {
-  exhibitName: string;
-  replaced: ICandidate;
-  replacer: ICandidate;
-  scopes: ICandidate[][];
-}[];
 
 interface FReplaceModalProps {
-  // nodeID: number;
-  // isTheme: boolean;
-  // visible?: boolean;
-
-  // onCancel?(): void;
-
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
-
-  // onConfirm?(value: IConfirmValue): void;
 }
 
 function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps) {
@@ -55,6 +37,12 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
     onOk={async () => {
       dispatch<OnReplaceModalConfirmAction>({
         type: 'informalNodeManagerPage/onReplaceModalConfirm',
+      });
+    }}
+    afterClose={() => {
+      // console.log('#######33afterClose');
+      dispatch<OnClose_ReplaceModal_Action>({
+        type: 'informalNodeManagerPage/onClose_ReplaceModal',
       });
     }}
   >
@@ -88,16 +76,3 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
 export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(FReplaceModal);
-
-// function simplifiedRelationship(relation: string[]): string[] {
-//   // console.log(relation, 'relation!!!!!@@@@@');
-//   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
-//
-//   for (let i = 0; i < arr.length; i++) {
-//     const current: string = arr[i];
-//     arr = arr.filter((a) => {
-//       return a === current || !a.startsWith(current);
-//     })
-//   }
-//   return arr;
-// }

@@ -8,6 +8,7 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import fMessage from '@/components/fMessage';
 import { listStateAndListMore } from '@/components/FListFooter';
+import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -78,9 +79,17 @@ export interface InformalNodeManagerPageModelState {
   addExhibitDrawer_Visible: boolean;
 
   replaceModal_Visible: boolean;
-  replaceModal_Replacer_ResourceOptions: { value: string; title: string }[];
-  replaceModal_Replacer_BucketOptions: { value: string; title: string }[];
-  replaceModal_Replacer_Origin: '!market' | '!resource' | '!collection' | string;
+  replaceModal_Replacer_ResourceOptions: {
+    value: InformalNodeManagerPageModelState['replaceModal_Replacer_Origin'];
+    title: string;
+  }[];
+  replaceModal_Replacer_Origin: 'market' | 'resource' | 'collection' | 'object';
+  replaceModal_Replacer_BucketOptions: {
+    value: string;
+    text: string;
+  }[];
+  replaceModal_Replacer_Bucket: string;
+
   replaceModal_Replacer_Keywords: string;
   replaceModal_Replacer_ResourceList: {
     checked: boolean;
@@ -222,30 +231,6 @@ export interface OnChangePageAction extends AnyAction {
     value: 'exhibit' | 'theme' | 'mappingRule';
   };
 }
-
-// export interface OnMount_ExhibitPage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onMount_ExhibitPage';
-// }
-//
-// export interface OnUnmount_ExhibitPage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onUnmount_ExhibitPage';
-// }
-//
-// export interface OnMount_ThemePage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onMount_ThemePage';
-// }
-//
-// export interface OnUnmount_ThemePage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onUnmount_ThemePage';
-// }
-//
-// export interface OnMount_RulePage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onMount_ThemePage';
-// }
-//
-// export interface OnUnmount_RulePage_Action extends AnyAction {
-//   type: 'informalNodeManagerPage/onUnmount_ThemePage';
-// }
 
 export interface OnMountExhibitPageAction extends AnyAction {
   type: 'informalNodeManagerPage/onMountExhibitPage';
@@ -491,6 +476,10 @@ export interface OnConfirm_AddExhibitDrawer_Action extends AnyAction {
   };
 }
 
+export interface OnClose_ReplaceModal_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClose_ReplaceModal';
+}
+
 export interface OnReplacerMountAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerMount';
 }
@@ -502,7 +491,14 @@ export interface OnReplacerUnmountAction extends AnyAction {
 export interface OnReplacerOriginChangeAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerOriginChange';
   payload: {
-    value: string;
+    value: InformalNodeManagerPageModelState['replaceModal_Replacer_Origin'];
+  };
+}
+
+export interface OnReplacerBucketChangeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onReplacerBucketChange';
+  payload: {
+    value: InformalNodeManagerPageModelState['replaceModal_Replacer_Bucket'];
   };
 }
 
@@ -517,8 +513,8 @@ export interface FetchReplacerListAction extends AnyAction {
   type: 'fetchReplacerList' | 'informalNodeManagerPage/fetchReplacerList';
   payload: {
     restart: boolean;
-    origin?: string;
-    keywords?: string;
+    // origin?: string;
+    // keywords?: string;
   };
 }
 
@@ -638,9 +634,11 @@ interface InformalNodeManagerPageModelType {
     onCancel_AddExhibitDrawer: (action: OnCancel_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddExhibitDrawer: (action: OnConfirm_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
 
+    onClose_ReplaceModal: (action: OnClose_ReplaceModal_Action, effects: EffectsCommandMap) => void;
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
     onReplacerOriginChange: (action: OnReplacerOriginChangeAction, effects: EffectsCommandMap) => void;
+    onReplacerBucketChange: (action: OnReplacerBucketChangeAction, effects: EffectsCommandMap) => void;
     onReplacerKeywordsChange: (action: OnReplacerKeywordsChangeAction, effects: EffectsCommandMap) => void;
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
     onReplacerListCheckedChange: (action: OnReplacerListCheckedChangeAction, effects: EffectsCommandMap) => void;
@@ -733,6 +731,54 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   rule_CodeEfficients: [],
 };
 
+const replaceModalInitDate: Pick<InformalNodeManagerPageModelState,
+  'replaceModal_Visible' |
+  'replaceModal_Replacer_ResourceOptions' |
+  'replaceModal_Replacer_Origin' |
+  'replaceModal_Replacer_BucketOptions' |
+  'replaceModal_Replacer_Bucket' |
+  'replaceModal_Replacer_Keywords' |
+  'replaceModal_Replacer_ResourceList' |
+
+  'replaceModal_Replaced_Keywords' |
+  'replaceModal_Replaced_DependencyTreeList' |
+  'replaceModal_Replaced_SelectDependency' |
+  'replaceModal_Replaced_TargetVersions' |
+  'replaceModal_Replaced_TargetSelectedVersion' |
+  'replaceModal_Replaced_TreeData' |
+  'replaceModal_Replaced_CheckedKeys'> = {
+  replaceModal_Visible: false,
+  replaceModal_Replacer_ResourceOptions: [
+    { value: 'market', title: '资源市场' },
+    { value: 'resource', title: '我的资源' },
+    { value: 'collection', title: '我的收藏' },
+    { value: 'object', title: '存储空间' },
+  ],
+  replaceModal_Replacer_Origin: 'market',
+  replaceModal_Replacer_BucketOptions: [],
+  replaceModal_Replacer_Bucket: '',
+  replaceModal_Replacer_Keywords: '',
+  replaceModal_Replacer_ResourceList: [],
+  replaceModal_Replaced_Keywords: '',
+  replaceModal_Replaced_DependencyTreeList: [],
+  replaceModal_Replaced_SelectDependency: null,
+  replaceModal_Replaced_TargetVersions: [],
+  replaceModal_Replaced_TargetSelectedVersion: null,
+  replaceModal_Replaced_TreeData: [],
+  replaceModal_Replaced_CheckedKeys: [],
+};
+//   replaceModal_Replacer_Bucket: '',
+//   replaceModal_Replacer_Keywords: '',
+//   replaceModal_Replacer_ResourceList: [],
+//   replaceModal_Replaced_Keywords: '',
+//   replaceModal_Replaced_DependencyTreeList: [],
+//   replaceModal_Replaced_SelectDependency: null,
+//   replaceModal_Replaced_TargetVersions: [],
+//   replaceModal_Replaced_TargetSelectedVersion: null,
+//   replaceModal_Replaced_TreeData: [],
+//   replaceModal_Replaced_CheckedKeys: [],
+
+
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   showPage: 'exhibit',
@@ -748,23 +794,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   addExhibitDrawer_Visible: false,
 
-  replaceModal_Visible: false,
-  replaceModal_Replacer_ResourceOptions: [
-    { value: '!market', title: '资源市场' },
-    { value: '!resource', title: '我的资源' },
-    { value: '!collection', title: '我的收藏' },
-  ],
-  replaceModal_Replacer_BucketOptions: [],
-  replaceModal_Replacer_Origin: '!market',
-  replaceModal_Replacer_Keywords: '',
-  replaceModal_Replacer_ResourceList: [],
-  replaceModal_Replaced_Keywords: '',
-  replaceModal_Replaced_DependencyTreeList: [],
-  replaceModal_Replaced_SelectDependency: null,
-  replaceModal_Replaced_TargetVersions: [],
-  replaceModal_Replaced_TargetSelectedVersion: null,
-  replaceModal_Replaced_TreeData: [],
-  replaceModal_Replaced_CheckedKeys: [],
+  ...replaceModalInitDate,
 
   ...exhibitInitStates,
 
@@ -1845,12 +1875,20 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
 
+    * onClose_ReplaceModal({}: OnClose_ReplaceModal_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...replaceModalInitDate,
+        },
+      });
+    },
     * onReplacerMount({}: OnReplacerMountAction, { put, call }: EffectsCommandMap) {
       yield put<FetchReplacerListAction>({
         type: 'fetchReplacerList',
         payload: {
           restart: true,
-          origin: '!market',
+          // origin: 'market',
         },
       });
 
@@ -1859,16 +1897,17 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.Storage.bucketList, params);
-      // console.log(data, '!@#$!@#$#$!@111111111');
+      // console.log(data, 'BBBBBBBBBB!@#$!@#$#$!@111111111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           replaceModal_Replacer_BucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_BucketOptions'][number]>((d: any) => {
             return {
               value: d.bucketName,
-              title: d.bucketName,
+              text: d.bucketName,
             };
           }),
+          replaceModal_Replacer_Bucket: data.length > 0 ? data[0].bucketName : '',
         },
       });
     },
@@ -1876,24 +1915,31 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replaceModal_Replacer_ResourceOptions: [
-            { value: '!market', title: '资源市场' },
-            { value: '!resource', title: '我的资源' },
-            { value: '!collection', title: '我的收藏' },
-          ],
-          replaceModal_Replacer_BucketOptions: [],
-          replaceModal_Replacer_Origin: '!market',
-          replaceModal_Replacer_Keywords: '',
-          replaceModal_Replacer_ResourceList: [],
+          // replaceModal_Replacer_ResourceOptions: [
+          //   { value: 'market', title: '资源市场' },
+          //   { value: 'resource', title: '我的资源' },
+          //   { value: 'collection', title: '我的收藏' },
+          //   { value: 'collection', title: '我的收藏' },
+          // ],
+          // replaceModal_Replacer_BucketOptions: [],
+          // replaceModal_Replacer_Origin: 'market',
+          // replaceModal_Replacer_Keywords: '',
+          // replaceModal_Replacer_ResourceList: [],
         },
       });
     },
-    * onReplacerOriginChange({ payload }: OnReplacerOriginChangeAction, { put, select }: EffectsCommandMap) {
-
+    * onReplacerOriginChange({ payload }: OnReplacerOriginChangeAction, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           replaceModal_Replacer_Origin: payload.value,
+          replaceModal_Replacer_Keywords: '',
+          replaceModal_Replacer_Bucket: informalNodeManagerPage.replaceModal_Replacer_BucketOptions.length > 0
+            ? informalNodeManagerPage.replaceModal_Replacer_BucketOptions[0].value
+            : '',
         },
       });
 
@@ -1901,7 +1947,23 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'fetchReplacerList',
         payload: {
           restart: true,
-          origin: payload.value,
+          // origin: payload.value,
+        },
+      });
+    },
+    * onReplacerBucketChange({ payload }: OnReplacerBucketChangeAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replaceModal_Replacer_Bucket: payload.value,
+        },
+      });
+
+      yield put<FetchReplacerListAction>({
+        type: 'fetchReplacerList',
+        payload: {
+          restart: true,
+          // keywords: payload.value,
         },
       });
     },
@@ -1917,7 +1979,7 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'fetchReplacerList',
         payload: {
           restart: true,
-          keywords: payload.value,
+          // keywords: payload.value,
         },
       });
     },
@@ -1926,8 +1988,8 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const payloadOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.replaceModal_Replacer_Origin;
-      const payloadKeywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.replaceModal_Replacer_Keywords;
+      // const payloadOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.replaceModal_Replacer_Origin;
+      // const payloadKeywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.replaceModal_Replacer_Keywords;
 
       let replacerResourceList: InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'] = [];
 
@@ -1937,15 +1999,16 @@ const Model: InformalNodeManagerPageModelType = {
         ];
       }
 
-      if (payloadOrigin === '!market') {
+      if (informalNodeManagerPage.replaceModal_Replacer_Origin === 'market') {
 
         const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
           skip: replacerResourceList.length,
           limit: FUtil.Predefined.pageSize,
-          keywords: payloadKeywords,
+          keywords: informalNodeManagerPage.replaceModal_Replacer_Keywords,
         };
 
         const { data } = yield call(FServiceAPI.Resource.list, params);
+        // console.log(data, 'data@!$@#$!@#41211111');
 
         replacerResourceList = [
           ...replacerResourceList,
@@ -1967,7 +2030,7 @@ const Model: InformalNodeManagerPageModelType = {
             };
           }),
         ];
-      } else if (payloadOrigin === '!resource') {
+      } else if (informalNodeManagerPage.replaceModal_Replacer_Origin === 'resource') {
         // yield put<FetchMyResourcesAction>({
         //   type: 'fetchMyResources',
         // });
@@ -1977,7 +2040,7 @@ const Model: InformalNodeManagerPageModelType = {
           skip: replacerResourceList.length,
           limit: FUtil.Predefined.pageSize,
           isSelf: 1,
-          keywords: payloadKeywords,
+          keywords: informalNodeManagerPage.replaceModal_Replacer_Keywords,
         };
         // console.log(params, 'paramsparams1234');
         const { data } = yield call(FServiceAPI.Resource.list, params);
@@ -2001,7 +2064,7 @@ const Model: InformalNodeManagerPageModelType = {
             };
           }),
         ];
-      } else if (payloadOrigin === '!collection') {
+      } else if (informalNodeManagerPage.replaceModal_Replacer_Origin === 'collection') {
         // yield put<FetchCollectionAction>({
         //   type: 'fetchCollection',
         // });
@@ -2009,7 +2072,7 @@ const Model: InformalNodeManagerPageModelType = {
         const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
           skip: replacerResourceList.length,
           limit: FUtil.Predefined.pageSize,
-          keywords: payloadKeywords,
+          keywords: informalNodeManagerPage.replaceModal_Replacer_Keywords,
         };
 
         const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
@@ -2050,11 +2113,22 @@ const Model: InformalNodeManagerPageModelType = {
         ];
 
       } else {
+
+        if (informalNodeManagerPage.replaceModal_Replacer_Bucket === '') {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              replaceModal_Replacer_ResourceList: [],
+            },
+          });
+          return;
+        }
+
         const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
           skip: 0,
           limit: FUtil.Predefined.pageSize,
-          bucketName: payloadOrigin,
-          keywords: payloadKeywords,
+          bucketName: informalNodeManagerPage.replaceModal_Replacer_Bucket,
+          keywords: informalNodeManagerPage.replaceModal_Replacer_Keywords,
         };
 
         const { data } = yield call(FServiceAPI.Storage.objectList, params);
@@ -2143,13 +2217,13 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replaceModal_Replaced_Keywords: '',
-          replaceModal_Replaced_DependencyTreeList: [],
-          replaceModal_Replaced_SelectDependency: null,
-          replaceModal_Replaced_TargetVersions: [],
-          replaceModal_Replaced_TargetSelectedVersion: null,
-          replaceModal_Replaced_TreeData: [],
-          replaceModal_Replaced_CheckedKeys: [],
+          // replaceModal_Replaced_Keywords: '',
+          // replaceModal_Replaced_DependencyTreeList: [],
+          // replaceModal_Replaced_SelectDependency: null,
+          // replaceModal_Replaced_TargetVersions: [],
+          // replaceModal_Replaced_TargetSelectedVersion: null,
+          // replaceModal_Replaced_TreeData: [],
+          // replaceModal_Replaced_CheckedKeys: [],
         },
       });
     },
