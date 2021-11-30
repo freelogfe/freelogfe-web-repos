@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import Replacer from "./Replacer";
-import Replaced from "./Replaced";
-import FModal from "@/components/FModal";
-import {connect, Dispatch} from 'dva';
-import {OnReplaceModalCancelAction, OnReplaceModalConfirmAction} from "@/models/informalNodeManagerPage";
-import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import FThickArrowRight from "@/components/FIcons/FThickArrowRight";
+import Replacer from './Replacer';
+import Replaced from './Replaced';
+import FModal from '@/components/FModal';
+import { connect, Dispatch } from 'dva';
+import { OnReplaceModalCancelAction, OnReplaceModalConfirmAction } from '@/models/informalNodeManagerPage';
+import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
+import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
 import * as AHooks from 'ahooks';
 
 interface ICandidate {
@@ -36,37 +36,8 @@ interface FReplaceModalProps {
   // onConfirm?(value: IConfirmValue): void;
 }
 
-function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) {
+function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps) {
 
-  // AHooks.useMount(() => {
-  //   // console.log('modal**************');
-  //   console.log(nodeID, 'nodeIDnodeIDnodeID890upioj;ksadrf;sad');
-  //   dispatch<ChangeAction>({
-  //     type: 'replaceInformExhibit/change',
-  //     payload: {
-  //       nodeID: nodeID,
-  //     },
-  //   });
-  // });
-
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload: {
-  //       nodeID: nodeID,
-  //     },
-  //   });
-  // }, [nodeID]);
-
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'replaceInformExhibit/change',
-  //     payload: {
-  //       isTheme: isTheme,
-  //     },
-  //   });
-  // }, [isTheme]);
-  // replaceModal_Replaced_
   return (<FModal
     title={null}
     width={947}
@@ -89,32 +60,32 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
   >
     <div className={styles.replaceHandler}>
       <div className={styles.replacer}>
-        <FTitleText type="h3" text={'选择替换资源'}/>
-        <div style={{height: 5}}/>
+        <FTitleText type='h3' text={'选择替换资源'} />
+        <div style={{ height: 5 }} />
         <div className={styles.content}>
-          <Replacer/>
+          <Replacer />
         </div>
       </div>
       <div className={styles.arrow}>
         <FThickArrowRight
-          style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}
+          style={{ fontSize: 36, fontWeight: 600, color: '#D8D8D8' }}
         />
       </div>
       <div className={styles.replaced}>
         <FTitleText
-          type="h3"
+          type='h3'
           text={'选择被替换资源'}
         />
-        <div style={{height: 5}}/>
+        <div style={{ height: 5 }} />
         <div className={styles.content}>
-          <Replaced/>
+          <Replaced />
         </div>
       </div>
     </div>
   </FModal>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(FReplaceModal);
 
