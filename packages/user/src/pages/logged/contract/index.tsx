@@ -117,10 +117,13 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       render(_: any, record) {
         return (<div className={styles.contract}>
           {
-            record.status === 'authorization' && (<span className={styles.authorized}>已授权</span>)
+            record.status === 'authorized' && (<span className={styles.authorized}>已授权</span>)
           }
           {
-            record.status === 'pending' && (<span className={styles.pending}>待执行</span>)
+            record.status === 'testAuthorized' && (<span className={styles.authorized}>测试授权</span>)
+          }
+          {
+            record.status === 'unauthorized' && (<span className={styles.pending}>未授权</span>)
           }
           {
             record.status === 'exception' && (<span className={styles.exception}>异常</span>)
@@ -221,10 +224,13 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       render(_: any, record) {
         return (<div className={styles.contract}>
           {
-            record.status === 'authorization' && (<span className={styles.authorized}>已授权</span>)
+            record.status === 'authorized' && (<span className={styles.authorized}>已授权</span>)
           }
           {
-            record.status === 'pending' && (<span className={styles.pending}>待执行</span>)
+            record.status === 'testAuthorized' && (<span className={styles.authorized}>测试授权</span>)
+          }
+          {
+            record.status === 'unauthorized' && (<span className={styles.pending}>未授权</span>)
           }
           {
             record.status === 'exception' && (<span className={styles.exception}>异常</span>)

@@ -6,10 +6,11 @@ import moment, { Moment } from 'moment';
 import { ConnectState } from '@/models/connect';
 
 type Authorize_SubjectType = 'resource' | 'exhibit';
-type Authorize_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
+// type Authorize_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
+type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
 type Authorized_SubjectType = 'resource' | 'exhibit';
-type Authorized_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
+type Authorized_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
 export interface ContractPageModelState {
   showPage: 'authorize' | 'authorized';
@@ -69,7 +70,7 @@ export interface ContractPageModelState {
     licenseeId: string;
     licenseeType: 'resource' | 'node' | 'user';
     licenseeName: string;
-    status: 'authorization' | 'pending' | 'exception' | 'terminated';
+    status: Authorized_Status;
     dataTime: string;
     contractID: string;
   }[];
@@ -238,11 +239,11 @@ const initStates: ContractPageModelState = {
     value: 'all',
     text: '全部',
   }, {
-    value: 'authorization',
+    value: 'authorized',
     text: '已授权',
   }, {
-    value: 'pending',
-    text: '待执行',
+    value: 'unauthorized',
+    text: '未授权',
   }, {
     value: 'terminated',
     text: '已终止',
@@ -269,11 +270,11 @@ const initStates: ContractPageModelState = {
     value: 'all',
     text: '全部',
   }, {
-    value: 'authorization',
+    value: 'authorized',
     text: '已授权',
   }, {
-    value: 'pending',
-    text: '待执行',
+    value: 'unauthorized',
+    text: '未授权',
   }, {
     value: 'terminated',
     text: '已终止',
@@ -435,7 +436,7 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorized_List',
       });
     },
-    * onClick_Authorized_LoadMoreBtn({}: OnClick_Authorized_LoadMoreBtn_Action, {put}: EffectsCommandMap) {
+    * onClick_Authorized_LoadMoreBtn({}: OnClick_Authorized_LoadMoreBtn_Action, { put }: EffectsCommandMap) {
       yield put<Fetch_Authorized_List_Action>({
         type: 'fetch_Authorized_List',
         payload: {
@@ -513,6 +514,7 @@ const Model: ContractPageModelType = {
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
         ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
+
           return {
             cover: '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
@@ -524,7 +526,11 @@ const Model: ContractPageModelType = {
             licenseeId: al.licenseeId,
             licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
             licenseeName: al.licenseeName,
-            status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            // status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            status: handleContractState({
+              status: al.status,
+              authStatus: al.authStatus,
+            }),
             dataTime: FUtil.Format.formatDateTime(al.createDate, true),
             contractID: al.contractId,
           };
@@ -563,7 +569,7 @@ const Model: ContractPageModelType = {
         },
       });
     },
-    * fetch_Authorized_List({payload}: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
+    * fetch_Authorized_List({ payload }: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
       const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
         contractPage,
       }));
@@ -643,7 +649,11 @@ const Model: ContractPageModelType = {
             licenseeId: al.licenseeId,
             licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
             licenseeName: al.licenseeName,
-            status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            // status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            status: handleContractState({
+              status: al.status,
+              authStatus: al.authStatus,
+            }),
             dataTime: FUtil.Format.formatDateTime(al.createDate, true),
             contractID: al.contractId,
           };
@@ -699,3 +709,31 @@ const Model: ContractPageModelType = {
 };
 
 export default Model;
+
+interface HandleContractStateParams {
+  status: 0 | 1 | 2; // 合同综合状态: 0:正常 1:已终止(不接受任何事件,也不给授权,事实上无效的合约) 2:异常
+  authStatus: 1 | 2 | 128 | number; // 合同授权状态 1:正式授权 2:测试授权 128:未获得授权
+}
+
+function handleContractState({
+                               status,
+                               authStatus,
+                             }: HandleContractStateParams): 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized' {
+  if (status === 1) {
+    return 'terminated';
+  }
+  if (status === 2) {
+    return 'exception';
+  }
+
+  if (authStatus === 1) {
+    return 'authorized';
+  }
+  if (authStatus === 2) {
+    return 'testAuthorized';
+  }
+  if (authStatus === 128) {
+    return 'unauthorized';
+  }
+  return 'exception';
+}

@@ -1297,7 +1297,7 @@ async function verifyCodeText(text: string, allTexts: string[], targetType = 're
       // TODO:
       // console.log([text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev'], '@@@@@@@############');
       const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
-      // console.log(result, 'resultresult@$!@$#@#$');
+      console.log(result, 'resultresult@$!@$#@#$');
     } catch (err) {
       console.log(err.message, 'err234234234');
       error = err.message;
