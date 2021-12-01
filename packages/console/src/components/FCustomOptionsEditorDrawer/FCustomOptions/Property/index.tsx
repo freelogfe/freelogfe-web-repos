@@ -46,13 +46,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
               errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
             }
-            // else if (usedKeys?.includes(value)) {
-            //   errorText = '键不能重复';
-            // }
-            // onKeyInputChange && onKeyInputChange({
-            //   value,
-            //   errorText,
-            // });
 
             onChangeData({
               key: value,
@@ -85,10 +78,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             if (value.length > 50) {
               errorText = '不超过15个字符';
             }
-            // onDescriptionInputChange && onDescriptionInputChange({
-            //   value,
-            //   errorText,
-            // });
+
             onChangeData({
               description: value,
               descriptionError: errorText,
@@ -126,9 +116,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             ]}
             value={data.custom}
             onChange={(value) => {
-              // onSelectChange && onSelectChange({
-              //   value,
-              // });
               onChangeData({ custom: value });
             }}
           />
@@ -136,10 +123,11 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       }
 
       {
-        data.custom === 'input' ? (<Col className='gutter-row' span={18}>
+        data.custom === 'input' ? (<Col span={18}>
             <Space size={5}>
-              <i className={styles.dot} />
-              <FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />
+              {/*<i className={styles.dot} />*/}
+              {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
+              <FTitleText type='h4' text={'自定义选项'} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
@@ -150,15 +138,12 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
-                if (value === '') {
-                  errorText = '请输入';
-                } else if (value.length > 30) {
+                // if (value === '') {
+                //   errorText = '请输入';
+                // } else
+                if (value.length > 30) {
                   errorText = '不超过30个字符';
                 }
-                // onValueInputChange && onValueInputChange({
-                //   value,
-                //   errorText,
-                // });
                 onChangeData({
                   defaultValue: value,
                   defaultValueError: errorText,

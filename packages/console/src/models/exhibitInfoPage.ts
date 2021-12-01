@@ -1046,7 +1046,7 @@ const Model: ExhibitInfoPageModelType = {
             if (i !== payload.index) {
               return co;
             }
-            const valueInputError: string = (co.valueInput.length > 30 || co.valueInput === '') ? '1~30个字符' : '';
+            const valueInputError: string = co.valueInput.length > 30 ? '不超过30个字符' : '';
             currentHasError = valueInputError !== '';
             return {
               ...co,

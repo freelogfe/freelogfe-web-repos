@@ -23,11 +23,11 @@ export interface FCustomOptionsEditorDrawerStates {
 const initDataSource: FCustomOptionsEditorDrawerStates['dataSource'] = [{
   key: '',
   keyError: '',
-  defaultValue: '',
-  defaultValueError: '',
   description: '',
   descriptionError: '',
   custom: 'input',
+  defaultValue: '',
+  defaultValueError: '',
   customOption: '',
   customOptionError: '',
 }];
@@ -75,7 +75,7 @@ function FCustomOptionsEditorDrawer({
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
-            || (eds.custom === 'select' ? (eds.customOption === '' || eds.customOptionError !== '') : (eds.defaultValue === '' || eds.defaultValueError !== ''))
+            || (eds.custom === 'select' ? (eds.customOption === '' || eds.customOptionError !== '') : eds.defaultValueError !== '')
             || eds.descriptionError !== '';
         })}
         onClick={onClick_ConfirmBtn}

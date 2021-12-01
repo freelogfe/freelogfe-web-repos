@@ -236,17 +236,6 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                                 index: index,
                               },
                             });
-                            // dispatch<ChangeAction>({
-                            //   type: 'exhibitInfoPage/change',
-                            //   payload: {
-                            //     side_CustomOptions: exhibitInfoPage.side_CustomOptions.filter((pCustomAttr) => {
-                            //       return pc.key !== pCustomAttr.key;
-                            //     }),
-                            //   },
-                            // });
-                            // dispatch<UpdateRewriteAction>({
-                            //   type: 'exhibitInfoPage/updateRewrite',
-                            // });
                           }}
                         />
                       </div>
@@ -255,9 +244,10 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
+                  placeholder={FUtil1.I18n.message('hint_value_null')}
                   className={styles.FInput}
                   value={co.valueInput}
-                  errorText={co.valueInputError}
+                  // errorText={co.valueInputError}
                   onChange={(e) => {
                     // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
                     dispatch<OnChange_Side_CustomOptions_ValueInput_Action>({
@@ -277,6 +267,9 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                     });
                   }}
                 />
+                {
+                  co.valueInputError !== '' && (<div style={{color: '#EE4040'}}>{co.valueInputError}</div>)
+                }
               </div>);
             })
           }

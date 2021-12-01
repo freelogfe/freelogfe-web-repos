@@ -108,7 +108,8 @@ function FCustomOptionEditorDrawer({
           type='primary'
           disabled={keyInput === '' || keyInputError !== ''
           || descriptionInputError !== ''
-          || valueInput === '' || valueInputError !== ''}
+          || (valueTypeSelect === 'select' && valueInput === '')
+          || valueInputError !== ''}
           onClick={() => {
             onConfirm && onConfirm({
               key: keyInput,
@@ -176,10 +177,6 @@ function FCustomOptionEditorDrawer({
                 }
                 setDescriptionInput(value);
                 setDescriptionInputError(errorText);
-                // onDescriptionInputChange && onDescriptionInputChange({
-                //   value,
-                //   errorText,
-                // });
               }}
             />
             {
@@ -223,8 +220,9 @@ function FCustomOptionEditorDrawer({
           {
             valueTypeSelect === 'input' ? (<Col span={18}>
                 <Space size={5}>
-                  <i className={styles.dot} />
-                  <FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />
+                  {/*<i className={styles.dot} />*/}
+                  {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
+                  <FTitleText type='h4' text={'自定义选项'} />
                 </Space>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -235,9 +233,10 @@ function FCustomOptionEditorDrawer({
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let errorText: string = '';
-                    if (value === '') {
-                      errorText = '请输入';
-                    } else if (value.length > 30) {
+                    // if (value === '') {
+                    //   errorText = '请输入';
+                    // } else
+                    if (value.length > 30) {
                       errorText = '不超过30个字符';
                     }
                     setValueInput(value);

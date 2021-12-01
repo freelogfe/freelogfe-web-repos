@@ -35,35 +35,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
       return value;
     });
 
-    return onChange && onChange(verifyDuplication(data));
-  }
-
-  function verifyDuplication(data: Data[]) {
-    const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
-      return [dk, 1];
-    }));
-    for (const item of data) {
-      if (item.key === '') {
-        continue;
-      }
-      if (map.has(item.key)) {
-        map.set(item.key, map.get(item.key) as number + 1);
-      } else {
-        map.set(item.key, 1);
-      }
-    }
-    const errorText: string = '键不能重复';
-
-    return data.map<Data>((d) => {
-      if (d.keyError && d.keyError !== errorText) {
-        return d;
-      }
-      // console.log(d.key, map.get(d.key), '9812347928137');
-      return {
-        ...d,
-        keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
-      };
-    });
+    return onChange && onChange(verifyDuplication(data, disabledKeys));
   }
 
   return (<>
@@ -90,7 +62,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
               type='danger'
               onClick={() => {
                 const data: Data[] = dataSource.filter((ds, index) => index !== j);
-                onChange && onChange(verifyDuplication(data));
+                onChange && onChange(verifyDuplication(data, disabledKeys));
               }}
             />
           </div>))
@@ -100,3 +72,31 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
 }
 
 export default FCustomOptions;
+
+function verifyDuplication(data: Data[], disabledKeys: string[]) {
+  const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+    return [dk, 1];
+  }));
+  for (const item of data) {
+    if (item.key === '') {
+      continue;
+    }
+    if (map.has(item.key)) {
+      map.set(item.key, map.get(item.key) as number + 1);
+    } else {
+      map.set(item.key, 1);
+    }
+  }
+  const errorText: string = '键不能重复';
+
+  return data.map<Data>((d) => {
+    if (d.keyError && d.keyError !== errorText) {
+      return d;
+    }
+    // console.log(d.key, map.get(d.key), '9812347928137');
+    return {
+      ...d,
+      keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
+    };
+  });
+}
