@@ -18,6 +18,8 @@ import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '@/components/FTooltip';
+import MonacoEditor from 'react-monaco-editor';
+import FMonacoEditor from '@/components/FMonacoEditor';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
@@ -34,14 +36,17 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
+type ResourceAuthColor = Array<'active' | 'testActive'>;
+type ExhibitAuthColor = Array<'active'>;
+
 type CombinationStructureType = {
   randomID: string;
   type: 'initial' | 'other';
   name: string;
   nameError: string;
   isNameDuplicate: boolean;
-  auth: boolean;
-  testAuth: boolean;
+  authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
+  authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
   events: Array<{
     randomID: string;
     type: 'payment';
@@ -67,8 +72,8 @@ type CombinationStructureType = {
 interface FPolicyBuilderDrawerStates {
   showView: 'edit' | 'fail' | 'success';
 
-  title: string;
-  titleError: string;
+  titleInput: string;
+  titleInputError: string;
   editMode: 'code' | 'composition';
   isVerifying: boolean;
 
@@ -76,8 +81,8 @@ interface FPolicyBuilderDrawerStates {
 
   addingEventStateID: string;
 
-  codeText: string;
-  codeTextError: string;
+  codeMirrorInput: string;
+  codeMirrorInputErrors: string[];
 
   failResult: {
     errorText: string;
@@ -109,33 +114,22 @@ const currencies = [
   { value: 'feather', title: '羽币' },
 ];
 
-const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
+// const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
 
 const initStates: FPolicyBuilderDrawerStates = {
   showView: 'edit',
 
-  title: '',
-  titleError: '',
+  titleInput: '',
+  titleInputError: '',
   editMode: 'composition',
   isVerifying: false,
 
-  combinationData: [
-    {
-      randomID: combinationDataInitialRandomID,
-      type: 'initial',
-      name: 'initial',
-      nameError: '',
-      isNameDuplicate: false,
-      auth: false,
-      testAuth: false,
-      events: [],
-    },
-  ],
+  combinationData: [],
 
   addingEventStateID: '',
 
-  codeText: '',
-  codeTextError: '',
+  codeMirrorInput: '',
+  codeMirrorInputErrors: [],
 
   failResult: null,
 
@@ -143,6 +137,9 @@ const initStates: FPolicyBuilderDrawerStates = {
 
   templateVisible: false,
 };
+
+const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
+const exhibitAuthColor: ExhibitAuthColor = ['active'];
 
 function FPolicyBuilder({
                           visible = false,
@@ -156,8 +153,8 @@ function FPolicyBuilder({
   const refPolicyTitleInput = React.useRef<any>(null);
   const [showView, setShowView] = React.useState<FPolicyBuilderDrawerStates['showView']>('edit');
 
-  const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>(initStates.title);
-  const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>(initStates.titleError);
+  const [titleInput, setTitleInput] = React.useState<FPolicyBuilderDrawerStates['titleInput']>(initStates.titleInput);
+  const [titleInputError, setTitleInputError] = React.useState<FPolicyBuilderDrawerStates['titleInputError']>(initStates.titleInputError);
   const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>(initStates.editMode);
   const [isVerifying, setIsVerifying] = React.useState<FPolicyBuilderDrawerStates['isVerifying']>(initStates.isVerifying);
 
@@ -165,9 +162,8 @@ function FPolicyBuilder({
   // const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
   const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>(initStates.addingEventStateID);
 
-  const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>(initStates.codeText);
-  const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>(initStates.codeTextError);
-
+  const [codeMirrorInput, setCodeMirrorInput] = React.useState<FPolicyBuilderDrawerStates['codeMirrorInput']>(initStates.codeMirrorInput);
+  const [codeMirrorInputErrors, setCodeMirrorInputErrors] = React.useState<FPolicyBuilderDrawerStates['codeMirrorInputErrors']>(initStates.codeMirrorInputErrors);
 
   const [failResult, setFailResult] = React.useState<FPolicyBuilderDrawerStates['failResult']>(initStates.failResult);
   const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(initStates.successResult);
@@ -176,30 +172,50 @@ function FPolicyBuilder({
 
   function resetAllStates() {
     setShowView(initStates.showView);
-    setTitle(initStates.title);
-    setTitleError(initStates.titleError);
+    setTitleInput(initStates.titleInput);
+    setTitleInputError(initStates.titleInputError);
     setEditMode(initStates.editMode);
     setIsVerifying(initStates.isVerifying);
     setCombinationData(initStates.combinationData);
     // setEnabledTargetState(initStates.enabledTargetState);
     setAddingEventStateID(initStates.addingEventStateID);
-    setCodeText(initStates.codeText);
-    setCodeTextError(initStates.codeTextError);
+    setCodeMirrorInput(initStates.codeMirrorInput);
+    setCodeMirrorInputErrors(initStates.codeMirrorInputErrors);
     setFailResult(initStates.failResult);
     setSuccessResult(initStates.successResult);
     setTemplateVisible(initStates.templateVisible);
   }
 
   function onChangeTitleInput(value: string) {
-    setTitle(value);
-    setTitleError(verifyTitle(value, alreadyUsedTitles));
+    setTitleInput(value);
+    setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
-  async function onChangeCodemirror(value: string) {
-    // const value: string = e.target.value;
-    setCodeText(value);
-    setCodeTextError(await verifyCodeText(value, alreadyUsedTexts, targetType));
-  }
+  // function onChangeCodemirror(value: string) {
+  //   // const value: string = e.target.value;
+  //   // console.log(value, 'valuevaluevalue!@#$');
+  //   // ###### setCodeText(value);
+  //
+  //
+  //   // setCodeTextErrors(await verifyCodeText(value, alreadyUsedTexts, targetType));
+  // }
+
+  // async function onBlur_Codemirror(codeText1: string) {
+  //   // console.log(codeMirrorInput, 'codeMirrorInput onBlur_Codemirror8924hj23kljlkjalsdf');
+  //   // console.log(codeText1, 'codeText@$!234123412342309j');
+  //   const { errors } = await compileCodeText({
+  //     text: codeText1,
+  //     targetType: 'resource',
+  //   });
+  //
+  //   if (errors.length > 0) {
+  //     return setCodeMirrorInputErrors(errors);
+  //   }
+  //
+  //   if (alreadyUsedTexts?.includes(codeMirrorInput)) {
+  //     return setCodeMirrorInputErrors(['']);
+  //   }
+  // }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
     let result: CombinationStructureType = combinationData.map((cd) => {
@@ -260,8 +276,8 @@ function FPolicyBuilder({
         name: '',
         nameError: '',
         isNameDuplicate: false,
-        auth: false,
-        testAuth: false,
+        authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+        authorizationChecked: [],
         events: [],
       },
     ];
@@ -361,164 +377,183 @@ function FPolicyBuilder({
     // console.log(num, 'handleTemplatehandleTemplate23423423');
     setTemplateVisible(false);
     if (num === 1) {
-      setCodeText(text1);
-      // setCodeTextError(await verifyText(text1, alreadyUsedTexts));
-      setTitle(title1);
-      setTitleError(verifyTitle(title1, alreadyUsedTitles));
 
-      const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-      const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-      const result: CombinationStructureType = [
-        {
-          randomID: initialRandomID,
-          type: 'initial',
-          name: 'initial',
-          nameError: '',
-          isNameDuplicate: false,
-          auth: true,
-          testAuth: false,
-          events: [
-            {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'relativeTime',
-              num: 1,
-              unit: 'month',
-              target: finishRandomID,
-            },
-          ],
-        },
-        {
-          randomID: finishRandomID,
-          type: 'other',
-          name: 'finish',
-          nameError: '',
-          isNameDuplicate: false,
-          auth: false,
-          testAuth: false,
-          events: [
-            {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'terminate',
-            },
-          ],
-        },
-      ];
-      setCombinationData(result);
+      setTitleInput(title1);
+      setTitleInputError(verifyTitle(title1, alreadyUsedTitles));
+
+      if (editMode === 'code') {
+        setCodeMirrorInput(text1);
+      } else {
+        const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+        const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
+        const result: CombinationStructureType = [
+          {
+            randomID: initialRandomID,
+            type: 'initial',
+            name: 'initial',
+            nameError: '',
+            isNameDuplicate: false,
+            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            authorizationChecked: ['active'],
+            events: [
+              {
+                randomID: FUtil.Tool.generateRandomCode(10),
+                type: 'relativeTime',
+                num: 1,
+                unit: 'month',
+                target: finishRandomID,
+              },
+            ],
+          },
+          {
+            randomID: finishRandomID,
+            type: 'other',
+            name: 'finish',
+            nameError: '',
+            isNameDuplicate: false,
+            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            authorizationChecked: [],
+            events: [
+              {
+                randomID: FUtil.Tool.generateRandomCode(10),
+                type: 'terminate',
+              },
+            ],
+          },
+        ];
+        setCombinationData(result);
+      }
     } else {
-      setCodeText(text2);
-      // setCodeTextError(await verifyText(text2, alreadyUsedTexts));
-      setTitle(title2);
-      setTitleError(verifyTitle(title2, alreadyUsedTitles));
-
-      const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-      const authRandomID: string = FUtil.Tool.generateRandomCode(10);
-      const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-      const result: CombinationStructureType = [
-        {
-          randomID: initialRandomID,
-          type: 'initial',
-          name: 'initial',
-          nameError: '',
-          isNameDuplicate: false,
-          auth: false,
-          testAuth: false,
-          events: [
-            {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'payment',
-              amount: 10,
-              target: authRandomID,
-            },
-          ],
-        },
-        {
-          randomID: authRandomID,
-          type: 'other',
-          name: 'auth',
-          nameError: '',
-          isNameDuplicate: false,
-          auth: true,
-          testAuth: false,
-          events: [
-            {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'relativeTime',
-              num: 1,
-              unit: 'month',
-              target: finishRandomID,
-            },
-          ],
-        },
-        {
-          randomID: finishRandomID,
-          type: 'other',
-          name: 'finish',
-          nameError: '',
-          isNameDuplicate: false,
-          auth: false,
-          testAuth: false,
-          events: [
-            {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'terminate',
-            },
-          ],
-        },
-      ];
-      setCombinationData(result);
-      // handleTargetState(result);
+      setTitleInput(title2);
+      setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
+      if (editMode === 'code') {
+        setCodeMirrorInput(text2);
+      } else {
+        const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+        const authRandomID: string = FUtil.Tool.generateRandomCode(10);
+        const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
+        const result: CombinationStructureType = [
+          {
+            randomID: initialRandomID,
+            type: 'initial',
+            name: 'initial',
+            nameError: '',
+            isNameDuplicate: false,
+            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            authorizationChecked: [],
+            events: [
+              {
+                randomID: FUtil.Tool.generateRandomCode(10),
+                type: 'payment',
+                amount: 10,
+                target: authRandomID,
+              },
+            ],
+          },
+          {
+            randomID: authRandomID,
+            type: 'other',
+            name: 'auth',
+            nameError: '',
+            isNameDuplicate: false,
+            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            authorizationChecked: ['active'],
+            events: [
+              {
+                randomID: FUtil.Tool.generateRandomCode(10),
+                type: 'relativeTime',
+                num: 1,
+                unit: 'month',
+                target: finishRandomID,
+              },
+            ],
+          },
+          {
+            randomID: finishRandomID,
+            type: 'other',
+            name: 'finish',
+            nameError: '',
+            isNameDuplicate: false,
+            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            authorizationChecked: [],
+            events: [
+              {
+                randomID: FUtil.Tool.generateRandomCode(10),
+                type: 'terminate',
+              },
+            ],
+          },
+        ];
+        setCombinationData(result);
+      }
     }
   }
 
   async function onClickVerifyBtn() {
     setIsVerifying(true);
-    let code: string;
+
     if (editMode === 'code') {
-      code = codeText;
+      const { errors } = await compileCodeText({
+        text: codeMirrorInput,
+        targetType: targetType,
+      });
+      if (errors) {
+        setIsVerifying(false);
+        // setShowView('fail');
+        // setFailResult({ errorText: errors.join() });
+        setCodeMirrorInputErrors(errors);
+        return;
+      }
+
+      const { error, text } = await FUtil.Format.policyCodeTranslationToText(codeMirrorInput, targetType);
+      setIsVerifying(false);
+      if (error) {
+        setShowView('fail');
+        setFailResult({ errorText: error.join(',') });
+        return;
+      }
+      // setIsVerifying(false);
+      setShowView('success');
+      setSuccessResult({
+        title: titleInput,
+        code: codeMirrorInput,
+        translation: text || '',
+        view: [],
+      });
     } else {
-      console.log(combinationData, 'combinationData234234');
-      code = dataToCode(combinationData);
+      // console.log(combinationData, 'combinationData234234');
+      // code = dataToCode(combinationData);
     }
     // console.log(code, 'code823u423u4ooij');
-    const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
-    if (err) {
-      setIsVerifying(false);
-      setShowView('fail');
-      setFailResult({ errorText: err });
-      return;
-    }
+    // const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
 
-    const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, targetType);
 
-    if (error) {
-      setIsVerifying(false);
-      setShowView('fail');
-      setFailResult({ errorText: err });
-      return;
-    }
 
-    setIsVerifying(false);
-    setShowView('success');
-    setSuccessResult({
-      title: title,
-      code: code,
-      translation: text || '',
-      view: [],
-    });
   }
 
   function onChangeDrawerVisible(visible: boolean) {
     if (!visible) {
       resetAllStates();
     } else {
+      setCombinationData([
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'initial',
+          name: 'initial',
+          nameError: '',
+          isNameDuplicate: false,
+          authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+          authorizationChecked: [],
+          events: [],
+        },
+      ]);
       refPolicyTitleInput.current.focus();
     }
   }
 
-  const disabledExecute: boolean = title.trim() === ''
-    || !!titleError
+  const disabledExecute: boolean = titleInput.trim() === '' || titleInputError !== ''
     || (editMode === 'code'
-      ? codeText.trim() === '' || !!codeTextError
+      ? codeMirrorInput.trim() === '' || codeMirrorInputErrors.length > 0
       : combinationData.some((cd) => {
         return cd.name.trim() === ''
           || !!cd.nameError
@@ -706,13 +741,16 @@ function FPolicyBuilder({
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
                 // className={styles.newTitle}
-                value={title}
+                value={titleInput}
                 // errorText={titleError}
                 onChange={(e) => {
                   onChangeTitleInput(e.target.value);
                 }}
                 // placeholder={'请输入授权策略名称'}
                 placeholder={'输入策略名称…'}
+                onBlur={() => {
+                  console.log(titleInput, 'title@@@@@@@@');
+                }}
               />
 
               <Space size={20}>
@@ -750,9 +788,9 @@ function FPolicyBuilder({
                 </FTextBtn>
               </Space>
             </div>
-            {titleError && <>
+            {titleInputError && <>
               <div style={{ height: 5 }} />
-              <div className={styles.textError}>{titleError}</div>
+              <div className={styles.textError}>{titleInputError}</div>
             </>}
             <div style={{ height: 20 }} />
 
@@ -847,27 +885,51 @@ function FPolicyBuilder({
 
                             <div className={styles.compositionStateHeader2}>
                               <div style={{ width: 50 }} />
-                              <FCheckbox
-                                checked={cd.auth}
-                                onChange={(e) => {
-                                  onChangeCombinationData({
-                                    auth: e.target.checked,
-                                  }, cd.randomID);
-                                }}
-                              />
-                              <div style={{ width: 5 }} />
-                              <FContentText text={'授权'} />
-                              <div style={{ width: 20 }} />
-                              <FCheckbox
-                                checked={cd.testAuth}
-                                onChange={(e) => {
-                                  onChangeCombinationData({
-                                    testAuth: e.target.checked,
-                                  }, cd.randomID);
-                                }}
-                              />
-                              <div style={{ width: 5 }} />
-                              <FContentText text={'测试授权'} />
+                              <Space size={20}>
+                                {
+                                  cd.authorizationOptions.map((ao) => {
+                                    return (<Space key={ao}>
+                                      <FCheckbox
+                                        checked={cd.authorizationChecked.includes(ao)}
+                                        onChange={(e) => {
+                                          onChangeCombinationData({
+                                            authorizationChecked: e.target.checked
+                                              ? [
+                                                ...cd.authorizationChecked,
+                                                ao,
+                                              ]
+                                              : cd.authorizationChecked.filter((ac) => {
+                                                return ac !== ao;
+                                              }),
+                                          }, cd.randomID);
+                                        }}
+                                      />
+                                      {/*<div*/}
+                                      {/*  style={{ cursor: 'pointer' }}*/}
+                                      {/*  onClick={() => {*/}
+
+                                      {/*  }}>*/}
+                                      <FContentText text={ao === 'active' ? '授权' : ao === 'testActive' ? '测试授权' : ao} />
+                                      {/*</div>*/}
+                                    </Space>);
+                                  })
+                                }
+
+                              </Space>
+
+                              {/*<div style={{ width: 5 }} />*/}
+
+                              {/*<div style={{ width: 20 }} />*/}
+                              {/*<FCheckbox*/}
+                              {/*  checked={cd.testAuth}*/}
+                              {/*  onChange={(e) => {*/}
+                              {/*    onChangeCombinationData({*/}
+                              {/*      testAuth: e.target.checked,*/}
+                              {/*    }, cd.randomID);*/}
+                              {/*  }}*/}
+                              {/*/>*/}
+                              {/*<div style={{ width: 5 }} />*/}
+                              {/*<FContentText text={'测试授权'} />*/}
                             </div>
                           </div>
 
@@ -1117,16 +1179,30 @@ function FPolicyBuilder({
 
                 </div>)
                 : (<>
-                  <FCodemirror
-                    value={codeText}
+                  <FMonacoEditor
+                    width={'100%'}
+                    value={codeMirrorInput}
+                    options={{
+                      selectOnLineNumbers: true,
+                    }}
                     onChange={(value) => {
-                      // console.log(value, 'value1234231421344324');
-                      onChangeCodemirror(value);
+                      // console.log(value, 'value!!@#!$@#$!!!!');
+                      setCodeMirrorInput(value);
+                    }}
+                    editorDidMount={(editor, monaco) => {
+                      // console.log('editorDidMount', editor, monaco);
+                      editor.focus();
                     }}
                   />
-                  {codeTextError && <>
+
+                  {codeMirrorInputErrors.length > 0 && <>
                     <div style={{ height: 5 }} />
-                    <div className={styles.textError}>{codeTextError}</div>
+                    {
+                      codeMirrorInputErrors.map((err, ei) => {
+                        return (<div key={ei} className={styles.textError}>{err}</div>);
+                      })
+                    }
+
                   </>}
                 </>)
             }
@@ -1159,7 +1235,7 @@ function FPolicyBuilder({
           //   // setTemplateVisible(false);
           // }}
           onClickSelect={(num) => {
-            if (codeText === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
+            if (codeMirrorInput === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
               return onClickSelectTemplateBtn(num);
             }
             Modal.confirm({
@@ -1284,26 +1360,36 @@ function verifyTitle(title: string, allTitles: string[]): string {
   return error;
 }
 
-async function verifyCodeText(text: string, allTexts: string[], targetType = 'resource'): Promise<string> {
-  // console.log(allTexts, 'allTexts2342323423234234');
-  // console.log(text, 'text234234234');
-  let error: string = '';
+interface CompileCodeText {
+  text: string;
+  targetType: 'resource' | 'presentable';
+}
+
+async function compileCodeText({ text, targetType = 'resource' }: CompileCodeText): Promise<{
+  errors: string[];
+  result?: any;
+}> {
   if (text === '') {
-    error = '请输入内容';
-  } else if (allTexts.includes(text)) {
-    error = FUil1.I18n.message('error_auth_plan_existed');
-  } else {
-    try {
-      // TODO:
-      // console.log([text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev'], '@@@@@@@############');
-      const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
-      console.log(result, 'resultresult@$!@$#@#$');
-    } catch (err) {
-      console.log(err.message, 'err234234234');
-      error = err.message;
-    }
+    return {
+      errors: ['请输入内容'],
+    };
   }
-  return error;
+  try {
+    const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
+    // console.log(result, 'resultresult@$!@$#@#$');
+    return {
+      errors: [
+        ...result.errors,
+        ...result.warnings,
+      ],
+      result: result.state_machine,
+    };
+  } catch (err) {
+    // console.log(err.message, 'err234234234');
+    return {
+      errors: [err.message + '(抛错)'],
+    };
+  }
 }
 
 interface PolicyShowcaseProps {
@@ -1375,15 +1461,7 @@ function dataToCode(data: CombinationStructureType): string {
   let result: string = 'for public\n';
   for (const st of data) {
     result += '\n';
-    const colors: string[] = [];
-    if (st.auth) {
-      colors.push('active');
-    }
-    if (st.testAuth) {
-      colors.push('testActive');
-    }
-    result += `${st.name}${colors.length > 0 ? `[${colors.join(',')}]` : ''}:`;
-
+    result += `${st.name}${st.authorizationChecked.length > 0 ? `[${st.authorizationChecked.join(',')}]` : ''}:`;
     for (const et of st.events) {
       result += '\n  ';
 

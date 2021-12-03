@@ -14,8 +14,9 @@ interface FCodemirror extends Partial<IControlledCodeMirror> {
   // onBeforeChange?: (editor, data, value) => void;
 }
 
-function FCodemirror({ value, onChange, className = '' }: FCodemirror) {
+function FCodemirror({ value, onChange, className = '', ...props }: FCodemirror) {
   return (<CodeMirror
+    {...props}
     className={[styles.CodeMirror, className].join(' ')}
     value={value}
     options={{
