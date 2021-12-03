@@ -39,6 +39,33 @@ interface FPolicyBuilderDrawerProps {
 type ResourceAuthColor = Array<'active' | 'testActive'>;
 type ExhibitAuthColor = Array<'active'>;
 
+interface IEvent_Payment {
+  randomID: string;
+  type: 'payment';
+  amount: number | null;
+  target: string;
+}
+
+interface IEvent_RelativeTime {
+  randomID: string;
+  type: 'relativeTime';
+  num: number | null;
+  unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
+  target: string;
+}
+
+interface IEvent_AbsoluteTime {
+  randomID: string;
+  type: 'absoluteTime';
+  dateTime: Moment | null;
+  target: string;
+}
+
+interface IEvent_Terminate {
+  randomID: string;
+  type: 'terminate';
+}
+
 type CombinationStructureType = {
   randomID: string;
   type: 'initial' | 'other';
@@ -47,26 +74,7 @@ type CombinationStructureType = {
   isNameDuplicate: boolean;
   authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
   authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
-  events: Array<{
-    randomID: string;
-    type: 'payment';
-    amount: number | null;
-    target: string;
-  } | {
-    randomID: string;
-    type: 'relativeTime';
-    num: number | null;
-    unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
-    target: string;
-  } | {
-    randomID: string;
-    type: 'absoluteTime';
-    dateTime: Moment | null;
-    target: string;
-  } | {
-    randomID: string;
-    type: 'terminate';
-  }>;
+  events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
 }[];
 
 interface FPolicyBuilderDrawerStates {
@@ -191,27 +199,31 @@ function FPolicyBuilder({
     setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
+  function onClick_SwitchMode_Code() {
+    const code: string = dataToCode(combinationData);
+    setCodeMirrorInput(code);
+    setEditMode('code');
+  }
+
+  async function onClick_SwitchMode_Composition() {
+    const { errors, results } = await codeToData({
+      text: codeMirrorInput,
+      targetType: targetType,
+    });
+    if (errors.length > 0) {
+      setIsVerifying(false);
+      setCodeMirrorInputErrors(errors);
+      return;
+    }
+
+    setCombinationData(results || []);
+    setEditMode('composition');
+  }
+
   function onChangeCodemirror(value: string) {
     setCodeMirrorInput(value);
     setCodeMirrorInputErrors([]);
   }
-
-  // async function onBlur_Codemirror(codeText1: string) {
-  //   // console.log(codeMirrorInput, 'codeMirrorInput onBlur_Codemirror8924hj23kljlkjalsdf');
-  //   // console.log(codeText1, 'codeText@$!234123412342309j');
-  //   const { errors } = await compileCodeText({
-  //     text: codeText1,
-  //     targetType: 'resource',
-  //   });
-  //
-  //   if (errors.length > 0) {
-  //     return setCodeMirrorInputErrors(errors);
-  //   }
-  //
-  //   if (alreadyUsedTexts?.includes(codeMirrorInput)) {
-  //     return setCodeMirrorInputErrors(['']);
-  //   }
-  // }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
     let result: CombinationStructureType = combinationData.map((cd) => {
@@ -557,26 +569,28 @@ function FPolicyBuilder({
     }
   }
 
-  const disabledExecute: boolean = titleInput.trim() === '' || titleInputError !== ''
-    || (editMode === 'code'
-      ? codeMirrorInput.trim() === '' || codeMirrorInputErrors.length > 0
-      : (combinationData.some((cd) => {
-      return cd.name.trim() === ''
-        || !!cd.nameError
-        || cd.events.some((et) => {
-          if (et.type === 'payment') {
-            return !et.amount || !et.target;
-          } else if (et.type === 'relativeTime') {
-            return !et.num || !et.unit || !et.target;
-          } else if (et.type === 'absoluteTime') {
-            return !et.dateTime || !et.target;
-          } else {
-            return false;
-          }
-        });
-    })) || !combinationData.some((cd) => {
-      return cd.authorizationChecked.length > 0;
-    }));
+  const titleInputHasError: boolean = titleInput.trim() === '' || titleInputError !== '';
+  const codeMirrorInputHasError: boolean = codeMirrorInput.trim() === '' || codeMirrorInputErrors.length > 0;
+  const combinationDataHasError: boolean = (combinationData.some((cd) => {
+    return cd.name.trim() === ''
+      || !!cd.nameError
+      || cd.events.some((et) => {
+        if (et.type === 'payment') {
+          return !et.amount || !et.target;
+        } else if (et.type === 'relativeTime') {
+          return !et.num || !et.unit || !et.target;
+        } else if (et.type === 'absoluteTime') {
+          return !et.dateTime || !et.target;
+        } else {
+          return false;
+        }
+      });
+  })) || !combinationData.some((cd) => {
+    return cd.authorizationChecked.length > 0;
+  });
+
+  const disabledExecute: boolean = titleInputHasError
+  || editMode === 'code' ? codeMirrorInputHasError : combinationDataHasError;
 
   const enabledTargetState: { value: string; title: string }[] = combinationData.map<{ value: string; title: string }>((cd, index) => {
     return {
@@ -766,9 +780,8 @@ function FPolicyBuilder({
                   editMode === 'code'
                     ? (<FTextBtn
                       type='default'
-                      onClick={() => {
-                        setEditMode('composition');
-                      }}>
+                      disabled={codeMirrorInputHasError || isVerifying}
+                      onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
                         <FComposition />
                         <span>组合模式</span>
@@ -776,9 +789,8 @@ function FPolicyBuilder({
                     </FTextBtn>)
                     : (<FTextBtn
                       type='default'
-                      onClick={() => {
-                        setEditMode('code');
-                      }}>
+                      // disabled={combinationDataHasError}
+                      onClick={onClick_SwitchMode_Code}>
                       <Space size={4}>
                         <FCode />
                         <span>代码模式</span>
@@ -1370,7 +1382,7 @@ interface CompileCodeText {
   targetType: 'resource' | 'presentable';
 }
 
-async function compileCodeText({ text, targetType = 'resource' }: CompileCodeText): Promise<{
+async function compileCodeText({ text, targetType }: CompileCodeText): Promise<{
   errors: string[];
   result?: any;
 }> {
@@ -1395,6 +1407,95 @@ async function compileCodeText({ text, targetType = 'resource' }: CompileCodeTex
       errors: [err.message + '(抛错)'],
     };
   }
+}
+
+interface CodeToDataParams extends CompileCodeText {
+
+}
+
+async function codeToData({
+                            text,
+                            targetType,
+                          }: CodeToDataParams): Promise<{ errors: string[]; results?: CombinationStructureType }> {
+  const { errors, result } = await compileCodeText({ text, targetType });
+  if (errors.length > 0) {
+    return {
+      errors: errors,
+    };
+  }
+  console.log(result, 'resultQ!@#$!@#$@#334343434');
+  const results: CombinationStructureType = Object.entries(result.states).map<CombinationStructureType[number]>(([k, v]: any) => {
+    return {
+      randomID: FUtil.Tool.generateRandomCode(10),
+      type: v.isInitial ? 'initial' : 'other',
+      name: k,
+      nameError: '',
+      isNameDuplicate: false,
+      authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      authorizationChecked: v.serviceStates,
+      events: v.transitions.length === 0
+        ? [{
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'terminate',
+        }]
+        : v.transitions.map((vt: any) => {
+          if (vt.name === 'TransactionEvent') {
+            const event: IEvent_Payment = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'payment',
+              amount: vt.args.amount,
+              target: vt.toState,
+            };
+            return event;
+          }
+          if (vt.name === 'RelativeTimeEvent') {
+            const event: IEvent_RelativeTime = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'relativeTime',
+              num: vt.args.elapsed,
+              unit: vt.args.timeUnit,
+              target: vt.toState,
+            };
+            return event;
+          }
+          if (vt.name === 'TimeEvent') {
+            const event: IEvent_AbsoluteTime = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'absoluteTime',
+              dateTime: moment(vt.args.dateTime, FUtil.Predefined.momentDateTimeFormat),
+              target: vt.toState,
+            };
+            return event;
+          }
+
+          const event: IEvent_Terminate = {
+            randomID: FUtil.Tool.generateRandomCode(10),
+            type: 'terminate',
+          };
+          return event;
+        }),
+    };
+  });
+  // console.log(results, 'results!!!!!@@@@@@######34343434');
+  return {
+    errors: [],
+    results: results.map((vt, _, array) => {
+      return {
+        ...vt,
+        events: vt.events.map((vte) => {
+          if (vte.type === 'terminate') {
+            return vte;
+          }
+          return {
+            ...vte,
+            target: array.find((af) => {
+              return af.name === vte.target;
+            })?.randomID || '',
+          };
+        }),
+      };
+    }),
+  };
 }
 
 interface PolicyShowcaseProps {
@@ -1472,11 +1573,11 @@ function dataToCode(data: CombinationStructureType): string {
 
       const targetStateName: string = data.find((dt) => dt.randomID === (et as any).target)?.name || '';
       if (et.type === 'payment') {
-        result += `~freelog.TransactionEvent("${et.amount}","self.account") => ${targetStateName}`;
+        result += `~freelog.TransactionEvent("${et.amount || ''}","self.account") => ${targetStateName}`;
       } else if (et.type === 'relativeTime') {
-        result += `~freelog.RelativeTimeEvent("${et.num}","${et.unit}") => ${targetStateName}`;
+        result += `~freelog.RelativeTimeEvent("${et.num || ''}","${et.unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {
-        result += `~freelog.TimeEvent("${et.dateTime?.format(FUtil.Predefined.momentDateTimeFormat)}") => ${targetStateName}`;
+        result += `~freelog.TimeEvent("${et.dateTime?.format(FUtil.Predefined.momentDateTimeFormat) || ''}") => ${targetStateName}`;
       } else {
         result += 'terminate';
       }
