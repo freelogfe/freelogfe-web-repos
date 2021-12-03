@@ -191,14 +191,10 @@ function FPolicyBuilder({
     setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
-  // function onChangeCodemirror(value: string) {
-  //   // const value: string = e.target.value;
-  //   // console.log(value, 'valuevaluevalue!@#$');
-  //   // ###### setCodeText(value);
-  //
-  //
-  //   // setCodeTextErrors(await verifyCodeText(value, alreadyUsedTexts, targetType));
-  // }
+  function onChangeCodemirror(value: string) {
+    setCodeMirrorInput(value);
+    setCodeMirrorInputErrors([]);
+  }
 
   // async function onBlur_Codemirror(codeText1: string) {
   //   // console.log(codeMirrorInput, 'codeMirrorInput onBlur_Codemirror8924hj23kljlkjalsdf');
@@ -497,14 +493,11 @@ function FPolicyBuilder({
         text: codeMirrorInput,
         targetType: targetType,
       });
-      if (errors) {
+      if (errors.length > 0) {
         setIsVerifying(false);
-        // setShowView('fail');
-        // setFailResult({ errorText: errors.join() });
         setCodeMirrorInputErrors(errors);
         return;
       }
-
       const { error, text } = await FUtil.Format.policyCodeTranslationToText(codeMirrorInput, targetType);
       setIsVerifying(false);
       if (error) {
@@ -521,12 +514,25 @@ function FPolicyBuilder({
         view: [],
       });
     } else {
-      // console.log(combinationData, 'combinationData234234');
-      // code = dataToCode(combinationData);
+      const code: string = dataToCode(combinationData);
+      const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, targetType);
+      setIsVerifying(false);
+      if (error) {
+        setShowView('fail');
+        setFailResult({ errorText: error.join(',') });
+        return;
+      }
+      // setIsVerifying(false);
+      setShowView('success');
+      setSuccessResult({
+        title: titleInput,
+        code: codeMirrorInput,
+        translation: text || '',
+        view: [],
+      });
     }
     // console.log(code, 'code823u423u4ooij');
     // const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
-
 
 
   }
@@ -554,21 +560,23 @@ function FPolicyBuilder({
   const disabledExecute: boolean = titleInput.trim() === '' || titleInputError !== ''
     || (editMode === 'code'
       ? codeMirrorInput.trim() === '' || codeMirrorInputErrors.length > 0
-      : combinationData.some((cd) => {
-        return cd.name.trim() === ''
-          || !!cd.nameError
-          || cd.events.some((et) => {
-            if (et.type === 'payment') {
-              return !et.amount || !et.target;
-            } else if (et.type === 'relativeTime') {
-              return !et.num || !et.unit || !et.target;
-            } else if (et.type === 'absoluteTime') {
-              return !et.dateTime || !et.target;
-            } else {
-              return false;
-            }
-          });
-      }));
+      : (combinationData.some((cd) => {
+      return cd.name.trim() === ''
+        || !!cd.nameError
+        || cd.events.some((et) => {
+          if (et.type === 'payment') {
+            return !et.amount || !et.target;
+          } else if (et.type === 'relativeTime') {
+            return !et.num || !et.unit || !et.target;
+          } else if (et.type === 'absoluteTime') {
+            return !et.dateTime || !et.target;
+          } else {
+            return false;
+          }
+        });
+    })) || !combinationData.some((cd) => {
+      return cd.authorizationChecked.length > 0;
+    }));
 
   const enabledTargetState: { value: string; title: string }[] = combinationData.map<{ value: string; title: string }>((cd, index) => {
     return {
@@ -1185,10 +1193,7 @@ function FPolicyBuilder({
                     options={{
                       selectOnLineNumbers: true,
                     }}
-                    onChange={(value) => {
-                      // console.log(value, 'value!!@#!$@#$!!!!');
-                      setCodeMirrorInput(value);
-                    }}
+                    onChange={onChangeCodemirror}
                     editorDidMount={(editor, monaco) => {
                       // console.log('editorDidMount', editor, monaco);
                       editor.focus();
