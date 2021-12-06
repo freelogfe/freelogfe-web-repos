@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
 import { FContentText } from '@/components/FText';
-import { ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/resourceAuthPage';
+import { FetchAuthorizedAction, ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/resourceAuthPage';
 import { connect, Dispatch } from 'dva';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
@@ -59,7 +59,14 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         <FContractDisplay
           contractID={k.id}
           onChangedEvent={() => {
-            
+            dispatch<FetchAuthorizedAction>({
+              type: 'resourceAuthPage/fetchAuthorized',
+              payload: {
+                activatedResourceId: resourceAuthPage.contractsAuthorized.find((ca) => {
+                  return ca.activated;
+                })?.id || '',
+              },
+            });
           }}
         />
         <div style={{ height: 10 }} />
