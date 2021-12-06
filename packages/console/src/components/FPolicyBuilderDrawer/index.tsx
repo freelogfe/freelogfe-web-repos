@@ -20,7 +20,7 @@ import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '@/components/FTooltip';
 // import MonacoEditor from 'react-monaco-editor';
 import FMonacoEditor from '@/components/FMonacoEditor';
-import fMessage from '@/components/fMessage';
+// import fMessage from '@/components/fMessage';
 import fConfirmModal from '@/components/fConfirmModal';
 import * as AHooks from 'ahooks';
 
@@ -75,8 +75,10 @@ type CombinationStructureType = {
   name: string;
   nameError: string;
   isNameDuplicate: boolean;
-  authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
-  authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
+  // authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
+  // authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
+  authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
+  // authorizationChecked: Partial<ResourceAuthColor> | Partial<ExhibitAuthColor>;
   events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
 }[];
 
@@ -88,9 +90,9 @@ interface FPolicyBuilderDrawerStates {
   editMode: 'code' | 'composition';
   isVerifying: boolean;
 
-  combinationData: CombinationStructureType;
-
-  addingEventStateID: string;
+  combination_Data: CombinationStructureType;
+  combination_AddingEventStateID: string;
+  combination_FinalAuthColor: ResourceAuthColor | ExhibitAuthColor;
 
   code_IsDirty: boolean;
   code_IsCompiling: boolean;
@@ -135,13 +137,26 @@ const initStates: FPolicyBuilderDrawerStates = {
   editMode: 'composition',
   isVerifying: false,
 
-  combinationData: [],
-
-  addingEventStateID: '',
+  combination_Data: [
+    {
+      randomID: FUtil.Tool.generateRandomCode(10),
+      type: 'initial',
+      name: 'initial',
+      nameError: '',
+      isNameDuplicate: false,
+      // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      authorizationChecked: [],
+      events: [],
+    },
+  ],
+  combination_AddingEventStateID: '',
+  combination_FinalAuthColor: [],
 
   code_IsDirty: false,
   code_IsCompiling: false,
-  code_Input: '',
+  code_Input: 'for public\n' +
+    '\n' +
+    'initial:',
   code_InputErrors: [],
 
   failResult: null,
@@ -162,8 +177,12 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                         }: FPolicyBuilderDrawerProps) {
-  const refContainer = React.useRef<any>(null);
+  // const refContainer = React.useRef<any>(null);
+  // const refContainerContent = React.useRef<any>(null);
+  const refBottomDiv = React.useRef<any>(null);
+  const refMaskingContainer = React.useRef<any>(null);
   const refPolicyTitleInput = React.useRef<any>(null);
+
   const [showView, setShowView] = React.useState<FPolicyBuilderDrawerStates['showView']>('edit');
 
   const [titleInput, setTitleInput] = React.useState<FPolicyBuilderDrawerStates['titleInput']>(initStates.titleInput);
@@ -171,9 +190,9 @@ function FPolicyBuilder({
   const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>(initStates.editMode);
   const [isVerifying, setIsVerifying] = React.useState<FPolicyBuilderDrawerStates['isVerifying']>(initStates.isVerifying);
 
-  const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>(initStates.combinationData);
-  // const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
-  const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>(initStates.addingEventStateID);
+  const [combination_Data, set_Combination_Data] = React.useState<FPolicyBuilderDrawerStates['combination_Data']>(initStates.combination_Data);
+  const [combination_AddingEventStateID, set_Combination_AddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['combination_AddingEventStateID']>(initStates.combination_AddingEventStateID);
+  const [combination_FinalAuthColor, set_Combination_FinalAuthColor] = React.useState<FPolicyBuilderDrawerStates['combination_FinalAuthColor']>(initStates.combination_FinalAuthColor);
 
   const [code_IsDirty, set_Code_IsDirty] = React.useState<FPolicyBuilderDrawerStates['code_IsDirty']>(initStates.code_IsDirty);
   const [code_IsCompiling, set_Code_IsCompiling] = React.useState<FPolicyBuilderDrawerStates['code_IsCompiling']>(initStates.code_IsDirty);
@@ -187,7 +206,7 @@ function FPolicyBuilder({
 
   AHooks.useDebounceEffect(
     () => {
-      console.log(code_Input, 'useDebounceEffect*(*******');
+      // console.log(code_Input, 'useDebounceEffect*(*******');
       onDebounceChange_Code_Input();
     },
     [code_Input],
@@ -204,10 +223,10 @@ function FPolicyBuilder({
     setTitleInputError(initStates.titleInputError);
     setEditMode(initStates.editMode);
     setIsVerifying(initStates.isVerifying);
-    setCombinationData(initStates.combinationData);
-    // setEnabledTargetState(initStates.enabledTargetState);
-    setAddingEventStateID(initStates.addingEventStateID);
+    set_Combination_Data(initStates.combination_Data);
+    set_Combination_AddingEventStateID(initStates.combination_AddingEventStateID);
     set_Code_IsDirty(initStates.code_IsDirty);
+    set_Code_IsCompiling(initStates.code_IsCompiling);
     set_Code_Input(initStates.code_Input);
     set_Code_InputErrors(initStates.code_InputErrors);
     setFailResult(initStates.failResult);
@@ -221,8 +240,9 @@ function FPolicyBuilder({
   }
 
   function onClick_SwitchMode_Code() {
-    const code: string = dataToCode(combinationData);
+    const code: string = dataToCode(combination_Data);
     set_Code_Input(code);
+    set_Code_IsDirty(false);
     setEditMode('code');
   }
 
@@ -231,10 +251,12 @@ function FPolicyBuilder({
       return setEditMode('composition');
     }
     fConfirmModal({
-      message: '当前有编译错误，如果离开将会丢弃错误后的代码？',
+      message: FUil1.I18n.message('alarm_switchto_visualeditor'),
       onOk() {
         setEditMode('composition');
       },
+      okText: FUil1.I18n.message('btn_switch'),
+      cancelText: FUil1.I18n.message('btn_cancel'),
     });
   }
 
@@ -256,13 +278,13 @@ function FPolicyBuilder({
       set_Code_InputErrors(errors);
       return;
     }
-    setCombinationData(results || []);
+    set_Combination_Data(results || []);
     set_Code_InputErrors([]);
     // setEditMode('composition');
   }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
-    let result: CombinationStructureType = combinationData.map((cd) => {
+    let result: CombinationStructureType = combination_Data.map((cd) => {
       if (cd.randomID !== randomID) {
         return cd;
       }
@@ -285,12 +307,12 @@ function FPolicyBuilder({
       };
     });
 
-    setCombinationData(result);
+    set_Combination_Data(result);
   }
 
   function onChangeCombinationEvent(data: Partial<CombinationStructureType[number]['events'][number]>, randomID1: string, randomID2: string) {
     // console.log(data, stateIndex, eventIndex, '!@#$@!#$234213423412342342134');
-    const result: CombinationStructureType = combinationData.map<CombinationStructureType[number]>((cd, si) => {
+    const result: CombinationStructureType = combination_Data.map<CombinationStructureType[number]>((cd, si) => {
       if (cd.randomID !== randomID1) {
         return cd;
       }
@@ -308,29 +330,34 @@ function FPolicyBuilder({
       };
     });
     // console.log(r/**/esult, 'resultresultresult09213j4lkjsdfalafasdf');
-    setCombinationData(result);
+    set_Combination_Data(result);
   }
 
   function onClickAddStateBtn() {
-    const results: FPolicyBuilderDrawerStates['combinationData'] = [
-      ...combinationData,
+    const results: FPolicyBuilderDrawerStates['combination_Data'] = [
+      ...combination_Data,
       {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'other',
         name: '',
         nameError: '',
         isNameDuplicate: false,
-        authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+        // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
         authorizationChecked: [],
         events: [],
       },
     ];
 
-    setCombinationData(results);
+    set_Combination_Data(results);
+
+    setTimeout(() => {
+      // refContainer.current.scrollTop = refContainerContent.current.clientHeight;
+      refBottomDiv.current.scrollIntoView({ behavior: 'auto' });
+    });
   }
 
   function onClickDeleteStateBtn(randomID: string) {
-    const result: FPolicyBuilderDrawerStates['combinationData'] = combinationData.filter((cd) => {
+    const result: FPolicyBuilderDrawerStates['combination_Data'] = combination_Data.filter((cd) => {
       // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
       return cd.randomID !== randomID;
     }).map((cd) => {
@@ -347,7 +374,7 @@ function FPolicyBuilder({
         }),
       };
     });
-    setCombinationData(result);
+    set_Combination_Data(result);
     // handleTargetState(result);
   }
 
@@ -384,8 +411,8 @@ function FPolicyBuilder({
       };
     }
 
-    const result: CombinationStructureType = combinationData.map((cd) => {
-      if (addingEventStateID !== cd.randomID) {
+    const result: CombinationStructureType = combination_Data.map((cd) => {
+      if (combination_AddingEventStateID !== cd.randomID) {
         return cd;
       }
       return {
@@ -397,12 +424,12 @@ function FPolicyBuilder({
       };
     });
 
-    setCombinationData(result);
-    setAddingEventStateID('');
+    set_Combination_Data(result);
+    set_Combination_AddingEventStateID('');
   }
 
   function onClickDeleteEventBtn(randomID1: string, randomID2: string) {
-    const result: CombinationStructureType = combinationData.map((cd) => {
+    const result: CombinationStructureType = combination_Data.map((cd) => {
       if (cd.randomID !== randomID1) {
         return cd;
       }
@@ -414,10 +441,10 @@ function FPolicyBuilder({
       };
     });
     // console.log(result, 'resultresultresult!@#$2134234');
-    setCombinationData(result);
+    set_Combination_Data(result);
   }
 
-  function onClickSelectTemplateBtn(num: 1 | 2) {
+  function onClick_SelectTemplateBtn(num: 1 | 2) {
     // console.log(num, 'handleTemplatehandleTemplate23423423');
     setTemplateVisible(false);
     if (num === 1) {
@@ -439,7 +466,7 @@ function FPolicyBuilder({
             name: 'initial',
             nameError: '',
             isNameDuplicate: false,
-            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
             authorizationChecked: ['active'],
             events: [
               {
@@ -457,7 +484,7 @@ function FPolicyBuilder({
             name: 'finish',
             nameError: '',
             isNameDuplicate: false,
-            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
             authorizationChecked: [],
             events: [
               {
@@ -467,7 +494,7 @@ function FPolicyBuilder({
             ],
           },
         ];
-        setCombinationData(result);
+        set_Combination_Data(result);
       }
     } else {
       setTitleInput(title2);
@@ -487,7 +514,7 @@ function FPolicyBuilder({
             name: 'initial',
             nameError: '',
             isNameDuplicate: false,
-            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
             authorizationChecked: [],
             events: [
               {
@@ -504,7 +531,7 @@ function FPolicyBuilder({
             name: 'auth',
             nameError: '',
             isNameDuplicate: false,
-            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
             authorizationChecked: ['active'],
             events: [
               {
@@ -522,7 +549,7 @@ function FPolicyBuilder({
             name: 'finish',
             nameError: '',
             isNameDuplicate: false,
-            authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
             authorizationChecked: [],
             events: [
               {
@@ -532,7 +559,7 @@ function FPolicyBuilder({
             ],
           },
         ];
-        setCombinationData(result);
+        set_Combination_Data(result);
       }
     }
   }
@@ -557,6 +584,13 @@ function FPolicyBuilder({
         setFailResult({ errorText: error.join(',') });
         return;
       }
+
+      if (alreadyUsedTexts?.includes(code_Input)) {
+        setShowView('fail');
+        setFailResult({ errorText: '当前策略已存在' });
+        return;
+      }
+
       // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
@@ -566,20 +600,28 @@ function FPolicyBuilder({
         view: [],
       });
     } else {
-      const code: string = dataToCode(combinationData);
-      const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, targetType);
+      const combinationCode: string = dataToCode(combination_Data);
+      const {
+        error,
+        text: translationText,
+      } = await FUtil.Format.policyCodeTranslationToText(combinationCode, targetType);
       setIsVerifying(false);
       if (error) {
         setShowView('fail');
         setFailResult({ errorText: error.join(',') });
         return;
       }
+      if (alreadyUsedTexts?.includes(combinationCode)) {
+        setShowView('fail');
+        setFailResult({ errorText: '当前策略已存在' });
+        return;
+      }
       // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
         title: titleInput,
-        code: code_Input,
-        translation: text || '',
+        code: combinationCode,
+        translation: translationText || '',
         view: [],
       });
     }
@@ -589,25 +631,14 @@ function FPolicyBuilder({
     if (!visible) {
       resetAllStates();
     } else {
-      setCombinationData([
-        {
-          randomID: FUtil.Tool.generateRandomCode(10),
-          type: 'initial',
-          name: 'initial',
-          nameError: '',
-          isNameDuplicate: false,
-          authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-          authorizationChecked: [],
-          events: [],
-        },
-      ]);
+      set_Combination_FinalAuthColor(targetType === 'resource' ? resourceAuthColor : exhibitAuthColor);
       refPolicyTitleInput.current.focus();
     }
   }
 
   const titleInputHasError: boolean = titleInput.trim() === '' || titleInputError !== '';
   const codeMirrorInputHasError: boolean = code_Input.trim() === '' || code_InputErrors.length > 0;
-  const combinationDataHasError: boolean = (combinationData.some((cd) => {
+  const combinationDataHasError: boolean = (combination_Data.some((cd) => {
     return cd.name.trim() === ''
       || !!cd.nameError
       || cd.events.some((et) => {
@@ -621,14 +652,14 @@ function FPolicyBuilder({
           return false;
         }
       });
-  })) || !combinationData.some((cd) => {
+  })) || !combination_Data.some((cd) => {
     return cd.authorizationChecked.length > 0;
   });
 
   const disabledExecute: boolean = titleInputHasError
-  || editMode === 'code' ? codeMirrorInputHasError : combinationDataHasError;
+    || (editMode === 'code' ? codeMirrorInputHasError : combinationDataHasError);
 
-  const enabledTargetState: { value: string; title: string }[] = combinationData.map<{ value: string; title: string }>((cd, index) => {
+  const enabledTargetState: { value: string; title: string }[] = combination_Data.map<{ value: string; title: string }>((cd, index) => {
     return {
       value: cd.randomID,
       title: `(${index + 1}) ${cd.name}`,
@@ -710,6 +741,13 @@ function FPolicyBuilder({
       afterVisibleChange={onChange_DrawerVisible}
       // destroyOnClose
     >
+      {/*<div className={styles.container} ref={refContainer}>*/}
+      {/*  <div ref={refContainerContent}>*/}
+      {/*<button onClick={() => {*/}
+      {/*  // console.log(refContainerContent.current.clientHeight, '#######224234');*/}
+      {/*  refContainer.current.scrollTop = refContainerContent.current.clientHeight;*/}
+      {/*}}>bottom*/}
+      {/*</button>*/}
       {
         showView === 'success' && (<div>
           <div className={styles.PolicyVerifySuccess}>
@@ -793,7 +831,7 @@ function FPolicyBuilder({
               <div style={{ height: 30 }} />
             </>)
           }
-          <div className={styles.maskingContainer} ref={refContainer}>
+          <div className={styles.maskingContainer} ref={refMaskingContainer}>
             <div className={styles.policyHeader}>
               <input
                 ref={refPolicyTitleInput}
@@ -866,7 +904,7 @@ function FPolicyBuilder({
 
                   <Space size={20} style={{ width: '100%' }} direction='vertical'>
                     {
-                      combinationData.map((cd, stateIndex) => {
+                      combination_Data.map((cd, stateIndex) => {
                         return (<div key={cd.randomID} className={styles.compositionState}>
 
                           <div className={styles.compositionStateHeader}>
@@ -943,7 +981,7 @@ function FPolicyBuilder({
                               <div style={{ width: 50 }} />
                               <Space size={20}>
                                 {
-                                  cd.authorizationOptions.map((ao) => {
+                                  combination_FinalAuthColor.map((ao) => {
                                     return (<Space key={ao}>
                                       <FCheckbox
                                         checked={cd.authorizationChecked.includes(ao)}
@@ -965,7 +1003,8 @@ function FPolicyBuilder({
                                       {/*  onClick={() => {*/}
 
                                       {/*  }}>*/}
-                                      <FContentText text={ao === 'active' ? '授权' : ao === 'testActive' ? '测试授权' : ao} />
+                                      <FContentText
+                                        text={ao === 'active' ? '授权' : ao === 'testActive' ? '测试授权' : ao} />
                                       {/*</div>*/}
                                     </Space>);
                                   })
@@ -1143,7 +1182,7 @@ function FPolicyBuilder({
                                               }, cd.randomID, et.randomID);
                                             }}
                                             getPopupContainer={() => {
-                                              return refContainer?.current || document.body;
+                                              return refMaskingContainer?.current || document.body;
                                             }}
                                             dropdownRender={menu => (<>
                                               {menu}
@@ -1190,14 +1229,14 @@ function FPolicyBuilder({
                                 <FCircleBtn
                                   type='minor'
                                   onClick={() => {
-                                    setAddingEventStateID(cd.randomID);
+                                    set_Combination_AddingEventStateID(cd.randomID);
                                   }}
                                 ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
                                 <div style={{ width: 5 }} />
                                 <FTextBtn
                                   type='primary'
                                   onClick={() => {
-                                    setAddingEventStateID(cd.randomID);
+                                    set_Combination_AddingEventStateID(cd.randomID);
                                   }}
                                 >添加事件或指令</FTextBtn>
                               </div>
@@ -1217,8 +1256,9 @@ function FPolicyBuilder({
                   <FRectBtn
                     type='default'
                     onClick={onClickAddStateBtn}
-                  >新建状态</FRectBtn>
 
+                  >新建状态</FRectBtn>
+                  <div ref={refBottomDiv} />
                 </div>)
                 : (<>
                   <FMonacoEditor
@@ -1234,7 +1274,14 @@ function FPolicyBuilder({
                     }}
                   />
 
-                  {code_InputErrors.length > 0 && <>
+                  {
+                    code_IsCompiling && (<>
+                      <div style={{ height: 5 }} />
+                      <div style={{ color: '#2784FF' }}>编译中......</div>
+                    </>)
+                  }
+
+                  {!code_IsCompiling && code_InputErrors.length > 0 && <>
                     <div style={{ height: 5 }} />
                     {
                       code_InputErrors.map((err, ei) => {
@@ -1253,6 +1300,8 @@ function FPolicyBuilder({
           </div>
         </>
       }
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <FDrawer
         width={640}
@@ -1274,18 +1323,20 @@ function FPolicyBuilder({
           //   // setTemplateVisible(false);
           // }}
           onClickSelect={(num) => {
-            if (code_Input === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
-              return onClickSelectTemplateBtn(num);
+            // console.log(combination_Data, 'combination_Data1111');
+            // console.log(initStates.combination_Data, 'initStates.combination_Data');
+            if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
+              return onClick_SelectTemplateBtn(num);
+            }
+            if (editMode === 'code' && code_Input === initStates.code_Input) {
+              return onClick_SelectTemplateBtn(num);
             }
             Modal.confirm({
               title: FUil1.I18n.message('alert_plan_cover '),
               okText: FUil1.I18n.message('btn_import'),
               cancelText: FUil1.I18n.message('btn_cancel'),
               onOk() {
-                onClickSelectTemplateBtn(num);
-              },
-              onCancel() {
-                // console.log('Cancel');
+                onClick_SelectTemplateBtn(num);
               },
             });
           }}
@@ -1294,10 +1345,10 @@ function FPolicyBuilder({
 
       <FDrawer
         width={640}
-        visible={!!addingEventStateID}
+        visible={!!combination_AddingEventStateID}
         title={'添加事件或指令'}
         onClose={() => {
-          setAddingEventStateID('');
+          set_Combination_AddingEventStateID('');
         }}
       >
         <FTitleText type='h3' text={'事件'} />
@@ -1371,8 +1422,8 @@ function FPolicyBuilder({
           <FRectBtn
             type='secondary'
             size='small'
-            disabled={!!(combinationData.find((cd) => {
-              return cd.randomID === addingEventStateID;
+            disabled={!!(combination_Data.find((cd) => {
+              return cd.randomID === combination_AddingEventStateID;
             })?.events.length)}
             onClick={() => {
               onClickAddEventBtn('terminate');
