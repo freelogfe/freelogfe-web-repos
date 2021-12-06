@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
-import FCodemirror from '../FCodemirror';
+// import FCodemirror from '../FCodemirror';
 import { Space, Divider, DatePicker, InputNumber, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
@@ -18,8 +18,11 @@ import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '@/components/FTooltip';
-import MonacoEditor from 'react-monaco-editor';
+// import MonacoEditor from 'react-monaco-editor';
 import FMonacoEditor from '@/components/FMonacoEditor';
+import fMessage from '@/components/fMessage';
+import fConfirmModal from '@/components/fConfirmModal';
+import * as AHooks from 'ahooks';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
@@ -89,8 +92,10 @@ interface FPolicyBuilderDrawerStates {
 
   addingEventStateID: string;
 
-  codeMirrorInput: string;
-  codeMirrorInputErrors: string[];
+  code_IsDirty: boolean;
+  code_IsCompiling: boolean;
+  code_Input: string;
+  code_InputErrors: string[];
 
   failResult: {
     errorText: string;
@@ -122,8 +127,6 @@ const currencies = [
   { value: 'feather', title: '羽币' },
 ];
 
-// const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
-
 const initStates: FPolicyBuilderDrawerStates = {
   showView: 'edit',
 
@@ -136,8 +139,10 @@ const initStates: FPolicyBuilderDrawerStates = {
 
   addingEventStateID: '',
 
-  codeMirrorInput: '',
-  codeMirrorInputErrors: [],
+  code_IsDirty: false,
+  code_IsCompiling: false,
+  code_Input: '',
+  code_InputErrors: [],
 
   failResult: null,
 
@@ -170,13 +175,28 @@ function FPolicyBuilder({
   // const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
   const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>(initStates.addingEventStateID);
 
-  const [codeMirrorInput, setCodeMirrorInput] = React.useState<FPolicyBuilderDrawerStates['codeMirrorInput']>(initStates.codeMirrorInput);
-  const [codeMirrorInputErrors, setCodeMirrorInputErrors] = React.useState<FPolicyBuilderDrawerStates['codeMirrorInputErrors']>(initStates.codeMirrorInputErrors);
+  const [code_IsDirty, set_Code_IsDirty] = React.useState<FPolicyBuilderDrawerStates['code_IsDirty']>(initStates.code_IsDirty);
+  const [code_IsCompiling, set_Code_IsCompiling] = React.useState<FPolicyBuilderDrawerStates['code_IsCompiling']>(initStates.code_IsDirty);
+  const [code_Input, set_Code_Input] = React.useState<FPolicyBuilderDrawerStates['code_Input']>(initStates.code_Input);
+  const [code_InputErrors, set_Code_InputErrors] = React.useState<FPolicyBuilderDrawerStates['code_InputErrors']>(initStates.code_InputErrors);
 
   const [failResult, setFailResult] = React.useState<FPolicyBuilderDrawerStates['failResult']>(initStates.failResult);
   const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(initStates.successResult);
 
   const [templateVisible, setTemplateVisible] = React.useState<FPolicyBuilderDrawerStates['templateVisible']>(initStates.templateVisible);
+
+  AHooks.useDebounceEffect(
+    () => {
+      console.log(code_Input, 'useDebounceEffect*(*******');
+      onDebounceChange_Code_Input();
+    },
+    [code_Input],
+    {
+      wait: 300,
+    },
+  );
+
+  // console.log(code_Input, 'code_Inputcode_Inputcode_Input0923u4io234jl2k3jl');
 
   function resetAllStates() {
     setShowView(initStates.showView);
@@ -187,8 +207,9 @@ function FPolicyBuilder({
     setCombinationData(initStates.combinationData);
     // setEnabledTargetState(initStates.enabledTargetState);
     setAddingEventStateID(initStates.addingEventStateID);
-    setCodeMirrorInput(initStates.codeMirrorInput);
-    setCodeMirrorInputErrors(initStates.codeMirrorInputErrors);
+    set_Code_IsDirty(initStates.code_IsDirty);
+    set_Code_Input(initStates.code_Input);
+    set_Code_InputErrors(initStates.code_InputErrors);
     setFailResult(initStates.failResult);
     setSuccessResult(initStates.successResult);
     setTemplateVisible(initStates.templateVisible);
@@ -201,28 +222,43 @@ function FPolicyBuilder({
 
   function onClick_SwitchMode_Code() {
     const code: string = dataToCode(combinationData);
-    setCodeMirrorInput(code);
+    set_Code_Input(code);
     setEditMode('code');
   }
 
   async function onClick_SwitchMode_Composition() {
-    const { errors, results } = await codeToData({
-      text: codeMirrorInput,
-      targetType: targetType,
-    });
-    if (errors.length > 0) {
-      setIsVerifying(false);
-      setCodeMirrorInputErrors(errors);
-      return;
+    if (!code_IsDirty || code_InputErrors.length === 0) {
+      return setEditMode('composition');
     }
-
-    setCombinationData(results || []);
-    setEditMode('composition');
+    fConfirmModal({
+      message: '当前有编译错误，如果离开将会丢弃错误后的代码？',
+      onOk() {
+        setEditMode('composition');
+      },
+    });
   }
 
-  function onChangeCodemirror(value: string) {
-    setCodeMirrorInput(value);
-    setCodeMirrorInputErrors([]);
+  function onChange_Code_Input(value: string) {
+    set_Code_IsDirty(true);
+    set_Code_IsCompiling(true);
+    set_Code_Input(value);
+    // set_Code_InputErrors([]);
+  }
+
+  async function onDebounceChange_Code_Input() {
+    const { errors, results } = await codeToData({
+      text: code_Input,
+      targetType: targetType,
+    });
+    set_Code_IsCompiling(false);
+    // console.log(errors, 'onDebounceChange_Code_Input ____  errorserrorserrorserrors');
+    if (errors.length > 0) {
+      set_Code_InputErrors(errors);
+      return;
+    }
+    setCombinationData(results || []);
+    set_Code_InputErrors([]);
+    // setEditMode('composition');
   }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
@@ -390,7 +426,9 @@ function FPolicyBuilder({
       setTitleInputError(verifyTitle(title1, alreadyUsedTitles));
 
       if (editMode === 'code') {
-        setCodeMirrorInput(text1);
+        set_Code_IsDirty(true);
+        set_Code_Input(text1);
+        set_Code_InputErrors([]);
       } else {
         const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
         const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
@@ -435,7 +473,9 @@ function FPolicyBuilder({
       setTitleInput(title2);
       setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
       if (editMode === 'code') {
-        setCodeMirrorInput(text2);
+        set_Code_IsDirty(true);
+        set_Code_Input(text2);
+        set_Code_InputErrors([]);
       } else {
         const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
         const authRandomID: string = FUtil.Tool.generateRandomCode(10);
@@ -497,20 +537,20 @@ function FPolicyBuilder({
     }
   }
 
-  async function onClickVerifyBtn() {
+  async function onClick_VerifyBtn() {
     setIsVerifying(true);
 
     if (editMode === 'code') {
       const { errors } = await compileCodeText({
-        text: codeMirrorInput,
+        text: code_Input,
         targetType: targetType,
       });
       if (errors.length > 0) {
         setIsVerifying(false);
-        setCodeMirrorInputErrors(errors);
+        set_Code_InputErrors(errors);
         return;
       }
-      const { error, text } = await FUtil.Format.policyCodeTranslationToText(codeMirrorInput, targetType);
+      const { error, text } = await FUtil.Format.policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
       if (error) {
         setShowView('fail');
@@ -521,7 +561,7 @@ function FPolicyBuilder({
       setShowView('success');
       setSuccessResult({
         title: titleInput,
-        code: codeMirrorInput,
+        code: code_Input,
         translation: text || '',
         view: [],
       });
@@ -538,18 +578,14 @@ function FPolicyBuilder({
       setShowView('success');
       setSuccessResult({
         title: titleInput,
-        code: codeMirrorInput,
+        code: code_Input,
         translation: text || '',
         view: [],
       });
     }
-    // console.log(code, 'code823u423u4ooij');
-    // const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
-
-
   }
 
-  function onChangeDrawerVisible(visible: boolean) {
+  function onChange_DrawerVisible(visible: boolean) {
     if (!visible) {
       resetAllStates();
     } else {
@@ -570,7 +606,7 @@ function FPolicyBuilder({
   }
 
   const titleInputHasError: boolean = titleInput.trim() === '' || titleInputError !== '';
-  const codeMirrorInputHasError: boolean = codeMirrorInput.trim() === '' || codeMirrorInputErrors.length > 0;
+  const codeMirrorInputHasError: boolean = code_Input.trim() === '' || code_InputErrors.length > 0;
   const combinationDataHasError: boolean = (combinationData.some((cd) => {
     return cd.name.trim() === ''
       || !!cd.nameError
@@ -614,7 +650,7 @@ function FPolicyBuilder({
               type='primary'
             >校验中</FRectBtn>)
             : (<FRectBtn
-              onClick={onClickVerifyBtn}
+              onClick={onClick_VerifyBtn}
               type='primary'
               disabled={disabledExecute}
             >校验</FRectBtn>)
@@ -671,7 +707,7 @@ function FPolicyBuilder({
       visible={visible}
       width={720}
       topRight={DrawerTopRight}
-      afterVisibleChange={onChangeDrawerVisible}
+      afterVisibleChange={onChange_DrawerVisible}
       // destroyOnClose
     >
       {
@@ -780,7 +816,7 @@ function FPolicyBuilder({
                   editMode === 'code'
                     ? (<FTextBtn
                       type='default'
-                      disabled={codeMirrorInputHasError || isVerifying}
+                      // disabled={codeMirrorInputHasError || isVerifying}
                       onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
                         <FComposition />
@@ -936,20 +972,6 @@ function FPolicyBuilder({
                                 }
 
                               </Space>
-
-                              {/*<div style={{ width: 5 }} />*/}
-
-                              {/*<div style={{ width: 20 }} />*/}
-                              {/*<FCheckbox*/}
-                              {/*  checked={cd.testAuth}*/}
-                              {/*  onChange={(e) => {*/}
-                              {/*    onChangeCombinationData({*/}
-                              {/*      testAuth: e.target.checked,*/}
-                              {/*    }, cd.randomID);*/}
-                              {/*  }}*/}
-                              {/*/>*/}
-                              {/*<div style={{ width: 5 }} />*/}
-                              {/*<FContentText text={'测试授权'} />*/}
                             </div>
                           </div>
 
@@ -1094,20 +1116,20 @@ function FPolicyBuilder({
 
                                     {
                                       et.type !== 'terminate' && (<>
-                                        <div style={{ height: 10 }}></div>
+                                        <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
                                           <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
                                           </FTitleText>
                                         </Divider>
 
-                                        <div style={{ height: 10 }}></div>
+                                        <div style={{ height: 10 }} />
 
                                         <div>
                                           <FTitleText type='h4' text={'目标状态'} />
                                         </div>
 
-                                        <div style={{ height: 10 }}></div>
+                                        <div style={{ height: 10 }} />
 
                                         <div>
                                           <FSelect
@@ -1201,21 +1223,21 @@ function FPolicyBuilder({
                 : (<>
                   <FMonacoEditor
                     width={'100%'}
-                    value={codeMirrorInput}
+                    value={code_Input}
                     options={{
                       selectOnLineNumbers: true,
                     }}
-                    onChange={onChangeCodemirror}
+                    onChange={onChange_Code_Input}
                     editorDidMount={(editor, monaco) => {
                       // console.log('editorDidMount', editor, monaco);
                       editor.focus();
                     }}
                   />
 
-                  {codeMirrorInputErrors.length > 0 && <>
+                  {code_InputErrors.length > 0 && <>
                     <div style={{ height: 5 }} />
                     {
-                      codeMirrorInputErrors.map((err, ei) => {
+                      code_InputErrors.map((err, ei) => {
                         return (<div key={ei} className={styles.textError}>{err}</div>);
                       })
                     }
@@ -1252,7 +1274,7 @@ function FPolicyBuilder({
           //   // setTemplateVisible(false);
           // }}
           onClickSelect={(num) => {
-            if (codeMirrorInput === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
+            if (code_Input === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
               return onClickSelectTemplateBtn(num);
             }
             Modal.confirm({
@@ -1417,13 +1439,15 @@ async function codeToData({
                             text,
                             targetType,
                           }: CodeToDataParams): Promise<{ errors: string[]; results?: CombinationStructureType }> {
+
+  // console.log(text, 'text%%%%%%%TTTTTTTXXXXXXXXS');
   const { errors, result } = await compileCodeText({ text, targetType });
   if (errors.length > 0) {
     return {
       errors: errors,
     };
   }
-  console.log(result, 'resultQ!@#$!@#$@#334343434');
+  // console.log(result, 'resultQ!@#$!@#$@#334343434');
   const results: CombinationStructureType = Object.entries(result.states).map<CombinationStructureType[number]>(([k, v]: any) => {
     return {
       randomID: FUtil.Tool.generateRandomCode(10),
