@@ -57,6 +57,7 @@ import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
+import FMonacoEditor from '@/components/FMonacoEditor';
 
 const { compile } = require('@freelog/nmr_translator');
 
@@ -355,7 +356,19 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
       informalNodeManagerPage.rule_PageStatus === 'coding'
         ? (<div className={styles.codeMirrorBody}>
           <div>
-            <FCodemirror
+            {/*<FCodemirror*/}
+            {/*  value={informalNodeManagerPage.rule_CodeInput}*/}
+            {/*  onChange={(value) => {*/}
+            {/*    dispatch<OnChange_Rule_Codemirror_Action>({*/}
+            {/*      type: 'informalNodeManagerPage/onChange_Rule_Codemirror',*/}
+            {/*      payload: {*/}
+            {/*        value: value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <FMonacoEditor
+              width={'100%'}
               value={informalNodeManagerPage.rule_CodeInput}
               onChange={(value) => {
                 dispatch<OnChange_Rule_Codemirror_Action>({
@@ -366,6 +379,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 });
               }}
             />
+
             <div style={{ height: 15 }} />
             <FRectBtn
               // loading={informalNodeManagerPage.codeIsChecking}
