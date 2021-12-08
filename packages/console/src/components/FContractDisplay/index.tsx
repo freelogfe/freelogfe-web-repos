@@ -10,6 +10,7 @@ import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
+import FUtil1 from '@/utils';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -27,7 +28,7 @@ interface IContractDisplayStates {
 
   currentS: {
     name: string;
-    colors: string[];
+    auth: 'active' | 'testActive' | 'inactive' | 'terminal' | string;
     datetime: string;
     events: Array<{
       id: string;
@@ -102,6 +103,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   }, [contractID]);
 
   async function fetchInitData() {
+    console.log(contractID, 'contractID@#@@#@#$@#$');
 
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
@@ -110,7 +112,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
-    // console.log(data, 'data111122222333333333');
+    console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       contractId: contractID,
     };
@@ -126,18 +128,30 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
     // console.log(currentState, 'currentState0923u4kjl');
 
-    console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
+    // console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
     setIsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
     setIsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
     set_Modal_Target(data.subjectName);
     set_Modal_ContractName(data.contractName);
     set_Modal_Payee(data.licensorOwnerName);
 
+    let theAuth: string = '';
+    if (data.fsmRunningStatus !== 4) {
+      theAuth = 'terminal';
+    } else if (data.authStatus === 1) {
+      theAuth = 'active';
+    } else if (data.authStatus === 2) {
+      theAuth = 'testActive';
+    } else if (data.authStatus === 128) {
+      theAuth = 'inactive';
+    }
+
     const currentSData: IContractDisplayStates['currentS'] = {
       name: currentState.stateInfo.content,
-      colors: currentState.serviceStateInfos.map((ssi: any) => {
-        return ssi.content;
-      }),
+      // colors: currentState.serviceStateInfos.map((ssi: any) => {
+      //   return ssi.content;
+      // }),
+      auth: theAuth,
       datetime: FUtil.Format.formatDateTime(data1.dataList.length === 0
         ? data.createDate
         : data1.dataList[data1.dataList.length - 1].createDate, true),
@@ -158,9 +172,11 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         }
       }),
     };
+    // console.log(currentSData, 'currentSData!!!!@3904ulksjfl');
     setCurrentS(currentSData);
 
     // console.log(currentSData, 'currentSDatacurrentSData11111111');
+    // console.log(data1, 'data1data1data1data19023jlksdf');
     const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
       .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
         // console.log(d1l, 'd1l123412344444444');
@@ -290,12 +306,27 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
                 {
-                  currentS.colors.length > 0
-                    ? currentS.colors.map((cl) => {
-                      return (<label key={cl} className={styles.Authorized}>{cl}</label>);
-                    })
-                    : (<label className={styles.Unauthorized}>未授权</label>)
+                  currentS.auth === 'terminal' && (<label className={styles.Terminal}>已终止</label>)
                 }
+                {
+                  currentS.auth === 'inactive' && (<label className={styles.Unauthorized}>未授权</label>)
+                }
+
+                {
+                  currentS.auth !== 'terminal' && currentS.auth !== 'inactive' && (
+                    <label className={styles.Authorized}>{currentS.auth === 'active'
+                      ? '已授权'
+                      : currentS.auth === 'active'
+                        ? '测试授权'
+                        : currentS.auth}</label>)
+                }
+                {/*{*/}
+                {/*  currentS.colors.length > 0*/}
+                {/*    ? currentS.colors.map((cl) => {*/}
+                {/*      return (<label key={cl} className={styles.Authorized}>{cl}</label>);*/}
+                {/*    })*/}
+                {/*    : (<label className={styles.Unauthorized}>未授权</label>)*/}
+                {/*}*/}
                 <FContentText text={currentS.datetime} type='normal' />
               </Space>
               <div style={{ height: 10 }} />
@@ -335,7 +366,9 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                     readyPay();
                                   }}
                                 >支付</FRectBtn>)
-                                : (<FContentText type='negative' text={'待对方执行'} />)
+                                // : (<FContentText type='negative' text={'待对方执行'} />)
+                                : (<FContentText type='negative'
+                                                 text={FUtil1.I18n.message('msg_waitfor_theotherparty_excutecontract')} />)
                             }
 
                           </div>);
