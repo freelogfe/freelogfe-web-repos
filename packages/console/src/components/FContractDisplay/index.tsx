@@ -5,7 +5,7 @@ import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '../FText';
 import { FRectBtn, FTextBtn } from '../FButton';
 import FModal from '../FModal';
-import FInput from '../FInput';
+// import FInput from '../FInput';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
@@ -23,6 +23,7 @@ interface IContractDisplayStates {
   activated: 'record' | 'code' | 'text' | 'view';
   recodeFold: boolean;
   isSelfLicensorOwner: boolean;
+  isSelfLicenseeOwner: boolean;
 
   currentS: {
     name: string;
@@ -51,16 +52,16 @@ interface IContractDisplayStates {
     };
   }[];
 
-  modalVisible: boolean;
-  modalAccountBalance: number;
-  modalTarget: string;
-  modalContractName: string;
-  modalPayee: string;
-  modalEventID: string;
-  modalAccountID: string;
-  modalTransactionAmount: number;
-  modalPassword: string;
-  modalIsPaying: boolean;
+  modal_Visible: boolean;
+  modal_AccountBalance: number;
+  modal_Target: string;
+  modal_ContractName: string;
+  modal_Payee: string;
+  modal_EventID: string;
+  modal_AccountID: string;
+  modal_TransactionAmount: number;
+  modal_Password: string;
+  modal_IsPaying: boolean;
 
   text: string;
   code: string;
@@ -73,20 +74,21 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
   const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
   const [isSelfLicensorOwner, setIsSelfLicensorOwner] = React.useState<IContractDisplayStates['isSelfLicensorOwner']>(false);
+  const [isSelfLicenseeOwner, setIsSelfLicenseeOwner] = React.useState<IContractDisplayStates['isSelfLicenseeOwner']>(false);
 
   const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
   const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
 
-  const [modalVisible, setModalVisible] = React.useState<IContractDisplayStates['modalVisible']>(false);
-  const [modalAccountBalance, setModalAccountBalance] = React.useState<IContractDisplayStates['modalAccountBalance']>(-1);
-  const [modalTarget, setModalTarget] = React.useState<IContractDisplayStates['modalTarget']>('');
-  const [modalContractName, setModalContractName] = React.useState<IContractDisplayStates['modalContractName']>('');
-  const [modalPayee, setModalPayee] = React.useState<IContractDisplayStates['modalContractName']>('');
-  const [modalEventID, setModalEventID] = React.useState<IContractDisplayStates['modalEventID']>('');
-  const [modalAccountID, setModalAccountID] = React.useState<IContractDisplayStates['modalAccountID']>('');
-  const [modalTransactionAmount, setModalTransactionAmount] = React.useState<IContractDisplayStates['modalTransactionAmount']>(-1);
-  const [modalPassword, setModalPassword] = React.useState<IContractDisplayStates['modalPassword']>('');
-  const [modalIsPaying, setModalIsPaying] = React.useState<IContractDisplayStates['modalIsPaying']>(false);
+  const [modal_Visible, set_Modal_Visible] = React.useState<IContractDisplayStates['modal_Visible']>(false);
+  const [modal_AccountBalance, set_Modal_AccountBalance] = React.useState<IContractDisplayStates['modal_AccountBalance']>(-1);
+  const [modal_Target, set_Modal_Target] = React.useState<IContractDisplayStates['modal_Target']>('');
+  const [modal_ContractName, set_Modal_ContractName] = React.useState<IContractDisplayStates['modal_ContractName']>('');
+  const [modal_Payee, set_Modal_Payee] = React.useState<IContractDisplayStates['modal_ContractName']>('');
+  const [modal_EventID, set_Modal_EventID] = React.useState<IContractDisplayStates['modal_EventID']>('');
+  const [modal_AccountID, set_Modal_AccountID] = React.useState<IContractDisplayStates['modal_AccountID']>('');
+  const [modal_TransactionAmount, set_Modal_TransactionAmount] = React.useState<IContractDisplayStates['modal_TransactionAmount']>(-1);
+  const [modal_Password, set_Modal_Password] = React.useState<IContractDisplayStates['modal_Password']>('');
+  const [modal_IsPaying, set_Modal_IsPaying] = React.useState<IContractDisplayStates['modal_IsPaying']>(false);
 
   const [text, setText] = React.useState<IContractDisplayStates['text']>('');
   const [code, setCode] = React.useState<IContractDisplayStates['code']>('');
@@ -124,11 +126,12 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
     // console.log(currentState, 'currentState0923u4kjl');
 
-    // console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
+    console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
     setIsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
-    setModalTarget(data.subjectName);
-    setModalContractName(data.contractName);
-    setModalPayee(data.licensorOwnerName);
+    setIsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
+    set_Modal_Target(data.subjectName);
+    set_Modal_ContractName(data.contractName);
+    set_Modal_Payee(data.licensorOwnerName);
 
     const currentSData: IContractDisplayStates['currentS'] = {
       name: currentState.stateInfo.content,
@@ -206,26 +209,26 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     const { data } = await FServiceAPI.Transaction.individualAccounts(params);
 
     // console.log(data, '@!#$#@!$@#$2314123432');
-    setModalAccountBalance(data.balance);
-    setModalAccountID(data.accountId);
-    setModalVisible(true);
+    set_Modal_AccountBalance(data.balance);
+    set_Modal_AccountID(data.accountId);
+    set_Modal_Visible(true);
   }
 
   async function confirmPay(password: string) {
-    setModalIsPaying(true);
+    set_Modal_IsPaying(true);
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
-      eventId: modalEventID,
-      accountId: modalAccountID,
-      transactionAmount: modalTransactionAmount,
+      eventId: modal_EventID,
+      accountId: modal_AccountID,
+      transactionAmount: modal_TransactionAmount,
       password: password,
     };
     const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
 
     if (ret + (errCode || 0) > 0) {
-      setModalPassword('');
+      set_Modal_Password('');
       inputEl.current.focus();
-      setModalIsPaying(false);
+      set_Modal_IsPaying(false);
       return fMessage(msg, 'error');
     }
 
@@ -238,9 +241,9 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
     fetchInitData();
     fMessage('支付成功');
-    setModalVisible(false);
-    setModalPassword('');
-    setModalIsPaying(false);
+    set_Modal_Visible(false);
+    set_Modal_Password('');
+    set_Modal_IsPaying(false);
     onChangedEvent && onChangedEvent();
   }
 
@@ -317,17 +320,22 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                               text={eti.tip}
                             />
                             {
-                              !isSelfLicensorOwner && (<FRectBtn
-                                style={{ flexShrink: 0 }}
-                                type='primary'
-                                size='small'
-                                onClick={() => {
-                                  setModalEventID(eti.id);
-                                  // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                                  setModalTransactionAmount(eti.amount);
-                                  readyPay();
-                                }}
-                              >支付</FRectBtn>)
+                              isSelfLicenseeOwner ?
+                                (<FRectBtn
+                                  style={{ flexShrink: 0 }}
+                                  type='primary'
+                                  size='small'
+                                  onClick={() => {
+                                    if (isSelfLicensorOwner) {
+                                      return fMessage('收款方不能是自己', 'error');
+                                    }
+                                    set_Modal_EventID(eti.id);
+                                    // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                    set_Modal_TransactionAmount(eti.amount);
+                                    readyPay();
+                                  }}
+                                >支付</FRectBtn>)
+                                : (<FContentText type='negative' text={'待对方执行'} />)
                             }
 
                           </div>);
@@ -450,11 +458,11 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     <FModal
       title={null}
       footer={null}
-      visible={modalVisible}
+      visible={modal_Visible}
       width={600}
       onCancel={() => {
-        setModalVisible(false);
-        setModalPassword('');
+        set_Modal_Visible(false);
+        set_Modal_Password('');
       }}
       destroyOnClose={true}
     >
@@ -466,7 +474,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       </div>
       <div style={{ height: 40 }} />
       <div className={styles.paymentAmount}>
-        <label>{modalTransactionAmount}</label>
+        <label>{modal_TransactionAmount}</label>
         <div style={{ width: 10 }} />
         <FTipText text={'羽币'} type='third' />
       </div>
@@ -475,17 +483,17 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         <Space size={20} direction='vertical' style={{ width: 440 }}>
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'标的物'} type='normal' /></div>
-            <div><FContentText text={modalTarget} type='highlight' /></div>
+            <div><FContentText text={modal_Target} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'授权合约'} type='normal' /></div>
-            <div><FContentText text={modalContractName} type='highlight' /></div>
+            <div><FContentText text={modal_ContractName} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'收款方'} type='normal' /></div>
-            <div><FContentText text={modalPayee} type='highlight' /></div>
+            <div><FContentText text={modal_Payee} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
@@ -493,7 +501,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             <div>
               <FContentText text={'羽币账户'} type='highlight' />
               <div style={{ width: 10 }} />
-              <FContentText text={`(余额 ${modalAccountBalance}枚 )`} type='negative' />
+              <FContentText text={`(余额 ${modal_AccountBalance}枚 )`} type='negative' />
             </div>
           </div>
 
@@ -503,7 +511,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
         <div className={styles.paymentPassword}>
           {
-            modalIsPaying
+            modal_IsPaying
               ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
               : (<FContentText text={'输入支付密码进行支付'} type='normal' />)
           }
@@ -513,11 +521,11 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           <FPaymentPasswordInput
             ref={inputEl}
             autoFocus={true}
-            value={modalPassword}
+            value={modal_Password}
             onChange={async (value) => {
               // console.log(value, '@#$@#$@#$@#$');
               // console.log(value, 'valuevalue9032klsdflksdfl');
-              setModalPassword(value);
+              set_Modal_Password(value);
               if (value.length === 6) {
                 inputEl.current.blur();
                 confirmPay(value);

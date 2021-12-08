@@ -20,8 +20,8 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
   const [text, setText] = React.useState<string>('');
 
   AHooks.useMount(async () => {
-    // const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
-    const { error, text } = await policyCodeTranslationToText(code, 'resource');
+    const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
+    // const { error, text } = await policyCodeTranslationToText(code, 'resource');
     // console.log(text, code, '@@@@@@########$#$#$#$');
     if (error) {
       setText('!!!解析错误\n' + '    ' + error[0]);
@@ -90,7 +90,7 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
       completeUrlByDomain('qi'),
       window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev',
     );
-    console.log(result, 'result!@#$@#$@#$@#$@#');
+    // console.log(result, 'result!@#$@#$@#$@#$@#');
     const contract: ContractEntity = {
       audiences: result.state_machine.audiences,
       fsmStates: Object.entries<any>(result.state_machine.states)
@@ -111,7 +111,7 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
         }),
     };
     const rrr = report(contract);
-    console.log(rrr, 'rrrrrrRRRR0923jlksdfjl');
+    // console.log(rrr, 'rrrrrrRRRR0923jlksdfjl');
     return {
       error: null,
       text: rrr.audienceInfos[0].content + rrr.content,
