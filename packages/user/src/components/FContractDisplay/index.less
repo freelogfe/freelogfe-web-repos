@@ -26,6 +26,7 @@
   //overscroll-behavior: contain;
   padding: 0 20px;
   background-color: white;
+  overflow: hidden;
 
   .StateRecord {
     padding: 15px;
@@ -35,7 +36,7 @@
     .CurrentState {
       width: 100%;
 
-      .Authorized, .Unauthorized {
+      .Authorized, .Unauthorized, .Terminal {
         border-radius: 10px;
         font-size: 12px;
         height: 20px;
@@ -51,6 +52,10 @@
 
       .Unauthorized {
         background-color: #E9A923;
+      }
+
+      .Terminal {
+        background-color: #999;
       }
 
       .Event {
@@ -123,6 +128,7 @@
     padding: 15px;
     background-color: #FAFBFC;
     border-radius: 0 0 6px 6px;
+    width: 100%;
   }
 
   .View {
@@ -136,6 +142,7 @@
     padding: 15px;
     background-color: #FAFBFC;
     border-radius: 0 0 6px 6px;
+    width: 100%;
   }
 }
 

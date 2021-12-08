@@ -2,16 +2,17 @@ import * as React from 'react';
 import styles from './index.less';
 
 interface FContractStatusBadgeProps {
-  status?: 'pending' | 'authorized' | 'stopped';
+  status: 'active' | 'testActive' | 'inactive' | 'terminal';
 }
 
 const statusTextObj = {
-  authorized: '已授权',
-  pending: '待执行',
-  stopped: '已终止',
+  active: '已授权',
+  testActive: '测试授权',
+  inactive: '未授权',
+  terminal: '已终止',
 };
 
-function FContractStatusBadge({status = 'authorized'}: FContractStatusBadgeProps) {
+function FContractStatusBadge({ status }: FContractStatusBadgeProps) {
   return (<label className={[styles.style, styles[status]].join(' ')}>{statusTextObj[status]}</label>);
 }
 
