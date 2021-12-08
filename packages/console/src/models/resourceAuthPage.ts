@@ -52,9 +52,9 @@ export interface ResourceAuthPageModelState {
     contractName: string,
     contractID: string,
     authorizedParty: string,
-    licenseeIdentityType: 1 | 2 | 3;
+    licenseeIdentityType: 'resource' | 'node' | 'user';
     createDate: string,
-    status: 0 | 1 | 3;
+    status: 'active' | 'testActive' | 'inactive' | 'terminal';
   }[];
 
   detailContractID: string;
@@ -119,6 +119,12 @@ interface ResourceAuthPageModelType {
     change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
+}
+
+enum LicenseeIdentityType {
+  resource = 1,
+  node,
+  user
 }
 
 const Model: ResourceAuthPageModelType = {
@@ -316,10 +322,10 @@ const Model: ResourceAuthPageModelType = {
             contractName: i.contractName,
             contractID: i.contractId,
             authorizedParty: i.licenseeName,
-            licenseeIdentityType: i.licenseeIdentityType,
+            licenseeIdentityType: LicenseeIdentityType[i.licenseeIdentityType],
             createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
             // status: i.isAuth ? 'executing' : 'stopped',
-            status: i.status === 1 ? 2 : ((i.authStatus & 1) === 1) ? 1 : 0,
+            status: i.status === 1 ? 'terminal' : i.authStatus === 1 ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
           })),
         },
       });

@@ -64,15 +64,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
     });
   }, [dispatch, match.params.id]);
 
-  const columns: ColumnsType<{
-    key: string,
-    contractName: string,
-    contractID: string,
-    authorizedParty: string,
-    licenseeIdentityType: 1 | 2 | 3;
-    createDate: string,
-    status: 0 | 1 | 2;
-  }> = [
+  const columns: ColumnsType<ResourceAuthPageModelState['contractsAuthorize'][number]> = [
     {
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
@@ -84,13 +76,13 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
       render: (_: any, record) => {
         return (<Space size={5}>
           {
-            record.licenseeIdentityType === 1 && (<FResource />)
+            record.licenseeIdentityType === 'resource' && (<FResource />)
           }
           {
-            record.licenseeIdentityType === 2 && (<FNodes />)
+            record.licenseeIdentityType === 'node' && (<FNodes />)
           }
           {
-            record.licenseeIdentityType === 3 && (<FUser />)
+            record.licenseeIdentityType === 'user' && (<FUser />)
           }
           <FContentText
             type='highlight'
@@ -118,7 +110,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
               text={record.contractName}
             />
             <FContractStatusBadge
-              status={FUtil.Predefined.EnumContractStatus[record?.status || 0] as 'authorized'}
+              status={record.status}
             />
           </Space>
           <div style={{ height: 5 }} />
