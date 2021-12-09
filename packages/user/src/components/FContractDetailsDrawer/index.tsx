@@ -61,6 +61,9 @@ interface FContractDetailsDrawerProps {
 }
 
 interface FContractDetailsDrawerStates {
+  isSelfLicensorOwner: boolean;
+  isSelfLicenseeOwner: boolean;
+
   baseInfo: BaseInfo | null;
   associateContracts: AssociateContracts | null;
   versionAllContractIDs: {
@@ -76,6 +79,9 @@ interface FContractDetailsDrawerStates {
 }
 
 const initStates: FContractDetailsDrawerStates = {
+  isSelfLicensorOwner: false,
+  isSelfLicenseeOwner: false,
+
   baseInfo: null,
   associateContracts: null,
   versionAllContractIDs: [],
@@ -85,6 +91,8 @@ const initStates: FContractDetailsDrawerStates = {
 function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDrawerProps) {
   // console.log(contractID, 'contractID!!!!2341234');
 
+  const [isSelfLicensorOwner, set_IsSelfLicensorOwner] = React.useState<FContractDetailsDrawerStates['isSelfLicensorOwner']>(initStates['isSelfLicensorOwner']);
+  const [isSelfLicenseeOwner, set_IsSelfLicenseeOwner] = React.useState<FContractDetailsDrawerStates['isSelfLicenseeOwner']>(initStates['isSelfLicenseeOwner']);
   const [baseInfo, setBaseInfo] = React.useState<FContractDetailsDrawerStates['baseInfo']>(initStates['baseInfo']);
   const [associateContracts, setAssociateContracts] = React.useState<FContractDetailsDrawerStates['associateContracts']>(initStates['associateContracts']);
   const [versionAllContractIDs, setVersionAllContractIDs] = React.useState<FContractDetailsDrawerStates['versionAllContractIDs']>(initStates['versionAllContractIDs']);
@@ -114,6 +122,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
+    set_IsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
+    set_IsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
     // console.log(data, 'data90234oi');
     const baseInfoData: BaseInfo = {
       subjectId: data.subjectId,
@@ -410,7 +420,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
 
               {
-                versionAllContractIDs.length > 0 && (<>
+                isSelfLicenseeOwner && versionAllContractIDs.length > 0 && (<>
                   <div style={{ height: 10 }} />
                   <div style={{ padding: '0 20px' }}>
                     <FVersions
@@ -431,7 +441,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               }
 
               {
-                exhibitAllContractIDs.length > 0 && (<>
+                isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && (<>
                   <div style={{ height: 10 }} />
                   <div style={{ padding: '0 20px' }}>
                     <FExhibits
@@ -519,7 +529,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       </div>
 
                       {
-                        versionAllContractIDs.length > 0 && (<>
+                        isSelfLicenseeOwner && versionAllContractIDs.length > 0 && (<>
                           <div style={{ height: 10 }} />
                           <div style={{ padding: '0 20px' }}>
                             <FVersions
@@ -542,7 +552,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       }
 
                       {
-                        exhibitAllContractIDs.length > 0 && (<>
+                        isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && (<>
                           <div style={{ height: 10 }} />
                           <div style={{ padding: '0 20px' }}>
                             <FExhibits

@@ -68,31 +68,55 @@ interface IContractDisplayStates {
   code: string;
 }
 
+const initStates: IContractDisplayStates = {
+  activated: 'record',
+  recodeFold: true,
+  isSelfLicensorOwner: false,
+  isSelfLicenseeOwner: false,
+
+  currentS: null,
+  historySs: [],
+
+  modal_Visible: false,
+  modal_AccountBalance: -1,
+  modal_Target: '',
+  modal_ContractName: '',
+  modal_Payee: '',
+  modal_EventID: '',
+  modal_AccountID: '',
+  modal_TransactionAmount: -1,
+  modal_Password: '',
+  modal_IsPaying: false,
+
+  text: '',
+  code: '',
+};
+
 function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps) {
 
   const inputEl = React.useRef<any>(null);
 
-  const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
-  const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
-  const [isSelfLicensorOwner, setIsSelfLicensorOwner] = React.useState<IContractDisplayStates['isSelfLicensorOwner']>(false);
-  const [isSelfLicenseeOwner, setIsSelfLicenseeOwner] = React.useState<IContractDisplayStates['isSelfLicenseeOwner']>(false);
+  const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>(initStates['activated']);
+  const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(initStates['recodeFold']);
+  const [isSelfLicensorOwner, setIsSelfLicensorOwner] = React.useState<IContractDisplayStates['isSelfLicensorOwner']>(initStates['isSelfLicensorOwner']);
+  const [isSelfLicenseeOwner, setIsSelfLicenseeOwner] = React.useState<IContractDisplayStates['isSelfLicenseeOwner']>(initStates['isSelfLicenseeOwner']);
 
-  const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
-  const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
+  const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(initStates['currentS']);
+  const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>(initStates['historySs']);
 
-  const [modal_Visible, set_Modal_Visible] = React.useState<IContractDisplayStates['modal_Visible']>(false);
-  const [modal_AccountBalance, set_Modal_AccountBalance] = React.useState<IContractDisplayStates['modal_AccountBalance']>(-1);
-  const [modal_Target, set_Modal_Target] = React.useState<IContractDisplayStates['modal_Target']>('');
-  const [modal_ContractName, set_Modal_ContractName] = React.useState<IContractDisplayStates['modal_ContractName']>('');
-  const [modal_Payee, set_Modal_Payee] = React.useState<IContractDisplayStates['modal_ContractName']>('');
-  const [modal_EventID, set_Modal_EventID] = React.useState<IContractDisplayStates['modal_EventID']>('');
-  const [modal_AccountID, set_Modal_AccountID] = React.useState<IContractDisplayStates['modal_AccountID']>('');
-  const [modal_TransactionAmount, set_Modal_TransactionAmount] = React.useState<IContractDisplayStates['modal_TransactionAmount']>(-1);
-  const [modal_Password, set_Modal_Password] = React.useState<IContractDisplayStates['modal_Password']>('');
-  const [modal_IsPaying, set_Modal_IsPaying] = React.useState<IContractDisplayStates['modal_IsPaying']>(false);
+  const [modal_Visible, set_Modal_Visible] = React.useState<IContractDisplayStates['modal_Visible']>(initStates['modal_Visible']);
+  const [modal_AccountBalance, set_Modal_AccountBalance] = React.useState<IContractDisplayStates['modal_AccountBalance']>(initStates['modal_AccountBalance']);
+  const [modal_Target, set_Modal_Target] = React.useState<IContractDisplayStates['modal_Target']>(initStates['modal_Target']);
+  const [modal_ContractName, set_Modal_ContractName] = React.useState<IContractDisplayStates['modal_ContractName']>(initStates['modal_ContractName']);
+  const [modal_Payee, set_Modal_Payee] = React.useState<IContractDisplayStates['modal_ContractName']>(initStates['modal_ContractName']);
+  const [modal_EventID, set_Modal_EventID] = React.useState<IContractDisplayStates['modal_EventID']>(initStates['modal_EventID']);
+  const [modal_AccountID, set_Modal_AccountID] = React.useState<IContractDisplayStates['modal_AccountID']>(initStates['modal_AccountID']);
+  const [modal_TransactionAmount, set_Modal_TransactionAmount] = React.useState<IContractDisplayStates['modal_TransactionAmount']>(initStates['modal_TransactionAmount']);
+  const [modal_Password, set_Modal_Password] = React.useState<IContractDisplayStates['modal_Password']>(initStates['modal_Password']);
+  const [modal_IsPaying, set_Modal_IsPaying] = React.useState<IContractDisplayStates['modal_IsPaying']>(initStates['modal_IsPaying']);
 
-  const [text, setText] = React.useState<IContractDisplayStates['text']>('');
-  const [code, setCode] = React.useState<IContractDisplayStates['code']>('');
+  const [text, setText] = React.useState<IContractDisplayStates['text']>(initStates['text']);
+  const [code, setCode] = React.useState<IContractDisplayStates['code']>(initStates['code']);
 
   React.useEffect(() => {
     if (!contractID) {
@@ -112,7 +136,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
-    console.log(data, 'data111122222333333333');
+    // console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       contractId: contractID,
     };
@@ -320,13 +344,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         ? '测试授权'
                         : currentS.auth}</label>)
                 }
-                {/*{*/}
-                {/*  currentS.colors.length > 0*/}
-                {/*    ? currentS.colors.map((cl) => {*/}
-                {/*      return (<label key={cl} className={styles.Authorized}>{cl}</label>);*/}
-                {/*    })*/}
-                {/*    : (<label className={styles.Unauthorized}>未授权</label>)*/}
-                {/*}*/}
                 <FContentText text={currentS.datetime} type='normal' />
               </Space>
               <div style={{ height: 10 }} />
