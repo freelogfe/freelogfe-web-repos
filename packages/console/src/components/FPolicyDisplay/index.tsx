@@ -3,11 +3,11 @@ import styles from './index.less';
 import FCodeFormatter from '../FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { FUtil } from '@freelog/tools-lib';
-import { completeUrlByDomain } from '@freelog/tools-lib/src/utils/format';
+// import { completeUrlByDomain } from '@freelog/tools-lib/src/utils/format';
 
-const { compile } = require('@freelog/resource-policy-lang');
-import { report } from '@freelog/resource-policy-lang/dist';
-import { ContractEntity } from '@freelog/resource-policy-lang/dist/tools/ContractTool';
+// const { compile } = require('@freelog/resource-policy-lang');
+// import { report } from '@freelog/resource-policy-lang/dist';
+// import { ContractEntity } from '@freelog/resource-policy-lang/dist/tools/ContractTool';
 
 interface FPolicyDisplayProps {
   code: string;
