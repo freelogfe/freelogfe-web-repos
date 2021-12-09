@@ -14,7 +14,7 @@ export interface FAuthPanelProps {
 
 function FAuthPanel({resourceAuthPage}: FAuthPanelProps) {
 
-  const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
+  // const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>

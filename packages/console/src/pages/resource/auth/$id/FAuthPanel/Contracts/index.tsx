@@ -5,9 +5,9 @@ import { FContentText } from '@/components/FText';
 import { FetchAuthorizedAction, ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/resourceAuthPage';
 import { connect, Dispatch } from 'dva';
 import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import { FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
+// import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';
 
@@ -50,8 +50,6 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         <div className={styles.PolicyGrammarName}>
           <Space size={10}>
             <span>{k.title}</span>
-            {/*<label className={styles.executing}>执行中</label>*/}
-            {/*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[k.status] as 'authorized'}/>*/}
           </Space>
         </div>
 
@@ -82,33 +80,26 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
           />
         </Space>
         <div style={{ height: 10 }} />
-        {/*<div style={{height: 15}}/>*/}
-        {/*<div className={styles.PolicyGrammar}>*/}
-        {/*  <pre className={styles.highlight}>{k.code}</pre>*/}
-        {/*</div>*/}
 
-
-        <div className={styles.PolicyInfo}>
-          {/*<Space size={40}>*/}
-          {/*  <FContentText type="additional2" text={'合约ID：' + k.id}/>*/}
-          {/*  <FContentText type="additional2" text={'签约时间：' + k.date}/>*/}
-          {/*</Space>*/}
-          {/*<div style={{height: 9}}/>*/}
-          <div className={styles.versionControl}>
-            <FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>
-            <div style={{ height: 8 }} />
-            <div className={styles.allVersions}>
-              {k.versions.map((i) => <Space size={8} key={i.version}>
-                <Checkbox
-                  checked={i.checked}
-                  disabled={i.disabled}
-                  onChange={(e) => onLicenseChange(i.version, k.policyId, e.target.checked)}
-                />
-                <span>{i.version}</span>
-              </Space>)}
+        {
+           (<div className={styles.PolicyInfo}>
+            <div className={styles.versionControl}>
+              <FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>
+              <div style={{ height: 8 }} />
+              <div className={styles.allVersions}>
+                {k.versions.map((i) => <Space size={8} key={i.version}>
+                  <Checkbox
+                    checked={i.checked}
+                    disabled={i.disabled}
+                    onChange={(e) => onLicenseChange(i.version, k.policyId, e.target.checked)}
+                  />
+                  <span>{i.version}</span>
+                </Space>)}
+              </div>
             </div>
-          </div>
-        </div>
+          </div>)
+        }
+
       </div>))}
   </Space>;
 }

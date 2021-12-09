@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
-import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
+import { FContentText } from '@/components/FText';
+import { Dispatch, connect } from 'dva';
+import { ConnectState, MarketResourcePageModelState, NodesModelState } from '@/models/connect';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
 import * as cover from '@/assets/default-resource-cover.jpg';
-import {Tooltip} from 'antd';
+import { Tooltip } from 'antd';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -17,7 +17,7 @@ interface SignProps {
   nodes: NodesModelState;
 }
 
-function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
+function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
 
   const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
 
@@ -32,14 +32,14 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           src={marketResourcePage.resourceInfo?.cover || cover}
           alt={''}
         />
-        <div style={{height: 20}}/>
+        <div style={{ height: 20 }} />
         <div className={styles.babels}>
           {
             (marketResourcePage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
               <label key={t}>{t}</label>))
           }
         </div>
-        <div style={{height: 20}}/>
+        <div style={{ height: 20 }} />
 
         <Tooltip
           title={marketResourcePage.resourceInfo?.about}
@@ -47,24 +47,24 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           overlayClassName={styles.TooltipOverlay}
           color={'rgba(0, 0, 0, 0.5)'}
           // visible={true}
-          placement="right"
+          placement='right'
         >
           <div>
             <FContentText
-              text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')}/>
+              text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')} />
           </div>
         </Tooltip>
       </div>
     </div>
-    <div className={styles.cell}/>
+    <div className={styles.cell} />
     <div className={styles.infoRight}>
       <div className={styles.top}>
-        <NodeSelector/>
+        <NodeSelector />
       </div>
       <div className={styles.mid}>
         <div className={styles.sign}>
           <div className={styles.signLeft}>
-            <Resources/>
+            <Resources />
           </div>
           <div className={styles.signRight}>
             {
@@ -73,29 +73,29 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
                   请先选择签约的节点…
                 </div>)
                 : policies?.length === 0 && contracts?.length === 0
-                ? (<div className={styles.noNode}>
-                  无策略可用…
-                </div>)
-                : (<>
-                  <div style={{height: 15}}/>
-                  <Contracts/>
-                  <Policies/>
-                  <div style={{height: 15}}/>
-                </>)
+                  ? (<div className={styles.noNode}>
+                    无策略可用…
+                  </div>)
+                  : (<>
+                    <div style={{ height: 15 }} />
+                    <Contracts />
+                    <Policies />
+                    <div style={{ height: 15 }} />
+                  </>)
             }
 
           </div>
         </div>
       </div>
       <div className={styles.bot}>
-        <Bottom/>
+        <Bottom />
       </div>
 
     </div>
   </div>);
 }
 
-export default connect(({marketResourcePage, nodes}: ConnectState) => ({
+export default connect(({ marketResourcePage, nodes }: ConnectState) => ({
   marketResourcePage,
   nodes,
 }))(Sign);

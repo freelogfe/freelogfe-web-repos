@@ -7,8 +7,8 @@ import { ChangeAction } from '@/models/marketResourcePage';
 import { FContentText, FTitleText } from '@/components/FText';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
-import FUtil1 from '@/utils';
-import FSwitch from '@/components/FSwitch';
+// import FUtil1 from '@/utils';
+// import FSwitch from '@/components/FSwitch';
 import FModal from '@/components/FModal';
 
 interface PoliciesProps {

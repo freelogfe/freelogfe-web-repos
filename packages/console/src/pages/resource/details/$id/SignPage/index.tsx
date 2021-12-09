@@ -8,7 +8,11 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import {router} from 'umi';
-import {ChangeAction, OnChangeAndVerifySignExhibitNameAction, SignContractAction} from '@/models/marketResourcePage';
+import {
+  ChangeAction,
+  OnChangeAndVerifySignExhibitNameAction,
+  OnClick_ConfirmSignContract_Action,
+} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/components/FFormLayout";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
@@ -59,8 +63,8 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       </FTextBtn>
       <div style={{width: 30}}/>
       <FRectBtn
-        onClick={() => dispatch<SignContractAction>({
-          type: 'marketResourcePage/signContract',
+        onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
+          type: 'marketResourcePage/onClick_ConfirmSignContract',
         })}
         disabled={!!marketResourcePage.signExhibitNameErrorTip}
         type="primary"

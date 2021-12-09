@@ -32,7 +32,8 @@ export interface ResourceAuthPageModelState {
     contracts: {
       checked: boolean;
       title: string;
-      status: 0 | 1 | 2;
+      // status: 0 | 1 | 2;
+      status: 'active' | 'testActive' | 'inactive' | 'terminal';
       code: string;
       id: string;
       date: string;
@@ -246,7 +247,9 @@ const Model: ResourceAuthPageModelType = {
           .filter((c: any) => c.licensorId === i.resourceId);
         // console.info(allContracts, 'allContracts');
 
-        const allUsedPoliciesId = allContracts.map((c: any) => c.policyId);
+        const allUsedPoliciesId = allContracts
+          .filter((c: any) => c.status !== 1)
+          .map((c: any) => c.policyId);
         // console.info(allUsedPoliciesId, 'allUsedPoliciesId');
         const allEnabledPolicies = data2.find((resource: any) => resource.resourceId === i.resourceId)?.policies?.filter((p: any) => {
           // console.log(p, '!@#$!@#$@#$@#!$');
@@ -269,14 +272,15 @@ const Model: ResourceAuthPageModelType = {
                 policyId: c.policyId,
                 title: c.contractName,
                 // status: c.status === 0 ? 'stopping' : 'executing',
-                status: c.status === 1 ? 2 : ((c.authStatus & 1) === 1) ? 1 : 0,
+                status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
                 code: c.policyInfo.policyText,
                 date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
                 // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]
                 versions: allEnabledVersions.map((v: string) => {
                   // console.log(i, currentResource, c, v, 'aw39osidc');
                   const versionContracts = i.versions?.find((version: any) => version.version === v)?.contracts;
-                  const versionChecked: boolean = !!versionContracts?.find((contract: any) => contract.contractId === c.contractId);
+                  // const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId && c.status !== 1);
+                  const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId);
                   return {
                     version: v,
                     checked: versionChecked,
@@ -293,7 +297,7 @@ const Model: ResourceAuthPageModelType = {
           })),
         };
       });
-      // console.log(contractsAuthorized, 'contractsAuthorized');
+      console.log(contractsAuthorized, 'contractsAuthorized');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

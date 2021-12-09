@@ -85,7 +85,12 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                   >
                     <span>{j.title}</span>
                     <div style={{ width: 5 }} />
-                    <label style={{ backgroundColor: j.status === 1 ? '#42C28C' : '#E9A923'}} /></div>))
+                    <label style={{
+                      backgroundColor: j.status === 'terminal'
+                        ? '#999' :
+                        j.status === 'inactive'
+                          ? '#E9A923' : '#42C28C',
+                    }} /></div>))
                 }
               </div>
             </>

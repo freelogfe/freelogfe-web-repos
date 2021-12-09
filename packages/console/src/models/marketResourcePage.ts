@@ -1,12 +1,12 @@
-import {DvaReducer} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
-import {router} from "umi";
+import { DvaReducer } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { router } from 'umi';
 import FUtil1 from '@/utils';
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
-import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
+import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -54,7 +54,7 @@ export interface MarketResourcePageModelState {
       text: string;
       createTime: string;
       policyID: string;
-      status: 0 | 1 | 2;
+      status: 'active' | 'testActive' | 'inactive' | 'terminal';
       exhibits: {
         exhibitID: string;
         exhibitName: string;
@@ -169,8 +169,8 @@ export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
 
-export interface SignContractAction extends AnyAction {
-  type: 'marketResourcePage/signContract';
+export interface OnClick_ConfirmSignContract_Action extends AnyAction {
+  type: 'marketResourcePage/onClick_ConfirmSignContract';
 }
 
 export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
@@ -194,7 +194,7 @@ interface MarketResourcePageModelType {
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
-    signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
+    onClick_ConfirmSignContract: (action: OnClick_ConfirmSignContract_Action, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
     fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
   };
@@ -253,7 +253,7 @@ const Model: MarketResourcePageModelType = {
   namespace: 'marketResourcePage',
   state: initStates,
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {put}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, { put }: EffectsCommandMap) {
       yield put({
         type: 'change',
         payload: {
@@ -269,26 +269,26 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchInfo',
       });
     },
-    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
+    * onChangeVersion({ payload }: OnChangeVersionAction, { put }: EffectsCommandMap) {
       yield put({
         type: 'change',
         payload: {
           version: payload.version,
-        }
+        },
       });
 
       yield put<FetchVersionInfoAction>({
         type: 'fetchVersionInfo',
       });
     },
-    * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
-      const {marketResourcePage, user}: ConnectState = yield select(({marketResourcePage, user}: ConnectState) => ({
+    * fetchInfo({}: FetchInfoAction, { call, put, select }: EffectsCommandMap) {
+      const { marketResourcePage, user }: ConnectState = yield select(({ marketResourcePage, user }: ConnectState) => ({
         marketResourcePage,
         user,
       }));
@@ -298,7 +298,7 @@ const Model: MarketResourcePageModelType = {
         resourceIdOrName: marketResourcePage.resourceId,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FServiceAPI.Resource.info, params);
+      const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, ' data2309');
 
       let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
@@ -311,7 +311,7 @@ const Model: MarketResourcePageModelType = {
           resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
           isLoadPolicyInfo: 1,
         };
-        const {data: data1} = yield call(FServiceAPI.Resource.batchInfo, params1);
+        const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
         // console.log(data1, 'data12390jsdfo');
         rawSignResources = [
           ...rawSignResources,
@@ -328,7 +328,7 @@ const Model: MarketResourcePageModelType = {
         // projection: 'nodeId',
       };
 
-      const {data: data3} = yield call(FServiceAPI.Exhibit.presentableList, params3);
+      const { data: data3 } = yield call(FServiceAPI.Exhibit.presentableList, params3);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -379,9 +379,9 @@ const Model: MarketResourcePageModelType = {
       });
 
     },
-    * fetchCollectionInfo({}: FetchCollectionInfoAction, {call, select, put}: EffectsCommandMap) {
+    * fetchCollectionInfo({}: FetchCollectionInfoAction, { call, select, put }: EffectsCommandMap) {
       // console.log('进入获取收藏', 'FGHSDGf09uj4k2t;ldfs');
-      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
       }));
 
@@ -389,13 +389,13 @@ const Model: MarketResourcePageModelType = {
         resourceIds: marketResourcePage.resourceId,
       };
 
-      const {data: data1} = yield call(FServiceAPI.Collection.isCollected, params1);
+      const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
 
       const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
         resourceId: marketResourcePage.resourceId,
       };
 
-      const {data: data2} = yield call(FServiceAPI.Collection.collectedCount, params2);
+      const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
       // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
 
       yield put<ChangeAction>({
@@ -406,8 +406,8 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * onClickCollection({}: OnClickCollectionAction, {select, call, put}: EffectsCommandMap) {
-      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+    * onClickCollection({}: OnClickCollectionAction, { select, call, put }: EffectsCommandMap) {
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
       }));
 
@@ -415,7 +415,7 @@ const Model: MarketResourcePageModelType = {
         const params: Parameters<typeof FServiceAPI.Collection.collectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
         };
-        yield call(FServiceAPI.Collection.collectResource, params)
+        yield call(FServiceAPI.Collection.collectResource, params);
       } else {
         const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
@@ -427,7 +427,7 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchCollectionInfo',
       });
     },
-    * onChangeNodeSelector({payload}: OnChangeNodeSelectorAction, {put, select, call}: EffectsCommandMap) {
+    * onChangeNodeSelector({ payload }: OnChangeNodeSelectorAction, { put, select, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -435,7 +435,7 @@ const Model: MarketResourcePageModelType = {
         },
       });
 
-      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
       }));
 
@@ -453,7 +453,7 @@ const Model: MarketResourcePageModelType = {
         nodeId: payload,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data: data1} = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+      const { data: data1 } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
 
 
       let data2: any[] = [];
@@ -464,7 +464,7 @@ const Model: MarketResourcePageModelType = {
           contractIds: result.flat().map((cr) => cr.contractId).join(','),
         };
 
-        const {data} = yield call(FServiceAPI.Exhibit.contractAppliedPresentable, params2);
+        const { data } = yield call(FServiceAPI.Exhibit.contractAppliedPresentable, params2);
         data2 = data;
       }
 
@@ -489,12 +489,14 @@ const Model: MarketResourcePageModelType = {
                   text: c.policyInfo.policyText,
                   createTime: FUtil.Format.formatDateTime(c.createDate),
                   policyID: c.policyInfo.policyId,
-                  status: c.status === 1 ? 2 : ((c.authStatus & 1) === 1) ? 1 : 0,
+                  status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
                   exhibits: exhibits || [],
                 };
               });
 
-              const allContractUsedPolicyIDs: string[] = contracts.map<string>((cp) => cp.policyID);
+              const allContractUsedPolicyIDs: string[] = contracts
+                .filter((cp) => cp.status !== 'terminal')
+                .map<string>((cp) => cp.policyID);
               const policies: MarketResourcePageModelState['signResources'][number]['policies'] = value.policies
                 .filter((rsp) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
                 .map((rsp) => ({
@@ -518,9 +520,9 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
-        marketResourcePage
+    * fetchVersionInfo({}: FetchVersionInfoAction, { call, select, put }: EffectsCommandMap) {
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
+        marketResourcePage,
       }));
 
       // console.log('######89987239847982347982349823748723');
@@ -529,7 +531,7 @@ const Model: MarketResourcePageModelType = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
+      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
       // console.log(data, '98sdalkf');
 
       const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
@@ -539,19 +541,22 @@ const Model: MarketResourcePageModelType = {
         isContainRootNode: true,
       };
 
-      const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
+      const { data: data2 } = yield call(FServiceAPI.Resource.dependencyTree, params2);
       // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
-      const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
+      const { nodes: dependencyGraphNodes, edges: dependencyGraphEdges } = handleDependencyGraphData(data2[0]);
 
       const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
       };
 
-      const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
+      const { data: data3 } = yield call(FServiceAPI.Resource.authTree, params3);
 
       // 授权树
-      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
+      const {
+        nodes: authorizationGraphNodes,
+        edges: authorizationGraphEdges,
+      } = yield call(handleAuthorizationGraphData, data3, {
         id: data.version,
         resourceId: data.resourceId,
         resourceName: data.resourceName,
@@ -599,10 +604,9 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * signContract({}: SignContractAction, {call, select, put}: EffectsCommandMap) {
-      const {marketResourcePage, nodes}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
+    * onClick_ConfirmSignContract({}: OnClick_ConfirmSignContract_Action, { call, select, put }: EffectsCommandMap) {
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
-        nodes,
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
@@ -613,7 +617,7 @@ const Model: MarketResourcePageModelType = {
         resolveResources: marketResourcePage.signResources.map((sr) => ({
           resourceId: sr.id,
           contracts: [
-            ...sr.contracts.filter((srp) => srp.checked)
+            ...sr.contracts.filter((srp) => srp.checked && srp.status !== 'terminal')
               .map((srp) => {
                 return {
                   policyId: srp.policyID,
@@ -625,13 +629,17 @@ const Model: MarketResourcePageModelType = {
                   policyId: srp.id,
                 };
               }),
-          ]
+          ],
         })),
       };
-      const {data} = yield call(FServiceAPI.Exhibit.createPresentable, params);
-      router.push(FUtil.LinkTo.exhibitManagement({exhibitID: data.presentableId}));
+      const { data } = yield call(FServiceAPI.Exhibit.createPresentable, params);
+      router.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
     },
-    * onChangeAndVerifySignExhibitName({payload}: OnChangeAndVerifySignExhibitNameAction, {put, select, call}: EffectsCommandMap) {
+    * onChangeAndVerifySignExhibitName({ payload }: OnChangeAndVerifySignExhibitNameAction, {
+      put,
+      select,
+      call,
+    }: EffectsCommandMap) {
       if (!FUtil.Regexp.EXHIBIT_NAME.test(payload)) {
         yield put<ChangeAction>({
           type: 'change',
@@ -642,7 +650,7 @@ const Model: MarketResourcePageModelType = {
         });
         return;
       }
-      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage, nodes }: ConnectState) => ({
         marketResourcePage,
         nodes,
       }));
@@ -651,7 +659,7 @@ const Model: MarketResourcePageModelType = {
         nodeId: marketResourcePage.selectedNodeID,
         presentableName: payload,
       };
-      const {data} = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
       if (data) {
         yield put<ChangeAction>({
           type: 'marketResourcePage/change',
@@ -671,12 +679,12 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * fetchDependencyGraphData({}: FetchDependencyGraphData, {select, call}: EffectsCommandMap) {
+    * fetchDependencyGraphData({}: FetchDependencyGraphData, { select, call }: EffectsCommandMap) {
 
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -687,7 +695,7 @@ const Model: MarketResourcePageModelType = {
     setup({}) {
 
     },
-  }
+  },
 };
 
 export default Model;
@@ -711,7 +719,7 @@ type GetAllContractsReturnType = {
   authStatus: number;
 }[][];
 
-async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   const allPromises = resourceIDs.map(async (id) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       subjectIds: id,
@@ -721,7 +729,7 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
       licenseeId: nodeID,
       isLoadPolicyInfo: 1,
     };
-    const {data} = await FServiceAPI.Contract.batchContracts(params);
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
     return data;
   });
 
@@ -733,14 +741,14 @@ interface GetAllContractExhibitsParamsType {
   nodeID: number;
 }
 
-async function getAllContractExhibits({resourceIDs, nodeID}: GetAllContractExhibitsParamsType) {
+async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExhibitsParamsType) {
   const allPromises = resourceIDs.map(async (rid) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       licenseeIdentityType: 2,
       licensorId: rid,
       licenseeId: nodeID,
     };
-    const {data} = await FServiceAPI.Contract.batchContracts(params);
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
     return data;
   });
   return await Promise.all(allPromises);

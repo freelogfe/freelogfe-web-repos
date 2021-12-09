@@ -127,7 +127,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   }, [contractID]);
 
   async function fetchInitData() {
-    console.log(contractID, 'contractID@#@@#@#$@#$');
+    // console.log(contractID, 'contractID@#@@#@#$@#$');
 
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,

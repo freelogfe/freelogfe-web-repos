@@ -33,48 +33,55 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
     {
       marketResourcePage.signResources
         .filter((r: any, i: number) => i === 0)
-        .map((r: any) => (<div
-          key={r.id}
-          className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
-          onClick={() => onChangeSelected(r.id)}
-        >
-          <div className={styles.title}>
+        .map((r: any) => {
+          return (<div
+            key={r.id}
+            className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
+            onClick={() => onChangeSelected(r.id)}
+          >
+            <div className={styles.title}>
+              <FContentText
+                type='highlight'
+                text={r.name}
+                singleRow
+                className={styles.titleText}
+                style={{ maxWidth: r.status === 0 ? 170 : '100%' }}
+              />
+
+              {
+                r.status === 0 && (<>
+                  <FResourceStatusBadge status={'offline'} />
+                  <div style={{ width: 5 }} />
+                </>)
+              }
+
+            </div>
+            <div style={{ height: 5 }} />
             <FContentText
-              type='highlight'
-              text={r.name}
-              singleRow
-              className={styles.titleText}
-              style={{ maxWidth: r.status === 0 ? 170 : '100%' }}
+              type='additional2'
+              text={r.type}
             />
-
-            {
-              r.status === 0 && (<>
-                <FResourceStatusBadge status={'offline'} />
-                <div style={{ width: 5 }} />
-              </>)
-            }
-
-          </div>
-          <div style={{ height: 5 }} />
-          <FContentText
-            type='additional2'
-            text={r.type}
-          />
-          <div style={{ height: 5 }} />
-          <div className={styles.policeTags}>
-            {
-              r.policies?.filter((p: any) => p.checked)
-                .map((p: any) => (<div key={p.id}>{p.name}</div>))
-            }
-            {
-              r.contracts?.map((c: any) => (<div key={c.id}>
-                <span>{c.name}</span>
-                <div style={{ width: 5 }} />
-                <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
-              </div>))
-            }
-          </div>
-        </div>))
+            <div style={{ height: 5 }} />
+            <div className={styles.policeTags}>
+              {
+                r.policies?.filter((p: any) => p.checked)
+                  .map((p: any) => (<div key={p.id}>{p.name}</div>))
+              }
+              {
+                r.contracts?.map((c: any) => (<div key={c.id}>
+                  <span>{c.name}</span>
+                  <div style={{ width: 5 }} />
+                  <label style={{
+                    backgroundColor: c.status === 'terminal'
+                      ? '#999' :
+                      c.status === 'inactive'
+                        ? '#E9A923' : '#42C28C',
+                  }} />
+                </div>))
+              }
+            </div>
+          </div>);
+        })
     }
 
     {
@@ -84,8 +91,9 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
     {
       marketResourcePage.signResources
         .filter((r, i: number) => i !== 0)
-        .map((r) => (
-          <div
+        .map((r) => {
+          // console.log(r, '####902j3l42k3jl');
+          return (<div
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
             key={r.id}
             onClick={() => onChangeSelected(r.id)}
@@ -127,10 +135,16 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
                     return c.checked;
                   })
                   .map((c) => {
+                    // console.log(c, 'cCCCCC89ulik');
                     return (<div key={c.id}>
                       <span>{c.name}</span>
                       <div style={{ width: 5 }} />
-                      <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+                      <label style={{
+                        backgroundColor: c.status === 'terminal'
+                          ? '#999' :
+                          c.status === 'inactive'
+                            ? '#E9A923' : '#42C28C',
+                      }} />
                     </div>);
                   })
               }
@@ -144,7 +158,8 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
                   })
               }
             </div>
-          </div>))
+          </div>);
+        })
     }
   </>);
 }
