@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 // import FCodemirror from '../FCodemirror';
-import { Space, Divider, DatePicker, InputNumber, Modal } from 'antd';
+import { Space, Divider, DatePicker, InputNumber, Modal, Select } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
@@ -334,6 +334,7 @@ function FPolicyBuilder({
   }
 
   function onClickAddStateBtn() {
+    console.log('********823u4928347923');
     const results: FPolicyBuilderDrawerStates['combination_Data'] = [
       ...combination_Data,
       {
@@ -577,8 +578,10 @@ function FPolicyBuilder({
         set_Code_InputErrors(errors);
         return;
       }
+
       const { error, text } = await FUtil.Format.policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
+
       if (error) {
         setShowView('fail');
         setFailResult({ errorText: error.join(',') });
@@ -662,7 +665,7 @@ function FPolicyBuilder({
   const enabledTargetState: { value: string; title: string }[] = combination_Data.map<{ value: string; title: string }>((cd, index) => {
     return {
       value: cd.randomID,
-      title: `(${index + 1}) ${cd.name}`,
+      title: `状态${index + 1}: ${cd.name}`,
     };
   });
 
@@ -934,6 +937,7 @@ function FPolicyBuilder({
                                       <div style={{ width: 15 }} />
                                       <FInput
                                         placeholder='输入状态名称'
+                                        autoFocus={true}
                                         style={{ width: 400 }}
                                         value={cd.name}
                                         onChange={(e) => {
@@ -1170,39 +1174,52 @@ function FPolicyBuilder({
 
                                         <div style={{ height: 10 }} />
 
-                                        <div>
-                                          <FSelect
-                                            value={et.target || undefined}
-                                            placeholder='选择目标状态'
-                                            style={{ width: '100%' }}
-                                            dataSource={enabledTargetState}
-                                            onChange={(value) => {
-                                              onChangeCombinationEvent({
-                                                target: value,
-                                              }, cd.randomID, et.randomID);
-                                            }}
-                                            getPopupContainer={() => {
-                                              return refMaskingContainer?.current || document.body;
-                                            }}
-                                            dropdownRender={menu => (<>
-                                              {menu}
-                                              <div className={styles.dropdownRenderAdd}>
-                                                <FCircleBtn
-                                                  size='small'
-                                                  type='minor'
-                                                  onClick={onClickAddStateBtn}
-                                                >
-                                                  <FPlus style={{ fontSize: 12 }} />
-                                                </FCircleBtn>
-                                                <div style={{ width: 5 }} />
-                                                <FTextBtn
-                                                  type='primary'
-                                                  onClick={onClickAddStateBtn}
-                                                >新建状态</FTextBtn>
-                                              </div>
-                                            </>)}
-                                          />
-                                        </div>
+                                        <TargetSelect
+                                          value={et.target || undefined}
+                                          dataSource={enabledTargetState}
+                                          onChange={(value) => {
+                                            onChangeCombinationEvent({
+                                              target: value,
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                          getPopupContainer={() => {
+                                            return refMaskingContainer?.current || document.body;
+                                          }}
+                                          onClickAddStateBtn={onClickAddStateBtn}
+                                        />
+                                        {/*<div>*/}
+                                        {/*  <FSelect*/}
+                                        {/*    value={et.target || undefined}*/}
+                                        {/*    placeholder='选择目标状态'*/}
+                                        {/*    style={{ width: '100%' }}*/}
+                                        {/*    dataSource={enabledTargetState}*/}
+                                        {/*    onChange={(value) => {*/}
+                                        {/*      onChangeCombinationEvent({*/}
+                                        {/*        target: value,*/}
+                                        {/*      }, cd.randomID, et.randomID);*/}
+                                        {/*    }}*/}
+                                        {/*    getPopupContainer={() => {*/}
+                                        {/*      return refMaskingContainer?.current || document.body;*/}
+                                        {/*    }}*/}
+                                        {/*    dropdownRender={menu => (<>*/}
+                                        {/*      {menu}*/}
+                                        {/*      <div className={styles.dropdownRenderAdd}>*/}
+                                        {/*        <FCircleBtn*/}
+                                        {/*          size='small'*/}
+                                        {/*          type='minor'*/}
+                                        {/*          onClick={onClickAddStateBtn}*/}
+                                        {/*        >*/}
+                                        {/*          <FPlus style={{ fontSize: 12 }} />*/}
+                                        {/*        </FCircleBtn>*/}
+                                        {/*        <div style={{ width: 5 }} />*/}
+                                        {/*        <FTextBtn*/}
+                                        {/*          type='primary'*/}
+                                        {/*          onClick={onClickAddStateBtn}*/}
+                                        {/*        >新建状态</FTextBtn>*/}
+                                        {/*      </div>*/}
+                                        {/*    </>)}*/}
+                                        {/*  />*/}
+                                        {/*</div>*/}
                                       </>)
                                     }
 
@@ -1684,4 +1701,79 @@ function disabledTime(date: Moment | null): DisabledTimes {
     //   return [];
     // },
   };
+}
+
+interface TargetSelectProps {
+  value?: string;
+  dataSource: any;
+
+  onChange?(value: string): void;
+
+  onClickAddStateBtn?(): void;
+}
+
+function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: TargetSelectProps) {
+  const refDev = React.useRef<any>(null);
+  const refSelect = React.useRef<any>(null);
+  const [open1, setOpen] = React.useState<boolean>(false);
+
+  AHooks.useMount(() => {
+    window.addEventListener('click', () => {
+      setOpen(false);
+    });
+  });
+
+  return (<div
+    style={{ position: 'relative' }}
+    ref={refDev}
+    onClick={(e) => {
+      e.stopPropagation();
+    }}
+  >
+    <FSelect
+      ref={refSelect}
+      open={open1}
+      value={value}
+      placeholder='选择目标状态'
+      style={{ width: '100%' }}
+      dataSource={dataSource}
+      onFocus={() => {
+        setOpen(true);
+      }}
+      onChange={(value) => {
+        setOpen(false);
+        refSelect.current.blur();
+        onChange && onChange(value);
+        // onChangeCombinationEvent({
+        //   target: value,
+        // }, cd.randomID, et.randomID);
+      }}
+      getPopupContainer={() => refDev.current}
+      dropdownRender={menu => (<>
+        {menu}
+        <div className={styles.dropdownRenderAdd}>
+          <FCircleBtn
+            size='small'
+            type='minor'
+            onClick={() => {
+              // console.log('###23948230948230480_))))))');
+              setOpen(false);
+              onClickAddStateBtn && onClickAddStateBtn();
+            }}
+          >
+            <FPlus style={{ fontSize: 12 }} />
+          </FCircleBtn>
+          <div style={{ width: 5 }} />
+          <FTextBtn
+            type='primary'
+            onClick={() => {
+              // console.log('###23948230948230480_))))))');
+              setOpen(false);
+              onClickAddStateBtn && onClickAddStateBtn();
+            }}
+          >新建状态111</FTextBtn>
+        </div>
+      </>)}
+    />
+  </div>);
 }
