@@ -1182,9 +1182,6 @@ function FPolicyBuilder({
                                               target: value,
                                             }, cd.randomID, et.randomID);
                                           }}
-                                          getPopupContainer={() => {
-                                            return refMaskingContainer?.current || document.body;
-                                          }}
                                           onClickAddStateBtn={onClickAddStateBtn}
                                         />
                                         {/*<div>*/}
