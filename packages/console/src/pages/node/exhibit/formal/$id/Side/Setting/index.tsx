@@ -3,8 +3,8 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
-import { FDelete, FEdit, FSwap, FRedo, FDoubleDown, FDoubleUp } from '@/components/FIcons';
-import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
+import { FDelete, FEdit, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
+import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -20,20 +20,13 @@ import {
   OnClick_Side_CustomOptions_EditBtn_Action,
   OnClick_Side_InheritOptions_ResetBtn_Action,
   OnConfirm_AddCustomOptionsDrawer_Action, OnConfirm_CustomOptionDrawer_Action,
-  UpdateRewriteAction,
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
 import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
-// import FModal from '@/components/FModal';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
-// import FDrawer from '@/components/FDrawer';
-// import {
-//   OnAddExhibitDrawerCancelChangeAction,
-//   OnAddExhibitDrawerConfirmChangeAction,
-// } from '@/models/informalNodeManagerPage';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 
@@ -43,29 +36,6 @@ interface SettingProps {
 }
 
 function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
-
-  // function onChangeCustomAttrs({ key, value }: { key: string; value: string }, update: boolean = false) {
-  //   dispatch<ChangeAction>({
-  //     type: 'exhibitInfoPage/change',
-  //     payload: {
-  //       side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((pCustomAttr) => {
-  //         if (pCustomAttr.key !== key) {
-  //           return pCustomAttr;
-  //         }
-  //         return {
-  //           ...pCustomAttr,
-  //           newValue: value,
-  //           newValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
-  //         };
-  //       }),
-  //     },
-  //   });
-  //   if (update) {
-  //     dispatch<UpdateRewriteAction>({
-  //       type: 'exhibitInfoPage/updateRewrite',
-  //     });
-  //   }
-  // }
 
   return (<>
     <FContentText text={FUtil1.I18n.message('advanced_setting')} type='highlight' />
@@ -118,7 +88,20 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_InheritOptions.map((io, index) => {
               return (<div key={io.key}>
                 <div className={styles.optionTitle}>
-                  <FContentText text={io.key} />
+                  <Space size={10}>
+                    <FContentText text={io.key} />
+                    {
+                      io.description && (<FTooltip
+                        title={io.description}
+                        color={'#fff'}
+                      >
+                        <FInfo
+                          style={{ cursor: 'pointer', fontSize: 14 }}
+                        />
+                      </FTooltip>)
+                    }
+                  </Space>
+
                   <FTooltip title={FUtil1.I18n.message('tip_reset_value')}>
                     <div>
                       <FTextBtn
@@ -161,29 +144,36 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         });
                       }}
                     />)
-                    : (<FInput
-                      className={styles.FInput}
-                      value={io.valueInput}
-                      errorText={io.valueInputError}
-                      onChange={(e) => {
-                        // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
-                        dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
-                          type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
-                          payload: {
-                            index: index,
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      onBlur={() => {
-                        dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
-                          type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
-                          payload: {
-                            index: index,
-                          },
-                        });
-                      }}
-                    />)
+                    : (<div>
+                      <FInput
+                        className={styles.FInput}
+                        value={io.valueInput}
+                        // errorText={io.valueInputError}
+                        placeholder={'输入自定义选项'}
+                        onChange={(e) => {
+                          // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
+                          dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
+                            type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
+                            payload: {
+                              index: index,
+                              value: e.target.value,
+                            },
+                          });
+                        }}
+                        onBlur={() => {
+                          dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
+                            type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
+                            payload: {
+                              index: index,
+                            },
+                          });
+                        }}
+                      />
+                      {
+                        io.valueInputError !== '' && (<div style={{ color: '#EE4040' }}>{io.valueInputError}</div>)
+                      }
+
+                    </div>)
                 }
               </div>);
             })
@@ -192,7 +182,19 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_CustomOptions.map((co, index) => {
               return (<div key={co.key}>
                 <div className={styles.optionTitle}>
-                  <FContentText text={co.key} />
+                  <Space size={10}>
+                    <FContentText text={co.key} />
+                    {
+                      co.description && (<FTooltip
+                        title={co.description}
+                        color={'#fff'}
+                      >
+                        <FInfo
+                          style={{ cursor: 'pointer', fontSize: 14 }}
+                        />
+                      </FTooltip>)
+                    }
+                  </Space>
                   <Space size={10}>
                     <FTooltip title={FUtil1.I18n.message('tips_edit')}>
                       <div>
@@ -205,22 +207,6 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                                 index: index,
                               },
                             });
-                            // const editing = exhibitInfoPage.side_CustomOptions.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                            // if (!editing) {
-                            //   return;
-                            // }
-                            // dispatch<ChangeAction>({
-                            //   type: 'exhibitInfoPage/change',
-                            //   payload: {
-                            //     side_BaseAttrs: exhibitInfoPage.side_CustomOptions.map((pCustomAttr) => ({
-                            //       ...pCustomAttr,
-                            //       isEditing: pCustomAttr.key === pc.key,
-                            //     })),
-                            //     // pAddCustomKey: editing.key,
-                            //     // pAddCustomValue: editing.value,
-                            //     // pAddCustomDescription: editing.remark,
-                            //   },
-                            // });
                           }}
                         ><FEdit /></FTextBtn>
                       </div>
@@ -268,7 +254,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   }}
                 />
                 {
-                  co.valueInputError !== '' && (<div style={{color: '#EE4040'}}>{co.valueInputError}</div>)
+                  co.valueInputError !== '' && (<div style={{ color: '#EE4040' }}>{co.valueInputError}</div>)
                 }
               </div>);
             })

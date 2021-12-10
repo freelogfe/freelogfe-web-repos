@@ -947,7 +947,7 @@ const Model: ExhibitInfoPageModelType = {
             if (i !== payload.index) {
               return io;
             }
-            const valueInputError: string = (io.valueInput.length > 30 || io.valueInput === '') ? '1~30个字符' : '';
+            const valueInputError: string = io.valueInput.length > 140 ? '不超过140个字符' : '';
             currentHasError = valueInputError !== '';
             return {
               ...io,
@@ -1046,7 +1046,7 @@ const Model: ExhibitInfoPageModelType = {
             if (i !== payload.index) {
               return co;
             }
-            const valueInputError: string = co.valueInput.length > 30 ? '不超过30个字符' : '';
+            const valueInputError: string = co.valueInput.length > 140 ? '不超过140个字符' : '';
             currentHasError = valueInputError !== '';
             return {
               ...co,
