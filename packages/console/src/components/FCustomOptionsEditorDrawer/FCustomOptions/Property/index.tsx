@@ -76,7 +76,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             const value: string = e.target.value;
             let errorText: string = '';
             if (value.length > 50) {
-              errorText = '不超过15个字符';
+              errorText = '不超过50个字符';
             }
 
             onChangeData({
@@ -133,7 +133,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
-              placeholder={'输入属性说明'}
+              placeholder={'输入自定义选项'}
               value={data.defaultValue}
               onChange={(e) => {
                 const value: string = e.target.value;
@@ -141,8 +141,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 // if (value === '') {
                 //   errorText = '请输入';
                 // } else
-                if (value.length > 30) {
-                  errorText = '不超过30个字符';
+                if (value.length > 140) {
+                  errorText = '不超过140个字符';
                 }
                 onChangeData({
                   defaultValue: value,
@@ -166,7 +166,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
-              placeholder={'输入属性说明'}
+              // placeholder={'输入属性说明'}
+              placeholder={FUtil1.I18n.message('msg_customdropdownlist')}
               value={data.customOption}
               onChange={(e) => {
                 const value: string = e.target.value;

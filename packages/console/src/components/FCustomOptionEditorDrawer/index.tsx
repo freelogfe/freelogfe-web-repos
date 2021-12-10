@@ -7,6 +7,7 @@ import { FTitleText } from '../FText';
 import FInput from '../FInput';
 import FSelect from '../FSelect';
 import { FUtil } from '@freelog/tools-lib';
+import FUtil1 from '@/utils';
 
 interface FCustomOptionEditorDrawerProps {
   visible: boolean;
@@ -236,8 +237,8 @@ function FCustomOptionEditorDrawer({
                     // if (value === '') {
                     //   errorText = '请输入';
                     // } else
-                    if (value.length > 30) {
-                      errorText = '不超过30个字符';
+                    if (value.length > 140) {
+                      errorText = '不超过140个字符';
                     }
                     setValueInput(value);
                     setValueInputError(errorText);
@@ -259,7 +260,8 @@ function FCustomOptionEditorDrawer({
                 <FInput
                   className={styles.input}
                   wrapClassName={styles.input}
-                  placeholder={'输入自定义选项'}
+                  // placeholder={'输入自定义选项'}
+                  placeholder={FUtil1.I18n.message('msg_customdropdownlist')}
                   value={valueInput}
                   onChange={(e) => {
                     const value: string = e.target.value;
