@@ -1437,7 +1437,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testNodeRules, params);
-      // console.log(data, 'data!!!!!@#$@#$@#$');
+      // console.log(data, 'data!!!!!@#$@#$@#$+++++++');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1446,7 +1446,9 @@ const Model: InformalNodeManagerPageModelType = {
           rule_CodeIsDirty: false,
           // rule_Indeterminate: false,
           // rule_IndeterminateChecked: false,
-          rule_RuleList: data.testRules.map((tr: any) => {
+          rule_RuleList: data.testRules.filter((tr: any) => {
+            return tr.ruleInfo.operation !== 'comment';
+          }).map((tr: any) => {
             return {
               ...tr,
               checked: false,
@@ -1810,7 +1812,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
-      // console.log(errorObjects, 'errorObjects234234');
+      console.log(errors, errorObjects, 'errorObjects234234');
       if (errorObjects.length > 0) {
         yield put<ChangeAction>({
           type: 'change',

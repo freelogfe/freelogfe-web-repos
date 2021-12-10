@@ -93,6 +93,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
   // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
   const ruleObjList = informalNodeManagerPage.rule_RuleList.map((rule) => {
+    // console.log(rule, '##@$@#$');
     const { ruleInfo } = rule;
 
     let theRule: any = {};
