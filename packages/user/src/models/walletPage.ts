@@ -7,6 +7,7 @@ import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { listStateAndListMore } from '@/components/FListFooter';
+import FUtil1 from '@/utils';
 
 export interface WalletPageModelState {
   userID: number;
@@ -281,6 +282,10 @@ export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Table_Filter_SearchBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Table_Filter_SearchBtn';
+}
+
 export interface OnClick_Table_LoadMoreBtn_Action extends AnyAction {
   type: 'walletPage/onClick_Table_LoadMoreBtn';
 }
@@ -340,6 +345,7 @@ interface WalletPageModelType {
     onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onBlur_Table_Filter_MaxAmount: (action: OnBlur_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
+    onClick_Table_Filter_SearchBtn: (action: OnClick_Table_Filter_SearchBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
     fetch_TableData: (action: Fetch_TableData_Action, effects: EffectsCommandMap) => void;
   };
@@ -433,7 +439,7 @@ const initStates: WalletPageModelState = {
   ...changingPasswordInitStates,
 
   table_Filter_Date_Type: 'month',
-  table_Filter_Date_Custom: null,
+  table_Filter_Date_Custom: getStartAndEndDate('month'),
   table_Filter_Keywords: '',
   table_Filter_MinAmount: '',
   table_Filter_MaxAmount: '',
@@ -670,6 +676,8 @@ const Model: WalletPageModelType = {
       if (errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
+
+      fMessage(FUtil1.I18n.message('msg_feather_account_successfully_actived'));
 
       const params1: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: walletPage.userID,
@@ -936,16 +944,16 @@ const Model: WalletPageModelType = {
         type: 'change',
         payload: {
           table_Filter_Date_Type: payload.value,
-          table_Filter_Date_Custom: null,
+          table_Filter_Date_Custom: getStartAndEndDate(payload.value),
         },
       });
 
-      yield put<Fetch_TableData_Action>({
-        type: 'fetch_TableData',
-        payload: {
-          andMore: false,
-        },
-      });
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
 
     },
     * onChange_Table_Filter_Date_Custom({ payload }: OnChange_Table_Filter_Date_Custom_Action, { put }: EffectsCommandMap) {
@@ -957,12 +965,12 @@ const Model: WalletPageModelType = {
         },
       });
 
-      yield put<Fetch_TableData_Action>({
-        type: 'fetch_TableData',
-        payload: {
-          andMore: false,
-        },
-      });
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
     },
     * onChange_Table_Filter_Keywords({ payload }: OnChange_Table_Filter_Keywords_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -972,14 +980,17 @@ const Model: WalletPageModelType = {
         },
       });
 
-      yield put<Fetch_TableData_Action>({
-        type: 'fetch_TableData',
-        payload: {
-          andMore: false,
-        },
-      });
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
     },
     * onChange_Table_Filter_MinAmount({ payload }: OnChange_Table_Filter_MinAmount_Action, { put }: EffectsCommandMap) {
+      if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1000,14 +1011,17 @@ const Model: WalletPageModelType = {
         },
       });
 
-      yield put<Fetch_TableData_Action>({
-        type: 'fetch_TableData',
-        payload: {
-          andMore: false,
-        },
-      });
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
     },
     * onChange_Table_Filter_MaxAmount({ payload }: OnChange_Table_Filter_MaxAmount_Action, { put }: EffectsCommandMap) {
+      if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1028,12 +1042,12 @@ const Model: WalletPageModelType = {
         },
       });
 
-      yield put<Fetch_TableData_Action>({
-        type: 'fetch_TableData',
-        payload: {
-          andMore: false,
-        },
-      });
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
     },
     * onChange_Table_Filter_StateSelected({ payload }: OnChange_Table_Filter_StateSelected_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1043,6 +1057,14 @@ const Model: WalletPageModelType = {
         },
       });
 
+      // yield put<Fetch_TableData_Action>({
+      //   type: 'fetch_TableData',
+      //   payload: {
+      //     andMore: false,
+      //   },
+      // });
+    },
+    * onClick_Table_Filter_SearchBtn({}: OnClick_Table_Filter_SearchBtn_Action, { put }: EffectsCommandMap) {
       yield put<Fetch_TableData_Action>({
         type: 'fetch_TableData',
         payload: {
@@ -1081,7 +1103,7 @@ const Model: WalletPageModelType = {
           },
         });
       }
-      const [startCreatedDate, endCreatedDate] = getStartAndEndDate(walletPage.table_Filter_Date_Type, walletPage.table_Filter_Date_Custom);
+      // const [startCreatedDate, endCreatedDate] = getStartAndEndDate(walletPage.table_Filter_Date_Type, walletPage.table_Filter_Date_Custom);
       // console.log(walletPage.accountID, 'walletPage.accountID23423');
 
       const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
@@ -1089,8 +1111,8 @@ const Model: WalletPageModelType = {
         skip: table_DateSource.length,
         limit: FUtil.Predefined.pageSize,
         // limit: 5,
-        startCreatedDate: startCreatedDate || undefined,
-        endCreatedDate: endCreatedDate || undefined,
+        startCreatedDate: walletPage.table_Filter_Date_Custom ? walletPage.table_Filter_Date_Custom[0].format(FUtil.Predefined.momentDateFormat) : undefined,
+        endCreatedDate: walletPage.table_Filter_Date_Custom ? walletPage.table_Filter_Date_Custom[1].format(FUtil.Predefined.momentDateFormat) : undefined,
         amountStartPoint: walletPage.table_Filter_MinAmount === '' ? undefined : Number(walletPage.table_Filter_MinAmount),
         amountEndPoint: walletPage.table_Filter_MaxAmount === '' ? undefined : Number(walletPage.table_Filter_MaxAmount),
         status: walletPage.table_Filter_StateSelected === '0' ? undefined : Number(walletPage.table_Filter_StateSelected) as 1,
@@ -1153,16 +1175,13 @@ const Model: WalletPageModelType = {
 
 export default Model;
 
-function getStartAndEndDate(type: WalletPageModelState['table_Filter_Date_Type'], startAndEndMoments: WalletPageModelState['table_Filter_Date_Custom']): [string, string] {
-  const momentDateFormat: string = FUtil.Predefined.momentDateFormat;
+function getStartAndEndDate(type: 'week' | 'month' | 'year'): [moment.Moment, moment.Moment] {
   switch (type) {
     case 'week':
-      return [moment().subtract(1, 'weeks').format(momentDateFormat), moment().format(momentDateFormat)];
+      return [moment().subtract(1, 'weeks'), moment()];
     case 'month':
-      return [moment().subtract(1, 'months').format(momentDateFormat), moment().format(momentDateFormat)];
-    case 'year':
-      return [moment().subtract(1, 'years').format(momentDateFormat), moment().format(momentDateFormat)];
+      return [moment().subtract(1, 'months'), moment()];
     default:
-      return startAndEndMoments ? [startAndEndMoments[0].format(momentDateFormat), startAndEndMoments[1].format(momentDateFormat)] : ['', ''];
+      return [moment().subtract(1, 'years'), moment()];
   }
 }

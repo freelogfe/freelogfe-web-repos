@@ -35,15 +35,6 @@ interface ResourceCreatorProps {
 
 function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceCreatorProps & RouterTypes) {
 
-  // React.useEffect(() => {
-  //   dispatch<GlobalChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  // }, [route]);
-
   React.useEffect(() => {
     return () => {
       dispatch<ClearDataAction>({

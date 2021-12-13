@@ -47,7 +47,7 @@ import {
   OnClick_Activate_SentCaptchaBtn_Action,
   OnClick_Activate_ConfirmBtn_Action,
   OnMountPageAction,
-  OnUnmountPageAction, OnClick_Activate_NextBtn_Action,
+  OnUnmountPageAction, OnClick_Activate_NextBtn_Action, OnClick_Table_Filter_SearchBtn_Action,
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -111,7 +111,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
   const columns: ColumnsType<WalletPageModelState['table_DateSource'][number]> = [
     {
-      title: (<FTitleText text={'时间'} type='table' />),
+      title: (<FTitleText text={FUtil1.I18n.message('header_tran_time')} type='table' />),
       dataIndex: 'dataTime',
       key: 'dataTime',
       render(_, record) {
@@ -234,7 +234,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </div>
 
           <div style={{ height: 40 }} />
-          <FTitleText type='h1' text={'交易记录'} />
+          <FTitleText type='h1' text={FUtil1.I18n.message('title_feather_tranaction_history')} />
           <div style={{ height: 20 }} />
 
           <div className={styles.TableBody}>
@@ -247,11 +247,14 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   <div className={styles.filter1}>
                     <div className={styles.filter1Date}>
                       <FContentText
-                        text={'日期区间：'}
+                        // text={'日期区间：'}
+                        style={{ maxWidth: 70 }}
+                        singleRow
+                        text={`${FUtil1.I18n.message('filter_transaction_time')}：`}
                       />
                       <div style={{ width: 5 }} />
                       <DatePicker.RangePicker
-                        allowClear={false}
+                        allowClear
                         value={walletPage.table_Filter_Date_Custom}
                         onChange={(values: any) => {
                           // console.log(values, 'values2423');
@@ -305,95 +308,107 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     <div className={styles.filter1Keyword}>
                       <FInput
                         theme='dark'
-                        debounce={300}
-                        onDebounceChange={(value) => {
+                        placeholder={FUtil1.I18n.message('hint_search_transctions')}
+                        onChange={(e) => {
                           dispatch<OnChange_Table_Filter_Keywords_Action>({
                             type: 'walletPage/onChange_Table_Filter_Keywords',
                             payload: {
-                              value: value,
+                              value: e.target.value,
                             },
                           });
                         }}
+                        // debounce={300}
+                        // onDebounceChange={(value) => {
+                        //
+                        // }}
                       />
                     </div>
                   </div>
 
                   <div style={{ height: 15 }} />
                   <div className={styles.filter2}>
-                    <FContentText
-                      text={'金额区间：'}
-                    />
-                    <div style={{ width: 5 }} />
-                    <FInput
-                      min={0}
-                      max={walletPage.table_Filter_MaxAmount || Number.POSITIVE_INFINITY}
-                      value={walletPage.table_Filter_MinAmount}
-                      onChange={(e) => {
-                        dispatch<OnChange_Table_Filter_MinAmount_Action>({
-                          type: 'walletPage/onChange_Table_Filter_MinAmount',
-                          payload: {
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      onBlur={() => {
-                        dispatch<OnBlur_Table_Filter_MinAmount_Action>({
-                          type: 'walletPage/onBlur_Table_Filter_MinAmount',
-                        });
-                      }}
-                      type='number'
-                      size='small'
-                      placeholder={'最低金额'}
-                      className={styles.filterAmount}
-                      wrapClassName={styles.filterAmount}
-                    />
-                    <span className={styles.filterAmountTo}>-</span>
-                    <FInput
-                      type='number'
-                      size='small'
-                      value={walletPage.table_Filter_MaxAmount}
-                      onChange={(e) => {
-                        dispatch<OnChange_Table_Filter_MaxAmount_Action>({
-                          type: 'walletPage/onChange_Table_Filter_MaxAmount',
-                          payload: {
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      onBlur={() => {
-                        dispatch<OnBlur_Table_Filter_MaxAmount_Action>({
-                          type: 'walletPage/onBlur_Table_Filter_MaxAmount',
-                        });
-                      }}
-                      placeholder={'最高金额'}
-                      className={styles.filterAmount}
-                      wrapClassName={styles.filterAmount}
-                      // debounce={300}
-                      // onDebounceChange={(value) => {
-                      //   // console.log(typeof value, 'Maxvalue23423');
-                      //   dispatch<OnChange_Table_Filter_MaxAmount_Action>({
-                      //     type: 'walletPage/onChange_Table_Filter_MaxAmount',
-                      //     payload: {
-                      //       value: value,
-                      //     },
-                      //   });
-                      // }}
-                    />
-                    <div style={{ width: 50 }} />
-                    <FContentText text={'交易状态：'} />
-                    <div style={{ width: 5 }} />
-                    <FDropdownMenu
-                      options={walletPage.table_Filter_StateOptions}
-                      text={walletPage.table_Filter_StateOptions.find((so) => so.value === walletPage.table_Filter_StateSelected)?.text || ''}
-                      onChange={(value) => {
-                        dispatch<OnChange_Table_Filter_StateSelected_Action>({
-                          type: 'walletPage/onChange_Table_Filter_StateSelected',
-                          payload: {
-                            value: value as '0',
-                          },
-                        });
-                      }}
-                    />
+                    <div className={styles.filter2Left}>
+                      <FContentText
+                        // text={'金额区间：'}
+                        style={{ maxWidth: 70 }}
+                        singleRow
+                        text={`${FUtil1.I18n.message('filter_transaction_amount ')}：`}
+                      />
+                      <div style={{ width: 5 }} />
+                      <FInput
+                        allowClear
+                        // min={0}
+                        // max={walletPage.table_Filter_MaxAmount || Number.POSITIVE_INFINITY}
+                        value={walletPage.table_Filter_MinAmount}
+                        // allowClear
+                        onChange={(e) => {
+                          dispatch<OnChange_Table_Filter_MinAmount_Action>({
+                            type: 'walletPage/onChange_Table_Filter_MinAmount',
+                            payload: {
+                              value: e.target.value,
+                            },
+                          });
+                        }}
+                        onBlur={() => {
+                          dispatch<OnBlur_Table_Filter_MinAmount_Action>({
+                            type: 'walletPage/onBlur_Table_Filter_MinAmount',
+                          });
+                        }}
+                        // type='number'
+                        size='small'
+                        placeholder={'最低金额'}
+                        className={styles.filterAmount}
+                        wrapClassName={styles.filterAmount}
+                      />
+                      <span className={styles.filterAmountTo}>-</span>
+                      <FInput
+                        allowClear
+                        // type='number'
+                        size='small'
+                        value={walletPage.table_Filter_MaxAmount}
+                        onChange={(e) => {
+                          dispatch<OnChange_Table_Filter_MaxAmount_Action>({
+                            type: 'walletPage/onChange_Table_Filter_MaxAmount',
+                            payload: {
+                              value: e.target.value,
+                            },
+                          });
+                        }}
+                        onBlur={() => {
+                          dispatch<OnBlur_Table_Filter_MaxAmount_Action>({
+                            type: 'walletPage/onBlur_Table_Filter_MaxAmount',
+                          });
+                        }}
+                        placeholder={'最高金额'}
+                        className={styles.filterAmount}
+                        wrapClassName={styles.filterAmount}
+                      />
+                      <div style={{ width: 50 }} />
+                      <FContentText text={'交易状态：'} />
+                      <div style={{ width: 5 }} />
+                      <FDropdownMenu
+                        options={walletPage.table_Filter_StateOptions}
+                        text={walletPage.table_Filter_StateOptions.find((so) => so.value === walletPage.table_Filter_StateSelected)?.text || ''}
+                        onChange={(value) => {
+                          dispatch<OnChange_Table_Filter_StateSelected_Action>({
+                            type: 'walletPage/onChange_Table_Filter_StateSelected',
+                            payload: {
+                              value: value as '0',
+                            },
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className={styles.filter2Right}>
+                      <FRectBtn
+                        type='primary'
+                        onClick={() => {
+                          dispatch<OnClick_Table_Filter_SearchBtn_Action>({
+                            type: 'walletPage/onClick_Table_Filter_SearchBtn',
+                          });
+                        }}
+                      >搜索</FRectBtn>
+                    </div>
                   </div>
 
                   {
@@ -453,7 +468,11 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
     <Modal
       destroyOnClose
-      title={<FTitleText text={'激活账户验证'} type='popup' />}
+      title={<FTitleText
+        // text={'激活账户验证'}
+        text={FUtil1.I18n.message('title_activate_feather_account')}
+        type='popup'
+      />}
       visible={walletPage.activating_VisibleModal === 'captcha'}
       onCancel={() => {
         dispatch<OnCancel_Activate_CaptchaModal_Action>({
@@ -572,27 +591,6 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           <div>
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
-            {/*<FInput*/}
-            {/*  type='password'*/}
-            {/*  className={styles.blockInput}*/}
-            {/*  wrapClassName={styles.blockInput}*/}
-            {/*  size='middle'*/}
-            {/*  value={walletPage.activating_PasswordOne}*/}
-            {/*  errorText={walletPage.activating_PasswordOneError}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<OnChange_Activate_Password1_Action>({*/}
-            {/*      type: 'walletPage/onChange_Activate_Password1',*/}
-            {/*      payload: {*/}
-            {/*        value: e.target.value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  onBlur={() => {*/}
-            {/*    dispatch<OnBlur_Activate_Password1_Action>({*/}
-            {/*      type: 'walletPage/onBlur_Activate_Password1',*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
             <FPaymentPasswordInput
               // autoFocus
               value={walletPage.activating_PasswordOne}
@@ -632,27 +630,6 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               }}
             />
             <div style={{ color: '#EE4040' }}>{walletPage.activating_PasswordTwoError}</div>
-            {/*<FInput*/}
-            {/*  type='password'*/}
-            {/*  className={styles.blockInput}*/}
-            {/*  wrapClassName={styles.blockInput}*/}
-            {/*  size='middle'*/}
-            {/*  value={walletPage.activating_PasswordTwo}*/}
-            {/*  errorText={walletPage.activating_PasswordTwoError}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<OnChange_Activate_Password2_Action>({*/}
-            {/*      type: 'walletPage/onChange_Activate_Password2',*/}
-            {/*      payload: {*/}
-            {/*        value: e.target.value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  onBlur={() => {*/}
-            {/*    dispatch<OnBlur_Activate_Password2_Action>({*/}
-            {/*      type: 'walletPage/onBlur_Activate_Password2',*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
           </div>
         </Space>
         <div style={{ height: 40 }} />
