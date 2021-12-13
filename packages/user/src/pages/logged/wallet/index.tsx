@@ -644,7 +644,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_Activate_ConfirmBtn',
             });
           }}
-        >激活feth账户</FRectBtn>
+        >{FUtil1.I18n.message('btn_activate_feather_account_now')}</FRectBtn>
       </div>
 
     </Modal>

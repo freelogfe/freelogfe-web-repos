@@ -19,7 +19,7 @@ interface LoggedProps extends IRouteComponentProps {
   // children: React.ReactNode;
 }
 
-function FLogged({ dispatch, user, children, match, history, location, route }: LoggedProps) {
+function FLogged({ dispatch, user, children, location }: LoggedProps) {
 
   // console.log(location, route, 'matchmatchmatch12341234');
   const [showPage, setShowPage] = React.useState<'wallet' | 'contract' | 'setting'>('wallet');

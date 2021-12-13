@@ -590,7 +590,8 @@ const Model: WalletPageModelType = {
       const { data, errCode } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
 
       if (errCode !== 0 || !data) {
-        return fMessage('验证码错误', 'error');
+        // return fMessage('验证码错误', 'error');
+        return fMessage(FUtil1.I18n.message('wrong_verified_code'), 'error');
       }
 
       yield put<ChangeAction>({
@@ -797,7 +798,8 @@ const Model: WalletPageModelType = {
       const { data, errCode } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
 
       if (errCode !== 0 || !data) {
-        return fMessage('验证码错误', 'error');
+        // return fMessage('验证码错误', 'error');
+        return fMessage(FUtil1.I18n.message('wrong_verified_code'), 'error');
       }
 
       yield put<ChangeAction>({
