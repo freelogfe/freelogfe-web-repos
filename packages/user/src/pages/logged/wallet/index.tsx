@@ -57,10 +57,11 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
-import {
-  OnBlur_PaymentPassword_Password2Input_Action,
-  OnChange_PaymentPassword_Password2Input_Action,
-} from '@/models/retrievePayPasswordPage';
+// import {
+//   OnBlur_PaymentPassword_Password2Input_Action,
+//   OnChange_PaymentPassword_Password2Input_Action,
+// } from '@/models/retrievePayPasswordPage';
+import FUtil1 from '@/utils';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -183,7 +184,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
     },
   ];
 
-  if (walletPage.accountStatus === -1) {
+  if (walletPage.accountStatus === 'uninitialized') {
     return (<FLoadingTip height={'calc(100vh - 70px)'} />);
   }
 
@@ -195,9 +196,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
     />
     <div style={{ height: 20 }} />
     {
-      walletPage.accountStatus === 0
+      walletPage.accountStatus === 'inactive'
         ? (<div className={styles.Inactive}>
-          <FTipText text={'账户未激活，点击按钮激活'} type='second' />
+          <FTipText text={FUtil1.I18n.message('msg_activate_feather_account')} type='second' />
           <div style={{ width: 30 }} />
           <FRectBtn
             type='primary'
@@ -206,7 +207,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 type: 'walletPage/onClick_Activate_AccountBtn',
               });
             }}
-          >激活账户</FRectBtn>
+          >{FUtil1.I18n.message('btn_activate_feather_account_now')}</FRectBtn>
         </div>)
         : (<>
           <div className={styles.AccountInfo}>

@@ -12,7 +12,7 @@ export interface WalletPageModelState {
   userID: number;
   userPhone: string;
   userEmail: string;
-  accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
+  accountStatus: 'uninitialized' | 'inactive' | 'normal' | 'frozen'; // 0:未激活 1:正常 2:冻结
   // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze';
   accountID: string;
   accountBalance: number;
@@ -351,6 +351,12 @@ interface WalletPageModelType {
   };
 }
 
+const accountStatus: { [k: string]: WalletPageModelState['accountStatus'] } = {
+  '0': 'inactive',
+  '1': 'normal',
+  '2': 'frozen',
+};
+
 const activatingAccountInitStates: Pick<WalletPageModelState,
   'activating_VisibleModal'
   | 'activating_AccountMobile'
@@ -417,7 +423,7 @@ const initStates: WalletPageModelState = {
   userID: -1,
   userPhone: '',
   userEmail: '',
-  accountStatus: -1,
+  accountStatus: 'uninitialized',
   accountID: '',
   accountBalance: -1,
   // transactionRecord: [],
@@ -464,7 +470,7 @@ const Model: WalletPageModelType = {
           userEmail: data1.email,
           userPhone: data1.mobile,
           accountID: data.accountId,
-          accountStatus: data.status,
+          accountStatus: accountStatus[data.status],
           accountBalance: data.balance,
         },
       });
@@ -674,7 +680,7 @@ const Model: WalletPageModelType = {
         type: 'change',
         payload: {
           ...activatingAccountInitStates,
-          accountStatus: data1.status,
+          accountStatus: accountStatus[data1.status],
           accountBalance: data1.balance,
         },
       });

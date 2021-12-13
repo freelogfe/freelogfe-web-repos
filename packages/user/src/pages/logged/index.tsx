@@ -10,6 +10,7 @@ import { FetchInfoAction } from '@/models/user';
 import UserSVG from '@/assets/user.svg';
 import { FUtil } from '@freelog/tools-lib';
 import { IRouteComponentProps, withRouter } from 'umi';
+import FUtil1 from '@/utils';
 
 interface LoggedProps extends IRouteComponentProps {
   dispatch: Dispatch;
@@ -52,15 +53,15 @@ function FLogged({ dispatch, user, children, match, history, location, route }: 
           <FLink
             to={FUtil.LinkTo.wallet()}
             className={[styles.FLink, showPage === 'wallet' ? styles.FLinkActive : ''].join(' ')}>
-            钱包
+            {FUtil1.I18n.message('tab_my_wallet')}
           </FLink>
           <FLink to={FUtil.LinkTo.contract()}
                  className={[styles.FLink, showPage === 'contract' ? styles.FLinkActive : ''].join(' ')}>
-            合约管理
+            {FUtil1.I18n.message('tab_my_contracts')}
           </FLink>
           <FLink to={FUtil.LinkTo.setting()}
                  className={[styles.FLink, showPage === 'setting' ? styles.FLinkActive : ''].join(' ')}>
-            设置
+            {FUtil1.I18n.message('tab_settings')}
           </FLink>
         </div>
       </div>
