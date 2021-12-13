@@ -280,7 +280,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     }
 
     fetchInitData();
-    fMessage('支付成功');
+    fMessage(FUtil1.I18n.message('msg_payment_successful'));
+    // fMessage('支付成功');
     set_Modal_Visible(false);
     set_Modal_Password('');
     set_Modal_IsPaying(false);
