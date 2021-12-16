@@ -10,6 +10,7 @@ interface FCustomOptionsEditorDrawerProps {
   visible: boolean;
   disabledKeys: string[];
   hideTypeSelect?: boolean;
+  defaultValue?: FCustomOptionsEditorDrawerStates['dataSource'];
 
   onConfirm?(value: FCustomOptionsEditorDrawerStates['dataSource']): void;
 
@@ -36,11 +37,12 @@ function FCustomOptionsEditorDrawer({
                                       visible,
                                       disabledKeys,
                                       hideTypeSelect = false,
+                                      defaultValue,
                                       onConfirm,
                                       onCancel,
                                     }: FCustomOptionsEditorDrawerProps) {
 
-  const [dataSource, setDataSource] = React.useState<FCustomOptionsEditorDrawerStates['dataSource']>(initDataSource);
+  const [dataSource, setDataSource] = React.useState<FCustomOptionsEditorDrawerStates['dataSource']>([]);
 
   function onClick_AddNewItem() {
     setDataSource([
@@ -84,6 +86,8 @@ function FCustomOptionsEditorDrawer({
     afterVisibleChange={(visible) => {
       if (!visible) {
         setDataSource(initDataSource);
+      } else {
+        setDataSource(defaultValue || initDataSource);
       }
     }}
   >

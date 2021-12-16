@@ -316,6 +316,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
     <FCustomOptionsEditorDrawer
       visible={resourceVersionCreatorPage.customOptionsEditorVisible}
+      defaultValue={resourceVersionCreatorPage.customOptionsEditorDataSource}
       onCancel={() => {
         onChange({
           customOptionsEditorVisible: false,
