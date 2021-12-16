@@ -1770,7 +1770,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
               setOpen(false);
               onClickAddStateBtn && onClickAddStateBtn();
             }}
-          >新建状态111</FTextBtn>
+          >新建状态</FTextBtn>
         </div>
       </>)}
     />
