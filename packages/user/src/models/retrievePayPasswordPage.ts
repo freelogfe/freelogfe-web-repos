@@ -159,6 +159,7 @@ const initStates: RetrievePayPasswordPageModelState = {
   userPhone: '',
   userEmail: '',
   showView: 'userPassword',
+  // showView: 'paymentPassword',
 
   userPassword_PasswordInput: '',
 

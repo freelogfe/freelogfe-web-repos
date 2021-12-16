@@ -119,7 +119,7 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                 type: 'retrievePayPasswordPage/onClick_UserPassword_NextBtn',
               });
             }}
-            style={{ width: 360 }}
+            // style={{ width: 360 }}
           >下一步</FRectBtn>
         </div>
       </div>)
@@ -219,7 +219,7 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                 type: 'retrievePayPasswordPage/onClick_Captcha_NextBtn',
               });
             }}
-            style={{ width: 360 }}
+            // style={{ width: 360 }}
           >下一步</FRectBtn>
         </div>
       </div>)
@@ -289,7 +289,7 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                 type: 'retrievePayPasswordPage/onClick_PaymentPassword_ConfirmBtn',
               });
             }}
-            style={{ width: 360 }}
+            // style={{ width: 360 }}
           >修改支付密码</FRectBtn>
         </div>
       </div>)

@@ -234,9 +234,12 @@ function FPolicyBuilder({
     setTemplateVisible(initStates.templateVisible);
   }
 
-  function onChangeTitleInput(value: string) {
+  function onChange_TitleInput(value: string) {
     setTitleInput(value);
-    setTitleInputError(verifyTitle(value, alreadyUsedTitles));
+  }
+
+  function onBlur_TitleInput() {
+    setTitleInputError(verifyTitle(titleInput, alreadyUsedTitles));
   }
 
   function onClick_SwitchMode_Code() {
@@ -843,12 +846,13 @@ function FPolicyBuilder({
                 value={titleInput}
                 // errorText={titleError}
                 onChange={(e) => {
-                  onChangeTitleInput(e.target.value);
+                  onChange_TitleInput(e.target.value.trim());
                 }}
                 // placeholder={'请输入授权策略名称'}
                 placeholder={'输入策略名称…'}
                 onBlur={() => {
                   // console.log(titleInput, 'title@@@@@@@@');
+                  onBlur_TitleInput();
                 }}
               />
 
@@ -1454,10 +1458,8 @@ export default FPolicyBuilder;
 
 function verifyTitle(title: string, allTitles: string[]): string {
   let error: string = '';
-  if (title === '') {
-    error = '请输入标题';
-  } else if (title.length > 20) {
-    error = '不错过20个字符';
+  if (title.length < 2 || title.length > 20) {
+    error = '2~20个字符';
   } else if (allTitles.includes(title)) {
     error = '标题已存在';
   }
