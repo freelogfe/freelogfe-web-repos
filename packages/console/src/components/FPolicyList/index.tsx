@@ -84,6 +84,7 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
         />
       </Space>
     </div>
+    <div style={{ height: 5 }} />
     <FPolicyDisplay
       containerHeight={170}
       code={code}
