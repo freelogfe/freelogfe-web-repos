@@ -195,6 +195,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     <Space className={styles.addCustomTitle}>
       <FCircleBtn
         // type='transparent'
+        size='small'
         onClick={() => {
           dispatch<OnHandleAttrModalAction>({
             type: 'informExhibitInfoPage/onHandleAttrModal',
