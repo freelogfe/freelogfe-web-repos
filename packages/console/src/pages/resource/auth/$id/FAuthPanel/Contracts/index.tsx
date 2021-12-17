@@ -53,7 +53,7 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
           </Space>
         </div>
 
-        <div style={{ height: 5 }} />
+        <div style={{ height: 10 }} />
         <div style={{ padding: '0 20px' }}>
           <FContractDisplay
             contractID={k.id}
