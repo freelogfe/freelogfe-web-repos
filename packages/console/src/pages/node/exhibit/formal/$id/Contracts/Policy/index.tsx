@@ -55,8 +55,12 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
           <div style={{ height: 10 }} />
           {/*<div style={{height: 15}}/>*/}
           {/*<pre>{p.text}</pre>*/}
-          <FPolicyDisplay containerHeight={170} code={p.text} />
-
+          <div style={{ padding: '0 20px' }}>
+            <FPolicyDisplay
+              // containerHeight={170}
+              code={p.text}
+            />
+          </div>
           <a
             className={styles.PolicyFullScreenBtn}
             onClick={() => {
@@ -95,11 +99,12 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
           }}
         >签约</FRectBtn>
       </div>
-
-      <FPolicyDisplay
-        containerHeight={770}
-        code={fullScreenPolicy?.text || ''}
-      />
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          code={fullScreenPolicy?.text || ''}
+        />
+      </div>
     </FModal>
   </div>);
 }

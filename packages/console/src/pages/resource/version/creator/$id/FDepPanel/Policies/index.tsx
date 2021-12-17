@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Checkbox, Space} from 'antd';
-import {ChangeAction} from '@/models/resourceVersionCreatorPage';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-import {FContentText} from '@/components/FText';
+import { Checkbox, Space } from 'antd';
+import { ChangeAction } from '@/models/resourceVersionCreatorPage';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
+import { FContentText } from '@/components/FText';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 
 interface PoliciesProps {
@@ -12,7 +12,7 @@ interface PoliciesProps {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
+function Policies({ resourceVersionCreatorPage, dispatch }: PoliciesProps) {
   const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
   if (!resource || resource.upthrow) {
@@ -56,14 +56,14 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
 
   return (<Space
     size={15}
-    style={{width: '100%'}}
-    direction="vertical"
+    style={{ width: '100%' }}
+    direction='vertical'
   >
     {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
-    <FContentText type="additional2" text={'可签约的策略'}/>
+    <FContentText type='additional2' text={'可签约的策略'} />
     {enabledPolicies.map((i) => (
       <div key={i.id} className={styles.Policy}>
-        <div style={{height: 15}}/>
+        <div style={{ height: 15 }} />
         <div className={styles.PolicyName}>
 
           {/*<div style={{width: 5}}/>*/}
@@ -84,12 +84,15 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
         {/*<div className={styles.PolicyGrammar}>*/}
         {/*  <pre>{i.code}</pre>*/}
         {/*</div>*/}
-        <FPolicyDisplay code={i.code}/>
+        <div style={{ height: 10 }} />
+        <div style={{ padding: '0 20px' }}>
+          <FPolicyDisplay code={i.code} />
+        </div>
       </div>
     ))}
   </Space>);
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Policies);

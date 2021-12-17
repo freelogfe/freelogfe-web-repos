@@ -84,11 +84,13 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
           }}
         >获取授权</FRectBtn>
       </div>
-      <FPolicyDisplay
-        code={code}
-        // containerHeight={170}
-      />
-
+      <div style={{ height: 10 }} />
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          code={code}
+          // containerHeight={170}
+        />
+      </div>
       <a
         className={styles.PolicyFullScreenBtn}
         onClick={() => {
@@ -117,11 +119,12 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
           }}
         >获取授权</FRectBtn>
       </div>
-
-      <FPolicyDisplay
-        containerHeight={770}
-        code={code}
-      />
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          code={code}
+        />
+      </div>
     </FModal>
 
     <FDrawer

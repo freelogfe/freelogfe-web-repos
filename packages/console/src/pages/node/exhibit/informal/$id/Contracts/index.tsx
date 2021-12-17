@@ -202,11 +202,12 @@ function SinglePolicy({ name, text, onClickSign }: SinglePolicyProps) {
     <div style={{ height: 10 }} />
     {/*<div style={{ height: 15 }} />*/}
     {/*<pre>{text}</pre>*/}
-    <FPolicyDisplay
-      code={text}
-      // containerHeight={170}
-    />
-
+    <div style={{ padding: '0 20px' }}>
+      <FPolicyDisplay
+        code={text}
+        // containerHeight={170}
+      />
+    </div>
     <a
       className={styles.PolicyFullScreenBtn}
       onClick={() => {
@@ -234,11 +235,12 @@ function SinglePolicy({ name, text, onClickSign }: SinglePolicyProps) {
           }}
         >签约</a>
       </div>
-
-      <FPolicyDisplay
-        containerHeight={770}
-        code={text}
-      />
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          code={text}
+        />
+      </div>
     </FModal>
 
   </div>);

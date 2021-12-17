@@ -85,10 +85,12 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
       </Space>
     </div>
     <div style={{ height: 10 }} />
-    <FPolicyDisplay
-      containerHeight={170}
-      code={code}
-    />
+    <div style={{ padding: '0 20px' }}>
+      <FPolicyDisplay
+        containerHeight={170}
+        code={code}
+      />
+    </div>
 
     <a
       className={styles.PolicyFullScreenBtn}
@@ -120,11 +122,12 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
           }}
         />
       </div>
-
-      <FPolicyDisplay
-        containerHeight={770}
-        code={code}
-      />
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          code={code}
+        />
+      </div>
     </FModal>
 
   </div>);

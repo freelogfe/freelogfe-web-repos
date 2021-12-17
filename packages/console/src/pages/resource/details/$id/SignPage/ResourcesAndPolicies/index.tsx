@@ -131,7 +131,13 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                 />
               </div>
               {/*<pre>{rp.text}</pre>*/}
-              <FPolicyDisplay code={rp.text} containerHeight={300} />
+              <div style={{ height: 10 }} />
+              <div style={{ padding: '0 20px' }}>
+                <FPolicyDisplay
+                  code={rp.text}
+                  containerHeight={300}
+                />
+              </div>
             </div>))
         }
         {
@@ -147,7 +153,10 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                   type='highlight'
                 />
               </div>
-              <FPolicyDisplay code={rp.text} containerHeight={300} />
+              <div style={{ height: 10 }} />
+              <div style={{ padding: '0 20px' }}>
+                <FPolicyDisplay code={rp.text} containerHeight={300} />
+              </div>
             </div>))
         }
       </Space>

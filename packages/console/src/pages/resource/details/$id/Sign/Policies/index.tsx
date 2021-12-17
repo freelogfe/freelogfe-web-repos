@@ -82,11 +82,13 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
           </div>
           {/*<pre>{p.text}</pre>*/}
-          <FPolicyDisplay
-            code={p.text}
-            // containerHeight={170}
-          />
-
+          <div style={{ height: 10 }} />
+          <div style={{ padding: '0 15px' }}>
+            <FPolicyDisplay
+              code={p.text}
+              // containerHeight={170}
+            />
+          </div>
           <a
             className={styles.PolicyFullScreenBtn}
             onClick={() => {
@@ -124,11 +126,12 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
           />)
         }
       </div>
-
-      <FPolicyDisplay
-        containerHeight={770}
-        code={modalPolicy?.text || ''}
-      />
+      <div style={{ padding: '0 15px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          code={modalPolicy?.text || ''}
+        />
+      </div>
     </FModal>
   </div>);
 }
