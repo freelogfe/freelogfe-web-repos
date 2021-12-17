@@ -8,6 +8,7 @@ import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
+import { FContentText } from '@/components/FText';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -30,12 +31,14 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
     {
       contracts.map((c) => {
         return (<div key={c.id} className={styles.Contracts}>
+          <div style={{ height: 15 }} />
           <div className={styles.contractTitle}>
-            <Space size={5}>
-              <span>{c.name}</span>
-              {/*<label className={styles.executing}>执行中</label>*/}
-              {/*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>*/}
-            </Space>
+            {/*<Space size={5}>*/}
+            {/*  <span>{c.name}</span>*/}
+            {/*  /!*<label className={styles.executing}>执行中</label>*!/*/}
+            {/*  /!*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>*!/*/}
+            {/*</Space>*/}
+            <FContentText text={c.name} type='highlight' />
             {
               !isSignedNode && (<Checkbox
                 checked={c.checked}
@@ -66,9 +69,11 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
               />)
             }
           </div>
-          {/*<div style={{height: 10}}/>*/}
+          <div style={{ height: 10 }} />
           {/*<pre>{c.text}</pre>*/}
-          <FContractDisplay contractID={c.id} />
+          <div style={{ padding: '0 15px' }}>
+            <FContractDisplay contractID={c.id} />
+          </div>
           {/*<div style={{height: 10}}/>*/}
           <div className={styles.footer}>
             <Space size={0}>

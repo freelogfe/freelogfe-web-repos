@@ -413,9 +413,11 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               <div style={{ height: 10 }} />
 
               {
-                contractID && (<FContractDisplay
-                  contractID={contractID}
-                />)
+                contractID && (<div style={{ padding: '0 20px' }}>
+                  <FContractDisplay
+                    contractID={contractID}
+                  />
+                </div>)
               }
 
 
@@ -522,7 +524,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
                       </div>
 
-                      <div style={{ display: ac.expansion ? 'block' : 'none' }}>
+                      <div style={{ display: ac.expansion ? 'block' : 'none', padding: '0 20px' }}>
                         <FContractDisplay
                           contractID={ac.contractId}
                         />

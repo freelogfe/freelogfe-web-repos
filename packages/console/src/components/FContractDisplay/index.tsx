@@ -288,7 +288,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     onChangedEvent && onChangedEvent();
   }
 
-  return (<div>
+  return (<div className={styles.ContractDisplay}>
     <div className={styles.PolicyBodyTabs}>
       <a
         className={activated === 'record' ? styles.PolicyBodyTabActivated : ''}

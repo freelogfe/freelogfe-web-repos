@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Checkbox, Space} from 'antd';
-import {FContentText} from '@/components/FText';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import { Checkbox, Space } from 'antd';
+import { FContentText } from '@/components/FText';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import FDivider from "@/components/FDivider";
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 
 interface ContractsProps {
@@ -17,7 +17,7 @@ interface ContractsProps {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
+function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
 
   const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
@@ -34,7 +34,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
       return {
         ...erc,
         checked,
-      }
+      };
     });
 
     const dependencies = resourceVersionCreatorPage.dependencies.map<ResourceVersionCreatorPageModelState['dependencies'][number]>((dd) => {
@@ -44,7 +44,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
       return {
         ...dd,
         enableReuseContracts,
-      }
+      };
     });
 
     dispatch<ChangeAction>({
@@ -61,12 +61,12 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
     return null;
   }
 
-  return <Space size={15} style={{width: '100%'}} direction="vertical">
-    <FContentText type="additional2" text={FUtil1.I18n.message('reusable_contract')}/>
+  return <Space size={15} style={{ width: '100%' }} direction='vertical'>
+    <FContentText type='additional2' text={FUtil1.I18n.message('reusable_contract')} />
     {
       resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
 
-        <div style={{height: 15}}/>
+        <div style={{ height: 15 }} />
         <div className={styles.PolicyGrammarName}>
           <Space size={10}>
             <span>{k.title}</span>
@@ -86,20 +86,22 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         {/*  <pre className={styles.highlight}>{k.code}</pre>*/}
         {/*</div>*/}
 
-        <div style={{height: 10}}/>
+        <div style={{ height: 10 }} />
 
-        <FContractDisplay contractID={k.id}/>
+        <div style={{padding: '0 20px'}}>
+          <FContractDisplay contractID={k.id} />
+        </div>
 
-        <div style={{height: 10}}/>
+        <div style={{ height: 10 }} />
 
-        <Space style={{padding: '0 20px'}} size={2}>
+        <Space style={{ padding: '0 20px' }} size={2}>
           <FContentText
-            type="additional2"
+            type='additional2'
             text={FUtil1.I18n.message('contract_id') + '：' + k.id}
           />
-          <FDivider style={{fontSize: 14}}/>
+          <FDivider style={{ fontSize: 14 }} />
           <FContentText
-            type="additional2"
+            type='additional2'
             text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
           />
         </Space>
@@ -107,8 +109,8 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         {/*<div style={{height: 10}}/>*/}
 
         <div className={styles.PolicyInfo}>
-          <FContentText type="additional2" text={'当前合约在此资源上被多个版本应用：'}/>
-          <div style={{height: 8}}/>
+          <FContentText type='additional2' text={'当前合约在此资源上被多个版本应用：'} />
+          <div style={{ height: 8 }} />
           {/*{FUtil.I18n.message('use_for_version')}：*/}
           <div className={styles.allVersions}>
             {k.versions.map((i) => <div key={i}>{i}</div>)}
@@ -116,10 +118,10 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         </div>
       </div>))
     }
-  </Space>
+  </Space>;
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Contracts);
 

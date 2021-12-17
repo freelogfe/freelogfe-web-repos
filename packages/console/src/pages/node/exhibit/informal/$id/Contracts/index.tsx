@@ -114,7 +114,9 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                       {/*<label className={styles.executing}>执行中</label>*/}
                     </Space>
                     <div style={{ height: 10 }} />
-                    <FContractDisplay contractID={c.id} />
+                    <div style={{ padding: '0 20px' }}>
+                      <FContractDisplay contractID={c.id} />
+                    </div>
                     <div style={{ height: 10 }} />
 
                     <Space style={{ padding: '0 20px' }} size={5}>

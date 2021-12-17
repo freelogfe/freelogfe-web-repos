@@ -29,6 +29,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
       payload: payload,
     });
   }
+
 // contract_ExhibitAllContractIDs: [],
   // contract_SelectedAssociatedID: '',
   // contract_Associated: [],
@@ -54,15 +55,17 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
             </Space>
             <div style={{ height: 10 }} />
 
-            <FContractDisplay
-              // containerHeight={300}
-              contractID={c.id}
-              onChangedEvent={() => {
-                // dispatch<FetchInfoAction>({
-                //   type: 'exhibitInfoPage/fetchInfo',
-                // });
-              }}
-            />
+            <div style={{ padding: '0 20px' }}>
+              <FContractDisplay
+                // containerHeight={300}
+                contractID={c.id}
+                onChangedEvent={() => {
+                  // dispatch<FetchInfoAction>({
+                  //   type: 'exhibitInfoPage/fetchInfo',
+                  // });
+                }}
+              />
+            </div>
 
             <div style={{ height: 10 }} />
             <Space style={{ padding: '0 20px' }} size={5}>

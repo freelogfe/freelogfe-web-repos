@@ -54,19 +54,21 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         </div>
 
         <div style={{ height: 5 }} />
-        <FContractDisplay
-          contractID={k.id}
-          onChangedEvent={() => {
-            dispatch<FetchAuthorizedAction>({
-              type: 'resourceAuthPage/fetchAuthorized',
-              payload: {
-                activatedResourceId: resourceAuthPage.contractsAuthorized.find((ca) => {
-                  return ca.activated;
-                })?.id || '',
-              },
-            });
-          }}
-        />
+        <div style={{ padding: '0 20px' }}>
+          <FContractDisplay
+            contractID={k.id}
+            onChangedEvent={() => {
+              dispatch<FetchAuthorizedAction>({
+                type: 'resourceAuthPage/fetchAuthorized',
+                payload: {
+                  activatedResourceId: resourceAuthPage.contractsAuthorized.find((ca) => {
+                    return ca.activated;
+                  })?.id || '',
+                },
+              });
+            }}
+          />
+        </div>
         <div style={{ height: 10 }} />
         <Space style={{ padding: '0 20px' }} size={2}>
           <FContentText
@@ -82,7 +84,7 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         <div style={{ height: 10 }} />
 
         {
-           (<div className={styles.PolicyInfo}>
+          (<div className={styles.PolicyInfo}>
             <div className={styles.versionControl}>
               <FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>
               <div style={{ height: 8 }} />
