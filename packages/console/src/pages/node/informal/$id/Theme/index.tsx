@@ -5,13 +5,13 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import {
-  ChangeAction,
+  // ChangeAction,
   InformalNodeManagerPageModelState,
   OnChangeThemeKeywordsAction, OnClickActiveThemeBtnAction,
   OnClickThemesAddBtnAction,
   OnClickThemesReplaceBtnAction,
   OnMountThemePageAction, OnUnmountThemePageAction,
-  SaveDataRulesAction,
+  // SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
 import FAdd from '@/components/FIcons/FAdd';
 import FInput from '@/components/FInput';
@@ -22,15 +22,15 @@ import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
 import FDivider from '@/components/FDivider';
-import FLink from '@/components/FLink';
+// import FLink from '@/components/FLink';
 import { FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import fConfirmModal from '@/components/fConfirmModal';
-import { OnActiveAction } from '@/models/nodeManagerPage';
+// import { OnActiveAction } from '@/models/nodeManagerPage';
 
-const { compile } = require('@freelog/nmr_translator');
+// const { compile } = require('@freelog/nmr_translator');
 
 interface ThemeProps {
   dispatch: Dispatch;

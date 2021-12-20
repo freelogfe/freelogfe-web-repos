@@ -93,7 +93,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             </div>
             <div className={styles.polices}>
               {
-                record.policies.map((l) => (<label key={l}>{l}</label>))
+                record.policies.length > 0
+                  ? record.policies.map((l) => (<label key={l}>{l}</label>))
+                  : (<FContentText text={'暂无策略…'} type='additional2' />)
               }
             </div>
           </div>

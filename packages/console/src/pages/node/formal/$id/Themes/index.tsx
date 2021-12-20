@@ -199,7 +199,9 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                     <div className={styles.bottom}>
                       <div className={styles.polices}>
                         {
-                          i.policies.map((p) => (<label key={p}>{p}</label>))
+                          i.policies.length > 0
+                            ? i.policies.map((p) => (<label key={p}>{p}</label>))
+                            : (<FContentText text={'暂无策略…'} type='additional2' />)
                         }
                       </div>
                     </div>
