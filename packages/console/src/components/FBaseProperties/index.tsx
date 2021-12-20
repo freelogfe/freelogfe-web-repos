@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FBasePropertiesCards from "../FBasePropertiesCards";
+import FBasePropertiesCards from '../FBasePropertiesCards';
 
 interface FBasePropertiesProps {
   basics: {
@@ -20,14 +20,14 @@ interface FBasePropertiesProps {
   onClickEdit?(theKey: string): void;
 }
 
-function FBaseProperties({basics, additions, rightTop, onChangeAdditions, onClickEdit}: FBasePropertiesProps) {
+function FBaseProperties({ basics, additions, rightTop, onChangeAdditions, onClickEdit }: FBasePropertiesProps) {
 
   return (<div className={styles.attributes}>
       <div className={styles.attributesHeader}>
         <span>基础属性</span>
         <div>{rightTop}</div>
       </div>
-
+      <div style={{ height: 5 }} />
       <FBasePropertiesCards
         rawProperties={basics.map((b) => {
           return {
@@ -51,7 +51,7 @@ function FBaseProperties({basics, additions, rightTop, onChangeAdditions, onClic
           }));
         }}
       />
-      <div style={{height: 10}}/>
+      <div style={{ height: 10 }} />
 
     </div>
   );

@@ -52,6 +52,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           }}
           rightTop={<Space size={20}>
             <FTextBtn
+              style={{ fontSize: 12, fontWeight: 600 }}
               type='primary'
               onClick={() => {
                 onChange({
@@ -70,6 +71,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             {
               resourceVersionCreatorPage.preVersionBaseProperties.length > 0
                 ? (<FTextBtn
+                  style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={() => {
                     dispatch<ImportLastVersionDataAction>({
@@ -107,6 +109,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
         <Space size={5}>
           <FTextBtn
+            style={{ fontSize: 12, fontWeight: 600 }}
             type='default'
             onClick={() => {
               onChange({
@@ -129,6 +132,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
             <Space size={40}>
               <FTextBtn
+                style={{ fontSize: 12, fontWeight: 600 }}
                 onClick={() => {
                   onChange({
                     customOptionsEditorDataSource: [{
@@ -148,6 +152,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               >添加选项</FTextBtn>
               {
                 resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FTextBtn
+                  style={{ fontSize: 12, fontWeight: 600 }}
                   onClick={() => {
                     dispatch<ImportLastVersionDataAction>({
                       type: 'resourceVersionCreatorPage/importLastVersionData',
@@ -323,31 +328,17 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           customOptionsEditorDataSource: [],
         });
       }}
-      // dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
       disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
         ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
       ]}
-      // onChange={(value) => {
-      //   onChange({customOptionsEditorDataSource: value});
-      // }}
       onConfirm={(value) => {
         onChange({
           customOptionsData: [
             ...resourceVersionCreatorPage.customOptionsData,
             ...value,
-            // ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-            //   return {
-            //     key: coeds.key,
-            //     defaultValue: coeds.defaultValue,
-            //     description: coeds.description,
-            //     custom: coeds.custom,
-            //     customOption: coeds.customOption,
-            //   };
-            // }),
           ],
-          // customOptionsEditorDataSource: [],
           customOptionsEditorVisible: false,
         });
       }}
@@ -361,15 +352,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         value: (resourceVersionCreatorPage.customOptionEditorData?.custom === 'input' ? resourceVersionCreatorPage.customOptionEditorData?.defaultValue : resourceVersionCreatorPage.customOptionEditorData?.customOption) || '',
         valueType: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',
       }}
-      // keyInput={resourceVersionCreatorPage.customOptionEditorData?.key || ''}
-      // keyInputError={resourceVersionCreatorPage.customOptionEditorData?.keyError || ''}
-      // descriptionInput={resourceVersionCreatorPage.customOptionEditorData?.description || ''}
-      // descriptionInputError={resourceVersionCreatorPage.customOptionEditorData?.descriptionError || ''}
-      // typeSelect={resourceVersionCreatorPage.customOptionEditorData?.custom || 'input'}
-      // valueInput={resourceVersionCreatorPage.customOptionEditorData?.defaultValue || ''}
-      // valueInputError={resourceVersionCreatorPage.customOptionEditorData?.defaultValueError || ''}
-      // optionsInput={resourceVersionCreatorPage.customOptionEditorData?.customOption || ''}
-      // optionsInputError={resourceVersionCreatorPage.customOptionEditorData?.customOptionError || ''}
       disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
@@ -403,50 +385,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           customOptionEditorData: null,
         });
       }}
-      // onKeyInputChange={(value) => {
-      //   onChange({
-      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-      //       ...resourceVersionCreatorPage.customOptionEditorData,
-      //       key: value.value,
-      //       keyError: value.errorText,
-      //     } : null,
-      //   });
-      // }}
-      // onDescriptionInputChange={(value) => {
-      //   onChange({
-      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-      //       ...resourceVersionCreatorPage.customOptionEditorData,
-      //       description: value.value,
-      //       descriptionError: value.errorText,
-      //     } : null,
-      //   });
-      // }}
-      // onSelectChange={(value) => {
-      //   onChange({
-      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-      //       ...resourceVersionCreatorPage.customOptionEditorData,
-      //       custom: value.value,
-      //     } : null,
-      //   });
-      // }}
-      // onValueInputChange={(value) => {
-      //   onChange({
-      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-      //       ...resourceVersionCreatorPage.customOptionEditorData,
-      //       defaultValue: value.value,
-      //       defaultValueError: value.errorText,
-      //     } : null,
-      //   });
-      // }}
-      // onOptionsInputChange={(value) => {
-      //   onChange({
-      //     customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
-      //       ...resourceVersionCreatorPage.customOptionEditorData,
-      //       customOption: value.value,
-      //       customOptionError: value.errorText,
-      //     } : null,
-      //   });
-      // }}
     />
   </>);
 }
