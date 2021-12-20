@@ -238,6 +238,8 @@ const Model: ResourceAuthPageModelType = {
       //
       // const {data: {dataList: contractsData}} = yield call(FServiceAPI.Contract.contracts, contractsParams);
 
+      // console.log(data, 'data@#$@#!$@34234');
+
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
         const currentResource = data2.find((resource: any) => resource.resourceId === i.resourceId);
@@ -263,6 +265,7 @@ const Model: ResourceAuthPageModelType = {
           resourceType: currentResource.resourceType,
           version: '',
           contracts: allContracts
+            .filter((c: any) => c.status !== 1)
             .map((c: any) => {
               // console.log(c, '当前合约');
               // console.log(i, '关系');
@@ -297,7 +300,7 @@ const Model: ResourceAuthPageModelType = {
           })),
         };
       });
-      console.log(contractsAuthorized, 'contractsAuthorized');
+      console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
