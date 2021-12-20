@@ -1,16 +1,16 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer, WholeReadonly} from './shared';
-import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import {router} from 'umi';
-import BraftEditor, {EditorState} from 'braft-editor';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer, WholeReadonly } from './shared';
+import { ConnectState, MarketPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { router } from 'umi';
+import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import {FetchDataSourceAction, FetchDraftDataAction} from '@/models/resourceInfo';
+import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 import * as semver from 'semver';
-import moment from "moment";
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import fConfirmModal from "@/components/fConfirmModal";
+import moment from 'moment';
+import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import fConfirmModal from '@/components/fConfirmModal';
 
 export type DepResources = {
   id: string;
@@ -244,7 +244,7 @@ export interface AddDepsAction extends AnyAction {
 }
 
 export interface AddDepsByMainIDsAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/dddDepsByMainIDs'
+  type: 'resourceVersionCreatorPage/dddDepsByMainIDs';
   payload: string[]; // 主资源 ids
 }
 
@@ -358,12 +358,12 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {put, call}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           resourceId: payload.resourceID,
-        }
+        },
       });
 
       yield put<FetchResourceInfoAction>({
@@ -386,7 +386,7 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
     },
-    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
       yield put<ChangeAction>({
         type: 'change',
@@ -394,7 +394,7 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
       });
     },
-    * onPromptPageLeave({payload}: OnPromptPageLeaveAction, {put}: EffectsCommandMap) {
+    * onPromptPageLeave({ payload }: OnPromptPageLeaveAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -402,14 +402,14 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, {select}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, { select }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
 
       router.push(resourceVersionCreatorPage.promptLeavePath);
     },
-    * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, {put}: EffectsCommandMap) {
+    * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'resourceVersionCreatorPage/change',
         payload: {
@@ -417,8 +417,8 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onClickCreateBtn({}: OnClickCreateBtnAction, {put, call, select}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * onClickCreateBtn({}: OnClickCreateBtnAction, { put, call, select }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
       const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
@@ -431,10 +431,10 @@ const Model: ResourceVersionCreatorModelType = {
           contracts: [
             ...dep.enabledPolicies
               .filter((p) => (p.checked))
-              .map((p) => ({policyId: p.id})),
+              .map((p) => ({ policyId: p.id })),
             ...dep.enableReuseContracts
               .filter((c) => (c.checked))
-              .map((c) => ({policyId: c.policyId})),
+              .map((c) => ({ policyId: c.policyId })),
           ],
         }));
 
@@ -444,14 +444,16 @@ const Model: ResourceVersionCreatorModelType = {
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.selectedFileSha1,
         filename: resourceVersionCreatorPage.selectedFileName,
-        baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
+        baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({ resourceId: baseUpId })),
         dependencies: resourceVersionCreatorPage.dependencies
-          .filter((dep) => directlyDependentIds.includes(dep.id))
+          .filter((dep) => {
+            return directlyDependentIds.includes(dep.id);
+          })
           .map((dep) => {
             return {
               resourceId: dep.id,
               versionRange: dep.versionRange,
-            }
+            };
           }),
         resolveResources: resolveResources,
         customPropertyDescriptors: [
@@ -478,7 +480,7 @@ const Model: ResourceVersionCreatorModelType = {
         description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
 
-      const {data} = yield call(FServiceAPI.Resource.createVersion, params);
+      const { data } = yield call(FServiceAPI.Resource.createVersion, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
@@ -498,10 +500,13 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * onClickCacheBtn({}: OnClickCacheBtnAction, {put, select, call}: EffectsCommandMap) {
+    * onClickCacheBtn({}: OnClickCacheBtnAction, { put, select, call }: EffectsCommandMap) {
 
-      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceInfo, resourceVersionCreatorPage
+      const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
+                                                                                         resourceVersionCreatorPage,
+                                                                                         resourceInfo,
+                                                                                       }: ConnectState) => ({
+        resourceInfo, resourceVersionCreatorPage,
       }));
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
@@ -525,23 +530,26 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * fetchDraft({}: FetchDraftAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
+    * fetchDraft({}: FetchDraftAction, { call, put, select }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({
+                                                                           resourceVersionCreatorPage,
+                                                                           resourceInfo,
+                                                                         }: ConnectState) => {
         return {
           resourceVersionCreatorPage,
         };
       });
 
     },
-    * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceVersionCreatorPage.resourceId,
         isLoadLatestVersionInfo: 1,
       };
-      const {data} = yield call(FServiceAPI.Resource.info, params);
+      const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '2093jdsl;kfasdf');
 
       let description: EditorState = BraftEditor.createEditorState('');
@@ -556,7 +564,7 @@ const Model: ResourceVersionCreatorModelType = {
           resourceId: resourceVersionCreatorPage.resourceId,
           version: data.latestVersion,
         };
-        const {data: data2} = yield call(FServiceAPI.Resource.resourceVersionInfo, params2);
+        const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo, params2);
         // console.log(data2, 'data2092384u0');
         description = BraftEditor.createEditorState(data2.description);
         preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
@@ -587,7 +595,7 @@ const Model: ResourceVersionCreatorModelType = {
           const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
             resourceIds: depResourceIds,
           };
-          const {data: data3} = yield call(FServiceAPI.Resource.batchInfo, params3);
+          const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
           // console.log(data2, '#ASGDFASDF');
           const relations: Relationships = data3.map((dd: any) => {
             return {
@@ -595,7 +603,7 @@ const Model: ResourceVersionCreatorModelType = {
               children: dd.baseUpcastResources.map((bur: any) => {
                 return {
                   id: bur.resourceId,
-                }
+                };
               }),
             };
           });
@@ -629,8 +637,11 @@ const Model: ResourceVersionCreatorModelType = {
         // caller: '97293879uoijlkll4823yu4oi234io23hjkfdsasdf',
       });
     },
-    * verifyVersionInput({}: VerifyVersionInputAction, {select, put}: EffectsCommandMap) {
-      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
+    * verifyVersionInput({}: VerifyVersionInputAction, { select, put }: EffectsCommandMap) {
+      const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
+                                                                                         resourceInfo,
+                                                                                         resourceVersionCreatorPage,
+                                                                                       }: ConnectState) => ({
         resourceInfo,
         resourceVersionCreatorPage,
       }));
@@ -652,8 +663,8 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '97293874823yu4oi234io23hjkfdsasdf++++++=',
       });
     },
-    * fetchRawProps({}: FetchRawPropsAction, {select, put, call}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
 
@@ -666,7 +677,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceType: resourceVersionCreatorPage.resourceType,
       };
 
-      const {data} = yield call(FServiceAPI.Storage.fileProperty, params);
+      const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
 
       if (!data) {
         return yield put<ChangeAction>({
@@ -692,9 +703,9 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
       });
     },
-    * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {
+    * addDeps({ payload: { relationships, versions } }: AddDepsAction, { select, put, call }: EffectsCommandMap) {
 
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
 
@@ -734,7 +745,7 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       // 本次要添加的一些列资源信息
-      const {data} = yield call(FServiceAPI.Resource.batchInfo, params);
+      const { data } = yield call(FServiceAPI.Resource.batchInfo, params);
       // console.log(data, 'DDD!@#$@!#$@');
 
       const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -744,7 +755,7 @@ const Model: ResourceVersionCreatorModelType = {
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data: data1} = yield call(FServiceAPI.Contract.batchContracts, params1);
+      const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
       // 如果有合约，就获取合约应用的版本
@@ -754,13 +765,15 @@ const Model: ResourceVersionCreatorModelType = {
           resourceId: resourceVersionCreatorPage.resourceId,
           contractIds: data1.map((ci: any) => ci.contractId).join(','),
         };
-        const {data: data2} = yield call(FServiceAPI.Resource.batchGetCoverageVersions, params2);
+        const { data: data2 } = yield call(FServiceAPI.Resource.batchGetCoverageVersions, params2);
         coverageVersions = data2;
       }
 
       // 组织添加的依赖数据
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
-        const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
+        const depC: any[] = data1.filter((dc: any) => {
+          return dc.licensorId === dr.resourceId && dr.status !== 1;
+        });
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         const theVersion = versions?.find((v) => v.id === dr.resourceId);
 
@@ -800,7 +813,7 @@ const Model: ResourceVersionCreatorModelType = {
                 status: policy.status,
               };
             }),
-        }
+        };
       });
 
       // 处理循环依赖的资源
@@ -840,11 +853,11 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '9##$#$%$7293874823yu4oi234io23hjkfdsasdf',
       });
     },
-    * dddDepsByMainIDs({payload}: AddDepsByMainIDsAction, {call, put}: EffectsCommandMap) {
+    * dddDepsByMainIDs({ payload }: AddDepsByMainIDsAction, { call, put }: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
         resourceIds: payload.join(','),
       };
-      const {data} = yield call(FServiceAPI.Resource.batchInfo, params);
+      const { data } = yield call(FServiceAPI.Resource.batchInfo, params);
       // console.log(data, 'data198023h');
       yield put<AddDepsAction>({
         type: 'addDeps',
@@ -857,21 +870,21 @@ const Model: ResourceVersionCreatorModelType = {
                   id: c.resourceId,
                 };
               }),
-            }
+            };
           }),
         },
       });
     },
-    * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
+    * handleObjectInfo({ payload }: HandleObjectInfoAction, { select, put, call }: EffectsCommandMap) {
       // console.log(payload, '!!!@@@#$@#$#$');
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
 
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: payload,
       };
-      const {data} = yield call(FServiceAPI.Storage.objectDetails, params);
+      const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
 
       const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
@@ -879,14 +892,14 @@ const Model: ResourceVersionCreatorModelType = {
         resourceType: resourceVersionCreatorPage.resourceType,
       };
 
-      const {data: data4} = yield call(FServiceAPI.Storage.fileProperty, params4);
+      const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
       console.log(data4, '@#@#@#@#@#@##@$@#$data4');
       if (!data4) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             selectedFileStatus: 2,
-          }
+          },
         });
       } else {
         yield put<ChangeAction>({
@@ -923,7 +936,7 @@ const Model: ResourceVersionCreatorModelType = {
                   // customOptionError: '',
                 };
               }),
-          }
+          },
         });
       }
 
@@ -944,7 +957,7 @@ const Model: ResourceVersionCreatorModelType = {
         const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
           resourceNames: depResources.map<string>((dr) => dr.name).join(','),
         };
-        const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
+        const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
         // console.log(data2, '#ASGDFASDF');
         const relations = data2.map((dd: any) => {
           return {
@@ -952,7 +965,7 @@ const Model: ResourceVersionCreatorModelType = {
             children: dd.baseUpcastResources.map((bur: any) => {
               return {
                 id: bur.resourceId,
-              }
+              };
             }),
           };
         });
@@ -993,7 +1006,7 @@ const Model: ResourceVersionCreatorModelType = {
           };
         });
         const allRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = allDepObjects.map((oo) => {
-          return {id: oo.id, children: []};
+          return { id: oo.id, children: [] };
         });
         yield put<ChangeAction>({
           type: 'change',
@@ -1010,8 +1023,8 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    * deleteDependencyByID({payload}: DeleteDependencyByIDAction, {select, put}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * deleteDependencyByID({ payload }: DeleteDependencyByIDAction, { select, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
       const depRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = resourceVersionCreatorPage.depRelationship.filter((drs) => drs.id !== payload);
@@ -1035,8 +1048,8 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '972%$^%^%^%^93874823yu4oi234io23hjkfdsasdf',
       });
     },
-    * importLastVersionData({payload}: ImportLastVersionDataAction, {call, select, put}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    * importLastVersionData({ payload }: ImportLastVersionDataAction, { call, select, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
 
@@ -1135,7 +1148,7 @@ const Model: ResourceVersionCreatorModelType = {
     //     caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
     //   });
     // },
-    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -1145,7 +1158,7 @@ const Model: ResourceVersionCreatorModelType = {
   },
 
   reducers: {
-    change(state, {payload, caller}) {
+    change(state, { payload, caller }) {
       // if (payload.resourceId === '') {
       //   console.log(caller, payload, 'callercallercallercallercaller');
       // }
@@ -1158,7 +1171,7 @@ const Model: ResourceVersionCreatorModelType = {
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
       // dispatch({
       //   type: 'init',
       // });
@@ -1178,7 +1191,10 @@ interface BatchCycleDependencyCheckParams {
   }[];
 }
 
-async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleDependencyCheckParams): Promise<string[]> {
+async function batchCycleDependencyCheck({
+                                           resourceId,
+                                           dependencies,
+                                         }: BatchCycleDependencyCheckParams): Promise<string[]> {
   const promises: Promise<any>[] = [];
   for (const dependency of dependencies) {
     const params: Parameters<typeof FServiceAPI.Resource.cycleDependencyCheck>[0] = {
@@ -1188,7 +1204,7 @@ async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleD
         versionRange: dependency.versionRange,
       }],
     };
-    promises.push(FServiceAPI.Resource.cycleDependencyCheck(params))
+    promises.push(FServiceAPI.Resource.cycleDependencyCheck(params));
   }
   const results = await Promise.all(promises);
 
@@ -1196,9 +1212,9 @@ async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleD
   // console.log(results, 'results12390j');
   for (const [index, result] of Object.entries(results)) {
     // console.log(index, value);
-    const {data} = result;
+    const { data } = result;
     if (!data) {
-      resourceIDs.push(dependencies[Number(index)].resourceId)
+      resourceIDs.push(dependencies[Number(index)].resourceId);
     }
   }
   return resourceIDs;
@@ -1221,7 +1237,10 @@ type GetAllContractsReturnType = {
   };
 }[];
 
-async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+async function getAllContracts({
+                                 resourceID,
+                                 resourceIDs,
+                               }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -1232,7 +1251,7 @@ async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsT
       licenseeId: resourceID,
       isLoadPolicyInfo: 1,
     };
-    const {data} = await FServiceAPI.Contract.batchContracts(params);
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
     // console.log(data, 'data!!!1111100000000))))))');
     return data;
   });
@@ -1270,12 +1289,12 @@ interface HandledDraftParamsType {
   resourceID: string;
 }
 
-async function handledDraft({resourceID}: HandledDraftParamsType): Promise<ResourceVersionCreatorPageModelState | null> {
+async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<ResourceVersionCreatorPageModelState | null> {
   const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
     resourceId: resourceID,
   };
 
-  const {data: data3} = await FServiceAPI.Resource.lookDraft(params3);
+  const { data: data3 } = await FServiceAPI.Resource.lookDraft(params3);
 
   // console.log(data3, 'dat2342890fj;lkasdf;adsjf;lfda');
   if (!data3) {
@@ -1293,7 +1312,7 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
     isLoadLatestVersionInfo: 1,
   };
 
-  const {data} = await FServiceAPI.Resource.batchInfo(params);
+  const { data } = await FServiceAPI.Resource.batchInfo(params);
 
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: allIDs.join(','),
@@ -1302,7 +1321,7 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
     licenseeIdentityType: 1,
     isLoadPolicyInfo: 1,
   };
-  const {data: data1} = await FServiceAPI.Contract.batchContracts(params1);
+  const { data: data1 } = await FServiceAPI.Contract.batchContracts(params1);
   // console.log(data1, 'data1 109234ui2o34');
 
   // 如果有合约，就获取合约应用的版本
@@ -1312,7 +1331,7 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
       resourceId: resourceID,
       contractIds: data1.map((ci: any) => ci.contractId).join(','),
     };
-    const {data: data2} = await FServiceAPI.Resource.batchGetCoverageVersions(params2);
+    const { data: data2 } = await FServiceAPI.Resource.batchGetCoverageVersions(params2);
     coverageVersions = data2;
   }
 
@@ -1361,7 +1380,7 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
             status: policy.status,
           };
         }),
-    }
+    };
   });
 
   return {
