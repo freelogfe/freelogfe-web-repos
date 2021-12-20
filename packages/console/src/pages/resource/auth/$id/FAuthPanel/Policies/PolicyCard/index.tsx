@@ -66,6 +66,7 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
   }
 
   function onConfirm_VersionsDrawer() {
+    setDrawerVisible(false);
     onClickLicense && onClickLicense(checkedVersions);
   }
 

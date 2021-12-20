@@ -230,16 +230,6 @@ const Model: ResourceAuthPageModelType = {
       const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
-      // const contractsParams: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
-      //   identityType: 2,
-      //   licenseeId: resourceAuthPage.resourceID,
-      //   isLoadPolicyInfo: 1,
-      // };
-      //
-      // const {data: {dataList: contractsData}} = yield call(FServiceAPI.Contract.contracts, contractsParams);
-
-      // console.log(data, 'data@#$@#!$@34234');
-
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
         const currentResource = data2.find((resource: any) => resource.resourceId === i.resourceId);
@@ -300,7 +290,7 @@ const Model: ResourceAuthPageModelType = {
           })),
         };
       });
-      console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
+      // console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
