@@ -4,15 +4,16 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
+// import FContractStatusBadge from '@/components/FContractStatusBadge';
 import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import { FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
 import { FTextBtn } from '@/components/FButton';
 import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -49,20 +50,16 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
             <div style={{ height: 10 }} />
             <Space style={{ padding: '0 20px' }} size={10}>
               <FContentText type='highlight' text={c.name} />
-              {/*<FContractStatusBadge*/}
-              {/*  status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}*/}
-              {/*/>*/}
             </Space>
             <div style={{ height: 10 }} />
 
             <div style={{ padding: '0 20px' }}>
               <FContractDisplay
-                // containerHeight={300}
                 contractID={c.id}
                 onChangedEvent={() => {
-                  // dispatch<FetchInfoAction>({
-                  //   type: 'exhibitInfoPage/fetchInfo',
-                  // });
+                  dispatch<FetchInfoAction>({
+                    type: 'exhibitInfoPage/fetchInfo',
+                  });
                 }}
               />
             </div>
@@ -193,7 +190,19 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
           </div>);
         })
       }
+
+      <div>
+
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FContentText text={'查看已终止的合约请移至'} type='negative' />
+          <FTextBtn onClick={() => {
+            window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+          }}>合约管理</FTextBtn>
+        </div>
+        <div style={{ height: 5 }} />
+      </div>
     </Space>
+
   </div>);
 }
 

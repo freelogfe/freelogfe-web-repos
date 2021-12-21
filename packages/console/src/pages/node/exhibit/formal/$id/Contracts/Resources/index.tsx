@@ -58,7 +58,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           mainResource.contracts.map((c) => (<div key={c.id}>
             <span>{c.name}</span>
             <div style={{ width: 5 }} />
-            <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+            <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
           </div>))
         }
       </div>
@@ -102,7 +102,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             r.contracts.map((c) => (<div key={c.id}>
               <span>{c.name}</span>
               <div style={{ width: 5 }} />
-              <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+              <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
             </div>))
           }
         </div>

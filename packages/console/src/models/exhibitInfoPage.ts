@@ -49,7 +49,7 @@ export interface ExhibitInfoPageModelState {
     }[];
     contracts: {
       name: string;
-      status: 0 | 1 | 2;
+      status: 'active' | 'testActive' | 'inactive' | 'terminal';
       id: string;
       text: string;
       createTime: string;
@@ -583,44 +583,51 @@ const Model: ExhibitInfoPageModelType = {
           contract_SelectedAssociatedID: result.some((rr) => {
             return rr.resourceId === exhibitInfoPage.contract_SelectedAssociatedID;
           }) ? exhibitInfoPage.contract_SelectedAssociatedID : result[0].resourceId,
-          contract_Associated: result.map((r, index) => {
-            const exhibits = data5.filter((d5: any) => {
-              return d5.resolveResources.some((rr: any) => {
-                return d5.presentableId !== data.presentableId && rr.resourceId === r.resourceId;
+          contract_Associated: result
+            .map((r, index) => {
+              const exhibits = data5.filter((d5: any) => {
+                return d5.resolveResources.some((rr: any) => {
+                  return d5.presentableId !== data.presentableId && rr.resourceId === r.resourceId;
+                });
+              }).map((d5: any) => {
+                return {
+                  id: d5.presentableId,
+                  name: d5.presentableName,
+                  // policyId: d5.
+                  status: d5.onlineStatus,
+                };
               });
-            }).map((d5: any) => {
+              // console.log(r, 'rrrrr09234j5rlkjsdflkfjsldfjl');
               return {
-                id: d5.presentableId,
-                name: d5.presentableName,
-                // policyId: d5.
-                status: d5.onlineStatus,
+                id: r.resourceId,
+                name: r.resourceName,
+                type: r.resourceType,
+                exhibits: exhibits,
+                contracts: r.contracts
+                  .filter((p) => {
+                    return p.status !== 'terminal';
+                  })
+                  .map((c) => ({
+                    name: c.contractName,
+                    status: c.status,
+                    id: c.contractId,
+                    text: c.policyText,
+                    createTime: FUtil.Format.formatDateTime(c.createDate),
+                    policyId: c.policyId,
+                    exhibitOpen: false,
+                  })),
+                policies: r.policies
+                  .filter((p) => {
+                    // console.log(p, 'p90234');
+                    return p.status === 1;
+                  })
+                  .map((p) => ({
+                    id: p.policyId,
+                    name: p.policyName,
+                    text: p.policyText,
+                  })),
               };
-            });
-            return {
-              id: r.resourceId,
-              name: r.resourceName,
-              type: r.resourceType,
-              exhibits: exhibits,
-              contracts: r.contracts.map((c) => ({
-                name: c.contractName,
-                status: c.status,
-                id: c.contractId,
-                text: c.policyText,
-                createTime: FUtil.Format.formatDateTime(c.createDate),
-                policyId: c.policyId,
-                exhibitOpen: false,
-              })),
-              policies: r.policies
-                .filter((p) => {
-                  return p.status === 1;
-                })
-                .map((p) => ({
-                  id: p.policyId,
-                  name: p.policyName,
-                  text: p.policyText,
-                })),
-            };
-          }),
+            }),
           graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
           graph_Viewport_RelationGraph_Edges: relationGraphEdges,
           graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
@@ -744,12 +751,6 @@ const Model: ExhibitInfoPageModelType = {
         fMessage(exhibitInfoPage.side_ResourceType === 'theme' ? '激活失败' : '上线失败', 'error');
         return;
       }
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     isOnline: payload === 1,
-      //   },
-      // });
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -805,14 +806,6 @@ const Model: ExhibitInfoPageModelType = {
         ],
       };
       yield call(FServiceAPI.Exhibit.updateRewriteProperty, params);
-
-      // 同步数据
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     side_CustomOptions: pCustomAttrs,
-      //   },
-      // });
     },
     * changeVersion({ payload }: ChangeVersionAction, { call, put, select }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
@@ -1191,7 +1184,7 @@ type HandleRelationResult = {
     contractName: string;
     createDate: string
     policyText: string
-    status: 0 | 1 | 2;
+    status: 'active' | 'testActive' | 'inactive' | 'terminal';
     policyId: string;
   }[];
   policies: {
@@ -1232,34 +1225,43 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
 
   const result: HandleRelationResult = params.map((r) => {
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
+    // console.log(resource, 'resource4329203ujlkzfsd');
+    const contracts: HandleRelationResult[number]['contracts'] = allContracts
+      .filter((acts: any) => {
+        return acts.licensorId === resource.resourceId && acts.status === 0;
+      })
+      .map((contract: any) => {
+        // console.log(contract, 'contract0923');
+        return {
+          contractId: contract.contractId,
+          contractName: contract.contractName,
+          createDate: contract.createDate,
+          policyText: contract.policyInfo.policyText,
+          status: contract.status === 1 ? 'terminal' : contract.authStatus === 1 ? 'active' : contract.authStatus === 2 ? 'testActive' : 'inactive',
+          policyId: contract.policyId,
+        };
+      });
+    const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
+      return c.policyId;
+    });
+    // console.log(allContractsUsedPolicyIDs, 'allContractsUsedPolicyIDsallContractsUsedPolicyIDs0932o');
     return {
       resourceId: resource.resourceId,
       resourceName: resource.resourceName,
       resourceType: resource.resourceType,
       status: resource.status,
-      contracts: allContracts
-        .filter((acts: any) => {
-          return acts.licensorId === resource.resourceId;
-        })
-        .map((contract: any) => {
-          // console.log(contract, 'contract0923');
-          return {
-            contractId: contract.contractId,
-            contractName: contract.contractName,
-            createDate: contract.createDate,
-            policyText: contract.policyInfo.policyText,
-            // status: contract.status,
-            status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
-            policyId: contract.policyId,
-          };
-        }),
+      contracts: contracts,
       policies: resource.policies
+        // .filter((p: any) => {
+        //   return !allContracts
+        //     .some((act: any) => {
+        //       // console.log(p, act, '!@#$!@#$!@#$!@#$!@#$!@#$!@#$');
+        //       return act.licensorId === resource.resourceId && act.policyId === p.policyId;
+        //     });
+        // })
         .filter((p: any) => {
-          return !allContracts
-            .some((act: any) => {
-              // console.log(p, act, '!@#$!@#$!@#$!@#$!@#$!@#$!@#$');
-              return act.licensorId === resource.resourceId && act.policyId === p.policyId;
-            });
+          // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
+          return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
         })
         .map((p: any) => {
           return {
@@ -1329,7 +1331,7 @@ async function handleFinalResolveResource({
   };
 
   const { data } = await FServiceAPI.Exhibit.presentableDetails(params);
-
+  console.log(data, 'data2903jsaldfksjd');
   return data.resolveResources?.map((rrs: any) => {
     if (resourceID !== rrs.resourceId) {
       return {
