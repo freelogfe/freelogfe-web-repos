@@ -1165,7 +1165,7 @@ export default Model;
 /**
  * 组织授权信息数据
  */
-type HandleRelationParams = {
+export type HandleRelationParams = {
   contracts: {
     contractId: string;
     policyId: string;
@@ -1174,7 +1174,7 @@ type HandleRelationParams = {
   resourceName: string;
 }[];
 
-type HandleRelationResult = {
+export type HandleRelationResult = {
   resourceId: string;
   resourceName: string;
   resourceType: string;
@@ -1195,7 +1195,7 @@ type HandleRelationResult = {
   }[];
 }[];
 
-async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
+export async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
 
   // console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
   // console.log(params, 'params0923jafdsl');
@@ -1259,7 +1259,7 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
         //       return act.licensorId === resource.resourceId && act.policyId === p.policyId;
         //     });
         // })
-        .filter((p: any) => {
+        .filter((p:any) => {
           // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
         })

@@ -11,7 +11,7 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FUtil1 from '@/utils';
-import FSwitch from '@/components/FSwitch';
+// import FSwitch from '@/components/FSwitch';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
@@ -86,7 +86,7 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                 r.contracts.map((c) => (<div key={c.id}>
                   <span>{c.name}</span>
                   <div style={{ width: 5 }} />
-                  <label style={{ backgroundColor: c.status === 1 ? '#42C28C' : '#E9A923' }} />
+                  <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
                 </div>))
               }
             </div>
@@ -134,6 +134,16 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                     <div style={{ height: 10 }} />
                   </div>))
                 }
+
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <FContentText text={'查看已终止的合约请移至'} type='negative' />
+                    <FTextBtn onClick={() => {
+                      window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                    }}>合约管理</FTextBtn>
+                  </div>
+                  <div style={{ height: 5 }} />
+                </div>
               </Space>
             </div>)
           }

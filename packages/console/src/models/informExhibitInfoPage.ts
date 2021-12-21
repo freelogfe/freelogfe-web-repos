@@ -6,14 +6,15 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import {
-  handleExhibitRelationGraphData,
+  // handleExhibitRelationGraphData,
   IGraph_Relationship_Edges, IGraph_Relationship_Nodes,
 } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 import {
-  handleAuthorizationGraphData,
+  // handleAuthorizationGraphData,
   IGraph_Authorization_Edges, IGraph_Authorization_Nodes,
 } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import { IGraph_Dependency_Edges, IGraph_Dependency_Nodes } from '@/components/FAntvG6/FAntvG6DependencyGraph';
+import { handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -80,7 +81,7 @@ export interface InformExhibitInfoPageModelState {
     type: string;
     contracts: {
       name: string;
-      status: 0 | 1 | 2;
+      status: 'active' | 'testActive' | 'inactive' | 'terminal';
       id: string;
       text: string;
       createTime: string;
@@ -557,7 +558,7 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
-      console.log(data7, 'data7data7data7data7');
+      // console.log(data7, 'data7data7data7data7');
 
       // const {
       //   nodes: authorizationGraphNodes,
@@ -576,7 +577,7 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
-      console.log(data8, 'data8data8data8data8');
+      // console.log(data8, 'data8data8data8data8');
 
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
@@ -639,12 +640,8 @@ const Model: ExhibitInfoPageModelType = {
               };
             }),
           contract_Associated: result.map<InformExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
-            return {
-              selected: selectedID ? selectedID === r.resourceId : index === 0,
-              id: r.resourceId,
-              name: r.resourceName,
-              type: r.resourceType,
-              contracts: r.contracts.map((c) => ({
+            const contracts = r.contracts.map((c) => {
+              return {
                 name: c.contractName,
                 // status: c.status,
                 status: c.status,
@@ -652,12 +649,27 @@ const Model: ExhibitInfoPageModelType = {
                 text: c.policyText,
                 createTime: FUtil.Format.formatDateTime(c.createDate),
                 policyId: c.policyId,
-              })),
-              policies: r.policies.map((p) => ({
-                id: p.policyId,
-                name: p.policyName,
-                text: p.policyText,
-              })),
+              };
+            });
+            const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
+              return c.policyId;
+            });
+            return {
+              selected: selectedID ? selectedID === r.resourceId : index === 0,
+              id: r.resourceId,
+              name: r.resourceName,
+              type: r.resourceType,
+              contracts: contracts,
+              policies: r.policies
+                .filter((p) => {
+                  // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
+                  return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
+                })
+                .map((p) => ({
+                  id: p.policyId,
+                  name: p.policyName,
+                  text: p.policyText,
+                })),
             };
           }),
           side_Resource_Relation: relation,
@@ -1496,97 +1508,97 @@ const Model: ExhibitInfoPageModelType = {
 
 export default Model;
 
-type HandleRelationParams = {
-  contracts: {
-    contractId: string;
-    policyId: string;
-  }[];
-  resourceId: string;
-  resourceName: string;
-}[];
-
-type HandleRelationResult = {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  status: 0 | 1;
-  contracts: {
-    contractId: string;
-    contractName: string;
-    createDate: string
-    policyText: string
-    status: 0 | 1 | 2;
-    policyId: string;
-  }[];
-  policies: {
-    policyId: string;
-    policyName: string;
-    policyText: string;
-    status: 0 | 1;
-  }[];
-}[];
-
-async function handleRelation(params: HandleRelationParams): Promise<HandleRelationResult> {
-  // console.log(params, 'params0923jafdsl9023ujioafdsl');
-  const resourceIds: string[] = params.map((r) => r.resourceId);
-  if (resourceIds.length === 0) {
-    return [];
-  }
-  const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
-
-  const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-    resourceIds: resourceIds.join(','),
-    isLoadPolicyInfo: 1,
-  };
-
-  const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-    contractIds: contractIds.join(','),
-    isLoadPolicyInfo: 1,
-  };
-
-  const { data: data0 }: any = await FServiceAPI.Resource.batchInfo(params0);
-  // console.log(data0, 'data0, data123rfsdadata0');
-  const { data: data1 }: any = params1.contractIds ? (await FServiceAPI.Contract.batchContracts(params1)) : { data: [] };
-  // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
-
-  const result: HandleRelationResult = params.map<HandleRelationResult[number]>((r) => {
-    const contractPolicyIds: string[] = r.contracts.map((cs) => cs.policyId);
-
-    const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
-    // console.log(resource, '2093jrlwkfladskfdslklresource');
-    return {
-      resourceId: resource.resourceId,
-      resourceName: resource.resourceName,
-      resourceType: resource.resourceType,
-      status: resource.status,
-      contracts: r.contracts.map((c) => {
-        const contract = data1.find((dc: any) => dc.contractId === c.contractId);
-        // console.log(contract, 'contract0923');
-        return {
-          contractId: contract.contractId,
-          contractName: contract.contractName,
-          createDate: contract.createDate,
-          policyText: contract.policyInfo.policyText,
-          // status: contract.status,
-          status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
-          policyId: contract.policyId,
-        };
-      }),
-      policies: resource.policies
-        .filter((p: any) => !contractPolicyIds.includes(p.policyId))
-        .map((p: any) => {
-          return {
-            policyId: p.policyId,
-            policyName: p.policyName,
-            policyText: p.policyText,
-            status: p.status,
-          };
-        }),
-    };
-  });
-  // console.log(result, 'result2309jd');
-  return result;
-}
+// type HandleRelationParams = {
+//   contracts: {
+//     contractId: string;
+//     policyId: string;
+//   }[];
+//   resourceId: string;
+//   resourceName: string;
+// }[];
+//
+// type HandleRelationResult = {
+//   resourceId: string;
+//   resourceName: string;
+//   resourceType: string;
+//   status: 0 | 1;
+//   contracts: {
+//     contractId: string;
+//     contractName: string;
+//     createDate: string
+//     policyText: string
+//     status: 0 | 1 | 2;
+//     policyId: string;
+//   }[];
+//   policies: {
+//     policyId: string;
+//     policyName: string;
+//     policyText: string;
+//     status: 0 | 1;
+//   }[];
+// }[];
+//
+// async function handleRelation(params: HandleRelationParams): Promise<HandleRelationResult> {
+//   // console.log(params, 'params0923jafdsl9023ujioafdsl');
+//   const resourceIds: string[] = params.map((r) => r.resourceId);
+//   if (resourceIds.length === 0) {
+//     return [];
+//   }
+//   const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
+//
+//   const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+//     resourceIds: resourceIds.join(','),
+//     isLoadPolicyInfo: 1,
+//   };
+//
+//   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+//     contractIds: contractIds.join(','),
+//     isLoadPolicyInfo: 1,
+//   };
+//
+//   const { data: data0 }: any = await FServiceAPI.Resource.batchInfo(params0);
+//   // console.log(data0, 'data0, data123rfsdadata0');
+//   const { data: data1 }: any = params1.contractIds ? (await FServiceAPI.Contract.batchContracts(params1)) : { data: [] };
+//   // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
+//
+//   const result: HandleRelationResult = params.map<HandleRelationResult[number]>((r) => {
+//     const contractPolicyIds: string[] = r.contracts.map((cs) => cs.policyId);
+//
+//     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
+//     // console.log(resource, '2093jrlwkfladskfdslklresource');
+//     return {
+//       resourceId: resource.resourceId,
+//       resourceName: resource.resourceName,
+//       resourceType: resource.resourceType,
+//       status: resource.status,
+//       contracts: r.contracts.map((c) => {
+//         const contract = data1.find((dc: any) => dc.contractId === c.contractId);
+//         // console.log(contract, 'contract0923');
+//         return {
+//           contractId: contract.contractId,
+//           contractName: contract.contractName,
+//           createDate: contract.createDate,
+//           policyText: contract.policyInfo.policyText,
+//           // status: contract.status,
+//           status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
+//           policyId: contract.policyId,
+//         };
+//       }),
+//       policies: resource.policies
+//         .filter((p: any) => !contractPolicyIds.includes(p.policyId))
+//         .map((p: any) => {
+//           return {
+//             policyId: p.policyId,
+//             policyName: p.policyName,
+//             policyText: p.policyText,
+//             status: p.status,
+//           };
+//         }),
+//     };
+//   });
+//   // console.log(result, 'result2309jd');
+//   return result;
+// }
 
 interface RuleMatchStatusParams {
   nodeID: number;
