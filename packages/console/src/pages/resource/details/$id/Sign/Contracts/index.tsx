@@ -33,11 +33,6 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
         return (<div key={c.id} className={styles.Contracts}>
           <div style={{ height: 15 }} />
           <div className={styles.contractTitle}>
-            {/*<Space size={5}>*/}
-            {/*  <span>{c.name}</span>*/}
-            {/*  /!*<label className={styles.executing}>执行中</label>*!/*/}
-            {/*  /!*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>*!/*/}
-            {/*</Space>*/}
             <FContentText text={c.name} type='highlight' />
             {
               !isSignedNode && (<Checkbox
@@ -122,6 +117,16 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
         </div>);
       })
     }
+
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FContentText text={'查看已终止的合约请移至'} type='negative' />
+        <FTextBtn onClick={() => {
+          window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+        }}>合约管理</FTextBtn>
+      </div>
+      <div style={{ height: 25 }} />
+    </div>
   </div>);
 }
 

@@ -474,25 +474,29 @@ const Model: MarketResourcePageModelType = {
           signedResourceExhibitID: data1?.presentableId || '',
           signResources: marketResourcePage.allRawResources
             .map<MarketResourcePageModelState['signResources'][number]>((value, index: number) => {
-              const contracts: MarketResourcePageModelState['signResources'][number]['contracts'] = result[index].map((c) => {
-                const exhibits = data2.find((d2: any) => d2.contractId === c.contractId)
-                  ?.presentables.map((pb: any) => {
-                    return {
-                      exhibitID: pb.presentableId,
-                      exhibitName: pb.presentableName,
-                    };
-                  });
-                return {
-                  checked: true,
-                  id: c.contractId,
-                  name: c.contractName,
-                  text: c.policyInfo.policyText,
-                  createTime: FUtil.Format.formatDateTime(c.createDate),
-                  policyID: c.policyInfo.policyId,
-                  status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
-                  exhibits: exhibits || [],
-                };
-              });
+              const contracts: MarketResourcePageModelState['signResources'][number]['contracts'] = result[index]
+                .filter((c) => {
+                  return c.status === 0;
+                })
+                .map((c) => {
+                  const exhibits = data2.find((d2: any) => d2.contractId === c.contractId)
+                    ?.presentables.map((pb: any) => {
+                      return {
+                        exhibitID: pb.presentableId,
+                        exhibitName: pb.presentableName,
+                      };
+                    });
+                  return {
+                    checked: true,
+                    id: c.contractId,
+                    name: c.contractName,
+                    text: c.policyInfo.policyText,
+                    createTime: FUtil.Format.formatDateTime(c.createDate),
+                    policyID: c.policyInfo.policyId,
+                    status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
+                    exhibits: exhibits || [],
+                  };
+                });
 
               const allContractUsedPolicyIDs: string[] = contracts
                 .filter((cp) => cp.status !== 'terminal')

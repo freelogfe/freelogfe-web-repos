@@ -32,15 +32,7 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
         className={styles.contentBox}
       >
         <Contracts />
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FContentText text={'查看已终止的合约请移至'} type='negative' />
-            <FTextBtn onClick={() => {
-              window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-            }}>合约管理</FTextBtn>
-          </div>
-          <div style={{ height: 5 }} />
-        </div>
+
         <Policies />
       </Space>
     </div>
