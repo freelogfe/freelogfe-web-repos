@@ -771,10 +771,12 @@ const Model: ResourceVersionCreatorModelType = {
 
       // 组织添加的依赖数据
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
+        // console.log(data1, 'data112323423');
         const depC: any[] = data1.filter((dc: any) => {
-          return dc.licensorId === dr.resourceId && dr.status !== 1;
+          return dc.licensorId === dr.resourceId && dc.status === 0;
         });
-        const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
+        // console.log(depC, 'depC902342lk3jlk');
+        const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
         const theVersion = versions?.find((v) => v.id === dr.resourceId);
 
         const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
@@ -788,19 +790,20 @@ const Model: ResourceVersionCreatorModelType = {
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,
           upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
-          enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
-            return {
-              checked: true,
-              id: c.contractId,
-              policyId: c.policyId,
-              title: c.contractName,
-              status: c.status,
-              code: c.policyInfo.policyText,
-              date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-              versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
-                .versions.map((ccc: any) => ccc.version),
-            };
-          }),
+          enableReuseContracts: depC
+            .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+              return {
+                checked: true,
+                id: c.contractId,
+                policyId: c.policyId,
+                title: c.contractName,
+                status: c.status,
+                code: c.policyInfo.policyText,
+                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+                versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
+                  .versions.map((ccc: any) => ccc.version),
+              };
+            }),
           enabledPolicies: dr.policies
             .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
             .map((policy: any) => {

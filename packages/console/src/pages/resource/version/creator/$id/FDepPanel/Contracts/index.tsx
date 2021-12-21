@@ -11,6 +11,7 @@ import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
+import { FTextBtn } from '@/components/FButton';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -118,6 +119,16 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
         </div>
       </div>))
     }
+
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FContentText text={'查看已终止的合约请移至'} type='negative' />
+        <FTextBtn onClick={() => {
+          window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+        }}>合约管理</FTextBtn>
+        <div style={{ height: 5 }} />
+      </div>
+    </div>
   </Space>;
 }
 

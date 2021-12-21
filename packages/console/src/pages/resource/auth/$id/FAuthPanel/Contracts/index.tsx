@@ -10,6 +10,8 @@ import FDivider from '@/components/FDivider';
 // import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
