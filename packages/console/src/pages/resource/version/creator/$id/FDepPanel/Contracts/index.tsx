@@ -126,7 +126,7 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
         <FTextBtn onClick={() => {
           window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
         }}>合约管理</FTextBtn>
-        <div style={{ height: 5 }} />
+        {/*<div style={{ height: 5 }} />*/}
       </div>
     </div>
   </Space>;
