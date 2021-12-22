@@ -12,7 +12,7 @@ import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, GlobalModelState} from "@/models/connect";
+import {ConnectState} from "@/models/connect";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';

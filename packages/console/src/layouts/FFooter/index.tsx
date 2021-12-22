@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Affix, Dropdown, Layout} from "antd";
+import {Dropdown} from "antd";
 import FMenu from "@/components/FMenu";
 import {DownOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from "dva";
-import {ConnectState, GlobalModelState, GlobalSearchingModelState} from "@/models/connect";
+import {ConnectState, GlobalModelState} from "@/models/connect";
 import {SetLocaleAction} from "@/models/global";
 // import {
 //   formatDate,

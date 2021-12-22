@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Layout} from 'antd';
+// import {Layout} from 'antd';
 import {connect} from 'dva';
 import {ConnectState, GlobalModelState} from '@/models/connect';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 
 interface FCenterLayoutProps {
   global: GlobalModelState;

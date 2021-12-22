@@ -7,7 +7,7 @@ import {FContentText} from "@/components/FText";
 import {FRectBtn} from "@/components/FButton";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
+import {ConnectState, NodesModelState} from "@/models/connect";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
