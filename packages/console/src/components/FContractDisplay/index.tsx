@@ -356,56 +356,72 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
               {
                 currentS.events.length > 0 && (<>
                   <div style={{ height: 10 }} />
-
+                  {/*{console.log(currentS.events, 'currentS.events****887878787878')}*/}
                   <Space size={10} direction='vertical' style={{ width: '100%' }}>
                     {
-                      currentS.events.map((eti) => {
+                      currentS.events.length === 0
+                        ? (<div className={styles.Event}>
+                          <FContentText
+                            type='normal'
+                            text={'停止接收事件'}
+                          />
+                        </div>)
+                        : currentS.events.map((eti) => {
 
-                        if (eti.type === 'TransactionEvent') {
-                          return (<div key={eti.id} className={styles.Event}>
-                            <FContentText
-                              style={{ flexShrink: 1 }}
-                              type='normal'
-                              text={eti.tip}
-                            />
-                            {
-                              isSelfLicenseeOwner ?
-                                (<FRectBtn
-                                  style={{ flexShrink: 0 }}
-                                  type='primary'
-                                  size='small'
-                                  onClick={() => {
-                                    if (isSelfLicensorOwner) {
-                                      return fMessage('收款方不能是自己', 'error');
-                                    }
-                                    set_Modal_EventID(eti.id);
-                                    // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                                    set_Modal_TransactionAmount(eti.amount);
-                                    readyPay();
-                                  }}
-                                >支付</FRectBtn>)
-                                // : (<FContentText type='negative' text={'待对方执行'} />)
-                                : (<FContentText type='negative'
-                                                 text={FUtil1.I18n.message('msg_waitfor_theotherparty_excutecontract')} />)
-                            }
+                          if (eti.type === 'TransactionEvent') {
+                            return (<div key={eti.id} className={styles.Event}>
+                              <FContentText
+                                style={{ flexShrink: 1 }}
+                                type='normal'
+                                text={eti.tip}
+                              />
+                              {
+                                isSelfLicenseeOwner ?
+                                  (<FRectBtn
+                                    style={{ flexShrink: 0 }}
+                                    type='primary'
+                                    size='small'
+                                    onClick={() => {
+                                      if (isSelfLicensorOwner) {
+                                        return fMessage('收款方不能是自己', 'error');
+                                      }
+                                      set_Modal_EventID(eti.id);
+                                      // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                      set_Modal_TransactionAmount(eti.amount);
+                                      readyPay();
+                                    }}
+                                  >支付</FRectBtn>)
+                                  // : (<FContentText type='negative' text={'待对方执行'} />)
+                                  : (<FContentText
+                                    type='negative'
+                                    text={FUtil1.I18n.message('msg_waitfor_theotherparty_excutecontract')}
+                                  />)
+                              }
 
-                          </div>);
-                        } else if (eti.type === 'RelativeTimeEvent') {
-                          return (<div key={eti.id} className={styles.Event}>
-                            <FContentText
-                              type='normal'
-                              text={eti.tip}
-                            />
-                          </div>);
-                        } else if (eti.type === 'TimeEvent') {
-                          return (<div key={eti.id} className={styles.Event}>
-                            <FContentText
-                              type='normal'
-                              text={eti.tip}
-                            />
-                          </div>);
-                        }
-                      })
+                            </div>);
+                          } else if (eti.type === 'RelativeTimeEvent') {
+                            return (<div key={eti.id} className={styles.Event}>
+                              <FContentText
+                                type='normal'
+                                text={eti.tip}
+                              />
+                            </div>);
+                          } else if (eti.type === 'TimeEvent') {
+                            return (<div key={eti.id} className={styles.Event}>
+                              <FContentText
+                                type='normal'
+                                text={eti.tip}
+                              />
+                            </div>);
+                          } else {
+                            return (<div key={'terminal'} className={styles.Event}>
+                              <FContentText
+                                type='normal'
+                                text={(eti as any).tip}
+                              />
+                            </div>);
+                          }
+                        })
                     }
                   </Space>
                 </>)
