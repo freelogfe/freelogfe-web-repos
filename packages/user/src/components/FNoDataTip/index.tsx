@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTipText} from "../FText";
-import {FRectBtn} from "../FButton";
+import { FTipText } from '../FText';
+import { FRectBtn } from '../FButton';
 
 interface FNoDataTipProps {
   height: number | string;
@@ -12,22 +12,23 @@ interface FNoDataTipProps {
   onClick?(): void;
 }
 
-function FNoDataTip({height, tipText, btnText, btn, onClick}: FNoDataTipProps) {
+function FNoDataTip({ height, tipText, btnText, btn, onClick }: FNoDataTipProps) {
   return (<div
     className={styles.noData}
-    style={{height}}
+    style={{ height }}
   >
-    <div/>
+    <div />
     <div>
       <FTipText
-        type="first"
+        type='first'
         text={tipText}
       />
 
       {
         btnText && (<>
-          <div style={{height: 30}}/>
+          <div style={{ height: 30 }} />
           <FRectBtn
+            size='large'
             className={styles.btn}
             onClick={() => onClick && onClick()}
           >{btnText}</FRectBtn>
@@ -36,12 +37,12 @@ function FNoDataTip({height, tipText, btnText, btn, onClick}: FNoDataTipProps) {
 
       {
         btn && (<>
-          <div style={{height: 30}}/>
+          <div style={{ height: 30 }} />
           {btn}
         </>)
       }
     </div>
-    <div/>
+    <div />
   </div>);
 }
 

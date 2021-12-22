@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
-import shared from "@/components/FText/shared.less";
+import shared from "../shared.less";
 
 interface FTipTextProps {
   type?: 'first' | 'second' | 'third';

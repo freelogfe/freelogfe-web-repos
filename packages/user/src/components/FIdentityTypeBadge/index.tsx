@@ -7,12 +7,12 @@ interface FIdentityTypeBadgeBadgeProps {
 }
 
 const statusTextObj = {
-  resource: '资源',
-  object: '对象',
-  exhibit: '展品',
+  resource: FUtil1.I18n.message('label_resource'),
+  object: FUtil1.I18n.message('label_object'),
+  exhibit: FUtil1.I18n.message('lable_exhibit'),
 };
 
-function FIdentityTypeBadge({ status = 'resource' }: FIdentityTypeBadgeBadgeProps) {
+function FIdentityTypeBadge({status = 'resource'}: FIdentityTypeBadgeBadgeProps) {
   // return (<label className={styles[status]}>{statusTextObj[status]}</label>);
   return (<label className={styles[status]}>{statusTextObj[status]}</label>);
 }

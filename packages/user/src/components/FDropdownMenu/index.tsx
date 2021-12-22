@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FMenu, {FMenuProps} from '@/components/FMenu';
+import FMenu, {FMenuProps} from '../FMenu';
+import {Dropdown} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
-import FDropdown from "@/components/FDropdown";
+import FDropdown from "../FDropdown";
 
 interface FDropdownMenuProps extends FMenuProps {
   children?: React.ReactNode;

@@ -1,0 +1,40 @@
+.styles {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  left: 0;
+  z-index: 998;
+  justify-content: center;
+  display: flex;
+
+  & > div {
+    width: 1100px;
+
+    @media (min-width: 1700px) {
+      width: 1400px;
+    }
+  }
+}
+
+.Tabs {
+  background-color: #FAFBFC;
+
+
+  & > div:first-child {
+    margin: 0;
+
+    &::before {
+      border-bottom-color: #E4E7EB;
+    }
+
+    & > div:first-child {
+      //justify-content: center;
+
+      & > div {
+        & > button {
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

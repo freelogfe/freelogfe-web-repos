@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FLoading} from "@/components/FIcons";
+import {FLoading} from "../FIcons";
 
 interface FLoadingTipProps {
   height: number | string;

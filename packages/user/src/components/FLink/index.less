@@ -2,22 +2,8 @@
 
 .Link {
   color: #222;
-  font-size: 14px;
-  cursor: pointer;
 
   &:hover {
-    color: #529DFF;
-  }
-
-  &:active {
-    color: #2376E5;
-  }
-
-  &[disabled] {
-    &, &:hover, &:active, &:focus {
-      opacity: 0.4;
-      cursor: not-allowed;
-      color: #666;
-    }
+    color: @f-primary-color;
   }
 }

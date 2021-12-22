@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
-import {FAdd, FDelete, FEdit, FLine, FPlus} from "@/components/FIcons";
+import { FEdit, FLine, FPlus} from "../../FIcons";
 
 interface FCircleBtnProps {
   children?: React.ReactNode;

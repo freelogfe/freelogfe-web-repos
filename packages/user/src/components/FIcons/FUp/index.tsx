@@ -11,6 +11,7 @@ interface FUpProps {
 }
 
 function FUp({...props}: FUpProps) {
+  // @ts-ignore
   return (<UpOutlined {...props} />);
 }
 

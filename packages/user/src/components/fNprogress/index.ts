@@ -1,4 +1,4 @@
 import NProgress from 'nprogress';
-import './index.less';
+// import './index.less';
 
 export default NProgress;
