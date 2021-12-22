@@ -93,6 +93,7 @@ const Model: UserModelType = {
         && window.location.pathname !== FUtil.LinkTo.login()
         && window.location.pathname !== FUtil.LinkTo.retrieveUserPassword()) {
         fConfirmModal({
+          visible: true,
           onOk() {
             window.location.reload();
           },

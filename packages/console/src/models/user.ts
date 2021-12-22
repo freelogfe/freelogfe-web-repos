@@ -78,17 +78,7 @@ const Model: MarketModelType = {
         user,
       }));
       if (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies()) {
-        fConfirmModal({
-          onOk() {
-            window.location.reload();
-          },
-          cancelButtonProps: {
-            style: {
-              display: 'none',
-            },
-          },
-          message: FUtil1.I18n.message('msg_account_switched'),
-        });
+        co();
       }
 
     },
@@ -130,3 +120,20 @@ const Model: MarketModelType = {
 };
 
 export default Model;
+
+function co() {
+  fConfirmModal({
+    afterClose() {
+      co();
+    },
+    onOk() {
+      window.location.reload();
+    },
+    cancelButtonProps: {
+      style: {
+        display: 'none',
+      },
+    },
+    message: FUtil1.I18n.message('msg_account_switched'),
+  });
+}
