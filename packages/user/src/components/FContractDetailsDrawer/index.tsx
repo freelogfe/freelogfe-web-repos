@@ -241,7 +241,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       isLoadPolicyInfo: 1,
     };
     const { data: data2 } = await FServiceAPI.Contract.batchContracts(params2);
-    console.log(data2, 'data22222222#$##$@$##$');
+    // console.log(data2, 'data22222222#$##$@$##$');
     const AssociateContractsResult: FContractDetailsDrawerStates['associateContracts'] = (data2 as any)
       .filter((d: any) => d.contractId !== data.contractId)
       .map((d: any) => {
@@ -256,7 +256,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
           policyText: d.policyInfo.policyText,
         };
       });
-    console.log(AssociateContractsResult, 'AssociateContractsResult290342309u');
+    // console.log(AssociateContractsResult, 'AssociateContractsResult290342309u');
     setAssociateContracts(AssociateContractsResult);
   }
 
