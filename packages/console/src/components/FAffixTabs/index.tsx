@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Affix, Tabs} from 'antd';
 import styles from './index.less';
-import {TabsProps} from "antd/lib/tabs";
+// import {TabsProps} from "antd/lib/tabs";
 
 interface Tab {
   value: string;

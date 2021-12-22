@@ -472,12 +472,14 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                       onClick={() => {
                         setRecodeFold(false);
                       }}
+                      style={{ fontSize: 12, color: '#7A869A' }}
                     >展开流转记录 <FDown /></FTextBtn>)
                     : (<FTextBtn
                       type='default'
                       onClick={() => {
                         setRecodeFold(true);
                       }}
+                      style={{ fontSize: 12, color: '#7A869A' }}
                     >收起流转记录 <FUp /></FTextBtn>)
                 }
               </div>

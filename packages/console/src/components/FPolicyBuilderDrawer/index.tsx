@@ -1490,7 +1490,7 @@ async function compileCodeText({ text, targetType }: CompileCodeText): Promise<{
       ],
       result: result.state_machine,
     };
-  } catch (err) {
+  } catch (err: any) {
     // console.log(err.message, 'err234234234');
     return {
       errors: [err.message + '(抛错)'],

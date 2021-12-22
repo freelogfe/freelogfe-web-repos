@@ -1,18 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
-import {SwapOutlined} from '@ant-design/icons';
-import {CSSProperties, ReactElement, ReactEventHandler, ReactPropTypes} from "react";
+import sharedStyles from '../iconShared.less';
+import {CSSProperties} from "react";
 
-interface FSwapProps {
+interface FCheckProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FSwap({className, ...props}: FSwapProps) {
+function FCheck({className, ...props}: FCheckProps) {
   // return (<SwapOutlined {...props}/>);
-  return (<i className={['freelog', 'fl-icon-shenqingchenggong1', styles.icon, className].join(' ')} {...props}/>);
+  return (<i className={['freelog', 'fl-icon-shenqingchenggong1', sharedStyles.shared, styles.icon, className].join(' ')} {...props}/>);
 }
 
-export default FSwap;
+export default FCheck;

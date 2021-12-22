@@ -105,9 +105,7 @@ export default function ({
         <div style={{height: '15px'}}/>
         <div className={styles.MetaFooter}>
           {
-            resource.policy.length > 0
-              ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
-              : (<FContentText text={'暂无策略…'} type='additional2' />)
+            resource.policy.map((i: string) => <Policy key={i} text={i}/>)
           }
         </div>
       </div>

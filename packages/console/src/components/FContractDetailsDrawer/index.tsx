@@ -35,7 +35,7 @@ interface BaseInfo {
   contractId: string;
   contractName: string;
   contractCreateDate: string;
-  contractStatus: 0 | 1 | 2;
+  contractStatus: 'active' | 'testActive' | 'inactive' | 'terminal';
 
   policyID: string;
   policyText: string;
@@ -49,8 +49,7 @@ type AssociateContracts = {
   contractId: string;
   contractName: string;
   contractCreateDate: string;
-  contractStatus: 0 | 1 | 2;
-
+  contractStatus: 'active' | 'testActive' | 'inactive' | 'terminal';
   policyID: string;
   policyText: string;
 }[];
@@ -143,7 +142,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       contractId: data.contractId,
       contractName: data.contractName,
       contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
-      contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
+      // contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
+      contractStatus: data.status === 1 ? 'terminal' : data.authStatus === 1 ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
 
       policyID: data.policyId,
       policyText: data.policyInfo.policyText,
@@ -241,7 +241,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       isLoadPolicyInfo: 1,
     };
     const { data: data2 } = await FServiceAPI.Contract.batchContracts(params2);
-    // console.log(data2, '#$##$@$##$');
+    console.log(data2, 'data22222222#$##$@$##$');
     const AssociateContractsResult: FContractDetailsDrawerStates['associateContracts'] = (data2 as any)
       .filter((d: any) => d.contractId !== data.contractId)
       .map((d: any) => {
@@ -250,11 +250,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
           contractId: d.contractId,
           contractName: d.contractName,
           contractCreateDate: FUtil.Format.formatDateTime(d.createDate, true),
-          contractStatus: d.status === 1 ? 2 : ((d.authStatus & 1) === 1) ? 1 : 0,
+          // contractStatus: d.status === 1 ? 2 : ((d.authStatus & 1) === 1) ? 1 : 0,
+          contractStatus: d.status === 1 ? 'terminal' : d.authStatus === 1 ? 'active' : d.authStatus === 2 ? 'testActive' : 'inactive',
           policyID: d.policyId,
           policyText: d.policyInfo.policyText,
         };
       });
+    console.log(AssociateContractsResult, 'AssociateContractsResult290342309u');
     setAssociateContracts(AssociateContractsResult);
   }
 
@@ -422,7 +424,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
 
               {
-                isSelfLicenseeOwner && versionAllContractIDs.length > 0 && (<>
+                isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
                   <div style={{ height: 10 }} />
                   <div style={{ padding: '0 20px' }}>
                     <FVersions
@@ -443,7 +445,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               }
 
               {
-                isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && (<>
+                isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
                   <div style={{ height: 10 }} />
                   <div style={{ padding: '0 20px' }}>
                     <FExhibits
@@ -531,7 +533,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       </div>
 
                       {
-                        isSelfLicenseeOwner && versionAllContractIDs.length > 0 && (<>
+                        isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
                           <div style={{ height: 10 }} />
                           <div style={{ padding: '0 20px' }}>
                             <FVersions
@@ -554,7 +556,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       }
 
                       {
-                        isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && (<>
+                        isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
                           <div style={{ height: 10 }} />
                           <div style={{ padding: '0 20px' }}>
                             <FExhibits
@@ -607,7 +609,7 @@ function FVersions({
                      onChangeVersionContractIDs,
                    }: FVersionsProps) {
   return (<>
-    <FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' />
+    <FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' style={{ fontSize: 12 }} />
 
     <div style={{ height: 10 }} />
 
@@ -669,7 +671,7 @@ function FExhibits({
                    }: FExhibitsProps) {
 
   return (<>
-    <FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' />
+    <FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' style={{ fontSize: 12 }} />
     {/*<div style={{ height: 10 }} />*/}
     <div className={styles.nodeExhibits}>
       {
