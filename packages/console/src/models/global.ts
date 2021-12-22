@@ -1,6 +1,6 @@
-import {DvaReducer} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
+import { DvaReducer } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
 import {
   formatDate,
   formatTime,
@@ -12,8 +12,8 @@ import {
   setLocale,
   getLocale,
 } from 'umi-plugin-react/locale';
-import {History} from "history";
-import {ConnectState} from "@/models/connect";
+import { History } from 'history';
+import { ConnectState } from '@/models/connect';
 
 export interface GlobalModelState {
   locale: 'zh-CN' | 'en-US' | 'pt-BR';
@@ -49,6 +49,7 @@ export interface GlobalModelType {
   };
   subscriptions: {
     setup: Subscription;
+    activatedWindow: Subscription;
   };
 }
 
@@ -61,7 +62,7 @@ const Model: GlobalModelType = {
     // backgroundColor: '',
   },
   effects: {
-    * setLocale({payload}: SetLocaleAction, {call, put}: EffectsCommandMap) {
+    * setLocale({ payload }: SetLocaleAction, { call, put }: EffectsCommandMap) {
       yield call(setLocale, payload);
       // yield call(window.localStorage.setItem, 'local', payload);
       yield put<ChangeAction>({
@@ -71,8 +72,8 @@ const Model: GlobalModelType = {
         },
       });
     },
-    * pushRouter({payload}: PushRouterAction, {put, select}: EffectsCommandMap) {
-      const {routerHistories} = yield select(({global}: ConnectState) => ({
+    * pushRouter({ payload }: PushRouterAction, { put, select }: EffectsCommandMap) {
+      const { routerHistories } = yield select(({ global }: ConnectState) => ({
         routerHistories: global.routerHistories,
       }));
       yield put<ChangeAction>({
@@ -87,15 +88,15 @@ const Model: GlobalModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
-    setup({dispatch, history}) {
+    setup({ dispatch, history }) {
       history.listen((listener) => {
         // console.log(listener, 'listener098phijnoweklf');
         dispatch<PushRouterAction>({
@@ -103,8 +104,21 @@ const Model: GlobalModelType = {
           payload: listener,
         });
       });
-    }
-  }
+    },
+    activatedWindow({dispatch}) {
+      window.document.addEventListener('visibilitychange', function() {
+        // console.log(document.hidden, 'document.hidden9032rweopfdslj.,');
+        // Modify behavior...
+
+      });
+
+      window.addEventListener("pagehide", event => {
+        if (event.persisted) {
+          /* the page isn't being discarded, so it can be reused later */
+        }
+      }, false);
+    },
+  },
 };
 
 export default Model;
