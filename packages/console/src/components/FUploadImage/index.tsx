@@ -27,15 +27,23 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
     if (!naturalFile || !cropArea) {
       return;
     }
+    // console.log(naturalFile, 'naturalFilenaturalFile90234jlksdfl');
     const res = await FServiceAPI.Storage.uploadImage({
       file: naturalFile,
     });
+    // console.log(res, '2342342');
+    const img = new Image();
+    img.src = res.data.url;
 
-    const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&width=${cropArea.width}&height=${cropArea.height}`;
-    // console.log(res, 'RRRRRRRRR');
-    const url: string = res.data.url + hash;
-    console.log(url, 'url2222222');
-    onUploadSuccess && onUploadSuccess(url);
+    img.onload = () => {
+      // console.log(img.width, ' iiii爱上帝就发了；ksadjlfkj');
+      // console.log(img.height, ' iiii爱上帝就发了；ksadjlfkj');
+      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.width}&h=${cropArea.height}&width=${img.width}&height=${img.height}`;
+      const url: string = res.data.url + hash;
+      // console.log(url, 'url2222222');
+      onUploadSuccess && onUploadSuccess(url);
+    }
+
   }
 
   return (
