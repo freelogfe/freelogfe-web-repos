@@ -7,10 +7,35 @@ interface FCoverImageProps extends ImgHTMLAttributes<any> {
   width: number;
 }
 
+interface FCoverImageStates {
+  imgStyle: {
+    width: number;
+    height: number;
+    translateX: number;
+    translateY: number;
+  } | null;
+}
+
 function FCoverImage({ src, width, ...props }: FCoverImageProps) {
 
-  const { x, y, w, h, width: wh, height: ht } = hashString(src);
-  const scale: number = width / w;
+  const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
+
+  React.useEffect(() => {
+    if (!src.includes('#')) {
+      setImgStyle(null);
+    } else {
+      const { x, y, w, h, width: wh, height: ht } = hashString(src);
+      const scale: number = width / w;
+      setImgStyle({
+        width: wh * scale,
+        height: ht * scale,
+        translateX: -x * scale,
+        translateY: -y * scale,
+      });
+    }
+
+  }, [src, width]);
+
 
   return (<div
     className={styles.FCoverImage}
@@ -24,9 +49,9 @@ function FCoverImage({ src, width, ...props }: FCoverImageProps) {
       src={src}
       alt={''}
       style={{
-        width: wh * scale,
-        height: ht * scale,
-        transform: `translateX(${-x * scale}px) translateY(${-y * scale}px)`,
+        width: imgStyle.width,
+        height: imgStyle.height,
+        transform: `translateX(${imgStyle.translateX}px) translateY(${imgStyle.translateY}px)`,
       }}
     />
   </div>);
