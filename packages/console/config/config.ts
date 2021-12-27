@@ -62,7 +62,7 @@ const config: IConfig | any = {
 
     'input-icon-color': '#8E8E93',
     'input-placeholder-color': '#C4C4C4',
-    'input-hover-border-color': '#CBCBCB',
+    // 'input-hover-border-color': '#CBCBCB',
     'input-icon-hover-color': '#B4B4B4',
     'input-bg': 'transparent',
 

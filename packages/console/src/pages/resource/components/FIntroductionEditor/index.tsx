@@ -1,7 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Input} from 'antd';
-import {TextAreaProps} from 'antd/lib/input';
+import { Input } from 'antd';
+import { TextAreaProps } from 'antd/lib/input';
+// import { RefSelectProps } from 'antd/lib/select';
+import { TextAreaRef } from 'antd/lib/input/TextArea';
 
 interface FIntroductionEditorProps extends TextAreaProps {
   errorText?: string;
@@ -9,16 +11,21 @@ interface FIntroductionEditorProps extends TextAreaProps {
 
 let textInput: any;
 
-export default function ({className, value, errorText, ...props}: FIntroductionEditorProps) {
+function FIntroductionEditor({
+                               className,
+                               value,
+                               errorText,
+                               ...props
+                             }: FIntroductionEditorProps, ref: React.Ref<TextAreaRef> | undefined) {
 
-  React.useEffect(() => {
-    textInput.focus();
-  }, []);
+  // React.useEffect(() => {
+  //   textInput.focus();
+  // }, []);
 
   return (<div className={styles.introduction}>
     <Input.TextArea
       {...props}
-      ref={(input) => textInput = input}
+      ref={ref}
       value={value}
       // onChange={(e) => onChange && onChange(e)}
       className={styles.TextArea}
@@ -26,5 +33,7 @@ export default function ({className, value, errorText, ...props}: FIntroductionE
     <span
       className={[styles.FInputWordCount, 1000 - String(value).length < 0 ? styles.beyond : ''].join(' ')}>{1000 - String(value).length}</span>
     <div className={styles.error}>{errorText}</div>
-  </div>)
+  </div>);
 }
+
+export default React.forwardRef(FIntroductionEditor);
