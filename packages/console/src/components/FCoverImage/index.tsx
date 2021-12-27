@@ -1,11 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-import { ImgHTMLAttributes } from 'react';
+import { CSSProperties, ImgHTMLAttributes } from 'react';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 
 interface FCoverImageProps {
   src: string;
   width: number;
+
+  style?: CSSProperties;
+  className?: string;
 }
 
 interface FCoverImageStates {
@@ -17,7 +20,7 @@ interface FCoverImageStates {
   } | null;
 }
 
-function FCoverImage({ src, width }: FCoverImageProps) {
+function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProps) {
 
   const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
 
@@ -39,8 +42,9 @@ function FCoverImage({ src, width }: FCoverImageProps) {
 
 
   return (<div
-    className={styles.FCoverImage}
+    className={[styles.FCoverImage, className].join(' ')}
     style={{
+      ...style,
       width,
       height: width / 4 * 3,
       // backgroundImage: `url("${src}")`,

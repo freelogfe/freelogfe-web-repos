@@ -106,7 +106,9 @@ function FResourceCard({
         <div style={{ height: '15px' }} />
         <div className={styles.MetaFooter}>
           {
-            resource.policy.map((i: string) => <Policy key={i} text={i} />)
+            resource.policy.length > 0
+              ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+              : (<FContentText text={'暂无策略…'} type='additional2' />)
           }
         </div>
       </div>

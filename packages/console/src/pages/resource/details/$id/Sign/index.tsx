@@ -8,8 +8,9 @@ import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
-import * as cover from '@/assets/default-resource-cover.jpg';
+// import * as cover from '@/assets/default-resource-cover.jpg';
 import { Tooltip } from 'antd';
+import FCoverImage from '@/components/FCoverImage';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -27,11 +28,12 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
-        <img
-          className={styles.cover}
-          src={marketResourcePage.resourceInfo?.cover || cover}
-          alt={''}
-        />
+        {/*<img*/}
+        {/*  className={styles.cover}*/}
+        {/*  src={marketResourcePage.resourceInfo?.cover || cover}*/}
+        {/*  alt={''}*/}
+        {/*/>*/}
+        <FCoverImage src={marketResourcePage.resourceInfo?.cover || ''} width={260} style={{ borderRadius: 10 }} />
         <div style={{ height: 20 }} />
         <div className={styles.babels}>
           {
