@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FDown, FEdit, FFileSearch, FLoading, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
@@ -33,6 +33,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import * as AHooks from 'ahooks';
 import { FTextBtn, FRectBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
+import FCoverImage from '@/components/FCoverImage';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -75,7 +76,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       // width: 100,
       render(_, record) {
         return (<div className={styles.info}>
-          <img src={record.cover || imgSrc} alt={''} />
+          {/*<img src={record.cover || imgSrc} alt={''} />*/}
+          <FCoverImage src={record.cover || ''} width={120} style={{ borderRadius: 4 }} />
           <div style={{ width: 10, flexShrink: 0 }} />
           <div className={styles.infos}>
             <FContentText

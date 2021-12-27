@@ -10,8 +10,8 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
   OnChangeThemeAction,
-  OnMount_ExhibitPage_Action, OnMount_ThemePage_Action,
-  OnUnmount_ExhibitPage_Action, OnUnmount_ThemePage_Action,
+  OnMount_ThemePage_Action,
+  OnUnmount_ThemePage_Action,
 } from '@/models/nodeManagerPage';
 import { router } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -20,14 +20,15 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-import FLink from '@/components/FLink';
+// import FLink from '@/components/FLink';
 import fConfirmModal from '@/components/fConfirmModal';
 import FDivider from '@/components/FDivider';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import informExhibitInfoPage from '@/models/informExhibitInfoPage';
-import exhibitInfoPage from '@/models/exhibitInfoPage';
+import FCoverImage from '@/components/FCoverImage';
+// import informExhibitInfoPage from '@/models/informExhibitInfoPage';
+// import exhibitInfoPage from '@/models/exhibitInfoPage';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -120,10 +121,11 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                         </FTooltip> : ''}
                       </Space>
 
-                      <img
-                        alt=''
-                        src={i.cover || imgSrc}
-                      />
+                      {/*<img*/}
+                      {/*  alt=''*/}
+                      {/*  src={i.cover || imgSrc}*/}
+                      {/*/>*/}
+                      <FCoverImage src={i.cover || ''} width={280} />
 
                       {
                         nodeManagerPage.theme_ActivatingThemeID === i.id
@@ -208,6 +210,11 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                   </div>);
                 })
               }
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
               <div />
               <div />
               <div />
