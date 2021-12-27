@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 // import Status from './Status';
-import FResourceStatusBadge from "../FResourceStatusBadge";
+import FResourceStatusBadge from '../FResourceStatusBadge';
+import FCoverImage from '@/components/FCoverImage';
 
 interface FResourceCoverProps {
   width?: number | string;
@@ -11,12 +12,12 @@ interface FResourceCoverProps {
   children?: React.ReactNode | React.ReactNodeArray;
 }
 
-export default function ({width, height, src, status, children}: FResourceCoverProps) {
+export default function({ width, height, src, status, children }: FResourceCoverProps) {
   return (<div className={styles.Cover}>
-    {src && (<img src={src} alt=""/>)}
+    {src && (<FCoverImage src={src} width={200} />)}
     {children}
     <div className={styles.Status}>
-      <FResourceStatusBadge status={status}/>
+      <FResourceStatusBadge status={status} />
     </div>
 
   </div>);
