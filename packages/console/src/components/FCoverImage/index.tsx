@@ -42,6 +42,7 @@ function FCoverImage({ src, width }: FCoverImageProps) {
     className={styles.FCoverImage}
     style={{
       width,
+      height: width / 4 * 3,
       // backgroundImage: `url("${src}")`,
       // backgroundPosition: `${-y}px ${w - wh}px ${h - ht}px ${-x}px`,
     }}

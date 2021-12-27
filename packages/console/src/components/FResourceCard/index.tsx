@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Policy from './Policy';
-import {FContentText} from '../FText';
+import { FContentText } from '../FText';
 import styles from './index.less';
-import FResourceStatusBadge from "../FResourceStatusBadge";
+import FResourceStatusBadge from '../FResourceStatusBadge';
 // import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
+import FCoverImage from '@/components/FCoverImage';
 
 type EventFunc = () => void
 
@@ -28,24 +29,24 @@ export interface FResourceCardProps {
   onClick?: EventFunc;
 }
 
-export default function ({
-                           className = '', type = 'market',
-                           resource,
-                           onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick
-                         }: FResourceCardProps) {
+function FResourceCard({
+                         className = '', type = 'market',
+                         resource,
+                         onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick,
+                       }: FResourceCardProps) {
   return (
     <div onClick={() => onClick && onClick()}
-         className={[styles.FResourceCard, className, type === 'market' ? styles.gesture : ''].join(' ')}>
+         className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}>
       <div className={styles.Cover}>
-        {
-          resource.cover && (<img
-            // srcSet
-            src={resource.cover}
-            loading="lazy"
-            alt=""
-          />)
-        }
-
+        {/*{*/}
+        {/*  resource.cover && (<img*/}
+        {/*    // srcSet*/}
+        {/*    src={resource.cover}*/}
+        {/*    loading='lazy'*/}
+        {/*    alt=''*/}
+        {/*  />)*/}
+        {/*}*/}
+        <FCoverImage src={resource.cover} width={280} />
         {
           type === 'market' || (<>
             <nav className={styles.CoverMask}>
@@ -86,29 +87,31 @@ export default function ({
       </div>
 
       <div className={styles.Meta}>
-        <div style={{height: '12px'}}/>
+        <div style={{ height: '12px' }} />
         <FContentText
           singleRow={true}
           text={resource.title}
         />
-        <div style={{height: '6px'}}/>
+        <div style={{ height: '6px' }} />
         <div className={styles.MetaInfo}>
           <FContentText
-            type="additional1"
+            type='additional1'
             text={resource.type}
           />
           <FContentText
-            type="additional1"
+            type='additional1'
             text={resource.version ? (FUtil1.I18n.message('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
         </div>
-        <div style={{height: '15px'}}/>
+        <div style={{ height: '15px' }} />
         <div className={styles.MetaFooter}>
           {
-            resource.policy.map((i: string) => <Policy key={i} text={i}/>)
+            resource.policy.map((i: string) => <Policy key={i} text={i} />)
           }
         </div>
       </div>
     </div>
   );
 }
+
+export default FResourceCard;
