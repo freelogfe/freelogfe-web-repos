@@ -15,17 +15,20 @@
   .list {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: -10px;
 
-    & > div {
-      width: calc(100% / 4);
-
-      @media (max-width: 1600px) {
-        width: calc(100% / 3);
-      }
-    }
+    //& > div {
+    //  width: calc(100% / 4);
+    //
+    //  @media (max-width: 1600px) {
+    //    width: calc(100% / 3);
+    //  }
+    //}
 
     .item {
-      padding: 15px;
+      width: 300px;
+      padding: 10px;
+      margin-bottom: 10px;
 
       &:hover {
         background-color: white;
@@ -41,9 +44,9 @@
         width: 100%;
         position: relative;
 
-        & > img {
-          width: 100%;
-        }
+        //& > img {
+        //  width: 100%;
+        //}
 
         .coverLabel {
           position: absolute;

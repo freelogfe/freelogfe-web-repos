@@ -28,6 +28,7 @@ import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import fConfirmModal from '@/components/fConfirmModal';
+import FCoverImage from '@/components/FCoverImage';
 // import { OnActiveAction } from '@/models/nodeManagerPage';
 
 // const { compile } = require('@freelog/nmr_translator');
@@ -147,7 +148,8 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         className={styles.item}
                       >
                         <div className={styles.cover}>
-                          <img src={t.cover || imgSrc} alt='' />
+                          {/*<img src={t.cover || imgSrc} alt='' />*/}
+                          <FCoverImage src={t.cover || ''} width={280} />
                           <div className={styles.coverLabel}>
                             {
                               t.isOnline

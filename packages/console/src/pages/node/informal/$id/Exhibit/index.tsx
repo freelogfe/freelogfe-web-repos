@@ -8,7 +8,7 @@ import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import { FTextBtn } from '@/components/FButton';
 import FAdd from '@/components/FIcons/FAdd';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import FInfiniteScroll from '@/components/FInfiniteScroll';
+// import FInfiniteScroll from '@/components/FInfiniteScroll';
 import { connect, Dispatch } from 'dva';
 import {
   ConnectState,
@@ -22,7 +22,7 @@ import {
   OnChangeExhibitTypeAction,
   OnClickExhibitsAddBtnAction,
   OnClickExhibitsReplaceBtnAction,
-  OnLoadMoreExhibitsAction,
+  // OnLoadMoreExhibitsAction,
   OnMountExhibitPageAction, OnUnmountExhibitPageAction,
 } from '@/models/informalNodeManagerPage';
 import ExhibitTable from './ExhibitTable';
@@ -30,7 +30,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
-import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
+// import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
 import FListFooter from '@/components/FListFooter';
 
 interface ExhibitProps {

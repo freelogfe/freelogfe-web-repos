@@ -6,7 +6,7 @@ import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect"
 import {ColumnsType} from "antd/lib/table/interface";
 import {FContentText, FTitleText} from "@/components/FText";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
-import {router} from "umi";
+// import {router} from "umi";
 import {Popconfirm, Space} from "antd";
 import FSwitch from "@/components/FSwitch";
 import {FDelete, FEdit, FFileSearch} from "@/components/FIcons";
@@ -17,6 +17,7 @@ import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPag
 import {FServiceAPI, FUtil} from '@freelog/tools-lib';
 import FUtil1 from "@/utils";
 import FTooltip from "@/components/FTooltip";
+import FCoverImage from '@/components/FCoverImage';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -35,11 +36,13 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       width: 120,
       render(text, record) {
         return (<div className={styles.cover}>
-          <img
-            src={record.cover || imgSrc}
-            alt={''}
-            loading="lazy"
-          />
+          {/*<img*/}
+          {/*  src={record.cover || imgSrc}*/}
+          {/*  alt={''}*/}
+          {/*  loading="lazy"*/}
+          {/*/>*/}
+
+          <FCoverImage src={record.cover || ''} width={120} style={{ borderRadius: 4 }} />
 
           <div className={styles.Identity}>
             <FIdentityTypeBadge
