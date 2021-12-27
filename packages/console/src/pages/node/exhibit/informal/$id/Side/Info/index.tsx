@@ -20,6 +20,7 @@ import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
+import FCoverImage from '@/components/FCoverImage';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -56,11 +57,12 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
           });
         }}>
         <div className={styles.cover}>
-          <img
-            alt=''
-            src={informExhibitInfoPage.side_Exhibit_Cover || imgSrc}
-          />
-          <div>
+          {/*<img*/}
+          {/*  alt=''*/}
+          {/*  src={informExhibitInfoPage.side_Exhibit_Cover || imgSrc}*/}
+          {/*/>*/}
+          <FCoverImage src={informExhibitInfoPage.side_Exhibit_Cover || ''} width={220} style={{ borderRadius: 10 }} />
+          <div className={styles.coverEdit}>
             <FEdit style={{ fontSize: 32 }} />
             <div style={{ height: 10 }} />
             <div>修改封面</div>
