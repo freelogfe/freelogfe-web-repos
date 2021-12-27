@@ -15,6 +15,7 @@ import fMessage from '@/components/fMessage';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
+import FCoverImage from '@/components/FCoverImage';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -58,11 +59,12 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
         });
       }}>
       <div className={styles.cover}>
-        <img
-          alt=''
-          src={exhibitInfoPage.side_ExhibitCover || imgSrc}
-        />
-        <div>
+        {/*<img*/}
+        {/*  alt=''*/}
+        {/*  src={exhibitInfoPage.side_ExhibitCover || imgSrc}*/}
+        {/*/>*/}
+        <FCoverImage src={exhibitInfoPage.side_ExhibitCover || ''} width={220} style={{ borderRadius: 10 }} />
+        <div className={styles.coverEdit}>
 
           <FEdit style={{ fontSize: 32 }} />
           <div style={{ height: 10 }} />
