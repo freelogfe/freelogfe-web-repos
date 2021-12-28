@@ -38,7 +38,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               onClick={() => {
                 window.open(nodeManagerPage.nodeUrl);
               }}
-            >{nodeManagerPage.nodeUrl.replace(/http(s)?:\/\//, '')}</a>
+            >{nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}</a>
             <FCopyToClipboard
               text={nodeManagerPage.nodeUrl}
               title={'复制节点地址'}

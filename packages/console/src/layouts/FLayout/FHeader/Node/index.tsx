@@ -1,16 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
-import FMenu from "@/components/FMenu";
-import {router} from "umi";
-import {FPlus} from "@/components/FIcons";
-import {FContentText} from "@/components/FText";
-import {FRectBtn} from "@/components/FButton";
-import FDropdown from "@/components/FDropdown";
-import {connect, Dispatch} from 'dva';
-import {ConnectState, NodesModelState} from "@/models/connect";
-import FNavLink from "@/layouts/FLayout/components/FNavLink";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import FMenu from '@/components/FMenu';
+import { router } from 'umi';
+import { FPlus } from '@/components/FIcons';
+import { FContentText } from '@/components/FText';
+import { FRectBtn } from '@/components/FButton';
+import FDropdown from '@/components/FDropdown';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, NodesModelState } from '@/models/connect';
+import FNavLink from '@/layouts/FLayout/components/FNavLink';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
 
 interface NodeProps {
   dispatch: Dispatch;
@@ -20,17 +20,19 @@ interface NodeProps {
   };
 }
 
-function Node({dispatch, nodes, router: routerObj}: NodeProps) {
+function Node({ dispatch, nodes, router: routerObj }: NodeProps) {
+  // console.log(routerObj.location, 'routerrouter902309jsdkjflsdkj');
   // console.log(routerObj, 'nnnnNNNNNNNNNnnnnnnnnnNNNNNNNooooijsodfjlkdsjf');
   // const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = /\/node\/formal\/(\d*)/.test(routerObj.location.pathname) || /\/node\/informal\/(\d*)/.test(routerObj.location.pathname);
+  const reg: RegExp = new RegExp(/\/node\/formal\/(\d*)/);
+  const isCurrent: boolean = reg.test(routerObj.location.pathname) || reg.test(routerObj.location.pathname);
   // console.log(isCurrent, 'isCurrent');
   // console.log(cRoute.pathname, 'cRoute.pathname');
-  const nodeId: string | null = (routerObj.location.pathname.match(/\/node\/formal\/(\d*)/) || routerObj.location.pathname.match(/\/node\/informal\/(\d*)/) || [null, null])[1];
+  const nodeId: string | null = (routerObj.location.pathname.match(reg) || routerObj.location.pathname.match(reg) || [null, null])[1];
 
   function onClickNodes(value: string) {
     // console.log(value, '!@#$!@#$!@#$');
-    return router.push(FUtil.LinkTo.nodeManagement({nodeID: Number(value)}));
+    return router.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(value) }));
   }
 
   return (<FDropdown
@@ -48,28 +50,28 @@ function Node({dispatch, nodes, router: routerObj}: NodeProps) {
       <a
         href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}>
-        <FPlus style={{fontSize: 14}}/>
+        <FPlus style={{ fontSize: 14 }} />
       </a>
     </div>) : (<div className={styles.emptyDropdown}>
-      <FContentText text={'自由创作从Freelog开始'}/>
-      <div style={{height: 30}}/>
+      <FContentText text={'自由创作从Freelog开始'} />
+      <div style={{ height: 30 }} />
       <FRectBtn
-        size="small"
+        size='small'
         onClick={() => {
           router.push(FUtil.LinkTo.nodeCreator());
         }}
-        type="primary"
+        type='primary'
       >创建节点</FRectBtn>
     </div>)}>
     <FNavLink
       text={FUtil1.I18n.message('node_manage')}
-      to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({nodeID: nodes.list[0].nodeId})}
+      to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId })}
       active={isCurrent}
     />
   </FDropdown>);
 }
 
-export default connect(({nodes, router}: ConnectState) => ({
+export default connect(({ nodes, router }: ConnectState) => ({
   nodes,
   router,
 }))(Node);

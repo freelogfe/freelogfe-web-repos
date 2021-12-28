@@ -43,10 +43,10 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
     <Space size={5} className={styles.url}>
       <a onClick={() => {
         window.open(informalNodeManagerPage.node_TestUrl);
-      }}>{informalNodeManagerPage.node_TestUrl.replace(/http(s)?:\/\//, '')}</a>
+      }}>{informalNodeManagerPage.node_TestUrl.replace(new RegExp(/http(s)?:\/\//), '')}</a>
       <FCopyToClipboard
         text={informalNodeManagerPage.node_TestUrl}
-        iconStyle={{fontSize: 14}}
+        iconStyle={{ fontSize: 14 }}
         title={FUtil1.I18n.message('tip_copy_node_domain')}
       />
     </Space>

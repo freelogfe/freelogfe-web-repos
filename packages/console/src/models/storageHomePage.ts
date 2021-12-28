@@ -7,6 +7,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
+import { BUCKET_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -207,7 +208,7 @@ const Model: StorageHomePageModelType = {
         },
       });
 
-      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(payload) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(payload)) {
+      if (!FUtil.Regexp.BUCKET_NAME.test(payload) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(payload)) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
