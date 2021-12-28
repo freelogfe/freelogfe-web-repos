@@ -125,7 +125,7 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                       {/*  alt=''*/}
                       {/*  src={i.cover || imgSrc}*/}
                       {/*/>*/}
-                      <FCoverImage src={i.cover || ''} width={280} />
+                      <FCoverImage src={i.cover || ''} width={280} style={{ borderRadius: 4 }} />
 
                       {
                         nodeManagerPage.theme_ActivatingThemeID === i.id

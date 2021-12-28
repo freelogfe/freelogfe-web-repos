@@ -38,15 +38,7 @@ function FResourceCard({
     <div onClick={() => onClick && onClick()}
          className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}>
       <div className={styles.Cover}>
-        {/*{*/}
-        {/*  resource.cover && (<img*/}
-        {/*    // srcSet*/}
-        {/*    src={resource.cover}*/}
-        {/*    loading='lazy'*/}
-        {/*    alt=''*/}
-        {/*  />)*/}
-        {/*}*/}
-        <FCoverImage src={resource.cover} width={280} />
+        <FCoverImage src={resource.cover} width={280} style={{ borderRadius: 4 }} />
         {
           type === 'market' || (<>
             <nav className={styles.CoverMask}>

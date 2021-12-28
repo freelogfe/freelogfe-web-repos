@@ -149,7 +149,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                       >
                         <div className={styles.cover}>
                           {/*<img src={t.cover || imgSrc} alt='' />*/}
-                          <FCoverImage src={t.cover || ''} width={280} />
+                          <FCoverImage src={t.cover || ''} width={280} style={{ borderRadius: 4 }} />
                           <div className={styles.coverLabel}>
                             {
                               t.isOnline
