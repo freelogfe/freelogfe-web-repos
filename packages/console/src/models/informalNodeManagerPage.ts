@@ -97,7 +97,7 @@ type ExhibitList = {
     };
   };
   rules: {
-    operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace'>;
+    operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
 
@@ -214,22 +214,23 @@ export interface InformalNodeManagerPageModelState {
   theme_FilterKeywords: string;
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
-  theme_List: {
-    id: string;
-    name: string;
-    identity: 'resource' | 'object' | 'exhibit';
-    cover: string;
-    version: string;
-    rule: IMappingRule;
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-    originInfo: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-    };
-  }[];
+  // theme_List: {
+  //   id: string;
+  //   name: string;
+  //   identity: 'resource' | 'object' | 'exhibit';
+  //   cover: string;
+  //   version: string;
+  //   rule: IMappingRule;
+  //   isOnline: boolean;
+  //   isAuth: boolean;
+  //   authErrorText: string;
+  //   originInfo: {
+  //     id: string;
+  //     name: string;
+  //     type: 'resource' | 'object';
+  //   };
+  // }[];
+  theme_List: ExhibitList;
   theme_PageError: string;
 
   rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
@@ -1289,100 +1290,114 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
-      const activatedTheme: string | null = data.dataList.find((dd: any) => {
-        return dd.stateInfo.themeInfo.ruleId !== 'default';
-      })?.testResourceName || null;
+      // const activatedTheme: string | null = data.dataList.find((dd: any) => {
+      //   return dd.stateInfo.themeInfo.ruleId !== 'default';
+      // })?.testResourceName || null;
 
       // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
-      const { rules: rulesObj } = compile(result.ruleText);
+      // const { rules: rulesObj } = compile(result.ruleText);
       // console.log(rulesObj, 'rulesObjiosfjewwef');
 
-      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['theme_List'][number]>((dl) => {
-        const operations: string[] = dl.rules[0]?.operations || [];
-        // console.log(operations, 'operations12334');
-        const stateInfo = dl.stateInfo;
+      // const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['theme_List'][number]>((dl) => {
+      //   const operations: string[] = dl.rules[0]?.operations || [];
+      //   // console.log(operations, 'operations12334');
+      //   const stateInfo = dl.stateInfo;
+      //
+      //   const rulesObjRule = rulesObj.find((ro: any) => {
+      //     // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
+      //     return ro.exhibitName === dl.testResourceName;
+      //   });
+      //
+      //   // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
+      //   const rule: InformalNodeManagerPageModelState['theme_List'][number]['rule'] = {
+      //     add: operations.includes('add') ? {
+      //       exhibit: dl.testResourceName,
+      //       source: {
+      //         type: dl.originInfo.type,
+      //         name: dl.originInfo.name,
+      //         version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+      //         versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
+      //       },
+      //     } : undefined,
+      //     alter: operations.includes('alter') ? dl.testResourceName : undefined,
+      //     labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+      //     title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+      //     cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+      //     // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+      //     // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+      //     attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+      //       return {
+      //         type: a.operation,
+      //         theKey: a.key,
+      //         value: a.value,
+      //         description: a.description,
+      //       };
+      //     }) : undefined,
+      //     // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+      //     active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
+      //     replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+      //       // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+      //       return {
+      //         replaced: {
+      //           ...rr.replaced,
+      //           versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+      //         },
+      //         replacer: {
+      //           ...rr.replacer,
+      //           versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+      //         },
+      //         scopes: rr.scopes && (rr.scopes as any[])
+      //           .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+      //             // console.log(ss, 'ss!!!!@@@@##');
+      //             return ss.map((sss: any) => {
+      //               return {
+      //                 ...sss,
+      //                 versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+      //               };
+      //             });
+      //           }),
+      //       };
+      //     }),
+      //   };
+      //   return {
+      //     id: dl.testResourceId,
+      //     cover: dl.stateInfo.coverInfo.coverImages[0] || '',
+      //     name: dl.testResourceName,
+      //     identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
+      //     rule: rule,
+      //     version: dl.originInfo.version,
+      //     isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
+      //     isAuth: true,
+      //     authErrorText: '',
+      //     originInfo: dl.originInfo,
+      //   };
+      // }).sort((a, b) => {
+      //   if (a.isOnline && !b.isOnline) {
+      //     return -1;
+      //   }
+      //   return 0;
+      // });
 
-        const rulesObjRule = rulesObj.find((ro: any) => {
-          // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
-          return ro.exhibitName === dl.testResourceName;
-        });
+      const activatedTheme: string = data.dataList.find((dd: any) => {
+        return dd.stateInfo.themeInfo.ruleId !== 'default';
+      })?.testResourceName || data.dataList.find((dd: any) => {
+        return dd.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      })?.testResourceName || '';
 
-        // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-        const rule: InformalNodeManagerPageModelState['theme_List'][number]['rule'] = {
-          add: operations.includes('add') ? {
-            exhibit: dl.testResourceName,
-            source: {
-              type: dl.originInfo.type,
-              name: dl.originInfo.name,
-              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-              versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-            },
-          } : undefined,
-          alter: operations.includes('alter') ? dl.testResourceName : undefined,
-          labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-          title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-          cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-          // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-          // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-          attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-            return {
-              type: a.operation,
-              theKey: a.key,
-              value: a.value,
-              description: a.description,
-            };
-          }) : undefined,
-          // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-          active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
-          replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-            // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-            return {
-              replaced: {
-                ...rr.replaced,
-                versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-              },
-              replacer: {
-                ...rr.replacer,
-                versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-              },
-              scopes: rr.scopes && (rr.scopes as any[])
-                .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-                  // console.log(ss, 'ss!!!!@@@@##');
-                  return ss.map((sss: any) => {
-                    return {
-                      ...sss,
-                      versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                    };
-                  });
-                }),
-            };
-          }),
-        };
-        return {
-          id: dl.testResourceId,
-          cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-          name: dl.testResourceName,
-          identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-          rule: rule,
-          version: dl.originInfo.version,
-          isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
-          isAuth: true,
-          authErrorText: '',
-          originInfo: dl.originInfo,
-        };
-      }).sort((a, b) => {
-        if (a.isOnline && !b.isOnline) {
-          return -1;
-        }
-        return 0;
-      });
+      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = data.dataList;
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           node_RuleText: result.ruleText,
           // themePageThemesTotal: data.totalItem,
-          theme_List: themePageThemeList,
+          theme_List: [...themePageThemeList]
+            .sort((a, b) => {
+              if (a.testResourceName === activatedTheme && b.testResourceName !== activatedTheme) {
+                return -1;
+              }
+              return 0;
+            }),
           theme_ListState: themePageThemeList.length > 0
             ? 'loaded'
             : informalNodeManagerPage.theme_FilterKeywords === ''
@@ -1474,23 +1489,31 @@ const Model: InformalNodeManagerPageModelType = {
           data: data,
         },
       });
-      yield put<ChangeAction>({
-        type: 'change',
+
+      yield put<FetchThemeListAction>({
+        type: 'fetchThemeList',
         payload: {
-          theme_List: informalNodeManagerPage.theme_List.map((ttt) => {
-            if (ttt.name !== payload.themeName) {
-              return {
-                ...ttt,
-                isOnline: false,
-              };
-            }
-            return {
-              ...ttt,
-              isOnline: true,
-            };
-          }),
+          isRematch: true,
+          isRestart: true,
         },
       });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     theme_List: informalNodeManagerPage.theme_List.map((ttt) => {
+      //       if (ttt.testResourceName !== payload.themeName) {
+      //         return {
+      //           ...ttt,
+      //           isOnline: false,
+      //         };
+      //       }
+      //       return {
+      //         ...ttt,
+      //         isOnline: true,
+      //       };
+      //     }),
+      //   },
+      // });
     },
 
     * fetchRules({}: FetchRulesAction, { call, select, put }: EffectsCommandMap) {

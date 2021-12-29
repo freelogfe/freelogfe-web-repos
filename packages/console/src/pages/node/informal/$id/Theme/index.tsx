@@ -142,24 +142,55 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
               : (<div className={styles.body}>
                 <div className={styles.list}>
                   {
-                    informalNodeManagerPage.theme_List.map((t, index, arr) => {
+                    informalNodeManagerPage.theme_List.map((t, index, theme_List) => {
+
+                      let add: {
+                        exhibit: string;
+                        source: {
+                          type: 'resource' | 'object';
+                          name: string;
+                          versionRange?: string;
+                        };
+                      } | null = null;
+                      let alter: string = '';
+                      let activate_theme: string = '';
+                      if (t.rules.length > 0 && t.rules[0].operations.includes('add')) {
+                        add = {
+                          exhibit: t.testResourceName,
+                          source: {
+                            type: t.originInfo.type,
+                            name: t.originInfo.name,
+                            versionRange: t.originInfo.versionRange,
+                          },
+                        };
+                      }
+                      if (t.rules.length > 0 && t.rules[0].operations.includes('alter')) {
+                        alter = t.testResourceName;
+                      }
+                      if (t.rules.length > 0 && t.rules[0].operations.includes('activate_theme')) {
+                        activate_theme = t.testResourceName;
+                      }
+
+                      const isActive: boolean = false;
+
                       return (<div
-                        key={t.id}
+                        key={t.testResourceId}
                         className={styles.item}
                       >
                         <div className={styles.cover}>
                           {/*<img src={t.cover || imgSrc} alt='' />*/}
-                          <FCoverImage src={t.cover || ''} width={280} style={{ borderRadius: 4 }} />
+                          <FCoverImage src={t.stateInfo.coverInfo.coverImages[0] || ''} width={280}
+                                       style={{ borderRadius: 4 }} />
                           <div className={styles.coverLabel}>
                             {
-                              t.isOnline
+                              activate_theme === t.testResourceName
                                 ? (<label className={styles.activated}>已激活</label>)
                                 : null
                             }
                           </div>
                           {/*{console.log(informalNodeManagerPage.theme_ActivatingThemeName, t.name, '######98988888')}*/}
                           {
-                            informalNodeManagerPage.theme_ActivatingThemeName === t.name
+                            informalNodeManagerPage.theme_ActivatingThemeName === t.testResourceName
                               ? (<div className={styles.processing}>
                                 <span>处理中…</span>
                               </div>)
@@ -168,7 +199,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                   <div style={{ width: 1 }} />
 
                                   {
-                                    !t.isOnline && (<>
+                                    activate_theme !== t.testResourceName && (<>
                                       <a onClick={() => {
                                         fConfirmModal({
                                           message: FUtil1.I18n.message('msg_change_theme_confirm'),
@@ -178,7 +209,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                             dispatch<OnClickActiveThemeBtnAction>({
                                               type: 'informalNodeManagerPage/onClickActiveThemeBtn',
                                               payload: {
-                                                themeName: t.name,
+                                                themeName: t.testResourceName,
                                               },
                                             });
                                           },
@@ -200,7 +231,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                   <FDivider />
 
                                   <a onClick={() => {
-                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.id }));
+                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
                                   }}>编辑</a>
 
                                   <div style={{ width: 1 }} />
@@ -213,20 +244,20 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         <div className={styles.itemTitle}>
                           {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
                           <FIdentityTypeBadge
-                            status={t.identity}
+                            status={t.originInfo.type}
                           />
                           <div style={{ width: 5 }} />
                           <FContentText
                             type='highlight'
-                            text={t.name}
+                            text={t.testResourceName}
                             singleRow
                           />
                         </div>
                         <div style={{ height: 6 }} />
                         <div className={styles.itemVersion}>
                           {
-                            t.identity !== 'object' && (<FContentText
-                              text={`展示版本 ${t.version}`}
+                            t.originInfo.type !== 'object' && (<FContentText
+                              text={`展示版本 ${t.originInfo.version}`}
                               type='additional1'
                             />)
                           }
@@ -234,8 +265,34 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         </div>
                         <div style={{ height: 10 }} />
                         <div className={styles.itemBar}>
+                          {/*<MappingRule*/}
+                          {/*  {...t.rule}*/}
+                          {/*/>*/}
                           <MappingRule
-                            {...t.rule}
+                            add={add || undefined}
+                            alter={alter || undefined}
+                            active={activate_theme || undefined}
+                            version={t.originInfo.versionRange || undefined}
+                            cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
+                            title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
+                            online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
+                            offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
+                            labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
+                            replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords}
+                            attrs={t.stateInfo.propertyInfo.ruleId === 'default'
+                              ? undefined
+                              : t.stateInfo.propertyInfo.testResourceProperty
+                                .filter((trp) => {
+                                  return trp.isRuleAdd;
+                                })
+                                .map((trp) => {
+                                  return {
+                                    type: 'add',
+                                    theKey: trp.key,
+                                    value: String(trp.value),
+                                    description: trp.remark,
+                                  };
+                                })}
                           />
                         </div>
                       </div>);
