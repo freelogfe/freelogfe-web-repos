@@ -1,36 +1,36 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTable from "@/components/FTable";
-import {connect, Dispatch} from 'dva';
-import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {ColumnsType} from "antd/lib/table/interface";
-import {FContentText, FTitleText} from "@/components/FText";
-import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
+import FTable from '@/components/FTable';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
+import { ColumnsType } from 'antd/lib/table/interface';
+import { FContentText, FTitleText } from '@/components/FText';
+import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 // import {router} from "umi";
-import {Popconfirm, Space} from "antd";
-import FSwitch from "@/components/FSwitch";
-import {FDelete, FEdit, FFileSearch} from "@/components/FIcons";
-import {FTextBtn} from "@/components/FButton";
+import { Popconfirm, Space } from 'antd';
+import FSwitch from '@/components/FSwitch';
+import { FDelete, FEdit, FFileSearch } from '@/components/FIcons';
+import { FTextBtn } from '@/components/FButton';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
-import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
-import {FServiceAPI, FUtil} from '@freelog/tools-lib';
-import FUtil1 from "@/utils";
-import FTooltip from "@/components/FTooltip";
+import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
+import { ChangeAction, SaveDataRulesAction } from '@/models/informalNodeManagerPage';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import FUtil1 from '@/utils';
+import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 
-const {compile} = require('@freelog/nmr_translator');
+const { compile } = require('@freelog/nmr_translator');
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
+function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) {
 
   const columns: ColumnsType<InformalNodeManagerPageModelState['exhibit_List'][number]> = [
     {
-      title: (<FTitleText type="table" text={'来源｜封面'}/>),
+      title: (<FTitleText type='table' text={'来源｜封面'} />),
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
@@ -42,79 +42,111 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
           {/*  loading="lazy"*/}
           {/*/>*/}
 
-          <FCoverImage src={record.cover || ''} width={120} style={{ borderRadius: 4 }} />
+          <FCoverImage src={record.stateInfo.coverInfo.coverImages[0] || ''} width={120} style={{ borderRadius: 4 }} />
 
           <div className={styles.Identity}>
             <FIdentityTypeBadge
-              status={record.identity}
+              status={record.originInfo.type}
             />
           </div>
-          {/*<label className={styles.object}>对象</label>*/}
-          {/*<label className={styles.exhibit}>展品</label>*/}
         </div>);
       },
     },
     {
-      title: (<FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
+      title: (<FTitleText type='table' text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />),
       dataIndex: 'name',
       key: 'name',
       render(text, record, index) {
+        let add: {
+          exhibit: string;
+          source: {
+            type: 'resource' | 'object';
+            name: string;
+            versionRange?: string;
+          };
+        } | null = null;
+        let alter: string = '';
+        if (record.associatedPresentableId === '') {
+          add = {
+            exhibit: record.testResourceName,
+            source: {
+              type: record.originInfo.type,
+              name: record.originInfo.name,
+              versionRange: record.originInfo.versionRange,
+            },
+          };
+        } else if (record.rules.length !== 0) {
+          alter = record.testResourceName;
+        }
         return (<div className={styles.name}>
           <FContentText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
-            text={record.name}
-            type="highlight"
+            text={record.testResourceName}
+            type='highlight'
             singleRow
           />
           <div className={styles.type}>
             <label>image</label>
             <div>
               <FContentText
-                type="additional2"
-                text={record.title}
+                type='additional2'
+                text={record.stateInfo.titleInfo.title}
                 singleRow
               />
             </div>
           </div>
           <div>
             <MappingRule
-              add={record.rule.add}
-              alter={record.rule.alter}
-              active={record.rule.active}
-              version={record.rule.version}
-              cover={record.rule.cover}
-              title={record.rule.title}
-              online={record.rule.online}
-              offline={record.rule.offline}
-              labels={record.rule.labels}
-              replaces={record.rule.replaces}
-              attrs={record.rule.attrs}
+              add={add || undefined}
+              alter={alter || undefined}
+              active={undefined}
+              version={record.originInfo.versionRange || undefined}
+              cover={record.stateInfo.coverInfo.ruleId === 'default' ? undefined : record.stateInfo.coverInfo.coverImages[0]}
+              title={record.stateInfo.titleInfo.ruleId === 'default' ? undefined : record.stateInfo.titleInfo.title}
+              online={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 1}
+              offline={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 0}
+              labels={record.stateInfo.tagInfo.ruleId === 'default' ? undefined : record.stateInfo.tagInfo.tags}
+              replaces={record.stateInfo.replaceInfo.ruleId === 'default' ? undefined : record.stateInfo.replaceInfo.replaceRecords}
+              attrs={record.stateInfo.propertyInfo.ruleId === 'default'
+                ? undefined
+                : record.stateInfo.propertyInfo.testResourceProperty
+                  .filter((trp) => {
+                    return trp.isRuleAdd;
+                  })
+                  .map((trp) => {
+                    return {
+                      type: 'add',
+                      theKey: trp.key,
+                      value: String(trp.value),
+                      description: trp.remark,
+                    };
+                  })}
             />
           </div>
         </div>);
       },
     },
     {
-      title: (<FTitleText type="table" text={''}/>),
+      title: (<FTitleText type='table' text={''} />),
       dataIndex: 'action',
       key: 'action',
       width: 110,
       render(text: any, record) {
         return (<div
-          style={{width: 110}}
+          style={{ width: 110 }}
           className={styles.hoverVisible}
         >
           <Actions
             onEdit={() => {
-              window.open(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}));
+              window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: record.testResourceId }));
             }}
             onSearch={async () => {
               // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
               if (record.originInfo.type === 'resource') {
-                return window.open(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
+                return window.open(FUtil.LinkTo.resourceDetails({ resourceID: record.originInfo.id }));
               }
 
-              const {data} = await FServiceAPI.Storage.objectDetails({
+              const { data } = await FServiceAPI.Storage.objectDetails({
                 objectIdOrName: record.originInfo.id,
               });
 
@@ -124,15 +156,15 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                 objectID: record.originInfo.id,
               }));
             }}
-            onDelete={!!record.associatedExhibitID ? undefined : async () => {
-              const {rules}: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
+            onDelete={record.associatedPresentableId !== '' ? undefined : async () => {
+              const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
               // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
               await dispatch<SaveDataRulesAction>({
                 type: 'informalNodeManagerPage/saveDataRules',
                 payload: {
                   type: 'replace',
                   data: rules.filter((r) => {
-                    return r.exhibitName !== record.name;
+                    return r.exhibitName !== record.testResourceName;
                   }),
                 },
               });
@@ -140,7 +172,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               await onChange({
                 exhibit_List: informalNodeManagerPage.exhibit_List.filter((e) => {
                   // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
-                  return e.name !== record.name;
+                  return e.testResourceName !== record.testResourceName;
                 }),
               });
             }}
@@ -149,52 +181,52 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       },
     },
     {
-      title: (<FTitleText type="table" text={'展示版本'}/>),
+      title: (<FTitleText type='table' text={'展示版本'} />),
       dataIndex: 'version',
       key: 'version',
       width: 123,
       render(text: any, record) {
-        return (<div style={{width: 123}}>
-          <FContentText text={record.version}/>
+        return (<div style={{ width: 123 }}>
+          <FContentText text={record.originInfo.version} />
         </div>);
       },
     },
     {
-      title: (<FTitleText type="table" text={'上线'}/>),
+      title: (<FTitleText type='table' text={'上线'} />),
       dataIndex: 'online',
       key: 'online',
       width: 65,
       render(text: any, record) {
-        return (<div style={{width: 65}}>
+        return (<div style={{ width: 65 }}>
           <Space size={15}>
             <FSwitch
               disabled={false}
-              checked={record.isOnline}
+              checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
               onChange={async (value) => {
-                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
+                const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
 
-                const rule = rules.find((r) => r.exhibitName === record.name);
+                const rule = rules.find((r) => r.exhibitName === record.testResourceName);
 
                 let data;
 
                 if (rule) {
                   data = rules.map((r) => {
-                    if (r.exhibitName !== record.name) {
+                    if (r.exhibitName !== record.testResourceName) {
                       return r;
                     }
                     return {
                       ...r,
                       online: value,
                     };
-                  })
+                  });
                 } else {
                   data = [
                     ...rules,
                     {
                       operation: 'alter',
-                      exhibitName: record.name,
+                      exhibitName: record.testResourceName,
                       online: value,
-                    }
+                    },
                   ];
                 }
 
@@ -208,25 +240,25 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
 
                 // console.log(value, 'value0923jrlkasdjflasdf');
 
-                await onChange({
-                  exhibit_List: informalNodeManagerPage.exhibit_List
-                    .map((e) => {
-                      // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
-                      if (e.name !== record.name) {
-                        return e;
-                      }
-
-                      return {
-                        ...e,
-                        isOnline: value,
-                        rule: {
-                          ...e.rule,
-                          online: value ? true : undefined,
-                          offline: !value ? true : undefined,
-                        },
-                      };
-                    }),
-                });
+                // await onChange({
+                //   exhibit_List: informalNodeManagerPage.exhibit_List
+                //     .map((e) => {
+                //       // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
+                //       if (e.testResourceName !== record.testResourceName) {
+                //         return e;
+                //       }
+                //
+                //       return {
+                //         ...e,
+                //         isOnline: value,
+                //         rule: {
+                //           ...e.rule,
+                //           online: value ? true : undefined,
+                //           offline: !value ? true : undefined,
+                //         },
+                //       };
+                //     }),
+                // });
               }}
             />
             {/*<FTooltip*/}
@@ -252,7 +284,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
     className={styles.table}
     dataSource={informalNodeManagerPage.exhibit_List.map((el) => {
       return {
-        key: el.id,
+        key: el.testResourceId,
         ...el,
       };
     })}
@@ -261,7 +293,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
   />);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(ExhibitTable);
 
@@ -273,7 +305,7 @@ interface ActionsProps {
   onDelete?(): void;
 }
 
-function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
+function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
   const refDom = React.useRef(null);
 
   return (<div ref={refDom}>
@@ -282,10 +314,10 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
         onEdit && (<FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
           <span>
           <FTextBtn
-            type="primary"
+            type='primary'
             onClick={() => onEdit()}
           >
-            <FEdit/>
+            <FEdit />
           </FTextBtn>
             </span>
         </FTooltip>)
@@ -295,10 +327,10 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
         onSearch && (<FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
           <span>
           <FTextBtn
-            type="primary"
+            type='primary'
             onClick={() => onSearch()}
           >
-            <FFileSearch/>
+            <FFileSearch />
           </FTextBtn>
             </span>
         </FTooltip>)
@@ -308,12 +340,12 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
         onDelete && (<Popconfirm
           title={'确定删除吗？'}
           // style={{width: 200}}
-          overlayStyle={{width: 150}}
-          trigger="hover"
+          overlayStyle={{ width: 150 }}
+          trigger='hover'
           getPopupContainer={() => refDom.current || document.body}
           onConfirm={() => onDelete()}
         >
-          <div><FTextBtn className={styles.Delete}><FDelete/></FTextBtn></div>
+          <div><FTextBtn className={styles.Delete}><FDelete /></FTextBtn></div>
         </Popconfirm>)
       }
 
