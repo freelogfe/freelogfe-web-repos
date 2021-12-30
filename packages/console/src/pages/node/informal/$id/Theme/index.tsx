@@ -61,16 +61,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
     return (<FLoadingTip height={'calc(100vh - 194px)'} />);
   }
 
-  // function onChange(value: Partial<InformalNodeManagerPageModelState>) {
-  //   dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload: {
-  //       ...value,
-  //     },
-  //   });
-  // }
-
-
   return (<>
     {
       informalNodeManagerPage.theme_ListState === 'noData'
@@ -171,7 +161,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         activate_theme = t.testResourceName;
                       }
 
-                      const isActive: boolean = false;
+                      const isActive: boolean = t.stateInfo.themeInfo.isActivatedTheme === 1;
 
                       return (<div
                         key={t.testResourceId}
@@ -183,7 +173,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                        style={{ borderRadius: 4 }} />
                           <div className={styles.coverLabel}>
                             {
-                              activate_theme === t.testResourceName
+                              isActive
                                 ? (<label className={styles.activated}>已激活</label>)
                                 : null
                             }
@@ -199,7 +189,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                   <div style={{ width: 1 }} />
 
                                   {
-                                    activate_theme !== t.testResourceName && (<>
+                                    !isActive && (<>
                                       <a onClick={() => {
                                         fConfirmModal({
                                           message: FUtil1.I18n.message('msg_change_theme_confirm'),

@@ -1393,7 +1393,7 @@ const Model: InformalNodeManagerPageModelType = {
           // themePageThemesTotal: data.totalItem,
           theme_List: [...themePageThemeList]
             .sort((a, b) => {
-              if (a.testResourceName === activatedTheme && b.testResourceName !== activatedTheme) {
+              if (a.stateInfo.themeInfo.isActivatedTheme === 1 && b.stateInfo.themeInfo.isActivatedTheme !== 1) {
                 return -1;
               }
               return 0;
