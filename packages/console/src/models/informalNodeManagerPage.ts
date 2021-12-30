@@ -124,6 +124,110 @@ type IConfirmValue = {
   scopes: ICandidate[][];
 }[];
 
+interface IActions {
+  comment: {
+    text: string;
+    operation: 'comment';
+  };
+  set_labels: {
+    operation: 'set_labels';
+    content: string[];
+  };
+  replace: {
+    operation: 'replace';
+    content: {
+      replaced: {
+        name: string;
+        versionRange: string;
+        type: 'resource' | 'object';
+      };
+      replacer: {
+        name: string;
+        type: 'resource' | 'object';
+      },
+      scopes: {
+        'name': 'u6/m6',
+        'versionRange': '*',
+        'type': 'resource'
+      }[][];
+    };
+  };
+  online: {
+    operation: 'online';
+    content: boolean;
+  };
+  set_title: {
+    operation: 'set_title';
+    content: string;
+  };
+  set_cover: {
+    operation: 'set_cover';
+    content: string;
+  };
+  add_attr: {
+    operation: 'add_attr';
+    content: {
+      key: string;
+      value: string;
+      description: string;
+    };
+  };
+  delete_attr: {
+    operation: 'delete_attr';
+    content: {
+      key: string;
+    };
+  };
+}
+
+export interface IRules {
+  comment: {
+    operation: 'comment';
+    text: string;
+  };
+  add: {
+    operation: 'add';
+    exhibitName: string;
+    candidate: {
+      name: string;
+      versionRange: string;
+      type: 'resource' | 'object';
+    };
+    actions: Array<IActions['comment']
+      | IActions['set_labels']
+      | IActions['replace']
+      | IActions['online']
+      | IActions['set_title']
+      | IActions['set_cover']
+      | IActions['add_attr']
+      | IActions['delete_attr']>;
+    text: string;
+  };
+  alter: {
+    operation: 'alter';
+    exhibitName: string;
+    candidate: {
+      name: string;
+      versionRange: string;
+      type: 'resource' | 'object';
+    };
+    actions: Array<IActions['comment']
+      | IActions['set_labels']
+      | IActions['replace']
+      | IActions['online']
+      | IActions['set_title']
+      | IActions['set_cover']
+      | IActions['add_attr']
+      | IActions['delete_attr']>;
+    text: string;
+  };
+  activate_theme: {
+    operation: 'activate_theme'
+    exhibitName: string;
+    text: string;
+  };
+}
+
 export interface InformalNodeManagerPageModelState {
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
@@ -133,8 +237,8 @@ export interface InformalNodeManagerPageModelState {
   node_TestUrl: string;
   node_RuleText: string;
   node_AllRuleResult: any;
-  node_RuleAllAddedResourceNames: string[];
-  node_RuleAllAddedObjectNames: string[];
+  // node_RuleAllAddedResourceNames: string[];
+  // node_RuleAllAddedObjectNames: string[];
 
   addExhibitDrawer_Visible: boolean;
 
@@ -189,24 +293,6 @@ export interface InformalNodeManagerPageModelState {
   exhibit_FilterKeywords: string;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
-  // exhibit_List: {
-  //   id: string;
-  //   cover: string;
-  //   associatedExhibitID: string;
-  //   name: string;
-  //   title: string;
-  //   identity: 'resource' | 'object' | 'exhibit';
-  //   originInfo: {
-  //     id: string;
-  //     name: string;
-  //     type: 'resource' | 'object';
-  //   };
-  //   rule: IMappingRule;
-  //   version: string;
-  //   isOnline: boolean;
-  //   isAuth: boolean;
-  //   authErrorText: string;
-  // }[];
   exhibit_List: ExhibitList;
   exhibit_PageError: string;
 
@@ -214,38 +300,24 @@ export interface InformalNodeManagerPageModelState {
   theme_FilterKeywords: string;
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
-  // theme_List: {
-  //   id: string;
-  //   name: string;
-  //   identity: 'resource' | 'object' | 'exhibit';
-  //   cover: string;
-  //   version: string;
-  //   rule: IMappingRule;
-  //   isOnline: boolean;
-  //   isAuth: boolean;
-  //   authErrorText: string;
-  //   originInfo: {
-  //     id: string;
-  //     name: string;
-  //     type: 'resource' | 'object';
-  //   };
-  // }[];
   theme_List: ExhibitList;
   theme_PageError: string;
 
   rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
-  // rule_Indeterminate: boolean;
-  // rule_IndeterminateChecked: boolean;
   rule_RuleList: {
     id: string;
     checked: boolean;
     matchErrors: string[];
-    ruleInfo: any;
-    efficientInfos: any[];
+    ruleInfo: IRules['comment'] | IRules['add'] | IRules['alter'] | IRules['activate_theme'];
+    efficientInfos: {
+      count: number;
+      type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
+    }[];
   }[];
   rule_CodeInput: string;
   rule_CodeIsDirty: boolean;
   rule_PromptLeavePath: string;
+
   rule_CodeState: 'editing' | 'checking' | 'compileError' | 'executionError' | 'noError';
   rule_CodeCompileErrors: {
     charPositionInLine: number;
@@ -412,12 +484,12 @@ export interface OnClickActiveThemeBtnAction extends AnyAction {
   };
 }
 
-export interface FetchRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchRules' | 'fetchRules';
+export interface Fetch_Rules_Action extends AnyAction {
+  type: 'fetch_Rules';
 }
 
 export interface SaveRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/saveRules' | 'saveRules';
+  type: 'saveRules';
 }
 
 export interface OnLoad_Rule_ImportFileInput_Action extends AnyAction {
@@ -674,7 +746,7 @@ interface InformalNodeManagerPageModelType {
     onLoadMoreThemes: (action: OnLoadMoreThemesAction, effects: EffectsCommandMap) => void;
     onClickActiveThemeBtn: (action: OnClickActiveThemeBtnAction, effects: EffectsCommandMap) => void;
 
-    fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
+    fetch_Rules: (action: Fetch_Rules_Action, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
     onLoad_Rule_ImportFileInput: (action: OnLoad_Rule_ImportFileInput_Action, effects: EffectsCommandMap) => void;
@@ -851,8 +923,8 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_TestUrl: '',
   node_RuleText: '',
   node_AllRuleResult: null,
-  node_RuleAllAddedResourceNames: [],
-  node_RuleAllAddedObjectNames: [],
+  // node_RuleAllAddedResourceNames: [],
+  // node_RuleAllAddedObjectNames: [],
 
   addExhibitDrawer_Visible: false,
 
@@ -936,8 +1008,8 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onMountRulePage({}: OnMountRulePageAction, { put }: EffectsCommandMap) {
-      yield put<FetchRulesAction>({
-        type: 'fetchRules',
+      yield put<Fetch_Rules_Action>({
+        type: 'fetch_Rules',
       });
     },
     * onUnmountRulePage({}: OnUnmountRulePageAction, { put }: EffectsCommandMap) {
@@ -1168,16 +1240,16 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           node_RuleText: result.ruleText,
           node_AllRuleResult: result.testRules,
-          node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
-            return tr.ruleInfo.candidate.type === 'object';
-          }).map((tr: any) => {
-            return tr.ruleInfo.candidate.name;
-          }),
-          node_RuleAllAddedResourceNames: allAddRule.filter((tr: any) => {
-            return tr.ruleInfo.candidate.type === 'resource';
-          }).map((tr: any) => {
-            return tr.ruleInfo.candidate.name;
-          }),
+          // node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
+          //   return tr.ruleInfo.candidate.type === 'object';
+          // }).map((tr: any) => {
+          //   return tr.ruleInfo.candidate.name;
+          // }),
+          // node_RuleAllAddedResourceNames: allAddRule.filter((tr: any) => {
+          //   return tr.ruleInfo.candidate.type === 'resource';
+          // }).map((tr: any) => {
+          //   return tr.ruleInfo.candidate.name;
+          // }),
           // exhibitPageExhibitsTotal: data.totalItem,
           exhibit_List: exhibitList,
           exhibit_ListState: state,
@@ -1516,7 +1588,7 @@ const Model: InformalNodeManagerPageModelType = {
       // });
     },
 
-    * fetchRules({}: FetchRulesAction, { call, select, put }: EffectsCommandMap) {
+    * fetch_Rules({}: Fetch_Rules_Action, { call, select, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1533,16 +1605,16 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_CodeInput: data.ruleText,
           rule_CodeIsDirty: false,
-          // rule_Indeterminate: false,
-          // rule_IndeterminateChecked: false,
-          rule_RuleList: data.testRules.filter((tr: any) => {
-            return tr.ruleInfo.operation !== 'comment';
-          }).map((tr: any) => {
-            return {
-              ...tr,
-              checked: false,
-            };
-          }),
+          rule_RuleList: data.testRules
+            .filter((tr: any) => {
+              return tr.ruleInfo.operation !== 'comment';
+            })
+            .map((tr: any) => {
+              return {
+                ...tr,
+                checked: false,
+              };
+            }),
           rule_CodeExecutionErrors: [],
           rule_CodeEfficients: [],
         },

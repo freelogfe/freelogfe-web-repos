@@ -42,7 +42,7 @@ import {
   OnClick_Rule_Delete_CancelBtn_Action,
   OnClick_Rule_Delete_ConfirmBtn_Action,
   OnChange_Rule_Codemirror_Action,
-  OnClick_Rule_SaveBtn_Action,
+  OnClick_Rule_SaveBtn_Action, IRules,
 } from '@/models/informalNodeManagerPage';
 import FileSaver from 'file-saver';
 import FUpload from '@/components/FUpload';
@@ -92,71 +92,71 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
-  const ruleObjList = informalNodeManagerPage.rule_RuleList.map((rule) => {
-    // console.log(rule, '##@$@#$');
-    const { ruleInfo } = rule;
-
-    let theRule: any = {};
-    if (ruleInfo.operation === 'activate_theme') {
-      theRule = {
-        active: ruleInfo.themeName,
-      };
-    } else {
-      theRule = {
-        add: ruleInfo.operation === 'add' ? {
-          exhibit: ruleInfo.exhibitName,
-          source: {
-            type: ruleInfo.candidate.type,
-            name: ruleInfo.candidate.name,
-            versionRange: ruleInfo.candidate.versionRange && ruleInfo.candidate.versionRange !== 'latest' ? ruleInfo.candidate.versionRange : undefined,
-          },
-        } : undefined,
-        alter: ruleInfo.operation === 'alter' ? ruleInfo.exhibitName : undefined,
-        // $version: r.candidate.versionRange,
-        cover: ruleInfo.cover,
-        title: ruleInfo.title,
-        online: ruleInfo.online === true,
-        offline: ruleInfo.online === false,
-        labels: ruleInfo.labels,
-        // replaces: r.replaces,
-        replaces: ruleInfo.replaces && (ruleInfo.replaces as any[]).map((rr: any) => {
-          // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-          return {
-            replaced: {
-              ...rr.replaced,
-              versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-            },
-            replacer: {
-              ...rr.replacer,
-              versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-            },
-            scopes: rr.scopes && (rr.scopes as any[])
-              .map((ss: any) => {
-                // console.log(ss, 'ss!!!!@@@@##');
-                return ss.map((sss: any) => {
-                  return {
-                    ...sss,
-                    versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                  };
-                });
-              }),
-          };
-        }),
-        attrs: ruleInfo.attrs?.map((a: any) => {
-          return {
-            type: a.operation,
-            theKey: a.key,
-            value: a.value,
-            description: a.description,
-          };
-        }),
-      };
-    }
-    return {
-      ...rule,
-      theRule,
-    };
-  });
+  // const ruleObjList = informalNodeManagerPage.rule_RuleList.map((rule) => {
+  //   // console.log(rule, '##@$@#$');
+  //   const { ruleInfo } = rule;
+  //
+  //   let theRule: any = {};
+  //   if (ruleInfo.operation === 'activate_theme') {
+  //     theRule = {
+  //       active: ruleInfo.exhibitName,
+  //     };
+  //   } else {
+  //     theRule = {
+  //       add: ruleInfo.operation === 'add' ? {
+  //         exhibit: ruleInfo.exhibitName,
+  //         source: {
+  //           type: ruleInfo.candidate.type,
+  //           name: ruleInfo.candidate.name,
+  //           versionRange: ruleInfo.candidate.versionRange && ruleInfo.candidate.versionRange !== 'latest' ? ruleInfo.candidate.versionRange : undefined,
+  //         },
+  //       } : undefined,
+  //       alter: ruleInfo.operation === 'alter' ? ruleInfo.exhibitName : undefined,
+  //       // $version: r.candidate.versionRange,
+  //       cover: ruleInfo.a,
+  //       title: ruleInfo.title,
+  //       online: ruleInfo.online === true,
+  //       offline: ruleInfo.online === false,
+  //       labels: ruleInfo.labels,
+  //       // replaces: r.replaces,
+  //       replaces: ruleInfo.replaces && (ruleInfo.replaces as any[]).map((rr: any) => {
+  //         // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+  //         return {
+  //           replaced: {
+  //             ...rr.replaced,
+  //             versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+  //           },
+  //           replacer: {
+  //             ...rr.replacer,
+  //             versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+  //           },
+  //           scopes: rr.scopes && (rr.scopes as any[])
+  //             .map((ss: any) => {
+  //               // console.log(ss, 'ss!!!!@@@@##');
+  //               return ss.map((sss: any) => {
+  //                 return {
+  //                   ...sss,
+  //                   versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+  //                 };
+  //               });
+  //             }),
+  //         };
+  //       }),
+  //       attrs: ruleInfo.attrs?.map((a: any) => {
+  //         return {
+  //           type: a.operation,
+  //           theKey: a.key,
+  //           value: a.value,
+  //           description: a.description,
+  //         };
+  //       }),
+  //     };
+  //   }
+  //   return {
+  //     ...rule,
+  //     theRule,
+  //   };
+  // });
 
   async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
     await dispatch<ChangeAction>({
@@ -485,12 +485,12 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             direction='vertical'
           >
             {
-              ruleObjList.length > 0 && informalNodeManagerPage.rule_PageStatus !== 'normal' && (
+              informalNodeManagerPage.rule_RuleList.length > 0 && informalNodeManagerPage.rule_PageStatus !== 'normal' && (
                 <div style={{ paddingLeft: 20 }}>
                   <Space size={10}>
                     <FCheckbox
-                      indeterminate={!(ruleObjList.every((ro) => ro.checked) || ruleObjList.every((ro) => !ro.checked))}
-                      checked={ruleObjList.every((ro) => ro.checked)}
+                      indeterminate={!(informalNodeManagerPage.rule_RuleList.every((ro) => ro.checked) || informalNodeManagerPage.rule_RuleList.every((ro) => !ro.checked))}
+                      checked={informalNodeManagerPage.rule_RuleList.every((ro) => ro.checked)}
                       onChange={(e) => {
                         dispatch<OnChange_Rule_CheckAllCheckbox_Action>({
                           type: 'informalNodeManagerPage/OoChange_Rule_CheckAllCheckbox',
@@ -506,9 +506,9 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             }
 
             {
-              ruleObjList.length === 0
+              informalNodeManagerPage.rule_RuleList.length === 0
                 ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'} />)
-                : ruleObjList.map(({ theRule, ...rule }, index: number, ruleObjListArray) => {
+                : informalNodeManagerPage.rule_RuleList.map((rule, index: number, ruleObjListArray) => {
                   return (<div
                     key={rule.id}
                     className={styles.ruleCard}
@@ -530,9 +530,16 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           />)
                         }
 
-                        {theRule.add && <AddRule {...theRule.add} />}
-                        {theRule.alter && <AlterRule alter={theRule.alter} />}
-                        {theRule.active && <ActiveRule active={theRule.active} />}
+                        {rule.ruleInfo.operation === 'add' && <AddRule
+                          exhibit={rule.ruleInfo.exhibitName}
+                          source={rule.ruleInfo.candidate}
+                        />}
+                        {rule.ruleInfo.operation === 'alter' && <AlterRule
+                          alter={rule.ruleInfo.exhibitName}
+                        />}
+                        {rule.ruleInfo.operation === 'activate_theme' && <ActiveRule
+                          active={rule.ruleInfo.exhibitName}
+                        />}
                       </Space>
                       {
                         rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
@@ -544,33 +551,57 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
                     </div>
                     {
-                      !(!theRule.cover && !theRule.title && !theRule.labels && !theRule.online && !theRule.offline && !theRule.replaces && !theRule.attrs)
-                      && (<div className={styles.ruleCardBody}>
+                      (rule.ruleInfo.operation === 'add' || rule.ruleInfo.operation === 'alter')
+                      && rule.ruleInfo.actions.length > 0 && (<div className={styles.ruleCardBody}>
                         <Space
                           className={styles.ruleCardBodyList}
                           size={15}
                           direction='vertical'
                         >
-                          {/*{theRule.version && <VersionRule version={theRule.version}/>}*/}
-                          {theRule.cover &&
-                          <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover} /></div>}
-                          {theRule.title &&
-                          <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title} /></div>}
-                          {theRule.labels &&
-                          <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels} /></div>}
-                          {theRule.online &&
-                          <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online} /></div>}
-                          {theRule.offline &&
-                          <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline} /></div>}
-                          {theRule.replaces && theRule.replaces.map((replace: any, replaceIndex: any) => {
-                            return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
-                              {...replace}
-                            /></div>);
-                          })}
-                          {theRule.attrs && theRule.attrs.map((attr: any, attrIndex: any) => {
-                            return (
-                              <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr} /></div>);
-                          })}
+                          {
+                            rule.ruleInfo.actions.map((ruleAction, ind) => {
+                              return (<div className={styles.ruleCardBodyListItem} key={ind}>
+                                {
+                                  ruleAction.operation === 'set_cover' && (<CoverRule cover={ruleAction.content} />)
+                                }
+                                {
+                                  ruleAction.operation === 'set_title' && (<TitleRule title={ruleAction.content} />)
+                                }
+                                {
+                                  ruleAction.operation === 'set_labels' && (<LabelRule labels={ruleAction.content} />)
+                                }
+                                {
+                                  ruleAction.operation === 'online' && (<>
+                                    {ruleAction.content
+                                      ? (<OnlineRule online />)
+                                      : (<OfflineRule offline />)}
+                                  </>)
+                                }
+                                {
+                                  ruleAction.operation === 'replace' && (<ReplaceRule
+                                    replaced={ruleAction.content.replaced}
+                                    replacer={ruleAction.content.replacer}
+                                    scopes={ruleAction.content.scopes}
+                                  />)
+                                }
+                                {
+                                  ruleAction.operation === 'add_attr' && (<AttrRule
+                                    type={'add'}
+                                    theKey={ruleAction.content.key}
+                                    value={ruleAction.content.value}
+                                    description={ruleAction.content.description}
+                                  />)
+                                }
+                                {
+                                  ruleAction.operation === 'delete_attr' && (<AttrRule
+                                    type={'add'}
+                                    theKey={ruleAction.content.key}
+                                  />)
+                                }
+                              </div>);
+
+                            })
+                          }
 
                         </Space>
                       </div>)

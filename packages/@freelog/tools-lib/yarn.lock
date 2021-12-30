@@ -917,10 +917,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@freelog/resource-policy-lang@^1.1.25":
-  version "1.1.25"
-  resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.1.25.tgz#385ee56a2993d2f0fb9dcc933ee9c611d6cc5716"
-  integrity sha512-HjbFW6c7GP0l6T/Nh4p1GogbLO6WRO9BwkTQqgvWzUm1sZTo141DeeypzMvxd55nZV3XU3CJEUKDc+xGYx8Uow==
+"@freelog/resource-policy-lang@1.1.26":
+  version "1.1.26"
+  resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.1.26.tgz#328daec30c532421c2dba9fad6d54fa9815da077"
+  integrity sha512-fUhIaeDV167hJJw4wEWUxuC9VDQycxaGnEU1EA2waHsW0s17gySZzPwZn6wFOA4HR4Z6YiC0lfr3se4WS+El2g==
   dependencies:
     "@types/node" "^15.3.1"
     antlr4 "4.8.0"
