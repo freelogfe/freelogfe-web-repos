@@ -12,38 +12,7 @@ import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
-interface IMappingRule {
-  add?: {
-    exhibit: string;
-    source: {
-      type: 'resource' | 'object';
-      name: string;
-      version?: string;
-      versionRange?: string;
-    };
-  };
-  alter?: string;
-  active?: string;
-  version?: string;
-  cover?: string;
-  title?: string;
-  online?: boolean;
-  offline?: boolean;
-  labels?: string[];
-  replaces?: {
-    replaced: ICandidate;
-    replacer: ICandidate;
-    scopes: ICandidate[][];
-  }[];
-  attrs?: {
-    type: 'add' | 'delete',
-    theKey: string;
-    value?: string;
-    description?: string;
-  }[];
-}
-
-type ExhibitList = {
+export interface IExhibit {
   testResourceId: string;
   testResourceName: string;
   associatedPresentableId: string;
@@ -100,8 +69,7 @@ type ExhibitList = {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
-
-}[]
+}
 
 export interface TreeNode {
   title: string;
@@ -293,14 +261,14 @@ export interface InformalNodeManagerPageModelState {
   exhibit_FilterKeywords: string;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
-  exhibit_List: ExhibitList;
+  exhibit_List: IExhibit[];
   exhibit_PageError: string;
 
   theme_ActivatingThemeName: string;
   theme_FilterKeywords: string;
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
-  theme_List: ExhibitList;
+  theme_List: IExhibit[];
   theme_PageError: string;
 
   rule_PageStatus: 'normal' | 'export' | 'delete' | 'coding';
@@ -308,7 +276,7 @@ export interface InformalNodeManagerPageModelState {
     id: string;
     checked: boolean;
     matchErrors: string[];
-    ruleInfo: IRules['comment'] | IRules['add'] | IRules['alter'] | IRules['activate_theme'];
+    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'];
     efficientInfos: {
       count: number;
       type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
@@ -1096,18 +1064,19 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      const params2: RuleMatchStatusParams = {
+      const params2: RuleMatchAndResultParams = {
         nodeID: informalNodeManagerPage.node_ID,
         isRematch: isRematch,
       };
 
-      const { error, result } = yield call(ruleMatchStatus, params2);
+      //ReturnType<typeof ruleMatchAndResult>
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
-      if (error) {
+      if (result.status === 2) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            exhibit_PageError: error,
+            exhibit_PageError: '匹配失败',
           },
         });
         return;
@@ -1335,18 +1304,18 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const params2: RuleMatchStatusParams = {
+      const params2: RuleMatchAndResultParams = {
         nodeID: informalNodeManagerPage.node_ID,
         isRematch: isRematch,
       };
 
-      const { error, result } = yield call(ruleMatchStatus, params2);
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
-      if (error) {
+      if (result.status === 2) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            theme_PageError: error,
+            theme_PageError: '匹配失败',
           },
         });
         return;
@@ -1639,10 +1608,10 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
       // console.log(data, 'data092u3jo4kj23l4kjl');
 
-      const params1: RuleMatchStatusParams = {
+      const params1: RuleMatchAndResultParams = {
         nodeID: informalNodeManagerPage.node_ID,
       };
-      const { error, result } = yield call(ruleMatchStatus, params1);
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params1);
 
       // console.log(data1, 'data1!@#$!@#$@#');
 
@@ -1712,14 +1681,14 @@ const Model: InformalNodeManagerPageModelType = {
         const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
       }
 
-      const params2: RuleMatchStatusParams = {
+      const params2: RuleMatchAndResultParams = {
         nodeID: informalNodeManagerPage.node_ID,
         isRematch: true,
       };
 
-      const { error, result } = yield call(ruleMatchStatus, params2);
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
-      if (error) {
+      if (result.status === 2) {
         return;
       }
 
@@ -2673,26 +2642,40 @@ const Model: InformalNodeManagerPageModelType = {
 
 export default Model;
 
-interface RuleMatchStatusParams {
+
+interface RuleMatchAndResultParams {
   nodeID: number;
   isRematch?: boolean;
 }
 
-async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<{
-  error: string | null;
-  result?: any;
-}> {
-  // const params: RulesRematchParamsType = {
-  //   nodeId: nodeID,
-  // };
+export interface RuleMatchAndResultReturn {
+  nodeId: number;
+  ruleText: string;
+  status: 2 | 3;
+  testRules: {
+    id: string;
+    matchErrors: string[];
+    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'];
+    efficientInfos: {
+      count: number;
+      type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
+    }[];
+  }[];
+  themeId: string;
+}
+
+export async function ruleMatchAndResult({
+                                    nodeID,
+                                    isRematch = false,
+                                  }: RuleMatchAndResultParams): Promise<RuleMatchAndResultReturn> {
 
   if (isRematch) {
     const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
-    if (errCode !== 0 || !data) {
-      return {
-        error: '匹配失败',
-      };
-    }
+    // if (errCode !== 0 || !data) {
+    //   return {
+    //     error: '匹配失败',
+    //   };
+    // }
   }
 
   while (true) {
@@ -2701,15 +2684,7 @@ async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusPar
     if (response.data.status === 1) {
       await sleep();
     } else {
-      if (response.data.status === 2) {
-        return {
-          error: '匹配失败',
-        };
-      }
-      return {
-        error: null,
-        result: response.data,
-      };
+      return response.data;
     }
   }
 
