@@ -15,6 +15,7 @@ import {
 } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import { IGraph_Dependency_Edges, IGraph_Dependency_Nodes } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
+import { RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -31,7 +32,7 @@ export interface InformExhibitInfoPageModelState {
   node_ID: number;
   node_Name: string;
   node_RuleText: string;
-  node_RuleResult: any;
+  node_RuleResult: null | RuleMatchAndResultReturn['testRules'];
   // node_MappingRule: {
   //   add?: {
   //     exhibit: string;
@@ -812,7 +813,7 @@ const Model: ExhibitInfoPageModelType = {
       const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       // const {rules} = compile(data1.ruleText);
-      const rules = informExhibitInfoPage.node_RuleResult.map((rr: any) => {
+      const rules = (informExhibitInfoPage.node_RuleResult || []).map((rr: any) => {
         return rr.ruleInfo;
       });
 

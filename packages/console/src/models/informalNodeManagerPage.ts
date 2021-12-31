@@ -203,10 +203,11 @@ export interface InformalNodeManagerPageModelState {
   node_Name: string;
   node_Url: string;
   node_TestUrl: string;
-  node_RuleText: string;
-  node_AllRuleResult: any;
+  // node_RuleText: string;
+  // node_AllRuleResult: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']>;
   // node_RuleAllAddedResourceNames: string[];
   // node_RuleAllAddedObjectNames: string[];
+  node_RuleInfo: null | RuleMatchAndResultReturn;
 
   addExhibitDrawer_Visible: boolean;
 
@@ -889,8 +890,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_Name: '',
   node_Url: '',
   node_TestUrl: '',
-  node_RuleText: '',
-  node_AllRuleResult: null,
+  node_RuleInfo: null,
+  // node_RuleText: '',
+  // node_AllRuleResult: [],
   // node_RuleAllAddedResourceNames: [],
   // node_RuleAllAddedObjectNames: [],
 
@@ -1071,6 +1073,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       //ReturnType<typeof ruleMatchAndResult>
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      console.log(result, 'resultresultresult!@$!@#$@#4');
 
       if (result.status === 2) {
         yield put<ChangeAction>({
@@ -1104,7 +1107,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log('###1111111111111');
       // console.log(result, 'result.ruleTextresult.ruleText2309482309');
-      const { rules: rulesObj } = compile(result.ruleText);
+      // const { rules: rulesObj } = compile(result.ruleText);
 
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
@@ -1192,9 +1195,9 @@ const Model: InformalNodeManagerPageModelType = {
       // ];
 
       // console.log('###3333333333333');
-      const allAddRule = result.testRules.filter((tr: any) => {
-        return tr.ruleInfo.operation === 'add';
-      });
+      // const allAddRule = result.testRules.filter((tr: any) => {
+      //   return tr.ruleInfo.operation === 'add';
+      // });
 
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
@@ -1207,8 +1210,8 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: result.ruleText,
-          node_AllRuleResult: result.testRules,
+          // node_RuleText: result.ruleText,
+          // node_AllRuleResult: result.testRules,
           // node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
           //   return tr.ruleInfo.candidate.type === 'object';
           // }).map((tr: any) => {
@@ -1292,7 +1295,6 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-
 
     * fetchThemeList({ payload: { isRematch = true, isRestart } }: FetchThemeListAction, {
       call,
@@ -1430,7 +1432,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: result.ruleText,
+          // node_RuleText: result.ruleText,
           // themePageThemesTotal: data.totalItem,
           theme_List: [...themePageThemeList]
             .sort((a, b) => {
@@ -1490,54 +1492,54 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       // console.log(payload, 'payload0923u4rjlksfdjflk');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          theme_ActivatingThemeName: payload.themeName,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     theme_ActivatingThemeName: payload.themeName,
+      //   },
+      // });
 
-      const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
+      // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
       // console.log(rules, 'rules1234234');
-      const rule = rules.find((r) => r.themeName);
+      // const rule = rules.find((r) => r.themeName);
 
-      let data;
+      // let data;
 
-      if (rule) {
-        data = rules.map((r) => {
-          if (!r.themeName) {
-            return r;
-          }
-          return {
-            ...r,
-            themeName: payload.themeName,
-          };
-        });
-      } else {
-        data = [
-          {
-            operation: 'activate_theme',
-            themeName: payload.themeName,
-          },
-          ...rules,
-        ];
-      }
+      // if (rule) {
+      //   data = rules.map((r) => {
+      //     if (!r.themeName) {
+      //       return r;
+      //     }
+      //     return {
+      //       ...r,
+      //       themeName: payload.themeName,
+      //     };
+      //   });
+      // } else {
+      //   data = [
+      //     {
+      //       operation: 'activate_theme',
+      //       themeName: payload.themeName,
+      //     },
+      //     ...rules,
+      //   ];
+      // }
 
-      yield put<SaveDataRulesAction>({
-        type: 'saveDataRules',
-        payload: {
-          type: 'replace',
-          data: data,
-        },
-      });
-
-      yield put<FetchThemeListAction>({
-        type: 'fetchThemeList',
-        payload: {
-          isRematch: true,
-          isRestart: true,
-        },
-      });
+      // yield put<SaveDataRulesAction>({
+      //   type: 'saveDataRules',
+      //   payload: {
+      //     type: 'replace',
+      //     data: data,
+      //   },
+      // });
+      //
+      // yield put<FetchThemeListAction>({
+      //   type: 'fetchThemeList',
+      //   payload: {
+      //     isRematch: true,
+      //     isRestart: true,
+      //   },
+      // });
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
@@ -1643,7 +1645,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_RuleText: result.ruleText,
+          // node_RuleText: result.ruleText,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
           rule_CodeExecutionErrors: rule_CodeExecutionErrors,
@@ -1831,7 +1833,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_PageStatus: 'normal',
 
-          rule_CodeInput: informalNodeManagerPage.node_RuleText,
+          rule_CodeInput: informalNodeManagerPage.node_RuleInfo?.ruleText || '',
           rule_CodeIsDirty: false,
           rule_CodeState: 'editing',
           rule_CodeCompileErrors: [],
@@ -1853,7 +1855,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rule_PageStatus: 'normal',
 
-          rule_CodeInput: informalNodeManagerPage.node_RuleText,
+          rule_CodeInput: informalNodeManagerPage.node_RuleInfo?.ruleText || '',
           rule_CodeIsDirty: false,
           rule_CodeState: 'editing',
           rule_CodeCompileErrors: [],
@@ -2584,7 +2586,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // return results;
 
-      const rules: any[] = informalNodeManagerPage.node_AllRuleResult.map((rr: any) => {
+      const rules: any[] = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
         return rr.ruleInfo;
       });
       // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
@@ -2665,9 +2667,9 @@ export interface RuleMatchAndResultReturn {
 }
 
 export async function ruleMatchAndResult({
-                                    nodeID,
-                                    isRematch = false,
-                                  }: RuleMatchAndResultParams): Promise<RuleMatchAndResultReturn> {
+                                           nodeID,
+                                           isRematch = false,
+                                         }: RuleMatchAndResultParams): Promise<RuleMatchAndResultReturn> {
 
   if (isRematch) {
     const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
