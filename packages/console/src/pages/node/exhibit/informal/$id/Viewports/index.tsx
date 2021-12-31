@@ -11,8 +11,9 @@ import {
 } from '@/components/FAntvG6';
 import FDrawer from '@/components/FDrawer';
 import {
-  ChangeAction,
-  InformExhibitInfoPageModelState, OnCancel_Graph_FullScreenDrawer_Action, OnChange_Graph_Tab_Action,
+  InformExhibitInfoPageModelState,
+  OnCancel_Graph_FullScreenDrawer_Action,
+  OnChange_Graph_Tab_Action,
   OnClick_Graph_FullScreenBtn_Action,
 } from '@/models/informExhibitInfoPage';
 import { connect, Dispatch } from 'dva';

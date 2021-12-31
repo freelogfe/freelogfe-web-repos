@@ -1,17 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
+import {connect} from 'dva';
+import {ConnectState} from '@/models/connect';
 import Info from './Info';
 import Relation from './Relation';
 import Setting from './Setting';
 
 interface SideProps {
-  dispatch: Dispatch;
-  exhibitInfoPage: ExhibitInfoPageModelState,
+
 }
 
-function Side({dispatch, exhibitInfoPage}: SideProps) {
+function Side({}: SideProps) {
 
 
   return (<div className={styles.side}>

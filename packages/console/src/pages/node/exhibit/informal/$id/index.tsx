@@ -189,6 +189,7 @@ function RuleBar({ t }: RuleBar) {
   }
 
   return (<MappingRule
+    placement='bottom'
     add={add || undefined}
     alter={alter || undefined}
     active={activate_theme || undefined}
