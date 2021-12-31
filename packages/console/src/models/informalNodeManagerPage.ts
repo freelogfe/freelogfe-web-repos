@@ -1210,6 +1210,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          node_RuleInfo: result,
           // node_RuleText: result.ruleText,
           // node_AllRuleResult: result.testRules,
           // node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
@@ -1432,6 +1433,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          node_RuleInfo: result,
           // node_RuleText: result.ruleText,
           // themePageThemesTotal: data.totalItem,
           theme_List: [...themePageThemeList]
@@ -1645,6 +1647,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          node_RuleInfo: result,
           // node_RuleText: result.ruleText,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
@@ -1693,6 +1696,13 @@ const Model: InformalNodeManagerPageModelType = {
       if (result.status === 2) {
         return;
       }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
 
       const codeExecutionError = result.testRules
         .filter((tr: any) => {
