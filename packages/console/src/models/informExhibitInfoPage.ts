@@ -32,35 +32,35 @@ export interface InformExhibitInfoPageModelState {
   node_Name: string;
   node_RuleText: string;
   node_RuleResult: any;
-  node_MappingRule: {
-    add?: {
-      exhibit: string;
-      source: {
-        type: 'resource' | 'object';
-        name: string;
-        version?: string;
-      };
-    };
-    alter?: string;
-    active?: string;
-    version?: string;
-    cover?: string;
-    title?: string;
-    online?: boolean;
-    offline?: boolean;
-    labels?: string[];
-    replaces?: {
-      replaced: ICandidate;
-      replacer: ICandidate;
-      scopes?: ICandidate[][];
-    }[];
-    attrs?: {
-      type: 'add' | 'delete',
-      theKey: string;
-      value?: string;
-      description?: string;
-    }[];
-  } | null;
+  // node_MappingRule: {
+  //   add?: {
+  //     exhibit: string;
+  //     source: {
+  //       type: 'resource' | 'object';
+  //       name: string;
+  //       version?: string;
+  //     };
+  //   };
+  //   alter?: string;
+  //   active?: string;
+  //   version?: string;
+  //   cover?: string;
+  //   title?: string;
+  //   online?: boolean;
+  //   offline?: boolean;
+  //   labels?: string[];
+  //   replaces?: {
+  //     replaced: ICandidate;
+  //     replacer: ICandidate;
+  //     scopes?: ICandidate[][];
+  //   }[];
+  //   attrs?: {
+  //     type: 'add' | 'delete',
+  //     theKey: string;
+  //     value?: string;
+  //     description?: string;
+  //   }[];
+  // } | null;
 
   exhibit_ID: string;
   exhibit_Name: string;
@@ -73,6 +73,67 @@ export interface InformExhibitInfoPageModelState {
     text: string;
     disabled: boolean;
   } | null;
+  exhibit_Info: null | {
+    testResourceId: string;
+    testResourceName: string;
+    associatedPresentableId: string;
+    nodeId: number;
+    resourceType: string;
+    originInfo: {
+      id: string;
+      name: string;
+      resourceType: string;
+      type: 'resource' | 'object';
+      version: string; // 测试资源引用的实体版本
+      versionRange: string; // 测试资源引用的实体版本范围
+      versions: string[]; // 测试资源的所有版本
+    };
+    stateInfo: {
+      coverInfo: {
+        coverImages: string[];
+        ruleId: 'default' | string;
+      };
+      onlineStatusInfo: {
+        ruleId: 'default' | string;
+        onlineStatus: 0 | 1;
+      };
+      propertyInfo: {
+        ruleId: 'default' | string;
+        testResourceProperty: {
+          authority: 1 | 2 | 4 | 6, //1:只读 2:可编辑 4:可删除 6:可删除可编辑,
+          remark: string;
+          key: string;
+          value: string | number;
+          isRuleAdd?: true;
+        }[];
+      };
+      replaceInfo: {
+        rootResourceReplacer: null;
+        replaceRecords: {
+          replaced: ICandidate;
+          replacer: ICandidate;
+          scopes?: ICandidate[][];
+        }[];
+        ruleId: 'default' | string;
+      };
+      tagInfo: {
+        tags: string[];
+        ruleId: 'default' | string;
+      };
+      themeInfo: {
+        isActivatedTheme: 0 | 1;
+        ruleId: 'default' | string;
+      };
+      titleInfo: {
+        title: string;
+        ruleId: 'default' | string;
+      };
+    };
+    rules: {
+      operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
+      ruleId: string;
+    }[];
+  };
 
   contract_Associated: {
     selected: boolean;
@@ -396,7 +457,7 @@ const initStates: InformExhibitInfoPageModelState = {
   node_Name: '',
   node_RuleText: '',
   node_RuleResult: null,
-  node_MappingRule: null,
+  // node_MappingRule: null,
 
   exhibit_ID: '',
   exhibit_Name: '',
@@ -405,6 +466,7 @@ const initStates: InformExhibitInfoPageModelState = {
   exhibit_RuleResult: null,
   exhibit_RuleID: '',
   exhibit_OnlineSwitchObj: null,
+  exhibit_Info: null,
 
   contract_Associated: [],
 
@@ -598,6 +660,7 @@ const Model: ExhibitInfoPageModelType = {
               : FUtil1.I18n.message('btn_show_exhibit'),
             disabled: isDisabled,
           },
+          exhibit_Info: data,
 
           side_Exhibit_Cover: data.stateInfo.coverInfo.coverImages[0] || '',
           side_Exhibit_Title: data.stateInfo.titleInfo.title || '',
@@ -684,49 +747,50 @@ const Model: ExhibitInfoPageModelType = {
       const { data: data2 } = yield call(ruleMatchStatus, params2);
       // console.log(data2, '##@#$@#$@#!!!!!!!!!1234');
 
-      const currentRule = data2.testRules.find((ro: any) => {
-        return ro.id === data.rules[0]?.ruleId;
-      });
+      // const currentRule = data2.testRules.find((ro: any) => {
+      //   return ro.id === data.rules[0]?.ruleId;
+      // });
 
-      const eRule = currentRule?.ruleInfo ? {
-        add: currentRule.ruleInfo.operation === 'add' ? {
-          exhibit: currentRule.ruleInfo.exhibitName,
-          source: {
-            name: currentRule.ruleInfo.candidate.name,
-            type: currentRule.ruleInfo.candidate.type,
-            versionRange: (currentRule.ruleInfo.candidate.versionRange && currentRule.ruleInfo.candidate.versionRange !== 'latest')
-              ? currentRule.ruleInfo.candidate.versionRange
-              : undefined,
-          },
-        } : undefined,
-        alter: currentRule.ruleInfo.operation === 'alter' ? currentRule.ruleInfo.exhibitName : undefined,
-        cover: currentRule.ruleInfo.cover,
-        title: currentRule.ruleInfo.title,
-        online: currentRule.ruleInfo.online === true,
-        offline: currentRule.ruleInfo.online === false,
-        labels: currentRule.ruleInfo.labels,
-        replaces: currentRule.ruleInfo.replaces,
-        attrs: currentRule.ruleInfo.attrs?.map((a: any) => {
-          return {
-            type: a.operation,
-            theKey: a.key,
-            value: a.value,
-            description: a.description,
-          };
-        }),
-      } : {};
-
-      const tRule = {
-        active: data.stateInfo.themeInfo.ruleId !== 'default' ? data.testResourceName : undefined,
-      };
+      // const eRule = currentRule?.ruleInfo ? {
+      //   add: currentRule.ruleInfo.operation === 'add' ? {
+      //     exhibit: currentRule.ruleInfo.exhibitName,
+      //     source: {
+      //       name: currentRule.ruleInfo.candidate.name,
+      //       type: currentRule.ruleInfo.candidate.type,
+      //       versionRange: (currentRule.ruleInfo.candidate.versionRange && currentRule.ruleInfo.candidate.versionRange !== 'latest')
+      //         ? currentRule.ruleInfo.candidate.versionRange
+      //         : undefined,
+      //     },
+      //   } : undefined,
+      //   alter: currentRule.ruleInfo.operation === 'alter' ? currentRule.ruleInfo.exhibitName : undefined,
+      //   active: data.stateInfo.themeInfo.ruleId !== 'default' ? data.testResourceName : undefined,
+      //   cover: currentRule.ruleInfo.cover,
+      //   title: currentRule.ruleInfo.title,
+      //   online: currentRule.ruleInfo.online === true,
+      //   offline: currentRule.ruleInfo.online === false,
+      //   labels: currentRule.ruleInfo.labels,
+      //   replaces: currentRule.ruleInfo.replaces,
+      //   attrs: currentRule.ruleInfo.attrs?.map((a: any) => {
+      //     return {
+      //       type: a.operation,
+      //       theKey: a.key,
+      //       value: a.value,
+      //       description: a.description,
+      //     };
+      //   }),
+      // } : {};
+      //
+      // const tRule = {
+      //
+      // };
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          node_MappingRule: {
-            ...eRule,
-            ...tRule,
-          },
+          // node_MappingRule: {
+          //   ...eRule,
+          //   ...tRule,
+          // },
           node_RuleText: data2.ruleText,
           node_RuleResult: data2.testRules,
           exhibit_RuleResult: data.rules.length > 0 ? data2.testRules.find((tr: any) => {

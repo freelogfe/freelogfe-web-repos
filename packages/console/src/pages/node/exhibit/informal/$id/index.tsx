@@ -26,6 +26,7 @@ import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
+import { IExhibit } from '@/models/informalNodeManagerPage';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -92,23 +93,27 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
 
           <div style={{ width: 20 }} />
           {
-            informExhibitInfoPage.node_MappingRule
-            && Object.entries(informExhibitInfoPage.node_MappingRule)
-              .filter((imr) => imr[1]).length > 0
-            && (<MappingRule
-              add={informExhibitInfoPage.node_MappingRule.add}
-              alter={informExhibitInfoPage.node_MappingRule.alter}
-              version={informExhibitInfoPage.node_MappingRule?.version}
-              active={informExhibitInfoPage.node_MappingRule.active}
-              cover={informExhibitInfoPage.node_MappingRule.cover}
-              title={informExhibitInfoPage.node_MappingRule.title}
-              online={informExhibitInfoPage.node_MappingRule.online}
-              offline={informExhibitInfoPage.node_MappingRule.offline}
-              labels={informExhibitInfoPage.node_MappingRule.labels}
-              replaces={informExhibitInfoPage.node_MappingRule.replaces}
-              attrs={informExhibitInfoPage.node_MappingRule.attrs}
-            />)
+            informExhibitInfoPage.exhibit_Info && (<RuleBar t={informExhibitInfoPage.exhibit_Info} />)
           }
+
+          {/*{*/}
+          {/*  informExhibitInfoPage.node_MappingRule*/}
+          {/*  && Object.entries(informExhibitInfoPage.node_MappingRule)*/}
+          {/*    .filter((imr) => imr[1]).length > 0*/}
+          {/*  && (<MappingRule*/}
+          {/*    add={informExhibitInfoPage.node_MappingRule.add}*/}
+          {/*    alter={informExhibitInfoPage.node_MappingRule.alter}*/}
+          {/*    version={informExhibitInfoPage.node_MappingRule?.version}*/}
+          {/*    active={informExhibitInfoPage.node_MappingRule.active}*/}
+          {/*    cover={informExhibitInfoPage.node_MappingRule.cover}*/}
+          {/*    title={informExhibitInfoPage.node_MappingRule.title}*/}
+          {/*    online={informExhibitInfoPage.node_MappingRule.online}*/}
+          {/*    offline={informExhibitInfoPage.node_MappingRule.offline}*/}
+          {/*    labels={informExhibitInfoPage.node_MappingRule.labels}*/}
+          {/*    replaces={informExhibitInfoPage.node_MappingRule.replaces}*/}
+          {/*    attrs={informExhibitInfoPage.node_MappingRule.attrs}*/}
+          {/*  />)*/}
+          {/*}*/}
         </div>
         <Space size={20}>
           {
@@ -150,3 +155,63 @@ export default connect(({ informExhibitInfoPage, nodes }: ConnectState) => ({
   informExhibitInfoPage,
   nodes,
 }))(Presentable);
+
+interface RuleBar {
+  t: IExhibit;
+}
+
+function RuleBar({ t }: RuleBar) {
+  let add: {
+    exhibit: string;
+    source: {
+      type: 'resource' | 'object';
+      name: string;
+      versionRange?: string;
+    };
+  } | null = null;
+  let alter: string = '';
+  let activate_theme: string = '';
+  if (t.rules.length > 0 && t.rules[0].operations.includes('add')) {
+    add = {
+      exhibit: t.testResourceName,
+      source: {
+        type: t.originInfo.type,
+        name: t.originInfo.name,
+        versionRange: t.originInfo.versionRange,
+      },
+    };
+  }
+  if (t.rules.length > 0 && t.rules[0].operations.includes('alter')) {
+    alter = t.testResourceName;
+  }
+  if (t.rules.length > 0 && t.rules[0].operations.includes('activate_theme')) {
+    activate_theme = t.testResourceName;
+  }
+
+  return (<MappingRule
+    add={add || undefined}
+    alter={alter || undefined}
+    active={activate_theme || undefined}
+    version={t.originInfo.versionRange || undefined}
+    cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
+    title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
+    online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
+    offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
+    labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
+    replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords}
+    attrs={t.stateInfo.propertyInfo.ruleId === 'default'
+      ? undefined
+      : t.stateInfo.propertyInfo.testResourceProperty
+        .filter((trp) => {
+          return trp.isRuleAdd;
+        })
+        .map((trp) => {
+          return {
+            type: 'add',
+            theKey: trp.key,
+            value: String(trp.value),
+            description: trp.remark,
+          };
+        })}
+  />);
+}
