@@ -205,6 +205,7 @@ export interface InformalNodeManagerPageModelState {
   node_RuleInfo: null | RuleMatchAndResultReturn;
 
   addExhibitDrawer_Visible: boolean;
+  addThemeDrawer_Visible: boolean;
 
   replaceModal_Visible: boolean;
   replaceModal_Replacer_ResourceOptions: {
@@ -423,7 +424,7 @@ export interface FetchThemeListAction extends AnyAction {
 }
 
 export interface OnClickThemesAddBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickExhibitsAddBtn';
+  type: 'informalNodeManagerPage/onClickThemesAddBtn';
 }
 
 export interface OnClickThemesReplaceBtnAction extends AnyAction {
@@ -576,6 +577,18 @@ export interface OnCancel_AddExhibitDrawer_Action extends AnyAction {
 
 export interface OnConfirm_AddExhibitDrawer_Action extends AnyAction {
   type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer';
+  payload: {
+    identity: 'object' | 'resource';
+    names: string[];
+  };
+}
+
+export interface OnCancel_AddThemeDrawer_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onCancel_AddThemeDrawer';
+}
+
+export interface OnConfirm_AddThemeDrawer_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onConfirm_AddThemeDrawer';
   payload: {
     identity: 'object' | 'resource';
     names: string[];
@@ -737,6 +750,8 @@ interface InformalNodeManagerPageModelType {
 
     onCancel_AddExhibitDrawer: (action: OnCancel_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddExhibitDrawer: (action: OnConfirm_AddExhibitDrawer_Action, effects: EffectsCommandMap) => void;
+    onCancel_AddThemeDrawer: (action: OnCancel_AddThemeDrawer_Action, effects: EffectsCommandMap) => void;
+    onConfirm_AddThemeDrawer: (action: OnConfirm_AddThemeDrawer_Action, effects: EffectsCommandMap) => void;
 
     onClose_ReplaceModal: (action: OnClose_ReplaceModal_Action, effects: EffectsCommandMap) => void;
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
@@ -879,6 +894,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_RuleInfo: null,
 
   addExhibitDrawer_Visible: false,
+  addThemeDrawer_Visible: false,
 
   ...replaceModalInitDate,
 
@@ -1235,7 +1251,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitDrawer_Visible: true,
+          addThemeDrawer_Visible: true,
         },
       });
     },
@@ -1767,28 +1783,60 @@ const Model: InformalNodeManagerPageModelType = {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
-
-      // const value: { identity: 'resource' | 'object'; names: string[]; } = {
-      //   identity: payload.identity,
-      //   names: payload.names,
-      // };
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           addExhibitDrawer_Visible: false,
         },
       });
-      // value.names.map((n) => {
-      //             return {
-      //               operation: 'add',
-      //               exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-      //               candidate: {
-      //                 name: n,
-      //                 versionRange: 'latest',
-      //                 type: value.identity,
-      //               },
-      //             };
-      //           }),
+      const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
+        return {
+          operation: 'add',
+          exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+          candidate: {
+            name: n,
+            versionRange: '',
+            type: payload.identity,
+          },
+          actions: [],
+          text: '',
+        };
+      });
+
+      const text = decompile(ruleObj);
+      // console.log(text, 'text1234fklsadj');
+      const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        additionalTestRule: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
+
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: true,
+          isRestart: true,
+        },
+      });
+    },
+    * onCancel_AddThemeDrawer({}: OnCancel_AddThemeDrawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addThemeDrawer_Visible: false,
+        },
+      });
+    },
+    * onConfirm_AddThemeDrawer({ payload }: OnConfirm_AddThemeDrawer_Action, { select, call, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addThemeDrawer_Visible: false,
+        },
+      });
       const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
         return {
           operation: 'add',
@@ -1802,30 +1850,19 @@ const Model: InformalNodeManagerPageModelType = {
           text: '',
         };
       });
-      // yield put<SaveDataRulesAction>({
-      //   type: 'saveDataRules',
-      //   payload: {
-      //     type: 'append',
-      //     data: ruleObj,
-      //   },
-      // });
+      // console.log(JSON.stringify(ruleObj), '123423423');
 
       const text = decompile(ruleObj);
       // console.log(text, 'text1234fklsadj');
+
       const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
       };
       const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
 
-      console.log(data, 'data2093u4lksjdflk');
-
-      // if (payload.type === 'append') {
-
-      // }
-
-      yield put<FetchExhibitListAction>({
-        type: 'fetchExhibitList',
+      yield put<FetchThemeListAction>({
+        type: 'fetchThemeList',
         payload: {
           isRematch: true,
           isRestart: true,

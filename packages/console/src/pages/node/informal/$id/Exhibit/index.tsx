@@ -15,13 +15,13 @@ import {
   InformalNodeManagerPageModelState,
 } from '@/models/connect';
 import {
-  FetchExhibitListAction,
+  FetchExhibitListAction, OnCancel_AddExhibitDrawer_Action,
 
   OnChangeExhibitKeywordsAction,
   OnChangeExhibitStatusAction,
   OnChangeExhibitTypeAction,
   OnClickExhibitsAddBtnAction,
-  OnClickExhibitsReplaceBtnAction,
+  OnClickExhibitsReplaceBtnAction, OnConfirm_AddExhibitDrawer_Action,
   // OnLoadMoreExhibitsAction,
   OnMountExhibitPageAction, OnUnmountExhibitPageAction,
 } from '@/models/informalNodeManagerPage';
@@ -32,6 +32,7 @@ import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
 // import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
 import FListFooter from '@/components/FListFooter';
+import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -189,7 +190,36 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         </>)
     }
 
-
+    <FAddInformExhibitDrawer
+      nodeID={informalNodeManagerPage.node_ID}
+      visible={informalNodeManagerPage.addExhibitDrawer_Visible}
+      isTheme={false}
+      onCancel={() => {
+        dispatch<OnCancel_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onCancel_AddExhibitDrawer',
+        });
+      }}
+      onConfirmObjects={(values) => {
+        // console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
+          payload: {
+            identity: 'object',
+            names: values,
+          },
+        });
+      }}
+      onConfirmResources={(values) => {
+        // console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddExhibitDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
+          payload: {
+            identity: 'resource',
+            names: values,
+          },
+        });
+      }}
+    />
   </>);
 }
 

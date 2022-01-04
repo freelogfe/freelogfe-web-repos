@@ -6,10 +6,10 @@ import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import {
   // ChangeAction,
-  InformalNodeManagerPageModelState,
+  InformalNodeManagerPageModelState, OnCancel_AddExhibitDrawer_Action, OnCancel_AddThemeDrawer_Action,
   OnChangeThemeKeywordsAction, OnClickActiveThemeBtnAction,
   OnClickThemesAddBtnAction,
-  OnClickThemesReplaceBtnAction,
+  OnClickThemesReplaceBtnAction, OnConfirm_AddExhibitDrawer_Action, OnConfirm_AddThemeDrawer_Action,
   OnMountThemePageAction, OnUnmountThemePageAction,
   // SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
@@ -29,6 +29,7 @@ import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import fConfirmModal from '@/components/fConfirmModal';
 import FCoverImage from '@/components/FCoverImage';
+import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 // import { OnActiveAction } from '@/models/nodeManagerPage';
 
 // const { compile } = require('@freelog/nmr_translator');
@@ -70,7 +71,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
           btnText={'添加测试主题展品'}
           onClick={() => {
             dispatch<OnClickThemesAddBtnAction>({
-              type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
+              type: 'informalNodeManagerPage/onClickThemesAddBtn',
             });
           }}
         />)
@@ -83,7 +84,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                 type='default'
                 onClick={() => {
                   dispatch<OnClickThemesAddBtnAction>({
-                    type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
+                    type: 'informalNodeManagerPage/onClickThemesAddBtn',
                   });
                 }}>
                 <Space size={5}>
@@ -262,7 +263,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                             add={add || undefined}
                             alter={alter || undefined}
                             active={activate_theme || undefined}
-                            version={t.originInfo.versionRange || undefined}
+                            version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
                             cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
                             title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
                             online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
@@ -295,6 +296,36 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
         </>)
     }
 
+    <FAddInformExhibitDrawer
+      nodeID={informalNodeManagerPage.node_ID}
+      visible={informalNodeManagerPage.addThemeDrawer_Visible}
+      isTheme={true}
+      onCancel={() => {
+        dispatch<OnCancel_AddThemeDrawer_Action>({
+          type: 'informalNodeManagerPage/onCancel_AddThemeDrawer',
+        });
+      }}
+      onConfirmObjects={(values) => {
+        // console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddThemeDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddThemeDrawer',
+          payload: {
+            identity: 'object',
+            names: values,
+          },
+        });
+      }}
+      onConfirmResources={(values) => {
+        // console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
+        dispatch<OnConfirm_AddThemeDrawer_Action>({
+          type: 'informalNodeManagerPage/onConfirm_AddThemeDrawer',
+          payload: {
+            identity: 'resource',
+            names: values,
+          },
+        });
+      }}
+    />
   </>);
 }
 

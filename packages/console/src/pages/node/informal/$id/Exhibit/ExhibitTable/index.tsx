@@ -100,7 +100,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               add={add || undefined}
               alter={alter || undefined}
               active={undefined}
-              version={record.originInfo.versionRange || undefined}
+              version={(record.originInfo.versionRange === '' || record.originInfo.versionRange === 'latest') ? undefined : record.originInfo.versionRange}
               cover={record.stateInfo.coverInfo.ruleId === 'default' ? undefined : record.stateInfo.coverInfo.coverImages[0]}
               title={record.stateInfo.titleInfo.ruleId === 'default' ? undefined : record.stateInfo.titleInfo.title}
               online={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 1}
@@ -157,24 +157,24 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               }));
             }}
             onDelete={record.associatedPresentableId !== '' ? undefined : async () => {
-              const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
-              // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
-              await dispatch<SaveDataRulesAction>({
-                type: 'informalNodeManagerPage/saveDataRules',
-                payload: {
-                  type: 'replace',
-                  data: rules.filter((r) => {
-                    return r.exhibitName !== record.testResourceName;
-                  }),
-                },
-              });
-
-              await onChange({
-                exhibit_List: informalNodeManagerPage.exhibit_List.filter((e) => {
-                  // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
-                  return e.testResourceName !== record.testResourceName;
-                }),
-              });
+              // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
+              // // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
+              // await dispatch<SaveDataRulesAction>({
+              //   type: 'informalNodeManagerPage/saveDataRules',
+              //   payload: {
+              //     type: 'replace',
+              //     data: rules.filter((r) => {
+              //       return r.exhibitName !== record.testResourceName;
+              //     }),
+              //   },
+              // });
+              //
+              // await onChange({
+              //   exhibit_List: informalNodeManagerPage.exhibit_List.filter((e) => {
+              //     // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
+              //     return e.testResourceName !== record.testResourceName;
+              //   }),
+              // });
             }}
           />
         </div>);
@@ -203,61 +203,39 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               disabled={false}
               checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
               onChange={async (value) => {
-                const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
-
-                const rule = rules.find((r) => r.exhibitName === record.testResourceName);
-
-                let data;
-
-                if (rule) {
-                  data = rules.map((r) => {
-                    if (r.exhibitName !== record.testResourceName) {
-                      return r;
-                    }
-                    return {
-                      ...r,
-                      online: value,
-                    };
-                  });
-                } else {
-                  data = [
-                    ...rules,
-                    {
-                      operation: 'alter',
-                      exhibitName: record.testResourceName,
-                      online: value,
-                    },
-                  ];
-                }
-
-                await dispatch<SaveDataRulesAction>({
-                  type: 'informalNodeManagerPage/saveDataRules',
-                  payload: {
-                    type: 'replace',
-                    data: data,
-                  },
-                });
-
-                // console.log(value, 'value0923jrlkasdjflasdf');
-
-                // await onChange({
-                //   exhibit_List: informalNodeManagerPage.exhibit_List
-                //     .map((e) => {
-                //       // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
-                //       if (e.testResourceName !== record.testResourceName) {
-                //         return e;
-                //       }
+                // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
                 //
-                //       return {
-                //         ...e,
-                //         isOnline: value,
-                //         rule: {
-                //           ...e.rule,
-                //           online: value ? true : undefined,
-                //           offline: !value ? true : undefined,
-                //         },
-                //       };
-                //     }),
+                // const rule = rules.find((r) => r.exhibitName === record.testResourceName);
+                //
+                // let data;
+                //
+                // if (rule) {
+                //   data = rules.map((r) => {
+                //     if (r.exhibitName !== record.testResourceName) {
+                //       return r;
+                //     }
+                //     return {
+                //       ...r,
+                //       online: value,
+                //     };
+                //   });
+                // } else {
+                //   data = [
+                //     ...rules,
+                //     {
+                //       operation: 'alter',
+                //       exhibitName: record.testResourceName,
+                //       online: value,
+                //     },
+                //   ];
+                // }
+                //
+                // await dispatch<SaveDataRulesAction>({
+                //   type: 'informalNodeManagerPage/saveDataRules',
+                //   payload: {
+                //     type: 'replace',
+                //     data: data,
+                //   },
                 // });
               }}
             />

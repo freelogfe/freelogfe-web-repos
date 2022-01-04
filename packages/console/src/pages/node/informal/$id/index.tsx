@@ -86,39 +86,6 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
       </div>
     </div>
 
-    <FAddInformExhibitDrawer
-      nodeID={informalNodeManagerPage.node_ID}
-      visible={informalNodeManagerPage.addExhibitDrawer_Visible}
-      isTheme={false}
-      // usedResourceNames={[]}
-      // usedObjectNames={[]}
-      onCancel={() => {
-        dispatch<OnCancel_AddExhibitDrawer_Action>({
-          type: 'informalNodeManagerPage/onCancel_AddExhibitDrawer',
-        });
-      }}
-      onConfirmObjects={(values) => {
-        // console.log(values, 'onConfirmObjects@#@#$@#$@#$@@@@@@@@@@@@');
-        dispatch<OnConfirm_AddExhibitDrawer_Action>({
-          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
-          payload: {
-            identity: 'object',
-            names: values,
-          },
-        });
-      }}
-      onConfirmResources={(values) => {
-        // console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
-        dispatch<OnConfirm_AddExhibitDrawer_Action>({
-          type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
-          payload: {
-            identity: 'resource',
-            names: values,
-          },
-        });
-      }}
-    />
-
     <FReplaceModal />
   </>);
 }
