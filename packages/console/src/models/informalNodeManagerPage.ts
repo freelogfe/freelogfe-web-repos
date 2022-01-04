@@ -6,7 +6,6 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
-// import fMessage from '@/components/fMessage';
 import { listStateAndListMore } from '@/components/FListFooter';
 import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
@@ -203,10 +202,6 @@ export interface InformalNodeManagerPageModelState {
   node_Name: string;
   node_Url: string;
   node_TestUrl: string;
-  // node_RuleText: string;
-  // node_AllRuleResult: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']>;
-  // node_RuleAllAddedResourceNames: string[];
-  // node_RuleAllAddedObjectNames: string[];
   node_RuleInfo: null | RuleMatchAndResultReturn;
 
   addExhibitDrawer_Visible: boolean;
@@ -616,8 +611,6 @@ export interface FetchReplacerListAction extends AnyAction {
   type: 'fetchReplacerList' | 'informalNodeManagerPage/fetchReplacerList';
   payload: {
     restart: boolean;
-    // origin?: string;
-    // keywords?: string;
   };
 }
 
@@ -811,8 +804,6 @@ const themeInitStates: Pick<InformalNodeManagerPageModelState,
 
 const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_PageStatus' |
-  // 'rule_Indeterminate' |
-  // 'rule_IndeterminateChecked' |
   'rule_RuleList' |
   'rule_CodeInput' |
   'rule_CodeIsDirty' |
@@ -822,8 +813,6 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_CodeExecutionErrors' |
   'rule_CodeEfficients'> = {
   rule_PageStatus: 'normal',
-  // rule_Indeterminate: false,
-  // rule_IndeterminateChecked: false,
   rule_RuleList: [],
   rule_CodeInput: '',
   rule_CodeIsDirty: false,
@@ -870,17 +859,6 @@ const replaceModalInitDate: Pick<InformalNodeManagerPageModelState,
   replaceModal_Replaced_TreeData: [],
   replaceModal_Replaced_CheckedKeys: [],
 };
-//   replaceModal_Replacer_Bucket: '',
-//   replaceModal_Replacer_Keywords: '',
-//   replaceModal_Replacer_ResourceList: [],
-//   replaceModal_Replaced_Keywords: '',
-//   replaceModal_Replaced_DependencyTreeList: [],
-//   replaceModal_Replaced_SelectDependency: null,
-//   replaceModal_Replaced_TargetVersions: [],
-//   replaceModal_Replaced_TargetSelectedVersion: null,
-//   replaceModal_Replaced_TreeData: [],
-//   replaceModal_Replaced_CheckedKeys: [],
-
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
@@ -891,10 +869,6 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   node_Url: '',
   node_TestUrl: '',
   node_RuleInfo: null,
-  // node_RuleText: '',
-  // node_AllRuleResult: [],
-  // node_RuleAllAddedResourceNames: [],
-  // node_RuleAllAddedObjectNames: [],
 
   addExhibitDrawer_Visible: false,
 
@@ -1055,10 +1029,6 @@ const Model: InformalNodeManagerPageModelType = {
         nodes,
       }));
 
-      // if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.node_ID)) {
-      //   return;
-      // }
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1071,9 +1041,8 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: isRematch,
       };
 
-      //ReturnType<typeof ruleMatchAndResult>
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
-      console.log(result, 'resultresultresult!@$!@#$@#4');
+      // console.log(result, 'resultresultresult!@$!@#$@#4');
 
       if (result.status === 2) {
         yield put<ChangeAction>({
@@ -1105,99 +1074,11 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
-      // console.log('###1111111111111');
-      // console.log(result, 'result.ruleTextresult.ruleText2309482309');
-      // const { rules: rulesObj } = compile(result.ruleText);
 
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
         ...data.dataList,
       ];
-      // console.log('###2222222222222');
-      // const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
-      //   ...list,
-      //   ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibit_List'][number]>((dl) => {
-      //     const operations: string[] = dl.rules[0]?.operations || [];
-      //     // console.log(operations, 'operations12334');
-      //     const stateInfo = dl.stateInfo;
-      //
-      //     const rulesObjRule = rulesObj.find((ro: any) => {
-      //       // console.log(ro, dl, '#############***********;ojsifw389');
-      //       return ro.exhibitName === dl.testResourceName;
-      //     });
-      //
-      //     const rule: InformalNodeManagerPageModelState['exhibit_List'][number]['rule'] = {
-      //       add: operations.includes('add') ? {
-      //         exhibit: dl.testResourceName,
-      //         source: {
-      //           type: dl.originInfo.type,
-      //           name: dl.originInfo.name,
-      //           version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-      //           versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-      //         },
-      //       } : undefined,
-      //       alter: operations.includes('alter') ? dl.testResourceName : undefined,
-      //       // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-      //       labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-      //       title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-      //       cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-      //       online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
-      //       offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-      //       attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-      //         return {
-      //           type: a.operation,
-      //           theKey: a.key,
-      //           value: a.value,
-      //           description: a.description,
-      //         };
-      //       }) : undefined,
-      //       replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-      //         // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-      //         return {
-      //           replaced: {
-      //             ...rr.replaced,
-      //             versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-      //           },
-      //           replacer: {
-      //             ...rr.replacer,
-      //             versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-      //           },
-      //           scopes: rr.scopes && (rr.scopes as any[])
-      //             .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-      //               // console.log(ss, 'ss!!!!@@@@##');
-      //               return ss.map((sss: any) => {
-      //                 return {
-      //                   ...sss,
-      //                   versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-      //                 };
-      //               });
-      //             }),
-      //         };
-      //       }),
-      //     };
-      //     // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
-      //     return {
-      //       id: dl.testResourceId,
-      //       key: dl.testResourceId,
-      //       associatedExhibitID: dl.associatedPresentableId,
-      //       cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-      //       name: dl.testResourceName,
-      //       title: dl.stateInfo.titleInfo.title,
-      //       identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-      //       rule: rule,
-      //       version: dl.originInfo.version,
-      //       isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
-      //       originInfo: dl.originInfo,
-      //       isAuth: true,
-      //       authErrorText: '',
-      //     };
-      //   }),
-      // ];
-
-      // console.log('###3333333333333');
-      // const allAddRule = result.testRules.filter((tr: any) => {
-      //   return tr.ruleInfo.operation === 'add';
-      // });
 
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
@@ -1211,19 +1092,6 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
-          // node_RuleText: result.ruleText,
-          // node_AllRuleResult: result.testRules,
-          // node_RuleAllAddedObjectNames: allAddRule.filter((tr: any) => {
-          //   return tr.ruleInfo.candidate.type === 'object';
-          // }).map((tr: any) => {
-          //   return tr.ruleInfo.candidate.name;
-          // }),
-          // node_RuleAllAddedResourceNames: allAddRule.filter((tr: any) => {
-          //   return tr.ruleInfo.candidate.type === 'resource';
-          // }).map((tr: any) => {
-          //   return tr.ruleInfo.candidate.name;
-          // }),
-          // exhibitPageExhibitsTotal: data.totalItem,
           exhibit_List: exhibitList,
           exhibit_ListState: state,
           exhibit_ListMore: more,
@@ -1334,108 +1202,12 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
-      // const activatedTheme: string | null = data.dataList.find((dd: any) => {
-      //   return dd.stateInfo.themeInfo.ruleId !== 'default';
-      // })?.testResourceName || null;
-
-      // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
-      // const { rules: rulesObj } = compile(result.ruleText);
-      // console.log(rulesObj, 'rulesObjiosfjewwef');
-
-      // const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['theme_List'][number]>((dl) => {
-      //   const operations: string[] = dl.rules[0]?.operations || [];
-      //   // console.log(operations, 'operations12334');
-      //   const stateInfo = dl.stateInfo;
-      //
-      //   const rulesObjRule = rulesObj.find((ro: any) => {
-      //     // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
-      //     return ro.exhibitName === dl.testResourceName;
-      //   });
-      //
-      //   // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-      //   const rule: InformalNodeManagerPageModelState['theme_List'][number]['rule'] = {
-      //     add: operations.includes('add') ? {
-      //       exhibit: dl.testResourceName,
-      //       source: {
-      //         type: dl.originInfo.type,
-      //         name: dl.originInfo.name,
-      //         version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-      //         versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-      //       },
-      //     } : undefined,
-      //     alter: operations.includes('alter') ? dl.testResourceName : undefined,
-      //     labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-      //     title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-      //     cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-      //     // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-      //     // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-      //     attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-      //       return {
-      //         type: a.operation,
-      //         theKey: a.key,
-      //         value: a.value,
-      //         description: a.description,
-      //       };
-      //     }) : undefined,
-      //     // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-      //     active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
-      //     replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-      //       // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-      //       return {
-      //         replaced: {
-      //           ...rr.replaced,
-      //           versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-      //         },
-      //         replacer: {
-      //           ...rr.replacer,
-      //           versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-      //         },
-      //         scopes: rr.scopes && (rr.scopes as any[])
-      //           .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-      //             // console.log(ss, 'ss!!!!@@@@##');
-      //             return ss.map((sss: any) => {
-      //               return {
-      //                 ...sss,
-      //                 versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-      //               };
-      //             });
-      //           }),
-      //       };
-      //     }),
-      //   };
-      //   return {
-      //     id: dl.testResourceId,
-      //     cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-      //     name: dl.testResourceName,
-      //     identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-      //     rule: rule,
-      //     version: dl.originInfo.version,
-      //     isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
-      //     isAuth: true,
-      //     authErrorText: '',
-      //     originInfo: dl.originInfo,
-      //   };
-      // }).sort((a, b) => {
-      //   if (a.isOnline && !b.isOnline) {
-      //     return -1;
-      //   }
-      //   return 0;
-      // });
-
-      const activatedTheme: string = data.dataList.find((dd: any) => {
-        return dd.stateInfo.themeInfo.ruleId !== 'default';
-      })?.testResourceName || data.dataList.find((dd: any) => {
-        return dd.stateInfo.onlineStatusInfo.onlineStatus === 1;
-      })?.testResourceName || '';
-
       const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = data.dataList;
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           node_RuleInfo: result,
-          // node_RuleText: result.ruleText,
-          // themePageThemesTotal: data.totalItem,
           theme_List: [...themePageThemeList]
             .sort((a, b) => {
               if (a.stateInfo.themeInfo.isActivatedTheme === 1 && b.stateInfo.themeInfo.isActivatedTheme !== 1) {
@@ -1954,7 +1726,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
-      console.log(errors, errorObjects, 'errorObjects234234');
+      // console.log(errors, errorObjects, 'errorObjects234234');
       if (errorObjects.length > 0) {
         yield put<ChangeAction>({
           type: 'change',
@@ -2493,8 +2265,6 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onReplacedTreeLoadData({ payload }: OnReplacedTreeLoadDataAction, { select, put, call }: EffectsCommandMap) {
 
-      // console.log(payload, 'payloadpayloadpayloadpayloadpayloadpayload!!!!!!@@@@@@@#3333333');
-
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -2635,10 +2405,6 @@ const Model: InformalNodeManagerPageModelType = {
   },
   reducers: {
     change(state, { payload }) {
-      // const newState = {...state};
-      // if (payload.replacedCheckedKeys && payload.replacedCheckedKeys.length === 0 && state.replacerResourceList.some((rr) => rr.checked)) {
-      //
-      // }
       return {
         ...state,
         ...payload,
@@ -2708,31 +2474,6 @@ export async function ruleMatchAndResult({
     });
   }
 }
-
-// interface GetUsedTargetIDsParams {
-//   nodeID: number;
-//   entityType: 'resource' | 'object';
-//   entityIds: string[];
-// }
-//
-// async function getUsedTargetIDs({ nodeID, entityType, entityIds }: GetUsedTargetIDsParams): Promise<string[]> {
-//   if (entityIds.length === 0) {
-//     return [];
-//   }
-//
-//   const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
-//     nodeId: nodeID,
-//     entityType: entityType,
-//     entityIds: entityIds.join(),
-//   };
-//
-//   const { data } = await FServiceAPI.InformalNode.batchTestResources(params1);
-//
-//   // console.log(data, 'data98jhksjkdaf13453');
-//   return (data as any[]).map<string>((d1: any) => {
-//     return d1.originInfo.id;
-//   });
-// }
 
 interface UpdateTreeDataParams {
   list: TreeNode[];
