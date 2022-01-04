@@ -535,30 +535,38 @@ interface ICandidate {
   type: 'resource' | 'object';
 }
 
+// export interface SaveDataRulesAction extends AnyAction {
+//   type: 'informalNodeManagerPage/saveDataRules' | 'saveDataRules';
+//   payload: {
+//     type: 'append' | 'replace';
+//     data: {
+//       operation: 'add' | 'alter';
+//       exhibitName: string;
+//       candidate?: ICandidate;
+//       labels?: string[];
+//       replace?: {
+//         replaced: ICandidate;
+//         replacer: ICandidate;
+//         scopes: ICandidate[][];
+//       }[];
+//       online?: boolean;
+//       cover?: string;
+//       title?: string;
+//       attrs?: {
+//         operation: 'add' | 'delete';
+//         key: string;
+//         value?: string;
+//         description?: string;
+//       }[];
+//     }[];
+//   };
+// }
+
 export interface SaveDataRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/saveDataRules' | 'saveDataRules';
   payload: {
     type: 'append' | 'replace';
-    data: {
-      operation: 'add' | 'alter';
-      exhibitName: string;
-      candidate?: ICandidate;
-      labels?: string[];
-      replace?: {
-        replaced: ICandidate;
-        replacer: ICandidate;
-        scopes: ICandidate[][];
-      }[];
-      online?: boolean;
-      cover?: string;
-      title?: string;
-      attrs?: {
-        operation: 'add' | 'delete';
-        key: string;
-        value?: string;
-        description?: string;
-      }[];
-    }[];
+    data: Array<IRules['add']> | Array<IRules['alter']>;
   };
 }
 
@@ -1751,42 +1759,76 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onConfirm_AddExhibitDrawer({ payload }: OnConfirm_AddExhibitDrawer_Action, { put }: EffectsCommandMap) {
-      // const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-      //   informalNodeManagerPage,
-      // }));
+    * onConfirm_AddExhibitDrawer({ payload }: OnConfirm_AddExhibitDrawer_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
 
-      const value: { identity: 'resource' | 'object'; names: string[]; } = {
-        identity: payload.identity,
-        names: payload.names,
-      };
+      // const value: { identity: 'resource' | 'object'; names: string[]; } = {
+      //   identity: payload.identity,
+      //   names: payload.names,
+      // };
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           addExhibitDrawer_Visible: false,
         },
       });
-      yield put<SaveDataRulesAction>({
-        type: 'saveDataRules',
-        payload: {
-          type: 'append',
-          data: value.names.map((n) => {
-            return {
-              operation: 'add',
-              exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-              candidate: {
-                name: n,
-                versionRange: 'latest',
-                type: value.identity,
-              },
-            };
-          }),
-        },
+      // value.names.map((n) => {
+      //             return {
+      //               operation: 'add',
+      //               exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+      //               candidate: {
+      //                 name: n,
+      //                 versionRange: 'latest',
+      //                 type: value.identity,
+      //               },
+      //             };
+      //           }),
+      const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
+        return {
+          operation: 'add',
+          exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+          candidate: {
+            name: n,
+            versionRange: 'latest',
+            type: payload.identity,
+          },
+          actions: [],
+          text: '',
+        };
       });
+      // yield put<SaveDataRulesAction>({
+      //   type: 'saveDataRules',
+      //   payload: {
+      //     type: 'append',
+      //     data: ruleObj,
+      //   },
+      // });
+
+      const text = decompile(ruleObj);
+      // console.log(text, 'text1234fklsadj');
+      const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        additionalTestRule: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
+
+      console.log(data, 'data2093u4lksjdflk');
+
+      // if (payload.type === 'append') {
+
+      // }
+
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
-          isRematch: false,
+          isRematch: true,
+          isRestart: true,
         },
       });
     },
