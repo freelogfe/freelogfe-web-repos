@@ -210,7 +210,7 @@ export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {
 // 批量获取测试资源授权结果
 interface BatchGetAuthsParamsType {
   nodeId: number;
-  testResourceIds: string;
+  exhibitIds: string;
   authType: 1 | 2 | 3; //授权类型 1:节点侧授权 2:资源侧授权 3:节点+资源侧授权
 }
 

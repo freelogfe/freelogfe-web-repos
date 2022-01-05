@@ -422,6 +422,7 @@ export interface OnClick_Exhibits_DeleteBtn_Action extends AnyAction {
 export interface OnChange_Exhibits_StatusSwitch_Action extends AnyAction {
   type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch';
   payload: {
+    testResourceId: string;
     testResourceName: string;
     checked: boolean;
   };
@@ -1111,7 +1112,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
-        testResourceIds: data.dataList.map((d: any) => d.testResourceId).join(','),
+        exhibitIds: data.dataList.map((d: any) => d.testResourceId).join(','),
         authType: 3,
       };
 
@@ -1119,15 +1120,16 @@ const Model: InformalNodeManagerPageModelType = {
 
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
-        ...data.dataList.map((d: any) => {
-          return {
-            ...d,
-            // isAuth: data1.find((d1: any) => {
-            //   return d1.testResourceId === d.testResourceId;
-            // }).isAuth,
-            isAuth: false,
-          };
-        }),
+        // ...data.dataList.map((d: any) => {
+        //   return {
+        //     ...d,
+        //     isAuth: data1.find((d1: any) => {
+        //       return d1.exhibitId === d.testResourceId;
+        //     }).isAuth,
+        //     // isAuth: false,
+        //   };
+        // }),
+        ...data.dataList,
       ];
 
       const { state, more } = listStateAndListMore({
@@ -1295,6 +1297,41 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
 
+      //  ##############
+      const params2: RuleMatchAndResultParams = {
+        nodeID: informalNodeManagerPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_PageError: '匹配失败',
+          },
+        });
+        return;
+      }
+
+      const params3: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
+        testResourceId: payload.testResourceId,
+      };
+
+      const {data: data3} = yield call(FServiceAPI.InformalNode.testResourceDetails, params3);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+          exhibit_List: informalNodeManagerPage.exhibit_List.map((el) => {
+            if (el.testResourceId === payload.testResourceId) {
+              return data3;
+            }
+            return el;
+          })
+        },
+      });
     },
 
     * fetchThemeList({ payload: { isRematch = true, isRestart } }: FetchThemeListAction, {

@@ -9,7 +9,7 @@ import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 // import {router} from "umi";
 import { Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FEdit, FFileSearch } from '@/components/FIcons';
+import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
 // import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
@@ -168,24 +168,6 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                   testResourceName: record.testResourceName,
                 },
               });
-              // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
-              // // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
-              // await dispatch<SaveDataRulesAction>({
-              //   type: 'informalNodeManagerPage/saveDataRules',
-              //   payload: {
-              //     type: 'replace',
-              //     data: rules.filter((r) => {
-              //       return r.exhibitName !== record.testResourceName;
-              //     }),
-              //   },
-              // });
-              //
-              // await onChange({
-              //   exhibit_List: informalNodeManagerPage.exhibit_List.filter((e) => {
-              //     // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
-              //     return e.testResourceName !== record.testResourceName;
-              //   }),
-              // });
             }}
           />
         </div>);
@@ -211,58 +193,28 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
         return (<div style={{ width: 65 }}>
           <Space size={15}>
             <FSwitch
-              disabled={false}
+              // disabled={!record.isAuth}
               checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
               onChange={(value) => {
                 dispatch<OnChange_Exhibits_StatusSwitch_Action>({
                   type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch',
                   payload: {
+                    testResourceId: record.testResourceId,
                     testResourceName: record.testResourceName,
                     checked: value,
                   },
                 });
-                // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
-                //
-                // const rule = rules.find((r) => r.exhibitName === record.testResourceName);
-                //
-                // let data;
-                //
-                // if (rule) {
-                //   data = rules.map((r) => {
-                //     if (r.exhibitName !== record.testResourceName) {
-                //       return r;
-                //     }
-                //     return {
-                //       ...r,
-                //       online: value,
-                //     };
-                //   });
-                // } else {
-                //   data = [
-                //     ...rules,
-                //     {
-                //       operation: 'alter',
-                //       exhibitName: record.testResourceName,
-                //       online: value,
-                //     },
-                //   ];
-                // }
-                //
-                // await dispatch<SaveDataRulesAction>({
-                //   type: 'informalNodeManagerPage/saveDataRules',
-                //   payload: {
-                //     type: 'replace',
-                //     data: data,
-                //   },
-                // });
               }}
             />
-            {/*<FTooltip*/}
-            {/*  // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}*/}
-            {/*  title={'暂无上线策略'}*/}
-            {/*>*/}
-            {/*  <FWarning/>*/}
-            {/*</FTooltip>*/}
+            {/*{*/}
+            {/*  !record.isAuth && (<FTooltip*/}
+            {/*    // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}*/}
+            {/*    title={'存在授权问题'}*/}
+            {/*  >*/}
+            {/*    <FWarning />*/}
+            {/*  </FTooltip>)*/}
+            {/*}*/}
+
           </Space>
         </div>);
       },
