@@ -5,9 +5,8 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import {
-  // ChangeAction,
   InformalNodeManagerPageModelState, OnCancel_AddExhibitDrawer_Action, OnCancel_AddThemeDrawer_Action,
-  OnChangeThemeKeywordsAction, OnClickActiveThemeBtnAction,
+  OnChangeThemeKeywordsAction, OnClick_ActiveThemeBtn_Action,
   OnClickThemesAddBtnAction,
   OnClickThemesReplaceBtnAction, OnConfirm_AddExhibitDrawer_Action, OnConfirm_AddThemeDrawer_Action,
   OnMountThemePageAction, OnUnmountThemePageAction,
@@ -15,7 +14,7 @@ import {
 } from '@/models/informalNodeManagerPage';
 import FAdd from '@/components/FIcons/FAdd';
 import FInput from '@/components/FInput';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Dispatch, connect } from 'dva';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
@@ -30,6 +29,8 @@ import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import fConfirmModal from '@/components/fConfirmModal';
 import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
+import FTooltip from '@/components/FTooltip';
+import { FWarning } from '@/components/FIcons';
 // import { OnActiveAction } from '@/models/nodeManagerPage';
 
 // const { compile } = require('@freelog/nmr_translator');
@@ -172,7 +173,24 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                           {/*<img src={t.cover || imgSrc} alt='' />*/}
                           <FCoverImage src={t.stateInfo.coverInfo.coverImages[0] || ''} width={280}
                                        style={{ borderRadius: 4 }} />
+
                           <div className={styles.coverLabel}>
+                            {
+                              !t.isAuth && (<>
+                                <div>
+                                  {
+                                    <FTooltip
+                                      // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+                                      title={'存在授权问题'}
+                                    >
+                                      <FWarning />
+                                    </FTooltip>
+                                  }
+                                </div>
+
+                                <div style={{ width: 10 }} />
+                              </>)
+                            }
                             {
                               isActive
                                 ? (<label className={styles.activated}>已激活</label>)
@@ -197,10 +215,11 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                           okText: FUtil1.I18n.message('active_new_theme'),
                                           cancelText: FUtil1.I18n.message('keep_current_theme'),
                                           onOk() {
-                                            dispatch<OnClickActiveThemeBtnAction>({
-                                              type: 'informalNodeManagerPage/onClickActiveThemeBtn',
+                                            dispatch<OnClick_ActiveThemeBtn_Action>({
+                                              type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',
                                               payload: {
-                                                themeName: t.testResourceName,
+                                                testResourceId: t.testResourceId,
+                                                testResourceName: t.testResourceName,
                                               },
                                             });
                                           },

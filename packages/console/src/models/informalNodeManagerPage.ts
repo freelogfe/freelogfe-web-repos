@@ -457,10 +457,11 @@ export interface OnLoadMoreThemesAction extends AnyAction {
   type: 'informalNodeManagerPage/onLoadMoreThemes';
 }
 
-export interface OnClickActiveThemeBtnAction extends AnyAction {
-  type: 'informalNodeManagerPage/onClickActiveThemeBtn';
+export interface OnClick_ActiveThemeBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_ActiveThemeBtn';
   payload: {
-    themeName: string;
+    testResourceId: string;
+    testResourceName: string;
   };
 }
 
@@ -744,7 +745,7 @@ interface InformalNodeManagerPageModelType {
     onClickThemesReplaceBtn: (action: OnClickThemesReplaceBtnAction, effects: EffectsCommandMap) => void;
     onChangeThemeKeywords: (action: OnChangeThemeKeywordsAction, effects: EffectsCommandMap) => void;
     onLoadMoreThemes: (action: OnLoadMoreThemesAction, effects: EffectsCommandMap) => void;
-    onClickActiveThemeBtn: (action: OnClickActiveThemeBtnAction, effects: EffectsCommandMap) => void;
+    onClick_ActiveThemeBtn: (action: OnClick_ActiveThemeBtn_Action, effects: EffectsCommandMap) => void;
 
     fetch_Rules: (action: Fetch_Rules_Action, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
@@ -1265,6 +1266,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          node_RuleInfo: result,
           exhibit_List: informalNodeManagerPage.exhibit_List.filter((el) => {
             return el.testResourceId !== payload.testResourceId;
           }),
@@ -1415,7 +1417,23 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
-      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = data.dataList;
+      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        exhibitIds: data.dataList.map((d: any) => d.testResourceId).join(','),
+        authType: 3,
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+
+      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = data.dataList.map((d: any) => {
+        return {
+          ...d,
+          isAuth: data1.find((d1: any) => {
+            return d1.exhibitId === d.testResourceId;
+          }).isAuth,
+          // isAuth: false,
+        };
+      });
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1473,77 +1491,86 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickActiveThemeBtn({ payload }: OnClickActiveThemeBtnAction, { select, put }: EffectsCommandMap) {
+    * onClick_ActiveThemeBtn({ payload }: OnClick_ActiveThemeBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
-      // console.log(payload, 'payload0923u4rjlksfdjflk');
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     theme_ActivatingThemeName: payload.themeName,
-      //   },
-      // });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          theme_ActivatingThemeName: payload.testResourceName,
+        },
+      });
 
-      // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
-      // console.log(rules, 'rules1234234');
-      // const rule = rules.find((r) => r.themeName);
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
 
-      // let data;
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
 
-      // if (rule) {
-      //   data = rules.map((r) => {
-      //     if (!r.themeName) {
-      //       return r;
-      //     }
-      //     return {
-      //       ...r,
-      //       themeName: payload.themeName,
-      //     };
-      //   });
-      // } else {
-      //   data = [
-      //     {
-      //       operation: 'activate_theme',
-      //       themeName: payload.themeName,
-      //     },
-      //     ...rules,
-      //   ];
-      // }
+      if (needHandleRules.some((n) => n.operation === 'activate_theme')) {
+        needHandleRules = needHandleRules.map((nhr) => {
+          if (nhr.operation === 'activate_theme') {
+            return {
+              ...nhr,
+              exhibitName: payload.testResourceName,
+              text: '',
+            };
+          }
+          return nhr;
+        });
+      } else {
+        needHandleRules = [
+          ...needHandleRules,
+          {
+            operation: 'activate_theme',
+            exhibitName: payload.testResourceName,
+            text: '',
+          },
+        ];
+      }
 
-      // yield put<SaveDataRulesAction>({
-      //   type: 'saveDataRules',
-      //   payload: {
-      //     type: 'replace',
-      //     data: data,
-      //   },
-      // });
-      //
-      // yield put<FetchThemeListAction>({
-      //   type: 'fetchThemeList',
-      //   payload: {
-      //     isRematch: true,
-      //     isRestart: true,
-      //   },
-      // });
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     theme_List: informalNodeManagerPage.theme_List.map((ttt) => {
-      //       if (ttt.testResourceName !== payload.themeName) {
-      //         return {
-      //           ...ttt,
-      //           isOnline: false,
-      //         };
-      //       }
-      //       return {
-      //         ...ttt,
-      //         isOnline: true,
-      //       };
-      //     }),
-      //   },
-      // });
+      const text: string = decompile(needHandleRules);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: RuleMatchAndResultParams = {
+        nodeID: informalNodeManagerPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_PageError: '匹配失败',
+          },
+        });
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchThemeListAction>({
+        type: 'fetchThemeList',
+        payload: {
+          isRematch: true,
+          isRestart: true,
+        },
+      });
+
     },
 
     * fetch_Rules({}: Fetch_Rules_Action, { call, select, put }: EffectsCommandMap) {
