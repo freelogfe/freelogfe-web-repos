@@ -165,6 +165,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               dispatch<OnClick_Exhibits_DeleteBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
                 payload: {
+                  testResourceId: record.testResourceId,
                   testResourceName: record.testResourceName,
                 },
               });

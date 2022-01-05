@@ -415,6 +415,7 @@ export interface OnLoadMoreExhibitsAction extends AnyAction {
 export interface OnClick_Exhibits_DeleteBtn_Action extends AnyAction {
   type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn';
   payload: {
+    testResourceId: string;
     testResourceName: string;
   };
 }
@@ -1055,7 +1056,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchExhibitList({ payload: { isRematch = true, isRestart } }: FetchExhibitListAction, {
+    * fetchExhibitList({ payload }: FetchExhibitListAction, {
       call,
       select,
       put,
@@ -1073,7 +1074,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params2: RuleMatchAndResultParams = {
         nodeID: informalNodeManagerPage.node_ID,
-        isRematch: isRematch,
+        isRematch: payload.isRematch !== undefined ? payload.isRematch : true,
       };
 
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
@@ -1091,7 +1092,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       // console.log(data1, '2434234234234234');
       let list: InformalNodeManagerPageModelState['exhibit_List'] = [];
-      if (!isRestart) {
+      if (!payload.isRestart) {
         list = [
           ...informalNodeManagerPage.exhibit_List,
         ];
@@ -1109,6 +1110,8 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
+
+      // console.log(data, 'data2093222222');
 
       const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
@@ -1129,7 +1132,7 @@ const Model: InformalNodeManagerPageModelType = {
             // isAuth: false,
           };
         }),
-        ...data.dataList,
+        // ...data.dataList,
       ];
 
       const { state, more } = listStateAndListMore({
@@ -1216,7 +1219,11 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClick_Exhibits_DeleteBtn({ payload }: OnClick_Exhibits_DeleteBtn_Action, { select, call }: EffectsCommandMap) {
+    * onClick_Exhibits_DeleteBtn({ payload }: OnClick_Exhibits_DeleteBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1238,6 +1245,32 @@ const Model: InformalNodeManagerPageModelType = {
         testRuleText: text,
       };
       const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      const params2: RuleMatchAndResultParams = {
+        nodeID: informalNodeManagerPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_PageError: '匹配失败',
+          },
+        });
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_List: informalNodeManagerPage.exhibit_List.filter((el) => {
+            return el.testResourceId !== payload.testResourceId;
+          }),
+        },
+      });
+
     },
     * onChange_Exhibits_StatusSwitch({ payload }: OnChange_Exhibits_StatusSwitch_Action, {
       select,
@@ -1960,7 +1993,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const text: string = decompile(ruleObj);
-      console.log(text, 'text1234fklsadj');
+      // console.log(text, 'text1234fklsadj');
       const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
