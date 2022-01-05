@@ -95,25 +95,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
           {
             informExhibitInfoPage.exhibit_Info && (<RuleBar t={informExhibitInfoPage.exhibit_Info} />)
           }
-
-          {/*{*/}
-          {/*  informExhibitInfoPage.node_MappingRule*/}
-          {/*  && Object.entries(informExhibitInfoPage.node_MappingRule)*/}
-          {/*    .filter((imr) => imr[1]).length > 0*/}
-          {/*  && (<MappingRule*/}
-          {/*    add={informExhibitInfoPage.node_MappingRule.add}*/}
-          {/*    alter={informExhibitInfoPage.node_MappingRule.alter}*/}
-          {/*    version={informExhibitInfoPage.node_MappingRule?.version}*/}
-          {/*    active={informExhibitInfoPage.node_MappingRule.active}*/}
-          {/*    cover={informExhibitInfoPage.node_MappingRule.cover}*/}
-          {/*    title={informExhibitInfoPage.node_MappingRule.title}*/}
-          {/*    online={informExhibitInfoPage.node_MappingRule.online}*/}
-          {/*    offline={informExhibitInfoPage.node_MappingRule.offline}*/}
-          {/*    labels={informExhibitInfoPage.node_MappingRule.labels}*/}
-          {/*    replaces={informExhibitInfoPage.node_MappingRule.replaces}*/}
-          {/*    attrs={informExhibitInfoPage.node_MappingRule.attrs}*/}
-          {/*  />)*/}
-          {/*}*/}
+          
         </div>
         <Space size={20}>
           {
