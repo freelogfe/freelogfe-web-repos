@@ -95,7 +95,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
           {
             informExhibitInfoPage.exhibit_Info && (<RuleBar t={informExhibitInfoPage.exhibit_Info} />)
           }
-          
+
         </div>
         <Space size={20}>
           {
