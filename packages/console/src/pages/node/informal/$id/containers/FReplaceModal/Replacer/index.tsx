@@ -157,10 +157,12 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
       </div>
       <div style={{ height: 15 }} />
       <Space size={10} direction='vertical' className={styles.replacerList}>
+        {/*{console.log(informalNodeManagerPage.replaceModal_Replacer_ResourceList, 'replaceModal_Replacer_ResourceList0923jldsf')}*/}
         {
           informalNodeManagerPage.replaceModal_Replacer_ResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
               <Radio
+                disabled={rl.disabled}
                 // checked={rl.name === informalNodeManagerPage.replacerCheckedResourceName}
                 checked={rl.checked}
                 onClick={(e) => {

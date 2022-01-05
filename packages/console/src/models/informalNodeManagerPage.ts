@@ -219,6 +219,7 @@ export interface InformalNodeManagerPageModelState {
   replaceModal_Replacer_Keywords: string;
   replaceModal_Replacer_ResourceList: {
     checked: boolean;
+    disabled?: boolean;
     id: string;
     name: string;
     identity: 'resource' | 'object';
@@ -2216,6 +2217,7 @@ const Model: InformalNodeManagerPageModelType = {
           skip: replacerResourceList.length,
           limit: FUtil.Predefined.pageSize,
           keywords: informalNodeManagerPage.replaceModal_Replacer_Keywords,
+          status: 1,
         };
 
         const { data } = yield call(FServiceAPI.Resource.list, params);
@@ -2261,6 +2263,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replaceModal_Replacer_ResourceList'][number]>((rs) => {
             return {
               checked: false,
+              disabled: rs.latestVersion === '',
               id: rs.resourceId,
               identity: 'resource',
               name: rs.resourceName,
@@ -2272,6 +2275,7 @@ const Model: InformalNodeManagerPageModelType = {
                 return rv.version;
               }),
               versionRange: '',
+
             };
           }),
         ];
