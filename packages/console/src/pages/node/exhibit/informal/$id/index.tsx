@@ -193,7 +193,8 @@ function RuleBar({ t }: RuleBar) {
     add={add || undefined}
     alter={alter || undefined}
     active={activate_theme || undefined}
-    version={t.originInfo.versionRange || undefined}
+    // version={t.originInfo.versionRange || undefined}
+    version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
     cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
     title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
     online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}

@@ -11,19 +11,20 @@ import { Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { FDelete, FEdit, FFileSearch } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   ChangeAction,
-  OnChange_Exhibits_StatusSwitch_Action, OnClick_Exhibits_DeleteBtn_Action,
-  SaveDataRulesAction,
+  OnChange_Exhibits_StatusSwitch_Action,
+  OnClick_Exhibits_DeleteBtn_Action,
+  // SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 
-const { compile } = require('@freelog/nmr_translator');
+// const { compile } = require('@freelog/nmr_translator');
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
