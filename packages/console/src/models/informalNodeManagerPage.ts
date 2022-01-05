@@ -84,12 +84,12 @@ interface ICandidate {
   type: 'resource' | 'object';
 }
 
-type IConfirmValue = {
-  exhibitName: string;
-  replaced: ICandidate;
-  replacer: ICandidate;
-  scopes: ICandidate[][];
-}[];
+// type IConfirmValue = {
+//   exhibitName: string;
+//   replaced: ICandidate;
+//   replacer: ICandidate;
+//   scopes: ICandidate[][];
+// }[];
 
 interface IActions {
   comment: {
@@ -110,12 +110,13 @@ interface IActions {
       };
       replacer: {
         name: string;
+        versionRange: string;
         type: 'resource' | 'object';
       },
       scopes: {
-        'name': 'u6/m6',
-        'versionRange': '*',
-        'type': 'resource'
+        name: string;
+        versionRange: string;
+        type: 'resource' | 'object';
       }[][];
     };
   };
@@ -173,11 +174,6 @@ export interface IRules {
   alter: {
     operation: 'alter';
     exhibitName: string;
-    candidate: {
-      name: string;
-      versionRange: string;
-      type: 'resource' | 'object';
-    };
     actions: Array<IActions['comment']
       | IActions['set_labels']
       | IActions['replace']
@@ -1803,7 +1799,7 @@ const Model: InformalNodeManagerPageModelType = {
         };
       });
 
-      const text = decompile(ruleObj);
+      const text: string = decompile(ruleObj);
       // console.log(text, 'text1234fklsadj');
       const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
@@ -2379,10 +2375,16 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, { select, put }: EffectsCommandMap) {
+    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, { select, call, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
 
       const simplifiedResults: string[][] = simplifiedRelationship(informalNodeManagerPage.replaceModal_Replaced_CheckedKeys)
         .map<string[]>((r) => {
@@ -2391,19 +2393,34 @@ const Model: InformalNodeManagerPageModelType = {
               return i !== 0;
             });
         });
-      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
-      const resultObj: { [key: string]: ICandidate[][] } = {};
-      for (const simplifiedResult of simplifiedResults) {
-        resultObj[simplifiedResult[0]] = [];
-      }
+      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults2222222');
+
+      const replaced: IActions['replace']['content']['replaced'] = {
+        name: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.name || '',
+        versionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || 'latest',
+        type: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.type || 'object',
+      };
+
+      const replacerData = informalNodeManagerPage.replaceModal_Replacer_ResourceList.find((rr) => {
+        // return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
+        return rr.checked;
+      });
+
+      const replacer: IActions['replace']['content']['replacer'] = {
+        name: replacerData?.name || '',
+        versionRange: replacerData?.versionRange || 'latest',
+        type: replacerData?.identity || 'object',
+      };
+
+
+      // const resultObj: { [key: string]: ICandidate[][] } = {};
+      // for (const simplifiedResult of simplifiedResults) {
+      //   resultObj[simplifiedResult[0]] = [];
+      // }
+      // console.log(simplifiedResult, 'simplifiedResult9023000000000');
       for (const simplifiedResult of simplifiedResults) {
         const [key, ...arr] = simplifiedResult;
-        // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
-        if (arr.length === 0) {
-          continue;
-        }
-        // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
-        resultObj[key].push(arr.map((o: string) => {
+        const scope: IActions['replace']['content']['scopes'][number] = arr.map((o: string) => {
           if (o.startsWith('$')) {
             return {
               name: o.replace('$', ''),
@@ -2417,63 +2434,139 @@ const Model: InformalNodeManagerPageModelType = {
               versionRange: 'latest',
             };
           }
-        }));
-      }
-      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+        });
 
-      const replacerData = informalNodeManagerPage.replaceModal_Replacer_ResourceList.find((rr) => {
-        // return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
-        return rr.checked;
-      });
-      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
-      const results: IConfirmValue = [];
-      for (const [exhibitName, scopes] of Object.entries(resultObj)) {
-        results.push({
-          exhibitName: exhibitName,
-          replaced: {
-            name: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.name || '',
-            versionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || 'latest',
-            type: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.type || 'object',
+        if (needHandleRules.some((nhr) => nhr.exhibitName === key && nhr.operation !== 'activate_theme')) {
+          needHandleRules = needHandleRules.map((nhr) => {
+            if (nhr.exhibitName === key && nhr.operation !== 'activate_theme') {
+              return {
+                ...nhr,
+                actions: [
+                  ...nhr.actions,
+                  {
+                    operation: 'replace',
+                    content: {
+                      replaced,
+                      replacer,
+                      scopes: scope.length === 0 ? [] : [scope],
+                    },
+                  },
+                ],
+              };
+            }
+
+            return nhr;
+          });
+        } else {
+          const alterRule: IRules['alter'] = {
+            operation: 'alter',
+            exhibitName: key,
+            actions: [
+              {
+                operation: 'replace',
+                content: {
+                  replaced,
+                  replacer,
+                  scopes: scope.length === 0 ? [] : [scope],
+                },
+              },
+            ],
+            text: '',
+          };
+          needHandleRules = [
+            ...needHandleRules,
+            alterRule,
+          ];
+        }
+
+
+      }
+
+      console.log(needHandleRules, 'needHandleRules23423490989808989999999');
+
+      const text: string = decompile(needHandleRules);
+      console.log(text, 'text1234fklsadj');
+      // const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
+      //   nodeId: informalNodeManagerPage.node_ID,
+      //   additionalTestRule: text,
+      // };
+      // const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (informalNodeManagerPage.showPage === 'exhibit') {
+        yield put<FetchExhibitListAction>({
+          type: 'fetchExhibitList',
+          payload: {
+            isRematch: true,
+            isRestart: true,
           },
-          replacer: {
-            name: replacerData?.name || '',
-            versionRange: replacerData?.versionRange || 'latest',
-            type: replacerData?.identity || 'object',
+        });
+      } else {
+        yield put<FetchThemeListAction>({
+          type: 'fetchThemeList',
+          payload: {
+            isRematch: true,
+            isRestart: true,
           },
-          scopes: scopes,
         });
       }
-      // return results;
 
-      const rules: any[] = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
-        return rr.ruleInfo;
-      });
-      // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
 
-      for (const v of results) {
-        const rule = rules.find((r: any) => v.exhibitName === r.exhibitName);
-        if (rule) {
-          let replaces = rule.replaces || [];
-          rule.replaces = [
-            ...replaces,
-            v,
-          ];
-        } else {
-          rules.unshift({
-            operation: 'alter',
-            exhibitName: v.exhibitName,
-            replaces: [v],
-          });
-        }
-      }
+      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+
+
+      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
+      // const results: IConfirmValue = [];
+      // for (const [exhibitName, scopes] of Object.entries(resultObj)) {
+      //   results.push({
+      //     exhibitName: exhibitName,
+      //     replaced: {
+      //       name: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.name || '',
+      //       versionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || 'latest',
+      //       type: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.type || 'object',
+      //     },
+      //     replacer: {
+      //       name: replacerData?.name || '',
+      //       versionRange: replacerData?.versionRange || 'latest',
+      //       type: replacerData?.identity || 'object',
+      //     },
+      //     scopes: scopes,
+      //   });
+      // }
+      // // return results;
+      //
+      //
+      // // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+      //
+      // for (const v of results) {
+      //   const rule = rules.find((r: any) => v.exhibitName === r.exhibitName);
+      //   if (rule) {
+      //     let replaces = rule.replaces || [];
+      //     rule.replaces = [
+      //       ...replaces,
+      //       v,
+      //     ];
+      //   } else {
+      //     rules.unshift({
+      //       operation: 'alter',
+      //       exhibitName: v.exhibitName,
+      //       replaces: [v],
+      //     });
+      //   }
+      // }
       // console.log(rules, 'nowRules0923jlkfds()UOIJ');
-      yield put<SaveDataRulesAction>({
-        type: 'saveDataRules',
-        payload: {
-          type: 'replace',
-          data: rules,
-        },
-      });
+      // yield put<SaveDataRulesAction>({
+      //   type: 'saveDataRules',
+      //   payload: {
+      //     type: 'replace',
+      //     data: rules,
+      //   },
+      // });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -2613,8 +2706,8 @@ function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] 
 }
 
 function simplifiedRelationship(relation: string[]): string[] {
+  // console.log(relation, 'relation0923jlksd0000');
   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
-
   for (let i = 0; i < arr.length; i++) {
     const current: string = arr[i];
     arr = arr.filter((a) => {
