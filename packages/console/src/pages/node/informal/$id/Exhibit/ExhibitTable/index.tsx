@@ -206,14 +206,14 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                 });
               }}
             />
-            {/*{*/}
-            {/*  !record.isAuth && (<FTooltip*/}
-            {/*    // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}*/}
-            {/*    title={'存在授权问题'}*/}
-            {/*  >*/}
-            {/*    <FWarning />*/}
-            {/*  </FTooltip>)*/}
-            {/*}*/}
+            {
+              !record.isAuth && (<FTooltip
+                // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+                title={'存在授权问题'}
+              >
+                <FWarning />
+              </FTooltip>)
+            }
 
           </Space>
         </div>);

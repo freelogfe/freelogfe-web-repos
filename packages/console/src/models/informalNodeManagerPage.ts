@@ -1120,15 +1120,15 @@ const Model: InformalNodeManagerPageModelType = {
 
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
-        // ...data.dataList.map((d: any) => {
-        //   return {
-        //     ...d,
-        //     isAuth: data1.find((d1: any) => {
-        //       return d1.exhibitId === d.testResourceId;
-        //     }).isAuth,
-        //     // isAuth: false,
-        //   };
-        // }),
+        ...data.dataList.map((d: any) => {
+          return {
+            ...d,
+            isAuth: data1.find((d1: any) => {
+              return d1.exhibitId === d.testResourceId;
+            }).isAuth,
+            // isAuth: false,
+          };
+        }),
         ...data.dataList,
       ];
 
@@ -1318,7 +1318,15 @@ const Model: InformalNodeManagerPageModelType = {
         testResourceId: payload.testResourceId,
       };
 
-      const {data: data3} = yield call(FServiceAPI.InformalNode.testResourceDetails, params3);
+      const { data: data3 } = yield call(FServiceAPI.InformalNode.testResourceDetails, params3);
+
+      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        exhibitIds: payload.testResourceId,
+        authType: 3,
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1326,10 +1334,13 @@ const Model: InformalNodeManagerPageModelType = {
           node_RuleInfo: result,
           exhibit_List: informalNodeManagerPage.exhibit_List.map((el) => {
             if (el.testResourceId === payload.testResourceId) {
-              return data3;
+              return {
+                ...data3,
+                isAuth: data1[0].isAuth,
+              };
             }
             return el;
-          })
+          }),
         },
       });
     },
