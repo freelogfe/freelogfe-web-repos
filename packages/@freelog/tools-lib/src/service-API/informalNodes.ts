@@ -206,3 +206,20 @@ export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {
     data: params,
   });
 }
+
+// 批量获取测试资源授权结果
+interface BatchGetAuthsParamsType {
+  nodeId: number;
+  testResourceIds: string;
+  authType: 1 | 2 | 3; //授权类型 1:节点侧授权 2:资源侧授权 3:节点+资源侧授权
+}
+
+export function batchGetAuths({nodeId, ...params}: BatchGetAuthsParamsType) {
+  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
+  return FUtil.Request({
+    method: 'GET',
+    // url: `/v2/auths/testResources/nodes/${nodeId}/result`,
+    url: `/v2/auths/exhibits/${nodeId}/test/batchAuth/results`,
+    params: params,
+  });
+}

@@ -427,6 +427,7 @@ async function handleList(payload: HandleListParams): Promise<{
       omitResourceType: payload.isTheme ? undefined : 'theme',
       resourceType: payload.isTheme ? 'theme' : undefined,
       keywords: payload.keywords,
+      status: 1,
     };
     // console.log(params, 'paramsparams1234');
     const { data } = await FServiceAPI.Resource.list(params);

@@ -68,6 +68,7 @@ export interface IExhibit {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
+  isAuth: boolean;
 }
 
 export interface TreeNode {
@@ -1058,13 +1059,8 @@ const Model: InformalNodeManagerPageModelType = {
       select,
       put,
     }: EffectsCommandMap) {
-
-      const { informalNodeManagerPage, nodes }: ConnectState = yield select(({
-                                                                               informalNodeManagerPage,
-                                                                               nodes,
-                                                                             }: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
-        nodes,
       }));
 
       yield put<ChangeAction>({
@@ -1113,9 +1109,25 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
 
+      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testResourceIds: data.dataList.map((d: any) => d.testResourceId).join(','),
+        authType: 3,
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
-        ...data.dataList,
+        ...data.dataList.map((d: any) => {
+          return {
+            ...d,
+            // isAuth: data1.find((d1: any) => {
+            //   return d1.testResourceId === d.testResourceId;
+            // }).isAuth,
+            isAuth: false,
+          };
+        }),
       ];
 
       const { state, more } = listStateAndListMore({
