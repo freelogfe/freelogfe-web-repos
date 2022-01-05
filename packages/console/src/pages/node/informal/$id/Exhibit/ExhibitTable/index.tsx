@@ -13,7 +13,11 @@ import { FDelete, FEdit, FFileSearch } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { ChangeAction, SaveDataRulesAction } from '@/models/informalNodeManagerPage';
+import {
+  ChangeAction,
+  OnChange_Exhibits_StatusSwitch_Action,
+  SaveDataRulesAction,
+} from '@/models/informalNodeManagerPage';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
@@ -202,7 +206,14 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             <FSwitch
               disabled={false}
               checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
-              onChange={async (value) => {
+              onChange={(value) => {
+                dispatch<OnChange_Exhibits_StatusSwitch_Action>({
+                  type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch',
+                  payload: {
+                    testResourceName: record.testResourceName,
+                    checked: value,
+                  },
+                });
                 // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
                 //
                 // const rule = rules.find((r) => r.exhibitName === record.testResourceName);

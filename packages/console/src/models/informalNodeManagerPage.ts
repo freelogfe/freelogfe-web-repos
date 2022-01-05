@@ -411,6 +411,19 @@ export interface OnLoadMoreExhibitsAction extends AnyAction {
   type: 'informalNodeManagerPage/onLoadMoreExhibits';
 }
 
+export interface OnClick_Exhibits_DeleteBtn_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn';
+}
+
+export interface OnChange_Exhibits_StatusSwitch_Action extends AnyAction {
+  type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch';
+  payload: {
+    testResourceName: string;
+    checked: boolean;
+  };
+}
+
+
 export interface FetchThemeListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchThemeList' | 'fetchThemeList';
   payload: {
@@ -717,6 +730,8 @@ interface InformalNodeManagerPageModelType {
     onChangeExhibitStatus: (action: OnChangeExhibitStatusAction, effects: EffectsCommandMap) => void;
     onChangeExhibitKeywords: (action: OnChangeExhibitKeywordsAction, effects: EffectsCommandMap) => void;
     onLoadMoreExhibits: (action: OnLoadMoreExhibitsAction, effects: EffectsCommandMap) => void;
+    onClick_Exhibits_DeleteBtn: (action: OnClick_Exhibits_DeleteBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Exhibits_StatusSwitch: (action: OnChange_Exhibits_StatusSwitch_Action, effects: EffectsCommandMap) => void;
 
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     onClickThemesAddBtn: (action: OnClickThemesAddBtnAction, effects: EffectsCommandMap) => void;
@@ -1183,6 +1198,68 @@ const Model: InformalNodeManagerPageModelType = {
           isRestart: false,
         },
       });
+    },
+    * onClick_Exhibits_DeleteBtn({}: OnClick_Exhibits_DeleteBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onChange_Exhibits_StatusSwitch({ payload }: OnChange_Exhibits_StatusSwitch_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      if (needHandleRules.some((nhr) => nhr.exhibitName === payload.testResourceName && nhr.operation !== 'activate_theme')) {
+        needHandleRules = needHandleRules.map((nhr) => {
+          if (nhr.exhibitName === payload.testResourceName && nhr.operation !== 'activate_theme') {
+            return {
+              ...nhr,
+              actions: [
+                ...nhr.actions,
+                {
+                  operation: 'online',
+                  content: payload.checked,
+                },
+              ],
+            };
+          }
+
+          return nhr;
+        });
+      } else {
+        const alterRule: IRules['alter'] = {
+          operation: 'alter',
+          exhibitName: payload.testResourceName,
+          actions: [
+            {
+              operation: 'online',
+              content: payload.checked,
+            },
+          ],
+          text: '',
+        };
+        needHandleRules = [
+          ...needHandleRules,
+          alterRule,
+        ];
+      }
+
+      const text: string = decompile(needHandleRules);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
     },
 
     * fetchThemeList({ payload: { isRematch = true, isRestart } }: FetchThemeListAction, {
@@ -1791,7 +1868,7 @@ const Model: InformalNodeManagerPageModelType = {
           exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
           candidate: {
             name: n,
-            versionRange: '',
+            versionRange: 'latest',
             type: payload.identity,
           },
           actions: [],
@@ -1800,7 +1877,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
       const text: string = decompile(ruleObj);
-      // console.log(text, 'text1234fklsadj');
+      console.log(text, 'text1234fklsadj');
       const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
@@ -2482,10 +2559,10 @@ const Model: InformalNodeManagerPageModelType = {
 
       }
 
-      console.log(needHandleRules, 'needHandleRules23423490989808989999999');
+      // console.log(needHandleRules, 'needHandleRules23423490989808989999999');
 
       const text: string = decompile(needHandleRules);
-      console.log(text, 'text1234fklsadj');
+      // console.log(text, 'text1234fklsadj');
       // const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
       //   nodeId: informalNodeManagerPage.node_ID,
       //   additionalTestRule: text,
