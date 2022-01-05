@@ -413,6 +413,9 @@ export interface OnLoadMoreExhibitsAction extends AnyAction {
 
 export interface OnClick_Exhibits_DeleteBtn_Action extends AnyAction {
   type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn';
+  payload: {
+    testResourceName: string;
+  };
 }
 
 export interface OnChange_Exhibits_StatusSwitch_Action extends AnyAction {
@@ -1199,8 +1202,28 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClick_Exhibits_DeleteBtn({}: OnClick_Exhibits_DeleteBtn_Action, {}: EffectsCommandMap) {
+    * onClick_Exhibits_DeleteBtn({ payload }: OnClick_Exhibits_DeleteBtn_Action, { select, call }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
 
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informalNodeManagerPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.filter((nhr) => {
+        return nhr.exhibitName !== payload.testResourceName;
+      });
+
+      const text: string = decompile(needHandleRules);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
     },
     * onChange_Exhibits_StatusSwitch({ payload }: OnChange_Exhibits_StatusSwitch_Action, {
       select,

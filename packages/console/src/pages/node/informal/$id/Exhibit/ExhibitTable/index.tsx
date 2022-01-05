@@ -15,7 +15,7 @@ import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   ChangeAction,
-  OnChange_Exhibits_StatusSwitch_Action,
+  OnChange_Exhibits_StatusSwitch_Action, OnClick_Exhibits_DeleteBtn_Action,
   SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -160,7 +160,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                 objectID: record.originInfo.id,
               }));
             }}
-            onDelete={record.associatedPresentableId !== '' ? undefined : async () => {
+            onDelete={record.associatedPresentableId !== '' ? undefined : () => {
+              dispatch<OnClick_Exhibits_DeleteBtn_Action>({
+                type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
+                payload: {
+                  testResourceName: record.testResourceName,
+                },
+              });
               // const { rules }: { rules: any[] } = compile(informalNodeManagerPage.node_RuleText);
               // // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
               // await dispatch<SaveDataRulesAction>({
