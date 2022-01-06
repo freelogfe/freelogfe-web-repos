@@ -21,7 +21,7 @@ import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-import FAddInformExhibitDrawer from './components/AddInformExhibitDrawer';
+// import FAddInformExhibitDrawer from './components/AddInformExhibitDrawer';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
