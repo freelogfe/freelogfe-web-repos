@@ -7,7 +7,7 @@ import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
-import informalNodeManagerPage from '@/models/informalNodeManagerPage';
+// import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 

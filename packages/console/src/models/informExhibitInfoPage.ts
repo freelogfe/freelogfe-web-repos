@@ -1,7 +1,7 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
@@ -15,9 +15,10 @@ import {
 } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import { IGraph_Dependency_Edges, IGraph_Dependency_Nodes } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
-import { RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
+import { IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
+import fMessage from '@/components/fMessage';
 
-const { decompile, compile } = require('@freelog/nmr_translator');
+const { decompile } = require('@freelog/nmr_translator');
 
 interface ICandidate {
   name: string;
@@ -31,44 +32,15 @@ export interface InformExhibitInfoPageModelState {
 
   node_ID: number;
   node_Name: string;
-  node_RuleText: string;
-  node_RuleResult: null | RuleMatchAndResultReturn['testRules'];
-  // node_MappingRule: {
-  //   add?: {
-  //     exhibit: string;
-  //     source: {
-  //       type: 'resource' | 'object';
-  //       name: string;
-  //       version?: string;
-  //     };
-  //   };
-  //   alter?: string;
-  //   active?: string;
-  //   version?: string;
-  //   cover?: string;
-  //   title?: string;
-  //   online?: boolean;
-  //   offline?: boolean;
-  //   labels?: string[];
-  //   replaces?: {
-  //     replaced: ICandidate;
-  //     replacer: ICandidate;
-  //     scopes?: ICandidate[][];
-  //   }[];
-  //   attrs?: {
-  //     type: 'add' | 'delete',
-  //     theKey: string;
-  //     value?: string;
-  //     description?: string;
-  //   }[];
-  // } | null;
+  // node_RuleText: string;
+  node_RuleInfo: null | RuleMatchAndResultReturn;
 
   exhibit_ID: string;
   exhibit_Name: string;
   exhibit_Identity: 'exhibit' | 'resource' | 'object';
   exhibit_ResourceType: string;
-  exhibit_RuleResult: any;
-  exhibit_RuleID: string;
+  // exhibit_RuleResult: any;
+  // exhibit_RuleID: string;
   exhibit_OnlineSwitchObj: {
     checked: boolean;
     text: string;
@@ -134,6 +106,7 @@ export interface InformExhibitInfoPageModelState {
       operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
       ruleId: string;
     }[];
+    isAuth: boolean;
   };
 
   contract_Associated: {
@@ -222,10 +195,17 @@ export interface OnPageUnmountAction extends AnyAction {
   type: 'informExhibitInfoPage/onPageUnmount';
 }
 
-export interface OnOnlineSwitchChangeAction extends AnyAction {
-  type: 'informExhibitInfoPage/onOnlineSwitchChange';
+export interface OnChange_Exhibit_OnlineSwitch_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch';
   payload: {
     checked: boolean;
+  };
+}
+
+export interface OnChange_Theme_OnlineSwitch_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch';
+  payload: {
+    checked: true;
   };
 }
 
@@ -291,27 +271,27 @@ export interface FetchInformalExhibitInfoAction extends AnyAction {
   };
 }
 
-export interface SyncRulesAction extends AnyAction {
-  type: 'syncRules';
-  payload: {
-    cover?: string;
-    labels?: string[];
-    title?: string;
-    attrs?: {
-      operation: 'add' | 'delete';
-      key: string;
-      value?: string;
-      description?: string;
-    }[];
-    online?: boolean;
-    active?: boolean;
-    replaces?: {
-      replaced: ICandidate;
-      replacer: ICandidate;
-      scopes?: ICandidate[][];
-    }[];
-  };
-}
+// export interface SyncRulesAction extends AnyAction {
+//   type: 'syncRules';
+//   payload: {
+//     cover?: string;
+//     labels?: string[];
+//     title?: string;
+//     attrs?: {
+//       operation: 'add' | 'delete';
+//       key: string;
+//       value?: string;
+//       description?: string;
+//     }[];
+//     online?: boolean;
+//     active?: boolean;
+//     replaces?: {
+//       replaced: ICandidate;
+//       replacer: ICandidate;
+//       scopes?: ICandidate[][];
+//     }[];
+//   };
+// }
 
 export interface OnHandleAttrModalAction extends AnyAction {
   type: 'informExhibitInfoPage/onHandleAttrModal';
@@ -403,11 +383,12 @@ export interface ExhibitInfoPageModelType {
 
     fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
 
-    syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
+    // syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
 
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
 
-    onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
+    onChange_Exhibit_OnlineSwitch: (action: OnChange_Exhibit_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
+    onChange_Theme_OnlineSwitch: (action: OnChange_Theme_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
 
     onClick_Graph_FullScreenBtn: (action: OnClick_Graph_FullScreenBtn_Action, effects: EffectsCommandMap) => void;
     onCancel_Graph_FullScreenDrawer: (action: OnCancel_Graph_FullScreenDrawer_Action, effects: EffectsCommandMap) => void;
@@ -456,16 +437,16 @@ const initStates: InformExhibitInfoPageModelState = {
 
   node_ID: -1,
   node_Name: '',
-  node_RuleText: '',
-  node_RuleResult: null,
+  // node_RuleText: '',
+  node_RuleInfo: null,
   // node_MappingRule: null,
 
   exhibit_ID: '',
   exhibit_Name: '',
   exhibit_Identity: 'exhibit',
   exhibit_ResourceType: '',
-  exhibit_RuleResult: null,
-  exhibit_RuleID: '',
+  // exhibit_RuleResult: null,
+  // exhibit_RuleID: '',
   exhibit_OnlineSwitchObj: null,
   exhibit_Info: null,
 
@@ -616,11 +597,11 @@ const Model: ExhibitInfoPageModelType = {
       // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
       //
       // 授权树数据
-      const params7: Parameters<typeof FServiceAPI.InformalNode.testResourcesAuthTree>[0] = {
-        testResourceId: informExhibitID,
-      };
-
-      const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
+      // const params7: Parameters<typeof FServiceAPI.InformalNode.testResourcesAuthTree>[0] = {
+      //   testResourceId: informExhibitID,
+      // };
+      //
+      // const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
       // console.log(data7, 'data7data7data7data7');
 
       // const {
@@ -635,25 +616,32 @@ const Model: ExhibitInfoPageModelType = {
       // });
 
       // 依赖树
-      const params8: Parameters<typeof FServiceAPI.InformalNode.testResourcesDependencyTree>[0] = {
-        testResourceId: informExhibitID,
-      };
-
-      const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
+      // const params8: Parameters<typeof FServiceAPI.InformalNode.testResourcesDependencyTree>[0] = {
+      //   testResourceId: informExhibitID,
+      // };
+      //
+      // const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
       // console.log(data8, 'data8data8data8data8');
 
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: data.nodeId,
+        isRematch: false,
+      };
+
+      const result2: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           pageLoading: false,
+          node_RuleInfo: result2,
           node_ID: data.nodeId,
           node_Name: data4.nodeName,
           exhibit_Identity: data.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
           exhibit_ResourceType: data.resourceType,
           exhibit_Name: data.testResourceName,
-          exhibit_RuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
+          // exhibit_RuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
           exhibit_OnlineSwitchObj: {
             checked: isChecked,
             text: data.resourceType === 'theme'
@@ -661,7 +649,10 @@ const Model: ExhibitInfoPageModelType = {
               : FUtil1.I18n.message('btn_show_exhibit'),
             disabled: isDisabled,
           },
-          exhibit_Info: data,
+          exhibit_Info: {
+            ...data,
+            isAuth: true,
+          },
 
           side_Exhibit_Cover: data.stateInfo.coverInfo.coverImages[0] || '',
           side_Exhibit_Title: data.stateInfo.titleInfo.title || '',
@@ -740,12 +731,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-      const params2: RuleMatchStatusParams = {
-        nodeID: data.nodeId,
-        isRematch: false,
-      };
 
-      const { data: data2 } = yield call(ruleMatchStatus, params2);
       // console.log(data2, '##@#$@#$@#!!!!!!!!!1234');
 
       // const currentRule = data2.testRules.find((ro: any) => {
@@ -785,100 +771,99 @@ const Model: ExhibitInfoPageModelType = {
       //
       // };
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          // node_MappingRule: {
-          //   ...eRule,
-          //   ...tRule,
-          // },
-          node_RuleText: data2.ruleText,
-          node_RuleResult: data2.testRules,
-          exhibit_RuleResult: data.rules.length > 0 ? data2.testRules.find((tr: any) => {
-            return tr.id === data.rules[0].ruleId;
-          }) : null,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     // node_MappingRule: {
+      //     //   ...eRule,
+      //     //   ...tRule,
+      //     // },
+      //     // node_In
+      //     // node_RuleText: data2.ruleText,
+      //
+      //     // exhibit_RuleResult: data,
+      //   },
+      // });
     },
-    * syncRules({ payload }: SyncRulesAction, { select, call, put }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
-
-      const params2: RuleMatchStatusParams = {
-        nodeID: informExhibitInfoPage.node_ID,
-        isRematch: false,
-      };
-
-      const { data: data1 } = yield call(ruleMatchStatus, params2);
-
-      // const {rules} = compile(data1.ruleText);
-      const rules = (informExhibitInfoPage.node_RuleResult || []).map((rr: any) => {
-        return rr.ruleInfo;
-      });
-
-      let newRulesObj;
-
-      if (payload.active !== undefined) {
-        newRulesObj = rules.filter((r: any) => {
-          return r.operation !== 'activate_theme';
-        });
-
-        if (payload.active) {
-          newRulesObj = [
-            {
-              operation: 'activate_theme',
-              themeName: informExhibitInfoPage.exhibit_Name,
-            },
-            ...newRulesObj,
-          ];
-        }
-        // console.log(rules1, 'rules1!Q@#RFcdios89joe');
-      } else {
-        const currentRule = rules.find((ro: any) => {
-          return ro.exhibitName === informExhibitInfoPage.exhibit_Name;
-        });
-
-        if (currentRule) {
-          newRulesObj = rules.map((ro: any) => {
-            if (ro.exhibitName !== informExhibitInfoPage.exhibit_Name) {
-              return ro;
-            }
-            return {
-              ...ro,
-              ...payload,
-            };
-          });
-        } else {
-          newRulesObj = [
-            {
-              operation: 'alter',
-              exhibitName: informExhibitInfoPage.exhibit_Name,
-              ...payload,
-            },
-            ...rules,
-          ];
-        }
-      }
-
-      // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
-      const text = decompile(newRulesObj);
-      // console.log(text, 'newRulesObj90ij32.dsfsdf');
-
-      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
-        nodeId: informExhibitInfoPage.node_ID,
-        testRuleText: text,
-      };
-      // console.log(params, 'paramsparams!!@#$!@#$');
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
-      // console.log(data, 'data!!@#$@#$');
-
-      yield call(sleep, 300);
-
-      yield put<FetchInformalExhibitInfoAction>({
-        type: 'fetchInformalExhibitInfo',
-      });
-    },
+    // * syncRules({ payload }: SyncRulesAction, { select, call, put }: EffectsCommandMap) {
+    //   const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+    //     informExhibitInfoPage,
+    //   }));
+    //
+    //   const params2: RuleMatchStatusParams = {
+    //     nodeID: informExhibitInfoPage.node_ID,
+    //     isRematch: false,
+    //   };
+    //
+    //   const { data: data1 } = yield call(ruleMatchStatus, params2);
+    //
+    //   // const {rules} = compile(data1.ruleText);
+    //   const rules = (informExhibitInfoPage.node_RuleResult || []).map((rr: any) => {
+    //     return rr.ruleInfo;
+    //   });
+    //
+    //   let newRulesObj;
+    //
+    //   if (payload.active !== undefined) {
+    //     newRulesObj = rules.filter((r: any) => {
+    //       return r.operation !== 'activate_theme';
+    //     });
+    //
+    //     if (payload.active) {
+    //       newRulesObj = [
+    //         {
+    //           operation: 'activate_theme',
+    //           themeName: informExhibitInfoPage.exhibit_Name,
+    //         },
+    //         ...newRulesObj,
+    //       ];
+    //     }
+    //     // console.log(rules1, 'rules1!Q@#RFcdios89joe');
+    //   } else {
+    //     const currentRule = rules.find((ro: any) => {
+    //       return ro.exhibitName === informExhibitInfoPage.exhibit_Name;
+    //     });
+    //
+    //     if (currentRule) {
+    //       newRulesObj = rules.map((ro: any) => {
+    //         if (ro.exhibitName !== informExhibitInfoPage.exhibit_Name) {
+    //           return ro;
+    //         }
+    //         return {
+    //           ...ro,
+    //           ...payload,
+    //         };
+    //       });
+    //     } else {
+    //       newRulesObj = [
+    //         {
+    //           operation: 'alter',
+    //           exhibitName: informExhibitInfoPage.exhibit_Name,
+    //           ...payload,
+    //         },
+    //         ...rules,
+    //       ];
+    //     }
+    //   }
+    //
+    //   // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
+    //   const text = decompile(newRulesObj);
+    //   // console.log(text, 'newRulesObj90ij32.dsfsdf');
+    //
+    //   const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+    //     nodeId: informExhibitInfoPage.node_ID,
+    //     testRuleText: text,
+    //   };
+    //   // console.log(params, 'paramsparams!!@#$!@#$');
+    //   const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+    //   // console.log(data, 'data!!@#$@#$');
+    //
+    //   yield call(sleep, 300);
+    //
+    //   yield put<FetchInformalExhibitInfoAction>({
+    //     type: 'fetchInformalExhibitInfo',
+    //   });
+    // },
     * updateRelation({ payload }: UpdateRelationAction, { select, call, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
@@ -904,26 +889,159 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInformalExhibitInfo',
       });
     },
-    * onOnlineSwitchChange({ payload }: OnOnlineSwitchChangeAction, { put, select }: EffectsCommandMap) {
+    * onChange_Exhibit_OnlineSwitch({ payload }: OnChange_Exhibit_OnlineSwitch_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
-        yield put<SyncRulesAction>({
-          type: 'syncRules',
-          payload: {
-            active: payload.checked,
-          },
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      // console.log(rules, 'rules928893292339829399999998888888');
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      // console.log(needHandleRules, 'needHandleRules9283239847239847');
+
+      if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
+        needHandleRules = needHandleRules.map((nhr) => {
+          if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+            return {
+              ...nhr,
+              actions: [
+                ...nhr.actions,
+                {
+                  operation: 'online',
+                  content: payload.checked,
+                },
+              ],
+            };
+          }
+
+          return nhr;
         });
       } else {
-        yield put<SyncRulesAction>({
-          type: 'syncRules',
-          payload: {
-            online: payload.checked,
-          },
-        });
+        const alterRule: IRules['alter'] = {
+          operation: 'alter',
+          exhibitName: informExhibitInfoPage.exhibit_Name,
+          actions: [
+            {
+              operation: 'online',
+              content: payload.checked,
+            },
+          ],
+          text: '',
+        };
+        needHandleRules = [
+          ...needHandleRules,
+          alterRule,
+        ];
       }
+
+      const text: string = decompile(needHandleRules);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
+    },
+    * onChange_Theme_OnlineSwitch({ payload }: OnChange_Theme_OnlineSwitch_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      if (needHandleRules.some((n) => n.operation === 'activate_theme')) {
+        needHandleRules = needHandleRules.map((nhr) => {
+          if (nhr.operation === 'activate_theme') {
+            return {
+              ...nhr,
+              exhibitName: informExhibitInfoPage.exhibit_Name,
+              text: '',
+            };
+          }
+          return nhr;
+        });
+      } else {
+        needHandleRules = [
+          ...needHandleRules,
+          {
+            operation: 'activate_theme',
+            exhibitName: informExhibitInfoPage.exhibit_Name,
+            text: '',
+          },
+        ];
+      }
+
+      const text: string = decompile(needHandleRules);
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
 
     * onClick_Graph_FullScreenBtn({}: OnClick_Graph_FullScreenBtn_Action, { put }: EffectsCommandMap) {
@@ -956,12 +1074,12 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: { side_Exhibit_Cover: payload.value },
       });
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          cover: payload.value,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     cover: payload.value,
+      //   },
+      // });
     },
     * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, { put, select }: EffectsCommandMap) {
 
@@ -999,12 +1117,12 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          title: pInputTitle,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     title: pInputTitle,
+      //   },
+      // });
     },
     * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, { put }: EffectsCommandMap) {
 
@@ -1024,12 +1142,12 @@ const Model: ExhibitInfoPageModelType = {
           side_Exhibit_Tags: payload.value,
         },
       });
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          labels: payload.value,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     labels: payload.value,
+      //   },
+      // });
     },
     * onChangePVersion({ payload }: OnChangePVersionAction, { select, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
@@ -1067,12 +1185,12 @@ const Model: ExhibitInfoPageModelType = {
           },
         },
       ];
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          replaces: replace,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     replaces: replace,
+      //   },
+      // });
     },
 
     * onHandleAttrModal({ payload }: OnHandleAttrModalAction, { select, put }: EffectsCommandMap) {
@@ -1302,12 +1420,12 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(theRule, 'TTTTTTtttttt');
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: theRule,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     attrs: theRule,
+      //   },
+      // });
 
     },
     // * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
@@ -1379,43 +1497,43 @@ const Model: ExhibitInfoPageModelType = {
         },
       ];
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: newAttrs,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     attrs: newAttrs,
+      //   },
+      // });
     },
     * onClickResetAttr({ payload }: OnClickResetAttrAction, { select, put }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
+      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+      //   informExhibitInfoPage,
+      // }));
 
-      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
+      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
 
       // console.log(attrs, 'rules!!!!!!!');
 
-      const newAttrs = attrs.filter((rl: any) => {
-        return rl.key !== payload.theKey;
-      });
+      // const newAttrs = attrs.filter((rl: any) => {
+      //   return rl.key !== payload.theKey;
+      // });
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: newAttrs,
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     attrs: newAttrs,
+      //   },
+      // });
     },
 
     * onConfirm_CustomOptionsDrawer({ payload }: OnConfirm_CustomOptionsDrawer_Action, {
       select,
       put,
     }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
+      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+      //   informExhibitInfoPage,
+      // }));
 
-      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.attrs || [];
+      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.attrs || [];
 
       // console.log(attrs, 'rules!!!!!!!');
 
@@ -1439,22 +1557,22 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: [
-            ...payload.value.map((v) => {
-              return {
-                operation: 'add',
-                key: v.key,
-                value: v.defaultValue,
-                description: v.description,
-              };
-            }),
-            ...attrs,
-          ],
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     attrs: [
+      //       ...payload.value.map((v) => {
+      //         return {
+      //           operation: 'add',
+      //           key: v.key,
+      //           value: v.defaultValue,
+      //           description: v.description,
+      //         };
+      //       }),
+      //       ...attrs,
+      //     ],
+      //   },
+      // });
 
       // yield put<ChangeAction>({
       //   type: 'change',
@@ -1492,11 +1610,11 @@ const Model: ExhibitInfoPageModelType = {
       select,
       put,
     }: EffectsCommandMap) {
-      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-        informExhibitInfoPage,
-      }));
+      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+      //   informExhibitInfoPage,
+      // }));
 
-      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
+      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1506,21 +1624,21 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-      yield put<SyncRulesAction>({
-        type: 'syncRules',
-        payload: {
-          attrs: attrs.map((a: any) => {
-            if (a.key !== payload.value.key) {
-              return a;
-            }
-            return {
-              ...a,
-              value: payload.value.value,
-              description: payload.value.description,
-            };
-          }),
-        },
-      });
+      // yield put<SyncRulesAction>({
+      //   type: 'syncRules',
+      //   payload: {
+      //     attrs: attrs.map((a: any) => {
+      //       if (a.key !== payload.value.key) {
+      //         return a;
+      //       }
+      //       return {
+      //         ...a,
+      //         value: payload.value.value,
+      //         description: payload.value.description,
+      //       };
+      //     }),
+      //   },
+      // });
 
       // yield put<ChangeAction>({
       //   type: 'change',
@@ -1665,41 +1783,41 @@ export default Model;
 //   return result;
 // }
 
-interface RuleMatchStatusParams {
-  nodeID: number;
-  isRematch?: boolean;
-}
-
-async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<any> {
-  const params: Parameters<typeof FServiceAPI.InformalNode.rulesRematch>[0] = {
-    nodeId: nodeID,
-  };
-
-  if (isRematch) {
-    await FServiceAPI.InformalNode.rulesRematch(params);
-  }
-
-  while (true) {
-    const response = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
-    // console.log(response, 'response1234');
-    if (response.data.status === 1) {
-      await sleep();
-    } else {
-      if (response.data.status === 2) {
-        throw new Error('匹配失败');
-      }
-      return response;
-    }
-  }
-}
-
-function sleep(ms: number = 200): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-}
+// interface RuleMatchStatusParams {
+//   nodeID: number;
+//   isRematch?: boolean;
+// }
+//
+// async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<any> {
+//   const params: Parameters<typeof FServiceAPI.InformalNode.rulesRematch>[0] = {
+//     nodeId: nodeID,
+//   };
+//
+//   if (isRematch) {
+//     await FServiceAPI.InformalNode.rulesRematch(params);
+//   }
+//
+//   while (true) {
+//     const response = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
+//     // console.log(response, 'response1234');
+//     if (response.data.status === 1) {
+//       await sleep();
+//     } else {
+//       if (response.data.status === 2) {
+//         throw new Error('匹配失败');
+//       }
+//       return response;
+//     }
+//   }
+// }
+//
+// function sleep(ms: number = 200): Promise<void> {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, ms);
+//   });
+// }
 
 
 // function recursiveDependencyTree(): InformExhibitInfoPageModelState['graph_Viewport_DependencyGraph_Edges']{

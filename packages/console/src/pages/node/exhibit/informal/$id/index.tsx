@@ -14,7 +14,8 @@ import {
 } from '@/models/connect';
 import {
   OnPageMountAction,
-  OnOnlineSwitchChangeAction,
+  OnChange_Exhibit_OnlineSwitch_Action,
+  OnChange_Theme_OnlineSwitch_Action,
   OnPageUnmountAction,
 } from '@/models/informExhibitInfoPage';
 import { FTextBtn } from '@/components/FButton';
@@ -106,12 +107,22 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
                 checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
                 onChange={(value) => {
-                  dispatch<OnOnlineSwitchChangeAction>({
-                    type: 'informExhibitInfoPage/onOnlineSwitchChange',
-                    payload: {
-                      checked: value,
-                    },
-                  });
+                  if (informExhibitInfoPage.exhibit_Info?.resourceType === 'theme') {
+                    dispatch<OnChange_Theme_OnlineSwitch_Action>({
+                      type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
+                      payload: {
+                        checked: true,
+                      },
+                    });
+                  } else {
+                    dispatch<OnChange_Exhibit_OnlineSwitch_Action>({
+                      type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch',
+                      payload: {
+                        checked: value,
+                      },
+                    });
+                  }
+
                 }}
               />
             </>)
