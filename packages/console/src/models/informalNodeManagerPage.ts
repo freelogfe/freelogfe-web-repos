@@ -959,6 +959,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onMountExhibitPage({}: OnMountExhibitPageAction, { select, put }: EffectsCommandMap) {
+      // console.log('onMountExhibitPage9989999999999');
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -979,6 +980,7 @@ const Model: InformalNodeManagerPageModelType = {
     },
 
     * onMountThemePage({}: OnMountThemePageAction, { put }: EffectsCommandMap) {
+      console.log('onMountThemePage9989999999999');
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {

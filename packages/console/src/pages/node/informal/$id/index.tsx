@@ -45,13 +45,14 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
   const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
 
   React.useEffect(() => {
+    // console.log(showPage, 'showPage093lkjladsf');
     dispatch<OnChangePageAction>({
       type: 'informalNodeManagerPage/onChangePage',
       payload: {
         value: showPage,
       },
     });
-  }, [dispatch, showPage]);
+  }, [showPage]);
 
   return (<>
     <Helmet>

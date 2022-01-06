@@ -19,8 +19,6 @@ import {
   OnReplacerKeywordsChangeAction,
   OnReplacerListCheckedChangeAction, OnReplacerListVersionRangeChangeAction, OnReplacerBucketChangeAction,
 } from '@/models/informalNodeManagerPage';
-// import {} from "@/models/replaceInformExhibitModal";
-// import FSelect from '@/components/FSelect';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FDropdownMenu from '@/components/FDropdownMenu';
@@ -54,7 +52,6 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
       type: 'informalNodeManagerPage/onReplacerUnmount',
     });
   });
-
 
   async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData = false) {
     dispatch<ChangeAction>({
