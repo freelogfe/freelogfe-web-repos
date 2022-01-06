@@ -6,16 +6,19 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import {
-  // handleExhibitRelationGraphData,
-  IGraph_Relationship_Edges, IGraph_Relationship_Nodes,
+  IGraph_Relationship_Edges,
+  IGraph_Relationship_Nodes,
 } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 import {
-  // handleAuthorizationGraphData,
-  IGraph_Authorization_Edges, IGraph_Authorization_Nodes,
+  IGraph_Authorization_Edges,
+  IGraph_Authorization_Nodes,
 } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
-import { IGraph_Dependency_Edges, IGraph_Dependency_Nodes } from '@/components/FAntvG6/FAntvG6DependencyGraph';
+import {
+  IGraph_Dependency_Edges,
+  IGraph_Dependency_Nodes,
+} from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
-import { IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
+import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 
 const { decompile } = require('@freelog/nmr_translator');
@@ -224,8 +227,8 @@ export interface OnChange_Graph_Tab_Action extends AnyAction {
   };
 }
 
-export interface OnChangePCoverAction extends AnyAction {
-  type: 'informExhibitInfoPage/onChangePCover';
+export interface OnChange_Side_Exhibit_Cover_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_Cover';
   payload: {
     value: string;
   };
@@ -394,7 +397,7 @@ export interface ExhibitInfoPageModelType {
     onCancel_Graph_FullScreenDrawer: (action: OnCancel_Graph_FullScreenDrawer_Action, effects: EffectsCommandMap) => void;
     onChange_Graph_Tab: (action: OnChange_Graph_Tab_Action, effects: EffectsCommandMap) => void;
 
-    onChangePCover: (action: OnChangePCoverAction, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_Cover: (action: OnChange_Side_Exhibit_Cover_Action, effects: EffectsCommandMap) => void;
     onClickPTitleEditBtn: (action: OnClickPTitleEditBtnAction, effects: EffectsCommandMap) => void;
     onChangePTitleInput: (action: OnChangePTitleInputAction, effects: EffectsCommandMap) => void;
     onClickPTitleConfirmBtn: (action: OnClickPTitleConfirmBtnAction, effects: EffectsCommandMap) => void;
@@ -497,8 +500,13 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onPageUnmount({}: OnPageUnmountAction, {}: EffectsCommandMap) {
-
+    * onPageUnmount({}: OnPageUnmountAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates,
+        },
+      });
     },
     * fetchInformalExhibitInfo({ payload }: FetchInformalExhibitInfoAction, { call, select, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
@@ -904,46 +912,53 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(rules, 'rules928893292339829399999998888888');
 
-      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+      // let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+      //
+      // // console.log(needHandleRules, 'needHandleRules9283239847239847');
+      //
+      // if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
+      //   needHandleRules = needHandleRules.map((nhr) => {
+      //     if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+      //       return {
+      //         ...nhr,
+      //         actions: [
+      //           ...nhr.actions,
+      //           {
+      //             operation: 'online',
+      //             content: payload.checked,
+      //           },
+      //         ],
+      //       };
+      //     }
+      //
+      //     return nhr;
+      //   });
+      // } else {
+      //   const alterRule: IRules['alter'] = {
+      //     operation: 'alter',
+      //     exhibitName: informExhibitInfoPage.exhibit_Name,
+      //     actions: [
+      //       {
+      //         operation: 'online',
+      //         content: payload.checked,
+      //       },
+      //     ],
+      //     text: '',
+      //   };
+      //   needHandleRules = [
+      //     ...needHandleRules,
+      //     alterRule,
+      //   ];
+      // }
 
-      // console.log(needHandleRules, 'needHandleRules9283239847239847');
-
-      if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
-        needHandleRules = needHandleRules.map((nhr) => {
-          if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
-            return {
-              ...nhr,
-              actions: [
-                ...nhr.actions,
-                {
-                  operation: 'online',
-                  content: payload.checked,
-                },
-              ],
-            };
-          }
-
-          return nhr;
-        });
-      } else {
-        const alterRule: IRules['alter'] = {
-          operation: 'alter',
-          exhibitName: informExhibitInfoPage.exhibit_Name,
-          actions: [
-            {
-              operation: 'online',
-              content: payload.checked,
-            },
-          ],
-          text: '',
-        };
-        needHandleRules = [
-          ...needHandleRules,
-          alterRule,
-        ];
-      }
-
-      const text: string = decompile(needHandleRules);
+      const text: string = decompile(mergeRules({
+        oldRules: rules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'online',
+          content: payload.checked,
+        },
+      }));
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.node_ID,
@@ -1069,17 +1084,101 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
-    * onChangePCover({ payload }: OnChangePCoverAction, { put }: EffectsCommandMap) {
+    * onChange_Side_Exhibit_Cover({ payload }: OnChange_Side_Exhibit_Cover_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { side_Exhibit_Cover: payload.value },
+        payload: {
+          side_Exhibit_Cover: payload.value,
+        },
       });
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     cover: payload.value,
-      //   },
-      // });
+
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      // let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+      //
+      // if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
+      //   needHandleRules = needHandleRules.map((nhr) => {
+      //     if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+      //       return {
+      //         ...nhr,
+      //         actions: [
+      //           ...nhr.actions,
+      //           {
+      //             operation: 'set_cover',
+      //             content: payload.value,
+      //           },
+      //         ],
+      //       };
+      //     }
+      //
+      //     return nhr;
+      //   });
+      // } else {
+      //   const alterRule: IRules['alter'] = {
+      //     operation: 'alter',
+      //     exhibitName: informExhibitInfoPage.exhibit_Name,
+      //     actions: [
+      //       {
+      //         operation: 'set_cover',
+      //         content: payload.value,
+      //       },
+      //     ],
+      //     text: '',
+      //   };
+      //   needHandleRules = [
+      //     ...needHandleRules,
+      //     alterRule,
+      //   ];
+      // }
+
+      const text: string = decompile(mergeRules({
+        oldRules: rules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'set_cover',
+          content: payload.value,
+        },
+      }));
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
+
     },
     * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, { put, select }: EffectsCommandMap) {
 
@@ -1827,3 +1926,62 @@ export default Model;
 // function recursiveAuthTree() {
 //
 // }
+
+interface MergeRulesParams {
+  oldRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']>;
+  exhibitName: string;
+  action: IActions['set_labels']
+    | IActions['replace']
+    | IActions['online']
+    | IActions['set_title']
+    | IActions['set_cover']
+    | IActions['add_attr']
+    | IActions['delete_attr'];
+}
+
+function mergeRules({
+                      oldRules,
+                      exhibitName,
+                      action,
+                    }: MergeRulesParams): Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> {
+  let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(oldRules));
+
+  if (needHandleRules.some((nhr) => nhr.exhibitName === exhibitName && nhr.operation !== 'activate_theme')) {
+    needHandleRules = needHandleRules.map((nhr) => {
+      if (nhr.exhibitName === exhibitName && nhr.operation !== 'activate_theme') {
+        return {
+          ...nhr,
+          actions: [
+            ...nhr.actions,
+            // {
+            //   operation: 'set_cover',
+            //   content: payload.value,
+            // },
+            action,
+          ],
+        };
+      }
+
+      return nhr;
+    });
+  } else {
+    const alterRule: IRules['alter'] = {
+      operation: 'alter',
+      exhibitName: exhibitName,
+      actions: [
+        // {
+        //   operation: 'set_cover',
+        //   content: payload.value,
+        // },
+        action,
+      ],
+      text: '',
+    };
+    needHandleRules = [
+      ...needHandleRules,
+      alterRule,
+    ];
+  }
+
+  return needHandleRules;
+}

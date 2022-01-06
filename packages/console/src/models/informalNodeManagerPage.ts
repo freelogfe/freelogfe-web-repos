@@ -92,7 +92,7 @@ interface ICandidate {
 //   scopes: ICandidate[][];
 // }[];
 
-interface IActions {
+export interface IActions {
   comment: {
     text: string;
     operation: 'comment';

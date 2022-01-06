@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FUploadImage from '@/components/FUploadImage';
 import {
-  ChangeAction,
+  ChangeAction, OnChange_Side_Exhibit_Cover_Action,
   OnChangePCoverAction,
   OnChangePLabelsAction,
   OnChangePTitleInputAction,
@@ -49,8 +49,8 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
           fMessage(err, 'error');
         }}
         onUploadSuccess={async (url: string) => {
-          dispatch<OnChangePCoverAction>({
-            type: 'informExhibitInfoPage/onChangePCover',
+          dispatch<OnChange_Side_Exhibit_Cover_Action>({
+            type: 'informExhibitInfoPage/onChange_Side_Exhibit_Cover',
             payload: {
               value: url,
             },
