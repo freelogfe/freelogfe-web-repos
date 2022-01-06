@@ -3,15 +3,17 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FUploadImage from '@/components/FUploadImage';
 import {
-  ChangeAction, OnChange_Side_Exhibit_Cover_Action,
-  OnChangePCoverAction,
-  OnChangePLabelsAction,
+  ChangeAction,
+  OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
+  // OnChangePCoverAction,
+  // OnChangePLabelsAction,
   OnChangePTitleInputAction,
+  OnClick_Side_Exhibit_Title_Action,
   OnClickPTitleCancelBtnAction,
-  OnClickPTitleConfirmBtnAction,
+  // OnClickPTitleConfirmBtnAction,
   OnClickPTitleEditBtnAction,
 } from '@/models/informExhibitInfoPage';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
@@ -33,12 +35,12 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
     return null;
   }
 
-  async function onChange(payload: Partial<InformExhibitInfoPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informExhibitInfoPage/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<InformExhibitInfoPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informExhibitInfoPage/change',
+  //     payload,
+  //   });
+  // }
 
   return (<>
       <FContentText text={'基础信息'} type='highlight' />
@@ -119,8 +121,8 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
               <FRectBtn
                 size='small'
                 onClick={async () => {
-                  dispatch<OnClickPTitleConfirmBtnAction>({
-                    type: 'informExhibitInfoPage/onClickPTitleConfirmBtn',
+                  dispatch<OnClick_Side_Exhibit_Title_Action>({
+                    type: 'informExhibitInfoPage/onClick_Side_Exhibit_Title',
                   });
                 }}
                 type='primary'
@@ -141,8 +143,8 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
       <FLabelEditor
         values={informExhibitInfoPage.side_Exhibit_Tags as string[]}
         onChange={async (value) => {
-          dispatch<OnChangePLabelsAction>({
-            type: 'informExhibitInfoPage/onChangePLabels',
+          dispatch<OnChange_Side_Exhibit_Tags_Action>({
+            type: 'informExhibitInfoPage/onChange_Side_Exhibit_Tags',
             payload: {
               value: value,
             },

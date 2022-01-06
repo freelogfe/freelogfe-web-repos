@@ -245,23 +245,23 @@ export interface OnChangePTitleInputAction extends AnyAction {
   };
 }
 
-export interface OnClickPTitleConfirmBtnAction extends AnyAction {
-  type: 'informExhibitInfoPage/onClickPTitleConfirmBtn';
+export interface OnClick_Side_Exhibit_Title_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onClick_Side_Exhibit_Title';
 }
 
 export interface OnClickPTitleCancelBtnAction extends AnyAction {
   type: 'informExhibitInfoPage/onClickPTitleCancelBtn';
 }
 
-export interface OnChangePLabelsAction extends AnyAction {
-  type: 'informExhibitInfoPage/onChangePLabels';
+export interface OnChange_Side_Exhibit_Tags_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_Tags';
   payload: {
     value: string[];
   };
 }
 
-export interface OnChangePVersionAction extends AnyAction {
-  type: 'informExhibitInfoPage/onChangePVersion';
+export interface OnChange_Side_Exhibit_Version_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_Version';
   payload: {
     value: string;
   };
@@ -400,10 +400,10 @@ export interface ExhibitInfoPageModelType {
     onChange_Side_Exhibit_Cover: (action: OnChange_Side_Exhibit_Cover_Action, effects: EffectsCommandMap) => void;
     onClickPTitleEditBtn: (action: OnClickPTitleEditBtnAction, effects: EffectsCommandMap) => void;
     onChangePTitleInput: (action: OnChangePTitleInputAction, effects: EffectsCommandMap) => void;
-    onClickPTitleConfirmBtn: (action: OnClickPTitleConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClick_Side_Exhibit_Title: (action: OnClick_Side_Exhibit_Title_Action, effects: EffectsCommandMap) => void;
     onClickPTitleCancelBtn: (action: OnClickPTitleCancelBtnAction, effects: EffectsCommandMap) => void;
-    onChangePLabels: (action: OnChangePLabelsAction, effects: EffectsCommandMap) => void;
-    onChangePVersion: (action: OnChangePVersionAction, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_Tags: (action: OnChange_Side_Exhibit_Tags_Action, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_Version: (action: OnChange_Side_Exhibit_Version_Action, effects: EffectsCommandMap) => void;
 
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
     // onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
@@ -1104,43 +1104,6 @@ const Model: ExhibitInfoPageModelType = {
         return rr.ruleInfo;
       });
 
-      // let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
-      //
-      // if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
-      //   needHandleRules = needHandleRules.map((nhr) => {
-      //     if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
-      //       return {
-      //         ...nhr,
-      //         actions: [
-      //           ...nhr.actions,
-      //           {
-      //             operation: 'set_cover',
-      //             content: payload.value,
-      //           },
-      //         ],
-      //       };
-      //     }
-      //
-      //     return nhr;
-      //   });
-      // } else {
-      //   const alterRule: IRules['alter'] = {
-      //     operation: 'alter',
-      //     exhibitName: informExhibitInfoPage.exhibit_Name,
-      //     actions: [
-      //       {
-      //         operation: 'set_cover',
-      //         content: payload.value,
-      //       },
-      //     ],
-      //     text: '',
-      //   };
-      //   needHandleRules = [
-      //     ...needHandleRules,
-      //     alterRule,
-      //   ];
-      // }
-
       const text: string = decompile(mergeRules({
         oldRules: rules,
         exhibitName: informExhibitInfoPage.exhibit_Name,
@@ -1188,7 +1151,9 @@ const Model: ExhibitInfoPageModelType = {
 
       yield put<ChangeAction>({
         type: 'change',
-        payload: { side_Exhibit_Title: informExhibitInfoPage.side_Exhibit_Title },
+        payload: {
+          side_Exhibit_InputTitle: informExhibitInfoPage.side_Exhibit_Title,
+        },
       });
     },
 
@@ -1200,7 +1165,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, { put, select }: EffectsCommandMap) {
+    * onClick_Side_Exhibit_Title({}: OnClick_Side_Exhibit_Title_Action, { put, select, call }: EffectsCommandMap) {
 
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
@@ -1216,12 +1181,47 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     title: pInputTitle,
-      //   },
-      // });
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      const text: string = decompile(mergeRules({
+        oldRules: rules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'set_title',
+          content: pInputTitle,
+        },
+      }));
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
     * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, { put }: EffectsCommandMap) {
 
@@ -1233,7 +1233,15 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onChangePLabels({ payload }: OnChangePLabelsAction, { put }: EffectsCommandMap) {
+    * onChange_Side_Exhibit_Tags({ payload }: OnChange_Side_Exhibit_Tags_Action, {
+      put,
+      select,
+      call,
+    }: EffectsCommandMap) {
+
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1241,55 +1249,110 @@ const Model: ExhibitInfoPageModelType = {
           side_Exhibit_Tags: payload.value,
         },
       });
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     labels: payload.value,
-      //   },
-      // });
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      const text: string = decompile(mergeRules({
+        oldRules: rules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'set_labels',
+          content: payload.value,
+        },
+      }));
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
-    * onChangePVersion({ payload }: OnChangePVersionAction, { select, put }: EffectsCommandMap) {
+    * onChange_Side_Exhibit_Version({ payload }: OnChange_Side_Exhibit_Version_Action, {
+      select,
+      put,
+      call,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      // console.log(payload, 'payloadpayloadpayloadpayload2214111111');
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
 
-      const replace: {
-        replaced: ICandidate;
-        replacer: ICandidate;
-        scopes?: ICandidate[][];
-      }[] = [
-        ...(informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.replaces || []).filter((r: any) => {
-          console.log(r, 'r!@#$!@#$!@!11RRRRRRRRR');
-          const replacer = r.replacer;
-          const replaced = r.replaced;
-          return !(replaced.name === informExhibitInfoPage.side_Resource_Relation?.name
-            && replaced.versionRange === '*'
-            && replaced.type === informExhibitInfoPage.side_Resource_Relation?.identity
-            && replacer.name === informExhibitInfoPage.side_Resource_Relation?.name
-            && replacer.type === informExhibitInfoPage.side_Resource_Relation?.identity
-            && !r.scopes);
-        }),
-        {
-          replacer: {
-            name: informExhibitInfoPage.side_Resource_Relation?.name,
-            versionRange: payload.value,
-            type: informExhibitInfoPage.side_Resource_Relation?.identity,
-          },
-          replaced: {
-            name: informExhibitInfoPage.side_Resource_Relation?.name,
-            versionRange: '*',
-            type: informExhibitInfoPage.side_Resource_Relation?.identity,
+      const text: string = decompile(mergeRules({
+        oldRules: rules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'replace',
+          content: {
+            replacer: {
+              name: informExhibitInfoPage.side_Resource_Relation?.name || '',
+              versionRange: payload.value,
+              type: informExhibitInfoPage.side_Resource_Relation?.identity || 'resource',
+            },
+            replaced: {
+              name: informExhibitInfoPage.side_Resource_Relation?.name || '',
+              versionRange: '*',
+              type: informExhibitInfoPage.side_Resource_Relation?.identity || 'resource',
+            },
+            scopes: [],
           },
         },
-      ];
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     replaces: replace,
-      //   },
-      // });
+      }));
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
 
     * onHandleAttrModal({ payload }: OnHandleAttrModalAction, { select, put }: EffectsCommandMap) {

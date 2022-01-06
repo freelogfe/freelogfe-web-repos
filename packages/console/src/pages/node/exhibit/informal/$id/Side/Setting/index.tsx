@@ -7,7 +7,7 @@ import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
   OnAttrBlurAction, OnCancel_CustomOptionDrawer_Action,
   // OnAttrModalChangeAction,
-  OnCancel_CustomOptionsDrawer_Action,
+  OnCancel_CustomOptionsDrawer_Action, OnChange_Side_Exhibit_Version_Action,
   // OnCancelHandleAttrModalAction,
   OnChangeAttrsAction,
   OnChangePVersionAction,
@@ -44,8 +44,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     <FDropdownMenu
       options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({ value: av, text: av }))}
       onChange={(value) => {
-        dispatch<OnChangePVersionAction>({
-          type: 'informExhibitInfoPage/onChangePVersion',
+        dispatch<OnChange_Side_Exhibit_Version_Action>({
+          type: 'informExhibitInfoPage/onChange_Side_Exhibit_Version',
           payload: {
             value: value,
           },
