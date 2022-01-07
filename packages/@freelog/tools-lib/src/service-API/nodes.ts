@@ -31,7 +31,7 @@ export function details(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
     return FUtil.Request({
       method: 'GET',
       url: `/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`,
-      params: params,
+      // params: params,
     });
   }
   // return FUtil.Axios.get(`/v2/nodes/detail`, {
