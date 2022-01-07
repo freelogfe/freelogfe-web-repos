@@ -5,15 +5,21 @@ import { Space } from 'antd';
 import { FDelete, FEdit, FRedo, FSwap } from '@/components/FIcons';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
-  OnAttrBlurAction, OnCancel_CustomOptionDrawer_Action,
+  OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
+  OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
+  // OnAttrBlurAction,
+  OnCancel_CustomOptionDrawer_Action,
   // OnAttrModalChangeAction,
-  OnCancel_CustomOptionsDrawer_Action, OnChange_Side_Exhibit_Version_Action,
+  OnCancel_CustomOptionsDrawer_Action,
+  OnChange_Side_Exhibit_Version_Action,
   // OnCancelHandleAttrModalAction,
   OnChangeAttrsAction,
-  OnChangePVersionAction,
+  // OnChangePVersionAction,
   // OnClickAttrModalConfirmBtnAction,
   OnClickDeleteAttrAction,
-  OnClickResetAttrAction, OnConfirm_CustomOptionDrawer_Action, OnConfirm_CustomOptionsDrawer_Action,
+  OnClickResetAttrAction,
+  OnConfirm_CustomOptionDrawer_Action,
+  OnConfirm_CustomOptionsDrawer_Action,
   OnHandleAttrModalAction,
 } from '@/models/informExhibitInfoPage';
 import FInput from '@/components/FInput';
@@ -121,11 +127,13 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               });
             }}
             onBlur={(event) => {
-              console.log(pc.theKey, 'pc.theKeypc.theKeypc.theKeypc.theKey');
-              dispatch<OnAttrBlurAction>({
-                type: 'informExhibitInfoPage/onAttrBlur',
+              // console.log(pc.theKey, 'pc.theKeypc.theKeypc.theKeypc.theKey');
+              dispatch<OnBlur_Side_Exhibit_OnlyEditAttrInput_Action>({
+                type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrInput',
                 payload: {
                   theKey: pc.theKey,
+                  theValue: pc.theValue,
+                  theDescription: pc.remark,
                 },
               });
             }}
@@ -180,10 +188,12 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               });
             }}
             onBlur={(event) => {
-              dispatch<OnAttrBlurAction>({
-                type: 'informExhibitInfoPage/onAttrBlur',
+              dispatch<OnBlur_Side_Exhibit_EditDeleteAttrInput_Action>({
+                type: 'informExhibitInfoPage/onBlur_Side_Exhibit_EditDeleteAttrInput',
                 payload: {
                   theKey: pc.theKey,
+                  theValue: pc.theValue,
+                  theDescription: pc.remark,
                 },
               });
             }}

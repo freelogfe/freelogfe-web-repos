@@ -325,10 +325,21 @@ export interface OnChangeAttrsAction extends AnyAction {
   };
 }
 
-export interface OnAttrBlurAction extends AnyAction {
-  type: 'informExhibitInfoPage/onAttrBlur';
+export interface OnBlur_Side_Exhibit_OnlyEditAttrInput_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrInput';
   payload: {
     theKey: string;
+    theValue: string;
+    theDescription: string;
+  };
+}
+
+export interface OnBlur_Side_Exhibit_EditDeleteAttrInput_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onBlur_Side_Exhibit_EditDeleteAttrInput';
+  payload: {
+    theKey: string;
+    theValue: string;
+    theDescription: string;
   };
 }
 
@@ -409,7 +420,8 @@ export interface ExhibitInfoPageModelType {
     // onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
     // onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
     onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
-    onAttrBlur: (action: OnAttrBlurAction, effects: EffectsCommandMap) => void;
+    onBlur_Side_Exhibit_OnlyEditAttrInput: (action: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     // onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
     onClickDeleteAttr: (action: OnClickDeleteAttrAction, effects: EffectsCommandMap) => void;
     onClickResetAttr: (action: OnClickResetAttrAction, effects: EffectsCommandMap) => void;
@@ -1487,7 +1499,10 @@ const Model: ExhibitInfoPageModelType = {
     //     });
     //   }
     // },
-    * onChangeAttrs({ payload }: OnChangeAttrsAction, { select, put }: EffectsCommandMap) {
+    * onChangeAttrs({ payload }: OnChangeAttrsAction, {
+      select,
+      put,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -1523,62 +1538,207 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onAttrBlur({ payload }: OnAttrBlurAction, { select, call, put }: EffectsCommandMap) {
+    * onBlur_Side_Exhibit_OnlyEditAttrInput({ payload }: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      const attr = informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.find((poe) => {
-        return poe.theKey === payload.theKey;
-      }) || informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.find((ped) => {
-        return ped.theKey === payload.theKey;
+      // console.log(payload, 'payload1234');
+
+      // const theValue: string = payload.theValue;
+      // const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     side_Exhibit_OnlyEditAttrs: informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_OnlyEditAttrs'][number]>((poe) => {
+      //       if (poe.theKey !== payload.theKey) {
+      //         return poe;
+      //       }
+      //       return {
+      //         ...poe,
+      //         theValue: theValue,
+      //         theValueError: textError,
+      //       };
+      //     }),
+      //     side_Exhibit_EditDeleteAttrs: informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][0]>((ped) => {
+      //       if (ped.theKey !== payload.theKey) {
+      //         return ped;
+      //       }
+      //       return {
+      //         ...ped,
+      //         theValue: theValue,
+      //         theValueError: textError,
+      //       };
+      //     }),
+      //   },
+      // });
+    },
+    * onBlur_Side_Exhibit_EditDeleteAttrInput({ payload }: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+
+      console.log(payload, 'payload1234234234');
+
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
       });
 
-      // console.log(attr, 'attrattrattr!!!');
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
 
-      if (attr?.theValueError) {
+      const theRuleExist: boolean = needHandleRules.some((nhr) => {
+        return nhr.exhibitName === informExhibitInfoPage.exhibit_Name
+          && nhr.operation !== 'activate_theme'
+          && nhr.actions.some((n) => n.operation === 'add_attr' && n.content.key === payload.theKey);
+      });
+      // console.log(theRuleExist, 'theRuleExist!!!!!!!');
+
+      if (theRuleExist) {
+        needHandleRules = needHandleRules.map((nhr) => {
+          if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+            return {
+              ...nhr,
+              actions: nhr.actions.map((n) => {
+                if (n.operation === 'add_attr' && n.content.key === payload.theKey) {
+                  return {
+                    ...n,
+                    content: {
+                      ...n.content,
+                      value: payload.theValue,
+                    },
+                  };
+                }
+                return n;
+              }),
+            };
+          }
+          return nhr;
+        });
+      } else {
+        needHandleRules = mergeRules({
+          oldRules: needHandleRules,
+          exhibitName: informExhibitInfoPage.exhibit_Name,
+          action: {
+            operation: 'add_attr',
+            content: {
+              key: payload.theKey,
+              value: payload.theValue,
+              description: payload.theDescription,
+            },
+          },
+        });
+      }
+      // console.log(needHandleRules, 'needHandleRules11111');
+      const text: string = decompile(needHandleRules);
+      // console.log(text, 'text1111111');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
         return;
       }
 
-      let theRule: any = [];
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
 
-      const currentRule = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo || null;
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
+      // } else {
+      //   const alterRule: IRules['alter'] = {
+      //     operation: 'alter',
+      //     exhibitName: informExhibitInfoPage.exhibit_Name,
+      //     actions: [
+      //       // {
+      //       //   operation: 'set_cover',
+      //       //   content: payload.value,
+      //       // },
+      //       action,
+      //     ],
+      //     text: '',
+      //   };
+      //   needHandleRules = [
+      //     ...needHandleRules,
+      //     alterRule,
+      //   ];
+      // }
 
-      if (currentRule) {
-        const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
-          return ar.key;
-        }) || [];
-
-        theRule = attrKeys.includes(payload.theKey)
-          ? currentRule.attrs.map((ar1: any) => {
-            if (ar1.key !== payload.theKey) {
-              return ar1;
-            }
-            return {
-              ...ar1,
-              value: attr?.theValue,
-              description: attr?.remark,
-            };
-          })
-          : [
-            ...currentRule.attrs,
-            {
-              operation: 'add',
-              key: attr?.theKey,
-              value: attr?.theValue,
-              description: attr?.remark,
-            },
-          ];
-      } else {
-        theRule = [
-          {
-            operation: 'add',
-            key: attr?.theKey,
-            value: attr?.theValue,
-            description: attr?.remark,
-          },
-        ];
-      }
+      // const attr = informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.find((poe) => {
+      //   return poe.theKey === payload.theKey;
+      // }) || informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.find((ped) => {
+      //   return ped.theKey === payload.theKey;
+      // });
+      //
+      // // console.log(attr, 'attrattrattr!!!');
+      //
+      // if (attr?.theValueError) {
+      //   return;
+      // }
+      //
+      // let theRule: any = [];
+      //
+      // const currentRule = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo || null;
+      //
+      // if (currentRule) {
+      //   const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
+      //     return ar.key;
+      //   }) || [];
+      //
+      //   theRule = attrKeys.includes(payload.theKey)
+      //     ? currentRule.attrs.map((ar1: any) => {
+      //       if (ar1.key !== payload.theKey) {
+      //         return ar1;
+      //       }
+      //       return {
+      //         ...ar1,
+      //         value: attr?.theValue,
+      //         description: attr?.remark,
+      //       };
+      //     })
+      //     : [
+      //       ...currentRule.attrs,
+      //       {
+      //         operation: 'add',
+      //         key: attr?.theKey,
+      //         value: attr?.theValue,
+      //         description: attr?.remark,
+      //       },
+      //     ];
+      // } else {
+      //   theRule = [
+      //     {
+      //       operation: 'add',
+      //       key: attr?.theKey,
+      //       value: attr?.theValue,
+      //       description: attr?.remark,
+      //     },
+      //   ];
+      // }
 
       // console.log(theRule, 'TTTTTTtttttt');
 
@@ -1643,21 +1803,21 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
-
-      // console.log(attrs, 'rules!!!!!!!');
-
-      let newAttrs = attrs.filter((rl: any) => {
-        return rl.key !== payload.theKey;
-      });
-
-      newAttrs = [
-        ...newAttrs,
-        {
-          operation: 'delete',
-          key: payload.theKey,
-        },
-      ];
+      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
+      //
+      // // console.log(attrs, 'rules!!!!!!!');
+      //
+      // let newAttrs = attrs.filter((rl: any) => {
+      //   return rl.key !== payload.theKey;
+      // });
+      //
+      // newAttrs = [
+      //   ...newAttrs,
+      //   {
+      //     operation: 'delete',
+      //     key: payload.theKey,
+      //   },
+      // ];
 
       // yield put<SyncRulesAction>({
       //   type: 'syncRules',
