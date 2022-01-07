@@ -5,15 +5,11 @@ import FUploadImage from '@/components/FUploadImage';
 import {
   ChangeAction,
   OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
-  // OnChangePCoverAction,
-  // OnChangePLabelsAction,
   OnChangePTitleInputAction,
   OnClick_Side_Exhibit_Title_Action,
   OnClickPTitleCancelBtnAction,
-  // OnClickPTitleConfirmBtnAction,
   OnClickPTitleEditBtnAction,
 } from '@/models/informExhibitInfoPage';
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
@@ -34,13 +30,6 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
   if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
     return null;
   }
-
-  // async function onChange(payload: Partial<InformExhibitInfoPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informExhibitInfoPage/change',
-  //     payload,
-  //   });
-  // }
 
   return (<>
       <FContentText text={'基础信息'} type='highlight' />
