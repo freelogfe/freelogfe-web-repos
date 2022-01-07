@@ -169,12 +169,12 @@ export function AttrRule({ type, theKey, value, description }: AttrRuleProps) {
           <div><FContentText text={'键'} /></div>
           <div><FContentText type='highlight' text={theKey} /></div>
           <div><FContentText text={'值'} /></div>
-          <div><FContentText type='highlight' text={value} /></div>
+          <div><FContentText type='highlight' text={value || ''} /></div>
           {
             description && (<>
               <div><FContentText text={'描述'} /></div>
               {/*<div><FTitleText type="h5" text={'description1'}/></div>*/}
-              <div><FContentText type='highlight' text={'description1'} /></div>
+              <div><FContentText type='highlight' text={description} /></div>
             </>)
           }
         </div>)

@@ -1690,10 +1690,67 @@ const Model: ExhibitInfoPageModelType = {
     * onConfirm_CustomOptionsDrawer({ payload }: OnConfirm_CustomOptionsDrawer_Action, {
       select,
       put,
+      call,
     }: EffectsCommandMap) {
-      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-      //   informExhibitInfoPage,
-      // }));
+      console.log(payload, 'payload00021323');
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let handleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      for (const ds of payload.value) {
+        handleRules = mergeRules({
+          oldRules: handleRules,
+          exhibitName: informExhibitInfoPage.exhibit_Name,
+          action: {
+            operation: 'add_attr',
+            content: {
+              key: ds.key,
+              value: ds.defaultValue,
+              description: ds.description,
+            },
+          },
+        });
+      }
+
+      // console.log(handleRules, '输入#########');
+
+      const text: string = decompile(handleRules);
+
+      // console.log(text, '输出********');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
 
       // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.attrs || [];
 
