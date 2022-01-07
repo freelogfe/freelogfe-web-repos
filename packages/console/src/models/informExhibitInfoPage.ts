@@ -347,8 +347,8 @@ export interface OnBlur_Side_Exhibit_EditDeleteAttrInput_Action extends AnyActio
 //   type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn';
 // }
 
-export interface OnClickDeleteAttrAction extends AnyAction {
-  type: 'informExhibitInfoPage/onClickDeleteAttr';
+export interface OnClick_DeleteAttrBtn_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onClick_DeleteAttrBtn';
   payload: {
     theKey: string;
   };
@@ -423,7 +423,7 @@ export interface ExhibitInfoPageModelType {
     onBlur_Side_Exhibit_OnlyEditAttrInput: (action: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     // onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
-    onClickDeleteAttr: (action: OnClickDeleteAttrAction, effects: EffectsCommandMap) => void;
+    onClick_DeleteAttrBtn: (action: OnClick_DeleteAttrBtn_Action, effects: EffectsCommandMap) => void;
     onClickResetAttr: (action: OnClickResetAttrAction, effects: EffectsCommandMap) => void;
 
     onConfirm_CustomOptionsDrawer: (action: OnConfirm_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
@@ -1652,81 +1652,72 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    // * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
-    //   const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-    //     informExhibitInfoPage,
-    //   }));
-    //
-    //   const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
-    //
-    //   // console.log(attrs, 'rules!!!!!!!');
-    //
-    //   let newAttrs = attrs.filter((rl: any) => {
-    //     return rl.key !== informExhibitInfoPage.pCustomKey;
-    //   });
-    //
-    //   newAttrs = [
-    //     {
-    //       operation: 'add',
-    //       key: informExhibitInfoPage.pCustomKey,
-    //       value: informExhibitInfoPage.pCustomValue,
-    //       description: informExhibitInfoPage.pCustomDescription,
-    //     },
-    //     ...newAttrs,
-    //   ];
-    //
-    //   yield put<SyncRulesAction>({
-    //     type: 'syncRules',
-    //     payload: {
-    //       attrs: newAttrs,
-    //     },
-    //   });
-    //
-    //   // yield put<ChangeAction>({
-    //   //   type: 'change',
-    //   //   payload: {
-    //   //     pCustomModalVisible: false,
-    //   //     pCustomModalTitle: '',
-    //   //     pCustomModalConfirmButtonDisabled: false,
-    //   //     pCustomMode: 'add',
-    //   //     pCustomKey: '',
-    //   //     pCustomKeyDisabled: false,
-    //   //     pCustomKeyError: '',
-    //   //     pCustomValue: '',
-    //   //     pCustomValueError: '',
-    //   //     pCustomDescription: '',
-    //   //     pCustomDescriptionError: '',
-    //   //   },
-    //   // });
-    //
-    // },
-    * onClickDeleteAttr({ payload }: OnClickDeleteAttrAction, { select, put }: EffectsCommandMap) {
+    * onClick_DeleteAttrBtn({ payload }: OnClick_DeleteAttrBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
-      //
-      // // console.log(attrs, 'rules!!!!!!!');
-      //
-      // let newAttrs = attrs.filter((rl: any) => {
-      //   return rl.key !== payload.theKey;
-      // });
-      //
-      // newAttrs = [
-      //   ...newAttrs,
-      //   {
-      //     operation: 'delete',
-      //     key: payload.theKey,
-      //   },
-      // ];
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
 
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     attrs: newAttrs,
-      //   },
-      // });
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !(a.operation === 'add_attr' && a.content.key === payload.theKey);
+            }),
+          };
+        }
+        return nhr;
+      });
+
+      needHandleRules = mergeRules({
+        oldRules: needHandleRules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'delete_attr',
+          content: {
+            key: payload.theKey,
+          },
+        },
+      });
+      // }
+      // console.log(needHandleRules, 'needHandleRules11111');
+      const text: string = decompile(needHandleRules);
+      // console.log(text, 'text1111111');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
     * onClickResetAttr({ payload }: OnClickResetAttrAction, { select, put }: EffectsCommandMap) {
       // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({

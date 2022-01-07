@@ -13,10 +13,10 @@ import {
   OnCancel_CustomOptionsDrawer_Action,
   OnChange_Side_Exhibit_Version_Action,
   // OnCancelHandleAttrModalAction,
-  OnChangeAttrsAction,
+  OnChangeAttrsAction, OnClick_DeleteAttrBtn_Action,
   // OnChangePVersionAction,
   // OnClickAttrModalConfirmBtnAction,
-  OnClickDeleteAttrAction,
+  // OnClickDeleteAttrAction,
   OnClickResetAttrAction,
   OnConfirm_CustomOptionDrawer_Action,
   OnConfirm_CustomOptionsDrawer_Action,
@@ -162,8 +162,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               <FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
-                  dispatch<OnClickDeleteAttrAction>({
-                    type: 'informExhibitInfoPage/onClickDeleteAttr',
+                  dispatch<OnClick_DeleteAttrBtn_Action>({
+                    type: 'informExhibitInfoPage/onClick_DeleteAttrBtn',
                     payload: {
                       theKey: pc.theKey,
                     },
