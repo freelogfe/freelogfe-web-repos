@@ -1583,8 +1583,6 @@ const Model: ExhibitInfoPageModelType = {
       put,
     }: EffectsCommandMap) {
 
-      console.log(payload, 'payload1234234234');
-
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -1595,48 +1593,31 @@ const Model: ExhibitInfoPageModelType = {
 
       let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
 
-      const theRuleExist: boolean = needHandleRules.some((nhr) => {
-        return nhr.exhibitName === informExhibitInfoPage.exhibit_Name
-          && nhr.operation !== 'activate_theme'
-          && nhr.actions.some((n) => n.operation === 'add_attr' && n.content.key === payload.theKey);
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !((a.operation === 'add_attr' || a.operation === 'delete_attr') && a.content.key === payload.theKey);
+            }),
+          };
+        }
+        return nhr;
       });
-      // console.log(theRuleExist, 'theRuleExist!!!!!!!');
 
-      if (theRuleExist) {
-        needHandleRules = needHandleRules.map((nhr) => {
-          if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
-            return {
-              ...nhr,
-              actions: nhr.actions.map((n) => {
-                if (n.operation === 'add_attr' && n.content.key === payload.theKey) {
-                  return {
-                    ...n,
-                    content: {
-                      ...n.content,
-                      value: payload.theValue,
-                    },
-                  };
-                }
-                return n;
-              }),
-            };
-          }
-          return nhr;
-        });
-      } else {
-        needHandleRules = mergeRules({
-          oldRules: needHandleRules,
-          exhibitName: informExhibitInfoPage.exhibit_Name,
-          action: {
-            operation: 'add_attr',
-            content: {
-              key: payload.theKey,
-              value: payload.theValue,
-              description: payload.theDescription,
-            },
+      needHandleRules = mergeRules({
+        oldRules: needHandleRules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'add_attr',
+          content: {
+            key: payload.theKey,
+            value: payload.theValue,
+            description: payload.theDescription,
           },
-        });
-      }
+        },
+      });
+      // }
       // console.log(needHandleRules, 'needHandleRules11111');
       const text: string = decompile(needHandleRules);
       // console.log(text, 'text1111111');
@@ -1669,85 +1650,6 @@ const Model: ExhibitInfoPageModelType = {
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });
-      // } else {
-      //   const alterRule: IRules['alter'] = {
-      //     operation: 'alter',
-      //     exhibitName: informExhibitInfoPage.exhibit_Name,
-      //     actions: [
-      //       // {
-      //       //   operation: 'set_cover',
-      //       //   content: payload.value,
-      //       // },
-      //       action,
-      //     ],
-      //     text: '',
-      //   };
-      //   needHandleRules = [
-      //     ...needHandleRules,
-      //     alterRule,
-      //   ];
-      // }
-
-      // const attr = informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.find((poe) => {
-      //   return poe.theKey === payload.theKey;
-      // }) || informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.find((ped) => {
-      //   return ped.theKey === payload.theKey;
-      // });
-      //
-      // // console.log(attr, 'attrattrattr!!!');
-      //
-      // if (attr?.theValueError) {
-      //   return;
-      // }
-      //
-      // let theRule: any = [];
-      //
-      // const currentRule = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo || null;
-      //
-      // if (currentRule) {
-      //   const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
-      //     return ar.key;
-      //   }) || [];
-      //
-      //   theRule = attrKeys.includes(payload.theKey)
-      //     ? currentRule.attrs.map((ar1: any) => {
-      //       if (ar1.key !== payload.theKey) {
-      //         return ar1;
-      //       }
-      //       return {
-      //         ...ar1,
-      //         value: attr?.theValue,
-      //         description: attr?.remark,
-      //       };
-      //     })
-      //     : [
-      //       ...currentRule.attrs,
-      //       {
-      //         operation: 'add',
-      //         key: attr?.theKey,
-      //         value: attr?.theValue,
-      //         description: attr?.remark,
-      //       },
-      //     ];
-      // } else {
-      //   theRule = [
-      //     {
-      //       operation: 'add',
-      //       key: attr?.theKey,
-      //       value: attr?.theValue,
-      //       description: attr?.remark,
-      //     },
-      //   ];
-      // }
-
-      // console.log(theRule, 'TTTTTTtttttt');
-
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     attrs: theRule,
-      //   },
-      // });
 
     },
     // * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
@@ -1861,11 +1763,23 @@ const Model: ExhibitInfoPageModelType = {
         return rr.ruleInfo;
       });
 
-      let handleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !payload.value.some((v) => a.operation === 'delete_attr' && v.key === a.content.key);
+            }),
+          };
+        }
+        return nhr;
+      });
 
       for (const ds of payload.value) {
-        handleRules = mergeRules({
-          oldRules: handleRules,
+        needHandleRules = mergeRules({
+          oldRules: needHandleRules,
           exhibitName: informExhibitInfoPage.exhibit_Name,
           action: {
             operation: 'add_attr',
@@ -1880,7 +1794,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(handleRules, '输入#########');
 
-      const text: string = decompile(handleRules);
+      const text: string = decompile(needHandleRules);
 
       // console.log(text, '输出********');
 
@@ -1905,77 +1819,13 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
+          side_CustomOptionsDrawer_Visible: false,
         },
       });
 
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });
-
-      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo?.attrs || [];
-
-      // console.log(attrs, 'rules!!!!!!!');
-
-      // let newAttrs = attrs.filter((rl: any) => {
-      //   return rl.key !== informExhibitInfoPage.pCustomKey;
-      // });
-      // newAttrs = [
-      //   {
-      //     operation: 'add',
-      //     key: informExhibitInfoPage.pCustomKey,
-      //     value: informExhibitInfoPage.pCustomValue,
-      //     description: informExhibitInfoPage.pCustomDescription,
-      //   },
-      //   ...newAttrs,
-      // ];
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionsDrawer_Visible: false,
-        },
-      });
-
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     attrs: [
-      //       ...payload.value.map((v) => {
-      //         return {
-      //           operation: 'add',
-      //           key: v.key,
-      //           value: v.defaultValue,
-      //           description: v.description,
-      //         };
-      //       }),
-      //       ...attrs,
-      //     ],
-      //   },
-      // });
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     side_CustomOptions: [
-      //       ...exhibitInfoPage.side_CustomOptions,
-      //       ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
-      //         return {
-      //           key: v.key,
-      //           value: v.defaultValue,
-      //           description: v.description,
-      //           option: [],
-      //           valueInput: v.defaultValue,
-      //           valueInputError: '',
-      //         };
-      //       }),
-      //     ],
-      //     side_CustomOptionsDrawer_Visible: false,
-      //   },
-      // });
-      //
-      // yield put<UpdateRewriteAction>({
-      //   type: 'updateRewrite',
-      // });
     },
     * onCancel_CustomOptionsDrawer({}: OnCancel_CustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1987,61 +1837,77 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
-      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-      //   informExhibitInfoPage,
-      // }));
+      console.log(payload, 'payload@@@@@@@');
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
 
-      // const attrs = informExhibitInfoPage.exhibit_RuleResult?.ruleInfo.attrs;
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !((a.operation === 'add_attr' || a.operation === 'delete_attr') && a.content.key === payload.value.key);
+            }),
+          };
+        }
+        return nhr;
+      });
+
+      needHandleRules = mergeRules({
+        oldRules: needHandleRules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'add_attr',
+          content: {
+            key: payload.value.key,
+            value: payload.value.value,
+            description: payload.value.description,
+          },
+        },
+      });
+      // }
+      // console.log(needHandleRules, 'needHandleRules11111');
+      const text: string = decompile(needHandleRules);
+      // console.log(text, 'text1111111');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptionDrawer_Visible: false,
-          side_CustomOptionDrawer_DataSource: null,
+          node_RuleInfo: result,
         },
       });
 
-      // yield put<SyncRulesAction>({
-      //   type: 'syncRules',
-      //   payload: {
-      //     attrs: attrs.map((a: any) => {
-      //       if (a.key !== payload.value.key) {
-      //         return a;
-      //       }
-      //       return {
-      //         ...a,
-      //         value: payload.value.value,
-      //         description: payload.value.description,
-      //       };
-      //     }),
-      //   },
-      // });
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co) => {
-      //       if (co.key !== payload.value.key) {
-      //         return co;
-      //       }
-      //       return {
-      //         key: co.key,
-      //         value: payload.value.value,
-      //         description: payload.value.description,
-      //         valueInput: payload.value.value,
-      //         valueInputError: '',
-      //       };
-      //     }),
-      //     side_CustomOptionDrawer_Visible: false,
-      //     side_CustomOptionDrawer_DataSource: null,
-      //   },
-      // });
-      //
-      // yield put<UpdateRewriteAction>({
-      //   type: 'updateRewrite',
-      // });
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
     * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
