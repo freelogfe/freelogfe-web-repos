@@ -1902,6 +1902,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
+          side_CustomOptionDrawer_Visible: false,
+          side_CustomOptionDrawer_DataSource: null,
         },
       });
 
