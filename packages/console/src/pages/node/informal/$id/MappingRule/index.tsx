@@ -594,7 +594,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                 }
                                 {
                                   ruleAction.operation === 'delete_attr' && (<AttrRule
-                                    type={'add'}
+                                    type={'delete'}
                                     theKey={ruleAction.content.key}
                                   />)
                                 }
