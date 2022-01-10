@@ -91,8 +91,9 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
         </Space>)
         : (<>
           <FInput
-            className={styles.Input}
-            value={exhibitInfoPage.side_ExhibitTitle || ''}
+            className={styles.FInput}
+            wrapClassName={styles.FInput}
+            value={exhibitInfoPage.side_ExhibitInputTitle || ''}
             onChange={(e) => onChangePInputTitle(e.target.value)}
           />
           <div style={{ height: 10 }} />
