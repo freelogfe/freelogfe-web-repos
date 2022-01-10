@@ -27,6 +27,7 @@ import {
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
+import { FetchInfoAction } from '@/models/user';
 
 interface RetrievePayPasswordProps {
   dispatch: Dispatch;
@@ -35,6 +36,12 @@ interface RetrievePayPasswordProps {
 }
 
 function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayPasswordProps) {
+
+  AHooks.useMount(() => {
+    dispatch<FetchInfoAction>({
+      type: 'user/fetchInfo',
+    });
+  });
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -232,7 +239,7 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
         <FTipText text={'现在您可以设置新的支付密码，重置成功后即可进行支付服务'} type='second' />
         <div style={{ height: 80 }} />
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 360 }}>
+          <Space size={25} direction='vertical'>
 
             <div>
               <FTipText type='third' text={'支付密码'} />

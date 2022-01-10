@@ -26,7 +26,7 @@ export interface InitModelStatesAction extends AnyAction {
 }
 
 export interface FetchInfoAction extends AnyAction {
-  type: 'user/fetchInfo';
+  type: 'user/fetchInfo' | 'fetchInfo';
 }
 
 export interface OnVisibilityChangeAction extends AnyAction {
@@ -63,6 +63,9 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put }: EffectsCommandMap) {
+      if (!FUtil.Tool.getUserIDByCookies()) {
+        return;
+      }
       const { data } = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(data, '!@#$!@#$@#$@#$');
       yield put<ChangeAction>({
@@ -117,8 +120,10 @@ const Model: UserModelType = {
     },
   },
   subscriptions: {
-    setup({}: SubscriptionAPI) {
-
+    setup({ dispatch }: SubscriptionAPI) {
+      // dispatch<FetchInfoAction>({
+      //   type: 'fetchInfo',
+      // });
     },
     checkUser({ dispatch }: SubscriptionAPI) {
       window.document.addEventListener('visibilitychange', () => {
