@@ -693,6 +693,13 @@ const Model: WalletPageModelType = {
           accountBalance: data1.balance,
         },
       });
+
+      yield put<Fetch_TableData_Action>({
+        type: 'fetch_TableData',
+        payload: {
+          andMore: false,
+        },
+      });
     },
 
     * onClick_ChangingPasswordBtn({}: OnClick_ChangingPasswordBtn_Action, {
