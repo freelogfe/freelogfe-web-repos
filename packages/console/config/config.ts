@@ -60,11 +60,11 @@ const config: IConfig | any = {
     'layout-header-height': '70px',
     'layout-header-padding': '0 40px',
 
-    'input-icon-color': '#8E8E93',
-    'input-placeholder-color': '#C4C4C4',
+    // 'input-icon-color': '#8E8E93',
+    // 'input-placeholder-color': '#C4C4C4',
     // 'input-hover-border-color': '#CBCBCB',
-    'input-icon-hover-color': '#B4B4B4',
-    'input-bg': 'transparent',
+    // 'input-icon-hover-color': '#B4B4B4',
+    // 'input-bg': 'transparent',
 
     'menu-item-vertical-margin': 0,
     'menu-item-boundary-margin': 0,
