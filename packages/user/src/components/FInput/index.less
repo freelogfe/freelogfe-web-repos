@@ -5,6 +5,21 @@
   display: inline-block;
   width: fit-content;
   position: relative;
+
+  :global(.ant-input-affix-wrapper.ant-input-affix-wrapper-focused) {
+    border-color: @f-primary-color !important;
+    background-color: #fff;
+  }
+
+  :global(.ant-input) {
+    &:focus {
+      border-color: @f-primary-color !important;
+    }
+  }
+
+  :global(.ant-input-focused){
+    border-color: @f-primary-color !important;
+  }
 }
 
 .Input {
@@ -16,7 +31,8 @@
   }
 
   &:focus {
-    border-color: @f-primary-color;
+    //border-color: @f-primary-color;
+    border-color: @f-primary-color !important;
   }
 
   &.InputError {
@@ -25,19 +41,15 @@
     //}
   }
 
+  //:global(.ant-input:focus) {
+  //
+  //}
+
   //&.ant-input-affix-wrapper:focus, &.ant-input-affix-wrapper-focused {
   //  border-color: @f-primary-color !important;
   //}
 
-  &.ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
-    border-color: @f-primary-color !important;
-    background-color: #fff;
-  }
 
-
-  :global(.ant-input:focus) {
-    border-color: @f-primary-color !important;
-  }
 }
 
 

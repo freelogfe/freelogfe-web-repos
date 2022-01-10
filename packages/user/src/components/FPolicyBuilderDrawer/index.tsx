@@ -23,6 +23,7 @@ import FMonacoEditor from '@/components/FMonacoEditor';
 // import fMessage from '@/components/fMessage';
 import fConfirmModal from '@/components/fConfirmModal';
 import * as AHooks from 'ahooks';
+import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
@@ -949,7 +950,7 @@ function FPolicyBuilder({
 
                                           onChangeCombinationData({
                                             name: value,
-                                            nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
+                                            nameError: FUtil.Regexp.JS_VARIABLE_NAME.test(value) ? '' : '请使用JavaScript英文变量命名规则',
                                           }, cd.randomID);
                                         }}
                                         onBlur={() => {
