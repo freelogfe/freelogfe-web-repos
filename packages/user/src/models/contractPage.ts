@@ -508,7 +508,7 @@ const Model: ContractPageModelType = {
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
-      const { data } = yield call(FServiceAPI.Contract.contracts, params);
+      const data = yield call(contractList, params);
       // const data1 = { dataList: [] };
 
       const resultList: ContractPageModelState['authorize_List'] = [
@@ -633,7 +633,7 @@ const Model: ContractPageModelType = {
         keywords: contractPage.authorized_Keywords || undefined,
       };
 
-      const { data } = yield call(FServiceAPI.Contract.contracts, params);
+      const data = yield call(contractList, params);
       // const data1 = { dataList: [] };
       const resultList: ContractPageModelState['authorized_List'] = [
         ...beforeData,
@@ -736,4 +736,50 @@ function handleContractState({
     return 'unauthorized';
   }
   return 'exception';
+}
+
+// interface Interface extends Parameters<typeof FServiceAPI.Contract.contracts>[0] {
+//
+// }
+
+async function contractList(params: Parameters<typeof FServiceAPI.Contract.contracts>[0]) {
+  const { data } = await FServiceAPI.Contract.contracts(params);
+  // console.log(data.dataList, 'data@@@@@@@@');
+  const exhibitIDs: string[] = data.dataList
+    .filter((d: any) => {
+      return d.subjectType === 2;
+    }).map((d: any) => {
+      return d.subjectId;
+    });
+
+  const resourceIDs: string[] = data.dataList
+    .filter((d: any) => {
+      return d.subjectType === 1;
+    }).map((d: any) => {
+      return d.subjectId;
+    });
+
+  // console.log(exhibitIDs, resourceIDs, '######3900928309482034809');
+  let exhibits = [];
+  let resources = [];
+
+  if (exhibitIDs.length > 0) {
+    const params1: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+      presentableIds: exhibitIDs.join(','),
+    };
+
+    const { data: data1 } = await FServiceAPI.Exhibit.presentableList(params1);
+    console.log(data1, '#####0920938048230480239');
+  }
+
+  if (resourceIDs.length > 0) {
+    const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+      resourceIds: resourceIDs.join(','),
+    };
+
+    const { data: data2 } = await FServiceAPI.Resource.batchInfo(params2);
+    console.log(data2, '*******0920938048230480239');
+  }
+
+  return data;
 }
