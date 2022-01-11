@@ -31,12 +31,14 @@
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "react-monaco-editor": "^0.46.0",
+    "semver": "^7.3.5",
     "umi": "^3.4.21"
   },
   "devDependencies": {
     "@types/nprogress": "^0.2.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/semver": "^7.3.9",
     "@umijs/test": "^3.4.21",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
