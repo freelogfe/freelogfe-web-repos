@@ -5,6 +5,7 @@ import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
 import FUtil1 from "@/utils";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { nodeCreateSuccess } from '@freelog/tools-lib/dist/utils/linkTo';
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -145,7 +146,9 @@ const Model: NodesModelType = {
         type: 'fetchNodes',
       });
 
-      router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
+      // router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
+      router.push(FUtil.LinkTo.nodeCreateSuccess({nodeID: data.nodeId}));
+
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
       yield put<ChangeAction>({

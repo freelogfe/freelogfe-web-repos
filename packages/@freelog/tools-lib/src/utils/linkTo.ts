@@ -18,7 +18,6 @@ interface ResourceDetailsParamsType {
 }
 
 export function resourceDetails({resourceID, ...params}: ResourceDetailsParamsType): TReturnType {
-  // return `/resource/${resourceID}`;
   return `/resource/details/${resourceID}${handleQuery(params)}`;
 }
 
@@ -153,22 +152,31 @@ export function objectDetails({...params}: ObjectDetailsParamsType): TReturnType
 }
 
 // 资源创建成功
-interface resourceCreateSuccessParamsType {
+interface ResourceCreateSuccessParamsType {
   resourceID: string;
 }
 
-export function resourceCreateSuccess({resourceID}: resourceCreateSuccessParamsType) {
+export function resourceCreateSuccess({resourceID}: ResourceCreateSuccessParamsType) {
   return `/result/resource/create/success/${resourceID}`;
 }
 
-// 资源创建成功
-interface resourceVersionCreateSuccessParamsType {
+// 资源版本创建成功
+interface ResourceVersionCreateSuccessParamsType {
   resourceID: string;
   version: string;
 }
 
-export function resourceVersionCreateSuccess({resourceID, version}: resourceVersionCreateSuccessParamsType) {
+export function resourceVersionCreateSuccess({resourceID, version}: ResourceVersionCreateSuccessParamsType) {
   return `/result/resource/version/create/success/${resourceID}/${version}`;
+}
+
+// 节点创建成功
+interface NodeCreateSuccessParamsType {
+  nodeID: number;
+}
+
+export function nodeCreateSuccess({nodeID}: NodeCreateSuccessParamsType) {
+  return `/result/node/create/success/${nodeID}`;
 }
 
 // 403
@@ -178,15 +186,11 @@ interface Exception403ParamsType {
 
 export function exception403({...params}: Exception403ParamsType = {}) {
 
-  // console.log(from, 'exception403!!!!!!!!');
-
   let fromUrl: string = params.from || '';
   if (!fromUrl) {
     const {href, origin} = window.location;
     fromUrl = href.replace(origin, '');
   }
-
-  // console.log(fromUrl, 'fromUrl!!!!!!!!');
 
   return `/exception/403${handleQuery({
     from: fromUrl
