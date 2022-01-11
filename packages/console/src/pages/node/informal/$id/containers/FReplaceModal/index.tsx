@@ -46,6 +46,7 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
       });
     }}
   >
+    <div style={{ height: 30 }} />
     <div className={styles.replaceHandler}>
       <div className={styles.replacer}>
         <FTitleText type='h3' text={'选择替换资源'} />
@@ -70,6 +71,21 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
         </div>
       </div>
     </div>
+    {
+      informalNodeManagerPage.replaceModal_Errors.length > 0 && (<>
+        <div style={{ height: 10 }} />
+        <div className={styles.errors}>
+          {
+            informalNodeManagerPage.replaceModal_Errors.map((rme) => {
+              return (<div className={styles.error}>{rme}</div>);
+            })
+          }
+        </div>
+      </>)
+    }
+
+    <div style={{ height: 30 }} />
+
   </FModal>);
 }
 

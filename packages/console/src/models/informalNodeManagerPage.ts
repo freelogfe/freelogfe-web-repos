@@ -7,6 +7,7 @@ import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
+import { mergeRules } from '@/models/informExhibitInfoPage';
 // import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
@@ -248,6 +249,8 @@ export interface InformalNodeManagerPageModelState {
   } | null;
   replaceModal_Replaced_TreeData: TreeNode[];
   replaceModal_Replaced_CheckedKeys: string[];
+
+  replaceModal_Errors: string[];
 
   exhibit_TypeOptions: { value: string; text: string; }[];
   exhibit_SelectedType: '-1' | string;
@@ -880,7 +883,8 @@ const replaceModalInitDate: Pick<InformalNodeManagerPageModelState,
   'replaceModal_Replaced_TargetVersions' |
   'replaceModal_Replaced_TargetSelectedVersion' |
   'replaceModal_Replaced_TreeData' |
-  'replaceModal_Replaced_CheckedKeys'> = {
+  'replaceModal_Replaced_CheckedKeys' |
+  'replaceModal_Errors'> = {
   replaceModal_Visible: false,
   replaceModal_Replacer_ResourceOptions: [
     { value: 'market', title: '资源市场' },
@@ -900,6 +904,7 @@ const replaceModalInitDate: Pick<InformalNodeManagerPageModelState,
   replaceModal_Replaced_TargetSelectedVersion: null,
   replaceModal_Replaced_TreeData: [],
   replaceModal_Replaced_CheckedKeys: [],
+  replaceModal_Errors: [],
 };
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
@@ -2638,12 +2643,8 @@ const Model: InformalNodeManagerPageModelType = {
         type: replacerData?.identity || 'object',
       };
 
+      // console.log(simplifiedResults, 'simplifiedResult9023000000000');
 
-      // const resultObj: { [key: string]: ICandidate[][] } = {};
-      // for (const simplifiedResult of simplifiedResults) {
-      //   resultObj[simplifiedResult[0]] = [];
-      // }
-      // console.log(simplifiedResult, 'simplifiedResult9023000000000');
       for (const simplifiedResult of simplifiedResults) {
         const [key, ...arr] = simplifiedResult;
         const scope: IActions['replace']['content']['scopes'][number] = arr.map((o: string) => {
@@ -2662,61 +2663,49 @@ const Model: InformalNodeManagerPageModelType = {
           }
         });
 
-        if (needHandleRules.some((nhr) => nhr.exhibitName === key && nhr.operation !== 'activate_theme')) {
-          needHandleRules = needHandleRules.map((nhr) => {
-            if (nhr.exhibitName === key && nhr.operation !== 'activate_theme') {
-              return {
-                ...nhr,
-                actions: [
-                  ...nhr.actions,
-                  {
-                    operation: 'replace',
-                    content: {
-                      replaced,
-                      replacer,
-                      scopes: scope.length === 0 ? [] : [scope],
-                    },
-                  },
-                ],
-              };
-            }
-
-            return nhr;
-          });
-        } else {
-          const alterRule: IRules['alter'] = {
-            operation: 'alter',
-            exhibitName: key,
-            actions: [
-              {
-                operation: 'replace',
-                content: {
-                  replaced,
-                  replacer,
-                  scopes: scope.length === 0 ? [] : [scope],
-                },
-              },
-            ],
-            text: '',
-          };
-          needHandleRules = [
-            ...needHandleRules,
-            alterRule,
-          ];
-        }
-
-
+        needHandleRules = mergeRules({
+          oldRules: needHandleRules,
+          exhibitName: key,
+          action: {
+            operation: 'replace',
+            content: {
+              replaced,
+              replacer,
+              scopes: scope.length === 0 ? [] : [scope],
+            },
+          },
+        });
       }
 
-      // console.log(needHandleRules, 'needHandleRules23423490989808989999999');
+      const changedRules: Array<IRules['add'] | IRules['alter'] | any> = simplifiedResults.map((s) => {
+        return needHandleRules.find((nhr) => {
+          return nhr.exhibitName === s[0] && nhr.operation !== 'activate_theme';
+        });
+      });
+
+      const params3: Parameters<typeof FServiceAPI.InformalNode.rulesPreExecution>[0] = {
+        nodeId: informalNodeManagerPage.node_ID,
+        testRuleText: decompile(changedRules),
+      };
+
+      const { data: data3 } = yield call(FServiceAPI.InformalNode.rulesPreExecution, params3);
+
+      const matchErrors: string[] = data3.map((d: any) => {
+        return d.matchErrors;
+      }).flat();
+      console.log(matchErrors, 'data32434');
+
+      if (matchErrors.length > 0) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            replaceModal_Errors: matchErrors,
+          },
+        });
+        return;
+      }
 
       const text: string = decompile(needHandleRules);
-      // console.log(text, 'text1234fklsadj');
-      // const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
-      //   nodeId: informalNodeManagerPage.node_ID,
-      //   additionalTestRule: text,
-      // };
-      // const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,

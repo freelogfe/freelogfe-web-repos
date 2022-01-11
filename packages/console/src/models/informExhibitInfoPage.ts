@@ -2078,7 +2078,7 @@ interface MergeRulesParams {
     | IActions['delete_attr'];
 }
 
-function mergeRules({
+export function mergeRules({
                       oldRules,
                       exhibitName,
                       action,

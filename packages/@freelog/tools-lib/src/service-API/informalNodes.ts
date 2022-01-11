@@ -199,10 +199,23 @@ interface RulesRematchParamsType {
 }
 
 export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {
-  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
   return FUtil.Request({
     method: 'POST',
     url: `/v2/testNodes/${nodeId}/rules/rematch`,
+    data: params,
+  });
+}
+
+// 节点测试规则预执行(不存档)
+interface RulesPreExecutionParamsType {
+  nodeId: number;
+  testRuleText: string;
+}
+
+export function rulesPreExecution({nodeId, ...params}: RulesPreExecutionParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/testNodes/${nodeId}/rules/preExecution`,
     data: params,
   });
 }
@@ -215,10 +228,8 @@ interface BatchGetAuthsParamsType {
 }
 
 export function batchGetAuths({nodeId, ...params}: BatchGetAuthsParamsType) {
-  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
   return FUtil.Request({
     method: 'GET',
-    // url: `/v2/auths/testResources/nodes/${nodeId}/result`,
     url: `/v2/auths/exhibits/${nodeId}/test/batchAuth/results`,
     params: params,
   });
