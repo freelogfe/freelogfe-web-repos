@@ -760,8 +760,8 @@ async function contractList(params: Parameters<typeof FServiceAPI.Contract.contr
     });
 
   // console.log(exhibitIDs, resourceIDs, '######3900928309482034809');
-  let exhibits = [];
-  let resources = [];
+  let exhibits: any[] = [];
+  let resources: any[] = [];
 
   if (exhibitIDs.length > 0) {
     const params1: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
@@ -769,7 +769,8 @@ async function contractList(params: Parameters<typeof FServiceAPI.Contract.contr
     };
 
     const { data: data1 } = await FServiceAPI.Exhibit.presentableList(params1);
-    console.log(data1, '#####0920938048230480239');
+    // console.log(data1, '#####0920938048230480239');
+    exhibits = data1;
   }
 
   if (resourceIDs.length > 0) {
@@ -778,8 +779,28 @@ async function contractList(params: Parameters<typeof FServiceAPI.Contract.contr
     };
 
     const { data: data2 } = await FServiceAPI.Resource.batchInfo(params2);
-    console.log(data2, '*******0920938048230480239');
+    // console.log(data2, '*******0920938048230480239');
+    resources = data2;
   }
 
-  return data;
+  //coverImages
+  return {
+    ...data,
+    dataList: data.dataList.map((d: any) => {
+      let subjectInfo: any = null;
+      if (d.subjectType === 1) {
+        subjectInfo = resources.find((r: any) => {
+          return r.resourceId === d.subjectId;
+        }) || null;
+      } else if (d.subjectType === 2) {
+        subjectInfo = exhibits.find((e: any) => {
+          return e.presentableId === d.subjectId;
+        }) || null;
+      }
+      return {
+        ...d,
+        subjectInfo,
+      };
+    }),
+  };
 }
