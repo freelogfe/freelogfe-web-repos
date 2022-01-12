@@ -421,11 +421,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                   />
                 </div>)
               }
-
-
+              <div style={{ height: 15 }} />
               {
                 isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
-                  {/*<div style={{ height: 10 }} />*/}
+
                   <div style={{ padding: '0 20px' }}>
                     <FVersions
                       versionAllContractIDs={versionAllContractIDs}
@@ -446,7 +445,6 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
               {
                 isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
-                  {/*<div style={{ height: 10 }} />*/}
                   <div style={{ padding: '0 20px' }}>
                     <FExhibits
                       nodeName={baseInfo.licenseeName}
@@ -532,9 +530,11 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         />
                       </div>
 
+                      <div style={{ height: 15 }} />
+
                       {
                         isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
-                          <div style={{ height: 10 }} />
+                          {/*<div style={{ height: 10 }} />*/}
                           <div style={{ padding: '0 20px' }}>
                             <FVersions
                               versionAllContractIDs={versionAllContractIDs}
@@ -557,7 +557,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
                       {
                         isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
-                          <div style={{ height: 10 }} />
+                          {/*<div style={{ height: 10 }} />*/}
                           <div style={{ padding: '0 20px' }}>
                             <FExhibits
                               nodeName={baseInfo.licenseeName}

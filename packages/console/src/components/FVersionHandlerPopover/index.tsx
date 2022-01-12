@@ -18,7 +18,7 @@ interface FVersionHandlerPopoverProps {
 function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onChange, children}: FVersionHandlerPopoverProps) {
   const [visible, setVisible] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>(value);
-  const [inputError, setInputEror] = React.useState<string>('');
+  const [inputError, setInputError] = React.useState<string>('');
 
   React.useEffect(() => {
     if (value !== input) {
@@ -55,7 +55,7 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
       inputError = '最少要匹配一个版本';
     }
     setInput(value);
-    setInputEror(inputError);
+    setInputError(inputError);
   }
 
   function onConfirm() {
