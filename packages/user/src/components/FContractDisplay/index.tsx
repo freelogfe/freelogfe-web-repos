@@ -482,7 +482,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                     }
 
                   </Space>
-
                 </>)
               }
 
@@ -530,6 +529,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         </div>)
       }
     </div>
+    <div style={{height: 15}}/>
 
     <FModal
       title={null}
