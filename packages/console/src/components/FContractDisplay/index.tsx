@@ -138,6 +138,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     const { data } = await FServiceAPI.Contract.contractDetails(params);
     // console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
+      skip: 0,
+      limit: 100,
       contractId: contractID,
     };
 
@@ -226,7 +228,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             type: currE.origin.name,
           },
         };
-      }).reverse();
+      });
 
     // console.log(historySsData, 'historySsData000000000000');
     setHistorySs(historySsData);
@@ -347,11 +349,16 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                 }
                 <FContentText text={currentS.datetime} type='normal' />
               </Space>
-              <div style={{ height: 10 }} />
-              <FContentText
-                type='highlight'
-                text={currentS.name}
-              />
+              {/*<div style={{ height: 10 }} />*/}
+              {/*<FContentText*/}
+              {/*  type='highlight'*/}
+              {/*  text={currentS.name}*/}
+              {/*/>*/}
+              {/*<div style={{*/}
+              {/*  color: '#7A869A',*/}
+              {/*  fontWeight: 600,*/}
+              {/*  lineHeight: '18px',*/}
+              {/*}}>{currentS.name}</div>*/}
 
               {
                 currentS.events.length > 0 && (<>
@@ -362,7 +369,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                       currentS.events.length === 0
                         ? (<div className={styles.Event}>
                           <FContentText
-                            type='normal'
+                            type='highlight'
                             text={'停止接收事件'}
                           />
                         </div>)
@@ -372,7 +379,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                             return (<div key={eti.id} className={styles.Event}>
                               <FContentText
                                 style={{ flexShrink: 1 }}
-                                type='normal'
+                                type='highlight'
                                 text={eti.tip}
                               />
                               {
@@ -402,21 +409,21 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                           } else if (eti.type === 'RelativeTimeEvent') {
                             return (<div key={eti.id} className={styles.Event}>
                               <FContentText
-                                type='normal'
+                                type='highlight'
                                 text={eti.tip}
                               />
                             </div>);
                           } else if (eti.type === 'TimeEvent') {
                             return (<div key={eti.id} className={styles.Event}>
                               <FContentText
-                                type='normal'
+                                type='highlight'
                                 text={eti.tip}
                               />
                             </div>);
                           } else {
                             return (<div key={'terminal'} className={styles.Event}>
                               <FContentText
-                                type='normal'
+                                type='highlight'
                                 text={(eti as any).tip}
                               />
                             </div>);
@@ -454,28 +461,27 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                             <FContentText text={hs.datetime} type='normal' />
                           </Space>
                           <div style={{ height: 10 }} />
-                          <FContentText
-                            type='highlight'
-                            text={hs.name}
-                          />
-                          <div style={{ height: 10 }} />
+                          {/*<FContentText*/}
+                          {/*  type='highlight'*/}
+                          {/*  text={hs.name}*/}
+                          {/*/>*/}
+                          {/*<div style={{ height: 10 }} />*/}
 
                           <div className={styles.Event}>
                             <FContentText
-                              type='normal'
+                              type='highlight'
                               text={hs.event.tip}
                             />
 
-                            <span style={{ color: '#2784FF' }}>已执行</span>
+                            {/*<span style={{ color: '#2784FF' }}>已执行</span>*/}
                           </div>
 
-                          <div className={styles.mask} />
+                          {/*<div className={styles.mask} />*/}
                         </div>);
                       })
                     }
 
                   </Space>
-
                 </>)
               }
 
@@ -523,6 +529,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         </div>)
       }
     </div>
+    {/*<div style={{height: 15}}/>*/}
 
     <FModal
       title={null}
