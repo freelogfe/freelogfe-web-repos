@@ -42,11 +42,14 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type="second" text={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}/>
+      {/*<FTipText type="second" text={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}/>*/}
+      <FTipText type="second" text={'节点创建成功'}/>
       <div style={{height: 40}}/>
-      <FTipText type="third" text={FUtil1.I18n.message('cta_add_theme')}/>
+      {/*<FTipText type="third" text={FUtil1.I18n.message('cta_add_theme')}/>*/}
+      <FTipText type="third" text={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}/>
       <div style={{height: 20}}/>
-      <FRectBtn onClick={goto}>{FUtil1.I18n.message('cta_btn_add_theme')}</FRectBtn>
+      {/*<FRectBtn onClick={goto}>{FUtil1.I18n.message('cta_btn_add_theme')}</FRectBtn>*/}
+      <FRectBtn onClick={goto}>{'添加主题 '}</FRectBtn>
     </div>
   </FCenterLayout>)
 }
