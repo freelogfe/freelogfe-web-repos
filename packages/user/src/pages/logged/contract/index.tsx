@@ -32,6 +32,7 @@ import moment, { Moment } from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FUtil1 from '@/utils';
+import FCoverImage from '@/components/FCoverImage';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -54,7 +55,8 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       render(_: any, record) {
         return (<div className={styles.target}>
           <div className={styles.targetCover}>
-            <img src={record.cover || imgSrc} />
+            {/*<img src={record.cover || imgSrc} />*/}
+            <FCoverImage src={record.cover || ''} width={120} />
             <div>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>
@@ -161,7 +163,8 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       render(_: any, record) {
         return (<div className={styles.target}>
           <div className={styles.targetCover}>
-            <img src={record.cover || imgSrc} />
+            {/*<img src={record.cover || imgSrc} />*/}
+            <FCoverImage src={record.cover || ''} width={120} />
             <div>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>

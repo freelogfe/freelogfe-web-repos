@@ -510,13 +510,14 @@ const Model: ContractPageModelType = {
 
       const data = yield call(contractList, params);
       // const data1 = { dataList: [] };
+      // console.log(data, 'data@@@@@@@@########');
 
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
         ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
 
           return {
-            cover: '',
+            cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
             subjectName: al.subjectName,
             contractName: al.contractName,
