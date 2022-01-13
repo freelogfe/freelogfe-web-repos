@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FUploadImage from '@/components/FUploadImage';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';

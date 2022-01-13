@@ -15,8 +15,9 @@ import {
 } from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/components/FFormLayout";
-import * as imgSrc from "@/assets/default-resource-cover.jpg";
+// import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FLeft, FNodes} from "@/components/FIcons";
+import FCoverImage from '@/components/FCoverImage';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -37,10 +38,11 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       <FTitleText type="h1" text={'确认签约'}/>
 
       <div className={styles.headerResource}>
-        <img
-          alt={''}
-          src={marketResourcePage.resourceInfo?.cover || imgSrc}
-        />
+        {/*<img*/}
+        {/*  alt={''}*/}
+        {/*  src={marketResourcePage.resourceInfo?.cover || imgSrc}*/}
+        {/*/>*/}
+        <FCoverImage src={marketResourcePage.resourceInfo?.cover || ''} width={36}/>
         <div style={{width: 8}}/>
         <FContentText text={marketResourcePage.resourceInfo?.name}/>
       </div>
