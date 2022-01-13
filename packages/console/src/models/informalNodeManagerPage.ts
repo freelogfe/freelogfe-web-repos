@@ -96,13 +96,6 @@ interface ICandidate {
   type: 'resource' | 'object';
 }
 
-// type IConfirmValue = {
-//   exhibitName: string;
-//   replaced: ICandidate;
-//   replacer: ICandidate;
-//   scopes: ICandidate[][];
-// }[];
-
 export interface IActions {
   comment: {
     text: string;
@@ -565,33 +558,6 @@ interface ICandidate {
   versionRange?: string;
   type: 'resource' | 'object';
 }
-
-// export interface SaveDataRulesAction extends AnyAction {
-//   type: 'informalNodeManagerPage/saveDataRules' | 'saveDataRules';
-//   payload: {
-//     type: 'append' | 'replace';
-//     data: {
-//       operation: 'add' | 'alter';
-//       exhibitName: string;
-//       candidate?: ICandidate;
-//       labels?: string[];
-//       replace?: {
-//         replaced: ICandidate;
-//         replacer: ICandidate;
-//         scopes: ICandidate[][];
-//       }[];
-//       online?: boolean;
-//       cover?: string;
-//       title?: string;
-//       attrs?: {
-//         operation: 'add' | 'delete';
-//         key: string;
-//         value?: string;
-//         description?: string;
-//       }[];
-//     }[];
-//   };
-// }
 
 export interface SaveDataRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/saveDataRules' | 'saveDataRules';
@@ -1060,7 +1026,6 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { data } = yield call(FServiceAPI.Node.details, params);
 
-      // if (user.cookiesUserID !== data.ownerUserId) {
       if (FUtil.Tool.getUserIDByCookies() !== data.ownerUserId) {
         router.replace(FUtil.LinkTo.exception403({}));
         return;
@@ -1120,7 +1085,6 @@ const Model: InformalNodeManagerPageModelType = {
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         skip: list.length,
         limit: FUtil.Predefined.pageSize,
-        // limit: 5,
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: 'theme',
@@ -1129,8 +1093,6 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
-
-      // console.log(data, 'data2093222222');
 
       const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
@@ -1157,9 +1119,9 @@ const Model: InformalNodeManagerPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
         total_Length: data.totalItem,
-        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType === '-1'
-          && informalNodeManagerPage.exhibit_SelectedStatus === '2'
-          && informalNodeManagerPage.exhibit_FilterKeywords === '',
+        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType !== '-1'
+          || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
+          || informalNodeManagerPage.exhibit_FilterKeywords !== '',
       });
       // console.log('###444444444444');
       yield put<ChangeAction>({
@@ -1453,6 +1415,12 @@ const Model: InformalNodeManagerPageModelType = {
         };
       });
 
+      const { state, more } = listStateAndListMore({
+        list_Length: themePageThemeList.length,
+        total_Length: data.totalItem,
+        has_FilterCriteria: informalNodeManagerPage.theme_FilterKeywords !== '',
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1464,11 +1432,8 @@ const Model: InformalNodeManagerPageModelType = {
               }
               return 0;
             }),
-          theme_ListState: themePageThemeList.length > 0
-            ? 'loaded'
-            : informalNodeManagerPage.theme_FilterKeywords === ''
-              ? 'noData'
-              : 'noSearchResult',
+          theme_ListState: state,
+          theme_ListMore: more,
         },
       });
     },

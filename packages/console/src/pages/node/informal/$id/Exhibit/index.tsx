@@ -8,29 +8,28 @@ import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import { FTextBtn } from '@/components/FButton';
 import FAdd from '@/components/FIcons/FAdd';
 import FDropdownMenu from '@/components/FDropdownMenu';
-// import FInfiniteScroll from '@/components/FInfiniteScroll';
 import { connect, Dispatch } from 'dva';
 import {
   ConnectState,
   InformalNodeManagerPageModelState,
 } from '@/models/connect';
 import {
-  FetchExhibitListAction, OnCancel_AddExhibitDrawer_Action,
-
+  FetchExhibitListAction,
+  OnCancel_AddExhibitDrawer_Action,
   OnChangeExhibitKeywordsAction,
   OnChangeExhibitStatusAction,
   OnChangeExhibitTypeAction,
   OnClickExhibitsAddBtnAction,
-  OnClickExhibitsReplaceBtnAction, OnConfirm_AddExhibitDrawer_Action,
-  // OnLoadMoreExhibitsAction,
-  OnMountExhibitPageAction, OnUnmountExhibitPageAction,
+  OnClickExhibitsReplaceBtnAction,
+  OnConfirm_AddExhibitDrawer_Action,
+  OnMountExhibitPageAction,
+  OnUnmountExhibitPageAction,
 } from '@/models/informalNodeManagerPage';
 import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
-// import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 
@@ -54,7 +53,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
   });
 
   if (informalNodeManagerPage.exhibit_PageError) {
-    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.exhibit_PageError}/>);
+    return (<FNoDataTip height={'calc(100vh - 194px)'} tipText={informalNodeManagerPage.exhibit_PageError} />);
   }
 
   if (informalNodeManagerPage.exhibit_ListState === 'loading') {
