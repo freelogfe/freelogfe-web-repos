@@ -36,7 +36,10 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
               text={r.name}
             />
             <div style={{ height: 5 }} />
-            <FContentText type='additional2' text={'audio'} />
+            <FContentText
+              type='additional2'
+              text={r.type}
+            />
           </div>
           <div className={styles.resourcePolicies}>
             {
@@ -71,7 +74,10 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                     text={r.name}
                   />
                   <div style={{ height: 5 }} />
-                  <FContentText type='additional2' text={'audio'} />
+                  <FContentText
+                    type='additional2'
+                    text={r.type}
+                  />
                 </div>
                 <div className={styles.resourcePolicies}>
                   {
