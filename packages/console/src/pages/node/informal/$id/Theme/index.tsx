@@ -289,7 +289,19 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                             online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
                             offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
                             labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
-                            replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords}
+                            replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords.map((rr) => {
+                              return {
+                                ...rr,
+                                replacer: {
+                                  ...rr.replacer,
+                                  versionRange: rr.replacer.version,
+                                },
+                                replaced: {
+                                  ...rr.replaced,
+                                  versionRange: rr.replaced.version,
+                                },
+                              };
+                            })}
                             attrs={t.stateInfo.propertyInfo.ruleId === 'default'
                               ? undefined
                               : t.stateInfo.propertyInfo.testResourceProperty

@@ -46,8 +46,18 @@ export interface IExhibit {
     replaceInfo: {
       rootResourceReplacer: null;
       replaceRecords: {
-        replaced: ICandidate;
-        replacer: ICandidate;
+        replaced: {
+          id: string;
+          name: string;
+          type: 'resource' | 'object';
+          version: string;
+        };
+        replacer: {
+          id: string;
+          name: string;
+          type: 'resource' | 'object';
+          version: string;
+        };
         scopes?: ICandidate[][];
       }[];
       ruleId: 'default' | string;

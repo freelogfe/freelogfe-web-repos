@@ -105,7 +105,19 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               online={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 1}
               offline={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 0}
               labels={record.stateInfo.tagInfo.ruleId === 'default' ? undefined : record.stateInfo.tagInfo.tags}
-              replaces={record.stateInfo.replaceInfo.ruleId === 'default' ? undefined : record.stateInfo.replaceInfo.replaceRecords}
+              replaces={record.stateInfo.replaceInfo.ruleId === 'default' ? undefined : record.stateInfo.replaceInfo.replaceRecords.map((rr) => {
+                return {
+                  ...rr,
+                  replacer: {
+                    ...rr.replacer,
+                    versionRange: rr.replacer.version,
+                  },
+                  replaced: {
+                    ...rr.replaced,
+                    versionRange: rr.replaced.version,
+                  },
+                };
+              })}
               attrs={record.stateInfo.propertyInfo.ruleId === 'default'
                 ? undefined
                 : record.stateInfo.propertyInfo.testResourceProperty

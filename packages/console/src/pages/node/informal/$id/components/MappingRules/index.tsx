@@ -211,7 +211,7 @@ export function ReplaceRule({ replacer, replaced, scopes }: ReplaceRuleProps) {
         className={replaced.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replaced.name}</label>
       </div>
       {
-        replaced.versionRange !== '' && replaced.versionRange !== '*' && (<>
+        replaced.versionRange && replaced.versionRange !== '*' && (<>
           <div><FContentText text={'版本'} /></div>
           <div><FContentText type='highlight' text={replaced.versionRange} /></div>
         </>)
@@ -221,7 +221,7 @@ export function ReplaceRule({ replacer, replaced, scopes }: ReplaceRuleProps) {
         className={replacer.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replacer.name}</label>
       </div>
       {
-        replacer.versionRange !== '' && replacer.versionRange !== 'latest' && (<>
+        replacer.versionRange && replacer.versionRange !== 'latest' && (<>
           <div><FContentText text={'版本'} /></div>
           <div><FContentText type='highlight' text={replacer.versionRange} /></div>
         </>)
