@@ -210,10 +210,12 @@ const Model: LogonPageModelType = {
 
       let usernameInputError: string = '';
 
-      if (!logonPage.usernameInput) {
+      if (logonPage.usernameInput === '') {
         usernameInputError = '用户名称不能为空';
       } else if (!FUtil.Regexp.USERNAME.test(logonPage.usernameInput)) {
         usernameInputError = '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+      } else if (FUtil.Regexp.MOBILE_PHONE_NUMBER.test(logonPage.usernameInput)) {
+        usernameInputError = '用户名不能是手机号';
       }
 
       if (!usernameInputError) {
