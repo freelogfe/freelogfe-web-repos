@@ -2835,7 +2835,10 @@ export async function ruleMatchAndResult({
                                          }: RuleMatchAndResultParams): Promise<RuleMatchAndResultReturn> {
 
   if (isRematch) {
-    const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
+    const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({
+      nodeId: nodeID,
+      // isMandatoryMatch: 1,
+    });
     // if (errCode !== 0 || !data) {
     //   return {
     //     error: '匹配失败',

@@ -196,6 +196,7 @@ export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestR
 // 重新匹配节点测试规则
 interface RulesRematchParamsType {
   nodeId: number;
+  isMandatoryMatch?: 0 | 1; //  0:否 1:是 默认1
 }
 
 export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {

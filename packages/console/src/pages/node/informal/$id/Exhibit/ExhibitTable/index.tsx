@@ -6,25 +6,20 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-// import {router} from "umi";
 import { Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   ChangeAction,
   OnChange_Exhibits_StatusSwitch_Action,
   OnClick_Exhibits_DeleteBtn_Action,
-  // SaveDataRulesAction,
 } from '@/models/informalNodeManagerPage';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
-
-// const { compile } = require('@freelog/nmr_translator');
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -41,17 +36,16 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       width: 120,
       render(text, record) {
         return (<div className={styles.cover}>
-          {/*<img*/}
-          {/*  src={record.cover || imgSrc}*/}
-          {/*  alt={''}*/}
-          {/*  loading="lazy"*/}
-          {/*/>*/}
 
-          <FCoverImage src={record.stateInfo.coverInfo.coverImages[0] || ''} width={120} style={{ borderRadius: 4 }} />
+          <FCoverImage
+            src={record.stateInfo.coverInfo.coverImages[0] || ''}
+            width={120}
+            style={{ borderRadius: 4 }}
+          />
 
           <div className={styles.Identity}>
             <FIdentityTypeBadge
-              status={record.originInfo.type}
+              status={record.associatedPresentableId === '' ? record.originInfo.type : 'exhibit'}
             />
           </div>
         </div>);

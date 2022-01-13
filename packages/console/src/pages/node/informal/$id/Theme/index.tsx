@@ -5,23 +5,24 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import {
-  InformalNodeManagerPageModelState, OnCancel_AddExhibitDrawer_Action, OnCancel_AddThemeDrawer_Action,
-  OnChangeThemeKeywordsAction, OnClick_ActiveThemeBtn_Action,
+  InformalNodeManagerPageModelState,
+  OnCancel_AddThemeDrawer_Action,
+  OnChangeThemeKeywordsAction,
+  OnClick_ActiveThemeBtn_Action,
   OnClickThemesAddBtnAction,
-  OnClickThemesReplaceBtnAction, OnConfirm_AddExhibitDrawer_Action, OnConfirm_AddThemeDrawer_Action,
-  OnMountThemePageAction, OnUnmountThemePageAction,
-  // SaveDataRulesAction,
+  OnClickThemesReplaceBtnAction,
+  OnConfirm_AddThemeDrawer_Action,
+  OnMountThemePageAction,
+  OnUnmountThemePageAction,
 } from '@/models/informalNodeManagerPage';
 import FAdd from '@/components/FIcons/FAdd';
 import FInput from '@/components/FInput';
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Dispatch, connect } from 'dva';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
 import FDivider from '@/components/FDivider';
-// import FLink from '@/components/FLink';
 import { FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
@@ -31,13 +32,9 @@ import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
-// import { OnActiveAction } from '@/models/nodeManagerPage';
-
-// const { compile } = require('@freelog/nmr_translator');
 
 interface ThemeProps {
   dispatch: Dispatch;
-
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
@@ -171,8 +168,11 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                       >
                         <div className={styles.cover}>
                           {/*<img src={t.cover || imgSrc} alt='' />*/}
-                          <FCoverImage src={t.stateInfo.coverInfo.coverImages[0] || ''} width={280}
-                                       style={{ borderRadius: 4 }} />
+                          <FCoverImage
+                            src={t.stateInfo.coverInfo.coverImages[0] || ''}
+                            width={280}
+                            style={{ borderRadius: 4 }}
+                          />
 
                           <div className={styles.coverLabel}>
                             {
@@ -254,13 +254,14 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         <div className={styles.itemTitle}>
                           {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
                           <FIdentityTypeBadge
-                            status={t.originInfo.type}
+                            status={t.associatedPresentableId === '' ? t.originInfo.type : 'exhibit'}
                           />
                           <div style={{ width: 5 }} />
                           <FContentText
                             type='highlight'
                             text={t.testResourceName}
                             singleRow
+                            style={{ maxWidth: 230 }}
                           />
                         </div>
                         <div style={{ height: 6 }} />
