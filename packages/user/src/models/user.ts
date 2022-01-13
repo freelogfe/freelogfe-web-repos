@@ -94,6 +94,7 @@ const Model: UserModelType = {
       if (!payload.hidden
         && user.userInfo?.userId !== FUtil.Tool.getUserIDByCookies()
         && window.location.pathname !== FUtil.LinkTo.login()
+        && window.location.pathname !== FUtil.LinkTo.logon()
         && window.location.pathname !== FUtil.LinkTo.retrieveUserPassword()) {
         fConfirmModal({
           visible: true,
