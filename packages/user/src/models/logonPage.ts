@@ -4,6 +4,8 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import { history } from '@@/core/history';
+import { LoginAction } from '@/models/loginPage';
 
 export type LogonPageModelState = WholeReadonly<{
 
@@ -122,6 +124,13 @@ export interface OnChangeWaitingTimeAction extends AnyAction {
   };
 }
 
+export interface OnTrigger_Login_Action extends AnyAction {
+  type: 'logonPage/onTrigger_Login';
+  payload: {
+    goToUrl: string;
+  };
+}
+
 interface LogonPageModelType {
   namespace: 'logonPage';
   state: LogonPageModelState;
@@ -143,6 +152,7 @@ interface LogonPageModelType {
     onBlurPasswordInput: (action: OnBlurPasswordInputAction, effects: EffectsCommandMap) => void;
     onClickLogonBtn: (action: OnClickLogonBtnAction, effects: EffectsCommandMap) => void;
     onChangeWaitingTime: (action: OnChangeWaitingTimeAction, effects: EffectsCommandMap) => void;
+    onTrigger_Login: (action: OnTrigger_Login_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<LogonPageModelState, ChangeAction>;
@@ -419,17 +429,19 @@ const Model: LogonPageModelType = {
       };
 
       const { data, msg } = yield call(FServiceAPI.User.logon, params);
+
       if (!data) {
         fMessage(msg, 'error');
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showView: 'success',
-            waitingTimeToLogin: 3,
-          },
-        });
+        return;
       }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showView: 'success',
+          waitingTimeToLogin: 3,
+        },
+      });
 
     },
     * onChangeWaitingTime({ payload }: OnChangeWaitingTimeAction, { put }: EffectsCommandMap) {
@@ -439,6 +451,30 @@ const Model: LogonPageModelType = {
           waitingTimeToLogin: payload.value,
         },
       });
+    },
+
+    * onTrigger_Login({ payload }: OnTrigger_Login_Action, { call, put, select }: EffectsCommandMap) {
+      const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
+        logonPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.login>[0] = {
+        loginName: logonPage.usernameInput,
+        password: logonPage.passwordInput,
+        isRemember: 1,
+      };
+
+      const { data } = yield call(FServiceAPI.User.login, params);
+
+      if (data?.userId) {
+        if (payload.goToUrl !== '') {
+          window.location.replace(decodeURIComponent(payload.goToUrl));
+        } else {
+          history.replace(FUtil.LinkTo.wallet());
+        }
+      } else {
+        fMessage('账户或密码错误', 'error');
+      }
     },
   },
   reducers: {

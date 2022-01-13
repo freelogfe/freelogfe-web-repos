@@ -24,7 +24,7 @@ import {
   OnClickSendVerifyCodeBtnAction,
   OnMountPageAction,
   OnUnmountPageAction,
-  OnChangeWaitingTimeAction,
+  OnChangeWaitingTimeAction, OnTrigger_Login_Action,
 } from '@/models/logonPage';
 import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
@@ -76,9 +76,15 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   }, logonPage.waitingTimeToLogin === 0 ? null : 1000);
 
   function gotoLogin() {
-    history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
-      goTo: decodeURIComponent(urlParams.goTo),
-    } : {}));
+    // history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
+    //   goTo: decodeURIComponent(urlParams.goTo),
+    // } : {}));
+    dispatch<OnTrigger_Login_Action>({
+      type: 'logonPage/onTrigger_Login',
+      payload: {
+        goToUrl: urlParams.goTo || '',
+      },
+    });
   }
 
   const isVerifyAccountError: boolean = logonPage.accountType === 'email'
