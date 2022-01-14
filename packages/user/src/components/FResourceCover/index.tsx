@@ -9,13 +9,12 @@ interface FResourceCoverProps {
   // height?: number | string;
   src?: string;
   status?: 'online' | 'offline' | 'unreleased';
-  children?: React.ReactNode | React.ReactNodeArray;
+  // children?: React.ReactNode | React.ReactNodeArray;
 }
 
-function FResourceCover({ src, status, children }: FResourceCoverProps) {
+function FResourceCover({ src, status }: FResourceCoverProps) {
   return (<div className={styles.Cover}>
-    {src && (<FCoverImage src={src} width={200} />)}
-    {children}
+    <FCoverImage src={src || ''} width={200} />
     <div className={styles.Status}>
       <FResourceStatusBadge status={status} />
     </div>

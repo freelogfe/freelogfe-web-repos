@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
@@ -16,6 +16,7 @@ import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
+import FCoverImage from '@/components/FCoverImage';
 
 interface BaseInfo {
   subjectId: string;
@@ -321,11 +322,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         : (<FFormLayout>
           <FFormLayout.FBlock title={'标的物'}>
             <Space size={10}>
-              <img
-                alt=''
-                className={styles.targetCover}
-                src={baseInfo?.subjectCover || imgSrc}
-              />
+              {/*<img*/}
+              {/*  alt=''*/}
+              {/*  className={styles.targetCover}*/}
+              {/*  src={baseInfo?.subjectCover || imgSrc}*/}
+              {/*/>*/}
+              <FCoverImage src={baseInfo?.subjectCover || ''} width={60} />
               <div>
                 <FContentText
                   type='highlight'
