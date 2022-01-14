@@ -165,8 +165,8 @@ export interface OnChangeNodeSelectorAction extends AnyAction {
   payload: -1 | number;
 }
 
-export interface FetchVersionInfoAction extends AnyAction {
-  type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
+export interface OnClick_SignBtn_Action extends AnyAction {
+  type: 'marketResourcePage/onClick_SignBtn';
 }
 
 export interface OnClick_ConfirmSignContract_Action extends AnyAction {
@@ -176,6 +176,10 @@ export interface OnClick_ConfirmSignContract_Action extends AnyAction {
 export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
   type: 'marketResourcePage/onChangeAndVerifySignExhibitName';
   payload: string;
+}
+
+export interface FetchVersionInfoAction extends AnyAction {
+  type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
 
 export interface FetchDependencyGraphData extends AnyAction {
@@ -194,6 +198,7 @@ interface MarketResourcePageModelType {
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
+    onClick_SignBtn: (action: OnClick_SignBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ConfirmSignContract: (action: OnClick_ConfirmSignContract_Action, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
     fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
@@ -608,6 +613,27 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
+    * onClick_SignBtn({}: OnClick_SignBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
+        marketResourcePage,
+      }));
+
+      const params: Parameters<typeof getAvailableExhibitName>[0] = {
+        nodeID: marketResourcePage.selectedNodeID,
+        exhibitName: marketResourcePage.resourceInfo?.name.split('/')[1] || '',
+      };
+
+      const signExhibitName: string = yield call(getAvailableExhibitName, params);
+      yield  put<ChangeAction>({
+        type: 'change',
+        payload: {
+          signExhibitName: signExhibitName,
+          signExhibitNameErrorTip: '',
+          isSignPage: true,
+        },
+      });
+      // window.history.pushState({}, '确认签约');
+    },
     * onClick_ConfirmSignContract({}: OnClick_ConfirmSignContract_Action, { call, select, put }: EffectsCommandMap) {
       const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
@@ -756,4 +782,32 @@ async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExh
     return data;
   });
   return await Promise.all(allPromises);
+}
+
+interface GetAvailableExhibitNameParamType {
+  nodeID: number;
+  exhibitName: string;
+  suffixNum?: number;
+}
+
+async function getAvailableExhibitName({
+                                         nodeID,
+                                         exhibitName,
+                                         suffixNum = 0,
+                                       }: GetAvailableExhibitNameParamType): Promise<string> {
+  const name: string = exhibitName + (suffixNum ? `_${suffixNum}` : '');
+  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+    nodeId: nodeID,
+    presentableName: name,
+  };
+  const { data } = await FServiceAPI.Exhibit.presentableDetails(params);
+  if (data) {
+    return await getAvailableExhibitName({
+      nodeID,
+      exhibitName,
+      suffixNum: suffixNum + 1,
+    });
+  }
+
+  return name;
 }

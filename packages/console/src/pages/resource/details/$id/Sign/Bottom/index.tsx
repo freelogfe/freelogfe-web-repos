@@ -1,18 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FRectBtn} from '@/components/FButton';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
-import {ChangeAction} from "@/models/marketResourcePage";
-import FLink from "@/components/FLink";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { FRectBtn } from '@/components/FButton';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { OnClick_SignBtn_Action } from '@/models/marketResourcePage';
+import FLink from '@/components/FLink';
+import { FUtil } from '@freelog/tools-lib';
 
 interface BottomProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState;
 }
 
-function Bottom({dispatch, marketResourcePage}: BottomProps) {
+function Bottom({ dispatch, marketResourcePage }: BottomProps) {
 
   return (<div className={styles.signBottom}>
     {
@@ -30,22 +30,13 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             // })
           }
           onClick={async () => {
-            const signExhibitName: string = await getAvailableExhibitName({
-              nodeID: marketResourcePage.selectedNodeID,
-              exhibitName: marketResourcePage.resourceInfo?.name.split('/')[1] || '',
-            });
-            await dispatch<ChangeAction>({
-              type: 'marketResourcePage/change',
-              payload: {
-                signExhibitName: signExhibitName,
-                signExhibitNameErrorTip: '',
-                isSignPage: true,
-              }
+            dispatch<OnClick_SignBtn_Action>({
+              type: 'marketResourcePage/onClick_SignBtn',
             });
           }}
         >立即签约</FRectBtn>)
         : (<span>该资源已签约，可进入<FLink
-          to={FUtil.LinkTo.exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitID})}
+          to={FUtil.LinkTo.exhibitManagement({ exhibitID: marketResourcePage.signedResourceExhibitID })}
           className={styles.gotoExhibitLink}
         >展品管理</FLink>进行授权管理</span>)
     }
@@ -53,30 +44,8 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
   </div>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({
+export default connect(({ marketResourcePage }: ConnectState) => ({
   marketResourcePage,
 }))(Bottom);
 
-interface GetAvailableExhibitNameParamType {
-  nodeID: number;
-  exhibitName: string;
-  suffixNum?: number;
-}
 
-async function getAvailableExhibitName({nodeID, exhibitName, suffixNum = 0}: GetAvailableExhibitNameParamType): Promise<string> {
-  const name: string = exhibitName + (suffixNum ? `_${suffixNum}` : '');
-  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
-    nodeId: nodeID,
-    presentableName: name,
-  };
-  const {data} = await FServiceAPI.Exhibit.presentableDetails(params);
-  if (data) {
-    return await getAvailableExhibitName({
-      nodeID,
-      exhibitName,
-      suffixNum: suffixNum + 1,
-    });
-  }
-
-  return name;
-}
