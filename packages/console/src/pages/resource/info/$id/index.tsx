@@ -15,7 +15,7 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import { FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
 

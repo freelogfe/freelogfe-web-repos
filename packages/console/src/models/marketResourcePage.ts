@@ -7,6 +7,7 @@ import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+import fMessage from '@/components/fMessage';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -617,6 +618,56 @@ const Model: MarketResourcePageModelType = {
       const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
       }));
+
+      const needVerifyResource: {
+        id: string;
+        policyIDs: string[];
+      }[] = marketResourcePage.signResources.map((sr) => {
+        return {
+          id: sr.id,
+          policyIDs: sr.policies.filter((p) => {
+            return p.checked;
+          }).map((p) => {
+            return p.id;
+          }),
+        };
+      });
+
+      const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        resourceIds: needVerifyResource.map((r) => r.id).join(','),
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
+
+      console.log(data1, 'data1903lkjlksdf');
+
+      const realTimeResourceOnlinePolicyIDs: {
+        id: string;
+        policyIDs: string[];
+      }[] = data1.map((d: any) => {
+        return {
+          id: d.resourceId,
+          policyIDs: d.policies.filter((p: any) => {
+            return p.status === 1;
+          }).map((p: any) => {
+            return p.policyId;
+          }),
+        };
+      });
+
+      console.log(needVerifyResource, realTimeResourceOnlinePolicyIDs, '###3902803498023840234808200');
+
+      for (const r1 of needVerifyResource) {
+        const res = realTimeResourceOnlinePolicyIDs.find((rt) => {
+          return rt.id === r1.id;
+        });
+
+        if (!res?.policyIDs.includes(r1.id)) {
+          // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
+          fMessage(FUtil1.I18n.message('选中的策略中，存在被下线策略'), 'error');
+          return;
+        }
+      }
 
       const params: Parameters<typeof getAvailableExhibitName>[0] = {
         nodeID: marketResourcePage.selectedNodeID,
