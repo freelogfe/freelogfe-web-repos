@@ -1543,6 +1543,7 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
+          theme_ActivatingThemeName: '',
         },
       });
 
