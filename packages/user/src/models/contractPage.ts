@@ -504,13 +504,11 @@ const Model: ContractPageModelType = {
         status: contractPage.authorize_Status === 'all' ? undefined : status[contractPage.authorize_Status],
         authStatus: contractPage.authorize_Status === 'all' ? undefined : authStatus[contractPage.authorize_Status],
         startDate: contractPage.authorize_Date ? contractPage.authorize_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
-        endDate: contractPage.authorize_Date ? contractPage.authorize_Date[1]?.format(FUtil.Predefined.momentDateFormat) : undefined,
+        endDate: contractPage.authorize_Date ? contractPage.authorize_Date[1]?.format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
       const data = yield call(contractList, params);
-      // const data1 = { dataList: [] };
-      // console.log(data, 'data@@@@@@@@########');
 
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
@@ -630,7 +628,7 @@ const Model: ContractPageModelType = {
         status: contractPage.authorized_Status === 'all' ? undefined : status[contractPage.authorized_Status],
         authStatus: contractPage.authorized_Status === 'all' ? undefined : authStatus[contractPage.authorized_Status],
         startDate: contractPage.authorized_Date ? contractPage.authorized_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
-        endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) : undefined,
+        endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
       };
 

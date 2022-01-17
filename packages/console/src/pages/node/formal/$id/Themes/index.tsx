@@ -121,10 +121,6 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                         </FTooltip> : ''}
                       </Space>
 
-                      {/*<img*/}
-                      {/*  alt=''*/}
-                      {/*  src={i.cover || imgSrc}*/}
-                      {/*/>*/}
                       <FCoverImage
                         src={i.cover || ''}
                         width={280}

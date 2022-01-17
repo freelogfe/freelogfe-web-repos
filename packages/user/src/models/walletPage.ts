@@ -615,14 +615,6 @@ const Model: WalletPageModelType = {
         walletPage,
       }));
 
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     changingPassword_NewPasswordModal_Password1Error: FUtil.Regexp.PAY_PASSWORD.test(walletPage.changingPassword_NewPasswordModal_Password1) ? '' : '必须为6为数字',
-      //     changingPassword_NewPasswordModal_Password2Error: (walletPage.changingPassword_NewPasswordModal_Password2 && walletPage.changingPassword_NewPasswordModal_Password1 !== walletPage.changingPassword_NewPasswordModal_Password2) ? '两次密码必须一致' : '',
-      //   },
-      // });
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -650,12 +642,6 @@ const Model: WalletPageModelType = {
           activating_PasswordTwoError: walletPage.activating_PasswordTwo === walletPage.activating_PasswordOne ? '' : '两次密码必须一致',
         },
       });
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     activating_PasswordTwoError: walletPage.activating_PasswordTwo === walletPage.activating_PasswordOne ? '' : '两次密码必须一致',
-      //   },
-      // });
     },
     * onClick_Activate_ConfirmBtn(action: OnClick_Activate_ConfirmBtn_Action, {
       select,
@@ -957,13 +943,6 @@ const Model: WalletPageModelType = {
         },
       });
 
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
-
     },
     * onChange_Table_Filter_Date_Custom({ payload }: OnChange_Table_Filter_Date_Custom_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -973,13 +952,6 @@ const Model: WalletPageModelType = {
           table_Filter_Date_Custom: payload.value,
         },
       });
-
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
     },
     * onChange_Table_Filter_Keywords({ payload }: OnChange_Table_Filter_Keywords_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -988,13 +960,6 @@ const Model: WalletPageModelType = {
           table_Filter_Keywords: payload.value,
         },
       });
-
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
     },
     * onChange_Table_Filter_MinAmount({ payload }: OnChange_Table_Filter_MinAmount_Action, { put }: EffectsCommandMap) {
       if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
@@ -1019,13 +984,6 @@ const Model: WalletPageModelType = {
             : String(Math.min(Math.max(0, Number(walletPage.table_Filter_MinAmount)), walletPage.table_Filter_MaxAmount !== '' ? Number(walletPage.table_Filter_MaxAmount) : Number.POSITIVE_INFINITY)),
         },
       });
-
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
     },
     * onChange_Table_Filter_MaxAmount({ payload }: OnChange_Table_Filter_MaxAmount_Action, { put }: EffectsCommandMap) {
       if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
@@ -1051,12 +1009,6 @@ const Model: WalletPageModelType = {
         },
       });
 
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
     },
     * onChange_Table_Filter_StateSelected({ payload }: OnChange_Table_Filter_StateSelected_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1065,13 +1017,6 @@ const Model: WalletPageModelType = {
           table_Filter_StateSelected: payload.value,
         },
       });
-
-      // yield put<Fetch_TableData_Action>({
-      //   type: 'fetch_TableData',
-      //   payload: {
-      //     andMore: false,
-      //   },
-      // });
     },
     * onClick_Table_Filter_SearchBtn({}: OnClick_Table_Filter_SearchBtn_Action, { put }: EffectsCommandMap) {
       yield put<Fetch_TableData_Action>({
@@ -1112,8 +1057,6 @@ const Model: WalletPageModelType = {
           },
         });
       }
-      // const [startCreatedDate, endCreatedDate] = getStartAndEndDate(walletPage.table_Filter_Date_Type, walletPage.table_Filter_Date_Custom);
-      // console.log(walletPage.accountID, 'walletPage.accountID23423');
 
       const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
         accountId: walletPage.accountID,
@@ -1121,7 +1064,7 @@ const Model: WalletPageModelType = {
         limit: FUtil.Predefined.pageSize,
         // limit: 5,
         startCreatedDate: walletPage.table_Filter_Date_Custom ? walletPage.table_Filter_Date_Custom[0].format(FUtil.Predefined.momentDateFormat) : undefined,
-        endCreatedDate: walletPage.table_Filter_Date_Custom ? walletPage.table_Filter_Date_Custom[1].format(FUtil.Predefined.momentDateFormat) : undefined,
+        endCreatedDate: walletPage.table_Filter_Date_Custom ? walletPage.table_Filter_Date_Custom[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         amountStartPoint: walletPage.table_Filter_MinAmount === '' ? undefined : Number(walletPage.table_Filter_MinAmount),
         amountEndPoint: walletPage.table_Filter_MaxAmount === '' ? undefined : Number(walletPage.table_Filter_MaxAmount),
         status: walletPage.table_Filter_StateSelected === '0' ? undefined : Number(walletPage.table_Filter_StateSelected) as 1,
