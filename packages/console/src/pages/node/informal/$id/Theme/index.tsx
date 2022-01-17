@@ -171,7 +171,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                           <FCoverImage
                             src={t.stateInfo.coverInfo.coverImages[0] || ''}
                             width={280}
-                            style={{ borderRadius: 4 }}
+                            style={{ borderRadius: 4, display: 'block' }}
                           />
 
                           <div className={styles.coverLabel}>
