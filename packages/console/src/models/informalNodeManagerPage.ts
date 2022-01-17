@@ -961,7 +961,7 @@ const Model: InformalNodeManagerPageModelType = {
     },
 
     * onMountThemePage({}: OnMountThemePageAction, { put }: EffectsCommandMap) {
-      console.log('onMountThemePage9989999999999');
+      // console.log('onMountThemePage9989999999999');
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {
@@ -1740,15 +1740,35 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      yield put({
+      console.log(payload, 'payload223423409090909uopifjlkjl');
+
+      //   rule_CodeInput: '',
+      //   rule_CodeIsDirty: false,
+      //   rule_PromptLeavePath: '',
+      //   rule_CodeState: 'editing',
+      //   rule_CodeCompileErrors: [],
+      //   rule_CodeExecutionErrors: [],
+      //   rule_CodeEfficients: [],
+
+      const dateTime: string = moment().format(FUtil.Predefined.momentDateTimeFormat);
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rulePageCodeInput: payload.value + '\n' + informalNodeManagerPage.rule_CodeInput,
-          rulePageStatus: 'coding',
-          rulePageCodeIsDirty: true,
-          rulePageCodeCompileErrors: null,
-          rulePageCodeExecutionError: null,
-          rulePageCodeSaveSuccess: false,
+          rule_CodeInput: '\n'
+            + `// 以下语句于${dateTime}导入` + '\n'
+            + payload.value + '\n'
+            + `// 以上语句于${dateTime}导入`
+            + informalNodeManagerPage.rule_CodeInput,
+          // rule_CodeState: 'coding',
+          rule_PageStatus: 'coding',
+          rule_CodeState: 'editing',
+          rule_CodeIsDirty: true,
+          // rulePageCodeCompileErrors: [],
+          // rulePageCodeExecutionError: ,
+          // rulePageCodeSaveSuccess: false,
+          rule_CodeCompileErrors: [],
+          rule_CodeExecutionErrors: [],
+          rule_CodeEfficients: [],
         },
       });
     },

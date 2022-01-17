@@ -2,11 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FImport, FExport, FCode, FExit, FInfo, FWarning, FDelete } from '@/components/FIcons';
+import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
-  VersionRule,
+  // VersionRule,
   TitleRule,
   ReplaceRule,
   OnlineRule,
@@ -16,7 +16,7 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-import FCodemirror from '@/components/FCodemirror';
+// import FCodemirror from '@/components/FCodemirror';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
@@ -35,7 +35,7 @@ import {
   OnMountRulePageAction,
   OnPromptRulePageLeaveAction,
   OnUnmountRulePageAction,
-  SaveRulesAction,
+  // SaveRulesAction,
   OnClick_Rule_ExitCodingBtn_Action,
   OnClick_Rule_Export_CancelBtn_Action,
   OnClick_Rule_Export_ConfirmBtn_Action,
@@ -44,22 +44,22 @@ import {
   OnChange_Rule_Codemirror_Action,
   OnClick_Rule_SaveBtn_Action, IRules,
 } from '@/models/informalNodeManagerPage';
-import FileSaver from 'file-saver';
+// import FileSaver from 'file-saver';
 import FUpload from '@/components/FUpload';
 import FUtil1 from '@/utils';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-import { router } from 'umi';
+// import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
-import moment from 'moment';
+// import moment from 'moment';
 import FMonacoEditor from '@/components/FMonacoEditor';
 
-const { compile } = require('@freelog/nmr_translator');
+// const { compile } = require('@freelog/nmr_translator');
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -89,74 +89,6 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
     }
 
   }, [informalNodeManagerPage.rule_CodeIsDirty]);
-
-  // const {rules} = compile(informalNodeManagerPage.ruleText);
-  // console.log(rules, '@#$RASDF)(JULK');
-  // const ruleObjList = informalNodeManagerPage.rule_RuleList.map((rule) => {
-  //   // console.log(rule, '##@$@#$');
-  //   const { ruleInfo } = rule;
-  //
-  //   let theRule: any = {};
-  //   if (ruleInfo.operation === 'activate_theme') {
-  //     theRule = {
-  //       active: ruleInfo.exhibitName,
-  //     };
-  //   } else {
-  //     theRule = {
-  //       add: ruleInfo.operation === 'add' ? {
-  //         exhibit: ruleInfo.exhibitName,
-  //         source: {
-  //           type: ruleInfo.candidate.type,
-  //           name: ruleInfo.candidate.name,
-  //           versionRange: ruleInfo.candidate.versionRange && ruleInfo.candidate.versionRange !== 'latest' ? ruleInfo.candidate.versionRange : undefined,
-  //         },
-  //       } : undefined,
-  //       alter: ruleInfo.operation === 'alter' ? ruleInfo.exhibitName : undefined,
-  //       // $version: r.candidate.versionRange,
-  //       cover: ruleInfo.a,
-  //       title: ruleInfo.title,
-  //       online: ruleInfo.online === true,
-  //       offline: ruleInfo.online === false,
-  //       labels: ruleInfo.labels,
-  //       // replaces: r.replaces,
-  //       replaces: ruleInfo.replaces && (ruleInfo.replaces as any[]).map((rr: any) => {
-  //         // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-  //         return {
-  //           replaced: {
-  //             ...rr.replaced,
-  //             versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-  //           },
-  //           replacer: {
-  //             ...rr.replacer,
-  //             versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-  //           },
-  //           scopes: rr.scopes && (rr.scopes as any[])
-  //             .map((ss: any) => {
-  //               // console.log(ss, 'ss!!!!@@@@##');
-  //               return ss.map((sss: any) => {
-  //                 return {
-  //                   ...sss,
-  //                   versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-  //                 };
-  //               });
-  //             }),
-  //         };
-  //       }),
-  //       attrs: ruleInfo.attrs?.map((a: any) => {
-  //         return {
-  //           type: a.operation,
-  //           theKey: a.key,
-  //           value: a.value,
-  //           description: a.description,
-  //         };
-  //       }),
-  //     };
-  //   }
-  //   return {
-  //     ...rule,
-  //     theRule,
-  //   };
-  // });
 
   async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
     await dispatch<ChangeAction>({
@@ -214,6 +146,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 const reader = new FileReader();
                 reader.readAsText(file);
                 reader.onload = function(evt: any) {
+                  console.log(evt, 'evt2222090900980989080980988');
                   dispatch<OnLoad_Rule_ImportFileInput_Action>({
                     type: 'informalNodeManagerPage/onLoad_Rule_ImportFileInput',
                     payload: {
