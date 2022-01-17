@@ -639,7 +639,7 @@ const Model: MarketResourcePageModelType = {
 
       const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
 
-      console.log(data1, 'data1903lkjlksdf');
+      // console.log(data1, 'data1903lkjlksdf');
 
       const realTimeResourceOnlinePolicyIDs: {
         id: string;
@@ -655,18 +655,22 @@ const Model: MarketResourcePageModelType = {
         };
       });
 
-      console.log(needVerifyResource, realTimeResourceOnlinePolicyIDs, '###3902803498023840234808200');
+      // console.log(needVerifyResource, realTimeResourceOnlinePolicyIDs, '###3902803498023840234808200');
 
       for (const r1 of needVerifyResource) {
         const res = realTimeResourceOnlinePolicyIDs.find((rt) => {
           return rt.id === r1.id;
         });
 
-        if (!res?.policyIDs.includes(r1.id)) {
-          // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
-          fMessage(FUtil1.I18n.message('选中的策略中，存在被下线策略'), 'error');
-          return;
+        // console.log(res, r1, '#######02948093u4o23uj4ojlk');
+        for (const p1 of r1.policyIDs) {
+          if (!res?.policyIDs.includes(p1)) {
+            // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
+            fMessage(FUtil1.I18n.message('选中的策略中，存在被下线策略'), 'error');
+            return;
+          }
         }
+
       }
 
       const params: Parameters<typeof getAvailableExhibitName>[0] = {
