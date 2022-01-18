@@ -777,7 +777,7 @@ const Model: ExhibitInfoPageModelType = {
         resolveResources: resolveResources,
       };
 
-      console.log(params, 'params2093uiksdjflsdkjl');
+      // console.log(params, 'params2093uiksdjflsdkjl');
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
