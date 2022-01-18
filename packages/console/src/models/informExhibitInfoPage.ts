@@ -547,7 +547,7 @@ const Model: ExhibitInfoPageModelType = {
       const actualOriginInfo = data.stateInfo.replaceInfo.rootResourceReplacer || data.originInfo;
 
       if (actualOriginInfo.type === 'resource') {
-        result = yield call(handleRelation, data.resolveResources);
+        result = yield call(handleRelation, data.resolveResources, data.nodeId);
 
         const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: actualOriginInfo.id,
@@ -651,6 +651,7 @@ const Model: ExhibitInfoPageModelType = {
       const result2: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
       // console.log(data, 'data@#$!@#$@#$@#$234234');
+      // console.log(result, 'result23423423423423423');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -715,17 +716,21 @@ const Model: ExhibitInfoPageModelType = {
               };
             }),
           contract_Associated: result.map<InformExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
-            const contracts = r.contracts.map((c) => {
-              return {
-                name: c.contractName,
-                // status: c.status,
-                status: c.status,
-                id: c.contractId,
-                text: c.policyText,
-                createTime: FUtil.Format.formatDateTime(c.createDate),
-                policyId: c.policyId,
-              };
-            });
+            const contracts = r.contracts
+              .filter((c) => {
+                return c.status !== 'terminal';
+              })
+              .map((c) => {
+                return {
+                  name: c.contractName,
+                  // status: c.status,
+                  status: c.status,
+                  id: c.contractId,
+                  text: c.policyText,
+                  createTime: FUtil.Format.formatDateTime(c.createDate),
+                  policyId: c.policyId,
+                };
+              });
             const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
               return c.policyId;
             });
@@ -1730,10 +1735,10 @@ interface MergeRulesParams {
 }
 
 export function mergeRules({
-                      oldRules,
-                      exhibitName,
-                      action,
-                    }: MergeRulesParams): Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> {
+                             oldRules,
+                             exhibitName,
+                             action,
+                           }: MergeRulesParams): Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> {
   let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(oldRules));
 
   if (needHandleRules.some((nhr) => nhr.exhibitName === exhibitName && nhr.operation !== 'activate_theme')) {

@@ -559,7 +559,7 @@ const Model: ExhibitInfoPageModelType = {
           };
         });
       }).flat();
-
+      // console.log(result, 'result111122222333333');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1196,7 +1196,7 @@ export type HandleRelationResult = {
 }[];
 
 export async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
-
+  // console.log(params, nodeID, 'params2222200000');
   // console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
   // console.log(params, 'params0923jafdsl');
   const resourceIds: string[] = params.map((r) => r.resourceId);
@@ -1259,7 +1259,7 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
         //       return act.licensorId === resource.resourceId && act.policyId === p.policyId;
         //     });
         // })
-        .filter((p:any) => {
+        .filter((p: any) => {
           // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
         })
