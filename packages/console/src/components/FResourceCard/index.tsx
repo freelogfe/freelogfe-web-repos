@@ -64,10 +64,6 @@ function FResourceCard({
                 }
               </div>
             </nav>
-            {/*<Status*/}
-            {/*  normal={resource.status === 1}*/}
-            {/*  className={styles.Status}*/}
-            {/*/>*/}
             <div className={styles.Status}>
               <FResourceStatusBadge
                 status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
