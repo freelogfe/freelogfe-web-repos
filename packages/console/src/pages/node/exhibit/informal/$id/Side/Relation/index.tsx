@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-// import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import { FTextBtn } from '@/components/FButton';

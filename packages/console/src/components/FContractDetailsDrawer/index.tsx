@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
