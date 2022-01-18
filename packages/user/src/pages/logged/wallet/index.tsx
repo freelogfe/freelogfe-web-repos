@@ -31,7 +31,8 @@ import {
   OnChange_Table_Filter_Date_Type_Action,
   OnChange_Table_Filter_Keywords_Action,
   OnChange_Table_Filter_MaxAmount_Action,
-  OnChange_Table_Filter_MinAmount_Action, OnChange_Table_Filter_StateSelected_Action,
+  OnChange_Table_Filter_MinAmount_Action,
+  OnChange_Table_Filter_StateSelected_Action,
   OnChange_Activate_CaptchaInput_Action,
   OnChange_Activate_AccountMode_Action,
   OnChange_Activate_Password1_Action,
@@ -47,7 +48,9 @@ import {
   OnClick_Activate_SentCaptchaBtn_Action,
   OnClick_Activate_ConfirmBtn_Action,
   OnMountPageAction,
-  OnUnmountPageAction, OnClick_Activate_NextBtn_Action, OnClick_Table_Filter_SearchBtn_Action,
+  OnUnmountPageAction,
+  OnClick_Activate_NextBtn_Action,
+  OnClick_Table_Filter_SearchBtn_Action,
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -57,10 +60,6 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
-// import {
-//   OnBlur_PaymentPassword_Password2Input_Action,
-//   OnChange_PaymentPassword_Password2Input_Action,
-// } from '@/models/retrievePayPasswordPage';
 import FUtil1 from '@/utils';
 
 interface WalletProps {
@@ -68,14 +67,6 @@ interface WalletProps {
   walletPage: WalletPageModelState;
   user: UserModelState;
 }
-
-//1.交易确认中 2:交易成功 3:交易关闭
-// const stateOptions = [
-//   { value: '0', text: '全部' },
-//   { value: '1', text: '交易确认中' },
-//   { value: '2', text: '交易成功' },
-//   { value: '3', text: '交易关闭' },
-// ];
 
 function Wallet({ dispatch, walletPage }: WalletProps) {
 
@@ -122,7 +113,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           <FContentText text={record.time} type='normal' />
         </div>);
       },
-    }, {
+    },
+    {
       title: (<FTitleText text={'交易方｜支付方式｜流水号'} type='table' />),
       dataIndex: 'payment',
       key: 'payment',
@@ -139,7 +131,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         </div>);
       },
     }, {
-      title: (<FTitleText text={'金额（枚）'} type='table' />),
+      // title: (<FTitleText text={'交易说明'} type='table' />),
+      title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
       dataIndex: 'money',
       key: 'money',
       render(_, record) {
@@ -155,7 +148,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         </div>);
       },
     }, {
-      title: (<FTitleText text={'金额'} type='table' />),
+      // title: (<FTitleText text={'金额（枚）'} type='table' />),
+      title: (<FTitleText text={FUtil1.I18n.message('header_tran_amount')} type='table' />),
       dataIndex: 'amount',
       key: 'amount',
       render(_, record) {
