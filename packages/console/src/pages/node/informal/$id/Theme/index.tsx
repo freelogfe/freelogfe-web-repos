@@ -228,6 +228,12 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                       <FDivider />
                                     </>)
                                   }
+                                  <a onClick={() => {
+                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
+                                  }}>编辑</a>
+
+                                  <FDivider />
+
                                   <a
                                     onClick={() => {
                                       window.open(t.originInfo.type === 'resource'
@@ -238,11 +244,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                         }));
                                     }}
                                   >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
-                                  <FDivider />
-
-                                  <a onClick={() => {
-                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
-                                  }}>编辑</a>
 
                                   <div style={{ width: 1 }} />
                                 </div>
