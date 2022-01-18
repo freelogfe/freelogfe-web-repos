@@ -85,7 +85,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             singleRow
           />
           <div className={styles.type}>
-            <label>image</label>
+            <label>{record.originInfo.resourceType}</label>
             <div>
               <FContentText
                 type='additional2'

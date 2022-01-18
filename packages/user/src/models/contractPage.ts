@@ -76,7 +76,6 @@ export interface ContractPageModelState {
   }[];
 
   contractDetailsID: string;
-
 }
 
 export interface ChangeAction extends AnyAction {
