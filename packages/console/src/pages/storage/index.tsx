@@ -13,7 +13,7 @@ import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/mode
 import Details from "@/pages/storage/Content/Details";
 import useUrlState from '@ahooksjs/use-url-state';
 import FInput from "@/components/FInput";
-import FModal from "@/components/FModal";
+// import FModal from "@/components/FModal";
 import {ChangeAction as StorageHomePageChangeAction} from '@/models/storageHomePage';
 import FUtil1 from "@/utils";
 import { Modal } from 'antd';

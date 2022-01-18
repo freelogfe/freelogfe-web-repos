@@ -34,8 +34,15 @@ const defaultSelectOptions: { text?: string, value: string }[] = [
 ];
 
 function FObjectSelector({
-                           disabledIDsOrNames, showRemoveIDsOrNames, visibleResourceType = '', isLoadingTypeless = 1, onSelect, onDelete,
-                           dispatch, selector, storageHomePage
+                           disabledIDsOrNames,
+                           showRemoveIDsOrNames,
+                           visibleResourceType = '',
+                           isLoadingTypeless = 1,
+                           onSelect,
+                           onDelete,
+                           dispatch,
+                           selector,
+                           storageHomePage
                          }: FObjectSelectorProps) {
 
   React.useEffect(() => {
