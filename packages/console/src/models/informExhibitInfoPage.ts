@@ -35,15 +35,12 @@ export interface InformExhibitInfoPageModelState {
 
   node_ID: number;
   node_Name: string;
-  // node_RuleText: string;
   node_RuleInfo: null | RuleMatchAndResultReturn;
 
   exhibit_ID: string;
   exhibit_Name: string;
   exhibit_Identity: 'exhibit' | 'resource' | 'object';
   exhibit_ResourceType: string;
-  // exhibit_RuleResult: any;
-  // exhibit_RuleID: string;
   exhibit_OnlineSwitchObj: {
     checked: boolean;
     text: string;
@@ -274,28 +271,6 @@ export interface FetchInformalExhibitInfoAction extends AnyAction {
   };
 }
 
-// export interface SyncRulesAction extends AnyAction {
-//   type: 'syncRules';
-//   payload: {
-//     cover?: string;
-//     labels?: string[];
-//     title?: string;
-//     attrs?: {
-//       operation: 'add' | 'delete';
-//       key: string;
-//       value?: string;
-//       description?: string;
-//     }[];
-//     online?: boolean;
-//     active?: boolean;
-//     replaces?: {
-//       replaced: ICandidate;
-//       replacer: ICandidate;
-//       scopes?: ICandidate[][];
-//     }[];
-//   };
-// }
-
 export interface OnHandleAttrModalAction extends AnyAction {
   type: 'informExhibitInfoPage/onHandleAttrModal';
   payload: {
@@ -303,19 +278,6 @@ export interface OnHandleAttrModalAction extends AnyAction {
     theKey?: string;
   };
 }
-
-// export interface OnCancelHandleAttrModalAction extends AnyAction {
-//   type: 'informExhibitInfoPage/onCancelHandleAttrModal';
-// }
-
-// export interface OnAttrModalChangeAction extends AnyAction {
-//   type: 'informExhibitInfoPage/onAttrModalChange';
-//   payload: {
-//     theKey?: string;
-//     value?: string;
-//     remark?: string;
-//   };
-// }
 
 export interface OnChangeAttrsAction extends AnyAction {
   type: 'informExhibitInfoPage/onChangeAttrs';
@@ -342,10 +304,6 @@ export interface OnBlur_Side_Exhibit_EditDeleteAttrInput_Action extends AnyActio
     theDescription: string;
   };
 }
-
-// export interface OnClickAttrModalConfirmBtnAction extends AnyAction {
-//   type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn';
-// }
 
 export interface OnClick_DeleteAttrBtn_Action extends AnyAction {
   type: 'informExhibitInfoPage/onClick_DeleteAttrBtn';
@@ -397,8 +355,6 @@ export interface ExhibitInfoPageModelType {
 
     fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
 
-    // syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
-
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
 
     onChange_Exhibit_OnlineSwitch: (action: OnChange_Exhibit_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
@@ -417,12 +373,9 @@ export interface ExhibitInfoPageModelType {
     onChange_Side_Exhibit_Version: (action: OnChange_Side_Exhibit_Version_Action, effects: EffectsCommandMap) => void;
 
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
-    // onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
-    // onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
     onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_OnlyEditAttrInput: (action: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
-    // onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
     onClick_DeleteAttrBtn: (action: OnClick_DeleteAttrBtn_Action, effects: EffectsCommandMap) => void;
     onClickResetAttr: (action: OnClickResetAttrAction, effects: EffectsCommandMap) => void;
 
@@ -452,16 +405,12 @@ const initStates: InformExhibitInfoPageModelState = {
 
   node_ID: -1,
   node_Name: '',
-  // node_RuleText: '',
   node_RuleInfo: null,
-  // node_MappingRule: null,
 
   exhibit_ID: '',
   exhibit_Name: '',
   exhibit_Identity: 'exhibit',
   exhibit_ResourceType: '',
-  // exhibit_RuleResult: null,
-  // exhibit_RuleID: '',
   exhibit_OnlineSwitchObj: null,
   exhibit_Info: null,
 
