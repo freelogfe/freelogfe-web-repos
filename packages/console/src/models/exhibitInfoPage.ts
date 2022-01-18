@@ -760,17 +760,24 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
-      const resource = exhibitInfoPage.contract_Associated.find((a) => a.id === payload.resourceId);
+      // const resource = exhibitInfoPage.contract_Associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#');
+
+      const params1: HandleFinalResolveResourceParams = {
+        exhibitID: exhibitInfoPage.exhibit_ID,
+        resourceID: payload.resourceId,
+        policyID: payload.policyId,
+        isUsed: true,
+      };
+
+      const resolveResources: HandleFinalResolveResourceReturn = yield call(handleFinalResolveResource, params1);
+
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
-        resolveResources: yield call(handleFinalResolveResource, {
-          exhibitID: exhibitInfoPage.exhibit_ID,
-          resourceID: payload.resourceId,
-          policyID: payload.policyId,
-          isUsed: true,
-        }),
+        resolveResources: resolveResources,
       };
+
+      console.log(params, 'params2093uiksdjflsdkjl');
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
@@ -828,11 +835,17 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(data, 'data123412398yuoihjkl');
 
+      const params3: HandleFinalResolveResourceParams = payload;
+
+      const resolveResources: HandleFinalResolveResourceReturn = yield call(handleFinalResolveResource, params3);
+
       const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: payload.exhibitID,
-        resolveResources: yield call(handleFinalResolveResource, payload),
+        resolveResources: resolveResources,
       };
       // console.log(params2, 'params2!@!@#$@!#$!@#$');
+
+      // console.log(params2, 'params2234234234234');
 
       const { data: data2 } = yield call(FServiceAPI.Exhibit.updatePresentable, params2);
 
@@ -1320,18 +1333,25 @@ interface HandleFinalResolveResourceParams {
   isUsed: boolean;
 }
 
+type HandleFinalResolveResourceReturn = {
+  resourceId: string,
+  contracts: {
+    policyId: string
+  }[];
+}[];
+
 async function handleFinalResolveResource({
                                             exhibitID,
                                             resourceID,
                                             policyID,
                                             isUsed,
-                                          }: HandleFinalResolveResourceParams) {
+                                          }: HandleFinalResolveResourceParams): Promise<HandleFinalResolveResourceReturn> {
   const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     presentableId: exhibitID,
   };
 
   const { data } = await FServiceAPI.Exhibit.presentableDetails(params);
-  console.log(data, 'data2903jsaldfksjd');
+  // console.log(data, 'data2903jsaldfksjd');
   return data.resolveResources?.map((rrs: any) => {
     if (resourceID !== rrs.resourceId) {
       return {
@@ -1343,26 +1363,25 @@ async function handleFinalResolveResource({
         }),
       };
     }
+    const policyIDs: string[] = isUsed ? [
+      ...rrs.contracts.map((cccttt: any) => {
+        return cccttt.policyId;
+      }),
+    ] : rrs.contracts
+      .filter((ccc: any) => {
+        return ccc.policyId !== policyID;
+      })
+      .map((cccttt: any) => {
+        return cccttt.policyId;
+      });
     return {
       resourceId: rrs.resourceId,
-      contracts: isUsed
-        ? [
-          ...rrs.contracts.map((cccttt: any) => {
-            return {
-              policyId: cccttt.policyId,
-            };
-          }),
-          { policyId: policyID },
-        ]
-        : rrs.contracts
-          .filter((ccc: any) => {
-            return ccc.policyId !== policyID;
-          })
-          .map((cccttt: any) => {
-            return {
-              policyId: cccttt.policyId,
-            };
-          }),
+      contracts: Array.from(new Set(policyIDs))
+        .map((pID) => {
+          return {
+            policyId: pID,
+          };
+        }),
     };
   });
 }
