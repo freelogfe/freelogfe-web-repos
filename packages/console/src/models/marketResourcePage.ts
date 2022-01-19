@@ -461,7 +461,6 @@ const Model: MarketResourcePageModelType = {
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
 
-
       let data2: any[] = [];
       const contractIds = result.flat().map((cr) => cr.contractId).join(',');
       if (contractIds) {
@@ -662,11 +661,16 @@ const Model: MarketResourcePageModelType = {
           return rt.id === r1.id;
         });
 
+        if ((res?.policyIDs.length || 0) === 0) {
+          fMessage(FUtil1.I18n.message('alarm_resource_not_available'), 'error');
+          return;
+        }
+
         // console.log(res, r1, '#######02948093u4o23uj4ojlk');
         for (const p1 of r1.policyIDs) {
           if (!res?.policyIDs.includes(p1)) {
             // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
-            fMessage(FUtil1.I18n.message('选中的策略中，存在被下线策略'), 'error');
+            fMessage(FUtil1.I18n.message('alarm_plan_not_available'), 'error');
             return;
           }
         }
@@ -717,7 +721,11 @@ const Model: MarketResourcePageModelType = {
           ],
         })),
       };
-      const { data } = yield call(FServiceAPI.Exhibit.createPresentable, params);
+      const { data, ret, errCode, msg } = yield call(FServiceAPI.Exhibit.createPresentable, params);
+      if (ret + (errCode || 0) > 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       router.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
     },
     * onChangeAndVerifySignExhibitName({ payload }: OnChangeAndVerifySignExhibitNameAction, {
