@@ -509,6 +509,8 @@ const Model: ContractPageModelType = {
 
       const data = yield call(contractList, params);
 
+      // console.log(data, '@2222222222')
+
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
         ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
@@ -632,12 +634,14 @@ const Model: ContractPageModelType = {
       };
 
       const data = yield call(contractList, params);
+
+      // console.log(data, 'DDDDF093ujlksjdlfsdkflsdfls');
       // const data1 = { dataList: [] };
       const resultList: ContractPageModelState['authorized_List'] = [
         ...beforeData,
         ...(data.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
           return {
-            cover: '',
+            cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
             subjectName: al.subjectName,
             contractName: al.contractName,
@@ -763,7 +767,7 @@ async function contractList(params: Parameters<typeof FServiceAPI.Contract.contr
 
   if (exhibitIDs.length > 0) {
     const params1: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-      presentableIds: exhibitIDs.join(','),
+      presentableIds: Array.from(new Set(exhibitIDs)).join(','),
     };
 
     const { data: data1 } = await FServiceAPI.Exhibit.presentableList(params1);
@@ -773,14 +777,14 @@ async function contractList(params: Parameters<typeof FServiceAPI.Contract.contr
 
   if (resourceIDs.length > 0) {
     const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-      resourceIds: resourceIDs.join(','),
+      resourceIds: Array.from(new Set(resourceIDs)).join(','),
     };
 
     const { data: data2 } = await FServiceAPI.Resource.batchInfo(params2);
     // console.log(data2, '*******0920938048230480239');
     resources = data2;
   }
-
+  // console.log(exhibits, resources, '####92093840238704230u3');
   //coverImages
   return {
     ...data,
