@@ -8,7 +8,6 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
-// import informalNodeManagerPage from '@/models/informalNodeManagerPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -1740,15 +1739,7 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      console.log(payload, 'payload223423409090909uopifjlkjl');
-
-      //   rule_CodeInput: '',
-      //   rule_CodeIsDirty: false,
-      //   rule_PromptLeavePath: '',
-      //   rule_CodeState: 'editing',
-      //   rule_CodeCompileErrors: [],
-      //   rule_CodeExecutionErrors: [],
-      //   rule_CodeEfficients: [],
+      // console.log(payload, 'payload223423409090909uopifjlkjl');
 
       const dateTime: string = moment().format(FUtil.Predefined.momentDateTimeFormat);
       yield put<ChangeAction>({
@@ -1757,7 +1748,7 @@ const Model: InformalNodeManagerPageModelType = {
           rule_CodeInput: '\n'
             + `// 以下语句于${dateTime}导入` + '\n'
             + payload.value + '\n'
-            + `// 以上语句于${dateTime}导入`
+            + `// 以上语句于${dateTime}导入` + '\n'
             + informalNodeManagerPage.rule_CodeInput,
           // rule_CodeState: 'coding',
           rule_PageStatus: 'coding',
