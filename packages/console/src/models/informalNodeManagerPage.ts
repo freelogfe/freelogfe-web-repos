@@ -2718,57 +2718,6 @@ const Model: InformalNodeManagerPageModelType = {
         });
       }
 
-
-      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
-
-
-      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
-      // const results: IConfirmValue = [];
-      // for (const [exhibitName, scopes] of Object.entries(resultObj)) {
-      //   results.push({
-      //     exhibitName: exhibitName,
-      //     replaced: {
-      //       name: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.name || '',
-      //       versionRange: informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.value || 'latest',
-      //       type: informalNodeManagerPage.replaceModal_Replaced_SelectDependency?.type || 'object',
-      //     },
-      //     replacer: {
-      //       name: replacerData?.name || '',
-      //       versionRange: replacerData?.versionRange || 'latest',
-      //       type: replacerData?.identity || 'object',
-      //     },
-      //     scopes: scopes,
-      //   });
-      // }
-      // // return results;
-      //
-      //
-      // // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
-      //
-      // for (const v of results) {
-      //   const rule = rules.find((r: any) => v.exhibitName === r.exhibitName);
-      //   if (rule) {
-      //     let replaces = rule.replaces || [];
-      //     rule.replaces = [
-      //       ...replaces,
-      //       v,
-      //     ];
-      //   } else {
-      //     rules.unshift({
-      //       operation: 'alter',
-      //       exhibitName: v.exhibitName,
-      //       replaces: [v],
-      //     });
-      //   }
-      // }
-      // console.log(rules, 'nowRules0923jlkfds()UOIJ');
-      // yield put<SaveDataRulesAction>({
-      //   type: 'saveDataRules',
-      //   payload: {
-      //     type: 'replace',
-      //     data: rules,
-      //   },
-      // });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
