@@ -50,8 +50,6 @@ export interface InformExhibitInfoPageModelState {
     testResourceId: string;
     testResourceName: string;
     associatedPresentableId: string;
-    nodeId: number;
-    resourceType: string;
     originInfo: {
       id: string;
       name: string;
@@ -73,7 +71,6 @@ export interface InformExhibitInfoPageModelState {
       propertyInfo: {
         ruleId: 'default' | string;
         testResourceProperty: {
-          authority: 1 | 2 | 4 | 6, //1:只读 2:可编辑 4:可删除 6:可删除可编辑,
           remark: string;
           key: string;
           value: string | number;
@@ -83,8 +80,18 @@ export interface InformExhibitInfoPageModelState {
       replaceInfo: {
         rootResourceReplacer: null;
         replaceRecords: {
-          replaced: ICandidate;
-          replacer: ICandidate;
+          replaced: {
+            id: string;
+            name: string;
+            type: 'resource' | 'object';
+            version: string;
+          };
+          replacer: {
+            id: string;
+            name: string;
+            type: 'resource' | 'object';
+            version: string;
+          };
           scopes?: ICandidate[][];
         }[];
         ruleId: 'default' | string;
@@ -496,7 +503,9 @@ const Model: ExhibitInfoPageModelType = {
       const actualOriginInfo = data.stateInfo.replaceInfo.rootResourceReplacer || data.originInfo;
 
       if (actualOriginInfo.type === 'resource') {
-        result = yield call(handleRelation, data.resolveResources, data.nodeId);
+        if (data.associatedPresentableId !== '') {
+          result = yield call(handleRelation, data.resolveResources, data.nodeId);
+        }
 
         const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: actualOriginInfo.id,

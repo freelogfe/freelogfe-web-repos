@@ -107,7 +107,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
                 checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
                 onChange={(value) => {
-                  if (informExhibitInfoPage.exhibit_Info?.resourceType === 'theme') {
+                  if (informExhibitInfoPage.exhibit_Info?.originInfo.resourceType === 'theme') {
                     dispatch<OnChange_Theme_OnlineSwitch_Action>({
                       type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
                       payload: {

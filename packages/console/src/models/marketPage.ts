@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
-import { DvaReducer, WholeReadonly } from './shared';
+import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
