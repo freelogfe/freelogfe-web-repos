@@ -218,7 +218,7 @@ export interface UpdateContractUsedAction {
     exhibitID: string;
     resourceID: string;
     policyID: string;
-    isUsed: boolean;
+    isUsed: boolean;  // 是否启用此合约
   };
 }
 
@@ -1346,6 +1346,12 @@ async function handleFinalResolveResource({
                                             policyID,
                                             isUsed,
                                           }: HandleFinalResolveResourceParams): Promise<HandleFinalResolveResourceReturn> {
+
+  // console.log(exhibitID, 'exhibitID333333');
+  // console.log(resourceID, 'resourceID3232423423423');
+  // console.log(policyID, 'policyID234234234');
+  // console.log(isUsed, 'isUsed0239j32lkl');
+
   const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     presentableId: exhibitID,
   };
@@ -1367,6 +1373,7 @@ async function handleFinalResolveResource({
       ...rrs.contracts.map((cccttt: any) => {
         return cccttt.policyId;
       }),
+      policyID,
     ] : rrs.contracts
       .filter((ccc: any) => {
         return ccc.policyId !== policyID;
@@ -1374,6 +1381,7 @@ async function handleFinalResolveResource({
       .map((cccttt: any) => {
         return cccttt.policyId;
       });
+    // console.log(policyIDs, 'policyIDs@@@#$234234234234');
     return {
       resourceId: rrs.resourceId,
       contracts: Array.from(new Set(policyIDs))
