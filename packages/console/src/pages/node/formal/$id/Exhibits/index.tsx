@@ -28,9 +28,9 @@ import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
-import InfiniteScroll from 'react-infinite-scroller';
+// import InfiniteScroll from 'react-infinite-scroller';
 import * as AHooks from 'ahooks';
-import { FTextBtn, FRectBtn } from '@/components/FButton';
+import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 
@@ -57,10 +57,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     key: i.id,
     ...i,
   }));
-
-  // if (nodeManagerPage.exhibit_ListState === 'loading') {
-  //   return (<FLoadingTip height={'calc(100vh - 70px)'} />);
-  // }
 
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
