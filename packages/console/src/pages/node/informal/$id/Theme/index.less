@@ -17,21 +17,17 @@
     flex-wrap: wrap;
     margin-bottom: -10px;
 
-    //& > div {
-    //  width: calc(100% / 4);
-    //
-    //  @media (max-width: 1600px) {
-    //    width: calc(100% / 3);
-    //  }
-    //}
-
     .item {
-      width: 300px;
+      cursor: pointer;
       padding: 10px;
       margin-bottom: 10px;
+      margin-right: 10px;
+      border-radius: 10px;
+      width: 300px;
 
       &:hover {
         background-color: white;
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
 
         & > .cover {
           .coverFooter {

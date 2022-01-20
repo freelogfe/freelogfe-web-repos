@@ -13,30 +13,21 @@
 
 .body {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: -15px;
+  margin-bottom: -10px;
   width: calc(100vw - 280px - 40px);
-
-  & > div {
-    width: 300px;
-    //width: calc(100% / 4);
-    //
-    //@media (max-width: 1600px) {
-    //  width: calc(100% / 3);
-    //}
-  }
 
   .theme {
     cursor: pointer;
     padding: 10px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+    margin-right: 10px;
     border-radius: 10px;
     width: 300px;
 
     &:hover {
       background-color: white;
+      box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
 
       & > div:first-child {
         & > div:last-child {
