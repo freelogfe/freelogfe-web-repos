@@ -228,12 +228,12 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
     },
   ];
 
-  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload,
+  //   });
+  // }
 
   return (<FTable
     className={styles.table}

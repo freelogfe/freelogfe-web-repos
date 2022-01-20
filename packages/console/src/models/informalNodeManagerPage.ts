@@ -78,7 +78,7 @@ export interface IExhibit {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
-  isAuth: boolean;
+  isAuth?: boolean;
 }
 
 export interface TreeNode {
@@ -1093,26 +1093,16 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
 
-      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
-        nodeId: informalNodeManagerPage.node_ID,
-        exhibitIds: data.dataList.map((d: any) => d.testResourceId).join(','),
-        authType: 3,
+      const params1: Parameters<typeof mergeAuthInfoToList>[0] = {
+        nodeID: informalNodeManagerPage.node_ID,
+        list: data.dataList,
       };
 
-      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+      const listWithAuth: any[] = yield call(mergeAuthInfoToList, params1);
 
       const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = [
         ...list,
-        ...data.dataList.map((d: any) => {
-          return {
-            ...d,
-            isAuth: data1.find((d1: any) => {
-              return d1.exhibitId === d.testResourceId;
-            }).isAuth,
-            // isAuth: false,
-          };
-        }),
-        // ...data.dataList,
+        ...listWithAuth,
       ];
 
       const { state, more } = listStateAndListMore({
@@ -1334,13 +1324,15 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { data: data3 } = yield call(FServiceAPI.InformalNode.testResourceDetails, params3);
 
-      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
-        nodeId: informalNodeManagerPage.node_ID,
-        exhibitIds: payload.testResourceId,
-        authType: 3,
+      const params1: Parameters<typeof mergeAuthInfoToList>[0] = {
+        nodeID: informalNodeManagerPage.node_ID,
+        list: [data3],
       };
+      const [data1] = yield call(mergeAuthInfoToList, params1);
 
-      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+      // console.log(data1, 'data1!@$@#$@#42309jlksdfl');
+
+      // const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1348,10 +1340,7 @@ const Model: InformalNodeManagerPageModelType = {
           node_RuleInfo: result,
           exhibit_List: informalNodeManagerPage.exhibit_List.map((el) => {
             if (el.testResourceId === payload.testResourceId) {
-              return {
-                ...data3,
-                isAuth: data1[0].isAuth,
-              };
+              return data1;
             }
             return el;
           }),
@@ -1395,27 +1384,15 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
-
-      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
-        nodeId: informalNodeManagerPage.node_ID,
-        exhibitIds: data.dataList.map((d: any) => d.testResourceId).join(','),
-        authType: 3,
+      const params1: Parameters<typeof mergeAuthInfoToList>[0] = {
+        nodeID: informalNodeManagerPage.node_ID,
+        list: data.dataList,
       };
 
-      const { data: data1 } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
-
-      const themePageThemeList: InformalNodeManagerPageModelState['theme_List'] = data.dataList.map((d: any) => {
-        return {
-          ...d,
-          isAuth: data1.find((d1: any) => {
-            return d1.exhibitId === d.testResourceId;
-          }).isAuth,
-          // isAuth: false,
-        };
-      });
+      const listWithAuth: any[] = yield call(mergeAuthInfoToList, params1);
 
       const { state, more } = listStateAndListMore({
-        list_Length: themePageThemeList.length,
+        list_Length: listWithAuth.length,
         total_Length: data.totalItem,
         has_FilterCriteria: informalNodeManagerPage.theme_FilterKeywords !== '',
       });
@@ -1424,7 +1401,7 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
-          theme_List: [...themePageThemeList]
+          theme_List: [...listWithAuth]
             .sort((a, b) => {
               if (a.stateInfo.themeInfo.isActivatedTheme === 1 && b.stateInfo.themeInfo.isActivatedTheme !== 1) {
                 return -1;
@@ -1643,7 +1620,6 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           node_RuleInfo: result,
-          // node_RuleText: result.ruleText,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
           rule_CodeExecutionErrors: rule_CodeExecutionErrors,
@@ -1699,18 +1675,18 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      const codeExecutionError = result.testRules
-        .filter((tr: any) => {
-          return tr.matchErrors.length > 0;
-        })
-        .map((tr: any) => {
-          return tr.matchErrors.map((me: string) => {
-            return {
-              msg: me,
-            };
-          });
-        })
-        .flat();
+      // const codeExecutionError = result.testRules
+      //   .filter((tr: any) => {
+      //     return tr.matchErrors.length > 0;
+      //   })
+      //   .map((tr: any) => {
+      //     return tr.matchErrors.map((me: string) => {
+      //       return {
+      //         msg: me,
+      //       };
+      //     });
+      //   })
+      //   .flat();
 
       if (informalNodeManagerPage.showPage === 'exhibit') {
         yield put<FetchExhibitListAction>({
@@ -1739,8 +1715,6 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      // console.log(payload, 'payload223423409090909uopifjlkjl');
-
       const dateTime: string = moment().format(FUtil.Predefined.momentDateTimeFormat);
       yield put<ChangeAction>({
         type: 'change',
@@ -1754,9 +1728,6 @@ const Model: InformalNodeManagerPageModelType = {
           rule_PageStatus: 'coding',
           rule_CodeState: 'editing',
           rule_CodeIsDirty: true,
-          // rulePageCodeCompileErrors: [],
-          // rulePageCodeExecutionError: ,
-          // rulePageCodeSaveSuccess: false,
           rule_CodeCompileErrors: [],
           rule_CodeExecutionErrors: [],
           rule_CodeEfficients: [],
@@ -1896,8 +1867,6 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // rule_Indeterminate: false,
-          // rule_IndeterminateChecked: payload.checked,
           rule_RuleList: informalNodeManagerPage.rule_RuleList.map((rpr) => {
             return {
               ...rpr,
@@ -1932,12 +1901,6 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // rule_IndeterminateChecked: ruleIndeterminateChecked,
-          // rule_Indeterminate: !(rulePageRuleList.every((rp) => {
-          //   return !rp.checked;
-          // }) || rulePageRuleList.every((rp) => {
-          //   return rp.checked;
-          // })),
           rule_RuleList: rulePageRuleList,
         },
       });
@@ -2120,18 +2083,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onReplacerUnmount({}: OnReplacerUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {
-          // replaceModal_Replacer_ResourceOptions: [
-          //   { value: 'market', title: '资源市场' },
-          //   { value: 'resource', title: '我的资源' },
-          //   { value: 'collection', title: '我的收藏' },
-          //   { value: 'collection', title: '我的收藏' },
-          // ],
-          // replaceModal_Replacer_BucketOptions: [],
-          // replaceModal_Replacer_Origin: 'market',
-          // replaceModal_Replacer_Keywords: '',
-          // replaceModal_Replacer_ResourceList: [],
-        },
+        payload: {},
       });
     },
     * onReplacerOriginChange({ payload }: OnReplacerOriginChangeAction, { select, put }: EffectsCommandMap) {
@@ -2425,15 +2377,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onReplacedUnmount({}: OnReplacedUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {
-          // replaceModal_Replaced_Keywords: '',
-          // replaceModal_Replaced_DependencyTreeList: [],
-          // replaceModal_Replaced_SelectDependency: null,
-          // replaceModal_Replaced_TargetVersions: [],
-          // replaceModal_Replaced_TargetSelectedVersion: null,
-          // replaceModal_Replaced_TreeData: [],
-          // replaceModal_Replaced_CheckedKeys: [],
-        },
+        payload: {},
       });
     },
     * onReplacedKeywordChange({ payload }: OnReplacedKeywordChangeAction, { put, select, call }: EffectsCommandMap) {
@@ -2869,4 +2813,36 @@ function simplifiedRelationship(relation: string[]): string[] {
     });
   }
   return arr;
+}
+
+interface MergeAuthInfoToListParams {
+  nodeID: number;
+  list: any[];
+}
+
+type MergeAuthInfoToListReturn = any[];
+
+async function mergeAuthInfoToList({ list, nodeID }: MergeAuthInfoToListParams): Promise<MergeAuthInfoToListReturn> {
+
+  if (list.length === 0) {
+    return [];
+  }
+
+  const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+    nodeId: nodeID,
+    exhibitIds: list.map((d: any) => d.testResourceId).join(','),
+    authType: 3,
+  };
+
+  const { data } = await FServiceAPI.InformalNode.batchGetAuths(params1);
+
+  const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = list.map((d: any) => {
+    return {
+      ...d,
+      isAuth: data.find((d1: any) => {
+        return d1.exhibitId === d.testResourceId;
+      }).isAuth,
+    };
+  });
+  return exhibitList;
 }
