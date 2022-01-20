@@ -167,7 +167,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
   async function beforeUpload(file: RcFile) {
     // setIsChecking(true);
     // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
-    if (file.size > 50 * 1024 * 1024) {
+    if (file.size > 350 * 1024 * 1024) {
       // setIsChecking(false);
       return onChange({
         selectedFileStatus: 1,

@@ -9,12 +9,12 @@ import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
 import { connect, Dispatch } from 'dva';
 import {
-  ConnectState, ResourceInfoModelState,
+  ConnectState,
+  ResourceInfoModelState,
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
   ChangeAction,
-  // CreateVersionAction,
   OnClickCacheBtnAction,
   OnClickCreateBtnAction,
   OnMountPageAction,
@@ -33,7 +33,6 @@ import Prompt from 'umi/prompt';
 import * as H from 'history';
 import fConfirmModal from '@/components/fConfirmModal';
 import FUtil1 from '@/utils';
-// import { FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
