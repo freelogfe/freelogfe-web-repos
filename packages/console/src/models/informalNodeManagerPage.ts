@@ -1428,7 +1428,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onChangeThemeKeywords({ payload }: OnChangeThemeKeywordsAction, { put }: EffectsCommandMap) {
-      yield put({
+      yield put<ChangeAction>({
         type: 'change',
         payload: { theme_FilterKeywords: payload.value },
       });
