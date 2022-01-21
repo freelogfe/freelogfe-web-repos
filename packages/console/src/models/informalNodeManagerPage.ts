@@ -1430,7 +1430,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onChangeThemeKeywords({ payload }: OnChangeThemeKeywordsAction, { put }: EffectsCommandMap) {
       yield put({
         type: 'change',
-        payload: { themePageFilterKeywords: payload.value },
+        payload: { theme_FilterKeywords: payload.value },
       });
 
       yield put<FetchThemeListAction>({
