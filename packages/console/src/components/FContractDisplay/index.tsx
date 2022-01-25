@@ -5,7 +5,6 @@ import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '../FText';
 import { FRectBtn, FTextBtn } from '../FButton';
 import FModal from '../FModal';
-// import FInput from '../FInput';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
@@ -202,8 +201,11 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setCurrentS(currentSData);
 
     // console.log(currentSData, 'currentSDatacurrentSData11111111');
-    // console.log(data1, 'data1data1data1data19023jlksdf');
+    console.log(data1, 'data1data1data1data19023jlksdf');
     const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
+      .filter((dl:any) => {
+        return dl.fromState !== '_none_';
+      })
       .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
         // console.log(d1l, 'd1l123412344444444');
         const currS = fsmInfos.find((fi: any) => {
