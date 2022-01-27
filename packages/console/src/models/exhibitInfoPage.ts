@@ -1307,7 +1307,7 @@ type GetAllContractsReturnType = {
   };
 }[];
 
-async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+export async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {

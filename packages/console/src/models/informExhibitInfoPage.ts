@@ -17,7 +17,7 @@ import {
   IGraph_Dependency_Edges,
   IGraph_Dependency_Nodes,
 } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-import { handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
+import { getAllContracts, handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 
@@ -116,18 +116,17 @@ export interface InformExhibitInfoPageModelState {
     isAuth: boolean;
   };
 
+  contract_Associated_Selected: string;
   contract_Associated: {
-    selected: boolean;
     id: string;
     name: string;
     type: string;
     contracts: {
-      name: string;
-      status: 'active' | 'testActive' | 'inactive' | 'terminal';
       id: string;
-      text: string;
+      name: string;
       createTime: string;
-      policyId: string;
+      status: 'active' | 'testActive' | 'inactive' | 'terminal';
+      policyID: string;
     }[];
     policies: {
       id: string;
@@ -421,6 +420,7 @@ const initStates: InformExhibitInfoPageModelState = {
   exhibit_OnlineSwitchObj: null,
   exhibit_Info: null,
 
+  contract_Associated_Selected: '',
   contract_Associated: [],
 
   graph_FullScreen: false,
@@ -486,26 +486,37 @@ const Model: ExhibitInfoPageModelType = {
       const params: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
         testResourceId: informExhibitID,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
+      const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
+      console.log(testResourceDetail, 'data288282822828282822888888888888');
 
-      // console.log(data, '#######32409jkldfsmdslkdsf||||||||');
+      const resolveResourceIDs: string[] = testResourceDetail.resolveResources.map((rr: any) => {
+        return rr.resourceId;
+      });
+      const params5: HandleContractAssociatedParams = {
+        nodeID: testResourceDetail.nodeId,
+        resourceIDs: testResourceDetail.originInfo.type === 'resource' ? [
+          testResourceDetail.originInfo.id,
+          ...resolveResourceIDs,
+        ] : resolveResourceIDs,
+      };
+
+      const contract_Associated: InformExhibitInfoPageModelState['contract_Associated'] = yield call(handleContractAssociated, params5);
+
+      // console.log(contract_Associated, 'contract_Associated9028394234h');
 
       const params4: Parameters<typeof FServiceAPI.Node.details>[0] = {
-        nodeId: data.nodeId,
+        nodeId: testResourceDetail.nodeId,
       };
 
       const { data: data4 } = yield call(FServiceAPI.Node.details, params4);
       // console.log(data4, 'data41234234123423412341234');
 
-      let result: HandleRelationResult = [];
+
       let relation: InformExhibitInfoPageModelState['side_Resource_Relation'] = null;
 
-      const actualOriginInfo = data.stateInfo.replaceInfo.rootResourceReplacer || data.originInfo;
+      const actualOriginInfo = testResourceDetail.stateInfo.replaceInfo.rootResourceReplacer || testResourceDetail.originInfo;
 
       if (actualOriginInfo.type === 'resource') {
-        if (data.associatedPresentableId !== '') {
-          result = yield call(handleRelation, data.resolveResources, data.nodeId);
-        }
 
         const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: actualOriginInfo.id,
@@ -547,11 +558,9 @@ const Model: ExhibitInfoPageModelType = {
 
       }
 
-      const selectedID = informExhibitInfoPage.contract_Associated.find((a) => a.selected)?.id;
-
       // console.log(data, 'data@!!!!!!!!1111');
-      const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
-      const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
+      const isChecked: boolean = testResourceDetail.resourceType === 'theme' ? testResourceDetail.stateInfo.themeInfo.isActivatedTheme === 1 : testResourceDetail.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      const isDisabled: boolean = testResourceDetail.resourceType === 'theme' && isChecked;
 
       // // 关系树数据
       // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
@@ -602,7 +611,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data8, 'data8data8data8data8');
 
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
-        nodeID: data.nodeId,
+        nodeID: testResourceDetail.nodeId,
         isRematch: false,
       };
 
@@ -615,30 +624,32 @@ const Model: ExhibitInfoPageModelType = {
         payload: {
           pageLoading: false,
           node_RuleInfo: result2,
-          node_ID: data.nodeId,
+          node_ID: testResourceDetail.nodeId,
           node_Name: data4.nodeName,
-          exhibit_Identity: data.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
-          exhibit_ResourceType: data.resourceType,
-          exhibit_Name: data.testResourceName,
+          exhibit_Identity: testResourceDetail.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
+          exhibit_ResourceType: testResourceDetail.resourceType,
+          exhibit_Name: testResourceDetail.testResourceName,
           // exhibit_RuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
           exhibit_OnlineSwitchObj: {
             checked: isChecked,
-            text: data.resourceType === 'theme'
+            text: testResourceDetail.resourceType === 'theme'
               ? FUtil1.I18n.message('toggle_activate_theme')
               : FUtil1.I18n.message('btn_show_exhibit'),
             disabled: isDisabled,
           },
           exhibit_Info: {
-            ...data,
+            ...testResourceDetail,
             isAuth: true,
           },
+          contract_Associated: contract_Associated,
+          contract_Associated_Selected: contract_Associated.length === 0 ? '' : contract_Associated[0].id,
 
-          side_Exhibit_Cover: data.stateInfo.coverInfo.coverImages[0] || '',
-          side_Exhibit_Title: data.stateInfo.titleInfo.title || '',
-          side_Exhibit_Tags: data.stateInfo.tagInfo.tags || [],
+          side_Exhibit_Cover: testResourceDetail.stateInfo.coverInfo.coverImages[0] || '',
+          side_Exhibit_Title: testResourceDetail.stateInfo.titleInfo.title || '',
+          side_Exhibit_Tags: testResourceDetail.stateInfo.tagInfo.tags || [],
           side_Exhibit_AllVersions: [...actualOriginInfo.versions].reverse(),
           side_Exhibit_Version: actualOriginInfo.version,
-          side_Exhibit_OnlyReadAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+          side_Exhibit_OnlyReadAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 1;
             })
@@ -648,7 +659,7 @@ const Model: ExhibitInfoPageModelType = {
                 value: cr.key === 'fileSize' ? FUtil.Format.humanizeSize(cr.value) : cr.value,
               };
             }),
-          side_Exhibit_OnlyEditAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+          side_Exhibit_OnlyEditAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 2;
             })
@@ -661,7 +672,7 @@ const Model: ExhibitInfoPageModelType = {
                 remark: cr.remark,
               };
             }),
-          side_Exhibit_EditDeleteAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+          side_Exhibit_EditDeleteAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 6;
             })
@@ -673,43 +684,7 @@ const Model: ExhibitInfoPageModelType = {
                 remark: cr.remark,
               };
             }),
-          contract_Associated: result.map<InformExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
-            const contracts = r.contracts
-              .filter((c) => {
-                return c.status !== 'terminal';
-              })
-              .map((c) => {
-                return {
-                  name: c.contractName,
-                  // status: c.status,
-                  status: c.status,
-                  id: c.contractId,
-                  text: c.policyText,
-                  createTime: FUtil.Format.formatDateTime(c.createDate),
-                  policyId: c.policyId,
-                };
-              });
-            const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
-              return c.policyId;
-            });
-            return {
-              selected: selectedID ? selectedID === r.resourceId : index === 0,
-              id: r.resourceId,
-              name: r.resourceName,
-              type: r.resourceType,
-              contracts: contracts,
-              policies: r.policies
-                .filter((p) => {
-                  // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
-                  return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
-                })
-                .map((p) => ({
-                  id: p.policyId,
-                  name: p.policyName,
-                  text: p.policyText,
-                })),
-            };
-          }),
+
           side_Resource_Relation: relation,
         },
       });
@@ -729,7 +704,7 @@ const Model: ExhibitInfoPageModelType = {
           {
             resourceId: resource?.id || '',
             contracts: [
-              ...(resource?.contracts || []).map((c) => ({ policyId: c.policyId })),
+              ...(resource?.contracts || []).map((c) => ({ policyId: c.policyID })),
               { policyId: payload.policyId },
             ],
           },
@@ -1737,4 +1712,91 @@ export function mergeRules({
   }
 
   return needHandleRules;
+}
+
+interface HandleContractAssociatedParams {
+  nodeID: number;
+  resourceIDs: string[];
+}
+
+async function handleContractAssociated({
+                                          nodeID,
+                                          resourceIDs,
+                                        }: HandleContractAssociatedParams): Promise<InformExhibitInfoPageModelState['contract_Associated']> {
+
+  // console.log(resourceIDs, 'resourceIDs@@@@099099090909999');
+  if (resourceIDs.length === 0) {
+    return [];
+  }
+
+  const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+    subjectIds: resourceIDs.join(','),
+    subjectType: 1,
+    licenseeId: nodeID,
+    licenseeIdentityType: 2,
+  };
+
+  const { data: allContracts } = await FServiceAPI.Contract.batchContracts(params1);
+  // console.log(allContracts, 'allContracts@@#$2344444444');
+
+  const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    resourceIds: resourceIDs.join(','),
+    isLoadPolicyInfo: 1,
+  };
+
+  const { data: resources }: any = await FServiceAPI.Resource.batchInfo(params0);
+  // console.log(resources, 'resources23324234234234');
+
+  const result: InformExhibitInfoPageModelState['contract_Associated'] = resources
+    .filter((resource: any) => {
+      return resource.userId !== FUtil.Tool.getUserIDByCookies();
+    })
+    .map((resource: any) => {
+      // console.log(resource, 'resource4329203ujlkzfsd');
+      const contracts: InformExhibitInfoPageModelState['contract_Associated'][0]['contracts'] = allContracts
+        .filter((contract: any) => {
+          // console.log(acts, 'acts@@@#$@#$#@222');
+          return contract && contract.licensorId === resource.resourceId && contract.status === 0;
+        })
+        .map((contract: any) => {
+          // console.log(contract, 'contract0923');
+          return {
+            id: contract.contractId,
+            name: contract.contractName,
+            createTime: contract.createDate,
+            status: contract.status === 1
+              ? 'terminal'
+              : contract.authStatus === 1
+                ? 'active' : contract.authStatus === 2
+                  ? 'testActive'
+                  : 'inactive',
+            policyID: contract.policyId,
+          };
+        });
+      const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
+        return c.policyID;
+      });
+      // console.log(allContractsUsedPolicyIDs, 'allContractsUsedPolicyIDsallContractsUsedPolicyIDs0932o');
+
+      const policies: InformExhibitInfoPageModelState['contract_Associated'][0]['policies'] = resource.policies
+        .filter((p: any) => {
+          return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
+        })
+        .map((p: any) => {
+          return {
+            id: p.policyId,
+            name: p.policyName,
+            text: p.policyText,
+          };
+        });
+      return {
+        id: resource?.resourceId || '',
+        name: resource?.resourceName || '',
+        type: resource?.resourceType || '',
+        contracts: contracts,
+        policies: policies,
+      };
+    });
+  // console.log(result, 'result2309jd');
+  return result;
 }

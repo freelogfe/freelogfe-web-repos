@@ -201,7 +201,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setCurrentS(currentSData);
 
     // console.log(currentSData, 'currentSDatacurrentSData11111111');
-    console.log(data1, 'data1data1data1data19023jlksdf');
+    // console.log(data1, 'data1data1data1data19023jlksdf');
     const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
       .filter((dl:any) => {
         return dl.fromState !== '_none_';
