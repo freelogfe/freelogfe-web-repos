@@ -39,7 +39,7 @@ export interface IExhibit {
         remark: string;
         key: string;
         value: string | number;
-        isRuleAdd?: true;
+        isRuleSet?: true;
       }[];
     };
     replaceInfo: {

@@ -122,7 +122,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                 ? undefined
                 : record.stateInfo.propertyInfo.testResourceProperty
                   .filter((trp) => {
-                    return trp.isRuleAdd;
+                    return trp.isRuleSet;
                   })
                   .map((trp) => {
                     return {

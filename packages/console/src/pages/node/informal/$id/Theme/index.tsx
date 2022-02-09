@@ -307,7 +307,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                               ? undefined
                               : t.stateInfo.propertyInfo.testResourceProperty
                                 .filter((trp) => {
-                                  return trp.isRuleAdd;
+                                  return trp.isRuleSet;
                                 })
                                 .map((trp) => {
                                   return {
