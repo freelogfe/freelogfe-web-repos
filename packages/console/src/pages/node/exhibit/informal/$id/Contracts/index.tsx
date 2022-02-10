@@ -14,6 +14,7 @@ import FUtil1 from '@/utils';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
+import { FWarning } from '@/components/FIcons';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -78,15 +79,24 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                 text={rr.type}
               />
               <div style={{ height: 5 }} />
-              <div className={styles.policeTags}>
-                {
-                  rr.contracts.map((c) => (<div key={c.id}>
-                    <span>{c.name}</span>
-                    <div style={{ width: 5 }} />
-                    <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
-                  </div>))
-                }
-              </div>
+              {
+                rr.contracts.length > 0
+                  ? (<div className={styles.policeTags}>
+                    {
+                      rr.contracts.map((c) => (<div key={c.id}>
+                        <span>{c.name}</span>
+                        <div style={{ width: 5 }} />
+                        <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
+                      </div>))
+                    }
+                  </div>)
+                  : (<div className={styles.noPoliceTag}>
+                    <FWarning style={{ fontSize: 14 }} />
+                    <span style={{ paddingLeft: 5 }}>无有效合约</span>
+                  </div>)
+              }
+
+
             </a>);
           })
         }
@@ -96,59 +106,65 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
       <div className={styles.signRight}>
         <div>
           {
-            selectedResource?.contracts && selectedResource?.contracts.length > 0 && (<div>
-              <FTitleText type='h4'>{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
-              <div style={{ height: 10 }} />
-              <Space style={{ width: '100%' }} size={15} direction='vertical'>
-                {
-                  selectedResource?.contracts.map((c) => (<div
-                    key={c.id}
-                    className={styles.Contracts}
-                  >
-                    <div style={{ height: 10 }} />
-                    <Space size={5} style={{ padding: '0 20px' }}>
-                      <FContentText type='highlight'>{c.name}</FContentText>
-                    </Space>
-                    <div style={{ height: 10 }} />
-                    <div style={{ padding: '0 20px' }}>
-                      <FContractDisplay contractID={c.id} />
-                    </div>
-                    <div style={{ height: 10 }} />
+            selectedResource?.contracts && selectedResource?.contracts.length > 0
+              ? (<div>
+                <FTitleText type='h4'>{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
+                <div style={{ height: 10 }} />
+                <Space style={{ width: '100%' }} size={15} direction='vertical'>
+                  {
+                    selectedResource?.contracts.map((c) => (<div
+                      key={c.id}
+                      className={styles.Contracts}
+                    >
+                      <div style={{ height: 10 }} />
+                      <Space size={5} style={{ padding: '0 20px' }}>
+                        <FContentText type='highlight'>{c.name}</FContentText>
+                      </Space>
+                      <div style={{ height: 10 }} />
+                      <div style={{ padding: '0 20px' }}>
+                        <FContractDisplay contractID={c.id} />
+                      </div>
+                      <div style={{ height: 10 }} />
 
-                    <Space style={{ padding: '0 20px' }} size={5}>
-                      <FContentText
-                        type='additional2'
-                        text={FUtil1.I18n.message('contract_id') + '：' + c.id}
-                      />
-                      <FDivider style={{ fontSize: 14 }} />
-                      <FContentText
-                        type='additional2'
-                        text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
-                      />
-                    </Space>
+                      <Space style={{ padding: '0 20px' }} size={5}>
+                        <FContentText
+                          type='additional2'
+                          text={FUtil1.I18n.message('contract_id') + '：' + c.id}
+                        />
+                        <FDivider style={{ fontSize: 14 }} />
+                        <FContentText
+                          type='additional2'
+                          text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
+                        />
+                      </Space>
 
-                    <div style={{ height: 10 }} />
-                  </div>))
-                }
-
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <FContentText text={'查看已终止的合约请移至'} type='negative' />
-                    <FTextBtn onClick={() => {
-                      window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                    }}>合约管理</FTextBtn>
-                  </div>
-                  <div style={{ height: 5 }} />
-                </div>
-              </Space>
-            </div>)
+                      <div style={{ height: 10 }} />
+                    </div>))
+                  }
+                </Space>
+              </div>)
+              : (<div className={styles.withoutValidContract}>
+                <FWarning style={{ fontSize: 14 }} />
+                <span style={{ paddingLeft: 5 }}>当前授权链上无有效合约</span>
+              </div>)
           }
 
           <div style={{ height: 15 }} />
 
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FContentText text={'查看已终止的合约请移至'} type='negative' />
+              <FTextBtn onClick={() => {
+                window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+              }}>合约管理</FTextBtn>
+            </div>
+            <div style={{ height: 5 }} />
+          </div>
+
           {
             selectedResource?.policies && selectedResource?.policies.length > 0 &&
             (<div>
+              <div style={{ height: 25 }} />
               <FTitleText type='h4'>未签约策略</FTitleText>
               <div style={{ height: 5 }} />
               <Space style={{ width: '100%' }} size={15} direction='vertical'>
