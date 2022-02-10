@@ -1,4 +1,9 @@
 <!doctype html>
+<script>
+  if (window.location.host.includes('.freelog.com') && window.location.protocol === 'http:') {
+    window.location.replace(window.location.href.replace('http:', 'https:'));
+  }
+</script>
 <html>
 <head>
     <meta charSet="utf-8" />

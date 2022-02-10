@@ -11,7 +11,6 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FUtil1 from '@/utils';
-// import FSwitch from '@/components/FSwitch';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
@@ -27,18 +26,15 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
     return null;
   }
 
-  const otherResource = informExhibitInfoPage.contract_Associated;
+  // const otherResource = informExhibitInfoPage.contract_Associated;
 
-  const selectedResource = informExhibitInfoPage.contract_Associated.find((a) => a.selected);
+  const selectedResource = informExhibitInfoPage.contract_Associated.find((a) => a.id === informExhibitInfoPage.contract_Associated_Selected);
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
       type: 'informExhibitInfoPage/change',
       payload: {
-        contract_Associated: informExhibitInfoPage.contract_Associated.map((a) => ({
-          ...a,
-          selected: a.id === id,
-        })),
+        contract_Associated_Selected: id,
       },
     });
   }
@@ -55,42 +51,44 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
       <div className={styles.signLeft}>
 
         {
-          otherResource.map((r) => (<a
-            className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
-            onClick={() => onChangeSelect(r.id)}
-            key={r.id}
-          >
-            <FTextBtn
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(FUtil.LinkTo.resourceDetails({
-                  resourceID: r.id,
-                }));
-              }}
+          informExhibitInfoPage.contract_Associated.map((rr) => {
+            return (<a
+              className={[styles.signResource, (rr.id === informExhibitInfoPage.contract_Associated_Selected ? styles.activatedSignResource : '')].join(' ')}
+              onClick={() => onChangeSelect(rr.id)}
+              key={rr.id}
             >
+              <FTextBtn
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: rr.id,
+                  }));
+                }}
+              >
+                <FContentText
+                  type='highlight'
+                  text={rr.name}
+                  singleRow
+                  className={styles.FContentText}
+                />
+              </FTextBtn>
+              <div style={{ height: 5 }} />
               <FContentText
-                type='highlight'
-                text={r.name}
-                singleRow
-                className={styles.FContentText}
+                type='additional2'
+                text={rr.type}
               />
-            </FTextBtn>
-            <div style={{ height: 5 }} />
-            <FContentText
-              type='additional2'
-              text={r.type}
-            />
-            <div style={{ height: 5 }} />
-            <div className={styles.policeTags}>
-              {
-                r.contracts.map((c) => (<div key={c.id}>
-                  <span>{c.name}</span>
-                  <div style={{ width: 5 }} />
-                  <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
-                </div>))
-              }
-            </div>
-          </a>))
+              <div style={{ height: 5 }} />
+              <div className={styles.policeTags}>
+                {
+                  rr.contracts.map((c) => (<div key={c.id}>
+                    <span>{c.name}</span>
+                    <div style={{ width: 5 }} />
+                    <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
+                  </div>))
+                }
+              </div>
+            </a>);
+          })
         }
 
       </div>
@@ -107,11 +105,9 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                     key={c.id}
                     className={styles.Contracts}
                   >
-                    {/*<div className={styles.content}>*/}
                     <div style={{ height: 10 }} />
                     <Space size={5} style={{ padding: '0 20px' }}>
                       <FContentText type='highlight'>{c.name}</FContentText>
-                      {/*<label className={styles.executing}>执行中</label>*/}
                     </Space>
                     <div style={{ height: 10 }} />
                     <div style={{ padding: '0 20px' }}>
@@ -210,12 +206,9 @@ function SinglePolicy({ name, text, onClickSign }: SinglePolicyProps) {
       >签约</FRectBtn>
     </div>
     <div style={{ height: 10 }} />
-    {/*<div style={{ height: 15 }} />*/}
-    {/*<pre>{text}</pre>*/}
     <div style={{ padding: '0 20px' }}>
       <FPolicyDisplay
         code={text}
-        // containerHeight={170}
       />
     </div>
     <a
