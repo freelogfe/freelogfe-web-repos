@@ -215,6 +215,10 @@ export interface OnChange_Theme_OnlineSwitch_Action extends AnyAction {
   };
 }
 
+export interface OnChangedEvent_FContractDisplay_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChangedEvent_FContractDisplay';
+}
+
 export interface OnClick_Graph_FullScreenBtn_Action extends AnyAction {
   type: 'informExhibitInfoPage/onClick_Graph_FullScreenBtn';
 }
@@ -365,6 +369,8 @@ export interface ExhibitInfoPageModelType {
 
     onChange_Exhibit_OnlineSwitch: (action: OnChange_Exhibit_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
     onChange_Theme_OnlineSwitch: (action: OnChange_Theme_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
+
+    onChangedEvent_FContractDisplay: (action: OnChangedEvent_FContractDisplay_Action, effects: EffectsCommandMap) => void;
 
     onClick_Graph_FullScreenBtn: (action: OnClick_Graph_FullScreenBtn_Action, effects: EffectsCommandMap) => void;
     onCancel_Graph_FullScreenDrawer: (action: OnCancel_Graph_FullScreenDrawer_Action, effects: EffectsCommandMap) => void;
@@ -872,6 +878,12 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
+    },
+
+    * onChangedEvent_FContractDisplay({}: OnChangedEvent_FContractDisplay_Action, { put }: EffectsCommandMap) {
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });

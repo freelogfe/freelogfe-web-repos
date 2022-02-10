@@ -4,7 +4,11 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
-import { ChangeAction, UpdateRelationAction } from '@/models/informExhibitInfoPage';
+import {
+  ChangeAction,
+  OnChangedEvent_FContractDisplay_Action,
+  UpdateRelationAction,
+} from '@/models/informExhibitInfoPage';
 import { FUtil } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
@@ -130,7 +134,14 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                       </Space>
                       <div style={{ height: 10 }} />
                       <div style={{ padding: '0 20px' }}>
-                        <FContractDisplay contractID={c.id} />
+                        <FContractDisplay
+                          contractID={c.id}
+                          onChangedEvent={() => {
+                            dispatch<OnChangedEvent_FContractDisplay_Action>({
+                              type: 'informExhibitInfoPage/onChangedEvent_FContractDisplay',
+                            });
+                          }}
+                        />
                       </div>
                       <div style={{ height: 10 }} />
 
