@@ -45,26 +45,33 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
 
     <div style={{ height: 20 }} />
 
-    <FTitleText text={'展示版本'} type='h4' />
-    <div style={{ height: 15 }} />
-    <FDropdownMenu
-      options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({ value: av, text: av }))}
-      onChange={(value) => {
-        dispatch<OnChange_Side_Exhibit_Version_Action>({
-          type: 'informExhibitInfoPage/onChange_Side_Exhibit_Version',
-          payload: {
-            value: value,
-          },
-        });
-      }}
-    >
-      <Space style={{ cursor: 'pointer' }} size={15}><FContentText
-        text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
-    </FDropdownMenu>
+    {
+      informExhibitInfoPage.side_Exhibit_AllVersions.length > 0 && (<>
+
+
+        <FTitleText text={'展示版本'} type='h4' />
+        <div style={{ height: 15 }} />
+        <FDropdownMenu
+          options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({ value: av, text: av }))}
+          onChange={(value) => {
+            dispatch<OnChange_Side_Exhibit_Version_Action>({
+              type: 'informExhibitInfoPage/onChange_Side_Exhibit_Version',
+              payload: {
+                value: value,
+              },
+            });
+          }}
+        >
+          <Space style={{ cursor: 'pointer' }} size={15}><FContentText
+            text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
+        </FDropdownMenu>
+        <div style={{ height: 30 }} />
+      </>)
+    }
 
     {/*{*/}
     {/*  informExhibitInfoPage.settingUnfold && (<>*/}
-    <div style={{ height: 30 }} />
+
 
     <FTitleText text={'基础属性'} type='h4' />
     <div style={{ height: 15 }} />
