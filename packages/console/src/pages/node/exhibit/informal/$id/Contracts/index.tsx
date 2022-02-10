@@ -16,6 +16,7 @@ import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
 import { FWarning } from '@/components/FIcons';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
+import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -150,10 +151,7 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                   }
                 </Space>
               </div>)
-              : (<div className={styles.withoutValidContract}>
-                <FWarning style={{ fontSize: 14 }} />
-                <span style={{ paddingLeft: 5 }}>当前授权链上无有效合约</span>
-              </div>)
+              : (<FResourceContractPanelNoContractTip />)
           }
 
           <div style={{ height: 15 }} />
