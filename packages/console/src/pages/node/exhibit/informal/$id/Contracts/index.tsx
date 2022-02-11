@@ -88,7 +88,7 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
               <FResourceContractLabels contracts={rr.contracts.map((c) => {
                 return {
                   name: c.name,
-                  auth: c.status === 'active' ? 'active' : 'testActive',
+                  auth: c.status === 'active' || c.status === 'testActive',
                 };
               })} />
             </a>);

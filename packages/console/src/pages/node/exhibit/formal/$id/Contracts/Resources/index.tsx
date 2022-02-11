@@ -57,7 +57,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
       <FResourceContractLabels contracts={mainResource.contracts.map((c) => {
         return {
           name: c.name,
-          auth: c.status === 'active' ? 'active' : 'testActive',
+          auth: c.status === 'active' || c.status === 'testActive',
         };
       })} />
       {/*<div className={styles.policeTags}>*/}
@@ -119,7 +119,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         <FResourceContractLabels contracts={r.contracts.map((c) => {
           return {
             name: c.name,
-            auth: c.status === 'active' ? 'active' : 'testActive',
+            auth: c.status === 'active' || c.status === 'testActive',
           };
         })} />
       </a>))

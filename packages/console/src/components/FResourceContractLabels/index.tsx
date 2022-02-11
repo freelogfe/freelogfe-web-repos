@@ -5,7 +5,7 @@ import { FWarning } from '@/components/FIcons';
 interface FResourceContractLabelsProps {
   contracts: {
     name: string;
-    auth: 'active' | 'testActive';
+    auth: boolean;
   }[];
 }
 
@@ -23,7 +23,7 @@ function FResourceContractLabels({ contracts }: FResourceContractLabelsProps) {
       contracts.map((c, i) => (<div key={i}>
         <span>{c.name}</span>
         <div style={{ width: 5 }} />
-        <label style={{ backgroundColor: c.auth === 'active' ? '#42C28C' : '#E9A923' }} />
+        <label style={{ backgroundColor: c.auth ? '#42C28C' : '#E9A923' }} />
       </div>))
     }
   </div>);

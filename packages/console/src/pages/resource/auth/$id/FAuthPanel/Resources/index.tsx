@@ -80,7 +80,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
             <FResourceContractLabels contracts={i.contracts.map((j) => {
               return {
                 name: j.title,
-                auth: j.status === 'active' ? 'active' : 'testActive',
+                auth: j.status === 'active' || j.status === 'testActive',
               };
             })} />
             {/*<div className={styles.DepPanelLabels}>*/}
