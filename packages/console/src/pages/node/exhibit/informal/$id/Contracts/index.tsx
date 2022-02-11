@@ -18,7 +18,7 @@ import FUtil1 from '@/utils';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
-import { FWarning } from '@/components/FIcons';
+// import { FWarning } from '@/components/FIcons';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 
@@ -91,24 +91,6 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
                   auth: c.status === 'active' ? 'active' : 'testActive',
                 };
               })} />
-              {/*{*/}
-              {/*  rr.contracts.length > 0*/}
-              {/*    ? (<div className={styles.policeTags}>*/}
-              {/*      {*/}
-              {/*        rr.contracts.map((c) => (<div key={c.id}>*/}
-              {/*          <span>{c.name}</span>*/}
-              {/*          <div style={{ width: 5 }} />*/}
-              {/*          <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />*/}
-              {/*        </div>))*/}
-              {/*      }*/}
-              {/*    </div>)*/}
-              {/*    : (<div className={styles.noPoliceTag}>*/}
-              {/*      <FWarning style={{ fontSize: 14 }} />*/}
-              {/*      <span style={{ paddingLeft: 5 }}>无有效合约</span>*/}
-              {/*    </div>)*/}
-              {/*}*/}
-
-
             </a>);
           })
         }

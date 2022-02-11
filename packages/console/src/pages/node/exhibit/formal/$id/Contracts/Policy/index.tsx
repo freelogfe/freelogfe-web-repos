@@ -29,6 +29,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
   });
 
   return (<div>
+    <div style={{ height: 10 }} />
     <FTitleText type='h4'>未签约策略</FTitleText>
     <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>

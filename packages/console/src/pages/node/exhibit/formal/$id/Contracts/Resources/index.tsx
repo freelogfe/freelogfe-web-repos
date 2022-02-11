@@ -6,6 +6,7 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
+import FResourceContractLabels from '@/components/FResourceContractLabels';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -53,15 +54,23 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         text={mainResource.type}
       />
       <div style={{ height: 5 }} />
-      <div className={styles.policeTags}>
-        {
-          mainResource.contracts.map((c) => (<div key={c.id}>
-            <span>{c.name}</span>
-            <div style={{ width: 5 }} />
-            <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
-          </div>))
-        }
-      </div>
+      <FResourceContractLabels contracts={mainResource.contracts.map((c) => {
+        return {
+          name: c.name,
+          auth: c.status === 'active' ? 'active' : 'testActive',
+        };
+      })} />
+      {/*<div className={styles.policeTags}>*/}
+      {/*  /!*{*!/*/}
+      {/*  /!*  mainResource.contracts.map((c) => (<div key={c.id}>*!/*/}
+      {/*  /!*    <span>{c.name}</span>*!/*/}
+      {/*  /!*    <div style={{ width: 5 }} />*!/*/}
+      {/*  /!*    <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />*!/*/}
+      {/*  /!*  </div>))*!/*/}
+      {/*  /!*}*!/*/}
+      {/*  {console.log(mainResource.contracts, 'mainResource.contracts9232342423423')}*/}
+      {/*  */}
+      {/*</div>*/}
     </a>
 
     {
@@ -97,15 +106,22 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           text={r.type}
         />
         <div style={{ height: 5 }} />
-        <div className={styles.policeTags}>
-          {
-            r.contracts.map((c) => (<div key={c.id}>
-              <span>{c.name}</span>
-              <div style={{ width: 5 }} />
-              <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />
-            </div>))
-          }
-        </div>
+        {/*<div className={styles.policeTags}>*/}
+        {/*  {*/}
+        {/*    r.contracts.map((c) => (<div key={c.id}>*/}
+        {/*      <span>{c.name}</span>*/}
+        {/*      <div style={{ width: 5 }} />*/}
+        {/*      <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />*/}
+        {/*    </div>))*/}
+        {/*  }*/}
+        {/*</div>*/}
+        {/*{console.log(r.contracts, 'r.contracts.@#$@#$@#$')}*/}
+        <FResourceContractLabels contracts={r.contracts.map((c) => {
+          return {
+            name: c.name,
+            auth: c.status === 'active' ? 'active' : 'testActive',
+          };
+        })} />
       </a>))
     }
   </>);
