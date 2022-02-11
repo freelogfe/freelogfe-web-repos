@@ -6,9 +6,9 @@ import Policies from './Policies';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-// import { FContentText } from '@/components/FText';
-// import { FTextBtn } from '@/components/FButton';
-// import { FUtil } from '@freelog/tools-lib';
+import { FContentText } from '@/components/FText';
+import { FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -26,15 +26,24 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
       </div>
     </div>
     <div className={styles.DepPanelContent}>
-      <Space
-        size={15}
-        direction='vertical'
-        className={styles.contentBox}
-      >
+      <div className={styles.contentBox}>
         <Contracts />
 
+        <div style={{ height: 15 }} />
+
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FContentText text={'查看已终止的合约请移至'} type='negative' />
+            <FTextBtn onClick={() => {
+              window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+            }}>合约管理</FTextBtn>
+          </div>
+        </div>
+
+        <div style={{ height: 25 }} />
+
         <Policies />
-      </Space>
+      </div>
     </div>
   </div>);
 }

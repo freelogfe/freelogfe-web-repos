@@ -6,6 +6,7 @@ import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
+import FResourceContractLabels from '@/components/FResourceContractLabels';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -75,25 +76,29 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
             <FContentText type='additional2'>
               <span>{i.resourceType}</span>
             </FContentText>
-            <>
-              <div style={{ height: 9 }} />
-              <div className={styles.DepPanelLabels}>
-                {
-                  i.contracts.map((j) => (<div
-                    key={j.id}
-                    className={styles.labelInfo}
-                  >
-                    <span>{j.title}</span>
-                    <div style={{ width: 5 }} />
-                    <label style={{
-                      backgroundColor: j.status === 'terminal'
-                        ? '#999' :
-                        j.status === 'inactive'
-                          ? '#E9A923' : '#42C28C',
-                    }} /></div>))
-                }
-              </div>
-            </>
+            <div style={{ height: 9 }} />
+            <FResourceContractLabels contracts={i.contracts.map((j) => {
+              return {
+                name: j.title,
+                auth: j.status === 'active' ? 'active' : 'testActive',
+              };
+            })} />
+            {/*<div className={styles.DepPanelLabels}>*/}
+            {/*  {*/}
+            {/*    i.contracts.map((j) => (<div*/}
+            {/*      key={j.id}*/}
+            {/*      className={styles.labelInfo}*/}
+            {/*    >*/}
+            {/*      <span>{j.title}</span>*/}
+            {/*      <div style={{ width: 5 }} />*/}
+            {/*      <label style={{*/}
+            {/*        backgroundColor: j.status === 'terminal'*/}
+            {/*          ? '#999' :*/}
+            {/*          j.status === 'inactive'*/}
+            {/*            ? '#E9A923' : '#42C28C',*/}
+            {/*      }} /></div>))*/}
+            {/*  }*/}
+            {/*</div>*/}
           </div>
         </div>))
     }

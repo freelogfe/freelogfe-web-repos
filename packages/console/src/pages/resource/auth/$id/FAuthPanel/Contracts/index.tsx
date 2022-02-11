@@ -12,6 +12,7 @@ import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
+import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -35,10 +36,10 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
   }
 
   if (!activeResource || activeResource?.contracts.length === 0) {
-    return null;
+    return (<FResourceContractPanelNoContractTip />);
   }
 
-  return <Space
+  return (<Space
     size={15}
     style={{ width: '100%' }}
     direction='vertical'
@@ -105,17 +106,7 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         }
 
       </div>))}
-
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <FContentText text={'查看已终止的合约请移至'} type='negative' />
-        <FTextBtn onClick={() => {
-          window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-        }}>合约管理</FTextBtn>
-      </div>
-      <div style={{ height: 5 }} />
-    </div>
-  </Space>;
+  </Space>);
 }
 
 export default connect(({ resourceAuthPage }: ConnectState) => ({
