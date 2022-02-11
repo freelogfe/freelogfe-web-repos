@@ -31,7 +31,7 @@ export function AddRule({ exhibit, source }: AddRuleProps) {
         className={source.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{source.name}</label>
       </div>
       {
-        source.versionRange !== '' && source.versionRange !== 'latest' && (<>
+        !!source.versionRange && source.versionRange !== 'latest' && (<>
           <div><FContentText text={'展示版本'} /></div>
           <div><FContentText type='highlight' text={source.versionRange} /></div>
         </>)

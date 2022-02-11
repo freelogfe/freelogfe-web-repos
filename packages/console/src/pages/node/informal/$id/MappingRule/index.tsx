@@ -6,7 +6,6 @@ import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
-  // VersionRule,
   TitleRule,
   ReplaceRule,
   OnlineRule,
@@ -16,7 +15,6 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-// import FCodemirror from '@/components/FCodemirror';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
@@ -35,7 +33,6 @@ import {
   OnMountRulePageAction,
   OnPromptRulePageLeaveAction,
   OnUnmountRulePageAction,
-  // SaveRulesAction,
   OnClick_Rule_ExitCodingBtn_Action,
   OnClick_Rule_Export_CancelBtn_Action,
   OnClick_Rule_Export_ConfirmBtn_Action,
@@ -44,22 +41,17 @@ import {
   OnChange_Rule_Codemirror_Action,
   OnClick_Rule_SaveBtn_Action, IRules,
 } from '@/models/informalNodeManagerPage';
-// import FileSaver from 'file-saver';
 import FUpload from '@/components/FUpload';
 import FUtil1 from '@/utils';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-// import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
-// import moment from 'moment';
 import FMonacoEditor from '@/components/FMonacoEditor';
-
-// const { compile } = require('@freelog/nmr_translator');
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -290,17 +282,6 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
       informalNodeManagerPage.rule_PageStatus === 'coding'
         ? (<div className={styles.codeMirrorBody}>
           <div>
-            {/*<FCodemirror*/}
-            {/*  value={informalNodeManagerPage.rule_CodeInput}*/}
-            {/*  onChange={(value) => {*/}
-            {/*    dispatch<OnChange_Rule_Codemirror_Action>({*/}
-            {/*      type: 'informalNodeManagerPage/onChange_Rule_Codemirror',*/}
-            {/*      payload: {*/}
-            {/*        value: value,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
             <FMonacoEditor
               width={'100%'}
               value={informalNodeManagerPage.rule_CodeInput}

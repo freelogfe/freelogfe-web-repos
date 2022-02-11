@@ -87,9 +87,6 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
   }
 
   return (<>
-    <Helmet>
-      <title>{`展品管理 · ${nodeManagerPage.nodeName} - Freelog`}</title>
-    </Helmet>
     {
       nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />
     }

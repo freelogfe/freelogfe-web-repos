@@ -33,6 +33,7 @@ import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
+import { Helmet } from 'react-helmet';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -176,152 +177,157 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     },
   ];
 
-  return (<FLeftSiderLayout
-    type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
-    sider={<Sider />}
-    header={<div className={styles.header}>
-      <FTitleText type='h1' text={'展品管理'} />
-      <Space size={80}>
-        <div>
-          <span>类型：</span>
-          <FDropdownMenu
-            options={nodeManagerPage.exhibit_ResourceTypeOptions}
-            onChange={(value) => {
-              dispatch<OnChange_Exhibit_SelectedType_Action>({
-                type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
-                payload: {
-                  value: value,
-                },
-              });
-            }}
-          >
+  return (<>
+    <Helmet>
+      <title>{`展品管理 · ${nodeManagerPage.nodeName} - Freelog`}</title>
+    </Helmet>
+    <FLeftSiderLayout
+      type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
+      sider={<Sider />}
+      header={<div className={styles.header}>
+        <FTitleText type='h1' text={'展品管理'} />
+        <Space size={80}>
+          <div>
+            <span>类型：</span>
+            <FDropdownMenu
+              options={nodeManagerPage.exhibit_ResourceTypeOptions}
+              onChange={(value) => {
+                dispatch<OnChange_Exhibit_SelectedType_Action>({
+                  type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
+            >
             <span
               style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
               style={{ marginLeft: 8 }} /></span>
-          </FDropdownMenu>
-        </div>
-        <div>
-          <span>状态：</span>
-          <FDropdownMenu
-            options={nodeManagerPage.exhibit_ResourceStateOptions}
-            onChange={(value) => {
-              dispatch<OnChange_Exhibit_SelectedStatus_Action>({
-                type: 'nodeManagerPage/onChange_Exhibit_SelectedStatus',
-                payload: {
-                  value: value,
-                },
-              });
-            }}
-          >
+            </FDropdownMenu>
+          </div>
+          <div>
+            <span>状态：</span>
+            <FDropdownMenu
+              options={nodeManagerPage.exhibit_ResourceStateOptions}
+              onChange={(value) => {
+                dispatch<OnChange_Exhibit_SelectedStatus_Action>({
+                  type: 'nodeManagerPage/onChange_Exhibit_SelectedStatus',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
+            >
             <span style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceStateOptions.find((rso) => {
               return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
             })?.text}<FDown style={{ marginLeft: 10 }} /></span>
-          </FDropdownMenu>
-        </div>
-        <div>
-          <FInput
-            className={styles.input}
-            theme='dark'
-            value={nodeManagerPage.exhibit_InputFilter}
-            debounce={300}
-            onDebounceChange={(value) => {
-              dispatch<OnChange_Exhibit_InputFilter_Action>({
-                type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
-                payload: {
-                  value: value,
-                },
-              });
-            }}
-          />
-        </div>
-      </Space>
-    </div>}
-  >
-
-    {
-      nodeManagerPage.exhibit_ListState === 'noData' ? (<FNoDataTip
-        height={'calc(100vh - 70px)'}
-        tipText={FUtil1.I18n.message('manage_exhibits_empty')}
-        btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
-        onClick={() => {
-          dispatch<MarketChangeAction>({
-            type: 'marketPage/change',
-            payload: {
-              resourceType: '-1',
-            },
-          });
-          router.push(FUtil.LinkTo.market());
-        }}
-      />) : (<>
-
-        {
-          nodeManagerPage.exhibit_ListState === 'loading' && (<FLoadingTip height={'calc(100vh - 270px)'} />)
-        }
-
-        {
-          nodeManagerPage.exhibit_ListState === 'noSearchResult'
-          && (<FNoDataTip
-            height={'calc(100vh - 270px)'}
-            tipText={'无搜索结果'}
-          />)
-        }
-
-        {
-          nodeManagerPage.exhibit_ListState === 'loaded' && (<div className={styles.body}>
-            <FTable
-              rowClassName={styles.rowClassName}
-              columns={columns}
-              dataSource={dataSource as any}
-              pagination={false}
-            />
-
-            <FListFooter
-              state={nodeManagerPage.exhibit_ListMore}
-              onClickLoadMore={() => {
-                dispatch<OnLoadMore_ExhibitList_Action>({
-                  type: 'nodeManagerPage/onLoadMore_ExhibitList',
+            </FDropdownMenu>
+          </div>
+          <div>
+            <FInput
+              className={styles.input}
+              theme='dark'
+              value={nodeManagerPage.exhibit_InputFilter}
+              debounce={300}
+              onDebounceChange={(value) => {
+                dispatch<OnChange_Exhibit_InputFilter_Action>({
+                  type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
+                  payload: {
+                    value: value,
+                  },
                 });
               }}
             />
-          </div>)
-        }
+          </div>
+        </Space>
+      </div>}
+    >
 
-        {/*{*/}
-        {/*  nodeManagerPage.exhibit_ListState === 'loaded' && (<InfiniteScroll*/}
-        {/*    pageStart={0}*/}
-        {/*    initialLoad={false}*/}
-        {/*    loadMore={() => {*/}
-        {/*      // console.log('@@@@8888QQQQQQ');*/}
-        {/*      dispatch<FetchExhibitsAction>({*/}
-        {/*        type: 'nodeManagerPage/fetchExhibits',*/}
-        {/*        payload: false,*/}
-        {/*      });*/}
-        {/*    }}*/}
-        {/*    // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}*/}
-        {/*    hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}*/}
-        {/*    // hasMore={true}*/}
-        {/*  >*/}
-        {/*    <div className={styles.body}>*/}
-        {/*      <FTable*/}
-        {/*        rowClassName={styles.rowClassName}*/}
-        {/*        columns={columns}*/}
-        {/*        dataSource={dataSource as any}*/}
-        {/*        pagination={false}*/}
-        {/*      />*/}
+      {
+        nodeManagerPage.exhibit_ListState === 'noData' ? (<FNoDataTip
+          height={'calc(100vh - 70px)'}
+          tipText={FUtil1.I18n.message('manage_exhibits_empty')}
+          btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
+          onClick={() => {
+            dispatch<MarketChangeAction>({
+              type: 'marketPage/change',
+              payload: {
+                resourceType: '-1',
+              },
+            });
+            router.push(FUtil.LinkTo.market());
+          }}
+        />) : (<>
 
-        {/*      {*/}
-        {/*        nodeManagerPage.exhibit_ListMore === 'loading' &&*/}
-        {/*        <div className={styles.loader} key={0}>Loading ...</div>*/}
-        {/*      }*/}
-        {/*    </div>*/}
-        {/*  </InfiniteScroll>)*/}
-        {/*}*/}
+          {
+            nodeManagerPage.exhibit_ListState === 'loading' && (<FLoadingTip height={'calc(100vh - 270px)'} />)
+          }
+
+          {
+            nodeManagerPage.exhibit_ListState === 'noSearchResult'
+            && (<FNoDataTip
+              height={'calc(100vh - 270px)'}
+              tipText={'无搜索结果'}
+            />)
+          }
+
+          {
+            nodeManagerPage.exhibit_ListState === 'loaded' && (<div className={styles.body}>
+              <FTable
+                rowClassName={styles.rowClassName}
+                columns={columns}
+                dataSource={dataSource as any}
+                pagination={false}
+              />
+
+              <FListFooter
+                state={nodeManagerPage.exhibit_ListMore}
+                onClickLoadMore={() => {
+                  dispatch<OnLoadMore_ExhibitList_Action>({
+                    type: 'nodeManagerPage/onLoadMore_ExhibitList',
+                  });
+                }}
+              />
+            </div>)
+          }
+
+          {/*{*/}
+          {/*  nodeManagerPage.exhibit_ListState === 'loaded' && (<InfiniteScroll*/}
+          {/*    pageStart={0}*/}
+          {/*    initialLoad={false}*/}
+          {/*    loadMore={() => {*/}
+          {/*      // console.log('@@@@8888QQQQQQ');*/}
+          {/*      dispatch<FetchExhibitsAction>({*/}
+          {/*        type: 'nodeManagerPage/fetchExhibits',*/}
+          {/*        payload: false,*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*    // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}*/}
+          {/*    hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}*/}
+          {/*    // hasMore={true}*/}
+          {/*  >*/}
+          {/*    <div className={styles.body}>*/}
+          {/*      <FTable*/}
+          {/*        rowClassName={styles.rowClassName}*/}
+          {/*        columns={columns}*/}
+          {/*        dataSource={dataSource as any}*/}
+          {/*        pagination={false}*/}
+          {/*      />*/}
+
+          {/*      {*/}
+          {/*        nodeManagerPage.exhibit_ListMore === 'loading' &&*/}
+          {/*        <div className={styles.loader} key={0}>Loading ...</div>*/}
+          {/*      }*/}
+          {/*    </div>*/}
+          {/*  </InfiniteScroll>)*/}
+          {/*}*/}
 
 
-      </>)
-    }
+        </>)
+      }
 
-  </FLeftSiderLayout>);
+    </FLeftSiderLayout>
+  </>);
 }
 
 export default connect(({ nodeManagerPage }: ConnectState) => ({
