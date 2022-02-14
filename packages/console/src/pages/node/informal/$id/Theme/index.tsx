@@ -31,8 +31,10 @@ import fConfirmModal from '@/components/fConfirmModal';
 import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
+import { FDelete, FEdit, FWarning } from '@/components/FIcons';
 import { Helmet } from 'react-helmet';
+import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
+import FFileSearch from '../../../../../components/FIcons/FFileSearch';
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -228,13 +230,21 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                             });
                                           },
                                         });
-                                      }}>激活</a>
+                                      }}>
+                                        <FMappingRuleActive />
+                                        <div style={{ height: 4 }} />
+                                        <span>激活</span>
+                                      </a>
                                       <FDivider />
                                     </>)
                                   }
                                   <a onClick={() => {
                                     window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
-                                  }}>编辑</a>
+                                  }}>
+                                    <FEdit />
+                                    <div style={{ height: 4 }} />
+                                    <span>编辑</span>
+                                  </a>
 
                                   <FDivider />
 
@@ -247,7 +257,28 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                           objectID: t.originInfo.id,
                                         }));
                                     }}
-                                  >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
+                                  >
+                                    <FFileSearch />
+                                    <div style={{ height: 4 }} />
+                                    <span>{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</span>
+                                  </a>
+
+                                  <FDivider />
+
+                                  <a
+                                    onClick={() => {
+                                      window.open(t.originInfo.type === 'resource'
+                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
+                                        : FUtil.LinkTo.objectDetails({
+                                          bucketName: t.originInfo.name.split('/')[0],
+                                          objectID: t.originInfo.id,
+                                        }));
+                                    }}
+                                  >
+                                    <FDelete />
+                                    <div style={{ height: 4 }} />
+                                    <span>删除</span>
+                                  </a>
 
                                   <div style={{ width: 1 }} />
                                 </div>
