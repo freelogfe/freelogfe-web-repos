@@ -19,7 +19,6 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
-  ChangeAction,
   OnCancelRulePageLeaveAction,
   OnChange_Rule_ListCheckbox_Action,
   OnChange_Rule_CheckAllCheckbox_Action,
@@ -83,12 +82,12 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   }, [informalNodeManagerPage.rule_CodeIsDirty]);
 
-  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload,
+  //   });
+  // }
 
   return (<>
     <Helmet>
@@ -98,7 +97,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
     <Prompt
       when={informalNodeManagerPage.rule_CodeIsDirty && informalNodeManagerPage.rule_PromptLeavePath === ''}
       message={(location: H.Location) => {
-        console.log(location, 'location12341234123411111111@@@@@@');
+        // console.log(location, 'location12341234123411111111@@@@@@');
         const locationHref: string = location.pathname + location.search;
         if (locationHref === FUtil.LinkTo.informNodeManagement({
           nodeID: informalNodeManagerPage.node_ID,
@@ -302,7 +301,6 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
             <div style={{ height: 15 }} />
             <FRectBtn
-              // loading={informalNodeManagerPage.codeIsChecking}
               disabled={!informalNodeManagerPage.rule_CodeIsDirty || informalNodeManagerPage.rule_CodeState === 'checking'}
               onClick={() => {
                 dispatch<OnClick_Rule_SaveBtn_Action>({
