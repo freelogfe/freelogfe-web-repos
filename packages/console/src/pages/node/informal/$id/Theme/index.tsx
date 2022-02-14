@@ -202,7 +202,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                 : null
                             }
                           </div>
-                          {/*{console.log(informalNodeManagerPage.theme_ActivatingThemeName, t.name, '######98988888')}*/}
                           {
                             informalNodeManagerPage.theme_ActivatingThemeName === t.testResourceName
                               ? (<div className={styles.processing}>
@@ -282,9 +281,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         </div>
                         <div style={{ height: 10 }} />
                         <div className={styles.itemBar}>
-                          {/*<MappingRule*/}
-                          {/*  {...t.rule}*/}
-                          {/*/>*/}
                           <MappingRule
                             add={add || undefined}
                             alter={alter || undefined}
