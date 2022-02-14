@@ -35,6 +35,7 @@ import { FDelete, FEdit, FWarning } from '@/components/FIcons';
 import { Helmet } from 'react-helmet';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import FFileSearch from '../../../../../components/FIcons/FFileSearch';
+import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -210,109 +211,137 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                 <span>处理中…</span>
                               </div>)
                               : (<div className={styles.coverFooter}>
-                                {/*<FCoverFooterButtons*/}
-                                {/*  buttons={[*/}
-                                {/*    {*/}
-                                {/*      type: 'active',*/}
-                                {/*      fn() {*/}
-                                {/*        dispatch<OnClick_ActiveThemeBtn_Action>({*/}
-                                {/*          type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',*/}
-                                {/*          payload: {*/}
-                                {/*            testResourceId: t.testResourceId,*/}
-                                {/*            testResourceName: t.testResourceName,*/}
-                                {/*          },*/}
-                                {/*        });*/}
-                                {/*      },*/}
-                                {/*    },*/}
-                                {/*    {*/}
-                                {/*      type: 'edit',*/}
-                                {/*      fn() {*/}
-                                {/*        window.open(t.originInfo.type === 'resource'*/}
-                                {/*          ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })*/}
-                                {/*          : FUtil.LinkTo.objectDetails({*/}
-                                {/*            bucketName: t.originInfo.name.split('/')[0],*/}
-                                {/*            objectID: t.originInfo.id,*/}
-                                {/*          }));*/}
-                                {/*      },*/}
-                                {/*    },*/}
-                                {/*  ]}*/}
-                                {/*/>*/}
-                                <div>
-                                  <div style={{ width: 1 }} />
-
-                                  {
-                                    !isActive && (<>
-                                      <a onClick={() => {
-                                        fConfirmModal({
-                                          message: FUtil1.I18n.message('msg_change_theme_confirm'),
-                                          okText: FUtil1.I18n.message('active_new_theme'),
-                                          cancelText: FUtil1.I18n.message('keep_current_theme'),
-                                          onOk() {
-                                            dispatch<OnClick_ActiveThemeBtn_Action>({
-                                              type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',
-                                              payload: {
-                                                testResourceId: t.testResourceId,
-                                                testResourceName: t.testResourceName,
-                                              },
-                                            });
+                                <FCoverFooterButtons
+                                  buttons={[
+                                    {
+                                      type: !isActive ? 'active' : '',
+                                      fn() {
+                                        dispatch<OnClick_ActiveThemeBtn_Action>({
+                                          type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',
+                                          payload: {
+                                            testResourceId: t.testResourceId,
+                                            testResourceName: t.testResourceName,
                                           },
                                         });
-                                      }}>
-                                        <FMappingRuleActive />
-                                        <div style={{ height: 4 }} />
-                                        <span>激活</span>
-                                      </a>
-                                      <FDivider />
-                                    </>)
-                                  }
-                                  <a onClick={() => {
-                                    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
-                                  }}>
-                                    <FEdit />
-                                    <div style={{ height: 4 }} />
-                                    <span>编辑</span>
-                                  </a>
+                                      },
+                                    },
+                                    {
+                                      type: 'edit',
+                                      fn() {
+                                        window.open(t.originInfo.type === 'resource'
+                                          ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
+                                          : FUtil.LinkTo.objectDetails({
+                                            bucketName: t.originInfo.name.split('/')[0],
+                                            objectID: t.originInfo.id,
+                                          }));
+                                      },
+                                    },
+                                    {
+                                      type: t.originInfo.type === 'resource' ? 'resourceDetails' : '',
+                                      fn() {
+                                        window.open(FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id }));
+                                      },
+                                    },
+                                    {
+                                      type: t.originInfo.type === 'object' ? 'objectDetails' : '',
+                                      fn() {
+                                        window.open(
+                                          FUtil.LinkTo.objectDetails({
+                                            bucketName: t.originInfo.name.split('/')[0],
+                                            objectID: t.originInfo.id,
+                                          }));
+                                      },
+                                    },
+                                    {
+                                      type: t.associatedPresentableId === '' ? 'delete' : '',
+                                      fn() {
+                                        dispatch<OnClick_Themes_DeleteBtn_Action>({
+                                          type: 'informalNodeManagerPage/onClick_Themes_DeleteBtn',
+                                          payload: {
+                                            testResourceId: t.testResourceId,
+                                            testResourceName: t.testResourceName,
+                                          },
+                                        });
+                                      },
+                                    },
+                                  ]}
+                                />
+                                {/*<div>*/}
+                                {/*  <div style={{ width: 1 }} />*/}
 
-                                  <FDivider />
+                                {/*  {*/}
+                                {/*    !isActive && (<>*/}
+                                {/*      <a onClick={() => {*/}
+                                {/*        fConfirmModal({*/}
+                                {/*          message: FUtil1.I18n.message('msg_change_theme_confirm'),*/}
+                                {/*          okText: FUtil1.I18n.message('active_new_theme'),*/}
+                                {/*          cancelText: FUtil1.I18n.message('keep_current_theme'),*/}
+                                {/*          onOk() {*/}
+                                {/*            dispatch<OnClick_ActiveThemeBtn_Action>({*/}
+                                {/*              type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',*/}
+                                {/*              payload: {*/}
+                                {/*                testResourceId: t.testResourceId,*/}
+                                {/*                testResourceName: t.testResourceName,*/}
+                                {/*              },*/}
+                                {/*            });*/}
+                                {/*          },*/}
+                                {/*        });*/}
+                                {/*      }}>*/}
+                                {/*        <FMappingRuleActive />*/}
+                                {/*        <div style={{ height: 4 }} />*/}
+                                {/*        <span>激活</span>*/}
+                                {/*      </a>*/}
+                                {/*      <FDivider />*/}
+                                {/*    </>)*/}
+                                {/*  }*/}
+                                {/*  <a onClick={() => {*/}
+                                {/*    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));*/}
+                                {/*  }}>*/}
+                                {/*    <FEdit />*/}
+                                {/*    <div style={{ height: 4 }} />*/}
+                                {/*    <span>编辑</span>*/}
+                                {/*  </a>*/}
 
-                                  <a
-                                    onClick={() => {
-                                      window.open(t.originInfo.type === 'resource'
-                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                        : FUtil.LinkTo.objectDetails({
-                                          bucketName: t.originInfo.name.split('/')[0],
-                                          objectID: t.originInfo.id,
-                                        }));
-                                    }}
-                                  >
-                                    <FFileSearch />
-                                    <div style={{ height: 4 }} />
-                                    <span>{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</span>
-                                  </a>
+                                {/*  <FDivider />*/}
 
-                                  {
-                                    t.associatedPresentableId === '' && (<>
-                                      <FDivider />
+                                {/*  <a*/}
+                                {/*    onClick={() => {*/}
+                                {/*      window.open(t.originInfo.type === 'resource'*/}
+                                {/*        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })*/}
+                                {/*        : FUtil.LinkTo.objectDetails({*/}
+                                {/*          bucketName: t.originInfo.name.split('/')[0],*/}
+                                {/*          objectID: t.originInfo.id,*/}
+                                {/*        }));*/}
+                                {/*    }}*/}
+                                {/*  >*/}
+                                {/*    <FFileSearch />*/}
+                                {/*    <div style={{ height: 4 }} />*/}
+                                {/*    <span>{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</span>*/}
+                                {/*  </a>*/}
 
-                                      <a
-                                        onClick={() => {
-                                          dispatch<OnClick_Themes_DeleteBtn_Action>({
-                                            type: 'informalNodeManagerPage/onClick_Themes_DeleteBtn',
-                                            payload: {
-                                              testResourceId: t.testResourceId,
-                                              testResourceName: t.testResourceName,
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <FDelete />
-                                        <div style={{ height: 4 }} />
-                                        <span>删除</span>
-                                      </a>
-                                    </>)
-                                  }
-                                  <div style={{ width: 1 }} />
-                                </div>
+                                {/*  {*/}
+                                {/*    t.associatedPresentableId === '' && (<>*/}
+                                {/*      <FDivider />*/}
+
+                                {/*      <a*/}
+                                {/*        onClick={() => {*/}
+                                {/*          dispatch<OnClick_Themes_DeleteBtn_Action>({*/}
+                                {/*            type: 'informalNodeManagerPage/onClick_Themes_DeleteBtn',*/}
+                                {/*            payload: {*/}
+                                {/*              testResourceId: t.testResourceId,*/}
+                                {/*              testResourceName: t.testResourceName,*/}
+                                {/*            },*/}
+                                {/*          });*/}
+                                {/*        }}*/}
+                                {/*      >*/}
+                                {/*        <FDelete />*/}
+                                {/*        <div style={{ height: 4 }} />*/}
+                                {/*        <span>删除</span>*/}
+                                {/*      </a>*/}
+                                {/*    </>)*/}
+                                {/*  }*/}
+                                {/*  <div style={{ width: 1 }} />*/}
+                                {/*</div>*/}
                               </div>)
                           }
 
@@ -429,53 +458,4 @@ export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(Theme);
 
-// interface FCoverFooterButtonsProps {
-//   buttons: {
-//     type: 'active' | 'edit' | 'detail' | 'delete';
-//     fn(): void;
-//   }[];
-// }
-//
-// const btnMap: any = {
-//   active: {
-//     text: '激活',
-//     icon: (<FMappingRuleActive />),
-//   },
-//   edit: {
-//     text: '编辑',
-//     icon: (<FEdit />),
-//   },
-//   resourceDetails: {
-//     text: '资源详情',
-//     icon: (<FFileSearch />),
-//   },
-//   objectDetails: {
-//     text: '对象详情',
-//     icon: (<FFileSearch />),
-//   },
-//   delete: {
-//     text: '删除',
-//     icon: (<FDelete />),
-//   },
-// };
-//
-// function FCoverFooterButtons({ buttons }: FCoverFooterButtonsProps) {
-//   return (<div className={styles.FCoverFooterButtons}>
-//     <div style={{ width: 1 }} />
-//     {
-//       buttons.map(({ type, fn }, i) => {
-//         return <>
-//           {i !== 0 && (<FDivider />)}
-//           <a onClick={() => {
-//             fn();
-//           }}>
-//             {btnMap[type].icon}
-//             <div style={{ height: 4 }} />
-//             <span>{btnMap[type].text}</span>
-//           </a>
-//         </>;
-//       })
-//     }
-//     <div style={{ width: 1 }} />
-//   </div>);
-// }
+
