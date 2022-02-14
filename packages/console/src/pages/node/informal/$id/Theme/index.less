@@ -40,10 +40,6 @@
         width: 100%;
         position: relative;
 
-        //& > img {
-        //  width: 100%;
-        //}
-
         .coverLabel {
           position: absolute;
           top: 10px;
@@ -76,11 +72,13 @@
           right: 0;
           left: 0;
           background: rgba(0, 0, 0, 0.4);
-          height: 40px;
+          height: 60px;
           align-items: center;
           display: flex;
           justify-content: center;
           color: white;
+          backdrop-filter: blur(8px);
+          border-radius: 0 0 4px 4px;
         }
 
         .coverFooter {

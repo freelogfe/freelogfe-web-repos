@@ -263,23 +263,26 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                     <span>{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</span>
                                   </a>
 
-                                  <FDivider />
+                                  {
+                                    t.associatedPresentableId === '' && (<>
+                                      <FDivider />
 
-                                  <a
-                                    onClick={() => {
-                                      window.open(t.originInfo.type === 'resource'
-                                        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                        : FUtil.LinkTo.objectDetails({
-                                          bucketName: t.originInfo.name.split('/')[0],
-                                          objectID: t.originInfo.id,
-                                        }));
-                                    }}
-                                  >
-                                    <FDelete />
-                                    <div style={{ height: 4 }} />
-                                    <span>删除</span>
-                                  </a>
-
+                                      <a
+                                        onClick={() => {
+                                          window.open(t.originInfo.type === 'resource'
+                                            ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
+                                            : FUtil.LinkTo.objectDetails({
+                                              bucketName: t.originInfo.name.split('/')[0],
+                                              objectID: t.originInfo.id,
+                                            }));
+                                        }}
+                                      >
+                                        <FDelete />
+                                        <div style={{ height: 4 }} />
+                                        <span>删除</span>
+                                      </a>
+                                    </>)
+                                  }
                                   <div style={{ width: 1 }} />
                                 </div>
                               </div>)
