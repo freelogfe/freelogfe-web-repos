@@ -6,6 +6,7 @@ import FResourceStatusBadge from '../FResourceStatusBadge';
 // import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
+import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 
 type EventFunc = () => void
 
@@ -42,27 +43,64 @@ function FResourceCard({
         {
           type === 'market' || (<>
             <nav className={styles.CoverMask}>
-              <div className={styles.CoverMaskNav}>
-                {
-                  type === 'favorite'
-                    ? (<div className={styles.favorite}>
-                      <a onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>
-                      <span>|</span>
-                      <a onClick={() => onBoomJuice && onBoomJuice()}>{FUtil1.I18n.message('remove_from_collection')}</a>
-                    </div>)
-                    : (
-                      <div className={styles.resources}>
-                        <a
-                          onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>
-                        <span>|</span>
-                        <a onClick={() => onClickEditing && onClickEditing()}>{FUtil1.I18n.message('edit_resource')}</a>
-                        <span>|</span>
-                        <a
-                          onClick={() => onClickRevision && onClickRevision()}>{FUtil1.I18n.message('update_resource')}</a>
-                      </div>
-                    )
-                }
-              </div>
+              {
+                type === 'favorite'
+                  ? (<FCoverFooterButtons buttons={[
+                    {
+                      type: 'resourceDetails',
+                      fn() {
+                        onClickDetails && onClickDetails();
+                      },
+                    },
+                    {
+                      type: 'cancelCollect',
+                      fn() {
+                        onBoomJuice && onBoomJuice();
+                      },
+                    },
+                  ]} />)
+                  : (<FCoverFooterButtons buttons={[
+                    {
+                      type: 'resourceDetails',
+                      fn() {
+                        onClickDetails && onClickDetails();
+                      },
+                    },
+                    {
+                      type: 'edit',
+                      fn() {
+                        onClickEditing && onClickEditing();
+                      },
+                    },
+                    {
+                      type: 'update',
+                      fn() {
+                        onClickRevision && onClickRevision();
+                      },
+                    },
+                  ]} />)
+              }
+              {/*<div className={styles.CoverMaskNav}>*/}
+              {/*  {*/}
+              {/*    type === 'favorite'*/}
+              {/*      ? (<div className={styles.favorite}>*/}
+              {/*        <a onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>*/}
+              {/*        <span>|</span>*/}
+              {/*        <a onClick={() => onBoomJuice && onBoomJuice()}>{FUtil1.I18n.message('remove_from_collection')}</a>*/}
+              {/*      </div>)*/}
+              {/*      : (*/}
+              {/*        <div className={styles.resources}>*/}
+              {/*          <a*/}
+              {/*            onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>*/}
+              {/*          <span>|</span>*/}
+              {/*          <a onClick={() => onClickEditing && onClickEditing()}>{FUtil1.I18n.message('edit_resource')}</a>*/}
+              {/*          <span>|</span>*/}
+              {/*          <a*/}
+              {/*            onClick={() => onClickRevision && onClickRevision()}>{FUtil1.I18n.message('update_resource')}</a>*/}
+              {/*        </div>*/}
+              {/*      )*/}
+              {/*  }*/}
+              {/*</div>*/}
             </nav>
             <div className={styles.Status}>
               <FResourceStatusBadge

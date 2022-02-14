@@ -11,8 +11,8 @@
     background-color: #fff;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
 
-    nav {
-      opacity: 1;
+    nav.CoverMask {
+      visibility: visible;
     }
   }
 }
@@ -37,17 +37,17 @@
   //}
 
   .CoverMask {
-    background: rgba(0, 0, 0, 0.4);
+    //background: rgba(0, 0, 0, 0.4);
     position: absolute;
-    height: 40px;
+    //height: 40px;
     right: 0;
     bottom: 0;
     left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity .2s, background-color .2s;
+    //display: flex;
+    //align-items: center;
+    //justify-content: center;
+    visibility: hidden;
+    //transition: opacity .2s;
 
     .CoverMaskNav {
       display: flex;

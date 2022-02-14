@@ -7,7 +7,7 @@ import FDivider from '@/components/FDivider';
 
 interface FCoverFooterButtonsProps {
   buttons: {
-    type: '' | 'active' | 'edit' | 'delete' | 'resourceDetails' | 'objectDetails';
+    type: '' | 'active' | 'edit' | 'delete' | 'resourceDetails' | 'objectDetails' | 'update' | 'cancelCollect';
     fn(): void;
   }[];
 }
@@ -31,6 +31,14 @@ const btnMap: any = {
   },
   delete: {
     text: '删除',
+    icon: (<FDelete />),
+  },
+  update: {
+    text: '更新',
+    icon: (<FDelete />),
+  },
+  cancelCollect: {
+    text: '取消收藏',
     icon: (<FDelete />),
   },
 };
