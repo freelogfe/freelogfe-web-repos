@@ -27,6 +27,7 @@ import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
+import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 // import informExhibitInfoPage from '@/models/informExhibitInfoPage';
 // import exhibitInfoPage from '@/models/exhibitInfoPage';
 
@@ -137,53 +138,98 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                               className={styles.action}
                               // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
                             >
-                              <div style={{ width: 1 }} />
-                              {
-                                hasActiveBtn && (<>
-                                  <a
-                                    onClick={() => {
-                                      if (!nodeManagerPage.nodeThemeId) {
+                              <FCoverFooterButtons buttons={[
+                                {
+                                  type: hasActiveBtn ? 'active' : '',
+                                  fn() {
+                                    if (!nodeManagerPage.nodeThemeId) {
+                                      dispatch<OnActiveAction>({
+                                        type: 'nodeManagerPage/onActive',
+                                        payload: {
+                                          id: i.id,
+                                        },
+                                      });
+                                      return;
+                                    }
+
+                                    fConfirmModal({
+                                      message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                      // message: '激活该主题，将下线其它主题',
+                                      okText: FUtil1.I18n.message('active_new_theme'),
+                                      // okText: '激活',
+                                      cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                      // cancelText: '保持当前主题',
+                                      onOk() {
                                         dispatch<OnActiveAction>({
                                           type: 'nodeManagerPage/onActive',
                                           payload: {
                                             id: i.id,
                                           },
                                         });
-                                        return;
-                                      }
+                                      },
+                                    });
+                                  },
+                                },
+                                {
+                                  type: 'edit',
+                                  fn() {
+                                    window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));
+                                  },
+                                },
+                                {
+                                  type: 'resourceDetails',
+                                  fn() {
+                                    window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));
+                                  },
+                                },
+                              ]} />
+                              {/*<div style={{ width: 1 }} />*/}
+                              {/*{*/}
+                              {/*  hasActiveBtn && (<>*/}
+                              {/*    <a*/}
+                              {/*      onClick={() => {*/}
+                              {/*        if (!nodeManagerPage.nodeThemeId) {*/}
+                              {/*          dispatch<OnActiveAction>({*/}
+                              {/*            type: 'nodeManagerPage/onActive',*/}
+                              {/*            payload: {*/}
+                              {/*              id: i.id,*/}
+                              {/*            },*/}
+                              {/*          });*/}
+                              {/*          return;*/}
+                              {/*        }*/}
 
-                                      fConfirmModal({
-                                        message: FUtil1.I18n.message('msg_change_theme_confirm'),
-                                        // message: '激活该主题，将下线其它主题',
-                                        okText: FUtil1.I18n.message('active_new_theme'),
-                                        // okText: '激活',
-                                        cancelText: FUtil1.I18n.message('keep_current_theme'),
-                                        // cancelText: '保持当前主题',
-                                        onOk() {
-                                          dispatch<OnActiveAction>({
-                                            type: 'nodeManagerPage/onActive',
-                                            payload: {
-                                              id: i.id,
-                                            },
-                                          });
-                                        },
-                                      });
-                                    }}>{FUtil1.I18n.message('btn_activate_theme')}</a>
+                              {/*        fConfirmModal({*/}
+                              {/*          message: FUtil1.I18n.message('msg_change_theme_confirm'),*/}
+                              {/*          // message: '激活该主题，将下线其它主题',*/}
+                              {/*          okText: FUtil1.I18n.message('active_new_theme'),*/}
+                              {/*          // okText: '激活',*/}
+                              {/*          cancelText: FUtil1.I18n.message('keep_current_theme'),*/}
+                              {/*          // cancelText: '保持当前主题',*/}
+                              {/*          onOk() {*/}
+                              {/*            dispatch<OnActiveAction>({*/}
+                              {/*              type: 'nodeManagerPage/onActive',*/}
+                              {/*              payload: {*/}
+                              {/*                id: i.id,*/}
+                              {/*              },*/}
+                              {/*            });*/}
+                              {/*          },*/}
+                              {/*        });*/}
+                              {/*      }}>{FUtil1.I18n.message('btn_activate_theme')}</a>*/}
 
-                                  <FDivider />
-                                </>)
-                              }
-                              <a
-                                onClick={() => {
-                                  window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));
-                                }}
-                              >{FUtil1.I18n.message('btn_edit_exhibit')}</a>
-                              <FDivider />
-                              <a
-                                onClick={() => {
-                                  window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));
-                                }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>
-                              <div style={{ width: 1 }} />
+                              {/*    <FDivider />*/}
+                              {/*  </>)*/}
+                              {/*}*/}
+                              {/*<a*/}
+                              {/*  onClick={() => {*/}
+                              {/*    window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));*/}
+                              {/*  }}*/}
+                              {/*>{FUtil1.I18n.message('btn_edit_exhibit')}</a>*/}
+                              {/*<FDivider />*/}
+                              {/*<a*/}
+                              {/*  onClick={() => {*/}
+                              {/*    window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));*/}
+                              {/*  }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>*/}
+                              {/*<div style={{ width: 1 }} />*/}
                             </div>)
                         }
                       </div>
