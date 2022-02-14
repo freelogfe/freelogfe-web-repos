@@ -5,8 +5,7 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import { connect, Dispatch } from 'dva';
 import {
-  OnCancel_AddExhibitDrawer_Action,
-  OnChangePageAction, OnConfirm_AddExhibitDrawer_Action,
+  OnChangePageAction,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/informalNodeManagerPage';
@@ -16,12 +15,10 @@ import MappingRule from './MappingRule';
 import { RouteComponentProps } from 'react-router';
 import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-// import AddInformExhibitDrawer from './components/AddInformExhibitDrawer';
 import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-// import FAddInformExhibitDrawer from './components/AddInformExhibitDrawer';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -55,9 +52,7 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
   }, [showPage]);
 
   return (<>
-    <Helmet>
-      <title>{`测试展品管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
-    </Helmet>
+
 
     <div>
       <div className={styles.headerTip}>

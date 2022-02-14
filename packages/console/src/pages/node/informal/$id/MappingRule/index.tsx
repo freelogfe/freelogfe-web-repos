@@ -52,6 +52,7 @@ import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
+import { Helmet } from 'react-helmet';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -90,6 +91,10 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
   }
 
   return (<>
+    <Helmet>
+      <title>{`映射规则管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+    </Helmet>
+
     <Prompt
       when={informalNodeManagerPage.rule_CodeIsDirty && informalNodeManagerPage.rule_PromptLeavePath === ''}
       message={(location: H.Location) => {

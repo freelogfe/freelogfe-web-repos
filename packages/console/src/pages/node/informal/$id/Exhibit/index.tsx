@@ -32,6 +32,7 @@ import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
+import { Helmet } from 'react-helmet';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -61,6 +62,10 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
   }
 
   return (<>
+    <Helmet>
+      <title>{`测试展品管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+    </Helmet>
+
     {
       // informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords === ''
       informalNodeManagerPage.exhibit_ListState === 'noData'

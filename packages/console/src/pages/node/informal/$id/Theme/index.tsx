@@ -32,6 +32,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
+import { Helmet } from 'react-helmet';
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -61,6 +62,10 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
   }
 
   return (<>
+    <Helmet>
+      <title>{`测试主题管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+    </Helmet>
+
     {
       informalNodeManagerPage.theme_ListState === 'noData'
         ? (<FNoDataTip
