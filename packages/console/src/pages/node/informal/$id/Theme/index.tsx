@@ -8,7 +8,7 @@ import {
   InformalNodeManagerPageModelState,
   OnCancel_AddThemeDrawer_Action,
   OnChangeThemeKeywordsAction,
-  OnClick_ActiveThemeBtn_Action,
+  OnClick_ActiveThemeBtn_Action, OnClick_Themes_DeleteBtn_Action,
   OnClickThemesAddBtnAction,
   OnClickThemesReplaceBtnAction,
   OnConfirm_AddThemeDrawer_Action,
@@ -269,12 +269,13 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 
                                       <a
                                         onClick={() => {
-                                          window.open(t.originInfo.type === 'resource'
-                                            ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                            : FUtil.LinkTo.objectDetails({
-                                              bucketName: t.originInfo.name.split('/')[0],
-                                              objectID: t.originInfo.id,
-                                            }));
+                                          dispatch<OnClick_Themes_DeleteBtn_Action>({
+                                            type: 'informalNodeManagerPage/onClick_Themes_DeleteBtn',
+                                            payload: {
+                                              testResourceId: t.testResourceId,
+                                              testResourceName: t.testResourceName,
+                                            },
+                                          });
                                         }}
                                       >
                                         <FDelete />
