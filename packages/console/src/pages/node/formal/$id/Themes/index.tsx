@@ -49,10 +49,6 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
     });
   });
 
-  // if (nodeManagerPage.theme_ListState === 'loading') {
-  //   return (<FLoadingTip height={'calc(100vh - 70px)'} />);
-  // }
-
   return (<>
     <Helmet>
       <title>{`主题管理 · ${nodeManagerPage.nodeName} - Freelog`}</title>

@@ -210,6 +210,33 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                 <span>处理中…</span>
                               </div>)
                               : (<div className={styles.coverFooter}>
+                                {/*<FCoverFooterButtons*/}
+                                {/*  buttons={[*/}
+                                {/*    {*/}
+                                {/*      type: 'active',*/}
+                                {/*      fn() {*/}
+                                {/*        dispatch<OnClick_ActiveThemeBtn_Action>({*/}
+                                {/*          type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',*/}
+                                {/*          payload: {*/}
+                                {/*            testResourceId: t.testResourceId,*/}
+                                {/*            testResourceName: t.testResourceName,*/}
+                                {/*          },*/}
+                                {/*        });*/}
+                                {/*      },*/}
+                                {/*    },*/}
+                                {/*    {*/}
+                                {/*      type: 'edit',*/}
+                                {/*      fn() {*/}
+                                {/*        window.open(t.originInfo.type === 'resource'*/}
+                                {/*          ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })*/}
+                                {/*          : FUtil.LinkTo.objectDetails({*/}
+                                {/*            bucketName: t.originInfo.name.split('/')[0],*/}
+                                {/*            objectID: t.originInfo.id,*/}
+                                {/*          }));*/}
+                                {/*      },*/}
+                                {/*    },*/}
+                                {/*  ]}*/}
+                                {/*/>*/}
                                 <div>
                                   <div style={{ width: 1 }} />
 
@@ -401,3 +428,54 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(Theme);
+
+// interface FCoverFooterButtonsProps {
+//   buttons: {
+//     type: 'active' | 'edit' | 'detail' | 'delete';
+//     fn(): void;
+//   }[];
+// }
+//
+// const btnMap: any = {
+//   active: {
+//     text: '激活',
+//     icon: (<FMappingRuleActive />),
+//   },
+//   edit: {
+//     text: '编辑',
+//     icon: (<FEdit />),
+//   },
+//   resourceDetails: {
+//     text: '资源详情',
+//     icon: (<FFileSearch />),
+//   },
+//   objectDetails: {
+//     text: '对象详情',
+//     icon: (<FFileSearch />),
+//   },
+//   delete: {
+//     text: '删除',
+//     icon: (<FDelete />),
+//   },
+// };
+//
+// function FCoverFooterButtons({ buttons }: FCoverFooterButtonsProps) {
+//   return (<div className={styles.FCoverFooterButtons}>
+//     <div style={{ width: 1 }} />
+//     {
+//       buttons.map(({ type, fn }, i) => {
+//         return <>
+//           {i !== 0 && (<FDivider />)}
+//           <a onClick={() => {
+//             fn();
+//           }}>
+//             {btnMap[type].icon}
+//             <div style={{ height: 4 }} />
+//             <span>{btnMap[type].text}</span>
+//           </a>
+//         </>;
+//       })
+//     }
+//     <div style={{ width: 1 }} />
+//   </div>);
+// }
