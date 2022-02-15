@@ -4,6 +4,7 @@ import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { FDelete, FEdit } from '@/components/FIcons';
 import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
+import FCancelCollect from '@/components/FIcons/FCancelCollect';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -39,7 +40,7 @@ const btnMap: any = {
   },
   cancelCollect: {
     text: '取消收藏',
-    icon: (<FDelete />),
+    icon: (<FCancelCollect />),
   },
 };
 

@@ -153,6 +153,15 @@ const Model: ResourceListPageModelType = {
       const { data } = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data')
 
+      const parmas1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+        resourceIds: data.dataList.map((r: any) => {
+          return r.resourceId;
+        }).join(','),
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, parmas1);
+      console.log(data1, '#####9823948237948792839');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {

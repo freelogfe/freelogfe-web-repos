@@ -87,6 +87,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
             type: 'marketResourcePage/onClickCollection',
           })}
         >
+          {/*{marketResourcePage.hasCollect ? <FC}*/}
           <FFavorite
             filled={marketResourcePage.hasCollect}
           />
