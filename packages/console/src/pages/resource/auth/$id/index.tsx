@@ -7,7 +7,8 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import {
   ConnectState,
-  ResourceAuthPageModelState, ResourceInfoModelState,
+  ResourceAuthPageModelState,
+  ResourceInfoModelState,
 } from '@/models/connect';
 import {
   ChangeAction,

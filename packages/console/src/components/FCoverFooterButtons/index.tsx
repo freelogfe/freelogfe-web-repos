@@ -52,7 +52,7 @@ function FCoverFooterButtons({ buttons }: FCoverFooterButtonsProps) {
           return type !== '';
         })
         .map(({ type, fn }, i) => {
-          return <>
+          return <React.Fragment key={i}>
             {i !== 0 && (<FDivider />)}
             <a onClick={() => {
               fn();
@@ -61,7 +61,7 @@ function FCoverFooterButtons({ buttons }: FCoverFooterButtonsProps) {
               <div style={{ height: 4 }} />
               <span>{btnMap[type].text}</span>
             </a>
-          </>;
+          </React.Fragment>;
         })
     }
     <div style={{ width: 1 }} />

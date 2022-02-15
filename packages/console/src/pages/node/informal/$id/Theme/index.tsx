@@ -171,7 +171,8 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                       const isActive: boolean = t.stateInfo.themeInfo.isActivatedTheme === 1;
 
                       return (<div
-                        key={t.testResourceId}
+                        // key={t.testResourceId}
+                        key={index}
                         className={styles.item}
                       >
                         <div className={styles.cover}>
@@ -266,82 +267,6 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                     },
                                   ]}
                                 />
-                                {/*<div>*/}
-                                {/*  <div style={{ width: 1 }} />*/}
-
-                                {/*  {*/}
-                                {/*    !isActive && (<>*/}
-                                {/*      <a onClick={() => {*/}
-                                {/*        fConfirmModal({*/}
-                                {/*          message: FUtil1.I18n.message('msg_change_theme_confirm'),*/}
-                                {/*          okText: FUtil1.I18n.message('active_new_theme'),*/}
-                                {/*          cancelText: FUtil1.I18n.message('keep_current_theme'),*/}
-                                {/*          onOk() {*/}
-                                {/*            dispatch<OnClick_ActiveThemeBtn_Action>({*/}
-                                {/*              type: 'informalNodeManagerPage/onClick_ActiveThemeBtn',*/}
-                                {/*              payload: {*/}
-                                {/*                testResourceId: t.testResourceId,*/}
-                                {/*                testResourceName: t.testResourceName,*/}
-                                {/*              },*/}
-                                {/*            });*/}
-                                {/*          },*/}
-                                {/*        });*/}
-                                {/*      }}>*/}
-                                {/*        <FMappingRuleActive />*/}
-                                {/*        <div style={{ height: 4 }} />*/}
-                                {/*        <span>激活</span>*/}
-                                {/*      </a>*/}
-                                {/*      <FDivider />*/}
-                                {/*    </>)*/}
-                                {/*  }*/}
-                                {/*  <a onClick={() => {*/}
-                                {/*    window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));*/}
-                                {/*  }}>*/}
-                                {/*    <FEdit />*/}
-                                {/*    <div style={{ height: 4 }} />*/}
-                                {/*    <span>编辑</span>*/}
-                                {/*  </a>*/}
-
-                                {/*  <FDivider />*/}
-
-                                {/*  <a*/}
-                                {/*    onClick={() => {*/}
-                                {/*      window.open(t.originInfo.type === 'resource'*/}
-                                {/*        ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })*/}
-                                {/*        : FUtil.LinkTo.objectDetails({*/}
-                                {/*          bucketName: t.originInfo.name.split('/')[0],*/}
-                                {/*          objectID: t.originInfo.id,*/}
-                                {/*        }));*/}
-                                {/*    }}*/}
-                                {/*  >*/}
-                                {/*    <FFileSearch />*/}
-                                {/*    <div style={{ height: 4 }} />*/}
-                                {/*    <span>{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</span>*/}
-                                {/*  </a>*/}
-
-                                {/*  {*/}
-                                {/*    t.associatedPresentableId === '' && (<>*/}
-                                {/*      <FDivider />*/}
-
-                                {/*      <a*/}
-                                {/*        onClick={() => {*/}
-                                {/*          dispatch<OnClick_Themes_DeleteBtn_Action>({*/}
-                                {/*            type: 'informalNodeManagerPage/onClick_Themes_DeleteBtn',*/}
-                                {/*            payload: {*/}
-                                {/*              testResourceId: t.testResourceId,*/}
-                                {/*              testResourceName: t.testResourceName,*/}
-                                {/*            },*/}
-                                {/*          });*/}
-                                {/*        }}*/}
-                                {/*      >*/}
-                                {/*        <FDelete />*/}
-                                {/*        <div style={{ height: 4 }} />*/}
-                                {/*        <span>删除</span>*/}
-                                {/*      </a>*/}
-                                {/*    </>)*/}
-                                {/*  }*/}
-                                {/*  <div style={{ width: 1 }} />*/}
-                                {/*</div>*/}
                               </div>)
                           }
 
