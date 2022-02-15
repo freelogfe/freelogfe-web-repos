@@ -440,12 +440,24 @@ interface RelationTreeAuthParamsType {
 }
 
 export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParamsType) {
-  // return FUtil.Axios.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    params: params,
+  });
+}
+
+// 批量查询资源授权结果
+interface BatchAuthParamsType {
+  resourceIds: string;
+  versions?: string;
+  versionRanges?: string;
+}
+
+export function batchAuth({...params}: BatchAuthParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/batchAuth/results`,
     params: params,
   });
 }
