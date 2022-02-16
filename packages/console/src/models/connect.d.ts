@@ -20,8 +20,7 @@ import {ExhibitInfoPageModelState} from './exhibitInfoPage';
 import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
-// import {AddInformExhibitDrawerModelState} from './addInformExhibitDrawer';
-// import {ReplaceInformExhibitState} from './replaceInformExhibitModal';
+import {ResourceEditorPageModelState} from './resourceEditorPage';
 
 export {
   // RouterHistoriesModelState,
@@ -47,15 +46,13 @@ export {
   ResourceDepSelectorModelState,
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
-  // AddInformExhibitDrawerModelState,
-  // ReplaceInformExhibitState,
+  ResourceEditorPageModelState,
 };
 
 export interface ConnectState {
   router: {
     location: Location;
   };
-  // routerHistories: RouterHistoriesModelState,
   globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
   resourceListPage: ResourceListPageModelState;
@@ -78,7 +75,4 @@ export interface ConnectState {
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
-
-  // addInformExhibitDrawer: AddInformExhibitDrawerModelState;
-  // replaceInformExhibit: ReplaceInformExhibitState;
 }

@@ -2,7 +2,7 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 
-export interface ResourceEditorModelState {
+export interface ResourceEditorPageModelState {
 
   resourceID: string;
 
@@ -19,7 +19,7 @@ export interface ResourceEditorModelState {
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
-  payload: Partial<ResourceEditorModelState>;
+  payload: Partial<ResourceEditorPageModelState>;
 }
 
 export interface InitModelStatesAction extends AnyAction {
@@ -30,22 +30,22 @@ export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
 
-interface ResourceEditorModelType {
-  namespace: 'resourceEditor';
-  state: ResourceEditorModelState;
+interface ResourceEditorPageModelType {
+  namespace: 'resourceEditorPage';
+  state: ResourceEditorPageModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<ResourceEditorModelState, ChangeAction>;
+    change: DvaReducer<ResourceEditorPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const initStates: ResourceEditorModelState = {
+const initStates: ResourceEditorPageModelState = {
   resourceID: '',
 
   sider_ResourceInfo: null,
@@ -54,8 +54,8 @@ const initStates: ResourceEditorModelState = {
   sider_Versions: [],
 };
 
-const Model: ResourceEditorModelType = {
-  namespace: 'resourceEditor',
+const Model: ResourceEditorPageModelType = {
+  namespace: 'resourceEditorPage',
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
