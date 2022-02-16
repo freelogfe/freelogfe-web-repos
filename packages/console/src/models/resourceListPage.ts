@@ -18,6 +18,7 @@ export interface ResourceListPageModelState {
     policy: string[],
     type: string;
     status: 0 | 1;
+    authProblem: boolean;
   }[];
 }
 
@@ -154,9 +155,13 @@ const Model: ResourceListPageModelType = {
       // console.log(data, 'data')
 
       const parmas1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
-        resourceIds: data.dataList.map((r: any) => {
-          return r.resourceId;
-        }).join(','),
+        resourceIds: data.dataList
+          .filter((r: any) => {
+            return r.latestVersion !== '';
+          })
+          .map((r: any) => {
+            return r.resourceId;
+          }).join(','),
       };
 
       const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, parmas1);
@@ -168,6 +173,9 @@ const Model: ResourceListPageModelType = {
           dataSource: [
             ...dataSource,
             ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
+              const res = data1.find((dd: any) => {
+                return dd.resourceId === i.resourceId;
+              });
               return {
                 id: i.resourceId,
                 cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
@@ -180,6 +188,7 @@ const Model: ResourceListPageModelType = {
                   .map((l: any) => l.policyName),
                 type: i.resourceType,
                 status: i.status,
+                authProblem: !!res && !res.isAuth,
               };
             }),
           ],

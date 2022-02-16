@@ -7,6 +7,8 @@ import FResourceStatusBadge from '../FResourceStatusBadge';
 import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
+import { FWarning } from '@/components/FIcons';
+import FTooltip from '@/components/FTooltip';
 
 type EventFunc = () => void
 
@@ -21,6 +23,7 @@ export interface FResourceCardProps {
     policy: string[];
     type: string;
     status: 0 | 1;
+    authProblem?: boolean;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -80,32 +83,13 @@ function FResourceCard({
                     },
                   ]} />)
               }
-              {/*<div className={styles.CoverMaskNav}>*/}
-              {/*  {*/}
-              {/*    type === 'favorite'*/}
-              {/*      ? (<div className={styles.favorite}>*/}
-              {/*        <a onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>*/}
-              {/*        <span>|</span>*/}
-              {/*        <a onClick={() => onBoomJuice && onBoomJuice()}>{FUtil1.I18n.message('remove_from_collection')}</a>*/}
-              {/*      </div>)*/}
-              {/*      : (*/}
-              {/*        <div className={styles.resources}>*/}
-              {/*          <a*/}
-              {/*            onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>*/}
-              {/*          <span>|</span>*/}
-              {/*          <a onClick={() => onClickEditing && onClickEditing()}>{FUtil1.I18n.message('edit_resource')}</a>*/}
-              {/*          <span>|</span>*/}
-              {/*          <a*/}
-              {/*            onClick={() => onClickRevision && onClickRevision()}>{FUtil1.I18n.message('update_resource')}</a>*/}
-              {/*        </div>*/}
-              {/*      )*/}
-              {/*  }*/}
-              {/*</div>*/}
             </nav>
             <div className={styles.Status}>
               <FResourceStatusBadge
                 status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
               />
+              <div style={{ width: 10 }} />
+              {resource.authProblem && <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
           </>)
         }

@@ -5,6 +5,7 @@ import { FDelete, FEdit } from '@/components/FIcons';
 import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
 import FCancelCollect from '@/components/FIcons/FCancelCollect';
+import FUpdate from '@/components/FIcons/FUpdate';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -36,7 +37,7 @@ const btnMap: any = {
   },
   update: {
     text: '更新',
-    icon: (<FDelete />),
+    icon: (<FUpdate />),
   },
   cancelCollect: {
     text: '取消收藏',
