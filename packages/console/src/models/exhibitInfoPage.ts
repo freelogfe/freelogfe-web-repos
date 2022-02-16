@@ -450,52 +450,52 @@ const Model: ExhibitInfoPageModelType = {
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
       };
-      const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
       // if (!data || data.userId !== user.cookiesUserID) {
-      if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
+      if (!data_PresentableDetails || data_PresentableDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
         router.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 
       const params3: Parameters<typeof FServiceAPI.Node.details>[0] = {
-        nodeId: data.nodeId,
+        nodeId: data_PresentableDetails.nodeId,
       };
 
       const { data: data3 } = yield call(FServiceAPI.Node.details, params3);
       // console.log(data3, 'data90j23rlkfjasdfa');
 
       const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: data.resourceInfo.resourceId,
+        resourceIdOrName: data_PresentableDetails.resourceInfo.resourceId,
       };
 
       const { data: data2 } = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
-      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources, data.nodeId);
+      const result: HandleRelationResult = yield call(handleRelation, data_PresentableDetails.resolveResources, data_PresentableDetails.nodeId);
 
       // 要禁用的键
       const disabledRewriteKeys = [
-        ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
+        ...data_PresentableDetails.resourceCustomPropertyDescriptors.map((i: any) => i.key),
       ];
 
       // console.log(data, 'data2341234');
 
       // 获取展品授权结果
       const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
-        nodeId: data.nodeId,
+        nodeId: data_PresentableDetails.nodeId,
         authType: 3,
-        presentableIds: data.presentableId,
+        presentableIds: data_PresentableDetails.presentableId,
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
 
       // 关系树数据
       const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
-        presentableId: data.presentableId,
+        presentableId: data_PresentableDetails.presentableId,
       };
 
       const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
@@ -506,10 +506,10 @@ const Model: ExhibitInfoPageModelType = {
         nodes: relationGraphNodes,
         edges: relationGraphEdges,
       } = yield call(handleExhibitRelationGraphData, data6, {
-        nodeId: data.nodeId,
+        nodeId: data_PresentableDetails.nodeId,
         nodeName: data3.nodeName,
-        exhibitId: data.presentableId,
-        exhibitName: data.presentableName,
+        exhibitId: data_PresentableDetails.presentableId,
+        exhibitName: data_PresentableDetails.presentableName,
       });
 
       // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
@@ -526,16 +526,16 @@ const Model: ExhibitInfoPageModelType = {
         nodes: authorizationGraphNodes,
         edges: authorizationGraphEdges,
       } = yield call(handleAuthorizationGraphData, data4, {
-        id: data.presentableId,
-        nodeId: data.nodeId,
+        id: data_PresentableDetails.presentableId,
+        nodeId: data_PresentableDetails.nodeId,
         nodeName: data3.nodeName,
-        exhibitId: data.presentableId,
-        exhibitName: data.presentableName,
+        exhibitId: data_PresentableDetails.presentableId,
+        exhibitName: data_PresentableDetails.presentableName,
       });
 
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        nodeId: data.nodeId,
+        nodeId: data_PresentableDetails.nodeId,
         resolveResourceIds: result.map((rs) => {
           return rs.resourceId;
         }).join(','),
@@ -564,15 +564,15 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           pageLoading: false,
-          exhibit_BelongNode_ID: data.nodeId,
+          exhibit_BelongNode_ID: data_PresentableDetails.nodeId,
           exhibit_BelongNode_Name: data3.nodeName,
           exhibit_BelongNode_ActiveThemeId: data3.nodeThemeId,
-          exhibit_ID: data.presentableId,
-          exhibit_Name: data.presentableName,
-          exhibit_Online: data.onlineStatus === 1,
+          exhibit_ID: data_PresentableDetails.presentableId,
+          exhibit_Name: data_PresentableDetails.presentableName,
+          exhibit_Online: data_PresentableDetails.onlineStatus === 1,
           exhibit_IsAuth: data1[0].isAuth,
           exhibit_AuthErrorText: data1[0].error,
-          policy_List: data.policies.map((p: any) => ({
+          policy_List: data_PresentableDetails.policies.map((p: any) => ({
             id: p.policyId,
             name: p.policyName,
             text: p.policyText,
@@ -587,7 +587,7 @@ const Model: ExhibitInfoPageModelType = {
             .map((r, index) => {
               const exhibits = data5.filter((d5: any) => {
                 return d5.resolveResources.some((rr: any) => {
-                  return d5.presentableId !== data.presentableId && rr.resourceId === r.resourceId;
+                  return d5.presentableId !== data_PresentableDetails.presentableId && rr.resourceId === r.resourceId;
                 });
               }).map((d5: any) => {
                 return {
@@ -633,29 +633,29 @@ const Model: ExhibitInfoPageModelType = {
           graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
           graph_Viewport_AuthorizationGraph_Edges: authorizationGraphEdges,
 
-          side_ExhibitCover: data.coverImages[0] || '',
-          side_ExhibitTitle: data.presentableTitle,
-          side_ExhibitTags: data.tags,
+          side_ExhibitCover: data_PresentableDetails.coverImages[0] || '',
+          side_ExhibitTitle: data_PresentableDetails.presentableTitle,
+          side_ExhibitTags: data_PresentableDetails.tags,
 
           side_AllVersions: data2.resourceVersions.map((d2: any) => d2.version),
-          side_Version: data.version,
+          side_Version: data_PresentableDetails.version,
 
           side_BaseAttrs: [
-            ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
+            ...Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
               key: s[0],
               value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
             })),
-            ...data.resourceCustomPropertyDescriptors
+            ...data_PresentableDetails.resourceCustomPropertyDescriptors
               .filter((rd: any) => rd.type === 'readonlyText')
               .map((rd: any) => ({
                 key: rd.key,
                 value: rd.defaultValue,
               })),
           ],
-          side_InheritOptions: (data.resourceCustomPropertyDescriptors as any[])
+          side_InheritOptions: (data_PresentableDetails.resourceCustomPropertyDescriptors as any[])
             .filter((rd: any) => rd.type !== 'readonlyText')
             .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd: any) => {
-              const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+              const prp = data_PresentableDetails.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
               const value = prp ? prp.value : rd.defaultValue;
               // console.log(prp, 'rd1234234#####');
               // console.log(rd, 'rd1234234******');
@@ -670,7 +670,7 @@ const Model: ExhibitInfoPageModelType = {
                 valueInputError: '',
               };
             }),
-          side_CustomOptions: (data.presentableRewriteProperty as any[])
+          side_CustomOptions: (data_PresentableDetails.presentableRewriteProperty as any[])
             .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
             .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => {
               return {
@@ -1209,24 +1209,13 @@ export type HandleRelationResult = {
 }[];
 
 export async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
-  // console.log(params, nodeID, 'params2222200000');
-  // console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
-  // console.log(params, 'params0923jafdsl');
+
   const resourceIds: string[] = params.map((r) => r.resourceId);
 
   const allContracts = await getAllContracts({
     nodeID,
     resourceIDs: resourceIds,
   });
-
-  // const contractResourcePolicyIds: {
-  //   resourceID: string;
-  //   policyID: string;
-  // }[] = allContracts.map((cs) => {
-  //   return {
-  //     resourceID: cs.
-  //   }
-  // });
 
   const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
