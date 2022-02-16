@@ -12,8 +12,9 @@ import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Space } from 'antd';
 import { FWarning } from '@/components/FIcons';
+import FTooltip from '@/components/FTooltip';
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
@@ -125,9 +126,11 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
           resourceID: match.params.id,
         })}
       >
-        <span>{FUtil1.I18n.message('authorization_infomation')}</span>
-        {/*{resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot}/>)}*/}
-        {resourceInfo.info?.policies.length === 0 && (<FWarning />)}
+        <Space size={10}>
+          <span>{FUtil1.I18n.message('authorization_infomation')}</span>
+          {resourceInfo.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>)}
+        </Space>
+        {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot} />)}
       </FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>

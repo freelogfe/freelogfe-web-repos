@@ -1,9 +1,9 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer, WholeReadonly} from './shared';
-import {ConnectState} from "@/models/connect";
-import {router} from 'umi';
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer, WholeReadonly } from './shared';
+import { ConnectState } from '@/models/connect';
+import { router } from 'umi';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -43,6 +43,7 @@ export interface ResourceInfoModelState {
       resourceName: string;
     }[];
   };
+  authProblem: boolean;
 
   draftData: null | { [key: string]: any };
 }
@@ -89,6 +90,7 @@ const initStates: ResourceInfoModelState = {
   resourceID: '',
   showPage: {},
   info: null,
+  authProblem: false,
   draftData: null,
   // hasPermission: true,
 };
@@ -99,12 +101,16 @@ const Model: ResourceInfoModelType = {
   state: initStates,
 
   effects: {
-    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap): Generator<any, void, any> {
+    * fetchDataSource({ payload }: FetchDataSourceAction, {
+      call,
+      put,
+      select,
+    }: EffectsCommandMap): Generator<any, void, any> {
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FServiceAPI.Resource.info, params);
+      const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
 
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
@@ -112,11 +118,22 @@ const Model: ResourceInfoModelType = {
         return;
       }
 
+      let authProblem: boolean = false;
+      if (data['latestVersion'] !== '') {
+        const params1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+          resourceIds: data['resourceId'],
+        };
+        const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, params1);
+        console.log(data1, 'data1232@@@@@');
+        authProblem = !data1[0].isAuth;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           info: data,
           // hasPermission: data.userId === user.info?.userId,
+          authProblem: authProblem,
         },
       });
 
@@ -124,15 +141,15 @@ const Model: ResourceInfoModelType = {
         type: 'fetchDraftData',
       });
     },
-    * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {
-      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+    * fetchDraftData({}: FetchDraftDataAction, { select, put, call }: EffectsCommandMap) {
+      const { resourceInfo }: ConnectState = yield select(({ resourceInfo }: ConnectState) => ({
         resourceInfo,
       }));
 
       const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceInfo.resourceID,
       };
-      const {data} = yield call(FServiceAPI.Resource.lookDraft, params);
+      const { data } = yield call(FServiceAPI.Resource.lookDraft, params);
       if (!data) {
         return yield put<ChangeAction>({
           type: 'change',
@@ -145,10 +162,10 @@ const Model: ResourceInfoModelType = {
         type: 'change',
         payload: {
           draftData: data.draftData,
-        }
+        },
       });
     },
-    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -160,10 +177,10 @@ const Model: ResourceInfoModelType = {
     changeInfo(state: ResourceInfoModelState, action: ChangeInfoAction): ResourceInfoModelState {
       return {
         ...state,
-        info: action.payload
+        info: action.payload,
       };
     },
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -172,7 +189,7 @@ const Model: ResourceInfoModelType = {
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
       // console.log(history, 'historyhistory');
     },
   },

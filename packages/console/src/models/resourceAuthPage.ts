@@ -138,10 +138,7 @@ const Model: ResourceAuthPageModelType = {
     policies: [],
     policyPreviewVisible: false,
     policyPreviewText: '',
-    // newPolicyTitle: '',
-    // newPolicyText: '',
     policyEditorVisible: false,
-    // policyTemplateVisible: false,
 
     baseUastResources: [],
     contractsAuthorized: [],
@@ -349,6 +346,9 @@ const Model: ResourceAuthPageModelType = {
           // baseResourceId: resourceInfo.info?.resourceId || '',
           activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
         },
+      });
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
       });
     },
   },

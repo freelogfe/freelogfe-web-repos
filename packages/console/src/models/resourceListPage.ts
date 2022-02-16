@@ -144,7 +144,6 @@ const Model: ResourceListPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
-        // limit: resourceListPage.pageSize,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
         resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
@@ -154,18 +153,21 @@ const Model: ResourceListPageModelType = {
       const { data } = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data')
 
-      const parmas1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
-        resourceIds: data.dataList
-          .filter((r: any) => {
-            return r.latestVersion !== '';
-          })
-          .map((r: any) => {
-            return r.resourceId;
-          }).join(','),
-      };
-
-      const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, parmas1);
-      console.log(data1, '#####9823948237948792839');
+      let auths: any[] = [];
+      const resourceIds: string = data.dataList
+        .filter((r: any) => {
+          return r.latestVersion !== '';
+        })
+        .map((r: any) => {
+          return r.resourceId;
+        }).join(',');
+      if (resourceIds !== '') {
+        const parmas1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+          resourceIds: resourceIds,
+        };
+        const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, parmas1);
+        auths = data1;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -173,7 +175,7 @@ const Model: ResourceListPageModelType = {
           dataSource: [
             ...dataSource,
             ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
-              const res = data1.find((dd: any) => {
+              const res = auths.find((dd: any) => {
                 return dd.resourceId === i.resourceId;
               });
               return {
