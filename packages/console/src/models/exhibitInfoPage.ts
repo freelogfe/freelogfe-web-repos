@@ -464,7 +464,7 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: data_PresentableDetails.nodeId,
       };
 
-      const { data: data3 } = yield call(FServiceAPI.Node.details, params3);
+      const { data: data_NodeDetails } = yield call(FServiceAPI.Node.details, params3);
       // console.log(data3, 'data90j23rlkfjasdfa');
 
       const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -507,7 +507,7 @@ const Model: ExhibitInfoPageModelType = {
         edges: relationGraphEdges,
       } = yield call(handleExhibitRelationGraphData, data6, {
         nodeId: data_PresentableDetails.nodeId,
-        nodeName: data3.nodeName,
+        nodeName: data_NodeDetails.nodeName,
         exhibitId: data_PresentableDetails.presentableId,
         exhibitName: data_PresentableDetails.presentableName,
       });
@@ -528,7 +528,7 @@ const Model: ExhibitInfoPageModelType = {
       } = yield call(handleAuthorizationGraphData, data4, {
         id: data_PresentableDetails.presentableId,
         nodeId: data_PresentableDetails.nodeId,
-        nodeName: data3.nodeName,
+        nodeName: data_NodeDetails.nodeName,
         exhibitId: data_PresentableDetails.presentableId,
         exhibitName: data_PresentableDetails.presentableName,
       });
@@ -565,8 +565,8 @@ const Model: ExhibitInfoPageModelType = {
         payload: {
           pageLoading: false,
           exhibit_BelongNode_ID: data_PresentableDetails.nodeId,
-          exhibit_BelongNode_Name: data3.nodeName,
-          exhibit_BelongNode_ActiveThemeId: data3.nodeThemeId,
+          exhibit_BelongNode_Name: data_NodeDetails.nodeName,
+          exhibit_BelongNode_ActiveThemeId: data_NodeDetails.nodeThemeId,
           exhibit_ID: data_PresentableDetails.presentableId,
           exhibit_Name: data_PresentableDetails.presentableName,
           exhibit_Online: data_PresentableDetails.onlineStatus === 1,
