@@ -1,10 +1,21 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
+import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
 
-export type ResourceEditorModelState = WholeReadonly<{
-  info: null | {};
-}>;
+export interface ResourceEditorModelState {
+
+  resourceID: string;
+
+  sider_ResourceInfo: null | {
+    cover: string;
+    name: string;
+    type: string;
+    state: 'online' | 'offline' | 'unreleased';
+  };
+  sider_Versions: string[];
+  sider_ShowPage: 'info' | 'auth' | 'versionCreator' | 'string';
+  sider_AuthProblem: boolean;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
@@ -35,7 +46,12 @@ interface ResourceEditorModelType {
 }
 
 const initStates: ResourceEditorModelState = {
-  info: null,
+  resourceID: '',
+
+  sider_ResourceInfo: null,
+  sider_ShowPage: 'info',
+  sider_AuthProblem: false,
+  sider_Versions: [],
 };
 
 const Model: ResourceEditorModelType = {
@@ -45,7 +61,7 @@ const Model: ResourceEditorModelType = {
     * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
 
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -53,18 +69,18 @@ const Model: ResourceEditorModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
-  }
+    },
+  },
 };
 
 export default Model;
