@@ -100,9 +100,6 @@ const Model: ResourceInfoModelType = {
 
   effects: {
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap): Generator<any, void, any> {
-      const {user}: ConnectState = yield select(({user}: ConnectState) => ({
-        user,
-      }));
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
@@ -110,9 +107,6 @@ const Model: ResourceInfoModelType = {
       const {data} = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
 
-      // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
-
-      // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
         router.replace(FUtil.LinkTo.exception403());
         return;
@@ -134,10 +128,6 @@ const Model: ResourceInfoModelType = {
       const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
         resourceInfo,
       }));
-
-      // if (!resourceInfo.hasPermission) {
-      //   return;
-      // }
 
       const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceInfo.resourceID,
