@@ -350,6 +350,10 @@ const Model: ResourceAuthPageModelType = {
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
       });
+      yield put<FetchDataSourceAction>({
+        type: 'resourceInfo/fetchDataSource',
+        payload: resourceAuthPage.resourceID,
+      });
     },
   },
   reducers: {
