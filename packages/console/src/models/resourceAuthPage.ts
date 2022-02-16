@@ -318,17 +318,12 @@ const Model: ResourceAuthPageModelType = {
             authorizedParty: i.licenseeName,
             licenseeIdentityType: LicenseeIdentityType[i.licenseeIdentityType],
             createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
-            // status: i.isAuth ? 'executing' : 'stopped',
             status: i.status === 1 ? 'terminal' : i.authStatus === 1 ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
           })),
         },
       });
     },
     * updateAuthorized({ payload }: UpdateAuthorizedAction, { select, call, put }: EffectsCommandMap) {
-      // const {resourceId, activatedResourceId} = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
-      //   resourceId: resourceInfo.info?.resourceId,
-      //   activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
-      // }));
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));

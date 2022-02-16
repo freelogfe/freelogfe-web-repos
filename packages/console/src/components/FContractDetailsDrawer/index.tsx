@@ -6,11 +6,9 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
-// import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FResource from '@/components/FIcons/FResource';
-// import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
@@ -39,9 +37,6 @@ interface BaseInfo {
 
   policyID: string;
   policyText: string;
-
-  // resourceInfo: null | {};
-  // exhibitInfo: null | {};
 }
 
 type AssociateContracts = {
@@ -142,14 +137,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       contractId: data.contractId,
       contractName: data.contractName,
       contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
-      // contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
       contractStatus: data.status === 1 ? 'terminal' : data.authStatus === 1 ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
 
       policyID: data.policyId,
       policyText: data.policyInfo.policyText,
-
-      // resourceInfo: null,
-      // exhibitInfo: null,
     };
 
     // console.log(data, 'data12432433333########');
