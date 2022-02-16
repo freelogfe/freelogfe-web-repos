@@ -471,7 +471,7 @@ const Model: ExhibitInfoPageModelType = {
         resourceIdOrName: data_PresentableDetails.resourceInfo.resourceId,
       };
 
-      const { data: data2 } = yield call(FServiceAPI.Resource.info, params2);
+      const { data: data_ResourceInfo} = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
@@ -637,7 +637,7 @@ const Model: ExhibitInfoPageModelType = {
           side_ExhibitTitle: data_PresentableDetails.presentableTitle,
           side_ExhibitTags: data_PresentableDetails.tags,
 
-          side_AllVersions: data2.resourceVersions.map((d2: any) => d2.version),
+          side_AllVersions: data_ResourceInfo.resourceVersions.map((d2: any) => d2.version),
           side_Version: data_PresentableDetails.version,
 
           side_BaseAttrs: [
@@ -682,10 +682,10 @@ const Model: ExhibitInfoPageModelType = {
               };
             }),
 
-          side_ResourceID: data2.resourceId,
-          side_ResourceName: data2.resourceName,
-          side_ResourceType: data2.resourceType,
-          side_ResourceCover: data2.coverImages[0] || '',
+          side_ResourceID: data_ResourceInfo.resourceId,
+          side_ResourceName: data_ResourceInfo.resourceName,
+          side_ResourceType: data_ResourceInfo.resourceType,
+          side_ResourceCover: data_ResourceInfo.coverImages[0] || '',
         },
       });
     },
