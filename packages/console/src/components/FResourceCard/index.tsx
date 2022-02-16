@@ -3,7 +3,6 @@ import Policy from './Policy';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
-// import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
