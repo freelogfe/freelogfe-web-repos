@@ -475,7 +475,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
-      const result: HandleRelationResult = yield call(handleRelation, data_PresentableDetails.resolveResources, data_PresentableDetails.nodeId);
+      const result_ContractAssociated: HandleRelationResult = yield call(handleRelation, data_PresentableDetails.resolveResources, data_PresentableDetails.nodeId);
 
       // 要禁用的键
       const disabledRewriteKeys = [
@@ -490,7 +490,7 @@ const Model: ExhibitInfoPageModelType = {
         authType: 3,
         presentableIds: data_PresentableDetails.presentableId,
       };
-      const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
+      const { data: data_ExhibitBatchAuthResults } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
 
       // 关系树数据
@@ -498,14 +498,14 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: data_PresentableDetails.presentableId,
       };
 
-      const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
+      const { data: data_ExhibitRelationTree } = yield call(FServiceAPI.Exhibit.relationTree, params6);
       // console.log(data, 'datadatadatadatadatadatadata');
       // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
 
       const {
         nodes: relationGraphNodes,
         edges: relationGraphEdges,
-      } = yield call(handleExhibitRelationGraphData, data6, {
+      } = yield call(handleExhibitRelationGraphData, data_ExhibitRelationTree, {
         nodeId: data_PresentableDetails.nodeId,
         nodeName: data_NodeDetails.nodeName,
         exhibitId: data_PresentableDetails.presentableId,
@@ -519,13 +519,13 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: exhibitInfoPage.exhibit_ID,
       };
 
-      const { data: data4 } = yield call(FServiceAPI.Exhibit.authTree, params4);
+      const { data: data_ExhibitAuthTree } = yield call(FServiceAPI.Exhibit.authTree, params4);
 
       // console.log(data4, '@@@@@#4234234324234');
       const {
         nodes: authorizationGraphNodes,
         edges: authorizationGraphEdges,
-      } = yield call(handleAuthorizationGraphData, data4, {
+      } = yield call(handleAuthorizationGraphData, data_ExhibitAuthTree, {
         id: data_PresentableDetails.presentableId,
         nodeId: data_PresentableDetails.nodeId,
         nodeName: data_NodeDetails.nodeName,
@@ -536,19 +536,19 @@ const Model: ExhibitInfoPageModelType = {
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         nodeId: data_PresentableDetails.nodeId,
-        resolveResourceIds: result.map((rs) => {
+        resolveResourceIds: result_ContractAssociated.map((rs) => {
           return rs.resourceId;
         }).join(','),
       };
 
-      const { data: data5 } = yield call(FServiceAPI.Exhibit.presentableList, params5);
+      const { data: data_AllPresentables } = yield call(FServiceAPI.Exhibit.presentableList, params5);
 
       // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
         exhibitID: string;
         resourceID: string;
         contractIDs: string[];
-      }[] = data5.map((d5: any) => {
+      }[] = data_AllPresentables.map((d5: any) => {
         return d5.resolveResources?.map((resvr: any) => {
           return {
             exhibitID: d5.presentableId,
@@ -570,8 +570,8 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_ID: data_PresentableDetails.presentableId,
           exhibit_Name: data_PresentableDetails.presentableName,
           exhibit_Online: data_PresentableDetails.onlineStatus === 1,
-          exhibit_IsAuth: data1[0].isAuth,
-          exhibit_AuthErrorText: data1[0].error,
+          exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
+          exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
           policy_List: data_PresentableDetails.policies.map((p: any) => ({
             id: p.policyId,
             name: p.policyName,
@@ -580,12 +580,12 @@ const Model: ExhibitInfoPageModelType = {
           })),
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
-          contract_SelectedAssociatedID: result.some((rr) => {
+          contract_SelectedAssociatedID: result_ContractAssociated.some((rr) => {
             return rr.resourceId === exhibitInfoPage.contract_SelectedAssociatedID;
-          }) ? exhibitInfoPage.contract_SelectedAssociatedID : result[0].resourceId,
-          contract_Associated: result
+          }) ? exhibitInfoPage.contract_SelectedAssociatedID : result_ContractAssociated[0].resourceId,
+          contract_Associated: result_ContractAssociated
             .map((r, index) => {
-              const exhibits = data5.filter((d5: any) => {
+              const exhibits = data_AllPresentables.filter((d5: any) => {
                 return d5.resolveResources.some((rr: any) => {
                   return d5.presentableId !== data_PresentableDetails.presentableId && rr.resourceId === r.resourceId;
                 });
