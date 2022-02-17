@@ -54,11 +54,8 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
             >签约</FRectBtn>
           </div>
           <div style={{ height: 10 }} />
-          {/*<div style={{height: 15}}/>*/}
-          {/*<pre>{p.text}</pre>*/}
           <div style={{ padding: '0 20px' }}>
             <FPolicyDisplay
-              // containerHeight={170}
               code={p.text}
             />
           </div>

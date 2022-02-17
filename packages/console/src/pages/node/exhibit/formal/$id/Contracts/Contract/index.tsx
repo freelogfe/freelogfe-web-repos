@@ -215,10 +215,3 @@ export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Contract);
 
-// interface UsedSwitchDisabledParams {
-//
-// }
-//
-// function usedSwitchDisabled() {
-//
-// }

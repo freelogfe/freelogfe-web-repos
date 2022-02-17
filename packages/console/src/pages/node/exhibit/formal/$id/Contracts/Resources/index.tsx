@@ -106,16 +106,6 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           text={r.type}
         />
         <div style={{ height: 5 }} />
-        {/*<div className={styles.policeTags}>*/}
-        {/*  {*/}
-        {/*    r.contracts.map((c) => (<div key={c.id}>*/}
-        {/*      <span>{c.name}</span>*/}
-        {/*      <div style={{ width: 5 }} />*/}
-        {/*      <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />*/}
-        {/*    </div>))*/}
-        {/*  }*/}
-        {/*</div>*/}
-        {/*{console.log(r.contracts, 'r.contracts.@#$@#$@#$')}*/}
         <FResourceContractLabels contracts={r.contracts.map((c) => {
           return {
             name: c.name,
