@@ -53,7 +53,7 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
     />
 
     <div style={{ height: 20 }} />
-    <FExhibitAuthorizedContracts/>
+    <FExhibitAuthorizedContracts exhibitID={'6988b26c94e51a22f88492a45c83a379'}/>
     <div style={{ height: 20 }} />
 
     <div className={styles.sign}>
