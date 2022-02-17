@@ -355,7 +355,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     ret: number;
   } = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
-  if (errcode !== 0 || ret !== 0 || !data) {
+  if (errcode !== 0 || ret !== 0 || !testResourceDetails) {
     return [];
   }
 
@@ -400,7 +400,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     return rr.resourceId;
   });
 
-  
+
 
   /*********** End 获取所有需要处理资源的合同 ******************************************************/
 }
