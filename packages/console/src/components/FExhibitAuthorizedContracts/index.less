@@ -1,0 +1,40 @@
+@import '../../config.less';
+
+.FExhibitAuthorizedContracts {
+  width: 860px;
+  height: 500px;
+  display: flex;
+  align-items: stretch;
+  border-radius: 6px;
+
+  .subjects {
+    width: 344px;
+    background-color: white;
+    border-radius: 6px 0 0 6px;
+
+    .subject {
+      padding: 10px 15px;
+      cursor: pointer;
+
+      .FContentText {
+        max-width: 270px;
+
+        &:hover {
+          color: inherit;
+        }
+      }
+
+      .disuseAuthorized {
+        font-size: 12px;
+        line-height: 18px;
+        color: @f-success-color1;
+      }
+    }
+  }
+
+  .operatorPanel {
+    width: 516px;
+    background-color: #FAFBFC;
+    border-radius: 0 6px 6px 0;
+  }
+}

@@ -60,17 +60,6 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           auth: c.status === 'active' || c.status === 'testActive',
         };
       })} />
-      {/*<div className={styles.policeTags}>*/}
-      {/*  /!*{*!/*/}
-      {/*  /!*  mainResource.contracts.map((c) => (<div key={c.id}>*!/*/}
-      {/*  /!*    <span>{c.name}</span>*!/*/}
-      {/*  /!*    <div style={{ width: 5 }} />*!/*/}
-      {/*  /!*    <label style={{ backgroundColor: c.status !== 'inactive' ? '#42C28C' : '#E9A923' }} />*!/*/}
-      {/*  /!*  </div>))*!/*/}
-      {/*  /!*}*!/*/}
-      {/*  {console.log(mainResource.contracts, 'mainResource.contracts9232342423423')}*/}
-      {/*  */}
-      {/*</div>*/}
     </a>
 
     {

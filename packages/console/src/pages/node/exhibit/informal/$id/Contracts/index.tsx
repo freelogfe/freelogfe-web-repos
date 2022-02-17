@@ -18,9 +18,9 @@ import FUtil1 from '@/utils';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
-// import { FWarning } from '@/components/FIcons';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
+import FExhibitAuthorizedContracts from '@/components/FExhibitAuthorizedContracts';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -52,6 +52,8 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
       type='h3'
     />
 
+    <div style={{ height: 20 }} />
+    <FExhibitAuthorizedContracts/>
     <div style={{ height: 20 }} />
 
     <div className={styles.sign}>
@@ -94,7 +96,6 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
             </a>);
           })
         }
-
       </div>
 
       <div className={styles.signRight}>
