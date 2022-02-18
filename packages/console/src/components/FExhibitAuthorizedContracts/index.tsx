@@ -64,11 +64,13 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
   }, [exhibitID]);
 
   async function handleData() {
-    const data = await handleExhibitAuthorizedContracts(exhibitID);
-    set_AuthorizedContracts(data);
-    if (!data.some((d) => d.id === selectedID)) {
-      set_SelectedID(data[0].id);
+    const { authorizedContracts, mappingContracts } = await handleExhibitAuthorizedContracts(exhibitID);
+    set_AuthorizedContracts(authorizedContracts);
+    set_CurrentExhibitResourceMappingContractIDs(mappingContracts);
+    if (!authorizedContracts.some((d) => d.id === selectedID)) {
+      set_SelectedID(authorizedContracts[0].id);
     }
+    console.log(mappingContracts, 'mappingContracts 0293ujewlkfasdlkf');
   }
 
   return (<div className={styles.FExhibitAuthorizedContracts}>
@@ -228,7 +230,9 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                                 type='highlight'
                               />
                               <FSwitch
-                                // checked={exhibitInfoExhibit?.contractIDs.includes(c.id)}
+                                checked={currentExhibitResourceMappingContractIDs.find((cermci) => {
+                                  return cermci.resourceID === selectedID;
+                                })?.contractIDs.includes(sac.id) || false}
                                 // disabled={exhibitInfoExhibit && (exhibitInfoExhibit.contractIDs.length <= 1) && exhibitInfoExhibit?.contractIDs.includes(c.id)}
                                 onChange={async (value) => {
                                   // await dispatch<UpdateContractUsedAction>({
@@ -273,7 +277,10 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
 
 export default FExhibitAuthorizedContracts;
 
-async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExhibitAuthorizedContractsStates['authorizedContracts']> {
+async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
+  authorizedContracts: FExhibitAuthorizedContractsStates['authorizedContracts'];
+  mappingContracts: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'];
+}> {
   const params1: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
     testResourceId: exhibitID,
   };
@@ -459,14 +466,24 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   });
 
   /************ End 组织最终数据 **************************************************************************/
-  console.log(result, '###$$$$$$$RRrrrrr');
+  // console.log(result, '###$$$$$$$RRrrrrr');
 
-  return result.sort((res) => {
-    // console.log(res.id, testResourceDetails.originInfo.id, '#########000000000））））））））');
-    if (res.id === testResourceDetails.originInfo.id) {
-    // if (res.id === '61d6b8262ae3ac002eb8581d') {
-      return -1;
-    }
-    return 0;
-  });
+  return {
+    authorizedContracts: result.sort((res) => {
+      // console.log(res.id, testResourceDetails.originInfo.id, '#########000000000））））））））');
+      if (res.id === testResourceDetails.originInfo.id) {
+        // if (res.id === '61d6b8262ae3ac002eb8581d') {
+        return -1;
+      }
+      return 0;
+    }),
+    mappingContracts: testResourceDetails.resolveResources.map((trdr) => {
+      return {
+        resourceID: trdr.resourceId,
+        contractIDs: trdr.contracts.map((trdrc) => {
+          return trdrc.contractId;
+        }),
+      };
+    }),
+  };
 }
