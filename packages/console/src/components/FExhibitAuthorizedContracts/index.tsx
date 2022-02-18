@@ -41,6 +41,7 @@ interface FExhibitAuthorizedContractsStates {
   currentExhibitResourceMappingContractIDs: {
     resourceID: string;
     contractIDs: string[];
+    policyIDs: string[];
   }[];
   // otherExhibitResourceMappingContractIDs: {
   //   exhibitID: string;
@@ -55,14 +56,21 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
   const [currentExhibitResourceMappingContractIDs, set_CurrentExhibitResourceMappingContractIDs] = React.useState<FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs']>([]);
 
+  // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
     return i.id === selectedID;
+  });
+
+  // 当前展品对应的现在已激活的标的物的有关合约映射
+  const currentExhibitResourceMappingContract: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'][0] | undefined = currentExhibitResourceMappingContractIDs.find((cermci) => {
+    return cermci.resourceID === selectedID;
   });
 
   React.useEffect(() => {
     handleData();
   }, [exhibitID]);
 
+  // 处理整个授权合约关系
   async function handleData() {
     const { authorizedContracts, mappingContracts } = await handleExhibitAuthorizedContracts(exhibitID);
     set_AuthorizedContracts(authorizedContracts);
@@ -71,6 +79,35 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
       set_SelectedID(authorizedContracts[0].id);
     }
     console.log(mappingContracts, 'mappingContracts 0293ujewlkfasdlkf');
+  }
+
+  // 启用和搁置合约
+  async function enableAndUnable(policyID: string, enabled: boolean) {
+    const resourceContracts = currentExhibitResourceMappingContract?.policyIDs || [];
+
+    const finalEnabledPolicyIDs: string[] = enabled
+      ? [
+        ...resourceContracts,
+        policyID,
+      ]
+      : resourceContracts.filter((rc) => {
+        return rc !== policyID;
+      });
+    const params: Parameters<typeof FServiceAPI.InformalNode.updateTestResourceContracts>[0] = {
+      testResourceId: exhibitID,
+      resolveResources: [{
+        resourceId: selectedID,
+        contracts: finalEnabledPolicyIDs.map((rc) => {
+          return {
+            policyId: rc,
+          };
+        }),
+      }],
+    };
+
+    const { data } = await FServiceAPI.InformalNode.updateTestResourceContracts(params);
+    // console.log(data, 'data@@#$@#4');
+    handleData();
   }
 
   return (<div className={styles.FExhibitAuthorizedContracts}>
@@ -230,23 +267,10 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                                 type='highlight'
                               />
                               <FSwitch
-                                checked={currentExhibitResourceMappingContractIDs.find((cermci) => {
-                                  return cermci.resourceID === selectedID;
-                                })?.contractIDs.includes(sac.id) || false}
-                                // disabled={exhibitInfoExhibit && (exhibitInfoExhibit.contractIDs.length <= 1) && exhibitInfoExhibit?.contractIDs.includes(c.id)}
-                                onChange={async (value) => {
-                                  // await dispatch<UpdateContractUsedAction>({
-                                  //   type: 'exhibitInfoPage/updateContractUsed',
-                                  //   payload: {
-                                  //     exhibitID: exhibitInfoPage.exhibit_ID,
-                                  //     resourceID: selectedResource.id,
-                                  //     policyID: c.policyId,
-                                  //     isUsed: value,
-                                  //   },
-                                  // });
-                                  // await dispatch<FetchInfoAction>({
-                                  //   type: 'exhibitInfoPage/fetchInfo',
-                                  // });
+                                checked={currentExhibitResourceMappingContract?.contractIDs.includes(sac.id) || false}
+                                disabled={currentExhibitResourceMappingContract && (currentExhibitResourceMappingContract.contractIDs.length <= 1) && currentExhibitResourceMappingContract?.contractIDs.includes(sac.id)}
+                                onChange={(value) => {
+                                  enableAndUnable(sac.policyID, value);
                                 }}
                               />
                             </div>
@@ -307,7 +331,10 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
   } = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
   if (errcode !== 0 || ret !== 0 || !testResourceDetails) {
-    return [];
+    return {
+      authorizedContracts: [],
+      mappingContracts: [],
+    };
   }
 
   // console.log(testResourceDetails, 'data_testResourceDetails 309uoijklsad/lfjlk');
@@ -482,6 +509,9 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
         resourceID: trdr.resourceId,
         contractIDs: trdr.contracts.map((trdrc) => {
           return trdrc.contractId;
+        }),
+        policyIDs: trdr.contracts.map((trdrc) => {
+          return trdrc.policyId;
         }),
       };
     }),
