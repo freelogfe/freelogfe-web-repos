@@ -29,22 +29,22 @@ interface ContractsProps {
 
 function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
 
-  if (informExhibitInfoPage.contract_Associated.length === 0) {
-    return null;
-  }
+  // if (informExhibitInfoPage.contract_Associated.length === 0) {
+  //   return null;
+  // }
 
   // const otherResource = informExhibitInfoPage.contract_Associated;
 
-  const selectedResource = informExhibitInfoPage.contract_Associated.find((a) => a.id === informExhibitInfoPage.contract_Associated_Selected);
+  // const selectedResource = informExhibitInfoPage.contract_Associated.find((a) => a.id === informExhibitInfoPage.contract_Associated_Selected);
 
-  function onChangeSelect(id: string) {
-    dispatch<ChangeAction>({
-      type: 'informExhibitInfoPage/change',
-      payload: {
-        contract_Associated_Selected: id,
-      },
-    });
-  }
+  // function onChangeSelect(id: string) {
+  //   dispatch<ChangeAction>({
+  //     type: 'informExhibitInfoPage/change',
+  //     payload: {
+  //       contract_Associated_Selected: id,
+  //     },
+  //   });
+  // }
 
   return (<div>
     <FTitleText
