@@ -2,19 +2,23 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
-import { FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
+// import { FetchInfoAction, UpdateContractUsedAction, UpdateRelationAction } from '@/models/exhibitInfoPage';
 import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
+import FFullScreen from '@/components/FIcons/FFullScreen';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
+
+  onChangeAuthorize?(): void;
 }
 
 interface FExhibitAuthorizedContractsStates {
@@ -50,7 +54,7 @@ interface FExhibitAuthorizedContractsStates {
   // }[];
 }
 
-function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsProps) {
+function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
@@ -78,7 +82,8 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
     if (!authorizedContracts.some((d) => d.id === selectedID)) {
       set_SelectedID(authorizedContracts[0].id);
     }
-    console.log(mappingContracts, 'mappingContracts 0293ujewlkfasdlkf');
+    // console.log(authorizedContracts, 'authorizedContracts 0293ujewlkfasdlkf');
+    // console.log(mappingContracts, 'mappingContracts 0293ujewlkfasdlkf');
   }
 
   // 启用和搁置合约
@@ -108,6 +113,7 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
     const { data } = await FServiceAPI.InformalNode.updateTestResourceContracts(params);
     // console.log(data, 'data@@#$@#4');
     handleData();
+    onChangeAuthorize && onChangeAuthorize();
   }
 
   return (<div className={styles.FExhibitAuthorizedContracts}>
@@ -218,11 +224,10 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                 </>)
                 : (<>
                   <div style={{ height: 15 }} />
-                  <div style={{ height: 15 }} />
                   <FTitleText type='h4'>当前合约</FTitleText>
                   {
                     selectedAuthorizedContract.contracts.map((sac) => {
-                      console.log(sac.id, 'sac.id@#$@!#$@#4234');
+                      // console.log(sac.id, 'sac.id@#$@!#$@#4234');
                       return (<React.Fragment key={sac.id}>
                         <div style={{ height: 15 }} />
                         <div
@@ -239,9 +244,7 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                             <FContractDisplay
                               contractID={sac.id}
                               onChangedEvent={() => {
-                                // dispatch<FetchInfoAction>({
-                                //   type: 'exhibitInfoPage/fetchInfo',
-                                // });
+                                onChangeAuthorize && onChangeAuthorize();
                               }}
                             />
                           </div>
@@ -292,6 +295,48 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
               }}>合约管理</FTextBtn>
             </div>
           </>
+
+          {
+            selectedAuthorizedContract && selectedAuthorizedContract.policies.length > 0 && (<>
+              <div style={{ height: 25 }} />
+              <FTitleText type='h4'>未签约策略</FTitleText>
+              {
+                selectedAuthorizedContract.policies.map((sacp) => {
+                  return (<>
+                    <div
+                      className={styles.Policy}
+                      key={sacp.id}
+                    >
+                      <div className={styles.singPolicyHeader}>
+                        <FContentText type='highlight'>{sacp.name}</FContentText>
+                        <FRectBtn
+                          style={{ height: 26, padding: '0 15px' }}
+                          size='small'
+                          onClick={() => {
+                            enableAndUnable(sacp.id, true);
+                          }}
+                        >签约</FRectBtn>
+                      </div>
+                      <div style={{ height: 10 }} />
+                      <div style={{ padding: '0 20px' }}>
+                        <FPolicyDisplay
+                          code={sacp.text}
+                        />
+                      </div>
+                      {/*<a*/}
+                      {/*  className={styles.PolicyFullScreenBtn}*/}
+                      {/*  onClick={() => {*/}
+                      {/*    setFullScreenVisibleID(p.id);*/}
+                      {/*  }}*/}
+                      {/*><FFullScreen style={{ fontSize: 12 }} /></a>*/}
+
+                    </div>
+                  </>);
+                })
+              }
+            </>)
+          }
+
 
         </div>)
     }
@@ -474,9 +519,9 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
         })
         .map((thp) => {
           return {
-            id: '',
-            name: '',
-            text: '',
+            id: thp.policyId,
+            name: thp.policyName,
+            text: thp.policyText,
           };
         });
     /************** End 处理策略相关数据 *********************************************************/
