@@ -493,7 +493,7 @@ const Model: ExhibitInfoPageModelType = {
         testResourceId: informExhibitID,
       };
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
-      console.log(testResourceDetail, 'data288282822828282822888888888888');
+      // console.log(testResourceDetail, 'data288282822828282822888888888888');
 
       const resolveResourceIDs: string[] = testResourceDetail.resolveResources.map((rr: any) => {
         return rr.resourceId;

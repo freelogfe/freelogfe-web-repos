@@ -52,85 +52,7 @@ interface FExhibitAuthorizedContractsStates {
 function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
-  const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([
-    {
-      id: '1',
-      name: 'Stefan/freelog白皮书',
-      type: 'json',
-      identity: 'object',
-      disuseAuthorized: true,
-      contracts: [{
-        id: 'c1',
-        name: '免费1',
-        createTime: '2002-10-10',
-        status: 'active',
-        policyID: 'p1',
-      }],
-      policies: [{
-        id: 'p2',
-        name: '收费',
-        text: '',
-      }],
-    },
-    {
-      id: '2',
-      name: 'Stefan/freelog白皮书2',
-      type: 'json',
-      identity: 'resource',
-      disuseAuthorized: false,
-      contracts: [{
-        id: 'c1',
-        name: '免费1',
-        createTime: '2002-10-10',
-        status: 'active',
-        policyID: 'p1',
-      }],
-      policies: [{
-        id: 'p2',
-        name: '收费',
-        text: '',
-      }],
-    },
-    {
-      id: '3',
-      name: 'Stefan/freelog白皮书3',
-      type: 'json',
-      identity: 'resource',
-      disuseAuthorized: false,
-      contracts: [],
-      policies: [{
-        id: 'p2',
-        name: '收费',
-        text: '',
-      }],
-    },
-    {
-      id: '4',
-      name: 'Stefan/freelog白皮书4',
-      type: 'json',
-      identity: 'resource',
-      disuseAuthorized: false,
-      contracts: [],
-      policies: [{
-        id: 'p2',
-        name: '收费',
-        text: '',
-      }],
-    },
-    {
-      id: '5',
-      name: 'Stefan/freelog白皮书5',
-      type: 'json',
-      identity: 'resource',
-      disuseAuthorized: false,
-      contracts: [],
-      policies: [{
-        id: 'p2',
-        name: '收费',
-        text: '',
-      }],
-    },
-  ]);
+  const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
   const [currentExhibitResourceMappingContractIDs, set_CurrentExhibitResourceMappingContractIDs] = React.useState<FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs']>([]);
 
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -138,9 +60,16 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
   });
 
   React.useEffect(() => {
-    handleExhibitAuthorizedContracts(exhibitID);
-  }, []);
+    handleData();
+  }, [exhibitID]);
 
+  async function handleData() {
+    const data = await handleExhibitAuthorizedContracts(exhibitID);
+    set_AuthorizedContracts(data);
+    if (!data.some((d) => d.id === selectedID)) {
+      set_SelectedID(data[0].id);
+    }
+  }
 
   return (<div className={styles.FExhibitAuthorizedContracts}>
     <div className={styles.subjects}>
@@ -211,19 +140,34 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
       <div style={{ height: 15 }} />
     </div>
 
-    <div className={styles.operatorPanel}>
-      {
-        selectedAuthorizedContract && (<>
+    {
+      selectedAuthorizedContract && selectedAuthorizedContract.disuseAuthorized && (
+        <div className={styles.disuseAuthorizedPanel}>
+          <FTitleText
+            text={'无需处理授权'}
+            type={'h2'}
+            style={{ color: '#42C28C' }}
+          />
+          <div style={{ height: 30 }} />
+          <FContentText
+            text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
+            type={'additional2'}
+          />
+        </div>)
+    }
+
+    {
+      selectedAuthorizedContract && !selectedAuthorizedContract.disuseAuthorized && (
+        <div className={styles.operatorPanel}>
           {
             selectedAuthorizedContract.policies.length > 0 && (<>
-                <div style={{ height: 15 }} />
-                <div className={styles.hasPolicyTip}>
-                  <FInfo style={{ fontSize: 14 }} />
-                  <div style={{ width: 5 }} />
-                  <span>最下方有可签约的策略</span>
-                </div>
-              </>
-            )
+              <div style={{ height: 15 }} />
+              <div className={styles.hasPolicyTip}>
+                <FInfo style={{ fontSize: 14 }} />
+                <div style={{ width: 5 }} />
+                <span>最下方有可签约的策略</span>
+              </div>
+            </>)
           }
 
           <>
@@ -239,6 +183,7 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                   <FTitleText type='h4'>当前合约</FTitleText>
                   {
                     selectedAuthorizedContract.contracts.map((sac) => {
+                      console.log(sac.id, 'sac.id@#$@!#$@#4234');
                       return (<React.Fragment key={sac.id}>
                         <div style={{ height: 15 }} />
                         <div
@@ -252,14 +197,14 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
                           <div style={{ height: 10 }} />
 
                           <div style={{ padding: '0 20px' }}>
-                            {/*<FContractDisplay*/}
-                            {/*  contractID={sac.id}*/}
-                            {/*  onChangedEvent={() => {*/}
-                            {/*    // dispatch<FetchInfoAction>({*/}
-                            {/*    //   type: 'exhibitInfoPage/fetchInfo',*/}
-                            {/*    // });*/}
-                            {/*  }}*/}
-                            {/*/>*/}
+                            <FContractDisplay
+                              contractID={sac.id}
+                              onChangedEvent={() => {
+                                // dispatch<FetchInfoAction>({
+                                //   type: 'exhibitInfoPage/fetchInfo',
+                                // });
+                              }}
+                            />
                           </div>
 
                           <div style={{ height: 10 }} />
@@ -320,10 +265,9 @@ function FExhibitAuthorizedContracts({ exhibitID }: FExhibitAuthorizedContractsP
             </div>
           </>
 
+        </div>)
+    }
 
-        </>)
-      }
-    </div>
   </div>);
 }
 
@@ -359,7 +303,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     return [];
   }
 
-  console.log(testResourceDetails, ' ######23423423');
+  // console.log(testResourceDetails, 'data_testResourceDetails 309uoijklsad/lfjlk');
 
   /************** Start 获取所有资源和对象的详细信息  *****************************************/
   const allResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
@@ -373,12 +317,29 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     return rr.resourceId;
   });
 
-  let batchResources = [];
-  let batchObjects = [];
+  let batchResources: {
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    policies: {
+      policyId: string;
+      policyName: string;
+      policyText: string;
+      status: 0 | 1;
+    }[];
+  }[] = [];
+  let batchObjects: {
+    objectId: string;
+    objectName: string;
+    resourceType: string;
+    bucketName: string;
+  }[] = [];
 
   if (allResourceIDs.length > 0) {
     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: allResourceIDs.join(','),
+      isLoadPolicyInfo: 1,
+      projection: 'resourceId,resourceName,resourceType,policies',
     };
     const { data } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
@@ -387,20 +348,125 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   if (allObjectIDs.length > 0) {
     const params: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
       objectIds: allObjectIDs.join(','),
+      projection: 'objectId,objectName,resourceType,bucketName',
     };
     const { data } = await FServiceAPI.Storage.batchObjectList(params);
     batchObjects = data;
   }
+  // console.log(batchResources, 'data_batchResources 2390oijsdflk');
+  // console.log(batchObjects, 'data_batchObjects 0932jlkjrlefwsd');
   /************** End 获取所有资源和对象的详细信息  *****************************************/
 
   /*********** Start 获取所有需要处理资源的合同 ******************************************************/
+  let allUsedContract: {
+    contractId: string;
+    contractName: string;
+    policyId: string;
+    authStatus: 1 | 2 | 128;
+    status: 0 | 1 | 2;
+    subjectId: string;
+    createDate: string;
+  }[] = [];
+
   const allNeedHandleResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
     return !rr.isSelf && rr.type === 'resource';
   }).map((rr) => {
     return rr.resourceId;
   });
 
+  if (allNeedHandleResourceIDs.length > 0) {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+      subjectIds: allNeedHandleResourceIDs.join(','),
+      subjectType: 1,
+      licenseeIdentityType: 2,
+      licenseeId: testResourceDetails.nodeId,
+      isLoadPolicyInfo: 1,
+    };
 
-
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
+    allUsedContract = data;
+    // console.log(allUsedContract, 'data_allUsedContract 90-[lajsdkfhlkjl');
+  }
   /*********** End 获取所有需要处理资源的合同 ******************************************************/
+
+  /************ Start 组织最终数据 **************************************************************************/
+  const result: FExhibitAuthorizedContractsStates['authorizedContracts'] = testResourceDetails.resolveResources.map((rr) => {
+
+    /******** Start 处理对象 ***********************************************/
+    if (rr.type === 'object') {
+      const theResource = batchObjects.find((bo) => {
+        return bo.objectId === rr.resourceId;
+      });
+
+      return {
+        id: rr.resourceId,
+        name: (theResource?.bucketName || '') + (theResource?.objectName || ''),
+        type: theResource?.resourceType || '',
+        identity: rr.type,
+        disuseAuthorized: rr.isSelf,
+        contracts: [],
+        policies: [],
+      };
+    }
+    /******** End 处理对象 ***********************************************/
+
+    /********* Start 处理资源 ***********************************************/
+    /********* Start 处理合约相关数据 *********************************************************/
+    const contracts: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['contracts'] = allUsedContract
+      .filter((auc) => {
+        return auc.subjectId === rr.resourceId && auc.status !== 1;
+      })
+      .map((auc) => {
+        return {
+          id: auc.contractId,
+          name: auc.contractName,
+          createTime: FUtil.Format.formatDateTime(auc.createDate, true),
+          status: auc.authStatus === 1 ? 'active' : auc.authStatus === 2 ? 'testActive' : 'inactive',
+          policyID: auc.policyId,
+        };
+      });
+    /********* End 处理合约相关数据 *********************************************************/
+
+    const theResource = batchResources.find((br) => {
+      return br.resourceId === rr.resourceId;
+    });
+
+    /************** Start 处理策略相关数据 *********************************************************/
+    const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = !theResource
+      ? []
+      : theResource.policies
+        .filter((thp) => {
+          return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
+        })
+        .map((thp) => {
+          return {
+            id: '',
+            name: '',
+            text: '',
+          };
+        });
+    /************** End 处理策略相关数据 *********************************************************/
+    return {
+      id: rr.resourceId,
+      name: theResource?.resourceName || '',
+      type: theResource?.resourceType || '',
+      identity: rr.type,
+      disuseAuthorized: rr.isSelf,
+      contracts: contracts,
+      policies: policies,
+    };
+    /********* End 处理资源 ***********************************************/
+  });
+
+  /************ End 组织最终数据 **************************************************************************/
+  console.log(result, '###$$$$$$$RRrrrrr');
+
+  return result.sort((res) => {
+    // console.log(res.id, testResourceDetails.originInfo.id, '#########000000000））））））））');
+    if (res.id === testResourceDetails.originInfo.id) {
+    // if (res.id === '61d6b8262ae3ac002eb8581d') {
+      return -1;
+    }
+    return 0;
+  });
 }
