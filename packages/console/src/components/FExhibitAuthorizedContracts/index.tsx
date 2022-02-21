@@ -182,6 +182,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               {
                 ac.disuseAuthorized
                   ? (<div className={styles.disuseAuthorized}>无需处理授权</div>)
+                  // ? (<div className={styles.disuseAuthorized}>{FUtil1.I18n.message('msg_resource_natural_auth')}</div>)
                   : (<FResourceContractLabels contracts={ac.contracts
                     .filter((c) => {
                       return c.applyToCurrentExhibit.checked;
@@ -213,7 +214,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           />
           <div style={{ height: 30 }} />
           <FContentText
-            text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
+            // text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
+            text={FUtil1.I18n.message('msg_resource_natural_auth')}
             type={'additional2'}
           />
         </div>)
