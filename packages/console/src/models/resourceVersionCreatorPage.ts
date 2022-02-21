@@ -218,14 +218,6 @@ export interface FetchResourceInfoAction extends AnyAction {
   type: 'fetchResourceInfo';
 }
 
-// export interface CreateVersionAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/createVersion';
-// }
-
-// export interface SaveDraftAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/saveDraft';
-// }
-
 export interface VerifyVersionInputAction extends AnyAction {
   type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
   // payload: string;
@@ -263,10 +255,6 @@ export interface ImportLastVersionDataAction extends AnyAction {
   payload: 'baseProps' | 'optionProps' | 'deps';
 }
 
-// export interface LeaveAndClearDataAction extends AnyAction {
-//   type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
-// }
-
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -281,8 +269,6 @@ export interface ResourceVersionCreatorModelType {
 
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
-    // createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
-    // saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
@@ -291,8 +277,6 @@ export interface ResourceVersionCreatorModelType {
     dddDepsByMainIDs: (action: AddDepsByMainIDsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
-    // goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
-    // leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -531,14 +515,14 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * fetchDraft({}: FetchDraftAction, { call, put, select }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({
-                                                                           resourceVersionCreatorPage,
-                                                                           resourceInfo,
-                                                                         }: ConnectState) => {
-        return {
-          resourceVersionCreatorPage,
-        };
-      });
+      // const { resourceVersionCreatorPage }: ConnectState = yield select(({
+      //                                                                      resourceVersionCreatorPage,
+      //                                                                      resourceInfo,
+      //                                                                    }: ConnectState) => {
+      //   return {
+      //     resourceVersionCreatorPage,
+      //   };
+      // });
 
     },
     * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
@@ -896,7 +880,7 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
-      console.log(data4, '@#@#@#@#@#@##@$@#$data4');
+      // console.log(data4, '@#@#@#@#@#@##@$@#$data4');
       if (!data4) {
         yield put<ChangeAction>({
           type: 'change',
@@ -1162,10 +1146,6 @@ const Model: ResourceVersionCreatorModelType = {
 
   reducers: {
     change(state, { payload, caller }) {
-      // if (payload.resourceId === '') {
-      //   console.log(caller, payload, 'callercallercallercallercaller');
-      // }
-
       return {
         ...state,
         ...payload,
@@ -1175,9 +1155,7 @@ const Model: ResourceVersionCreatorModelType = {
 
   subscriptions: {
     setup({ dispatch, history }: SubscriptionAPI) {
-      // dispatch({
-      //   type: 'init',
-      // });
+
     },
   },
 
@@ -1223,70 +1201,70 @@ async function batchCycleDependencyCheck({
   return resourceIDs;
 }
 
-interface GetAllContractsParamsType {
-  resourceID: string;
-  resourceIDs: string[];
-}
-
-type GetAllContractsReturnType = {
-  contractId: string;
-  contractName: string;
-  createDate: string;
-  updateDate: string;
-  policyId: string;
-  policyInfo: {
-    policyId: string;
-    policyText: string;
-  };
-}[];
-
-async function getAllContracts({
-                                 resourceID,
-                                 resourceIDs,
-                               }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
-  // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
-  const allPromises = resourceIDs.map(async (id) => {
-    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-      subjectIds: id,
-      subjectType: 1,
-      licenseeIdentityType: 1,
-      licensorId: id,
-      licenseeId: resourceID,
-      isLoadPolicyInfo: 1,
-    };
-    const { data } = await FServiceAPI.Contract.batchContracts(params);
-    // console.log(data, 'data!!!1111100000000))))))');
-    return data;
-  });
-
-  return (await Promise.all(allPromises)).flat();
-}
-
-function promiseConfirm(keyList: string[]) {
-  return new Promise((resolve) => {
-    fConfirmModal({
-      message: `正在从上一个版本中导入信息，包含{KeyNumber}个同名键（key）：${keyList.join()}`,
-      okText: FUtil1.I18n.message('replace_key_value'),
-      cancelText: FUtil1.I18n.message('skip'),
-      onOk() {
-        resolve(true);
-      },
-      onCancel() {
-        resolve(false);
-      },
-    });
-  });
-}
-
-function repeatedKeys(str1: string[], str2: string[]): string[] {
-  const keys: string[] = [];
-  for (const str of str1) {
-    if (str2.includes(str)) {
-      keys.push(str);
-    }
-  }
-  return keys;
-}
+// interface GetAllContractsParamsType {
+//   resourceID: string;
+//   resourceIDs: string[];
+// }
+//
+// type GetAllContractsReturnType = {
+//   contractId: string;
+//   contractName: string;
+//   createDate: string;
+//   updateDate: string;
+//   policyId: string;
+//   policyInfo: {
+//     policyId: string;
+//     policyText: string;
+//   };
+// }[];
+//
+// async function getAllContracts({
+//                                  resourceID,
+//                                  resourceIDs,
+//                                }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+//   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
+//   const allPromises = resourceIDs.map(async (id) => {
+//     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+//       subjectIds: id,
+//       subjectType: 1,
+//       licenseeIdentityType: 1,
+//       licensorId: id,
+//       licenseeId: resourceID,
+//       isLoadPolicyInfo: 1,
+//     };
+//     const { data } = await FServiceAPI.Contract.batchContracts(params);
+//     // console.log(data, 'data!!!1111100000000))))))');
+//     return data;
+//   });
+//
+//   return (await Promise.all(allPromises)).flat();
+// }
+//
+// function promiseConfirm(keyList: string[]) {
+//   return new Promise((resolve) => {
+//     fConfirmModal({
+//       message: `正在从上一个版本中导入信息，包含{KeyNumber}个同名键（key）：${keyList.join()}`,
+//       okText: FUtil1.I18n.message('replace_key_value'),
+//       cancelText: FUtil1.I18n.message('skip'),
+//       onOk() {
+//         resolve(true);
+//       },
+//       onCancel() {
+//         resolve(false);
+//       },
+//     });
+//   });
+// }
+//
+// function repeatedKeys(str1: string[], str2: string[]): string[] {
+//   const keys: string[] = [];
+//   for (const str of str1) {
+//     if (str2.includes(str)) {
+//       keys.push(str);
+//     }
+//   }
+//   return keys;
+// }
 
 interface HandledDraftParamsType {
   resourceID: string;
