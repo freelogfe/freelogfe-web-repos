@@ -25,6 +25,7 @@ interface FExhibitAuthorizedContractsStates {
   authorizedContracts: {
     subjectID: string;
     subjectName: string;
+    detailsUrl: string;
     type: string;
     identity: 'resource' | 'object';
     disuseAuthorized: boolean;
@@ -45,33 +46,17 @@ interface FExhibitAuthorizedContractsStates {
       text: string;
     }[];
   }[];
-  // currentExhibitResourceMappingContractIDs: {
-  //   resourceID: string;
-  //   contractIDs: string[];
-  //   policyIDs: string[];
-  // }[];
-  // otherExhibitResourceMappingContractIDs: {
-  //   exhibitID: string;
-  //   resourceID: string;
-  //   contractIDs: string[];
-  // }[];
 }
 
 function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
-  // const [currentExhibitResourceMappingContractIDs, set_CurrentExhibitResourceMappingContractIDs] = React.useState<FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
     return i.subjectID === selectedID;
   });
-
-  // 当前展品对应的现在已激活的标的物的有关合约映射
-  // const currentExhibitResourceMappingContract: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'][0] | undefined = currentExhibitResourceMappingContractIDs.find((cermci) => {
-  //   return cermci.resourceID === selectedID;
-  // });
 
   React.useEffect(() => {
     handleData();
@@ -177,10 +162,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             >
               <FTextBtn
                 onClick={(e) => {
-                  // e.stopPropagation();
-                  // window.open(FUtil.LinkTo.resourceDetails({
-                  //   resourceID: mainResource.id,
-                  // }));
+                  e.stopPropagation();
+                  window.open(ac.detailsUrl);
                 }}
               >
                 <FContentText
@@ -515,9 +498,15 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
         return bo.objectId === rr.resourceId;
       });
 
+      // console.log(theResource, 'theResource23433333');
+
       return {
         subjectID: rr.resourceId,
         subjectName: (theResource?.bucketName || '') + (theResource?.objectName || ''),
+        detailsUrl: FUtil.LinkTo.objectDetails({
+          bucketName: theResource?.bucketName || '',
+          objectID: theResource?.objectId || '',
+        }),
         type: theResource?.resourceType || '',
         identity: rr.type,
         disuseAuthorized: rr.isSelf,
@@ -577,6 +566,9 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     return {
       subjectID: rr.resourceId,
       subjectName: theResource?.resourceName || '',
+      detailsUrl: FUtil.LinkTo.resourceDetails({
+        resourceID: theResource?.resourceId || '',
+      }),
       type: theResource?.resourceType || '',
       identity: rr.type,
       disuseAuthorized: rr.isSelf,
