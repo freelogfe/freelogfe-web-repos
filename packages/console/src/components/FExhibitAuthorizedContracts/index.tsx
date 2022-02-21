@@ -12,6 +12,7 @@ import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
+import fMessage from '@/components/fMessage';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -95,7 +96,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       testResourceId: exhibitID,
 
     };
-    const { data: data_testResourceDetails }: {
+    const { data: data_testResourceDetails, errcode, ret }: {
       data: {
         resolveResources: {
           contracts: {
@@ -106,8 +107,14 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           resourceId: string;
           type: 'object' | 'resource';
         }[];
-      }
+      };
+      errcode: number;
+      ret: number;
     } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+
+    if (errcode !== 0 || ret !== 0 || !data_testResourceDetails) {
+      return fMessage('当前测试展品异常', 'error');
+    }
 
     const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources.find((acon) => {
       return acon.resourceId === selectedID;
