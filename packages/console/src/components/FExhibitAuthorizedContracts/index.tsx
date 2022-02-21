@@ -8,12 +8,10 @@ import FResourceContractPanelNoContractTip from '@/components/FResourceContractP
 import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
-// import { FetchInfoAction, UpdateContractUsedAction, UpdateRelationAction } from '@/models/exhibitInfoPage';
 import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-// import FFullScreen from '@/components/FIcons/FFullScreen';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -35,6 +33,10 @@ interface FExhibitAuthorizedContractsStates {
       createTime: string;
       status: 'active' | 'testActive' | 'inactive';
       policyID: string;
+      applyToCurrentExhibit: {
+        checked: boolean;
+        disabled: boolean;
+      };
     }[];
     policies: {
       policyID: string;
@@ -42,11 +44,11 @@ interface FExhibitAuthorizedContractsStates {
       text: string;
     }[];
   }[];
-  currentExhibitResourceMappingContractIDs: {
-    resourceID: string;
-    contractIDs: string[];
-    policyIDs: string[];
-  }[];
+  // currentExhibitResourceMappingContractIDs: {
+  //   resourceID: string;
+  //   contractIDs: string[];
+  //   policyIDs: string[];
+  // }[];
   // otherExhibitResourceMappingContractIDs: {
   //   exhibitID: string;
   //   resourceID: string;
@@ -58,7 +60,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
-  const [currentExhibitResourceMappingContractIDs, set_CurrentExhibitResourceMappingContractIDs] = React.useState<FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs']>([]);
+  // const [currentExhibitResourceMappingContractIDs, set_CurrentExhibitResourceMappingContractIDs] = React.useState<FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -66,9 +68,9 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
   });
 
   // 当前展品对应的现在已激活的标的物的有关合约映射
-  const currentExhibitResourceMappingContract: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'][0] | undefined = currentExhibitResourceMappingContractIDs.find((cermci) => {
-    return cermci.resourceID === selectedID;
-  });
+  // const currentExhibitResourceMappingContract: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'][0] | undefined = currentExhibitResourceMappingContractIDs.find((cermci) => {
+  //   return cermci.resourceID === selectedID;
+  // });
 
   React.useEffect(() => {
     handleData();
@@ -76,9 +78,9 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
   // 处理整个授权合约关系
   async function handleData() {
-    const { authorizedContracts, mappingContracts } = await handleExhibitAuthorizedContracts(exhibitID);
+    const authorizedContracts = await handleExhibitAuthorizedContracts(exhibitID);
     set_AuthorizedContracts(authorizedContracts);
-    set_CurrentExhibitResourceMappingContractIDs(mappingContracts);
+    // set_CurrentExhibitResourceMappingContractIDs(mappingContracts);
     if (!authorizedContracts.some((d) => d.subjectID === selectedID)) {
       set_SelectedID(authorizedContracts[0].subjectID);
     }
@@ -88,14 +90,37 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
   // 启用和搁置合约
   async function enableAndUnable(policyID: string, enabled: boolean) {
-    const resourceContracts = currentExhibitResourceMappingContract?.policyIDs || [];
+
+    const params1: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
+      testResourceId: exhibitID,
+
+    };
+    const { data: data_testResourceDetails }: {
+      data: {
+        resolveResources: {
+          contracts: {
+            contractId: string;
+            policyId: string;
+          }[];
+          isSelf: boolean;
+          resourceId: string;
+          type: 'object' | 'resource';
+        }[];
+      }
+    } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+
+    const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources.find((acon) => {
+      return acon.resourceId === selectedID;
+    })?.contracts.map((cstr) => {
+      return cstr.policyId;
+    }) || [];
 
     const finalEnabledPolicyIDs: string[] = enabled
       ? [
-        ...resourceContracts,
+        ...oldPolicyIDs,
         policyID,
       ]
-      : resourceContracts.filter((rc) => {
+      : oldPolicyIDs.filter((rc) => {
         return rc !== policyID;
       });
     const params: Parameters<typeof FServiceAPI.InformalNode.updateTestResourceContracts>[0] = {
@@ -168,12 +193,16 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               {
                 ac.disuseAuthorized
                   ? (<div className={styles.disuseAuthorized}>无需处理授权</div>)
-                  : (<FResourceContractLabels contracts={ac.contracts.map((c) => {
-                    return {
-                      name: c.contractName,
-                      auth: c.status === 'active' || c.status === 'testActive',
-                    };
-                  })} />)
+                  : (<FResourceContractLabels contracts={ac.contracts
+                    .filter((c) => {
+                      return c.applyToCurrentExhibit.checked;
+                    })
+                    .map((c) => {
+                      return {
+                        name: c.contractName,
+                        auth: c.status === 'active' || c.status === 'testActive',
+                      };
+                    })} />)
               }
 
             </div>
@@ -217,73 +246,82 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
           <>
             {
-              selectedAuthorizedContract.contracts.length === 0
-                ? (<>
-                  <div style={{ height: 15 }} />
-                  <FResourceContractPanelNoContractTip />
-                </>)
-                : (<>
-                  <div style={{ height: 15 }} />
-                  <FTitleText type='h4'>当前合约</FTitleText>
-                  {
-                    selectedAuthorizedContract.contracts.map((sac) => {
-                      // console.log(sac.id, 'sac.id@#$@!#$@#4234');
-                      return (<React.Fragment key={sac.contractID}>
-                        <div style={{ height: 15 }} />
-                        <div
-                          key={sac.contractID}
-                          className={styles.Contracts}
-                        >
-                          <div style={{ height: 10 }} />
-                          <Space style={{ padding: '0 20px' }} size={10}>
-                            <FContentText type='highlight' text={sac.contractName} />
-                          </Space>
-                          <div style={{ height: 10 }} />
+              selectedAuthorizedContract.contracts
+                .filter((c) => {
+                  return c.applyToCurrentExhibit.checked;
+                })
+                .length === 0
+              && (<>
+                <div style={{ height: 15 }} />
+                <FResourceContractPanelNoContractTip />
+              </>)
+            }
 
-                          <div style={{ padding: '0 20px' }}>
-                            <FContractDisplay
-                              contractID={sac.contractID}
-                              onChangedEvent={() => {
-                                onChangeAuthorize && onChangeAuthorize();
+            {
+              selectedAuthorizedContract.contracts.length > 0 && (<>
+                <div style={{ height: 15 }} />
+                <FTitleText type='h4'>当前合约</FTitleText>
+                {
+                  selectedAuthorizedContract.contracts.map((sac) => {
+                    // console.log(sac.id, 'sac.id@#$@!#$@#4234');
+                    return (<React.Fragment key={sac.contractID}>
+                      <div style={{ height: 15 }} />
+                      <div
+                        key={sac.contractID}
+                        className={styles.Contracts}
+                      >
+                        <div style={{ height: 10 }} />
+                        <Space style={{ padding: '0 20px' }} size={10}>
+                          <FContentText type='highlight' text={sac.contractName} />
+                        </Space>
+                        <div style={{ height: 10 }} />
+
+                        <div style={{ padding: '0 20px' }}>
+                          <FContractDisplay
+                            contractID={sac.contractID}
+                            onChangedEvent={() => {
+                              onChangeAuthorize && onChangeAuthorize();
+                            }}
+                          />
+                        </div>
+
+                        <div style={{ height: 10 }} />
+                        <Space style={{ padding: '0 20px' }} size={5}>
+                          <FContentText
+                            type='additional2'
+                            text={FUtil1.I18n.message('contract_id') + '：' + sac.contractID}
+                          />
+                          <FDivider style={{ fontSize: 14 }} />
+                          <FContentText
+                            type='additional2'
+                            text={FUtil1.I18n.message('contract_signed_time') + '：' + sac.createTime}
+                          />
+                        </Space>
+                        <div style={{ height: 10 }} />
+                        <div className={styles.footer}>
+                          <div className={styles.action}>
+                            <FContentText
+                              // text={exhibitInfoPage.pName}
+                              text={FUtil1.I18n.message('use_in_current_exhibit')}
+                              type='highlight'
+                            />
+                            <FSwitch
+                              // checked={currentExhibitResourceMappingContract?.contractIDs.includes(sac.contractID) || false}
+                              checked={sac.applyToCurrentExhibit.checked}
+                              // disabled={currentExhibitResourceMappingContract && (currentExhibitResourceMappingContract.contractIDs.length <= 1) && currentExhibitResourceMappingContract?.contractIDs.includes(sac.contractID)}
+                              disabled={sac.applyToCurrentExhibit.disabled}
+                              onChange={(value) => {
+                                enableAndUnable(sac.policyID, value);
                               }}
                             />
                           </div>
-
-                          <div style={{ height: 10 }} />
-                          <Space style={{ padding: '0 20px' }} size={5}>
-                            <FContentText
-                              type='additional2'
-                              text={FUtil1.I18n.message('contract_id') + '：' + sac.contractID}
-                            />
-                            <FDivider style={{ fontSize: 14 }} />
-                            <FContentText
-                              type='additional2'
-                              text={FUtil1.I18n.message('contract_signed_time') + '：' + sac.createTime}
-                            />
-                          </Space>
-                          <div style={{ height: 10 }} />
-                          <div className={styles.footer}>
-                            <div className={styles.action}>
-                              <FContentText
-                                // text={exhibitInfoPage.pName}
-                                text={FUtil1.I18n.message('use_in_current_exhibit')}
-                                type='highlight'
-                              />
-                              <FSwitch
-                                checked={currentExhibitResourceMappingContract?.contractIDs.includes(sac.contractID) || false}
-                                disabled={currentExhibitResourceMappingContract && (currentExhibitResourceMappingContract.contractIDs.length <= 1) && currentExhibitResourceMappingContract?.contractIDs.includes(sac.contractID)}
-                                onChange={(value) => {
-                                  enableAndUnable(sac.policyID, value);
-                                }}
-                              />
-                            </div>
-                          </div>
                         </div>
-                      </React.Fragment>);
-                    })
-                  }
+                      </div>
+                    </React.Fragment>);
+                  })
+                }
 
-                </>)
+              </>)
             }
 
             <div style={{ height: 15 }} />
@@ -346,10 +384,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
 export default FExhibitAuthorizedContracts;
 
-async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
-  authorizedContracts: FExhibitAuthorizedContractsStates['authorizedContracts'];
-  mappingContracts: FExhibitAuthorizedContractsStates['currentExhibitResourceMappingContractIDs'];
-}> {
+async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExhibitAuthorizedContractsStates['authorizedContracts']> {
   const params1: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
     testResourceId: exhibitID,
   };
@@ -369,17 +404,14 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
         isSelf: boolean;
         resourceId: string;
         type: 'object' | 'resource';
-      }[]
+      }[];
     };
     errcode: number;
     ret: number;
   } = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
   if (errcode !== 0 || ret !== 0 || !testResourceDetails) {
-    return {
-      authorizedContracts: [],
-      mappingContracts: [],
-    };
+    return [];
   }
 
   // console.log(testResourceDetails, 'data_testResourceDetails 309uoijklsad/lfjlk');
@@ -490,25 +522,36 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
     /******** End 处理对象 ***********************************************/
 
     /********* Start 处理资源 ***********************************************/
+    const theResource = batchResources.find((br) => {
+      return br.resourceId === rr.resourceId;
+    });
+
     /********* Start 处理合约相关数据 *********************************************************/
+
+    const currentExhibitResolveResources = testResourceDetails.resolveResources.find((rere) => {
+      return rere.resourceId === theResource?.resourceId;
+    });
+
     const contracts: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['contracts'] = allUsedContract
       .filter((auc) => {
-        return auc.subjectId === rr.resourceId && auc.status !== 1;
+        return auc.subjectId === theResource?.resourceId && auc.status !== 1;
       })
       .map((auc) => {
+        const checked: boolean = currentExhibitResolveResources?.contracts.some((contract) => contract.contractId === auc.contractId) || false;
+        const disabled: boolean = checked && currentExhibitResolveResources && (currentExhibitResolveResources?.contracts.length <= 1) || false;
         return {
           contractID: auc.contractId,
           contractName: auc.contractName,
           createTime: FUtil.Format.formatDateTime(auc.createDate, true),
           status: auc.authStatus === 1 ? 'active' : auc.authStatus === 2 ? 'testActive' : 'inactive',
           policyID: auc.policyId,
+          applyToCurrentExhibit: {
+            checked,
+            disabled,
+          },
         };
       });
     /********* End 处理合约相关数据 *********************************************************/
-
-    const theResource = batchResources.find((br) => {
-      return br.resourceId === rr.resourceId;
-    });
 
     /************** Start 处理策略相关数据 *********************************************************/
     const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = !theResource
@@ -540,25 +583,12 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<{
   /************ End 组织最终数据 **************************************************************************/
   // console.log(result, '###$$$$$$$RRrrrrr');
 
-  return {
-    authorizedContracts: result.sort((res) => {
-      // console.log(res.id, testResourceDetails.originInfo.id, '#########000000000））））））））');
-      if (res.subjectID === testResourceDetails.originInfo.id) {
-        // if (res.id === '61d6b8262ae3ac002eb8581d') {
-        return -1;
-      }
-      return 0;
-    }),
-    mappingContracts: testResourceDetails.resolveResources.map((trdr) => {
-      return {
-        resourceID: trdr.resourceId,
-        contractIDs: trdr.contracts.map((trdrc) => {
-          return trdrc.contractId;
-        }),
-        policyIDs: trdr.contracts.map((trdrc) => {
-          return trdrc.policyId;
-        }),
-      };
-    }),
-  };
+  return result.sort((res) => {
+    // console.log(res.id, testResourceDetails.originInfo.id, '#########000000000））））））））');
+    if (res.subjectID === testResourceDetails.originInfo.id) {
+      // if (res.id === '61d6b8262ae3ac002eb8581d') {
+      return -1;
+    }
+    return 0;
+  });
 }
