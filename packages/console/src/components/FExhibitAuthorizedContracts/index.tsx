@@ -94,7 +94,6 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
     const params1: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
       testResourceId: exhibitID,
-
     };
     const { data: data_testResourceDetails, errcode, ret }: {
       data: {
