@@ -8,9 +8,9 @@ import fMessage from '@/components/fMessage';
 import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import moment from 'moment';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 
 export type DepResources = {
   id: string;
