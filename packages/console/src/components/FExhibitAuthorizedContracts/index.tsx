@@ -214,8 +214,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           />
           <div style={{ height: 30 }} />
           <FContentText
-            // text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
-            text={FUtil1.I18n.message('msg_resource_natural_auth')}
+            text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
+            // text={FUtil1.I18n.message('msg_resource_natural_auth')}
             type={'additional2'}
           />
         </div>)
