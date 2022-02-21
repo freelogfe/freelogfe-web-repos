@@ -1,25 +1,25 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { Space } from 'antd';
+// import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
-import {
-  ChangeAction,
-  OnChangedEvent_FContractDisplay_Action,
-  UpdateRelationAction,
-} from '@/models/informExhibitInfoPage';
-import { FUtil } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
+// import {
+//   ChangeAction,
+//   OnChangedEvent_FContractDisplay_Action,
+//   UpdateRelationAction,
+// } from '@/models/informExhibitInfoPage';
+// import { FUtil } from '@freelog/tools-lib';
+// import { FTextBtn } from '@/components/FButton';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
-import FUtil1 from '@/utils';
-import FContractDisplay from '@/components/FContractDisplay';
-import FDivider from '@/components/FDivider';
+// import FUtil1 from '@/utils';
+// import FContractDisplay from '@/components/FContractDisplay';
+// import FDivider from '@/components/FDivider';
 import { FRectBtn } from '@/components/FButton';
-import FResourceContractLabels from '@/components/FResourceContractLabels';
-import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
+// import FResourceContractLabels from '@/components/FResourceContractLabels';
+// import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FExhibitAuthorizedContracts from '@/components/FExhibitAuthorizedContracts';
 
 interface ContractsProps {
@@ -53,7 +53,12 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
     />
 
     <div style={{ height: 20 }} />
-    <FExhibitAuthorizedContracts exhibitID={informExhibitInfoPage.exhibit_ID}/>
+    <FExhibitAuthorizedContracts
+      exhibitID={informExhibitInfoPage.exhibit_ID}
+      onChangeAuthorize={() => {
+
+      }}
+    />
     {/*<div style={{ height: 20 }} />*/}
 
     {/*<div className={styles.sign}>*/}
