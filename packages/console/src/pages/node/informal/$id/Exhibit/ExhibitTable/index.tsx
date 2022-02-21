@@ -12,7 +12,6 @@ import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
-  ChangeAction,
   OnChange_Exhibits_StatusSwitch_Action,
   OnClick_Exhibits_DeleteBtn_Action,
 } from '@/models/informalNodeManagerPage';
@@ -227,13 +226,6 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
   ];
-
-  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload,
-  //   });
-  // }
 
   return (<FTable
     className={styles.table}

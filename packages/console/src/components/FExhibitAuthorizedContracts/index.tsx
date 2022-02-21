@@ -83,7 +83,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
     set_AuthorizedContracts(authorizedContracts);
     // set_CurrentExhibitResourceMappingContractIDs(mappingContracts);
     if (!authorizedContracts.some((d) => d.subjectID === selectedID)) {
-      set_SelectedID(authorizedContracts[0].subjectID);
+      set_SelectedID(authorizedContracts[0]?.subjectID || '');
     }
     // console.log(authorizedContracts, 'authorizedContracts 0293ujewlkfasdlkf');
     // console.log(mappingContracts, 'mappingContracts 0293ujewlkfasdlkf');

@@ -17,7 +17,7 @@ import {
   IGraph_Dependency_Edges,
   IGraph_Dependency_Nodes,
 } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-import { getAllContracts, handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
+// import { getAllContracts, handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 
@@ -116,25 +116,6 @@ export interface InformExhibitInfoPageModelState {
     isAuth: boolean;
   };
 
-  // contract_Associated_Selected: string;
-  // contract_Associated: {
-  //   id: string;
-  //   name: string;
-  //   type: string;
-  //   contracts: {
-  //     id: string;
-  //     name: string;
-  //     createTime: string;
-  //     status: 'active' | 'testActive' | 'inactive' | 'terminal';
-  //     policyID: string;
-  //   }[];
-  //   policies: {
-  //     id: string;
-  //     name: string;
-  //     text: string;
-  //   }[];
-  // }[];
-
   graph_FullScreen: boolean;
   graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
   graph_Viewport_RelationGraph_Nodes: IGraph_Relationship_Nodes;
@@ -215,8 +196,8 @@ export interface OnChange_Theme_OnlineSwitch_Action extends AnyAction {
   };
 }
 
-export interface OnChangedEvent_FContractDisplay_Action extends AnyAction {
-  type: 'informExhibitInfoPage/onChangedEvent_FContractDisplay';
+export interface OnChanged_ExhibitAuthorized_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChanged_ExhibitAuthorized';
 }
 
 export interface OnClick_Graph_FullScreenBtn_Action extends AnyAction {
@@ -365,12 +346,10 @@ export interface ExhibitInfoPageModelType {
 
     fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
 
-    // updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
-
     onChange_Exhibit_OnlineSwitch: (action: OnChange_Exhibit_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
     onChange_Theme_OnlineSwitch: (action: OnChange_Theme_OnlineSwitch_Action, effects: EffectsCommandMap) => void;
 
-    onChangedEvent_FContractDisplay: (action: OnChangedEvent_FContractDisplay_Action, effects: EffectsCommandMap) => void;
+    onChanged_ExhibitAuthorized: (action: OnChanged_ExhibitAuthorized_Action, effects: EffectsCommandMap) => void;
 
     onClick_Graph_FullScreenBtn: (action: OnClick_Graph_FullScreenBtn_Action, effects: EffectsCommandMap) => void;
     onCancel_Graph_FullScreenDrawer: (action: OnCancel_Graph_FullScreenDrawer_Action, effects: EffectsCommandMap) => void;
@@ -495,21 +474,6 @@ const Model: ExhibitInfoPageModelType = {
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
       // console.log(testResourceDetail, 'data288282822828282822888888888888');
 
-      // const resolveResourceIDs: string[] = testResourceDetail.resolveResources.map((rr: any) => {
-      //   return rr.resourceId;
-      // });
-      // const params5: HandleContractAssociatedParams = {
-      //   nodeID: testResourceDetail.nodeId,
-      //   resourceIDs: testResourceDetail.originInfo.type === 'resource' ? [
-      //     testResourceDetail.originInfo.id,
-      //     ...resolveResourceIDs,
-      //   ] : resolveResourceIDs,
-      // };
-
-      // const contract_Associated: InformExhibitInfoPageModelState['contract_Associated'] = yield call(handleContractAssociated, params5);
-
-      // console.log(contract_Associated, 'contract_Associated9028394234h');
-
       const params4: Parameters<typeof FServiceAPI.Node.details>[0] = {
         nodeId: testResourceDetail.nodeId,
       };
@@ -523,7 +487,6 @@ const Model: ExhibitInfoPageModelType = {
       const actualOriginInfo = testResourceDetail.stateInfo.replaceInfo.rootResourceReplacer || testResourceDetail.originInfo;
 
       if (actualOriginInfo.type === 'resource') {
-
         const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: actualOriginInfo.id,
         };
@@ -561,81 +524,37 @@ const Model: ExhibitInfoPageModelType = {
             objectID: data3.objectId,
           }),
         };
-
       }
-
       // console.log(data, 'data@!!!!!!!!1111');
       const isChecked: boolean = testResourceDetail.resourceType === 'theme' ? testResourceDetail.stateInfo.themeInfo.isActivatedTheme === 1 : testResourceDetail.stateInfo.onlineStatusInfo.onlineStatus === 1;
       const isDisabled: boolean = testResourceDetail.resourceType === 'theme' && isChecked;
-
-      // // 关系树数据
-      // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
-      //   presentableId: data.presentableId,
-      // };
-      //
-      // const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
-      // // console.log(data, 'datadatadatadatadatadatadata');
-      // // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
-      //
-      // const {
-      //   nodes: relationGraphNodes,
-      //   edges: relationGraphEdges,
-      // } = yield call(handleExhibitRelationGraphData, data6, {
-      //   nodeId: data.nodeId,
-      //   nodeName: data3.nodeName,
-      //   exhibitId: data.presentableId,
-      //   exhibitName: data.presentableName,
-      // });
-      //
-      // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
-      //
-      // 授权树数据
-      // const params7: Parameters<typeof FServiceAPI.InformalNode.testResourcesAuthTree>[0] = {
-      //   testResourceId: informExhibitID,
-      // };
-      //
-      // const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
-      // console.log(data7, 'data7data7data7data7');
-
-      // const {
-      //   nodes: authorizationGraphNodes,
-      //   edges: authorizationGraphEdges,
-      // } = yield call(handleAuthorizationGraphData, data4, {
-      //   id: data.presentableId,
-      //   nodeId: data.nodeId,
-      //   nodeName: data3.nodeName,
-      //   exhibitId: data.presentableId,
-      //   exhibitName: data.presentableName,
-      // });
-
-      // 依赖树
-      // const params8: Parameters<typeof FServiceAPI.InformalNode.testResourcesDependencyTree>[0] = {
-      //   testResourceId: informExhibitID,
-      // };
-      //
-      // const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
-      // console.log(data8, 'data8data8data8data8');
 
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
         nodeID: testResourceDetail.nodeId,
         isRematch: false,
       };
 
-      const result2: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      const node_RuleInfo: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
 
-      // console.log(data, 'data@#$!@#$@#$@#$234234');
-      // console.log(result, 'result23423423423423423');
+      const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+        nodeId: testResourceDetail.nodeId,
+        exhibitIds: testResourceDetail.testResourceId,
+        authType: 3,
+      };
+
+      const { data: data_batchGetAuths }: { data: [{ isAuth: boolean }] } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+      // console.log(data_batchGetAuths, 'data@#$@#$#@ data_batchGetAuths');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           pageLoading: false,
-          node_RuleInfo: result2,
+          node_RuleInfo: node_RuleInfo,
           node_ID: testResourceDetail.nodeId,
           node_Name: data4.nodeName,
           exhibit_Identity: testResourceDetail.associatedPresentableId !== '' ? 'exhibit' : actualOriginInfo.type,
           exhibit_ResourceType: testResourceDetail.resourceType,
           exhibit_Name: testResourceDetail.testResourceName,
-          // exhibit_RuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
           exhibit_OnlineSwitchObj: {
             checked: isChecked,
             text: testResourceDetail.resourceType === 'theme'
@@ -645,10 +564,8 @@ const Model: ExhibitInfoPageModelType = {
           },
           exhibit_Info: {
             ...testResourceDetail,
-            isAuth: true,
+            isAuth: data_batchGetAuths[0].isAuth,
           },
-          // contract_Associated: contract_Associated,
-          // contract_Associated_Selected: contract_Associated.length === 0 ? '' : contract_Associated[0].id,
 
           side_Exhibit_Cover: testResourceDetail.stateInfo.coverInfo.coverImages[0] || '',
           side_Exhibit_Title: testResourceDetail.stateInfo.titleInfo.title || '',
@@ -696,31 +613,6 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    // * updateRelation({ payload }: UpdateRelationAction, { select, call, put }: EffectsCommandMap) {
-    //   const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-    //     informExhibitInfoPage,
-    //   }));
-    //   const resource = informExhibitInfoPage.contract_Associated.find((a) => a.id === payload.resourceId);
-    //   // console.log(resource, '$#@$#$@#+++++++++++');
-    //   // if (resource?.contracts && resource?.contracts.length > 0) {
-    //   const params: Parameters<typeof FServiceAPI.InformalNode.updateTestResourceContracts>[0] = {
-    //     // presentableId: informExhibitInfoPage?.presentableId || '',
-    //     testResourceId: informExhibitInfoPage.exhibit_ID,
-    //     resolveResources: [
-    //       {
-    //         resourceId: resource?.id || '',
-    //         contracts: [
-    //           ...(resource?.contracts || []).map((c) => ({ policyId: c.policyID })),
-    //           { policyId: payload.policyId },
-    //         ],
-    //       },
-    //     ],
-    //   };
-    //   yield call(FServiceAPI.InformalNode.updateTestResourceContracts, params);
-    //   yield put<FetchInformalExhibitInfoAction>({
-    //     type: 'fetchInformalExhibitInfo',
-    //   });
-    // },
     * onChange_Exhibit_OnlineSwitch({ payload }: OnChange_Exhibit_OnlineSwitch_Action, {
       select,
       call,
@@ -733,47 +625,6 @@ const Model: ExhibitInfoPageModelType = {
       const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
         return rr.ruleInfo;
       });
-
-      // console.log(rules, 'rules928893292339829399999998888888');
-
-      // let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
-      //
-      // // console.log(needHandleRules, 'needHandleRules9283239847239847');
-      //
-      // if (needHandleRules.some((nhr) => nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme')) {
-      //   needHandleRules = needHandleRules.map((nhr) => {
-      //     if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
-      //       return {
-      //         ...nhr,
-      //         actions: [
-      //           ...nhr.actions,
-      //           {
-      //             operation: 'online',
-      //             content: payload.checked,
-      //           },
-      //         ],
-      //       };
-      //     }
-      //
-      //     return nhr;
-      //   });
-      // } else {
-      //   const alterRule: IRules['alter'] = {
-      //     operation: 'alter',
-      //     exhibitName: informExhibitInfoPage.exhibit_Name,
-      //     actions: [
-      //       {
-      //         operation: 'online',
-      //         content: payload.checked,
-      //       },
-      //     ],
-      //     text: '',
-      //   };
-      //   needHandleRules = [
-      //     ...needHandleRules,
-      //     alterRule,
-      //   ];
-      // }
 
       const text: string = decompile(mergeRules({
         oldRules: rules,
@@ -883,10 +734,30 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
-    * onChangedEvent_FContractDisplay({}: OnChangedEvent_FContractDisplay_Action, { put }: EffectsCommandMap) {
+    * onChanged_ExhibitAuthorized({}: OnChanged_ExhibitAuthorized_Action, { select, call, put }: EffectsCommandMap) {
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });
+      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+      //   informExhibitInfoPage,
+      // }));
+      // const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
+      //   nodeId: informExhibitInfoPage.node_ID,
+      //   exhibitIds: informExhibitInfoPage.exhibit_ID,
+      //   authType: 3,
+      // };
+      //
+      // const { data: data_batchGetAuths } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
+      // console.log(data_batchGetAuths, 'data@#$@#$#@ data_batchGetAuths');
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     exhibit_Info: {
+      //       ...informExhibitInfoPage.exhibit_Info,
+      //       isAuth: data_batchGetAuths[0].isAuth,
+      //     },
+      //   },
+      // });
     },
 
     * onClick_Graph_FullScreenBtn({}: OnClick_Graph_FullScreenBtn_Action, { put }: EffectsCommandMap) {
@@ -1726,89 +1597,50 @@ export function mergeRules({
   return needHandleRules;
 }
 
-// interface HandleContractAssociatedParams {
-//   nodeID: number;
-//   resourceIDs: string[];
-// }
+// // 关系树数据
+// const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
+//   presentableId: data.presentableId,
+// };
 //
-// async function handleContractAssociated({
-//                                           nodeID,
-//                                           resourceIDs,
-//                                         }: HandleContractAssociatedParams): Promise<InformExhibitInfoPageModelState['contract_Associated']> {
+// const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
+// // console.log(data, 'datadatadatadatadatadatadata');
+// // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
 //
-//   // console.log(resourceIDs, 'resourceIDs@@@@099099090909999');
-//   if (resourceIDs.length === 0) {
-//     return [];
-//   }
+// const {
+//   nodes: relationGraphNodes,
+//   edges: relationGraphEdges,
+// } = yield call(handleExhibitRelationGraphData, data6, {
+//   nodeId: data.nodeId,
+//   nodeName: data3.nodeName,
+//   exhibitId: data.presentableId,
+//   exhibitName: data.presentableName,
+// });
 //
-//   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-//     subjectIds: resourceIDs.join(','),
-//     subjectType: 1,
-//     licenseeId: nodeID,
-//     licenseeIdentityType: 2,
-//   };
+// // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
 //
-//   const { data: allContracts } = await FServiceAPI.Contract.batchContracts(params1);
-//   // console.log(allContracts, 'allContracts@@#$2344444444');
+// 授权树数据
+// const params7: Parameters<typeof FServiceAPI.InformalNode.testResourcesAuthTree>[0] = {
+//   testResourceId: informExhibitID,
+// };
 //
-//   const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-//     resourceIds: resourceIDs.join(','),
-//     isLoadPolicyInfo: 1,
-//   };
+// const { data: data7 } = yield call(FServiceAPI.InformalNode.testResourcesAuthTree, params7);
+// console.log(data7, 'data7data7data7data7');
+
+// const {
+//   nodes: authorizationGraphNodes,
+//   edges: authorizationGraphEdges,
+// } = yield call(handleAuthorizationGraphData, data4, {
+//   id: data.presentableId,
+//   nodeId: data.nodeId,
+//   nodeName: data3.nodeName,
+//   exhibitId: data.presentableId,
+//   exhibitName: data.presentableName,
+// });
+
+// 依赖树
+// const params8: Parameters<typeof FServiceAPI.InformalNode.testResourcesDependencyTree>[0] = {
+//   testResourceId: informExhibitID,
+// };
 //
-//   const { data: resources }: any = await FServiceAPI.Resource.batchInfo(params0);
-//   // console.log(resources, 'resources23324234234234');
-//
-//   const result: InformExhibitInfoPageModelState['contract_Associated'] = resources
-//     .filter((resource: any) => {
-//       return resource.userId !== FUtil.Tool.getUserIDByCookies();
-//     })
-//     .map((resource: any) => {
-//       // console.log(resource, 'resource4329203ujlkzfsd');
-//       const contracts: InformExhibitInfoPageModelState['contract_Associated'][0]['contracts'] = allContracts
-//         .filter((contract: any) => {
-//           // console.log(acts, 'acts@@@#$@#$#@222');
-//           return contract && contract.licensorId === resource.resourceId && contract.status === 0;
-//         })
-//         .map((contract: any) => {
-//           // console.log(contract, 'contract0923');
-//           return {
-//             id: contract.contractId,
-//             name: contract.contractName,
-//             createTime: contract.createDate,
-//             status: contract.status === 1
-//               ? 'terminal'
-//               : contract.authStatus === 1
-//                 ? 'active' : contract.authStatus === 2
-//                   ? 'testActive'
-//                   : 'inactive',
-//             policyID: contract.policyId,
-//           };
-//         });
-//       const allContractsUsedPolicyIDs: string[] = contracts.map<string>((c) => {
-//         return c.policyID;
-//       });
-//       // console.log(allContractsUsedPolicyIDs, 'allContractsUsedPolicyIDsallContractsUsedPolicyIDs0932o');
-//
-//       const policies: InformExhibitInfoPageModelState['contract_Associated'][0]['policies'] = resource.policies
-//         .filter((p: any) => {
-//           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
-//         })
-//         .map((p: any) => {
-//           return {
-//             id: p.policyId,
-//             name: p.policyName,
-//             text: p.policyText,
-//           };
-//         });
-//       return {
-//         id: resource?.resourceId || '',
-//         name: resource?.resourceName || '',
-//         type: resource?.resourceType || '',
-//         contracts: contracts,
-//         policies: policies,
-//       };
-//     });
-//   // console.log(result, 'result2309jd');
-//   return result;
-// }
+// const { data: data8 } = yield call(FServiceAPI.InformalNode.testResourcesDependencyTree, params8);
+// console.log(data8, 'data8data8data8data8');

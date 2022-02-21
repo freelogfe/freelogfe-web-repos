@@ -1733,19 +1733,6 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      // const codeExecutionError = result.testRules
-      //   .filter((tr: any) => {
-      //     return tr.matchErrors.length > 0;
-      //   })
-      //   .map((tr: any) => {
-      //     return tr.matchErrors.map((me: string) => {
-      //       return {
-      //         msg: me,
-      //       };
-      //     });
-      //   })
-      //   .flat();
-
       if (informalNodeManagerPage.showPage === 'exhibit') {
         yield put<FetchExhibitListAction>({
           type: 'fetchExhibitList',

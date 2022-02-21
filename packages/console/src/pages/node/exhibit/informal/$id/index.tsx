@@ -28,6 +28,8 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
 import { IExhibit } from '@/models/informalNodeManagerPage';
+import FTooltip from '@/components/FTooltip';
+import { FWarning } from '@/components/FIcons';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -126,6 +128,15 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 }}
               />
             </>)
+          }
+
+          {
+            !informExhibitInfoPage.exhibit_Info?.isAuth && (<FTooltip
+              // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+              title={'存在授权问题'}
+            >
+              <FWarning />
+            </FTooltip>)
           }
         </Space>
       </div>
