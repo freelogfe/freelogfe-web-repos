@@ -7,6 +7,8 @@ import { ChangeAction } from '@/models/marketResourcePage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
+import FTooltip from '@/components/FTooltip';
+import { FWarning } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -52,6 +54,13 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
                 r.status === 0 && (<>
                   <FResourceStatusBadge status={'offline'} />
                   <div style={{ width: 5 }} />
+                </>)
+              }
+
+              {
+                r.status === 1 && r.authProblem && (<>
+                  <div style={{ width: 5 }} />
+                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
@@ -118,6 +127,13 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
                 r.status === 0 && (<>
                   <FResourceStatusBadge status={'offline'} />
                   <div style={{ width: 5 }} />
+                </>)
+              }
+              {/*{console.log(r, 'r903i2jrlksjdlfkjdflksdj')}*/}
+              {
+                r.status === 1 && r.authProblem && (<>
+                  <div style={{ width: 5 }} />
+                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 

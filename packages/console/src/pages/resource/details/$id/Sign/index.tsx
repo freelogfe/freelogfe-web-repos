@@ -8,8 +8,9 @@ import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
-import { Tooltip } from 'antd';
+import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
+import { FWarning } from '@/components/FIcons';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -21,8 +22,7 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
 
   const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
 
-  const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
-  const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
+  const resource = marketResourcePage.signResources.find((r) => r.selected);
 
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
@@ -68,11 +68,20 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
                 </div>)
-                : policies?.length === 0 && contracts?.length === 0
+                : (resource?.policies || []).length === 0 && (resource?.contracts || []).length === 0
                   ? (<div className={styles.noNode}>
                     无策略可用…
                   </div>)
                   : (<>
+                    {
+                      resource?.status === 1 && resource.authProblem && (<>
+                        <div style={{ height: 15 }} />
+                        <Space size={10}>
+                          <FWarning style={{ fontSize: 20 }} />
+                          <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
+                        </Space>
+                      </>)
+                    }
                     <div style={{ height: 15 }} />
                     <Contracts />
                     <Policies />

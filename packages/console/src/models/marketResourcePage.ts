@@ -35,6 +35,7 @@ export interface MarketResourcePageModelState {
     resourceName: string;
     resourceType: string;
     status: 0 | 1;
+    authProblem: boolean;
     policies: {
       policyId: string;
       policyName: string;
@@ -48,6 +49,7 @@ export interface MarketResourcePageModelState {
     name: string;
     type: string;
     status: 0 | 1;
+    authProblem: boolean;
     contracts: {
       checked: boolean;
       id: string;
@@ -300,11 +302,17 @@ const Model: MarketResourcePageModelType = {
       }));
 
       // 获取资源信息详情
-      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: marketResourcePage.resourceId,
-        isLoadPolicyInfo: 1,
+      // const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+      //   resourceIdOrName: marketResourcePage.resourceId,
+      //   isLoadPolicyInfo: 1,
+      // };
+      // const { data } = yield call(FServiceAPI.Resource.info, params);
+      const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+        resourceIDs: [marketResourcePage.resourceId],
       };
-      const { data } = yield call(FServiceAPI.Resource.info, params);
+
+      // 本次要添加的一些列资源信息
+      const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
 
       let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
@@ -313,11 +321,19 @@ const Model: MarketResourcePageModelType = {
       // 获取上抛资源信息
       if ((data.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
-        const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-          resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
-          isLoadPolicyInfo: 1,
+
+        const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+          resourceIDs: data.baseUpcastResources.map((r) => r.resourceId),
         };
-        const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
+
+        // 本次要添加的一些列资源信息
+        const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+
+        // const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        //   resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
+        //   isLoadPolicyInfo: 1,
+        // };
+        // const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
         // console.log(data1, 'data12390jsdfo');
         rawSignResources = [
           ...rawSignResources,
@@ -360,6 +376,7 @@ const Model: MarketResourcePageModelType = {
                 name: rs.resourceName,
                 type: rs.resourceType,
                 status: rs.status,
+                authProblem: rs.authProblem,
                 contracts: [],
                 policies: rs.policies
                   .filter((srp) => srp.status === 1)
@@ -522,6 +539,7 @@ const Model: MarketResourcePageModelType = {
                 name: value.resourceName,
                 type: value.resourceType,
                 status: value.status,
+                authProblem: value.authProblem,
                 contracts: contracts,
                 policies: policies,
               };
@@ -873,4 +891,81 @@ async function getAvailableExhibitName({
   }
 
   return name;
+}
+
+interface HandleResourceBatchInfoParams {
+  resourceIDs: string[];
+}
+
+type HandleResourceBatchInfoReturn = {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  latestVersion: string;
+  coverImages: string[];
+  status: 0 | 1;
+  policies: {
+    policyId: string;
+    policyName: string;
+    policyText: string;
+    status: 0 | 1;
+  }[];
+  resourceVersions: {
+    createDate: string;
+    version: string;
+  }[];
+  baseUpcastResources: {
+    resourceId: string;
+    resourceName: string;
+  }[];
+  tags: string[];
+  intro: string;
+  authProblem: boolean;
+}[];
+
+async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoParams): Promise<HandleResourceBatchInfoReturn> {
+
+  if (resourceIDs.length === 0) {
+    return [];
+  }
+
+  const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    resourceIds: resourceIDs.join(','),
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
+    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,baseUpcastResources,coverImages,tags,intro',
+  };
+
+  // 本次要添加的一些列资源信息
+  const { data: data_batchResourceInfo }: { data: Omit<HandleResourceBatchInfoReturn, 'authProblem'> } = await FServiceAPI.Resource.batchInfo(params);
+
+  // console.log(data_batchResourceInfo, 'data_batchResourceInfo 238998sdhfkjshdfksdf');
+
+  const needGetAuthProblemResourceIDs: string[] = data_batchResourceInfo.filter((dbri) => {
+    return dbri.latestVersion !== '';
+  }).map((dbri) => {
+    return dbri.resourceId;
+  });
+  let resourceAuthProblems: {
+    isAuth: boolean;
+    resourceId: string;
+  }[] = [];
+  if (needGetAuthProblemResourceIDs.length > 0) {
+    const params1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+      resourceIds: needGetAuthProblemResourceIDs.join(','),
+    };
+    const { data } = await FServiceAPI.Resource.batchAuth(params1);
+    // console.log(data_BatchAuth, 'data_BatchAuth @@@34234wfgsrd');
+    resourceAuthProblems = data;
+  }
+
+  return data_batchResourceInfo.map((dbri) => {
+    const authP = resourceAuthProblems.find((rap) => {
+      return rap.resourceId === dbri.resourceId;
+    });
+    return {
+      ...dbri,
+      authProblem: authP ? !authP.isAuth : false,
+    };
+  });
 }
