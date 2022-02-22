@@ -114,7 +114,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                     {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
                     {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
                     {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
-                    {rrr.status === 1 && rrr.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>)}
+                    {rrr.status === 1 && rrr.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{height: 9}}/>
                   <FContentText type="additional2">
@@ -237,6 +237,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
               {i.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
               {i.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
               {i.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
+              {i.status === 1 && i.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{height: 5}}/>
             <FContentText type="additional2">
