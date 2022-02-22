@@ -15,6 +15,8 @@ import FUtil1 from "@/utils";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import {FEdit} from "@/components/FIcons";
+import FForbid from '@/components/FIcons/FForbid';
+import FUpcast from '@/components/FIcons/FUpcast';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -108,7 +110,9 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                     </FTextBtn>
                     <div style={{width: 5}}/>
                     {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
-                    {rrr.status !== 1 && rrr.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
+                    {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
+                    {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
+                    {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
                   </div>
                   <div style={{height: 9}}/>
                   <FContentText type="additional2">
@@ -228,7 +232,9 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
               </FTextBtn>
               <div style={{width: 5}}/>
               {i.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
-              {i.status !== 1 && i.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
+              {i.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
+              {i.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
+              {i.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
             </div>
             <div style={{height: 5}}/>
             <FContentText type="additional2">

@@ -16,6 +16,8 @@ import {ChangeAction, DepResources, ImportLastVersionDataAction} from '@/models/
 import FDrawer from "@/components/FDrawer";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
+import FForbid from '@/components/FIcons/FForbid';
+import FUpcast from '@/components/FIcons/FUpcast';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -74,7 +76,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
             {
               resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
-                  <CloseCircleFilled className={styles.errorIcon}/>
+                  <FForbid className={styles.errorIcon}/>
                   <FTipText
                     text={FUtil1.I18n.message('authorization_issue_offline_resource')}
                     type="second"
@@ -83,7 +85,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
             }
             {
               resource?.status === 2 && (<div className={styles.errorBox}>
-                <CloseCircleFilled className={styles.errorIcon}/>
+                <FForbid className={styles.errorIcon}/>
                 <FTipText
                   text={FUtil1.I18n.message('authorization_issue_circular_reply')}
                   type="second"
@@ -92,14 +94,14 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
             }
             {
               resource?.status === 3 && (<div className={styles.errorBox}>
-                <CloseCircleFilled className={styles.errorIcon}/>
+                <FForbid className={styles.errorIcon}/>
                 <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="second"/>
               </div>)
             }
             {
               resource?.status === 4 && (<div className={styles.errorBox}>
-                <CloseCircleFilled className={styles.errorIcon}/>
-                <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="second"/>
+                <FUpcast className={styles.errorIcon}/>
+                <FTipText text={'此依赖为当前资源的基础上抛'} type="second"/>
               </div>)
             }
             {
