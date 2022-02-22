@@ -13,11 +13,11 @@ import {
   SyncAllPropertiesAction,
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
-import { ChangeAction as GlobalChangeAction } from '@/models/global';
+// import { ChangeAction as GlobalChangeAction } from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
 import { withRouter } from 'umi';
 import FInput from '@/components/FInput';
-import FSelect from '@/components/FSelect';
+// import FSelect from '@/components/FSelect';
 import FTooltip from '@/components/FTooltip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';

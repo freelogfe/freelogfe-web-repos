@@ -124,7 +124,7 @@ const Model: ResourceInfoModelType = {
           resourceIds: data['resourceId'],
         };
         const { data: data1 } = yield call(FServiceAPI.Resource.batchAuth, params1);
-        console.log(data1, 'data1232@@@@@');
+        // console.log(data1, 'data1232@@@@@');
         authProblem = !data1[0].isAuth;
       }
 
