@@ -773,7 +773,7 @@ const Model: ResourceVersionCreatorModelType = {
           status: isUpthrow ? 4 : dr.status,
           versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
-          upthrow: false,
+          upthrow: isUpthrow,
           upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
           authProblem: dr.authProblem,
           enableReuseContracts: depC
@@ -1270,7 +1270,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
       status: isUpthrow ? 4 : dr.status,
       versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
       versions: dr.resourceVersions.map((version: any) => version.version),
-      upthrow: false,
+      upthrow: isUpthrow,
       upthrowDisabled: !!draftData.latestVersion,
       authProblem: dr.authProblem,
       enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
@@ -1343,6 +1343,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     resourceIds: resourceIDs.join(','),
     isLoadPolicyInfo: 1,
     isLoadLatestVersionInfo: 1,
+    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions',
   };
 
   // 本次要添加的一些列资源信息
