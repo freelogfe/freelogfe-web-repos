@@ -14,9 +14,10 @@ import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil1 from "@/utils";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
-import {FEdit} from "@/components/FIcons";
+import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
+import FTooltip from '@/components/FTooltip';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -113,6 +114,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                     {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
                     {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
                     {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
+                    {rrr.status === 1 && rrr.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>)}
                   </div>
                   <div style={{height: 9}}/>
                   <FContentText type="additional2">

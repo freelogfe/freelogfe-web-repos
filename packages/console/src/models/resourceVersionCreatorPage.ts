@@ -21,6 +21,7 @@ export type DepResources = {
   versions: string[];
   upthrow: boolean;
   upthrowDisabled: boolean;
+  authProblem: boolean;
   enableReuseContracts: {
     checked: boolean;
     id: string;
@@ -722,14 +723,14 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
 
-      const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        resourceIds: allIDs.join(','),
-        isLoadPolicyInfo: 1,
-        isLoadLatestVersionInfo: 1,
+      // handleResourceBatchInfo({ resourceIDs: allIDs });
+
+      const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+        resourceIDs: allIDs,
       };
 
       // 本次要添加的一些列资源信息
-      const { data } = yield call(FServiceAPI.Resource.batchInfo, params);
+      const data_batchResourceInfo: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, 'DDD!@#$@!#$@');
 
       const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -739,24 +740,24 @@ const Model: ResourceVersionCreatorModelType = {
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
+      const { data: data_batchContracts } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
-      if (data1.length > 0) {
+      if (data_batchContracts.length > 0) {
         const params2: Parameters<typeof FServiceAPI.Resource.batchGetCoverageVersions>[0] = {
           resourceId: resourceVersionCreatorPage.resourceId,
-          contractIds: data1.map((ci: any) => ci.contractId).join(','),
+          contractIds: data_batchContracts.map((ci: any) => ci.contractId).join(','),
         };
         const { data: data2 } = yield call(FServiceAPI.Resource.batchGetCoverageVersions, params2);
         coverageVersions = data2;
       }
 
       // 组织添加的依赖数据
-      const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
+      const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
         // console.log(data1, 'data112323423');
-        const depC: any[] = data1.filter((dc: any) => {
+        const depC: any[] = data_batchContracts.filter((dc: any) => {
           return dc.licensorId === dr.resourceId && dc.status === 0;
         });
         // console.log(depC, 'depC902342lk3jlk');
@@ -774,6 +775,7 @@ const Model: ResourceVersionCreatorModelType = {
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,
           upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
+          authProblem: dr.authProblem,
           enableReuseContracts: depC
             .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
               return {
@@ -988,6 +990,7 @@ const Model: ResourceVersionCreatorModelType = {
             versions: [],
             upthrow: false,
             upthrowDisabled: true,
+            authProblem: false,
             enableReuseContracts: [],
             enabledPolicies: [],
           };
@@ -1128,13 +1131,6 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    // * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: initStates,
-    //     caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
-    //   });
-    // },
     * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1201,71 +1197,6 @@ async function batchCycleDependencyCheck({
   return resourceIDs;
 }
 
-// interface GetAllContractsParamsType {
-//   resourceID: string;
-//   resourceIDs: string[];
-// }
-//
-// type GetAllContractsReturnType = {
-//   contractId: string;
-//   contractName: string;
-//   createDate: string;
-//   updateDate: string;
-//   policyId: string;
-//   policyInfo: {
-//     policyId: string;
-//     policyText: string;
-//   };
-// }[];
-//
-// async function getAllContracts({
-//                                  resourceID,
-//                                  resourceIDs,
-//                                }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
-//   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
-//   const allPromises = resourceIDs.map(async (id) => {
-//     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-//       subjectIds: id,
-//       subjectType: 1,
-//       licenseeIdentityType: 1,
-//       licensorId: id,
-//       licenseeId: resourceID,
-//       isLoadPolicyInfo: 1,
-//     };
-//     const { data } = await FServiceAPI.Contract.batchContracts(params);
-//     // console.log(data, 'data!!!1111100000000))))))');
-//     return data;
-//   });
-//
-//   return (await Promise.all(allPromises)).flat();
-// }
-//
-// function promiseConfirm(keyList: string[]) {
-//   return new Promise((resolve) => {
-//     fConfirmModal({
-//       message: `正在从上一个版本中导入信息，包含{KeyNumber}个同名键（key）：${keyList.join()}`,
-//       okText: FUtil1.I18n.message('replace_key_value'),
-//       cancelText: FUtil1.I18n.message('skip'),
-//       onOk() {
-//         resolve(true);
-//       },
-//       onCancel() {
-//         resolve(false);
-//       },
-//     });
-//   });
-// }
-//
-// function repeatedKeys(str1: string[], str2: string[]): string[] {
-//   const keys: string[] = [];
-//   for (const str of str1) {
-//     if (str2.includes(str)) {
-//       keys.push(str);
-//     }
-//   }
-//   return keys;
-// }
-
 interface HandledDraftParamsType {
   resourceID: string;
 }
@@ -1287,13 +1218,19 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
   // 本次要添加全部资源 ID
   const allIDs: string[] = draftData.dependencies.map((d) => d.id);
 
-  const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-    resourceIds: allIDs.join(','),
-    isLoadPolicyInfo: 1,
-    isLoadLatestVersionInfo: 1,
+  // const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+  //   resourceIds: allIDs.join(','),
+  //   isLoadPolicyInfo: 1,
+  //   isLoadLatestVersionInfo: 1,
+  // };
+  //
+  // const { data: data_batchResourceInfo } = await FServiceAPI.Resource.batchInfo(params);
+  const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+    resourceIDs: allIDs,
   };
 
-  const { data } = await FServiceAPI.Resource.batchInfo(params);
+  // 本次要添加的一些列资源信息
+  const data_batchResourceInfo: HandleResourceBatchInfoReturn = await handleResourceBatchInfo(params);
 
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: allIDs.join(','),
@@ -1317,7 +1254,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
   }
 
   // 组织添加的依赖数据
-  const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
+  const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
 
     const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
     const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
@@ -1335,6 +1272,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
       versions: dr.resourceVersions.map((version: any) => version.version),
       upthrow: false,
       upthrowDisabled: !!draftData.latestVersion,
+      authProblem: dr.authProblem,
       enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
         return {
           checked: true,
@@ -1370,4 +1308,73 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
     dataIsDirty: false,
     dependencies: dependencies,
   };
+}
+
+interface HandleResourceBatchInfoParams {
+  resourceIDs: string[];
+}
+
+type HandleResourceBatchInfoReturn = {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  latestVersion: string;
+  status: 0 | 1;
+  policies: {
+    policyId: string;
+    policyName: string;
+    policyText: string;
+    status: 0 | 1;
+  }[];
+  resourceVersions: {
+    createDate: string;
+    version: string;
+  }[];
+  authProblem: boolean;
+}[];
+
+async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoParams): Promise<HandleResourceBatchInfoReturn> {
+
+  if (resourceIDs.length === 0) {
+    return [];
+  }
+
+  const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    resourceIds: resourceIDs.join(','),
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
+  };
+
+  // 本次要添加的一些列资源信息
+  const { data: data_batchResourceInfo }: { data: Omit<HandleResourceBatchInfoReturn, 'authProblem'> } = await FServiceAPI.Resource.batchInfo(params);
+
+  // console.log(data_batchResourceInfo, 'data_batchResourceInfo 238998sdhfkjshdfksdf');
+
+  const needGetAuthProblemResourceIDs: string[] = data_batchResourceInfo.filter((dbri) => {
+    return dbri.latestVersion !== '';
+  }).map((dbri) => {
+    return dbri.resourceId;
+  });
+  let resourceAuthProblems: {
+    isAuth: boolean;
+    resourceId: string;
+  }[] = [];
+  if (needGetAuthProblemResourceIDs.length > 0) {
+    const params1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+      resourceIds: needGetAuthProblemResourceIDs.join(','),
+    };
+    const { data } = await FServiceAPI.Resource.batchAuth(params1);
+    // console.log(data_BatchAuth, 'data_BatchAuth @@@34234wfgsrd');
+    resourceAuthProblems = data;
+  }
+
+  return data_batchResourceInfo.map((dbri) => {
+    const authP = resourceAuthProblems.find((rap) => {
+      return rap.resourceId === dbri.resourceId;
+    });
+    return {
+      ...dbri,
+      authProblem: authP ? !authP.isAuth : false,
+    };
+  });
 }
