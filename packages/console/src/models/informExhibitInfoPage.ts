@@ -20,6 +20,7 @@ import {
 // import { getAllContracts, handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
+import { router } from 'umi';
 
 const { decompile } = require('@freelog/nmr_translator');
 
@@ -502,7 +503,11 @@ const Model: ExhibitInfoPageModelType = {
         testResourceId: informExhibitID,
       };
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
-      // console.log(testResourceDetail, 'data288282822828282822888888888888');
+      console.log(testResourceDetail, 'data288282822828282822888888888888');
+      if (!testResourceDetail || testResourceDetail.userId !== FUtil.Tool.getUserIDByCookies()) {
+        router.replace(FUtil.LinkTo.exception403({}));
+        return;
+      }
 
       const params4: Parameters<typeof FServiceAPI.Node.details>[0] = {
         nodeId: testResourceDetail.nodeId,
@@ -769,26 +774,6 @@ const Model: ExhibitInfoPageModelType = {
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });
-      // const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
-      //   informExhibitInfoPage,
-      // }));
-      // const params1: Parameters<typeof FServiceAPI.InformalNode.batchGetAuths>[0] = {
-      //   nodeId: informExhibitInfoPage.node_ID,
-      //   exhibitIds: informExhibitInfoPage.exhibit_ID,
-      //   authType: 3,
-      // };
-      //
-      // const { data: data_batchGetAuths } = yield call(FServiceAPI.InformalNode.batchGetAuths, params1);
-      // console.log(data_batchGetAuths, 'data@#$@#$#@ data_batchGetAuths');
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     exhibit_Info: {
-      //       ...informExhibitInfoPage.exhibit_Info,
-      //       isAuth: data_batchGetAuths[0].isAuth,
-      //     },
-      //   },
-      // });
     },
 
     * onClick_Graph_FullScreenBtn({}: OnClick_Graph_FullScreenBtn_Action, { put }: EffectsCommandMap) {
