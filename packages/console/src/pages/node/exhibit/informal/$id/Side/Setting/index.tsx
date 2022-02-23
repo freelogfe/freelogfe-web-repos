@@ -9,11 +9,11 @@ import {
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action,
   OnCancel_CustomOptionDrawer_Action,
-  OnCancel_CustomOptionsDrawer_Action,
+  OnCancel_CustomOptionsDrawer_Action, OnChange_Side_Exhibit_EditDeleteAttrInput_Action,
   OnChange_Side_Exhibit_OnlyEditAttrInput_Action,
   OnChange_Side_Exhibit_OnlyEditAttrSelect_Action,
-  OnChange_Side_Exhibit_Version_Action,
-  OnClick_DeleteAttrBtn_Action,
+  OnChange_Side_Exhibit_Version_Action, OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action,
+  // OnClick_DeleteAttrBtn_Action,
   OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action,
   OnConfirm_CustomOptionDrawer_Action,
   OnConfirm_CustomOptionsDrawer_Action,
@@ -195,8 +195,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               <FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
-                  dispatch<OnClick_DeleteAttrBtn_Action>({
-                    type: 'informExhibitInfoPage/onClick_DeleteAttrBtn',
+                  dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
+                    type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
                     payload: {
                       theKey: pc.theKey,
                     },
@@ -212,8 +212,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
             value={pc.theValue}
             errorText={pc.theValueError}
             onChange={(e) => {
-              dispatch<OnChange_Side_Exhibit_OnlyEditAttrInput_Action>({
-                type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrInput',
+              dispatch<OnChange_Side_Exhibit_EditDeleteAttrInput_Action>({
+                type: 'informExhibitInfoPage/onChange_Side_Exhibit_EditDeleteAttrInput',
                 payload: {
                   theKey: pc.theKey,
                   theValue: e.target.value,

@@ -312,6 +312,14 @@ export interface OnBlur_Side_Exhibit_OnlyEditAttrInput_Action extends AnyAction 
   };
 }
 
+export interface OnChange_Side_Exhibit_EditDeleteAttrInput_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_EditDeleteAttrInput';
+  payload: {
+    theKey: string;
+    theValue: string;
+  };
+}
+
 export interface OnBlur_Side_Exhibit_EditDeleteAttrInput_Action extends AnyAction {
   type: 'informExhibitInfoPage/onBlur_Side_Exhibit_EditDeleteAttrInput';
   payload: {
@@ -321,8 +329,8 @@ export interface OnBlur_Side_Exhibit_EditDeleteAttrInput_Action extends AnyActio
   };
 }
 
-export interface OnClick_DeleteAttrBtn_Action extends AnyAction {
-  type: 'informExhibitInfoPage/onClick_DeleteAttrBtn';
+export interface OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn';
   payload: {
     theKey: string;
   };
@@ -387,8 +395,9 @@ export interface ExhibitInfoPageModelType {
     onBlur_Side_Exhibit_OnlyEditAttrSelect: (action: OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action, effects: EffectsCommandMap) => void;
     onChange_Side_Exhibit_OnlyEditAttrInput: (action: OnChange_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_OnlyEditAttrInput: (action: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_EditDeleteAttrInput: (action: OnChange_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
-    onClick_DeleteAttrBtn: (action: OnClick_DeleteAttrBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn: (action: OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action, effects: EffectsCommandMap) => void;
     // OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action: (action: OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action, effects: EffectsCommandMap) => void;
 
     onConfirm_CustomOptionsDrawer: (action: OnConfirm_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
@@ -1393,6 +1402,30 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInformalExhibitInfo',
       });
     },
+    * onChange_Side_Exhibit_EditDeleteAttrInput({payload}: OnChange_Side_Exhibit_EditDeleteAttrInput_Action, {select, call, put}: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const theValue: string = payload.theValue;
+      const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_Exhibit_EditDeleteAttrs: informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][number]>((poe) => {
+            if (poe.theKey !== payload.theKey) {
+              return poe;
+            }
+            return {
+              ...poe,
+              theValue: theValue,
+              theValueError: textError,
+            };
+          }),
+        },
+      });
+    },
     * onBlur_Side_Exhibit_EditDeleteAttrInput({ payload }: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, {
       select,
       call,
@@ -1468,7 +1501,7 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onClick_DeleteAttrBtn({ payload }: OnClick_DeleteAttrBtn_Action, { select, call, put }: EffectsCommandMap) {
+    * onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn({ payload }: OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
