@@ -8,19 +8,13 @@ import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action,
-  // OnAttrBlurAction,
   OnCancel_CustomOptionDrawer_Action,
-  // OnAttrModalChangeAction,
   OnCancel_CustomOptionsDrawer_Action,
   OnChange_Side_Exhibit_OnlyEditAttrInput_Action,
   OnChange_Side_Exhibit_OnlyEditAttrSelect_Action,
   OnChange_Side_Exhibit_Version_Action,
-  // OnCancelHandleAttrModalAction,
   OnClick_DeleteAttrBtn_Action,
-  // OnChangePVersionAction,
-  // OnClickAttrModalConfirmBtnAction,
-  // OnClickDeleteAttrAction,
-  OnClickResetAttrAction,
+  OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action,
   OnConfirm_CustomOptionDrawer_Action,
   OnConfirm_CustomOptionsDrawer_Action,
   OnHandleAttrModalAction,
@@ -28,14 +22,9 @@ import {
 import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
-// import FModal from '@/components/FModal';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
-import {
-  OnBlur_Side_InheritOptions_ValueInput_Action,
-  OnChange_Side_InheritOptions_ValueInput_Action,
-} from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
 
 interface SettingProps {
@@ -114,8 +103,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               <FTextBtn
                 type='primary'
                 onClick={() => {
-                  dispatch<OnClickResetAttrAction>({
-                    type: 'informExhibitInfoPage/onClickResetAttr',
+                  dispatch<OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action>({
+                    type: 'informExhibitInfoPage/onClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn',
                     payload: {
                       theKey: pc.theKey,
                     },
