@@ -7,13 +7,16 @@ import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
+  OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action,
   // OnAttrBlurAction,
   OnCancel_CustomOptionDrawer_Action,
   // OnAttrModalChangeAction,
   OnCancel_CustomOptionsDrawer_Action,
+  OnChange_Side_Exhibit_OnlyEditAttrInput_Action,
+  OnChange_Side_Exhibit_OnlyEditAttrSelect_Action,
   OnChange_Side_Exhibit_Version_Action,
   // OnCancelHandleAttrModalAction,
-  OnChangeAttrsAction, OnClick_DeleteAttrBtn_Action,
+  OnClick_DeleteAttrBtn_Action,
   // OnChangePVersionAction,
   // OnClickAttrModalConfirmBtnAction,
   // OnClickDeleteAttrAction,
@@ -29,6 +32,11 @@ import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect'
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+import {
+  OnBlur_Side_InheritOptions_ValueInput_Action,
+  OnChange_Side_InheritOptions_ValueInput_Action,
+} from '@/models/exhibitInfoPage';
+import FSelect from '@/components/FSelect';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -120,31 +128,60 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
 
           </div>
           <div style={{ height: 5 }} />
-          <FInput
-            className={styles.FInput}
-            value={pc.theValue}
-            errorText={pc.theValueError}
-            onChange={(e) => {
-              dispatch<OnChangeAttrsAction>({
-                type: 'informExhibitInfoPage/onChangeAttrs',
-                payload: {
-                  theKey: pc.theKey,
-                  theValue: e.target.value,
-                },
-              });
-            }}
-            onBlur={(event) => {
-              // console.log(pc.theKey, 'pc.theKeypc.theKeypc.theKeypc.theKey');
-              dispatch<OnBlur_Side_Exhibit_OnlyEditAttrInput_Action>({
-                type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrInput',
-                payload: {
-                  theKey: pc.theKey,
-                  theValue: pc.theValue,
-                  theDescription: pc.remark,
-                },
-              });
-            }}
-          />
+          {
+            pc.selectOptions.length > 0
+              ? (<FSelect
+                className={styles.FSelect}
+                value={pc.theValue}
+                dataSource={pc.selectOptions.map((d) => ({ value: d, title: d }))}
+                onChange={(value: string) => {
+                  // onChangeCustomAttrs({ key: pc.key, value: value }, true);
+                  dispatch<OnChange_Side_Exhibit_OnlyEditAttrSelect_Action>({
+                    type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrSelect',
+                    payload: {
+                      theKey: pc.theKey,
+                      theValue: value,
+                    },
+                  });
+                }}
+                onBlur={() => {
+                  dispatch<OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action>({
+                    type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrSelect',
+                    payload: {
+                      theKey: pc.theKey,
+                      theValue: pc.theValue,
+                      theDescription: pc.remark,
+                    },
+                  });
+                }}
+              />)
+              : (<FInput
+                className={styles.FInput}
+                value={pc.theValue}
+                errorText={pc.theValueError}
+                onChange={(e) => {
+                  dispatch<OnChange_Side_Exhibit_OnlyEditAttrInput_Action>({
+                    type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrInput',
+                    payload: {
+                      theKey: pc.theKey,
+                      theValue: e.target.value,
+                    },
+                  });
+                }}
+                onBlur={(event) => {
+                  // console.log(pc.theKey, 'pc.theKeypc.theKeypc.theKeypc.theKey');
+                  dispatch<OnBlur_Side_Exhibit_OnlyEditAttrInput_Action>({
+                    type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrInput',
+                    payload: {
+                      theKey: pc.theKey,
+                      theValue: pc.theValue,
+                      theDescription: pc.remark,
+                    },
+                  });
+                }}
+              />)
+          }
+
         </div>))
       }
 
@@ -186,8 +223,8 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
             value={pc.theValue}
             errorText={pc.theValueError}
             onChange={(e) => {
-              dispatch<OnChangeAttrsAction>({
-                type: 'informExhibitInfoPage/onChangeAttrs',
+              dispatch<OnChange_Side_Exhibit_OnlyEditAttrInput_Action>({
+                type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrInput',
                 payload: {
                   theKey: pc.theKey,
                   theValue: e.target.value,

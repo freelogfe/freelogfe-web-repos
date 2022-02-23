@@ -140,6 +140,7 @@ export interface InformExhibitInfoPageModelState {
     theValue: string;
     theValueError: string;
     remark: string;
+    selectOptions: string[];
   }[];
   side_Exhibit_EditDeleteAttrs: {
     theKey: string;
@@ -270,8 +271,25 @@ export interface OnHandleAttrModalAction extends AnyAction {
   };
 }
 
-export interface OnChangeAttrsAction extends AnyAction {
-  type: 'informExhibitInfoPage/onChangeAttrs';
+export interface OnChange_Side_Exhibit_OnlyEditAttrSelect_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrSelect';
+  payload: {
+    theKey: string;
+    theValue: string;
+  };
+}
+
+export interface OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onBlur_Side_Exhibit_OnlyEditAttrSelect';
+  payload: {
+    theKey: string;
+    theValue: string;
+    theDescription: string;
+  };
+}
+
+export interface OnChange_Side_Exhibit_OnlyEditAttrInput_Action extends AnyAction {
+  type: 'informExhibitInfoPage/onChange_Side_Exhibit_OnlyEditAttrInput';
   payload: {
     theKey: string;
     theValue: string;
@@ -364,7 +382,9 @@ export interface ExhibitInfoPageModelType {
     onChange_Side_Exhibit_Version: (action: OnChange_Side_Exhibit_Version_Action, effects: EffectsCommandMap) => void;
 
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
-    onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_OnlyEditAttrSelect: (action: OnChange_Side_Exhibit_OnlyEditAttrSelect_Action, effects: EffectsCommandMap) => void;
+    onBlur_Side_Exhibit_OnlyEditAttrSelect: (action: OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action, effects: EffectsCommandMap) => void;
+    onChange_Side_Exhibit_OnlyEditAttrInput: (action: OnChange_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_OnlyEditAttrInput: (action: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     onClick_DeleteAttrBtn: (action: OnClick_DeleteAttrBtn_Action, effects: EffectsCommandMap) => void;
@@ -593,6 +613,7 @@ const Model: ExhibitInfoPageModelType = {
                 theValue: cr.value,
                 theValueError: '',
                 remark: cr.remark,
+                selectOptions: cr.candidateItems,
               };
             }),
           side_Exhibit_EditDeleteAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])
@@ -1107,8 +1128,7 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
-
-    * onChangeAttrs({ payload }: OnChangeAttrsAction, {
+    * onChange_Side_Exhibit_OnlyEditAttrSelect({ payload }: OnChange_Side_Exhibit_OnlyEditAttrSelect_Action, {
       select,
       put,
     }: EffectsCommandMap) {
@@ -1134,12 +1154,102 @@ const Model: ExhibitInfoPageModelType = {
               theValueError: textError,
             };
           }),
-          side_Exhibit_EditDeleteAttrs: informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][0]>((ped) => {
-            if (ped.theKey !== payload.theKey) {
-              return ped;
+        },
+      });
+    },
+    * onBlur_Side_Exhibit_OnlyEditAttrSelect({ payload }: OnBlur_Side_Exhibit_OnlyEditAttrSelect_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
+
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !((a.operation === 'add_attr' || a.operation === 'delete_attr') && a.content.key === payload.theKey);
+            }),
+          };
+        }
+        return nhr;
+      });
+
+      needHandleRules = mergeRules({
+        oldRules: needHandleRules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'add_attr',
+          content: {
+            key: payload.theKey,
+            value: payload.theValue,
+            description: payload.theDescription,
+          },
+        },
+      });
+      // }
+      // console.log(needHandleRules, 'needHandleRules11111');
+      const text: string = decompile(needHandleRules);
+      // console.log(text, 'text1111111');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
+    },
+    * onChange_Side_Exhibit_OnlyEditAttrInput({ payload }: OnChange_Side_Exhibit_OnlyEditAttrInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const theValue: string = payload.theValue;
+      const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_Exhibit_OnlyEditAttrs: informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_OnlyEditAttrs'][number]>((poe) => {
+            if (poe.theKey !== payload.theKey) {
+              return poe;
             }
             return {
-              ...ped,
+              ...poe,
               theValue: theValue,
               theValueError: textError,
             };
@@ -1149,42 +1259,76 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onBlur_Side_Exhibit_OnlyEditAttrInput({ payload }: OnBlur_Side_Exhibit_OnlyEditAttrInput_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      // console.log(payload, 'payload1234');
+      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+        return rr.ruleInfo;
+      });
 
-      // const theValue: string = payload.theValue;
-      // const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
-      //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     side_Exhibit_OnlyEditAttrs: informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_OnlyEditAttrs'][number]>((poe) => {
-      //       if (poe.theKey !== payload.theKey) {
-      //         return poe;
-      //       }
-      //       return {
-      //         ...poe,
-      //         theValue: theValue,
-      //         theValueError: textError,
-      //       };
-      //     }),
-      //     side_Exhibit_EditDeleteAttrs: informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map<InformExhibitInfoPageModelState['side_Exhibit_EditDeleteAttrs'][0]>((ped) => {
-      //       if (ped.theKey !== payload.theKey) {
-      //         return ped;
-      //       }
-      //       return {
-      //         ...ped,
-      //         theValue: theValue,
-      //         theValueError: textError,
-      //       };
-      //     }),
-      //   },
-      // });
+      let needHandleRules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = JSON.parse(JSON.stringify(rules));
+
+      needHandleRules = needHandleRules.map((nhr) => {
+        if (nhr.exhibitName === informExhibitInfoPage.exhibit_Name && nhr.operation !== 'activate_theme') {
+          return {
+            ...nhr,
+            actions: nhr.actions.filter((a) => {
+              return !((a.operation === 'add_attr' || a.operation === 'delete_attr') && a.content.key === payload.theKey);
+            }),
+          };
+        }
+        return nhr;
+      });
+
+      needHandleRules = mergeRules({
+        oldRules: needHandleRules,
+        exhibitName: informExhibitInfoPage.exhibit_Name,
+        action: {
+          operation: 'add_attr',
+          content: {
+            key: payload.theKey,
+            value: payload.theValue,
+            description: payload.theDescription,
+          },
+        },
+      });
+      // }
+      // console.log(needHandleRules, 'needHandleRules11111');
+      const text: string = decompile(needHandleRules);
+      // console.log(text, 'text1111111');
+
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
+        nodeId: informExhibitInfoPage.node_ID,
+        testRuleText: text,
+      };
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      //  ##############
+      const params2: Parameters<typeof ruleMatchAndResult>[0] = {
+        nodeID: informExhibitInfoPage.node_ID,
+        isRematch: true,
+      };
+
+      const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
+      if (result.status === 2) {
+        fMessage('规则匹配失败');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          node_RuleInfo: result,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
     * onBlur_Side_Exhibit_EditDeleteAttrInput({ payload }: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, {
       select,
