@@ -22,19 +22,19 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
-import FDivider from '@/components/FDivider';
+// import FDivider from '@/components/FDivider';
 import { FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';
 import { FDelete, FEdit, FWarning } from '@/components/FIcons';
 import { Helmet } from 'react-helmet';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
-import FFileSearch from '../../../../../components/FIcons/FFileSearch';
+// import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
+// import FFileSearch from '../../../../../components/FIcons/FFileSearch';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 
 interface ThemeProps {
@@ -229,12 +229,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                     {
                                       type: 'edit',
                                       fn() {
-                                        window.open(t.originInfo.type === 'resource'
-                                          ? FUtil.LinkTo.resourceDetails({ resourceID: t.originInfo.id })
-                                          : FUtil.LinkTo.objectDetails({
-                                            bucketName: t.originInfo.name.split('/')[0],
-                                            objectID: t.originInfo.id,
-                                          }));
+                                        window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: t.testResourceId }));
                                       },
                                     },
                                     {
