@@ -16,17 +16,6 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
 
   const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
-  function onLicense(versions: string[], policyId: string) {
-    dispatch<UpdateAuthorizedAction>({
-      type: 'resourceAuthPage/updateAuthorized',
-      payload: versions.map((v: string) => ({
-        version: v,
-        policyId: policyId,
-        operation: 1,
-      })),
-    });
-  }
-
   if (!activeResource || activeResource?.policies?.length === 0) {
     return null;
   }
@@ -45,7 +34,16 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
         code={i.code}
         allVersions={i.allEnabledVersions}
         // allVersions={['0.0.1', '0.0.2', '0.0.3']}
-        onClickLicense={(versions: string[]) => onLicense(versions, i.id)}
+        onClickLicense={(versions: string[]) => {
+          dispatch<UpdateAuthorizedAction>({
+            type: 'resourceAuthPage/updateAuthorized',
+            payload: versions.map((v: string) => ({
+              version: v,
+              policyId: i.id,
+              operation: 1,
+            })),
+          });
+        }}
       />
     ))}
   </Space>);
