@@ -105,6 +105,10 @@ export interface UpdateAuthorizedAction extends AnyAction {
   }[];
 }
 
+export interface OnTrigger_AuthorizedContractEvent_Action extends AnyAction {
+  type: 'resourceAuthPage/onTrigger_AuthorizedContractEvent';
+}
+
 interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
@@ -115,6 +119,8 @@ interface ResourceAuthPageModelType {
     fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;
     fetchAuthorize: (action: FetchAuthorizeAction, effects: EffectsCommandMap) => void;
     updateAuthorized: (action: UpdateAuthorizedAction, effects: EffectsCommandMap) => void;
+
+    onTrigger_AuthorizedContractEvent: (action: OnTrigger_AuthorizedContractEvent_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
@@ -348,6 +354,27 @@ const Model: ResourceAuthPageModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: resourceAuthPage.resourceID,
+      });
+    },
+
+    * onTrigger_AuthorizedContractEvent({}: OnTrigger_AuthorizedContractEvent_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
+        resourceAuthPage,
+      }));
+      yield put<FetchDataSourceAction>({
+        type: 'resourceInfo/fetchDataSource',
+        payload: resourceAuthPage.resourceID,
+      });
+      yield put<FetchAuthorizedAction>({
+        type: 'fetchAuthorized',
+        payload: {
+          activatedResourceId: resourceAuthPage.contractsAuthorized.find((ca) => {
+            return ca.activated;
+          })?.id || '',
+        },
       });
     },
   },
