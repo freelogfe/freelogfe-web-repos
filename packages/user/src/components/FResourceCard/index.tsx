@@ -3,9 +3,11 @@ import Policy from './Policy';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
-// import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
+import FCoverFooterButtons from '@/components/FCoverFooterButtons';
+import { FWarning } from '@/components/FIcons';
+import FTooltip from '@/components/FTooltip';
 
 type EventFunc = () => void
 
@@ -20,6 +22,7 @@ export interface FResourceCardProps {
     policy: string[];
     type: string;
     status: 0 | 1;
+    authProblem?: boolean;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -42,36 +45,50 @@ function FResourceCard({
         {
           type === 'market' || (<>
             <nav className={styles.CoverMask}>
-              <div className={styles.CoverMaskNav}>
-                {
-                  type === 'favorite'
-                    ? (<div className={styles.favorite}>
-                      <a onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>
-                      <span>|</span>
-                      <a onClick={() => onBoomJuice && onBoomJuice()}>{FUtil1.I18n.message('remove_from_collection')}</a>
-                    </div>)
-                    : (
-                      <div className={styles.resources}>
-                        <a
-                          onClick={() => onClickDetails && onClickDetails()}>{FUtil1.I18n.message('resource_details')}</a>
-                        <span>|</span>
-                        <a onClick={() => onClickEditing && onClickEditing()}>{FUtil1.I18n.message('edit_resource')}</a>
-                        <span>|</span>
-                        <a
-                          onClick={() => onClickRevision && onClickRevision()}>{FUtil1.I18n.message('update_resource')}</a>
-                      </div>
-                    )
-                }
-              </div>
+              {
+                type === 'favorite'
+                  ? (<FCoverFooterButtons buttons={[
+                    {
+                      type: 'resourceDetails',
+                      fn() {
+                        onClickDetails && onClickDetails();
+                      },
+                    },
+                    {
+                      type: 'cancelCollect',
+                      fn() {
+                        onBoomJuice && onBoomJuice();
+                      },
+                    },
+                  ]} />)
+                  : (<FCoverFooterButtons buttons={[
+                    {
+                      type: 'resourceDetails',
+                      fn() {
+                        onClickDetails && onClickDetails();
+                      },
+                    },
+                    {
+                      type: 'edit',
+                      fn() {
+                        onClickEditing && onClickEditing();
+                      },
+                    },
+                    {
+                      type: 'update',
+                      fn() {
+                        onClickRevision && onClickRevision();
+                      },
+                    },
+                  ]} />)
+              }
             </nav>
-            {/*<Status*/}
-            {/*  normal={resource.status === 1}*/}
-            {/*  className={styles.Status}*/}
-            {/*/>*/}
             <div className={styles.Status}>
               <FResourceStatusBadge
                 status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
               />
+              <div style={{ width: 10 }} />
+              {resource.authProblem && <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
           </>)
         }
