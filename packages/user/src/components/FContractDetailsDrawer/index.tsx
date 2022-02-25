@@ -312,11 +312,6 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
         : (<FFormLayout>
           <FFormLayout.FBlock title={'标的物'}>
             <Space size={10}>
-              {/*<img*/}
-              {/*  alt=''*/}
-              {/*  className={styles.targetCover}*/}
-              {/*  src={baseInfo?.subjectCover || imgSrc}*/}
-              {/*/>*/}
               <FCoverImage src={baseInfo?.subjectCover || ''} width={60} />
               <div>
                 <FContentText
@@ -413,6 +408,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                   />
                 </div>)
               }
+              <div style={{ height: 15 }} />
+              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
               <div style={{ height: 15 }} />
               {
                 isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
@@ -522,7 +519,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         />
                       </div>
 
-                      <div style={{ height: 15 }} />
+                      {
+                        ac.expansion && (<>
+                          <div style={{ height: 15 }} />
+                          <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+                          <div style={{ height: 15 }} />
+                        </>)
+                      }
 
                       {
                         isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
