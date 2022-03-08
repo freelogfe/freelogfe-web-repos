@@ -728,7 +728,7 @@ function handleContractState({
     return 'exception';
   }
 
-  if (authStatus === 1) {
+  if (authStatus === 1 || authStatus === 3) {
     return 'authorized';
   }
   if (authStatus === 2) {
