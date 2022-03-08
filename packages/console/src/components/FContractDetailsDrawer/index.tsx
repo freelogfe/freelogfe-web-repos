@@ -408,8 +408,8 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                   />
                 </div>)
               }
-              <div style={{ height: 15 }} />
-              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+              {/*<div style={{ height: 15 }} />*/}
+              {/*<div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />*/}
               <div style={{ height: 15 }} />
               {
                 isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
@@ -517,19 +517,26 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         <FContractDisplay
                           contractID={ac.contractId}
                         />
+                        <div style={{ height: 10 }} />
                       </div>
 
-                      {
-                        ac.expansion && (<>
-                          <div style={{ height: 15 }} />
-                          <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
-                          <div style={{ height: 15 }} />
-                        </>)
-                      }
-
+                      {/*{*/}
+                      {/*  ac.expansion && (<>*/}
+                      {/*    */}
+                      {/*  </>)*/}
+                      {/*}*/}
+                      {/*<div style={{ height: 15 }} />*/}
                       {
                         isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
                           {/*<div style={{ height: 10 }} />*/}
+                          {
+                            !ac.expansion && (<>
+                              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+                              <div style={{ height: 15 }} />
+                            </>)
+                          }
+
+
                           <div style={{ padding: '0 20px' }}>
                             <FVersions
                               versionAllContractIDs={versionAllContractIDs}
@@ -553,6 +560,14 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       {
                         isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
                           {/*<div style={{ height: 10 }} />*/}
+
+                          {
+                            !ac.expansion && (<>
+                              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+                              <div style={{ height: 15 }} />
+                            </>)
+                          }
+
                           <div style={{ padding: '0 20px' }}>
                             <FExhibits
                               nodeName={baseInfo.licenseeName}
