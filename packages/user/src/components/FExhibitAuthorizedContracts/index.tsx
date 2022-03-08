@@ -464,7 +464,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     contractId: string;
     contractName: string;
     policyId: string;
-    authStatus: 1 | 2 | 128;
+    authStatus: 1 | 2 | 128 | number;
     status: 0 | 1 | 2;
     subjectId: string;
     createDate: string;
@@ -540,7 +540,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
           contractID: auc.contractId,
           contractName: auc.contractName,
           createTime: FUtil.Format.formatDateTime(auc.createDate, true),
-          status: auc.authStatus === 1 ? 'active' : auc.authStatus === 2 ? 'testActive' : 'inactive',
+          status: (auc.authStatus === 1 || auc.authStatus === 3) ? 'active' : auc.authStatus === 2 ? 'testActive' : 'inactive',
           policyID: auc.policyId,
           applyToCurrentExhibit: {
             checked,

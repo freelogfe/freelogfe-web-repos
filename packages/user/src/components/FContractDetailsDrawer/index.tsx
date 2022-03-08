@@ -137,7 +137,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       contractId: data.contractId,
       contractName: data.contractName,
       contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
-      contractStatus: data.status === 1 ? 'terminal' : data.authStatus === 1 ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
+      contractStatus: data.status === 1 ? 'terminal' : (data.authStatus === 1 || data.authStatus === 3) ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
 
       policyID: data.policyId,
       policyText: data.policyInfo.policyText,
@@ -242,7 +242,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
           contractName: d.contractName,
           contractCreateDate: FUtil.Format.formatDateTime(d.createDate, true),
           // contractStatus: d.status === 1 ? 2 : ((d.authStatus & 1) === 1) ? 1 : 0,
-          contractStatus: d.status === 1 ? 'terminal' : d.authStatus === 1 ? 'active' : d.authStatus === 2 ? 'testActive' : 'inactive',
+          contractStatus: d.status === 1 ? 'terminal' : (d.authStatus === 1 || d.authStatus === 3) ? 'active' : d.authStatus === 2 ? 'testActive' : 'inactive',
           policyID: d.policyId,
           policyText: d.policyInfo.policyText,
         };
