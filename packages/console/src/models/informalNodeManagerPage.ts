@@ -11,6 +11,12 @@ import { mergeRules } from '@/models/informExhibitInfoPage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
+interface ICandidate {
+  name: string;
+  versionRange?: string;
+  type: 'resource' | 'object';
+}
+
 export interface IExhibit {
   testResourceId: string;
   testResourceName: string;
@@ -77,6 +83,27 @@ export interface IExhibit {
   rules: {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
+  }[];
+  operationAndActionRecords: {
+    type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
+    data: {
+      exhibitName: string;
+
+      candidate?: ICandidate;
+
+      tags?: string[];
+      coverImage?: string;
+      title?: string;
+      onlineStatus?: boolean;
+
+      attrDescription?: string;
+      attrKey?: string;
+      attrValue?: string;
+
+      replaced?: ICandidate;
+      replacer?: ICandidate;
+      scopes?: ICandidate[][];
+    };
   }[];
   isAuth?: boolean;
 }
@@ -1092,7 +1119,8 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         skip: list.length,
-        limit: FUtil.Predefined.pageSize,
+        // limit: FUtil.Predefined.pageSize,
+        limit: 50,
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: 'theme',
@@ -1388,7 +1416,8 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: 2,
         resourceType: 'theme',
-        limit: FUtil.Predefined.pageSize,
+        // limit: FUtil.Predefined.pageSize,
+        limit: 50,
         keywords: informalNodeManagerPage.theme_FilterKeywords || undefined,
       };
       const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
@@ -1541,7 +1570,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
     },
-    * onClick_Themes_DeleteBtn({payload}: OnClick_Themes_DeleteBtn_Action, {select, call, put}: EffectsCommandMap) {
+    * onClick_Themes_DeleteBtn({ payload }: OnClick_Themes_DeleteBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1969,6 +1998,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
+      console.log(rules, 'rules##@#$$449098uoi234');
       // console.log(errors, errorObjects, 'errorObjects234234');
       if (errorObjects.length > 0) {
         yield put<ChangeAction>({

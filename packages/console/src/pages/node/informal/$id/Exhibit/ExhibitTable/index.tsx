@@ -93,44 +93,9 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               />
             </div>
           </div>
-          <div>
+          <div style={{ maxWidth: 500, overflow: 'hidden' }}>
             <MappingRule
-              add={add || undefined}
-              alter={alter || undefined}
-              active={undefined}
-              version={(record.originInfo.versionRange === '' || record.originInfo.versionRange === 'latest') ? undefined : record.originInfo.versionRange}
-              cover={record.stateInfo.coverInfo.ruleId === 'default' ? undefined : record.stateInfo.coverInfo.coverImages[0]}
-              title={record.stateInfo.titleInfo.ruleId === 'default' ? undefined : record.stateInfo.titleInfo.title}
-              online={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 1}
-              offline={record.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : record.stateInfo.onlineStatusInfo.onlineStatus === 0}
-              labels={record.stateInfo.tagInfo.ruleId === 'default' ? undefined : record.stateInfo.tagInfo.tags}
-              replaces={record.stateInfo.replaceInfo.ruleId === 'default' ? undefined : record.stateInfo.replaceInfo.replaceRecords.map((rr) => {
-                return {
-                  ...rr,
-                  replacer: {
-                    ...rr.replacer,
-                    versionRange: rr.replacer.version,
-                  },
-                  replaced: {
-                    ...rr.replaced,
-                    versionRange: rr.replaced.version,
-                  },
-                };
-              })}
-              attrs={record.stateInfo.propertyInfo.ruleId === 'default'
-                ? undefined
-                : record.stateInfo.propertyInfo.testResourceProperty
-                  .filter((trp) => {
-                    return trp.isRuleSet;
-                  })
-                  .map((trp) => {
-                    return {
-                      type: 'add',
-                      theKey: trp.key,
-                      value: String(trp.value),
-                      description: trp.remark,
-                    };
-                  })}
+              operationAndActionRecords={record.operationAndActionRecords}
             />
           </div>
         </div>);

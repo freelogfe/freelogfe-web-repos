@@ -288,44 +288,45 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 
                         </div>
                         <div style={{ height: 10 }} />
-                        <div className={styles.itemBar}>
+                        <div style={{ maxWidth: 280, overflow: 'hidden' }}>
                           <MappingRule
-                            add={add || undefined}
-                            alter={alter || undefined}
-                            active={activate_theme || undefined}
-                            version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
-                            cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
-                            title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
-                            online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
-                            offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
-                            labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
-                            replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords.map((rr) => {
-                              return {
-                                ...rr,
-                                replacer: {
-                                  ...rr.replacer,
-                                  versionRange: rr.replacer.version,
-                                },
-                                replaced: {
-                                  ...rr.replaced,
-                                  versionRange: rr.replaced.version,
-                                },
-                              };
-                            })}
-                            attrs={t.stateInfo.propertyInfo.ruleId === 'default'
-                              ? undefined
-                              : t.stateInfo.propertyInfo.testResourceProperty
-                                .filter((trp) => {
-                                  return trp.isRuleSet;
-                                })
-                                .map((trp) => {
-                                  return {
-                                    type: 'add',
-                                    theKey: trp.key,
-                                    value: String(trp.value),
-                                    description: trp.remark,
-                                  };
-                                })}
+                            operationAndActionRecords={t.operationAndActionRecords}
+                            // add={add || undefined}
+                            // alter={alter || undefined}
+                            // active={activate_theme || undefined}
+                            // version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
+                            // cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
+                            // title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
+                            // online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
+                            // offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
+                            // labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
+                            // replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords.map((rr) => {
+                            //   return {
+                            //     ...rr,
+                            //     replacer: {
+                            //       ...rr.replacer,
+                            //       versionRange: rr.replacer.version,
+                            //     },
+                            //     replaced: {
+                            //       ...rr.replaced,
+                            //       versionRange: rr.replaced.version,
+                            //     },
+                            //   };
+                            // })}
+                            // attrs={t.stateInfo.propertyInfo.ruleId === 'default'
+                            //   ? undefined
+                            //   : t.stateInfo.propertyInfo.testResourceProperty
+                            //     .filter((trp) => {
+                            //       return trp.isRuleSet;
+                            //     })
+                            //     .map((trp) => {
+                            //       return {
+                            //         type: 'add',
+                            //         theKey: trp.key,
+                            //         value: String(trp.value),
+                            //         description: trp.remark,
+                            //       };
+                            //     })}
                           />
                         </div>
                       </div>);

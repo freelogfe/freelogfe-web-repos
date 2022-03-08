@@ -39,44 +39,66 @@ interface ICandidate {
 }
 
 interface MappingRuleProps {
-  add?: {
-    exhibit: string;
-    source: {
-      type: 'resource' | 'object';
-      name: string;
-      versionRange?: string;
+  operationAndActionRecords: {
+    type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
+    data: {
+      exhibitName: string;
+
+      candidate?: ICandidate;
+
+      tags?: string[];
+      coverImage?: string;
+      title?: string;
+      onlineStatus?: boolean;
+
+      attrDescription?: string;
+      attrKey?: string;
+      attrValue?: string;
+
+      replaced?: ICandidate;
+      replacer?: ICandidate;
+      scopes?: ICandidate[][];
     };
-  };
-  alter?: string;
-  active?: string;
-  version?: string;
-  cover?: string;
-  title?: string;
-  online?: boolean;
-  offline?: boolean;
-  labels?: string[];
-  replaces?: {
-    replaced: ICandidate;
-    replacer: ICandidate;
-    scopes?: ICandidate[][];
   }[];
-  attrs?: {
-    type: 'add' | 'delete',
-    theKey: string;
-    value?: string;
-    description?: string;
-  }[];
+  // add?: {
+  //   exhibit: string;
+  //   source: {
+  //     type: 'resource' | 'object';
+  //     name: string;
+  //     versionRange?: string;
+  //   };
+  // };
+  // alter?: string;
+  // active?: string;
+  // version?: string;
+  // cover?: string;
+  // title?: string;
+  // online?: boolean;
+  // offline?: boolean;
+  // labels?: string[];
+  // replaces?: {
+  //   replaced: ICandidate;
+  //   replacer: ICandidate;
+  //   scopes?: ICandidate[][];
+  // }[];
+  // attrs?: {
+  //   type: 'add' | 'delete',
+  //   theKey: string;
+  //   value?: string;
+  //   description?: string;
+  // }[];
 
   placement?: TooltipPlacement;
 }
 
 function MappingRule({
-                       add, alter, active,
-                       version, cover, title, offline, online, labels, replaces, attrs,
+                       operationAndActionRecords = [],
+                       // add, alter, active,
+                       // version, cover, title, offline, online, labels, replaces, attrs,
                        placement = 'right',
                      }: MappingRuleProps) {
 
-  if (!(add || alter || active)) {
+  if (operationAndActionRecords.length === 0) {
     return (<FLine />);
   }
 
@@ -90,24 +112,91 @@ function MappingRule({
       direction='vertical'
       size={15}
     >
-      {add && <AddRule {...add} />}
-      {alter && <AlterRule alter={alter} />}
-      {active && <ActiveRule active={active} />}
-      {version && <VersionRule version={version} />}
-      {cover && <CoverRule cover={cover} />}
-      {title && <TitleRule title={title} />}
-      {labels && <LabelRule labels={labels} />}
-      {online && <OnlineRule online={online} />}
-      {offline && <OfflineRule offline={offline} />}
-      {replaces && replaces.map((replace, replaceIndex) => {
-        return (<ReplaceRule
-          key={replaceIndex}
-          {...replace}
-        />);
-      })}
-      {attrs && attrs.map((attr, attrIndex) => {
-        return (<AttrRule key={attrIndex} {...attr} />);
-      })}
+      {
+        operationAndActionRecords.map((oaar, oaarIndex) => {
+
+          if (oaar.type === 'add' && oaar.data.candidate) {
+            return (<AddRule
+              key={oaarIndex}
+              exhibit={oaar.data.exhibitName}
+              source={oaar.data.candidate}
+            />);
+          }
+
+          if (oaar.type === 'alter') {
+            return (<AlterRule key={oaarIndex} alter={oaar.data.exhibitName} />);
+          }
+
+          if (oaar.type === 'activate_theme') {
+            return (<ActiveRule key={oaarIndex} active={oaar.data.exhibitName} />);
+          }
+
+          if (oaar.type === 'set_cover' && oaar.data.coverImage) {
+            return (<CoverRule key={oaarIndex} cover={oaar.data.coverImage} />);
+          }
+
+          if (oaar.type === 'set_title' && oaar.data.title) {
+            return (<TitleRule key={oaarIndex} title={oaar.data.title} />);
+          }
+
+          if (oaar.type === 'set_labels' && oaar.data.tags) {
+            return (<LabelRule key={oaarIndex} labels={oaar.data.tags} />);
+          }
+
+          if (oaar.type === 'online') {
+            return oaar.data.onlineStatus
+              ? (<OnlineRule key={oaarIndex} online={true} />)
+              : (<OfflineRule key={oaarIndex} offline={true} />);
+          }
+
+          if (oaar.type === 'replace' && oaar.data.replacer && oaar.data.replaced) {
+            return (<ReplaceRule
+              key={oaarIndex}
+              replacer={oaar.data.replacer}
+              replaced={oaar.data.replaced}
+              scopes={[]}
+            />);
+          }
+
+          if (oaar.type === 'add_attr' && oaar.data.attrKey && oaar.data.attrValue && oaar.data.attrDescription) {
+            return (<AttrRule
+              key={oaarIndex}
+              type={'add'}
+              theKey={oaar.data.attrKey}
+              value={oaar.data.attrValue}
+              description={oaar.data.attrDescription}
+            />);
+          }
+
+          if (oaar.type === 'delete_attr' && oaar.data.attrKey) {
+            return (<AttrRule
+              key={oaarIndex}
+              type={'delete'}
+              theKey={oaar.data.attrKey}
+            />);
+          }
+
+          return null;
+        })
+      }
+      {/*{add && <AddRule {...add} />}*/}
+      {/*{alter && <AlterRule alter={alter} />}*/}
+      {/*{active && <ActiveRule active={active} />}*/}
+      {/*{version && <VersionRule version={version} />}*/}
+      {/*{cover && <CoverRule cover={cover} />}*/}
+      {/*{title && <TitleRule title={title} />}*/}
+      {/*{labels && <LabelRule labels={labels} />}*/}
+      {/*{online && <OnlineRule online={online} />}*/}
+      {/*{offline && <OfflineRule offline={offline} />}*/}
+      {/*{replaces && replaces.map((replace, replaceIndex) => {*/}
+      {/*  return (<ReplaceRule*/}
+      {/*    key={replaceIndex}*/}
+      {/*    {...replace}*/}
+      {/*  />);*/}
+      {/*})}*/}
+      {/*{attrs && attrs.map((attr, attrIndex) => {*/}
+      {/*  return (<AttrRule key={attrIndex} {...attr} />);*/}
+      {/*})}*/}
     </Space>}
     title={<div className={styles.popoverTitle}>
       <FContentText
@@ -118,17 +207,53 @@ function MappingRule({
     </div>}
   >
     <Space size={16}>
-      {add && <FMappingRuleAdd />}
-      {alter && <FEdit />}
-      {active && <FMappingRuleActive />}
-      {attrs && <FMappingRuleAttr />}
-      {cover && <FMappingRuleCover />}
-      {labels && <FMappingRuleLabel />}
-      {offline && <FMappingRuleOffline />}
-      {online && <FMappingRuleOnline />}
-      {replaces && <FMappingRuleReplace />}
-      {title && <FMappingRuleTitle />}
-      {version && <FMappingRuleVersion />}
+      {
+        operationAndActionRecords.map((oaar, oaarIndex) => {
+          if (oaar.type === 'add') {
+            return (<FMappingRuleAdd key={oaarIndex} />);
+          }
+          if (oaar.type === 'alter') {
+            return (<FEdit key={oaarIndex} />);
+          }
+          if (oaar.type === 'activate_theme') {
+            return (<FMappingRuleActive key={oaarIndex} />);
+          }
+          if (oaar.type === 'set_cover') {
+            return (<FMappingRuleCover key={oaarIndex} />);
+          }
+          if (oaar.type === 'set_title') {
+            return (<FMappingRuleTitle key={oaarIndex} />);
+          }
+          if (oaar.type === 'set_labels') {
+            return (<FMappingRuleLabel key={oaarIndex} />);
+          }
+          if (oaar.type === 'online') {
+            return oaar.data.onlineStatus
+              ? (<FMappingRuleOnline key={oaarIndex} />)
+              : (<FMappingRuleOffline key={oaarIndex} />);
+          }
+
+          if (oaar.type === 'add_attr' || oaar.type === 'delete_attr') {
+            return (<FMappingRuleAttr key={oaarIndex} />);
+          }
+
+          if (oaar.type === 'replace') {
+            return (<FMappingRuleReplace key={oaarIndex} />);
+          }
+          return null;
+        })
+      }
+      {/*{add && <FMappingRuleAdd />}*/}
+      {/*{alter && <FEdit />}*/}
+      {/*{active && <FMappingRuleActive />}*/}
+      {/*{attrs && <FMappingRuleAttr />}*/}
+      {/*{cover && <FMappingRuleCover />}*/}
+      {/*{labels && <FMappingRuleLabel />}*/}
+      {/*{offline && <FMappingRuleOffline />}*/}
+      {/*{online && <FMappingRuleOnline />}*/}
+      {/*{replaces && <FMappingRuleReplace />}*/}
+      {/*{title && <FMappingRuleTitle />}*/}
+      {/*{version && <FMappingRuleVersion />}*/}
     </Space>
   </FPopover>);
 }
