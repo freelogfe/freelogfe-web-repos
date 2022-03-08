@@ -163,7 +163,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     let theAuth: string = '';
     if (data.fsmRunningStatus !== 4) {
       theAuth = 'terminal';
-    } else if (data.authStatus === 1) {
+    } else if (data.authStatus === 1 || data.authStatus === 3) {
       theAuth = 'active';
     } else if (data.authStatus === 2) {
       theAuth = 'testActive';

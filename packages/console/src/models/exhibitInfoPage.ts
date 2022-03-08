@@ -471,7 +471,7 @@ const Model: ExhibitInfoPageModelType = {
         resourceIdOrName: data_PresentableDetails.resourceInfo.resourceId,
       };
 
-      const { data: data_ResourceInfo} = yield call(FServiceAPI.Resource.info, params2);
+      const { data: data_ResourceInfo } = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
@@ -1233,13 +1233,13 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
         return acts.licensorId === resource.resourceId && acts.status === 0;
       })
       .map((contract: any) => {
-        // console.log(contract, 'contract0923');
+        console.log(contract, 'contract0923');
         return {
           contractId: contract.contractId,
           contractName: contract.contractName,
           createDate: contract.createDate,
           policyText: contract.policyInfo.policyText,
-          status: contract.status === 1 ? 'terminal' : contract.authStatus === 1 ? 'active' : contract.authStatus === 2 ? 'testActive' : 'inactive',
+          status: contract.status === 1 ? 'terminal' : (contract.authStatus === 1 || contract.authStatus === 3) ? 'active' : contract.authStatus === 2 ? 'testActive' : 'inactive',
           policyId: contract.policyId,
         };
       });
@@ -1296,7 +1296,10 @@ type GetAllContractsReturnType = {
   };
 }[];
 
-export async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+export async function getAllContracts({
+                                        nodeID,
+                                        resourceIDs,
+                                      }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {

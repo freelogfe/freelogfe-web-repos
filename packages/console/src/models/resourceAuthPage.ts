@@ -268,7 +268,7 @@ const Model: ResourceAuthPageModelType = {
                 policyId: c.policyId,
                 title: c.contractName,
                 // status: c.status === 0 ? 'stopping' : 'executing',
-                status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
+                status: c.status === 1 ? 'terminal' : (c.authStatus === 1 || c.authStatus === 3) ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
                 code: c.policyInfo.policyText,
                 date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
                 // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]
@@ -324,7 +324,7 @@ const Model: ResourceAuthPageModelType = {
             authorizedParty: i.licenseeName,
             licenseeIdentityType: LicenseeIdentityType[i.licenseeIdentityType],
             createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
-            status: i.status === 1 ? 'terminal' : i.authStatus === 1 ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
+            status: i.status === 1 ? 'terminal' : (i.authStatus === 1 || i.authStatus === 3) ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
           })),
         },
       });

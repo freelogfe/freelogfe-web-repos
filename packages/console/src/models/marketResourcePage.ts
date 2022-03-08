@@ -515,7 +515,7 @@ const Model: MarketResourcePageModelType = {
                     text: c.policyInfo.policyText,
                     createTime: FUtil.Format.formatDateTime(c.createDate),
                     policyID: c.policyInfo.policyId,
-                    status: c.status === 1 ? 'terminal' : c.authStatus === 1 ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
+                    status: c.status === 1 ? 'terminal' : (c.authStatus === 1 || c.authStatus === 3) ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
                     exhibits: exhibits || [],
                   };
                 });
