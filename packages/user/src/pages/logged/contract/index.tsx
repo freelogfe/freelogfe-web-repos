@@ -3,7 +3,7 @@ import styles from './index.less';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
@@ -57,7 +57,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div className={styles.targetCover}>
             {/*<img src={record.cover || imgSrc} />*/}
             <FCoverImage src={record.cover || ''} width={120} />
-            <div>
+            <div className={styles.targetType}>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>
           </div>
@@ -165,7 +165,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div className={styles.targetCover}>
             {/*<img src={record.cover || imgSrc} />*/}
             <FCoverImage src={record.cover || ''} width={120} />
-            <div>
+            <div className={styles.targetType}>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>
           </div>
