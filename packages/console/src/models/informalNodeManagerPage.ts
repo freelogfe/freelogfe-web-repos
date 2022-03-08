@@ -8,7 +8,7 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
-import { OperationAndActionRecord } from '@/type/InformalNodeType';
+import { OperationAndActionRecords } from '@/type/InformalNodeType';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -85,7 +85,7 @@ export interface IExhibit {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
-  operationAndActionRecords: OperationAndActionRecord[];
+  operationAndActionRecords: OperationAndActionRecords;
   isAuth?: boolean;
 }
 

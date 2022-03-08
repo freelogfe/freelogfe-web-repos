@@ -21,7 +21,7 @@ import {
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 import { router } from 'umi';
-import { OperationAndActionRecord } from '@/type/InformalNodeType';
+import { OperationAndActionRecords } from '@/type/InformalNodeType';
 
 const { decompile } = require('@freelog/nmr_translator');
 
@@ -115,7 +115,7 @@ export interface InformExhibitInfoPageModelState {
       operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
       ruleId: string;
     }[];
-    operationAndActionRecords: OperationAndActionRecord[];
+    operationAndActionRecords: OperationAndActionRecords;
     isAuth: boolean;
   };
 
