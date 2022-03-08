@@ -8,6 +8,7 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
+import { OperationAndActionRecord } from '@/type/InformalNodeType';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -84,27 +85,7 @@ export interface IExhibit {
     operations: Array<'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme'>;
     ruleId: string;
   }[];
-  operationAndActionRecords: {
-    type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
-    data: {
-      exhibitName: string;
-
-      candidate?: ICandidate;
-
-      tags?: string[];
-      coverImage?: string;
-      title?: string;
-      onlineStatus?: boolean;
-
-      attrDescription?: string;
-      attrKey?: string;
-      attrValue?: string;
-
-      replaced?: ICandidate;
-      replacer?: ICandidate;
-      scopes?: ICandidate[][];
-    };
-  }[];
+  operationAndActionRecords: OperationAndActionRecord[];
   isAuth?: boolean;
 }
 

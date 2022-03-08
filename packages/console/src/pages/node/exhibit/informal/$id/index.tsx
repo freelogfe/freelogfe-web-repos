@@ -96,7 +96,12 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
 
           <div style={{ width: 20 }} />
           {
-            informExhibitInfoPage.exhibit_Info && (<RuleBar t={informExhibitInfoPage.exhibit_Info} />)
+            informExhibitInfoPage.exhibit_Info && (<div style={{ maxWidth: 500, overflow: 'hidden' }}>
+              <MappingRule
+                operationAndActionRecords={informExhibitInfoPage.exhibit_Info.operationAndActionRecords}
+                placement='bottom'
+              />
+            </div>)
           }
 
         </div>
@@ -160,64 +165,64 @@ export default connect(({ informExhibitInfoPage, nodes }: ConnectState) => ({
   nodes,
 }))(Presentable);
 
-interface RuleBar {
-  t: IExhibit;
-}
-
-function RuleBar({ t }: RuleBar) {
-  let add: {
-    exhibit: string;
-    source: {
-      type: 'resource' | 'object';
-      name: string;
-      versionRange?: string;
-    };
-  } | null = null;
-  let alter: string = '';
-  let activate_theme: string = '';
-  if (t.rules.length > 0 && t.rules[0].operations.includes('add')) {
-    add = {
-      exhibit: t.testResourceName,
-      source: {
-        type: t.originInfo.type,
-        name: t.originInfo.name,
-        versionRange: t.originInfo.versionRange,
-      },
-    };
-  }
-  if (t.rules.length > 0 && t.rules[0].operations.includes('alter')) {
-    alter = t.testResourceName;
-  }
-  if (t.rules.length > 0 && t.rules[0].operations.includes('activate_theme')) {
-    activate_theme = t.testResourceName;
-  }
-
-  return (<MappingRule
-    placement='bottom'
-    add={add || undefined}
-    alter={alter || undefined}
-    active={activate_theme || undefined}
-    // version={t.originInfo.versionRange || undefined}
-    version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
-    cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
-    title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
-    online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
-    offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
-    labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
-    replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords}
-    attrs={t.stateInfo.propertyInfo.ruleId === 'default'
-      ? undefined
-      : t.stateInfo.propertyInfo.testResourceProperty
-        .filter((trp) => {
-          return trp.isRuleSet;
-        })
-        .map((trp) => {
-          return {
-            type: 'add',
-            theKey: trp.key,
-            value: String(trp.value),
-            description: trp.remark,
-          };
-        })}
-  />);
-}
+// interface RuleBar {
+//   t: IExhibit;
+// }
+//
+// function RuleBar({ t }: RuleBar) {
+//   let add: {
+//     exhibit: string;
+//     source: {
+//       type: 'resource' | 'object';
+//       name: string;
+//       versionRange?: string;
+//     };
+//   } | null = null;
+//   let alter: string = '';
+//   let activate_theme: string = '';
+//   if (t.rules.length > 0 && t.rules[0].operations.includes('add')) {
+//     add = {
+//       exhibit: t.testResourceName,
+//       source: {
+//         type: t.originInfo.type,
+//         name: t.originInfo.name,
+//         versionRange: t.originInfo.versionRange,
+//       },
+//     };
+//   }
+//   if (t.rules.length > 0 && t.rules[0].operations.includes('alter')) {
+//     alter = t.testResourceName;
+//   }
+//   if (t.rules.length > 0 && t.rules[0].operations.includes('activate_theme')) {
+//     activate_theme = t.testResourceName;
+//   }
+//
+//   return (<MappingRule
+//     placement='bottom'
+//     add={add || undefined}
+//     alter={alter || undefined}
+//     active={activate_theme || undefined}
+//     // version={t.originInfo.versionRange || undefined}
+//     version={(t.originInfo.versionRange === '' || t.originInfo.versionRange === 'latest') ? undefined : t.originInfo.versionRange}
+//     cover={t.stateInfo.coverInfo.ruleId === 'default' ? undefined : t.stateInfo.coverInfo.coverImages[0]}
+//     title={t.stateInfo.titleInfo.ruleId === 'default' ? undefined : t.stateInfo.titleInfo.title}
+//     online={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 1}
+//     offline={t.stateInfo.onlineStatusInfo.ruleId === 'default' ? undefined : t.stateInfo.onlineStatusInfo.onlineStatus === 0}
+//     labels={t.stateInfo.tagInfo.ruleId === 'default' ? undefined : t.stateInfo.tagInfo.tags}
+//     replaces={t.stateInfo.replaceInfo.ruleId === 'default' ? undefined : t.stateInfo.replaceInfo.replaceRecords}
+//     attrs={t.stateInfo.propertyInfo.ruleId === 'default'
+//       ? undefined
+//       : t.stateInfo.propertyInfo.testResourceProperty
+//         .filter((trp) => {
+//           return trp.isRuleSet;
+//         })
+//         .map((trp) => {
+//           return {
+//             type: 'add',
+//             theKey: trp.key,
+//             value: String(trp.value),
+//             description: trp.remark,
+//           };
+//         })}
+//   />);
+// }

@@ -54,28 +54,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       title: (<FTitleText type='table' text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />),
       dataIndex: 'name',
       key: 'name',
-      render(text, record, index) {
-        let add: {
-          exhibit: string;
-          source: {
-            type: 'resource' | 'object';
-            name: string;
-            versionRange?: string;
-          };
-        } | null = null;
-        let alter: string = '';
-        if (record.associatedPresentableId === '') {
-          add = {
-            exhibit: record.testResourceName,
-            source: {
-              type: record.originInfo.type,
-              name: record.originInfo.name,
-              versionRange: record.originInfo.versionRange,
-            },
-          };
-        } else if (record.rules.length !== 0) {
-          alter = record.testResourceName;
-        }
+      render(text, record) {
         return (<div className={styles.name}>
           <FContentText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
