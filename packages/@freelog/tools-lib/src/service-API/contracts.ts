@@ -69,9 +69,10 @@ export function batchContracts(params: BatchContractsParamsType) {
 
 // 查看合同流转记录分页列表
 interface TransitionRecordsParamsType {
+  contractId: string;
   skip?: number;
   limit?: number;
-  contractId: string;
+  isTranslate?: 0 | 1;
 }
 
 export function transitionRecords({contractId, ...params}: TransitionRecordsParamsType) {

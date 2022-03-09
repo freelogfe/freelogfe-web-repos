@@ -140,6 +140,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       skip: 0,
       limit: 100,
       contractId: contractID,
+      isTranslate: 1,
     };
 
     const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
@@ -203,7 +204,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     // console.log(currentSData, 'currentSDatacurrentSData11111111');
     // console.log(data1, 'data1data1data1data19023jlksdf');
     const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
-      .filter((dl:any) => {
+      .filter((dl: any) => {
         return dl.fromState !== '_none_';
       })
       .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
@@ -351,16 +352,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                 }
                 <FContentText text={currentS.datetime} type='normal' />
               </Space>
-              {/*<div style={{ height: 10 }} />*/}
-              {/*<FContentText*/}
-              {/*  type='highlight'*/}
-              {/*  text={currentS.name}*/}
-              {/*/>*/}
-              {/*<div style={{*/}
-              {/*  color: '#7A869A',*/}
-              {/*  fontWeight: 600,*/}
-              {/*  lineHeight: '18px',*/}
-              {/*}}>{currentS.name}</div>*/}
 
               {
                 currentS.events.length > 0 && (<>
