@@ -8,7 +8,7 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
-import { OperationAndActionRecords } from '@/type/InformalNodeType';
+import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 

@@ -21,7 +21,7 @@ import {
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 import { router } from 'umi';
-import { OperationAndActionRecords } from '@/type/InformalNodeType';
+import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
 const { decompile } = require('@freelog/nmr_translator');
 

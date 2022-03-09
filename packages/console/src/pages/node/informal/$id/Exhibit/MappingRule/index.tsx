@@ -31,7 +31,7 @@ import {
 } from '../../components/MappingRules';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
-import { OperationAndActionRecords } from '@/type/InformalNodeType';
+import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
 interface ICandidate {
   name: string;
@@ -139,13 +139,13 @@ function MappingRule({
             />);
           }
 
-          if (oaar.type === 'add_attr' && oaar.data.attrKey && oaar.data.attrValue && oaar.data.attrDescription) {
+          if (oaar.type === 'add_attr' && oaar.data.attrKey && oaar.data.attrValue) {
             return (<AttrRule
               key={oaarIndex}
               type={'add'}
-              theKey={oaar.data.attrKey}
-              value={oaar.data.attrValue}
-              description={oaar.data.attrDescription}
+              theKey={oaar.data.attrKey || ''}
+              value={oaar.data.attrValue || ''}
+              description={oaar.data.attrDescription || ''}
             />);
           }
 
