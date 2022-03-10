@@ -41,41 +41,12 @@ interface ICandidate {
 
 interface MappingRuleProps {
   operationAndActionRecords: OperationAndActionRecords;
-  // add?: {
-  //   exhibit: string;
-  //   source: {
-  //     type: 'resource' | 'object';
-  //     name: string;
-  //     versionRange?: string;
-  //   };
-  // };
-  // alter?: string;
-  // active?: string;
-  // version?: string;
-  // cover?: string;
-  // title?: string;
-  // online?: boolean;
-  // offline?: boolean;
-  // labels?: string[];
-  // replaces?: {
-  //   replaced: ICandidate;
-  //   replacer: ICandidate;
-  //   scopes?: ICandidate[][];
-  // }[];
-  // attrs?: {
-  //   type: 'add' | 'delete',
-  //   theKey: string;
-  //   value?: string;
-  //   description?: string;
-  // }[];
 
   placement?: TooltipPlacement;
 }
 
 function MappingRule({
                        operationAndActionRecords = [],
-                       // add, alter, active,
-                       // version, cover, title, offline, online, labels, replaces, attrs,
                        placement = 'right',
                      }: MappingRuleProps) {
 
@@ -160,24 +131,7 @@ function MappingRule({
           return null;
         })
       }
-      {/*{add && <AddRule {...add} />}*/}
-      {/*{alter && <AlterRule alter={alter} />}*/}
-      {/*{active && <ActiveRule active={active} />}*/}
-      {/*{version && <VersionRule version={version} />}*/}
-      {/*{cover && <CoverRule cover={cover} />}*/}
-      {/*{title && <TitleRule title={title} />}*/}
-      {/*{labels && <LabelRule labels={labels} />}*/}
-      {/*{online && <OnlineRule online={online} />}*/}
-      {/*{offline && <OfflineRule offline={offline} />}*/}
-      {/*{replaces && replaces.map((replace, replaceIndex) => {*/}
-      {/*  return (<ReplaceRule*/}
-      {/*    key={replaceIndex}*/}
-      {/*    {...replace}*/}
-      {/*  />);*/}
-      {/*})}*/}
-      {/*{attrs && attrs.map((attr, attrIndex) => {*/}
-      {/*  return (<AttrRule key={attrIndex} {...attr} />);*/}
-      {/*})}*/}
+
     </Space>}
     title={<div className={styles.popoverTitle}>
       <FContentText
@@ -224,17 +178,7 @@ function MappingRule({
           return null;
         })
       }
-      {/*{add && <FMappingRuleAdd />}*/}
-      {/*{alter && <FEdit />}*/}
-      {/*{active && <FMappingRuleActive />}*/}
-      {/*{attrs && <FMappingRuleAttr />}*/}
-      {/*{cover && <FMappingRuleCover />}*/}
-      {/*{labels && <FMappingRuleLabel />}*/}
-      {/*{offline && <FMappingRuleOffline />}*/}
-      {/*{online && <FMappingRuleOnline />}*/}
-      {/*{replaces && <FMappingRuleReplace />}*/}
-      {/*{title && <FMappingRuleTitle />}*/}
-      {/*{version && <FMappingRuleVersion />}*/}
+     
     </Space>
   </FPopover>);
 }
