@@ -10,6 +10,8 @@ import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import FUtil1 from '@/utils';
+import { ContractStatus } from '@/type/contractTypes';
+import FContractStatusBadge from '@/components/FContractStatusBadge';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -25,31 +27,21 @@ interface IContractDisplayStates {
   isSelfLicensorOwner: boolean;
   isSelfLicenseeOwner: boolean;
 
-  currentS: {
-    name: string;
-    auth: 'active' | 'testActive' | 'inactive' | 'terminal' | string;
+  record_CurrentEvents: Array<{
+    eventID: string;
+    tip: string;
+  } & ({
+    type: 'RelativeTimeEvent';
+  } | {
+    type: 'TimeEvent';
+  } | {
+    type: 'TransactionEvent';
+    amount: number;
+  })>;
+  record_Histories: {
+    contractStatus: ContractStatus;
     datetime: string;
-    events: Array<{
-      id: string;
-      tip: string;
-    } & ({
-      type: 'RelativeTimeEvent';
-    } | {
-      type: 'TimeEvent';
-    } | {
-      type: 'TransactionEvent';
-      amount: number;
-    })>;
-  } | null;
-  historySs: {
-    name: string;
-    colors: string[];
-    datetime: string;
-    event: {
-      id: string;
-      tip: string;
-      type: 'RelativeTimeEvent' | 'TimeEvent' | 'TransactionEvent';
-    };
+    description: string;
   }[];
 
   modal_Visible: boolean;
@@ -73,8 +65,8 @@ const initStates: IContractDisplayStates = {
   isSelfLicensorOwner: false,
   isSelfLicenseeOwner: false,
 
-  currentS: null,
-  historySs: [],
+  record_CurrentEvents: [],
+  record_Histories: [],
 
   modal_Visible: false,
   modal_AccountBalance: -1,
@@ -91,6 +83,14 @@ const initStates: IContractDisplayStates = {
   code: '',
 };
 
+// 'active' | 'testActive' | 'inactive' | 'terminal'
+const contractStatus = {
+  1: 'active',
+  2: 'testActive',
+  3: 'active',
+  128: 'inactive',
+};
+
 function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps) {
 
   const inputEl = React.useRef<any>(null);
@@ -100,8 +100,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
   const [isSelfLicensorOwner, setIsSelfLicensorOwner] = React.useState<IContractDisplayStates['isSelfLicensorOwner']>(initStates['isSelfLicensorOwner']);
   const [isSelfLicenseeOwner, setIsSelfLicenseeOwner] = React.useState<IContractDisplayStates['isSelfLicenseeOwner']>(initStates['isSelfLicenseeOwner']);
 
-  const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(initStates['currentS']);
-  const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>(initStates['historySs']);
+  const [record_CurrentEvents, set_Record_CurrentEvents] = React.useState<IContractDisplayStates['record_CurrentEvents']>(initStates['record_CurrentEvents']);
+  const [record_Histories, set_Record_Histories] = React.useState<IContractDisplayStates['record_Histories']>(initStates['record_Histories']);
 
   const [modal_Visible, set_Modal_Visible] = React.useState<IContractDisplayStates['modal_Visible']>(initStates['modal_Visible']);
   const [modal_AccountBalance, set_Modal_AccountBalance] = React.useState<IContractDisplayStates['modal_AccountBalance']>(initStates['modal_AccountBalance']);
@@ -127,14 +127,25 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
   async function fetchInitData() {
     // console.log(contractID, 'contractID@#@@#@#$@#$');
-
+// const p: PromiseFulfilledResult<any> =
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
       isLoadPolicyInfo: 1,
       isTranslate: 1,
     };
 
-    const { data } = await FServiceAPI.Contract.contractDetails(params);
+    const { data: data_ContractDetails }: {
+      data: {
+        licensorOwnerId: number;
+        licenseeOwnerId: number;
+        subjectName: string;
+        contractName: string;
+        licensorOwnerName: string;
+        policyInfo: any;
+        fsmCurrentState: string;
+        status: 0 | 1 | 2;
+      };
+    } = await FServiceAPI.Contract.contractDetails(params);
     // console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       skip: 0,
@@ -143,102 +154,133 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       isTranslate: 1,
     };
 
-    const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
-
-    const fsmInfos: any = data.policyInfo.translateInfo.fsmInfos;
-    // console.log(fsmInfos, 'fsmInfos9023u4k23jl');
-    // console.log(data, fsmInfos, 'fsmInfos24123423423');
-    const currentState: any = fsmInfos.find((fi: any) => {
-      return fi.stateInfo.origin === data.fsmCurrentState;
-    });
+    const { data: data_transitionRecords }: {
+      data: {
+        dataList: {
+          serviceStates: 1 | 2 | 3 | 128;
+          stateInfoStr: string;
+          stateStr: string;
+          time: string;
+        }[];
+        limit: 100
+        skip: 0
+        totalItem: 1
+      }
+    } = await FServiceAPI.Contract.transitionRecords(params1);
 
     // console.log(currentState, 'currentState0923u4kjl');
 
     // console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
-    setIsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
-    setIsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
-    set_Modal_Target(data.subjectName);
-    set_Modal_ContractName(data.contractName);
-    set_Modal_Payee(data.licensorOwnerName);
+    setIsSelfLicensorOwner(data_ContractDetails.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
+    setIsSelfLicenseeOwner(data_ContractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
+    set_Modal_Target(data_ContractDetails.subjectName);
+    set_Modal_ContractName(data_ContractDetails.contractName);
+    set_Modal_Payee(data_ContractDetails.licensorOwnerName);
 
-    let theAuth: string = '';
-    if (data.fsmRunningStatus !== 4) {
-      theAuth = 'terminal';
-    } else if (data.authStatus === 1 || data.authStatus === 3) {
-      theAuth = 'active';
-    } else if (data.authStatus === 2) {
-      theAuth = 'testActive';
-    } else if (data.authStatus === 128) {
-      theAuth = 'inactive';
-    }
+    const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
+      return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
+    });
 
-    const currentSData: IContractDisplayStates['currentS'] = {
-      name: currentState.stateInfo.content,
-      // colors: currentState.serviceStateInfos.map((ssi: any) => {
-      //   return ssi.content;
-      // }),
-      auth: theAuth,
-      datetime: FUtil.Format.formatDateTime(data1.dataList.length === 0
-        ? data.createDate
-        : data1.dataList[data1.dataList.length - 1].createDate, true),
-      // datetime: '2001-01-01 00:00',
-      events: (currentState.eventTranslateInfos as any[]).map((eti) => {
-        const obj = {
-          id: eti.origin.id,
-          tip: eti.content,
-          type: eti.origin.name,
+    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = (currentState.eventTranslateInfos as any[]).map((eti, etiIndex) => {
+      const obj = {
+        // id: eti.origin.id,
+        eventID: eti.origin.eventId,
+        tip: eti.content,
+        type: eti.origin.name,
+      };
+      if (eti.origin.name === 'TransactionEvent') {
+        return {
+          ...obj,
+          amount: eti.origin.args.amount,
         };
-        if (eti.origin.name === 'TransactionEvent') {
-          return {
-            ...obj,
-            amount: eti.origin.args.amount,
-          };
-        } else {
-          return obj;
-        }
-      }),
-    };
+      } else {
+        return obj;
+      }
+    });
+    // console.log(data_transitionRecords, 'data_transitionRecords@#@3890iosdlfihj');
+    const record_Histories: IContractDisplayStates['record_Histories'] = data_transitionRecords.dataList.map((tr, trIndex) => {
+      return {
+        contractStatus: (trIndex === 0 && data_ContractDetails.status === 1) ? 'terminal' : contractStatus[tr.serviceStates] as 'active',
+        datetime: tr.time,
+        description: tr.stateInfoStr,
+      };
+    });
+
+    set_Record_CurrentEvents(record_CurrentEvents);
+    set_Record_Histories(record_Histories);
+
+    // console.log(record_CurrentEvents, 'record_CurrentEvents');
+
+    // const currentSData: IContractDisplayStates['currentS'] = {
+    //   name: currentState.stateInfo.content,
+    //   // colors: currentState.serviceStateInfos.map((ssi: any) => {
+    //   //   return ssi.content;
+    //   // }),
+    //   auth: theAuth,
+    //   datetime: FUtil.Format.formatDateTime(data1.dataList.length === 0
+    //     ? data.createDate
+    //     : data1.dataList[data1.dataList.length - 1].createDate, true),
+    //   // datetime: '2001-01-01 00:00',
+    //   events: (currentState.eventTranslateInfos as any[]).map((eti) => {
+    //     const obj = {
+    //       id: eti.origin.id,
+    //       tip: eti.content,
+    //       type: eti.origin.name,
+    //     };
+    //     if (eti.origin.name === 'TransactionEvent') {
+    //       return {
+    //         ...obj,
+    //         amount: eti.origin.args.amount,
+    //       };
+    //     } else {
+    //       return obj;
+    //     }
+    //   }),
+    // };
     // console.log(currentSData, 'currentSData!!!!@3904ulksjfl');
-    setCurrentS(currentSData);
+    // setCurrentS(currentSData);
 
     // console.log(currentSData, 'currentSDatacurrentSData11111111');
     // console.log(data1, 'data1data1data1data19023jlksdf');
-    const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
-      .filter((dl: any) => {
-        return dl.fromState !== '_none_';
-      })
-      .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
-        // console.log(d1l, 'd1l123412344444444');
-        const currS = fsmInfos.find((fi: any) => {
-          return fi.stateInfo.origin === d1l.fromState;
-        });
-        // console.log(currS, 'currScurrScurrS55555555');
-        const currE = currS.eventTranslateInfos.find((eti: any) => {
-          return eti.origin.id === d1l.eventId;
-        });
-        // console.log(currE, 'currE111111');
-        return {
-          name: currS.stateInfo.content,
-          colors: currS.serviceStateInfos.map((ssi: any) => {
-            return ssi.content;
-          }),
-          datetime: FUtil.Format.formatDateTime(ind === 0
-            ? data.createDate
-            : arr[ind - 1].createDate, true),
-          event: {
-            id: currE.origin.id,
-            tip: currE.content,
-            type: currE.origin.name,
-          },
-        };
-      });
-
-    // console.log(historySsData, 'historySsData000000000000');
-    setHistorySs(historySsData);
+    // const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
+    //   .filter((dl: any) => {
+    //     return dl.fromState !== '_none_';
+    //   })
+    //   .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
+    //     // console.log(d1l, 'd1l123412344444444');
+    //     const currS = fsmInfos.find((fi: any) => {
+    //       return fi.stateInfo.origin === d1l.fromState;
+    //     });
+    //     // console.log(currS, 'currScurrScurrS55555555');
+    //     const currE = currS.eventTranslateInfos.find((eti: any) => {
+    //       return eti.origin.id === d1l.eventId;
+    //     });
+    //     // console.log(currE, 'currE111111');
+    //     return {
+    //       name: currS.stateInfo.content,
+    //       colors: currS.serviceStateInfos.map((ssi: any) => {
+    //         return ssi.content;
+    //       }),
+    //       datetime: FUtil.Format.formatDateTime(ind === 0
+    //         ? data.createDate
+    //         : arr[ind - 1].createDate, true),
+    //       event: {
+    //         id: currE.origin.id,
+    //         tip: currE.content,
+    //         type: currE.origin.name,
+    //       },
+    //     };
+    //   });
+    //
+    // // console.log(historySsData, 'historySsData000000000000');
+    // setHistorySs(historySsData);
 
     // setHistoryStates(historyStates1);
-    setCode(data.policyInfo.policyText);
-    const { error, text } = await FUtil.Format.policyCodeTranslationToText(data.policyInfo.policyText, 'resource');
+    setCode(data_ContractDetails.policyInfo.policyText);
+    const {
+      error,
+      text,
+    } = await FUtil.Format.policyCodeTranslationToText(data_ContractDetails.policyInfo.policyText, 'resource');
     if (error) {
       setText('!!!解析错误\n' + '    ' + error[0]);
       return;
@@ -268,7 +310,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       transactionAmount: modal_TransactionAmount,
       password: password,
     };
-    const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
+    const { data, errCode, msg, ret } = await FServiceAPI.Event.transaction(params);
 
     if (ret + (errCode || 0) > 0) {
       set_Modal_Password('');
@@ -333,43 +375,36 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         activated === 'record' && (<div className={styles.StateRecord}>
           {/*{console.log(currentS, 'currentS!!!!!@#$@#$@#$@#$')}*/}
           {
-            currentS && (<div className={styles.CurrentState}>
+            record_Histories.length > 0 && (<div className={styles.CurrentState}>
               <Space size={5}>
-                {
-                  currentS.auth === 'terminal' && (<label className={styles.Terminal}>已终止</label>)
-                }
-                {
-                  currentS.auth === 'inactive' && (<label className={styles.Unauthorized}>未授权</label>)
-                }
+                <FContractStatusBadge status={record_Histories[0].contractStatus} />
 
-                {
-                  currentS.auth !== 'terminal' && currentS.auth !== 'inactive' && (
-                    <label className={styles.Authorized}>{currentS.auth === 'active'
-                      ? '已授权'
-                      : currentS.auth === 'active'
-                        ? '测试授权'
-                        : currentS.auth}</label>)
-                }
-                <FContentText text={currentS.datetime} type='normal' />
+                <FContentText text={record_Histories[0].datetime} type='normal' />
               </Space>
 
+              <div style={{ height: 10 }} />
+              <FContentText
+                type='highlight'
+                text={record_Histories[0].description}
+              />
+
               {
-                currentS.events.length > 0 && (<>
+                record_Histories[0].contractStatus !== 'terminal' && record_CurrentEvents.length > 0 && (<>
                   <div style={{ height: 10 }} />
                   {/*{console.log(currentS.events, 'currentS.events****887878787878')}*/}
                   <Space size={10} direction='vertical' style={{ width: '100%' }}>
                     {
-                      currentS.events.length === 0
+                      record_CurrentEvents.length === 0
                         ? (<div className={styles.Event}>
                           <FContentText
                             type='highlight'
                             text={'停止接收事件'}
                           />
                         </div>)
-                        : currentS.events.map((eti) => {
+                        : record_CurrentEvents.map((eti, etiIndex) => {
 
                           if (eti.type === 'TransactionEvent') {
-                            return (<div key={eti.id} className={styles.Event}>
+                            return (<div key={etiIndex} className={styles.Event}>
                               <FContentText
                                 style={{ flexShrink: 1 }}
                                 type='highlight'
@@ -385,7 +420,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                       if (isSelfLicensorOwner) {
                                         return fMessage('收款方不能是自己', 'error');
                                       }
-                                      set_Modal_EventID(eti.id);
+                                      set_Modal_EventID(eti.eventID);
                                       // console.log(eti.origin.args.amount, '!#@$!234123412341234');
                                       set_Modal_TransactionAmount(eti.amount);
                                       readyPay();
@@ -400,14 +435,14 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
                             </div>);
                           } else if (eti.type === 'RelativeTimeEvent') {
-                            return (<div key={eti.id} className={styles.Event}>
+                            return (<div key={etiIndex} className={styles.Event}>
                               <FContentText
                                 type='highlight'
                                 text={eti.tip}
                               />
                             </div>);
                           } else if (eti.type === 'TimeEvent') {
-                            return (<div key={eti.id} className={styles.Event}>
+                            return (<div key={etiIndex} className={styles.Event}>
                               <FContentText
                                 type='highlight'
                                 text={eti.tip}
@@ -430,54 +465,51 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             </div>)
           }
 
+
           {
-            historySs.length > 0 && (<>
-              {
-                !recodeFold && (<>
-                  <div style={{ height: 20 }} />
+            !recodeFold && (<>
+              <div style={{ height: 20 }} />
 
-                  <Space className={styles.TransferringRecords} size={20} direction='vertical'>
+              <Space className={styles.TransferringRecords} size={20} direction='vertical'>
 
-                    {
-                      historySs.map((hs, index) => {
-                        // console.log(hs, 'hshshshshshshs1234234');
-                        return (<div key={index} className={styles.TransferringRecord}>
-                          <Space size={5}>
-                            {
-                              hs.colors.length > 0
-                                ? hs.colors.map((cl) => {
-                                  return (<label key={cl} className={styles.Authorized}>{cl}</label>);
-                                })
-                                : (<label className={styles.Unauthorized}>未授权</label>)
-                            }
+                {
+                  record_Histories.filter((_, i) => {
+                    return i !== 0;
+                  }).map((hs, index) => {
+                    // console.log(hs, 'hshshshshshshs1234234');
+                    return (<div key={index} className={styles.TransferringRecord}>
+                      <Space size={5}>
+                        <FContractStatusBadge status={hs.contractStatus} />
+                        {/*{*/}
+                        {/*  hs.colors.length > 0*/}
+                        {/*    ? hs.colors.map((cl) => {*/}
+                        {/*      return (<label key={cl} className={styles.Authorized}>{cl}</label>);*/}
+                        {/*    })*/}
+                        {/*    : (<label className={styles.Unauthorized}>未授权</label>)*/}
+                        {/*}*/}
 
-                            <FContentText text={hs.datetime} type='normal' />
-                          </Space>
-                          <div style={{ height: 10 }} />
-                          {/*<FContentText*/}
-                          {/*  type='highlight'*/}
-                          {/*  text={hs.name}*/}
-                          {/*/>*/}
-                          {/*<div style={{ height: 10 }} />*/}
+                        <FContentText text={hs.datetime} type='normal' />
+                      </Space>
+                      <div style={{ height: 10 }} />
+                      {/*<FContentText*/}
+                      {/*  type='highlight'*/}
+                      {/*  text={hs.name}*/}
+                      {/*/>*/}
+                      {/*<div style={{ height: 10 }} />*/}
+                      <FContentText
+                        type='highlight'
+                        text={hs.description}
+                      />
+                      {/*<div className={styles.mask} />*/}
+                    </div>);
+                  })
+                }
 
-                          <div className={styles.Event}>
-                            <FContentText
-                              type='highlight'
-                              text={hs.event.tip}
-                            />
-
-                            {/*<span style={{ color: '#2784FF' }}>已执行</span>*/}
-                          </div>
-
-                          {/*<div className={styles.mask} />*/}
-                        </div>);
-                      })
-                    }
-
-                  </Space>
-                </>)
-              }
-
+              </Space>
+            </>)
+          }
+          {
+            record_Histories.length > 1 && (<>
               <div style={{ height: 20 }} />
               <div className={styles.recodeFold}>
                 {
