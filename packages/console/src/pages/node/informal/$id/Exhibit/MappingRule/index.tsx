@@ -178,7 +178,7 @@ function MappingRule({
           return null;
         })
       }
-     
+
     </Space>
   </FPopover>);
 }
