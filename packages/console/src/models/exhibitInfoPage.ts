@@ -52,11 +52,7 @@ export interface ExhibitInfoPageModelState {
       policyId: string;
       exhibitOpen: boolean;
     }[];
-    policies: {
-      id: string;
-      name: string;
-      text: string;
-    }[];
+    policies: PolicyFullInfo[];
   }[];
 
   graph_FullScreen: boolean;
@@ -588,12 +584,7 @@ const Model: ExhibitInfoPageModelType = {
                   .filter((p) => {
                     // console.log(p, 'p90234');
                     return p.status === 1;
-                  })
-                  .map((p) => ({
-                    id: p.policyId,
-                    name: p.policyName,
-                    text: p.policyText,
-                  })),
+                  }),
               };
             }),
           graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
@@ -1168,12 +1159,7 @@ export type HandleRelationResult = {
     status: 'active' | 'testActive' | 'inactive' | 'terminal';
     policyId: string;
   }[];
-  policies: {
-    policyId: string;
-    policyName: string;
-    policyText: string;
-    status: 0 | 1;
-  }[];
+  policies: PolicyFullInfo[];
 }[];
 
 export async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
@@ -1188,6 +1174,7 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
   const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
     isLoadPolicyInfo: 1,
+    isTranslate: 1,
   };
 
   const { data: data0 }: any = await FServiceAPI.Resource.batchInfo(params0);
@@ -1201,7 +1188,7 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
         return acts.licensorId === resource.resourceId && acts.status === 0;
       })
       .map((contract: any) => {
-        console.log(contract, 'contract0923');
+        // console.log(contract, 'contract0923');
         return {
           contractId: contract.contractId,
           contractName: contract.contractName,
@@ -1233,14 +1220,6 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
           // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
         })
-        .map((p: any) => {
-          return {
-            policyId: p.policyId,
-            policyName: p.policyName,
-            policyText: p.policyText,
-            status: p.status,
-          };
-        }),
     };
   });
   // console.log(result, 'result2309jd');

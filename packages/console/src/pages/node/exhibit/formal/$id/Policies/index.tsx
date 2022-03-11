@@ -72,10 +72,10 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     <FPolicyBuilder
       visible={exhibitInfoPage.policy_BuildDrawer_Visible}
       alreadyUsedTitles={exhibitInfoPage.policy_List.map((p) => {
-        return p.name;
+        return p.policyName;
       })}
       alreadyUsedTexts={exhibitInfoPage.policy_List.map((p) => {
-        return p.text;
+        return p.policyText;
       })}
       targetType='presentable'
       onCancel={() => dispatch<ChangeAction>({

@@ -25,7 +25,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
   }
 
   const fullScreenPolicy = selectedResource.policies.find((pl) => {
-    return pl.id === fullScreenVisibleID;
+    return pl.policyId === fullScreenVisibleID;
   });
 
   return (<div>
@@ -36,10 +36,10 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
       {
         selectedResource?.policies.map((p) => (<div
           className={styles.singPolicy}
-          key={p.id}
+          key={p.policyId}
         >
           <div className={styles.singPolicyHeader}>
-            <FContentText type='highlight'>{p.name}</FContentText>
+            <FContentText type='highlight'>{p.policyName}</FContentText>
 
             <FRectBtn
               style={{ height: 26, padding: '0 15px' }}
@@ -48,7 +48,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
                 type: 'exhibitInfoPage/updateRelation',
                 payload: {
                   resourceId: selectedResource.id,
-                  policyId: p.id,
+                  policyId: p.policyId,
                 },
               })}
             >签约</FRectBtn>
@@ -62,7 +62,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
           <a
             className={styles.PolicyFullScreenBtn}
             onClick={() => {
-              setFullScreenVisibleID(p.id);
+              setFullScreenVisibleID(p.policyId);
             }}
           ><FFullScreen style={{ fontSize: 12 }} /></a>
 
@@ -80,7 +80,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={fullScreenPolicy?.name || ''} type='h2' />
+        <FTitleText text={fullScreenPolicy?.policyName || ''} type='h2' />
         <div style={{ width: 20 }} />
         <FRectBtn
           style={{ height: 26, padding: '0 15px' }}
@@ -90,7 +90,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
               type: 'exhibitInfoPage/updateRelation',
               payload: {
                 resourceId: selectedResource.id,
-                policyId: fullScreenPolicy?.id || '',
+                policyId: fullScreenPolicy?.policyId || '',
               },
             });
             setFullScreenVisibleID('');
@@ -98,10 +98,13 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
         >签约</FRectBtn>
       </div>
       <div style={{ padding: '0 20px' }}>
-        <FPolicyDisplay
-          containerHeight={770}
-          code={fullScreenPolicy?.text || ''}
-        />
+        {
+          fullScreenPolicy && (<FPolicyDisplay
+            containerHeight={770}
+            // code={fullScreenPolicy?.policyText || ''}
+            fullInfo={fullScreenPolicy}
+          />)
+        }
       </div>
     </FModal>
   </div>);

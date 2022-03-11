@@ -60,11 +60,11 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           {
             exhibitInfoPage.policy_List.map((p) => (<div
               className={styles.policy}
-              key={p.id}
+              key={p.policyId}
             >
               <div className={styles.title}>
                 <FContentText
-                  text={p.name}
+                  text={p.policyName}
                 />
                 <Space size={8}>
                   {
@@ -77,13 +77,13 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
                     checked={p.status === 1}
                     onChange={(value) => dispatch<UpdateAPolicyAction>({
                       type: 'exhibitInfoPage/updateAPolicy',
-                      payload: { id: p.id, status: value ? 1 : 0 },
+                      payload: { id: p.policyId, status: value ? 1 : 0 },
                     })}
                   />
                 </Space>
               </div>
               <div style={{ height: 15 }} />
-              <pre>{p.text}</pre>
+              <pre>{p.policyText}</pre>
             </div>))
           }
         </div>)
@@ -92,10 +92,10 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     <FPolicyBuilder
       visible={exhibitInfoPage.policy_BuildDrawer_Visible}
       alreadyUsedTitles={exhibitInfoPage.policy_List.map((p) => {
-        return p.name;
+        return p.policyName;
       })}
       alreadyUsedTexts={exhibitInfoPage.policy_List.map((p) => {
-        return p.text;
+        return p.policyText;
       })}
       targetType='presentable'
       onCancel={() => dispatch<ChangeAction>({
