@@ -12,7 +12,7 @@ import {
   FMappingRuleOnline,
   FMappingRuleReplace,
   FMappingRuleTitle,
-  FMappingRuleVersion,
+  // FMappingRuleVersion,
 } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
 import TypesCaption from '../../components/TypesCaption';
@@ -33,11 +33,11 @@ import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
-interface ICandidate {
-  name: string;
-  versionRange?: string;
-  type: 'resource' | 'object';
-}
+// interface ICandidate {
+//   name: string;
+//   versionRange?: string;
+//   type: 'resource' | 'object';
+// }
 
 interface MappingRuleProps {
   operationAndActionRecords: OperationAndActionRecords;
