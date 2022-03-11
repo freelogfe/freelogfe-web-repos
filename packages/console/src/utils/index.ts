@@ -1,5 +1,5 @@
 import * as I18n from './i18n';
-import * as Tool from './tools';
+// import * as Tool from './tools';
 
 const FUtil = {
   // Format,
@@ -7,7 +7,7 @@ const FUtil = {
   // LinkTo,
   I18n,
   // Predefined,
-  Tool,
+  // Tool,
 };
 
 export default FUtil;
