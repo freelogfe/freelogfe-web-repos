@@ -11,7 +11,6 @@ export interface CreateParamsType {
 }
 
 export function create(params: CreateParamsType) {
-  // return FUtil.Axios.post('/v2/resources', params)
   return FUtil.Request({
     method: 'POST',
     url: `/v2/resources`,
@@ -37,7 +36,6 @@ interface UpdateParamsType {
 }
 
 export function update(params: UpdateParamsType) {
-  // return FUtil.Axios.put(`/v2/resources/${params.resourceId}`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/resources/${params.resourceId}`,
@@ -61,9 +59,6 @@ interface ListParamsType {
 }
 
 export function list(params: ListParamsType) {
-  // return FUtil.Axios.get('/v2/resources', {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources`,
@@ -75,14 +70,12 @@ export function list(params: ListParamsType) {
 interface InfoParamsType {
   resourceIdOrName: string;
   isLoadPolicyInfo?: 0 | 1;
+  isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
 }
 
 export function info({resourceIdOrName, ...params}: InfoParamsType) {
-  // return FUtil.Axios.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/${encodeURIComponent(resourceIdOrName)}`,
@@ -100,9 +93,6 @@ interface BatchInfoParamsType {
 }
 
 export function batchInfo(params: BatchInfoParamsType) {
-  // return FUtil.Axios.get(`/v2/resources/list`, {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/list`,
@@ -120,9 +110,6 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType) {
-  // return FUtil.Axios.get(`/v2/resources/${resourceId}/dependencyTree`, {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/${resourceId}/dependencyTree`,
@@ -137,9 +124,6 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({resourceId, ...params}: AuthTreeParamsType) {
-  // return FUtil.Axios.get(`/v2/resources/${resourceId}/authTree`, {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/${resourceId}/authTree`,
@@ -198,13 +182,7 @@ interface ResourceVersionInfoParamsType2 {
 }
 
 export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
-  // console.log('####!AAA');
   if ((params as ResourceVersionInfoParamsType1).version) {
-    // return FUtil.Axios.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
-    //   params: {
-    //     projection: params.projection,
-    //   }
-    // });
     return FUtil.Request({
       method: 'GET',
       url: `/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`,
@@ -212,9 +190,6 @@ export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | Res
     });
   }
 
-  // return FUtil.Axios.get(`/v2/resources/versions/detail`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/versions/detail`,
