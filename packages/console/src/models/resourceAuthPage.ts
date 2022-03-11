@@ -5,16 +5,12 @@ import { FetchDataSourceAction } from '@/models/resourceInfo';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
 
-  policies: {
-    policyId: string;
-    policyName: string;
-    status: 0 | 1;
-    policyText: string;
-  }[];
+  policies: PolicyFullInfo[];
   policyPreviewVisible: boolean;
   policyPreviewText: string;
   policyEditorVisible: boolean;
@@ -161,6 +157,7 @@ const Model: ResourceAuthPageModelType = {
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceAuthPage.resourceID,
         isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
 
       const { data } = yield call(FServiceAPI.Resource.info, params);

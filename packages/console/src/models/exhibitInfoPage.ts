@@ -8,6 +8,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -22,12 +23,7 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_Name: string;
   exhibit_BelongNode_ActiveThemeId: string;
 
-  policy_List: {
-    id: string;
-    name: string;
-    text: string;
-    status: 0 | 1;
-  }[];
+  policy_List: PolicyFullInfo[];
   policy_BuildDrawer_Visible: boolean;
 
   contract_ExhibitAllContractIDs: {
@@ -369,23 +365,6 @@ const initStates: ExhibitInfoPageModelState = {
   graph_Viewport_AuthorizationGraph_Nodes: [],
   graph_Viewport_AuthorizationGraph_Edges: [],
 
-  //   side_ExhibitCover: string;
-  //   side_ExhibitTitle: string;
-  //   side_ExhibitInputTitle: string | null;
-  //   side_ExhibitTags: string[];
-  //   side_AllVersions: string[];
-  //   side_Version: string;
-  //   side_SettingUnfold: boolean;
-  //   side_BaseAttrs:
-  //   side_CustomOptions:
-  //   side_CustomOptionsDrawer_Visible: boolean;
-  //   side_CustomOptionsDrawer_DataSource:
-  //   side_CustomOptionDrawer_Visible: boolean;
-  //   side_CustomOptionDrawer_DataSource: null;
-  //   side_ResourceId: string;
-  //   side_ResourceName: string;
-  //   side_ResourceType: string;
-  //   side_ResourceCover: string;
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
   side_ExhibitInputTitle: null,
@@ -405,13 +384,6 @@ const initStates: ExhibitInfoPageModelState = {
   side_ResourceType: '',
   side_ResourceCover: '',
 
-  // pAddCustomModalVisible: false,
-  // pAddCustomKey: '',
-  // pAddCustomKeyError: '',
-  // pAddCustomValue: '',
-  // pAddCustomValueError: '',
-  // pAddCustomDescription: '',
-  // pAddCustomDescriptionError: '',
 };
 
 const Model: ExhibitInfoPageModelType = {
@@ -449,6 +421,7 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: exhibitInfoPage.exhibit_ID,
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
       const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
@@ -572,12 +545,7 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_Online: data_PresentableDetails.onlineStatus === 1,
           exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
           exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
-          policy_List: data_PresentableDetails.policies.map((p: any) => ({
-            id: p.policyId,
-            name: p.policyName,
-            text: p.policyText,
-            status: p.status,
-          })),
+          policy_List: data_PresentableDetails.policies,
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
           contract_SelectedAssociatedID: result_ContractAssociated.some((rr) => {

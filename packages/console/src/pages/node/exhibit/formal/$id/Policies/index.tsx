@@ -59,14 +59,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
         </div>)
         : (<FPolicyList
           atLeastOneUsing={exhibitInfoPage.exhibit_Online}
-          dataSource={exhibitInfoPage.policy_List.map((p) => {
-            return {
-              id: p.id,
-              name: p.name,
-              using: p.status === 1,
-              text: p.text,
-            };
-          })}
+          dataSource={exhibitInfoPage.policy_List}
           onCheckChange={(data) => {
             dispatch<UpdateAPolicyAction>({
               type: 'exhibitInfoPage/updateAPolicy',

@@ -3,32 +3,29 @@ import styles from './index.less';
 import FCodeFormatter from '../FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { FUtil } from '@freelog/tools-lib';
-// import { completeUrlByDomain } from '@freelog/tools-lib/src/utils/format';
-
-// const { compile } = require('@freelog/resource-policy-lang');
-// import { report } from '@freelog/resource-policy-lang/dist';
-// import { ContractEntity } from '@freelog/resource-policy-lang/dist/tools/ContractTool';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface FPolicyDisplayProps {
-  code: string;
+  // code: string;
+  fullInfo: PolicyFullInfo;
   containerHeight?: string | number;
 }
 
-function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps) {
+function FPolicyDisplay({ fullInfo, containerHeight = 'auto' }: FPolicyDisplayProps) {
 
   const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
-  const [text, setText] = React.useState<string>('');
+  // const [text, setText] = React.useState<string>('');
 
-  AHooks.useMount(async () => {
-    const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
-    // const { error, text } = await policyCodeTranslationToText(code, 'resource');
-    // console.log(text, code, '@@@@@@########$#$#$#$');
-    if (error) {
-      setText('!!!解析错误\n' + '    ' + error[0]);
-      return;
-    }
-    setText(text || '');
-  });
+  // AHooks.useMount(async () => {
+  //   const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
+  //   // const { error, text } = await policyCodeTranslationToText(code, 'resource');
+  //   // console.log(text, code, '@@@@@@########$#$#$#$');
+  //   if (error) {
+  //     setText('!!!解析错误\n' + '    ' + error[0]);
+  //     return;
+  //   }
+  //   setText(text || '');
+  // });
 
   return (<div className={styles.PolicyBody}>
     <div className={styles.PolicyBodyTabs}>
@@ -58,7 +55,7 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
 
       {
         activated === 'text' && (<div style={{ width: '100%' }}>
-          <FCodeFormatter code={text} />
+          <FCodeFormatter code={fullInfo.translateInfo.content} />
         </div>)
       }
 
@@ -69,7 +66,7 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
 
       {
         activated === 'code' && (<div style={{ width: '100%' }}>
-          <FCodeFormatter code={code} />
+          <FCodeFormatter code={fullInfo.policyText} />
         </div>)
       }
     </div>

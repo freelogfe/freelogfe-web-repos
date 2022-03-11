@@ -59,14 +59,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             onClick={openNewVisible}>{'添加授权策略'}</FRectBtn>
         </div>)
         : <FPolicyList
-          dataSource={resourceAuthPage.policies.map((p) => {
-            return {
-              id: p.policyId,
-              name: p.policyName,
-              using: p.status === 1,
-              text: p.policyText,
-            };
-          })}
+          dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
             onPolicyStatusChange(data.id, data.using);
           }}
