@@ -77,7 +77,10 @@ interface PresentableDetailsParamsType1 {
   projection?: string;
   isLoadVersionProperty?: 0 | 1;
   isLoadPolicyInfo?: 0 | 1;
+  isTranslate?: 0 | 1;
   isLoadCustomPropertyDescriptors?: 0 | 1;
+  isLoadResourceDetailInfo?: 0 | 1;
+  isLoadResourceVersionInfo?: 0 | 1;
 }
 
 interface PresentableDetailsParamsType2 {
@@ -129,9 +132,6 @@ interface PresentablesParamsType {
 }
 
 export function presentables(params: PresentablesParamsType) {
-  // return FUtil.Axios.get(`/v2/presentables`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables`,
@@ -153,9 +153,6 @@ interface PresentableListParamsType {
 }
 
 export function presentableList(params: PresentableListParamsType) {
-  // return FUtil.Axios.get(`/v2/presentables/list`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/list`,
