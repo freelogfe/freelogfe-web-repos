@@ -25,7 +25,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import * as AHooks from 'ahooks';
 // import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
-const { compile } = require('@freelog/resource-policy-lang');
+const { compile, report } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -583,7 +583,7 @@ function FPolicyBuilder({
         return;
       }
 
-      const { error, text } = await FUtil.Format.policyCodeTranslationToText(code_Input, targetType);
+      const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
 
       if (error) {
@@ -611,7 +611,7 @@ function FPolicyBuilder({
       const {
         error,
         text: translationText,
-      } = await FUtil.Format.policyCodeTranslationToText(combinationCode, targetType);
+      } = await policyCodeTranslationToText(combinationCode, targetType);
       setIsVerifying(false);
       if (error) {
         setShowView('fail');
@@ -1776,4 +1776,33 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
       </>)}
     />
   </div>);
+}
+
+/**
+ * 根据策略代码和标的物类型，生成对应的翻译
+ * @param code 策略代码
+ * @param targetType 标的物类型
+ */
+export async function policyCodeTranslationToText(code: string, targetType: string): Promise<{
+  error: string[] | null;
+  text?: string;
+}> {
+  try {
+    const result = await compile(
+      code,
+      targetType,
+      FUtil.Format.completeUrlByDomain('qi'),
+      window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev',
+    );
+    const rrr = report(result.state_machine);
+    // console.log(rrr, 'rrr@#$@#$@#$44444$$$$$$$$');
+    return {
+      error: null,
+      text: rrr.content,
+    };
+  } catch (err) {
+    return {
+      error: [err.message],
+    };
+  }
 }

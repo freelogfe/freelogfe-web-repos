@@ -148,6 +148,7 @@ interface PresentableListParamsType {
   resourceNames?: string;
   isLoadVersionProperty?: 0 | 1;
   isLoadPolicyInfo?: 0 | 1;
+  isTranslate?: 0 | 1;
   projection?: string;
   resolveResourceIds?: string;
 }

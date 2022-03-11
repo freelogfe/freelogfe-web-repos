@@ -25,7 +25,7 @@ interface FPolicyListProps {
 }
 
 function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPolicyListProps) {
-
+  console.log(dataSource, 'dataSource#@@@@@#@##########');
   const disabledOnlyUsing: boolean = atLeastOneUsing ? dataSource.filter((ds) => {
     return ds.status === 1;
   }).length <= 1 : false;

@@ -29,9 +29,8 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
 
     {activeResource?.policies.map((i) => (
       <PolicyCard
-        key={i.id}
-        title={i.title}
-        code={i.code}
+        key={i.fullInfo.policyId}
+        fullInfo={i.fullInfo}
         allVersions={i.allEnabledVersions}
         // allVersions={['0.0.1', '0.0.2', '0.0.3']}
         onClickLicense={(versions: string[]) => {
@@ -39,7 +38,7 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
             type: 'resourceAuthPage/updateAuthorized',
             payload: versions.map((v: string) => ({
               version: v,
-              policyId: i.id,
+              policyId: i.fullInfo.policyId,
               operation: 1,
             })),
           });

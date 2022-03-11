@@ -56,7 +56,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
           <div style={{ height: 10 }} />
           <div style={{ padding: '0 20px' }}>
             <FPolicyDisplay
-              code={p.text}
+              fullInfo={p}
             />
           </div>
           <a

@@ -46,9 +46,13 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
     });
   }
 
+  // {
+  //   // console.log(resourceAuthPage.policies, 'resourceAuthPage.policies@@@@@@@@');
+  // }
+
   return (<div className={styles.FPoliciesStyles}>
     {
-      resourceAuthPage.policies?.length === 0
+      resourceAuthPage.policies.length === 0
         ? (<div className={styles.empty}>
           <FTipText
             type='second'
@@ -58,12 +62,13 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
           <FRectBtn
             onClick={openNewVisible}>{'添加授权策略'}</FRectBtn>
         </div>)
-        : <FPolicyList
+        : (<FPolicyList
           dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
             onPolicyStatusChange(data.id, data.using);
           }}
-        />
+        />)
+        // : null
     }
 
     <FPolicyBuilderDrawer
@@ -74,7 +79,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
       alreadyUsedTitles={resourceAuthPage.policies.map((ip) => {
         return ip.policyName;
       })}
-      targetType="resource"
+      targetType='resource'
       onCancel={closeNewVisible}
       onConfirm={({ title, text }) => {
         dispatch<UpdatePoliciesAction>({

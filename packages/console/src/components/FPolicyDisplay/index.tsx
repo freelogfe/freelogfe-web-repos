@@ -12,20 +12,9 @@ interface FPolicyDisplayProps {
 }
 
 function FPolicyDisplay({ fullInfo, containerHeight = 'auto' }: FPolicyDisplayProps) {
+  // console.log(fullInfo, 'fullInfo#############');
 
   const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
-  // const [text, setText] = React.useState<string>('');
-
-  // AHooks.useMount(async () => {
-  //   const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
-  //   // const { error, text } = await policyCodeTranslationToText(code, 'resource');
-  //   // console.log(text, code, '@@@@@@########$#$#$#$');
-  //   if (error) {
-  //     setText('!!!解析错误\n' + '    ' + error[0]);
-  //     return;
-  //   }
-  //   setText(text || '');
-  // });
 
   return (<div className={styles.PolicyBody}>
     <div className={styles.PolicyBodyTabs}>

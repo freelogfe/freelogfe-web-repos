@@ -8,10 +8,10 @@ import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface PolicyCardProps {
-  title: string;
-  code: string;
+  fullInfo: PolicyFullInfo;
   allVersions: string[];
 
   onClickLicense?(versions: string[]): void;
@@ -23,7 +23,7 @@ interface PolicyCardStates {
   checkedVersions: string[];
 }
 
-function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProps) {
+function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) {
   const [fullScreenVisible, setFullScreenVisible] = React.useState<PolicyCardStates['fullScreenVisible']>(false);
   const [drawerVisible, setDrawerVisible] = React.useState<PolicyCardStates['drawerVisible']>(false);
   const [checkedVersions, setCheckedVersions] = React.useState<PolicyCardStates['checkedVersions']>([]);
@@ -75,7 +75,7 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
       <div style={{ height: 10 }} />
       <div className={styles.PolicyName}>
         <Space size={10}>
-          <span>{title}</span>
+          <span>{fullInfo.policyName}</span>
         </Space>
 
         <FRectBtn
@@ -88,7 +88,8 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
       <div style={{ height: 10 }} />
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
-          code={code}
+          fullInfo={fullInfo}
+          // code={code}
           // containerHeight={170}
         />
       </div>
@@ -111,7 +112,7 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={title} type='h2' />
+        <FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
         <FRectBtn
           size='small'
@@ -123,7 +124,8 @@ function PolicyCard({ title, code, allVersions, onClickLicense }: PolicyCardProp
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
           containerHeight={770}
-          code={code}
+          // code={code}
+          fullInfo={fullInfo}
         />
       </div>
     </FModal>

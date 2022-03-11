@@ -36,10 +36,14 @@ export interface ResourceAuthPageModelState {
       policyId: string;
       versions: { version: string; checked: boolean; disabled: boolean }[];
     }[];
+    // policies: {
+    //   id: string;
+    //   title: string;
+    //   code: string;
+    //   allEnabledVersions: string[];
+    // }[];
     policies: {
-      id: string;
-      title: string;
-      code: string;
+      fullInfo: PolicyFullInfo;
       allEnabledVersions: string[];
     }[];
   }[];
@@ -215,6 +219,7 @@ const Model: ResourceAuthPageModelType = {
       const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
         resourceIds: data.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
       const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
@@ -283,9 +288,10 @@ const Model: ResourceAuthPageModelType = {
               };
             }),
           policies: allEnabledPolicies.map((policy: any) => ({
-            id: policy.policyId,
-            title: policy.policyName,
-            code: policy.policyText,
+            // id: policy.policyId,
+            // title: policy.policyName,
+            // code: policy.policyText,
+            fullInfo:  policy,
             allEnabledVersions: allEnabledVersions,
           })),
         };

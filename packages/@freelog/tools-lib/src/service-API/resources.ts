@@ -88,6 +88,7 @@ interface BatchInfoParamsType {
   resourceIds?: string;
   resourceNames?: string;
   isLoadPolicyInfo?: 0 | 1;
+  isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
 }
