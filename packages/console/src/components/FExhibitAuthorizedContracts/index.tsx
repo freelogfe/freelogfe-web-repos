@@ -13,6 +13,7 @@ import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -40,11 +41,7 @@ interface FExhibitAuthorizedContractsStates {
         disabled: boolean;
       };
     }[];
-    policies: {
-      policyID: string;
-      policyName: string;
-      text: string;
-    }[];
+    policies: PolicyFullInfo[];
   }[];
 }
 
@@ -334,7 +331,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                   return (<>
                     <div
                       className={styles.Policy}
-                      key={sacp.policyID}
+                      key={sacp.policyId}
                     >
                       <div className={styles.singPolicyHeader}>
                         <FContentText type='highlight'>{sacp.policyName}</FContentText>
@@ -342,14 +339,15 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                           style={{ height: 26, padding: '0 15px' }}
                           size='small'
                           onClick={() => {
-                            enableAndUnable(sacp.policyID, true);
+                            enableAndUnable(sacp.policyId, true);
                           }}
                         >签约</FRectBtn>
                       </div>
                       <div style={{ height: 10 }} />
                       <div style={{ padding: '0 20px' }}>
                         <FPolicyDisplay
-                          code={sacp.text}
+                          // code={sacp.text}
+                          fullInfo={sacp}
                         />
                       </div>
                       {/*<a*/}
@@ -423,12 +421,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     resourceId: string;
     resourceName: string;
     resourceType: string;
-    policies: {
-      policyId: string;
-      policyName: string;
-      policyText: string;
-      status: 0 | 1;
-    }[];
+    policies: PolicyFullInfo[];
   }[] = [];
   let batchObjects: {
     objectId: string;
@@ -442,6 +435,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       resourceIds: allResourceIDs.join(','),
       isLoadPolicyInfo: 1,
       projection: 'resourceId,resourceName,resourceType,policies',
+      isTranslate: 1,
     };
     const { data } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
@@ -556,13 +550,6 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       : theResource.policies
         .filter((thp) => {
           return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
-        })
-        .map((thp) => {
-          return {
-            policyID: thp.policyId,
-            policyName: thp.policyName,
-            text: thp.policyText,
-          };
         });
     /************** End 处理策略相关数据 *********************************************************/
     return {
