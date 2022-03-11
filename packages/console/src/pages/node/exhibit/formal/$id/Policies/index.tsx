@@ -17,16 +17,6 @@ interface PoliciesProps {
 
 function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
 
-  // const onlyOnePolicy = exhibitInfoPage.policies.filter((p) => p.status === 1).length === 1;
-// exhibit_ID: string;
-  //   exhibit_Name: string;
-  //   exhibit_Title: string;
-  //   exhibit_Online: boolean;
-  //   exhibit_IsAuth: boolean;
-  //   exhibit_AuthErrorText: string;
-  //   exhibit_BelongNode_ID: number;
-  //   exhibit_BelongNode_Name: string;
-  //   exhibit_BelongNode_ActiveThemeId: string;
   return (<div>
     <Space size={15}>
       <FTitleText
