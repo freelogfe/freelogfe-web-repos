@@ -23,7 +23,7 @@ import FMonacoEditor from '@/components/FMonacoEditor';
 // import fMessage from '@/components/fMessage';
 import fConfirmModal from '@/components/fConfirmModal';
 import * as AHooks from 'ahooks';
-import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
+// import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
