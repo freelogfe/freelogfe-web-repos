@@ -14,6 +14,7 @@ import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
+import { FTextBtn } from '@/components/FButton';
 
 interface BaseInfo {
   subjectId: string;
@@ -688,10 +689,18 @@ function FExhibits({
         exhibitAllContractIDs.map((eac, ind, list) => {
           const checked: boolean = eac.policyIDs.includes(currentPolicyID);
           return (<div key={eac.exhibitID} className={styles.nodeExhibit}>
-            <FContentText
-              text={eac.exhibitName}
-              type='highlight'
-            />
+            <Space size={5}>
+              <label className={styles.nodeExhibitLabel}>展品</label>
+              {/*<a className={styles.nodeExhibitNameLink}>{eac.exhibitName}</a>*/}
+              <FTextBtn
+                type='default'
+                style={{ fontSize: 12, fontWeight: 600, color: '#222' }}
+                onClick={() => {
+                  window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.exhibitManagement({ exhibitID: eac.exhibitID }));
+                }}
+              >{eac.exhibitName}</FTextBtn>
+            </Space>
+
             <FSwitch
               checked={checked}
               disabled={checked && eac.policyIDs.length === 1}
