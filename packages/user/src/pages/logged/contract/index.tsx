@@ -59,7 +59,11 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         return (<div className={styles.target}>
           <div className={styles.targetCover}>
             {/*<img src={record.cover || imgSrc} />*/}
-            <FCoverImage src={record.cover || ''} width={120} />
+            <FCoverImage
+              style={{ borderRadius: 4 }}
+              src={record.cover || ''}
+              width={120}
+            />
             <div className={styles.targetType}>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>
@@ -167,7 +171,11 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         return (<div className={styles.target}>
           <div className={styles.targetCover}>
             {/*<img src={record.cover || imgSrc} />*/}
-            <FCoverImage src={record.cover || ''} width={120} />
+            <FCoverImage
+              style={{ borderRadius: 4 }}
+              src={record.cover || ''}
+              width={120}
+            />
             <div className={styles.targetType}>
               <FIdentityTypeBadge status={record.subjectType} />
             </div>
