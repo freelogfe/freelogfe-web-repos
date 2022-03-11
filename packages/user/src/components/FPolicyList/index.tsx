@@ -7,14 +7,17 @@ import { FContentText, FTitleText } from '../FText';
 import FModal from '../FModal';
 import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface FPolicyListProps {
-  dataSource: {
-    id: string;
-    name: string;
-    using: boolean;
-    text: string;
-  }[];
+  // dataSource: {
+  //   id: string;
+  //   name: string;
+  //   using: boolean;
+  //   text: string;
+  // }[];
+
+  dataSource: PolicyFullInfo[];
 
   atLeastOneUsing?: boolean;
 
@@ -24,20 +27,18 @@ interface FPolicyListProps {
 function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPolicyListProps) {
 
   const disabledOnlyUsing: boolean = atLeastOneUsing ? dataSource.filter((ds) => {
-    return ds.using;
+    return ds.status === 1;
   }).length <= 1 : false;
 
   return (<div className={styles.styles}>
     {
       dataSource.map((ds) => {
         return (<PolicyCard
-          key={ds.id}
-          name={ds.name}
-          code={ds.text}
-          online={ds.using}
-          onlineDisable={disabledOnlyUsing && ds.using}
+          key={ds.policyId}
+          fullInfo={ds}
+          onlineDisable={disabledOnlyUsing && ds.status === 1}
           onOnlineChange={(value) => {
-            onCheckChange && onCheckChange({ id: ds.id, using: value });
+            onCheckChange && onCheckChange({ id: ds.policyId, using: value });
           }}
         />);
       })
@@ -52,15 +53,13 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
 export default FPolicyList;
 
 interface PolicyCardProps {
-  name: string;
-  online: boolean;
+  fullInfo: PolicyFullInfo;
   onlineDisable: boolean;
-  code: string;
 
   onOnlineChange?(bool: boolean): void;
 }
 
-function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: PolicyCardProps) {
+function PolicyCard({ fullInfo, onlineDisable, onOnlineChange }: PolicyCardProps) {
 
   const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
 
@@ -68,16 +67,16 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
     <div className={styles.header}>
       <FContentText
         type='highlight'
-        text={name}
+        text={fullInfo.policyName}
         style={{ maxWidth: 150 }}
         singleRow
       />
       <Space size={8}>
         <label
-          style={{ color: online ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
+          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
         <FSwitch
           disabled={onlineDisable}
-          checked={online}
+          checked={fullInfo.status === 1}
           onChange={(value) => {
             onOnlineChange && onOnlineChange(value);
           }}
@@ -88,7 +87,7 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
     <div style={{ padding: '0 20px' }}>
       <FPolicyDisplay
         containerHeight={170}
-        code={code}
+        fullInfo={fullInfo}
       />
     </div>
 
@@ -109,14 +108,14 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={name} type='h2' />
+        <FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
         <label
-          style={{ color: online ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
+          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
         <div style={{ width: 10 }} />
         <FSwitch
           disabled={onlineDisable}
-          checked={online}
+          checked={fullInfo.status === 1}
           onChange={(value) => {
             onOnlineChange && onOnlineChange(value);
           }}
@@ -125,7 +124,7 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
           containerHeight={770}
-          code={code}
+          fullInfo={fullInfo}
         />
       </div>
     </FModal>
