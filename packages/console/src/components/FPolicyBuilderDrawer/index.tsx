@@ -351,7 +351,7 @@ function FPolicyBuilder({
   }
 
   function onClickAddStateBtn() {
-    console.log('********823u4928347923');
+    // console.log('********823u4928347923');
     const results: FPolicyBuilderDrawerStates['combination_Data'] = [
       ...combination_Data,
       {
@@ -668,9 +668,9 @@ function FPolicyBuilder({
       || !!cd.nameError
       || cd.events.some((et) => {
         if (et.type === 'payment') {
-          return !et.payment_Amount || !et.target;
+          return et.payment_Amount === '' || et.payment_AmountError !== '' || !et.target;
         } else if (et.type === 'relativeTime') {
-          return !et.relativeTime_Num || !et.relativeTime_Unit || !et.target;
+          return et.relativeTime_Num === '' || et.relativeTime_NumError !== '' || !et.relativeTime_Unit || !et.target;
         } else if (et.type === 'absoluteTime') {
           return !et.absoluteTime_DateTime || !et.target;
         } else {
@@ -734,6 +734,8 @@ function FPolicyBuilder({
     }
 
   </Space>);
+
+  // console.log(combination_Data, 'combination_Data################@@@@@@@@@');
 
   return (<>
     <FDrawer
