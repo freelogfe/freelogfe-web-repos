@@ -176,8 +176,6 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                         }: FPolicyBuilderDrawerProps) {
-  // const refContainer = React.useRef<any>(null);
-  // const refContainerContent = React.useRef<any>(null);
   const refBottomDiv = React.useRef<any>(null);
   const refMaskingContainer = React.useRef<any>(null);
   const refPolicyTitleInput = React.useRef<any>(null);
@@ -744,15 +742,7 @@ function FPolicyBuilder({
       width={720}
       topRight={DrawerTopRight}
       afterVisibleChange={onChange_DrawerVisible}
-      // destroyOnClose
     >
-      {/*<div className={styles.container} ref={refContainer}>*/}
-      {/*  <div ref={refContainerContent}>*/}
-      {/*<button onClick={() => {*/}
-      {/*  // console.log(refContainerContent.current.clientHeight, '#######224234');*/}
-      {/*  refContainer.current.scrollTop = refContainerContent.current.clientHeight;*/}
-      {/*}}>bottom*/}
-      {/*</button>*/}
       {
         showView === 'success' && (<div>
           <div className={styles.PolicyVerifySuccess}>
@@ -773,7 +763,6 @@ function FPolicyBuilder({
             <FTextBtn
               type='primary'
               onClick={() => {
-                // setCheckResult('unchecked');
                 setShowView('edit');
                 setSuccessResult(null);
               }}
@@ -841,9 +830,7 @@ function FPolicyBuilder({
               <input
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
-                // className={styles.newTitle}
                 value={titleInput}
-                // errorText={titleError}
                 onChange={(e) => {
                   onChange_TitleInput(e.target.value.trim());
                 }}
@@ -1043,12 +1030,10 @@ function FPolicyBuilder({
                                         <div style={{ width: 10 }} />
                                         <InputNumber
                                           min={1}
-                                          // placeholder={'输入交易金额'}
                                           placeholder={FUil1.I18n.message('hint_transaction_amount')}
                                           style={{ width: 120 }}
                                           value={et.amount as 0}
                                           onChange={(value) => {
-                                            // console.log(value, 'valuevaluevalue980upoaisdjfl');
                                             onChangeCombinationEvent({
                                               amount: value,
                                             }, cd.randomID, et.randomID);
@@ -1060,9 +1045,6 @@ function FPolicyBuilder({
                                           disabled
                                           style={{ width: 120 }}
                                           dataSource={currencies}
-                                          // onChange={(value) => {
-                                          //   onChangeCombinationEvent({});
-                                          // }}
                                         />
                                         <div style={{ width: 10 }} />
                                         <FContentText text={'至'} type='normal' />
@@ -1181,39 +1163,6 @@ function FPolicyBuilder({
                                           }}
                                           onClickAddStateBtn={onClickAddStateBtn}
                                         />
-                                        {/*<div>*/}
-                                        {/*  <FSelect*/}
-                                        {/*    value={et.target || undefined}*/}
-                                        {/*    placeholder='选择目标状态'*/}
-                                        {/*    style={{ width: '100%' }}*/}
-                                        {/*    dataSource={enabledTargetState}*/}
-                                        {/*    onChange={(value) => {*/}
-                                        {/*      onChangeCombinationEvent({*/}
-                                        {/*        target: value,*/}
-                                        {/*      }, cd.randomID, et.randomID);*/}
-                                        {/*    }}*/}
-                                        {/*    getPopupContainer={() => {*/}
-                                        {/*      return refMaskingContainer?.current || document.body;*/}
-                                        {/*    }}*/}
-                                        {/*    dropdownRender={menu => (<>*/}
-                                        {/*      {menu}*/}
-                                        {/*      <div className={styles.dropdownRenderAdd}>*/}
-                                        {/*        <FCircleBtn*/}
-                                        {/*          size='small'*/}
-                                        {/*          type='minor'*/}
-                                        {/*          onClick={onClickAddStateBtn}*/}
-                                        {/*        >*/}
-                                        {/*          <FPlus style={{ fontSize: 12 }} />*/}
-                                        {/*        </FCircleBtn>*/}
-                                        {/*        <div style={{ width: 5 }} />*/}
-                                        {/*        <FTextBtn*/}
-                                        {/*          type='primary'*/}
-                                        {/*          onClick={onClickAddStateBtn}*/}
-                                        {/*        >新建状态</FTextBtn>*/}
-                                        {/*      </div>*/}
-                                        {/*    </>)}*/}
-                                        {/*  />*/}
-                                        {/*</div>*/}
                                       </>)
                                     }
 
@@ -1311,8 +1260,6 @@ function FPolicyBuilder({
           </div>
         </>
       }
-      {/*  </div>*/}
-      {/*</div>*/}
 
       <FDrawer
         width={640}
@@ -1327,15 +1274,7 @@ function FPolicyBuilder({
         </div>
         <div style={{ height: 30 }} />
         <PolicyTemplates
-          // onSelect={(p) => {
-          //   // setTitle(p.title);
-          //   // onChangeTitleInput(p.title);
-          //   // onChangeTextInput(p.text);
-          //   // setTemplateVisible(false);
-          // }}
           onClickSelect={(num) => {
-            // console.log(combination_Data, 'combination_Data1111');
-            // console.log(initStates.combination_Data, 'initStates.combination_Data');
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
               return onClick_SelectTemplateBtn(num);
             }
