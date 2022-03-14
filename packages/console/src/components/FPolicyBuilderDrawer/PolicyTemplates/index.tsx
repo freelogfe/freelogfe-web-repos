@@ -3,8 +3,9 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '../../FText';
 import FCodeFormatter from '../../FCodeFormatter';
 import { FRectBtn, FTextBtn } from '../../FButton';
-import { FUtil } from '@freelog/tools-lib';
+// import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import { policyCodeTranslationToText } from '../index';
 
 interface PolicyTemplatesProps {
   onSelect?({ title, text }: { title: string, text: string }): void;
@@ -35,8 +36,8 @@ function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
   const [translation2, setTranslation2] = React.useState<string>('');
 
   AHooks.useMount(async () => {
-    const promise1 = FUtil.Format.policyCodeTranslationToText(text1, 'resource');
-    const promise2 = FUtil.Format.policyCodeTranslationToText(text2, 'resource');
+    const promise1 = policyCodeTranslationToText(text1, 'resource');
+    const promise2 = policyCodeTranslationToText(text2, 'resource');
     setTranslation1((await promise1)?.text || '');
     setTranslation2((await promise2)?.text || '');
   });

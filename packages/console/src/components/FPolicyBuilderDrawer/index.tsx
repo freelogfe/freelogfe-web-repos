@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
-// import FCodemirror from '../FCodemirror';
 import { Space, Divider, DatePicker, InputNumber, Modal, Select } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
@@ -18,12 +17,9 @@ import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '@/components/FTooltip';
-// import MonacoEditor from 'react-monaco-editor';
 import FMonacoEditor from '@/components/FMonacoEditor';
-// import fMessage from '@/components/fMessage';
 import fConfirmModal from '@/components/fConfirmModal';
 import * as AHooks from 'ahooks';
-// import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 const { compile, report } = require('@freelog/resource-policy-lang');
 
@@ -93,7 +89,7 @@ interface FPolicyBuilderDrawerStates {
 
   combination_Data: CombinationStructureType;
   combination_AddingEventStateID: string;
-  combination_FinalAuthColor: ResourceAuthColor | ExhibitAuthColor;
+  combination_FinalAuthColor: Array<'active' | 'testActive'>;
 
   code_IsDirty: boolean;
   code_IsCompiling: boolean;
@@ -151,7 +147,7 @@ const initStates: FPolicyBuilderDrawerStates = {
     },
   ],
   combination_AddingEventStateID: '',
-  combination_FinalAuthColor: [],
+  combination_FinalAuthColor: ['active'],
 
   code_IsDirty: false,
   code_IsCompiling: false,
@@ -169,6 +165,11 @@ const initStates: FPolicyBuilderDrawerStates = {
 
 const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
 const exhibitAuthColor: ExhibitAuthColor = ['active'];
+
+const authMap = {
+  active: '授权',
+  testActive: '测试授权',
+};
 
 function FPolicyBuilder({
                           visible = false,
@@ -638,7 +639,7 @@ function FPolicyBuilder({
     if (!visible) {
       resetAllStates();
     } else {
-      set_Combination_FinalAuthColor(targetType === 'resource' ? resourceAuthColor : exhibitAuthColor);
+      set_Combination_FinalAuthColor(targetType === 'resource' ? ['active', 'testActive'] : ['active']);
       refPolicyTitleInput.current.focus();
     }
   }
@@ -973,12 +974,12 @@ function FPolicyBuilder({
                                         paddingTop: 5,
                                       }}>{cd.nameError}</div>)
                                       : cd.isNameDuplicate
-                                        ? (<div style={{
-                                          color: '#EE4040',
-                                          paddingLeft: 55,
-                                          paddingTop: 5,
-                                        }}>有重复的名称</div>)
-                                        : null
+                                      ? (<div style={{
+                                        color: '#EE4040',
+                                        paddingLeft: 55,
+                                        paddingTop: 5,
+                                      }}>有重复的名称</div>)
+                                      : null
                                   }
 
                                 </>)
@@ -1007,14 +1008,8 @@ function FPolicyBuilder({
                                           }, cd.randomID);
                                         }}
                                       />
-                                      {/*<div*/}
-                                      {/*  style={{ cursor: 'pointer' }}*/}
-                                      {/*  onClick={() => {*/}
-
-                                      {/*  }}>*/}
                                       <FContentText
-                                        text={ao === 'active' ? '授权' : ao === 'testActive' ? '测试授权' : ao} />
-                                      {/*</div>*/}
+                                        text={authMap[ao]} />
                                     </Space>);
                                   })
                                 }
