@@ -86,7 +86,7 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                   }
                   {
                     r.policies.filter((p) => p.checked)
-                      .map((p) => (<label key={p.id}>{p.name}</label>))
+                      .map((p) => (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>))
                   }
                 </div>
               </a>))
@@ -151,17 +151,20 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
             .filter((rp) => rp.checked)
             .map((rp) => (<div
               className={styles.policy}
-              key={rp.id}
+              key={rp.fullInfo.policyId}
             >
               <div style={{ padding: '10px 20px 0' }}>
                 <FContentText
-                  text={rp.name}
+                  text={rp.fullInfo.policyName}
                   type='highlight'
                 />
               </div>
               <div style={{ height: 10 }} />
               <div style={{ padding: '0 20px' }}>
-                <FPolicyDisplay code={rp.text} containerHeight={300} />
+                <FPolicyDisplay
+                  fullInfo={rp.fullInfo}
+                  containerHeight={300}
+                />
               </div>
             </div>))
         }

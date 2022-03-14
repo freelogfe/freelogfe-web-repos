@@ -6,15 +6,28 @@ import { FUtil } from '@freelog/tools-lib';
 import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface FPolicyDisplayProps {
-  // code: string;
-  fullInfo: PolicyFullInfo;
+  code?: string;
+  fullInfo?: PolicyFullInfo;
   containerHeight?: string | number;
 }
 
-function FPolicyDisplay({ fullInfo, containerHeight = 'auto' }: FPolicyDisplayProps) {
+function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDisplayProps) {
   // console.log(fullInfo, 'fullInfo#############');
 
   const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
+
+  const [text, setText] = React.useState<string>('');
+
+  AHooks.useMount(async () => {
+    const { error, text } = await FUtil.Format.policyCodeTranslationToText(code || '', 'resource');
+    // const { error, text } = await policyCodeTranslationToText(code, 'resource');
+    // console.log(text, code, '@@@@@@########$#$#$#$');
+    if (error) {
+      setText('!!!解析错误\n' + '    ' + error[0]);
+      return;
+    }
+    setText(text || '');
+  });
 
   return (<div className={styles.PolicyBody}>
     <div className={styles.PolicyBodyTabs}>
@@ -44,7 +57,7 @@ function FPolicyDisplay({ fullInfo, containerHeight = 'auto' }: FPolicyDisplayPr
 
       {
         activated === 'text' && (<div style={{ width: '100%' }}>
-          <FCodeFormatter code={fullInfo.translateInfo.content} />
+          <FCodeFormatter code={code ? code : fullInfo ? fullInfo.translateInfo.content : ''} />
         </div>)
       }
 
@@ -55,7 +68,7 @@ function FPolicyDisplay({ fullInfo, containerHeight = 'auto' }: FPolicyDisplayPr
 
       {
         activated === 'code' && (<div style={{ width: '100%' }}>
-          <FCodeFormatter code={fullInfo.policyText} />
+          <FCodeFormatter code={code ? text : fullInfo ? fullInfo.policyText : ''} />
         </div>)
       }
     </div>
