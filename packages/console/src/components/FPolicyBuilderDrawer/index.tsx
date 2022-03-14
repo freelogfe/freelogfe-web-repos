@@ -1061,7 +1061,7 @@ function FPolicyBuilder({
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let payment_AmountError: string = '';
-                                              if (!POSITIVE_INTEGER.test(value)) {
+                                              if (!MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
                                                 payment_AmountError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
                                               }
                                               onChangeCombinationEvent({
