@@ -39,32 +39,34 @@ interface FPolicyBuilderDrawerProps {
 // type ResourceAuthColor = Array<'active' | 'testActive'>;
 // type ExhibitAuthColor = Array<'active'>;
 
-interface IEvent_Payment {
-  randomID: string;
-  type: 'payment';
-  amount: number | null;
-  target: string;
-}
-
-interface IEvent_RelativeTime {
-  randomID: string;
-  type: 'relativeTime';
-  num: number | null;
-  unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
-  target: string;
-}
-
-interface IEvent_AbsoluteTime {
-  randomID: string;
-  type: 'absoluteTime';
-  dateTime: Moment | null;
-  target: string;
-}
-
-interface IEvent_Terminate {
-  randomID: string;
-  type: 'terminate';
-}
+// interface IEvent_Payment {
+//   randomID: string;
+//   type: 'payment';
+//   amount: string;
+//   amountError: string;
+//   target: string;
+// }
+//
+// interface IEvent_RelativeTime {
+//   randomID: string;
+//   type: 'relativeTime';
+//   num: string;
+//   numError: string;
+//   unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
+//   target: string;
+// }
+//
+// interface IEvent_AbsoluteTime {
+//   randomID: string;
+//   type: 'absoluteTime';
+//   dateTime: Moment | null;
+//   target: string;
+// }
+//
+// interface IEvent_Terminate {
+//   randomID: string;
+//   type: 'terminate';
+// }
 
 type CombinationStructureType = {
   randomID: string;
@@ -73,7 +75,22 @@ type CombinationStructureType = {
   nameError: string;
   isNameDuplicate: boolean;
   authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'];
-  events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
+  // events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
+  events: {
+    randomID: string;
+    type: 'payment' | 'relativeTime' | 'absoluteTime' | 'terminate';
+
+    target?: string;
+
+    payment_Amount?: string;
+    payment_AmountError?: string;
+
+    relativeTime_Num?: string;
+    relativeTime_NumError?: string;
+    relativeTime_Unit?: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
+
+    absoluteTime_DateTime?: Moment | null;
+  }[];
 }[];
 
 interface FPolicyBuilderDrawerStates {
@@ -387,23 +404,25 @@ function FPolicyBuilder({
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'payment',
-        amount: null,
         target: '',
+        payment_Amount: '',
+        payment_AmountError: '',
       };
     } else if (eventType === 'relativeTime') {
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'relativeTime',
-        num: null,
-        unit: '',
         target: '',
+        relativeTime_Num: '',
+        relativeTime_NumError: '',
+        relativeTime_Unit: '',
       };
     } else if (eventType === 'absoluteTime') {
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'absoluteTime',
-        dateTime: null,
         target: '',
+        absoluteTime_DateTime: null,
       };
     } else {
       evn = {
@@ -473,9 +492,10 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'relativeTime',
-                num: 1,
-                unit: 'month',
                 target: finishRandomID,
+                relativeTime_Num: '1',
+                relativeTime_NumError: '',
+                relativeTime_Unit: 'month',
               },
             ],
           },
@@ -521,8 +541,9 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'payment',
-                amount: 10,
                 target: authRandomID,
+                payment_Amount: '10',
+                payment_AmountError: '',
               },
             ],
           },
@@ -538,9 +559,10 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'relativeTime',
-                num: 1,
-                unit: 'month',
                 target: finishRandomID,
+                relativeTime_Num: '1',
+                relativeTime_NumError: '',
+                relativeTime_Unit: 'month',
               },
             ],
           },
@@ -646,11 +668,11 @@ function FPolicyBuilder({
       || !!cd.nameError
       || cd.events.some((et) => {
         if (et.type === 'payment') {
-          return !et.amount || !et.target;
+          return !et.payment_Amount || !et.target;
         } else if (et.type === 'relativeTime') {
-          return !et.num || !et.unit || !et.target;
+          return !et.relativeTime_Num || !et.relativeTime_Unit || !et.target;
         } else if (et.type === 'absoluteTime') {
-          return !et.dateTime || !et.target;
+          return !et.absoluteTime_DateTime || !et.target;
         } else {
           return false;
         }
@@ -1028,14 +1050,14 @@ function FPolicyBuilder({
                                       et.type === 'payment' && (<div>
                                         <FContentText text={'支付'} type='normal' />
                                         <div style={{ width: 10 }} />
-                                        <InputNumber
-                                          min={1}
+                                        <FInput
+                                          // min={1}
                                           placeholder={FUil1.I18n.message('hint_transaction_amount')}
                                           style={{ width: 120 }}
-                                          value={et.amount as 0}
-                                          onChange={(value) => {
+                                          value={et.payment_Amount}
+                                          onChange={(e) => {
                                             onChangeCombinationEvent({
-                                              amount: value,
+                                              payment_Amount: e.target.value,
                                             }, cd.randomID, et.randomID);
                                           }}
                                         />
@@ -1065,28 +1087,28 @@ function FPolicyBuilder({
 
                                     {
                                       et.type === 'relativeTime' && (<div>
-                                        <InputNumber
-                                          min={1}
+                                        <FInput
+                                          // min={1}
                                           // placeholder={'输入周期数目'}
                                           placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
                                           style={{ width: 250 }}
-                                          value={et.num as number}
-                                          onChange={(value) => {
+                                          value={et.relativeTime_Num}
+                                          onChange={(e) => {
                                             onChangeCombinationEvent({
-                                              num: value,
+                                              relativeTime_Num: e.target.value,
                                             }, cd.randomID, et.randomID);
                                           }}
                                         />
                                         <div style={{ width: 10 }} />
                                         <FSelect
                                           placeholder={FUil1.I18n.message('hint_relativetime_unit')}
-                                          value={et.unit || null}
+                                          value={et.relativeTime_Unit || null}
                                           // value={''}
                                           style={{ width: 250 }}
                                           dataSource={timeUnits}
                                           onChange={(value) => {
                                             onChangeCombinationEvent({
-                                              unit: value as 'year',
+                                              relativeTime_Unit: value as 'year',
                                             }, cd.randomID, et.randomID);
                                           }}
                                         />
@@ -1113,12 +1135,12 @@ function FPolicyBuilder({
                                           format='YYYY-MM-DD HH:mm'
                                           disabledDate={disabledDate}
                                           allowClear={false}
-                                          value={et.dateTime}
+                                          value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
                                           onChange={(value, dateString) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
-                                              dateTime: mo,
+                                              absoluteTime_DateTime: mo,
                                             }, cd.randomID, et.randomID);
                                           }}
                                         />
@@ -1462,39 +1484,37 @@ async function codeToData({
           type: 'terminate',
         }]
         : v.transitions.map((vt: any) => {
-          if (vt.name === 'TransactionEvent') {
-            const event: IEvent_Payment = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'payment',
-              amount: vt.args.amount,
-              target: vt.toState,
-            };
-            return event;
-          }
-          if (vt.name === 'RelativeTimeEvent') {
-            const event: IEvent_RelativeTime = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'relativeTime',
-              num: vt.args.elapsed,
-              unit: vt.args.timeUnit,
-              target: vt.toState,
-            };
-            return event;
-          }
-          if (vt.name === 'TimeEvent') {
-            const event: IEvent_AbsoluteTime = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'absoluteTime',
-              dateTime: moment(vt.args.dateTime, FUtil.Predefined.momentDateTimeFormat),
-              target: vt.toState,
-            };
-            return event;
-          }
 
-          const event: IEvent_Terminate = {
+          let event: CombinationStructureType[number]['events'][number] = {
             randomID: FUtil.Tool.generateRandomCode(10),
             type: 'terminate',
           };
+
+          if (vt.name === 'TransactionEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'payment',
+              target: vt.toState,
+              payment_Amount: vt.args.amount,
+              payment_AmountError: '',
+            };
+          } else if (vt.name === 'RelativeTimeEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'relativeTime',
+              target: vt.toState,
+              relativeTime_Num: vt.args.elapsed,
+              relativeTime_NumError: '',
+              relativeTime_Unit: vt.args.timeUnit,
+            };
+          } else if (vt.name === 'TimeEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'absoluteTime',
+              target: vt.toState,
+              absoluteTime_DateTime: moment(vt.args.dateTime, FUtil.Predefined.momentDateTimeFormat),
+            };
+          }
           return event;
         }),
     };
@@ -1596,11 +1616,11 @@ function dataToCode(data: CombinationStructureType): string {
 
       const targetStateName: string = data.find((dt) => dt.randomID === (et as any).target)?.name || '';
       if (et.type === 'payment') {
-        result += `~freelog.TransactionEvent("${et.amount || ''}","self.account") => ${targetStateName}`;
+        result += `~freelog.TransactionEvent("${et.payment_Amount || ''}","self.account") => ${targetStateName}`;
       } else if (et.type === 'relativeTime') {
-        result += `~freelog.RelativeTimeEvent("${et.num || ''}","${et.unit}") => ${targetStateName}`;
+        result += `~freelog.RelativeTimeEvent("${et.relativeTime_Num || ''}","${et.relativeTime_Unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {
-        result += `~freelog.TimeEvent("${et.dateTime?.format(FUtil.Predefined.momentDateTimeFormat) || ''}") => ${targetStateName}`;
+        result += `~freelog.TimeEvent("${et.absoluteTime_DateTime?.format(FUtil.Predefined.momentDateTimeFormat) || ''}") => ${targetStateName}`;
       } else {
         result += 'terminate';
       }
