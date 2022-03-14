@@ -1092,7 +1092,7 @@ function FPolicyBuilder({
                                             text={'之后'}
                                           />
                                         </div>
-                                        <div className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>
+                                        {et.payment_AmountError !== '' && (<div className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>)}
                                       </>)
                                     }
 
@@ -1136,7 +1136,10 @@ function FPolicyBuilder({
                                             text={'之后'}
                                           />
                                         </div>
-                                        <div className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>
+                                        {
+                                          et.relativeTime_NumError !== '' && (<div className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>)
+                                        }
+
                                       </>)
                                     }
 
