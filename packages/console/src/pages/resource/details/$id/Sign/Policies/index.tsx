@@ -24,14 +24,14 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
   // console.log(policies, 'policies@#$rsafd980judsafsad');
 
-  if (!policies || policies.filter((p) => p.status !== 0).length === 0) {
+  if (!policies || policies.filter((p) => p.fullInfo.status !== 0).length === 0) {
     return null;
   }
 
   const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
 
   const modalPolicy = policies.find((pl) => {
-    return pl.id === visibleModalPolicyID;
+    return pl.fullInfo.policyId === visibleModalPolicyID;
   });
 
   function onChangeResourceChecked(id: string, checked: boolean) {
@@ -45,7 +45,7 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
           return {
             ...sr,
             policies: sr.policies.map((srp) => {
-              if (srp.id !== id) {
+              if (srp.fullInfo.policyId !== id) {
                 return srp;
               }
               return {
@@ -63,19 +63,19 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
     <div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>
     <div style={{ height: 5 }} />
     {
-      policies.filter((p) => p.status !== 0).map((p) => {
+      policies.filter((p) => p.fullInfo.status !== 0).map((p) => {
         return (<div
           className={styles.singPolicy}
-          key={p.id}
+          key={p.fullInfo.policyId}
         >
           <div className={styles.singPolicyTitle}>
-            <FContentText text={p.name} type='highlight' />
+            <FContentText text={p.fullInfo.policyName} type='highlight' />
             {
               !isSignedNode && (<Checkbox
                 checked={p.checked}
-                disabled={p.status === 0}
+                disabled={p.fullInfo.status === 0}
                 onChange={(e) => {
-                  onChangeResourceChecked(p.id, e.target.checked);
+                  onChangeResourceChecked(p.fullInfo.policyId, e.target.checked);
                 }}
               />)
             }
@@ -85,7 +85,8 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
           <div style={{ height: 10 }} />
           <div style={{ padding: '0 15px' }}>
             <FPolicyDisplay
-              code={p.text}
+              // code={p.fullInfo}
+              fullInfo={p.fullInfo}
               // containerHeight={170}
             />
           </div>
@@ -93,7 +94,7 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
             className={styles.PolicyFullScreenBtn}
             onClick={() => {
               // setFullScreenVisible(true);
-              setVisibleModalPolicyID(p.id);
+              setVisibleModalPolicyID(p.fullInfo.policyId);
             }}
           ><FFullScreen style={{ fontSize: 12 }} /></a>
 
@@ -113,24 +114,28 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={modalPolicy?.name || ''} type='h2' />
+        <FTitleText text={modalPolicy?.fullInfo.policyName || ''} type='h2' />
         <div style={{ width: 20 }} />
 
         {
           !isSignedNode && (<Checkbox
             checked={modalPolicy?.checked}
-            disabled={modalPolicy?.status === 0}
+            disabled={modalPolicy?.fullInfo.status === 0}
             onChange={(e) => {
-              onChangeResourceChecked(modalPolicy?.id || '', e.target.checked);
+              onChangeResourceChecked(modalPolicy?.fullInfo.policyId || '', e.target.checked);
             }}
           />)
         }
       </div>
       <div style={{ padding: '0 15px' }}>
-        <FPolicyDisplay
-          containerHeight={770}
-          code={modalPolicy?.text || ''}
-        />
+        {
+          modalPolicy && (<FPolicyDisplay
+            containerHeight={770}
+            // code={modalPolicy?.text || ''}
+            fullInfo={modalPolicy.fullInfo}
+          />)
+        }
+
       </div>
     </FModal>
   </div>);

@@ -8,6 +8,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
+import { PolicyFullInfo } from '@/type/contractTypes';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -36,12 +37,7 @@ export interface MarketResourcePageModelState {
     resourceType: string;
     status: 0 | 1;
     authProblem: boolean;
-    policies: {
-      policyId: string;
-      policyName: string;
-      policyText: string;
-      status: 0 | 1;
-    }[],
+    policies: PolicyFullInfo[],
   }[];
   signResources: {
     selected: boolean;
@@ -65,10 +61,11 @@ export interface MarketResourcePageModelState {
     }[];
     policies: {
       checked: boolean;
-      id: string;
-      status: 0 | 1;
-      name: string;
-      text: string;
+      fullInfo: PolicyFullInfo;
+      // id: string;
+      // status: 0 | 1;
+      // name: string;
+      // text: string;
     }[];
   }[];
   signedResourceExhibitID: string;
@@ -382,10 +379,7 @@ const Model: MarketResourcePageModelType = {
                   .filter((srp) => srp.status === 1)
                   .map((rsp) => ({
                     checked: false,
-                    id: rsp.policyId,
-                    name: rsp.policyName,
-                    text: rsp.policyText,
-                    status: rsp.status,
+                    fullInfo: rsp,
                   })),
               };
             }),
@@ -527,10 +521,7 @@ const Model: MarketResourcePageModelType = {
                 .filter((rsp) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
                 .map((rsp) => ({
                   checked: false,
-                  id: rsp.policyId,
-                  name: rsp.policyName,
-                  text: rsp.policyText,
-                  status: rsp.status,
+                  fullInfo: rsp,
                 }));
 
               return {
@@ -645,7 +636,7 @@ const Model: MarketResourcePageModelType = {
           policyIDs: sr.policies.filter((p) => {
             return p.checked;
           }).map((p) => {
-            return p.id;
+            return p.fullInfo.policyId;
           }),
         };
       });
@@ -733,7 +724,7 @@ const Model: MarketResourcePageModelType = {
             ...sr.policies.filter((srp) => srp.checked)
               .map((srp) => {
                 return {
-                  policyId: srp.id,
+                  policyId: srp.fullInfo.policyId,
                 };
               }),
           ],
@@ -904,12 +895,7 @@ type HandleResourceBatchInfoReturn = {
   latestVersion: string;
   coverImages: string[];
   status: 0 | 1;
-  policies: {
-    policyId: string;
-    policyName: string;
-    policyText: string;
-    status: 0 | 1;
-  }[];
+  policies: PolicyFullInfo[];
   resourceVersions: {
     createDate: string;
     version: string;
@@ -932,6 +918,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
   const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: resourceIDs.join(','),
     isLoadPolicyInfo: 1,
+    isTranslate: 1,
     isLoadLatestVersionInfo: 1,
     projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,baseUpcastResources,coverImages,tags,intro',
   };
