@@ -16,9 +16,9 @@ import { FUtil } from '@freelog/tools-lib';
 import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
-import FTooltip from '@/components/FTooltip';
-import FMonacoEditor from '@/components/FMonacoEditor';
-import fConfirmModal from '@/components/fConfirmModal';
+import FTooltip from '../FTooltip';
+import FMonacoEditor from '../FMonacoEditor';
+import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 
 const { compile, report } = require('@freelog/resource-policy-lang');
@@ -36,8 +36,8 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
-type ResourceAuthColor = Array<'active' | 'testActive'>;
-type ExhibitAuthColor = Array<'active'>;
+// type ResourceAuthColor = Array<'active' | 'testActive'>;
+// type ExhibitAuthColor = Array<'active'>;
 
 interface IEvent_Payment {
   randomID: string;
@@ -72,10 +72,7 @@ type CombinationStructureType = {
   name: string;
   nameError: string;
   isNameDuplicate: boolean;
-  // authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
-  // authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
-  authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
-  // authorizationChecked: Partial<ResourceAuthColor> | Partial<ExhibitAuthColor>;
+  authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'];
   events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
 }[];
 
@@ -163,8 +160,8 @@ const initStates: FPolicyBuilderDrawerStates = {
   templateVisible: false,
 };
 
-const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
-const exhibitAuthColor: ExhibitAuthColor = ['active'];
+// const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
+// const exhibitAuthColor: ExhibitAuthColor = ['active'];
 
 const authMap = {
   active: '授权',
@@ -1518,7 +1515,7 @@ async function codeToData({
       name: k,
       nameError: '',
       isNameDuplicate: false,
-      authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      authorizationOptions: targetType === 'resource' ? ['active', 'testActive'] : ['active'],
       authorizationChecked: v.serviceStates,
       events: v.transitions.length === 0
         ? [{
