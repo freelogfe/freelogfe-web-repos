@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
-// import FCodemirror from '../FCodemirror';
 import { Space, Divider, DatePicker, InputNumber, Modal, Select } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
@@ -17,15 +16,12 @@ import { FUtil } from '@freelog/tools-lib';
 import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
-import FTooltip from '@/components/FTooltip';
-// import MonacoEditor from 'react-monaco-editor';
-import FMonacoEditor from '@/components/FMonacoEditor';
-// import fMessage from '@/components/fMessage';
-import fConfirmModal from '@/components/fConfirmModal';
+import FTooltip from '../FTooltip';
+import FMonacoEditor from '../FMonacoEditor';
+import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
-// import { JS_VARIABLE_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
-const { compile } = require('@freelog/resource-policy-lang');
+const { compile, report } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -40,35 +36,37 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
-type ResourceAuthColor = Array<'active' | 'testActive'>;
-type ExhibitAuthColor = Array<'active'>;
+// type ResourceAuthColor = Array<'active' | 'testActive'>;
+// type ExhibitAuthColor = Array<'active'>;
 
-interface IEvent_Payment {
-  randomID: string;
-  type: 'payment';
-  amount: number | null;
-  target: string;
-}
-
-interface IEvent_RelativeTime {
-  randomID: string;
-  type: 'relativeTime';
-  num: number | null;
-  unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
-  target: string;
-}
-
-interface IEvent_AbsoluteTime {
-  randomID: string;
-  type: 'absoluteTime';
-  dateTime: Moment | null;
-  target: string;
-}
-
-interface IEvent_Terminate {
-  randomID: string;
-  type: 'terminate';
-}
+// interface IEvent_Payment {
+//   randomID: string;
+//   type: 'payment';
+//   amount: string;
+//   amountError: string;
+//   target: string;
+// }
+//
+// interface IEvent_RelativeTime {
+//   randomID: string;
+//   type: 'relativeTime';
+//   num: string;
+//   numError: string;
+//   unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
+//   target: string;
+// }
+//
+// interface IEvent_AbsoluteTime {
+//   randomID: string;
+//   type: 'absoluteTime';
+//   dateTime: Moment | null;
+//   target: string;
+// }
+//
+// interface IEvent_Terminate {
+//   randomID: string;
+//   type: 'terminate';
+// }
 
 type CombinationStructureType = {
   randomID: string;
@@ -76,11 +74,23 @@ type CombinationStructureType = {
   name: string;
   nameError: string;
   isNameDuplicate: boolean;
-  // authorizationOptions: ResourceAuthColor | ExhibitAuthColor;
-  // authorizationChecked: CombinationStructureType[number]['authorizationOptions'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
-  authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'] extends ResourceAuthColor ? Partial<ResourceAuthColor> : Partial<ExhibitAuthColor>;
-  // authorizationChecked: Partial<ResourceAuthColor> | Partial<ExhibitAuthColor>;
-  events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
+  authorizationChecked: FPolicyBuilderDrawerStates['combination_FinalAuthColor'];
+  // events: Array<IEvent_Payment | IEvent_RelativeTime | IEvent_AbsoluteTime | IEvent_Terminate>;
+  events: {
+    randomID: string;
+    type: 'payment' | 'relativeTime' | 'absoluteTime' | 'terminate';
+
+    target?: string;
+
+    payment_Amount?: string;
+    payment_AmountError?: string;
+
+    relativeTime_Num?: string;
+    relativeTime_NumError?: string;
+    relativeTime_Unit?: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
+
+    absoluteTime_DateTime?: Moment | null;
+  }[];
 }[];
 
 interface FPolicyBuilderDrawerStates {
@@ -93,7 +103,7 @@ interface FPolicyBuilderDrawerStates {
 
   combination_Data: CombinationStructureType;
   combination_AddingEventStateID: string;
-  combination_FinalAuthColor: ResourceAuthColor | ExhibitAuthColor;
+  combination_FinalAuthColor: Array<'active' | 'testActive'>;
 
   code_IsDirty: boolean;
   code_IsCompiling: boolean;
@@ -151,7 +161,7 @@ const initStates: FPolicyBuilderDrawerStates = {
     },
   ],
   combination_AddingEventStateID: '',
-  combination_FinalAuthColor: [],
+  combination_FinalAuthColor: ['active'],
 
   code_IsDirty: false,
   code_IsCompiling: false,
@@ -167,8 +177,13 @@ const initStates: FPolicyBuilderDrawerStates = {
   templateVisible: false,
 };
 
-const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
-const exhibitAuthColor: ExhibitAuthColor = ['active'];
+// const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
+// const exhibitAuthColor: ExhibitAuthColor = ['active'];
+
+const authMap = {
+  active: '授权',
+  testActive: '测试授权',
+};
 
 function FPolicyBuilder({
                           visible = false,
@@ -178,8 +193,6 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                         }: FPolicyBuilderDrawerProps) {
-  // const refContainer = React.useRef<any>(null);
-  // const refContainerContent = React.useRef<any>(null);
   const refBottomDiv = React.useRef<any>(null);
   const refMaskingContainer = React.useRef<any>(null);
   const refPolicyTitleInput = React.useRef<any>(null);
@@ -338,7 +351,7 @@ function FPolicyBuilder({
   }
 
   function onClickAddStateBtn() {
-    console.log('********823u4928347923');
+    // console.log('********823u4928347923');
     const results: FPolicyBuilderDrawerStates['combination_Data'] = [
       ...combination_Data,
       {
@@ -391,23 +404,25 @@ function FPolicyBuilder({
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'payment',
-        amount: null,
         target: '',
+        payment_Amount: '',
+        payment_AmountError: '',
       };
     } else if (eventType === 'relativeTime') {
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'relativeTime',
-        num: null,
-        unit: '',
         target: '',
+        relativeTime_Num: '',
+        relativeTime_NumError: '',
+        relativeTime_Unit: '',
       };
     } else if (eventType === 'absoluteTime') {
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'absoluteTime',
-        dateTime: null,
         target: '',
+        absoluteTime_DateTime: null,
       };
     } else {
       evn = {
@@ -477,9 +492,10 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'relativeTime',
-                num: 1,
-                unit: 'month',
                 target: finishRandomID,
+                relativeTime_Num: '1',
+                relativeTime_NumError: '',
+                relativeTime_Unit: 'month',
               },
             ],
           },
@@ -525,8 +541,9 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'payment',
-                amount: 10,
                 target: authRandomID,
+                payment_Amount: '10',
+                payment_AmountError: '',
               },
             ],
           },
@@ -542,9 +559,10 @@ function FPolicyBuilder({
               {
                 randomID: FUtil.Tool.generateRandomCode(10),
                 type: 'relativeTime',
-                num: 1,
-                unit: 'month',
                 target: finishRandomID,
+                relativeTime_Num: '1',
+                relativeTime_NumError: '',
+                relativeTime_Unit: 'month',
               },
             ],
           },
@@ -583,7 +601,7 @@ function FPolicyBuilder({
         return;
       }
 
-      const { error, text } = await FUtil.Format.policyCodeTranslationToText(code_Input, targetType);
+      const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
 
       if (error) {
@@ -611,7 +629,7 @@ function FPolicyBuilder({
       const {
         error,
         text: translationText,
-      } = await FUtil.Format.policyCodeTranslationToText(combinationCode, targetType);
+      } = await policyCodeTranslationToText(combinationCode, targetType);
       setIsVerifying(false);
       if (error) {
         setShowView('fail');
@@ -638,7 +656,7 @@ function FPolicyBuilder({
     if (!visible) {
       resetAllStates();
     } else {
-      set_Combination_FinalAuthColor(targetType === 'resource' ? resourceAuthColor : exhibitAuthColor);
+      set_Combination_FinalAuthColor(targetType === 'resource' ? ['active', 'testActive'] : ['active']);
       refPolicyTitleInput.current.focus();
     }
   }
@@ -650,11 +668,11 @@ function FPolicyBuilder({
       || !!cd.nameError
       || cd.events.some((et) => {
         if (et.type === 'payment') {
-          return !et.amount || !et.target;
+          return et.payment_Amount === '' || et.payment_AmountError !== '' || !et.target;
         } else if (et.type === 'relativeTime') {
-          return !et.num || !et.unit || !et.target;
+          return et.relativeTime_Num === '' || et.relativeTime_NumError !== '' || !et.relativeTime_Unit || !et.target;
         } else if (et.type === 'absoluteTime') {
-          return !et.dateTime || !et.target;
+          return !et.absoluteTime_DateTime || !et.target;
         } else {
           return false;
         }
@@ -717,6 +735,8 @@ function FPolicyBuilder({
 
   </Space>);
 
+  // console.log(combination_Data, 'combination_Data################@@@@@@@@@');
+
   return (<>
     <FDrawer
       title={<Space size={10}>
@@ -746,15 +766,7 @@ function FPolicyBuilder({
       width={720}
       topRight={DrawerTopRight}
       afterVisibleChange={onChange_DrawerVisible}
-      // destroyOnClose
     >
-      {/*<div className={styles.container} ref={refContainer}>*/}
-      {/*  <div ref={refContainerContent}>*/}
-      {/*<button onClick={() => {*/}
-      {/*  // console.log(refContainerContent.current.clientHeight, '#######224234');*/}
-      {/*  refContainer.current.scrollTop = refContainerContent.current.clientHeight;*/}
-      {/*}}>bottom*/}
-      {/*</button>*/}
       {
         showView === 'success' && (<div>
           <div className={styles.PolicyVerifySuccess}>
@@ -775,7 +787,6 @@ function FPolicyBuilder({
             <FTextBtn
               type='primary'
               onClick={() => {
-                // setCheckResult('unchecked');
                 setShowView('edit');
                 setSuccessResult(null);
               }}
@@ -843,9 +854,7 @@ function FPolicyBuilder({
               <input
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
-                // className={styles.newTitle}
                 value={titleInput}
-                // errorText={titleError}
                 onChange={(e) => {
                   onChange_TitleInput(e.target.value.trim());
                 }}
@@ -973,12 +982,12 @@ function FPolicyBuilder({
                                         paddingTop: 5,
                                       }}>{cd.nameError}</div>)
                                       : cd.isNameDuplicate
-                                        ? (<div style={{
-                                          color: '#EE4040',
-                                          paddingLeft: 55,
-                                          paddingTop: 5,
-                                        }}>有重复的名称</div>)
-                                        : null
+                                      ? (<div style={{
+                                        color: '#EE4040',
+                                        paddingLeft: 55,
+                                        paddingTop: 5,
+                                      }}>有重复的名称</div>)
+                                      : null
                                   }
 
                                 </>)
@@ -1007,14 +1016,8 @@ function FPolicyBuilder({
                                           }, cd.randomID);
                                         }}
                                       />
-                                      {/*<div*/}
-                                      {/*  style={{ cursor: 'pointer' }}*/}
-                                      {/*  onClick={() => {*/}
-
-                                      {/*  }}>*/}
                                       <FContentText
-                                        text={ao === 'active' ? '授权' : ao === 'testActive' ? '测试授权' : ao} />
-                                      {/*</div>*/}
+                                        text={authMap[ao]} />
                                     </Space>);
                                   })
                                 }
@@ -1046,82 +1049,95 @@ function FPolicyBuilder({
                                     }
 
                                     {
-                                      et.type === 'payment' && (<div>
-                                        <FContentText text={'支付'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <InputNumber
-                                          min={1}
-                                          // placeholder={'输入交易金额'}
-                                          placeholder={FUil1.I18n.message('hint_transaction_amount')}
-                                          style={{ width: 120 }}
-                                          value={et.amount as 0}
-                                          onChange={(value) => {
-                                            // console.log(value, 'valuevaluevalue980upoaisdjfl');
-                                            onChangeCombinationEvent({
-                                              amount: value,
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'feather'}
-                                          disabled
-                                          style={{ width: 120 }}
-                                          dataSource={currencies}
-                                          // onChange={(value) => {
-                                          //   onChangeCombinationEvent({});
-                                          // }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText text={'至'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'my'}
-                                          disabled
-                                          style={{ width: 180 }}
-                                          dataSource={accounts}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText
-                                          type='normal'
-                                          text={'之后'}
-                                        />
-                                      </div>)
+                                      et.type === 'payment' && (<>
+                                        <div>
+                                          <FContentText text={'支付'} type='normal' />
+                                          <div style={{ width: 10 }} />
+                                          <FInput
+                                            // min={1}
+                                            placeholder={FUil1.I18n.message('hint_transaction_amount')}
+                                            style={{ width: 120 }}
+                                            value={et.payment_Amount}
+                                            onChange={(e) => {
+                                              const value: string = e.target.value;
+                                              let payment_AmountError: string = '';
+                                              if (!MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
+                                                payment_AmountError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                              }
+                                              onChangeCombinationEvent({
+                                                payment_Amount: e.target.value,
+                                                payment_AmountError: payment_AmountError,
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            value={'feather'}
+                                            disabled
+                                            style={{ width: 120 }}
+                                            dataSource={currencies}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText text={'至'} type='normal' />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            value={'my'}
+                                            disabled
+                                            style={{ width: 180 }}
+                                            dataSource={accounts}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText
+                                            type='normal'
+                                            text={'之后'}
+                                          />
+                                        </div>
+                                        <div className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>
+                                      </>)
                                     }
 
                                     {
-                                      et.type === 'relativeTime' && (<div>
-                                        <InputNumber
-                                          min={1}
-                                          // placeholder={'输入周期数目'}
-                                          placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
-                                          style={{ width: 250 }}
-                                          value={et.num as number}
-                                          onChange={(value) => {
-                                            onChangeCombinationEvent({
-                                              num: value,
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          placeholder={FUil1.I18n.message('hint_relativetime_unit')}
-                                          value={et.unit || null}
-                                          // value={''}
-                                          style={{ width: 250 }}
-                                          dataSource={timeUnits}
-                                          onChange={(value) => {
-                                            onChangeCombinationEvent({
-                                              unit: value as 'year',
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText
-                                          type='normal'
-                                          text={'之后'}
-                                        />
-                                      </div>)
+                                      et.type === 'relativeTime' && (<>
+                                        <div>
+                                          <FInput
+                                            // min={1}
+                                            // placeholder={'输入周期数目'}
+                                            placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
+                                            style={{ width: 250 }}
+                                            value={et.relativeTime_Num}
+                                            onChange={(e) => {
+                                              const value: string = e.target.value;
+                                              let relativeTime_NumError: string = '';
+                                              if (!POSITIVE_INTEGER.test(value)) {
+                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                              }
+                                              onChangeCombinationEvent({
+                                                relativeTime_Num: value,
+                                                relativeTime_NumError: relativeTime_NumError,
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            placeholder={FUil1.I18n.message('hint_relativetime_unit')}
+                                            value={et.relativeTime_Unit || null}
+                                            // value={''}
+                                            style={{ width: 250 }}
+                                            dataSource={timeUnits}
+                                            onChange={(value) => {
+                                              onChangeCombinationEvent({
+                                                relativeTime_Unit: value as 'year',
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText
+                                            type='normal'
+                                            text={'之后'}
+                                          />
+                                        </div>
+                                        <div className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>
+                                      </>)
                                     }
 
                                     {
@@ -1139,12 +1155,12 @@ function FPolicyBuilder({
                                           format='YYYY-MM-DD HH:mm'
                                           disabledDate={disabledDate}
                                           allowClear={false}
-                                          value={et.dateTime}
+                                          value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
                                           onChange={(value, dateString) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
-                                              dateTime: mo,
+                                              absoluteTime_DateTime: mo,
                                             }, cd.randomID, et.randomID);
                                           }}
                                         />
@@ -1189,39 +1205,6 @@ function FPolicyBuilder({
                                           }}
                                           onClickAddStateBtn={onClickAddStateBtn}
                                         />
-                                        {/*<div>*/}
-                                        {/*  <FSelect*/}
-                                        {/*    value={et.target || undefined}*/}
-                                        {/*    placeholder='选择目标状态'*/}
-                                        {/*    style={{ width: '100%' }}*/}
-                                        {/*    dataSource={enabledTargetState}*/}
-                                        {/*    onChange={(value) => {*/}
-                                        {/*      onChangeCombinationEvent({*/}
-                                        {/*        target: value,*/}
-                                        {/*      }, cd.randomID, et.randomID);*/}
-                                        {/*    }}*/}
-                                        {/*    getPopupContainer={() => {*/}
-                                        {/*      return refMaskingContainer?.current || document.body;*/}
-                                        {/*    }}*/}
-                                        {/*    dropdownRender={menu => (<>*/}
-                                        {/*      {menu}*/}
-                                        {/*      <div className={styles.dropdownRenderAdd}>*/}
-                                        {/*        <FCircleBtn*/}
-                                        {/*          size='small'*/}
-                                        {/*          type='minor'*/}
-                                        {/*          onClick={onClickAddStateBtn}*/}
-                                        {/*        >*/}
-                                        {/*          <FPlus style={{ fontSize: 12 }} />*/}
-                                        {/*        </FCircleBtn>*/}
-                                        {/*        <div style={{ width: 5 }} />*/}
-                                        {/*        <FTextBtn*/}
-                                        {/*          type='primary'*/}
-                                        {/*          onClick={onClickAddStateBtn}*/}
-                                        {/*        >新建状态</FTextBtn>*/}
-                                        {/*      </div>*/}
-                                        {/*    </>)}*/}
-                                        {/*  />*/}
-                                        {/*</div>*/}
                                       </>)
                                     }
 
@@ -1319,8 +1302,6 @@ function FPolicyBuilder({
           </div>
         </>
       }
-      {/*  </div>*/}
-      {/*</div>*/}
 
       <FDrawer
         width={640}
@@ -1335,15 +1316,7 @@ function FPolicyBuilder({
         </div>
         <div style={{ height: 30 }} />
         <PolicyTemplates
-          // onSelect={(p) => {
-          //   // setTitle(p.title);
-          //   // onChangeTitleInput(p.title);
-          //   // onChangeTextInput(p.text);
-          //   // setTemplateVisible(false);
-          // }}
           onClickSelect={(num) => {
-            // console.log(combination_Data, 'combination_Data1111');
-            // console.log(initStates.combination_Data, 'initStates.combination_Data');
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
               return onClick_SelectTemplateBtn(num);
             }
@@ -1523,7 +1496,7 @@ async function codeToData({
       name: k,
       nameError: '',
       isNameDuplicate: false,
-      authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      authorizationOptions: targetType === 'resource' ? ['active', 'testActive'] : ['active'],
       authorizationChecked: v.serviceStates,
       events: v.transitions.length === 0
         ? [{
@@ -1531,39 +1504,37 @@ async function codeToData({
           type: 'terminate',
         }]
         : v.transitions.map((vt: any) => {
-          if (vt.name === 'TransactionEvent') {
-            const event: IEvent_Payment = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'payment',
-              amount: vt.args.amount,
-              target: vt.toState,
-            };
-            return event;
-          }
-          if (vt.name === 'RelativeTimeEvent') {
-            const event: IEvent_RelativeTime = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'relativeTime',
-              num: vt.args.elapsed,
-              unit: vt.args.timeUnit,
-              target: vt.toState,
-            };
-            return event;
-          }
-          if (vt.name === 'TimeEvent') {
-            const event: IEvent_AbsoluteTime = {
-              randomID: FUtil.Tool.generateRandomCode(10),
-              type: 'absoluteTime',
-              dateTime: moment(vt.args.dateTime, FUtil.Predefined.momentDateTimeFormat),
-              target: vt.toState,
-            };
-            return event;
-          }
 
-          const event: IEvent_Terminate = {
+          let event: CombinationStructureType[number]['events'][number] = {
             randomID: FUtil.Tool.generateRandomCode(10),
             type: 'terminate',
           };
+
+          if (vt.name === 'TransactionEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'payment',
+              target: vt.toState,
+              payment_Amount: vt.args.amount,
+              payment_AmountError: '',
+            };
+          } else if (vt.name === 'RelativeTimeEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'relativeTime',
+              target: vt.toState,
+              relativeTime_Num: vt.args.elapsed,
+              relativeTime_NumError: '',
+              relativeTime_Unit: vt.args.timeUnit,
+            };
+          } else if (vt.name === 'TimeEvent') {
+            event = {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'absoluteTime',
+              target: vt.toState,
+              absoluteTime_DateTime: moment(vt.args.dateTime, FUtil.Predefined.momentDateTimeFormat),
+            };
+          }
           return event;
         }),
     };
@@ -1665,11 +1636,11 @@ function dataToCode(data: CombinationStructureType): string {
 
       const targetStateName: string = data.find((dt) => dt.randomID === (et as any).target)?.name || '';
       if (et.type === 'payment') {
-        result += `~freelog.TransactionEvent("${et.amount || ''}","self.account") => ${targetStateName}`;
+        result += `~freelog.TransactionEvent("${et.payment_Amount || ''}","self.account") => ${targetStateName}`;
       } else if (et.type === 'relativeTime') {
-        result += `~freelog.RelativeTimeEvent("${et.num || ''}","${et.unit}") => ${targetStateName}`;
+        result += `~freelog.RelativeTimeEvent("${et.relativeTime_Num || ''}","${et.relativeTime_Unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {
-        result += `~freelog.TimeEvent("${et.dateTime?.format(FUtil.Predefined.momentDateTimeFormat) || ''}") => ${targetStateName}`;
+        result += `~freelog.TimeEvent("${et.absoluteTime_DateTime?.format(FUtil.Predefined.momentDateTimeFormat) || ''}") => ${targetStateName}`;
       } else {
         result += 'terminate';
       }
@@ -1777,3 +1748,38 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
     />
   </div>);
 }
+
+/**
+ * 根据策略代码和标的物类型，生成对应的翻译
+ * @param code 策略代码
+ * @param targetType 标的物类型
+ */
+export async function policyCodeTranslationToText(code: string, targetType: string): Promise<{
+  error: string[] | null;
+  text?: string;
+}> {
+  try {
+    const result = await compile(
+      code,
+      targetType,
+      FUtil.Format.completeUrlByDomain('qi'),
+      window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev',
+    );
+    const rrr = report(result.state_machine);
+    // console.log(rrr, 'rrr@#$@#$@#$44444$$$$$$$$');
+    return {
+      error: null,
+      text: rrr.content,
+    };
+  } catch (err) {
+    return {
+      error: [err.message],
+    };
+  }
+}
+
+// 正整数
+const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
+
+// 最多两位小数的正数
+const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
