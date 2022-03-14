@@ -239,7 +239,7 @@ export function retrievePayPassword() {
   return `/retrievePayPassword`;
 }
 
-// 钱包
+// 我的钱包
 // interface WalletParamsType {
 // }
 
@@ -247,6 +247,7 @@ export function wallet() {
   return `/logged/wallet`;
 }
 
+// 我的合约
 // interface ContractParamsType {
 // }
 
@@ -254,9 +255,9 @@ export function contract() {
   return `/logged/contract`;
 }
 
+// 个人设置
 // interface SettingParamsType {
 // }
-
 export function setting() {
   return `/logged/setting`;
 }
