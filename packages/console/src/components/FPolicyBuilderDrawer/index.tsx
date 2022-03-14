@@ -1049,77 +1049,95 @@ function FPolicyBuilder({
                                     }
 
                                     {
-                                      et.type === 'payment' && (<div>
-                                        <FContentText text={'支付'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <FInput
-                                          // min={1}
-                                          placeholder={FUil1.I18n.message('hint_transaction_amount')}
-                                          style={{ width: 120 }}
-                                          value={et.payment_Amount}
-                                          onChange={(e) => {
-                                            onChangeCombinationEvent({
-                                              payment_Amount: e.target.value,
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'feather'}
-                                          disabled
-                                          style={{ width: 120 }}
-                                          dataSource={currencies}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText text={'至'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'my'}
-                                          disabled
-                                          style={{ width: 180 }}
-                                          dataSource={accounts}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText
-                                          type='normal'
-                                          text={'之后'}
-                                        />
-                                      </div>)
+                                      et.type === 'payment' && (<>
+                                        <div>
+                                          <FContentText text={'支付'} type='normal' />
+                                          <div style={{ width: 10 }} />
+                                          <FInput
+                                            // min={1}
+                                            placeholder={FUil1.I18n.message('hint_transaction_amount')}
+                                            style={{ width: 120 }}
+                                            value={et.payment_Amount}
+                                            onChange={(e) => {
+                                              const value: string = e.target.value;
+                                              let payment_AmountError: string = '';
+                                              if (!POSITIVE_INTEGER.test(value)) {
+                                                payment_AmountError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                              }
+                                              onChangeCombinationEvent({
+                                                payment_Amount: e.target.value,
+                                                payment_AmountError: payment_AmountError,
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            value={'feather'}
+                                            disabled
+                                            style={{ width: 120 }}
+                                            dataSource={currencies}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText text={'至'} type='normal' />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            value={'my'}
+                                            disabled
+                                            style={{ width: 180 }}
+                                            dataSource={accounts}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText
+                                            type='normal'
+                                            text={'之后'}
+                                          />
+                                        </div>
+                                        <div className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>
+                                      </>)
                                     }
 
                                     {
-                                      et.type === 'relativeTime' && (<div>
-                                        <FInput
-                                          // min={1}
-                                          // placeholder={'输入周期数目'}
-                                          placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
-                                          style={{ width: 250 }}
-                                          value={et.relativeTime_Num}
-                                          onChange={(e) => {
-                                            onChangeCombinationEvent({
-                                              relativeTime_Num: e.target.value,
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          placeholder={FUil1.I18n.message('hint_relativetime_unit')}
-                                          value={et.relativeTime_Unit || null}
-                                          // value={''}
-                                          style={{ width: 250 }}
-                                          dataSource={timeUnits}
-                                          onChange={(value) => {
-                                            onChangeCombinationEvent({
-                                              relativeTime_Unit: value as 'year',
-                                            }, cd.randomID, et.randomID);
-                                          }}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText
-                                          type='normal'
-                                          text={'之后'}
-                                        />
-                                      </div>)
+                                      et.type === 'relativeTime' && (<>
+                                        <div>
+                                          <FInput
+                                            // min={1}
+                                            // placeholder={'输入周期数目'}
+                                            placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
+                                            style={{ width: 250 }}
+                                            value={et.relativeTime_Num}
+                                            onChange={(e) => {
+                                              const value: string = e.target.value;
+                                              let relativeTime_NumError: string = '';
+                                              if (!POSITIVE_INTEGER.test(value)) {
+                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                              }
+                                              onChangeCombinationEvent({
+                                                relativeTime_Num: value,
+                                                relativeTime_NumError: relativeTime_NumError,
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FSelect
+                                            placeholder={FUil1.I18n.message('hint_relativetime_unit')}
+                                            value={et.relativeTime_Unit || null}
+                                            // value={''}
+                                            style={{ width: 250 }}
+                                            dataSource={timeUnits}
+                                            onChange={(value) => {
+                                              onChangeCombinationEvent({
+                                                relativeTime_Unit: value as 'year',
+                                              }, cd.randomID, et.randomID);
+                                            }}
+                                          />
+                                          <div style={{ width: 10 }} />
+                                          <FContentText
+                                            type='normal'
+                                            text={'之后'}
+                                          />
+                                        </div>
+                                        <div className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>
+                                      </>)
                                     }
 
                                     {
@@ -1759,3 +1777,9 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
     };
   }
 }
+
+// 正整数
+const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
+
+// 最多两位小数的正数
+const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
