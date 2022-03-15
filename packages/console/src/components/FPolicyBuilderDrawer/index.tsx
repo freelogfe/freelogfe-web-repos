@@ -20,6 +20,7 @@ import FTooltip from '../FTooltip';
 import FMonacoEditor from '../FMonacoEditor';
 import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
+import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 
 const { compile, report } = require('@freelog/resource-policy-lang');
 
@@ -1092,7 +1093,8 @@ function FPolicyBuilder({
                                             text={'之后'}
                                           />
                                         </div>
-                                        {et.payment_AmountError !== '' && (<div className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>)}
+                                        {et.payment_AmountError !== '' && (<div
+                                          className={styles.compositionStateBodyEventError}>{et.payment_AmountError}</div>)}
                                       </>)
                                     }
 
@@ -1137,7 +1139,8 @@ function FPolicyBuilder({
                                           />
                                         </div>
                                         {
-                                          et.relativeTime_NumError !== '' && (<div className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>)
+                                          et.relativeTime_NumError !== '' && (<div
+                                            className={styles.compositionStateBodyEventError}>{et.relativeTime_NumError}</div>)
                                         }
 
                                       </>)
@@ -1338,94 +1341,106 @@ function FPolicyBuilder({
         />
       </FDrawer>
 
-      <FDrawer
-        width={640}
+      <FAddingEventDrawer
         visible={!!combination_AddingEventStateID}
-        title={'添加事件或指令'}
+        disabledTerminateEvent={!!(combination_Data.find((cd) => {
+          return cd.randomID === combination_AddingEventStateID;
+        })?.events.length)}
         onClose={() => {
           set_Combination_AddingEventStateID('');
         }}
-      >
-        <FTitleText type='h3' text={'事件'} />
-        <div style={{ height: 20 }} />
-        <div className={styles.templateEvent}>
-          <div>
-            <div style={{ width: 130 }}>
-              <FContentText type='normal' text={'相对时间事件'} />
-            </div>
-            <div>
-              <FContentText type='negative' text={'示例：1 周之后'} />
-            </div>
-          </div>
-          <FRectBtn
-            type='secondary'
-            size='small'
-            onClick={() => {
-              onClickAddEventBtn('relativeTime');
-            }}>选择</FRectBtn>
-        </div>
+        onSelectEvent={(type) => {
+          onClickAddEventBtn(type);
+        }}
+      />
+      {/*<FDrawer*/}
+      {/*  width={640}*/}
+      {/*  visible={!!combination_AddingEventStateID}*/}
+      {/*  title={'添加事件或指令'}*/}
+      {/*  onClose={() => {*/}
+      {/*    set_Combination_AddingEventStateID('');*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <FTitleText type='h3' text={'事件'} />*/}
+      {/*  <div style={{ height: 20 }} />*/}
+      {/*  <div className={styles.templateEvent}>*/}
+      {/*    <div>*/}
+      {/*      <div style={{ width: 130 }}>*/}
+      {/*        <FContentText type='normal' text={'相对时间事件'} />*/}
+      {/*      </div>*/}
+      {/*      <div>*/}
+      {/*        <FContentText type='negative' text={'示例：1 周之后'} />*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*    <FRectBtn*/}
+      {/*      type='secondary'*/}
+      {/*      size='small'*/}
+      {/*      onClick={() => {*/}
+      {/*        onClickAddEventBtn('relativeTime');*/}
+      {/*      }}>选择</FRectBtn>*/}
+      {/*  </div>*/}
 
-        <div style={{ height: 10 }} />
+      {/*  <div style={{ height: 10 }} />*/}
 
-        <div className={styles.templateEvent}>
-          <div>
-            <div style={{ width: 130 }}>
-              <FContentText type='normal' text={'绝对时间事件'} />
-            </div>
-            <div>
-              <FContentText type='negative' text={'示例：于 2021/05/03'} />
-            </div>
-          </div>
-          <FRectBtn
-            type='secondary'
-            size='small'
-            onClick={() => {
-              onClickAddEventBtn('absoluteTime');
-            }}>选择</FRectBtn>
-        </div>
+      {/*  <div className={styles.templateEvent}>*/}
+      {/*    <div>*/}
+      {/*      <div style={{ width: 130 }}>*/}
+      {/*        <FContentText type='normal' text={'绝对时间事件'} />*/}
+      {/*      </div>*/}
+      {/*      <div>*/}
+      {/*        <FContentText type='negative' text={'示例：于 2021/05/03'} />*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*    <FRectBtn*/}
+      {/*      type='secondary'*/}
+      {/*      size='small'*/}
+      {/*      onClick={() => {*/}
+      {/*        onClickAddEventBtn('absoluteTime');*/}
+      {/*      }}>选择</FRectBtn>*/}
+      {/*  </div>*/}
 
-        <div style={{ height: 10 }} />
+      {/*  <div style={{ height: 10 }} />*/}
 
-        <div className={styles.templateEvent}>
-          <div>
-            <div style={{ width: 130 }}>
-              <FContentText type='normal' text={'支付事件'} />
-            </div>
-            <div>
-              <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />
-            </div>
-          </div>
-          <FRectBtn
-            type='secondary'
-            size='small'
-            onClick={() => {
-              onClickAddEventBtn('payment');
-            }}
-          >选择</FRectBtn>
-        </div>
+      {/*  <div className={styles.templateEvent}>*/}
+      {/*    <div>*/}
+      {/*      <div style={{ width: 130 }}>*/}
+      {/*        <FContentText type='normal' text={'支付事件'} />*/}
+      {/*      </div>*/}
+      {/*      <div>*/}
+      {/*        <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*    <FRectBtn*/}
+      {/*      type='secondary'*/}
+      {/*      size='small'*/}
+      {/*      onClick={() => {*/}
+      {/*        onClickAddEventBtn('payment');*/}
+      {/*      }}*/}
+      {/*    >选择</FRectBtn>*/}
+      {/*  </div>*/}
 
-        <div style={{ height: 30 }} />
+      {/*  <div style={{ height: 30 }} />*/}
 
-        <FTitleText type='h3' text={'指令'} />
+      {/*  <FTitleText type='h3' text={'指令'} />*/}
 
-        <div style={{ height: 20 }} />
+      {/*  <div style={{ height: 20 }} />*/}
 
-        <div className={styles.templateEvent}>
-          <div>
-            <FContentText type='normal' text={'状态机终止，停止接收事件'} />
-          </div>
-          <FRectBtn
-            type='secondary'
-            size='small'
-            disabled={!!(combination_Data.find((cd) => {
-              return cd.randomID === combination_AddingEventStateID;
-            })?.events.length)}
-            onClick={() => {
-              onClickAddEventBtn('terminate');
-            }}
-          >选择</FRectBtn>
-        </div>
-      </FDrawer>
+      {/*  <div className={styles.templateEvent}>*/}
+      {/*    <div>*/}
+      {/*      <FContentText type='normal' text={'状态机终止，停止接收事件'} />*/}
+      {/*    </div>*/}
+      {/*    <FRectBtn*/}
+      {/*      type='secondary'*/}
+      {/*      size='small'*/}
+      {/*      disabled={!!(combination_Data.find((cd) => {*/}
+      {/*        return cd.randomID === combination_AddingEventStateID;*/}
+      {/*      })?.events.length)}*/}
+      {/*      onClick={() => {*/}
+      {/*        onClickAddEventBtn('terminate');*/}
+      {/*      }}*/}
+      {/*    >选择</FRectBtn>*/}
+      {/*  </div>*/}
+      {/*</FDrawer>*/}
     </FDrawer>
 
   </>);
