@@ -692,13 +692,13 @@ function FExhibits({
             <Space size={5}>
               <label className={styles.nodeExhibitLabel}>展品</label>
               {/*<a className={styles.nodeExhibitNameLink}>{eac.exhibitName}</a>*/}
-              <FTextBtn
+              <a
                 type='default'
-                style={{ fontSize: 12, fontWeight: 600, color: '#222' }}
+                className={styles.nodeExhibitNameLink}
                 onClick={() => {
                   window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.exhibitManagement({ exhibitID: eac.exhibitID }));
                 }}
-              >{eac.exhibitName}</FTextBtn>
+              >{eac.exhibitName}</a>
             </Space>
 
             <FSwitch
