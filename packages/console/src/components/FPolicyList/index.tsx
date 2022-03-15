@@ -10,12 +10,6 @@ import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo } from '@/type/contractTypes';
 
 interface FPolicyListProps {
-  // dataSource: {
-  //   id: string;
-  //   name: string;
-  //   using: boolean;
-  //   text: string;
-  // }[];
 
   dataSource: PolicyFullInfo[];
 
