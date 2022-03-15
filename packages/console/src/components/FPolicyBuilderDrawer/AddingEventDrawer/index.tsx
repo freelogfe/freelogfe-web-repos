@@ -26,24 +26,27 @@ const initStates: FAddingEventDrawerStates = {
 function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelectEvent }: FAddingEventDrawerProps) {
 
   const [areAccountActivated, set_AreAccountActivated] = React.useState<FAddingEventDrawerStates['areAccountActivated']>(initStates['areAccountActivated']);
-
-  AHooks.useMount(async () => {
-    const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-      userId: FUtil.Tool.getUserIDByCookies(),
-    };
-    const { data } = await FServiceAPI.Transaction.individualAccounts(params);
-
-    if (data.status !== 1) {
-      set_AreAccountActivated(false);
-    }
-  });
-
+  
   return (<FDrawer
     width={640}
     visible={visible}
     title={'添加事件或指令'}
     onClose={() => {
       onClose();
+    }}
+    afterVisibleChange={async (visible) => {
+      if (visible) {
+        const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+          userId: FUtil.Tool.getUserIDByCookies(),
+        };
+        const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+
+        if (data.status !== 1) {
+          set_AreAccountActivated(false);
+        } else {
+          set_AreAccountActivated(true);
+        }
+      }
     }}
   >
     <FTitleText type='h3' text={'事件'} />
