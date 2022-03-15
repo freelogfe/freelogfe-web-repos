@@ -1,8 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import FDrawer from '@/components/FDrawer';
-import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
+import FDrawer from '../../FDrawer';
+import { FContentText, FTipText, FTitleText } from '@/components/FText';
+import { FRectBtn, FTextBtn } from '../../FButton';
+import * as AHooks from 'ahooks';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface FAddingEventDrawerProps {
   visible: boolean;
@@ -17,9 +19,24 @@ interface FAddingEventDrawerStates {
   areAccountActivated: boolean;
 }
 
+const initStates: FAddingEventDrawerStates = {
+  areAccountActivated: true,
+};
+
 function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelectEvent }: FAddingEventDrawerProps) {
 
-  const [areAccountActivated, set_AreAccountActivated] = React.useState<FAddingEventDrawerStates['areAccountActivated']>(true);
+  const [areAccountActivated, set_AreAccountActivated] = React.useState<FAddingEventDrawerStates['areAccountActivated']>(initStates['areAccountActivated']);
+
+  AHooks.useMount(async () => {
+    const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+      userId: FUtil.Tool.getUserIDByCookies(),
+    };
+    const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+
+    if (data.status !== 1) {
+      set_AreAccountActivated(false);
+    }
+  });
 
   return (<FDrawer
     width={640}
@@ -81,11 +98,29 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
       <FRectBtn
         type='secondary'
         size='small'
+        disabled={!areAccountActivated}
         onClick={() => {
           onSelectEvent('payment');
         }}
       >选择</FRectBtn>
     </div>
+    {
+      !areAccountActivated && (<>
+        <div style={{ height: 5 }} />
+        <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}>
+          <FTextBtn
+            style={{ fontSize: 12 }}
+            type='primary'
+            onClick={() => {
+              window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
+            }}
+          >马上激活</FTextBtn>
+          <div style={{ width: 5 }} />
+          <span style={{ fontSize: 12, color: '#666' }}>你的羽币账户未激活，无法添加支付事件</span>
+        </div>
+      </>)
+    }
+
 
     <div style={{ height: 30 }} />
 
