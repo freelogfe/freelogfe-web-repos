@@ -3,7 +3,6 @@ import styles from './index.less';
 import FDrawer from '../../FDrawer';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import { FRectBtn, FTextBtn } from '../../FButton';
-import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface FAddingEventDrawerProps {
@@ -26,7 +25,7 @@ const initStates: FAddingEventDrawerStates = {
 function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelectEvent }: FAddingEventDrawerProps) {
 
   const [areAccountActivated, set_AreAccountActivated] = React.useState<FAddingEventDrawerStates['areAccountActivated']>(initStates['areAccountActivated']);
-  
+
   return (<FDrawer
     width={640}
     visible={visible}
