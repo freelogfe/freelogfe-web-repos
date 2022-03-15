@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '../../FText';
+import { FTitleText } from '../../FText';
 import FCodeFormatter from '../../FCodeFormatter';
 import { FRectBtn, FTextBtn } from '../../FButton';
-// import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { policyCodeTranslationToText } from '../index';
 
