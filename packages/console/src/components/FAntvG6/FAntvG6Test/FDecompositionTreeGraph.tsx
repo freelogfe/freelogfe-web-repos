@@ -2,9 +2,10 @@ import React from 'react';
 // import ReactDOM from 'react-dom';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import { CommonConfig } from '@ant-design/graphs/es/interface';
+import { DecompositionTreeGraphConfig } from '@ant-design/graphs/es/components/decompositionTreeGraph';
 
 const DemoDecompositionTreeGraph = () => {
-  const data = {
+  const data: DecompositionTreeGraphConfig['data'] = {
     id: 'A0',
     value: {
       title: '订单金额',
@@ -96,7 +97,7 @@ const DemoDecompositionTreeGraph = () => {
     ],
   };
 
-  const config: CommonConfig['nodeCfg'] = {
+  const config: DecompositionTreeGraphConfig = {
     data,
     layout: {
       type: 'indented',
@@ -110,8 +111,8 @@ const DemoDecompositionTreeGraph = () => {
         return 100;
       },
     },
-    markerCfg: (cfg: any) => {
-      const { children } = cfg;
+    markerCfg: (cfg) => {
+      const { children } = cfg as any;
       return {
         show: children?.length,
       };
