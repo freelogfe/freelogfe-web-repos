@@ -10,7 +10,8 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.6",
     "@ant-design/icons": "^4.2.1",
-    "@antv/g6": "^4.0.3",
+    "@antv/g6": "^4.6.3",
+    "@antv/g6-react-node": "^1.4.4",
     "@freelog/nmr_translator": "^5.0.18",
     "@freelog/resource-policy-lang": "^1.2.10",
     "@freelog/tools-lib": "^0.1.78",
