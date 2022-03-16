@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.6",
+    "@ant-design/graphs": "^1.1.0",
     "@ant-design/icons": "^4.2.1",
     "@antv/g6": "^4.6.3",
     "@antv/g6-react-node": "^1.4.4",

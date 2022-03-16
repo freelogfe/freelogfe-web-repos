@@ -101,7 +101,7 @@ export const G6MiniDemo = ({
         })),
       edges: [],
     };
-    const width = document.getElementById('container')?.clientWidth || 800;
+    const width = document.getElementById('container000111')?.clientWidth || 800;
     const graph = new G6.Graph({
       container: 'container000111',
       width,
@@ -201,4 +201,8 @@ const ReactNode = ({ cfg = {} }) => {
 
 G6.registerNode('test', createNodeFromReact(ReactNode));
 
-export default () => (<G6MiniDemo nodeType='test' count={3} />);
+function FG6MiniDemo() {
+  return (<G6MiniDemo nodeType='test' count={3} />);
+}
+
+export default FG6MiniDemo;
