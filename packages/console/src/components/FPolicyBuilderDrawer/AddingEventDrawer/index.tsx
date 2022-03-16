@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '../../FDrawer';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
+import { FContentText, FTitleText } from '@/components/FText';
 import { FRectBtn, FTextBtn } from '../../FButton';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
