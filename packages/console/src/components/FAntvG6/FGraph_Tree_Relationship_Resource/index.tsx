@@ -6,7 +6,7 @@ import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registe
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
-interface FGraph_Relationship_Resource_Tree_Props {
+interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
   version: string;
   width: number;
@@ -36,12 +36,12 @@ interface ServerDataNode {
   children: ServerDataNode[];
 }
 
-function FGraph_Relationship_Resource_Tree({
+function FGraph_Tree_Relationship_Resource({
                                              resourceID,
                                              version,
                                              width,
                                              height,
-                                           }: FGraph_Relationship_Resource_Tree_Props) {
+                                           }: FGraph_Tree_Relationship_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
 
@@ -122,7 +122,7 @@ function FGraph_Relationship_Resource_Tree({
   />);
 }
 
-export default FGraph_Relationship_Resource_Tree;
+export default FGraph_Tree_Relationship_Resource;
 
 
 function getAllResourceIDAndVersions(data: ServerDataNode): {
