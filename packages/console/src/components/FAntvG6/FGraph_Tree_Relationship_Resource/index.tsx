@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode';
-import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode';
+import { FNode_Relationship_Resource_Values } from '../registerNode';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 

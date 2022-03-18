@@ -11,6 +11,7 @@ import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FResultTip from '@/components/FResultTip';
 import FG6MiniDemo from '@/components/FAntvG6/FAntvG6Test/FG6MiniDemo';
 import FGraph_Relationship_Resource_Tree from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
+import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -52,7 +53,7 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
     {/*  />*/}
 
     {/*</div>*/}
-    <FGraph_Relationship_Resource_Tree
+    <FGraph_Tree_Dependency_Resource
       height={600}
       width={1000}
       version={'0.1.2'}

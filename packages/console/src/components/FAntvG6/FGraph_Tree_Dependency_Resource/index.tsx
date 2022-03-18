@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode';
+import '../registerNode';
+import { FNode_Dependency_Resource_Values } from '../registerNode';
 import FLoadingTip from '@/components/FLoadingTip';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 
@@ -15,7 +16,7 @@ interface FGraph_Tree_Dependency_Resource_Props {
 
 interface NodeTree {
   id: string;
-  value: FNode_Relationship_Resource_Values;
+  value: FNode_Dependency_Resource_Values;
   children: NodeTree[];
 }
 
@@ -35,7 +36,12 @@ interface ServerDataNode {
   dependencies: ServerDataNode[];
 }
 
-function FGraph_Tree_Dependency_Resource({resourceID, version, height, width}: FGraph_Tree_Dependency_Resource_Props) {
+function FGraph_Tree_Dependency_Resource({
+                                           resourceID,
+                                           version,
+                                           height,
+                                           width,
+                                         }: FGraph_Tree_Dependency_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
 
@@ -43,30 +49,16 @@ function FGraph_Tree_Dependency_Resource({resourceID, version, height, width}: F
     handleData();
   }, [resourceID, version]);
 
-  async function handleData(){
+  async function handleData() {
     const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
-      resourceId: '',
-      version: '',
+      resourceId: resourceID,
+      version: version,
       isContainRootNode: true,
     };
 
     const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.dependencyTree(params2);
-    const authResult = getAllResourceIDAndVersions(data_DependencyTree[0]);
 
-    const params3: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
-      resourceIds: authResult.map((ar) => ar.resourceID).join(','),
-      versions: authResult.map((ar) => ar.version).join(','),
-    };
-
-    const { data: data_BatchAuth }: {
-      data: {
-        isAuth: boolean;
-        resourceId: string;
-        resourceName: string;
-        version: string;
-      }[];
-    } = await FServiceAPI.Resource.batchAuth(params3);
-
+    set_DataSource(handleDataSource(data_DependencyTree)[0]);
   }
 
   if (!dataSource) {
@@ -79,11 +71,9 @@ function FGraph_Tree_Dependency_Resource({resourceID, version, height, width}: F
     data={dataSource as any}
     nodeCfg={
       {
-        type: 'FNode_Relationship_Resource',
+        type: 'FNode_Dependency_Resource',
         style: {},
-        nodeStateStyles: {
-
-        },
+        nodeStateStyles: {},
       }
     }
     layout={{
@@ -92,7 +82,7 @@ function FGraph_Tree_Dependency_Resource({resourceID, version, height, width}: F
       dropCap: false,
       indent: 500,
       getHeight: () => {
-        return 90;
+        return 64;
       },
       // getWidth: () => {
       //   return 200;
@@ -136,12 +126,7 @@ function getAllResourceIDAndVersions(data: ServerDataNode): {
   return resources;
 }
 
-function handleDataSource(data: ServerDataNode[], auth: {
-  isAuth: boolean;
-  resourceId: string;
-  resourceName: string;
-  version: string;
-}[]): NodeTree[] {
+function handleDataSource(data: ServerDataNode[]): NodeTree[] {
   return data.map<NodeTree>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
@@ -150,19 +135,11 @@ function handleDataSource(data: ServerDataNode[], auth: {
         resourceName: d.resourceName,
         resourceType: d.resourceType,
         version: d.version,
-        url: FUtil.LinkTo.resourceDetails({
-          resourceID: d.resourceId,
-          version: d.version,
-        }),
-        isAuth: auth.find((af) => {
-          return af.resourceId === d.resourceId && af.version === d.version;
-        })?.isAuth || true,
       },
-      children: handleDataSource(d.dependencies, auth),
+      children: handleDataSource(d.dependencies),
     };
   });
 }
-
 
 
 // // 依赖树
