@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import '../registerNode';
-import { FNode_Dependency_Resource_Values } from '../registerNode';
+import '../registerNode/fDependency';
+import { FNode_Dependency_Resource_Values } from '../registerNode/fDependency';
 import FLoadingTip from '@/components/FLoadingTip';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 
