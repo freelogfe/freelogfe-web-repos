@@ -6,7 +6,7 @@ import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registe
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
-interface FGraph_Relationship_Props {
+interface FGraph_Relationship_Resource_Tree_Props {
   resourceID: string;
   version: string;
   width: number;
@@ -31,11 +31,17 @@ interface ServerDataNode {
   resourceId: string;
   resourceName: string;
   resourceType: string;
-  version: string;
-  dependencies: ServerDataNode[];
+  versions: string[];
+  versionRanges: string[];
+  children: ServerDataNode[];
 }
 
-function FGraph_Relationship({ resourceID, version, width, height }: FGraph_Relationship_Props) {
+function FGraph_Relationship_Resource_Tree({
+                                             resourceID,
+                                             version,
+                                             width,
+                                             height,
+                                           }: FGraph_Relationship_Resource_Tree_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
 
@@ -46,18 +52,18 @@ function FGraph_Relationship({ resourceID, version, width, height }: FGraph_Rela
   async function handleData() {
     set_DataSource(null);
 
-    const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
+    const params2: Parameters<typeof FServiceAPI.Resource.relationTree>[0] = {
       resourceId: resourceID,
       version: version,
-      isContainRootNode: true,
     };
 
-    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.dependencyTree(params2);
+    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTree(params2);
+    console.log(data_DependencyTree, 'data_DependencyTree#@##34234234');
     const authResult = getAllResourceIDAndVersions(data_DependencyTree[0]);
 
     const params3: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
       resourceIds: authResult.map((ar) => ar.resourceID).join(','),
-      versions: authResult.map((ar) => ar.version).join(','),
+      versionRanges: authResult.map((ar) => ar.version).join(','),
     };
 
     const { data: data_BatchAuth }: {
@@ -90,13 +96,7 @@ function FGraph_Relationship({ resourceID, version, width, height }: FGraph_Rela
         type: 'FNode_Relationship_Resource',
         style: {},
         nodeStateStyles: {
-          // 各状态下的样式，平铺的配置项仅在 keyShape 上生效。需要在其他 shape 样式上响应状态变化则写法不同，参见上文提到的 配置状态样式 链接
-          // hover: {
-          //   fillOpacity: 0.1,
-          //   lineWidth: 10,
-          //   fill: 'red',
-          //   stroke: 'red',
-          // },
+
         },
       }
     }
@@ -104,7 +104,7 @@ function FGraph_Relationship({ resourceID, version, width, height }: FGraph_Rela
       type: 'indented',
       direction: 'LR',
       dropCap: false,
-      indent: 400,
+      indent: 500,
       getHeight: () => {
         return 90;
       },
@@ -122,7 +122,7 @@ function FGraph_Relationship({ resourceID, version, width, height }: FGraph_Rela
   />);
 }
 
-export default FGraph_Relationship;
+export default FGraph_Relationship_Resource_Tree;
 
 
 function getAllResourceIDAndVersions(data: ServerDataNode): {
@@ -137,13 +137,15 @@ function getAllResourceIDAndVersions(data: ServerDataNode): {
   traversal(data);
 
   function traversal(data: ServerDataNode): any {
-    const { dependencies, ...resource } = data;
+    const { children, ...resource } = data;
     resources.push({
       resourceID: resource.resourceId,
-      version: resource.version,
+      version: resource.versionRanges.length > 0
+        ? resource.versionRanges[0]
+        : resource.versions[0],
     });
 
-    for (const dep of dependencies) {
+    for (const dep of children) {
       traversal(dep);
     }
   }
@@ -164,16 +166,19 @@ function handleDataSource(data: ServerDataNode[], auth: {
         resourceID: d.resourceId,
         resourceName: d.resourceName,
         resourceType: d.resourceType,
-        version: d.version,
+        version: d.versionRanges.length > 0
+          ? d.versionRanges[0]
+          : d.versions[0],
         url: FUtil.LinkTo.resourceDetails({
           resourceID: d.resourceId,
-          version: d.version,
+          // version: d.version,
         }),
         isAuth: auth.find((af) => {
-          return af.resourceId === d.resourceId && af.version === d.version;
+          return af.resourceId === d.resourceId;
+          // && af.version === d.version;
         })?.isAuth || true,
       },
-      children: handleDataSource(d.dependencies, auth),
+      children: handleDataSource(d.children, auth),
     };
   });
 }

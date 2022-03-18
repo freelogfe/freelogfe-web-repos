@@ -135,7 +135,9 @@ const ReactNode = ({ cfg = {} }) => {
   const { description, meta = {}, label = 'label' } = cfg as any;
   return (
     <Group>
-      <Rect style={{}}>
+      <Rect style={{}} onClick={() => {
+        console.log('#####2342394ui3jk');
+      }}>
         <Rect
           style={{
             width: 150,
@@ -167,7 +169,7 @@ const ReactNode = ({ cfg = {} }) => {
             radius: [0, 0, 6, 6],
           }}
         >
-          <Text style={{ fill: '#333', margin: [8, 4] }}>
+          <Text  style={{ fill: '#333', margin: [8, 4] }}>
             描述: {description}
           </Text>
           <Text style={{ fill: '#333', margin: [6, 4] }}>

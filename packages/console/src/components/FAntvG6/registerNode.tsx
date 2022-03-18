@@ -14,9 +14,7 @@ export interface FNode_Relationship_Resource_Values {
 }
 
 const FNode_Relationship_Resource = ({ cfg = {} }) => {
-  // console.log(img, 'img@#WEf09sdofjsdlkjljlkj');
-  // console.log(cfg, 'cfg#######0900938024038409238');
-  // const { description, meta = {}, label = 'label' } = cfg as any;
+
   const {
     resourceID,
     resourceName,
@@ -40,13 +38,19 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
       onClick={() => {
         console.log('#######98ioklj');
       }}
+
     >
-      <Text style={{
-        fontSize: 14,
-        fontWeight: 600,
-        fill: '#222',
-        padding: [3, 0],
-      }}>{textOverflowEllipsis(resourceName)}</Text>
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+        }}
+        onClick={() => {
+          console.log('#####2342394ui3jk');
+        }}
+      >{textOverflowEllipsis(resourceName)}</Text>
       <Rect style={{ height: 10 }} />
       <Text style={{
         fontSize: 12,
@@ -72,11 +76,14 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
           //   console.log(url, '###@#34342342343#####');
           //   window.open(url);
           // }}
-          onClick={(evt, node, shape, graph) => {
-            // graph.updateItem(node, {
-            //   collapsed: !collapsed,
-            // });
-            console.log(evt, node, shape, graph, 'evt, node, shape, graph2389iolkjfds');
+          // onClick={(evt, node, shape, graph) => {
+          //   // graph.updateItem(node, {
+          //   //   collapsed: !collapsed,
+          //   // });
+          //   console.log(evt, node, shape, graph, 'evt, node, shape, graph2389iolkjfds');
+          // }}
+          onClick={() => {
+            console.log('#####2342394ui3jk');
           }}
         >查看</Text>
       </Rect>

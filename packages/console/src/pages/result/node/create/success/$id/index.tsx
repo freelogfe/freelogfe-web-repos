@@ -9,6 +9,8 @@ import { FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FResultTip from '@/components/FResultTip';
+import FG6MiniDemo from '@/components/FAntvG6/FAntvG6Test/FG6MiniDemo';
+import FGraph_Relationship_Resource_Tree from '@/components/FAntvG6/FGraph_Relationship_Resource_Tree';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -37,18 +39,13 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
 
   return (<FCenterLayout style={{ backgroundColor: 'white' }}>
     <div style={{ height: 100 }} />
-    <div className={styles.modal}>
-      <FResultTip
-        // h1={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}
-        h1={'节点创建成功'}
-        // h2={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}
-        h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}
-        // btnText={FUtil1.I18n.message('cta_btn_add_theme')}
-        btnText={'添加主题'}
-        onClickBtn={goto}
-      />
-
-    </div>
+    {/*<FG6MiniDemo/>*/}
+    <FGraph_Relationship_Resource_Tree
+      height={600}
+      width={1000}
+      version={'0.1.2'}
+      resourceID={'62189e5a182192002eef2f41'}
+    />
   </FCenterLayout>);
 }
 
