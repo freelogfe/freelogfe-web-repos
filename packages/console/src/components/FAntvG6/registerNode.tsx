@@ -28,7 +28,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
       draggable
       style={{
         // width: 200,
-        height: 90,
+        // height: 90,
         fill: '#fff',
         stroke: '#EFEFEF',
         radius: 10,
@@ -72,16 +72,6 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
             fontWeight: 600,
             cursor: 'pointer',
           }}
-          // onClick={() => {
-          //   console.log(url, '###@#34342342343#####');
-          //   window.open(url);
-          // }}
-          // onClick={(evt, node, shape, graph) => {
-          //   // graph.updateItem(node, {
-          //   //   collapsed: !collapsed,
-          //   // });
-          //   console.log(evt, node, shape, graph, 'evt, node, shape, graph2389iolkjfds');
-          // }}
           onClick={() => {
             console.log('#####2342394ui3jk');
           }}
@@ -92,3 +82,57 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
 };
 
 G6.registerNode('FNode_Relationship_Resource', createNodeFromReact(FNode_Relationship_Resource));
+
+
+export interface FNode_Dependency_Resource_Values {
+  resourceID: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+}
+
+const FNode_Dependency_Resource = ({ cfg = {} }) => {
+
+  const {
+    resourceID,
+    resourceName,
+    resourceType,
+    version,
+  } = (cfg as any).value as FNode_Dependency_Resource_Values;
+  return (<Group>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+        console.log('#######98ioklj');
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+        }}
+        onClick={() => {
+          console.log('#####2342394ui3jk');
+        }}
+      >{textOverflowEllipsis(resourceName)}</Text>
+      <Rect style={{ height: 10 }} />
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 400,
+        fill: '#666',
+        padding: [3, 0],
+      }}>{resourceType} | {version}</Text>
+    </Rect>
+  </Group>);
+};
+
+G6.registerNode('FNode_Dependency_Resource', createNodeFromReact(FNode_Dependency_Resource));
