@@ -122,7 +122,7 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
               }}>待执行</Text>
             </>)
         }
-
+        <Rect style={{ width: 20 }} />
         <Text
           style={{
             fill: '#2E88FF',
