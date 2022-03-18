@@ -2,17 +2,16 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode';
+import FLoadingTip from '@/components/FLoadingTip';
+import { DecompositionTreeGraph } from '@ant-design/graphs';
 
-interface FGraph_Dependency_Props {
-
-}
-
-interface FGraph_Relationship_Props {
+interface FGraph_Tree_Dependency_Resource_Props {
   resourceID: string;
   version: string;
   width: number;
   height: number;
 }
+
 
 interface NodeTree {
   id: string;
@@ -36,9 +35,15 @@ interface ServerDataNode {
   dependencies: ServerDataNode[];
 }
 
-function FGraph_Dependency({}: FGraph_Dependency_Props) {
+function FGraph_Tree_Dependency_Resource({resourceID, version, height, width}: FGraph_Tree_Dependency_Resource_Props) {
 
-  async function handle(){
+  const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
+
+  React.useEffect(() => {
+    handleData();
+  }, [resourceID, version]);
+
+  async function handleData(){
     const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
       resourceId: '',
       version: '',
@@ -64,10 +69,46 @@ function FGraph_Dependency({}: FGraph_Dependency_Props) {
 
   }
 
-  return (<div>__Template</div>);
+  if (!dataSource) {
+    return (<FLoadingTip height={height} />);
+  }
+
+  return (<DecompositionTreeGraph
+    width={width}
+    height={height}
+    data={dataSource as any}
+    nodeCfg={
+      {
+        type: 'FNode_Relationship_Resource',
+        style: {},
+        nodeStateStyles: {
+
+        },
+      }
+    }
+    layout={{
+      type: 'indented',
+      direction: 'LR',
+      dropCap: false,
+      indent: 500,
+      getHeight: () => {
+        return 90;
+      },
+      // getWidth: () => {
+      //   return 200;
+      // },
+    }}
+    // markerCfg={(cfg) => {
+    //   const { children } = cfg as any;
+    //   return {
+    //     show: children?.length,
+    //   };
+    // }}
+    behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+  />);
 }
 
-export default FGraph_Dependency;
+export default FGraph_Tree_Dependency_Resource;
 
 function getAllResourceIDAndVersions(data: ServerDataNode): {
   resourceID: string;

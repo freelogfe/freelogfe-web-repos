@@ -85,7 +85,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
           onClick={() => {
             console.log('#####2342394ui3jk');
           }}
-        >查看</Text>
+        >查看合约</Text>
       </Rect>
     </Rect>
   </Group>);

@@ -10,7 +10,7 @@ import { RouteComponentProps } from 'react-router';
 import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FResultTip from '@/components/FResultTip';
 import FG6MiniDemo from '@/components/FAntvG6/FAntvG6Test/FG6MiniDemo';
-import FGraph_Relationship_Resource_Tree from '@/components/FAntvG6/FGraph_Relationship_Resource_Tree';
+import FGraph_Relationship_Resource_Tree from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
