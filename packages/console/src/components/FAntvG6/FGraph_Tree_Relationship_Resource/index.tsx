@@ -58,7 +58,7 @@ function FGraph_Tree_Relationship_Resource({
     };
 
     const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTree(params2);
-    console.log(data_DependencyTree, 'data_DependencyTree#@##34234234');
+    // console.log(data_DependencyTree, 'data_DependencyTree#@##34234234');
     const authResult = getAllResourceIDAndVersions(data_DependencyTree[0]);
 
     const params3: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
@@ -75,7 +75,7 @@ function FGraph_Tree_Relationship_Resource({
       }[];
     } = await FServiceAPI.Resource.batchAuth(params3);
 
-    console.log(data_BatchAuth, 'data_BatchAuth089io23klasdfasdfdata_BatchAuth');
+    // console.log(data_BatchAuth, 'data_BatchAuth089io23klasdfasdfdata_BatchAuth');
 
     const dataSource: FGraph_Relationship_States['dataSource'] = handleDataSource(data_DependencyTree, data_BatchAuth)[0];
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');

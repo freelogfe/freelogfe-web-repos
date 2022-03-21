@@ -1,18 +1,49 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FServiceAPI } from '@freelog/tools-lib';
-import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+import { DecompositionTreeGraph } from '@ant-design/graphs';
 
-interface __TemplateProps {
-
+interface FGraph_Tree_Authorization_Resource_Props {
+  resourceID: string;
+  version: string;
+  width: number;
+  height: number;
 }
 
-function __Template({}: __TemplateProps) {
-  return (<div>__Template</div>);
+function FGraph_Tree_Authorization_Resource({width, height, resourceID, version}: FGraph_Tree_Authorization_Resource_Props) {
+  return (<DecompositionTreeGraph
+    width={width}
+    height={height}
+    data={dataSource as any}
+    nodeCfg={
+      {
+        type: 'FNode_Dependency_Resource',
+        style: {},
+        nodeStateStyles: {},
+      }
+    }
+    layout={{
+      type: 'indented',
+      direction: 'LR',
+      dropCap: false,
+      indent: 500,
+      getHeight: () => {
+        return 64;
+      },
+      // getWidth: () => {
+      //   return 200;
+      // },
+    }}
+    // markerCfg={(cfg) => {
+    //   const { children } = cfg as any;
+    //   return {
+    //     show: children?.length,
+    //   };
+    // }}
+    behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+  />);
 }
 
-export default __Template;
+export default FGraph_Tree_Authorization_Resource;
 
 // 依赖树
 // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
