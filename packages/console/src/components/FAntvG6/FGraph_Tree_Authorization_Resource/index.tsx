@@ -7,7 +7,10 @@ import {
   FNode_Authorization_Resource_Values,
 } from '../registerNode/fAuthorization';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
+import { Graph } from '@antv/g6';
+// import { appenAutoShapeListener } from '@antv/g6-react-node';
 
 type ServerDataNodes = {
   resourceId: string;
@@ -148,6 +151,7 @@ function FGraph_Tree_Authorization_Resource({
     onReady={(graph) => {
       console.log(graph, 'GGGRRRRAAAFFFFFF');
       graph.moveTo(20, 20, true);
+      appendAutoShapeListener(graph as Graph);
     }}
   />);
 }
@@ -161,12 +165,24 @@ interface HandleDataSourceParams {
 type HandleDataSourceReturn = ContractNode[];
 
 function handleDataSource({ data }: HandleDataSourceParams): HandleDataSourceReturn {
+
+  // const source = (data || []).flat();
+
+  // const allContractIDs: string[] = [];
+  //
+  // function getAllContractIDs(src) {
+  //   for (const s of src) {
+  //     allContractIDs.push();
+  //   }
+  // }
+
+
   // console.log(data, 'data,99999933333234234234');
-  return (data || []).flat().map((d) => {
+  return (data || []).map((d) => {
     // console.log(d, 'ddddddddddddEEEEEEE90jlk');
-    const firstContract = d.contracts[0];
+    const firstContract = d[0].contracts[0];
     return {
-      id: firstContract.contractId,
+      id: firstContract.contractId + '-' + FUtil.Tool.generateRandomCode(),
       type: 'FNode_Authorization_Contract',
       value: {
         contractID: firstContract.contractId,
@@ -174,21 +190,21 @@ function handleDataSource({ data }: HandleDataSourceParams): HandleDataSourceRet
         isAuth: true,
         isMultiple: false,
       },
-      children: [
-        {
-          id: d.resourceId,
+      children: d.map((d1) => {
+        return {
+          id: d1.resourceId + '-' + FUtil.Tool.generateRandomCode(),
           type: 'FNode_Authorization_Resource',
           value: {
-            resourceID: d.resourceId,
-            resourceName: d.resourceName,
-            resourceType: d.resourceType,
-            version: d.version,
+            resourceID: d1.resourceId,
+            resourceName: d1.resourceName,
+            resourceType: d1.resourceType,
+            version: d1.version,
           },
           children: handleDataSource({
-            data: d.children,
+            data: d1.children,
           }),
-        },
-      ],
+        };
+      }),
     };
   });
 }

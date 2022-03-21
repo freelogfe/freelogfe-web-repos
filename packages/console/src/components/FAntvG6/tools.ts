@@ -47,7 +47,7 @@ const propsToEventMap = {
   contextmenu: 'onContextMenu',
 };
 
-export function appenAutoShapeListener(graph: Graph) {
+export function appendAutoShapeListener(graph: Graph) {
   Object.entries(propsToEventMap).map(([eventName, propName]) => {
     graph.on(`node:${eventName}`, evt => {
       const shape = evt.shape;
