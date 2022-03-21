@@ -73,9 +73,12 @@ function FGraph_Tree_Dependency_Resource({
   }
 
   return (<DecompositionTreeGraph
+    style={{ backgroundColor: 'transparent' }}
     width={width}
     height={height}
     data={dataSource as any}
+    fitCenter={false}
+    autoFit={true}
     nodeCfg={
       {
         type: 'FNode_Dependency_Resource',
@@ -84,16 +87,16 @@ function FGraph_Tree_Dependency_Resource({
       }
     }
     layout={{
-      type: 'indented',
-      direction: 'LR',
-      dropCap: false,
-      indent: 500,
+      // type: 'indented',
+      // direction: 'LR',
+      // dropCap: false,
+      // indent: 500,
       getHeight: () => {
         return 64;
       },
-      // getWidth: () => {
-      //   return 200;
-      // },
+      getWidth: () => {
+        return 200;
+      },
     }}
     // markerCfg={(cfg) => {
     //   const { children } = cfg as any;
@@ -103,8 +106,9 @@ function FGraph_Tree_Dependency_Resource({
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
     onReady={(graph) => {
-      // console.log(graph, 'GGGRRRRAAAFFFFFF');
-      graph.moveTo(20, 20, true);
+      // console.log(graph.getNodes(), 'GGGRRRRAAAFFFFFF');
+      // graph.moveTo(20, 20);
+      // graph.zoom(1);
       appendAutoShapeListener(graph as Graph);
     }}
   />);

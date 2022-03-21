@@ -143,11 +143,12 @@ function FGraph_Tree_Authorization_Resource({
   }
 
   return (<DecompositionTreeGraph
+    style={{ backgroundColor: 'transparent' }}
     width={width}
     height={height}
     data={dataSource as any}
-    // fitCenter={false}
-    // autoFit={false}
+    fitCenter={false}
+    autoFit={true}
     nodeCfg={
       {
         style: {},
@@ -159,7 +160,7 @@ function FGraph_Tree_Authorization_Resource({
       // rankdir: 'LR',
       // type: 'indented',
       direction: 'LR',
-      dropCap: false,
+      // dropCap: false,
       // indent: 500,
       getHeight: () => {
         return 64;
@@ -177,8 +178,11 @@ function FGraph_Tree_Authorization_Resource({
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
     onReady={(graph) => {
+      // console.log(graph.getNodes(), 'GGGRRRRAAAFFFFFF');
       // console.log(graph, 'GGGRRRRAAAFFFFFF');
-      graph.moveTo(20, 20, true);
+      // graph.moveTo(20, 20, true);
+      // console.log(graph.getHeight());
+      // graph.zoom(1);
       appendAutoShapeListener(graph as Graph);
     }}
   />);

@@ -52,7 +52,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
           // console.log('#####2342394ui3jk');
           window.open(resourceDetails_Url);
         }}
-      >{textOverflowEllipsis(resourceName)}</Text>
+      >{textOverflowEllipsis(resourceName, 18)}</Text>
       <Rect style={{ height: 10 }} />
       <Text style={{
         fontSize: 12,
