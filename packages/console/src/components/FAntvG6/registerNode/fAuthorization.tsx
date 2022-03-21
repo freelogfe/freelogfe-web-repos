@@ -13,7 +13,7 @@ export interface FNode_Authorization_Resource_Values {
 }
 
 const FNode_Authorization_Resource = ({ cfg = {} }) => {
-
+  // console.log(cfg, 'cfgcfgcfgcfg0932iojsdlkfsjdlklllllllCCCCC');
   const {
     resourceID,
     resourceName,
@@ -66,7 +66,7 @@ export interface FNode_Authorization_Contract_Values {
 }
 
 const FNode_Authorization_Contract = ({ cfg = {} }) => {
-
+  // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
   const {
     contractID,
     contractName,
@@ -98,21 +98,10 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
           console.log('#####2342394ui3jk');
         }}
       >{textOverflowEllipsis(contractName)}</Text>
+      {/*<Rect style={{ height: 5 }} />*/}
       <Rect style={{ height: 10 }} />
-      <Rect style={{ height: 15 }} />
-      <Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
-        {
-          isAuth
-            ? (<>
-              <Image style={{ width: 16, height: 16, img: img_Gear, next: 'inline' }} />
-              <Text style={{
-                fill: '#42C28C',
-                fontSize: 12,
-                fontWeight: 600,
-                lineHeight: 18,
-              }}>已授权</Text>
-            </>)
-            : (<>
+      {/*<Rect style={{ height: 15 }} />*/}
+      {/*(<Rect>
               <Image style={{ width: 16, height: 16, img: img_Execute, next: 'inline' }} />
               <Text style={{
                 fill: '#E9A923',
@@ -120,21 +109,81 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
                 fontWeight: 600,
                 lineHeight: 18,
               }}>待执行</Text>
-            </>)
-        }
-        <Rect style={{ width: 20 }} />
-        <Text
-          style={{
-            fill: '#2E88FF',
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-          onClick={() => {
-            console.log('#####2342394ui3jk');
-          }}
-        >查看</Text>
-      </Rect>
+            </Rect>)
+        }*/}
+      {
+        isAuth
+          ? (<Rect style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}>
+            <Image
+              style={{
+                width: 16,
+                height: 16,
+                img: img_Gear,
+                next: 'inline',
+              }} />
+            <Text style={{
+              fill: '#42C28C',
+              fontSize: 12,
+              fontWeight: 600,
+              margin: [3, 20, 0, 5],
+              next: 'inline',
+            }}>已授权</Text>
+
+            <Text
+              style={{
+                fill: '#2E88FF',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+                margin: [3, 0, 0],
+              }}
+              onClick={() => {
+                console.log('#####2342394ui3jk');
+              }}
+            >查看</Text>
+          </Rect>)
+          : (<Rect style={{
+            display: 'flex',
+            alignItems: 'center',
+            // justifyContent: 'space-between',
+            flexDirection: 'row',
+            // height: 18,
+          }}>
+            <Image
+              style={{
+                width: 16,
+                height: 16,
+                img: img_Execute,
+                next: 'inline',
+              }} />
+            <Text style={{
+              fill: '#E9A923',
+              fontSize: 12,
+              fontWeight: 600,
+              margin: [3, 20, 0, 5],
+              // lineHeight: '18px',
+              next: 'inline',
+            }}>待执行</Text>
+
+            <Text
+              style={{
+                fill: '#2E88FF',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+                margin: [3, 0, 0],
+              }}
+              onClick={() => {
+                console.log('#####2342394ui3jk');
+              }}
+            >查看</Text>
+          </Rect>)
+      }
+
     </Rect>
   </Group>);
 };

@@ -119,6 +119,10 @@ function FGraph_Tree_Relationship_Resource({
     //   };
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+    onReady={(graph) => {
+      console.log(graph, 'GGGRRRRAAAFFFFFF');
+      graph.moveTo(20, 20, true);
+    }}
   />);
 }
 
