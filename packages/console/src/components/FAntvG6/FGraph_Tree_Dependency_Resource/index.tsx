@@ -5,6 +5,8 @@ import '../registerNode/fDependency';
 import { FNode_Dependency_Resource_Values } from '../registerNode/fDependency';
 import FLoadingTip from '@/components/FLoadingTip';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
+import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
+import { Graph } from '@antv/g6';
 
 interface FGraph_Tree_Dependency_Resource_Props {
   resourceID: string;
@@ -95,8 +97,9 @@ function FGraph_Tree_Dependency_Resource({
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
     onReady={(graph) => {
-      console.log(graph, 'GGGRRRRAAAFFFFFF');
+      // console.log(graph, 'GGGRRRRAAAFFFFFF');
       graph.moveTo(20, 20, true);
+      appendAutoShapeListener(graph as Graph);
     }}
   />);
 }
@@ -138,6 +141,10 @@ function handleDataSource(data: ServerDataNode[]): NodeTree[] {
         resourceName: d.resourceName,
         resourceType: d.resourceType,
         version: d.version,
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
+          resourceID: d.resourceId,
+          // version: d.version,
+        }),
       },
       children: handleDataSource(d.dependencies),
     };

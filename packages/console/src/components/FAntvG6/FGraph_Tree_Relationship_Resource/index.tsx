@@ -5,6 +5,8 @@ import '../registerNode/fRelationship';
 import { FNode_Relationship_Resource_Values } from '../registerNode/fRelationship';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
+import { Graph } from '@antv/g6';
 
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
@@ -120,8 +122,9 @@ function FGraph_Tree_Relationship_Resource({
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
     onReady={(graph) => {
-      console.log(graph, 'GGGRRRRAAAFFFFFF');
+      // console.log(graph, 'GGGRRRRAAAFFFFFF');
       graph.moveTo(20, 20, true);
+      appendAutoShapeListener(graph as Graph);
     }}
   />);
 }
@@ -173,7 +176,7 @@ function handleDataSource(data: ServerDataNode[], auth: {
         version: d.versionRanges.length > 0
           ? d.versionRanges[0]
           : d.versions[0],
-        url: FUtil.LinkTo.resourceDetails({
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
           resourceID: d.resourceId,
           // version: d.version,
         }),

@@ -118,6 +118,10 @@ function FGraph_Tree_Authorization_Resource({
         resourceName: data_ResourceDetails.resourceName,
         resourceType: data_ResourceDetails.resourceType,
         version: version,
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
+          resourceID: data_ResourceDetails.resourceId,
+          // version: d.version,
+        }),
       },
       children: partyResult,
       // children: [],
@@ -168,7 +172,7 @@ function FGraph_Tree_Authorization_Resource({
     // }}
     behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
     onReady={(graph) => {
-      console.log(graph, 'GGGRRRRAAAFFFFFF');
+      // console.log(graph, 'GGGRRRRAAAFFFFFF');
       graph.moveTo(20, 20, true);
       appendAutoShapeListener(graph as Graph);
     }}
@@ -208,6 +212,10 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
             resourceName: d1.resourceName,
             resourceType: d1.resourceType,
             version: d1.version,
+            resourceDetails_Url: FUtil.LinkTo.resourceDetails({
+              resourceID: d1.resourceId,
+              // version: d.version,
+            }),
           },
           children: handleDataSource({
             data: d1.children,

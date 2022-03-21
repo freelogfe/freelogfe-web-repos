@@ -10,6 +10,7 @@ export interface FNode_Authorization_Resource_Values {
   resourceName: string;
   resourceType: string;
   version: string;
+  resourceDetails_Url: string;
 }
 
 const FNode_Authorization_Resource = ({ cfg = {} }) => {
@@ -19,6 +20,7 @@ const FNode_Authorization_Resource = ({ cfg = {} }) => {
     resourceName,
     resourceType,
     version,
+    resourceDetails_Url,
   } = (cfg as any).value as FNode_Authorization_Resource_Values;
   return (<Group>
     <Rect
@@ -31,7 +33,8 @@ const FNode_Authorization_Resource = ({ cfg = {} }) => {
         cursor: 'move',
       }}
       onClick={() => {
-        console.log('#######98ioklj');
+        // console.log('#######98ioklj');
+
       }}
     >
       <Text
@@ -40,9 +43,11 @@ const FNode_Authorization_Resource = ({ cfg = {} }) => {
           fontWeight: 600,
           fill: '#222',
           padding: [3, 0],
+          cursor: 'pointer',
         }}
         onClick={() => {
-          console.log('#####2342394ui3jk');
+          // console.log('#####2342394ui3jk');
+          window.open(resourceDetails_Url);
         }}
       >{textOverflowEllipsis(resourceName)}</Text>
       <Rect style={{ height: 10 }} />

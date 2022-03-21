@@ -9,8 +9,8 @@ export interface FNode_Relationship_Resource_Values {
   resourceName: string;
   resourceType: string;
   version: string;
-  url: string;
   isAuth: boolean;
+  resourceDetails_Url: string;
 }
 
 const FNode_Relationship_Resource = ({ cfg = {} }) => {
@@ -20,8 +20,8 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
     resourceName,
     resourceType,
     version,
-    url,
     isAuth,
+    resourceDetails_Url,
   } = (cfg as any).value as FNode_Relationship_Resource_Values;
   return (<Group>
     <Rect
@@ -36,7 +36,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
         cursor: 'move',
       }}
       onClick={() => {
-        console.log('#######98ioklj');
+        // console.log('#######98ioklj');
       }}
 
     >
@@ -46,9 +46,11 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
           fontWeight: 600,
           fill: '#222',
           padding: [3, 0],
+          cursor: 'pointer',
         }}
         onClick={() => {
-          console.log('#####2342394ui3jk');
+          // console.log('#####2342394ui3jk');
+          window.open(resourceDetails_Url);
         }}
       >{textOverflowEllipsis(resourceName)}</Text>
       <Rect style={{ height: 10 }} />
@@ -73,7 +75,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
             cursor: 'pointer',
           }}
           onClick={() => {
-            console.log('#####2342394ui3jk');
+            // console.log('#####2342394ui3jk');
           }}
         >查看合约</Text>
       </Rect>
