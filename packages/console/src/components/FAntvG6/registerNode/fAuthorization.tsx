@@ -142,7 +142,7 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
                 margin: [3, 0, 0],
               }}
               onClick={() => {
-                console.log('#####2342394ui3jk');
+                console.log('#####2342394ui3jk查看');
               }}
             >查看</Text>
           </Rect>)
@@ -178,7 +178,7 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
                 margin: [3, 0, 0],
               }}
               onClick={() => {
-                console.log('#####2342394ui3jk');
+                console.log('#####2342394ui3jk查看');
               }}
             >查看</Text>
           </Rect>)

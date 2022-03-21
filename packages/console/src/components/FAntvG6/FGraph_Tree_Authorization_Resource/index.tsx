@@ -24,6 +24,12 @@ type ServerDataNodes = {
   children: ServerDataNodes;
 }[][];
 
+type ServerDataContracts = {
+  authStatus: 1 | 2 | 128 | number;
+  contractId: string;
+  contractName: string;
+}[];
+
 interface FGraph_Tree_Authorization_Resource_Props {
   resourceID: string;
   version: string;
@@ -67,6 +73,7 @@ function FGraph_Tree_Authorization_Resource({
   }, [resourceID, version]);
 
   async function handleData() {
+    // console.log(resourceID, version, 'resourceID, version VVVSSSRRR0923oijsdlfk');
     set_DataSource(null);
     const parmas1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
       resourceIdOrName: resourceID,
@@ -88,8 +95,20 @@ function FGraph_Tree_Authorization_Resource({
 
     const { data: data_AuthorizationTree }: { data: ServerDataNodes } = await FServiceAPI.Resource.authTree(params2);
     // console.log(data_AuthorizationTree, 'data_AuthorizationTree@#@#42342342343');
+    // console.log('handleDataSource handleDataSource handleDataSource');
+    const allContractIDs: string[] = getAllContractIDs({ data: data_AuthorizationTree });
+    let data_AllContracts: ServerDataContracts = [];
+    if (allContractIDs.length > 0) {
+      const params3: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+        contractIds: allContractIDs.join(','),
+        projection: 'authStatus,contractId,contractName',
+      };
 
-    const partyResult = handleDataSource({ data: data_AuthorizationTree });
+      const { data }: { data: ServerDataContracts } = await FServiceAPI.Contract.batchContracts(params3);
+      data_AllContracts = data;
+    }
+
+    const partyResult = handleDataSource({ data: data_AuthorizationTree, data_Contracts: data_AllContracts });
 
     const finalDataSource: FGraph_Tree_Authorization_Resource_States['dataSource'] = {
       id: resourceID,
@@ -106,7 +125,7 @@ function FGraph_Tree_Authorization_Resource({
 
     // console.log(data_ResourceDetails, 'data_ResourceDetails@#$@#$@#$09');
     // console.log(partyResult, 'partyResult@#$@#$@#4209900o');
-    // console.log(finalDataSource, 'finalDataSource333838383838888888888*****');
+    console.log(finalDataSource, 'finalDataSource333838383838888888888*****');
     set_DataSource(finalDataSource);
   }
 
@@ -160,35 +179,25 @@ export default FGraph_Tree_Authorization_Resource;
 
 interface HandleDataSourceParams {
   data: ServerDataNodes;
+  data_Contracts: ServerDataContracts;
 }
 
 type HandleDataSourceReturn = ContractNode[];
 
-function handleDataSource({ data }: HandleDataSourceParams): HandleDataSourceReturn {
-
-  // const source = (data || []).flat();
-
-  // const allContractIDs: string[] = [];
-  //
-  // function getAllContractIDs(src) {
-  //   for (const s of src) {
-  //     allContractIDs.push();
-  //   }
-  // }
-
-
-  // console.log(data, 'data,99999933333234234234');
+function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): HandleDataSourceReturn {
   return (data || []).map((d) => {
-    // console.log(d, 'ddddddddddddEEEEEEE90jlk');
-    const firstContract = d[0].contracts[0];
+    const firstContract = data_Contracts.find((dc) => {
+      return d[0].contracts[0].contractId === dc.contractId;
+    });
+
     return {
-      id: firstContract.contractId + '-' + FUtil.Tool.generateRandomCode(),
+      id: firstContract?.contractId + '-' + FUtil.Tool.generateRandomCode(),
       type: 'FNode_Authorization_Contract',
       value: {
-        contractID: firstContract.contractId,
-        contractName: '合约名称-' + firstContract.contractId,
+        contractID: firstContract?.contractId || '',
+        contractName: firstContract?.contractName || '',
         isAuth: true,
-        isMultiple: false,
+        isMultiple: d.length > 0,
       },
       children: d.map((d1) => {
         return {
@@ -202,11 +211,31 @@ function handleDataSource({ data }: HandleDataSourceParams): HandleDataSourceRet
           },
           children: handleDataSource({
             data: d1.children,
+            data_Contracts: data_Contracts,
           }),
         };
       }),
     };
   });
+}
+
+interface GetAllContractIDsParams {
+  data: ServerDataNodes;
+}
+
+function getAllContractIDs({ data = [] }: GetAllContractIDsParams): string[] {
+  const allContractIDs: string[] = [];
+
+  recursive(data);
+
+  return allContractIDs;
+
+  function recursive(d: GetAllContractIDsParams['data']) {
+    for (const s of d) {
+      allContractIDs.push(s[0].contracts[0].contractId);
+      recursive(s[0].children);
+    }
+  }
 }
 
 // interface AuthorizationGraphData {
