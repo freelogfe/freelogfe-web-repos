@@ -13,11 +13,9 @@ import {
   SyncAllPropertiesAction,
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
-// import { ChangeAction as GlobalChangeAction } from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
 import { withRouter } from 'umi';
 import FInput from '@/components/FInput';
-// import FSelect from '@/components/FSelect';
 import FTooltip from '@/components/FTooltip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -39,6 +37,9 @@ import { RouteComponentProps } from 'react-router';
 import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { Helmet } from 'react-helmet';
+import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
+import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
+import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -259,31 +260,58 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               });
             }}
           >
+
             {
               resourceVersionEditorPage.graphFullScreen
                 ? (<div style={{ height: 500 }} />)
                 : (<>
+                  {/*{*/}
+                  {/*  resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
+                  {/*    nodes={resourceVersionEditorPage.relationGraphNodes}*/}
+                  {/*    edges={resourceVersionEditorPage.relationGraphEdges}*/}
+                  {/*    width={860}*/}
+                  {/*  />)*/}
+                  {/*}*/}
                   {
-                    resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
-                      nodes={resourceVersionEditorPage.relationGraphNodes}
-                      edges={resourceVersionEditorPage.relationGraphEdges}
+                    resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
+                      resourceID={resourceVersionEditorPage.resourceID}
+                      version={resourceVersionEditorPage.version}
                       width={860}
+                      height={500}
                     />)
                   }
 
+                  {/*{*/}
+                  {/*  resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+                  {/*    nodes={resourceVersionEditorPage.authorizationGraphNodes}*/}
+                  {/*    edges={resourceVersionEditorPage.authorizationGraphEdges}*/}
+                  {/*    width={860}*/}
+                  {/*  />)*/}
+                  {/*}*/}
+
                   {
-                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
-                      nodes={resourceVersionEditorPage.authorizationGraphNodes}
-                      edges={resourceVersionEditorPage.authorizationGraphEdges}
+                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+                      resourceID={resourceVersionEditorPage.resourceID}
+                      version={resourceVersionEditorPage.version}
                       width={860}
+                      height={500}
                     />)
                   }
 
+                  {/*{*/}
+                  {/*  resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph*/}
+                  {/*    nodes={resourceVersionEditorPage.dependencyGraphNodes}*/}
+                  {/*    edges={resourceVersionEditorPage.dependencyGraphEdges}*/}
+                  {/*    width={860}*/}
+                  {/*  />)*/}
+                  {/*}*/}
+
                   {
-                    resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
-                      nodes={resourceVersionEditorPage.dependencyGraphNodes}
-                      edges={resourceVersionEditorPage.dependencyGraphEdges}
+                    resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
+                      resourceID={resourceVersionEditorPage.resourceID}
+                      version={resourceVersionEditorPage.version}
                       width={860}
+                      height={500}
                     />)
                   }
                 </>)
@@ -493,24 +521,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         description: resourceVersionEditorPage.customOptionDescription,
         valueType: resourceVersionEditorPage.customOptionCustom || 'input',
       }}
-      // keyInput={resourceVersionEditorPage.customOptionKey}
-      // keyInputError={''}
-      // descriptionInput={resourceVersionEditorPage.customOptionDescription || ''}
-      // descriptionInputError={resourceVersionEditorPage.customOptionDescriptionError || ''}
-      // typeSelect={resourceVersionEditorPage.customOptionCustom || 'input'}
-      // valueInput={resourceVersionEditorPage.customOptionDefaultValue || ''}
-      // valueInputError={resourceVersionEditorPage.customOptionDefaultValueError || ''}
-      // optionsInput={resourceVersionEditorPage.customOptionCustomOption || ''}
-      // optionsInputError={resourceVersionEditorPage.customOptionCustomOptionError || ''}
-      // usedKeys={[
-      //   ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
-      //   ...resourceVersionEditorPage.baseProperties.map<string>((pp) => pp.key),
-      //   ...resourceVersionEditorPage.customOptions.filter((cod, ind) => {
-      //     return ind !== resourceVersionCreatorPage.customOptionIndex;
-      //   }).map((cod) => {
-      //     return cod.key;
-      //   }),
-      // ]}
       onCancel={() => {
         onCloseCustomOptionDrawer();
       }}
@@ -542,210 +552,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           type: 'resourceVersionEditorPage/syncAllProperties',
         });
       }}
-      // onDescriptionInputChange={(data) => {
-      //   onChange({
-      //     customOptionDescription: data.value,
-      //     customOptionDescriptionError: data.errorText,
-      //   });
-      // }}
-      // onValueInputChange={(data) => {
-      //   onChange({
-      //     customOptionDefaultValue: data.value,
-      //     customOptionDefaultValueError: data.errorText,
-      //   });
-      // }}
-      // onOptionsInputChange={(data) => {
-      //   onChange({
-      //     customOptionCustomOption: data.value,
-      //     customOptionCustomOptionError: data.errorText,
-      //   });
-      // }}
     />
-
-    {/*<FDrawer*/}
-    {/*  title={'添加自定义选项'}*/}
-    {/*  onClose={() => {*/}
-    {/*    onCloseCustomOptionDrawer();*/}
-    {/*  }}*/}
-    {/*  visible={resourceVersionEditorPage.customOptionEditorVisible}*/}
-    {/*  width={720}*/}
-    {/*  topRight={<Space size={30}>*/}
-    {/*    <FTextBtn*/}
-    {/*      type="default"*/}
-    {/*      onClick={() => {*/}
-    {/*        onCloseCustomOptionDrawer();*/}
-    {/*      }}*/}
-    {/*    >取消</FTextBtn>*/}
-    {/*    <FRectBtn*/}
-    {/*      type="primary"*/}
-    {/*      disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}*/}
-    {/*      onClick={async () => {*/}
-    {/*        await onChange({*/}
-    {/*          customOptions: resourceVersionEditorPage.customOptions*/}
-    {/*            .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {*/}
-    {/*              if (bp.key !== resourceVersionEditorPage.customOptionKey) {*/}
-    {/*                return bp;*/}
-    {/*              }*/}
-    {/*              return {*/}
-    {/*                ...bp,*/}
-    {/*                description: resourceVersionEditorPage.customOptionDescription,*/}
-    {/*                defaultValue: resourceVersionEditorPage.customOptionDefaultValue,*/}
-    {/*                customOption: resourceVersionEditorPage.customOptionCustomOption,*/}
-    {/*              };*/}
-    {/*            }),*/}
-    {/*          customOptionEditorVisible: false,*/}
-    {/*          customOptionKey: '',*/}
-    {/*          customOptionDescription: '',*/}
-    {/*          customOptionDescriptionError: '',*/}
-    {/*          customOptionCustom: 'input',*/}
-    {/*          customOptionDefaultValue: '',*/}
-    {/*          customOptionDefaultValueError: '',*/}
-    {/*          customOptionCustomOption: '',*/}
-    {/*          customOptionCustomOptionError: '',*/}
-    {/*        });*/}
-    {/*        await dispatch<SyncAllPropertiesAction>({*/}
-    {/*          type: 'resourceVersionEditorPage/syncAllProperties',*/}
-    {/*        });*/}
-    {/*      }}*/}
-    {/*    >保存</FRectBtn>*/}
-    {/*  </Space>}*/}
-    {/*>*/}
-    {/*  <Space*/}
-    {/*    className={styles.properties}*/}
-    {/*    size={15}*/}
-    {/*    direction="vertical"*/}
-    {/*  >*/}
-    {/*    <div>*/}
-    {/*      <div className={styles.Content}>*/}
-    {/*        <div style={{height: 10}}/>*/}
-    {/*        <Space size={20} className={styles.row}>*/}
-    {/*          <Field*/}
-    {/*            title={FUtil.I18n.message('key')}*/}
-    {/*            dot={true}*/}
-    {/*          >*/}
-    {/*            <FInput*/}
-    {/*              disabled*/}
-    {/*              wrapClassName={styles.FInputWrap}*/}
-    {/*              value={resourceVersionEditorPage.customOptionKey}*/}
-    {/*            />*/}
-    {/*          </Field>*/}
-    {/*          <Field title={FUtil.I18n.message('property_remark')}>*/}
-    {/*            <FInput*/}
-    {/*              wrapClassName={styles.FInputWrap}*/}
-    {/*              // errorText={resourceVersionEditorPage.customOptionDescriptionError}*/}
-    {/*              value={resourceVersionEditorPage.customOptionDescription}*/}
-    {/*              onChange={(e) => {*/}
-    {/*                const value: string = e.target.value;*/}
-    {/*                let descriptionError: string = '';*/}
-    {/*                if (value.length > 50) {*/}
-    {/*                  descriptionError = '不超过50个字符';*/}
-    {/*                }*/}
-    {/*                onChange({*/}
-    {/*                  customOptionDescription: value,*/}
-    {/*                  customOptionDescriptionError: descriptionError,*/}
-    {/*                });*/}
-    {/*              }}*/}
-    {/*            />*/}
-    {/*            {resourceVersionEditorPage.customOptionDescriptionError && (<>*/}
-    {/*              <div style={{height: 5}}/>*/}
-    {/*              <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionDescriptionError}</div>*/}
-    {/*            </>)}*/}
-    {/*          </Field>*/}
-    {/*        </Space>*/}
-
-    {/*        <div style={{height: 15}}/>*/}
-    {/*        <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>*/}
-    {/*          <Field*/}
-    {/*            className={styles.FSelect}*/}
-    {/*            title={FUtil.I18n.message('value_input_mode')}*/}
-    {/*          >*/}
-    {/*            <FSelect*/}
-    {/*              disabled*/}
-    {/*              value={resourceVersionEditorPage.customOptionCustom}*/}
-    {/*              className={styles.FSelect}*/}
-    {/*              dataSource={[*/}
-    {/*                {value: 'input', title: FUtil.I18n.message('textfield')},*/}
-    {/*                {value: 'select', title: FUtil.I18n.message('dropdownlist')},*/}
-    {/*              ]}*/}
-    {/*            />*/}
-    {/*          </Field>*/}
-
-    {/*          {*/}
-    {/*            resourceVersionEditorPage.customOptionCustom === 'select'*/}
-    {/*              ? (<Field*/}
-    {/*                dot={true}*/}
-    {/*                title={'自定义选项(首个选项为默认值)'}*/}
-    {/*                className={styles.customOptions}*/}
-    {/*              >*/}
-    {/*                <FInput*/}
-    {/*                  wrapClassName={styles.FInputWrap}*/}
-    {/*                  value={resourceVersionEditorPage.customOptionCustomOption}*/}
-    {/*                  onChange={(e) => {*/}
-    {/*                    const value: string = e.target.value;*/}
-    {/*                    let customOptionError: string = '';*/}
-
-    {/*                    if (value === '') {*/}
-    {/*                      customOptionError = '请输入';*/}
-    {/*                    } else if (value.length > 500) {*/}
-    {/*                      customOptionError = '不超过500个字符';*/}
-    {/*                    }*/}
-
-    {/*                    if (!customOptionError) {*/}
-    {/*                      const allOptions = value.split(',');*/}
-    {/*                      const setS = new Set(allOptions);*/}
-    {/*                      if (setS.size !== allOptions.length) {*/}
-    {/*                        customOptionError = '选项不能重复';*/}
-    {/*                      }*/}
-    {/*                    }*/}
-
-    {/*                    onChange({*/}
-    {/*                      customOptionCustomOption: value,*/}
-    {/*                      customOptionCustomOptionError: customOptionError,*/}
-    {/*                    });*/}
-    {/*                  }}*/}
-    {/*                />*/}
-    {/*                {resourceVersionEditorPage.customOptionCustomOptionError && (<>*/}
-    {/*                  <div style={{height: 5}}/>*/}
-    {/*                  <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionCustomOptionError}</div>*/}
-    {/*                </>)}*/}
-    {/*              </Field>)*/}
-    {/*              : (<Field*/}
-    {/*                // title={FUtil.I18n.message('value')}*/}
-    {/*                title={'自定义选项(填写一个默认值)'}*/}
-    {/*                dot={true}*/}
-    {/*              >*/}
-    {/*                <FInput*/}
-    {/*                  wrapClassName={styles.FInputWrap}*/}
-    {/*                  value={resourceVersionEditorPage.customOptionDefaultValue}*/}
-    {/*                  onChange={(e) => {*/}
-    {/*                    const value: string = e.target.value;*/}
-    {/*                    let valueError: string = '';*/}
-    {/*                    if (value === '') {*/}
-    {/*                      valueError = '请输入';*/}
-    {/*                    } else if (value.length > 30) {*/}
-    {/*                      valueError = '不超过30个字符';*/}
-    {/*                    }*/}
-    {/*                    onChange({*/}
-    {/*                      customOptionDefaultValue: value,*/}
-    {/*                      customOptionDefaultValueError: valueError,*/}
-    {/*                    });*/}
-    {/*                  }}*/}
-    {/*                />*/}
-    {/*                {resourceVersionEditorPage.customOptionDefaultValueError && (<>*/}
-    {/*                  <div style={{height: 5}}/>*/}
-    {/*                  <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionDefaultValueError}</div>*/}
-    {/*                </>)}*/}
-    {/*              </Field>)*/}
-    {/*          }*/}
-
-    {/*        </Space>*/}
-    {/*        <div style={{height: 15}}/>*/}
-    {/*      </div>*/}
-    {/*    </div>*/}
-    {/*  </Space>*/}
-
-    {/*  <div style={{height: 20}}/>*/}
-    {/*</FDrawer>*/}
 
     <FDrawer
       visible={resourceVersionEditorPage.graphFullScreen}
@@ -773,28 +580,54 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         }}
       >
 
+        {/*{*/}
+        {/*  resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
+        {/*    nodes={resourceVersionEditorPage.relationGraphNodes}*/}
+        {/*    edges={resourceVersionEditorPage.relationGraphEdges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
+
         {
-          resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
-            nodes={resourceVersionEditorPage.relationGraphNodes}
-            edges={resourceVersionEditorPage.relationGraphEdges}
+          resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
+            resourceID={resourceVersionEditorPage.resourceID}
+            version={resourceVersionEditorPage.version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
         }
 
+        {/*{*/}
+        {/*  resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+        {/*    nodes={resourceVersionEditorPage.authorizationGraphNodes}*/}
+        {/*    edges={resourceVersionEditorPage.authorizationGraphEdges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
         {
-          resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
-            nodes={resourceVersionEditorPage.authorizationGraphNodes}
-            edges={resourceVersionEditorPage.authorizationGraphEdges}
+          resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+            resourceID={resourceVersionEditorPage.resourceID}
+            version={resourceVersionEditorPage.version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
         }
 
+        {/*{*/}
+        {/*  resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph*/}
+        {/*    nodes={resourceVersionEditorPage.dependencyGraphNodes}*/}
+        {/*    edges={resourceVersionEditorPage.dependencyGraphEdges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
+
         {
-          resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
-            nodes={resourceVersionEditorPage.dependencyGraphNodes}
-            edges={resourceVersionEditorPage.dependencyGraphEdges}
+          resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
+            resourceID={resourceVersionEditorPage.resourceID}
+            version={resourceVersionEditorPage.version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
