@@ -75,6 +75,11 @@ function FGraph_Tree_Authorization_Resource({
   async function handleData() {
     // console.log(resourceID, version, 'resourceID, version VVVSSSRRR0923oijsdlfk');
     set_DataSource(null);
+
+    if (!resourceID || !version) {
+      return;
+    }
+
     const parmas1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
       resourceIdOrName: resourceID,
       projection: 'resourceId,resourceName,resourceType',

@@ -51,6 +51,12 @@ function FGraph_Tree_Dependency_Resource({
   }, [resourceID, version]);
 
   async function handleData() {
+    set_DataSource(null);
+
+    if (!resourceID || !version) {
+      return;
+    }
+
     const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
       resourceId: resourceID,
       version: version,

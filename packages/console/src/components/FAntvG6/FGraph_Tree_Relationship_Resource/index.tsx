@@ -54,6 +54,10 @@ function FGraph_Tree_Relationship_Resource({
   async function handleData() {
     set_DataSource(null);
 
+    if (!resourceID || !version) {
+      return;
+    }
+
     const params2: Parameters<typeof FServiceAPI.Resource.relationTree>[0] = {
       resourceId: resourceID,
       version: version,
@@ -97,9 +101,7 @@ function FGraph_Tree_Relationship_Resource({
       {
         type: 'FNode_Relationship_Resource',
         style: {},
-        nodeStateStyles: {
-
-        },
+        nodeStateStyles: {},
       }
     }
     layout={{
