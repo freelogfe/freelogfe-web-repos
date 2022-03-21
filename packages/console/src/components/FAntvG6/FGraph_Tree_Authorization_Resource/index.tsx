@@ -142,6 +142,7 @@ function FGraph_Tree_Authorization_Resource({
     return (<FLoadingTip height={height} />);
   }
 
+
   return (<DecompositionTreeGraph
     style={{ backgroundColor: 'transparent' }}
     width={width}
@@ -159,7 +160,7 @@ function FGraph_Tree_Authorization_Resource({
       // type: 'dagre',
       // rankdir: 'LR',
       // type: 'indented',
-      direction: 'LR',
+      // direction: 'LR',
       // dropCap: false,
       // indent: 500,
       getHeight: () => {

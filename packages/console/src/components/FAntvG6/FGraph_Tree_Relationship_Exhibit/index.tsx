@@ -165,7 +165,7 @@ function handleDataSource(data: ServerDataNode[], auth: {
         resourceName: d.resourceName,
         resourceType: d.resourceType,
         version: d.version,
-        url: FUtil.LinkTo.resourceDetails({
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
           resourceID: d.resourceId,
           version: d.version,
         }),
