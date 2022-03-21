@@ -129,7 +129,7 @@ function FGraph_Tree_Authorization_Resource({
 
     // console.log(data_ResourceDetails, 'data_ResourceDetails@#$@#$@#$09');
     // console.log(partyResult, 'partyResult@#$@#$@#4209900o');
-    console.log(finalDataSource, 'finalDataSource333838383838888888888*****');
+    // console.log(finalDataSource, 'finalDataSource333838383838888888888*****');
     set_DataSource(finalDataSource);
   }
 
