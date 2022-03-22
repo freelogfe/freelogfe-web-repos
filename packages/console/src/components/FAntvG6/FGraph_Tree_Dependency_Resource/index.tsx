@@ -69,6 +69,8 @@ function FGraph_Tree_Dependency_Resource({
     set_DataSource(handleDataSource(data_DependencyTree)[0]);
   }
 
+  console.log(dataSource, 'dataSource依赖树932ioasdfjl');
+
   if (!dataSource) {
     return (<FLoadingTip height={height} />);
   }
