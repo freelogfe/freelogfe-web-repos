@@ -66,8 +66,41 @@ G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Author
 export type FNode_Authorization_Contract_Values = {
   contractID: string;
   contractName: string;
-  isAuth: boolean;
+  contractStatus: 'active' | 'testActive' | 'inactive' | 'terminal' | 'exception';
 }[];
+
+const statusInfo = {
+  active: {
+    color1: '#8FD6B8',
+    color2: '#E5F6EF',
+    text: '已授权',
+    img: img_Gear,
+  },
+  testActive: {
+    color1: '#8FD6B8',
+    color2: '#E5F6EF',
+    text: '已授权',
+    img: img_Gear,
+  },
+  inactive: {
+    color1: '#E5C78A',
+    color2: '#FBF5EA',
+    text: '未授权',
+    img: img_Execute,
+  },
+  terminal: {
+    color1: '#FBF5EA',
+    color2: '#E5C78A',
+    text: '已终止',
+    img: img_Execute,
+  },
+  exception: {
+    color1: '#FBF5EA',
+    color2: '#E5C78A',
+    text: '异常',
+    img: img_Execute,
+  },
+};
 
 const FNode_Authorization_Contract = ({ cfg = {} }) => {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
@@ -80,14 +113,14 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
           key={contract.contractID}
           draggable
           style={{
-            fill: contract.isAuth ? '#E5F6EF' : '#FBF5EA',
-            stroke: contract.isAuth ? '#8FD6B8' : '#E5C78A',
+            fill: statusInfo[contract.contractStatus].color2,
+            stroke: statusInfo[contract.contractStatus].color1,
             radius: 10,
             padding: [10, 20],
             cursor: 'move',
           }}
           onClick={() => {
-            console.log('#######98ioklj');
+            // console.log('#######98ioklj');
           }}
         >
           {/*<Rect style={{ width: 200, height: 64, fill: 'red', marginLeft: 10, marginTop: -74}} />*/}
@@ -99,80 +132,45 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
               padding: [3, 0],
             }}
             onClick={() => {
-              console.log('#####2342394ui3jk');
+              // console.log('#####2342394ui3jk');
             }}
           >{textOverflowEllipsis(contract.contractName)}</Text>
           <Rect style={{ height: 10 }} />
-          {
-            contract.isAuth
-              ? (<Rect style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-                <Image
-                  style={{
-                    width: 16,
-                    height: 16,
-                    img: img_Gear,
-                    next: 'inline',
-                  }} />
-                <Text style={{
-                  fill: '#42C28C',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  margin: [3, 20, 0, 5],
-                  next: 'inline',
-                }}>已授权</Text>
+          <Rect style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}>
+            <Image
+              style={{
+                width: 16,
+                height: 16,
+                img: statusInfo[contract.contractStatus].img,
+                next: 'inline',
+              }}
+            />
+            <Text style={{
+              fill: statusInfo[contract.contractStatus].color1,
+              fontSize: 12,
+              fontWeight: 600,
+              margin: [3, 20, 0, 5],
+              next: 'inline',
+            }}>{statusInfo[contract.contractStatus].text}</Text>
 
-                <Text
-                  style={{
-                    fill: '#2E88FF',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    margin: [3, 0, 0],
-                  }}
-                  onClick={() => {
-                    console.log('#####2342394ui3jk查看');
-                  }}
-                >查看</Text>
-              </Rect>)
-              : (<Rect style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-                <Image
-                  style={{
-                    width: 16,
-                    height: 16,
-                    img: img_Execute,
-                    next: 'inline',
-                  }} />
-                <Text style={{
-                  fill: '#E9A923',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  margin: [3, 20, 0, 5],
-                  next: 'inline',
-                }}>待执行</Text>
-
-                <Text
-                  style={{
-                    fill: '#2E88FF',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    margin: [3, 0, 0],
-                  }}
-                  onClick={() => {
-                    console.log('#####2342394ui3jk查看');
-                  }}
-                >查看</Text>
-              </Rect>)
-          }
-        </Rect>)
+            <Text
+              style={{
+                fill: '#2E88FF',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+                margin: [3, 0, 0],
+              }}
+              onClick={() => {
+                console.log('#####2342394ui3jk查看');
+              }}
+            >查看</Text>
+          </Rect>
+        </Rect>);
       })
     }
 

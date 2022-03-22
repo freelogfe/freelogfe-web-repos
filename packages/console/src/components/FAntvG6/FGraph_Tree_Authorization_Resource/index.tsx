@@ -26,9 +26,10 @@ type ServerDataNodes = {
 }[][];
 
 type ServerDataContracts = {
-  authStatus: 1 | 2 | 128 | number;
   contractId: string;
   contractName: string;
+  status: 0 | 1 | 2;
+  authStatus: 1 | 2 | 3 | 128;
 }[];
 
 interface FGraph_Tree_Authorization_Resource_Props {
@@ -107,7 +108,7 @@ function FGraph_Tree_Authorization_Resource({
     if (allContractIDs.length > 0) {
       const params3: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
         contractIds: allContractIDs.join(','),
-        projection: 'authStatus,contractId,contractName',
+        projection: 'authStatus,contractId,contractName,status',
       };
 
       const { data }: { data: ServerDataContracts } = await FServiceAPI.Contract.batchContracts(params3);
@@ -228,7 +229,10 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
         return {
           contractID: contract.contractId,
           contractName: contractMap?.contractName || '',
-          isAuth: contractMap?.authStatus === 1 || contractMap?.authStatus === 2,
+          contractStatus: contractMap ? transformServerAPIContractState({
+            status: contractMap.status,
+            authStatus: contractMap.authStatus,
+          }) : 'terminal',
         };
       }),
       children: d.map((d1) => {
@@ -274,4 +278,32 @@ function getAllContractIDs({ data = [] }: GetAllContractIDsParams): string[] {
       recursive(s[0].children);
     }
   }
+}
+
+
+interface TransformServerAPIContractStateParams {
+  status: 0 | 1 | 2; // 合同综合状态: 0:正常 1:已终止(不接受任何事件,也不给授权,事实上无效的合约) 2:异常
+  authStatus: 1 | 2 | 128 | number; // 合同授权状态 1:正式授权 2:测试授权 128:未获得授权
+}
+
+function transformServerAPIContractState({
+                                           status,
+                                           authStatus,
+                                         }: TransformServerAPIContractStateParams): 'active' | 'testActive' | 'inactive' | 'terminal' | 'exception' {
+  if (status === 0) {
+    if (authStatus === 1 || authStatus === 3) {
+      return 'active';
+    }
+    if (authStatus === 2) {
+      return 'testActive';
+    }
+    if (authStatus === 128) {
+      return 'inactive';
+    }
+  }
+
+  if (status === 1) {
+    return 'terminal';
+  }
+  return 'exception';
 }
