@@ -77,8 +77,8 @@ function FGraph_Tree_Dependency_Resource({
     width={width}
     height={height}
     data={dataSource as any}
-    fitCenter={false}
-    autoFit={true}
+    // fitCenter={false}
+    // autoFit={true}
     nodeCfg={
       {
         type: 'FNode_Dependency_Resource',

@@ -148,8 +148,8 @@ function FGraph_Tree_Authorization_Resource({
     width={width}
     height={height}
     data={dataSource as any}
-    fitCenter={false}
-    autoFit={true}
+    // fitCenter={false}
+    // autoFit={true}
     nodeCfg={
       {
         style: {},
@@ -268,98 +268,3 @@ function getAllContractIDs({ data = [] }: GetAllContractIDsParams): string[] {
     }
   }
 }
-
-// interface AuthorizationGraphData {
-//   nodes: Array<ResourceNode | ContractNode>;
-//   // edges: {
-//   //   source: string;
-//   //   target: string;
-//   // }[];
-// }
-//
-// interface ResourceNode1 {
-//   id: string;
-//   resourceId: string;
-//   resourceName: string;
-//   resourceType: string;
-//   version: string;
-// }
-//
-// type AuthorizationTree = {
-//   contracts: {
-//     contractId: string;
-//   }[];
-//   resourceId: string;
-//   resourceName: string;
-//   resourceType: string;
-//   version: string;
-//   versionId: string;
-//   children: AuthorizationTree;
-// }[][];
-//
-// export async function handleAuthorizationGraphData(data: AuthorizationTree, root: ResourceNode1): Promise<AuthorizationGraphData> {
-//
-//   const contractNodes: {
-//     id: string;
-//     contractIds: string[];
-//   }[] = [];
-//
-//   const resourceNodes: Array<ResourceNode1> = [{
-//     ...root,
-//     id: root.versionId,
-//   }];
-//
-//   const edges: AuthorizationGraphData['edges'] = [];
-//   // console.log(data, 'datadatadatadata12324');
-//   traversal(data, resourceNodes[0].id);
-//
-//   const contractIds = contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(',');
-//
-//   let data3: any[] = [];
-//   if (contractIds) {
-//     const { data: data2 } = await FServiceAPI.Contract.batchContracts({
-//       contractIds: contractIds,
-//     });
-//     data3 = data2;
-//   }
-//
-//   const nodes: AuthorizationGraphData['nodes'] = [
-//     ...resourceNodes,
-//     ...contractNodes.map<ContractNode>((cn, index, array) => {
-//       return {
-//         id: cn.id,
-//         contracts: cn.contractIds.map((id) => {
-//           return data3.find((a: any) => a.contractId === id);
-//         }),
-//       };
-//     }),
-//   ];
-//
-//   return {
-//     nodes,
-//     // edges,
-//   };
-//
-//   function traversal(authorizationTree: AuthorizationTree, parentID: string = '') {
-//
-//     for (const auths of authorizationTree) {
-//       const id1: string = `${parentID}_${auths[0].resourceId}`;
-//       const contracts = auths[0].contracts;
-//       contractNodes.push({
-//         id: id1,
-//         contractIds: contracts.map<string>((c) => c.contractId),
-//       });
-//       for (const auth of auths) {
-//         const id2: string = `${id1}_${auth.versionId}`;
-//         resourceNodes.push({
-//           id: id2,
-//           resourceId: auth.resourceId,
-//           resourceName: auth.resourceName,
-//           resourceType: auth.resourceType,
-//           version: auth.version,
-//         });
-//         traversal(auth.children, id2);
-//       }
-//     }
-//   }
-// }

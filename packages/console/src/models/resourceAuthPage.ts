@@ -164,8 +164,12 @@ const Model: ResourceAuthPageModelType = {
         isTranslate: 1,
       };
 
-      const { data: data_ResourceDetails } = yield call(FServiceAPI.Resource.info, params);
+      const { data: data_ResourceDetails, ret, errCode } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '@#$RFDSASDFSDFASDF');
+
+      if (ret !== 0 || errCode !== 0) {
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -291,7 +295,7 @@ const Model: ResourceAuthPageModelType = {
             // id: policy.policyId,
             // title: policy.policyName,
             // code: policy.policyText,
-            fullInfo:  policy,
+            fullInfo: policy,
             allEnabledVersions: allEnabledVersions,
           })),
         };

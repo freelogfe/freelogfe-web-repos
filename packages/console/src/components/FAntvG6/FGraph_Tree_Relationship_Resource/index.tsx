@@ -98,8 +98,8 @@ function FGraph_Tree_Relationship_Resource({
     width={width}
     height={height}
     data={dataSource as any}
-    fitCenter={false}
-    autoFit={true}
+    // fitCenter={false}
+    // autoFit={true}
     nodeCfg={
       {
         type: 'FNode_Relationship_Resource',
