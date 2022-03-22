@@ -39,3 +39,34 @@ export function getUserIDByCookies(): number {
   }
   return Number(uid.replace('uid=', ''));
 }
+
+
+/**
+ * 将服务端的合约状态转换成前端需要的状态
+ */
+interface TransformServerAPIContractStateParams {
+  status: 0 | 1 | 2; // 合同综合状态: 0:正常 1:已终止(不接受任何事件,也不给授权,事实上无效的合约) 2:异常
+  authStatus: 1 | 2 | 128 | number; // 合同授权状态 1:正式授权 2:测试授权 128:未获得授权
+}
+
+export function transformServerAPIContractState({
+                                           status,
+                                           authStatus,
+                                         }: TransformServerAPIContractStateParams): 'active' | 'testActive' | 'inactive' | 'terminal' | 'exception' {
+  if (status === 0) {
+    if (authStatus === 1 || authStatus === 3) {
+      return 'active';
+    }
+    if (authStatus === 2) {
+      return 'testActive';
+    }
+    if (authStatus === 128) {
+      return 'inactive';
+    }
+  }
+
+  if (status === 1) {
+    return 'terminal';
+  }
+  return 'exception';
+}
