@@ -5,6 +5,9 @@ import React from 'react';
 import img_Execute from '@/assets/execute.svg';
 import img_Gear from '@/assets/gear.svg';
 import img_Forbid from '@/assets/forbid.svg';
+import img from '@/assets/warning.svg';
+import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode/fRelationship';
+import { FNode_Dependency_Resource_Values } from '@/components/FAntvG6/registerNode/fDependency';
 
 export interface FNode_Authorization_Resource_Values {
   resourceID: string;
@@ -14,15 +17,22 @@ export interface FNode_Authorization_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Authorization_Resource = ({ cfg = {} }) => {
+const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Resource_Values }) => {
   // console.log(cfg, 'cfgcfgcfgcfg0932iojsdlkfsjdlklllllllCCCCC');
+  // const {
+  //   resourceID,
+  //   resourceName,
+  //   resourceType,
+  //   version,
+  //   resourceDetails_Url,
+  // } = (cfg as any).value as FNode_Authorization_Resource_Values;
   const {
     resourceID,
     resourceName,
     resourceType,
     version,
     resourceDetails_Url,
-  } = (cfg as any).value as FNode_Authorization_Resource_Values;
+  } = value;
   return (<Group>
     <Rect
       draggable
@@ -62,7 +72,7 @@ const FNode_Authorization_Resource = ({ cfg = {} }) => {
   </Group>);
 };
 
-G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource));
+// G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource));
 
 export type FNode_Authorization_Contract_Values = {
   contractID: string;
@@ -103,9 +113,10 @@ const statusInfo = {
   },
 };
 
-const FNode_Authorization_Contract = ({ cfg = {} }) => {
+const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Contract_Values }) => {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
-  const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
+  // const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
+  const contracts = value;
   // console.log(cfg, 'contracts@##3433333333');
   return (<Group>
 
@@ -182,4 +193,14 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
   </Group>);
 };
 
-G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
+
+// G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
+
+const FNode_Authorization_Resource1 = ({ cfg = {} }) => {
+  const value = (cfg as any).value;
+  return Array.isArray(value) ? (<FNode_Authorization_Contract
+    value={value}
+  />) : (<FNode_Authorization_Resource value={value} />);
+};
+
+G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource1));

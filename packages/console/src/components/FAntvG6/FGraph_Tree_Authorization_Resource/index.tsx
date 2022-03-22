@@ -42,14 +42,14 @@ interface FGraph_Tree_Authorization_Resource_Props {
 
 interface ResourceNode {
   id: string;
-  type: 'FNode_Authorization_Resource';
+  // type: 'FNode_Authorization_Resource';
   value: FNode_Authorization_Resource_Values;
   children: ContractNode[];
 }
 
 interface ContractNode {
   id: string;
-  type: 'FNode_Authorization_Contract'
+  // type: 'FNode_Authorization_Contract'
   value: FNode_Authorization_Contract_Values;
   children: ResourceNode[];
 }
@@ -124,7 +124,7 @@ function FGraph_Tree_Authorization_Resource({
 
     const finalDataSource: FGraph_Tree_Authorization_Resource_States['dataSource'] = {
       id: resourceID,
-      type: 'FNode_Authorization_Resource',
+      // type: 'FNode_Authorization_Resource',
       value: {
         resourceID: data_ResourceDetails.resourceId,
         resourceName: data_ResourceDetails.resourceName,
@@ -162,13 +162,13 @@ function FGraph_Tree_Authorization_Resource({
       width={width}
       height={height}
       data={dataSource as any}
+      nodeCfg={{
+        type: 'FNode_Authorization_Resource',
+      }}
       layout={{
         getHeight: (node: any) => {
           // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-          if (node.type === 'FNode_Authorization_Contract') {
-            return node.value.length * 64;
-          }
-          return 64;
+          return Array.isArray(node.value) ? node.value.length * 64 : 64;
         },
         getWidth: () => {
           return 200;
@@ -210,7 +210,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
     return {
       // id: firstContract?.contractId + '-' + FUtil.Tool.generateRandomCode(20),
       id: FUtil.Tool.generateRandomCode(20),
-      type: 'FNode_Authorization_Contract',
+      // type: 'FNode_Authorization_Contract',
       // value: {
       //   contractID: firstContract?.contractId || '',
       //   contractName: firstContract?.contractName || '',
@@ -233,7 +233,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
       children: d.map((d1) => {
         return {
           id: d1.resourceId + '-' + FUtil.Tool.generateRandomCode(),
-          type: 'FNode_Authorization_Resource',
+          // type: 'FNode_Authorization_Resource',
           value: {
             resourceID: d1.resourceId,
             resourceName: d1.resourceName,
