@@ -137,7 +137,7 @@ function FGraph_Tree_Authorization_Resource({
     set_DataSource(finalDataSource);
   }
 
-  console.log(dataSource, 'dataSource授权树2398iohsdfsdl');
+  // console.log(dataSource, 'dataSource授权树2398iohsdfsdl');
 
   if (!dataSource) {
     return (<FLoadingTip height={height} />);
@@ -171,8 +171,12 @@ function FGraph_Tree_Authorization_Resource({
       // direction: 'LR',
       // dropCap: false,
       // indent: 500,
-      getHeight: () => {
-        return 64;
+      getHeight: (node:any) => {
+        console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+        if (node.type === 'FNode_Authorization_Contract') {
+          return node.value.length * 64
+        }
+        return  64;
       },
       // fitViewPadding: [200, 200],
       getWidth: () => {
