@@ -166,8 +166,13 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
                 cursor: 'pointer',
                 margin: [3, 0, 0],
               }}
-              onClick={() => {
-                console.log('#####2342394ui3jk查看');
+              // onClick={() => {
+              //   console.log('#####2342394ui3jk查看');
+              // }}
+              onClick={(evt, node, shape, graph) => {
+                graph.emit('contract:view', {
+                  contractID: contract.contractID,
+                });
               }}
             >查看</Text>
           </Rect>
