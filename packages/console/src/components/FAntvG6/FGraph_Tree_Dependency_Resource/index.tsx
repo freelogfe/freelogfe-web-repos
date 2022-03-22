@@ -7,6 +7,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
+import FResultTip from '@/components/FResultTip';
 
 interface FGraph_Tree_Dependency_Resource_Props {
   resourceID: string;
@@ -70,6 +71,13 @@ function FGraph_Tree_Dependency_Resource({
 
   if (!dataSource) {
     return (<FLoadingTip height={height} />);
+  }
+
+  if (dataSource.children.length === 0) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无依赖树'} />
+      </div>);
   }
 
   return (<DecompositionTreeGraph

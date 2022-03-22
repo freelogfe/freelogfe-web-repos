@@ -10,6 +10,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
+import FResultTip from '@/components/FResultTip';
 // import { appenAutoShapeListener } from '@antv/g6-react-node';
 
 type ServerDataNodes = {
@@ -132,14 +133,18 @@ function FGraph_Tree_Authorization_Resource({
       // children: [],
     };
 
-    // console.log(data_ResourceDetails, 'data_ResourceDetails@#$@#$@#$09');
-    // console.log(partyResult, 'partyResult@#$@#$@#4209900o');
-    // console.log(finalDataSource, 'finalDataSource333838383838888888888*****');
     set_DataSource(finalDataSource);
   }
 
   if (!dataSource) {
     return (<FLoadingTip height={height} />);
+  }
+
+  if (dataSource.children.length === 0) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无授权树'} />
+      </div>);
   }
 
 

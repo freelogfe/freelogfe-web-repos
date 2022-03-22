@@ -114,7 +114,7 @@ G6.registerNode('authorization-contract', {
       height: 64,
       fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
       stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
-      radius: 10,
+      radfius: 10,
       marginTop: 10,
     }}>
       <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${textOverflowEllipsis(contract.contractName)}&nbsp;</text>
