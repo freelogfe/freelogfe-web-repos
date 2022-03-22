@@ -164,14 +164,14 @@ const Model: ResourceAuthPageModelType = {
         isTranslate: 1,
       };
 
-      const { data } = yield call(FServiceAPI.Resource.info, params);
+      const { data: data_ResourceDetails } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '@#$RFDSASDFSDFASDF');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          policies: data.policies,
-          baseUastResources: data.baseUpcastResources,
+          policies: data_ResourceDetails.policies || [],
+          baseUastResources: data_ResourceDetails.baseUpcastResources || [],
         },
       });
     },
