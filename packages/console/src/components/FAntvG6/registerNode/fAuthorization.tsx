@@ -106,6 +106,7 @@ const statusInfo = {
 const FNode_Authorization_Contract = ({ cfg = {} }) => {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
   const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
+  // console.log(cfg, 'contracts@##3433333333');
   return (<Group>
 
     {
@@ -166,9 +167,6 @@ const FNode_Authorization_Contract = ({ cfg = {} }) => {
                 cursor: 'pointer',
                 margin: [3, 0, 0],
               }}
-              // onClick={() => {
-              //   console.log('#####2342394ui3jk查看');
-              // }}
               onClick={(evt, node, shape, graph) => {
                 graph.emit('contract:view', {
                   contractID: contract.contractID,
