@@ -200,19 +200,30 @@ type HandleDataSourceReturn = ContractNode[];
 
 function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): HandleDataSourceReturn {
   return (data || []).map((d) => {
-    const firstContract = data_Contracts.find((dc) => {
-      return d[0].contracts[0].contractId === dc.contractId;
-    });
+    // const firstContract = data_Contracts.find((dc) => {
+    //   return d[0].contracts[0].contractId === dc.contractId;
+    // });
 
     return {
-      id: firstContract?.contractId + '-' + FUtil.Tool.generateRandomCode(),
+      // id: firstContract?.contractId + '-' + FUtil.Tool.generateRandomCode(20),
+      id: FUtil.Tool.generateRandomCode(20),
       type: 'FNode_Authorization_Contract',
-      value: {
-        contractID: firstContract?.contractId || '',
-        contractName: firstContract?.contractName || '',
-        isAuth: true,
-        isMultiple: d.length > 0,
-      },
+      // value: {
+      //   contractID: firstContract?.contractId || '',
+      //   contractName: firstContract?.contractName || '',
+      //   isAuth: true,
+      //   isMultiple: d.length > 0,
+      // },
+      value: d[0].contracts.map((contract) => {
+        const contractMap = data_Contracts.find((dc) => {
+          return contract.contractId === dc.contractId;
+        });
+        return {
+          contractID: contract.contractId,
+          contractName: contractMap?.contractName || '',
+          isAuth: true,
+        };
+      }),
       children: d.map((d1) => {
         return {
           id: d1.resourceId + '-' + FUtil.Tool.generateRandomCode(),
@@ -250,7 +261,9 @@ function getAllContractIDs({ data = [] }: GetAllContractIDsParams): string[] {
 
   function recursive(d: GetAllContractIDsParams['data']) {
     for (const s of d) {
-      allContractIDs.push(s[0].contracts[0].contractId);
+      for (const c of s[0].contracts) {
+        allContractIDs.push(c.contractId);
+      }
       recursive(s[0].children);
     }
   }
