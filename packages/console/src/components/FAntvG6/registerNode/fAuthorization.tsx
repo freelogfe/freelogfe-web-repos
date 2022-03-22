@@ -4,6 +4,7 @@ import G6 from '@antv/g6';
 import React from 'react';
 import img_Execute from '@/assets/execute.svg';
 import img_Gear from '@/assets/gear.svg';
+import img_Forbid from '@/assets/forbid.svg';
 
 export interface FNode_Authorization_Resource_Values {
   resourceID: string;
@@ -89,16 +90,16 @@ const statusInfo = {
     img: img_Execute,
   },
   terminal: {
-    color1: '#FBF5EA',
-    color2: '#E5C78A',
+    color1: '#D5D5D5',
+    color2: '#E5E7EB',
     text: '已终止',
-    img: img_Execute,
+    img: img_Forbid,
   },
   exception: {
-    color1: '#FBF5EA',
-    color2: '#E5C78A',
+    color1: '#D5D5D5',
+    color2: '#E5E7EB',
     text: '异常',
-    img: img_Execute,
+    img: img_Forbid,
   },
 };
 
