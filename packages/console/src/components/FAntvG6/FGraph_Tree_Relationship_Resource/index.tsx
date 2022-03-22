@@ -102,7 +102,7 @@ function FGraph_Tree_Relationship_Resource({
   }
 
   return (<DecompositionTreeGraph
-    style={{backgroundColor: 'transparent'}}
+    style={{ backgroundColor: 'transparent' }}
     width={width}
     height={height}
     data={dataSource as any}
@@ -196,10 +196,11 @@ function handleDataSource(data: ServerDataNode[], auth: {
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        isAuth: auth.find((af) => {
-          return af.resourceId === d.resourceId;
-          // && af.version === d.version;
-        })?.isAuth || true,
+        isAuth: true,
+        // isAuth: auth.find((af) => {
+        //   return af.resourceId === d.resourceId;
+        //   // && af.version === d.version;
+        // })?.isAuth || true,
       },
       children: handleDataSource(d.children, auth),
     };

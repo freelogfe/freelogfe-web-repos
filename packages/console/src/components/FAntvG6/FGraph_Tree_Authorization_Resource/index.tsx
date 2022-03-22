@@ -226,7 +226,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
         return {
           contractID: contract.contractId,
           contractName: contractMap?.contractName || '',
-          isAuth: true,
+          isAuth: contractMap?.authStatus === 1 || contractMap?.authStatus === 2,
         };
       }),
       children: d.map((d1) => {
