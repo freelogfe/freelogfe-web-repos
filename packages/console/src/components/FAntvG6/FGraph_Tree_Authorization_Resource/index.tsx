@@ -162,21 +162,7 @@ function FGraph_Tree_Authorization_Resource({
       width={width}
       height={height}
       data={dataSource as any}
-      // fitCenter={false}
-      // autoFit={true}
-      nodeCfg={
-        {
-          style: {},
-          nodeStateStyles: {},
-        }
-      }
       layout={{
-        // type: 'dagre',
-        // rankdir: 'LR',
-        // type: 'indented',
-        // direction: 'LR',
-        // dropCap: false,
-        // indent: 500,
         getHeight: (node: any) => {
           // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
           if (node.type === 'FNode_Authorization_Contract') {
@@ -184,24 +170,12 @@ function FGraph_Tree_Authorization_Resource({
           }
           return 64;
         },
-        // fitViewPadding: [200, 200],
         getWidth: () => {
           return 200;
         },
       }}
-      // markerCfg={(cfg) => {
-      //   const { children } = cfg as any;
-      //   return {
-      //     show: children?.length,
-      //   };
-      // }}
       behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
       onReady={(graph) => {
-        // console.log(graph.getNodes(), 'GGGRRRRAAAFFFFFF');
-        // console.log(graph, 'GGGRRRRAAAFFFFFF');
-        // graph.moveTo(20, 20, true);
-        // console.log(graph.getHeight());
-        // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
         graph.on('contract:view', ({ contractID }: any) => {
           // console.log(params, 'params23908isdflk');
