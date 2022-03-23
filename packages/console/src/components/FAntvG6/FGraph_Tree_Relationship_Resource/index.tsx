@@ -8,6 +8,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
+import FErrorBoundary from '@/components/FErrorBoundary';
 
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
@@ -101,48 +102,50 @@ function FGraph_Tree_Relationship_Resource({
       </div>);
   }
 
-  return (<DecompositionTreeGraph
-    style={{ backgroundColor: 'transparent' }}
-    width={width}
-    height={height}
-    data={dataSource as any}
-    // fitCenter={false}
-    // autoFit={true}
-    nodeCfg={
-      {
-        type: 'FNode_Relationship_Resource',
-        style: {},
-        nodeStateStyles: {},
+  return (<FErrorBoundary>
+    <DecompositionTreeGraph
+      style={{ backgroundColor: 'transparent' }}
+      width={width}
+      height={height}
+      data={dataSource as any}
+      // fitCenter={false}
+      // autoFit={true}
+      nodeCfg={
+        {
+          type: 'FNode_Relationship_Resource',
+          style: {},
+          nodeStateStyles: {},
+        }
       }
-    }
-    layout={{
-      // type: 'indented',
-      // direction: 'LR',
-      // dropCap: false,
-      // indent: 500,
-      getHeight: () => {
-        return 90;
-      },
-      getWidth: () => {
-        return 200;
-      },
+      layout={{
+        // type: 'indented',
+        // direction: 'LR',
+        // dropCap: false,
+        // indent: 500,
+        getHeight: () => {
+          return 90;
+        },
+        getWidth: () => {
+          return 200;
+        },
 
-    }}
-    // markerCfg={(cfg) => {
-    //   const { children } = cfg as any;
-    //   return {
-    //     show: children?.length,
-    //   };
-    // }}
-    behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
-    onReady={(graph) => {
-      // console.log(graph, 'GGGRRRRAAAFFFFFF');
-      // console.log(graph.getNodes(), 'GGGRRRRAAAFFFFFF');
-      // graph.moveTo(20, 20, true);
-      // graph.zoom(1);
-      appendAutoShapeListener(graph as Graph);
-    }}
-  />);
+      }}
+      // markerCfg={(cfg) => {
+      //   const { children } = cfg as any;
+      //   return {
+      //     show: children?.length,
+      //   };
+      // }}
+      behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+      onReady={(graph) => {
+        // console.log(graph, 'GGGRRRRAAAFFFFFF');
+        // console.log(graph.getNodes(), 'GGGRRRRAAAFFFFFF');
+        // graph.moveTo(20, 20, true);
+        // graph.zoom(1);
+        appendAutoShapeListener(graph as Graph);
+      }}
+    />
+  </FErrorBoundary>);
 }
 
 export default FGraph_Tree_Relationship_Resource;

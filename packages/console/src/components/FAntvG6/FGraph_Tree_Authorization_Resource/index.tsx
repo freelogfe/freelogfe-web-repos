@@ -12,6 +12,7 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
+import FErrorBoundary from '@/components/FErrorBoundary';
 // import { appenAutoShapeListener } from '@antv/g6-react-node';
 
 type ServerDataNodes = {
@@ -141,7 +142,7 @@ function FGraph_Tree_Authorization_Resource({
     set_DataSource(finalDataSource);
   }
 
-  return (<>
+  return (<FErrorBoundary>
     {
       !dataSource
         ? (<FLoadingTip height={height} />)
@@ -189,7 +190,7 @@ function FGraph_Tree_Authorization_Resource({
         handleData();
       }}
     />
-  </>);
+  </FErrorBoundary>);
 }
 
 export default FGraph_Tree_Authorization_Resource;
