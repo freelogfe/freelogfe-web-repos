@@ -14,7 +14,8 @@ import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
-import { FTextBtn } from '@/components/FButton';
+
+// import { FTextBtn } from '@/components/FButton';
 
 interface BaseInfo {
   subjectId: string;
@@ -53,6 +54,8 @@ type AssociateContracts = {
 interface FContractDetailsDrawerProps {
   contractID?: string;
   onClose?: () => void;
+
+  onChange_SomeContract?(): void;
 }
 
 interface FContractDetailsDrawerStates {
@@ -83,7 +86,7 @@ const initStates: FContractDetailsDrawerStates = {
   exhibitAllContractIDs: [],
 };
 
-function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDrawerProps) {
+function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContract }: FContractDetailsDrawerProps) {
   // console.log(contractID, 'contractID!!!!2341234');
 
   const [isSelfLicensorOwner, set_IsSelfLicensorOwner] = React.useState<FContractDetailsDrawerStates['isSelfLicensorOwner']>(initStates['isSelfLicensorOwner']);
@@ -301,6 +304,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     }
   }
 
+  function reportedInformation() {
+    onChange_SomeContract && onChange_SomeContract();
+  }
+
   return (<FDrawer
     visible={!!contractID}
     title={'合约详情'}
@@ -406,11 +413,12 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                 contractID && (<div style={{ padding: '0 20px' }}>
                   <FContractDisplay
                     contractID={contractID}
+                    onChangedEvent={() => {
+                      reportedInformation();
+                    }}
                   />
                 </div>)
               }
-              {/*<div style={{ height: 15 }} />*/}
-              {/*<div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />*/}
               <div style={{ height: 15 }} />
               {
                 isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
@@ -423,6 +431,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       onChangeVersionAllContractIDs={(value) => {
                         // console.log(value, '@#$@#$@#');
                         setVersionAllContractIDs(value);
+                        reportedInformation();
                       }}
                       onChangeVersionContractIDs={(value) => {
                         // console.log(value, '##$@#$@#$');
@@ -443,6 +452,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       onChangeExhibitAllContractIDs={(value) => {
                         // console.log(value, '@#$@#$@#$@#09sdj');
                         setExhibitAllContractIDs(value);
+                        reportedInformation();
                       }}
                       onChangeExhibitContractIDs={(value) => {
                         // console.log(value, '@#$@#098jsdlfkjl');
@@ -517,16 +527,13 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                       <div style={{ display: ac.expansion ? 'block' : 'none', padding: '0 20px' }}>
                         <FContractDisplay
                           contractID={ac.contractId}
+                          onChangedEvent={() => {
+                            reportedInformation();
+                          }}
                         />
                         <div style={{ height: 10 }} />
                       </div>
 
-                      {/*{*/}
-                      {/*  ac.expansion && (<>*/}
-                      {/*    */}
-                      {/*  </>)*/}
-                      {/*}*/}
-                      {/*<div style={{ height: 15 }} />*/}
                       {
                         isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
                           {/*<div style={{ height: 10 }} />*/}
@@ -546,6 +553,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                               onChangeVersionAllContractIDs={(value) => {
                                 // console.log(value, '@#$@#$@#');
                                 setVersionAllContractIDs(value);
+                                reportedInformation();
                               }}
                               onChangeVersionContractIDs={(value) => {
                                 // console.log(value, '##$@#$@#$');
@@ -577,6 +585,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                               onChangeExhibitAllContractIDs={(value) => {
                                 // console.log(value, '@#$@#$@#$@#09sdj');
                                 setExhibitAllContractIDs(value);
+                                reportedInformation();
                               }}
                               onChangeExhibitContractIDs={(value) => {
                                 // console.log(value, '@#$@#098jsdlfkjl');
