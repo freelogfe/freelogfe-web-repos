@@ -140,7 +140,7 @@ function FGraph_Tree_Authorization_Resource({
 
     set_DataSource(finalDataSource);
   }
-  
+
   return (<>
     {
       !dataSource
