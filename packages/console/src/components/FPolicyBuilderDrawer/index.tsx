@@ -1062,7 +1062,7 @@ function FPolicyBuilder({
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let payment_AmountError: string = '';
-                                              if (!MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
+                                              if (!FUtil.Regexp.MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
                                                 payment_AmountError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
                                               }
                                               onChangeCombinationEvent({
@@ -1110,7 +1110,7 @@ function FPolicyBuilder({
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let relativeTime_NumError: string = '';
-                                              if (!POSITIVE_INTEGER.test(value)) {
+                                              if (!FUtil.Regexp.POSITIVE_INTEGER.test(value)) {
                                                 relativeTime_NumError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
                                               }
                                               onChangeCombinationEvent({
@@ -1797,7 +1797,7 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
 }
 
 // 正整数
-const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
+// const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
 
 // 最多两位小数的正数
-const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
+// const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
