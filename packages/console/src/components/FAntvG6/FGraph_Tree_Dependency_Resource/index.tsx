@@ -52,7 +52,7 @@ function FGraph_Tree_Dependency_Resource({
   }, [resourceID, version]);
 
   async function handleData() {
-    set_DataSource(null);
+    // set_DataSource(null);
 
     if (!resourceID || !version) {
       return;
