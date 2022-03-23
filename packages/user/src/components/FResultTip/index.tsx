@@ -19,8 +19,8 @@ function FResultTip({ h1, h2, btnText, onClickBtn }: FResultTipProps) {
   return (<div className={styles.modal}>
 
     {
-      h1Text.map((h) => {
-        return (<FTipText type='first' text={h} />);
+      h1Text.map((h, i) => {
+        return (<FTipText key={i} type='first' text={h} />);
       })
     }
 
@@ -28,8 +28,8 @@ function FResultTip({ h1, h2, btnText, onClickBtn }: FResultTipProps) {
       h2Text.length > 0 && (<>
         <div style={{ height: 30 }} />
         {
-          h2Text.map((h) => {
-            return (<FTipText type='second' text={h} />);
+          h2Text.map((h, i) => {
+            return (<FTipText key={i} type='second' text={h} />);
           })
         }
       </>)
