@@ -3,9 +3,9 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
-import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
-import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
-import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
+// import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
+// import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
+// import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 
@@ -19,49 +19,49 @@ export interface ResourceVersionEditorPageModelState {
 
   graphFullScreen: boolean;
   viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
-  dependencyGraphNodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  }[];
-  dependencyGraphEdges: {
-    source: string;
-    target: string;
-  }[];
-  authorizationGraphNodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  authorizationGraphEdges: {
-    source: string;
-    target: string;
-  }[];
-  relationGraphNodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-    pending: boolean;
-    exception: boolean;
-  }[];
-  relationGraphEdges: {
-    source: string;
-    target: string;
-  }[];
+  // dependencyGraphNodes: {
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  // }[];
+  // dependencyGraphEdges: {
+  //   source: string;
+  //   target: string;
+  // }[];
+  // authorizationGraphNodes: Array<{
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  // } | {
+  //   id: string;
+  //   contracts: {
+  //     contractId: string;
+  //     contractName: string;
+  //     isAuth: boolean;
+  //     updateDate: string;
+  //   }[];
+  // }>;
+  // authorizationGraphEdges: {
+  //   source: string;
+  //   target: string;
+  // }[];
+  // relationGraphNodes: {
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  //   pending: boolean;
+  //   exception: boolean;
+  // }[];
+  // relationGraphEdges: {
+  //   source: string;
+  //   target: string;
+  // }[];
 
   rawProperties: {
     key: string;
@@ -147,12 +147,12 @@ const Model: ResourceVersionEditorModelType = {
 
     graphFullScreen: false,
     viewportGraphShow: 'relationship',
-    dependencyGraphNodes: [],
-    dependencyGraphEdges: [],
-    authorizationGraphNodes: [],
-    authorizationGraphEdges: [],
-    relationGraphNodes: [],
-    relationGraphEdges: [],
+    // dependencyGraphNodes: [],
+    // dependencyGraphEdges: [],
+    // authorizationGraphNodes: [],
+    // authorizationGraphEdges: [],
+    // relationGraphNodes: [],
+    // relationGraphEdges: [],
 
     rawProperties: [],
     baseProperties: [],
@@ -194,42 +194,42 @@ const Model: ResourceVersionEditorModelType = {
       }
 
       // 依赖树
-      const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
-        resourceId: resourceVersionEditorPage.resourceID,
-        version: resourceVersionEditorPage.version,
-        // $version: '0.0.1',
-        isContainRootNode: true,
-      };
-
-      const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
-      const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
+      // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
+      //   resourceId: resourceVersionEditorPage.resourceID,
+      //   version: resourceVersionEditorPage.version,
+      //   // $version: '0.0.1',
+      //   isContainRootNode: true,
+      // };
+      //
+      // const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
+      // const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
 
       // 授权树
-      const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
-        resourceId: resourceVersionEditorPage.resourceID,
-        version: resourceVersionEditorPage.version,
-      };
-
-      const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
-      // console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
-      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
-        id: data.version,
-        resourceId: data.resourceId,
-        resourceName: data.resourceName,
-        resourceType: data.resourceType,
-        version: data.version,
-        versionId: data.versionId,
-      });
+      // const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
+      //   resourceId: resourceVersionEditorPage.resourceID,
+      //   version: resourceVersionEditorPage.version,
+      // };
+      //
+      // const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
+      // // console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
+      // const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
+      //   id: data.version,
+      //   resourceId: data.resourceId,
+      //   resourceName: data.resourceName,
+      //   resourceType: data.resourceType,
+      //   version: data.version,
+      //   versionId: data.versionId,
+      // });
 
       // 关系树
-      const params4: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
-        resourceId: resourceVersionEditorPage.resourceID,
-        version: resourceVersionEditorPage.version,
-      };
-
-      const {data: data4} = yield call(FServiceAPI.Resource.relationTreeAuth, params4);
-      // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
-      const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
+      // const params4: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
+      //   resourceId: resourceVersionEditorPage.resourceID,
+      //   version: resourceVersionEditorPage.version,
+      // };
+      //
+      // const {data: data4} = yield call(FServiceAPI.Resource.relationTreeAuth, params4);
+      // // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      // const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
       // console.log(relationGraphNodes, relationGraphEdges, 'relationGraphEdges@Q@#$!@#$!@$@#$@!#$');
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
@@ -267,12 +267,12 @@ const Model: ResourceVersionEditorModelType = {
             defaultValue: i.defaultValue,
             customOption: i.candidateItems.join(','),
           })),
-          dependencyGraphNodes: dependencyGraphNodes,
-          dependencyGraphEdges: dependencyGraphEdges,
-          authorizationGraphNodes: authorizationGraphNodes,
-          authorizationGraphEdges: authorizationGraphEdges,
-          relationGraphNodes: relationGraphNodes,
-          relationGraphEdges: relationGraphEdges,
+          // dependencyGraphNodes: dependencyGraphNodes,
+          // dependencyGraphEdges: dependencyGraphEdges,
+          // authorizationGraphNodes: authorizationGraphNodes,
+          // authorizationGraphEdges: authorizationGraphEdges,
+          // relationGraphNodes: relationGraphNodes,
+          // relationGraphEdges: relationGraphEdges,
         },
       });
     },

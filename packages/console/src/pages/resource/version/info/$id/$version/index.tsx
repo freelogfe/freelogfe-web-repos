@@ -23,9 +23,9 @@ import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
 import FDownload from '@/components/FIcons/FDownload';
 import {
-  FAntvG6AuthorizationGraph,
-  FAntvG6DependencyGraph,
-  FAntvG6RelationshipGraph,
+  // FAntvG6AuthorizationGraph,
+  // FAntvG6DependencyGraph,
+  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import FUtil1 from '@/utils';
