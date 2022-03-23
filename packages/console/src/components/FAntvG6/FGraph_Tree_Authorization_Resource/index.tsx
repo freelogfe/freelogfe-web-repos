@@ -168,7 +168,7 @@ function FGraph_Tree_Authorization_Resource({
       layout={{
         getHeight: (node: any) => {
           // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-          return Array.isArray(node.value) ? node.value.length * 64 : 64;
+          return Array.isArray(node.value) ? (node.value.length || 1) * 64 : 64;
         },
         getWidth: () => {
           return 200;

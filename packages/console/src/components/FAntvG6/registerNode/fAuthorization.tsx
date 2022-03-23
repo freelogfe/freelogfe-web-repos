@@ -8,6 +8,7 @@ import img_Forbid from '@/assets/forbid.svg';
 import img from '@/assets/warning.svg';
 import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode/fRelationship';
 import { FNode_Dependency_Resource_Values } from '@/components/FAntvG6/registerNode/fDependency';
+import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Authorization_Resource_Values {
   resourceID: string;
@@ -118,7 +119,49 @@ const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Co
   // const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
   const contracts = value;
   // console.log(cfg, 'contracts@##3433333333');
-  return (<Group>
+
+  if (contracts.length === 0) {
+    return (<Group draggable={true}>
+      <Rect draggable style={{
+        // width: 200,
+        // height: 64,
+        fill: '#E5E7EB',
+        stroke: '#D5D5D5',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: 600,
+            fill: '#222',
+            padding: [3, 0],
+          }}
+          onClick={() => {
+            // console.log('#####2342394ui3jk');
+          }}
+        >暂无有效合约</Text>
+        <Rect style={{ height: 10 }} />
+        <Text
+          style={{
+            fill: '#2E88FF',
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: 'pointer',
+            margin: [3, 0, 0],
+          }}
+          onClick={(evt, node, shape, graph) => {
+            // graph.emit('contract:view', {
+            //   contractID: contract.contractID,
+            // });
+            window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.contract());
+          }}
+        >查看已终止的合约</Text>
+      </Rect>
+    </Group>);
+  }
+  return (<Group draggable={true}>
 
     {
       contracts.map((contract) => {
