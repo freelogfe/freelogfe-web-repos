@@ -74,7 +74,6 @@ function FGraph_Tree_Authorization_Resource({
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Resource_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Resource_States['contractID']>(initStates['contractID']);
 
-
   React.useEffect(() => {
     handleData();
   }, [resourceID, version]);
@@ -144,49 +143,61 @@ function FGraph_Tree_Authorization_Resource({
 
   // console.log(dataSource, 'dataSource授权树2398iohsdfsdl');
 
-  if (!dataSource) {
-    return (<FLoadingTip height={height} />);
-  }
-
-  if (dataSource.children.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-        <FResultTip h1={'无授权树'} />
-      </div>);
-  }
+  // if (!dataSource) {
+  //   return ;
+  // }
+  //
+  // if (dataSource.children.length === 0) {
+  //   return ;
+  // }
 
 
   return (<>
-    <DecompositionTreeGraph
-      style={{ backgroundColor: 'transparent' }}
-      width={width}
-      height={height}
-      data={dataSource as any}
-      nodeCfg={{
-        type: 'FNode_Authorization_Resource',
-      }}
-      layout={{
-        getHeight: (node: any) => {
-          // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-          return Array.isArray(node.value) ? (node.value.length || 1) * 64 : 64;
-        },
-        getWidth: () => {
-          return 200;
-        },
-      }}
-      behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
-      onReady={(graph) => {
-        appendAutoShapeListener(graph as Graph);
-        graph.on('contract:view', ({ contractID }: any) => {
-          // console.log(params, 'params23908isdflk');
-          set_ContractID(contractID);
-        });
-      }}
-    />
+    {
+      !dataSource
+        ? (<FLoadingTip height={height} />)
+        : dataSource.children.length === 0
+          ? (<div
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+            <FResultTip h1={'无授权树'} />
+          </div>)
+          : (<DecompositionTreeGraph
+            style={{ backgroundColor: 'transparent' }}
+            width={width}
+            height={height}
+            data={dataSource as any}
+            nodeCfg={{
+              type: 'FNode_Authorization_Resource',
+            }}
+            layout={{
+              getHeight: (node: any) => {
+                // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+                return Array.isArray(node.value) ? (node.value.length || 1) * 64 : 64;
+              },
+              getWidth: () => {
+                return 200;
+              },
+            }}
+            behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+            onReady={(graph) => {
+              appendAutoShapeListener(graph as Graph);
+              graph.on('contract:view', ({ contractID }: any) => {
+                // console.log(params, 'params23908isdflk');
+                console.log(contractID, 'contractID@#@##$@#$@#');
+                set_ContractID(contractID);
+              });
+            }}
+          />)
+    }
+
+
     <FContractDetailsDrawer
       contractID={contractID}
       onClose={() => {
         set_ContractID('');
+      }}
+      onChange_SomeContract={() => {
+        handleData();
       }}
     />
   </>);
@@ -208,15 +219,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
     // });
 
     return {
-      // id: firstContract?.contractId + '-' + FUtil.Tool.generateRandomCode(20),
       id: FUtil.Tool.generateRandomCode(20),
-      // type: 'FNode_Authorization_Contract',
-      // value: {
-      //   contractID: firstContract?.contractId || '',
-      //   contractName: firstContract?.contractName || '',
-      //   isAuth: true,
-      //   isMultiple: d.length > 0,
-      // },
       value: d[0].contracts.map((contract) => {
         const contractMap = data_Contracts.find((dc) => {
           return contract.contractId === dc.contractId;
