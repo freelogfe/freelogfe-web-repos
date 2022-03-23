@@ -140,18 +140,7 @@ function FGraph_Tree_Authorization_Resource({
 
     set_DataSource(finalDataSource);
   }
-
-  // console.log(dataSource, 'dataSource授权树2398iohsdfsdl');
-
-  // if (!dataSource) {
-  //   return ;
-  // }
-  //
-  // if (dataSource.children.length === 0) {
-  //   return ;
-  // }
-
-
+  
   return (<>
     {
       !dataSource
