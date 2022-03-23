@@ -93,36 +93,36 @@ export interface MarketResourcePageModelState {
 
   graphFullScreen: boolean;
   viewportGraphShow: 'dependency' | 'authorization';
-  dependencyGraphNodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  }[];
-  dependencyGraphEdges: {
-    source: string;
-    target: string;
-  }[];
-  authorizationGraphNodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  authorizationGraphEdges: {
-    source: string;
-    target: string;
-  }[];
+  // dependencyGraphNodes: {
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  // }[];
+  // dependencyGraphEdges: {
+  //   source: string;
+  //   target: string;
+  // }[];
+  // authorizationGraphNodes: Array<{
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  // } | {
+  //   id: string;
+  //   contracts: {
+  //     contractId: string;
+  //     contractName: string;
+  //     isAuth: boolean;
+  //     updateDate: string;
+  //   }[];
+  // }>;
+  // authorizationGraphEdges: {
+  //   source: string;
+  //   target: string;
+  // }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -247,10 +247,10 @@ const initStates: MarketResourcePageModelState = {
 
   graphFullScreen: false,
   viewportGraphShow: 'dependency',
-  dependencyGraphNodes: [],
-  dependencyGraphEdges: [],
-  authorizationGraphNodes: [],
-  authorizationGraphEdges: [],
+  // dependencyGraphNodes: [],
+  // dependencyGraphEdges: [],
+  // authorizationGraphNodes: [],
+  // authorizationGraphEdges: [],
 
 };
 
@@ -615,10 +615,10 @@ const Model: MarketResourcePageModelType = {
                 description: p.remark,
               };
             }),
-          dependencyGraphNodes: dependencyGraphNodes,
-          dependencyGraphEdges: dependencyGraphEdges,
-          authorizationGraphNodes: authorizationGraphNodes,
-          authorizationGraphEdges: authorizationGraphEdges,
+          // dependencyGraphNodes: dependencyGraphNodes,
+          // dependencyGraphEdges: dependencyGraphEdges,
+          // authorizationGraphNodes: authorizationGraphNodes,
+          // authorizationGraphEdges: authorizationGraphEdges,
         },
       });
     },
@@ -692,7 +692,7 @@ const Model: MarketResourcePageModelType = {
       };
 
       const signExhibitName: string = yield call(getAvailableExhibitName, params);
-      yield  put<ChangeAction>({
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
           signExhibitName: signExhibitName,

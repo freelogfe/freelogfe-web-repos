@@ -2,9 +2,9 @@ import * as React from 'react';
 import { FContentText, FTitleText } from '@/components/FText';
 import styles from './index.less';
 import {
-  FAntvG6AuthorizationGraph,
-  FAntvG6DependencyGraph,
-  FAntvG6RelationshipGraph,
+  // FAntvG6AuthorizationGraph,
+  // FAntvG6DependencyGraph,
+  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import { connect, Dispatch } from 'dva';
