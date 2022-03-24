@@ -73,11 +73,11 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
             <div style={{ height: 5 }} />
             <div className={styles.policeTags}>
               {
-                r.policies?.filter((p) => p.checked)
+                r.policies.filter((p) => p.checked)
                   .map((p) => (<div key={p.fullInfo.policyId}>{p.fullInfo.policyName}</div>))
               }
               {
-                r.contracts?.map((c) => (<div key={c.id}>
+                r.contracts.map((c) => (<div key={c.id}>
                   <span>{c.name}</span>
                   <div style={{ width: 5 }} />
                   <label style={{
