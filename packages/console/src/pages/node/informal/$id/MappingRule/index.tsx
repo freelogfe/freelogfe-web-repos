@@ -427,7 +427,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'} />)
                 : informalNodeManagerPage.rule_RuleList.map((rule, index: number, ruleObjListArray) => {
                   return (<div
-                    key={rule.id}
+                    key={index}
                     className={styles.ruleCard}
                   >
                     <div className={styles.ruleCardHeader}>
