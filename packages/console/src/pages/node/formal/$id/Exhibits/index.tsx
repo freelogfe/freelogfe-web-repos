@@ -153,7 +153,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={15}>
           <FSwitch
-            disabled={!record.isAuth}
+            disabled={!record.isAuth && !record.isOnline}
             checked={record.isOnline}
             onChange={(value) => {
               if (value && record.policies.length === 0) {
