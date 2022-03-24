@@ -28,12 +28,12 @@ import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
-// import InfiniteScroll from 'react-infinite-scroller';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
+import fMessage from '@/components/fMessage';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -62,14 +62,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
       title: (<FTitleText
-        // text={'展品名称｜类型｜展品标题｜策略'}
         text={FUtil1.I18n.message('tableheader_exhibit')}
         type='table'
       />),
       dataIndex: 'name',
       key: 'name',
-      // className: styles.tableName,
-      // width: 100,
       render(_, record) {
         return (<div className={styles.info}>
           {/*<img src={record.cover || imgSrc} alt={''} />*/}
@@ -156,9 +153,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={15}>
           <FSwitch
-            disabled={!record.isAuth || record.policies.length === 0}
+            disabled={!record.isAuth}
             checked={record.isOnline}
             onChange={(value) => {
+              if (value && record.policies.length === 0) {
+                fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                return;
+              }
               dispatch<OnOnlineOrOfflineAction>({
                 type: 'nodeManagerPage/onOnlineOrOffline',
                 payload: {
@@ -168,10 +169,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               });
             }}
           />
-          {!record.isAuth || record.policies.length === 0 ?
-            <FTooltip title={!record.isAuth ? record.authErrorText : '暂无上线策略'}>
+          {
+            !record.isAuth && (<FTooltip title={record.authErrorText}>
               <FWarning />
-            </FTooltip> : ''}
+            </FTooltip>)
+          }
         </Space>);
       },
     },

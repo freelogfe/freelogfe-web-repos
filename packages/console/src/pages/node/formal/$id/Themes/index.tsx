@@ -19,17 +19,14 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-// import FLink from '@/components/FLink';
 import fConfirmModal from '@/components/fConfirmModal';
-import FDivider from '@/components/FDivider';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
-// import informExhibitInfoPage from '@/models/informExhibitInfoPage';
-// import exhibitInfoPage from '@/models/exhibitInfoPage';
+import fMessage from '@/components/fMessage';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -106,7 +103,7 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
               nodeManagerPage.theme_ListState === 'loaded' && (<div className={styles.body}>
                 {
                   nodeManagerPage.theme_List.map((i) => {
-                    const hasActiveBtn: boolean = !i.isOnline && i.isAuth && i.policies.length > 0;
+                    const hasActiveBtn: boolean = !i.isOnline && i.isAuth; //&& i.policies.length > 0;
                     return (<div
                       className={styles.theme}
                       key={i.id}
@@ -117,10 +114,11 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                             i.isOnline && (<label className={styles.label}>{FUtil1.I18n.message('state_active')}</label>)
                           }
 
-                          {!i.isAuth || i.policies.length === 0 ?
-                            <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
+                          {
+                            !i.isAuth && (<FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
                               <FWarning />
-                            </FTooltip> : ''}
+                            </FTooltip>)
+                          }
                         </Space>
 
                         <FCoverImage
@@ -142,6 +140,10 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                 {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
+                                    if (i.policies.length === 0) {
+                                      fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                                      return;
+                                    }
                                     if (!nodeManagerPage.nodeThemeId) {
                                       dispatch<OnActiveAction>({
                                         type: 'nodeManagerPage/onActive',
