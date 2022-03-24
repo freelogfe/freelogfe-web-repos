@@ -37,38 +37,6 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
-// type ResourceAuthColor = Array<'active' | 'testActive'>;
-// type ExhibitAuthColor = Array<'active'>;
-
-// interface IEvent_Payment {
-//   randomID: string;
-//   type: 'payment';
-//   amount: string;
-//   amountError: string;
-//   target: string;
-// }
-//
-// interface IEvent_RelativeTime {
-//   randomID: string;
-//   type: 'relativeTime';
-//   num: string;
-//   numError: string;
-//   unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
-//   target: string;
-// }
-//
-// interface IEvent_AbsoluteTime {
-//   randomID: string;
-//   type: 'absoluteTime';
-//   dateTime: Moment | null;
-//   target: string;
-// }
-//
-// interface IEvent_Terminate {
-//   randomID: string;
-//   type: 'terminate';
-// }
-
 type CombinationStructureType = {
   randomID: string;
   type: 'initial' | 'other';
