@@ -742,23 +742,22 @@ function FPolicyBuilder({
     <FDrawer
       title={<Space size={10}>
         <FTitleText type='h2' text={'添加授权策略'} />
-        <FTooltip title={<FTextBtn
-          type='default'
-          onClick={() => {
-            window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
-          }}
-        >点击查看帮助文档</FTextBtn>}>
-          <label style={{
-            cursor: 'pointer',
-            width: 20,
-            height: 20,
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#E9E9E9',
-            fontSize: 12,
-          }}>?
+        <FTooltip title={'点击查看帮助文档'}>
+          <label
+            onClick={() => {
+              window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
+            }}
+            style={{
+              cursor: 'pointer',
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#E9E9E9',
+              fontSize: 12,
+            }}>?
           </label>
         </FTooltip>
       </Space>}
@@ -983,12 +982,12 @@ function FPolicyBuilder({
                                         paddingTop: 5,
                                       }}>{cd.nameError}</div>)
                                       : cd.isNameDuplicate
-                                      ? (<div style={{
-                                        color: '#EE4040',
-                                        paddingLeft: 55,
-                                        paddingTop: 5,
-                                      }}>有重复的名称</div>)
-                                      : null
+                                        ? (<div style={{
+                                          color: '#EE4040',
+                                          paddingLeft: 55,
+                                          paddingTop: 5,
+                                        }}>有重复的名称</div>)
+                                        : null
                                   }
 
                                 </>)
