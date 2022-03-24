@@ -24,6 +24,7 @@ import { FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
+import fMessage from '@/components/fMessage';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -97,9 +98,15 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           }
 
           <FSwitch
-            disabled={(!exhibitInfoPage.exhibit_IsAuth || exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0) && !exhibitInfoPage.exhibit_Online}
+            disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
             checked={exhibitInfoPage.exhibit_Online}
             onChange={(value) => {
+
+              if (value && exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0) {
+                fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                return;
+              }
+
               if (exhibitInfoPage.side_ResourceType !== 'theme' || !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId || !value) {
                 dispatch<UpdateStatusAction>({
                   type: 'exhibitInfoPage/updateStatus',
@@ -125,10 +132,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             }}
           />
           {
-            !exhibitInfoPage.exhibit_IsAuth || exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0 ? (
-              <FTooltip title={!exhibitInfoPage.exhibit_IsAuth ? exhibitInfoPage.exhibit_AuthErrorText : '暂无上线策略'}>
+            !exhibitInfoPage.exhibit_IsAuth && (<FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
                 <FWarning />
-              </FTooltip>) : ''
+              </FTooltip>)
           }
         </Space>
       </div>
