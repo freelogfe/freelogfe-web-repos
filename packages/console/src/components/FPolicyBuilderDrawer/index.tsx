@@ -1111,7 +1111,7 @@ function FPolicyBuilder({
                                               const value: string = e.target.value;
                                               let relativeTime_NumError: string = '';
                                               if (!FUtil.Regexp.POSITIVE_INTEGER.test(value)) {
-                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_cycle_amount_error');
                                               }
                                               onChangeCombinationEvent({
                                                 relativeTime_Num: value,
