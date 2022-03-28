@@ -350,12 +350,6 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                           fullInfo={sacp}
                         />
                       </div>
-                      {/*<a*/}
-                      {/*  className={styles.PolicyFullScreenBtn}*/}
-                      {/*  onClick={() => {*/}
-                      {/*    setFullScreenVisibleID(p.id);*/}
-                      {/*  }}*/}
-                      {/*><FFullScreen style={{ fontSize: 12 }} /></a>*/}
 
                     </div>
                   </>);
