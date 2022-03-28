@@ -106,6 +106,18 @@ function FGraph_Tree_Authorization_Exhibit({
       };
     } = await FServiceAPI.Exhibit.presentableDetails(parmas1);
 
+    const parmas2: Parameters<typeof FServiceAPI.Node.details>[0] = {
+      nodeId: data_ExhibitDetails.nodeId,
+      // projection: 'presentableId,presentableName,nodeId',
+    };
+
+    const { data: data_NodeDetails }: {
+      data: {
+        nodeId: number;
+        nodeName: string;
+      };
+    } = await FServiceAPI.Node.details(parmas2);
+
     const params2: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
       presentableId: exhibitID,
     };
@@ -134,8 +146,8 @@ function FGraph_Tree_Authorization_Exhibit({
       value: {
         exhibitID: data_ExhibitDetails.presentableId,
         exhibitName: data_ExhibitDetails.presentableName,
-        nodeID: data_ExhibitDetails.nodeId,
-        nodeName: String(data_ExhibitDetails.nodeId),
+        nodeID: data_NodeDetails.nodeId,
+        nodeName: data_NodeDetails.nodeName,
       },
       children: partyResult,
       // children: [],
