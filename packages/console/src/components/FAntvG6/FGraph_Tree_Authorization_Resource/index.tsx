@@ -3,6 +3,7 @@ import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode/fAuthorization';
 import {
+  F_AUTHORIZATION_NODE_TYPE,
   FNode_Authorization_Contract_Values,
   FNode_Authorization_Resource_Values,
 } from '../registerNode/fAuthorization';
@@ -13,7 +14,6 @@ import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FErrorBoundary from '@/components/FErrorBoundary';
-// import { appenAutoShapeListener } from '@antv/g6-react-node';
 
 type ServerDataNodes = {
   resourceId: string;
@@ -43,14 +43,14 @@ interface FGraph_Tree_Authorization_Resource_Props {
 
 interface ResourceNode {
   id: string;
-  // type: 'FNode_Authorization_Resource';
+  nodeType: 'resource';
   value: FNode_Authorization_Resource_Values;
   children: ContractNode[];
 }
 
 interface ContractNode {
   id: string;
-  // type: 'FNode_Authorization_Contract'
+  nodeType: 'contract';
   value: FNode_Authorization_Contract_Values;
   children: ResourceNode[];
 }
@@ -124,6 +124,7 @@ function FGraph_Tree_Authorization_Resource({
 
     const finalDataSource: FGraph_Tree_Authorization_Resource_States['dataSource'] = {
       id: resourceID,
+      nodeType: 'resource',
       // type: 'FNode_Authorization_Resource',
       value: {
         resourceID: data_ResourceDetails.resourceId,
@@ -157,12 +158,12 @@ function FGraph_Tree_Authorization_Resource({
             height={height}
             data={dataSource as any}
             nodeCfg={{
-              type: 'FNode_Authorization_Resource',
+              type: F_AUTHORIZATION_NODE_TYPE,
             }}
             layout={{
               getHeight: (node: any) => {
                 // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-                return Array.isArray(node.value) ? (node.value.length || 1) * 64 : 64;
+                return node.value.type === 'contract' ? (node.value.length || 1) * 64 : 64;
               },
               getWidth: () => {
                 return 200;
@@ -210,6 +211,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
 
     return {
       id: FUtil.Tool.generateRandomCode(20),
+      nodeType: 'contract',
       value: d[0].contracts.map((contract) => {
         const contractMap = data_Contracts.find((dc) => {
           return contract.contractId === dc.contractId;
@@ -226,7 +228,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
       children: d.map((d1) => {
         return {
           id: d1.resourceId + '-' + FUtil.Tool.generateRandomCode(),
-          // type: 'FNode_Authorization_Resource',
+          nodeType: 'resource',
           value: {
             resourceID: d1.resourceId,
             resourceName: d1.resourceName,

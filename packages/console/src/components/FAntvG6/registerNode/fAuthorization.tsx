@@ -6,8 +6,6 @@ import img_Execute from '@/assets/execute.svg';
 import img_Gear from '@/assets/gear.svg';
 import img_Forbid from '@/assets/forbid.svg';
 import img from '@/assets/warning.svg';
-import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode/fRelationship';
-import { FNode_Dependency_Resource_Values } from '@/components/FAntvG6/registerNode/fDependency';
 import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Authorization_Resource_Values {
@@ -239,11 +237,22 @@ const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Co
 
 // G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
 
-const FNode_Authorization_Resource1 = ({ cfg = {} }) => {
+const FNode_Authorization = ({ cfg = {} }: { cfg: any }) => {
   const value = (cfg as any).value;
-  return Array.isArray(value) ? (<FNode_Authorization_Contract
-    value={value}
-  />) : (<FNode_Authorization_Resource value={value} />);
+  // console.log(value, 'value@#38s9dio');
+  if (cfg.nodeType === 'contract') {
+    return (<FNode_Authorization_Contract
+      value={value}
+    />);
+  }
+  if (cfg.nodeType === 'resource') {
+    return (<FNode_Authorization_Resource
+      value={value}
+    />);
+  }
+  return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
 };
 
-G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource1));
+export const F_AUTHORIZATION_NODE_TYPE: string = 'FNode_Authorization';
+
+G6.registerNode(F_AUTHORIZATION_NODE_TYPE, createNodeFromReact(FNode_Authorization));
