@@ -11,7 +11,11 @@ export interface FNode_Dependency_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Dependency_Resource = ({ value }: { value: FNode_Dependency_Resource_Values }) => {
+interface FNode_Dependency_Resource_Props {
+  value: FNode_Dependency_Resource_Values;
+}
+
+function FNode_Dependency_Resource({ value }: FNode_Dependency_Resource_Props) {
   const {
     resourceID,
     resourceName,
@@ -55,9 +59,9 @@ const FNode_Dependency_Resource = ({ value }: { value: FNode_Dependency_Resource
       }}>{resourceType} | {version}</Text>
     </Rect>
   </Group>);
-};
+}
 
-const FNode_Dependency = ({ cfg = {} }: { cfg: any }) => {
+function FNode_Dependency({ cfg = {} }: any) {
   // console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
   if (cfg.nodeType === 'resource') {
     return (<FNode_Dependency_Resource
@@ -66,7 +70,7 @@ const FNode_Dependency = ({ cfg = {} }: { cfg: any }) => {
   }
 
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
-};
+}
 
 export const F_DEPENDENCY_NODE_TYPE: string = 'FNode_Dependency';
 

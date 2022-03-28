@@ -16,7 +16,11 @@ export interface FNode_Authorization_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Resource_Values }) => {
+interface FNode_Authorization_Resource_Props {
+  value: FNode_Authorization_Resource_Values;
+}
+
+function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Props) {
   // console.log(cfg, 'cfgcfgcfgcfg0932iojsdlkfsjdlklllllllCCCCC');
   // const {
   //   resourceID,
@@ -69,9 +73,7 @@ const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Re
       }}>{resourceType} | {version}</Text>
     </Rect>
   </Group>);
-};
-
-// G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource));
+}
 
 export type FNode_Authorization_Contract_Values = {
   contractID: string;
@@ -112,7 +114,11 @@ const statusInfo = {
   },
 };
 
-const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Contract_Values }) => {
+interface FNode_Authorization_Contract_Props {
+  value: FNode_Authorization_Contract_Values;
+}
+
+function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Props) {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
   // const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
   const contracts = value;
@@ -229,15 +235,10 @@ const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Co
         </Rect>);
       })
     }
-
-
   </Group>);
-};
+}
 
-
-// G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
-
-const FNode_Authorization = ({ cfg = {} }: { cfg: any }) => {
+function FNode_Authorization({ cfg = {} }: any) {
   // console.log(value, 'value@#38s9dio');
   if (cfg.nodeType === 'contract') {
     return (<FNode_Authorization_Contract
@@ -250,7 +251,7 @@ const FNode_Authorization = ({ cfg = {} }: { cfg: any }) => {
     />);
   }
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
-};
+}
 
 export const F_AUTHORIZATION_NODE_TYPE: string = 'FNode_Authorization';
 
