@@ -238,16 +238,15 @@ const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Co
 // G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
 
 const FNode_Authorization = ({ cfg = {} }: { cfg: any }) => {
-  const value = (cfg as any).value;
   // console.log(value, 'value@#38s9dio');
   if (cfg.nodeType === 'contract') {
     return (<FNode_Authorization_Contract
-      value={value}
+      value={cfg.value}
     />);
   }
   if (cfg.nodeType === 'resource') {
     return (<FNode_Authorization_Resource
-      value={value}
+      value={cfg.value}
     />);
   }
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);

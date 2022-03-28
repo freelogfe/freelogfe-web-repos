@@ -11,15 +11,14 @@ export interface FNode_Dependency_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Dependency_Resource = ({ cfg = {} }) => {
-
+const FNode_Dependency_Resource = ({ value }: { value: FNode_Dependency_Resource_Values }) => {
   const {
     resourceID,
     resourceName,
     resourceType,
     version,
     resourceDetails_Url,
-  } = (cfg as any).value as FNode_Dependency_Resource_Values;
+  } = value;
   return (<Group>
     <Rect
       draggable
@@ -58,5 +57,18 @@ const FNode_Dependency_Resource = ({ cfg = {} }) => {
   </Group>);
 };
 
-G6.registerNode('FNode_Dependency_Resource', createNodeFromReact(FNode_Dependency_Resource));
+const FNode_Dependency = ({ cfg = {} }: { cfg: any }) => {
+  console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
+  if (cfg.nodeType === 'resource') {
+    return (<FNode_Dependency_Resource
+      value={cfg.value}
+    />);
+  }
+
+  return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
+};
+
+export const F_DEPENDENCY_NODE_TYPE: string = 'FNode_Dependency';
+
+G6.registerNode(F_DEPENDENCY_NODE_TYPE, createNodeFromReact(FNode_Dependency));
 
