@@ -13,6 +13,7 @@ import {
 import FDrawer from "@/components/FDrawer";
 import {FTextBtn} from "@/components/FButton";
 import FUtil1 from "@/utils";
+import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -69,13 +70,23 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
               />)
             }
 
+
+            {/*{*/}
+            {/*  exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+            {/*    nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
+            {/*    edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
             {
-              exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph
-                nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}
-                edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}
+              exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
+                exhibitID={exhibitInfoPage.exhibit_ID}
                 width={860}
+                height={500}
               />)
             }
+
 
           </>)
       }
@@ -114,10 +125,18 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
           />)
         }
 
+        {/*{*/}
+        {/*  exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+        {/*    nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
+        {/*    edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
+
         {
-          exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph
-            nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}
-            edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}
+          exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
+            exhibitID={exhibitInfoPage.exhibit_ID}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
