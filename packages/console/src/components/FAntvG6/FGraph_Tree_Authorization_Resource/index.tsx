@@ -205,9 +205,6 @@ type HandleDataSourceReturn = ContractNode[];
 
 function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): HandleDataSourceReturn {
   return (data || []).map((d) => {
-    // const firstContract = data_Contracts.find((dc) => {
-    //   return d[0].contracts[0].contractId === dc.contractId;
-    // });
 
     return {
       id: FUtil.Tool.generateRandomCode(20),
