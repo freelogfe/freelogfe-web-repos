@@ -3,7 +3,6 @@ import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import img from '@/assets/warning.svg';
 import G6 from '@antv/g6';
 import React from 'react';
-import any = jasmine.any;
 
 export interface FNode_Relationship_Resource_Values {
   resourceID: string;
@@ -88,9 +87,83 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
   </Group>);
 }
 
+export interface FNode_Relationship_Exhibit_Values {
+  exhibitID: string;
+  exhibitName: string;
+  nodeID: number;
+  nodeName: string;
+}
+
+interface FNode_Relationship_Exhibit_Props {
+  value: FNode_Relationship_Exhibit_Values;
+}
+
+function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props) {
+  const {
+    exhibitID,
+    exhibitName,
+    nodeID,
+    nodeName,
+  } = value;
+  return (<Group>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+
+      }}
+    >
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>节点：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(nodeName)}</Text>
+      <Rect style={{ height: 15 }} />
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>展品：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(exhibitName)}</Text>
+    </Rect>
+  </Group>);
+}
+
 function FNode_Relationship({ cfg = {} }: any) {
   if (cfg.nodeType === 'resource') {
     return (<FNode_Relationship_Resource
+      value={cfg.value}
+    />);
+  }
+  if (cfg.nodeType === 'exhibit') {
+    return (<FNode_Relationship_Exhibit
       value={cfg.value}
     />);
   }
