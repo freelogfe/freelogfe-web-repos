@@ -163,9 +163,9 @@ function FGraph_Tree_Authorization_Exhibit({
             }}
             layout={{
               getHeight: (node: any) => {
-                console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+                // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
                 // return node.value.type === 'contract' ? (node.value.length || 1) * 64 : 64;
-                console.log(node.type, 'node.type####980ios');
+                // console.log(node.type, 'node.type####980ios');
                 if (node.nodeType === 'resource') {
                   return 64;
                 }
