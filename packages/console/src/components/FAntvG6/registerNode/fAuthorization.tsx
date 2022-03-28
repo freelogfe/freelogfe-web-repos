@@ -21,14 +21,6 @@ interface FNode_Authorization_Resource_Props {
 }
 
 function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Props) {
-  // console.log(cfg, 'cfgcfgcfgcfg0932iojsdlkfsjdlklllllllCCCCC');
-  // const {
-  //   resourceID,
-  //   resourceName,
-  //   resourceType,
-  //   version,
-  //   resourceDetails_Url,
-  // } = (cfg as any).value as FNode_Authorization_Resource_Values;
   const {
     resourceID,
     resourceName,
@@ -47,7 +39,6 @@ function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Pr
         cursor: 'move',
       }}
       onClick={() => {
-        // console.log('#######98ioklj');
 
       }}
     >
@@ -71,6 +62,75 @@ function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Pr
         fill: '#666',
         padding: [3, 0],
       }}>{resourceType} | {version}</Text>
+    </Rect>
+  </Group>);
+}
+
+export interface FNode_Authorization_Exhibit_Values {
+  exhibitID: string;
+  exhibitName: string;
+  nodeID: number;
+  nodeName: string;
+}
+
+interface FNode_Authorization_Exhibit_Props {
+  value: FNode_Authorization_Exhibit_Values;
+}
+
+function FNode_Authorization_Exhibit({ value }: FNode_Authorization_Exhibit_Props) {
+  const {
+    exhibitID,
+    exhibitName,
+    nodeID,
+    nodeName,
+  } = value;
+  return (<Group>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+
+      }}
+    >
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>节点：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(nodeName)}</Text>
+      <Rect style={{ height: 15 }} />
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>展品：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(exhibitName)}</Text>
     </Rect>
   </Group>);
 }
@@ -240,13 +300,18 @@ function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Pr
 
 function FNode_Authorization({ cfg = {} }: any) {
   // console.log(value, 'value@#38s9dio');
-  if (cfg.nodeType === 'contract') {
-    return (<FNode_Authorization_Contract
+  if (cfg.nodeType === 'resource') {
+    return (<FNode_Authorization_Resource
       value={cfg.value}
     />);
   }
-  if (cfg.nodeType === 'resource') {
-    return (<FNode_Authorization_Resource
+  if (cfg.nodeType === 'exhibit') {
+    return (<FNode_Authorization_Exhibit
+      value={cfg.value}
+    />);
+  }
+  if (cfg.nodeType === 'contract') {
+    return (<FNode_Authorization_Contract
       value={cfg.value}
     />);
   }
