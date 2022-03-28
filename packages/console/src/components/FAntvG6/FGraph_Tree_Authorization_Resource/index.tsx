@@ -123,7 +123,7 @@ function FGraph_Tree_Authorization_Resource({
     const partyResult = handleDataSource({ data: data_AuthorizationTree, data_Contracts: data_AllContracts });
 
     const finalDataSource: FGraph_Tree_Authorization_Resource_States['dataSource'] = {
-      id: resourceID,
+      id: resourceID + '-' + FUtil.Tool.generateRandomCode(),
       nodeType: 'resource',
       // type: 'FNode_Authorization_Resource',
       value: {
