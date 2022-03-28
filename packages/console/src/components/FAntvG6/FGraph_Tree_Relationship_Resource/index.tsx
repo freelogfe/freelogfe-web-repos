@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode/fRelationship';
-import { FNode_Relationship_Resource_Values } from '../registerNode/fRelationship';
+import { F_RELATIONSHIP_NODE_TYPE, FNode_Relationship_Resource_Values } from '../registerNode/fRelationship';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
@@ -19,6 +19,7 @@ interface FGraph_Tree_Relationship_Resource_Props {
 
 interface NodeTree {
   id: string;
+  nodeType: 'resource';
   value: FNode_Relationship_Resource_Values;
   children: NodeTree[];
 }
@@ -112,7 +113,7 @@ function FGraph_Tree_Relationship_Resource({
       // autoFit={true}
       nodeCfg={
         {
-          type: 'FNode_Relationship_Resource',
+          type: F_RELATIONSHIP_NODE_TYPE,
           style: {},
           nodeStateStyles: {},
         }
@@ -188,6 +189,7 @@ function handleDataSource(data: ServerDataNode[], auth: {
   return data.map<NodeTree>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
+      nodeType: 'resource',
       value: {
         resourceID: d.resourceId,
         resourceName: d.resourceName,

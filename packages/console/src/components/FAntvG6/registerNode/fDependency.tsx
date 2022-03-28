@@ -58,7 +58,7 @@ const FNode_Dependency_Resource = ({ value }: { value: FNode_Dependency_Resource
 };
 
 const FNode_Dependency = ({ cfg = {} }: { cfg: any }) => {
-  console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
+  // console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
   if (cfg.nodeType === 'resource') {
     return (<FNode_Dependency_Resource
       value={cfg.value}

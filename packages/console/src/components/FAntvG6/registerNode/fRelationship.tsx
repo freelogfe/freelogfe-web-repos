@@ -3,6 +3,7 @@ import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import img from '@/assets/warning.svg';
 import G6 from '@antv/g6';
 import React from 'react';
+import any = jasmine.any;
 
 export interface FNode_Relationship_Resource_Values {
   resourceID: string;
@@ -13,7 +14,11 @@ export interface FNode_Relationship_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Relationship_Resource = ({ cfg = {} }) => {
+interface FNode_Relationship_Resource_Props {
+  value: FNode_Relationship_Resource_Values;
+}
+
+function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Props) {
 
   const {
     resourceID,
@@ -22,7 +27,7 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
     version,
     isAuth,
     resourceDetails_Url,
-  } = (cfg as any).value as FNode_Relationship_Resource_Values;
+  } = value;
   return (<Group>
     <Rect
       draggable
@@ -81,6 +86,18 @@ const FNode_Relationship_Resource = ({ cfg = {} }) => {
       </Rect>
     </Rect>
   </Group>);
-};
+}
 
-G6.registerNode('FNode_Relationship_Resource', createNodeFromReact(FNode_Relationship_Resource));
+function FNode_Relationship({ cfg = {} }: any) {
+  if (cfg.nodeType === 'resource') {
+    return (<FNode_Relationship_Resource
+      value={cfg.value}
+    />);
+  }
+
+  return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
+}
+
+export const F_RELATIONSHIP_NODE_TYPE: string = 'FNode_Relationship';
+
+G6.registerNode(F_RELATIONSHIP_NODE_TYPE, createNodeFromReact(FNode_Relationship));
