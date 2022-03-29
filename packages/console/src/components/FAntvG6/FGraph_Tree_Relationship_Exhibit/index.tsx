@@ -50,6 +50,7 @@ interface ServerDataNode {
   resourceName: string;
   resourceType: string;
   versions?: string[];
+  versionRanges?: string[];
   downstreamAuthContractIds: string[];
   downstreamIsAuth: boolean;
   selfAndUpstreamIsAuth: boolean;
@@ -202,7 +203,12 @@ function handleDataSource({ data }: HandleDataSourceParams): ResourceNodeTree[] 
         resourceID: d.resourceId,
         resourceName: d.resourceName,
         resourceType: d.resourceType,
-        version: d.versions ? d.versions[0] : '',
+        // version: d.versions?.length ? d.versions[0] : '',
+        version: d.versionRanges?.length
+          ? d.versionRanges[0]
+          : d.versions?.length
+            ? d.versions[0]
+            : '',
         // downstreamAuthContractIds: d.downstreamAuthContractIds,
         show_Execute: !d.downstreamIsAuth,
         show_Warning: !d.selfAndUpstreamIsAuth,

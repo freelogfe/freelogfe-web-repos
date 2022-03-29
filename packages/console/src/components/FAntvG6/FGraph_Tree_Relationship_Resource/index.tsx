@@ -9,6 +9,7 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FErrorBoundary from '@/components/FErrorBoundary';
+import { relationTreeAuth } from '@freelog/tools-lib/dist/service-API/resources';
 
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
@@ -38,6 +39,10 @@ interface ServerDataNode {
   resourceType: string;
   versions: string[];
   versionRanges: string[];
+  // versions?: string[];
+  downstreamAuthContractIds: string[];
+  downstreamIsAuth?: boolean;
+  selfAndUpstreamIsAuth?: boolean;
   children: ServerDataNode[];
 }
 
@@ -61,32 +66,15 @@ function FGraph_Tree_Relationship_Resource({
       return;
     }
 
-    const params2: Parameters<typeof FServiceAPI.Resource.relationTree>[0] = {
+    const params2: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
       resourceId: resourceID,
       version: version,
     };
 
-    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTree(params2);
-    // console.log(data_DependencyTree, 'data_DependencyTree#@##34234234');
-    const authResult = getAllResourceIDAndVersions(data_DependencyTree[0]);
+    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTreeAuth(params2);
+    // console.log(data_DependencyTree, 'data_DependencyTree32sdfsd');
 
-    const params3: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
-      resourceIds: authResult.map((ar) => ar.resourceID).join(','),
-      versionRanges: authResult.map((ar) => ar.version).join(','),
-    };
-
-    const { data: data_BatchAuth }: {
-      data: {
-        isAuth: boolean;
-        resourceId: string;
-        resourceName: string;
-        version: string;
-      }[];
-    } = await FServiceAPI.Resource.batchAuth(params3);
-
-    // console.log(data_BatchAuth, 'data_BatchAuth089io23klasdfasdfdata_BatchAuth');
-
-    const dataSource: FGraph_Relationship_States['dataSource'] = handleDataSource(data_DependencyTree, data_BatchAuth)[0];
+    const dataSource: FGraph_Relationship_States['dataSource'] = handleDataSource({ data: data_DependencyTree })[0];
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
 
     set_DataSource(dataSource);
@@ -152,40 +140,39 @@ function FGraph_Tree_Relationship_Resource({
 export default FGraph_Tree_Relationship_Resource;
 
 
-function getAllResourceIDAndVersions(data: ServerDataNode): {
-  resourceID: string;
-  version: string;
-}[] {
+// function getAllResourceIDAndVersions(data: ServerDataNode): {
+//   resourceID: string;
+//   version: string;
+// }[] {
+//
+//   const resources: {
+//     resourceID: string;
+//     version: string;
+//   }[] = [];
+//   traversal(data);
+//
+//   function traversal(data: ServerDataNode): any {
+//     const { children, ...resource } = data;
+//     resources.push({
+//       resourceID: resource.resourceId,
+//       version: resource.versionRanges.length > 0
+//         ? resource.versionRanges[0]
+//         : resource.versions[0],
+//     });
+//
+//     for (const dep of children) {
+//       traversal(dep);
+//     }
+//   }
+//
+//   return resources;
+// }
 
-  const resources: {
-    resourceID: string;
-    version: string;
-  }[] = [];
-  traversal(data);
-
-  function traversal(data: ServerDataNode): any {
-    const { children, ...resource } = data;
-    resources.push({
-      resourceID: resource.resourceId,
-      version: resource.versionRanges.length > 0
-        ? resource.versionRanges[0]
-        : resource.versions[0],
-    });
-
-    for (const dep of children) {
-      traversal(dep);
-    }
-  }
-
-  return resources;
+interface HandleDataSourceParams {
+  data: ServerDataNode[];
 }
 
-function handleDataSource(data: ServerDataNode[], auth: {
-  isAuth: boolean;
-  resourceId: string;
-  resourceName: string;
-  version: string;
-}[]): NodeTree[] {
+function handleDataSource({ data }: HandleDataSourceParams): NodeTree[] {
   return data.map<NodeTree>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
@@ -194,9 +181,14 @@ function handleDataSource(data: ServerDataNode[], auth: {
         resourceID: d.resourceId,
         resourceName: d.resourceName,
         resourceType: d.resourceType,
-        version: d.versionRanges.length > 0
+        version: d.versionRanges?.length
           ? d.versionRanges[0]
-          : d.versions[0],
+          : d.versions?.length
+            ? d.versions[0]
+            : '',
+        // downstreamAuthContractIds: d.downstreamAuthContractIds,
+        show_Execute: d.downstreamIsAuth === false,
+        show_Warning: d.selfAndUpstreamIsAuth === false,
         resourceDetails_Url: FUtil.LinkTo.resourceDetails({
           resourceID: d.resourceId,
           // version: d.version,
@@ -207,7 +199,7 @@ function handleDataSource(data: ServerDataNode[], auth: {
         //   // && af.version === d.version;
         // })?.isAuth || true,
       },
-      children: handleDataSource(d.children, auth),
+      children: handleDataSource({ data: d.children }),
     };
   });
 }
