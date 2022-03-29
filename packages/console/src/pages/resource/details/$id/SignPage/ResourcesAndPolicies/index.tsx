@@ -25,29 +25,36 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
     {
       showResource
         .filter((r, i: number) => i === 0)
-        .map((r) => (<a
-          key={r.id}
-          className={styles.resource}
-          onClick={() => setVisibleR(r.id)}
-        >
-          <div>
-            <FContentText
-              type='highlight'
-              text={r.name}
-            />
-            <div style={{ height: 5 }} />
-            <FContentText
-              type='additional2'
-              text={r.type}
-            />
-          </div>
-          <div className={styles.resourcePolicies}>
-            {
-              r.policies.filter((p: any) => p.checked)
-                .map((p: any) => (<label key={p.id}>{p.name}</label>))
-            }
-          </div>
-        </a>))
+        .map((r) => {
+          return (<a
+            key={r.id}
+            className={styles.resource}
+            onClick={() => setVisibleR(r.id)}
+          >
+            <div>
+              <FContentText
+                type='highlight'
+                text={r.name}
+              />
+              <div style={{ height: 5 }} />
+              <FContentText
+                type='additional2'
+                text={r.type}
+              />
+            </div>
+            <div className={styles.resourcePolicies}>
+              {
+                r.policies
+                  .filter((p) => {
+                    return p.checked;
+                  })
+                  .map((p) => {
+                    return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
+                  })
+              }
+            </div>
+          </a>);
+        })
     }
 
     {
@@ -63,33 +70,45 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
           {
             showResource
               .filter((r, i: number) => i !== 0)
-              .map((r) => (<a
-                key={r.id}
-                className={styles.resource}
-                onClick={() => setVisibleR(r.id)}
-              >
-                <div>
-                  <FContentText
-                    type='highlight'
-                    text={r.name}
-                  />
-                  <div style={{ height: 5 }} />
-                  <FContentText
-                    type='additional2'
-                    text={r.type}
-                  />
-                </div>
-                <div className={styles.resourcePolicies}>
-                  {
-                    r.contracts.filter((c) => c.checked)
-                      .map((c) => (<label key={c.id}>{c.name}</label>))
-                  }
-                  {
-                    r.policies.filter((p) => p.checked)
-                      .map((p) => (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>))
-                  }
-                </div>
-              </a>))
+              .map((r) => {
+                return (<a
+                  key={r.id}
+                  className={styles.resource}
+                  onClick={() => setVisibleR(r.id)}
+                >
+                  <div>
+                    <FContentText
+                      type='highlight'
+                      text={r.name}
+                    />
+                    <div style={{ height: 5 }} />
+                    <FContentText
+                      type='additional2'
+                      text={r.type}
+                    />
+                  </div>
+                  <div className={styles.resourcePolicies}>
+                    {
+                      r.contracts
+                        .filter((c) => {
+                          return c.checked;
+                        })
+                        .map((c) => {
+                          return (<label key={c.id}>{c.name}</label>);
+                        })
+                    }
+                    {
+                      r.policies
+                        .filter((p) => {
+                          return p.checked;
+                        })
+                        .map((p) => {
+                          return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
+                        })
+                    }
+                  </div>
+                </a>);
+              })
           }
         </Space>
       </>
@@ -102,6 +121,7 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
       width={720}
       bodyStyle={{ padding: 40 }}
       onClose={() => setVisibleR('')}
+      maskClosable={false}
     >
       <FTitleText
         text={showRInfo?.name}
