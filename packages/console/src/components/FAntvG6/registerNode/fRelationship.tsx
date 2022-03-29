@@ -1,6 +1,7 @@
 import { createNodeFromReact, Group, Image, Rect, Text } from '@antv/g6-react-node';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
-import img from '@/assets/warning.svg';
+import img_warning from '@/assets/warning.svg';
+import img_execute from '@/assets/execute.svg';
 import G6 from '@antv/g6';
 import React from 'react';
 
@@ -9,7 +10,8 @@ export interface FNode_Relationship_Resource_Values {
   resourceName: string;
   resourceType: string;
   version: string;
-  isAuth: boolean;
+  show_Warning: boolean;
+  show_Execute: boolean;
   resourceDetails_Url: string;
 }
 
@@ -24,7 +26,8 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
     resourceName,
     resourceType,
     version,
-    isAuth,
+    show_Warning,
+    show_Execute,
     resourceDetails_Url,
   } = value;
   return (<Group>
@@ -58,17 +61,37 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
         }}
       >{textOverflowEllipsis(resourceName, 18)}</Text>
       <Rect style={{ height: 10 }} />
-      <Text style={{
-        fontSize: 12,
-        fontWeight: 400,
-        fill: '#666',
-        padding: [3, 0],
-      }}>{resourceType} | {version}</Text>
+      {
+        version
+          ? (<Text style={{
+            fontSize: 12,
+            fontWeight: 400,
+            fill: '#666',
+            padding: [3, 0],
+          }}>{resourceType} | {version}</Text>)
+          : ((<Text style={{
+            fontSize: 12,
+            fontWeight: 400,
+            fill: '#666',
+            padding: [3, 0],
+          }}>{resourceType}</Text>))
+      }
+
       {/*<Text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '未授权' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</Text>*/}
       <Rect style={{ height: 15 }} />
       <Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
         {
-          !isAuth && (<Image style={{ width: 16, height: 16, img: img, next: 'inline' }} />)
+          (show_Execute || show_Warning) && (<Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
+            {
+              show_Execute && (<Image style={{ width: 16, height: 16, img: img_execute, next: 'inline' }} />)
+            }
+            {
+              show_Execute && show_Warning && (<Rect style={{ width: 5 }} />)
+            }
+            {
+              show_Warning && (<Image style={{ width: 16, height: 16, img: img_warning, next: 'inline' }} />)
+            }
+          </Rect>)
         }
 
         <Text

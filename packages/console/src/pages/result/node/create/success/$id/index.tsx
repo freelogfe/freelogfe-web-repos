@@ -52,6 +52,7 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
     {/*</div>*/}
     <FGraph_Tree_Relationship_Exhibit
       exhibitID={'6241881c045d28002e60518b'}
+      // version={''}
       width={860}
       height={500}
     />
