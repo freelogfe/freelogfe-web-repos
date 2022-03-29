@@ -13,6 +13,7 @@ import { FTextBtn } from '@/components/FButton';
 import FUtil1 from '@/utils';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
 import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
+import FGraph_Tree_Dependency_Exhibit from '@/components/FAntvG6/FGraph_Tree_Dependency_Exhibit';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -52,6 +53,7 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
       options={[
         { value: 'relationship', label: FUtil1.I18n.message('quick_decision_map') },
         { value: 'authorization', label: '授权链视图' },
+        { value: 'dependency', label: '依赖树' },
       ]}
       value={exhibitInfoPage.graph_Viewport_Show}
       onChange={(value) => {
@@ -97,6 +99,14 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
               />)
             }
 
+            {
+              exhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FGraph_Tree_Dependency_Exhibit
+                exhibitID={exhibitInfoPage.exhibit_ID}
+                version={exhibitInfoPage.side_Version}
+                width={860}
+                height={500}
+              />)
+            }
 
           </>)
       }
@@ -116,8 +126,9 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
       <FViewportTabs
         options={[
-          { label: '关系树', value: 'relationship' },
-          { label: '授权链', value: 'authorization' },
+          { value: 'relationship', label: FUtil1.I18n.message('quick_decision_map') },
+          { value: 'authorization', label: '授权链视图' },
+          { value: 'dependency', label: '依赖树' },
         ]}
         value={exhibitInfoPage.graph_Viewport_Show}
         onChange={(value) => {
@@ -155,6 +166,15 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
         {/*{console.log(exhibitInfoPage.side_Version, 'exhibitInfoPage.side_Version2390iojsdklf')}*/}
         {
           exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
+            exhibitID={exhibitInfoPage.exhibit_ID}
+            version={exhibitInfoPage.side_Version}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
+          />)
+        }
+
+        {
+          exhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FGraph_Tree_Dependency_Exhibit
             exhibitID={exhibitInfoPage.exhibit_ID}
             version={exhibitInfoPage.side_Version}
             width={window.innerWidth - 60}

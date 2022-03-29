@@ -56,7 +56,7 @@ export interface ExhibitInfoPageModelState {
   }[];
 
   graph_FullScreen: boolean;
-  graph_Viewport_Show: 'relationship' | 'authorization';
+  graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
   graph_Viewport_RelationGraph_Nodes: Array<{
     id: string;
     resourceId: string;
