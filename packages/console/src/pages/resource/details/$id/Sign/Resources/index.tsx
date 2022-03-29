@@ -166,11 +166,11 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
               }
               {
                 r.policies
-                  .filter((p: any) => {
+                  .filter((p) => {
                     return p.checked;
                   })
-                  .map((p: any) => {
-                    return (<div key={p.id}>{p.name}</div>);
+                  .map((p) => {
+                    return (<div key={p.fullInfo.policyId}>{p.fullInfo.policyName}</div>);
                   })
               }
             </div>
