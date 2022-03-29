@@ -193,11 +193,6 @@ function handleDataSource({ data }: HandleDataSourceParams): NodeTree[] {
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        isAuth: true,
-        // isAuth: auth.find((af) => {
-        //   return af.resourceId === d.resourceId;
-        //   // && af.version === d.version;
-        // })?.isAuth || true,
       },
       children: handleDataSource({ data: d.children }),
     };
