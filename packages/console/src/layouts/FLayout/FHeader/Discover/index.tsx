@@ -14,10 +14,10 @@ const discoverOptions = [
     text: '发现资源',
     value: '1'
   },
-  {
-    text: '发现节点',
-    value: '2'
-  },
+  // {
+  //   text: '发现节点',
+  //   value: '2'
+  // },
 ];
 
 interface DiscoverProps {
