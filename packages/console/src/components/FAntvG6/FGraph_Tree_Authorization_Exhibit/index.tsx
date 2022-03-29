@@ -37,6 +37,7 @@ type ServerDataContracts = {
 
 interface FGraph_Tree_Authorization_Exhibit_Props {
   exhibitID: string;
+  version?: string;
   width: number;
   height: number;
 }
@@ -76,14 +77,16 @@ function FGraph_Tree_Authorization_Exhibit({
                                              width,
                                              height,
                                              exhibitID,
+                                             version = '',
                                            }: FGraph_Tree_Authorization_Exhibit_Props) {
-
+  // console.log(exhibitID, 'exhibitID@##4093uijol()((((((((((((');
+  // console.log(version, 'version@##4093uijol()((((((((((((');
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Exhibit_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Exhibit_States['contractID']>(initStates['contractID']);
 
   React.useEffect(() => {
     handleData();
-  }, [exhibitID]);
+  }, [exhibitID, version]);
 
   async function handleData() {
     // console.log(resourceID, version, 'resourceID, version VVVSSSRRR0923oijsdlfk');
@@ -117,9 +120,10 @@ function FGraph_Tree_Authorization_Exhibit({
         nodeName: string;
       };
     } = await FServiceAPI.Node.details(parmas2);
-
+    // console.log(version, 'version@#$23409io');
     const params2: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
       presentableId: exhibitID,
+      version: version || undefined,
     };
 
     const { data: data_AuthorizationTree }: { data: ServerDataNodes } = await FServiceAPI.Exhibit.authTree(params2);

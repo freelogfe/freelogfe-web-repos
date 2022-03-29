@@ -10,6 +10,7 @@ import { RouteComponentProps } from 'react-router';
 import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FResultTip from '@/components/FResultTip';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
+import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -49,8 +50,8 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
     {/*    onClickBtn={goto}*/}
     {/*  />*/}
     {/*</div>*/}
-    <FGraph_Tree_Authorization_Exhibit
-      exhibitID={'624168f30f691f002e80ce33'}
+    <FGraph_Tree_Relationship_Exhibit
+      exhibitID={'6241881c045d28002e60518b'}
       width={860}
       height={500}
     />
