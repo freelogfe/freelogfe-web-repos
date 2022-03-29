@@ -12,6 +12,7 @@ import FDrawer from '@/components/FDrawer';
 import { FTextBtn } from '@/components/FButton';
 import FUtil1 from '@/utils';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
+import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -61,11 +62,20 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
         exhibitInfoPage.graph_FullScreen
           ? (<div style={{ height: 500 }} />)
           : (<>
+            {/*{*/}
+            {/*  exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
+            {/*    nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
+            {/*    edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
             {
-              exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph
-                nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}
-                edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}
+              exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FGraph_Tree_Relationship_Exhibit
+                exhibitID={exhibitInfoPage.exhibit_ID}
+                version={exhibitInfoPage.side_Version}
                 width={860}
+                height={500}
               />)
             }
 
@@ -116,10 +126,19 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
           });
         }}
       >
+        {/*{*/}
+        {/*  exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
+        {/*    nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
+        {/*    edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
+
         {
-          exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph
-            nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}
-            edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}
+          exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FGraph_Tree_Relationship_Exhibit
+            exhibitID={exhibitInfoPage.exhibit_ID}
+            version={exhibitInfoPage.side_Version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
@@ -137,7 +156,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
         {
           exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
             exhibitID={exhibitInfoPage.exhibit_ID}
-            // version={exhibitInfoPage.side_Version}
             version={exhibitInfoPage.side_Version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
