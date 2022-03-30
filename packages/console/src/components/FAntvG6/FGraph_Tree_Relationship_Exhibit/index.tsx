@@ -125,19 +125,8 @@ function FGraph_Tree_Relationship_Exhibit({
     set_DataSource(dataSource);
   }
 
-  if (!dataSource) {
-    return (<FLoadingTip height={height} />);
-  }
-
-  if (dataSource.children.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-        <FResultTip h1={'无关系树'} />
-      </div>);
-  }
-
-  return (<FErrorBoundary>
-    <DecompositionTreeGraph
+  const Gra = React.useMemo(() => {
+    return (<DecompositionTreeGraph
       style={{ backgroundColor: 'transparent' }}
       width={width}
       height={height}
@@ -184,7 +173,22 @@ function FGraph_Tree_Relationship_Exhibit({
         // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
       }}
-    />
+    />);
+  }, [dataSource]);
+
+  if (!dataSource) {
+    return (<FLoadingTip height={height} />);
+  }
+
+  if (dataSource.children.length === 0) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无关系树'} />
+      </div>);
+  }
+
+  return (<FErrorBoundary>
+    {Gra}
   </FErrorBoundary>);
 }
 

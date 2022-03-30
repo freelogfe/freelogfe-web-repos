@@ -121,21 +121,8 @@ function FGraph_Tree_Dependency_Exhibit({
     set_DataSource(dataSource);
   }
 
-  // console.log(dataSource, 'dataSource依赖树932ioasdfjl');
-
-  if (!dataSource) {
-    return (<FLoadingTip height={height} />);
-  }
-
-  if (dataSource.children.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-        <FResultTip h1={'无依赖树'} />
-      </div>);
-  }
-
-  return (<FErrorBoundary>
-    <DecompositionTreeGraph
+  const Gra = React.useMemo(() => {
+    return (<DecompositionTreeGraph
       style={{ backgroundColor: 'transparent' }}
       width={width}
       height={height}
@@ -180,7 +167,22 @@ function FGraph_Tree_Dependency_Exhibit({
         // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
       }}
-    />
+    />);
+  }, [dataSource]);
+
+  if (!dataSource) {
+    return (<FLoadingTip height={height} />);
+  }
+
+  if (dataSource.children.length === 0) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无依赖树'} />
+      </div>);
+  }
+
+  return (<FErrorBoundary>
+    {Gra}
   </FErrorBoundary>);
 }
 

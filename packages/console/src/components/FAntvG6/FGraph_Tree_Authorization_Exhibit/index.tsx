@@ -160,6 +160,47 @@ function FGraph_Tree_Authorization_Exhibit({
     set_DataSource(finalDataSource);
   }
 
+  const Gra = React.useMemo(() => {
+    return (<DecompositionTreeGraph
+      style={{ backgroundColor: 'transparent' }}
+      width={width}
+      height={height}
+      data={dataSource as any}
+      nodeCfg={{
+        type: F_AUTHORIZATION_NODE_TYPE,
+      }}
+      layout={{
+        getHeight: (node: any) => {
+          // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+          // return node.value.type === 'contract' ? (node.value.length || 1) * 64 : 64;
+          // console.log(node.type, 'node.type####980ios');
+          if (node.nodeType === 'resource') {
+            return 64;
+          }
+          if (node.nodeType === 'exhibit') {
+            return 110;
+          }
+          if (node.nodeType === 'contract') {
+            return (node.value.length || 1) * 64;
+          }
+          return 64;
+        },
+        getWidth: () => {
+          return 200;
+        },
+      }}
+      behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+      onReady={(graph) => {
+        appendAutoShapeListener(graph as Graph);
+        graph.on('contract:view', ({ contractID }: any) => {
+          // console.log(params, 'params23908isdflk');
+          // console.log(contractID, 'contractID@#@##$@#$@#');
+          set_ContractID(contractID);
+        });
+      }}
+    />);
+  }, [dataSource]);
+
   return (<FErrorBoundary>
     {
       !dataSource
@@ -169,46 +210,8 @@ function FGraph_Tree_Authorization_Exhibit({
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
             <FResultTip h1={'无授权树'} />
           </div>)
-          : (<DecompositionTreeGraph
-            style={{ backgroundColor: 'transparent' }}
-            width={width}
-            height={height}
-            data={dataSource as any}
-            nodeCfg={{
-              type: F_AUTHORIZATION_NODE_TYPE,
-            }}
-            layout={{
-              getHeight: (node: any) => {
-                // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-                // return node.value.type === 'contract' ? (node.value.length || 1) * 64 : 64;
-                // console.log(node.type, 'node.type####980ios');
-                if (node.nodeType === 'resource') {
-                  return 64;
-                }
-                if (node.nodeType === 'exhibit') {
-                  return 110;
-                }
-                if (node.nodeType === 'contract') {
-                  return (node.value.length || 1) * 64;
-                }
-                return 64;
-              },
-              getWidth: () => {
-                return 200;
-              },
-            }}
-            behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
-            onReady={(graph) => {
-              appendAutoShapeListener(graph as Graph);
-              graph.on('contract:view', ({ contractID }: any) => {
-                // console.log(params, 'params23908isdflk');
-                // console.log(contractID, 'contractID@#@##$@#$@#');
-                set_ContractID(contractID);
-              });
-            }}
-          />)
+          : Gra
     }
-
 
     <FContractDetailsDrawer
       contractID={contractID}
