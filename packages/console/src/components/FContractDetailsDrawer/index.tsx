@@ -278,16 +278,17 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
   }
 
   async function syncExhibitUsedContracts(value: FContractDetailsDrawerStates['exhibitAllContractIDs'][number]) {
-    const params: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-      nodeId: Number(baseInfo?.licenseeId) || 0,
-      resourceIds: baseInfo?.licensorId || '',
-    };
-
-    const { data } = await FServiceAPI.Exhibit.presentableList(params);
-    // console.log(data[0].presentableId, '!!!!234234');
+    // const params: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+    //   nodeId: Number(baseInfo?.licenseeId) || 0,
+    //   resourceIds: baseInfo?.licensorId || '',
+    // };
+    //
+    // const { data } = await FServiceAPI.Exhibit.presentableList(params);
+    // console.log(data, 'FServiceAPI.Exhibit.presentableList !!!!234234');
 
     const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-      presentableId: data[0].presentableId,
+      // presentableId: data[0].presentableId,
+      presentableId: value.exhibitID,
       resolveResources: [{
         resourceId: baseInfo?.licensorId || '',
         contracts: value.policyIDs.map((p) => {
@@ -449,14 +450,16 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                       nodeName={baseInfo.licenseeName}
                       exhibitAllContractIDs={exhibitAllContractIDs}
                       currentPolicyID={baseInfo.policyID}
-                      onChangeExhibitAllContractIDs={(value) => {
-                        // console.log(value, '@#$@#$@#$@#09sdj');
-                        setExhibitAllContractIDs(value);
-                        reportedInformation();
-                      }}
-                      onChangeExhibitContractIDs={(value) => {
+                      // onChangeExhibitAllContractIDs={(value) => {
+                      //   // console.log(value, '@#$@#$@#$@#09sdj');
+                      //   setExhibitAllContractIDs(value);
+                      //   reportedInformation();
+                      // }}
+                      onChangeExhibitContractIDs={async (value, values) => {
                         // console.log(value, '@#$@#098jsdlfkjl');
-                        syncExhibitUsedContracts(value);
+                        setExhibitAllContractIDs(values);
+                        await syncExhibitUsedContracts(value);
+                        reportedInformation();
                       }}
                     />
                   </div>
@@ -582,14 +585,16 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                               nodeName={baseInfo.licenseeName}
                               exhibitAllContractIDs={exhibitAllContractIDs}
                               currentPolicyID={ac.policyID}
-                              onChangeExhibitAllContractIDs={(value) => {
-                                // console.log(value, '@#$@#$@#$@#09sdj');
-                                setExhibitAllContractIDs(value);
-                                reportedInformation();
-                              }}
-                              onChangeExhibitContractIDs={(value) => {
+                              // onChangeExhibitAllContractIDs={(value) => {
+                              //   // console.log(value, '@#$@#$@#$@#09sdj');
+                              //   setExhibitAllContractIDs(value);
+                              //   reportedInformation();
+                              // }}
+                              onChangeExhibitContractIDs={async (value, values) => {
                                 // console.log(value, '@#$@#098jsdlfkjl');
-                                syncExhibitUsedContracts(value);
+                                setExhibitAllContractIDs(values);
+                                await syncExhibitUsedContracts(value);
+                                reportedInformation();
                               }}
                             />
                           </div>
@@ -676,9 +681,9 @@ interface FExhibitsProps {
   exhibitAllContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs'];
   currentPolicyID: string;
 
-  onChangeExhibitAllContractIDs?(value: FContractDetailsDrawerStates['exhibitAllContractIDs']): void;
+  // onChangeExhibitAllContractIDs?(value: FContractDetailsDrawerStates['exhibitAllContractIDs']): void;
 
-  onChangeExhibitContractIDs?(value: FContractDetailsDrawerStates['exhibitAllContractIDs'][number]): void;
+  onChangeExhibitContractIDs?(changedContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs'][number], allContractIDs: FContractDetailsDrawerStates['exhibitAllContractIDs']): void;
 }
 
 function FExhibits({
@@ -686,7 +691,7 @@ function FExhibits({
                      exhibitAllContractIDs,
                      // currentContractID,
                      currentPolicyID,
-                     onChangeExhibitAllContractIDs,
+                     // onChangeExhibitAllContractIDs,
                      onChangeExhibitContractIDs,
                    }: FExhibitsProps) {
 
@@ -731,8 +736,8 @@ function FExhibits({
                   return exhibitContractIDs;
                 });
 
-                onChangeExhibitContractIDs && onChangeExhibitContractIDs(exhibitContractIDs);
-                onChangeExhibitAllContractIDs && onChangeExhibitAllContractIDs(all);
+                onChangeExhibitContractIDs && onChangeExhibitContractIDs(exhibitContractIDs, all);
+                // onChangeExhibitAllContractIDs && onChangeExhibitAllContractIDs(all);
 
               }}
             />
