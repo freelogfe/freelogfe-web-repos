@@ -429,14 +429,16 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                       versionAllContractIDs={versionAllContractIDs}
                       resourceName={baseInfo.licenseeName}
                       currentPolicyID={baseInfo.policyID}
-                      onChangeVersionAllContractIDs={(value) => {
-                        // console.log(value, '@#$@#$@#');
-                        setVersionAllContractIDs(value);
-                        reportedInformation();
-                      }}
-                      onChangeVersionContractIDs={(value) => {
+                      // onChangeVersionAllContractIDs={(value) => {
+                      //   // console.log(value, '@#$@#$@#');
+                      //   setVersionAllContractIDs(value);
+                      //   reportedInformation();
+                      // }}
+                      onChangeVersionContractIDs={async (value, values) => {
                         // console.log(value, '##$@#$@#$');
-                        syncVersionUsedContracts(value);
+                        setVersionAllContractIDs(values);
+                        await syncVersionUsedContracts(value);
+                        reportedInformation();
                       }}
                     />
                   </div>
@@ -553,14 +555,16 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                               versionAllContractIDs={versionAllContractIDs}
                               resourceName={baseInfo.licenseeName}
                               currentPolicyID={ac.policyID}
-                              onChangeVersionAllContractIDs={(value) => {
-                                // console.log(value, '@#$@#$@#');
-                                setVersionAllContractIDs(value);
-                                reportedInformation();
-                              }}
-                              onChangeVersionContractIDs={(value) => {
+                              // onChangeVersionAllContractIDs={(value) => {
+                              //   // console.log(value, '@#$@#$@#');
+                              //   setVersionAllContractIDs(value);
+                              //   reportedInformation();
+                              // }}
+                              onChangeVersionContractIDs={(value, values) => {
                                 // console.log(value, '##$@#$@#$');
+                                setVersionAllContractIDs(values);
                                 syncVersionUsedContracts(value);
+                                reportedInformation();
                               }}
                             />
 
@@ -621,16 +625,16 @@ interface FVersionsProps {
   versionAllContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'];
   currentPolicyID: string;
 
-  onChangeVersionAllContractIDs?(value: FContractDetailsDrawerStates['versionAllContractIDs']): void;
+  // onChangeVersionAllContractIDs?(value: FContractDetailsDrawerStates['versionAllContractIDs']): void;
 
-  onChangeVersionContractIDs?(value: FContractDetailsDrawerStates['versionAllContractIDs'][number]): void;
+  onChangeVersionContractIDs?(changedContractIDs: FContractDetailsDrawerStates['versionAllContractIDs'][number], allContractIDs: FContractDetailsDrawerStates['versionAllContractIDs']): void;
 }
 
 function FVersions({
                      resourceName,
                      versionAllContractIDs,
                      currentPolicyID,
-                     onChangeVersionAllContractIDs,
+                     // onChangeVersionAllContractIDs,
                      onChangeVersionContractIDs,
                    }: FVersionsProps) {
   return (<>
@@ -664,8 +668,8 @@ function FVersions({
                   return versionContractIDs;
                 });
 
-                onChangeVersionContractIDs && onChangeVersionContractIDs(versionContractIDs);
-                onChangeVersionAllContractIDs && onChangeVersionAllContractIDs(all);
+                onChangeVersionContractIDs && onChangeVersionContractIDs(versionContractIDs, all);
+                // onChangeVersionAllContractIDs && onChangeVersionAllContractIDs(all);
               }}
             />
             <span>{vai.version}</span>
