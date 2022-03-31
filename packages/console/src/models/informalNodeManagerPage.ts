@@ -107,10 +107,13 @@ export interface IActions {
   comment: {
     text: string;
     operation: 'comment';
+    errorMsg?: string;
+    warningMsg?: string;
   };
   set_labels: {
     operation: 'set_labels';
     content: string[];
+    errorMsg?: string;
     warningMsg?: string;
   };
   replace: {
@@ -132,21 +135,25 @@ export interface IActions {
         type: 'resource' | 'object';
       }[][];
     };
+    errorMsg?: string;
     warningMsg?: string;
   };
   online: {
     operation: 'online';
     content: boolean;
+    errorMsg?: string;
     warningMsg?: string;
   };
   set_title: {
     operation: 'set_title';
     content: string;
+    errorMsg?: string;
     warningMsg?: string;
   };
   set_cover: {
     operation: 'set_cover';
     content: string;
+    errorMsg?: string;
     warningMsg?: string;
   };
   add_attr: {
@@ -156,6 +163,7 @@ export interface IActions {
       value: string;
       description: string;
     };
+    errorMsg?: string;
     warningMsg?: string;
   };
   delete_attr: {
@@ -163,6 +171,7 @@ export interface IActions {
     content: {
       key: string;
     };
+    errorMsg?: string;
     warningMsg?: string;
   };
 }
@@ -189,6 +198,8 @@ export interface IRules {
       | IActions['add_attr']
       | IActions['delete_attr']>;
     text: string;
+    errorMsg?: string;
+    warningMsg?: string;
   };
   alter: {
     operation: 'alter';
@@ -202,11 +213,15 @@ export interface IRules {
       | IActions['add_attr']
       | IActions['delete_attr']>;
     text: string;
+    errorMsg?: string;
+    warningMsg?: string;
   };
   activate_theme: {
     operation: 'activate_theme'
     exhibitName: string;
     text: string;
+    errorMsg?: string;
+    warningMsg?: string;
   };
 }
 

@@ -52,6 +52,8 @@ import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
+import FForbid from '@/components/FIcons/FForbid';
+import FFail from '@/components/FIcons/FFail';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -458,11 +460,23 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           active={rule.ruleInfo.exhibitName}
                         />}
                       </Space>
-                      {/*{*/}
-                      {/*  true && (<FTooltip title={'带填充'}>*/}
-                      {/*    <div><FWarning /></div>*/}
-                      {/*  </FTooltip>)*/}
-                      {/*}*/}
+
+                      {
+                        rule.ruleInfo.errorMsg && (<FTooltip
+                          title={rule.ruleInfo.errorMsg}
+                          placement='left'
+                        >
+                          <div><FFail style={{ color: '#EE4040' }} /></div>
+                        </FTooltip>)
+                      }
+                      {
+                        !rule.ruleInfo.errorMsg && rule.ruleInfo.warningMsg && (<FTooltip
+                          title={rule.ruleInfo.warningMsg}
+                          placement='left'
+                        >
+                          <div><FWarning /></div>
+                        </FTooltip>)
+                      }
 
                     </div>
                     {
@@ -475,7 +489,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                         >
                           {
                             rule.ruleInfo.actions.map((ruleAction, ind) => {
-                              console.log(ruleAction, 'ruleAction@#$@#$@809i');
+                              // console.log(ruleAction, 'ruleAction@#$@#$@809i');
                               return (<div className={styles.ruleCardBodyListItem} key={ind}>
                                 {
                                   ruleAction.operation === 'set_cover' && (<CoverRule cover={ruleAction.content} />)
@@ -516,13 +530,23 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                 }
 
                                 {
-                                  (ruleAction as any).warningMsg && (<FTooltip
-                                    title={(ruleAction as any).warningMsg}
+                                  ruleAction.errorMsg && (<FTooltip
+                                    title={ruleAction.errorMsg}
+                                    placement='left'
+                                  >
+                                    <div><FFail style={{ color: '#EE4040' }} /></div>
+                                  </FTooltip>)
+                                }
+
+                                {
+                                  !ruleAction.errorMsg && ruleAction.warningMsg && (<FTooltip
+                                    title={ruleAction.warningMsg}
                                     placement='left'
                                   >
                                     <div><FWarning /></div>
                                   </FTooltip>)
                                 }
+
                               </div>);
 
                             })
