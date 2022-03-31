@@ -1,11 +1,12 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {ConnectState} from '@/models/connect';
-import {router} from 'umi';
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { router } from 'umi';
+import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { nodeCreateSuccess } from '@freelog/tools-lib/dist/utils/linkTo';
+import fMessage from '@/components/fMessage';
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -85,17 +86,17 @@ const Model: NodesModelType = {
     ...initStates,
   },
   effects: {
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
+    * fetchNodes({}: FetchNodesAction, { call, put }: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Node.nodes>[0] = {
         limit: FUtil.Predefined.pageSize,
       };
-      const {data} = yield call(FServiceAPI.Node.nodes, params);
+      const { data } = yield call(FServiceAPI.Node.nodes, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -109,8 +110,8 @@ const Model: NodesModelType = {
         },
       });
     },
-    * createNode({}: CreateNodeAction, {call, select, put}: EffectsCommandMap) {
-      const {nodes}: ConnectState = yield select(({nodes}: ConnectState) => ({
+    * createNode({}: CreateNodeAction, { call, select, put }: EffectsCommandMap) {
+      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
         nodes,
       }));
 
@@ -123,7 +124,12 @@ const Model: NodesModelType = {
         nodeName: nodes.nodeName.trim(),
       };
 
-      const {data} = yield call(FServiceAPI.Node.create, params);
+      const { data, ret, errCode, msg } = yield call(FServiceAPI.Node.create, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        fMessage(msg, 'error');
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -147,10 +153,10 @@ const Model: NodesModelType = {
       });
 
       // router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
-      router.push(FUtil.LinkTo.nodeCreateSuccess({nodeID: data.nodeId}));
+      router.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
 
     },
-    * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
+    * onChangeName({ payload }: OnChangeNameAction, { select, call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -159,7 +165,7 @@ const Model: NodesModelType = {
         },
       });
 
-      const {nodes}: ConnectState = yield select(({nodes}: ConnectState) => ({
+      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
         nodes,
       }));
 
@@ -176,7 +182,7 @@ const Model: NodesModelType = {
         const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeName: payload.trim(),
         };
-        const {data: data2} = yield call(FServiceAPI.Node.details, params2);
+        const { data: data2 } = yield call(FServiceAPI.Node.details, params2);
         if (data2) {
           nameError = '该节点名称已经存在或已经被其它用户使用';
         }
@@ -190,7 +196,7 @@ const Model: NodesModelType = {
         },
       });
     },
-    * onChangeDomain({payload}: OnChangeDomainAction, {call, select, put}: EffectsCommandMap) {
+    * onChangeDomain({ payload }: OnChangeDomainAction, { call, select, put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -200,7 +206,7 @@ const Model: NodesModelType = {
         },
       });
 
-      const {nodes}: ConnectState = yield select(({nodes}: ConnectState) => ({
+      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
         nodes,
       }));
 
@@ -216,7 +222,7 @@ const Model: NodesModelType = {
         const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeDomain: payload.trim(),
         };
-        const {data: data1} = yield call(FServiceAPI.Node.details, params1);
+        const { data: data1 } = yield call(FServiceAPI.Node.details, params1);
         if (data1) {
           domainError = '该节点地址已经存在或已经被其它用户使用';
         }
@@ -232,21 +238,21 @@ const Model: NodesModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       // console.log(payload, '98023j');
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
-    setup({dispatch}: SubscriptionAPI) {
+    setup({ dispatch }: SubscriptionAPI) {
       dispatch<FetchNodesAction>({
         type: 'fetchNodes',
       });
-    }
-  }
+    },
+  },
 };
 
 export default Model;
