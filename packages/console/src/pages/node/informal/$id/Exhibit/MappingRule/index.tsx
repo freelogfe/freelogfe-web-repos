@@ -11,7 +11,7 @@ import {
   FMappingRuleOffline,
   FMappingRuleOnline,
   FMappingRuleReplace,
-  FMappingRuleTitle,
+  FMappingRuleTitle, FWarning,
   // FMappingRuleVersion,
 } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
@@ -32,6 +32,7 @@ import {
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
+import FTooltip from '@/components/FTooltip';
 
 // interface ICandidate {
 //   name: string;
@@ -66,69 +67,80 @@ function MappingRule({
     >
       {
         operationAndActionRecords.map((oaar, oaarIndex) => {
+          return (<div
+            key={oaarIndex}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            {
+              oaar.type === 'add' && oaar.data.candidate && (<AddRule
+                exhibit={oaar.data.exhibitName}
+                source={oaar.data.candidate}
+              />)
+            }
 
-          if (oaar.type === 'add' && oaar.data.candidate) {
-            return (<AddRule
-              key={oaarIndex}
-              exhibit={oaar.data.exhibitName}
-              source={oaar.data.candidate}
-            />);
-          }
+            {
+              oaar.type === 'alter' && (<AlterRule alter={oaar.data.exhibitName} />)
+            }
 
-          if (oaar.type === 'alter') {
-            return (<AlterRule key={oaarIndex} alter={oaar.data.exhibitName} />);
-          }
+            {
+              oaar.type === 'activate_theme' && (<ActiveRule active={oaar.data.exhibitName} />)
+            }
 
-          if (oaar.type === 'activate_theme') {
-            return (<ActiveRule key={oaarIndex} active={oaar.data.exhibitName} />);
-          }
+            {
+              oaar.type === 'set_cover' && oaar.data.coverImage && (
+                <CoverRule cover={oaar.data.coverImage} />)
+            }
 
-          if (oaar.type === 'set_cover' && oaar.data.coverImage) {
-            return (<CoverRule key={oaarIndex} cover={oaar.data.coverImage} />);
-          }
+            {
+              oaar.type === 'set_title' && oaar.data.title && (<TitleRule title={oaar.data.title} />)
+            }
 
-          if (oaar.type === 'set_title' && oaar.data.title) {
-            return (<TitleRule key={oaarIndex} title={oaar.data.title} />);
-          }
+            {
+              oaar.type === 'set_labels' && oaar.data.tags && (<LabelRule labels={oaar.data.tags} />)
+            }
 
-          if (oaar.type === 'set_labels' && oaar.data.tags) {
-            return (<LabelRule key={oaarIndex} labels={oaar.data.tags} />);
-          }
+            {
+              oaar.type === 'online' && oaar.data.onlineStatus && (<OnlineRule online={true} />)
+            }
 
-          if (oaar.type === 'online') {
-            return oaar.data.onlineStatus
-              ? (<OnlineRule key={oaarIndex} online={true} />)
-              : (<OfflineRule key={oaarIndex} offline={true} />);
-          }
+            {
+              oaar.type === 'online' && !oaar.data.onlineStatus && (<OfflineRule offline={true} />)
+            }
 
-          if (oaar.type === 'replace' && oaar.data.replacer && oaar.data.replaced) {
-            return (<ReplaceRule
-              key={oaarIndex}
-              replacer={oaar.data.replacer}
-              replaced={oaar.data.replaced}
-              scopes={[]}
-            />);
-          }
+            {
+              oaar.type === 'replace' && oaar.data.replacer && oaar.data.replaced && (<ReplaceRule
+                replacer={oaar.data.replacer}
+                replaced={oaar.data.replaced}
+                scopes={[]}
+              />)
+            }
 
-          if (oaar.type === 'add_attr' && oaar.data.attrKey && oaar.data.attrValue) {
-            return (<AttrRule
-              key={oaarIndex}
-              type={'add'}
-              theKey={oaar.data.attrKey || ''}
-              value={oaar.data.attrValue || ''}
-              description={oaar.data.attrDescription || ''}
-            />);
-          }
+            {
+              oaar.type === 'add_attr' && oaar.data.attrKey && oaar.data.attrValue && (<AttrRule
+                type={'add'}
+                theKey={oaar.data.attrKey || ''}
+                value={oaar.data.attrValue || ''}
+                description={oaar.data.attrDescription || ''}
+              />)
+            }
 
-          if (oaar.type === 'delete_attr' && oaar.data.attrKey) {
-            return (<AttrRule
-              key={oaarIndex}
-              type={'delete'}
-              theKey={oaar.data.attrKey}
-            />);
-          }
+            {
+              oaar.type === 'delete_attr' && oaar.data.attrKey && (<AttrRule
+                type={'delete'}
+                theKey={oaar.data.attrKey}
+              />)
+            }
 
-          return null;
+            {
+              oaar.warningMsg && (<FTooltip
+                title={oaar.warningMsg}
+                placement="left"
+              >
+                <FWarning />
+              </FTooltip>)
+            }
+
+          </div>);
         })
       }
 
