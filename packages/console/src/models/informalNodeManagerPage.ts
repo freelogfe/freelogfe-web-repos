@@ -111,6 +111,7 @@ export interface IActions {
   set_labels: {
     operation: 'set_labels';
     content: string[];
+    warningMsg?: string;
   };
   replace: {
     operation: 'replace';
@@ -131,18 +132,22 @@ export interface IActions {
         type: 'resource' | 'object';
       }[][];
     };
+    warningMsg?: string;
   };
   online: {
     operation: 'online';
     content: boolean;
+    warningMsg?: string;
   };
   set_title: {
     operation: 'set_title';
     content: string;
+    warningMsg?: string;
   };
   set_cover: {
     operation: 'set_cover';
     content: string;
+    warningMsg?: string;
   };
   add_attr: {
     operation: 'add_attr';
@@ -151,12 +156,14 @@ export interface IActions {
       value: string;
       description: string;
     };
+    warningMsg?: string;
   };
   delete_attr: {
     operation: 'delete_attr';
     content: {
       key: string;
     };
+    warningMsg?: string;
   };
 }
 

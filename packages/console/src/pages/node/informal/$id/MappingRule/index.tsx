@@ -458,13 +458,11 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           active={rule.ruleInfo.exhibitName}
                         />}
                       </Space>
-                      {
-                        rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
-                          return (<div key={iinn}>{mE}</div>);
-                        })}>
-                          <div><FWarning /></div>
-                        </FTooltip>)
-                      }
+                      {/*{*/}
+                      {/*  true && (<FTooltip title={'带填充'}>*/}
+                      {/*    <div><FWarning /></div>*/}
+                      {/*  </FTooltip>)*/}
+                      {/*}*/}
 
                     </div>
                     {
@@ -477,6 +475,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                         >
                           {
                             rule.ruleInfo.actions.map((ruleAction, ind) => {
+                              console.log(ruleAction, 'ruleAction@#$@#$@809i');
                               return (<div className={styles.ruleCardBodyListItem} key={ind}>
                                 {
                                   ruleAction.operation === 'set_cover' && (<CoverRule cover={ruleAction.content} />)
@@ -514,6 +513,15 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                     type={'delete'}
                                     theKey={ruleAction.content.key}
                                   />)
+                                }
+
+                                {
+                                  (ruleAction as any).warningMsg && (<FTooltip
+                                    title={(ruleAction as any).warningMsg}
+                                    placement='left'
+                                  >
+                                    <div><FWarning /></div>
+                                  </FTooltip>)
                                 }
                               </div>);
 
