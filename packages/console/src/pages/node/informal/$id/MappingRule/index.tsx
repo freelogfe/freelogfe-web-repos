@@ -52,7 +52,7 @@ import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
-import FForbid from '@/components/FIcons/FForbid';
+// import FForbid from '@/components/FIcons/FForbid';
 import FFail from '@/components/FIcons/FFail';
 
 interface MappingRuleProps {
