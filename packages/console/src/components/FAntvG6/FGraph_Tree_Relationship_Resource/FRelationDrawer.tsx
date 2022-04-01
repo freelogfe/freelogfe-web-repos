@@ -19,21 +19,23 @@ interface FRelationDrawerProps {
 }
 
 interface FRelationDrawerStates {
-  licensorInfo: {
-    licensorID: string;
-    licensorName: string;
-    licensorIdentityType: 'resource';
-  };
-  licenseeInfo: {
-    licenseeID: string;
-    licenseeName: string;
-    licensorIdentityType: 'resource' | 'exhibit';
-  };
-  contracts: {
-    contractID: string;
-    contractName: string;
-    createDate: string;
-  };
+  dataSource: {
+    licensorInfo: {
+      licensorID: string;
+      licensorName: string;
+      licensorIdentityType: 'resource';
+    };
+    licenseeInfo: {
+      licenseeID: string;
+      licenseeName: string;
+      licensorIdentityType: 'resource' | 'exhibit';
+    };
+    contracts: {
+      contractID: string;
+      contractName: string;
+      createDate: string;
+    }[];
+  } | null;
 }
 
 function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
