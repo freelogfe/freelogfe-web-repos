@@ -20,12 +20,12 @@ interface FRelationDrawerProps {
 
 interface FRelationDrawerStates {
   dataSource: {
-    licensorInfo: {
+    licensor: {
       licensorID: string;
       licensorName: string;
       licensorIdentityType: 'resource';
     };
-    licenseeInfo: {
+    licensee: {
       licenseeID: string;
       licenseeName: string;
       licensorIdentityType: 'resource' | 'exhibit';
