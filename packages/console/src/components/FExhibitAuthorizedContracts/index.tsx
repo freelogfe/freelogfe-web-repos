@@ -328,7 +328,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <FTitleText type='h4'>未签约策略</FTitleText>
               {
                 selectedAuthorizedContract.policies.map((sacp) => {
-                  return (<>
+                  return (
                     <div
                       className={styles.Policy}
                       key={sacp.policyId}
@@ -352,7 +352,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                       </div>
 
                     </div>
-                  </>);
+                  );
                 })
               }
             </>)

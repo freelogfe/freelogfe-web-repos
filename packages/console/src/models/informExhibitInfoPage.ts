@@ -505,7 +505,7 @@ const Model: ExhibitInfoPageModelType = {
         testResourceId: informExhibitID,
       };
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
-      console.log(testResourceDetail, 'data288282822828282822888888888888');
+      // console.log(testResourceDetail, 'data288282822828282822888888888888');
       if (!testResourceDetail || testResourceDetail.userId !== FUtil.Tool.getUserIDByCookies()) {
         router.replace(FUtil.LinkTo.exception403({}));
         return;
