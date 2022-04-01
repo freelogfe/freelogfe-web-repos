@@ -19,7 +19,21 @@ interface FRelationDrawerProps {
 }
 
 interface FRelationDrawerStates {
-
+  licensorInfo: {
+    licensorID: string;
+    licensorName: string;
+    licensorIdentityType: 'resource';
+  };
+  licenseeInfo: {
+    licenseeID: string;
+    licenseeName: string;
+    licensorIdentityType: 'resource' | 'exhibit';
+  };
+  contracts: {
+    contractID: string;
+    contractName: string;
+    createDate: string;
+  };
 }
 
 function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
@@ -62,7 +76,13 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
       projection: 'contractId,contractName,createDate',
     };
 
-    const { data: data_Contracts } = await FServiceAPI.Contract.batchContracts(params1);
+    const { data: data_Contracts }: {
+      data: {
+        contractId: string;
+        contractName: string;
+        createDate: string;
+      };
+    } = await FServiceAPI.Contract.batchContracts(params1);
     console.log(data_Contracts, 'data_Contracts@3098uijoklsdfl');
 
   }
