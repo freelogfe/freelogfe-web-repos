@@ -125,20 +125,23 @@ function FGraph_Tree_Relationship_Resource({
     />);
   }, [dataSource]);
 
-  if (!dataSource) {
-    return (<FLoadingTip height={height} />);
-  }
+  return (<>
+    {
+      !dataSource && (<FLoadingTip height={height} />)
+    }
 
-  if (dataSource.children.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-        <FResultTip h1={'无关系树'} />
-      </div>);
-  }
+    {
+      dataSource && dataSource.children.length === 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+          <FResultTip h1={'无关系树'} />
+        </div>)
+    }
 
-  return (<FErrorBoundary>
-    {Gra}
-  </FErrorBoundary>);
+    {
+      dataSource && dataSource.children.length > 0 && <FErrorBoundary>{Gra}</FErrorBoundary>
+    }
+
+  </>);
 }
 
 export default FGraph_Tree_Relationship_Resource;
