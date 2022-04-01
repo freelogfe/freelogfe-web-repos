@@ -57,48 +57,48 @@ export interface ExhibitInfoPageModelState {
 
   graph_FullScreen: boolean;
   graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
-  graph_Viewport_RelationGraph_Nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-    pending: boolean;
-    exception: boolean;
-  } | {
-    id: string;
-    nodeName: string;
-    exhibitName: string;
-  }>;
-  graph_Viewport_RelationGraph_Edges: {
-    source: string;
-    target: string;
-  }[];
-  graph_Viewport_AuthorizationGraph_Nodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    nodeId: number;
-    nodeName: string;
-    exhibitId: string;
-    exhibitName: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  graph_Viewport_AuthorizationGraph_Edges: {
-    source: string;
-    target: string;
-  }[];
+  // graph_Viewport_RelationGraph_Nodes: Array<{
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  //   pending: boolean;
+  //   exception: boolean;
+  // } | {
+  //   id: string;
+  //   nodeName: string;
+  //   exhibitName: string;
+  // }>;
+  // graph_Viewport_RelationGraph_Edges: {
+  //   source: string;
+  //   target: string;
+  // }[];
+  // graph_Viewport_AuthorizationGraph_Nodes: Array<{
+  //   id: string;
+  //   resourceId: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   version: string;
+  // } | {
+  //   id: string;
+  //   nodeId: number;
+  //   nodeName: string;
+  //   exhibitId: string;
+  //   exhibitName: string;
+  // } | {
+  //   id: string;
+  //   contracts: {
+  //     contractId: string;
+  //     contractName: string;
+  //     isAuth: boolean;
+  //     updateDate: string;
+  //   }[];
+  // }>;
+  // graph_Viewport_AuthorizationGraph_Edges: {
+  //   source: string;
+  //   target: string;
+  // }[];
 
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
@@ -356,10 +356,10 @@ const initStates: ExhibitInfoPageModelState = {
 
   graph_FullScreen: false,
   graph_Viewport_Show: 'relationship',
-  graph_Viewport_RelationGraph_Nodes: [],
-  graph_Viewport_RelationGraph_Edges: [],
-  graph_Viewport_AuthorizationGraph_Nodes: [],
-  graph_Viewport_AuthorizationGraph_Edges: [],
+  // graph_Viewport_RelationGraph_Nodes: [],
+  // graph_Viewport_RelationGraph_Edges: [],
+  // graph_Viewport_AuthorizationGraph_Nodes: [],
+  // graph_Viewport_AuthorizationGraph_Edges: [],
 
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
@@ -587,10 +587,10 @@ const Model: ExhibitInfoPageModelType = {
                   }),
               };
             }),
-          graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
-          graph_Viewport_RelationGraph_Edges: relationGraphEdges,
-          graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
-          graph_Viewport_AuthorizationGraph_Edges: authorizationGraphEdges,
+          // graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
+          // graph_Viewport_RelationGraph_Edges: relationGraphEdges,
+          // graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
+          // graph_Viewport_AuthorizationGraph_Edges: authorizationGraphEdges,
 
           side_ExhibitCover: data_PresentableDetails.coverImages[0] || '',
           side_ExhibitTitle: data_PresentableDetails.presentableTitle,

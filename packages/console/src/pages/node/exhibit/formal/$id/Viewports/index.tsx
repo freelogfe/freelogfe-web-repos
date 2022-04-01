@@ -5,7 +5,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import {
-  FAntvG6RelationshipGraph,
+  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import FDrawer from '@/components/FDrawer';
