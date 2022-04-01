@@ -71,6 +71,10 @@ export interface FNode_Relationship_Resource_Values {
   show_Warning: boolean;
   show_Execute: boolean;
   resourceDetails_Url: string;
+  parentInfo: {
+    parentID: string;
+    parentIdentity: 'resource' | 'exhibit';
+  };
 }
 
 interface FNode_Relationship_Resource_Props {
@@ -87,6 +91,7 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
     show_Warning,
     show_Execute,
     resourceDetails_Url,
+    parentInfo,
   } = value;
   return (<Group>
     <Rect
@@ -161,7 +166,12 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
             cursor: 'pointer',
           }}
           onClick={(evt, node, shape, graph) => {
-            console.log(evt, '#####2342394ui3jk0988uoij32lk');
+            // console.log(evt, '#####2342394ui3jk0988uoij32lk');
+            graph.emit('resource:viewContract', {
+              // contractID: contract.contractID,
+              resourceID: resourceID,
+              parentInfo: parentInfo,
+            });
           }}
         >查看合约</Text>
       </Rect>

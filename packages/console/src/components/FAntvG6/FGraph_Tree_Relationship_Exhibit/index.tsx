@@ -118,7 +118,13 @@ function FGraph_Tree_Relationship_Exhibit({
         nodeID: data_NodeDetails.nodeId,
         nodeName: data_NodeDetails.nodeName,
       },
-      children: handleDataSource({ data: data_RelationTree }),
+      children: handleDataSource({
+        data: data_RelationTree,
+        parentInfo: {
+          parentID: data_ExhibitDetails.presentableId,
+          parentIdentity: 'exhibit',
+        },
+      }),
     };
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
 
@@ -201,9 +207,13 @@ export default FGraph_Tree_Relationship_Exhibit;
 
 interface HandleDataSourceParams {
   data: ServerDataNode[];
+  parentInfo: {
+    parentID: string;
+    parentIdentity: 'resource' | 'exhibit';
+  };
 }
 
-function handleDataSource({ data }: HandleDataSourceParams): ResourceNodeTree[] {
+function handleDataSource({ data, parentInfo }: HandleDataSourceParams): ResourceNodeTree[] {
   return data.map<ResourceNodeTree>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
@@ -222,8 +232,15 @@ function handleDataSource({ data }: HandleDataSourceParams): ResourceNodeTree[] 
         show_Execute: !d.downstreamIsAuth,
         show_Warning: !d.selfAndUpstreamIsAuth,
         resourceDetails_Url: FUtil.LinkTo.resourceDetails({ resourceID: d.resourceId }),
+        parentInfo: parentInfo,
       },
-      children: handleDataSource({ data: d.children }),
+      children: handleDataSource({
+        data: d.children,
+        parentInfo: {
+          parentID: d.resourceId,
+          parentIdentity: 'resource',
+        },
+      }),
     };
   });
 }

@@ -166,25 +166,30 @@ function FGraph_Tree_Authorization_Resource({
         appendAutoShapeListener(graph as Graph);
         graph.on('contract:view', ({ contractID }: any) => {
           // console.log(params, 'params23908isdflk');
-          console.log(contractID, 'contractID@#@##$@#$@#');
+          // console.log(contractID, 'contractID@#@##$@#$@#');
           set_ContractID(contractID);
         });
       }}
     />);
   }, [dataSource]);
 
-  return (<FErrorBoundary>
+  return (<>
+
+    {!dataSource && (<FLoadingTip height={height} />)}
+
     {
-      !dataSource
-        ? (<FLoadingTip height={height} />)
-        : dataSource.children.length === 0
-          ? (<div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-            <FResultTip h1={'无授权树'} />
-          </div>)
-          : Gra
+      dataSource && dataSource.children.length === 0 && (<div
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无授权树'} />
+      </div>)
     }
-    
+
+    {
+      dataSource && dataSource.children.length > 0 && (<FErrorBoundary>
+        {Gra}
+      </FErrorBoundary>)
+    }
+
     <FContractDetailsDrawer
       contractID={contractID}
       onClose={() => {
@@ -194,7 +199,8 @@ function FGraph_Tree_Authorization_Resource({
         handleData();
       }}
     />
-  </FErrorBoundary>);
+
+  </>);
 }
 
 export default FGraph_Tree_Authorization_Resource;

@@ -158,6 +158,11 @@ function FGraph_Tree_Relationship_Resource({
         // graph.moveTo(20, 20, true);
         // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
+        graph.on('resource:viewContract', ({ resourceID, parentInfo }: any) => {
+          // console.log(params, 'params23908isdflk');
+          console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
+          // set_ContractID(contractID);
+        });
       }}
     />);
   }, [dataSource]);
@@ -218,7 +223,7 @@ interface HandleDataSourceParams {
 }
 
 function handleDataSource({ data, parentResourceID }: HandleDataSourceParams): ResourceNode[] {
-  return data.map((d) => {
+  return data.map<ResourceNode>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
       nodeType: 'resource',
@@ -238,6 +243,10 @@ function handleDataSource({ data, parentResourceID }: HandleDataSourceParams): R
           resourceID: d.resourceId,
           // version: d.version,
         }),
+        parentInfo: {
+          parentID: parentResourceID,
+          parentIdentity: 'resource',
+        },
       },
       children: handleDataSource({
         data: d.children,
