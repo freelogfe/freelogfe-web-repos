@@ -5,6 +5,64 @@ import img_execute from '@/assets/execute.svg';
 import G6 from '@antv/g6';
 import React from 'react';
 
+export interface FNode_Relationship_RootResource_Values {
+  resourceID: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  resourceDetails_Url: string;
+}
+
+interface FNode_Relationship_RootResource_Props {
+  value: FNode_Relationship_RootResource_Values;
+}
+
+function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResource_Props) {
+  const {
+    resourceID,
+    resourceName,
+    resourceType,
+    version,
+    resourceDetails_Url,
+  } = value;
+  return (<Group>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+        // console.log('#######98ioklj');
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          // console.log('#####2342394ui3jk');
+          window.open(resourceDetails_Url);
+        }}
+      >{textOverflowEllipsis(resourceName)}</Text>
+      <Rect style={{ height: 10 }} />
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 400,
+        fill: '#666',
+        padding: [3, 0],
+      }}>{resourceType} | {version}</Text>
+    </Rect>
+  </Group>);
+}
+
 export interface FNode_Relationship_Resource_Values {
   resourceID: string;
   resourceName: string;
@@ -81,7 +139,8 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
       <Rect style={{ height: 15 }} />
       <Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
         {
-          (show_Execute || show_Warning) && (<Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
+          (show_Execute || show_Warning) && (<Rect
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
             {
               show_Execute && (<Image style={{ width: 16, height: 16, img: img_execute, next: 'inline' }} />)
             }
@@ -101,8 +160,8 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
             fontWeight: 600,
             cursor: 'pointer',
           }}
-          onClick={() => {
-            // console.log('#####2342394ui3jk');
+          onClick={(evt, node, shape, graph) => {
+            console.log(evt, '#####2342394ui3jk0988uoij32lk');
           }}
         >查看合约</Text>
       </Rect>
@@ -180,8 +239,14 @@ function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props)
 }
 
 function FNode_Relationship({ cfg = {} }: any) {
+  // console.log(cfg, 'cfg#$rwe0 9fuiojlsjd');
   if (cfg.nodeType === 'resource') {
     return (<FNode_Relationship_Resource
+      value={cfg.value}
+    />);
+  }
+  if (cfg.nodeType === 'rootResource') {
+    return (<FNode_Relationship_RootResource
       value={cfg.value}
     />);
   }

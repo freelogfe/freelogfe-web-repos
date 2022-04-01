@@ -2,7 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode/fRelationship';
-import { F_RELATIONSHIP_NODE_TYPE, FNode_Relationship_Resource_Values } from '../registerNode/fRelationship';
+import {
+  F_RELATIONSHIP_NODE_TYPE,
+  FNode_Relationship_Exhibit_Values,
+  FNode_Relationship_Resource_Values, FNode_Relationship_RootResource_Values,
+} from '../registerNode/fRelationship';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
@@ -18,15 +22,23 @@ interface FGraph_Tree_Relationship_Resource_Props {
   height: number;
 }
 
-interface NodeTree {
+interface RootResourceNode {
+  id: string;
+  nodeType: 'rootResource';
+  // value: FNode_Relationship_Resource_Values;
+  value: FNode_Relationship_RootResource_Values;
+  children: ResourceNode[];
+}
+
+interface ResourceNode {
   id: string;
   nodeType: 'resource';
   value: FNode_Relationship_Resource_Values;
-  children: NodeTree[];
+  children: ResourceNode[];
 }
 
 interface FGraph_Relationship_States {
-  dataSource: NodeTree | null;
+  dataSource: RootResourceNode | null;
 }
 
 const initStates: FGraph_Relationship_States = {
@@ -74,7 +86,29 @@ function FGraph_Tree_Relationship_Resource({
     const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTreeAuth(params2);
     // console.log(data_DependencyTree, 'data_DependencyTree32sdfsd');
 
-    const dataSource: FGraph_Relationship_States['dataSource'] = handleDataSource({ data: data_DependencyTree })[0];
+    const dataSource: FGraph_Relationship_States['dataSource'] = {
+      id: data_DependencyTree[0].resourceId + '-' + FUtil.Tool.generateRandomCode(),
+      nodeType: 'rootResource',
+      // value: FNode_Relationship_Resource_Values;
+      value: {
+        resourceID: data_DependencyTree[0].resourceId,
+        resourceName: data_DependencyTree[0].resourceName,
+        resourceType: data_DependencyTree[0].resourceType,
+        version: data_DependencyTree[0].versionRanges?.length
+          ? data_DependencyTree[0].versionRanges[0]
+          : data_DependencyTree[0].versions?.length
+            ? data_DependencyTree[0].versions[0]
+            : '',
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
+          resourceID: data_DependencyTree[0].resourceId,
+          // version: d.version,
+        }),
+      },
+      children: handleDataSource({
+        data: data_DependencyTree[0].children,
+        parentResourceID: data_DependencyTree[0].resourceId,
+      }),
+    };
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
 
     set_DataSource(dataSource);
@@ -100,7 +134,10 @@ function FGraph_Tree_Relationship_Resource({
         // direction: 'LR',
         // dropCap: false,
         // indent: 500,
-        getHeight: () => {
+        getHeight: (node: any) => {
+          if (node.nodeType === 'rootResource') {
+            return 58;
+          }
           return 90;
         },
         getWidth: () => {
@@ -177,10 +214,11 @@ export default FGraph_Tree_Relationship_Resource;
 
 interface HandleDataSourceParams {
   data: ServerDataNode[];
+  parentResourceID: string;
 }
 
-function handleDataSource({ data }: HandleDataSourceParams): NodeTree[] {
-  return data.map<NodeTree>((d) => {
+function handleDataSource({ data, parentResourceID }: HandleDataSourceParams): ResourceNode[] {
+  return data.map((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
       nodeType: 'resource',
@@ -201,7 +239,10 @@ function handleDataSource({ data }: HandleDataSourceParams): NodeTree[] {
           // version: d.version,
         }),
       },
-      children: handleDataSource({ data: d.children }),
+      children: handleDataSource({
+        data: d.children,
+        parentResourceID: d.resourceId,
+      }),
     };
   });
 }

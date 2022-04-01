@@ -5,7 +5,7 @@ import React from 'react';
 import img_Execute from '@/assets/execute.svg';
 import img_Gear from '@/assets/gear.svg';
 import img_Forbid from '@/assets/forbid.svg';
-import img from '@/assets/warning.svg';
+// import img from '@/assets/warning.svg';
 import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Authorization_Resource_Values {
