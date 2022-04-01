@@ -560,10 +560,10 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                               //   setVersionAllContractIDs(value);
                               //   reportedInformation();
                               // }}
-                              onChangeVersionContractIDs={(value, values) => {
+                              onChangeVersionContractIDs={async (value, values) => {
                                 // console.log(value, '##$@#$@#$');
                                 setVersionAllContractIDs(values);
-                                syncVersionUsedContracts(value);
+                                await syncVersionUsedContracts(value);
                                 reportedInformation();
                               }}
                             />
