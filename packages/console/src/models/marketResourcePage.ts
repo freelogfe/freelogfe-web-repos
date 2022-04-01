@@ -5,8 +5,8 @@ import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
 import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+// import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
+// import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo } from '@/type/contractTypes';
 
@@ -552,36 +552,36 @@ const Model: MarketResourcePageModelType = {
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
       // console.log(data, '98sdalkf');
 
-      const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
-        resourceId: marketResourcePage.resourceId,
-        version: marketResourcePage.version,
-        // $version: '0.0.1',
-        isContainRootNode: true,
-      };
-
-      const { data: data2 } = yield call(FServiceAPI.Resource.dependencyTree, params2);
-      // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
-      const { nodes: dependencyGraphNodes, edges: dependencyGraphEdges } = handleDependencyGraphData(data2[0]);
-
-      const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
-        resourceId: marketResourcePage.resourceId,
-        version: marketResourcePage.version,
-      };
-
-      const { data: data3 } = yield call(FServiceAPI.Resource.authTree, params3);
-
-      // 授权树
-      const {
-        nodes: authorizationGraphNodes,
-        edges: authorizationGraphEdges,
-      } = yield call(handleAuthorizationGraphData, data3, {
-        id: data.version,
-        resourceId: data.resourceId,
-        resourceName: data.resourceName,
-        resourceType: data.resourceType,
-        version: data.version,
-        versionId: data.versionId,
-      });
+      // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
+      //   resourceId: marketResourcePage.resourceId,
+      //   version: marketResourcePage.version,
+      //   // $version: '0.0.1',
+      //   isContainRootNode: true,
+      // };
+      //
+      // const { data: data2 } = yield call(FServiceAPI.Resource.dependencyTree, params2);
+      // // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
+      // const { nodes: dependencyGraphNodes, edges: dependencyGraphEdges } = handleDependencyGraphData(data2[0]);
+      //
+      // const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
+      //   resourceId: marketResourcePage.resourceId,
+      //   version: marketResourcePage.version,
+      // };
+      //
+      // const { data: data3 } = yield call(FServiceAPI.Resource.authTree, params3);
+      //
+      // // 授权树
+      // const {
+      //   nodes: authorizationGraphNodes,
+      //   edges: authorizationGraphEdges,
+      // } = yield call(handleAuthorizationGraphData, data3, {
+      //   id: data.version,
+      //   resourceId: data.resourceId,
+      //   resourceName: data.resourceName,
+      //   resourceType: data.resourceType,
+      //   version: data.version,
+      //   versionId: data.versionId,
+      // });
 
       // console.log('授权树', 'marketResourcePage112342342');
 
