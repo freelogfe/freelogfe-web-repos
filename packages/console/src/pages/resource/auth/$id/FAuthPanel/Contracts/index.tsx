@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Checkbox, Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import {
-  FetchAuthorizedAction,
+  // FetchAuthorizedAction,
   OnTrigger_AuthorizedContractEvent_Action,
   ResourceAuthPageModelState,
   UpdateAuthorizedAction,

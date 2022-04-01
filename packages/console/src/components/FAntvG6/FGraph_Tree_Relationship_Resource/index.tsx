@@ -14,6 +14,13 @@ import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FErrorBoundary from '@/components/FErrorBoundary';
 import { relationTreeAuth } from '@freelog/tools-lib/dist/service-API/resources';
+import FDrawer from '@/components/FDrawer';
+import { Space } from 'antd';
+import { FContentText } from '@/components/FText';
+import FResource from '@/components/FIcons/FResource';
+import { FNodes, FUser } from '@/components/FIcons';
+import FFormLayout from '@/components/FFormLayout';
+import FRelationDrawer from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource/FRelationDrawer';
 
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
@@ -183,6 +190,15 @@ function FGraph_Tree_Relationship_Resource({
       dataSource && dataSource.children.length > 0 && <FErrorBoundary>{Gra}</FErrorBoundary>
     }
 
+    <FRelationDrawer
+      licensor={{
+        licensorID: '61b1b9c055709a002e9229c9',
+        licensorIdentityType: 'resource',
+      }}
+      licensee={{
+        licenseeID: '620c97f5a8f0ed002eacd759',
+        licensorIdentityType: 'resource',
+      }} />
   </>);
 }
 
