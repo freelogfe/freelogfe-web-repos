@@ -6,9 +6,14 @@ import { FContentText } from '@/components/FText';
 // import { FNodes, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
+import styles from '@/pages/resource/auth/$id/FAuthPanel/Contracts/index.less';
+import FContractDisplay from '@/components/FContractDisplay';
+import { OnTrigger_AuthorizedContractEvent_Action } from '@/models/resourceAuthPage';
+import FUtil1 from '@/utils';
+import FDivider from '@/components/FDivider';
 
 interface FRelationDrawerProps {
   licensor: {
@@ -163,10 +168,65 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
           </Space>
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'合约详情'}>
-          <FContentText
-            type='highlight'
-            text={'5678'}
-          />
+          <Space size={15} direction='vertical' style={{ width: '100%' }}>
+            {
+              dataSource.contracts.map((k) => {
+                return (<div key={k.contractID} className={styles.Policy}>
+                  <div style={{ height: 15 }} />
+
+                  <div className={styles.PolicyGrammarName}>
+                    <Space size={10}>
+                      <span>{k.contractName}</span>
+                    </Space>
+                  </div>
+
+                  <div style={{ height: 10 }} />
+                  <div style={{ padding: '0 20px' }}>
+                    <FContractDisplay
+                      contractID={k.contractID}
+                      onChangedEvent={() => {
+                        // dispatch<OnTrigger_AuthorizedContractEvent_Action>({
+                        //   type: 'resourceAuthPage/onTrigger_AuthorizedContractEvent',
+                        // });
+                      }}
+                    />
+                  </div>
+                  <div style={{ height: 10 }} />
+                  <Space style={{ padding: '0 20px' }} size={2}>
+                    <FContentText
+                      type='additional2'
+                      text={FUtil1.I18n.message('contract_id') + '：' + k.contractID}
+                    />
+                    <FDivider style={{ fontSize: 14 }} />
+                    <FContentText
+                      type='additional2'
+                      text={FUtil1.I18n.message('contract_signed_time') + '：' + k.createDate}
+                    />
+                  </Space>
+                  <div style={{ height: 10 }} />
+
+                  {/*{*/}
+                  {/*  (<div className={styles.PolicyInfo}>*/}
+                  {/*    <div className={styles.versionControl}>*/}
+                  {/*      <FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>*/}
+                  {/*      <div style={{ height: 8 }} />*/}
+                  {/*      <div className={styles.allVersions}>*/}
+                  {/*        {k.versions.map((i) => <Space size={8} key={i.version}>*/}
+                  {/*          <Checkbox*/}
+                  {/*            checked={i.checked}*/}
+                  {/*            disabled={i.disabled}*/}
+                  {/*            onChange={(e) => onLicenseChange(i.version, k.policyId, e.target.checked)}*/}
+                  {/*          />*/}
+                  {/*          <span>{i.version}</span>*/}
+                  {/*        </Space>)}*/}
+                  {/*      </div>*/}
+                  {/*    </div>*/}
+                  {/*  </div>)*/}
+                  {/*}*/}
+
+                </div>);
+              })}
+          </Space>
         </FFormLayout.FBlock>
       </FFormLayout>)
     }
