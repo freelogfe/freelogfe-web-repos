@@ -173,7 +173,7 @@ function FGraph_Tree_Relationship_Resource({
         appendAutoShapeListener(graph as Graph);
         graph.on('resource:viewContract', ({ resourceID, parentInfo }: any) => {
           // console.log(params, 'params23908isdflk');
-          console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
+          // console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
           // set_ContractID(contractID);
           set_ShowRelationDrawerInfo({
             licensor: {
