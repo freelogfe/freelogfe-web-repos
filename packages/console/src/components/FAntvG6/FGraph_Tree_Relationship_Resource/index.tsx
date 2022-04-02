@@ -16,6 +16,19 @@ import FResultTip from '../../FResultTip';
 import FErrorBoundary from '../../FErrorBoundary';
 import FRelationDrawer from '../FRelationDrawer';
 
+interface ServerDataNode {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  versions: string[];
+  versionRanges: string[];
+  // versions?: string[];
+  downstreamAuthContractIds: string[];
+  downstreamIsAuth?: boolean;
+  selfAndUpstreamIsAuth?: boolean;
+  children: ServerDataNode[];
+}
+
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
   version: string;
@@ -40,24 +53,22 @@ interface ResourceNode {
 
 interface FGraph_Relationship_States {
   dataSource: RootResourceNode | null;
+  showRelationDrawerInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licenseeIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
 }
 
 const initStates: FGraph_Relationship_States = {
   dataSource: null,
+  showRelationDrawerInfo: null,
 };
-
-interface ServerDataNode {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  versions: string[];
-  versionRanges: string[];
-  // versions?: string[];
-  downstreamAuthContractIds: string[];
-  downstreamIsAuth?: boolean;
-  selfAndUpstreamIsAuth?: boolean;
-  children: ServerDataNode[];
-}
 
 function FGraph_Tree_Relationship_Resource({
                                              resourceID,
@@ -67,6 +78,7 @@ function FGraph_Tree_Relationship_Resource({
                                            }: FGraph_Tree_Relationship_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
+  const [showRelationDrawerInfo, set_ShowRelationDrawerInfo] = React.useState<FGraph_Relationship_States['showRelationDrawerInfo']>(initStates['showRelationDrawerInfo']);
 
   React.useEffect(() => {
     handleData();
@@ -163,6 +175,16 @@ function FGraph_Tree_Relationship_Resource({
           // console.log(params, 'params23908isdflk');
           console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
           // set_ContractID(contractID);
+          set_ShowRelationDrawerInfo({
+            licensor: {
+              licensorID: resourceID,
+              licensorIdentityType: 'resource',
+            },
+            licensee: {
+              licenseeID: parentInfo.parentID,
+              licenseeIdentityType: parentInfo.parentIdentity,
+            },
+          });
         });
       }}
     />);
@@ -185,13 +207,12 @@ function FGraph_Tree_Relationship_Resource({
     }
 
     <FRelationDrawer
-      licensor={{
-        licensorID: '61b1b9c055709a002e9229c9',
-        licensorIdentityType: 'resource',
+      bothSidesInfo={showRelationDrawerInfo}
+      onClose={() => {
+        set_ShowRelationDrawerInfo(null);
       }}
-      licensee={{
-        licenseeID: '620c97f5a8f0ed002eacd759',
-        licensorIdentityType: 'resource',
+      onChange_Authorization={() => {
+        handleData();
       }}
     />
   </>);

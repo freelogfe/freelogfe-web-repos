@@ -24,7 +24,7 @@ interface FRelationDrawerProps {
     };
     licensee: {
       licenseeID: string;
-      licensorIdentityType: 'resource' | 'exhibit';
+      licenseeIdentityType: 'resource' | 'exhibit';
     };
   } | null;
 
@@ -68,7 +68,7 @@ const initData: FRelationDrawerStates = {
   versions: [],
 };
 
-function FRelationDrawer({ bothSidesInfo }: FRelationDrawerProps) {
+function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRelationDrawerProps) {
 
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
@@ -80,7 +80,7 @@ function FRelationDrawer({ bothSidesInfo }: FRelationDrawerProps) {
   function onChange_DrawerVisible(visible: boolean) {
     if (visible && bothSidesInfo) {
       const { licensor, licensee } = bothSidesInfo;
-      if (licensor.licensorIdentityType === 'resource' && licensee.licensorIdentityType === 'resource') {
+      if (licensor.licensorIdentityType === 'resource' && licensee.licenseeIdentityType === 'resource') {
         handleData_Resource2Resource();
       }
     }
@@ -220,7 +220,7 @@ function FRelationDrawer({ bothSidesInfo }: FRelationDrawerProps) {
       return;
     }
     const { licensor, licensee } = bothSidesInfo;
-    
+
     const params: Parameters<typeof FServiceAPI.Resource.batchSetContracts>[0] = {
       resourceId: licensee.licenseeID,
       subjects: [{
@@ -238,13 +238,18 @@ function FRelationDrawer({ bothSidesInfo }: FRelationDrawerProps) {
       fMessage(msg, 'error');
       return;
     }
+    handleData_Resource2Resource();
+    onChange_Authorization && onChange_Authorization();
   }
 
   return (<FDrawer
-    visible={true}
+    visible={!!bothSidesInfo}
     title={'授权关系'}
     // onClose={() => onClose && onClose()}
     afterVisibleChange={onChange_DrawerVisible}
+    onClose={() => {
+      onClose && onClose();
+    }}
   >
     {
       !dataSource && (<FLoadingTip height={500} />)
