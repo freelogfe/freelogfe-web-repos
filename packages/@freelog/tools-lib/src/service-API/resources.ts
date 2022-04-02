@@ -1,4 +1,5 @@
 import FUtil from '../utils';
+import {CommonReturn} from "./tools";
 
 // 创建资源
 export interface CreateParamsType {
@@ -341,7 +342,22 @@ interface ResolveResourcesParamsType {
   resourceId: string;
 }
 
-export function resolveResources(params: ResolveResourcesParamsType) {
+interface CreateVersionReturnType extends CommonReturn {
+  data: {
+    resourceId: string;
+    resourceName: string;
+    versions: {
+      version: string;
+      versionId: string;
+      contracts: {
+        policyId: string;
+        contractId: string;
+      }[];
+    }[];
+  }[];
+}
+
+export function resolveResources(params: ResolveResourcesParamsType): Promise<CreateVersionReturnType> {
   // return FUtil.Axios.get(`/v2/resources/${params.resourceId}/resolveResources`);
   return FUtil.Request({
     method: 'GET',
