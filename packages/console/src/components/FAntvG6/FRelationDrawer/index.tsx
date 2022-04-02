@@ -11,11 +11,10 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import styles from '@/pages/resource/auth/$id/FAuthPanel/Contracts/index.less';
 import FContractDisplay from '@/components/FContractDisplay';
-import { OnTrigger_AuthorizedContractEvent_Action } from '@/models/resourceAuthPage';
 import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
-import FCheckbox from '@/components/FCheckbox';
 import FContractAppliedVersions from '@/components/FContractAppliedVersions';
+import fMessage from '@/components/fMessage';
 
 interface FRelationDrawerProps {
   licensor: {
@@ -106,7 +105,7 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
         contractId: string;
         contractName: string;
         createDate: string;
-        policyId:  string;
+        policyId: string;
       }[];
     } = await FServiceAPI.Contract.batchContracts(params1);
 
@@ -185,6 +184,30 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
 
   async function handleData_Resource2Exhibit() {
 
+  }
+
+  async function onChange_AppliedVersion(changed: {
+    version: string;
+    checked: boolean;
+    policyID: string;
+  }) {
+    const params: Parameters<typeof FServiceAPI.Resource.batchSetContracts>[0] = {
+      resourceId: licensee.licenseeID,
+      subjects: [{
+        subjectId: licensor.licensorID,
+        versions: [{
+          version: changed.version,
+          policyId: changed.policyID,
+          operation: changed.checked ? 1 : 0,
+        }],
+      }],
+    };
+    const { ret, errCode, msg, data } = await FServiceAPI.Resource.batchSetContracts(params);
+
+    if (ret !== 0 || errCode !== 0 || !data) {
+      fMessage(msg, 'error');
+      return;
+    }
   }
 
   return (<FDrawer
@@ -272,6 +295,13 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
                       <FContractAppliedVersions
                         versionAndPolicyIDs={versions}
                         currentPolicyID={k.policyID}
+                        onChangeVersionContractIDs={({ changed, changedAllIDs }) => {
+                          onChange_AppliedVersion({
+                            ...changed,
+                            policyID: k.policyID,
+                          });
+                          set_Versions(changedAllIDs);
+                        }}
                       />
                       {/*<FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>*/}
 

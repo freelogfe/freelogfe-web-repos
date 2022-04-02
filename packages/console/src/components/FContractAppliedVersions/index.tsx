@@ -2,6 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import FCheckbox from '../FCheckbox';
 
+interface OnChangeVersionContractIDsParams {
+  changed: {
+    version: string;
+    checked: boolean;
+  };
+  changedIDs: FContractAppliedVersionsProps['versionAndPolicyIDs'][number];
+  changedAllIDs: FContractAppliedVersionsProps['versionAndPolicyIDs'];
+}
+
 interface FContractAppliedVersionsProps {
   versionAndPolicyIDs: {
     version: string;
@@ -9,14 +18,14 @@ interface FContractAppliedVersionsProps {
   }[];
   currentPolicyID: string;
 
-  onChangeVersionContractIDs?(changedIDs: FContractAppliedVersionsProps['versionAndPolicyIDs'][number], allIDs: FContractAppliedVersionsProps['versionAndPolicyIDs']): void;
+  onChangeVersionContractIDs?(params: OnChangeVersionContractIDsParams): void;
 }
 
 function FContractAppliedVersions({
-                     versionAndPolicyIDs,
-                     currentPolicyID,
-                     onChangeVersionContractIDs,
-                   }: FContractAppliedVersionsProps) {
+                                    versionAndPolicyIDs,
+                                    currentPolicyID,
+                                    onChangeVersionContractIDs,
+                                  }: FContractAppliedVersionsProps) {
   return (<div className={styles.resourceVersions}>
     {
       versionAndPolicyIDs.map((vai, ind, list) => {
@@ -43,7 +52,14 @@ function FContractAppliedVersions({
                 return versionPolicyIDs;
               });
 
-              onChangeVersionContractIDs && onChangeVersionContractIDs(versionPolicyIDs, all);
+              onChangeVersionContractIDs && onChangeVersionContractIDs({
+                changed: {
+                  version: vai.version,
+                  checked: e.target.checked,
+                },
+                changedIDs: versionPolicyIDs,
+                changedAllIDs: all,
+              });
               // onChangeVersionAllContractIDs && onChangeVersionAllContractIDs(all);
             }}
           />
