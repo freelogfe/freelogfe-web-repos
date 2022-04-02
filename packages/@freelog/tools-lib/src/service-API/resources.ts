@@ -1,6 +1,35 @@
 import FUtil from '../utils';
 import {CommonReturn} from "./tools";
 
+interface IResourceInfo {
+  baseUpcastResources: {
+    resourceId: string;
+    resourceName: string;
+  }[],
+  coverImages: string[],
+  createDate: string;
+  intro: string;
+  latestVersion: string;
+  policies: {
+    policyId: string;
+    policyName: string;
+    status: 0 | 1;
+  }[];
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  resourceVersions: {
+    createDate: string;
+    version: string;
+    versionId: string;
+  }[];
+  status: 0 | 1 | 2 | 3; // 资源状态(0:未上线 1:已上线 2:被冻结且未上线 3:被冻结且上线)
+  tags: string[];
+  updateDate: string;
+  userId: number;
+  username: string;
+}
+
 // 创建资源
 export interface CreateParamsType {
   name: string;
@@ -59,7 +88,11 @@ interface ListParamsType {
   projection?: string;
 }
 
-export function list(params: ListParamsType) {
+interface ListReturnType extends CommonReturn {
+  data: IResourceInfo[];
+}
+
+export function list(params: ListParamsType): Promise<ListReturnType> {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources`,
@@ -76,7 +109,11 @@ interface InfoParamsType {
   projection?: string;
 }
 
-export function info({resourceIdOrName, ...params}: InfoParamsType) {
+interface InfoReturnType extends CommonReturn {
+  data: IResourceInfo
+}
+
+export function info({resourceIdOrName, ...params}: InfoParamsType): Promise<InfoReturnType> {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/${encodeURIComponent(resourceIdOrName)}`,
@@ -94,7 +131,11 @@ interface BatchInfoParamsType {
   projection?: string;
 }
 
-export function batchInfo(params: BatchInfoParamsType) {
+interface BatchInfoReturnType extends CommonReturn {
+  data: IResourceInfo[];
+}
+
+export function batchInfo(params: BatchInfoParamsType): Promise<BatchInfoReturnType> {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/list`,

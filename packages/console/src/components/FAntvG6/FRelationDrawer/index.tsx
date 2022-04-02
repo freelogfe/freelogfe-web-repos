@@ -17,14 +17,20 @@ import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
 
 interface FRelationDrawerProps {
-  licensor: {
-    licensorID: string;
-    licensorIdentityType: 'resource';
-  };
-  licensee: {
-    licenseeID: string;
-    licensorIdentityType: 'resource' | 'exhibit';
-  };
+  bothSidesInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licensorIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
+
+  onClose?(): void;
+
+  onChange_Authorization?(): void;
 }
 
 interface FRelationDrawerStates {
@@ -33,18 +39,21 @@ interface FRelationDrawerStates {
       licensorID: string;
       licensorName: string;
       licensorIdentityType: 'resource';
+      isCurrentUser: boolean;
     };
     licensee: {
       licenseeID: string;
       licenseeName: string;
       licensorIdentityType: 'resource' | 'exhibit';
+      isCurrentUser: boolean;
     };
-    contracts: {
+    validContracts: {
       contractID: string;
       policyID: string;
       contractName: string;
       createDate: string;
     }[];
+    invalidContracts: any[];
   } | null;
 
   versions: {
@@ -59,7 +68,7 @@ const initData: FRelationDrawerStates = {
   versions: [],
 };
 
-function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
+function FRelationDrawer({ bothSidesInfo }: FRelationDrawerProps) {
 
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
@@ -69,7 +78,8 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
   }, []);
 
   function onChange_DrawerVisible(visible: boolean) {
-    if (visible) {
+    if (visible && bothSidesInfo) {
+      const { licensor, licensee } = bothSidesInfo;
       if (licensor.licensorIdentityType === 'resource' && licensee.licensorIdentityType === 'resource') {
         handleData_Resource2Resource();
       }
@@ -77,7 +87,10 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
   }
 
   async function handleData_Resource2Resource() {
-
+    if (!bothSidesInfo) {
+      return;
+    }
+    const { licensor, licensee } = bothSidesInfo;
     const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: [licensor.licensorID, licensee.licenseeID].join(','),
       projection: 'resourceId,resourceName,userId',
@@ -91,13 +104,15 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
       }[];
     } = await FServiceAPI.Resource.batchInfo(params0);
 
+    // console.log(data_ResourceInfos, 'data_ResourceInfos#@890uiojsd;flsdfklk');
+
     const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       subjectIds: licensor.licensorID,
       subjectType: 1,
       licensorId: licensor.licensorID,
       licenseeId: licensee.licenseeID,
       licenseeIdentityType: 1,
-      projection: 'contractId,contractName,createDate,policyId',
+      projection: 'contractId,contractName,createDate,policyId,status',
     };
 
     const { data: data_Contracts }: {
@@ -106,6 +121,7 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
         contractName: string;
         createDate: string;
         policyId: string;
+        status: 0 | 1;
       }[];
     } = await FServiceAPI.Contract.batchContracts(params1);
 
@@ -146,19 +162,28 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
         licensorID: lor.resourceId,
         licensorName: lor.resourceName,
         licensorIdentityType: 'resource',
+        isCurrentUser: lor.userId === FUtil.Tool.getUserIDByCookies(),
       },
       licensee: {
         licenseeID: lee.resourceId,
         licenseeName: lee.resourceName,
         licensorIdentityType: 'resource',
+        isCurrentUser: lee.userId === FUtil.Tool.getUserIDByCookies(),
       },
-      contracts: data_Contracts.map<NonNullable<FRelationDrawerStates['dataSource']>['contracts'][number]>((dc) => {
-        return {
-          contractID: dc.contractId,
-          contractName: dc.contractName,
-          createDate: FUtil.Format.formatDateTime(dc.createDate),
-          policyID: dc.policyId,
-        };
+      validContracts: data_Contracts
+        .filter((dc) => {
+          return dc.status === 0;
+        })
+        .map<NonNullable<FRelationDrawerStates['dataSource']>['validContracts'][number]>((dc) => {
+          return {
+            contractID: dc.contractId,
+            contractName: dc.contractName,
+            createDate: FUtil.Format.formatDateTime(dc.createDate),
+            policyID: dc.policyId,
+          };
+        }),
+      invalidContracts: data_Contracts.filter((dc) => {
+        return dc.status === 1;
       }),
     };
 
@@ -191,6 +216,11 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
     checked: boolean;
     policyID: string;
   }) {
+    if (!bothSidesInfo) {
+      return;
+    }
+    const { licensor, licensee } = bothSidesInfo;
+    
     const params: Parameters<typeof FServiceAPI.Resource.batchSetContracts>[0] = {
       resourceId: licensee.licenseeID,
       subjects: [{
@@ -244,7 +274,7 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
         <FFormLayout.FBlock title={'合约详情'}>
           <Space size={15} direction='vertical' style={{ width: '100%' }}>
             {
-              dataSource.contracts.map((k) => {
+              dataSource.validContracts.map((k) => {
                 return (<div key={k.contractID} className={styles.Policy}>
                   <div style={{ height: 15 }} />
 
@@ -280,7 +310,7 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
                   <div style={{ height: 10 }} />
 
                   {
-                    (<div style={{
+                    dataSource.licensee.isCurrentUser && (<div style={{
                       padding: '12px 20px',
                       borderTop: '1px solid #E5E7EB',
                     }}>
@@ -291,6 +321,8 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
                         type='table'
                         style={{ fontSize: 12 }}
                       />
+
+
                       <div style={{ height: 8 }} />
                       <FContractAppliedVersions
                         versionAndPolicyIDs={versions}
@@ -303,6 +335,8 @@ function FRelationDrawer({ licensor, licensee }: FRelationDrawerProps) {
                           set_Versions(changedAllIDs);
                         }}
                       />
+
+
                       {/*<FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>*/}
 
                       {/*<div className={styles.allVersions}>*/}
