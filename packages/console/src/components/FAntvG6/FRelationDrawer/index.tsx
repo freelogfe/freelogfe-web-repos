@@ -78,11 +78,16 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }, []);
 
   function onChange_DrawerVisible(visible: boolean) {
-    if (visible && bothSidesInfo) {
-      const { licensor, licensee } = bothSidesInfo;
-      if (licensor.licensorIdentityType === 'resource' && licensee.licenseeIdentityType === 'resource') {
-        handleData_Resource2Resource();
-      }
+    if (!visible || !bothSidesInfo) {
+      return;
+    }
+    const { licensor, licensee } = bothSidesInfo;
+    if (licensor.licensorIdentityType === 'resource' && licensee.licenseeIdentityType === 'resource') {
+      handleData_Resource2Resource();
+    }
+
+    if (licensor.licensorIdentityType === 'resource' && licensee.licenseeIdentityType === 'exhibit') {
+
     }
   }
 
