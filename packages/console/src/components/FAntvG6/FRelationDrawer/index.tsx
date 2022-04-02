@@ -78,6 +78,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }, []);
 
   function onChange_DrawerVisible(visible: boolean) {
+    // console.log(visible, bothSidesInfo, '898932798479384798237498273948723984798');
     if (!visible || !bothSidesInfo) {
       return;
     }
@@ -92,6 +93,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }
 
   async function handleData_Resource2Resource() {
+    console.log(bothSidesInfo, 'bothSidesInfobothSidesInfo8932iosdaflkbothSidesInfo');
     if (!bothSidesInfo) {
       return;
     }
@@ -191,11 +193,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         return dc.status === 1;
       }),
     };
-
+    console.log(data_resolveResource, 'data_resolveResource3209iojsdlfksdjflk');
     const currentResource = data_resolveResource.find((rr) => {
       return rr.resourceId === licensor.licensorID;
     });
 
+    console.log(data, currentResource, 'currentResource093wqiojsdlkfddddddded');
     if (!currentResource) {
       return;
     }

@@ -13,6 +13,19 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FErrorBoundary from '@/components/FErrorBoundary';
+import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
+
+interface ServerDataNode {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  versions?: string[];
+  versionRanges?: string[];
+  downstreamAuthContractIds: string[];
+  downstreamIsAuth: boolean;
+  selfAndUpstreamIsAuth: boolean;
+  children: ServerDataNode[];
+}
 
 interface FGraph_Tree_Relationship_Exhibit_Props {
   exhibitID: string;
@@ -39,23 +52,22 @@ interface ResourceNodeTree {
 
 interface FGraph_Relationship_States {
   dataSource: ExhibitNode | null;
+  showRelationDrawerInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licenseeIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
 }
 
 const initStates: FGraph_Relationship_States = {
   dataSource: null,
+  showRelationDrawerInfo: null,
 };
-
-interface ServerDataNode {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  versions?: string[];
-  versionRanges?: string[];
-  downstreamAuthContractIds: string[];
-  downstreamIsAuth: boolean;
-  selfAndUpstreamIsAuth: boolean;
-  children: ServerDataNode[];
-}
 
 function FGraph_Tree_Relationship_Exhibit({
                                             exhibitID,
@@ -65,6 +77,7 @@ function FGraph_Tree_Relationship_Exhibit({
                                           }: FGraph_Tree_Relationship_Exhibit_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
+  const [showRelationDrawerInfo, set_ShowRelationDrawerInfo] = React.useState<FGraph_Relationship_States['showRelationDrawerInfo']>(initStates['showRelationDrawerInfo']);
 
   React.useEffect(() => {
     handleData();
@@ -178,6 +191,21 @@ function FGraph_Tree_Relationship_Exhibit({
         // graph.moveTo(20, 20, true);
         // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
+        graph.on('resource:viewContract', ({ resourceID, parentInfo }: any) => {
+          // console.log(params, 'params23908isdflk');
+          console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
+          // set_ContractID(contractID);
+          set_ShowRelationDrawerInfo({
+            licensor: {
+              licensorID: resourceID,
+              licensorIdentityType: 'resource',
+            },
+            licensee: {
+              licenseeID: parentInfo.parentID,
+              licenseeIdentityType: parentInfo.parentIdentity,
+            },
+          });
+        });
       }}
     />);
   }, [dataSource]);
@@ -199,6 +227,16 @@ function FGraph_Tree_Relationship_Exhibit({
         {Gra}
       </FErrorBoundary>)
     }
+    {/*{console.log(showRelationDrawerInfo, 'showRelationDrawerInfo98io3ewfsdl')}*/}
+    <FRelationDrawer
+      bothSidesInfo={showRelationDrawerInfo}
+      onClose={() => {
+        set_ShowRelationDrawerInfo(null);
+      }}
+      onChange_Authorization={() => {
+        handleData();
+      }}
+    />
 
   </>);
 }
