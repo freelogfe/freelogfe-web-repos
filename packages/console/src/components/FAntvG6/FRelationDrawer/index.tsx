@@ -65,17 +65,27 @@ interface FRelationDrawerStates {
     policyIDs: string[];
   }[];
 
+  exhibits: {
+    contractID: string;
+    exhibits: {
+      exhibitID: string;
+      exhibitName: string;
+    }[];
+  }[];
+
 }
 
 const initData: FRelationDrawerStates = {
   dataSource: null,
   versions: [],
+  exhibits: [],
 };
 
 function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRelationDrawerProps) {
 
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
+  const [exhibits, set_Exhibits] = React.useState<FRelationDrawerStates['exhibits']>(initData['exhibits']);
 
   React.useEffect(() => {
 
@@ -217,7 +227,6 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       return;
     }
 
-    set_DataSource(data);
     const vs: FRelationDrawerStates['versions'] = currentResource.versions.map((v) => {
       return {
         version: v.version,
@@ -226,7 +235,9 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         }),
       };
     });
+    set_DataSource(data);
     set_Versions(vs);
+    set_Exhibits([]);
   }
 
   async function handleData_Resource2Exhibit() {
@@ -268,7 +279,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       licensorId: licensor.licensorID,
       licenseeId: data_exhibitDetails.nodeId,
       licenseeIdentityType: 2,
-      projection: 'contractId,contractName,createDate,policyId,status',
+      // projection: 'contractId,contractName,createDate,policyId,status',
     };
 
     const { data: data_Contracts }: {
@@ -281,6 +292,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       }[];
     } = await FServiceAPI.Contract.batchContracts(params2);
     console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
+
     const validContracts = data_Contracts
       .filter((dc) => {
         return dc.status === 0;
@@ -293,6 +305,26 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
           policyID: dc.policyId,
         };
       });
+
+    let data_ContractApplied: {
+      contractId: string;
+      presentables: {
+        presentableId: string;
+        presentableName: string;
+      }[];
+    }[] = [];
+    if (validContracts.length > 0) {
+      const params2: Parameters<typeof FServiceAPI.Exhibit.contractAppliedPresentable>[0] = {
+        nodeId: data_exhibitDetails.nodeId,
+        contractIds: validContracts.map((vc) => {
+          return vc.contractID;
+        }).join(','),
+      };
+
+      const { data } = await FServiceAPI.Exhibit.contractAppliedPresentable(params2);
+      data_ContractApplied = data;
+      console.log(data_ContractApplied, 'data_ContractApplied093opsldkfjsdl');
+    }
 
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
@@ -318,6 +350,18 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       }),
     };
     set_DataSource(data);
+    set_Exhibits(data_ContractApplied.map((ca) => {
+      return {
+        contractID: ca.contractId,
+        exhibits: ca.presentables.map((p) => {
+          return {
+            exhibitID: p.presentableId,
+            exhibitName: p.presentableName,
+          };
+        }),
+      };
+    }));
+    set_Versions([]);
   }
 
   async function onChange_AppliedVersion(changed: {
