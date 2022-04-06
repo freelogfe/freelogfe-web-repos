@@ -30,7 +30,7 @@ function FContractAppliedVersions({
     {
       versionAndPolicyIDs.map((vai, ind, list) => {
         const checked: boolean = vai.policyIDs.includes(currentPolicyID);
-        return (<div key={vai.version}>
+        return (<div key={vai.version} className={styles.resourceVersion}>
           <FCheckbox
             checked={checked}
             disabled={checked && vai.policyIDs.length === 1}
@@ -63,10 +63,7 @@ function FContractAppliedVersions({
               // onChangeVersionAllContractIDs && onChangeVersionAllContractIDs(all);
             }}
           />
-          <span style={{
-            display: 'inline-block',
-            paddingLeft: 5,
-          }}>{vai.version}</span>
+          <span className={styles.versionText}>{vai.version}</span>
         </div>);
       })
     }
