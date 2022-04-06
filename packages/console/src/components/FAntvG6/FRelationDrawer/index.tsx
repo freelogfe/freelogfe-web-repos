@@ -93,7 +93,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     }
 
     if (licensor.licensorIdentityType === 'resource' && licensee.licenseeIdentityType === 'exhibit') {
-
+      handleData_Resource2Exhibit();
     }
   }
 
@@ -229,6 +229,20 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }
 
   async function handleData_Resource2Exhibit() {
+    if (!bothSidesInfo) {
+      return;
+    }
+    const params0: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+      presentableId: bothSidesInfo.licensee.licenseeID,
+    };
+    const { data: data_exhibitDetails } = await FServiceAPI.Exhibit.presentableDetails(params0);
+
+    const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+      resourceIdOrName: bothSidesInfo.licensor.licensorID,
+    };
+
+    const { data: data_ResourceDetails } = await FServiceAPI.Resource.info(params1);
+
 
   }
 
@@ -299,75 +313,78 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
             />
           </Space>
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={'合约详情'}>
-          <Space size={15} direction='vertical' style={{ width: '100%' }}>
-            {
-              dataSource.validContracts.map((k) => {
-                return (<div key={k.contractID} className={styles.Policy}>
-                  <div style={{ height: 15 }} />
 
-                  <div className={styles.PolicyGrammarName}>
-                    <Space size={10}>
-                      <span>{k.contractName}</span>
-                    </Space>
-                  </div>
+        {
+          dataSource.validContracts.length > 0 && (<FFormLayout.FBlock title={'合约详情'}>
+            <Space size={15} direction='vertical' style={{ width: '100%' }}>
+              {
+                dataSource.validContracts.map((k) => {
+                  return (<div key={k.contractID} className={styles.Policy}>
+                    <div style={{ height: 15 }} />
 
-                  <div style={{ height: 10 }} />
-                  <div style={{ padding: '0 20px' }}>
-                    <FContractDisplay
-                      contractID={k.contractID}
-                      onChangedEvent={() => {
-                        onChange_Authorization && onChange_Authorization();
-                      }}
-                    />
-                  </div>
-                  <div style={{ height: 10 }} />
-                  <Space style={{ padding: '0 20px' }} size={2}>
-                    <FContentText
-                      type='additional2'
-                      text={FUtil1.I18n.message('contract_id') + '：' + k.contractID}
-                    />
-                    <FDivider style={{ fontSize: 14 }} />
-                    <FContentText
-                      type='additional2'
-                      text={FUtil1.I18n.message('contract_signed_time') + '：' + k.createDate}
-                    />
-                  </Space>
-                  <div style={{ height: 10 }} />
+                    <div className={styles.PolicyGrammarName}>
+                      <Space size={10}>
+                        <span>{k.contractName}</span>
+                      </Space>
+                    </div>
 
-                  {
-                    dataSource.licensee.isCurrentUser && (<div style={{
-                      padding: '12px 20px',
-                      borderTop: '1px solid #E5E7EB',
-                    }}>
-                      <FTitleText
-                        // text={`当前合约资源 ${dataSource.licensee.licenseeName} 中各个版本的应用情况`}
-                        // text={`当前合约在此资源上被多个版本应用`}
-                        text={`当前合约应用版本`}
-                        type='table'
-                        style={{ fontSize: 12 }}
-                      />
-
-                      <div style={{ height: 8 }} />
-                      <FContractAppliedVersions
-                        versionAndPolicyIDs={versions}
-                        currentPolicyID={k.policyID}
-                        onChangeVersionContractIDs={({ changed, changedAllIDs }) => {
-                          onChange_AppliedVersion([{
-                            ...changed,
-                            policyID: k.policyID,
-                          }]);
-                          set_Versions(changedAllIDs);
+                    <div style={{ height: 10 }} />
+                    <div style={{ padding: '0 20px' }}>
+                      <FContractDisplay
+                        contractID={k.contractID}
+                        onChangedEvent={() => {
+                          onChange_Authorization && onChange_Authorization();
                         }}
                       />
-                    </div>)
-                  }
+                    </div>
+                    <div style={{ height: 10 }} />
+                    <Space style={{ padding: '0 20px' }} size={2}>
+                      <FContentText
+                        type='additional2'
+                        text={FUtil1.I18n.message('contract_id') + '：' + k.contractID}
+                      />
+                      <FDivider style={{ fontSize: 14 }} />
+                      <FContentText
+                        type='additional2'
+                        text={FUtil1.I18n.message('contract_signed_time') + '：' + k.createDate}
+                      />
+                    </Space>
+                    <div style={{ height: 10 }} />
 
-                </div>);
-              })}
-          </Space>
-        </FFormLayout.FBlock>
+                    {
+                      dataSource.licensee.isCurrentUser && (<div style={{
+                        padding: '12px 20px',
+                        borderTop: '1px solid #E5E7EB',
+                      }}>
+                        <FTitleText
+                          // text={`当前合约资源 ${dataSource.licensee.licenseeName} 中各个版本的应用情况`}
+                          // text={`当前合约在此资源上被多个版本应用`}
+                          text={`当前合约应用版本`}
+                          type='table'
+                          style={{ fontSize: 12 }}
+                        />
 
+                        <div style={{ height: 8 }} />
+                        <FContractAppliedVersions
+                          versionAndPolicyIDs={versions}
+                          currentPolicyID={k.policyID}
+                          onChangeVersionContractIDs={({ changed, changedAllIDs }) => {
+                            onChange_AppliedVersion([{
+                              ...changed,
+                              policyID: k.policyID,
+                            }]);
+                            set_Versions(changedAllIDs);
+                          }}
+                        />
+                      </div>)
+                    }
+
+                  </div>);
+                })}
+            </Space>
+          </FFormLayout.FBlock>)
+        }
+        
         {
           dataSource.validPolicies.length > 0 && (<FFormLayout.FBlock title={'可签约的策略'}>
             <Space size={15} direction='vertical' style={{ width: '100%' }}>
