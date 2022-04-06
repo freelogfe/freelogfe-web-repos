@@ -6,6 +6,7 @@ import { ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/res
 import { Space } from 'antd';
 import { ConnectState } from '@/models/connect';
 import { FContentText } from '@/components/FText';
+import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -28,7 +29,7 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
     <FContentText type='additional2' text={'可签约的合约'} />
 
     {activeResource?.policies.map((i) => (
-      <PolicyCard
+      <FContract_AvailablePolicy_Card
         key={i.fullInfo.policyId}
         fullInfo={i.fullInfo}
         allVersions={i.allEnabledVersions}

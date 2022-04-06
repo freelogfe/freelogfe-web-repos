@@ -13,7 +13,7 @@ import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -41,7 +41,7 @@ interface FExhibitAuthorizedContractsStates {
         disabled: boolean;
       };
     }[];
-    policies: PolicyFullInfo[];
+    policies: PolicyFullInfo_Type[];
   }[];
 }
 
@@ -415,7 +415,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     resourceId: string;
     resourceName: string;
     resourceType: string;
-    policies: PolicyFullInfo[];
+    policies: PolicyFullInfo_Type[];
   }[] = [];
   let batchObjects: {
     objectId: string;

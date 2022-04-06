@@ -8,7 +8,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 // import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -37,7 +37,7 @@ export interface MarketResourcePageModelState {
     resourceType: string;
     status: 0 | 1;
     authProblem: boolean;
-    policies: PolicyFullInfo[],
+    policies: PolicyFullInfo_Type[],
   }[];
   signResources: {
     selected: boolean;
@@ -61,7 +61,7 @@ export interface MarketResourcePageModelState {
     }[];
     policies: {
       checked: boolean;
-      fullInfo: PolicyFullInfo;
+      fullInfo: PolicyFullInfo_Type;
       // id: string;
       // status: 0 | 1;
       // name: string;
@@ -895,7 +895,7 @@ type HandleResourceBatchInfoReturn = {
   latestVersion: string;
   coverImages: string[];
   status: 0 | 1;
-  policies: PolicyFullInfo[];
+  policies: PolicyFullInfo_Type[];
   resourceVersions: {
     createDate: string;
     version: string;

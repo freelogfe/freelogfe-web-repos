@@ -7,11 +7,11 @@ import { FContentText, FTitleText } from '../FText';
 import FModal from '../FModal';
 import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface FPolicyListProps {
 
-  dataSource: PolicyFullInfo[];
+  dataSource: PolicyFullInfo_Type[];
 
   atLeastOneUsing?: boolean;
 
@@ -47,7 +47,7 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
 export default FPolicyList;
 
 interface PolicyCardProps {
-  fullInfo: PolicyFullInfo;
+  fullInfo: PolicyFullInfo_Type;
   onlineDisable: boolean;
 
   onOnlineChange?(bool: boolean): void;

@@ -10,23 +10,23 @@ import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
-interface PolicyCardProps {
+interface FContract_AvailablePolicy_Card_Props {
   fullInfo: PolicyFullInfo_Type;
   allVersions: string[];
 
   onClickLicense?(versions: string[]): void;
 }
 
-interface PolicyCardStates {
+interface FContract_AvailablePolicy_Card_States {
   fullScreenVisible: boolean;
   drawerVisible: boolean;
   checkedVersions: string[];
 }
 
-function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) {
-  const [fullScreenVisible, setFullScreenVisible] = React.useState<PolicyCardStates['fullScreenVisible']>(false);
-  const [drawerVisible, setDrawerVisible] = React.useState<PolicyCardStates['drawerVisible']>(false);
-  const [checkedVersions, setCheckedVersions] = React.useState<PolicyCardStates['checkedVersions']>([]);
+function FContract_AvailablePolicy_Card({ fullInfo, allVersions, onClickLicense }: FContract_AvailablePolicy_Card_Props) {
+  const [fullScreenVisible, setFullScreenVisible] = React.useState<FContract_AvailablePolicy_Card_States['fullScreenVisible']>(false);
+  const [drawerVisible, setDrawerVisible] = React.useState<FContract_AvailablePolicy_Card_States['drawerVisible']>(false);
+  const [checkedVersions, setCheckedVersions] = React.useState<FContract_AvailablePolicy_Card_States['checkedVersions']>([]);
 
   function onCancel_VersionsDrawer() {
     setDrawerVisible(false);
@@ -184,4 +184,4 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
 }
 
 
-export default PolicyCard;
+export default FContract_AvailablePolicy_Card;

@@ -8,7 +8,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 // import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -23,7 +23,7 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_Name: string;
   exhibit_BelongNode_ActiveThemeId: string;
 
-  policy_List: PolicyFullInfo[];
+  policy_List: PolicyFullInfo_Type[];
   policy_BuildDrawer_Visible: boolean;
 
   contract_ExhibitAllContractIDs: {
@@ -52,7 +52,7 @@ export interface ExhibitInfoPageModelState {
       policyId: string;
       exhibitOpen: boolean;
     }[];
-    policies: PolicyFullInfo[];
+    policies: PolicyFullInfo_Type[];
   }[];
 
   graph_FullScreen: boolean;
@@ -1159,7 +1159,7 @@ export type HandleRelationResult = {
     status: 'active' | 'testActive' | 'inactive' | 'terminal';
     policyId: string;
   }[];
-  policies: PolicyFullInfo[];
+  policies: PolicyFullInfo_Type[];
 }[];
 
 export async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {

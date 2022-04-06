@@ -5,12 +5,12 @@ import { FetchDataSourceAction } from '@/models/resourceInfo';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
 
-  policies: PolicyFullInfo[];
+  policies: PolicyFullInfo_Type[];
   policyPreviewVisible: boolean;
   policyPreviewText: string;
   policyEditorVisible: boolean;
@@ -43,7 +43,7 @@ export interface ResourceAuthPageModelState {
     //   allEnabledVersions: string[];
     // }[];
     policies: {
-      fullInfo: PolicyFullInfo;
+      fullInfo: PolicyFullInfo_Type;
       allEnabledVersions: string[];
     }[];
   }[];
