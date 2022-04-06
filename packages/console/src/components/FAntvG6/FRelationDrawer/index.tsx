@@ -15,6 +15,8 @@ import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
 
 interface FRelationDrawerProps {
   bothSidesInfo: {
@@ -54,6 +56,7 @@ interface FRelationDrawerStates {
       createDate: string;
     }[];
     invalidContracts: any[];
+    validPolicies: PolicyFullInfo_Type[];
   } | null;
 
   versions: {
@@ -112,14 +115,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         resourceId: string;
         resourceName: string;
         userId: number;
-        policies: {
-          fsmDescriptionInfo: any;
-          policyId: string;
-          policyName: string;
-          policyText: string;
-          status: 0 | 1;
-          translateInfo: any;
-        }[];
+        policies: PolicyFullInfo_Type[];
       }[];
     } = await FServiceAPI.Resource.batchInfo(params0);
 
@@ -175,7 +171,18 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     if (!lor || !lee) {
       return;
     }
-
+    const validContracts = data_Contracts
+      .filter((dc) => {
+        return dc.status === 0;
+      })
+      .map<NonNullable<FRelationDrawerStates['dataSource']>['validContracts'][number]>((dc) => {
+        return {
+          contractID: dc.contractId,
+          contractName: dc.contractName,
+          createDate: FUtil.Format.formatDateTime(dc.createDate),
+          policyID: dc.policyId,
+        };
+      });
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
         licensorID: lor.resourceId,
@@ -189,28 +196,22 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         licensorIdentityType: 'resource',
         isCurrentUser: lee.userId === FUtil.Tool.getUserIDByCookies(),
       },
-      validContracts: data_Contracts
-        .filter((dc) => {
-          return dc.status === 0;
-        })
-        .map<NonNullable<FRelationDrawerStates['dataSource']>['validContracts'][number]>((dc) => {
-          return {
-            contractID: dc.contractId,
-            contractName: dc.contractName,
-            createDate: FUtil.Format.formatDateTime(dc.createDate),
-            policyID: dc.policyId,
-          };
-        }),
+      validContracts: validContracts,
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
+      validPolicies: lor.policies.filter((p) => {
+        return p.status === 1 && !validContracts.some((vcp) => {
+          return vcp.policyID === p.policyId;
+        });
+      }),
     };
-    console.log(data_resolveResource, 'data_resolveResource3209iojsdlfksdjflk');
+    // console.log(data_resolveResource, 'data_resolveResource3209iojsdlfksdjflk');
     const currentResource = data_resolveResource.find((rr) => {
       return rr.resourceId === licensor.licensorID;
     });
 
-    console.log(data, currentResource, 'currentResource093wqiojsdlkfddddddded');
+    // console.log(data, currentResource, 'currentResource093wqiojsdlkfddddddded');
     if (!currentResource) {
       return;
     }
@@ -235,7 +236,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     version: string;
     checked: boolean;
     policyID: string;
-  }) {
+  }[]) {
     if (!bothSidesInfo) {
       return;
     }
@@ -245,11 +246,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       resourceId: licensee.licenseeID,
       subjects: [{
         subjectId: licensor.licensorID,
-        versions: [{
-          version: changed.version,
-          policyId: changed.policyID,
-          operation: changed.checked ? 1 : 0,
-        }],
+        versions: changed.map((cha) => {
+          return {
+            version: cha.version,
+            policyId: cha.policyID,
+            operation: cha.checked ? 1 : 0,
+          };
+        }),
       }],
     };
     const { ret, errCode, msg, data } = await FServiceAPI.Resource.batchSetContracts(params);
@@ -314,9 +317,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                     <FContractDisplay
                       contractID={k.contractID}
                       onChangedEvent={() => {
-                        // dispatch<OnTrigger_AuthorizedContractEvent_Action>({
-                        //   type: 'resourceAuthPage/onTrigger_AuthorizedContractEvent',
-                        // });
+                        onChange_Authorization && onChange_Authorization();
                       }}
                     />
                   </div>
@@ -347,33 +348,18 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                         style={{ fontSize: 12 }}
                       />
 
-
                       <div style={{ height: 8 }} />
                       <FContractAppliedVersions
                         versionAndPolicyIDs={versions}
                         currentPolicyID={k.policyID}
                         onChangeVersionContractIDs={({ changed, changedAllIDs }) => {
-                          onChange_AppliedVersion({
+                          onChange_AppliedVersion([{
                             ...changed,
                             policyID: k.policyID,
-                          });
+                          }]);
                           set_Versions(changedAllIDs);
                         }}
                       />
-
-
-                      {/*<FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>*/}
-
-                      {/*<div className={styles.allVersions}>*/}
-                      {/*  {k.versions.map((i) => <Space size={8} key={i.version}>*/}
-                      {/*    <Checkbox*/}
-                      {/*      checked={i.checked}*/}
-                      {/*      disabled={i.disabled}*/}
-                      {/*      onChange={(e) => onLicenseChange(i.version, k.policyId, e.target.checked)}*/}
-                      {/*    />*/}
-                      {/*    <span>{i.version}</span>*/}
-                      {/*  </Space>)}*/}
-                      {/*</div>*/}
                     </div>)
                   }
 
@@ -381,6 +367,34 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
               })}
           </Space>
         </FFormLayout.FBlock>
+
+        {
+          dataSource.validPolicies.length > 0 && (<FFormLayout.FBlock title={'可签约的策略'}>
+            <Space size={15} direction='vertical' style={{ width: '100%' }}>
+              {
+                dataSource.validPolicies.map((vp) => {
+                  return (<FContract_AvailablePolicy_Card
+                    key={vp.policyId}
+                    fullInfo={vp}
+                    allVersions={versions.map((vs) => {
+                      return vs.version;
+                    })}
+                    onClickLicense={(vs) => {
+                      onChange_AppliedVersion(vs.map((v) => {
+                        return {
+                          version: v,
+                          checked: true,
+                          policyID: vp.policyId,
+                        };
+                      }));
+                    }}
+                  />);
+                })
+              }
+            </Space>
+          </FFormLayout.FBlock>)
+        }
+
       </FFormLayout>)
     }
 
