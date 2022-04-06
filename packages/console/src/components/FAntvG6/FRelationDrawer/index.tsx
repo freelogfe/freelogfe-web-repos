@@ -102,7 +102,9 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     const { licensor, licensee } = bothSidesInfo;
     const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: [licensor.licensorID, licensee.licenseeID].join(','),
-      projection: 'resourceId,resourceName,userId',
+      isLoadPolicyInfo: 1,
+      isTranslate: 1,
+      projection: 'resourceId,resourceName,userId,policies',
     };
 
     const { data: data_ResourceInfos }: {
@@ -110,6 +112,14 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         resourceId: string;
         resourceName: string;
         userId: number;
+        policies: {
+          fsmDescriptionInfo: any;
+          policyId: string;
+          policyName: string;
+          policyText: string;
+          status: 0 | 1;
+          translateInfo: any;
+        }[];
       }[];
     } = await FServiceAPI.Resource.batchInfo(params0);
 
