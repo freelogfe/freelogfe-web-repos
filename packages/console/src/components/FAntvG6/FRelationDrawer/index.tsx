@@ -17,6 +17,7 @@ import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
+import { resourceDetails } from '@freelog/tools-lib/dist/utils/linkTo';
 
 interface FRelationDrawerProps {
   bothSidesInfo: {
@@ -232,18 +233,91 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     if (!bothSidesInfo) {
       return;
     }
+    const { licensor, licensee } = bothSidesInfo;
     const params0: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
-      presentableId: bothSidesInfo.licensee.licenseeID,
+      presentableId: licensee.licenseeID,
     };
-    const { data: data_exhibitDetails } = await FServiceAPI.Exhibit.presentableDetails(params0);
+    const { data: data_exhibitDetails }: {
+      data: {
+        presentableId: string;
+        presentableName: string;
+        userId: number;
+        nodeId: number;
+      };
+    } = await FServiceAPI.Exhibit.presentableDetails(params0);
 
     const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-      resourceIdOrName: bothSidesInfo.licensor.licensorID,
+      resourceIdOrName: licensor.licensorID,
+      isLoadPolicyInfo: 1,
+      isTranslate: 1,
+      projection: 'resourceId,resourceName,userId,policies',
     };
 
-    const { data: data_ResourceDetails } = await FServiceAPI.Resource.info(params1);
+    const { data: data_ResourceDetails }: {
+      data: {
+        resourceId: string;
+        resourceName: string;
+        userId: number;
+        policies: PolicyFullInfo_Type[];
+      };
+    } = await FServiceAPI.Resource.info(params1);
 
+    const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+      subjectIds: licensor.licensorID,
+      subjectType: 1,
+      licensorId: licensor.licensorID,
+      licenseeId: data_exhibitDetails.nodeId,
+      licenseeIdentityType: 2,
+      projection: 'contractId,contractName,createDate,policyId,status',
+    };
 
+    const { data: data_Contracts }: {
+      data: {
+        contractId: string;
+        contractName: string;
+        createDate: string;
+        policyId: string;
+        status: 0 | 1;
+      }[];
+    } = await FServiceAPI.Contract.batchContracts(params2);
+    console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
+    const validContracts = data_Contracts
+      .filter((dc) => {
+        return dc.status === 0;
+      })
+      .map<NonNullable<FRelationDrawerStates['dataSource']>['validContracts'][number]>((dc) => {
+        return {
+          contractID: dc.contractId,
+          contractName: dc.contractName,
+          createDate: FUtil.Format.formatDateTime(dc.createDate),
+          policyID: dc.policyId,
+        };
+      });
+
+    const data: FRelationDrawerStates['dataSource'] = {
+      licensor: {
+        licensorID: data_ResourceDetails.resourceId,
+        licensorName: data_ResourceDetails.resourceName,
+        licensorIdentityType: 'resource',
+        isCurrentUser: data_ResourceDetails.userId === FUtil.Tool.getUserIDByCookies(),
+      },
+      licensee: {
+        licenseeID: data_exhibitDetails.presentableId,
+        licenseeName: data_exhibitDetails.presentableName,
+        licensorIdentityType: 'exhibit',
+        isCurrentUser: data_exhibitDetails.userId === FUtil.Tool.getUserIDByCookies(),
+      },
+      validContracts: validContracts,
+      invalidContracts: data_Contracts.filter((dc) => {
+        return dc.status === 1;
+      }),
+      validPolicies: data_ResourceDetails.policies.filter((p) => {
+        return p.status === 1 && !validContracts.some((vcp) => {
+          return vcp.policyID === p.policyId;
+        });
+      }),
+    };
+    set_DataSource(data);
   }
 
   async function onChange_AppliedVersion(changed: {
@@ -384,7 +458,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
             </Space>
           </FFormLayout.FBlock>)
         }
-        
+
         {
           dataSource.validPolicies.length > 0 && (<FFormLayout.FBlock title={'可签约的策略'}>
             <Space size={15} direction='vertical' style={{ width: '100%' }}>
