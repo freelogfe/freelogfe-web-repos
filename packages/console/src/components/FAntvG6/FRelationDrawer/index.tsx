@@ -80,6 +80,8 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   function onChange_DrawerVisible(visible: boolean) {
     // console.log(visible, bothSidesInfo, '898932798479384798237498273948723984798');
     if (!visible || !bothSidesInfo) {
+      set_DataSource(initData['dataSource']);
+      set_Versions(initData['versions']);
       return;
     }
     const { licensor, licensee } = bothSidesInfo;
@@ -93,7 +95,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }
 
   async function handleData_Resource2Resource() {
-    console.log(bothSidesInfo, 'bothSidesInfobothSidesInfo8932iosdaflkbothSidesInfo');
+    // console.log(bothSidesInfo, 'bothSidesInfobothSidesInfo8932iosdaflkbothSidesInfo');
     if (!bothSidesInfo) {
       return;
     }

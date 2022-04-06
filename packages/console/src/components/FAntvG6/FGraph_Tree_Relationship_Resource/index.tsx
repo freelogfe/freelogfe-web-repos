@@ -119,7 +119,7 @@ function FGraph_Tree_Relationship_Resource({
       },
       children: handleDataSource({
         data: data_DependencyTree[0].children,
-        parentResourceID: data_DependencyTree[0].resourceId,
+        // parentResourceID: data_DependencyTree[0].resourceId,
       }),
     };
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
@@ -181,8 +181,8 @@ function FGraph_Tree_Relationship_Resource({
               licensorIdentityType: 'resource',
             },
             licensee: {
-              licenseeID: parentInfo.parentID,
-              licenseeIdentityType: parentInfo.parentIdentity,
+              licenseeID: dataSource?.value.resourceID || '',
+              licenseeIdentityType: 'resource',
             },
           });
         });
@@ -251,10 +251,10 @@ export default FGraph_Tree_Relationship_Resource;
 
 interface HandleDataSourceParams {
   data: ServerDataNode[];
-  parentResourceID: string;
+  // parentResourceID: string;
 }
 
-function handleDataSource({ data, parentResourceID }: HandleDataSourceParams): ResourceNode[] {
+function handleDataSource({ data }: HandleDataSourceParams): ResourceNode[] {
   return data.map<ResourceNode>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
@@ -275,14 +275,14 @@ function handleDataSource({ data, parentResourceID }: HandleDataSourceParams): R
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        parentInfo: {
-          parentID: parentResourceID,
-          parentIdentity: 'resource',
-        },
+        // parentInfo: {
+        //   parentID: parentResourceID,
+        //   parentIdentity: 'resource',
+        // },
       },
       children: handleDataSource({
         data: d.children,
-        parentResourceID: d.resourceId,
+        // parentResourceID: d.resourceId,
       }),
     };
   });

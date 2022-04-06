@@ -71,10 +71,10 @@ export interface FNode_Relationship_Resource_Values {
   show_Warning: boolean;
   show_Execute: boolean;
   resourceDetails_Url: string;
-  parentInfo: {
-    parentID: string;
-    parentIdentity: 'resource' | 'exhibit';
-  };
+  // parentInfo: {
+  //   parentID: string;
+  //   parentIdentity: 'resource' | 'exhibit';
+  // };
 }
 
 interface FNode_Relationship_Resource_Props {
@@ -91,7 +91,7 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
     show_Warning,
     show_Execute,
     resourceDetails_Url,
-    parentInfo,
+    // parentInfo,
   } = value;
   return (<Group>
     <Rect
@@ -170,7 +170,7 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
             graph.emit('resource:viewContract', {
               // contractID: contract.contractID,
               resourceID: resourceID,
-              parentInfo: parentInfo,
+              // parentInfo: parentInfo,
             });
           }}
         >查看合约</Text>
