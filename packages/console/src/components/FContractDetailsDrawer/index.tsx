@@ -15,8 +15,6 @@ import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
 
-// import { FTextBtn } from '@/components/FButton';
-
 interface BaseInfo {
   subjectId: string;
   subjectName: string;
