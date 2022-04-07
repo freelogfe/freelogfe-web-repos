@@ -1,15 +1,11 @@
 import * as React from 'react';
 import FFormLayout from '@/components/FFormLayout';
-// import { Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-// import FResource from '@/components/FIcons/FResource';
-// import { FNodes, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Checkbox, Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
-// import styles from '@/pages/resource/auth/$id/FAuthPanel/Contracts/index.less';
 import styles from './index.less';
 import FContractDisplay from '@/components/FContractDisplay';
 import FUtil1 from '@/utils';
@@ -18,9 +14,6 @@ import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
-// import { resourceDetails } from '@freelog/tools-lib/dist/utils/linkTo';
-// import FSwitch from '@/components/FSwitch';
-// import { FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
 import FContractAppliedExhibits, { serverData_2_ContractAppliedExhibits } from '@/components/FContractAppliedExhibits';
 
 interface FRelationDrawerProps {
