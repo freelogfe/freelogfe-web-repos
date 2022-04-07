@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
-import FUtil1 from '@/utils';
 import FSwitch from '@/components/FSwitch';
-import { FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
 import { FUtil } from '@freelog/tools-lib';
 
@@ -25,13 +22,13 @@ interface FContractAppliedExhibitsProps {
     policyIDs: string[];
   }[];
 
-  onChangeVersionContractIDs?(params: OnChangeExhibitContractIDsParams): void;
+  onChangeExhibitContractIDs?(params: OnChangeExhibitContractIDsParams): void;
 }
 
 function FContractAppliedExhibits({
                                     currentPolicyID,
                                     exhibitAndPolicyIDs,
-                                    onChangeVersionContractIDs,
+                                    onChangeExhibitContractIDs,
                                   }: FContractAppliedExhibitsProps) {
 
   return (<div className={styles.nodeExhibits}>
@@ -72,7 +69,7 @@ function FContractAppliedExhibits({
                 return exhibitContractIDs;
               });
 
-              onChangeVersionContractIDs && onChangeVersionContractIDs({
+              onChangeExhibitContractIDs && onChangeExhibitContractIDs({
                 changed: {
                   exhibitID: eac.exhibitID,
                   checked: value,
@@ -90,3 +87,38 @@ function FContractAppliedExhibits({
 }
 
 export default FContractAppliedExhibits;
+
+interface ServerData_2_ContractAppliedExhibits_Params {
+  data: {
+    presentableId: string;
+    presentableName: string;
+    resolveResources: {
+      contracts: {
+        contractId: string;
+        policyId: string;
+      }[];
+      resourceId: string;
+      resourceName: string;
+    }[];
+  }[];
+  currentResourceID: string;
+}
+
+export function serverData_2_ContractAppliedExhibits({
+                                data,
+                                currentResourceID,
+                              }: ServerData_2_ContractAppliedExhibits_Params): FContractAppliedExhibitsProps['exhibitAndPolicyIDs'] {
+  return data.map((dd) => {
+    const resource = dd.resolveResources.find((rr) => {
+      return rr.resourceId === currentResourceID;
+    });
+    return {
+      exhibitID: dd.presentableId,
+      exhibitName: dd.presentableName,
+      exhibitDetailsUrl: FUtil.LinkTo.exhibitManagement({ exhibitID: dd.presentableId }),
+      policyIDs: resource ? resource.contracts.map((c) => {
+        return c.policyId;
+      }) : [],
+    };
+  });
+}

@@ -10,7 +10,7 @@ import { Checkbox, Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 // import styles from '@/pages/resource/auth/$id/FAuthPanel/Contracts/index.less';
-import styles from '../index.less';
+import styles from './index.less';
 import FContractDisplay from '@/components/FContractDisplay';
 import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
@@ -18,9 +18,10 @@ import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
-import { resourceDetails } from '@freelog/tools-lib/dist/utils/linkTo';
-import FSwitch from '@/components/FSwitch';
-import { FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
+// import { resourceDetails } from '@freelog/tools-lib/dist/utils/linkTo';
+// import FSwitch from '@/components/FSwitch';
+// import { FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
+import FContractAppliedExhibits, { serverData_2_ContractAppliedExhibits } from '@/components/FContractAppliedExhibits';
 
 interface FRelationDrawerProps {
   bothSidesInfo: {
@@ -325,29 +326,10 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
           resourceId: string;
           resourceName: string;
         }[];
-      }
+      }[];
     } = await FServiceAPI.Exhibit.presentableList(params5);
 
-    console.log(data_ResolveResourceExhibit, 'data_AllPresentables');
-    // let data_ContractApplied: {
-    //   contractId: string;
-    //   presentables: {
-    //     presentableId: string;
-    //     presentableName: string;
-    //   }[];
-    // }[] = [];
-    // if (validContracts.length > 0) {
-    //   const params2: Parameters<typeof FServiceAPI.Exhibit.contractAppliedPresentable>[0] = {
-    //     nodeId: data_exhibitDetails.nodeId,
-    //     contractIds: validContracts.map((vc) => {
-    //       return vc.contractID;
-    //     }).join(','),
-    //   };
-    //
-    //   const { data } = await FServiceAPI.Exhibit.contractAppliedPresentable(params2);
-    //   data_ContractApplied = data;
-    //   console.log(data_ContractApplied, 'data_ContractApplied093opsldkfjsdl');
-    // }
+    // console.log(data_ResolveResourceExhibit, 'data_AllPresentables');
 
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
@@ -384,7 +366,10 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     //     }),
     //   };
     // }));
-    set_Versions([]);
+    set_Exhibits(serverData_2_ContractAppliedExhibits({
+      data: data_ResolveResourceExhibit,
+      currentResourceID: licensor.licensorID,
+    }));
   }
 
   async function onChange_AppliedVersion(changed: {
@@ -418,6 +403,14 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     }
     handleData_Resource2Resource();
     onChange_Authorization && onChange_Authorization();
+  }
+
+  async function onChange_AppliedExhibit(changed: {
+    exhibitID: string;
+    checked: boolean;
+    policyID: string;
+  }) {
+
   }
 
   return (<FDrawer
@@ -523,7 +516,33 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                     }
 
                     {
+                      dataSource.licensee.isCurrentUser && exhibits.length > 0 && (<>
+                        <div style={{ height: 10 }} />
+                        <div style={{
+                          padding: '12px 20px',
+                          borderTop: '1px solid #E5E7EB',
+                        }}>
+                          <FTitleText
+                            // text={`当前合约资源 ${dataSource.licensee.licenseeName} 中各个版本的应用情况`}
+                            // text={`当前合约在此资源上被多个版本应用`}
+                            text={`当前合约应用展品`}
+                            type='table'
+                            style={{ fontSize: 12 }}
+                          />
 
+                          {/*<div style={{ height: 8 }} />*/}
+                          <FContractAppliedExhibits
+                            currentPolicyID={k.policyID}
+                            exhibitAndPolicyIDs={exhibits}
+                            onChangeExhibitContractIDs={({ changed }) => {
+                              onChange_AppliedExhibit({
+                                ...changed,
+                                policyID: k.policyID,
+                              });
+                            }}
+                          />
+                        </div>
+                      </>)
                     }
 
                   </div>);
