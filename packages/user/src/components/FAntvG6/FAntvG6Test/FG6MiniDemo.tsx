@@ -58,7 +58,7 @@ const propsToEventMap = {
 
 export function appenAutoShapeListener(graph: Graph) {
   Object.entries(propsToEventMap).map(([eventName, propName]) => {
-    graph.on(`node:${eventName}`, evt => {
+    graph.on(`node:${eventName}` as any, evt => {
       const shape = evt.shape;
       const item = evt.item as INode;
       const graph = evt.currentTarget as Graph;
@@ -169,7 +169,7 @@ const ReactNode = ({ cfg = {} }) => {
             radius: [0, 0, 6, 6],
           }}
         >
-          <Text  style={{ fill: '#333', margin: [8, 4] }}>
+          <Text style={{ fill: '#333', margin: [8, 4] }}>
             描述: {description}
           </Text>
           <Text style={{ fill: '#333', margin: [6, 4] }}>

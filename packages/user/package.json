@@ -23,7 +23,7 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.7",
     "@ant-design/pro-layout": "^6.5.0",
-    "@freelog/tools-lib": "^0.1.73",
+    "@freelog/tools-lib": "^0.1.80",
     "@umijs/preset-react": "^1.8.8",
     "ahooks": "^2.10.4",
     "antd": "^4.15.6",

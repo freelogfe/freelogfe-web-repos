@@ -3,12 +3,12 @@ import styles from './index.less';
 import FCodeFormatter from '../FCodeFormatter';
 import * as AHooks from 'ahooks';
 // import { FUtil } from '@freelog/tools-lib';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
 
 interface FPolicyDisplayProps {
   code?: string;
-  fullInfo?: PolicyFullInfo;
+  fullInfo?: PolicyFullInfo_Type;
   containerHeight?: string | number;
 }
 

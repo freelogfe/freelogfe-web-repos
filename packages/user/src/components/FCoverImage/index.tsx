@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { CSSProperties, ImgHTMLAttributes } from 'react';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import { FUtil } from '@freelog/tools-lib';
+// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 
 interface FCoverImageProps {
   src: string;
@@ -63,14 +64,14 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
           }}
         />)
         : (<img
-          src={src || imgSrc}
+          src={src || (FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png')}
           style={{
             width: width,
             height: width / 4 * 3,
           }}
         />)
     }
-
+  {/*http://static.testfreelog.com/static/default_cover.png*/}
   </div>);
 }
 

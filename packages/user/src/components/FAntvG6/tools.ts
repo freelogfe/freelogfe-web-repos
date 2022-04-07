@@ -49,7 +49,7 @@ const propsToEventMap = {
 
 export function appendAutoShapeListener(graph: Graph) {
   Object.entries(propsToEventMap).map(([eventName, propName]) => {
-    graph.on(`node:${eventName}`, evt => {
+    graph.on(`node:${eventName}` as any, evt => {
       const shape = evt.shape;
       const item = evt.item as INode;
       const graph = evt.currentTarget as Graph;

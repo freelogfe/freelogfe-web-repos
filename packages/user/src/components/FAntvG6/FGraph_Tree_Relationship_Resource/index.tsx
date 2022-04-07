@@ -2,13 +2,32 @@ import * as React from 'react';
 import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode/fRelationship';
-import { FNode_Relationship_Resource_Values } from '../registerNode/fRelationship';
-import FLoadingTip from '@/components/FLoadingTip';
+import {
+  F_RELATIONSHIP_NODE_TYPE,
+  FNode_Relationship_Exhibit_Values,
+  FNode_Relationship_Resource_Values,
+  FNode_Relationship_RootResource_Values,
+} from '../registerNode/fRelationship';
+import FLoadingTip from '../../FLoadingTip';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
+import { appendAutoShapeListener } from '../../FAntvG6/tools';
 import { Graph } from '@antv/g6';
-import FResultTip from '@/components/FResultTip';
-import FErrorBoundary from '@/components/FErrorBoundary';
+import FResultTip from '../../FResultTip';
+import FErrorBoundary from '../../FErrorBoundary';
+import FRelationDrawer from '../FRelationDrawer';
+
+interface ServerDataNode {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  versions: string[];
+  versionRanges: string[];
+  // versions?: string[];
+  downstreamAuthContractIds: string[];
+  downstreamIsAuth?: boolean;
+  selfAndUpstreamIsAuth?: boolean;
+  children: ServerDataNode[];
+}
 
 interface FGraph_Tree_Relationship_Resource_Props {
   resourceID: string;
@@ -17,28 +36,39 @@ interface FGraph_Tree_Relationship_Resource_Props {
   height: number;
 }
 
-interface NodeTree {
+interface RootResourceNode {
   id: string;
+  nodeType: 'rootResource';
+  // value: FNode_Relationship_Resource_Values;
+  value: FNode_Relationship_RootResource_Values;
+  children: ResourceNode[];
+}
+
+interface ResourceNode {
+  id: string;
+  nodeType: 'resource';
   value: FNode_Relationship_Resource_Values;
-  children: NodeTree[];
+  children: ResourceNode[];
 }
 
 interface FGraph_Relationship_States {
-  dataSource: NodeTree | null;
+  dataSource: RootResourceNode | null;
+  showRelationDrawerInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licenseeIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
 }
 
 const initStates: FGraph_Relationship_States = {
   dataSource: null,
+  showRelationDrawerInfo: null,
 };
-
-interface ServerDataNode {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  versions: string[];
-  versionRanges: string[];
-  children: ServerDataNode[];
-}
 
 function FGraph_Tree_Relationship_Resource({
                                              resourceID,
@@ -48,6 +78,7 @@ function FGraph_Tree_Relationship_Resource({
                                            }: FGraph_Tree_Relationship_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
+  const [showRelationDrawerInfo, set_ShowRelationDrawerInfo] = React.useState<FGraph_Relationship_States['showRelationDrawerInfo']>(initStates['showRelationDrawerInfo']);
 
   React.useEffect(() => {
     handleData();
@@ -60,50 +91,44 @@ function FGraph_Tree_Relationship_Resource({
       return;
     }
 
-    const params2: Parameters<typeof FServiceAPI.Resource.relationTree>[0] = {
+    const params2: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
       resourceId: resourceID,
       version: version,
     };
 
-    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTree(params2);
-    // console.log(data_DependencyTree, 'data_DependencyTree#@##34234234');
-    const authResult = getAllResourceIDAndVersions(data_DependencyTree[0]);
+    const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.relationTreeAuth(params2);
+    // console.log(data_DependencyTree, 'data_DependencyTree32sdfsd');
 
-    const params3: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
-      resourceIds: authResult.map((ar) => ar.resourceID).join(','),
-      versionRanges: authResult.map((ar) => ar.version).join(','),
+    const dataSource: FGraph_Relationship_States['dataSource'] = {
+      id: data_DependencyTree[0].resourceId + '-' + FUtil.Tool.generateRandomCode(),
+      nodeType: 'rootResource',
+      // value: FNode_Relationship_Resource_Values;
+      value: {
+        resourceID: data_DependencyTree[0].resourceId,
+        resourceName: data_DependencyTree[0].resourceName,
+        resourceType: data_DependencyTree[0].resourceType,
+        version: data_DependencyTree[0].versionRanges?.length
+          ? data_DependencyTree[0].versionRanges[0]
+          : data_DependencyTree[0].versions?.length
+            ? data_DependencyTree[0].versions[0]
+            : '',
+        resourceDetails_Url: FUtil.LinkTo.resourceDetails({
+          resourceID: data_DependencyTree[0].resourceId,
+          // version: d.version,
+        }),
+      },
+      children: handleDataSource({
+        data: data_DependencyTree[0].children,
+        // parentResourceID: data_DependencyTree[0].resourceId,
+      }),
     };
-
-    const { data: data_BatchAuth }: {
-      data: {
-        isAuth: boolean;
-        resourceId: string;
-        resourceName: string;
-        version: string;
-      }[];
-    } = await FServiceAPI.Resource.batchAuth(params3);
-
-    // console.log(data_BatchAuth, 'data_BatchAuth089io23klasdfasdfdata_BatchAuth');
-
-    const dataSource: FGraph_Relationship_States['dataSource'] = handleDataSource(data_DependencyTree, data_BatchAuth)[0];
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
 
     set_DataSource(dataSource);
   }
 
-  if (!dataSource) {
-    return (<FLoadingTip height={height} />);
-  }
-
-  if (dataSource.children.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-        <FResultTip h1={'无关系树'} />
-      </div>);
-  }
-
-  return (<FErrorBoundary>
-    <DecompositionTreeGraph
+  const Gra = React.useMemo(() => {
+    return (<DecompositionTreeGraph
       style={{ backgroundColor: 'transparent' }}
       width={width}
       height={height}
@@ -112,7 +137,7 @@ function FGraph_Tree_Relationship_Resource({
       // autoFit={true}
       nodeCfg={
         {
-          type: 'FNode_Relationship_Resource',
+          type: F_RELATIONSHIP_NODE_TYPE,
           style: {},
           nodeStateStyles: {},
         }
@@ -122,7 +147,10 @@ function FGraph_Tree_Relationship_Resource({
         // direction: 'LR',
         // dropCap: false,
         // indent: 500,
-        getHeight: () => {
+        getHeight: (node: any) => {
+          if (node.nodeType === 'rootResource') {
+            return 58;
+          }
           return 90;
         },
         getWidth: () => {
@@ -143,69 +171,119 @@ function FGraph_Tree_Relationship_Resource({
         // graph.moveTo(20, 20, true);
         // graph.zoom(1);
         appendAutoShapeListener(graph as Graph);
+        graph.on('resource:viewContract', ({ resourceID, parentInfo }: any) => {
+          // console.log(params, 'params23908isdflk');
+          // console.log(resourceID, parentInfo, 'resourceID, parentInfo92394iuojsldk@#@##$@#$@#');
+          // set_ContractID(contractID);
+          set_ShowRelationDrawerInfo({
+            licensor: {
+              licensorID: resourceID,
+              licensorIdentityType: 'resource',
+            },
+            licensee: {
+              licenseeID: dataSource?.value.resourceID || '',
+              licenseeIdentityType: 'resource',
+            },
+          });
+        });
+      }}
+    />);
+  }, [dataSource]);
+
+  return (<>
+    {
+      !dataSource && (<FLoadingTip height={height} />)
+    }
+
+    {
+      dataSource && dataSource.children.length === 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+          <FResultTip h1={'无关系树'} />
+        </div>)
+    }
+
+    {
+      dataSource && dataSource.children.length > 0 && <FErrorBoundary>{Gra}</FErrorBoundary>
+    }
+
+    <FRelationDrawer
+      bothSidesInfo={showRelationDrawerInfo}
+      onClose={() => {
+        set_ShowRelationDrawerInfo(null);
+      }}
+      onChange_Authorization={() => {
+        handleData();
       }}
     />
-  </FErrorBoundary>);
+  </>);
 }
 
 export default FGraph_Tree_Relationship_Resource;
 
 
-function getAllResourceIDAndVersions(data: ServerDataNode): {
-  resourceID: string;
-  version: string;
-}[] {
+// function getAllResourceIDAndVersions(data: ServerDataNode): {
+//   resourceID: string;
+//   version: string;
+// }[] {
+//
+//   const resources: {
+//     resourceID: string;
+//     version: string;
+//   }[] = [];
+//   traversal(data);
+//
+//   function traversal(data: ServerDataNode): any {
+//     const { children, ...resource } = data;
+//     resources.push({
+//       resourceID: resource.resourceId,
+//       version: resource.versionRanges.length > 0
+//         ? resource.versionRanges[0]
+//         : resource.versions[0],
+//     });
+//
+//     for (const dep of children) {
+//       traversal(dep);
+//     }
+//   }
+//
+//   return resources;
+// }
 
-  const resources: {
-    resourceID: string;
-    version: string;
-  }[] = [];
-  traversal(data);
-
-  function traversal(data: ServerDataNode): any {
-    const { children, ...resource } = data;
-    resources.push({
-      resourceID: resource.resourceId,
-      version: resource.versionRanges.length > 0
-        ? resource.versionRanges[0]
-        : resource.versions[0],
-    });
-
-    for (const dep of children) {
-      traversal(dep);
-    }
-  }
-
-  return resources;
+interface HandleDataSourceParams {
+  data: ServerDataNode[];
+  // parentResourceID: string;
 }
 
-function handleDataSource(data: ServerDataNode[], auth: {
-  isAuth: boolean;
-  resourceId: string;
-  resourceName: string;
-  version: string;
-}[]): NodeTree[] {
-  return data.map<NodeTree>((d) => {
+function handleDataSource({ data }: HandleDataSourceParams): ResourceNode[] {
+  return data.map<ResourceNode>((d) => {
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
+      nodeType: 'resource',
       value: {
         resourceID: d.resourceId,
         resourceName: d.resourceName,
         resourceType: d.resourceType,
-        version: d.versionRanges.length > 0
+        version: d.versionRanges?.length
           ? d.versionRanges[0]
-          : d.versions[0],
+          : d.versions?.length
+            ? d.versions[0]
+            : '',
+        // downstreamAuthContractIds: d.downstreamAuthContractIds,
+        show_Execute: d.downstreamIsAuth === false,
+        show_Warning: d.selfAndUpstreamIsAuth === false,
         resourceDetails_Url: FUtil.LinkTo.resourceDetails({
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        isAuth: true,
-        // isAuth: auth.find((af) => {
-        //   return af.resourceId === d.resourceId;
-        //   // && af.version === d.version;
-        // })?.isAuth || true,
+        // parentInfo: {
+        //   parentID: parentResourceID,
+        //   parentIdentity: 'resource',
+        // },
       },
-      children: handleDataSource(d.children, auth),
+      children: handleDataSource({
+        data: d.children,
+        // parentResourceID: d.resourceId,
+      }),
     };
   });
 }

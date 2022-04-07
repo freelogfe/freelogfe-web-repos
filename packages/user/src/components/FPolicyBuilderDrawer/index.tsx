@@ -37,38 +37,6 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
-// type ResourceAuthColor = Array<'active' | 'testActive'>;
-// type ExhibitAuthColor = Array<'active'>;
-
-// interface IEvent_Payment {
-//   randomID: string;
-//   type: 'payment';
-//   amount: string;
-//   amountError: string;
-//   target: string;
-// }
-//
-// interface IEvent_RelativeTime {
-//   randomID: string;
-//   type: 'relativeTime';
-//   num: string;
-//   numError: string;
-//   unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
-//   target: string;
-// }
-//
-// interface IEvent_AbsoluteTime {
-//   randomID: string;
-//   type: 'absoluteTime';
-//   dateTime: Moment | null;
-//   target: string;
-// }
-//
-// interface IEvent_Terminate {
-//   randomID: string;
-//   type: 'terminate';
-// }
-
 type CombinationStructureType = {
   randomID: string;
   type: 'initial' | 'other';
@@ -742,23 +710,22 @@ function FPolicyBuilder({
     <FDrawer
       title={<Space size={10}>
         <FTitleText type='h2' text={'添加授权策略'} />
-        <FTooltip title={<FTextBtn
-          type='default'
-          onClick={() => {
-            window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
-          }}
-        >点击查看帮助文档</FTextBtn>}>
-          <label style={{
-            cursor: 'pointer',
-            width: 20,
-            height: 20,
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#E9E9E9',
-            fontSize: 12,
-          }}>?
+        <FTooltip title={'点击查看帮助文档'}>
+          <label
+            onClick={() => {
+              window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
+            }}
+            style={{
+              cursor: 'pointer',
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#E9E9E9',
+              fontSize: 12,
+            }}>?
           </label>
         </FTooltip>
       </Space>}
@@ -983,12 +950,12 @@ function FPolicyBuilder({
                                         paddingTop: 5,
                                       }}>{cd.nameError}</div>)
                                       : cd.isNameDuplicate
-                                      ? (<div style={{
-                                        color: '#EE4040',
-                                        paddingLeft: 55,
-                                        paddingTop: 5,
-                                      }}>有重复的名称</div>)
-                                      : null
+                                        ? (<div style={{
+                                          color: '#EE4040',
+                                          paddingLeft: 55,
+                                          paddingTop: 5,
+                                        }}>有重复的名称</div>)
+                                        : null
                                   }
 
                                 </>)
@@ -1111,7 +1078,7 @@ function FPolicyBuilder({
                                               const value: string = e.target.value;
                                               let relativeTime_NumError: string = '';
                                               if (!FUtil.Regexp.POSITIVE_INTEGER.test(value)) {
-                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_cycle_amount_error');
                                               }
                                               onChangeCombinationEvent({
                                                 relativeTime_Num: value,

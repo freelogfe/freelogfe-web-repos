@@ -3,6 +3,7 @@ import styles from './index.less';
 import { DecompositionTreeGraph } from '@ant-design/graphs';
 import '../registerNode/fAuthorization';
 import {
+  F_AUTHORIZATION_NODE_TYPE,
   FNode_Authorization_Contract_Values,
   FNode_Authorization_Resource_Values,
 } from '../registerNode/fAuthorization';
@@ -13,7 +14,6 @@ import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FErrorBoundary from '@/components/FErrorBoundary';
-// import { appenAutoShapeListener } from '@antv/g6-react-node';
 
 type ServerDataNodes = {
   resourceId: string;
@@ -43,14 +43,14 @@ interface FGraph_Tree_Authorization_Resource_Props {
 
 interface ResourceNode {
   id: string;
-  // type: 'FNode_Authorization_Resource';
+  nodeType: 'resource';
   value: FNode_Authorization_Resource_Values;
   children: ContractNode[];
 }
 
 interface ContractNode {
   id: string;
-  // type: 'FNode_Authorization_Contract'
+  nodeType: 'contract';
   value: FNode_Authorization_Contract_Values;
   children: ResourceNode[];
 }
@@ -123,7 +123,8 @@ function FGraph_Tree_Authorization_Resource({
     const partyResult = handleDataSource({ data: data_AuthorizationTree, data_Contracts: data_AllContracts });
 
     const finalDataSource: FGraph_Tree_Authorization_Resource_States['dataSource'] = {
-      id: resourceID,
+      id: resourceID + '-' + FUtil.Tool.generateRandomCode(),
+      nodeType: 'resource',
       // type: 'FNode_Authorization_Resource',
       value: {
         resourceID: data_ResourceDetails.resourceId,
@@ -142,44 +143,52 @@ function FGraph_Tree_Authorization_Resource({
     set_DataSource(finalDataSource);
   }
 
-  return (<FErrorBoundary>
+  const Gra = React.useMemo(() => {
+    return (<DecompositionTreeGraph
+      style={{ backgroundColor: 'transparent' }}
+      width={width}
+      height={height}
+      data={dataSource as any}
+      nodeCfg={{
+        type: F_AUTHORIZATION_NODE_TYPE,
+      }}
+      layout={{
+        getHeight: (node: any) => {
+          // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+          return node.nodeType === 'contract' ? (node.value.length || 1) * 64 : 64;
+        },
+        getWidth: () => {
+          return 200;
+        },
+      }}
+      behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
+      onReady={(graph) => {
+        appendAutoShapeListener(graph as Graph);
+        graph.on('contract:view', ({ contractID }: any) => {
+          // console.log(params, 'params23908isdflk');
+          // console.log(contractID, 'contractID@#@##$@#$@#');
+          set_ContractID(contractID);
+        });
+      }}
+    />);
+  }, [dataSource]);
+
+  return (<>
+
+    {!dataSource && (<FLoadingTip height={height} />)}
+
     {
-      !dataSource
-        ? (<FLoadingTip height={height} />)
-        : dataSource.children.length === 0
-          ? (<div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-            <FResultTip h1={'无授权树'} />
-          </div>)
-          : (<DecompositionTreeGraph
-            style={{ backgroundColor: 'transparent' }}
-            width={width}
-            height={height}
-            data={dataSource as any}
-            nodeCfg={{
-              type: 'FNode_Authorization_Resource',
-            }}
-            layout={{
-              getHeight: (node: any) => {
-                // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-                return Array.isArray(node.value) ? (node.value.length || 1) * 64 : 64;
-              },
-              getWidth: () => {
-                return 200;
-              },
-            }}
-            behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
-            onReady={(graph) => {
-              appendAutoShapeListener(graph as Graph);
-              graph.on('contract:view', ({ contractID }: any) => {
-                // console.log(params, 'params23908isdflk');
-                console.log(contractID, 'contractID@#@##$@#$@#');
-                set_ContractID(contractID);
-              });
-            }}
-          />)
+      dataSource && dataSource.children.length === 0 && (<div
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+        <FResultTip h1={'无授权树'} />
+      </div>)
     }
 
+    {
+      dataSource && dataSource.children.length > 0 && (<FErrorBoundary>
+        {Gra}
+      </FErrorBoundary>)
+    }
 
     <FContractDetailsDrawer
       contractID={contractID}
@@ -190,7 +199,8 @@ function FGraph_Tree_Authorization_Resource({
         handleData();
       }}
     />
-  </FErrorBoundary>);
+
+  </>);
 }
 
 export default FGraph_Tree_Authorization_Resource;
@@ -204,12 +214,10 @@ type HandleDataSourceReturn = ContractNode[];
 
 function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): HandleDataSourceReturn {
   return (data || []).map((d) => {
-    // const firstContract = data_Contracts.find((dc) => {
-    //   return d[0].contracts[0].contractId === dc.contractId;
-    // });
 
     return {
       id: FUtil.Tool.generateRandomCode(20),
+      nodeType: 'contract',
       value: d[0].contracts.map((contract) => {
         const contractMap = data_Contracts.find((dc) => {
           return contract.contractId === dc.contractId;
@@ -226,7 +234,7 @@ function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): Han
       children: d.map((d1) => {
         return {
           id: d1.resourceId + '-' + FUtil.Tool.generateRandomCode(),
-          // type: 'FNode_Authorization_Resource',
+          nodeType: 'resource',
           value: {
             resourceID: d1.resourceId,
             resourceName: d1.resourceName,

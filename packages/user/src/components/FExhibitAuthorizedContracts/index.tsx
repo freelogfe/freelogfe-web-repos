@@ -13,7 +13,7 @@ import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
-import { PolicyFullInfo } from '@/type/contractTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -41,7 +41,7 @@ interface FExhibitAuthorizedContractsStates {
         disabled: boolean;
       };
     }[];
-    policies: PolicyFullInfo[];
+    policies: PolicyFullInfo_Type[];
   }[];
 }
 
@@ -328,7 +328,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <FTitleText type='h4'>未签约策略</FTitleText>
               {
                 selectedAuthorizedContract.policies.map((sacp) => {
-                  return (<>
+                  return (
                     <div
                       className={styles.Policy}
                       key={sacp.policyId}
@@ -350,15 +350,9 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                           fullInfo={sacp}
                         />
                       </div>
-                      {/*<a*/}
-                      {/*  className={styles.PolicyFullScreenBtn}*/}
-                      {/*  onClick={() => {*/}
-                      {/*    setFullScreenVisibleID(p.id);*/}
-                      {/*  }}*/}
-                      {/*><FFullScreen style={{ fontSize: 12 }} /></a>*/}
 
                     </div>
-                  </>);
+                  );
                 })
               }
             </>)
@@ -421,7 +415,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     resourceId: string;
     resourceName: string;
     resourceType: string;
-    policies: PolicyFullInfo[];
+    policies: PolicyFullInfo_Type[];
   }[] = [];
   let batchObjects: {
     objectId: string;

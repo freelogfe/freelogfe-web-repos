@@ -5,9 +5,7 @@ import React from 'react';
 import img_Execute from '@/assets/execute.svg';
 import img_Gear from '@/assets/gear.svg';
 import img_Forbid from '@/assets/forbid.svg';
-import img from '@/assets/warning.svg';
-import { FNode_Relationship_Resource_Values } from '@/components/FAntvG6/registerNode/fRelationship';
-import { FNode_Dependency_Resource_Values } from '@/components/FAntvG6/registerNode/fDependency';
+// import img from '@/assets/warning.svg';
 import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Authorization_Resource_Values {
@@ -18,15 +16,11 @@ export interface FNode_Authorization_Resource_Values {
   resourceDetails_Url: string;
 }
 
-const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Resource_Values }) => {
-  // console.log(cfg, 'cfgcfgcfgcfg0932iojsdlkfsjdlklllllllCCCCC');
-  // const {
-  //   resourceID,
-  //   resourceName,
-  //   resourceType,
-  //   version,
-  //   resourceDetails_Url,
-  // } = (cfg as any).value as FNode_Authorization_Resource_Values;
+interface FNode_Authorization_Resource_Props {
+  value: FNode_Authorization_Resource_Values;
+}
+
+function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Props) {
   const {
     resourceID,
     resourceName,
@@ -45,7 +39,6 @@ const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Re
         cursor: 'move',
       }}
       onClick={() => {
-        // console.log('#######98ioklj');
 
       }}
     >
@@ -71,9 +64,76 @@ const FNode_Authorization_Resource = ({ value }: { value: FNode_Authorization_Re
       }}>{resourceType} | {version}</Text>
     </Rect>
   </Group>);
-};
+}
 
-// G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource));
+export interface FNode_Authorization_Exhibit_Values {
+  exhibitID: string;
+  exhibitName: string;
+  nodeID: number;
+  nodeName: string;
+}
+
+interface FNode_Authorization_Exhibit_Props {
+  value: FNode_Authorization_Exhibit_Values;
+}
+
+function FNode_Authorization_Exhibit({ value }: FNode_Authorization_Exhibit_Props) {
+  const {
+    exhibitID,
+    exhibitName,
+    nodeID,
+    nodeName,
+  } = value;
+  return (<Group>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+
+      }}
+    >
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>节点：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(nodeName)}</Text>
+      <Rect style={{ height: 15 }} />
+      <Text style={{
+        fontSize: 12,
+        fontWeight: 600,
+        fill: '#7F8388',
+        padding: [3, 0],
+      }}>展品：</Text>
+      <Rect style={{ height: 10 }} />
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+          cursor: 'pointer',
+        }}
+      >{textOverflowEllipsis(exhibitName)}</Text>
+    </Rect>
+  </Group>);
+}
 
 export type FNode_Authorization_Contract_Values = {
   contractID: string;
@@ -114,7 +174,11 @@ const statusInfo = {
   },
 };
 
-const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Contract_Values }) => {
+interface FNode_Authorization_Contract_Props {
+  value: FNode_Authorization_Contract_Values;
+}
+
+function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Props) {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
   // const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
   const contracts = value;
@@ -231,19 +295,29 @@ const FNode_Authorization_Contract = ({ value }: { value: FNode_Authorization_Co
         </Rect>);
       })
     }
-
-
   </Group>);
-};
+}
 
+function FNode_Authorization({ cfg = {} }: any) {
+  // console.log(value, 'value@#38s9dio');
+  if (cfg.nodeType === 'resource') {
+    return (<FNode_Authorization_Resource
+      value={cfg.value}
+    />);
+  }
+  if (cfg.nodeType === 'exhibit') {
+    return (<FNode_Authorization_Exhibit
+      value={cfg.value}
+    />);
+  }
+  if (cfg.nodeType === 'contract') {
+    return (<FNode_Authorization_Contract
+      value={cfg.value}
+    />);
+  }
+  return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
+}
 
-// G6.registerNode('FNode_Authorization_Contract', createNodeFromReact(FNode_Authorization_Contract));
+export const F_AUTHORIZATION_NODE_TYPE: string = 'FNode_Authorization';
 
-const FNode_Authorization_Resource1 = ({ cfg = {} }) => {
-  const value = (cfg as any).value;
-  return Array.isArray(value) ? (<FNode_Authorization_Contract
-    value={value}
-  />) : (<FNode_Authorization_Resource value={value} />);
-};
-
-G6.registerNode('FNode_Authorization_Resource', createNodeFromReact(FNode_Authorization_Resource1));
+G6.registerNode(F_AUTHORIZATION_NODE_TYPE, createNodeFromReact(FNode_Authorization));

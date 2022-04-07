@@ -1,11 +1,10 @@
-
 interface ICandidate {
   name: string;
   versionRange?: string;
   type: 'resource' | 'object';
 }
 
-export type OperationAndActionRecords  = {
+export type OperationAndActionRecords = {
   type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
   data: {
     exhibitName: string;
@@ -25,4 +24,5 @@ export type OperationAndActionRecords  = {
     replacer?: ICandidate;
     scopes?: ICandidate[][];
   };
+  warningMsg?: string;
 }[];

@@ -1,6 +1,6 @@
 export type ContractStatus = 'active' | 'testActive' | 'inactive' | 'terminal';
 
-export interface PolicyFullInfo {
+export interface PolicyFullInfo_Type {
   fsmDescriptionInfo: any;
   policyId: string;
   policyName: string;
