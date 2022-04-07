@@ -410,7 +410,27 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     checked: boolean;
     policyID: string;
   }) {
+    if (!dataSource) {
+      return;
+    }
+    const params1: HandleFinalResolveResourceParams = {
+      exhibitID: changed.exhibitID,
+      resourceID: dataSource.licensor.licensorID,
+      policyID: changed.policyID,
+      isUsed: changed.checked,
+    };
 
+    const resolveResources: HandleFinalResolveResourceReturn = await handleFinalResolveResource(params1);
+
+    const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+      presentableId: changed.exhibitID,
+      resolveResources: resolveResources,
+    };
+
+    // console.log(params, 'params2093uiksdjflsdkjl');
+    const { data } = await FServiceAPI.Exhibit.updatePresentable(params);
+    handleData_Resource2Exhibit();
+    onChange_Authorization && onChange_Authorization();
   }
 
   return (<FDrawer
@@ -534,11 +554,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                           <FContractAppliedExhibits
                             currentPolicyID={k.policyID}
                             exhibitAndPolicyIDs={exhibits}
-                            onChangeExhibitContractIDs={({ changed }) => {
+                            onChangeExhibitContractIDs={({ changed, changedAllIDs }) => {
                               onChange_AppliedExhibit({
                                 ...changed,
                                 policyID: k.policyID,
                               });
+                              set_Exhibits(changedAllIDs);
                             }}
                           />
                         </div>
@@ -563,13 +584,22 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                       return vs.version;
                     })}
                     onClickLicense={(vs) => {
-                      onChange_AppliedVersion(vs.map((v) => {
-                        return {
-                          version: v,
+                      if (dataSource.licensee.licensorIdentityType === 'resource') {
+                        onChange_AppliedVersion(vs.map((v) => {
+                          return {
+                            version: v,
+                            checked: true,
+                            policyID: vp.policyId,
+                          };
+                        }));
+                      }
+                      if (dataSource.licensee.licensorIdentityType === 'exhibit') {
+                        onChange_AppliedExhibit({
+                          exhibitID: dataSource.licensee.licenseeID,
                           checked: true,
                           policyID: vp.policyId,
-                        };
-                      }));
+                        });
+                      }
                     }}
                   />);
                 })
@@ -586,6 +616,70 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
 
 export default FRelationDrawer;
 
+interface HandleFinalResolveResourceParams {
+  exhibitID: string;
+  resourceID: string;
+  policyID: string;
+  isUsed: boolean;
+}
 
+type HandleFinalResolveResourceReturn = {
+  resourceId: string,
+  contracts: {
+    policyId: string
+  }[];
+}[];
 
+async function handleFinalResolveResource({
+                                            exhibitID,
+                                            resourceID,
+                                            policyID,
+                                            isUsed,
+                                          }: HandleFinalResolveResourceParams): Promise<HandleFinalResolveResourceReturn> {
 
+  // console.log(exhibitID, 'exhibitID333333');
+  // console.log(resourceID, 'resourceID3232423423423');
+  // console.log(policyID, 'policyID234234234');
+  // console.log(isUsed, 'isUsed0239j32lkl');
+
+  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+    presentableId: exhibitID,
+  };
+
+  const { data } = await FServiceAPI.Exhibit.presentableDetails(params);
+  // console.log(data, 'data2903jsaldfksjd');
+  return data.resolveResources?.map((rrs: any) => {
+    if (resourceID !== rrs.resourceId) {
+      return {
+        resourceId: rrs.resourceId,
+        contracts: rrs.contracts.map((cccttt: any) => {
+          return {
+            policyId: cccttt.policyId,
+          };
+        }),
+      };
+    }
+    const policyIDs: string[] = isUsed ? [
+      ...rrs.contracts.map((cccttt: any) => {
+        return cccttt.policyId;
+      }),
+      policyID,
+    ] : rrs.contracts
+      .filter((ccc: any) => {
+        return ccc.policyId !== policyID;
+      })
+      .map((cccttt: any) => {
+        return cccttt.policyId;
+      });
+    // console.log(policyIDs, 'policyIDs@@@#$234234234234');
+    return {
+      resourceId: rrs.resourceId,
+      contracts: Array.from(new Set(policyIDs))
+        .map((pID) => {
+          return {
+            policyId: pID,
+          };
+        }),
+    };
+  });
+}

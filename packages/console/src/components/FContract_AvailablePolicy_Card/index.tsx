@@ -23,7 +23,11 @@ interface FContract_AvailablePolicy_Card_States {
   checkedVersions: string[];
 }
 
-function FContract_AvailablePolicy_Card({ fullInfo, allVersions, onClickLicense }: FContract_AvailablePolicy_Card_Props) {
+function FContract_AvailablePolicy_Card({
+                                          fullInfo,
+                                          allVersions,
+                                          onClickLicense,
+                                        }: FContract_AvailablePolicy_Card_Props) {
   const [fullScreenVisible, setFullScreenVisible] = React.useState<FContract_AvailablePolicy_Card_States['fullScreenVisible']>(false);
   const [drawerVisible, setDrawerVisible] = React.useState<FContract_AvailablePolicy_Card_States['drawerVisible']>(false);
   const [checkedVersions, setCheckedVersions] = React.useState<FContract_AvailablePolicy_Card_States['checkedVersions']>([]);
@@ -81,7 +85,12 @@ function FContract_AvailablePolicy_Card({ fullInfo, allVersions, onClickLicense 
         <FRectBtn
           size='small'
           onClick={() => {
-            setDrawerVisible(true);
+            if (allVersions.length > 0) {
+              setDrawerVisible(true);
+            } else {
+              onClickLicense && onClickLicense([]);
+            }
+
           }}
         >获取授权</FRectBtn>
       </div>
@@ -89,8 +98,6 @@ function FContract_AvailablePolicy_Card({ fullInfo, allVersions, onClickLicense 
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
           fullInfo={fullInfo}
-          // code={code}
-          // containerHeight={170}
         />
       </div>
       <a
@@ -117,7 +124,11 @@ function FContract_AvailablePolicy_Card({ fullInfo, allVersions, onClickLicense 
         <FRectBtn
           size='small'
           onClick={() => {
-            setDrawerVisible(true);
+            if (allVersions.length > 0) {
+              setDrawerVisible(true);
+            } else {
+              onClickLicense && onClickLicense([]);
+            }
           }}
         >获取授权</FRectBtn>
       </div>
