@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Policy from './Policy';
+// import Policy from './Policy';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
@@ -8,6 +8,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 type EventFunc = () => void
 
@@ -116,7 +117,16 @@ function FResourceCard({
         <div className={styles.MetaFooter}>
           {
             resource.policy.length > 0
-              ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+              // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+              ? (<F_Contract_And_Policy_Labels
+                data={resource.policy.map((p) => {
+                  return {
+                    text: p,
+                    dot: '',
+                  };
+                })}
+                singleRow
+              />)
               : (<FContentText text={'暂无策略…'} type='additional2' />)
           }
         </div>
