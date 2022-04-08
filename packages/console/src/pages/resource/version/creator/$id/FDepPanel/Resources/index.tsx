@@ -1,36 +1,37 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
-import {FCircleBtn, FTextBtn} from '@/components/FButton';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import { FContentText } from '@/components/FText';
+import { FCircleBtn, FTextBtn } from '@/components/FButton';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
   ChangeAction,
   DeleteDependencyByIDAction,
   DepResources,
 } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-type T = DepResources[0];
+// type T = DepResources[0];
 
-interface DataS extends T {
-  unresolved: DepResources;
-}
+// interface DataS extends T {
+//   unresolved: DepResources;
+// }
 
-function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
+function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
 
   function onChangeVersion(version: DepResources[number]['versionRange'], id: DepResources[number]['id']) {
     const dependencies: ResourceVersionCreatorPageModelState['dependencies'] = resourceVersionCreatorPage.dependencies.map((dd) => {
@@ -100,53 +101,66 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                           resourceID: rrr.id,
                         }));
                       }}
-                      type="default"
+                      type='default'
                     >
                       <FContentText
                         className={styles.titleText}
                         text={rrr.title}
                         singleRow
-                        type="highlight"
+                        type='highlight'
                       />
                     </FTextBtn>
-                    <div style={{width: 5}}/>
-                    {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
-                    {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
-                    {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
-                    {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
-                    {rrr.status === 1 && rrr.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                    <div style={{ width: 5 }} />
+                    {rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
+                    {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.status === 1 && rrr.authProblem && (
+                      <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
-                  <div style={{height: 9}}/>
-                  <FContentText type="additional2">
+                  <div style={{ height: 9 }} />
+                  <FContentText type='additional2'>
                     <div>
                       {/*{rrr.resourceType || '暂无类型'}*/}
                       {rrr.resourceType}
                       {rrr.resourceType ? ' | ' : ''}
                       {
                         rrr.versions?.length === 0
-                          ? <span style={{paddingRight: 5}}>暂无版本</span>
+                          ? <span style={{ paddingRight: 5 }}>暂无版本</span>
                           : <>
                     <span
-                      style={{paddingRight: 5}}>{FUtil1.I18n.message('version_range')}：{rrr.versionRange}</span>
+                      style={{ paddingRight: 5 }}>{FUtil1.I18n.message('version_range')}：{rrr.versionRange}</span>
                             <FVersionHandlerPopover
                               value={rrr.versionRange}
                               versionOptions={rrr.versions}
                               onChange={(version) => onChangeVersion(version, i.id)}
-                            ><FEdit style={{fontSize: 14}}/></FVersionHandlerPopover>
+                            ><FEdit style={{ fontSize: 14 }} /></FVersionHandlerPopover>
                           </>
                       }
                     </div>
                   </FContentText>
                   <>
-                    <div style={{height: 5}}/>
+                    <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
+                      {/*{*/}
+                      {/*  !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]*/}
+                      {/*    .filter((k) => k.checked)*/}
+                      {/*    .map((j) => (<label*/}
+                      {/*      key={j.id}*/}
+                      {/*      className={styles.labelInfo}*/}
+                      {/*    >{j.title}</label>))*/}
+                      {/*}*/}
                       {
-                        !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
-                          .filter((k) => k.checked)
-                          .map((j) => (<label
-                            key={j.id}
-                            className={styles.labelInfo}
-                          >{j.title}</label>))
+                        !rrr.upthrow && <F_Contract_And_Policy_Labels
+                          data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                            .filter((k) => k.checked)
+                            .map((j) => {
+                              return {
+                                text: j.title,
+                                dot: '',
+                              };
+                            })}
+                        />
                       }
                       {
                         rrr.upthrow && (<label
@@ -159,9 +173,9 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                 <FCircleBtn
                   onClick={(e) => {
                     e.stopPropagation();
-                    return onDeleteResource(i.id)
+                    return onDeleteResource(i.id);
                   }}
-                  type="danger"
+                  type='danger'
                 />
               </div>
 
@@ -177,9 +191,9 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
               />
 
             </div>);
-          }
+          },
         )}
-  </div>
+  </div>;
 }
 
 interface SmallNavProps {
@@ -188,15 +202,15 @@ interface SmallNavProps {
   readonly onClick?: (resourceID: DepResources[number]['id']) => void;
 }
 
-function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
+function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
   if (dataSource.length === 0) {
     return null;
   }
 
   return (<div className={styles.children}>
-    <div style={{padding: '5px 0 5px 15px'}}>
+    <div style={{ padding: '5px 0 5px 15px' }}>
       <FContentText
-        type="additional2"
+        type='additional2'
         // text={'此资源存在以下基础上抛'}
         text={FUtil1.I18n.message('upcast')}
       />
@@ -223,36 +237,49 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                     resourceID: i.id,
                   }));
                 }}
-                type="default"
+                type='default'
               >
                 <FContentText
                   className={styles.titleText}
                   text={i.title}
                   singleRow
-                  type="highlight"
+                  type='highlight'
                 />
               </FTextBtn>
-              <div style={{width: 5}}/>
-              {i.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
-              {i.status === 2 && (<FForbid className={styles.titleErrorIcon}/>)}
-              {i.status === 3 && (<FForbid className={styles.titleErrorIcon}/>)}
-              {i.status === 4 && (<FUpcast className={styles.titleErrorIcon}/>)}
-              {i.status === 1 && i.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+              <div style={{ width: 5 }} />
+              {i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
+              {i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
+              {i.status === 1 && i.authProblem && (
+                <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
-            <div style={{height: 5}}/>
-            <FContentText type="additional2">
+            <div style={{ height: 5 }} />
+            <FContentText type='additional2'>
               <div>{i.resourceType || '暂无类型'}</div>
             </FContentText>
             <>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               <div className={styles.DepPanelLabels}>
+                {/*{*/}
+                {/*  !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]*/}
+                {/*    .filter((k) => k.checked)*/}
+                {/*    .map((j) => (<label*/}
+                {/*      key={j.id}*/}
+                {/*      className={styles.labelInfo}*/}
+                {/*    >{j.title}</label>))*/}
+                {/*}*/}
                 {
-                  !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
-                    .filter((k) => k.checked)
-                    .map((j) => (<label
-                      key={j.id}
-                      className={styles.labelInfo}
-                    >{j.title}</label>))
+                  !i.upthrow && <F_Contract_And_Policy_Labels
+                    data={[...i.enableReuseContracts, ...i.enabledPolicies]
+                      .filter((k) => k.checked)
+                      .map((j) => {
+                        return {
+                          text: j.title,
+                          dot: '',
+                        };
+                      })}
+                  />
                 }
                 {
                   i.upthrow && (<label
@@ -268,12 +295,12 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
   </div>);
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Resources);
 
 async function goToObject(id: string) {
-  const {data} = await FServiceAPI.Storage.objectDetails({
+  const { data } = await FServiceAPI.Storage.objectDetails({
     objectIdOrName: id,
   });
   // console.log(data, 'data!Q@#$@#$!@#$@#$@!#$!@#$');

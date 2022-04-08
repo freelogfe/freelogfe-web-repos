@@ -19,8 +19,8 @@ function F_Contract_And_Policy_Labels({ data, singleRow }: F_Contract_And_Policy
   console.log(data, 'data@#089iosdfsdlk');
   return (<div className={[styles.styles, singleRow ? styles.singleRow : ''].join(' ')}>
     {
-      data.map((d) => {
-        return (<label className={styles.label}>
+      data.map((d, i) => {
+        return (<label className={styles.label} key={i}>
           <span className={styles.labelText}>{d.text}</span>
           {
             d.dot && (<>
