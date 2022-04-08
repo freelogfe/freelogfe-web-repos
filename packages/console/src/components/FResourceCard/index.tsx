@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Policy from './Policy';
+// import Policy from './Policy';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
