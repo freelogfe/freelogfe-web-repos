@@ -36,6 +36,7 @@ import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -73,9 +74,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div className={styles.targetInfo}>
             <FContentText text={record.subjectName} type='highlight' />
             <div style={{ height: 10 }} />
-            <Space size={5} className={styles.targetInfoLabels}>
-              <label>{record.contractName}</label>
-            </Space>
+            {/*<Space size={5} className={styles.targetInfoLabels}>*/}
+            {/*  <label>{record.contractName}</label>*/}
+            {/*</Space>*/}
+            <F_Contract_And_Policy_Labels data={[{ text: record.contractName, dot: '' }]} />
           </div>
         </div>);
       },
