@@ -16,7 +16,7 @@ const colors = {
 };
 
 function F_Contract_And_Policy_Labels({ data, singleRow }: F_Contract_And_Policy_Labels_Props) {
-  console.log(data, 'data@#089iosdfsdlk');
+  // console.log(data, 'data@#089iosdfsdlk');
   return (<div className={[styles.styles, singleRow ? styles.singleRow : ''].join(' ')}>
     {
       data.map((d, i) => {
