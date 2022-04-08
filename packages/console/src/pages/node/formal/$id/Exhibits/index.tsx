@@ -34,6 +34,7 @@ import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -89,7 +90,15 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <div className={styles.polices}>
               {
                 record.policies.length > 0
-                  ? record.policies.map((l) => (<label key={l}>{l}</label>))
+                  ? (<F_Contract_And_Policy_Labels
+                    data={record.policies.map((l) => {
+                      return {
+                        text: l,
+                        dot: '',
+                      };
+                    })}
+                    singleRow
+                  />)
                   : (<FContentText text={'暂无策略…'} type='additional2' />)
               }
             </div>

@@ -27,6 +27,7 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import fMessage from '@/components/fMessage';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -185,53 +186,6 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                   },
                                 },
                               ]} />
-                              {/*<div style={{ width: 1 }} />*/}
-                              {/*{*/}
-                              {/*  hasActiveBtn && (<>*/}
-                              {/*    <a*/}
-                              {/*      onClick={() => {*/}
-                              {/*        if (!nodeManagerPage.nodeThemeId) {*/}
-                              {/*          dispatch<OnActiveAction>({*/}
-                              {/*            type: 'nodeManagerPage/onActive',*/}
-                              {/*            payload: {*/}
-                              {/*              id: i.id,*/}
-                              {/*            },*/}
-                              {/*          });*/}
-                              {/*          return;*/}
-                              {/*        }*/}
-
-                              {/*        fConfirmModal({*/}
-                              {/*          message: FUtil1.I18n.message('msg_change_theme_confirm'),*/}
-                              {/*          // message: '激活该主题，将下线其它主题',*/}
-                              {/*          okText: FUtil1.I18n.message('active_new_theme'),*/}
-                              {/*          // okText: '激活',*/}
-                              {/*          cancelText: FUtil1.I18n.message('keep_current_theme'),*/}
-                              {/*          // cancelText: '保持当前主题',*/}
-                              {/*          onOk() {*/}
-                              {/*            dispatch<OnActiveAction>({*/}
-                              {/*              type: 'nodeManagerPage/onActive',*/}
-                              {/*              payload: {*/}
-                              {/*                id: i.id,*/}
-                              {/*              },*/}
-                              {/*            });*/}
-                              {/*          },*/}
-                              {/*        });*/}
-                              {/*      }}>{FUtil1.I18n.message('btn_activate_theme')}</a>*/}
-
-                              {/*    <FDivider />*/}
-                              {/*  </>)*/}
-                              {/*}*/}
-                              {/*<a*/}
-                              {/*  onClick={() => {*/}
-                              {/*    window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));*/}
-                              {/*  }}*/}
-                              {/*>{FUtil1.I18n.message('btn_edit_exhibit')}</a>*/}
-                              {/*<FDivider />*/}
-                              {/*<a*/}
-                              {/*  onClick={() => {*/}
-                              {/*    window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));*/}
-                              {/*  }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>*/}
-                              {/*<div style={{ width: 1 }} />*/}
                             </div>)
                         }
                       </div>
@@ -251,7 +205,14 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                         <div className={styles.polices}>
                           {
                             i.policies.length > 0
-                              ? i.policies.map((p) => (<label key={p}>{p}</label>))
+                              ? (<F_Contract_And_Policy_Labels
+                                data={i.policies.map((p) => {
+                                  return {
+                                    text: p,
+                                    dot: '',
+                                  };
+                                })}
+                              />)
                               : (<FContentText text={'暂无策略…'} type='additional2' />)
                           }
                         </div>
