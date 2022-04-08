@@ -18,6 +18,7 @@ import {
 } from '@/models/informExhibitInfoPage';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
+import FResultTip from '@/components/FResultTip';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -75,29 +76,42 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
         informExhibitInfoPage.graph_FullScreen
           ? (<div style={{ height: 500 }} />)
           : (<>
-            {
-              informExhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph
-                nodes={informExhibitInfoPage.graph_Viewport_RelationGraph_Nodes}
-                edges={informExhibitInfoPage.graph_Viewport_RelationGraph_Edges}
-                width={860}
-              />)
-            }
 
-            {
-              informExhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph
-                nodes={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}
-                edges={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}
-                width={860}
-              />)
-            }
+            <div style={{
+              height: 500,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <FResultTip h1={'即将推出，敬请期待...'} />
+            </div>
 
-            {
-              informExhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FAntvG6DependencyGraph
-                nodes={informExhibitInfoPage.graph_Viewport_DependencyGraph_Nodes}
-                edges={informExhibitInfoPage.graph_Viewport_DependencyGraph_Edges}
-                width={860}
-              />)
-            }
+            {/*{*/}
+            {/*  informExhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
+            {/*    nodes={informExhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
+            {/*    edges={informExhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
+
+            {/*{*/}
+            {/*  informExhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+            {/*    nodes={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
+            {/*    edges={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
+
+            {/*{*/}
+            {/*  informExhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FAntvG6DependencyGraph*/}
+            {/*    nodes={informExhibitInfoPage.graph_Viewport_DependencyGraph_Nodes}*/}
+            {/*    edges={informExhibitInfoPage.graph_Viewport_DependencyGraph_Edges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
 
           </>)
       }
@@ -127,32 +141,40 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
           });
         }}
       >
-        {
-          informExhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph
-            nodes={informExhibitInfoPage.graph_Viewport_RelationGraph_Nodes}
-            edges={informExhibitInfoPage.graph_Viewport_RelationGraph_Edges}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+        <div style={{
+          height: window.innerHeight - 60 - 70 - 50,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <FResultTip h1={'即将推出，敬请期待...'} />
+        </div>)
+        {/*{*/}
+        {/*  informExhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
+        {/*    nodes={informExhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
+        {/*    edges={informExhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
 
-        {
-          informExhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph
-            nodes={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}
-            edges={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+        {/*{*/}
+        {/*  informExhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
+        {/*    nodes={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
+        {/*    edges={informExhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
 
-        {
-          informExhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FAntvG6DependencyGraph
-            nodes={informExhibitInfoPage.graph_Viewport_DependencyGraph_Nodes}
-            edges={informExhibitInfoPage.graph_Viewport_DependencyGraph_Edges}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+        {/*{*/}
+        {/*  informExhibitInfoPage.graph_Viewport_Show === 'dependency' && (<FAntvG6DependencyGraph*/}
+        {/*    nodes={informExhibitInfoPage.graph_Viewport_DependencyGraph_Nodes}*/}
+        {/*    edges={informExhibitInfoPage.graph_Viewport_DependencyGraph_Edges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
 
       </FViewportTabs>
     </FDrawer>
