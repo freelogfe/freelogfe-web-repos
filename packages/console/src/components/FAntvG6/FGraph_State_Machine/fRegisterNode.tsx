@@ -3,11 +3,6 @@ import { createNodeFromReact, Group, Rect, Text } from '@antv/g6-react-node';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import G6 from '@antv/g6';
 
-export type FNode_State_Machine_State_Values = {
-  stateName: string;
-  colors: Array<'active' | 'testActive'>;
-};
-
 const statusInfo = {
   active: {
     color1: '#8FD6B8',
@@ -24,6 +19,11 @@ const statusInfo = {
     color2: '#FDEBEC',
     text: '停止接收事件',
   },
+};
+
+export type FNode_State_Machine_State_Values = {
+  stateName: string;
+  colors: Array<'active' | 'testActive'>;
 };
 
 interface FNode_State_Machine_State_Props {
@@ -86,6 +86,41 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
   </Group>);
 }
 
+export type FNode_State_Machine_Event_Values = {
+  eventDescription: string;
+};
+
+interface FNode_State_Machine_Event_Props {
+  value: FNode_State_Machine_Event_Values;
+}
+
+function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
+  const { eventDescription } = value;
+  return (<Group draggable={true}>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+      }}
+      onClick={() => {
+        // console.log('#######98ioklj');
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+        }}
+      >{textOverflowEllipsis(eventDescription)}</Text>
+    </Rect>
+  </Group>);
+}
+
 function FNode_State_Machine({ cfg = {} }: any) {
   // console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
   // if (cfg.nodeType === 'resource') {
@@ -96,6 +131,12 @@ function FNode_State_Machine({ cfg = {} }: any) {
   //
   if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
+      value={cfg.value}
+    />);
+  }
+
+  if (cfg.nodeType === 'event') {
+    return (<FNode_State_Machine_Event
       value={cfg.value}
     />);
   }
