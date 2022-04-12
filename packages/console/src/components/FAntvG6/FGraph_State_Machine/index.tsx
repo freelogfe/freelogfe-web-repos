@@ -5,44 +5,6 @@ import './fRegisterNode';
 import { F_STATE_MACHINE_NODE_TYPE } from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
-const data = {
-  nodes: [
-    {
-      id: '0',
-      nodeType: 'state',
-      value: {
-        stateName: 'initial',
-        colors: ['active', 'testActive'],
-      },
-    },
-    {
-      id: '1',
-      nodeType: 'state',
-      value: {
-        stateName: 'auth',
-        colors: ['active', 'testActive'],
-      },
-    },
-    {
-      id: '2',
-      nodeType: 'event',
-      value: {
-        eventDescription: '支付10块钱',
-      },
-    },
-  ],
-  edges: [
-    {
-      source: '0',
-      target: '1',
-    },
-    {
-      source: '1',
-      target: '2',
-    },
-  ],
-};
-
 interface FGraph_State_Machine_Props {
   fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'];
   width: number;
