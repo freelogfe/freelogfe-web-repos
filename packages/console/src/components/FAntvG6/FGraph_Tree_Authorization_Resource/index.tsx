@@ -13,7 +13,7 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
-import FErrorBoundary from '@/components/FErrorBoundary';
+// import FErrorBoundary from '@/components/FErrorBoundary';
 
 type ServerDataNodes = {
   resourceId: string;
