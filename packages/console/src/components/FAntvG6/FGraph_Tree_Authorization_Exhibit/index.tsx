@@ -201,28 +201,28 @@ function FGraph_Tree_Authorization_Exhibit({
     />);
   }, [dataSource]);
 
-  return (<FErrorBoundary>
-    {
-      !dataSource
-        ? (<FLoadingTip height={height} />)
-        : dataSource.children.length === 0
-          ? (<div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-            <FResultTip h1={'无授权树'} />
-          </div>)
-          : Gra
-    }
+  return (<>
+      {
+        !dataSource
+          ? (<FLoadingTip height={height} />)
+          : dataSource.children.length === 0
+            ? (<div
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+              <FResultTip h1={'无授权树'} />
+            </div>)
+            : Gra
+      }
 
-    <FContractDetailsDrawer
-      contractID={contractID}
-      onClose={() => {
-        set_ContractID('');
-      }}
-      onChange_SomeContract={() => {
-        handleData();
-      }}
-    />
-  </FErrorBoundary>);
+      <FContractDetailsDrawer
+        contractID={contractID}
+        onClose={() => {
+          set_ContractID('');
+        }}
+        onChange_SomeContract={() => {
+          handleData();
+        }}
+      />
+  </>);
 }
 
 export default FGraph_Tree_Authorization_Exhibit;

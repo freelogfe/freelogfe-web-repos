@@ -185,9 +185,9 @@ function FGraph_Tree_Authorization_Resource({
     }
 
     {
-      dataSource && dataSource.children.length > 0 && (<FErrorBoundary>
+      dataSource && dataSource.children.length > 0 && (<>
         {Gra}
-      </FErrorBoundary>)
+      </>)
     }
 
     <FContractDetailsDrawer

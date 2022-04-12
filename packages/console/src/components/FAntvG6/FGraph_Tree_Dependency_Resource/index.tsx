@@ -127,9 +127,9 @@ function FGraph_Tree_Dependency_Resource({
       </div>);
   }
 
-  return (<FErrorBoundary>
+  return (<>
     {Gra}
-  </FErrorBoundary>);
+  </>);
 }
 
 export default FGraph_Tree_Dependency_Resource;

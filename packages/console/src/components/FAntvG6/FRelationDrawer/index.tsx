@@ -3,7 +3,7 @@ import FFormLayout from '@/components/FFormLayout';
 import { FContentText, FTitleText } from '@/components/FText';
 import FDrawer from '@/components/FDrawer';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { Checkbox, Space } from 'antd';
+import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import styles from './index.less';

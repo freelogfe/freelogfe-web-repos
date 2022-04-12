@@ -181,9 +181,9 @@ function FGraph_Tree_Dependency_Exhibit({
       </div>);
   }
 
-  return (<FErrorBoundary>
+  return (<>
     {Gra}
-  </FErrorBoundary>);
+  </>);
 }
 
 export default FGraph_Tree_Dependency_Exhibit;
