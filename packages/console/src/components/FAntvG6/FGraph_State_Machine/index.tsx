@@ -12,7 +12,7 @@ const data = {
   nodes: [
     {
       id: '0',
-      type: 'state',
+      nodeType: 'state',
       value: {
         stateName: 'initial',
         colors: ['active', 'testActive'],
@@ -20,7 +20,7 @@ const data = {
     },
     {
       id: '1',
-      type: 'state',
+      nodeType: 'state',
       value: {
         stateName: 'auth',
         colors: ['active', 'testActive'],
@@ -28,7 +28,7 @@ const data = {
     },
     {
       id: '2',
-      type: 'event',
+      nodeType: 'event',
       value: {
         eventDescription: '支付10块钱',
       },
@@ -48,10 +48,24 @@ const data = {
 
 function FGraph_State_Machine({}: FGraph_State_Machine_Props) {
 
-  const [dataSource, set_DataSource] = React.useState();
+  const [dataSource, set_DataSource] = React.useState({
+    nodes: [ {
+      id: '0',
+      nodeType: 'state',
+      value: {
+        stateName: 'initial',
+        colors: ['active', 'testActive'],
+      },
+    }],
+    edges: [],
+  });
+
+  React.useEffect(() => {
+    set_DataSource(data);
+  })
 
   return (<FlowAnalysisGraph
-    data={data as any}
+    data={dataSource as any}
     width={1000}
     height={600}
     // layout={{

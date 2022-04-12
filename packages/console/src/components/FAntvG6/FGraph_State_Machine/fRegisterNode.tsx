@@ -31,6 +31,7 @@ interface FNode_State_Machine_State_Props {
 }
 
 function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
+  console.log(value, 'FNode_State_Machine_State980980239099999999');
   const { stateName, colors } = value;
   const stateInfo: 'active' | 'inActive' | 'terminal' = colors.length > 0 ? 'active' : 'inActive';
   return (<Group draggable={true}>
@@ -121,13 +122,13 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
 // console.log('##@#$$@#$@#$@#$@#$@#$@#$@######');
 
 function FNode_State_Machine({ cfg = {} }: any) {
-  console.log('FNode_State_Machine 903oipj2klsdfjlskd');
+  console.log(cfg, 'FNode_State_Machine 903oipj2klsdfjlskd');
 
-  // if (cfg.nodeType === 'state') {
+  if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
       value={cfg.value}
     />);
-  // }
+  }
 
   if (cfg.nodeType === 'event') {
     return (<FNode_State_Machine_Event
