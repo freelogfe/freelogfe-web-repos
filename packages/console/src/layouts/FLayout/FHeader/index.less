@@ -1,0 +1,27 @@
+@import '../../../config.less';
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.logo {
+  font-size: 34px;
+  color: #2C2C2C;
+}
+
+.MenuBar {
+  padding: 0 25px;
+}
+
+.headerRight {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  width: auto;
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="signup-page">
+  <div class="f-ui-signup-page">
 		<sign-up></sign-up>	
 	</div>
 </template>
@@ -13,6 +13,10 @@ export default {
 </script>
 
 <style lang="less">
-  @import './index.less';
+@import "../styles/mixin.less";
+.f-ui-signup-page {
+	.ui-login-page();
+}
 </style>
+
 

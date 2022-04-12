@@ -16,7 +16,8 @@ const mockStore = {
     },
     actions: {
         async [types.LOAD_BUCKETS]({commit}) {
-            const {data} = await axios.get('/v1/resources/mocks/buckets');
+            // const {data} = await axios.get('/v1/resources/mocks/buckets');
+            const {data} = await axios.get('/v1/storages/buckets');
 
             // console.log(data.data, 'resres');
             commit(types.LOAD_BUCKETS, data.data)

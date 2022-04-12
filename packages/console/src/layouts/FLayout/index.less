@@ -1,0 +1,48 @@
+@import '../../config.less';
+@import '~antd/es/style/themes/default';
+
+.Layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.header {
+  line-height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  //box-shadow: 0 1px 0 0 #E5E5E5;
+  //border-bottom: 1px solid #E5E5E5;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.newButton {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  transition: none;
+  border-top: 1px solid #E4E7EB;
+
+  &:hover {
+    color: white;
+    background-color: @primary-color;
+  }
+}
+
+.Content {
+  //background-color: pink;
+}
+
+.Footer {
+  padding: 0;
+}

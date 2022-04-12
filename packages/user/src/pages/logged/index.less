@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+
+  .sider {
+    width: 280px;
+    box-shadow: 1px 0 0 0 #E5E7EB;
+    position: fixed;
+    left: 0;
+    top: 70px;
+    bottom: 0;
+  }
+
+  .padding {
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  .content {
+    width: 100%;
+    flex-shrink: 1;
+  }
+}
+
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+}
+
+.FLink {
+  padding: 15px 40px;
+  width: 100%;
+}
+
+.FLinkActive {
+  color: #2784FF !important;
+  background-color: #F4F5F7;
+}

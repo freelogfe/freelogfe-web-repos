@@ -58,6 +58,18 @@
 
             <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceFile')}}</SmallTitle>
 
+
+            <!--            <div-->
+            <!--                v-if="isUpdateResource && !!fileSystemInfo"-->
+            <!--                style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"-->
+            <!--            >-->
+            <!--                <div>{{resourceName}}</div>-->
+            <!--                <div>-->
+            <!--                    <span style="padding-right: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>-->
+            <!--                    <a :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"><i class="el-icon-download"/></a>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
             <div
                 v-if="!isUpdateResource"
                 class="resource-editor__upload"
@@ -73,21 +85,41 @@
 
             <SmallTitle>{{$t('resource.resourceName')}}</SmallTitle>
 
-            <div
-                class="resource-editor__name"
-            >
-                <!--                :disabled="isUpdateResource"-->
-                <el-input
-                    :minlength="1"
-                    :maxlength="60"
-                    v-model="resourceName"
-                    :placeholder="$t('resource.enterResourceName')"
-                    class="resource-editor__name__input"
-                />
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div
+                    class="resource-editor__name"
+                >
+                    <!--                :disabled="isUpdateResource"-->
+                    <el-input
+                        :minlength="1"
+                        :maxlength="60"
+                        v-model="resourceName"
+                        :placeholder="$t('resource.enterResourceName')"
+                        class="resource-editor__name__input"
+                    >
+<!--                        <div slot="suffix" style="height: 100%;">-->
+                        <span
+                            slot="suffix"
+                            style="line-height: 38px; padding-right: 6px;"
+                            class="resource-editor__name__length"
+                        >{{resourceName.length}}/60</span>
+<!--                        </div>-->
+                    </el-input>
 
-                <span
-                    class="resource-editor__name__length"
-                >{{resourceName.length}}/60</span>
+
+                </div>
+
+                <div v-if="!!fileSystemInfo"
+                     style="padding-right: 35px; color: #333; font-size: 14px; font-weight: 600;">
+                    <a
+                        :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"
+                        style="color: #333;"
+                    >
+                        <i class="freelog fl-icon-export"/>
+                        <span style="padding-left: 2px;">{{$t('resource.list.downloadBtnText')}}</span>
+                    </a>
+                    <span style="padding-left: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
+                </div>
             </div>
 
             <div style="height: 20px;"></div>
@@ -152,14 +184,14 @@
             class="resource-editor__footer"
         >
             <div class="resource-editor__footer__box">
-                <el-button
-                    size="medium"
-                    round
-                    class="resource-editor__footer__box__cancel"
-                    type="text"
-                    @click="goBack"
-                >{{isUpdateResource ? $t('resource.cancel'): $t('resource.cancelCreating')}}
-                </el-button>
+<!--                <el-button-->
+<!--                    size="medium"-->
+<!--                    round-->
+<!--                    class="resource-editor__footer__box__cancel"-->
+<!--                    type="text"-->
+<!--                    @click="goBack"-->
+<!--                >{{isUpdateResource ? $t('resource.cancel'): $t('resource.cancelCreating')}}-->
+<!--                </el-button>-->
                 <el-button
                     size="medium"
                     round
@@ -176,28 +208,16 @@
             </div>
         </div>
 
-        <el-dialog
-            width="750px"
-            top="10vh"
-            center
-            :visible.sync="isShowReleaseSearchDialog"
-        >
-            <!--            :historicalReleases="releasesList"-->
-            <release-search
-                :release-source="targetResourceData"
-                :tabLayout="['my-release']"
-                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"
-                @add="createRelease"
-            />
-            <div slot="footer">
-                <el-button
-                    round
-                    type="primary"
-                    class="create-release-btn"
-                    @click="createRelease()">{{$t('resource.createANewRelease')}}
-                </el-button>
-            </div>
-        </el-dialog>
+
+        <CreateReleaseModal
+            v-if="isShowReleaseSearchDialog"
+            @close="isShowReleaseSearchDialog = false"
+            :disabledReleaseIDs="releasedList.map(i => i.id)"
+            @addRelease="createRelease"
+            @createNew="createRelease"
+            :showType="resourceType"
+        />
+
     </div>
 </template>
 

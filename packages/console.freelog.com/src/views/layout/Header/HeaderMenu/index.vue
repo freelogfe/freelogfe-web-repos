@@ -24,7 +24,7 @@
         </a>
         <a
             class="header-menu__nav"
-            :class="{'header-menu__nav--active': ['/mock/display'].includes($route.path)}"
+            :class="{'header-menu__nav--active': ['/storage/display'].includes($route.path)}"
         >
             <span>{{$t('layout.storageSpace')}}</span>
             <div class="header-menu__dropdown" style="width: 240px;">
@@ -34,7 +34,7 @@
                         <a
                             v-for="(bucket, index) in (buckets || [])"
                             class="header-menu__menu__item"
-                            :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
+                            :class="{'header-menu__menu__item--active': $route.path === '/storage/display' && $route.query.activatedBucketName === bucket.bucketName}"
                             @click="gotoMock(bucket)"
                         >{{bucket.bucketName}}
                         </a>
@@ -195,7 +195,7 @@
             },
             gotoMock(bucket) {
                 this.$router.push({
-                    path: '/mock/display',
+                    path: '/storage/display',
                     query: {
                         activatedBucketName: bucket.bucketName,
                     }
@@ -263,6 +263,7 @@
                     box-sizing: border-box;
                     line-height: 40px;
                     color: #999;
+                    cursor: pointer;
 
                     & > a {
                         background-color: #444;
@@ -310,6 +311,7 @@
                 display: block;
                 font-size: 14px;
                 color: #999;
+                cursor: pointer;
                 /*font-weight: 600;*/
 
                 &:hover {

@@ -1,12 +1,15 @@
 <template>
     <div class="header-tools">
         <div class="header-tools__col" style="padding-left: 0;">
-            <a :href="consoleHref" target="_blank" class="header-tool-btn__console">{{$t('navTop[0]')}}</a>
+            <a :href="consoleHref" target="_blank" class="header-tool-btn__console">{{$t('navTop.goToConsole')}}</a>
         </div>
 
         <div class="header-tools__col" style="padding-left: 0;">
-            <a class="header-tool__avatar">
-                <img :src="userInfo && userInfo.headImage" alt="" />
+            <a class="header-tool__avatar" v-if="userInfo">
+                <div class="">
+                    <img :src="userInfo && userInfo.headImage" alt="" />
+                    <label class="closed-beta-tag" v-if="userInfo.userType === 1">{{$t('navTop.closedBeta')}}</label>
+                </div>
                 <div
                     v-if="!!userInfo"
                     class="header-tools__dropdown"
@@ -21,7 +24,7 @@
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
                     <!-- <a @click="gotoUserProfile">个人中心</a> -->
-                    <router-link to="/login" >{{$t('navTop[1]')}}</router-link>
+                    <a @click="logout">{{$t('navTop.logout')}}</a>
                 </div>
             </a>
         </div>
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+    import { logout } from '@freelog/freelog-ui-login'
 
     export default {
         name: "index",
@@ -94,6 +98,9 @@
                         window.location.reload();
                     }).catch(() => {
                 })
+            },
+            logout() {
+                logout().catch(this.$error.showErrorMessage)
             },
         }
     }
@@ -197,10 +204,15 @@
     }
 
     .header-tool__avatar {
-        width: 32px; padding-left: 15px;
+        width: 32px; margin-right: 40px; padding-left: 15px;
         display: block;
-
-        & > img {
+        & > div { display: flex; align-items: center; }
+        .closed-beta-tag {
+            width: 36px; height: 20px; line-height: 20px; margin-left: 10px; border-radius: 10px;
+            background-color: #409eff; color: #fff;
+            text-align: center; font-size: 12px; font-weight: 600;
+        }
+        img {
             background: rgba(142, 142, 147, 0.4);
             border-radius: 50%;
             width: 32px;

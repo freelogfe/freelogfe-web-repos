@@ -1,14 +1,13 @@
 <!--<i18n src="../../i18n-locales/contractSigning.json"></i18n>-->
 <template>
     <el-dialog
-            center
-            :title="$t('contractSigning.confirm.title')"
-            width="440px"
-            top="25vh"
-            :visible.sync="isShowDialog"
-            @close="confirmCancel"
-            append-to-body
-    >
+      :title="$t('contractSigning.confirm.title')"
+      width="440px"
+      top="25vh"
+      :visible.sync="isShowDialog"
+      @close="confirmCancel"
+      center
+      append-to-body>
       <div class="rcb-confirm-cont">
         <div class="confirm-set-default-contract" v-if="confirmType === 'set-default-contract'">
           {{$t('contractSigning.confirm.content_default')}}

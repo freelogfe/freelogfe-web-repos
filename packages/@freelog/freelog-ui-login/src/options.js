@@ -1,3 +1,4 @@
+import { LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
 const options = {
 	Vue: null,
 	i18n: null,
@@ -9,13 +10,17 @@ const options = {
 	router: null,
 	// 是否注册路由
 	isRegisterRouter: true,
+	// 是否注册组件
+	isRegisterComponents: true,
 	// 进入路由之前是否验证身份授权
 	isAuthenticationBeforeRoute: true,
 	// 是否监听当前窗口的显隐状态变化，是则当状态变化时重新验证用户信息
 	isListenWindowVisibility: true,
 	checkIsAuthException(response) {
 		const { data } = response
-		return [28, 30].indexOf(data.errcode) > -1
+		if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) !== -1) return false
+		return false
+		// return [28, 30].indexOf(data.errcode) > -1
 	}
 }
 

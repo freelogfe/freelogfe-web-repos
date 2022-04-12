@@ -1,0 +1,157 @@
+@import '../../../config.less';
+
+.styles {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: center;
+  height: 38px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.primary {
+  border: none;
+  color: white;
+  background-color: @f-primary-color;
+
+  &:hover {
+    background-color: #529DFF;
+  }
+
+  &:active {
+    background-color: #2376E5;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      color: #FFFFFF;
+      background-color: @f-primary-color;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.transparent {
+  border: none;
+  color: #666;
+  background-color: transparent;
+
+  &:hover {
+    background-color: #EDEDED;
+  }
+
+  &:active {
+    background-color: #E6E6E6;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      //background-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.default {
+  border: 1px solid #D4D4D4;
+  font-weight: 400;
+  color: #222;
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F4F6 100%);
+
+  &:hover {
+    background-image: linear-gradient(180deg, #529DFF 0%, #529DFF 100%);
+    color: white;
+  }
+
+  &:active {
+    background-image: linear-gradient(180deg, #2376E5 0%, #2376E5 100%);
+    color: white;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      //color: #222;
+      //background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F4F6 100%);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.secondary {
+  border: none;
+  color: @f-primary-color;
+  background-color: #EEF6FF;
+
+  &:hover {
+    background-color: #F1F8FF;
+    color: #529DFF;
+  }
+
+  &:active {
+    background-color: #E4F0FF;
+    color: #187AFC;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      color: @f-primary-color;
+      background-color: #EEF6FF;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.danger1 {
+  border: none;
+  color: white;
+  background-color: #EE4040;
+
+  &:hover {
+    background-color: #F86363;
+  }
+
+  &:active {
+    background-color: #EB3737;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      background-color: #EE4040;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.danger2 {
+  border: none;
+  color: #EE4040;
+  background-color: #FDEBEB;
+
+  &:hover {
+    background-color: #FEF2F2;
+    color: #F86363
+  }
+
+  &:active {
+    background-color: #FEE6E6;
+    color: #EB3737;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      color: #EE4040;
+      background-color: #FDEBEB;
+      cursor: not-allowed;
+    }
+  }
+}

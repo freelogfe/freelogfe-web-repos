@@ -1,22 +1,21 @@
-.signup-section {
+@import "../../styles/mixin.less";
+
+.f-ui-signup-section {
+
+  .signup-error-box {
+    .error-box()
+  }
 
   .vcode-btn {
-    margin-left: 4px; padding: 12px 0;
+    min-width: 110px; margin-left: 4px; padding: 12px 6px;
     background-color: #409EFF; color: #fff;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
     &.is-disabled {
       background-color: #CCCCCC; color: #fff;
     }
   }
 
   .signup-btns { margin: 40px auto 30px; text-align: center; }
-
-  .check-code-wrap {
-    float: right; margin-left: 4px;
-    .vcode-btn {
-      width: 140px; padding: 12px; 
-      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-    }
-  }
 
   .check-code-img {
     cursor: pointer;
@@ -32,6 +31,7 @@
     line-height: 20px; font-size: 14px; color: #666; text-align: center; 
     a { color: #409EFF; }
   }
+
   .signup-register-type-box {
     position: relative;
     .signup-radios {

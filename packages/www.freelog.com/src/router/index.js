@@ -4,7 +4,7 @@ import { Vue } from '@freelog/freelog-common-lib'
 import Layout from '@/views/layout/layout.vue'
 import MyContractsView from '@/views/contracts/index.vue'
 import MyAccountsView from '@/views/accounts/index.vue'
-import MyProfileView from '@/views/profile/index.vue'
+import MyProfileView from '@/views/setting/index.vue'
 import MyCollectionsView from '@/views/collections/index.vue'
 import AccountCreateView from '@/views/accounts/create.vue'
 import AccountRechargeView from '@/views/accounts/recharge.vue'
@@ -164,6 +164,10 @@ const notFoundRouteConfig = {
   component: ErrorView,
 }
 const router = new Router(routerConfig)
+router.afterEach((route) => {
+  const title = route.meta.title !== '' ? route.meta.title + ' - Freelog' : 'Freelog'
+  document.title = title
+})
 export function registerNotFoundRouete() {
   // 延迟执行挂载404页面路由
   setTimeout(() => {

@@ -1,0 +1,82 @@
+.sider {
+  //padding: 0 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  & > div {
+    width: 100%;
+  }
+}
+
+.title {
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  //border-bottom: 1px solid #E4E7EB;
+  //padding-bottom: 15px;
+  height: 26px;
+  box-sizing: content-box;
+}
+
+.navs {
+  display: flex;
+  flex-direction: column;
+
+  & > a {
+    padding: 0 30px 0 40px;
+    height: 50px;
+    //color: #222;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    &:hover {
+      .bucketDeleteBtn {
+        visibility: visible;
+      }
+    }
+
+    &.activated {
+      background: rgba(0, 0, 0, 0.02);
+      color: #2784FF;
+    }
+
+    .bucketDeleteBtn {
+      color: #EE4040;
+      visibility: hidden;
+      padding: 0 10px;
+    }
+
+  }
+}
+
+.statistics {
+  padding: 0 40px;
+}
+
+//a.bucketActive {
+//  background-color: #EEF6FF;
+//  color: #2784FF;
+//}
+
+//.progressBack {
+//  //background-color: #EBEBEB;
+//}
+
+.ratio {
+  color: #000;
+  font-size: 13px;
+}
+
+
+
+
+
+

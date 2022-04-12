@@ -1,5 +1,5 @@
 <template>
-  <section class="reset-password-section">
+  <section class="f-ui-reset-password-section">
     <template v-if="step === steps[0]">
       <header>
         <div class="h-logo" ><i class="freelog fl-icon-logo-freelog" /></div>
@@ -15,17 +15,13 @@
         </div>
         <el-form class="reset-password-form" auto-complete="off" :model="model" :rules="rules" ref="formRef">
           <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
-            <el-input type="text" v-model="model.loginName"></el-input>
+            <el-input type="text" v-model="model.loginName" :placeholder="$t('resetPassword.loginNamePlaceholder')"></el-input>
           </el-form-item>
-          <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
-            <div>
-              <el-input type="text" v-model="model.authCode" style="width: 280px"></el-input>
-              <el-button class="vcode-btn" style="width: 110px"
-                        @click="sendCheckCodeNotifyHandler"
-                        :disabled="disabledCheckCodeBtn">
-                {{vcodeBtnText}}
-              </el-button>
-            </div>
+          <el-form-item prop="authCode" class="rp-authcode-box" :label="$t('resetPassword.verifyCode')">
+            <el-input ref="authCodeInput" type="text" v-model="model.authCode" ></el-input>
+            <el-button class="vcode-btn" @click="sendCheckCodeNotifyHandler">
+              {{vcodeBtnText}}
+            </el-button>
           </el-form-item>
           <el-form-item prop="password" :label="$t('resetPassword.password')">
             <el-input type="password" v-model="model.password"></el-input>
@@ -62,7 +58,8 @@ export default ResetView
 </script>
 
 <style lang="less" scoped>
-  .reset-password-section {
+  @import "../../styles/mixin.less";
+  .f-ui-reset-password-section {
     header {
       .reset-password-intro { 
         margin-top: 10px; margin-bottom: 30px;
@@ -71,7 +68,7 @@ export default ResetView
     }
 
     .vcode-btn {
-      margin-left: 4px; padding: 12px 0;
+      min-width: 110px; margin-left: 4px; padding: 12px 6px;
       background-color: #409EFF; color: #fff;
       &.is-disabled {
         background-color: #CCCCCC; color: #fff;
@@ -110,5 +107,30 @@ export default ResetView
         a { color: #409EFF; } 
       }
     }
+
+    .reset-password-error-box {
+      .error-box()
+    }
   }
+</style>
+
+<style lang="less">
+  @import "../../styles/mixin.less";
+  .f-ui-reset-password-section {
+    .ui-login-section();
+    .reset-password-body {
+      .ui-login-body();
+    }
+    .el-alert {  
+      .error-alert()
+    }
+    .rp-authcode-box .el-form-item__content{
+      display: flex;
+      .el-input { flex: 1; }
+    }
+  }
+  .el-form-item.is-error {
+    .ui-login-form-item-error()
+  }
+
 </style>

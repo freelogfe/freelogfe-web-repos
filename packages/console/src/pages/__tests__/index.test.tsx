@@ -1,12 +1,13 @@
 import 'jest';
-import Index from '..';
+import Index from '../market/index';
 import React from 'react';
 import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 
 jest.mock('umi-plugin-locale');
 
-describe('Page: index', () => {
+describe('Page: market', () => {
   it('Render correctly', () => {
+    // @ts-ignore
     const wrapper: ReactTestRenderer = renderer.create(<Index />);
     expect(wrapper.root.children.length).toBe(1);
     const outerLayer = wrapper.root.children[0] as ReactTestInstance;

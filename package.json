@@ -7,7 +7,7 @@
     "registOss": "node registOssConfig.js"
   },
   "devDependencies": {
-    "lerna": "^3.16.4",
+    "lerna": "^3.22.1",
     "xproxy": "^0.2.2"
   },
   "dependencies": {

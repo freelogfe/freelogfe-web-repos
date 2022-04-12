@@ -7,7 +7,7 @@
             ref="searchInputRef"
             @clear="clearSearchInputHandler"
             @keyup.native.enter="searchHandler"
-            :placeholder="$t('search.resourcePlaceholder')"
+            :placeholder="$t('resource.pleaseEnterAResourceName')"
     ></el-input>
     <lazy-list-view :list="searchResources"
                     ref="searchView"
@@ -36,7 +36,7 @@ export default {
     searchResourceType: {
       type: String,
       default: ''
-    } 
+    }
   },
   components: {
     LazyListView

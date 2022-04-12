@@ -1,0 +1,72 @@
+@import '../../../../../config.less';
+
+.styles {
+  //padding: 25px 40px 30px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  //align-items: ;
+
+  .header {
+
+    .title {
+      //.url {
+      //  font-size: 14px;
+      //  display: inline-block;
+      //  padding-right: 10px;
+      //  color: #222;
+      //
+      //  &:hover {
+      //    color: @f-primary-color;
+      //  }
+      //}
+      .url {
+        a {
+          text-decoration: underline;
+          display: block;
+          max-width: 200px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 13px;
+          line-height: 19px;
+          font-weight: 600;
+        }
+      }
+
+      padding: 0 40px;
+    }
+
+    .navs {
+      & > a {
+        padding: 15px 40px;
+        color: #222;
+        font-size: 14px;
+        cursor: pointer;
+        display: block;
+
+        &.activated {
+          background: rgba(0, 0, 0, 0.02);
+          color: #2784FF;
+        }
+      }
+    }
+  }
+
+  .gotoTest {
+    font-size: 12px;
+    padding: 0 40px;
+
+    & > span {
+      color: #7A869A;
+    }
+
+    & > a {
+      color: @f-primary-color;
+    }
+  }
+}
+

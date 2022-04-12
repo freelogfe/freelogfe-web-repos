@@ -5,26 +5,18 @@ import QueryPolicyLicense from './tool/queryLicense.vue'
 
 export default {
   name: 'policy-editor',
-  data() {
-    return {
-      showCustomPolicyTplDialog: false,
-      currentTool: '',
-      mode: 'edit'
-    }
-  },
   props: {
     policy: {
       type: Object,
-      default() {
-        return {}
-      }
+      default: () => {}
     },
-
+    policyList: {
+      type: Array, 
+      default: () => []
+    },
     showValidate: {
       type: Boolean,
-      default() {
-        return true
-      }
+      default: () => true
     },
     autoSave: {
       type: Boolean,
@@ -35,18 +27,47 @@ export default {
       default: true
     }
   },
-
+  components: {PolicyTemplateSelector, QueryPolicyLicense},
+  data() {
+    return {
+      showCustomPolicyTplDialog: false,
+      currentTool: '',
+      mode: 'edit',
+      policyForm: {
+        policyName: '',
+        policyText: ''
+      },
+      isValidPolicyName: false,
+      policyNameRules: [
+        { required: true, message: '授权策略名称不能为空' },
+        { max: 30, message: '授权策略名称不能超过30字符' },
+        { validator: (rule, value, callback) => {
+            const policyNames = this.policyList.map(p => p.policyName.replace(/^(\s*)|(\s*)$/g, ''))
+            if (value && policyNames.indexOf(value) !== -1) {
+              callback(new Error('该授权策略名称在当前资源的中已存在'))
+            } else {
+              callback()
+            }
+          } 
+        }
+      ],
+    }
+  },
   computed: {
     disabledPolicy() {
       return this.policy.status === 0
     }
   },
-
-  components: {PolicyTemplateSelector, QueryPolicyLicense},
   watch: {
     policy() {
+      this.policyForm.policyName = this.policy.policyName
       this.resolvePolicy(this.policy)
-    }
+    },
+    'policyForm.policyName': function () {
+      this.$refs['policyForm'].validateField('policyName', (str) => {
+        this.isValidPolicyName = str === ''
+      })
+    },
   },
   mounted() {
     this.resolvePolicy(this.policy)
@@ -97,7 +118,7 @@ export default {
         if (typeof this[name] === 'function') {
           this[name](data.data)
         }
-
+        this.policyForm.policyName = data.data.name
         this.$emit('input', this.policyText)
       }
     },
@@ -112,7 +133,6 @@ export default {
       if (this.autoSave) {
         this.savePolicyHandler()
       }
-      // to validate
     },
     switchPolicyStatusHandler() {
       var policy = this.policy
@@ -129,14 +149,20 @@ export default {
       }
     },
     changePolicyNameHandler() {
+      this.$refs['policyForm'].validateField('policyName', (str) => {
+        this.isValidPolicyName = str === ''
+      })
       if (this.policy.policySegmentId) {
+        this.policy.policyName = this.policyForm.policyName
         this.$emit('save', this.policy)
       }
     },
     cancelPolicyHandler() {
+      this.policy.policyName = this.policyForm.policyName
       this.$emit('cancel', this.policy)
     },
     savePolicyHandler() {
+      this.policy.policyName = this.policyForm.policyName
       this.$emit('save', this.policy)
     }
   }

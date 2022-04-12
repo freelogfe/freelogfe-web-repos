@@ -108,19 +108,20 @@
                 </div>
                 <div class="r-e-w-r-p-list" v-else>
                   <policy-list
-                          :policyList="release.policies"
-                          @add-policy="addPolicyHandler"
-                          @update-policies="updatePolicies"
+                      :policyList="release.policies"
+                      @add-policy="addPolicyHandler"
+                      @update-policies="updatePolicies"
                   ></policy-list>
                 </div>
               </template>
               <policy-editor
-                      show-footer-btns
-                      :policy="editTmpPolicy"
-                      class="r-e-w-r-p-editor"
-                      v-if="isShowEditPolicy"
-                      @save="savePolicyHandler"
-                      @cancel="cancelPolicyHandler"
+                  show-footer-btns
+                  :policy="editTmpPolicy"
+                  :policyList="release.policies"
+                  class="r-e-w-r-p-editor"
+                  v-if="isShowEditPolicy"
+                  @save="savePolicyHandler"
+                  @cancel="cancelPolicyHandler"
               ></policy-editor>
             </div>
           </div>

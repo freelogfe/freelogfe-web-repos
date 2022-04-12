@@ -1,0 +1,81 @@
+.DepsCards {
+  position: relative;
+}
+
+.resources {
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: -10px;
+}
+
+.resource {
+  width: 100%;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 10px;
+  transition: none;
+  justify-content: space-between;
+
+  &:hover {
+    & > div:last-child {
+      visibility: visible;
+    }
+  }
+}
+
+.resourceLeft {
+  padding-left: 15px;
+  width: 550px;
+  flex-shrink: 1;
+}
+
+//.resourceTitle {
+//  display: flex;
+//  align-items: center;
+//}
+
+.resourceName {
+  max-width: 470px;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+//
+//.notOnline {
+//  background-color: #FBF5EA;
+//  color: #E9A923;
+//  padding: 2px 5px;
+//  font-size: 12px;
+//  margin-left: 5px;
+//}
+
+.resourceInfo {
+  //display: flex;
+  //align-items: center;
+  position: relative;
+}
+
+.BasisUpthrows {
+  //padding: 10px 20px;
+  & > div {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+.resourceRight {
+  display: flex;
+  width: 50px;
+  height: 100%;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}

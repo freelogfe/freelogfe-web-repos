@@ -1,5 +1,5 @@
 <template>
-  <section class="signup-section"
+  <section class="f-ui-signup-section"
            v-loading="logining"
            :element-loading-text="$t('signup.loadingText')">
     <header>
@@ -9,7 +9,7 @@
     <div class="signup-body">
       <div class="signup-error-box">
         <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
-        <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
+        <el-alert type="error" @close="closeErrorElert" :title="error.title" :description="error.message" v-if="error" />
       </div>
       <el-form class="signup-form" auto-complete="off" :model="model" :rules="rules" ref="signupForm">
         <el-form-item prop="username" :label="$t('signup.username')">
@@ -21,24 +21,19 @@
             <el-radio v-model="selectedRegisterType" :label="registerTypes[0]">{{$t('signup.loginIphone')}}</el-radio>
             <el-radio v-model="selectedRegisterType" :label="registerTypes[1]">{{$t('signup.loginEmail')}}</el-radio>
           </div>
-          <el-form-item prop="loginIphone" :label="$t('signup.registerType')" v-if="registerTypes[0] === selectedRegisterType">
+          <el-form-item prop="loginIphone" :label="$t('signup.registerType')" :error="IphoneErrorMsg" v-if="registerTypes[0] === selectedRegisterType">
             <el-input ref="iphone" v-model="model.loginIphone" :placeholder="$t('signup.loginIphonePlaceholder')">
             </el-input>
           </el-form-item>
-          <el-form-item prop="loginEmail" :label="$t('signup.registerType')" v-if="registerTypes[1] === selectedRegisterType">
+          <el-form-item prop="loginEmail" :label="$t('signup.registerType')" :error="EmailErrorMsg" v-if="registerTypes[1] === selectedRegisterType">
             <el-input ref="email" v-model="model.loginEmail" :placeholder="$t('signup.loginEmailPlaceholder')">
             </el-input>
           </el-form-item>
         </div>
-        <el-form-item prop="authCode" :label="$t('signup.verifyCode')">
-          <el-input v-model="model.authCode"
-                    style="width: 280px"
-                    :placeholder="$t('signup.verifyCodePlaceholder')"></el-input>
+        <el-form-item prop="authCode" class="signup-authcode-box" :label="$t('signup.verifyCode')" :error="authCodeErrorMsg">
+          <el-input v-model="model.authCode" :placeholder="$t('signup.verifyCodePlaceholder')"></el-input>
           <div class="check-code-wrap">
-            <el-button class="vcode-btn"
-                      style="width: 110px"
-                      @click="sendCheckCodeNotifyHandler"
-                      :disabled="disabledCheckCodeBtn">
+            <el-button class="vcode-btn" @click="sendCheckCodeNotifyHandler" :disabled="disabledCheckCodeBtn">
               {{vcodeBtnText}}
             </el-button>
           </div>
@@ -68,7 +63,6 @@
       {{$t('signup.loginTexts[0]')}}
       <a :href="loginLink">{{$t('signup.loginTexts[1]')}}</a>
     </div>
-    
   </section>
 </template>
 
@@ -79,19 +73,34 @@ export default SignupView
 </script>
 
 <style lang="less" scoped>
-  @import "index.less";
+  @import "./index.less";
 </style>
 
 <style lang="less">
-.signup-section {
-  .signup-register-type-box {
-    .signup-radios {
-      .is-checked {
-        .el-radio__label { color: #409EFF; }
+  @import "../../styles/mixin.less";
+  .f-ui-signup-section {
+    .ui-login-section();
+		.signup-body {
+			.ui-login-body();
+		}
+    .el-alert {  
+      .error-alert()
+    }
+    .signup-register-type-box {
+      .signup-radios {
+        .is-checked {
+          .el-radio__label { color: #409EFF; }
+        }
+        .el-radio__label { padding-left: 7px; font-size: 12px; color: #666; }
       }
-      .el-radio__label { padding-left: 7px; font-size: 12px; color: #666; }
+    }
+    .signup-authcode-box .el-form-item__content{
+      display: flex;
+      .el-input { flex: 1; }
     }
   }
-}
   
+  .el-form-item.is-error {
+    .ui-login-form-item-error()
+  }
 </style>

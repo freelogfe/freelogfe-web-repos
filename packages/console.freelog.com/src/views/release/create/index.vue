@@ -71,7 +71,12 @@
     <div class="r-c-w-footer">
       <div class="body">
         <div class="cancel" @click="cancelCreateRelease">{{$t('release.cancelBtnText')}}</div>
-        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">{{$t('release.cancelCreateBtnText')}}</el-button>
+        <el-button
+            class="create"
+            type="primary"
+            size="small"
+            round
+            @click="createRelease('createReleaseForm')">{{$t('release.createBtnText')}}</el-button>
       </div>
     </div>
   </div>

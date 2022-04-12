@@ -72,7 +72,7 @@
         </el-table-column>
         <el-table-column width="130">
           <template slot="header" slot-scope="scope">
-            <el-dropdown class="r-l-status" @command="handleSelectReleaseStatus" v-if="type === 'myReleases'">
+            <el-dropdown class="r-l-status" @command="handleSelectReleaseStatus">
               <span class="el-dropdown-link">
                 {{$t('release.list.statusText')}} {{releaseStatusArray[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
               </span>
@@ -84,9 +84,6 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="" v-else>
-              {{releaseStatusArray[0].label}}
-            </span>
           </template>
           <template slot-scope="scope">
             <div class="r-l-item-online" v-if="scope.row.isOnline">{{$t('release.list.status[1]')}}</div>
@@ -105,7 +102,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('release.list.operate')" :width="type === 'myReleases' ? 76: 95">
+        <el-table-column :label="$t('release.list.operate')" :width="type === 'myReleases' ? 86: 95">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'" target="_blank">
               <el-button class="r-l-item-edit-btn" size="mini">{{$t('release.list.editBtnText')}}</el-button>
@@ -163,7 +160,8 @@
             isSelf: 1,
             resourceType: qResourceType != null ? qResourceType : undefined,
             keywords: undefined,
-            status: undefined
+            status: undefined,
+            releaseStatus: undefined,
           }
         },
         selectedType: qResourceType != null ? qResourceType : 'all',
@@ -247,7 +245,7 @@
           release._toDetailLink = release.releaseId ? `/release/detail/${releaseId}?version=${latestVersion.version}` : ''
           release._toMangeDetailLink = `/release/edit/${releaseId}`
           release.previewImage = previewImages && previewImages[0] || ''
-          if(this.type === 'myCollections') {
+          if (this.type === 'myCollections') {
             release.updateDate = release.releaseUpdateDate
             release.createDate = release.latestVersion.createDate
           }
@@ -287,21 +285,20 @@
       handleSelectReleaseStatus(command) {
         console.log(command)
         this.selectedReleaseStatus = command
+        let status 
         // 0: 全部状态；1: 已上线；2: 已下线
         switch(+this.selectedReleaseStatus) {
-          case 0: {
-            this.paginationConfig.params.status = undefined
-            break
-          }
-          case 1: {
-            this.paginationConfig.params.status = 1
-            break
-          }
-          case 2: {
-            this.paginationConfig.params.status = 0
-            break
-          }
+          case 0: status = undefined; break
+          case 1: status = 1; break
+          case 2: status = 0; break
           default: {}
+        }
+        if (this.type === 'myReleases') {
+          this.paginationConfig.params.status = status
+          this.paginationConfig.params.releaseStatus = undefined
+        } else {
+          this.paginationConfig.params.status = undefined
+          this.paginationConfig.params.releaseStatus = status
         }
       }
     }

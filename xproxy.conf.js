@@ -21,7 +21,7 @@ function map2Local(urlPath, match, urlObject) {
   }
 
   if (/console.(test)?freelog/.test(urlObject.host)) {
-    reqPath = reqPath.replace('/public', '')
+    // reqPath = reqPath.replace('/public', '')
     return `http://127.0.0.1:8${port}${reqPath}`
   } else if (/pagebuild\/static/.test(urlPath)) {
     return path.join(CWD, 'www.freelog.com', 'src', urlPath)

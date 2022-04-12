@@ -1,0 +1,174 @@
+//@import '../../config.less';
+
+.styles {
+  width: 920px;
+  margin: 0 auto;
+
+  .Inactive {
+    display: flex;
+    width: 100%;
+    height: 128px;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .AccountInfo {
+    display: flex;
+    width: 100%;
+    height: 128px;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px 0 20px;
+
+    .Gold {
+      font-size: 50px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 56px;
+    }
+
+    .ChangePassword {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer;
+    }
+  }
+
+  .tipCompleted {
+    color: #42C28C;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  .tipProcessing {
+    color: #E9A923;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  .TableBody {
+    background-color: white;
+
+    .filter1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+
+      .filter1Date {
+        display: flex;
+        align-items: center;
+
+        .dateRange {
+          padding: 0 15px;
+          display: flex;
+          height: 32px;
+          border: none;
+          background-color: transparent;
+          font-size: 14px;
+          color: #666;
+          align-items: center;
+          justify-content: center;
+
+          &.active {
+            background-color: #EEF6FF;
+            color: #2784FF;
+          }
+
+        }
+      }
+
+      .filter1Keyword {
+
+      }
+    }
+
+    .filter2 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 20px;
+
+      .filter2Left {
+        display: flex;
+        align-items: center;
+
+        .filterAmount {
+          width: 100px;
+        }
+
+        .filterAmountTo {
+          color: #BEBEBE;
+          display: inline-block;
+          padding: 0 5px;
+        }
+      }
+    }
+
+    .totalAmount {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+
+      .totalAmountExpenditure {
+        color: #42C28C;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+
+      .totalAmountIncome {
+        color: #E9A923;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+    }
+  }
+}
+
+.ActivateAccountContent {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .payPassword {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .verificationCodeInput {
+    width: 200px;
+  }
+
+  .blockInput {
+    width: 100%;
+  }
+}
+
+.success {
+  width: 310px;
+  height: 200px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+:global .ant-message-notice-content {
+  padding: 0;
+}

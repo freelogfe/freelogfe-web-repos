@@ -1,0 +1,64 @@
+{
+  "name": "@freelog/tools-lib",
+  "version": "0.1.80",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "publish": "npm publish --access public"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {}
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "author": "liu-kai-github",
+  "module": "dist/tools-lib.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/tools-lib.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/tools-lib.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.11.0",
+    "@types/crypto-js": "^4.0.1",
+    "@types/nprogress": "^0.2.0",
+    "husky": "^6.0.0",
+    "size-limit": "^4.11.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.2.0",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "@freelog/resource-policy-lang": "1.1.26",
+    "@freelog/tools-lib": "^0.1.43",
+    "axios": "^0.21.1",
+    "crypto-js": "^4.0.0",
+    "moment": "^2.29.1",
+    "nprogress": "^0.2.0"
+  }
+}

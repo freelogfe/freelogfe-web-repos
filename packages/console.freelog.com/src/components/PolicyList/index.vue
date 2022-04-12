@@ -1,10 +1,12 @@
 <template>
   <div class="fl-policy-list-wrap">
     <policy-editor
-            v-for="policy in policyList"
-            :policy="policy"
-            @save="savePolicyHandler"
-            @delete="deletePolicyHandler"></policy-editor>
+        v-for="policy in policyList"
+        :key="policy.policyId"
+        :policy="policy"
+        :policyList="policyList"
+        @save="savePolicyHandler"
+        @delete="deletePolicyHandler"></policy-editor>
     <div>
       <el-button type="text" class="add-new-policy-btn" @click="addNewPolicyHandler">
         <span><i class="el-icon-plus"></i>{{$t('components.policyList.addPolicy')}}<i class="dot solid" v-if="!policyList.length"></i></span>

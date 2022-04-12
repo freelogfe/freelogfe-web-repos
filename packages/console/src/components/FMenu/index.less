@@ -1,0 +1,25 @@
+.Menu {
+  padding: 10px 0;
+  min-width: 128px;
+  display: inline-block;
+  //box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
+  border-radius: 4px;
+  border: none;
+}
+
+.MenuItem {
+  padding: 0 70px 0 20px !important;
+
+  &:global(.ant-menu-item) {
+
+    &:hover, &:active {
+      background-color: #2784FF;
+      color: #fff;
+    }
+  }
+
+}
+
+.active {
+  font-weight: 600;
+}

@@ -62,7 +62,9 @@ export default {
             // 策略列表
             policies: [],
             // 新建的策略
-            newPolicie: {policyName: this.$t('unnamedPolicy'), policyText: ''},
+
+            newPolicie: {policyName: this.$t('components.policyList.unnamedPolicy'), policyText: ''},
+
 
             // 当前底部激活的是哪个 tabs
             activeTab: 'contract',
@@ -155,7 +157,8 @@ export default {
          */
         switchShowEditPolicy(bool) {
             this.isShowEditPolicy = bool;
-            this.newPolicie = {policyName: this.$t('unnamedPolicy'), policyText: ''};
+
+            this.newPolicie = {policyName: this.$t('components.policyList.unnamedPolicy'), policyText: ''};
         },
         /**
          * 保存一个新策略
@@ -191,21 +194,21 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('addPolicySuccess'));
+            this.$message.success(this.$t('node.addPolicySuccess'));
         },
         /**
          * 更新一个策略的状态
          * @param policie
          */
-        async updatePolicies(policie) {
+        async updatePolicies(policy) {
             // console.log(policie, 'policiespoliciespoliciespolicies');
             const res = await this.updatePresentable({
                 policyInfo: {
                     updatePolicies: [
                         {
-                            policyId: policie.policyId,
-                            policyName: policie.policyName,
-                            status: policie.status,
+                            policyId: policy.policyId,
+                            policyName: policy.policyName,
+                            status: policy.status,
                         },
                     ],
                 },
@@ -217,7 +220,13 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('updatedPolicySuccessfully'));
+            // this.$message.success(this.$t('node.updatedPolicySuccessfully'));
+
+            if(policy.status === 1) {
+                this.$message({type: 'success', message: `${this.$t('release.policy')}(${policy.policyName})${this.$t('release.enabled')}！`});
+            }else if(policy.status === 0){
+                this.$message({type: 'warning', message: `${this.$t('release.policy')}(${policy.policyName})${this.$t('release.disabled')}！`});
+            }
         },
         /**
          * presentableName 变化
@@ -228,7 +237,7 @@ export default {
             this.updatePresentable({
                 presentableName: value,
             });
-            this.$message.success(this.$t('titleUpdateSuccessful'));
+            this.$message.success(this.$t('node.titleUpdateSuccessful'));
         },
         /**
          * 上线和下线
@@ -291,7 +300,7 @@ export default {
             this.updatePresentable({
                 userDefinedTags: val,
             });
-            this.$message.success(this.$t('tagUpdatedSuccessfully'));
+            this.$message.success(this.$t('node.tagUpdatedSuccessfully'));
         },
         versionValue(val, old) {
             if (old === null) {
@@ -301,7 +310,7 @@ export default {
             // this.updatePresentable({
             //     version: val,
             // });
-            // this.$message.success(this.$t('tagUpdatedSuccessfully'));
+            // this.$message.success(this.$t('node.tagUpdatedSuccessfully'));
         }
     },
     computed: {
