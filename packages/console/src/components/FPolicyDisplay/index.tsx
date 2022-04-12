@@ -5,6 +5,7 @@ import * as AHooks from 'ahooks';
 // import { FUtil } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
+import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
 
 interface FPolicyDisplayProps {
   code?: string;
@@ -65,6 +66,10 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
 
       {
         activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
+          {fullInfo && (<FGraph_State_Machine
+            fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}
+          />)}
+
         </div>)
       }
 
