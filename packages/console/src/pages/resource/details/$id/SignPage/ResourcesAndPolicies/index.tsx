@@ -5,6 +5,7 @@ import { Drawer, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
+import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 
 interface ResourcesAndPoliciesProps {
   dispatch: Dispatch;
@@ -43,15 +44,39 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
               />
             </div>
             <div className={styles.resourcePolicies}>
-              {
-                r.policies
+              <F_Contract_And_Policy_Labels data={[
+                ...r.contracts
+                  .filter((c) => {
+                    return c.checked;
+                  })
+                  .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                    // return (<label key={c.id}>{c.name}</label>);
+                    return {
+                      text: c.name,
+                      dot: c.status === 'inactive' ? 'yellow' : 'green',
+                    };
+                  }),
+                ...r.policies
                   .filter((p) => {
                     return p.checked;
                   })
-                  .map((p) => {
-                    return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
-                  })
-              }
+                  .map<{ text: string; dot: '' }>((p) => {
+                    // return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
+                    return {
+                      text: p.fullInfo.policyName,
+                      dot: '',
+                    };
+                  }),
+              ]} />
+              {/*{*/}
+              {/*  r.policies*/}
+              {/*    .filter((p) => {*/}
+              {/*      return p.checked;*/}
+              {/*    })*/}
+              {/*    .map((p) => {*/}
+              {/*      return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);*/}
+              {/*    })*/}
+              {/*}*/}
             </div>
           </a>);
         })
@@ -88,24 +113,48 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                     />
                   </div>
                   <div className={styles.resourcePolicies}>
-                    {
-                      r.contracts
+                    <F_Contract_And_Policy_Labels data={[
+                      ...r.contracts
                         .filter((c) => {
                           return c.checked;
                         })
-                        .map((c) => {
-                          return (<label key={c.id}>{c.name}</label>);
-                        })
-                    }
-                    {
-                      r.policies
+                        .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                          // return (<label key={c.id}>{c.name}</label>);
+                          return {
+                            text: c.name,
+                            dot: c.status === 'inactive' ? 'yellow' : 'green',
+                          };
+                        }),
+                      ...r.policies
                         .filter((p) => {
                           return p.checked;
                         })
-                        .map((p) => {
-                          return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
-                        })
-                    }
+                        .map<{ text: string; dot: '' }>((p) => {
+                          // return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);
+                          return {
+                            text: p.fullInfo.policyName,
+                            dot: '',
+                          };
+                        }),
+                    ]} />
+                    {/*{*/}
+                    {/*  r.contracts*/}
+                    {/*    .filter((c) => {*/}
+                    {/*      return c.checked;*/}
+                    {/*    })*/}
+                    {/*    .map((c) => {*/}
+                    {/*      return (<label key={c.id}>{c.name}</label>);*/}
+                    {/*    })*/}
+                    {/*}*/}
+                    {/*{*/}
+                    {/*  r.policies*/}
+                    {/*    .filter((p) => {*/}
+                    {/*      return p.checked;*/}
+                    {/*    })*/}
+                    {/*    .map((p) => {*/}
+                    {/*      return (<label key={p.fullInfo.policyId}>{p.fullInfo.policyName}</label>);*/}
+                    {/*    })*/}
+                    {/*}*/}
                   </div>
                 </a>);
               })
