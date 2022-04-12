@@ -74,9 +74,6 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
                 fontSize: 12,
                 fontWeight: 600,
               }}
-              onClick={(evt, node, shape, graph) => {
-
-              }}
             >{statusInfo[stateInfo].text}</Text>);
           })
         }
@@ -121,19 +118,16 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
   </Group>);
 }
 
+// console.log('##@#$$@#$@#$@#$@#$@#$@#$@######');
+
 function FNode_State_Machine({ cfg = {} }: any) {
-  // console.log(cfg, 'cfg@@#09soidjlfsdfjsdlkfjsdlkfjl');
-  // if (cfg.nodeType === 'resource') {
-  //   return (<FNode_Dependency_Resource
-  //     value={cfg.value}
-  //   />);
-  // }
-  //
-  if (cfg.nodeType === 'state') {
+  console.log('FNode_State_Machine 903oipj2klsdfjlskd');
+
+  // if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
       value={cfg.value}
     />);
-  }
+  // }
 
   if (cfg.nodeType === 'event') {
     return (<FNode_State_Machine_Event
@@ -148,3 +142,5 @@ function FNode_State_Machine({ cfg = {} }: any) {
 export const F_STATE_MACHINE_NODE_TYPE: string = 'FNode_State_Machine';
 
 G6.registerNode(F_STATE_MACHINE_NODE_TYPE, createNodeFromReact(FNode_State_Machine));
+
+// console.log(G6, 'G60932ioldskfjsdlkfjl');
