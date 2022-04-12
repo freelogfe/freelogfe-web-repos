@@ -58,7 +58,7 @@
     "@freelog/tools-lib": "^0.1.43",
     "axios": "^0.21.1",
     "crypto-js": "^4.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nprogress": "^0.2.0"
   }
 }
