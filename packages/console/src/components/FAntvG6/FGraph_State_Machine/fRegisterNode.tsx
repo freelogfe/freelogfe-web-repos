@@ -36,7 +36,7 @@ interface FNode_State_Machine_State_Props {
 }
 
 function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
-  console.log(value, 'FNode_State_Machine_State980980239099999999&&&&&&&&&&&');
+  // console.log(value, 'FNode_State_Machine_State980980239099999999&&&&&&&&&&&');
   const { stateName, colors } = value;
   const stateInfo: 'active' | 'inActive' | 'terminal' = colors.length > 0 ? 'active' : 'inActive';
   return (<Group draggable={true}>
@@ -112,11 +112,14 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
       draggable
       style={{
         fill: '#fff',
-        stroke: '#EFEFEF',
+        // stroke: '#EFEFEF',
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
         width: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
       onClick={() => {
         // console.log('#######98ioklj');

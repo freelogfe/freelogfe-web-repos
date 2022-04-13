@@ -9,7 +9,10 @@ export interface PolicyFullInfo_Type {
       isInitial?: boolean;
       isTerminate?: boolean;
       transitions: Array<({
-        args: { elapsed: number, timeUnit: 'month' };
+        args: {
+          elapsed: number;
+          timeUnit: 'year' | 'month' | 'week' | 'day' | 'cycle';
+        };
         name: 'RelativeTimeEvent';
       } | {
         name: 'TimeEvent';

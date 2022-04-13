@@ -63,12 +63,13 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
           <FCodeFormatter code={code ? code : fullInfo ? fullInfo.translateInfo.content : ''} />
         </div>)
       }
-      {console.log(JSON.stringify(fullInfo?.fsmDescriptionInfo), '9823ijhosdklfjlsdjflsdkjl')}
+      {/*{console.log(JSON.stringify(fullInfo?.fsmDescriptionInfo), '9823ijhosdklfjlsdjflsdkjl')}*/}
       {
         activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
           {fullInfo && (<FGraph_State_Machine
             fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}
-            // height={170}
+            height={1000}
+            width={1600}
           />)}
 
         </div>)

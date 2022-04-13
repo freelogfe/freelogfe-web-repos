@@ -8,6 +8,7 @@ import {
   FNode_State_Machine_State_Values,
 } from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { ArrowConfig, Shape, ShapeCfg } from '@ant-design/graphs/es/interface';
 
 interface FGraph_State_Machine_Props {
   fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'];
@@ -38,6 +39,14 @@ const initStates: FGraph_State_Machine_States = {
   dataSource_Edges: [],
 };
 
+const timeUnit = {
+  year: '年',
+  month: '月',
+  week: '周',
+  day: '天',
+  cycle: '周期',
+};
+
 function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_State_Machine_Props) {
   // console.log(fsmDescriptionInfo, 'fsmDescriptionInfo9832iosdlkfjl');
   const [dataSource_Nodes_State, set_DataSource_Nodes_State] = React.useState<FGraph_State_Machine_States['dataSource_Nodes_State']>(initStates['dataSource_Nodes_State']);
@@ -54,7 +63,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     const nodes_event: FGraph_State_Machine_States['dataSource_Nodes_Event'] = [];
     const edges: FGraph_State_Machine_States['dataSource_Edges'] = [];
     for (const state of Object.entries(fsmDescriptionInfo)) {
-      console.log(state[0]);
+      // console.log(state[0]);
       const stateID: string = state[0];
       const colors: Array<'active' | 'testActive'> = [];
       if (state[1].isAuth) {
@@ -75,11 +84,12 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         const eventID: string = state[0] + ':' + event[0];
         let eventDescription: string = '';
         if (event[1].name === 'RelativeTimeEvent') {
-          eventDescription = 'RelativeTimeEvent';
+          // { elapsed: number, timeUnit: 'month' }
+          eventDescription = `${event[1].args.elapsed} ${timeUnit[event[1].args.timeUnit]}后`;
         } else if (event[1].name === 'TimeEvent') {
-          eventDescription = 'TimeEvent';
+          eventDescription = `于 ${event[1].args.dateTime}`;
         } else if (event[1].name === 'TransactionEvent') {
-          eventDescription = 'TransactionEvent';
+          eventDescription = `支付 ${event[1].args.amount}枚 羽币`;
         }
         nodes_event.push({
           id: eventID,
@@ -132,8 +142,18 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     edgeCfg={{
       type: 'cubic-vertical',
       // endArrow: true,
-      endArrow: {
-        show: true,
+      // endArrow: {
+      //   show: true,
+      // },
+      endArrow: (edge: Shape | ShapeCfg | undefined) => {
+        // console.log(edge, 'edge2309oijlskdfjlsdkfj');
+        return {
+          // show: !(edge as any).target.includes(':'),
+          show: false,
+        };
+      },
+      edgeStateStyles: {
+        hover: {},
       },
     }}
     layout={{
