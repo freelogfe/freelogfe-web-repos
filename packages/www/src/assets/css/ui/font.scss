@@ -1,0 +1,161 @@
+// size
+@for $i from 1 through 100 {
+  .fs-#{$i} {
+    font-size: (1px * $i);
+  }
+  .lh-#{$i} {
+    line-height: (1px * $i);
+  }
+  .ls-#{$i} {
+    letter-spacing: (1px * $i);
+  }
+}
+
+// color
+.fc-normal {
+  color: #222222;
+}
+
+.fc-black {
+  color: #333333;
+}
+
+.fc-red {
+  color: $fc-red;
+}
+
+.fc-white {
+  color: $fc-white;
+}
+
+.fc-green {
+  color: $fc-green;
+}
+
+.fc-blue {
+  color: $fc-blue;
+}
+
+.fc-grey {
+  color: $fc-grey;
+}
+
+.fc-nav-normal {
+  color: $fc-nav-normal;
+}
+
+.fc-nav-active {
+  color: $fc-nav-active;
+}
+
+.fc-63676c {
+  color: #63676c;
+}
+
+.fc-7a869a {
+  color: #7a869a;
+}
+
+$weight-regular: 400;
+
+$weight-medium: 500;
+
+$weight-bold: 600;
+
+// weight
+.fw-regular {
+  font-weight: $weight-regular;
+}
+
+.fw-medium {
+  font-weight: $weight-medium;
+}
+
+.fw-bold {
+  font-weight: $weight-bold;
+}
+
+// content
+.f-regular {
+  font-weight: $weight-regular;
+  color: $fc-regular;
+  font-size: $fs-content-normal;
+}
+
+.f-main {
+  font-weight: $weight-bold;
+  color: $fc-main;
+  font-size: $fs-content-normal;
+}
+
+.fc-main {
+  color: $fc-main;
+}
+
+.f-less {
+  font-weight: $weight-regular;
+  color: $fc-less;
+  font-size: $fs-content-normal;
+}
+
+.fc-less {
+  color: $fc-less;
+}
+
+.f-small {
+  font-weight: $weight-regular;
+  color: $fc-less;
+  font-size: $fs-content-small;
+}
+
+.f-least {
+  font-weight: $weight-regular;
+  color: $fc-less;
+  font-size: $fs-content-least;
+}
+
+// tittle
+.f-title-1 {
+  font-size: $fs-title-1;
+}
+
+.f-title-2 {
+  font-size: $fs-title-2;
+}
+
+.f-title-3 {
+  font-size: $fs-title-3;
+}
+
+.f-title-4 {
+  font-size: $fs-title-4;
+}
+
+.f-title-5 {
+  font-size: $fs-title-5;
+  font-weight: $weight-bold;
+}
+
+.f-title-6 {
+  font-size: $fs-title-6;
+  font-weight: $weight-bold;
+}
+
+// navigator
+.f-nav-normal {
+  font-size: $fs-nav-normal;
+  color: $fs-nav-normal;
+}
+
+.f-nav-active {
+  font-size: $fs-nav-active;
+  color: $fc-nav-active;
+}
+
+.f-italic {
+  font-style: italic;
+}
+
+.f-oblique {
+  font-style: oblique;
+}

@@ -1,0 +1,160 @@
+@for $i from -200 through 200 {
+  .p-#{$i} {
+    padding: (1px * $i);
+  }
+
+  .px-#{$i} {
+    padding-left: (1px * $i);
+    padding-right: (1px * $i);
+  }
+
+  .py-#{$i} {
+    padding-top: (1px * $i);
+    padding-bottom: (1px * $i);
+  }
+
+  .pt-#{$i} {
+    padding-top: (1px * $i);
+  }
+
+  .pr-#{$i} {
+    padding-right: (1px * $i);
+  }
+
+  .pb-#{$i} {
+    padding-bottom: (1px * $i);
+  }
+
+  .pl-#{$i} {
+    padding-left: (1px * $i);
+  }
+
+  .m-#{$i} {
+    margin: (1px * $i);
+  }
+
+  .mx-#{$i} {
+    margin-left: (1px * $i);
+    margin-right: (1px * $i);
+  }
+
+  .my-#{$i} {
+    margin-top: (1px * $i);
+    margin-bottom: (1px * $i);
+  }
+
+  .mt-#{$i} {
+    margin-top: (1px * $i);
+  }
+
+  .mr-#{$i} {
+    margin-right: (1px * $i);
+  }
+
+  .mb-#{$i} {
+    margin-bottom: (1px * $i);
+  }
+
+  .ml-#{$i} {
+    margin-left: (1px * $i);
+  }
+}
+
+@for $i from -100 through 100 {
+  .mt-self-#{$i} + .mt-self-#{$i} {
+    margin-top: (1px * $i);
+  }
+
+  .ml-self-#{$i} + .ml-self-#{$i} {
+    margin-left: (1px * $i);
+  }
+
+  .translateX-#{$i}p {
+    transform: translateX(1% * $i);
+  }
+
+  .z-#{$i} {
+    z-index: $i;
+  }
+}
+
+@for $i from -100 through 100 {
+  .w-#{$i}p {
+    width: (1% * $i);
+  }
+
+  .mw-#{$i}p {
+    max-width: (1% * $i);
+  }
+
+  .mh-#{$i}p {
+    max-height: (1% * $i);
+  }
+
+  .h-#{$i}p {
+    height: (1% * $i);
+  }
+
+  .mt-#{$i}p {
+    margin-top: (1% * $i);
+  }
+
+  .mr-#{$i}p {
+    margin-right: (1% * $i);
+  }
+
+  .mb-#{$i}p {
+    margin-bottom: (1% * $i);
+  }
+
+  .ml-#{$i}p {
+    margin-left: (1% * $i);
+  }
+
+  .pt-#{$i}p {
+    padding-top: (1% * $i);
+  }
+
+  .pr-#{$i}p {
+    padding-right: (1% * $i);
+  }
+
+  .pb-#{$i}p {
+    padding-bottom: (1% * $i);
+  }
+
+  .pl-#{$i}p {
+    padding-left: (1% * $i);
+  }
+}
+
+@for $i from 0 through 1500 {
+  .w-#{$i} {
+    width: (1px * $i) !important;
+  }
+
+  .mw-#{$i} {
+    max-width: (1px * $i);
+  }
+
+  .h-#{$i} {
+    height: (1px * $i) !important;
+  }
+
+  .mh-#{$i} {
+    max-height: (1px * $i);
+  }
+}
+
+.w-full {
+  width: 100vw;
+}
+
+.h-full {
+  height: 100vh;
+}
+
+.full {
+  width: 100vw;
+  height: 100vh;
+}

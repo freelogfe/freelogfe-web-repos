@@ -1,0 +1,298 @@
+// 主要
+.main-btn {
+  height: 38px;
+  width: fit-content;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #2784ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &.large {
+    height: 50px;
+    padding: 0 50px;
+  }
+
+  &.mini {
+    height: 32px;
+    padding: 0 15px;
+  }
+
+  &:hover {
+    background-color: #529dff;
+  }
+
+  &:active {
+    background-color: #2376e5;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 默认
+.default-btn {
+  height: 38px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #ffffff, #f3f4f6);
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  color: #222;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &.mini {
+    height: 32px;
+    padding: 0 15px;
+  }
+
+  &:hover {
+    background: #529dff;
+    border-color: #d4d4d4;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &:active {
+    background: #2376e5;
+    border-color: #d4d4d4;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 辅助
+.assist-btn {
+  height: 38px;
+  width: fit-content;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #2784ff;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #eef6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &.mini {
+    height: 32px;
+    padding: 0 15px;
+  }
+
+  &:hover {
+    background-color: #f1f8ff;
+    color: #529dff;
+  }
+
+  &:active {
+    background-color: #e4f0ff;
+    color: #187afc;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 取消
+.cancel-btn {
+  height: 38px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ededed;
+  }
+
+  &:active {
+    background-color: #e6e6e6;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 危险
+.danger-btn {
+  height: 38px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #ee4040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f86363;
+  }
+
+  &:active {
+    background-color: #eb3737;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 危险朴素
+.danger-plain-btn {
+  height: 38px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #ee4040;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #fdebeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    color: #f86363;
+    background-color: #fef2f2;
+  }
+
+  &:active {
+    color: #eb3737;
+    background-color: #fee6e6;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 含图标
+.icon-btn i {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  margin-right: 5px;
+}
+
+// 主要文字
+.main-word-btn {
+  line-height: 20px;
+  color: #2784ff;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    color: #529dff;
+  }
+
+  &:active {
+    color: #2376e5;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 默认文字
+.word-btn {
+  line-height: 20px;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    color: #529dff;
+  }
+
+  &:active {
+    color: #2376e5;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 危险文字
+.danger-word-btn {
+  line-height: 20px;
+  color: #ee4040;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    color: #f86363;
+  }
+
+  &:active {
+    color: #eb3737;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// 圆形
+.circle-btn {
+  border-radius: 50%;
+
+  &.main-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.default-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  &.danger-btn {
+    width: 18px;
+    height: 18px;
+  }
+
+  &.main-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.operate-btn {
+    width: 20px;
+    height: 20px;
+  }
+}

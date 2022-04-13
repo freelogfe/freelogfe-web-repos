@@ -1,0 +1,55 @@
+.bg-less {
+  background-color: #f0f2f5;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-content {
+  background-color: #fafbfc;
+}
+
+// color
+.bg-success {
+  background-color: $success;
+}
+
+.bg-warn {
+  background-color: $warn;
+}
+
+.bg-error {
+  background-color: $error;
+}
+
+.bg-main {
+  background-color: $bt-main;
+}
+
+.bg-hover {
+  background-color: $bt-hover;
+}
+
+.bg-active {
+  background-color: $bt-active;
+}
+.bg-disabled {
+  opacity: 0.4;
+}
+
+.bg-c-main {
+  background-color: $bt-c-main;
+}
+
+.bg-c-hover {
+  background-color: $bt-c-hover;
+}
+
+.bg-c-active {
+  background-color: $bt-c-active;
+}
+
+.bg-end {
+  background-color: $end;
+}
