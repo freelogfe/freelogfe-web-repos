@@ -51,7 +51,57 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
   }, [fsmDescriptionInfo]);
 
   function handleData() {
-
+    const nodes_state: FGraph_State_Machine_States['dataSource_Nodes_State'] = [];
+    const nodes_event: FGraph_State_Machine_States['dataSource_Nodes_Event'] = [];
+    const edges: FGraph_State_Machine_States['dataSource_Edges'] = [];
+    for (const state of Object.entries(fsmDescriptionInfo)) {
+      // console.log(state[0]);
+      const stateID: string = state[0];
+      const colors: Array<'active' | 'testActive'> = [];
+      if (state[1].isAuth) {
+        colors.push('active');
+      }
+      if (state[1].isTestAuth) {
+        colors.push('testActive');
+      }
+      nodes_state.push({
+        id: stateID,
+        nodeType: 'state',
+        value: {
+          stateName: '状态 ' + state[0],
+          colors: colors,
+        },
+      });
+      for (const event of Object.entries(state[1].transitions)) {
+        const eventID: string = state[0] + ':' + event[0];
+        let eventDescription: string = '';
+        if (event[1].name === 'RelativeTimeEvent') {
+          eventDescription = 'RelativeTimeEvent';
+        } else if (event[1].name === 'TimeEvent') {
+          eventDescription = 'TimeEvent';
+        } else if (event[1].name === 'TransactionEvent') {
+          eventDescription = 'TransactionEvent';
+        }
+        nodes_event.push({
+          id: eventID,
+          nodeType: 'event',
+          value: {
+            eventDescription: eventDescription,
+          },
+        });
+        edges.push({
+          source: stateID,
+          target: eventID,
+        });
+        edges.push({
+          source: eventID,
+          target: event[1].toState,
+        });
+      }
+    }
+    set_DataSource_Nodes_State(nodes_state);
+    set_DataSource_Nodes_Event(nodes_event);
+    set_DataSource_Edges(edges);
   }
 
   return (<FlowAnalysisGraph
@@ -64,8 +114,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         ...dataSource_Edges,
       ],
     }}
-    // width={1000}
-    height={height}
+    width={width || undefined}
+    height={height || undefined}
     // layout={{
     //   rankdir: 'TB',
     //   ranksepFunc: () => 20,
