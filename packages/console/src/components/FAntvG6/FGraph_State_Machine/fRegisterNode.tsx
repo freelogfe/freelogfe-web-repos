@@ -72,26 +72,27 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         alignItems: 'center',
         flexDirection: 'row',
       }}>
-        <Text
-          style={{
-            fill: '#8FD6B8',
-            fontSize: 12,
-            fontWeight: 600,
-          }}
-        >正式授权</Text>
-        {/*{*/}
-        {/*  colors.map((co) => {*/}
-        {/*    console.log(co, 'cocococococococo');*/}
-        {/*    return (<Text*/}
-        {/*      key={co}*/}
-        {/*      style={{*/}
-        {/*        fill: statusInfo[stateInfo].color1,*/}
-        {/*        fontSize: 12,*/}
-        {/*        fontWeight: 600,*/}
-        {/*      }}*/}
-        {/*    >{statusInfo[stateInfo].text}</Text>);*/}
-        {/*  })*/}
-        {/*}*/}
+        {/*<Text*/}
+        {/*  style={{*/}
+        {/*    fill: '#8FD6B8',*/}
+        {/*    fontSize: 12,*/}
+        {/*    fontWeight: 600,*/}
+        {/*  }}*/}
+        {/*>正式授权</Text>*/}
+        {console.log(colors, 'colors!23890iosdajsalk')}
+        {
+          colors.map((co) => {
+            console.log(co, 'cocococococococo');
+            return (<Text
+              key={co}
+              style={{
+                fill: statusInfo[stateInfo].color1,
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >{co}</Text>);
+          })
+        }
       </Rect>
     </Rect>
   </Group>);
@@ -139,7 +140,7 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
 // console.log('##@#$$@#$@#$@#$@#$@#$@#$@######');
 
 function FNode_State_Machine({ cfg = {} }: any) {
-  console.log(cfg, 'FNode_State_Machine cfg 903oipj2klsdfjlskd');
+  // console.log(cfg, 'FNode_State_Machine cfg 903oipj2klsdfjlskd');
 
   if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
