@@ -9,10 +9,15 @@ const statusInfo = {
     color2: '#E5F6EF',
     text: '正式授权',
   },
+  testActive: {
+    color1: '#8FD6B8',
+    color2: '#E5F6EF',
+    text: '测试授权',
+  },
   inActive: {
     color1: '#D4D4D4',
     color2: '#FFFFFF',
-    text: '测试授权',
+    text: '未授权',
   },
   terminal: {
     color1: '#EE4040',
@@ -31,7 +36,7 @@ interface FNode_State_Machine_State_Props {
 }
 
 function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
-  console.log(value, 'FNode_State_Machine_State980980239099999999');
+  console.log(value, 'FNode_State_Machine_State980980239099999999&&&&&&&&&&&');
   const { stateName, colors } = value;
   const stateInfo: 'active' | 'inActive' | 'terminal' = colors.length > 0 ? 'active' : 'inActive';
   return (<Group draggable={true}>
@@ -43,6 +48,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
+        width: 200,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
@@ -66,19 +72,26 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         alignItems: 'center',
         flexDirection: 'row',
       }}>
-        {
-          colors.map((co) => {
-            return (<Text
-              key={co}
-              style={{
-                fill: statusInfo[stateInfo].color1,
-                fontSize: 12,
-                fontWeight: 600,
-              }}
-            >{statusInfo[stateInfo].text}</Text>);
-          })
-        }
-
+        <Text
+          style={{
+            fill: '#8FD6B8',
+            fontSize: 12,
+            fontWeight: 600,
+          }}
+        >正式授权</Text>
+        {/*{*/}
+        {/*  colors.map((co) => {*/}
+        {/*    console.log(co, 'cocococococococo');*/}
+        {/*    return (<Text*/}
+        {/*      key={co}*/}
+        {/*      style={{*/}
+        {/*        fill: statusInfo[stateInfo].color1,*/}
+        {/*        fontSize: 12,*/}
+        {/*        fontWeight: 600,*/}
+        {/*      }}*/}
+        {/*    >{statusInfo[stateInfo].text}</Text>);*/}
+        {/*  })*/}
+        {/*}*/}
       </Rect>
     </Rect>
   </Group>);
@@ -103,6 +116,7 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
+        width: 200,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
@@ -122,7 +136,7 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
 // console.log('##@#$$@#$@#$@#$@#$@#$@#$@######');
 
 function FNode_State_Machine({ cfg = {} }: any) {
-  console.log(cfg, 'FNode_State_Machine 903oipj2klsdfjlskd');
+  console.log(cfg, 'FNode_State_Machine cfg 903oipj2klsdfjlskd');
 
   if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State

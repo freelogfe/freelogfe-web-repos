@@ -2,30 +2,29 @@ import * as React from 'react';
 import styles from './index.less';
 import { FlowAnalysisGraph } from '@ant-design/graphs';
 import './fRegisterNode';
-import { F_STATE_MACHINE_NODE_TYPE } from './fRegisterNode';
+import {
+  F_STATE_MACHINE_NODE_TYPE,
+  FNode_State_Machine_Event_Values,
+  FNode_State_Machine_State_Values,
+} from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface FGraph_State_Machine_Props {
   fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'];
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
 interface FGraph_State_Machine_States {
   dataSource_Nodes_State: {
     id: string;
     nodeType: 'state';
-    value: {
-      stateName: string;
-      colors: Array<'active' | 'testActive'>
-    },
+    value: FNode_State_Machine_State_Values;
   }[];
   dataSource_Nodes_Event: {
     id: string;
     nodeType: 'event';
-    value: {
-      eventDescription: string;
-    };
+    value: FNode_State_Machine_Event_Values;
   }[];
   dataSource_Edges: {
     source: string;
@@ -40,7 +39,7 @@ const initStates: FGraph_State_Machine_States = {
 };
 
 function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_State_Machine_Props) {
-
+  // console.log(fsmDescriptionInfo, 'fsmDescriptionInfo9832iosdlkfjl');
   const [dataSource_Nodes_State, set_DataSource_Nodes_State] = React.useState<FGraph_State_Machine_States['dataSource_Nodes_State']>(initStates['dataSource_Nodes_State']);
   const [dataSource_Nodes_Event, set_DataSource_Nodes_Event] = React.useState<FGraph_State_Machine_States['dataSource_Nodes_Event']>(initStates['dataSource_Nodes_Event']);
   const [dataSource_Edges, set_DataSource_Edges] = React.useState<FGraph_State_Machine_States['dataSource_Edges']>(initStates['dataSource_Edges']);
@@ -55,7 +54,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     const nodes_event: FGraph_State_Machine_States['dataSource_Nodes_Event'] = [];
     const edges: FGraph_State_Machine_States['dataSource_Edges'] = [];
     for (const state of Object.entries(fsmDescriptionInfo)) {
-      // console.log(state[0]);
+      console.log(state[0]);
       const stateID: string = state[0];
       const colors: Array<'active' | 'testActive'> = [];
       if (state[1].isAuth) {
@@ -99,6 +98,9 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         });
       }
     }
+    console.log(nodes_state, 'nodes_state98023iolk');
+    console.log(nodes_event, 'nodes_event98023iolk');
+    console.log(edges, 'edges98023iolk');
     set_DataSource_Nodes_State(nodes_state);
     set_DataSource_Nodes_Event(nodes_event);
     set_DataSource_Edges(edges);
@@ -121,15 +123,30 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     //   ranksepFunc: () => 20,
     // }}
     nodeCfg={{
-      // anchorPoints: [
-      //   [0.5, 0],
-      //   [0.5, 1],
-      // ],
+      anchorPoints: [
+        [0.5, 0],
+        [0.5, 1],
+      ],
       type: F_STATE_MACHINE_NODE_TYPE,
     }}
     edgeCfg={{
-      type: 'polyline',
+      type: 'cubic-vertical',
       // endArrow: true,
+      endArrow: {
+        show: true,
+      },
+    }}
+    layout={{
+      rankdir: 'TB',
+      ranksepFunc: () => 40,
+      getHeight: (node: any) => {
+        // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+        // return node.nodeType === 'event' ? 40 : 64;
+        return node.nodeType === 'event' ? 50 : 64;
+      },
+      getWidth: () => {
+        return 200;
+      },
     }}
     // markerCfg={(cfg) => {
     //   return {

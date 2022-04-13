@@ -11,6 +11,34 @@ import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FResultTip from '@/components/FResultTip';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
 import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
+import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
+
+
+const fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'] = {
+  'initial': {
+    'transitions': [{
+      'toState': 'finish',
+      'service': 'freelog',
+      'name': 'RelativeTimeEvent',
+      'args': { 'elapsed': 1, 'timeUnit': 'month' },
+      'code': 'A103',
+      'isSingleton': false,
+      'eventId': '1b0662145c874a7fa9fba4a8a3479550',
+    }],
+    'serviceStates': ['active'],
+    'isInitial': true,
+    'isAuth': true,
+    'isTestAuth': false,
+  },
+  'finish': {
+    'transitions': [],
+    'serviceStates': [],
+    'isAuth': false,
+    'isTestAuth': false,
+    'isTerminate': true,
+  },
+};
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -40,14 +68,20 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
   return (<FCenterLayout style={{ backgroundColor: 'white' }}>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
-      <FResultTip
-        // h1={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}
-        h1={'节点创建成功'}
-        // h2={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}
-        h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}
-        // btnText={FUtil1.I18n.message('cta_btn_add_theme')}
-        btnText={'添加主题'}
-        onClickBtn={goto}
+      {/*<FResultTip*/}
+      {/*  // h1={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}*/}
+      {/*  h1={'节点创建成功'}*/}
+      {/*  // h2={FUtil1.I18n.message('msg_nodecreatedsuccessfully')}*/}
+      {/*  h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}*/}
+      {/*  // btnText={FUtil1.I18n.message('cta_btn_add_theme')}*/}
+      {/*  btnText={'添加主题'}*/}
+      {/*  onClickBtn={goto}*/}
+      {/*/>*/}
+
+      <FGraph_State_Machine
+        fsmDescriptionInfo={fsmDescriptionInfo}
+        width={1000}
+        height={600}
       />
     </div>
 

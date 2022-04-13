@@ -3,9 +3,11 @@ export type ContractStatus = 'active' | 'testActive' | 'inactive' | 'terminal';
 export interface PolicyFullInfo_Type {
   fsmDescriptionInfo: {
     [k: string]: {
+      serviceStates: string[];
       isAuth: boolean;
-      isInitial: boolean;
       isTestAuth: boolean;
+      isInitial?: boolean;
+      isTerminate?: boolean;
       transitions: Array<({
         args: { elapsed: number, timeUnit: 'month' };
         name: 'RelativeTimeEvent';
@@ -17,6 +19,10 @@ export interface PolicyFullInfo_Type {
         args: { amount: number; account: 'self.account' }
       }) & {
         toState: string;
+        code: string;
+        isSingleton: boolean;
+        eventId: string;
+        service: string;
       }>;
     }
   };
