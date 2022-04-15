@@ -81,7 +81,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
           id: stateID,
           nodeType: 'stateNoAuth',
           value: {
-            stateName: '状态 ' + state[0],
+            stateName: state[0],
           },
         });
       } else {
@@ -89,8 +89,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
           id: stateID,
           nodeType: 'state',
           value: {
-            stateName: '状态 ' + state[0],
-            colors: colors,
+            stateName: state[0],
+            auths: colors,
           },
         });
       }
@@ -162,9 +162,9 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       type: 'cubic-vertical',
       startArrow(edge) {
         return {
-          type: (edge as any).source.includes(':') ? 'diamond' : 'rect',
+          // type: (edge as any).source.includes(':') ? 'diamond' : 'rect',
+          type: 'diamond',
           // fill: 'red',
-
         };
       },
       endArrow(edge) {

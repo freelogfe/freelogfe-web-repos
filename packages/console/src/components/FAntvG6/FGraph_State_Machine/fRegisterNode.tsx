@@ -3,32 +3,32 @@ import { createNodeFromReact, Group, Rect, Text } from '@antv/g6-react-node';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import G6 from '@antv/g6';
 
-const statusInfo = {
-  active: {
-    color1: '#8FD6B8',
-    color2: '#E5F6EF',
-    text: '正式授权',
-  },
-  testActive: {
-    color1: '#8FD6B8',
-    color2: '#E5F6EF',
-    text: '测试授权',
-  },
-  inActive: {
-    color1: '#D4D4D4',
-    color2: '#FFFFFF',
-    text: '未授权',
-  },
-  terminal: {
-    color1: '#EE4040',
-    color2: '#FDEBEC',
-    text: '停止接收事件',
-  },
-};
+// const statusInfo = {
+//   active: {
+//     color1: '#8FD6B8',
+//     color2: '#E5F6EF',
+//     text: '正式授权',
+//   },
+//   testActive: {
+//     color1: '#8FD6B8',
+//     color2: '#E5F6EF',
+//     text: '测试授权',
+//   },
+//   inActive: {
+//     color1: '#D4D4D4',
+//     color2: '#FFFFFF',
+//     text: '未授权',
+//   },
+//   terminal: {
+//     color1: '#EE4040',
+//     color2: '#FDEBEC',
+//     text: '停止接收事件',
+//   },
+// };
 
 export interface FNode_State_Machine_State_Values {
   stateName: string;
-  colors: Array<'active' | 'testActive'>;
+  auths: string[];
 }
 
 interface FNode_State_Machine_State_Props {
@@ -37,14 +37,13 @@ interface FNode_State_Machine_State_Props {
 
 function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
   // console.log(value, 'FNode_State_Machine_State980980239099999999&&&&&&&&&&&');
-  const { stateName, colors } = value;
-  const stateInfo: 'active' | 'inActive' | 'terminal' = colors.length > 0 ? 'active' : 'inActive';
+  const { stateName, auths } = value;
   return (<Group draggable={true}>
     <Rect
       draggable
       style={{
-        fill: statusInfo[stateInfo].color2,
-        stroke: statusInfo[stateInfo].color1,
+        fill: '#E5F6EF',
+        stroke: '#8FD6B8',
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
@@ -65,28 +64,20 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >{textOverflowEllipsis(stateName)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 18)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'row',
       }}>
-        {/*<Text*/}
-        {/*  style={{*/}
-        {/*    fill: '#8FD6B8',*/}
-        {/*    fontSize: 12,*/}
-        {/*    fontWeight: 600,*/}
-        {/*  }}*/}
-        {/*>正式授权</Text>*/}
-        {/*{console.log(colors, 'colors!23890iosdajsalk')}*/}
         {
-          colors.map((co) => {
+          auths.map((co) => {
             // console.log(co, 'cocococococococo');
             return (<Text
               key={co}
               style={{
-                fill: statusInfo[stateInfo].color1,
+                fill: '#8FD6B8',
                 fontSize: 12,
                 fontWeight: 600,
               }}
@@ -133,7 +124,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
           fontWeight: 600,
           fill: '#222',
         }}
-      >{textOverflowEllipsis(stateName)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 18)}</Text>
     </Rect>
   </Group>);
 }
