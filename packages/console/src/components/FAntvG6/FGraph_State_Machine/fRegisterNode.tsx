@@ -64,7 +64,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >状态 {textOverflowEllipsis(stateName, 18)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
@@ -124,7 +124,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
           fontWeight: 600,
           fill: '#222',
         }}
-      >状态 {textOverflowEllipsis(stateName, 18)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
     </Rect>
   </Group>);
 }
