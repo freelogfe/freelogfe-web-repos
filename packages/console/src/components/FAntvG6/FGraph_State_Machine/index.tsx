@@ -132,6 +132,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
   }
 
   return (<FlowAnalysisGraph
+    autoFit={false}
+    animate={true}
     data={{
       nodes: [
         ...dataSource_Nodes_State,
@@ -149,35 +151,56 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         [0.5, 1],
       ],
       type: F_STATE_MACHINE_NODE_TYPE,
+      nodeStateStyles: {
+        hover: {
+          stroke: '#1890ff',
+          lineWidth: 2,
+        },
+      },
     }}
     edgeCfg={{
       type: 'cubic-vertical',
-      // endArrow: true,
-      // endArrow: {
-      //   show: true,
-      // },
-      endArrow: (edge: Shape | ShapeCfg | undefined) => {
-        // console.log(edge, 'edge2309oijlskdfjlsdkfj');
+      startArrow(edge) {
         return {
-          // show: !(edge as any).target.includes(':'),
-          show: false,
+          type: (edge as any).source.includes(':') ? 'diamond' : 'rect',
+          // fill: 'red',
+
         };
       },
-      edgeStateStyles: {
-        hover: {},
+      endArrow(edge) {
+        console.log(edge, 'edge2309oijlskdfjlsdkfj');
+        return {
+          // type: (edge as any).target.includes(':') ? 'diamond' : 'vee',
+          type: (edge as any).target.includes(':') ? 'diamond' : 'triangle',
+          // fill: 'green',
+        };
       },
+      // edgeStateStyles: {
+      //   hover: {},
+      // },
     }}
     layout={{
       rankdir: 'TB',
-      ranksepFunc: () => 50,
-      getHeight: (node: any) => {
-        // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-        // return node.nodeType === 'event' ? 40 : 64;
-        return node.nodeType === 'event' ? 50 : 64;
-      },
-      getWidth: () => {
+      // ranksepFunc: () => 50,
+      // getWidth: () => {
+      //   return 200;
+      // },
+      // getHeight: (node: any) => {
+      //   // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
+      //   // return node.nodeType === 'event' ? 40 : 64;
+      //
+      //   return node.nodeType === 'event' ? 100 : 128
+      // },
+      /** Number of pixels that separate nodes vertically in the layout. */
+      nodesepFunc: (node: any) => {
+        // return node.nodeType === 'event' ? 200 : 200;
         return 200;
       },
+      /** Number of pixels that separate nodes horizontally in the layout. */
+      ranksepFunc: (node: any) => {
+        return node.nodeType === 'event' ? 50 : 64;
+      },
+
     }}
     // markerCfg={(cfg) => {
     //   return {

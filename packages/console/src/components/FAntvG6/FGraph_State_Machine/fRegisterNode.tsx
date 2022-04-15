@@ -157,7 +157,7 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 150,
+        width: 200,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
