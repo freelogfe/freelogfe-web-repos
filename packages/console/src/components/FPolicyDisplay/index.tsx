@@ -68,8 +68,8 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
         activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
           {fullInfo && (<FGraph_State_Machine
             fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}
-            height={1000}
-            width={1600}
+            width={1000}
+            height={600}
           />)}
 
         </div>)
