@@ -80,6 +80,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
                 fill: '#8FD6B8',
                 fontSize: 12,
                 fontWeight: 600,
+                margin: [0, 10, 0, 0],
               }}
             >{co}</Text>);
           })
