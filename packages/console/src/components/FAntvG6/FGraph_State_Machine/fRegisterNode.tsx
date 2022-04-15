@@ -90,6 +90,63 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
   </Group>);
 }
 
+export interface FNode_State_Machine_StateTerminal_Values {
+  stateName: string;
+}
+
+interface FNode_State_Machine_StateTerminal_Props {
+  value: FNode_State_Machine_StateTerminal_Values;
+}
+
+function FNode_State_Machine_StateTerminal({ value }: FNode_State_Machine_StateTerminal_Props) {
+  // console.log(value, 'FNode_State_Machine_State980980239099999999&&&&&&&&&&&');
+  const { stateName } = value;
+  return (<Group draggable={true}>
+    <Rect
+      draggable
+      style={{
+        fill: '#FDEBEC',
+        stroke: '#EE4040',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+        width: 200,
+      }}
+      onClick={() => {
+        // console.log('#######98ioklj');
+      }}
+    >
+      {/*<Rect style={{ width: 200, height: 64, fill: 'red', marginLeft: 10, marginTop: -74}} />*/}
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+          padding: [3, 0],
+        }}
+        onClick={() => {
+          // console.log('#####2342394ui3jk');
+        }}
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
+      <Rect style={{ height: 10 }} />
+      <Rect style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+      }}>
+        <Text
+          style={{
+            fill: '#EE4040',
+            fontSize: 12,
+            fontWeight: 600,
+            margin: [0, 10, 0, 0],
+          }}
+        >停止接收事件</Text>
+      </Rect>
+    </Rect>
+  </Group>);
+}
+
 export interface FNode_State_Machine_StateNoAuth_Values {
   stateName: string;
 }
@@ -176,6 +233,12 @@ function FNode_State_Machine({ cfg = {} }: any) {
 
   if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
+      value={cfg.value}
+    />);
+  }
+
+  if (cfg.nodeType === 'stateTerminal') {
+    return (<FNode_State_Machine_StateTerminal
       value={cfg.value}
     />);
   }

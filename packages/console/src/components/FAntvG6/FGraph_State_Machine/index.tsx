@@ -23,6 +23,9 @@ interface FGraph_State_Machine_States {
     nodeType: 'state';
     value: FNode_State_Machine_State_Values;
   } | {
+    nodeType: 'stateTerminal';
+    value: FNode_State_Machine_StateNoAuth_Values;
+  } | {
     nodeType: 'stateNoAuth';
     value: FNode_State_Machine_StateNoAuth_Values;
   })>;
@@ -77,13 +80,24 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         auths.push('测试授权');
       }
       if (auths.length === 0) {
-        nodes_state.push({
-          id: stateID,
-          nodeType: 'stateNoAuth',
-          value: {
-            stateName: state[0],
-          },
-        });
+        if (state[1].transitions.length === 0) {
+          nodes_state.push({
+            id: stateID,
+            nodeType: 'stateTerminal',
+            value: {
+              stateName: state[0],
+            },
+          });
+        } else {
+          nodes_state.push({
+            id: stateID,
+            nodeType: 'stateNoAuth',
+            value: {
+              stateName: state[0],
+            },
+          });
+        }
+
       } else {
         nodes_state.push({
           id: stateID,
