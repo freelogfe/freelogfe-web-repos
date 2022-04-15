@@ -69,14 +69,14 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     for (const state of Object.entries(fsmDescriptionInfo)) {
       // console.log(state[0]);
       const stateID: string = state[0];
-      const colors: Array<'active' | 'testActive'> = [];
+      const auths: string[] = [];
       if (state[1].isAuth) {
-        colors.push('active');
+        auths.push('正式授权');
       }
       if (state[1].isTestAuth) {
-        colors.push('testActive');
+        auths.push('测试授权');
       }
-      if (colors.length === 0) {
+      if (auths.length === 0) {
         nodes_state.push({
           id: stateID,
           nodeType: 'stateNoAuth',
@@ -90,7 +90,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
           nodeType: 'state',
           value: {
             stateName: state[0],
-            auths: colors,
+            auths: auths,
           },
         });
       }
@@ -181,26 +181,15 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     }}
     layout={{
       rankdir: 'TB',
-      // ranksepFunc: () => 50,
-      // getWidth: () => {
-      //   return 200;
-      // },
-      // getHeight: (node: any) => {
-      //   // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
-      //   // return node.nodeType === 'event' ? 40 : 64;
-      //
-      //   return node.nodeType === 'event' ? 100 : 128
-      // },
       /** Number of pixels that separate nodes vertically in the layout. */
-      nodesepFunc: (node: any) => {
+      nodesepFunc(node: any) {
         // return node.nodeType === 'event' ? 200 : 200;
         return 200;
       },
       /** Number of pixels that separate nodes horizontally in the layout. */
-      ranksepFunc: (node: any) => {
+      ranksepFunc(node: any) {
         return node.nodeType === 'event' ? 50 : 64;
       },
-
     }}
     // markerCfg={(cfg) => {
     //   return {
