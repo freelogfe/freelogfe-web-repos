@@ -26,10 +26,10 @@ const statusInfo = {
   },
 };
 
-export type FNode_State_Machine_State_Values = {
+export interface FNode_State_Machine_State_Values {
   stateName: string;
   colors: Array<'active' | 'testActive'>;
-};
+}
 
 interface FNode_State_Machine_State_Props {
   value: FNode_State_Machine_State_Values;
@@ -79,10 +79,10 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         {/*    fontWeight: 600,*/}
         {/*  }}*/}
         {/*>正式授权</Text>*/}
-        {console.log(colors, 'colors!23890iosdajsalk')}
+        {/*{console.log(colors, 'colors!23890iosdajsalk')}*/}
         {
           colors.map((co) => {
-            console.log(co, 'cocococococococo');
+            // console.log(co, 'cocococococococo');
             return (<Text
               key={co}
               style={{
@@ -94,6 +94,46 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
           })
         }
       </Rect>
+    </Rect>
+  </Group>);
+}
+
+export interface FNode_State_Machine_StateNoAuth_Values {
+  stateName: string;
+}
+
+interface FNode_State_Machine_StateNoAuth_Props {
+  value: FNode_State_Machine_StateNoAuth_Values;
+}
+
+function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoAuth_Props) {
+  const { stateName } = value;
+  return (<Group draggable={true}>
+    <Rect
+      draggable
+      style={{
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+        padding: [10, 20],
+        cursor: 'move',
+        width: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 60,
+      }}
+      onClick={() => {
+        // console.log('#######98ioklj');
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#222',
+        }}
+      >{textOverflowEllipsis(stateName)}</Text>
     </Rect>
   </Group>);
 }
@@ -117,7 +157,7 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 200,
+        width: 150,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -144,6 +184,12 @@ function FNode_State_Machine({ cfg = {} }: any) {
 
   if (cfg.nodeType === 'state') {
     return (<FNode_State_Machine_State
+      value={cfg.value}
+    />);
+  }
+
+  if (cfg.nodeType === 'stateNoAuth') {
+    return (<FNode_State_Machine_StateNoAuth
       value={cfg.value}
     />);
   }

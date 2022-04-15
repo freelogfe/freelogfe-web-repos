@@ -5,7 +5,7 @@ import './fRegisterNode';
 import {
   F_STATE_MACHINE_NODE_TYPE,
   FNode_State_Machine_Event_Values,
-  FNode_State_Machine_State_Values,
+  FNode_State_Machine_State_Values, FNode_State_Machine_StateNoAuth_Values,
 } from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { ArrowConfig, Shape, ShapeCfg } from '@ant-design/graphs/es/interface';
@@ -17,11 +17,15 @@ interface FGraph_State_Machine_Props {
 }
 
 interface FGraph_State_Machine_States {
-  dataSource_Nodes_State: {
+  dataSource_Nodes_State: Array<{
     id: string;
+  } & ({
     nodeType: 'state';
     value: FNode_State_Machine_State_Values;
-  }[];
+  } | {
+    nodeType: 'stateNoAuth';
+    value: FNode_State_Machine_StateNoAuth_Values;
+  })>;
   dataSource_Nodes_Event: {
     id: string;
     nodeType: 'event';
@@ -72,14 +76,25 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       if (state[1].isTestAuth) {
         colors.push('testActive');
       }
-      nodes_state.push({
-        id: stateID,
-        nodeType: 'state',
-        value: {
-          stateName: '状态 ' + state[0],
-          colors: colors,
-        },
-      });
+      if (colors.length === 0) {
+        nodes_state.push({
+          id: stateID,
+          nodeType: 'stateNoAuth',
+          value: {
+            stateName: '状态 ' + state[0],
+          },
+        });
+      } else {
+        nodes_state.push({
+          id: stateID,
+          nodeType: 'state',
+          value: {
+            stateName: '状态 ' + state[0],
+            colors: colors,
+          },
+        });
+      }
+
       for (const event of Object.entries(state[1].transitions)) {
         const eventID: string = state[0] + ':' + event[0];
         let eventDescription: string = '';
@@ -108,9 +123,9 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         });
       }
     }
-    console.log(nodes_state, 'nodes_state98023iolk');
-    console.log(nodes_event, 'nodes_event98023iolk');
-    console.log(edges, 'edges98023iolk');
+    // console.log(nodes_state, 'nodes_state98023iolk');
+    // console.log(nodes_event, 'nodes_event98023iolk');
+    // console.log(edges, 'edges98023iolk');
     set_DataSource_Nodes_State(nodes_state);
     set_DataSource_Nodes_Event(nodes_event);
     set_DataSource_Edges(edges);
@@ -128,10 +143,6 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     }}
     width={width || undefined}
     height={height || undefined}
-    // layout={{
-    //   rankdir: 'TB',
-    //   ranksepFunc: () => 20,
-    // }}
     nodeCfg={{
       anchorPoints: [
         [0.5, 0],
@@ -158,7 +169,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     }}
     layout={{
       rankdir: 'TB',
-      ranksepFunc: () => 40,
+      ranksepFunc: () => 50,
       getHeight: (node: any) => {
         // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
         // return node.nodeType === 'event' ? 40 : 64;
