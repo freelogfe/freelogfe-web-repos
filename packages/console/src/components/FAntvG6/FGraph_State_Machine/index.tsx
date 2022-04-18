@@ -173,8 +173,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       },
     }}
     edgeCfg={{
-      // type: 'cubic-vertical',
-      type: 'polyline',
+      type: 'cubic-horizontal',
+      // type: 'polyline',
       startArrow(edge) {
         return {
           // type: (edge as any).source.includes(':') ? 'diamond' : 'rect',
@@ -183,7 +183,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
         };
       },
       endArrow(edge) {
-        console.log(edge, 'edge2309oijlskdfjlsdkfj');
+        // console.log(edge, 'edge2309oijlskdfjlsdkfj');
         return {
           // type: (edge as any).target.includes(':') ? 'diamond' : 'vee',
           type: (edge as any).target.includes(':') ? 'diamond' : 'triangle',
@@ -198,14 +198,15 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       // rankdir: 'TB',
       rankdir: 'LR',
       /** Number of pixels that separate nodes vertically in the layout. */
-      // nodesepFunc(node: any) {
-      //   // return node.nodeType === 'event' ? 200 : 200;
-      //   return 200;
-      // },
+      nodesepFunc(node: any) {
+        // return node.nodeType === 'event' ? 200 : 200;
+        return 20;
+      },
       /** Number of pixels that separate nodes horizontally in the layout. */
-      /*ranksepFunc(node: any) {
-        return node.nodeType === 'event' ? 50 : 64;
-      },*/
+      ranksepFunc(node: any) {
+        // return node.nodeType === 'event' ? 50 : 64;
+        return 50;
+      },
     }}
     // markerCfg={(cfg) => {
     //   return {

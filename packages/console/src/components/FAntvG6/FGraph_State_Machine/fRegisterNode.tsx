@@ -24,7 +24,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 160,
+        // width: 160,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
@@ -40,7 +40,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >{textOverflowEllipsis(stateName, 15)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
@@ -86,7 +86,7 @@ function FNode_State_Machine_StateTerminal({ value }: FNode_State_Machine_StateT
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 160,
+        // width: 160,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
@@ -103,7 +103,7 @@ function FNode_State_Machine_StateTerminal({ value }: FNode_State_Machine_StateT
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >{textOverflowEllipsis(stateName, 15)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
@@ -142,7 +142,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 160,
+        // width: 160,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -158,7 +158,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
           fontWeight: 600,
           fill: '#222',
         }}
-      >{textOverflowEllipsis(stateName, 15)}</Text>
+      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
     </Rect>
   </Group>);
 }
