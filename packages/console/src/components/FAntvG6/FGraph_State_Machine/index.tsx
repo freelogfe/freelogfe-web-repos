@@ -146,7 +146,7 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
   }
 
   return (<FlowAnalysisGraph
-    autoFit={false}
+    autoFit={true}
     animate={true}
     data={{
       nodes: [
@@ -161,8 +161,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
     height={height || undefined}
     nodeCfg={{
       anchorPoints: [
-        [0.5, 0],
-        [0.5, 1],
+        // [0.5, 0],
+        // [0.5, 1],
       ],
       type: F_STATE_MACHINE_NODE_TYPE,
       nodeStateStyles: {
@@ -173,7 +173,8 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       },
     }}
     edgeCfg={{
-      type: 'cubic-vertical',
+      // type: 'cubic-vertical',
+      type: 'polyline',
       startArrow(edge) {
         return {
           // type: (edge as any).source.includes(':') ? 'diamond' : 'rect',
@@ -194,16 +195,17 @@ function FGraph_State_Machine({ fsmDescriptionInfo, width, height }: FGraph_Stat
       // },
     }}
     layout={{
-      rankdir: 'TB',
+      // rankdir: 'TB',
+      rankdir: 'LR',
       /** Number of pixels that separate nodes vertically in the layout. */
-      nodesepFunc(node: any) {
-        // return node.nodeType === 'event' ? 200 : 200;
-        return 200;
-      },
+      // nodesepFunc(node: any) {
+      //   // return node.nodeType === 'event' ? 200 : 200;
+      //   return 200;
+      // },
       /** Number of pixels that separate nodes horizontally in the layout. */
-      ranksepFunc(node: any) {
+      /*ranksepFunc(node: any) {
         return node.nodeType === 'event' ? 50 : 64;
-      },
+      },*/
     }}
     // markerCfg={(cfg) => {
     //   return {

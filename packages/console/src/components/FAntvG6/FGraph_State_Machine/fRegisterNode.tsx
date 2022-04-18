@@ -3,29 +3,6 @@ import { createNodeFromReact, Group, Rect, Text } from '@antv/g6-react-node';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import G6 from '@antv/g6';
 
-// const statusInfo = {
-//   active: {
-//     color1: '#8FD6B8',
-//     color2: '#E5F6EF',
-//     text: '正式授权',
-//   },
-//   testActive: {
-//     color1: '#8FD6B8',
-//     color2: '#E5F6EF',
-//     text: '测试授权',
-//   },
-//   inActive: {
-//     color1: '#D4D4D4',
-//     color2: '#FFFFFF',
-//     text: '未授权',
-//   },
-//   terminal: {
-//     color1: '#EE4040',
-//     color2: '#FDEBEC',
-//     text: '停止接收事件',
-//   },
-// };
-
 export interface FNode_State_Machine_State_Values {
   stateName: string;
   auths: string[];
@@ -47,13 +24,12 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 200,
+        width: 160,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
       }}
     >
-      {/*<Rect style={{ width: 200, height: 64, fill: 'red', marginLeft: 10, marginTop: -74}} />*/}
       <Text
         style={{
           fontSize: 14,
@@ -64,7 +40,7 @@ function FNode_State_Machine_State({ value }: FNode_State_Machine_State_Props) {
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
+      >{textOverflowEllipsis(stateName, 15)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
@@ -110,7 +86,7 @@ function FNode_State_Machine_StateTerminal({ value }: FNode_State_Machine_StateT
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 200,
+        width: 160,
       }}
       onClick={() => {
         // console.log('#######98ioklj');
@@ -127,7 +103,7 @@ function FNode_State_Machine_StateTerminal({ value }: FNode_State_Machine_StateT
         onClick={() => {
           // console.log('#####2342394ui3jk');
         }}
-      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
+      >{textOverflowEllipsis(stateName, 15)}</Text>
       <Rect style={{ height: 10 }} />
       <Rect style={{
         display: 'flex',
@@ -166,7 +142,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 200,
+        width: 160,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -182,7 +158,7 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
           fontWeight: 600,
           fill: '#222',
         }}
-      >状态 {textOverflowEllipsis(stateName, 15)}</Text>
+      >{textOverflowEllipsis(stateName, 15)}</Text>
     </Rect>
   </Group>);
 }
@@ -201,12 +177,12 @@ function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
     <Rect
       draggable
       style={{
-        fill: '#fff',
+        // fill: '#fff',
         // stroke: '#EFEFEF',
         radius: 10,
         padding: [10, 20],
         cursor: 'move',
-        width: 200,
+        // width: 160,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
