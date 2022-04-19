@@ -6,6 +6,7 @@ import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
 import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
+import FGraph_State_Machine2 from '@/components/FAntvG6/FGraph_State_Machine2';
 
 interface FPolicyDisplayProps {
   code?: string;
@@ -66,7 +67,7 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
       {/*{console.log(JSON.stringify(fullInfo?.fsmDescriptionInfo), '9823ijhosdklfjlsdjflsdkjl')}*/}
       {
         activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
-          {fullInfo && (<FGraph_State_Machine
+          {fullInfo && (<FGraph_State_Machine2
             fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}
             width={1200}
             height={770}
