@@ -4,7 +4,7 @@ import { FlowAnalysisGraph } from '@ant-design/graphs';
 import './fRegisterNode';
 import {
   F_STATE_MACHINE_NODE_TYPE,
-  FNode_State_Machine_Event_Values,
+  // FNode_State_Machine_Event_Values,
   FNode_State_Machine_State_Values, FNode_State_Machine_StateNoAuth_Values,
 } from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';

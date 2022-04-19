@@ -163,44 +163,44 @@ function FNode_State_Machine_StateNoAuth({ value }: FNode_State_Machine_StateNoA
   </Group>);
 }
 
-export type FNode_State_Machine_Event_Values = {
-  eventDescription: string;
-};
-
-interface FNode_State_Machine_Event_Props {
-  value: FNode_State_Machine_Event_Values;
-}
-
-function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
-  const { eventDescription } = value;
-  return (<Group draggable={true}>
-    <Rect
-      draggable
-      style={{
-        // fill: '#fff',
-        // stroke: '#EFEFEF',
-        radius: 10,
-        padding: [10, 20],
-        cursor: 'move',
-        // width: 160,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      onClick={() => {
-        // console.log('#######98ioklj');
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 14,
-          fontWeight: 600,
-          fill: '#222',
-        }}
-      >{textOverflowEllipsis(eventDescription)}</Text>
-    </Rect>
-  </Group>);
-}
+// export type FNode_State_Machine_Event_Values = {
+//   eventDescription: string;
+// };
+//
+// interface FNode_State_Machine_Event_Props {
+//   value: FNode_State_Machine_Event_Values;
+// }
+//
+// function FNode_State_Machine_Event({ value }: FNode_State_Machine_Event_Props) {
+//   const { eventDescription } = value;
+//   return (<Group draggable={true}>
+//     <Rect
+//       draggable
+//       style={{
+//         // fill: '#fff',
+//         // stroke: '#EFEFEF',
+//         radius: 10,
+//         padding: [10, 20],
+//         cursor: 'move',
+//         // width: 160,
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//       }}
+//       onClick={() => {
+//         // console.log('#######98ioklj');
+//       }}
+//     >
+//       <Text
+//         style={{
+//           fontSize: 14,
+//           fontWeight: 600,
+//           fill: '#222',
+//         }}
+//       >{textOverflowEllipsis(eventDescription)}</Text>
+//     </Rect>
+//   </Group>);
+// }
 
 // console.log('##@#$$@#$@#$@#$@#$@#$@#$@######');
 
@@ -225,11 +225,11 @@ function FNode_State_Machine({ cfg = {} }: any) {
     />);
   }
 
-  if (cfg.nodeType === 'event') {
-    return (<FNode_State_Machine_Event
-      value={cfg.value}
-    />);
-  }
+  // if (cfg.nodeType === 'event') {
+  //   return (<FNode_State_Machine_Event
+  //     value={cfg.value}
+  //   />);
+  // }
 
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
 }
