@@ -203,7 +203,7 @@ function FGraph_Tree_Relationship_Resource({
     }
 
     {
-      dataSource && dataSource.children.length > 0 && <FErrorBoundary>{Gra}</FErrorBoundary>
+      dataSource && dataSource.children.length > 0 && <>{Gra}</>
     }
 
     <FRelationDrawer

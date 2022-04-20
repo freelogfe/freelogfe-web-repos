@@ -3,7 +3,7 @@ import styles from './index.less';
 import { ErrorInfo } from 'react';
 
 interface FErrorBoundaryProps {
-
+  // children: React.ReactChildren;
 }
 
 interface FErrorBoundaryStates {

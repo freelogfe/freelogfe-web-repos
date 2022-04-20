@@ -223,9 +223,9 @@ function FGraph_Tree_Relationship_Exhibit({
     }
 
     {
-      dataSource && dataSource.children.length > 0 && (<FErrorBoundary>
+      dataSource && dataSource.children.length > 0 && (<>
         {Gra}
-      </FErrorBoundary>)
+      </>)
     }
     {/*{console.log(showRelationDrawerInfo, 'showRelationDrawerInfo98io3ewfsdl')}*/}
     <FRelationDrawer
