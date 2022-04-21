@@ -117,7 +117,11 @@ function HomePage({}: HomePageProps) {
 
     </div>
     <div className={styles.banner4}>
-
+      <h1 className={styles.banner4H1}>Freelog，专业免费的资源发行和运营平台</h1>
+      <div style={{ height: 40 }} />
+      <h3 className={styles.banner4H2}>支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现</h3>
+      <div style={{ height: 40 }} />
+      <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
     </div>
 
   </div>);
