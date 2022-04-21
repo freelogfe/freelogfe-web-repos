@@ -197,8 +197,70 @@
 }
 
 .banner3 {
-  //height: 836px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #FAFBFC;
+
+  .banner3H1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #222222;
+    line-height: 46px;
+    margin: 0;
+  }
+
+  .banner3H2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #63676C;
+    line-height: 26px;
+    margin: 0;
+  }
+
+  .banner3_Content {
+    width: 1060px;
+    height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+    .banner3_Content_LeftImg {
+      width: 640px;
+      height: 520px;
+      position: absolute;
+      top: 0;
+      left: -100px;
+    }
+
+    .banner3_Content_RightImg {
+      width: 640px;
+      height: 520px;
+      position: absolute;
+      top: 0;
+      right: -100px;
+    }
+
+    .banner3_Content_Display {
+      width: 420px;
+
+      .banner3_Content_DisplayH1 {
+        font-size: 28px;
+        font-weight: 400;
+        color: #222;
+        line-height: 34px;
+      }
+
+      .banner3_Content_DisplayH2 {
+        font-size: 14px;
+        font-weight: 400;
+        color: #222222;
+        line-height: 24px;
+      }
+    }
+  }
 }
 
 .banner4 {
@@ -225,5 +287,6 @@
     font-weight: 400;
     color: #63676C;
     line-height: 24px;
+    margin: 0;
   }
 }

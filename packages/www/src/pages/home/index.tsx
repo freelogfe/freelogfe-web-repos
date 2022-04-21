@@ -15,6 +15,10 @@ import img_Case6 from '@/assets/case6.jpg';
 import img_Case7 from '@/assets/case7.jpg';
 import img_Case8 from '@/assets/case8.jpg';
 
+import img_Banner3_1 from '@/assets/banner3-1.png';
+import img_Banner3_2 from '@/assets/banner3-2.png';
+import img_Banner3_3 from '@/assets/banner3-3.png';
+
 interface HomePageProps {
 
 }
@@ -114,6 +118,49 @@ function HomePage({}: HomePageProps) {
       </div>
     </div>
     <div className={styles.banner3}>
+      <div style={{ height: 150 }} />
+      <h1 className={styles.banner3H1}>助力虚拟资源发行和运营</h1>
+      <div style={{ height: 20 }} />
+      <h3 className={styles.banner3H2}>实现资源授权与交易自动化、定制化，开创资源再创作的变现新模式，节点商整合运营资源助力变现</h3>
+      <div style={{ height: 150 }} />
+
+      <div className={styles.banner3_Content}>
+        <img src={img_Banner3_1} alt={''} className={styles.banner3_Content_LeftImg} />
+        <div />
+        <div className={styles.banner3_Content_Display}>
+          <div className={styles.banner3_Content_DisplayH1}>「 智能合约 」，高效变现</div>
+          <div style={{ height: 30 }} />
+          <div className={styles.banner3_Content_DisplayH2}>根据不同人群创建不同授权策略，实现交易定制化、自动化，满足你的多样变现需求。</div>
+          <div style={{ height: 30 }} />
+          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+        </div>
+      </div>
+
+      <div className={styles.banner3_Content}>
+        <img src={img_Banner3_2} alt={''} className={styles.banner3_Content_RightImg} />
+        <div className={styles.banner3_Content_Display}>
+          <div className={styles.banner3_Content_DisplayH1}>「 再创作 」，助力多渠道变现</div>
+          <div style={{ height: 30 }} />
+          <div className={styles.banner3_Content_DisplayH2}>资源可被他人签约为素材进行再创作，拓宽资源变现渠道。</div>
+          <div style={{ height: 30 }} />
+          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+        </div>
+        <div />
+      </div>
+
+      <div className={styles.banner3_Content}>
+        <img src={img_Banner3_3} alt={''} className={styles.banner3_Content_LeftImg} />
+        <div />
+        <div className={styles.banner3_Content_Display}>
+          <div className={styles.banner3_Content_DisplayH1}>节点商运营，轻松获益</div>
+          <div style={{ height: 30 }} />
+          <div className={styles.banner3_Content_DisplayH2}>新增节点商角色，专注资源运营，提高变现效率， 你可以专注生产优质资源，轻松获益。</div>
+          <div style={{ height: 30 }} />
+          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+        </div>
+      </div>
+
+      <div style={{ height: 150 }} />
 
     </div>
     <div className={styles.banner4}>
