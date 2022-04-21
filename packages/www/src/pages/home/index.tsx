@@ -1,6 +1,10 @@
 import styles from './index.less';
 import { FRectBtn } from '@/components/FButton';
 import { FTitleText } from '@/components/FText';
+import img_CircularBlue from '@/assets/circular-blue.png';
+import img_CircularGreen from '@/assets/circular-green.png';
+import img_LatticeBlue from '@/assets/lattice-blue.png';
+import img_LatticeGreen from '@/assets/lattice-green.png';
 
 interface HomePageProps {
 
@@ -90,7 +94,10 @@ function HomePage({}: HomePageProps) {
 
         </div>
         <div className={styles.banner2Content2Right}>
-
+          <img className={styles.circularBlue} src={img_CircularBlue} alt={''} />
+          <img className={styles.circularGreen} src={img_CircularGreen} alt={''} />
+          <img className={styles.latticeBlue} src={img_LatticeBlue} alt={''} />
+          <img className={styles.latticeGreen} src={img_LatticeGreen} alt={''} />
         </div>
       </div>
     </div>
