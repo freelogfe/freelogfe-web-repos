@@ -18,6 +18,7 @@ import img_Case8 from '@/assets/case8.jpg';
 import img_Banner3_1 from '@/assets/banner3-1.png';
 import img_Banner3_2 from '@/assets/banner3-2.png';
 import img_Banner3_3 from '@/assets/banner3-3.png';
+import FPentagram from '@/components/FIcons/FPentagram';
 
 interface HomePageProps {
 
@@ -29,6 +30,7 @@ function HomePage({}: HomePageProps) {
       <span className={styles.banner0White}>3000元现金奖励等你赢取！内测期间参与</span>
       <a className={styles.banner0Red}>资源创作大赛</a>
       <span className={styles.banner0White}>，最低可领15元现金奖励，参与排名更有机会赢取3000元现金奖励！</span>
+      <FPentagram style={{ color: '#F3E574' }} />
     </div>
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>
