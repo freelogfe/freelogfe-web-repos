@@ -19,6 +19,7 @@ import img_Banner3_1 from '@/assets/banner3-1.png';
 import img_Banner3_2 from '@/assets/banner3-2.png';
 import img_Banner3_3 from '@/assets/banner3-3.png';
 import FPentagram from '@/components/FIcons/FPentagram';
+import { Space } from 'antd';
 
 interface HomePageProps {
 
@@ -173,6 +174,31 @@ function HomePage({}: HomePageProps) {
       <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
     </div>
 
+    <footer className={styles.footer}>
+      <div className={styles.footerLeft}>
+        <Space size={30} style={{ height: 70 }}>
+          <a className={styles.footerLeft_Link}>产品动态</a>
+          <a className={styles.footerLeft_Link}>服务协议</a>
+          <a className={styles.footerLeft_Link}>关于我们</a>
+          <a className={styles.footerLeft_Link}>联系我们</a>
+          <a className={styles.footerLeft_Link}>English</a>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={30} style={{ height: 70 }}>
+          <a className={styles.footerLeft_Link}>
+
+          </a>
+          <a className={styles.footerLeft_Link}>服务协议</a>
+          <a className={styles.footerLeft_Link}>关于我们</a>
+          <a className={styles.footerLeft_Link}>联系我们</a>
+          <a className={styles.footerLeft_Link}>English</a>
+        </Space>
+      </div>
+
+      <div className={styles.footerRight}>
+
+      </div>
+    </footer>
   </div>);
 }
 
