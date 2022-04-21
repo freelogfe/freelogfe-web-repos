@@ -1,0 +1,100 @@
+@import '../../config.less';
+
+.Policy {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: white;
+  position: relative;
+
+  .PolicyName {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  //.PolicyGrammar {
+  //  padding: 15px 20px;
+  //  border-top: 1px solid #E5E7EB;
+  //
+  //  & > pre {
+  //    margin: 0;
+  //  }
+  //}
+
+  .PolicyFullScreenBtn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .PolicyFullScreenBtn {
+      visibility: visible;
+    }
+  }
+}
+
+.MenuPanel {
+  width: 360px;
+  //background-color: #44C28C;
+  background-color: white;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //padding-left: 20px;
+  //padding-right: 20px;
+  padding: 40px 20px;
+  border-radius: 4px;
+
+  .allVersions {
+    //margin-right: -15px;
+    margin-bottom: -8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    & > div {
+      margin-right: 8px;
+      margin-left: 8px;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.ModalTile {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+}
+
+.versionDrawerTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: @f-warning-color2;
+  color: @f-warning-color1;
+  border-radius: 4px;
+  height: 40px;
+}
+
+.versionDrawerVersions {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid #E5E7EB;
+}

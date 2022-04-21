@@ -1,0 +1,36 @@
+@import '../../../config.less';
+
+.styles {
+  .title {
+    display: flex;
+    align-items: center;
+    //transform: translateX(-10px);
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      align-items: center;
+
+      .prefix {
+        width: 3px;
+        height: 15px;
+        background: linear-gradient(180deg, #2784FF 0%, #C5DEFF 100%);
+        border-radius: 2px;
+      }
+
+      .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #EE4040;
+      }
+
+      .dotHidden {
+        visibility: hidden;
+      }
+    }
+  }
+
+}
+
+

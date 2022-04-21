@@ -1,0 +1,154 @@
+@import '../../config.less';
+
+.FExhibitAuthorizedContracts {
+  width: 860px;
+  height: 500px;
+  display: flex;
+  align-items: stretch;
+  border-radius: 6px;
+  //background-color: #FAFBFC;
+
+  .subjects {
+    width: 344px;
+    background-color: white;
+    border-radius: 6px 0 0 6px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+
+    .subject {
+      padding: 10px 15px;
+      cursor: pointer;
+
+      .FContentText {
+        max-width: 270px;
+
+        &:hover {
+          color: inherit;
+        }
+      }
+
+      .disuseAuthorized {
+        font-size: 12px;
+        line-height: 18px;
+        color: @f-success-color1;
+      }
+    }
+  }
+
+  .disuseAuthorizedPanel {
+    display: flex;
+    width: 516px;
+    background-color: #FAFBFC;
+    border-radius: 0 6px 6px 0;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .operatorPanel {
+    width: 516px;
+    background-color: #FAFBFC;
+    border-radius: 0 6px 6px 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding: 0 20px;
+
+    .hasPolicyTip {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 4px;
+      height: 28px;
+      padding: 0 10px;
+
+      & > span {
+        font-size: 12px;
+        font-weight: 400;
+        color: #999;
+      }
+    }
+
+    .Contracts {
+      background-color: white;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+
+      .footer {
+        padding: 0 20px;
+
+        .action {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 42px;
+
+        }
+
+        .otherTitle {
+          //height: 40px;
+          border-top: 1px solid #E5E7EB;
+          //display: flex;
+          //align-items: center;
+        }
+
+        .otherActions {
+          .otherAction {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 42px;
+
+            & + .otherAction {
+              border-top: 1px solid #E5E7EB;
+            }
+          }
+        }
+      }
+    }
+
+    .Policy {
+      background-color: white;
+      //padding: 20px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      position: relative;
+
+      //& > pre {
+      //  margin: 0;
+      //  padding: 0;
+      //}
+
+      .singPolicyHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px 0;
+      }
+
+      .PolicyFullScreenBtn {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: 20px;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        border-radius: 4px;
+        line-height: 1;
+        padding: 0;
+        margin: 0;
+        visibility: hidden;
+      }
+
+      &:hover {
+        .PolicyFullScreenBtn {
+          visibility: visible;
+        }
+      }
+    }
+  }
+}

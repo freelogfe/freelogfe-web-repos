@@ -8,7 +8,7 @@ import {
   FNode_State_Machine_State_Values, FNode_State_Machine_StateNoAuth_Values,
 } from './fRegisterNode';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { ArrowConfig, Shape, ShapeCfg } from '@ant-design/graphs/es/interface';
+// import { ArrowConfig, Shape, ShapeCfg } from '@ant-design/graphs/es/interface';
 
 interface FGraph_State_Machine_Props {
   fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'];
