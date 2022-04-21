@@ -26,7 +26,16 @@ function HomePage({}: HomePageProps) {
     </div>
 
     <div className={styles.banner2}>
-
+      <div className={styles.banner2Content}>
+        <div style={{ height: 30 }} />
+        <h1 className={styles.banner2H1}>丰富的应用场景</h1>
+        <div style={{ height: 20 }} />
+        <h2 className={styles.banner2H2}>Freelog，基于「智能合约」的虚拟资源交易平台，支持资源授权的自动化和定制化，</h2>
+        <h2 className={styles.banner2H2}>为资源的发行、再创作和推广提供多样化解决方案，助力资源作者和运营者快速变现。</h2>
+        <div style={{ height: 20 }} />
+        <h3 className={styles.banner2H3}>一键创建资源商店 • 收益独享 • 多渠道变现</h3>
+        <div style={{ height: 60 }} />
+      </div>
     </div>
     <div className={styles.banner3}>
 
