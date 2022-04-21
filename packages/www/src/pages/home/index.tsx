@@ -1,6 +1,12 @@
 import styles from './index.less';
 import { FRectBtn } from '@/components/FButton';
 import { FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import FPentagram from '@/components/FIcons/FPentagram';
+import FWeChat from '@/components/FIcons/FWeChat';
+import FSina from '@/components/FIcons/FSina';
+import FLinkedin from '@/components/FIcons/FLinkedin';
+
 import img_CircularBlue from '@/assets/circular-blue.png';
 import img_CircularGreen from '@/assets/circular-green.png';
 import img_LatticeBlue from '@/assets/lattice-blue.png';
@@ -18,11 +24,9 @@ import img_Case8 from '@/assets/case8.jpg';
 import img_Banner3_1 from '@/assets/banner3-1.png';
 import img_Banner3_2 from '@/assets/banner3-2.png';
 import img_Banner3_3 from '@/assets/banner3-3.png';
-import FPentagram from '@/components/FIcons/FPentagram';
-import { Space } from 'antd';
-import FWeChat from '@/components/FIcons/FWeChat';
-import FSina from '@/components/FIcons/FSina';
-import FLinkedin from '@/components/FIcons/FLinkedin';
+
+import img_Police from '@/assets/police@2x.png';
+
 
 interface HomePageProps {
 
@@ -201,7 +205,11 @@ function HomePage({}: HomePageProps) {
       </div>
 
       <div className={styles.footerRight}>
-
+        <img src={img_Police} className={styles.policeImg} alt={''} />
+        <div style={{ width: 6 }} />
+        <div className={styles.footerRightText}>粤ICP备17085716号-1</div>
+        <div style={{ width: 30 }} />
+        <div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>
       </div>
     </footer>
   </div>);
