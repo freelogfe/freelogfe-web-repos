@@ -1,5 +1,6 @@
 import styles from './index.less';
 import { FRectBtn } from '@/components/FButton';
+import { FTitleText } from '@/components/FText';
 
 interface HomePageProps {
 
@@ -14,7 +15,7 @@ function HomePage({}: HomePageProps) {
     </div>
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>
-        <div style={{ height: 100 }} />
+        <div style={{ height: 110 }} />
         <h1 className={styles.banner1H1}>创作盛放之地</h1>
         <div style={{ height: 40 }} />
         <h2 className={styles.banner1H2}>免费专业的资源发行和运营平台</h2>
@@ -34,7 +35,63 @@ function HomePage({}: HomePageProps) {
         <h2 className={styles.banner2H2}>为资源的发行、再创作和推广提供多样化解决方案，助力资源作者和运营者快速变现。</h2>
         <div style={{ height: 20 }} />
         <h3 className={styles.banner2H3}>一键创建资源商店 • 收益独享 • 多渠道变现</h3>
-        <div style={{ height: 60 }} />
+      </div>
+      <div style={{ height: 60 }} />
+      <div className={styles.banner2Content2}>
+        <div className={styles.banner2Content2Left}>
+          <div style={{ height: 20 }} />
+          <div className={[styles.banner2Content2Left_Card, styles.activated].join(' ')}>
+            <FTitleText text={'小说/漫画连载'} type='h1' />
+            <div style={{ height: 15 }} />
+            <FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
+            <div style={{ height: 15 }} />
+            <div className={styles.banner2Content2Left_CardFooter}>
+              <FRectBtn size='small'>小说场景</FRectBtn>
+              <div style={{ width: 10 }} />
+              <FRectBtn size='small'>漫画场景</FRectBtn>
+            </div>
+          </div>
+          <div style={{ height: 10 }} />
+          <div className={styles.banner2Content2Left_Card}>
+            <FTitleText text={'摄影/设计作品集'} type='h1' />
+            <div style={{ height: 15 }} />
+            <FTitleText text={'版权保护 • 再创作变现'} type='h4' />
+            <div style={{ height: 15 }} />
+            <div className={styles.banner2Content2Left_CardFooter}>
+              <FRectBtn size='small'>小说场景</FRectBtn>
+              <div style={{ width: 10 }} />
+              <FRectBtn size='small'>漫画场景</FRectBtn>
+            </div>
+          </div>
+          <div style={{ height: 10 }} />
+          <div className={styles.banner2Content2Left_Card}>
+            <FTitleText text={'游戏中心'} type='h1' />
+            <div style={{ height: 15 }} />
+            <FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
+            <div style={{ height: 15 }} />
+            <div className={styles.banner2Content2Left_CardFooter}>
+              <FRectBtn size='small'>小说场景</FRectBtn>
+              <div style={{ width: 10 }} />
+              <FRectBtn size='small'>漫画场景</FRectBtn>
+            </div>
+          </div>
+          <div style={{ height: 10 }} />
+          <div className={styles.banner2Content2Left_Card}>
+            <FTitleText text={'更多可能，等你探索'} type='h1' />
+            <div style={{ height: 15 }} />
+            <FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
+            <div style={{ height: 15 }} />
+            <div className={styles.banner2Content2Left_CardFooter}>
+              <FRectBtn size='small'>小说场景</FRectBtn>
+              <div style={{ width: 10 }} />
+              <FRectBtn size='small'>漫画场景</FRectBtn>
+            </div>
+          </div>
+
+        </div>
+        <div className={styles.banner2Content2Right}>
+
+        </div>
       </div>
     </div>
     <div className={styles.banner3}>
