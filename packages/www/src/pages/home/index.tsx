@@ -20,6 +20,9 @@ import img_Banner3_2 from '@/assets/banner3-2.png';
 import img_Banner3_3 from '@/assets/banner3-3.png';
 import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
+import FWeChat from '@/components/FIcons/FWeChat';
+import FSina from '@/components/FIcons/FSina';
+import FLinkedin from '@/components/FIcons/FLinkedin';
 
 interface HomePageProps {
 
@@ -183,15 +186,17 @@ function HomePage({}: HomePageProps) {
           <a className={styles.footerLeft_Link}>联系我们</a>
           <a className={styles.footerLeft_Link}>English</a>
         </Space>
-        <div style={{ height: 40 }} />
+        <div style={{ width: 40 }} />
         <Space size={30} style={{ height: 70 }}>
           <a className={styles.footerLeft_Link}>
-
+            <FWeChat />
           </a>
-          <a className={styles.footerLeft_Link}>服务协议</a>
-          <a className={styles.footerLeft_Link}>关于我们</a>
-          <a className={styles.footerLeft_Link}>联系我们</a>
-          <a className={styles.footerLeft_Link}>English</a>
+          <a className={styles.footerLeft_Link}>
+            <FSina />
+          </a>
+          <a className={styles.footerLeft_Link}>
+            <FLinkedin />
+          </a>
         </Space>
       </div>
 
