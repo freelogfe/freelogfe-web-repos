@@ -6,6 +6,15 @@ import img_CircularGreen from '@/assets/circular-green.png';
 import img_LatticeBlue from '@/assets/lattice-blue.png';
 import img_LatticeGreen from '@/assets/lattice-green.png';
 
+import img_Case1 from '@/assets/case1.jpg';
+import img_Case2 from '@/assets/case2.jpg';
+import img_Case3 from '@/assets/case3.jpg';
+import img_Case4 from '@/assets/case4.jpg';
+import img_Case5 from '@/assets/case5.jpg';
+import img_Case6 from '@/assets/case6.jpg';
+import img_Case7 from '@/assets/case7.jpg';
+import img_Case8 from '@/assets/case8.jpg';
+
 interface HomePageProps {
 
 }
@@ -98,6 +107,9 @@ function HomePage({}: HomePageProps) {
           <img className={styles.circularGreen} src={img_CircularGreen} alt={''} />
           <img className={styles.latticeBlue} src={img_LatticeBlue} alt={''} />
           <img className={styles.latticeGreen} src={img_LatticeGreen} alt={''} />
+
+          <img className={styles.imgTop} src={img_Case1} />
+          <img className={styles.imgBottom} src={img_Case2} />
         </div>
       </div>
     </div>

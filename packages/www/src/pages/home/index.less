@@ -117,12 +117,17 @@
 
         &.activated {
           background-color: #FAFAFA;
+
+          .banner2Content2Left_CardFooter {
+            visibility: visible;
+          }
         }
 
         .banner2Content2Left_CardFooter {
           display: flex;
           align-items: center;
           justify-content: center;
+          visibility: hidden;
         }
       }
     }
@@ -161,6 +166,30 @@
         height: 110px;
         left: 60px;
         top: 255px;
+      }
+
+      .imgTop {
+        position: absolute;
+        width: 520px;
+        height: 340px;
+        right: 0;
+        top: 60px;
+
+        background: #D8D8D8;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+
+      .imgBottom {
+        position: absolute;
+        width: 520px;
+        height: 340px;
+        left: 90px;
+        top: 310px;
+
+        background: #D8D8D8;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
       }
     }
 
