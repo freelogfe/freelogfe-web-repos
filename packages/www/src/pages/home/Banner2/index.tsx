@@ -15,11 +15,53 @@ import img_Case6 from '@/assets/case6.jpg';
 import img_Case7 from '@/assets/case7.jpg';
 import img_Case8 from '@/assets/case8.jpg';
 
+// const info = [{
+//
+// }]
+
 interface Banner2Props {
 
 }
 
+interface Banner2States {
+  activatedIndex: 0 | 1 | 2 | 3;
+}
+
+const initStates: Banner2States = {
+  activatedIndex: 0,
+};
+
+const configInfo: {
+  top: number;
+  img1: string;
+  img2: string;
+}[] = [
+  {
+    top: 20,
+    img1: img_Case1,
+    img2: img_Case2,
+  },
+  {
+    top: 190,
+    img1: img_Case3,
+    img2: img_Case4,
+  },
+  {
+    top: 360,
+    img1: img_Case5,
+    img2: img_Case6,
+  },
+  {
+    top: 530,
+    img1: img_Case7,
+    img2: img_Case8,
+  },
+];
+
 function Banner2() {
+
+  const [activatedIndex, set_ActivatedIndex] = React.useState<Banner2States['activatedIndex']>(initStates['activatedIndex']);
+
   return (<div className={styles.banner2}>
     <div className={styles.banner2Content}>
       <div style={{ height: 30 }} />
@@ -33,8 +75,17 @@ function Banner2() {
     <div style={{ height: 60 }} />
     <div className={styles.banner2Content2}>
       <div className={styles.banner2Content2Left}>
-        <div style={{ height: 20 }} />
-        <div className={[styles.banner2Content2Left_Card, styles.activated].join(' ')}>
+        <div className={styles.banner2Content2Left_Card_Mask} style={{ top: configInfo[activatedIndex].top }} />
+        <div
+          className={[styles.banner2Content2Left_Card, activatedIndex === 0 ? styles.activated : ''].join(' ')}
+          style={{ top: 20 }}
+          onMouseEnter={() => {
+            set_ActivatedIndex(0);
+          }}
+          onMouseLeave={() => {
+
+          }}
+        >
           <FTitleText text={'小说/漫画连载'} type='h1' />
           <div style={{ height: 15 }} />
           <FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
@@ -45,40 +96,61 @@ function Banner2() {
             <FRectBtn size='small'>漫画场景</FRectBtn>
           </div>
         </div>
-        <div style={{ height: 10 }} />
-        <div className={styles.banner2Content2Left_Card}>
+        {/*<div style={{ height: 10 }} />*/}
+        <div
+          className={[styles.banner2Content2Left_Card, activatedIndex === 1 ? styles.activated : ''].join(' ')}
+          style={{ top: 190 }}
+          onMouseEnter={() => {
+            set_ActivatedIndex(1);
+          }}
+          onMouseLeave={() => {
+
+          }}
+        >
           <FTitleText text={'摄影/设计作品集'} type='h1' />
           <div style={{ height: 15 }} />
           <FTitleText text={'版权保护 • 再创作变现'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>小说场景</FRectBtn>
-            <div style={{ width: 10 }} />
-            <FRectBtn size='small'>漫画场景</FRectBtn>
+            <FRectBtn size='small'>场景体验</FRectBtn>
           </div>
         </div>
-        <div style={{ height: 10 }} />
-        <div className={styles.banner2Content2Left_Card}>
+        {/*<div style={{ height: 10 }} />*/}
+        <div
+          className={[styles.banner2Content2Left_Card, activatedIndex === 2 ? styles.activated : ''].join(' ')}
+          style={{ top: 360 }}
+          onMouseEnter={() => {
+            set_ActivatedIndex(2);
+          }}
+          onMouseLeave={() => {
+
+          }}
+        >
           <FTitleText text={'游戏中心'} type='h1' />
           <div style={{ height: 15 }} />
           <FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>小说场景</FRectBtn>
-            <div style={{ width: 10 }} />
-            <FRectBtn size='small'>漫画场景</FRectBtn>
+            <FRectBtn size='small'>场景体验</FRectBtn>
           </div>
         </div>
-        <div style={{ height: 10 }} />
-        <div className={styles.banner2Content2Left_Card}>
+        {/*<div style={{ height: 10 }} />*/}
+        <div
+          className={[styles.banner2Content2Left_Card, activatedIndex === 3 ? styles.activated : ''].join(' ')}
+          style={{ top: 530 }}
+          onMouseEnter={() => {
+            set_ActivatedIndex(3);
+          }}
+          onMouseLeave={() => {
+
+          }}
+        >
           <FTitleText text={'更多可能，等你探索'} type='h1' />
           <div style={{ height: 15 }} />
           <FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>小说场景</FRectBtn>
-            <div style={{ width: 10 }} />
-            <FRectBtn size='small'>漫画场景</FRectBtn>
+            <FRectBtn size='small'>马上注册</FRectBtn>
           </div>
         </div>
 

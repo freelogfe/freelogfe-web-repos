@@ -42,8 +42,12 @@
 
     .banner2Content2Left {
       width: 260px;
+      position: relative;
 
       .banner2Content2Left_Card {
+        position: absolute;
+        left: 0;
+        right: 0;
         width: 260px;
         height: 160px;
         border-radius: 10px;
@@ -53,10 +57,11 @@
         flex-direction: column;
 
         &.activated {
-          background-color: #FAFAFA;
+          //background-color: #FAFAFA;
 
           .banner2Content2Left_CardFooter {
             visibility: visible;
+            transition: visibility .2s;
           }
         }
 
@@ -65,7 +70,20 @@
           align-items: center;
           justify-content: center;
           visibility: hidden;
+          transition: visibility .2s;
         }
+      }
+
+      .banner2Content2Left_Card_Mask {
+        position: absolute;
+        background-color: #FAFAFA;
+        width: 260px;
+        height: 160px;
+        border-radius: 10px;
+        left: 0;
+        right: 0;
+        transition: top .2s;
+        //transition-duration: .25s, 1s;
       }
     }
 
