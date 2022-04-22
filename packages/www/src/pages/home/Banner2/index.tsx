@@ -89,9 +89,9 @@ function Banner2({}: Banner2Props) {
           <FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>小说场景</FRectBtn>
+            <FRectBtn size='small' style={{ padding: '0 15px' }}>小说场景</FRectBtn>
             <div style={{ width: 10 }} />
-            <FRectBtn size='small'>漫画场景</FRectBtn>
+            <FRectBtn size='small' style={{ padding: '0 15px' }}>漫画场景</FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -110,7 +110,7 @@ function Banner2({}: Banner2Props) {
           <FTitleText text={'版权保护 • 再创作变现'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>场景体验</FRectBtn>
+            <FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -129,7 +129,7 @@ function Banner2({}: Banner2Props) {
           <FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>场景体验</FRectBtn>
+            <FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -148,7 +148,7 @@ function Banner2({}: Banner2Props) {
           <FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small'>马上注册</FRectBtn>
+            <FRectBtn size='small' style={{ padding: '0 15px' }}>马上注册</FRectBtn>
           </div>
         </div>
 
