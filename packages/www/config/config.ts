@@ -16,6 +16,9 @@ export default defineConfig({
       routes: [
         { exact: true, path: '.', redirect: '/home' },
         { path: 'home', component: '@/pages/home/index' },
+        { path: 'dashboard', component: '@/pages/dashboard/index' },
+        { path: 'activity', component: '@/pages/activity/index' },
+        { path: 'invite', component: '@/pages/invite/index' },
       ]
     }
   ],
