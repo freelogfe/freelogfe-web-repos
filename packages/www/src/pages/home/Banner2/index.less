@@ -1,0 +1,134 @@
+.banner2 {
+  background-color: white;
+  display: flex;
+  //align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .banner2Content {
+    width: 1060px;
+
+    .banner2H1 {
+      font-size: 40px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 46px;
+      margin: 0;
+    }
+
+    .banner2H2 {
+      font-size: 16px;
+      font-weight: 400;
+      color: #63676C;
+      line-height: 26px;
+      margin: 0;
+    }
+
+    .banner2H3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #5260BB;
+      line-height: 20px;
+      margin: 0;
+    }
+  }
+
+  .banner2Content2 {
+    width: 1060px;
+    height: 860px;
+    display: flex;
+    align-items: stretch;
+
+    .banner2Content2Left {
+      width: 260px;
+
+      .banner2Content2Left_Card {
+        width: 260px;
+        height: 160px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        &.activated {
+          background-color: #FAFAFA;
+
+          .banner2Content2Left_CardFooter {
+            visibility: visible;
+          }
+        }
+
+        .banner2Content2Left_CardFooter {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          visibility: hidden;
+        }
+      }
+    }
+
+    .banner2Content2Right {
+      width: 800px;
+      position: relative;
+
+      .circularBlue {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        top: 0;
+        right: -60px;
+      }
+
+      .circularGreen {
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        left: 340px;
+        top: 590px
+      }
+
+      .latticeBlue {
+        position: absolute;
+        width: 140px;
+        height: 110px;
+        right: -30px;
+        top: 345px;
+      }
+
+      .latticeGreen {
+        position: absolute;
+        width: 140px;
+        height: 110px;
+        left: 60px;
+        top: 255px;
+      }
+
+      .imgTop {
+        position: absolute;
+        width: 520px;
+        height: 340px;
+        right: 0;
+        top: 60px;
+
+        background: #D8D8D8;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+
+      .imgBottom {
+        position: absolute;
+        width: 520px;
+        height: 340px;
+        left: 90px;
+        top: 310px;
+
+        background: #D8D8D8;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+    }
+
+  }
+}
