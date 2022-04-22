@@ -15,9 +15,7 @@ import img_Case6 from '@/assets/case6.jpg';
 import img_Case7 from '@/assets/case7.jpg';
 import img_Case8 from '@/assets/case8.jpg';
 
-// const info = [{
-//
-// }]
+import 'animate.css';
 
 interface Banner2Props {
 
@@ -58,7 +56,7 @@ const configInfo: {
   },
 ];
 
-function Banner2() {
+function Banner2({}: Banner2Props) {
 
   const [activatedIndex, set_ActivatedIndex] = React.useState<Banner2States['activatedIndex']>(initStates['activatedIndex']);
 
@@ -161,8 +159,27 @@ function Banner2() {
         <img className={styles.latticeBlue} src={img_LatticeBlue} alt={''} />
         <img className={styles.latticeGreen} src={img_LatticeGreen} alt={''} />
 
-        <img className={styles.imgTop} src={img_Case1} />
-        <img className={styles.imgBottom} src={img_Case2} />
+        {
+          [0, 1, 2, 3].map((i) => {
+            return (<React.Fragment key={i}>
+              <img
+                className={[styles.imgTop, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
+                // className={[styles.imgTop, 'animate__animated', i === activatedIndex ? 'animate__zoomInDown' : ''].join(' ')}
+                src={configInfo[activatedIndex].img1}
+                style={{ opacity: i === activatedIndex ? 1 : 0 }}
+                alt={''}
+              />
+              <img
+                className={[styles.imgBottom, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
+                // className={[styles.imgBottom, 'animate__animated', i === activatedIndex ? 'animate__zoomInUp' : ''].join(' ')}
+                src={configInfo[activatedIndex].img2}
+                alt={''}
+                style={{ opacity: i === activatedIndex ? 1 : 0 }}
+              />
+            </React.Fragment>);
+          })
+        }
+
       </div>
     </div>
   </div>);
