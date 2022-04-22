@@ -27,6 +27,8 @@ import img_Banner3_3 from '@/assets/banner3-3.png';
 
 import img_Police from '@/assets/police@2x.png';
 
+import img_RewardSuspension from '@/assets/reward-suspension.png';
+
 
 interface HomePageProps {
 
@@ -145,7 +147,7 @@ function HomePage({}: HomePageProps) {
           <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
         </div>
       </div>
-      
+
       <div style={{ height: 100 }} />
 
       <div className={styles.banner3_Content}>
@@ -216,6 +218,10 @@ function HomePage({}: HomePageProps) {
         <div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>
       </div>
     </footer>
+
+    <a className={styles.rewardSuspension}>
+      <img src={img_RewardSuspension} alt={''}/>
+    </a>
   </div>);
 }
 
