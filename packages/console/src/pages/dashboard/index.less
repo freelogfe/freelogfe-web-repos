@@ -1,16 +1,41 @@
 @import '../../../../www/src/config.less';
 
-.notice {
-  background-color: #EDF6FF;
-  height: 50px;
+.dashboard {
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
 
-  .noticeContent {
-    width: 1190px;
+  .notice {
+    background-color: #EDF6FF;
+    height: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    width: 100%;
+
+    .noticeContent {
+      width: 1190px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .title1 {
+    display: flex;
+    align-items: baseline;
+    font-size: 40px;
+    font-weight: 600;
+    color: #222;
+    line-height: 46px;
+  }
+
+  .title2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #63676C;
+    line-height: 26px;
+    text-align: center;
   }
 }
+

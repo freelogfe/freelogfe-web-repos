@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FWarning } from '@/components/FIcons';
+import { FInfo, FWarning } from '@/components/FIcons';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 
@@ -9,7 +9,7 @@ interface DashboardProps {
 }
 
 function Dashboard({}: DashboardProps) {
-  return (<div>
+  return (<div className={styles.dashboard}>
     <div className={styles.notice}>
       <div className={styles.noticeContent}>
         <Space size={10}>
@@ -21,6 +21,23 @@ function Dashboard({}: DashboardProps) {
           <FTextBtn type='primary'>查看详情</FTextBtn>
         </Space>
       </div>
+    </div>
+    <div style={{ height: 50 }} />
+    <div className={styles.title1}>
+      <span>萌新任务，完成即领20元现金奖励！</span>
+      <FTextBtn>
+        <FInfo />
+        <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
+      </FTextBtn>
+    </div>
+    <div style={{ height: 20 }} />
+    <div className={styles.title2}>
+      完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
+      完成全部任务仅需**分钟，快开始萌新之旅吧~
+    </div>
+    <div style={{ height: 30 }} />
+    <div>
+      
     </div>
   </div>);
 }
