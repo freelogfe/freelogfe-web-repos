@@ -4,7 +4,8 @@ export default [
     path: '/',
     component: '../layouts/FLayout',
     routes: [
-      { exact: true, path: '.', redirect: '/market' },
+      { exact: true, path: '.', redirect: '/dashboard' },
+      { path: 'dashboard', component: '../pages/dashboard/index' },
       {
         path: 'market',
         routes: [
