@@ -3,6 +3,9 @@ import styles from './index.less';
 import { FInfo, FWarning } from '@/components/FIcons';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
+import { FContentText, FTitleText } from '@/components/FText';
+import FUtil1 from '@/utils';
+import FFormLayout from '@/components/FFormLayout';
 
 interface DashboardProps {
 
@@ -45,11 +48,103 @@ function Dashboard({}: DashboardProps) {
 
         </div>
         <div className={styles.board3}>
-          
+
         </div>
       </div>
       <div style={{ height: 50 }} />
     </div>
+
+    <div style={{ height: 40 }} />
+    <div className={styles.statistics}>
+      <div className={styles.statisticsContent}>
+        <div className={styles.statisticsLeft}>
+          <FTitleText text={'资源'} />
+          <div style={{ height: 20 }} />
+          <div className={styles.statisticsLeft_Panel}>
+            <FFormLayout>
+              <FFormLayout.FBlock
+                title={'数据总览'}
+              >
+                <div className={styles.statisticsLeft_Panel_Total}>
+                  <span>1087.5</span>
+                  <FContentText text={'总收益（元）'} type='normal' />
+                </div>
+                <div style={{ height: 10 }} />
+                <div className={styles.statisticsLeft_Panel_Week}>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日收益（元）</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日签约量</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日浏览量</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                </div>
+              </FFormLayout.FBlock>
+
+              <FFormLayout.FBlock
+                title={'最近发布'}
+              >
+
+              </FFormLayout.FBlock>
+            </FFormLayout>
+          </div>
+
+          <div style={{ height: 40 }} />
+          <FTitleText text={'资源'} />
+          <div style={{ height: 20 }} />
+          <div className={styles.statisticsLeft_Panel}>
+            <FFormLayout>
+              <FFormLayout.FBlock
+                title={'节点'}
+              >
+                <div className={styles.statisticsLeft_Panel_Total}>
+                  <span>1087.5</span>
+                  <FContentText text={'总收益（元）'} type='normal' />
+                </div>
+                <div style={{ height: 10 }} />
+                <div className={styles.statisticsLeft_Panel_Week}>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日收益（元）</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日签约量</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                  <div className={styles.statisticsLeft_Panel_Week_Card}>
+                    <span>近7日浏览量</span>
+                    <div style={{ height: 10 }} />
+                    <FTitleText text={'500'} type='h1' />
+                  </div>
+                </div>
+              </FFormLayout.FBlock>
+
+              <FFormLayout.FBlock
+                title={'我的节点'}
+              >
+
+              </FFormLayout.FBlock>
+            </FFormLayout>
+          </div>
+        </div>
+        <div className={styles.statisticsRight}>
+
+        </div>
+      </div>
+    </div>
+
+    <div style={{ height: 100 }} />
+
   </div>);
 }
 

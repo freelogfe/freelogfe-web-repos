@@ -2,7 +2,6 @@
 
 .dashboard {
 
-
   .notice {
     background-color: #EDF6FF;
     height: 50px;
@@ -44,7 +43,6 @@
     }
   }
 
-
   .boards {
     width: 1190px;
     display: flex;
@@ -69,6 +67,63 @@
       background: #E9A923;
       border-radius: 20px;
     }
+  }
+
+  .statistics {
+    display: flex;
+    justify-content: center;
+
+    .statisticsContent {
+      display: flex;
+      width: 1190px;
+      justify-content: space-between;
+
+      .statisticsLeft {
+        width: 920px;
+
+        .statisticsLeft_Panel {
+          padding: 30px;
+          background-color: white;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          border-radius: 6px;
+
+          .statisticsLeft_Panel_Total {
+            padding: 20px;
+            font-size: 40px;
+            font-weight: 600;
+            color: #222222;
+            line-height: 46px;
+            display: flex;
+            align-items: baseline;
+            background-color: #F7F8F9;
+            border-radius: 8px;
+
+            & > span {
+              display: inline-block;
+              padding-right: 10px;
+            }
+          }
+
+          .statisticsLeft_Panel_Week {
+            display: flex;
+            justify-content: space-between;
+
+            .statisticsLeft_Panel_Week_Card {
+              width: 280px;
+              background-color: #F7F8F9;
+              border-radius: 8px;
+              padding: 15px 20px;
+            }
+          }
+        }
+      }
+
+      .statisticsRight {
+        width: 260px;
+      }
+    }
+
+
   }
 }
 
