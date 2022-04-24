@@ -1,1 +1,57 @@
 @import '../../config.less';
+
+.activity {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    width: 1140px;
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 1140px;
+    margin-bottom: -20px;
+
+    .contentCard {
+      width: 560px;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px;
+
+      &:hover {
+        background: #FFFFFF;
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+      }
+
+      .contentCard_Cover {
+        width: 540px;
+        display: block;
+        height: 320px;
+      }
+
+      .ongoingLabel, .closedLabel {
+        display: inline-block;
+        padding: 0 5px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 18px;
+        border-radius: 2px;
+      }
+
+      .ongoingLabel {
+        color: #42C28C;
+        background: rgba(66, 194, 140, 0.15);
+      }
+
+      .closedLabel {
+        color: #666;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
