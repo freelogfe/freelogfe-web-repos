@@ -22,22 +22,33 @@ function Dashboard({}: DashboardProps) {
         </Space>
       </div>
     </div>
-    <div style={{ height: 50 }} />
-    <div className={styles.title1}>
-      <span>萌新任务，完成即领20元现金奖励！</span>
-      <FTextBtn>
-        <FInfo />
-        <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
-      </FTextBtn>
-    </div>
-    <div style={{ height: 20 }} />
-    <div className={styles.title2}>
-      完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
-      完成全部任务仅需**分钟，快开始萌新之旅吧~
-    </div>
-    <div style={{ height: 30 }} />
-    <div>
-      
+    <div className={styles.title}>
+      <div style={{ height: 50 }} />
+      <div className={styles.title1}>
+        <span>萌新任务，完成即领20元现金奖励！</span>
+        <FTextBtn>
+          <FInfo />
+          <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
+        </FTextBtn>
+      </div>
+      <div style={{ height: 20 }} />
+      <div className={styles.title2}>
+        完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
+        完成全部任务仅需**分钟，快开始萌新之旅吧~
+      </div>
+      <div style={{ height: 30 }} />
+      <div className={styles.boards}>
+        <div className={styles.board1}>
+
+        </div>
+        <div className={styles.board2}>
+
+        </div>
+        <div className={styles.board3}>
+          
+        </div>
+      </div>
+      <div style={{ height: 50 }} />
     </div>
   </div>);
 }

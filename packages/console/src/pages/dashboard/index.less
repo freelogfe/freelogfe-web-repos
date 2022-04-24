@@ -1,9 +1,7 @@
 @import '../../../../www/src/config.less';
 
 .dashboard {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+
 
   .notice {
     background-color: #EDF6FF;
@@ -21,21 +19,56 @@
     }
   }
 
-  .title1 {
+  .title {
     display: flex;
-    align-items: baseline;
-    font-size: 40px;
-    font-weight: 600;
-    color: #222;
-    line-height: 46px;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+
+    .title1 {
+      display: flex;
+      align-items: baseline;
+      font-size: 40px;
+      font-weight: 600;
+      color: #222;
+      line-height: 46px;
+    }
+
+    .title2 {
+      font-size: 16px;
+      font-weight: 400;
+      color: #63676C;
+      line-height: 26px;
+      text-align: center;
+    }
   }
 
-  .title2 {
-    font-size: 16px;
-    font-weight: 400;
-    color: #63676C;
-    line-height: 26px;
-    text-align: center;
+
+  .boards {
+    width: 1190px;
+    display: flex;
+
+    .board1 {
+      width: 700px;
+      height: 503px;
+      background: #2784FF;
+      border-radius: 20px;
+    }
+
+    .board2 {
+      width: 245px;
+      height: 503px;
+      background: #42C28C;
+      border-radius: 20px;
+    }
+
+    .board3 {
+      width: 245px;
+      height: 503px;
+      background: #E9A923;
+      border-radius: 20px;
+    }
   }
 }
 
