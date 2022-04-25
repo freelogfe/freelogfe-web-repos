@@ -66,7 +66,7 @@ function Dashboard({}: DashboardProps) {
                 title={'数据总览'}
               >
                 <div className={styles.statisticsLeft_Panel_Total}>
-                  <span>1087.5</span>
+                  <span>--</span>
                   <FContentText text={'总收益（元）'} type='normal' />
                 </div>
                 <div style={{ height: 10 }} />
@@ -74,7 +74,7 @@ function Dashboard({}: DashboardProps) {
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日收益（元）</span>
                     <div style={{ height: 10 }} />
-                    <FTitleText text={'500'} type='h1' />
+                    <FTitleText text={'--'} type='h1' />
                   </div>
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日签约量</span>
