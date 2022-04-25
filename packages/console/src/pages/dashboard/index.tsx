@@ -13,6 +13,7 @@ import FMappingRuleAdd from '../../components/FIcons/FMappingRuleAdd';
 import FContent from '@/components/FIcons/FContent';
 import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FCoverImage from '@/components/FCoverImage';
+import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 
 interface DashboardProps {
 
@@ -116,7 +117,112 @@ function Dashboard({}: DashboardProps) {
                       <FCoverImage src={''} width={260} style={{ borderRadius: 4 }} />
 
                       <div className={styles.releasedResourceCard_Cover_Footer}>
+                        <FCoverFooterButtons buttons={[
+                          {
+                            type: 'resourceDetails',
+                            fn() {
+                              // onClickDetails && onClickDetails();
+                            },
+                          },
+                          {
+                            type: 'edit',
+                            fn() {
+                              // onClickEditing && onClickEditing();
+                            },
+                          },
+                          {
+                            type: 'update',
+                            fn() {
+                              // onClickRevision && onClickRevision();
+                            },
+                          },
+                        ]} />
+                      </div>
+                    </div>
+                    <div style={{ height: 10 }} />
+                    <FContentText text={'桌面整理技巧'} type='highlight' singleRow />
+                    <div style={{ height: 8 }} />
+                    <FContentText text={'markdown'} />
+                    <div style={{ height: 12 }} />
+                    <F_Contract_And_Policy_Labels
+                      data={[{
+                        text: '免费',
+                        dot: '',
+                      }]}
+                      singleRow
+                    />
+                    <div style={{ height: 15 }} />
+                    <FContentText text={'2021/03/01 12:00'} type='additional2' />
+                  </div>
 
+                  <div className={styles.releasedResourceCard}>
+                    <div className={styles.releasedResourceCard_Cover}>
+                      <FCoverImage src={''} width={260} style={{ borderRadius: 4 }} />
+
+                      <div className={styles.releasedResourceCard_Cover_Footer}>
+                        <FCoverFooterButtons buttons={[
+                          {
+                            type: 'resourceDetails',
+                            fn() {
+                              // onClickDetails && onClickDetails();
+                            },
+                          },
+                          {
+                            type: 'edit',
+                            fn() {
+                              // onClickEditing && onClickEditing();
+                            },
+                          },
+                          {
+                            type: 'update',
+                            fn() {
+                              // onClickRevision && onClickRevision();
+                            },
+                          },
+                        ]} />
+                      </div>
+                    </div>
+                    <div style={{ height: 10 }} />
+                    <FContentText text={'桌面整理技巧'} type='highlight' singleRow />
+                    <div style={{ height: 8 }} />
+                    <FContentText text={'markdown'} />
+                    <div style={{ height: 12 }} />
+                    <F_Contract_And_Policy_Labels
+                      data={[{
+                        text: '免费',
+                        dot: '',
+                      }]}
+                      singleRow
+                    />
+                    <div style={{ height: 15 }} />
+                    <FContentText text={'2021/03/01 12:00'} type='additional2' />
+                  </div>
+
+                  <div className={styles.releasedResourceCard}>
+                    <div className={styles.releasedResourceCard_Cover}>
+                      <FCoverImage src={''} width={260} style={{ borderRadius: 4 }} />
+
+                      <div className={styles.releasedResourceCard_Cover_Footer}>
+                        <FCoverFooterButtons buttons={[
+                          {
+                            type: 'resourceDetails',
+                            fn() {
+                              // onClickDetails && onClickDetails();
+                            },
+                          },
+                          {
+                            type: 'edit',
+                            fn() {
+                              // onClickEditing && onClickEditing();
+                            },
+                          },
+                          {
+                            type: 'update',
+                            fn() {
+                              // onClickRevision && onClickRevision();
+                            },
+                          },
+                        ]} />
                       </div>
                     </div>
                     <div style={{ height: 10 }} />
