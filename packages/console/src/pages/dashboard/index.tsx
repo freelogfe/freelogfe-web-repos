@@ -280,6 +280,10 @@ function Dashboard({}: DashboardProps) {
 
               <FFormLayout.FBlock
                 title={'我的节点'}
+                extra={<FTextBtn type='default'>
+                  <FAdd style={{ fontSize: 16 }} />
+                  <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
+                </FTextBtn>}
               >
 
               </FFormLayout.FBlock>
