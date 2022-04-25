@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FInfo, FWarning } from '@/components/FIcons';
+import { FAdd, FInfo, FWarning } from '@/components/FIcons';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import { FContentText, FTitleText } from '@/components/FText';
@@ -9,6 +9,8 @@ import FFormLayout from '@/components/FFormLayout';
 import img_Questionnaire from '@/assets/questionnaire.png';
 import img_Invite from '@/assets/invite.png';
 import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
+import FMappingRuleAdd from '../../components/FIcons/FMappingRuleAdd';
+import FContent from '@/components/FIcons/FContent';
 
 interface DashboardProps {
 
@@ -94,6 +96,17 @@ function Dashboard({}: DashboardProps) {
 
               <FFormLayout.FBlock
                 title={'最近发布'}
+                extra={<Space size={25}>
+                  <FTextBtn type='default'>
+                    <FAdd style={{ fontSize: 16 }} />
+                    <span style={{ paddingLeft: 3, display: 'inline-block' }}>新资源</span>
+                  </FTextBtn>
+
+                  <FTextBtn type='default'>
+                    <FContent style={{ fontSize: 16 }} />
+                    <span style={{ paddingLeft: 3, display: 'inline-block' }}>查看全部</span>
+                  </FTextBtn>
+                </Space>}
               >
 
               </FFormLayout.FBlock>
