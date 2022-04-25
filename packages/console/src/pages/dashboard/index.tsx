@@ -285,7 +285,32 @@ function Dashboard({}: DashboardProps) {
                   <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
                 </FTextBtn>}
               >
+                <div className={styles.nodeList}>
+                  <div className={styles.node}>
+                    <FContentText text={'The official node of freelog'} type='highlight' />
 
+                    <Space size={20}>
+                      <FTextBtn type='primary'>打开节点</FTextBtn>
+                      <FTextBtn type='primary'>管理节点</FTextBtn>
+                    </Space>
+                  </div>
+                  <div className={styles.node}>
+                    <FContentText text={'The official node of freelog'} type='highlight' />
+
+                    <Space size={20}>
+                      <FTextBtn type='primary'>打开节点</FTextBtn>
+                      <FTextBtn type='primary'>管理节点</FTextBtn>
+                    </Space>
+                  </div>
+                  <div className={styles.node}>
+                    <FContentText text={'The official node of freelog'} type='highlight' />
+
+                    <Space size={20}>
+                      <FTextBtn type='primary'>打开节点</FTextBtn>
+                      <FTextBtn type='primary'>管理节点</FTextBtn>
+                    </Space>
+                  </div>
+                </div>
               </FFormLayout.FBlock>
             </FFormLayout>
           </div>
