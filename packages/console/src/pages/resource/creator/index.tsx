@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
+import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import {FRectBtn} from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/layouts/FContentLayout';
-import {Space} from 'antd';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
+import { Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
   OnCreateAction,
   ChangeAction,
@@ -18,14 +18,14 @@ import {
   ClearDataAction,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
-import {router, RouterTypes} from 'umi';
-import {FCheck, FInfo, FLoading} from '@/components/FIcons';
-import FFormLayout from "@/components/FFormLayout";
-import * as H from "history";
-import Prompt from "umi/prompt";
-import fConfirmModal from "@/components/fConfirmModal";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import { router, RouterTypes } from 'umi';
+import { FCheck, FInfo, FLoading } from '@/components/FIcons';
+import FFormLayout from '@/components/FFormLayout';
+import * as H from 'history';
+import Prompt from 'umi/prompt';
+import fConfirmModal from '@/components/fConfirmModal';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -33,7 +33,7 @@ interface ResourceCreatorProps {
   user: UserModelState;
 }
 
-function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceCreatorProps & RouterTypes) {
+function ResourceCreator({ dispatch, route, resourceCreatorPage, user }: ResourceCreatorProps & RouterTypes) {
 
   React.useEffect(() => {
     return () => {
@@ -80,7 +80,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           type: 'resourceCreatorPage/change',
           payload: {
             promptLeavePath: location.pathname + location.search,
-          }
+          },
         });
         fConfirmModal({
           message: '还没有创建资源，现在离开会导致信息丢失',
@@ -94,7 +94,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
               type: 'resourceCreatorPage/change',
               payload: {
                 promptLeavePath: '',
-              }
+              },
             });
           },
         });
@@ -112,7 +112,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           dot={true}
         >
           <div className={styles.resourceName}>
-            <FContentText text={`${user.info?.username} /`}/>
+            <FContentText text={`${user.info?.username} /`} />
             &nbsp;
             <FInput
               errorText={resourceCreatorPage.nameErrorText}
@@ -134,9 +134,9 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
               placeholder={FUtil1.I18n.message('hint_enter_resource_name')}
               lengthLimit={60}
             />
-            <div style={{width: 10}}/>
-            {resourceCreatorPage.nameVerify === 1 && <FLoading/>}
-            {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && <FCheck/>}
+            <div style={{ width: 10 }} />
+            {resourceCreatorPage.nameVerify === 1 && <FLoading />}
+            {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && <FCheck />}
           </div>
         </FFormLayout.FBlock>
 
@@ -150,7 +150,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
             })}
             className={styles.FSelect}
             placeholder={FUtil1.I18n.message('hint_choose_resource_type')}
-            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
+            options={FUtil.Predefined.resourceTypes.map((i: string) => ({ value: i, label: i }))}
           />
         </FFormLayout.FBlock>
 
@@ -159,7 +159,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
             value={resourceCreatorPage.introduction}
             onChange={(e) => onChange({
               introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
-              introduction: e.target.value
+              introduction: e.target.value,
             })}
             placeholder={FUtil1.I18n.message('hint_enter_resource_short_description')}
           />
@@ -169,7 +169,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           <FUploadResourceCover
             value={resourceCreatorPage.cover}
             onChange={(value) => onChange({
-              cover: value
+              cover: value,
             })}
           />
         </FFormLayout.FBlock>
@@ -192,12 +192,12 @@ interface HeaderProps {
   disabled?: boolean;
 }
 
-function Header({onClickCreate, disabled = false}: HeaderProps) {
+function Header({ onClickCreate, disabled = false }: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText
       // text={FUtil.I18n.message('create_resource')}
       text={'创建资源'}
-      type="h1"
+      type='h1'
     />
 
     <Space size={30}>
@@ -212,7 +212,7 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
   </div>);
 }
 
-export default connect(({resourceCreatorPage, user}: ConnectState) => ({
+export default connect(({ resourceCreatorPage, user }: ConnectState) => ({
   resourceCreatorPage: resourceCreatorPage,
   user: user,
 }))(ResourceCreator);
