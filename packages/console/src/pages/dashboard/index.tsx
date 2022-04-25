@@ -4,8 +4,11 @@ import { FInfo, FWarning } from '@/components/FIcons';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import { FContentText, FTitleText } from '@/components/FText';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FFormLayout from '@/components/FFormLayout';
+import img_Questionnaire from '@/assets/questionnaire.png';
+import img_Invite from '@/assets/invite.png';
+import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
 
 interface DashboardProps {
 
@@ -137,9 +140,76 @@ function Dashboard({}: DashboardProps) {
             </FFormLayout>
           </div>
         </div>
-        <div className={styles.statisticsRight}>
+        <Space size={10} direction={'vertical'} className={styles.statisticsRight}>
+          <a href={'#'} className={styles.imgCard}>
+            <img src={img_Invite} alt={''} />
+          </a>
 
-        </div>
+          <a href={'#'} className={styles.imgCard}>
+            <img src={img_Questionnaire} alt={''} />
+          </a>
+
+          <div className={styles.panelCard}>
+            <FFormLayout>
+              <FFormLayout.FBlock
+                title={'我的节点'}
+                extra={<FTextBtn type='default'>更多 &gt;</FTextBtn>}
+              >
+                <div className={styles.linkList}>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>
+                      如何创建资源？
+                    </a>
+                  </div>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>
+                      如何创建节点？
+                    </a>
+                  </div>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>
+                      Freelog有哪些使用场景？
+                    </a>
+                  </div>
+                </div>
+              </FFormLayout.FBlock>
+            </FFormLayout>
+          </div>
+
+          <div className={styles.panelCard}>
+            <FFormLayout>
+              <FFormLayout.FBlock
+                title={'热门讨论'}
+                extra={<FTextBtn type='default'>更多 &gt;</FTextBtn>}
+              >
+                <div className={styles.linkList}>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>
+                      Freelog内测签到盖楼，完成签到和其他基础任务领6元现金奖励！
+                    </a>
+                  </div>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>
+                      Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！
+                    </a>
+                  </div>
+
+                </div>
+              </FFormLayout.FBlock>
+            </FFormLayout>
+          </div>
+
+        </Space>
       </div>
     </div>
 
