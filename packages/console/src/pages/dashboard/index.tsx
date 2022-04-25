@@ -4,12 +4,10 @@ import { FAdd, FInfo, FWarning } from '@/components/FIcons';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import { FContentText, FTitleText } from '@/components/FText';
-// import FUtil1 from '@/utils';
 import FFormLayout from '@/components/FFormLayout';
 import img_Questionnaire from '@/assets/questionnaire.png';
 import img_Invite from '@/assets/invite.png';
-import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
-import FMappingRuleAdd from '../../components/FIcons/FMappingRuleAdd';
+
 import FContent from '@/components/FIcons/FContent';
 import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FCoverImage from '@/components/FCoverImage';
