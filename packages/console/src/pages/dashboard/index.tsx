@@ -323,23 +323,27 @@ function Dashboard({}: DashboardProps) {
                   <div className={styles.linkListItem}>
                     <i />
                     <span />
-                    <a href={'#'}>
-                      如何创建资源？
-                    </a>
+                    <a href={'#'}>如何创建资源？</a>
                   </div>
                   <div className={styles.linkListItem}>
                     <i />
                     <span />
-                    <a href={'#'}>
-                      如何创建节点？
-                    </a>
+                    <a href={'#'}>如何创建节点？</a>
                   </div>
                   <div className={styles.linkListItem}>
                     <i />
                     <span />
-                    <a href={'#'}>
-                      Freelog有哪些使用场景？
-                    </a>
+                    <a href={'#'}>Freelog有哪些使用场景？</a>
+                  </div>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>资源作者和节点商有什么区别？</a>
+                  </div>
+                  <div className={styles.linkListItem}>
+                    <i />
+                    <span />
+                    <a href={'#'}>如何添加授权策略？</a>
                   </div>
                 </div>
               </FFormLayout.FBlock>
@@ -356,16 +360,12 @@ function Dashboard({}: DashboardProps) {
                   <div className={styles.linkListItem}>
                     <i />
                     <span />
-                    <a href={'#'}>
-                      Freelog内测签到盖楼，完成签到和其他基础任务领6元现金奖励！
-                    </a>
+                    <a href={'#'}>Freelog内测签到盖楼，完成签到和其他基础任务领6元现金奖励！</a>
                   </div>
                   <div className={styles.linkListItem}>
                     <i />
                     <span />
-                    <a href={'#'}>
-                      Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！
-                    </a>
+                    <a href={'#'}>Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！</a>
                   </div>
                 </div>
               </FFormLayout.FBlock>
