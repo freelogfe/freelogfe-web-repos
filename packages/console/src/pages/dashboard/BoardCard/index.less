@@ -9,8 +9,9 @@
     background-image: url("../../../assets/dashboard-card-bg@2x.png");
     background-size: 700px 503px;
     background-position: center center;
-    padding: 30px 30px 0;
+    padding: 0 30px;
     transition: width .5s;
+    overflow: hidden;
   }
 
   .board1 {
@@ -73,6 +74,41 @@
       align-items: center;
       justify-content: center;
     }
+  }
 
+  .tasks {
+    .task {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      box-sizing: border-box;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+
+      .taskTitle {
+        font-size: 14px;
+        font-weight: 600;
+        color: #FFF;
+        line-height: 20px;
+      }
+
+      .taskState {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 20px;
+      }
+
+      &.finish {
+        .taskTitle {
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .taskState {
+          color: #FFF;
+        }
+      }
+    }
   }
 }

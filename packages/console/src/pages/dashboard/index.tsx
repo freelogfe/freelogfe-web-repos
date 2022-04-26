@@ -367,7 +367,6 @@ function Dashboard({}: DashboardProps) {
                       Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！
                     </a>
                   </div>
-
                 </div>
               </FFormLayout.FBlock>
             </FFormLayout>
