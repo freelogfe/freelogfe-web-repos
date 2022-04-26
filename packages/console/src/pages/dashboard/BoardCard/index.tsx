@@ -53,8 +53,9 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
     <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
       <div />
       <div className={styles.title1}>基础任务</div>
-      <div className={styles.title2}
-           style={{ height: unfold ? 60 : 150 }}>完成下列基础任务可以了解Freelog的基本功能，以便更顺畅的使用Freelog完成资源、节点创建和推广
+      <div
+        className={styles.title2}
+        style={{ height: unfold ? 60 : 150 }}>完成下列基础任务可以了解Freelog的基本功能，以便更顺畅的使用Freelog完成资源、节点创建和推广
       </div>
       <div className={styles.title3}>还差5步领取 <span>6元</span> 奖励</div>
       <div />
@@ -63,7 +64,6 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
       <div className={styles.task}>
         <FPopover
           placement='right'
-          // color={'white'}
           content={<div className={styles.tooltipDisplay}>
             <FContentText text={'完善「个人中心」里的标星内容即可，更了解你一点，才能为你提供更精准的高质量内容哦。'} type='highlight' />
           </div>}
@@ -75,9 +75,6 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
       <div className={styles.task}>
         <FPopover
           placement='right'
-          // color={'white'}
-          // visible
-          // overlayInnerStyle={{width: 500}}
           content={<div className={styles.tooltipDisplay}>
             <FContentText text={'Freelog平台存在资源作者和节点商两个角色：'} type='highlight' />
             <div style={{ height: 15 }} />
@@ -107,9 +104,9 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
             <div style={{ height: 15 }} />
             <Space size={5}>
               <FContentText text={'查看'} />
-              <FTextBtn type='primary'>资源作者使用教程</FTextBtn>
+              <a type='primary'>资源作者使用教程</a>
               <FContentText text={'或'} />
-              <FTextBtn type='primary'>节点商使用教</FTextBtn>
+              <a type='primary'>节点商使用教</a>
             </Space>
           </div>}
         >
@@ -175,19 +172,67 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
     </div>
     <div className={styles.tasks}>
       <div className={styles.task}>
-        <div className={styles.taskTitle}>1.创建1个资源</div>
+        <FPopover
+          placement='right'
+          content={<div className={styles.tooltipDisplay}>
+            <FContentText text={'成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'} type='highlight' />
+            <div style={{ height: 15 }} />
+            <Space size={5}>
+              <FContentText text={'可查阅'} />
+              <a type='primary'>资源作者使用教程</a>
+              <FContentText text={'（视频）或'} />
+              <a type='primary'>资源创建教程</a>
+              <FContentText text={'（图文）创建资源。'} />
+            </Space>
+          </div>}>
+          <div className={styles.taskTitle}>1.创建1个资源</div>
+        </FPopover>
         <div className={styles.taskState}>未完成</div>
       </div>
       <div className={styles.task}>
-        <div className={styles.taskTitle}>2.发布资源版本</div>
+        <FPopover
+          placement='right'
+          content={<div className={styles.tooltipDisplay}>
+            <FContentText text={'通过更新资源版本可以优化和调整资源内容，以便在相同的资源中保留多个资源文件。'} type='highlight' />
+            <div style={{ height: 15 }} />
+            <Space size={5}>
+              <FContentText text={'可查阅'} />
+              <a type='primary'>资源版本发布教程</a>
+              <FContentText text={'（图文）或'} />
+              <a type='primary'>资源作者使用教程</a>
+              <FContentText text={'（视频）发布资源版本。'} />
+            </Space>
+          </div>}>
+          <div className={styles.taskTitle}>2.发布资源版本</div>
+        </FPopover>
         <div className={styles.taskState}>未完成</div>
       </div>
       <div className={styles.task}>
-        <div className={styles.taskTitle}>3.添加资源授权策略</div>
+        <FPopover
+          placement='right'
+          content={<div className={styles.tooltipDisplay}>
+            <FContentText text={'授权策略（免费/收费）是资源作者对资源授权的权利声明，也是资源作者获取收益的重要部分。'} type='highlight' />
+            <div style={{ height: 15 }} />
+            <Space size={5}>
+              <FContentText text={'可查阅'} />
+              <a type='primary'>资源授权策略添加教程</a>
+              <FContentText text={'（图文）或'} />
+              <a type='primary'>资源作者使用教程</a>
+              <FContentText text={'(视频) 为资源添加授权策略。'} />
+            </Space>
+          </div>}>
+          <div className={styles.taskTitle}>3.添加资源授权策略</div>
+        </FPopover>
         <div className={styles.taskState}>未完成</div>
       </div>
       <div className={styles.task}>
-        <div className={styles.taskTitle}>4.分享我的资源</div>
+        <FPopover
+          placement='right'
+          content={<div className={styles.tooltipDisplay}>
+            <FContentText text={'分享资源可以获得更多签约，快去资源详情页和好友分享已发行的资源吧。'} type='highlight' />
+          </div>}>
+          <div className={styles.taskTitle}>4.分享我的资源</div>
+        </FPopover>
         <div className={styles.taskState}>未完成</div>
       </div>
     </div>
