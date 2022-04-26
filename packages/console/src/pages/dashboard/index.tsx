@@ -13,6 +13,7 @@ import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Lab
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
+import FLoudspeaker from '@/components/FIcons/FLoudspeaker';
 
 interface DashboardProps {
 
@@ -23,7 +24,7 @@ function Dashboard({}: DashboardProps) {
     <div className={styles.notice}>
       <div className={styles.noticeContent}>
         <Space size={10}>
-          <FWarning />
+          <FLoudspeaker style={{ color: '#2784FF' }} />
           <span>系统维护通知：2月1日至3日进行系统维护。</span>
         </Space>
         <Space size={15}>
