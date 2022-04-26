@@ -1,0 +1,76 @@
+@import '../../../config.less';
+
+.boards {
+  width: 1190px;
+  display: flex;
+
+  .board1, .board2, .board3 {
+    border-radius: 20px;
+    background-image: url("../../../assets/dashboard-card-bg@2x.png");
+    background-size: 700px 503px;
+    background-position: center center;
+    padding: 30px 30px 0;
+  }
+
+  .board1 {
+    width: 245px;
+    height: 503px;
+    background-color: #2784FF;
+  }
+
+  .board2 {
+    width: 245px;
+    height: 503px;
+    background-color: #42C28C;
+  }
+
+  .board3 {
+    width: 245px;
+    height: 503px;
+    background-color: #E9A923;
+  }
+
+  .instruction {
+    display: flex;
+    height: 500px;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+
+    .title1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #FFF;
+      line-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #FFF;
+      line-height: 24px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 400px;
+      text-align: justify;
+      text-align-last: center;
+
+    }
+
+    .title3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #FFFFFF;
+      line-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+  }
+}

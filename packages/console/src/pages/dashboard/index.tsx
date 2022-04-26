@@ -12,6 +12,7 @@ import FContent from '@/components/FIcons/FContent';
 import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
+import BoardCard from './BoardCard';
 
 interface DashboardProps {
 
@@ -46,17 +47,7 @@ function Dashboard({}: DashboardProps) {
         完成全部任务仅需**分钟，快开始萌新之旅吧~
       </div>
       <div style={{ height: 30 }} />
-      <div className={styles.boards}>
-        <div className={styles.board1}>
-
-        </div>
-        <div className={styles.board2}>
-
-        </div>
-        <div className={styles.board3}>
-
-        </div>
-      </div>
+      <BoardCard />
       <div style={{ height: 50 }} />
     </div>
 
