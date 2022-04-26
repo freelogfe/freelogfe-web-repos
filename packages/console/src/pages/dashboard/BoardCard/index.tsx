@@ -51,7 +51,7 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
       <div className={styles.title2}
            style={{ height: unfold ? 60 : 150 }}>完成下列基础任务可以了解Freelog的基本功能，以便更顺畅的使用Freelog完成资源、节点创建和推广
       </div>
-      <div className={styles.title3}>还差3步领取 6元 奖励</div>
+      <div className={styles.title3}>还差3步领取 <span>6元</span> 奖励</div>
       <div />
     </div>
     <div className={styles.tasks}>
@@ -98,7 +98,7 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
       <div />
       <div className={styles.title1}>资源任务</div>
       <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>完成“资源任务”可成为Freelog资源创作者，可通过创建发行资源获取创作收益</div>
-      <div className={styles.title3}>领取 7元 奖励</div>
+      <div className={styles.title3}>领取 <span>7元</span> 奖励</div>
       <div />
     </div>
     <div className={styles.tasks}>
@@ -142,7 +142,7 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
       <div className={styles.title2}
            style={{ height: unfold ? 60 : 150 }}>完成“节点任务”即可成为Freelog节点商，节点商是平台资源的整合方，通过在节点上展示资源和制定授权策略获取资运营收益
       </div>
-      <div className={styles.title3}>领取 7元 奖励</div>
+      <div className={styles.title3}>领取 <span>7元</span> 奖励</div>
       <div />
     </div>
     <div className={styles.tasks}>
