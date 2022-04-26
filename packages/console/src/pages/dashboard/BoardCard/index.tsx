@@ -6,10 +6,26 @@ interface BoardCardProps {
 }
 
 function BoardCard({}: BoardCardProps) {
+  const [unfoldIndex, setUnfoldIndex] = React.useState<0 | 1 | 2>(0);
   return (<div className={styles.boards}>
-    <BoardCard1 unfold={false} />
-    <BoardCard2 unfold={false} />
-    <BoardCard3 unfold={true} />
+    <BoardCard1
+      unfold={unfoldIndex === 0}
+      onMouseEnter={() => {
+        setUnfoldIndex(0);
+      }}
+    />
+    <BoardCard2
+      unfold={unfoldIndex === 1}
+      onMouseEnter={() => {
+        setUnfoldIndex(1);
+      }}
+    />
+    <BoardCard3
+      unfold={unfoldIndex === 2}
+      onMouseEnter={() => {
+        setUnfoldIndex(2);
+      }}
+    />
   </div>);
 }
 
@@ -17,10 +33,18 @@ export default BoardCard;
 
 interface BoardCard1Props {
   unfold: boolean;
+
+  onMouseEnter?(): void;
 }
 
-function BoardCard1({ unfold }: BoardCard1Props) {
-  return (<div className={styles.board1} style={{ width: unfold ? 700 : 245 }}>
+function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
+  return (<div
+    className={styles.board1}
+    style={{ width: unfold ? 700 : 245 }}
+    onMouseEnter={() => {
+      onMouseEnter && onMouseEnter();
+    }}
+  >
     <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
       <div className={styles.title1}>基础任务</div>
       <div className={styles.title2}
@@ -34,10 +58,18 @@ function BoardCard1({ unfold }: BoardCard1Props) {
 
 interface BoardCard2Props {
   unfold: boolean;
+
+  onMouseEnter?(): void;
 }
 
-function BoardCard2({ unfold }: BoardCard2Props) {
-  return (<div className={styles.board2} style={{ width: unfold ? 700 : 245 }}>
+function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
+  return (<div
+    className={styles.board2}
+    style={{ width: unfold ? 700 : 245 }}
+    onMouseEnter={() => {
+      onMouseEnter && onMouseEnter();
+    }}
+  >
     <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
       <div className={styles.title1}>资源任务</div>
       <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>完成“资源任务”可成为Freelog资源创作者，可通过创建发行资源获取创作收益</div>
@@ -49,10 +81,18 @@ function BoardCard2({ unfold }: BoardCard2Props) {
 
 interface BoardCard3Props {
   unfold: boolean;
+
+  onMouseEnter?(): void;
 }
 
-function BoardCard3({ unfold }: BoardCard3Props) {
-  return (<div className={styles.board3} style={{ width: unfold ? 700 : 245 }}>
+function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
+  return (<div
+    className={styles.board3}
+    style={{ width: unfold ? 700 : 245 }}
+    onMouseEnter={() => {
+      onMouseEnter && onMouseEnter();
+    }}
+  >
     <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
       <div className={styles.title1}>节点任务</div>
       <div className={styles.title2}
