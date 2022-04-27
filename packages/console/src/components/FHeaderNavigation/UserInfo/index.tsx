@@ -8,6 +8,8 @@ import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import UserSVG from '@/assets/user.svg';
 import * as AHooks from 'ahooks';
+import { FRectBtn } from '@/components/FButton';
+import { Space } from 'antd';
 
 interface UserInfoProps {
   info: {
@@ -18,7 +20,14 @@ interface UserInfoProps {
   } | null;
 }
 
-function UserInfo({}: UserInfoProps) {
+function UserInfo({info}: UserInfoProps) {
+
+  if (!info) {
+    return (<Space size={10}>
+      <FRectBtn type='default' size='small'>登录</FRectBtn>
+      <FRectBtn type='primary' size='small'>注册</FRectBtn>
+    </Space>);
+  }
 
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>

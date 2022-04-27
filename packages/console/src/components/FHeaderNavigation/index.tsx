@@ -84,10 +84,20 @@ function FHeaderNavigation({
 
     </div>
     <Space size={30} className={styles.FHeaderNavigation_Right}>
-      {/*<FInput theme='dark' size='small' style={{ width: 200 }} />*/}
-      <FInput theme='dark' style={{ width: 200 }} />
+      <FInput
+        size='small'
+        theme='dark'
+        style={{ width: 200 }}
+      />
 
+      <UserInfo info={null} />
 
+      <FRectBtn
+        type='secondary'
+        onClick={() => {
+          // window.open(FUtil.Format.completeUrlByDomain('console'));
+        }}
+      >进入工作台</FRectBtn>
     </Space>
   </div>);
 }
