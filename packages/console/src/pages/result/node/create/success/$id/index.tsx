@@ -13,6 +13,7 @@ import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_
 import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
 import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FHeaderNavigation from '@/components/FHeaderNavigation';
 
 
 const fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'] = {
@@ -64,6 +65,70 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
     });
     router.push(FUtil.LinkTo.market());
   }
+
+  return (<FHeaderNavigation
+    logoHref={''}
+    alphaTest={true}
+    menu={[
+      {
+        id: 'dashboard',
+        text: '概览',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'resource',
+        text: '资源管理',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'node',
+        text: '节点管理',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'storage',
+        text: '存储空间',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'discover',
+        text: '发现',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'activity',
+        text: '活动',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'community',
+        text: '社区',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'help',
+        text: '帮助',
+        href: '',
+        items: [],
+      },
+      {
+        id: 'product',
+        text: '产品',
+        href: '',
+        items: [],
+      },
+    ]}
+    activeIDs={['dashboard', '']}
+    showGotoConsole={true}
+    showGotoUerCenter={true}
+  />);
 
   return (<FCenterLayout style={{ backgroundColor: 'white' }}>
     <div style={{ height: 100 }} />
