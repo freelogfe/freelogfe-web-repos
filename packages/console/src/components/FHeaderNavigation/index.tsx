@@ -1,6 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Link } from 'umi';
+import { Space } from 'antd';
+import FInput from '@/components/FInput';
+import { FRectBtn } from '@/components/FButton';
+import UserInfo from './UserInfo';
 
 interface FHeaderNavigationProps {
   logoHref: string;
@@ -44,7 +48,7 @@ function FHeaderNavigation({
                            }: FHeaderNavigationProps) {
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
-      <Link className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} href={logoHref} />
+      <Link className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} to={logoHref} />
       {
         isAlphaTest && (<>
           <div style={{ width: 10 }} />
@@ -79,9 +83,12 @@ function FHeaderNavigation({
       }
 
     </div>
-    <div className={styles.FHeaderNavigation_Right}>
+    <Space size={30} className={styles.FHeaderNavigation_Right}>
+      {/*<FInput theme='dark' size='small' style={{ width: 200 }} />*/}
+      <FInput theme='dark' style={{ width: 200 }} />
 
-    </div>
+
+    </Space>
   </div>);
 }
 
