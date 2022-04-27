@@ -68,7 +68,7 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
 
   return (<FHeaderNavigation
     logoHref={''}
-    alphaTest={true}
+    isAlphaTest={true}
     menu={[
       {
         id: 'dashboard',

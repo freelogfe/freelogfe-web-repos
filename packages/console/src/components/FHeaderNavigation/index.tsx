@@ -4,8 +4,8 @@ import { Link } from 'umi';
 
 interface FHeaderNavigationProps {
   logoHref: string;
-  alphaTest?: boolean;
-  menu: {
+  isAlphaTest?: boolean;
+  menu?: {
     id: string;
     text: string;
     href: string;
@@ -37,7 +37,7 @@ interface FHeaderNavigationProps {
 
 function FHeaderNavigation({
                              logoHref,
-                             alphaTest,
+                             isAlphaTest,
                              menu,
                              activeIDs,
                              showGotoUerCenter,
@@ -45,25 +45,39 @@ function FHeaderNavigation({
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
       <a className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} href={logoHref} />
-      <div style={{ width: 25 }} />
-      <div className={styles.Menus}>
-        {
-          menu.map((m) => {
-            if (m.target === '_blank') {
-              return (
-                <a className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')} href={m.href}
-                   target='_blank'>
-                  <span>{m.text}</span>
-                </a>);
-            }
-            return (
-              <Link className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')} to={m.href}>
-                <span>{m.text}</span>
-              </Link>);
-          })
-        }
+      {
+        isAlphaTest && (<>
+          <div style={{ width: 10 }} />
+          <label className={styles.alphaTestLabel}>内测</label>
+        </>)
+      }
 
-      </div>
+      {
+        menu && menu.length > 0 && (<>
+          <div style={{ width: 25 }} />
+          <div className={styles.Menus}>
+            {
+              menu.map((m) => {
+                if (m.target === '_blank') {
+                  return (
+                    <a className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                       href={m.href}
+                       target='_blank'>
+                      <span>{m.text}</span>
+                    </a>);
+                }
+                return (
+                  <Link className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                        to={m.href}>
+                    <span>{m.text}</span>
+                  </Link>);
+              })
+            }
+
+          </div>
+        </>)
+      }
+
     </div>
     <div className={styles.FHeaderNavigation_Right}>
 
