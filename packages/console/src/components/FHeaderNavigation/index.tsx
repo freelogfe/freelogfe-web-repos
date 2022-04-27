@@ -44,7 +44,7 @@ function FHeaderNavigation({
                            }: FHeaderNavigationProps) {
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
-      <a className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} href={logoHref} />
+      <Link className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} href={logoHref} />
       {
         isAlphaTest && (<>
           <div style={{ width: 10 }} />
