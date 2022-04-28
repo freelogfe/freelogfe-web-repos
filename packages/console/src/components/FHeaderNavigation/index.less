@@ -91,10 +91,33 @@
   }
 
   .FHeaderNavigation_Right {
-    height: 80px;
-    //display: flex;
-    //align-items: center;
-    //justify-content: flex-end;
+    height: 70px;
+
+    .createBtnMenu {
+      display: flex;
+      width: 32px;
+      height: 70px;
+      align-items: center;
+      justify-content: center;
+
+      & > span {
+        display: flex;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        background-color: @f-primary-color;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        & > span {
+          background-color: #529DFF;
+        }
+      }
+    }
   }
 }
 

@@ -8,6 +8,7 @@ import UserInfo from './UserInfo';
 import FDropdown from '@/components/FDropdown';
 import EmptyAndCreate from './EmptyAndCreate';
 import NavList from './NavList';
+import FPlus from '../FIcons/FPlus';
 
 interface FHeaderNavigationProps {
   logoHref: string;
@@ -130,18 +131,32 @@ function FHeaderNavigation({
         showGlobalSearch && (<FInput
           size='small'
           theme='dark'
-          style={{ width: 200 }}
+          style={{ width: 200, height: 32 }}
         />)
       }
 
       {
         showGotoConsole && (<FRectBtn
+          size='small'
           type='secondary'
           onClick={() => {
             // window.open(FUtil.Format.completeUrlByDomain('console'));
           }}
         >进入工作台</FRectBtn>)
       }
+
+      {
+        createBtnMenu && createBtnMenu.length > 0 && (<FDropdown
+          overlay={<NavList items={createBtnMenu} />}
+        >
+          <a className={styles.createBtnMenu}>
+            <span>
+              <FPlus />
+            </span>
+          </a>
+        </FDropdown>)
+      }
+
 
       <UserInfo data={userPanel} />
 

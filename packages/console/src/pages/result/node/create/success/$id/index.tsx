@@ -145,7 +145,20 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
       },
     ]}
     activeIDs={['dashboard', '']}
+    showGlobalSearch={true}
     showGotoConsole={true}
+    createBtnMenu={[
+      {
+        id: 'createResource',
+        text: '创建资源',
+        href: '/resource/creator',
+      },
+      {
+        id: 'createNode',
+        text: '创建节点',
+        href: '/node/creator',
+      },
+    ]}
     userPanel={{
       info: {
         avatar: '',
