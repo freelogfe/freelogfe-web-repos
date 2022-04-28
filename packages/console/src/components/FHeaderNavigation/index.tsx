@@ -6,7 +6,8 @@ import FInput from '@/components/FInput';
 import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';
 import FDropdown from '@/components/FDropdown';
-import EmptyAndCreate from '@/components/FHeaderNavigation/EmptyAndCreate';
+import EmptyAndCreate from './EmptyAndCreate';
+import NavList from './NavList';
 
 interface FHeaderNavigationProps {
   logoHref: string;
@@ -64,7 +65,7 @@ function FHeaderNavigation({
           <div className={styles.Menus}>
             {
               menu.map((m) => {
-                return (<FDropdown overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <div />}>
+                return (<FDropdown overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <NavList/>}>
                   {
                     m.href.startsWith('http')
                       ? (<a
