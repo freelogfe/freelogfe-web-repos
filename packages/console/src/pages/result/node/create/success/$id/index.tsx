@@ -68,13 +68,24 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
 
   return (<FHeaderNavigation
     logoHref={''}
-    isAlphaTest={true}
+    showAlphaTest={true}
     menu={[
       {
         id: 'dashboard',
         text: '概览',
         href: 'https://www.baidu.com',
-        items: [],
+        items: [
+          {
+            id: 'dashboard-1',
+            text: '我的资源',
+            href: 'https://www.baidu.com',
+          },
+          {
+            id: 'dashboard-2',
+            text: '我的收藏',
+            href: 'https://www.baidu.com',
+          },
+        ],
       },
       {
         id: 'resource',

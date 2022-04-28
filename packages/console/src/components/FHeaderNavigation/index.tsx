@@ -11,7 +11,7 @@ import NavList from './NavList';
 
 interface FHeaderNavigationProps {
   logoHref: string;
-  isAlphaTest?: boolean;
+  showAlphaTest?: boolean;
   menu?: {
     id: string;
     text: string;
@@ -44,7 +44,7 @@ interface FHeaderNavigationProps {
 
 function FHeaderNavigation({
                              logoHref,
-                             isAlphaTest,
+                             showAlphaTest,
                              menu,
                              activeIDs,
                              showGotoUerCenter,
@@ -53,7 +53,7 @@ function FHeaderNavigation({
     <div className={styles.FHeaderNavigation_Left}>
       <Link className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} to={logoHref} />
       {
-        isAlphaTest && (<>
+        showAlphaTest && (<>
           <div style={{ width: 10 }} />
           <label className={styles.alphaTestLabel}>内测</label>
         </>)
@@ -65,7 +65,10 @@ function FHeaderNavigation({
           <div className={styles.Menus}>
             {
               menu.map((m) => {
-                return (<FDropdown overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <NavList/>}>
+                return (<FDropdown
+                  key={m.id}
+                  overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <NavList items={m.items} />}
+                >
                   {
                     m.href.startsWith('http')
                       ? (<a
