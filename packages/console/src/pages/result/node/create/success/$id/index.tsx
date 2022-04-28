@@ -73,14 +73,19 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
       {
         id: 'dashboard',
         text: '概览',
-        href: '',
+        href: 'https://www.baidu.com',
         items: [],
       },
       {
         id: 'resource',
         text: '资源管理',
-        href: '',
+        href: '/dashboard',
         items: [],
+        emptyItemsTip: {
+          tipText: '自由创作从Freelog开始',
+          btnText: '创建Bucket',
+          btnHref: 'https://www.baidu.com',
+        }
       },
       {
         id: 'node',

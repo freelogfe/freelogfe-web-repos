@@ -5,6 +5,8 @@ import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';
+import FDropdown from '@/components/FDropdown';
+import EmptyAndCreate from '@/components/FHeaderNavigation/EmptyAndCreate';
 
 interface FHeaderNavigationProps {
   logoHref: string;
@@ -62,19 +64,26 @@ function FHeaderNavigation({
           <div className={styles.Menus}>
             {
               menu.map((m) => {
-                if (m.target === '_blank') {
-                  return (
-                    <a className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                       href={m.href}
-                       target='_blank'>
-                      <span>{m.text}</span>
-                    </a>);
-                }
-                return (
-                  <Link className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                        to={m.href}>
-                    <span>{m.text}</span>
-                  </Link>);
+                return (<FDropdown overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <div />}>
+                  {
+                    m.href.startsWith('http')
+                      ? (<a
+                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                        href={m.href}
+                        target={m.target}
+                      >
+                        <span>{m.text}</span>
+                      </a>)
+                      : (<Link
+                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                        to={m.href}
+                        target={m.target}
+                      >
+                        <span>{m.text}</span>
+                      </Link>)
+                  }
+                </FDropdown>);
+
               })
             }
 
