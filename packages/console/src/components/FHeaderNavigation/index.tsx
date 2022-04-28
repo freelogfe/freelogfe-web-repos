@@ -12,6 +12,7 @@ import NavList from './NavList';
 interface FHeaderNavigationProps {
   logoHref: string;
   showAlphaTest?: boolean;
+  showConsoleBabel?: boolean;
   menu?: {
     id: string;
     text: string;
@@ -31,27 +32,55 @@ interface FHeaderNavigationProps {
       target?: '_self' | '_blank';
     },
   }[];
-  activeIDs: [string, string];
+  activeIDs?: [string, string];
+  showGlobalSearch?: boolean;
+  showGotoConsole?: boolean;
   createBtnMenu?: {
     id: string;
     text: string;
     href: string;
     target?: '_self' | '_blank';
   }[];
-  showGotoUerCenter?: boolean;
-  showGotoConsole?: boolean;
+  userPanel: {
+    info: {
+      avatar: string;
+      userName: string;
+      email: string;
+      phone: string;
+    };
+    menu: {
+      text: string;
+      onClick(): void;
+    }[];
+  } | null;
 }
 
 function FHeaderNavigation({
                              logoHref,
-                             showAlphaTest,
-                             menu,
-                             activeIDs,
-                             showGotoUerCenter,
+                             showAlphaTest = false,
+                             showConsoleBabel = false,
+                             menu = [],
+                             activeIDs = ['', ''],
+                             showGlobalSearch = false,
+                             showGotoConsole = false,
+                             createBtnMenu = [],
+                             userPanel,
                            }: FHeaderNavigationProps) {
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
-      <Link className={['freelog fl-icon-a-featherlogo5', styles.logoLink].join(' ')} to={logoHref} />
+      {
+
+      }
+      <Link className={styles.logoLink} to={logoHref}>
+        <i className={'freelog fl-icon-a-featherlogo5'} />
+        {
+          showConsoleBabel && (<>
+            <div style={{ width: 10 }} />
+            <span>· 工作台</span>
+          </>)
+        }
+
+      </Link>
       {
         showAlphaTest && (<>
           <div style={{ width: 10 }} />
@@ -97,20 +126,25 @@ function FHeaderNavigation({
 
     </div>
     <Space size={30} className={styles.FHeaderNavigation_Right}>
-      <FInput
-        size='small'
-        theme='dark'
-        style={{ width: 200 }}
-      />
+      {
+        showGlobalSearch && (<FInput
+          size='small'
+          theme='dark'
+          style={{ width: 200 }}
+        />)
+      }
 
-      <UserInfo info={null} />
+      {
+        showGotoConsole && (<FRectBtn
+          type='secondary'
+          onClick={() => {
+            // window.open(FUtil.Format.completeUrlByDomain('console'));
+          }}
+        >进入工作台</FRectBtn>)
+      }
 
-      <FRectBtn
-        type='secondary'
-        onClick={() => {
-          // window.open(FUtil.Format.completeUrlByDomain('console'));
-        }}
-      >进入工作台</FRectBtn>
+      <UserInfo data={userPanel} />
+
     </Space>
   </div>);
 }

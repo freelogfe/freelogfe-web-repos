@@ -16,17 +16,24 @@
     justify-content: flex-start;
 
     .logoLink {
-      font-size: 24px;
       color: #222;
-      line-height: 40px;
-      transition: color .25s, font-weight .25s;
+      transition: opacity .25s;
+      display: flex;
+      align-items: center;
 
-      &:hover {
-        color: #529DFF;
+      & > i {
+        font-size: 24px;
+        line-height: 30px;
       }
 
-      &:active {
-        color: #2376E5;
+      & > span {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 21px;
+      }
+
+      &:hover {
+        opacity: .7;
       }
     }
 

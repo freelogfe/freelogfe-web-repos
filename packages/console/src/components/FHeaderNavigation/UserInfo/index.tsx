@@ -12,46 +12,54 @@ import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 
 interface UserInfoProps {
-  info: {
-    avatar: string;
-    userName: string;
-    email: string;
-    phone: string;
+  data: {
+    info: {
+      avatar: string;
+      userName: string;
+      email: string;
+      phone: string;
+    };
+    menu: {
+      text: string;
+      onClick(): void;
+    }[];
   } | null;
 }
 
-function UserInfo({info}: UserInfoProps) {
+function UserInfo({ data }: UserInfoProps) {
 
-  if (!info) {
+  if (!data) {
     return (<Space size={10}>
       <FRectBtn type='default' size='small'>登录</FRectBtn>
       <FRectBtn type='primary' size='small'>注册</FRectBtn>
     </Space>);
   }
 
+  const { info, menu } = data;
+
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
-      <img src={(UserSVG) as string} alt='headImage' />
+      <img src={info.avatar || UserSVG} alt='headImage' />
       <div style={{ height: 10 }} />
       <FContentText
         type='highlight'
-        text={'Liu'}
+        text={info.userName}
       />
       <div style={{ height: 8 }} />
-      <FContentText text={'13333333333'} />
+      <FContentText text={info.phone || info.email} />
     </div>
     <div className={styles.userPanelMenu}>
-      <a onClick={() => {
-        window.open(`${FUtil.Format.completeUrlByDomain('user')}/logged/wallet`);
-      }}>个人中心</a>
-      <a onClick={async () => {
-        // window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
-        await FServiceAPI.User.logout({});
-
-        setTimeout(() => {
-          window.location.replace(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.login()}`);
-        }, 30);
-      }}>登出</a>
+      {
+        menu.map((m) => {
+          return (<a
+            key={m.text}
+            onClick={(e) => {
+              e.preventDefault();
+              m.onClick();
+            }}
+          >{m.text}</a>);
+        })
+      }
     </div>
   </div>}>
     <a className={styles.avatar}>

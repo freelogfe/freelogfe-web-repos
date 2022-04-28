@@ -69,11 +69,14 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
   return (<FHeaderNavigation
     logoHref={''}
     showAlphaTest={true}
+    showConsoleBabel={true}
     menu={[
       {
         id: 'dashboard',
         text: '概览',
         href: 'https://www.baidu.com',
+        showAddBtn: false,
+        emptyItemsTip: undefined,
         items: [
           {
             id: 'dashboard-1',
@@ -96,7 +99,7 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
           tipText: '自由创作从Freelog开始',
           btnText: '创建Bucket',
           btnHref: 'https://www.baidu.com',
-        }
+        },
       },
       {
         id: 'node',
@@ -143,7 +146,28 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
     ]}
     activeIDs={['dashboard', '']}
     showGotoConsole={true}
-    showGotoUerCenter={true}
+    userPanel={{
+      info: {
+        avatar: '',
+        userName: 'Liu',
+        email: '12345@qq.com',
+        phone: '13333333333',
+      },
+      menu: [
+        {
+          text: '个人中心',
+          onClick() {
+            console.log('####');
+          },
+        },
+        {
+          text: '登出',
+          onClick() {
+            console.log('****');
+          },
+        },
+      ],
+    }}
   />);
 
   return (<FCenterLayout style={{ backgroundColor: 'white' }}>
