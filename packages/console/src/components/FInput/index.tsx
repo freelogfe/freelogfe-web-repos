@@ -59,7 +59,6 @@ function FInput({
   const commentClass: string [] = [styles.Input, className, errorText ? styles.InputError : ''];
 
   // console.log(errorText, 'errorText!@#$!@#$@#$');
-
   return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
     {
       theme === 'dark'

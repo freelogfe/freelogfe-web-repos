@@ -126,41 +126,51 @@ function FHeaderNavigation({
       }
 
     </div>
-    <Space size={30} className={styles.FHeaderNavigation_Right}>
+    <div className={styles.FHeaderNavigation_Right}>
       {
-        showGlobalSearch && (<FInput
-          size='small'
-          theme='dark'
-          style={{ width: 200, height: 32 }}
-        />)
+        showGlobalSearch && (<>
+          <FInput
+            size='small'
+            theme='dark'
+            style={{ width: 200 }}
+            value={''}
+          />
+          <div style={{ width: 30 }} />
+        </>)
       }
 
       {
-        showGotoConsole && (<FRectBtn
-          size='small'
-          type='secondary'
-          onClick={() => {
-            // window.open(FUtil.Format.completeUrlByDomain('console'));
-          }}
-        >进入工作台</FRectBtn>)
+        showGotoConsole && (<>
+          <FRectBtn
+            size='small'
+            type='secondary'
+            onClick={() => {
+              // window.open(FUtil.Format.completeUrlByDomain('console'));
+            }}
+          >进入工作台</FRectBtn>
+          <div style={{ width: 30 }} />
+        </>)
       }
 
       {
-        createBtnMenu && createBtnMenu.length > 0 && (<FDropdown
-          overlay={<NavList items={createBtnMenu} />}
-        >
-          <a className={styles.createBtnMenu}>
+        createBtnMenu && createBtnMenu.length > 0 && (<>
+          <FDropdown
+            overlay={<NavList items={createBtnMenu} />}
+          >
+            <a className={styles.createBtnMenu}>
             <span>
               <FPlus />
             </span>
-          </a>
-        </FDropdown>)
+            </a>
+          </FDropdown>
+          <div style={{ width: 30 }} />
+        </>)
       }
 
 
       <UserInfo data={userPanel} />
 
-    </Space>
+    </div>
   </div>);
 }
 
