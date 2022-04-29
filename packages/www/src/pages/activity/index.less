@@ -34,7 +34,7 @@
         height: 320px;
       }
 
-      .ongoingLabel, .closedLabel {
+      .startingLabel, .ongoingLabel, .closedLabel {
         display: inline-block;
         padding: 0 5px;
         font-size: 12px;
@@ -43,14 +43,19 @@
         border-radius: 2px;
       }
 
+      .startingLabel {
+        color: #2784FF;
+        background-color: rgba(39, 132, 255, 0.15);
+      }
+
       .ongoingLabel {
         color: #42C28C;
-        background: rgba(66, 194, 140, 0.15);
+        background-color: rgba(66, 194, 140, 0.15);
       }
 
       .closedLabel {
         color: #666;
-        background: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.1);
       }
     }
   }

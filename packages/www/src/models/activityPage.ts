@@ -1,19 +1,21 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 export interface ActivityPageModelState {
-  // info: null | {};
+  listState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  // listMore: 'loading' | 'andMore' | 'noMore';
   list: {
     activityID: string;
     activityTitle: string;
     activityCover: string;
+    status: 'starting' | 'ongoing' | 'end';
     persis: boolean;
     link: string;
-    startTime: string | null;
-    limitTime: string | null;
-  }[] | null;
+    startTime: string;
+    limitTime: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -45,7 +47,9 @@ interface ActivityPageModelType {
 }
 
 const initStates: ActivityPageModelState = {
-  list: null,
+  listState: 'loading',
+  // listMore: 'loading' | 'andMore' | 'noMore';
+  list: [],
 };
 
 const Model: ActivityPageModelType = {
@@ -55,7 +59,26 @@ const Model: ActivityPageModelType = {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Activity.list4Client>[0] = {};
       const { data } = yield call(FServiceAPI.Activity.list4Client, params);
-      console.log(data, 'data9023ulk');
+      // console.log(data, 'data9023ulk');
+      const list: ActivityPageModelState['list'] = (data as any[]).map<ActivityPageModelState['list'][0]>((d) => {
+        return {
+          activityID: d._id,
+          activityTitle: d.title,
+          activityCover: d.cover,
+          status: 'starting',
+          persis: d.persist,
+          link: d.link,
+          startTime: d.startTime ? FUtil.Format.formatDateTime(d.startTime) : '',
+          limitTime: d.limitTime ? FUtil.Format.formatDateTime(d.limitTime) : '',
+        };
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          list: list,
+          listState: list.length === 0 ? 'noData' : 'loaded',
+        },
+      });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
