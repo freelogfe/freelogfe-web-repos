@@ -6,7 +6,7 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ActivityPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
-import { OnMountPageAction } from '@/models/activityPage';
+import { OnMountPageAction, OnUnmountPageAction } from '@/models/activityPage';;
 
 interface ActivityProps {
   dispatch: Dispatch;
@@ -22,7 +22,9 @@ function Activity({ dispatch, activityPage }: ActivityProps) {
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmountPageAction>({
+      type: 'activityPage/onUnmountPage',
+    });
   });
 
   return (<div className={styles.activity}>
@@ -39,7 +41,7 @@ function Activity({ dispatch, activityPage }: ActivityProps) {
 
         {
           activityPage.list && activityPage.list.map((m) => {
-            return (<div key={m} className={styles.contentCard}>
+            return (<div key={m.activityID} className={styles.contentCard}>
               <img
                 className={styles.contentCard_Cover}
                 src={FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png'}
