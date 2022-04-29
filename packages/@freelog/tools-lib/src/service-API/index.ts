@@ -9,6 +9,7 @@ import * as Contract from './contracts';
 import * as Transaction from './transactions';
 import * as Captcha from './captcha';
 import * as Event from './events';
+import * as Activity from './activities';
 
 const FServiceAPI = {
   Node,
@@ -22,6 +23,7 @@ const FServiceAPI = {
   Transaction,
   Captcha,
   Event,
+  Activity,
 };
 
 export default FServiceAPI;

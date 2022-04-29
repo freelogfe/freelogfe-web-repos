@@ -15,8 +15,6 @@ import FUtil1 from '@/utils';
 interface LoggedProps extends IRouteComponentProps {
   dispatch: Dispatch;
   user: UserModelState;
-
-  // children: React.ReactNode;
 }
 
 function FLogged({ dispatch, user, children, location }: LoggedProps) {

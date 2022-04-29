@@ -3,12 +3,28 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ActivityPageModelState, ConnectState } from '@/models/connect';
+import * as AHooks from 'ahooks';
+import { OnMountPageAction } from '@/models/activityPage';
 
 interface ActivityProps {
-
+  dispatch: Dispatch;
+  activityPage: ActivityPageModelState;
 }
 
-function Activity({}: ActivityProps) {
+function Activity({ dispatch, activityPage }: ActivityProps) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'activityPage/onMountPage',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
+
   return (<div className={styles.activity}>
       <div className={styles.title}>
         <div style={{ height: 35 }} />
@@ -16,8 +32,13 @@ function Activity({}: ActivityProps) {
         <div style={{ height: 35 }} />
       </div>
       <a className={styles.content}>
+
         {
-          [1, 2, 3, 4].map((m) => {
+          activityPage.list
+        }
+
+        {
+          activityPage.list && activityPage.list.map((m) => {
             return (<div key={m} className={styles.contentCard}>
               <img
                 className={styles.contentCard_Cover}
@@ -40,8 +61,6 @@ function Activity({}: ActivityProps) {
             </div>);
           })
         }
-
-
         <div style={{ width: 560 }} />
       </a>
       <div style={{ height: 100 }} />
@@ -49,4 +68,6 @@ function Activity({}: ActivityProps) {
   );
 }
 
-export default Activity;
+export default connect(({ activityPage }: ConnectState) => ({
+  activityPage,
+}))(Activity);
