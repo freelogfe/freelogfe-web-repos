@@ -43,7 +43,7 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
     >
       <Layout.Header className={styles.header}>
         <FHeaderNavigation
-          logoHref={''}
+          logoBtn={{ href: FUtil.LinkTo.dashboard() }}
           showAlphaTest={true}
           showConsoleBabel={true}
           menu={[

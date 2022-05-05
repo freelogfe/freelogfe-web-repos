@@ -9,9 +9,13 @@ import FDropdown from '@/components/FDropdown';
 import EmptyAndCreate from './EmptyAndCreate';
 import NavList from './NavList';
 import FPlus from '../FIcons/FPlus';
+import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 
 interface FHeaderNavigationProps {
-  logoHref: string;
+  logoBtn: {
+    href: string;
+    target?: '_self' | '_blank';
+  };
   showAlphaTest?: boolean;
   showConsoleBabel?: boolean;
   menu?: {
@@ -60,7 +64,7 @@ interface FHeaderNavigationProps {
 }
 
 function FHeaderNavigation({
-                             logoHref,
+                             logoBtn,
                              showAlphaTest = false,
                              showConsoleBabel = false,
                              menu = [],
@@ -70,13 +74,9 @@ function FHeaderNavigation({
                              createBtnMenu = [],
                              userPanel,
                            }: FHeaderNavigationProps) {
-  console.log(menu, 'menu93920394');
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
-      {
-
-      }
-      <Link className={styles.logoLink} to={logoHref}>
+      <AOrLink href={logoBtn.href} className={styles.logoLink}>
         <i className={'freelog fl-icon-a-featherlogo5'} />
         {
           showConsoleBabel && (<>
@@ -84,8 +84,29 @@ function FHeaderNavigation({
             <span>· 工作台</span>
           </>)
         }
+      </AOrLink>
+      {/*{*/}
+      {/*  logoBtn.href.startsWith('http')*/}
+      {/*    ? (<a className={styles.logoLink} href={logoBtn.href}>*/}
+      {/*      <i className={'freelog fl-icon-a-featherlogo5'} />*/}
+      {/*      {*/}
+      {/*        showConsoleBabel && (<>*/}
+      {/*          <div style={{ width: 10 }} />*/}
+      {/*          <span>· 工作台</span>*/}
+      {/*        </>)*/}
+      {/*      }*/}
+      {/*    </a>)*/}
+      {/*    : (<Link className={styles.logoLink} to={logoHref}>*/}
+      {/*      <i className={'freelog fl-icon-a-featherlogo5'} />*/}
+      {/*      {*/}
+      {/*        showConsoleBabel && (<>*/}
+      {/*          <div style={{ width: 10 }} />*/}
+      {/*          <span>· 工作台</span>*/}
+      {/*        </>)*/}
+      {/*      }*/}
+      {/*    </Link>)*/}
+      {/*}*/}
 
-      </Link>
       {
         showAlphaTest && (<>
           <div style={{ width: 10 }} />
@@ -109,23 +130,28 @@ function FHeaderNavigation({
                       createBtn={m.createBtn}
                     />}
                 >
-                  {
-                    m.href.startsWith('http')
-                      ? (<a
-                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                        href={m.href}
-                        target={m.target}
-                      >
-                        <span>{m.text}</span>
-                      </a>)
-                      : (<Link
-                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                        to={m.href}
-                        target={m.target}
-                      >
-                        <span>{m.text}</span>
-                      </Link>)
-                  }
+                  <AOrLink
+                    href={m.href}
+                    target={m.target}
+                    className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                  ><span>{m.text}</span></AOrLink>
+                  {/*{*/}
+                  {/*  m.href.startsWith('http')*/}
+                  {/*    ? (<a*/}
+                  {/*      className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}*/}
+                  {/*      href={m.href}*/}
+                  {/*      target={m.target}*/}
+                  {/*    >*/}
+                  {/*      <span>{m.text}</span>*/}
+                  {/*    </a>)*/}
+                  {/*    : (<Link*/}
+                  {/*      className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}*/}
+                  {/*      to={m.href}*/}
+                  {/*      target={m.target}*/}
+                  {/*    >*/}
+                  {/*      <span>{m.text}</span>*/}
+                  {/*    </Link>)*/}
+                  {/*}*/}
                 </FDropdown>);
 
               })
