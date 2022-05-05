@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@freelog/tools-lib": "^0.1.82",
+    "@freelog/tools-lib": "^0.1.84",
     "ahooks": "^3.3.8",
     "animate.css": "^4.1.1",
     "react": "17.x",
