@@ -1,0 +1,127 @@
+@import '../../config.less';
+
+.FHeaderNavigation {
+  padding: 0 40px;
+  height: 70px;
+  background: white;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .FHeaderNavigation_Left {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .logoLink {
+      color: #222;
+      transition: opacity .25s;
+      display: flex;
+      align-items: center;
+
+      & > i {
+        font-size: 24px;
+        line-height: 30px;
+      }
+
+      & > span {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 21px;
+      }
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    .alphaTestLabel {
+      background: #2784FF;
+      border-radius: 12px;
+      line-height: 20px;
+      padding: 0 10px;
+      font-size: 10px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .Menus {
+      display: flex;
+      height: 70px;
+
+      .NavLink {
+        font-size: 14px;
+        font-weight: 400;
+        color: #222;
+        line-height: 20px;
+        transition: color .25s, font-weight .25s;
+        padding: 0 15px;
+        height: 70px;
+        display: flex;
+
+        & > span {
+          display: flex;
+          align-items: center;
+          border-top: 2px solid transparent;
+          border-bottom: 2px solid transparent;
+          height: 100%;
+          width: fit-content;
+        }
+
+        &:hover {
+          color: #2784FF;
+        }
+
+        //&:active {
+        //  color: #2376E5;
+        //}
+
+        &.activated {
+          color: #2784FF;
+
+          & > span {
+            border-bottom-color: #2784FF;
+          }
+        }
+      }
+    }
+
+  }
+
+  .FHeaderNavigation_Right {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+
+    .createBtnMenu {
+      display: flex;
+      width: 32px;
+      height: 70px;
+      align-items: center;
+      justify-content: center;
+
+      & > span {
+        display: flex;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        background-color: @f-primary-color;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        & > span {
+          background-color: #529DFF;
+        }
+      }
+    }
+  }
+}
+
+
