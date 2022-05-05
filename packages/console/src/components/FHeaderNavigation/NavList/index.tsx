@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FPlus } from '@/components/FIcons';
 import { Link } from 'umi';
+import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 
 interface NavListProps {
   items: {
@@ -21,37 +22,38 @@ function NavList({ items, createBtn = null }: NavListProps) {
     <div style={{ height: 10 }} />
     {
       items.map((i) => {
-        return <a className={styles.NavItem} key={i.id}>
+        return <AOrLink className={styles.NavItem} key={i.id} href={i.href}>
           {i.text}
-        </a>;
+        </AOrLink>;
       })
     }
     <div style={{ height: 10 }} />
     {
       createBtn && (<>
-        {
-          createBtn.href.startsWith('http')
-            ? (<a
-              className={styles.newButton}
-              href={createBtn.href}
-              target={createBtn.target}
-            >
-              <FPlus style={{ fontSize: 14 }} />
-            </a>)
-            : (<Link
-              className={styles.newButton}
-              to={createBtn.href}
-              target={createBtn.target}
-            >
-              <FPlus style={{ fontSize: 14 }} />
-            </Link>)
-        }
-        {/*<a*/}
-        {/*  onClick={() => {*/}
-        {/*  }}*/}
-        {/*  className={styles.newButton}>*/}
-        {/* */}
-        {/*</a>*/}
+        {/*{*/}
+        {/*  createBtn.href.startsWith('http')*/}
+        {/*    ? (<a*/}
+        {/*      className={styles.newButton}*/}
+        {/*      href={createBtn.href}*/}
+        {/*      target={createBtn.target}*/}
+        {/*    >*/}
+        {/*      <FPlus style={{ fontSize: 14 }} />*/}
+        {/*    </a>)*/}
+        {/*    : (<Link*/}
+        {/*      className={styles.newButton}*/}
+        {/*      to={createBtn.href}*/}
+        {/*      target={createBtn.target}*/}
+        {/*    >*/}
+        {/*      <FPlus style={{ fontSize: 14 }} />*/}
+        {/*    </Link>)*/}
+        {/*}*/}
+        <AOrLink
+          className={styles.newButton}
+          href={createBtn.href}
+          target={createBtn.target}
+        >
+          <FPlus style={{ fontSize: 14 }} />
+        </AOrLink>
       </>)
     }
 
