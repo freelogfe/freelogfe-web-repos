@@ -9,7 +9,7 @@ import FDropdown from '@/components/FDropdown';
 import EmptyAndCreate from './EmptyAndCreate';
 import NavList from './NavList';
 import FPlus from '../FIcons/FPlus';
-import AOrLink from '@/components/FHeaderNavigation/AOrLink';
+import AOrLink from './AOrLink';
 
 interface FHeaderNavigationProps {
   logoBtn: {
@@ -85,27 +85,6 @@ function FHeaderNavigation({
           </>)
         }
       </AOrLink>
-      {/*{*/}
-      {/*  logoBtn.href.startsWith('http')*/}
-      {/*    ? (<a className={styles.logoLink} href={logoBtn.href}>*/}
-      {/*      <i className={'freelog fl-icon-a-featherlogo5'} />*/}
-      {/*      {*/}
-      {/*        showConsoleBabel && (<>*/}
-      {/*          <div style={{ width: 10 }} />*/}
-      {/*          <span>· 工作台</span>*/}
-      {/*        </>)*/}
-      {/*      }*/}
-      {/*    </a>)*/}
-      {/*    : (<Link className={styles.logoLink} to={logoHref}>*/}
-      {/*      <i className={'freelog fl-icon-a-featherlogo5'} />*/}
-      {/*      {*/}
-      {/*        showConsoleBabel && (<>*/}
-      {/*          <div style={{ width: 10 }} />*/}
-      {/*          <span>· 工作台</span>*/}
-      {/*        </>)*/}
-      {/*      }*/}
-      {/*    </Link>)*/}
-      {/*}*/}
 
       {
         showAlphaTest && (<>
@@ -135,23 +114,6 @@ function FHeaderNavigation({
                     target={m.target}
                     className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
                   ><span>{m.text}</span></AOrLink>
-                  {/*{*/}
-                  {/*  m.href.startsWith('http')*/}
-                  {/*    ? (<a*/}
-                  {/*      className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}*/}
-                  {/*      href={m.href}*/}
-                  {/*      target={m.target}*/}
-                  {/*    >*/}
-                  {/*      <span>{m.text}</span>*/}
-                  {/*    </a>)*/}
-                  {/*    : (<Link*/}
-                  {/*      className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}*/}
-                  {/*      to={m.href}*/}
-                  {/*      target={m.target}*/}
-                  {/*    >*/}
-                  {/*      <span>{m.text}</span>*/}
-                  {/*    </Link>)*/}
-                  {/*}*/}
                 </FDropdown>);
 
               })

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FPlus } from '@/components/FIcons';
-import { Link } from 'umi';
-import AOrLink from '@/components/FHeaderNavigation/AOrLink';
+import AOrLink from '../AOrLink';
 
 interface NavListProps {
   items: {
