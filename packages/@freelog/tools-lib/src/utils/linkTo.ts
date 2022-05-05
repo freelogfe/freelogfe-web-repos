@@ -2,6 +2,46 @@ import * as querystring from 'querystring';
 
 type TReturnType = string;
 
+/************** www Start ******************************************************/
+// 首页
+interface HomeParamsType {
+
+}
+
+export function home({}: HomeParamsType = {}) {
+  return `/home`;
+}
+
+// 活动列表
+interface ActivitiesParamsType {
+
+}
+
+export function activities({}: ActivitiesParamsType = {}) {
+  return `/activity`;
+}
+
+// 活动详情
+interface ActivitiesParamsType {
+  activityID: string;
+}
+
+export function activity({activityID}: ActivitiesParamsType) {
+  return `/activityDetail/${activityID}`;
+}
+
+/************** www End ******************************************************/
+
+/************** console Start ******************************************************/
+// dashboard
+interface DashboardParamsType {
+
+}
+
+export function dashboard({}: DashboardParamsType = {}) {
+  return `/dashboard`;
+}
+
 // 市场
 interface MarketParamsType {
   // nodeID: number;
@@ -197,6 +237,10 @@ export function exception403({...params}: Exception403ParamsType = {}) {
   })}`;
 }
 
+/************** console End ******************************************************/
+
+
+/************** user Start ******************************************************/
 // 登录
 interface LoginParamsType {
   goTo?: string;
@@ -231,36 +275,39 @@ export function retrieveUserPassword({goTo}: RetrieveUserPasswordParamsType = {}
 }
 
 // 找回支付密码
-// interface RetrievePayPasswordParamsType {
-//   goTo?: string;
-// }
+interface RetrievePayPasswordParamsType {
+  goTo?: string;
+}
 
-export function retrievePayPassword() {
+export function retrievePayPassword({}: RetrievePayPasswordParamsType = {}) {
   return `/retrievePayPassword`;
 }
 
 // 我的钱包
-// interface WalletParamsType {
-// }
+interface WalletParamsType {
+}
 
-export function wallet() {
+export function wallet({}: WalletParamsType = {}) {
   return `/logged/wallet`;
 }
 
 // 我的合约
-// interface ContractParamsType {
-// }
+interface ContractParamsType {
+}
 
-export function contract() {
+export function contract({}: ContractParamsType = {}) {
   return `/logged/contract`;
 }
 
 // 个人设置
-// interface SettingParamsType {
-// }
-export function setting() {
+interface SettingParamsType {
+}
+
+export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
+
+/************** user End ******************************************************/
 
 function handleQuery(query: object): string {
   const obj: any = {};
