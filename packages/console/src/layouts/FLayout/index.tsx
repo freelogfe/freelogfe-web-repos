@@ -156,12 +156,12 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
               href: '',
               items: [],
             },
-            {
-              id: 'product',
-              text: '产品',
-              href: FUtil.LinkTo.home(),
-              items: [],
-            },
+            // {
+            //   id: 'product',
+            //   text: '产品',
+            //   href: FUtil.LinkTo.home(),
+            //   items: [],
+            // },
           ]}
           activeIDs={['dashboard', '']}
           showGlobalSearch={true}
