@@ -124,13 +124,24 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
             {
               id: 'discover',
               text: '发现',
-              href: '',
-              items: [],
+              href: FUtil.LinkTo.market(),
+              items: [
+                {
+                  id: 'myResource',
+                  text: '发现资源',
+                  href: FUtil.LinkTo.market(),
+                },
+                {
+                  id: 'myCollection',
+                  text: '示例节点',
+                  href: FUtil.LinkTo.market(),
+                },
+              ],
             },
             {
               id: 'activity',
               text: '活动',
-              href: '',
+              href: FUtil.LinkTo.activities(),
               items: [],
             },
             {
@@ -148,7 +159,7 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
             {
               id: 'product',
               text: '产品',
-              href: '',
+              href: FUtil.LinkTo.home(),
               items: [],
             },
           ]}
