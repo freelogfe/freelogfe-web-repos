@@ -175,6 +175,7 @@ export function informExhibitManagement({exhibitID}: InformExhibitManagementPara
 // 存储空间
 interface StorageSpaceParamsType {
   bucketName?: string;
+  createBucket?: boolean;
 }
 
 export function storageSpace({...params}: StorageSpaceParamsType = {}): TReturnType {

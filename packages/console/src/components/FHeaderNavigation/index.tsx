@@ -25,7 +25,10 @@ interface FHeaderNavigationProps {
       href: string;
       target?: '_self' | '_blank';
     }[];
-    showAddBtn?: boolean;
+    createBtn?: {
+      href: string;
+      target?: '_self' | '_blank';
+    } | null;
     emptyItemsTip?: {
       tipText: string;
       btnText: string;
@@ -67,6 +70,7 @@ function FHeaderNavigation({
                              createBtnMenu = [],
                              userPanel,
                            }: FHeaderNavigationProps) {
+  console.log(menu, 'menu93920394');
   return (<div className={styles.FHeaderNavigation}>
     <div className={styles.FHeaderNavigation_Left}>
       {
@@ -98,11 +102,11 @@ function FHeaderNavigation({
                 return (<FDropdown
                   key={m.id}
                   disabled={m.items.length === 0}
-                  overlay={m.emptyItemsTip
+                  overlay={m.items.length === 0 && m.emptyItemsTip
                     ? <EmptyAndCreate {...m.emptyItemsTip} />
                     : <NavList
                       items={m.items}
-                      showAddBtn={m.showAddBtn}
+                      createBtn={m.createBtn}
                     />}
                 >
                   {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FPlus } from '@/components/FIcons';
+import { Link } from 'umi';
 
 interface NavListProps {
   items: {
@@ -9,10 +10,13 @@ interface NavListProps {
     href: string;
     target?: '_self' | '_blank';
   }[];
-  showAddBtn?: boolean;
+  createBtn?: {
+    href: string;
+    target?: '_self' | '_blank';
+  } | null;
 }
 
-function NavList({ items, showAddBtn = false }: NavListProps) {
+function NavList({ items, createBtn = null }: NavListProps) {
   return (<div className={styles.NavList}>
     <div style={{ height: 10 }} />
     {
@@ -24,12 +28,31 @@ function NavList({ items, showAddBtn = false }: NavListProps) {
     }
     <div style={{ height: 10 }} />
     {
-      showAddBtn && (<a
-        onClick={() => {
-        }}
-        className={styles.newButton}>
-        <FPlus style={{ fontSize: 14 }} />
-      </a>)
+      createBtn && (<>
+        {
+          createBtn.href.startsWith('http')
+            ? (<a
+              className={styles.newButton}
+              href={createBtn.href}
+              target={createBtn.target}
+            >
+              <FPlus style={{ fontSize: 14 }} />
+            </a>)
+            : (<Link
+              className={styles.newButton}
+              to={createBtn.href}
+              target={createBtn.target}
+            >
+              <FPlus style={{ fontSize: 14 }} />
+            </Link>)
+        }
+        {/*<a*/}
+        {/*  onClick={() => {*/}
+        {/*  }}*/}
+        {/*  className={styles.newButton}>*/}
+        {/* */}
+        {/*</a>*/}
+      </>)
     }
 
   </div>);
