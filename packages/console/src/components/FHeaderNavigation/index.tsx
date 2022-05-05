@@ -97,7 +97,13 @@ function FHeaderNavigation({
               menu.map((m) => {
                 return (<FDropdown
                   key={m.id}
-                  overlay={m.emptyItemsTip ? <EmptyAndCreate {...m.emptyItemsTip} /> : <NavList items={m.items} />}
+                  disabled={m.items.length === 0}
+                  overlay={m.emptyItemsTip
+                    ? <EmptyAndCreate {...m.emptyItemsTip} />
+                    : <NavList
+                      items={m.items}
+                      showAddBtn={m.showAddBtn}
+                    />}
                 >
                   {
                     m.href.startsWith('http')

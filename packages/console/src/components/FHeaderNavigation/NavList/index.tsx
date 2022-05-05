@@ -9,9 +9,10 @@ interface NavListProps {
     href: string;
     target?: '_self' | '_blank';
   }[];
+  showAddBtn?: boolean;
 }
 
-function NavList({ items }: NavListProps) {
+function NavList({ items, showAddBtn = false }: NavListProps) {
   return (<div className={styles.NavList}>
     <div style={{ height: 10 }} />
     {
@@ -22,12 +23,15 @@ function NavList({ items }: NavListProps) {
       })
     }
     <div style={{ height: 10 }} />
-    <a
-      onClick={() => {
-      }}
-      className={styles.newButton}>
-      <FPlus style={{ fontSize: 14 }} />
-    </a>
+    {
+      showAddBtn && (<a
+        onClick={() => {
+        }}
+        className={styles.newButton}>
+        <FPlus style={{ fontSize: 14 }} />
+      </a>)
+    }
+
   </div>);
 }
 
