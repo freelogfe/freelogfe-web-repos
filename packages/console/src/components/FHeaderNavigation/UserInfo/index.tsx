@@ -30,8 +30,20 @@ function UserInfo({ data }: UserInfoProps) {
 
   if (!data) {
     return (<Space size={10}>
-      <FRectBtn type='default' size='small'>登录</FRectBtn>
-      <FRectBtn type='primary' size='small'>注册</FRectBtn>
+      <FRectBtn
+        type='default'
+        size='small'
+        onClick={() => {
+          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login();
+        }}
+      >登录</FRectBtn>
+      <FRectBtn
+        type='primary'
+        size='small'
+        onClick={() => {
+          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon();
+        }}
+      >注册</FRectBtn>
     </Space>);
   }
 
