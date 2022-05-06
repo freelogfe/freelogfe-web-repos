@@ -14,38 +14,24 @@ interface NavListProps {
     href: string;
     target?: '_self' | '_blank';
   } | null;
+  activeID?: string;
 }
 
-function NavList({ items, createBtn = null }: NavListProps) {
+function NavList({ items, createBtn = null, activeID = '' }: NavListProps) {
   return (<div className={styles.NavList}>
     <div style={{ height: 10 }} />
     {
       items.map((i) => {
-        return <AOrLink className={styles.NavItem} key={i.id} href={i.href}>
-          {i.text}
-        </AOrLink>;
+        return <AOrLink
+          className={[styles.NavItem, i.id === activeID ? styles.active : ''].join(' ')}
+          key={i.id}
+          href={i.href}
+        >{i.text}</AOrLink>;
       })
     }
     <div style={{ height: 10 }} />
     {
       createBtn && (<>
-        {/*{*/}
-        {/*  createBtn.href.startsWith('http')*/}
-        {/*    ? (<a*/}
-        {/*      className={styles.newButton}*/}
-        {/*      href={createBtn.href}*/}
-        {/*      target={createBtn.target}*/}
-        {/*    >*/}
-        {/*      <FPlus style={{ fontSize: 14 }} />*/}
-        {/*    </a>)*/}
-        {/*    : (<Link*/}
-        {/*      className={styles.newButton}*/}
-        {/*      to={createBtn.href}*/}
-        {/*      target={createBtn.target}*/}
-        {/*    >*/}
-        {/*      <FPlus style={{ fontSize: 14 }} />*/}
-        {/*    </Link>)*/}
-        {/*}*/}
         <AOrLink
           className={styles.newButton}
           href={createBtn.href}
