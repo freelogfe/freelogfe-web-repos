@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FLayout from '@/components/FLayout';
+// import FLayout from '@/components/FLayout';
 import { NavLink } from 'umi';
 import FDropdown from '@/components/FDropdown';
 import { FContentText } from '@/components/FText';

@@ -3,13 +3,19 @@ import styles from './index.less';
 import { Layout } from 'antd';
 import { withRouter } from 'umi';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, GlobalModelState, NodesModelState, StorageHomePageModelState } from '@/models/connect';
+import {
+  ConnectState,
+  GlobalModelState,
+  NodesModelState,
+  StorageHomePageModelState,
+  UserModelState,
+} from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 // import FFooter from "@/layouts/FFooter";
-import FHeader from '@/layouts/FLayout/FHeader';
+// import FHeader from '@/layouts/FLayout/FHeader';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FUtil } from '@freelog/tools-lib';
-import { dashboard } from '@freelog/tools-lib/dist/utils/linkTo';
+// import { dashboard } from '@freelog/tools-lib/dist/utils/linkTo';
 // import * as AHooks from 'ahooks';
 // import {ChangeAction} from "@/models/user";
 
@@ -19,24 +25,11 @@ interface FLayoutProps extends RouteComponentProps {
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;
   nodes: NodesModelState;
+  user: UserModelState;
 }
 
-function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayoutProps) {
-
-  // const [cookiesUserID] = AHooks.useCookieState('uid', {
-  //   defaultValue: '50028',
-  // });
-  //
-  // React.useEffect(() => {
-  //   // console.log(cookiesUserID, '!~!!!!!!!!###3333333');
-  //   dispatch<ChangeAction>({
-  //     type: 'user/change',
-  //     payload: {
-  //       cookiesUserID: Number(cookiesUserID),
-  //     },
-  //   });
-  // }, []);
-
+function FLayout({ dispatch, children, global, storageHomePage, nodes, user }: FLayoutProps) {
+  // console.log(user, 'UUUUUUUUU');
   return (
     <Layout
       className={styles.Layout}
@@ -159,7 +152,7 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
           ]}
           activeIDs={['dashboard', '']}
           showGlobalSearch={true}
-          showGotoConsole={true}
+          // showGotoConsole={true}
           createBtnMenu={[
             {
               id: 'createResource',
@@ -172,12 +165,12 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
               href: '/node/creator',
             },
           ]}
-          userPanel={{
+          userPanel={user.info ? {
             info: {
-              avatar: '',
-              userName: 'Liu',
-              email: '12345@qq.com',
-              phone: '13333333333',
+              avatar: user.info.headImage,
+              userName: user.info.username,
+              email: user.info.email,
+              phone: user.info.mobile,
             },
             menu: [
               {
@@ -193,7 +186,7 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
                 },
               },
             ],
-          }}
+          } : null}
         />
       </Layout.Header>
 
@@ -209,8 +202,9 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes }: FLayout
   );
 }
 
-export default withRouter(connect(({ global, storageHomePage, nodes }: ConnectState) => ({
+export default withRouter(connect(({ global, storageHomePage, nodes, user }: ConnectState) => ({
   global: global,
   storageHomePage: storageHomePage,
   nodes: nodes,
+  user: user,
 }))(FLayout));

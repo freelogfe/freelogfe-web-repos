@@ -64,7 +64,7 @@ function UserInfo({ data }: UserInfoProps) {
   </div>}>
     <a className={styles.avatar}>
       <img
-        src={(UserSVG) as string}
+        src={info.avatar || UserSVG}
         alt={'avatar'}
       />
     </a>
