@@ -106,7 +106,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
         'Cookie': cookie,
       },
     },
@@ -115,7 +114,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
         'Cookie': cookie,
       },
     },
