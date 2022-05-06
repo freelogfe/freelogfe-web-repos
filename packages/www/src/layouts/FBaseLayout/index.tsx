@@ -3,10 +3,13 @@ import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Layout } from 'antd';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
+import { connect } from 'dva';
+import { ConnectState, GlobalModelState } from '@/models/connect';
+import * as AHooks from 'ahooks';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
-  // user: UserModelState;
+  global: GlobalModelState;
 }
 
 interface FBaseLayoutStates {
@@ -27,11 +30,37 @@ interface FBaseLayoutStates {
     userType: 0 | 1;
     username: string;
   };
+  activeIDs: [string, string];
 }
 
-function FBaseLayout({ children }: FBaseLayoutProps) {
+const initStates: FBaseLayoutStates = {
+  userInfo: null,
+  activeIDs: ['', ''],
+};
 
-  const [userInfo, set_UserInfo] = React.useState<FBaseLayoutStates['userInfo']>(null);
+function FBaseLayout({ children, global }: FBaseLayoutProps) {
+
+  const [userInfo, set_UserInfo] = React.useState<FBaseLayoutStates['userInfo']>(initStates['userInfo']);
+  const [activeIDs, set_ActiveIDs] = React.useState<FBaseLayoutStates['activeIDs']>(initStates['activeIDs']);
+
+  AHooks.useMount(async () => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
+
+  React.useEffect(() => {
+    const curRouter = global.routerHistories[global.routerHistories.length - 1];
+    if (curRouter.pathname.startsWith('/home')) {
+      set_ActiveIDs(['product', '']);
+    } else if (curRouter.pathname.startsWith('/activity')) {
+      set_ActiveIDs(['activity', '']);
+    } else {
+      set_ActiveIDs(initStates['activeIDs']);
+    }
+  }, [global.routerHistories]);
 
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
@@ -82,7 +111,7 @@ function FBaseLayout({ children }: FBaseLayoutProps) {
             items: [],
           },
         ]}
-        activeIDs={['dashboard', '']}
+        activeIDs={activeIDs}
         showGotoConsole={!!userInfo}
         userPanel={userInfo ? {
           info: {
@@ -165,4 +194,6 @@ function FBaseLayout({ children }: FBaseLayoutProps) {
   // </FLayout>);
 }
 
-export default FBaseLayout;
+export default connect(({ global }: ConnectState) => ({
+  global,
+}))(FBaseLayout);
