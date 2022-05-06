@@ -44,7 +44,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
   const [activeIDs, set_ActiveIDs] = React.useState<FBaseLayoutStates['activeIDs']>(initStates['activeIDs']);
 
   AHooks.useMount(async () => {
-    if (!FUtil.Tool.getUserIDByCookies()) {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
       set_UserInfo(initStates['userInfo']);
       return;
     }
