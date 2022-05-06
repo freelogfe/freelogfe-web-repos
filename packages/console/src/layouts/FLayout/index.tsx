@@ -40,8 +40,9 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       set_ActiveIDs(['resource', 'myCollection']);
     } else if (curRouter.pathname.startsWith('/node/formal/')) {
       const nodeID: string = curRouter.pathname.split('/')[3];
-      console.log(nodeID, 'nodeID23098ijlsdkfjl');
       set_ActiveIDs(['node', nodeID]);
+    } else if (curRouter.pathname.startsWith('/storage')) {
+      set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
     } else {
       set_ActiveIDs(['', '']);
     }
