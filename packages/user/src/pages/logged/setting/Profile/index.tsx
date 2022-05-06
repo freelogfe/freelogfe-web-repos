@@ -24,6 +24,7 @@ interface ProfileProps {
 }
 
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
+
   return (<>
     <div className={styles.avatar}>
       <div>

@@ -8,18 +8,43 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Layout, Space } from 'antd';
 // import { FRectBtn } from '@/components/FButton';
 import { connect } from 'dva';
-import { ConnectState, UserModelState } from '@/models/connect';
+import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
 // import UserSVG from '@/assets/user.svg';
 // import { history } from 'umi';
 // import FUtil1 from '@/utils';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
+import { history } from '@@/core/history';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
   user: UserModelState;
+  global: GlobalModelState;
 }
 
-function FBaseLayout({ children, user }: FBaseLayoutProps) {
+function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
+
+  // const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
+  //
+  // React.useEffect(() => {
+  //   const curRouter = global.routerHistories[global.routerHistories.length - 1];
+  //   if (curRouter.pathname.startsWith('/logged/wallet')) {
+  //     set_ActiveIDs(['dashboard', '']);
+  //   } else if (curRouter.pathname.startsWith('/resource/list')) {
+  //     set_ActiveIDs(['resource', 'myResource']);
+  //   } else if (curRouter.pathname.startsWith('/resource/collect')) {
+  //     set_ActiveIDs(['resource', 'myCollection']);
+  //   } else if (curRouter.pathname.startsWith('/node/formal/')) {
+  //     const nodeID: string = curRouter.pathname.split('/')[3];
+  //     set_ActiveIDs(['node', nodeID]);
+  //   } else if (curRouter.pathname.startsWith('/storage')) {
+  //     set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
+  //   } else if (curRouter.pathname.startsWith('/market')) {
+  //     set_ActiveIDs(['discover', 'market']);
+  //   } else {
+  //     set_ActiveIDs(['', '']);
+  //   }
+  // }, [global.routerHistories]);
+
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
       <FHeaderNavigation
@@ -30,30 +55,30 @@ function FBaseLayout({ children, user }: FBaseLayoutProps) {
           {
             id: 'product',
             text: '产品',
-            href: FUtil.LinkTo.home(),
+            href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
             items: [],
           },
           {
             id: 'discover',
             text: '发现',
-            href: FUtil.LinkTo.market(),
+            href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
             items: [
               {
                 id: 'myResource',
                 text: '发现资源',
-                href: FUtil.LinkTo.market(),
+                href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
               },
               {
                 id: 'myCollection',
                 text: '示例节点',
-                href: FUtil.LinkTo.market(),
+                href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
               },
             ],
           },
           {
             id: 'activity',
             text: '活动',
-            href: FUtil.LinkTo.activities(),
+            href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activities(),
             items: [],
           },
           {
@@ -69,30 +94,32 @@ function FBaseLayout({ children, user }: FBaseLayoutProps) {
             items: [],
           },
         ]}
-        activeIDs={['dashboard', '']}
+        activeIDs={['', '']}
         showGotoConsole={true}
-        userPanel={{
+        userPanel={user.userInfo ? {
           info: {
-            avatar: '',
-            userName: 'Liu',
-            email: '12345@qq.com',
-            phone: '13333333333',
+            avatar: user.userInfo.headImage,
+            userName: user.userInfo.username,
+            email: user.userInfo.email,
+            phone: user.userInfo.mobile,
           },
           menu: [
-            {
-              text: '个人中心',
-              onClick() {
-                console.log('####');
-              },
-            },
+            // {
+            //   text: '个人中心',
+            //   onClick() {
+            //     console.log('####');
+            //   },
+            // },
             {
               text: '登出',
-              onClick() {
-                console.log('****');
+              async onClick() {
+                await FServiceAPI.User.logout();
+                // return FUtil.LinkTo.login();
+                history.push(FUtil.LinkTo.login());
               },
             },
           ],
-        }}
+        } : null}
       />
     </Layout.Header>
 
@@ -148,4 +175,4 @@ function FBaseLayout({ children, user }: FBaseLayoutProps) {
   // </FLayout>);
 }
 
-export default connect(({ user }: ConnectState) => ({ user }))(FBaseLayout);
+export default connect(({ user, global }: ConnectState) => ({ user, global }))(FBaseLayout);

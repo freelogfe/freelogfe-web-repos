@@ -10,6 +10,7 @@ import EmptyAndCreate from './EmptyAndCreate';
 import NavList from './NavList';
 import FPlus from '../FIcons/FPlus';
 import AOrLink from './AOrLink';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FHeaderNavigationProps {
   logoBtn: {
@@ -144,7 +145,7 @@ function FHeaderNavigation({
             size='small'
             type='secondary'
             onClick={() => {
-              // window.open(FUtil.Format.completeUrlByDomain('console'));
+              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard());
             }}
           >进入工作台</FRectBtn>
           <div style={{ width: 30 }} />

@@ -8,11 +8,21 @@ import FUtil1 from '@/utils';
 
 export type UserModelState = WholeReadonly<{
   userInfo: null | {
-    userId: number;
-    headImage: string;
-    username: string;
-    mobile: string;
+    createDate: string;
     email: string;
+    headImage: string;
+    mobile: string;
+    status: number;
+    tokenSn: string;
+    userDetail: {
+      sex: 0 | 1 | 2;
+      birthday: string;
+      occupation: string;
+      areaCode: string;
+    };
+    userId: number;
+    userType: 0 | 1;
+    username: string;
   };
 }>;
 
@@ -71,13 +81,7 @@ const Model: UserModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          userInfo: {
-            userId: data.userId,
-            headImage: data.headImage,
-            username: data.username,
-            mobile: data.mobile,
-            email: data.email,
-          },
+          userInfo: data,
         },
       });
     },
