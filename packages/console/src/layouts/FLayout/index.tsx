@@ -38,6 +38,10 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       set_ActiveIDs(['resource', 'myResource']);
     } else if (curRouter.pathname.startsWith('/resource/collect')) {
       set_ActiveIDs(['resource', 'myCollection']);
+    } else if (curRouter.pathname.startsWith('/node/formal/')) {
+      const nodeID: string = curRouter.pathname.split('/')[3];
+      console.log(nodeID, 'nodeID23098ijlsdkfjl');
+      set_ActiveIDs(['node', nodeID]);
     } else {
       set_ActiveIDs(['', '']);
     }
