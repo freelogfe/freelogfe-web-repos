@@ -38,17 +38,17 @@ function FBaseLayout({ children }: FBaseLayoutProps) {
           {
             id: 'discover',
             text: '发现',
-            href: FUtil.LinkTo.market(),
+            href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
             items: [
               {
                 id: 'myResource',
                 text: '发现资源',
-                href: FUtil.LinkTo.market(),
+                href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
               },
               {
                 id: 'myCollection',
                 text: '示例节点',
-                href: FUtil.LinkTo.market(),
+                href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
               },
             ],
           },
