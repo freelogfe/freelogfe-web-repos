@@ -136,7 +136,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
               text: '登出',
               async onClick() {
                 await FServiceAPI.User.logout();
-
+                set_UserInfo(initStates['userInfo']);
               },
             },
           ],
