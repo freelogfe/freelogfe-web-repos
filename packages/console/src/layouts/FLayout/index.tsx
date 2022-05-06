@@ -154,7 +154,7 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
             {
               id: 'activity',
               text: '活动',
-              href: FUtil.LinkTo.activities(),
+              href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activities(),
               items: [],
             },
             {
