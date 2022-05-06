@@ -12,7 +12,7 @@ import {
 } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
-import { FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -196,13 +196,14 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
               {
                 text: '个人中心',
                 onClick() {
-                  console.log('####');
+                  window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
                 },
               },
               {
                 text: '登出',
-                onClick() {
-                  console.log('****');
+                async onClick() {
+                  await FServiceAPI.User.logout();
+                  return window.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login());
                 },
               },
             ],
