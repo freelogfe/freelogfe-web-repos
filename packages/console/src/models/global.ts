@@ -18,7 +18,14 @@ import { ConnectState } from '@/models/connect';
 export interface GlobalModelState {
   locale: 'zh-CN' | 'en-US' | 'pt-BR';
   route: any;
-  routerHistories: History['location'][];
+  routerHistories: {
+    hash: string;
+    key: string;
+    pathname: string;
+    query: { [key: string]: string };
+    search: string;
+    state: any;
+  }[];
   // backgroundColor: string;
 }
 
@@ -49,6 +56,7 @@ export interface GlobalModelType {
   };
   subscriptions: {
     setup: Subscription;
+    historyListen: Subscription;
     activatedWindow: Subscription;
   };
 }
@@ -97,22 +105,31 @@ const Model: GlobalModelType = {
   },
   subscriptions: {
     setup({ dispatch, history }) {
+      // history.listen((listener) => {
+      //   // console.log(listener, 'listener098phijnoweklf');
+      //   dispatch<PushRouterAction>({
+      //     type: 'pushRouter',
+      //     payload: listener as any,
+      //   });
+      // });
+    },
+    historyListen({ dispatch, history }) {
       history.listen((listener) => {
         // console.log(listener, 'listener098phijnoweklf');
         dispatch<PushRouterAction>({
           type: 'pushRouter',
-          payload: listener,
+          payload: listener as any,
         });
       });
     },
-    activatedWindow({dispatch}) {
+    activatedWindow({ dispatch }) {
       window.document.addEventListener('visibilitychange', function() {
         // console.log(document.hidden, 'document.hidden9032rweopfdslj.,');
         // Modify behavior...
 
       });
 
-      window.addEventListener("pagehide", event => {
+      window.addEventListener('pagehide', event => {
         if (event.persisted) {
           /* the page isn't being discarded, so it can be reused later */
         }

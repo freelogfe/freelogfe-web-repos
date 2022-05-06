@@ -65,7 +65,7 @@ function Node({ dispatch, nodes, router: routerObj }: NodeProps) {
     </div>)}>
     <FNavLink
       text={FUtil1.I18n.message('node_manage')}
-      to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId })}
+      to={nodes.list.length === 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId })}
       active={isCurrent}
     />
   </FDropdown>);

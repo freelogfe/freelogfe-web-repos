@@ -15,6 +15,9 @@ import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FUtil } from '@freelog/tools-lib';
 
 interface FLayoutProps extends RouteComponentProps {
+  router: {
+    location: Location;
+  };
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   global: GlobalModelState;
@@ -23,8 +26,23 @@ interface FLayoutProps extends RouteComponentProps {
   user: UserModelState;
 }
 
-function FLayout({ dispatch, children, global, storageHomePage, nodes, user }: FLayoutProps) {
-  // console.log(user, 'UUUUUUUUU');
+function FLayout({ router: routerObj, dispatch, children, global, storageHomePage, nodes, user }: FLayoutProps) {
+  // console.log(global, 'global09234jl23kl');
+  const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
+
+  React.useEffect(() => {
+    const curRouter = global.routerHistories[global.routerHistories.length - 1];
+    if (curRouter.pathname.startsWith('/dashboard')) {
+      set_ActiveIDs(['dashboard', '']);
+    } else if (curRouter.pathname.startsWith('/resource/list')) {
+      set_ActiveIDs(['resource', 'myResource']);
+    } else if (curRouter.pathname.startsWith('/resource/collect')) {
+      set_ActiveIDs(['resource', 'myCollection']);
+    } else {
+      set_ActiveIDs(['', '']);
+    }
+  }, [global.routerHistories]);
+
   return (
     <Layout
       className={styles.Layout}
@@ -145,7 +163,7 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes, user }: F
               items: [],
             },
           ]}
-          activeIDs={['dashboard', '']}
+          activeIDs={activeIDs}
           showGlobalSearch={true}
           // showGotoConsole={true}
           createBtnMenu={[
