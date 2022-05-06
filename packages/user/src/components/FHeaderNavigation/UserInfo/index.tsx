@@ -34,7 +34,9 @@ function UserInfo({ data }: UserInfoProps) {
         type='default'
         size='small'
         onClick={() => {
-          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login();
+          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
+            goTo: window.location.href,
+          });
         }}
       >登录</FRectBtn>
       <FRectBtn
