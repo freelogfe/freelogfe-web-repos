@@ -8,16 +8,21 @@ import { ConnectState } from '@/models/connect';
 
 export interface UserModelState {
   info: null | {
-    userId: number;
-    username: string;
-    nickname: string;
-    email: string;
-    tokenSn: string;
-    mobile: string;
-    userRole: number;
     createDate: string;
-    updateDate: string;
+    email: string;
     headImage: string;
+    mobile: string;
+    status: number;
+    tokenSn: string;
+    userDetail: {
+      sex: 0 | 1 | 2;
+      birthday:string;
+      occupation: string;
+      areaCode: string;
+    };
+    userId: number;
+    userType: 0 | 1;
+    username: string;
   };
   // cookiesUserID: number;
 }

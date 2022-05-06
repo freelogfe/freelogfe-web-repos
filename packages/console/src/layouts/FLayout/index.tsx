@@ -43,6 +43,8 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       set_ActiveIDs(['node', nodeID]);
     } else if (curRouter.pathname.startsWith('/storage')) {
       set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
+    } else if (curRouter.pathname.startsWith('/market')) {
+      set_ActiveIDs(['discover', 'market']);
     } else {
       set_ActiveIDs(['', '']);
     }
@@ -55,7 +57,7 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       <Layout.Header className={styles.header}>
         <FHeaderNavigation
           logoBtn={{ href: FUtil.LinkTo.dashboard() }}
-          showAlphaTest={true}
+          showAlphaTest={user.info?.userType === 1}
           showConsoleBabel={true}
           menu={[
             {
@@ -138,12 +140,12 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
               href: FUtil.LinkTo.market(),
               items: [
                 {
-                  id: 'myResource',
+                  id: 'market',
                   text: '发现资源',
                   href: FUtil.LinkTo.market(),
                 },
                 {
-                  id: 'myCollection',
+                  id: 'example',
                   text: '示例节点',
                   href: FUtil.LinkTo.market(),
                 },
