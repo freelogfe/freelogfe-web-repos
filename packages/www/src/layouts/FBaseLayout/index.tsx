@@ -1,27 +1,38 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FLayout from '@/components/FLayout';
-// import { NavLink } from 'umi';
-// import FDropdown from '@/components/FDropdown';
-// import { FContentText } from '@/components/FText';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { Layout, Space } from 'antd';
-// import { FRectBtn } from '@/components/FButton';
-// import { connect } from 'dva';
-// import { ConnectState, UserModelState } from '@/models/connect';
-// import UserSVG from '@/assets/user.svg';
-// import { history } from 'umi';
-// import FInput from '@/components/FInput';
+import { Layout } from 'antd';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
-
-// import FUtil1 from '@/utils';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
   // user: UserModelState;
 }
 
+interface FBaseLayoutStates {
+  userInfo: null | {
+    createDate: string;
+    email: string;
+    headImage: string;
+    mobile: string;
+    status: number;
+    tokenSn: string;
+    userDetail: {
+      sex: 0 | 1 | 2;
+      birthday: string;
+      occupation: string;
+      areaCode: string;
+    };
+    userId: number;
+    userType: 0 | 1;
+    username: string;
+  };
+}
+
 function FBaseLayout({ children }: FBaseLayoutProps) {
+
+  const [userInfo, set_UserInfo] = React.useState<FBaseLayoutStates['userInfo']>(null);
+
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
       <FHeaderNavigation
@@ -70,32 +81,32 @@ function FBaseLayout({ children }: FBaseLayoutProps) {
             href: '',
             items: [],
           },
-
         ]}
         activeIDs={['dashboard', '']}
-        showGotoConsole={true}
-        userPanel={{
+        showGotoConsole={!!userInfo}
+        userPanel={userInfo ? {
           info: {
-            avatar: '',
-            userName: 'Liu',
-            email: '12345@qq.com',
-            phone: '13333333333',
+            avatar: userInfo.headImage,
+            userName: userInfo.username,
+            email: userInfo.email,
+            phone: userInfo.mobile,
           },
           menu: [
             {
               text: '个人中心',
               onClick() {
-                console.log('####');
+                window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
               },
             },
             {
               text: '登出',
-              onClick() {
-                console.log('****');
+              async onClick() {
+                await FServiceAPI.User.logout();
+
               },
             },
           ],
-        }}
+        } : null}
       />
     </Layout.Header>
 
