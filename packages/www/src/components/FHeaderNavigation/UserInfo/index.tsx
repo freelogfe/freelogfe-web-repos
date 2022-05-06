@@ -43,7 +43,9 @@ function UserInfo({ data }: UserInfoProps) {
         type='primary'
         size='small'
         onClick={() => {
-          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon();
+          window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon({
+            goTo: window.location.href,
+          });
         }}
       >注册</FRectBtn>
     </Space>);
