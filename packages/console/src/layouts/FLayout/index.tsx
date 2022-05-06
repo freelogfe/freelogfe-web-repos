@@ -11,13 +11,8 @@ import {
   UserModelState,
 } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
-// import FFooter from "@/layouts/FFooter";
-// import FHeader from '@/layouts/FLayout/FHeader';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FUtil } from '@freelog/tools-lib';
-// import { dashboard } from '@freelog/tools-lib/dist/utils/linkTo';
-// import * as AHooks from 'ahooks';
-// import {ChangeAction} from "@/models/user";
 
 interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -193,10 +188,6 @@ function FLayout({ dispatch, children, global, storageHomePage, nodes, user }: F
       <div style={{ height: 70 }} />
 
       <Layout.Content className={styles.Content}>{children}</Layout.Content>
-
-      {/*<Layout.Footer className={styles.Footer}>*/}
-      {/*  <FFooter/>*/}
-      {/*</Layout.Footer>*/}
 
     </Layout>
   );
