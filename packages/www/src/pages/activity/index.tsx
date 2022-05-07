@@ -11,8 +11,6 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
 
-;
-
 interface ActivityProps {
   dispatch: Dispatch;
   activityPage: ActivityPageModelState;

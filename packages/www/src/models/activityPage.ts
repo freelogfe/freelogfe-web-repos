@@ -59,8 +59,8 @@ const Model: ActivityPageModelType = {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Activity.list4Client>[0] = {};
       const { data } = yield call(FServiceAPI.Activity.list4Client, params);
-      // console.log(data, 'data9023ulk');
-      const list: ActivityPageModelState['list'] = (data as any[]).map<ActivityPageModelState['list'][0]>((d) => {
+      console.log(data, 'data9023ulk');
+      const list: ActivityPageModelState['list'] = (data.dataList as any[]).map<ActivityPageModelState['list'][0]>((d) => {
         return {
           activityID: d._id,
           activityTitle: d.title,
