@@ -2,6 +2,8 @@ import FUtil from '../utils';
 
 // 列出活动
 interface List4ClientParamsType {
+  skip?: number;
+  limit?: number;
 }
 
 export function list4Client(params: List4ClientParamsType) {
