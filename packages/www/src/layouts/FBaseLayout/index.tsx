@@ -60,8 +60,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
     const curRouter = global.routerHistories[global.routerHistories.length - 1];
     if (curRouter.pathname.startsWith('/home')) {
       set_ActiveIDs(['product', '']);
-    } else if (curRouter.pathname.startsWith('/activity')) {
-      set_ActiveIDs(['activity', '']);
+    } else if (curRouter.pathname.startsWith('/activities')) {
+      set_ActiveIDs(['activities', '']);
     } else {
       set_ActiveIDs(initStates['activeIDs']);
     }
@@ -98,7 +98,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
             ],
           },
           {
-            id: 'activity',
+            id: 'activities',
             text: '活动',
             href: FUtil.LinkTo.activities(),
             items: [],

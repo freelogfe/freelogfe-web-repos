@@ -18,7 +18,7 @@ interface ActivitiesParamsType {
 }
 
 export function activities({}: ActivitiesParamsType = {}) {
-  return `/activity`;
+  return `/activities`;
 }
 
 // 活动详情
@@ -27,7 +27,7 @@ interface ActivitiesParamsType {
 }
 
 export function activity({activityID}: ActivitiesParamsType) {
-  return `/activityDetail/${activityID}`;
+  return `/activity/${activityID}`;
 }
 
 /************** www End ******************************************************/
