@@ -9,6 +9,7 @@ interface ActivityProps {
 function Activity({}: ActivityProps) {
   return (<div>
     <FLoadingTip height={window.innerHeight - 170} />
+    
   </div>);
 }
 
