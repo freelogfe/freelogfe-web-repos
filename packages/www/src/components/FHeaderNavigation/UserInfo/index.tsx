@@ -3,9 +3,9 @@ import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import FDropdown from '@/components/FDropdown';
 import { FUtil } from '@freelog/tools-lib';
-import UserSVG from '@/assets/user.svg';
 import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
+import { FUser } from '@/components/FIcons';
 
 interface UserInfoProps {
   data: {
@@ -51,7 +51,12 @@ function UserInfo({ data }: UserInfoProps) {
 
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
-      <img src={info.avatar || UserSVG} alt='headImage' />
+      {
+        info.avatar
+          ? (<img src={info.avatar} alt='headImage' />)
+          : (<FUser style={{fontSize: 36}} />)
+      }
+
       <div style={{ height: 10 }} />
       <FContentText
         type='highlight'
@@ -75,10 +80,11 @@ function UserInfo({ data }: UserInfoProps) {
     </div>
   </div>}>
     <a className={styles.avatar}>
-      <img
-        src={info.avatar || UserSVG}
-        alt={'avatar'}
-      />
+      {
+        info.avatar
+          ? (<img src={info.avatar} alt='avatar' />)
+          : (<FUser style={{fontSize: 18}} />)
+      }
     </a>
   </FDropdown>);
 }
