@@ -2,12 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import FDropdown from '@/components/FDropdown';
-import { connect, Dispatch } from 'dva';
-import { FetchUserInfoAction, UserModelState } from '@/models/user';
-import { ConnectState } from '@/models/connect';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FUtil } from '@freelog/tools-lib';
 import UserSVG from '@/assets/user.svg';
-import * as AHooks from 'ahooks';
 import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 
