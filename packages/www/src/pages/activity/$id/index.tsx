@@ -33,6 +33,11 @@ interface ActivityStates {
     img: string;
     description: string;
   }[];
+  display_Novel_Css: {
+    right: number;
+    transform: string;
+    zIndex: number;
+  }[];
 }
 
 const css1: ActivityStates['display_Cartoon_Css'] = [
@@ -53,6 +58,29 @@ const css1: ActivityStates['display_Cartoon_Css'] = [
   },
   {
     left: 210,
+    transform: 'scale(.82)',
+    zIndex: 500,
+  },
+];
+
+const css2: ActivityStates['display_Novel_Css'] = [
+  {
+    right: 0,
+    transform: 'scale(1)',
+    zIndex: 503,
+  },
+  {
+    right: 70,
+    transform: 'scale(.94)',
+    zIndex: 502,
+  },
+  {
+    right: 140,
+    transform: 'scale(.88)',
+    zIndex: 501,
+  },
+  {
+    right: 210,
     transform: 'scale(.82)',
     zIndex: 500,
   },
@@ -88,6 +116,7 @@ const initStates: ActivityStates = {
     { id: 'novel3', img: img_Novel3, description: '渡心劫' },
     { id: 'novel4', img: img_Novel4, description: '盗墓笔记' },
   ],
+  display_Novel_Css: [...css2],
 };
 
 function Activity({}: ActivityProps) {
@@ -95,6 +124,7 @@ function Activity({}: ActivityProps) {
   const [display_Cartoon, set_Display_Cartoon] = React.useState<ActivityStates['display_Cartoon']>(initStates['display_Cartoon']);
   const [display_Cartoon_Css, set_Display_Cartoon_Css] = React.useState<ActivityStates['display_Cartoon_Css']>(initStates['display_Cartoon_Css']);
   const [display_Novel, set_Display_Novel] = React.useState<ActivityStates['display_Novel']>(initStates['display_Novel']);
+  const [display_Novel_Css, set_Display_Novel_Css] = React.useState<ActivityStates['display_Novel_Css']>(initStates['display_Novel_Css']);
 
   function onClick_Display_Cartoon(i: number) {
     let index: number = i;
@@ -103,8 +133,19 @@ function Activity({}: ActivityProps) {
       result[index % 4] = css1[j];
       index++;
     }
-    console.log(result, 'result')
+    // console.log(result, 'result');
     set_Display_Cartoon_Css(result);
+  }
+
+  function onClick_Display_Novel(i: number) {
+    let index: number = i;
+    const result: any[] = Array(4).fill(null);
+    for (let j = 0; j < 4; j++) {
+      result[index % 4] = css2[j];
+      index++;
+    }
+    // console.log(result, 'result');
+    set_Display_Novel_Css(result);
   }
 
 
@@ -159,7 +200,6 @@ function Activity({}: ActivityProps) {
           <div className={styles.participation_Display_Covers}>
             {
               display_Cartoon.map((d, i) => {
-
                 return (<a
                   className={styles.participation_Display_Cover}
                   style={{ ...display_Cartoon_Css[i] }}
@@ -171,11 +211,9 @@ function Activity({}: ActivityProps) {
                   <img src={d.img} alt={''} />
                   <div style={{ height: 10 }} />
                   <FTitleText text={d.description} type='h3' singleRow />
-                  {/*<FTitleText style={{ width: '100%', textAlign: 'right' }} text={d.id} type='h3' singleRow />*/}
                 </a>);
               })
             }
-
           </div>
           <div style={{ height: 30 }} />
           <div className={styles.participation_Display_Description}>漫画展品示例</div>
@@ -184,7 +222,26 @@ function Activity({}: ActivityProps) {
       <div style={{ height: 100 }} />
       <div className={styles.participation}>
         <div className={styles.participation_Display}>
-
+          <div className={styles.participation_Display_Covers}>
+            {
+              display_Novel.map((d, i) => {
+                return (<a
+                  className={styles.participation_Display_Cover}
+                  style={{ ...display_Novel_Css[i] }}
+                  key={d.id}
+                  onClick={() => {
+                    onClick_Display_Novel(i);
+                  }}
+                >
+                  <img src={d.img} alt={''} />
+                  <div style={{ height: 10 }} />
+                  <FTitleText text={d.description} type='h3' singleRow />
+                </a>);
+              })
+            }
+          </div>
+          <div style={{ height: 30 }} />
+          <div className={styles.participation_Display_Description}>小说展品示例</div>
         </div>
         <div className={styles.participation_Text}>
           <div className={styles.participation_Text1}>小说赛道参与方式</div>
