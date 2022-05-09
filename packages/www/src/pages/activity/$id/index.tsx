@@ -8,8 +8,10 @@ interface ActivityProps {
 
 function Activity({}: ActivityProps) {
   return (<div>
-    <FLoadingTip height={window.innerHeight - 170} />
-    
+    {/*<FLoadingTip height={window.innerHeight - 170} />*/}
+    <div className={styles.banner1}>
+
+    </div>
   </div>);
 }
 
