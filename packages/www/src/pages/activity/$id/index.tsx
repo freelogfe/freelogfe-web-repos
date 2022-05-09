@@ -149,7 +149,7 @@ function Activity({}: ActivityProps) {
   }
 
 
-  return (<div>
+  return (<div className={styles.style}>
     {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>
@@ -258,6 +258,9 @@ function Activity({}: ActivityProps) {
           </Space>
         </div>
       </div>
+    </div>
+    <div className={styles.reward}>
+
     </div>
   </div>);
 }
