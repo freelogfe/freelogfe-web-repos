@@ -4,6 +4,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 
 import Banner1 from '@/pages/activity/$id/Banner1';
 import Participations from '@/pages/activity/$id/Participations';
+import Reward from '@/pages/activity/$id/Reward';
 
 interface ActivityProps {
 
@@ -19,10 +20,7 @@ function Activity({}: ActivityProps) {
     <div style={{ height: 266 }} />
     <Participations />
     <div style={{ height: 100 }} />
-    <div className={styles.reward}>
-      <div className={styles.rewardTitle}>活动奖励</div>
-      <div style={{ height: 40 }} />
-    </div>
+    <Reward />
   </div>);
 }
 
