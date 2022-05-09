@@ -3,159 +3,21 @@
 .style {
   background-color: white;
 
-  .banner1 {
-    height: 580px;
-    background-image: url("../../../assets/activity/banner1@2x.png"), linear-gradient(315deg, #D2D6EA 0%, #F2F2F2 100%);
-    background-size: auto 100%;
-    background-position: 50%;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
 
-    .banner1Content {
-      width: 1060px;
-      height: 286px;
-      background: #FFFFFF;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
-      border-radius: 20px;
-      transform: translateY(166px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
 
-      .banner1Content_Title {
-        font-size: 18px;
-        font-weight: 400;
-        color: #222;
-        line-height: 28px;
-        text-align: center;
-      }
 
-      .banner1Content_Times {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 930px;
 
-        .banner1Content_Time1, .banner1Content_Time2, .banner1Content_Time3 {
-          width: 250px;
-          height: 100px;
-          border-radius: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-
-          .title {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 20px;
-          }
-
-          .time {
-            font-size: 30px;
-            font-weight: 600;
-            line-height: 36px;
-          }
-        }
-
-        .banner1Content_Time1 {
-          background-color: #E9F2FF;
-
-          color: #2784FF;
-        }
-
-        .banner1Content_Time2 {
-          background-color: #ECF8F3;
-
-          color: #42C28C;
-        }
-
-        .banner1Content_Time3 {
-          background-color: #FCF6E9;
-
-          color: #E9A923;
-        }
-      }
-    }
-  }
-
-  .participations {
+  .reward {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .participation {
-      width: 1060px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .participation_Text {
-        .participation_Text1 {
-          font-size: 40px;
-          font-weight: 400;
-          color: #222;
-          line-height: 46px;
-        }
-
-        .participation_Text2 {
-          font-size: 14px;
-          font-weight: 400;
-          color: #999;
-          line-height: 20px;
-        }
-
-        .participation_Text3 {
-          font-size: 18px;
-          font-weight: 600;
-          color: #222;
-          line-height: 24px;
-        }
-      }
-
-      .participation_Display {
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .participation_Display_Covers {
-          position: relative;
-          width: 420px;
-          height: 332px;
-
-          .participation_Display_Cover {
-            position: absolute;
-            padding: 10px;
-            width: 220px;
-            background: #FFF;
-            box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            top: 0;
-            display: block;
-            transition: left 2s, right 2s, transform 2s;
-
-            & > img {
-              display: block;
-              width: 100%;
-            }
-          }
-        }
-
-        .participation_Display_Description {
-          font-size: 14px;
-          font-weight: 400;
-          color: #999;
-          line-height: 20px;
-        }
-      }
+    .rewardTitle {
+      font-size: 40px;
+      font-weight: 400;
+      color: #222;
+      line-height: 46px;
     }
-  }
-
-  .reward {
-
   }
 }
 

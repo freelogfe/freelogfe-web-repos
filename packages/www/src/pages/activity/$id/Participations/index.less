@@ -1,0 +1,75 @@
+@import '../../../../config.less';
+
+.participations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .participation {
+    width: 1060px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .participation_Text {
+      .participation_Text1 {
+        font-size: 40px;
+        font-weight: 400;
+        color: #222;
+        line-height: 46px;
+      }
+
+      .participation_Text2 {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
+        line-height: 20px;
+      }
+
+      .participation_Text3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #222;
+        line-height: 24px;
+      }
+    }
+
+    .participation_Display {
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .participation_Display_Covers {
+        position: relative;
+        width: 420px;
+        height: 332px;
+
+        .participation_Display_Cover {
+          position: absolute;
+          padding: 10px;
+          width: 220px;
+          background: #FFF;
+          box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.2);
+          border-radius: 10px;
+          overflow: hidden;
+          top: 0;
+          display: block;
+          transition: left 2s, right 2s, transform 2s;
+
+          & > img {
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+
+      .participation_Display_Description {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
+        line-height: 20px;
+      }
+    }
+  }
+}
