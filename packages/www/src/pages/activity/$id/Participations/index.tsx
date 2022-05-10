@@ -11,6 +11,7 @@ import img_Novel1 from '@/assets/activity/novel1@2x.png';
 import img_Novel2 from '@/assets/activity/novel2@2x.png';
 import img_Novel3 from '@/assets/activity/novel3@2x.png';
 import img_Novel4 from '@/assets/activity/novel4@2x.png';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ParticipationsProps {
 
@@ -159,7 +160,13 @@ function Participations({}: ParticipationsProps) {
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
-          <FRectBtn type='primary' style={{ height: 50, padding: '0 50px' }}>立即参赛</FRectBtn>
+          <FRectBtn
+            type='primary'
+            style={{ height: 50, padding: '0 50px' }}
+            onClick={() => {
+              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
+            }}
+          >立即参赛</FRectBtn>
           <FTextBtn type='primary'>如何参赛？</FTextBtn>
         </Space>
       </div>
@@ -220,7 +227,13 @@ function Participations({}: ParticipationsProps) {
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
-          <FRectBtn type='primary' style={{ height: 50, padding: '0 50px' }}>立即参赛</FRectBtn>
+          <FRectBtn
+            type='primary'
+            style={{ height: 50, padding: '0 50px' }}
+            onClick={() => {
+              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
+            }}
+          >立即参赛</FRectBtn>
           <FTextBtn type='primary'>如何参赛？</FTextBtn>
         </Space>
       </div>
