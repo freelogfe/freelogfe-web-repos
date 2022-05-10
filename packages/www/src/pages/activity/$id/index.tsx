@@ -7,6 +7,7 @@ import Participations from './Participations';
 import Reward from './Reward';
 import Strategy from './Strategy';
 import Banner2 from './Banner2';
+import FPageFooter from '@/components/FPageFooter';
 
 interface ActivityProps {
 
@@ -28,7 +29,7 @@ function Activity({}: ActivityProps) {
     <div style={{ height: 100 }} />
     <Banner2 />
     <div style={{ height: 100 }} />
-
+    <FPageFooter />
   </div>);
 }
 
