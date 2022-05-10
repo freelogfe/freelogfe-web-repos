@@ -1,8 +1,53 @@
 @import '../../../../config.less';
 
-.strategy{
+.strategy {
   background-color: #FAFBFC;
-
-  height: 628px;
+  //height: 628px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .strategyTitle {
+    font-size: 40px;
+    font-weight: 400;
+    color: #222;
+    line-height: 46px;
+  }
+
+  .strategyContent {
+    display: flex;
+
+    .strategyContentLeft {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #E9A923;
+      border-radius: 50%;
+      transform: translateY(10px);
+    }
+
+    .strategyContentRight {
+      width: 820px;
+
+      .strategyContent1 {
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 30px;
+      }
+
+      .strategyContent2 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #222;
+        line-height: 22px;
+      }
+
+      .strategyContent3 {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
+        line-height: 20px;
+      }
+    }
+  }
 }
