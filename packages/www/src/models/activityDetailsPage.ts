@@ -57,8 +57,14 @@ const Model: ActivityDetailsPageModelType = {
       const params: Parameters<typeof FServiceAPI.Activity.find4Client>[0] = {
         _id: payload.activityID,
       };
-      const { data } = yield call(FServiceAPI.Activity.find4Client, params);
-      if (!data) {
+      const { ret, errCode, data } = yield call(FServiceAPI.Activity.find4Client, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pageState: 'noDate',
+          },
+        });
         return;
       }
       yield put<ChangeAction>({
