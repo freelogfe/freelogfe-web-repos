@@ -1,12 +1,12 @@
-import { ActivityPageModelState } from './activityPage';
+import { ActivitiesPageModelState } from './activitiesPage';
 import {GlobalModelState} from './global';
 
 export {
-  ActivityPageModelState,
+  ActivitiesPageModelState,
   GlobalModelState,
 };
 
 export interface ConnectState {
-  activityPage: ActivityPageModelState;
+  activitiesPage: ActivitiesPageModelState;
   global: GlobalModelState;
 }

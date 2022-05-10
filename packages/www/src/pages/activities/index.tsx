@@ -4,29 +4,29 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
-import { ActivityPageModelState, ConnectState } from '@/models/connect';
+import { ActivitiesPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
-import { OnMountPageAction, OnUnmountPageAction } from '@/models/activityPage';
+import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage';
 import FLoadingTip from '@/components/FLoadingTip';
 import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
 
 interface ActivityProps {
   dispatch: Dispatch;
-  activityPage: ActivityPageModelState;
+  activitiesPage: ActivitiesPageModelState;
 }
 
-function Activity({ dispatch, activityPage }: ActivityProps) {
+function Activity({ dispatch, activitiesPage }: ActivityProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
-      type: 'activityPage/onMountPage',
+      type: 'activitiesPage/onMountPage',
     });
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
-      type: 'activityPage/onUnmountPage',
+      type: 'activitiesPage/onUnmountPage',
     });
   });
 
@@ -37,21 +37,21 @@ function Activity({ dispatch, activityPage }: ActivityProps) {
         <div style={{ height: 35 }} />
       </div>
       {
-        activityPage.listState === 'loading' && (<FLoadingTip height={window.innerHeight - 170} />)
+        activitiesPage.listState === 'loading' && (<FLoadingTip height={window.innerHeight - 170} />)
       }
 
       {
-        activityPage.listState === 'noData' && (<FNoDataTip
+        activitiesPage.listState === 'noData' && (<FNoDataTip
           height={window.innerHeight - 170}
           tipText={'暂无活动'}
         />)
       }
 
       {
-        activityPage.listState === 'loaded' && (<>
+        activitiesPage.listState === 'loaded' && (<>
           <div className={styles.content}>
             {
-              activityPage.list && activityPage.list.map((m) => {
+              activitiesPage.list && activitiesPage.list.map((m) => {
                 return (<a key={m.activityID} className={styles.contentCard}>
                   <img
                     className={styles.contentCard_Cover}
@@ -96,6 +96,6 @@ function Activity({ dispatch, activityPage }: ActivityProps) {
   );
 }
 
-export default connect(({ activityPage }: ConnectState) => ({
-  activityPage,
+export default connect(({ activitiesPage }: ConnectState) => ({
+  activitiesPage,
 }))(Activity);

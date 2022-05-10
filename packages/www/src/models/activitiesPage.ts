@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
-export interface ActivityPageModelState {
+export interface ActivitiesPageModelState {
   listState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   // listMore: 'loading' | 'andMore' | 'noMore';
   list: {
@@ -20,47 +20,49 @@ export interface ActivityPageModelState {
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
-  payload: Partial<ActivityPageModelState>;
+  payload: Partial<ActivitiesPageModelState>;
 }
 
 export interface OnMountPageAction extends AnyAction {
-  type: 'activityPage/onMountPage';
+  type: 'activitiesPage/onMountPage';
 }
 
 export interface OnUnmountPageAction extends AnyAction {
-  type: 'activityPage/onUnmountPage';
+  type: 'activitiesPage/onUnmountPage';
 }
 
-interface ActivityPageModelType {
-  namespace: 'activityPage';
-  state: ActivityPageModelState;
+interface activitiesPageModelType {
+  namespace: 'activitiesPage';
+  state: ActivitiesPageModelState;
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<ActivityPageModelState, ChangeAction>;
+    change: DvaReducer<ActivitiesPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const initStates: ActivityPageModelState = {
+const initStates: ActivitiesPageModelState = {
   listState: 'loading',
   // listMore: 'loading' | 'andMore' | 'noMore';
   list: [],
 };
 
-const Model: ActivityPageModelType = {
-  namespace: 'activityPage',
+const Model: activitiesPageModelType = {
+  namespace: 'activitiesPage',
   state: initStates,
   effects: {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
-      const params: Parameters<typeof FServiceAPI.Activity.list4Client>[0] = {};
+      const params: Parameters<typeof FServiceAPI.Activity.list4Client>[0] = {
+        limit: 100,
+      };
       const { data } = yield call(FServiceAPI.Activity.list4Client, params);
-      console.log(data, 'data9023ulk');
-      const list: ActivityPageModelState['list'] = (data.dataList as any[]).map<ActivityPageModelState['list'][0]>((d) => {
+      // console.log(data, 'data9023ulk');
+      const list: ActivitiesPageModelState['list'] = (data.dataList as any[]).map<ActivitiesPageModelState['list'][0]>((d) => {
         return {
           activityID: d._id,
           activityTitle: d.title,
