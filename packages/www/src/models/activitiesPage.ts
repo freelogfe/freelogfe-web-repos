@@ -62,12 +62,19 @@ const Model: activitiesPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Activity.list4Client, params);
       // console.log(data, 'data9023ulk');
+      const status: any = {
+        1: '',
+        2: '',
+        3: 'starting',
+        4: 'ongoing',
+        5: 'end',
+      };
       const list: ActivitiesPageModelState['list'] = (data.dataList as any[]).map<ActivitiesPageModelState['list'][0]>((d) => {
         return {
           activityID: d._id,
           activityTitle: d.title,
           activityCover: d.cover,
-          status: 'starting',
+          status: status[d.status] || 'end',
           persis: d.persist,
           link: d.link,
           startTime: d.startTime ? FUtil.Format.formatDateTime(d.startTime) : '',
