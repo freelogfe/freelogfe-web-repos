@@ -15,6 +15,7 @@ import img_Police from '@/assets/police@2x.png';
 
 import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import Banner2 from '@/pages/home/Banner2';
+import FPageFooter from '@/components/FPageFooter';
 
 interface HomePageProps {
 
@@ -101,37 +102,7 @@ function HomePage({}: HomePageProps) {
       <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
     </div>
 
-    <footer className={styles.footer}>
-      <div className={styles.footerLeft}>
-        <Space size={30} style={{ height: 70 }}>
-          <a className={styles.footerLeft_Link}>产品动态</a>
-          <a className={styles.footerLeft_Link}>服务协议</a>
-          <a className={styles.footerLeft_Link}>关于我们</a>
-          <a className={styles.footerLeft_Link}>联系我们</a>
-          <a className={styles.footerLeft_Link}>English</a>
-        </Space>
-        <div style={{ width: 40 }} />
-        <Space size={30} style={{ height: 70 }}>
-          <a className={styles.footerLeft_Link}>
-            <FWeChat />
-          </a>
-          <a className={styles.footerLeft_Link}>
-            <FSina />
-          </a>
-          <a className={styles.footerLeft_Link}>
-            <FLinkedin />
-          </a>
-        </Space>
-      </div>
-
-      <div className={styles.footerRight}>
-        <img src={img_Police} className={styles.policeImg} alt={''} />
-        <div style={{ width: 6 }} />
-        <div className={styles.footerRightText}>粤ICP备17085716号-1</div>
-        <div style={{ width: 30 }} />
-        <div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>
-      </div>
-    </footer>
+    <FPageFooter />
 
     <a className={styles.rewardSuspension}>
       <img src={img_RewardSuspension} alt={''} />
