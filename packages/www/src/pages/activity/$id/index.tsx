@@ -1,36 +1,72 @@
 import * as React from 'react';
 import styles from './index.less';
 import FLoadingTip from '@/components/FLoadingTip';
+import { connect, Dispatch } from 'dva';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
+import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
+import * as AHooks from 'ahooks';
+import { OnMountPageAction, OnUnmountPageAction } from '@/models/activityDetailsPage';
+import { IRouteComponentProps, withRouter } from 'umi';
+import FNoDataTip from '@/components/FNoDataTip';
+import FResultTip from '@/components/FResultTip';
+import { FUtil } from '@freelog/tools-lib';
 
-import Banner1 from './Banner1';
-import Participations from './Participations';
-import Reward from './Reward';
-import Strategy from './Strategy';
-import Banner2 from './Banner2';
-import FPageFooter from '@/components/FPageFooter';
+interface ActivityProps extends IRouteComponentProps {
+  dispatch: Dispatch;
+  activityDetailsPage: ActivityDetailsPageModelState;
 
-interface ActivityProps {
-
+  // match: {
+  //   params: {
+  //     id: string;
+  //   }
+  // };
 }
 
 
-function Activity({}: ActivityProps) {
+function Activity({ dispatch, activityDetailsPage, match, history }: ActivityProps) {
 
 
-  return (<div className={styles.style}>
-    {/*<FLoadingTip height={window.innerHeight - 170} />*/}
-    <Banner1 />
-    <div style={{ height: 266 }} />
-    <Participations />
-    <div style={{ height: 100 }} />
-    <Reward />
-    <div style={{ height: 100 }} />
-    <Strategy />
-    <div style={{ height: 100 }} />
-    <Banner2 />
-    <div style={{ height: 100 }} />
-    <FPageFooter />
-  </div>);
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'activityDetailsPage/onMountPage',
+      payload: {
+        activityID: (match.params as { id: string }).id || '',
+      },
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'activityDetailsPage/onUnmountPage',
+    });
+  });
+
+  if (activityDetailsPage.pageState === 'loading') {
+    return (<FLoadingTip height={window.innerHeight - 170} />);
+  }
+
+
+  if (activityDetailsPage.pageState === 'noDate') {
+    return (<div
+      style={{ height: window.innerHeight - 170, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <FResultTip h1={'活动不存在或者已暂停'} btnText={'返回首页'} onClickBtn={() => {
+        history.push(FUtil.LinkTo.home());
+      }} />
+    </div>);
+  }
+
+  if (activityDetailsPage.showActivity === 'ResourceCompetition') {
+    return (<ResourceCompetition />);
+  }
+
+  return (
+    <div style={{ height: window.innerHeight - 170, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <FResultTip h1={'活动不存在或者已暂停'} btnText={'返回首页'} onClickBtn={() => {
+        history.push(FUtil.LinkTo.home());
+      }} />
+    </div>);
 }
 
-export default Activity;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(withRouter(Activity));

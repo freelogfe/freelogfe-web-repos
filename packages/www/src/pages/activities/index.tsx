@@ -10,6 +10,7 @@ import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage'
 import FLoadingTip from '@/components/FLoadingTip';
 import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
+import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 
 interface ActivityProps {
   dispatch: Dispatch;
@@ -52,7 +53,12 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
           <div className={styles.content}>
             {
               activitiesPage.list && activitiesPage.list.map((m) => {
-                return (<a key={m.activityID} className={styles.contentCard}>
+                return (<AOrLink
+                  key={m.activityID}
+                  className={styles.contentCard}
+                  href={FUtil.LinkTo.activity({ activityID: m.activityID })}
+                  target='_blank'
+                >
                   <img
                     className={styles.contentCard_Cover}
                     src={m.activityCover || (FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png')}
@@ -82,7 +88,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
                     text={'活动时限：' + (m.persis ? '持续进行' : `${m.startTime}-${m.limitTime}`)}
                     type='additional2'
                   />
-                </a>);
+                </AOrLink>);
               })
             }
             <div style={{ width: 560 }} />

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FPentagram from '@/components/FIcons/FPentagram';
-import FLine from '../../../../components/FIcons/FLine';
+import FLine from '../../../../../components/FIcons/FLine';
 import { Space } from 'antd';
 import { FRectBtn } from '@/components/FButton';
 
