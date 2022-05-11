@@ -12,12 +12,14 @@ import img_Novel2 from '@/assets/activity/novel2@2x.png';
 import img_Novel3 from '@/assets/activity/novel3@2x.png';
 import img_Novel4 from '@/assets/activity/novel4@2x.png';
 import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ParticipationsProps {
 
 }
 
 interface ActivityStates {
+  delay: undefined | number;
   display_Cartoon: {
     id: string;
     img: string;
@@ -28,6 +30,7 @@ interface ActivityStates {
     transform: string;
     zIndex: number;
   }[];
+  display_Cartoon_Index: number;
   display_Novel: {
     id: string;
     img: string;
@@ -38,6 +41,7 @@ interface ActivityStates {
     transform: string;
     zIndex: number;
   }[];
+  display_Novel_Index: number;
 }
 
 const css1: ActivityStates['display_Cartoon_Css'] = [
@@ -87,6 +91,7 @@ const css2: ActivityStates['display_Novel_Css'] = [
 ];
 
 const initStates: ActivityStates = {
+  delay: 5000,
   display_Cartoon: [
     {
       id: 'cartoon1',
@@ -110,6 +115,7 @@ const initStates: ActivityStates = {
     },
   ],
   display_Cartoon_Css: [...css1],
+  display_Cartoon_Index: 0,
   display_Novel: [
     { id: 'novel1', img: img_Novel1, description: '五极异域' },
     { id: 'novel2', img: img_Novel2, description: '你躲在时间门外' },
@@ -117,17 +123,32 @@ const initStates: ActivityStates = {
     { id: 'novel4', img: img_Novel4, description: '盗墓笔记' },
   ],
   display_Novel_Css: [...css2],
+  display_Novel_Index: 0,
 };
 
 function Participations({}: ParticipationsProps) {
 
+  const [delay, set_Delay] = React.useState<ActivityStates['delay']>(initStates['delay']);
+
   const [display_Cartoon, set_Display_Cartoon] = React.useState<ActivityStates['display_Cartoon']>(initStates['display_Cartoon']);
   const [display_Cartoon_Css, set_Display_Cartoon_Css] = React.useState<ActivityStates['display_Cartoon_Css']>(initStates['display_Cartoon_Css']);
+  const [display_Cartoon_Index, set_Display_Cartoon_Index] = React.useState<ActivityStates['display_Cartoon_Index']>(initStates['display_Cartoon_Index']);
+
   const [display_Novel, set_Display_Novel] = React.useState<ActivityStates['display_Novel']>(initStates['display_Novel']);
   const [display_Novel_Css, set_Display_Novel_Css] = React.useState<ActivityStates['display_Novel_Css']>(initStates['display_Novel_Css']);
+  const [display_Novel_Index, set_Display_Novel_Index] = React.useState<ActivityStates['display_Novel_Index']>(initStates['display_Novel_Index']);
+
+  AHooks.useInterval(() => {
+    onClick_Display_Cartoon((display_Cartoon_Index + 1) % 4);
+  }, delay);
+
+  AHooks.useInterval(() => {
+    onClick_Display_Novel((display_Novel_Index + 1) % 4);
+  }, delay);
 
   function onClick_Display_Cartoon(i: number) {
     let index: number = i;
+    set_Display_Cartoon_Index(index);
     const result: any[] = Array(4).fill(null);
     for (let j = 0; j < 4; j++) {
       result[index % 4] = css1[j];
@@ -139,6 +160,7 @@ function Participations({}: ParticipationsProps) {
 
   function onClick_Display_Novel(i: number) {
     let index: number = i;
+    set_Display_Novel_Index(index);
     const result: any[] = Array(4).fill(null);
     for (let j = 0; j < 4; j++) {
       result[index % 4] = css2[j];
@@ -170,7 +192,15 @@ function Participations({}: ParticipationsProps) {
           <FTextBtn type='primary'>如何参赛？</FTextBtn>
         </Space>
       </div>
-      <div className={styles.participation_Display}>
+      <div
+        onMouseEnter={() => {
+          set_Delay(undefined);
+        }}
+        onMouseLeave={() => {
+          set_Delay(5000);
+        }}
+        className={styles.participation_Display}
+      >
         <div className={styles.participation_Display_Covers}>
           {
             display_Cartoon.map((d, i) => {
@@ -195,7 +225,15 @@ function Participations({}: ParticipationsProps) {
     </div>
     <div style={{ height: 100 }} />
     <div className={styles.participation}>
-      <div className={styles.participation_Display}>
+      <div
+        onMouseEnter={() => {
+          set_Delay(undefined);
+        }}
+        onMouseLeave={() => {
+          set_Delay(5000);
+        }}
+        className={styles.participation_Display}
+      >
         <div className={styles.participation_Display_Covers}>
           {
             display_Novel.map((d, i) => {
