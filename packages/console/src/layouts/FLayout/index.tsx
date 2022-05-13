@@ -144,7 +144,7 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
         <FHeaderNavigation
           logoBtn={{ href: FUtil.LinkTo.dashboard() }}
           showAlphaTest={user.info?.userType === 1}
-          showConsoleBabel={true}
+          showConsoleBabel={!!user.info}
           menu={[
             ...navs,
             {
