@@ -78,6 +78,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
               customBuckets
                 .map((b) => {
                   return (<FLink
+                    replace
                     key={b.bucketName}
                     className={storageHomePage.activatedBucket === b.bucketName
                       ? styles.activated
