@@ -482,12 +482,14 @@ const Model: StorageHomePageModelType = {
   },
   subscriptions: {
     setup({ dispatch }, done) {
-      dispatch<FetchBucketsAction>({
-        type: 'fetchBuckets',
-        payload: {
-          from: 'header',
-        },
-      });
+      if (FUtil.Tool.getUserIDByCookies() !== -1) {
+        dispatch<FetchBucketsAction>({
+          type: 'fetchBuckets',
+          payload: {
+            from: 'other',
+          },
+        });
+      }
     },
   },
 };

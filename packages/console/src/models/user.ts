@@ -16,7 +16,7 @@ export interface UserModelState {
     tokenSn: string;
     userDetail: {
       sex: 0 | 1 | 2;
-      birthday:string;
+      birthday: string;
       occupation: string;
       areaCode: string;
     };
@@ -82,7 +82,7 @@ const Model: MarketModelType = {
       const { user }: ConnectState = yield select(({ user }: ConnectState) => ({
         user,
       }));
-      if (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies()) {
+      if (FUtil.Tool.getUserIDByCookies() !== -1 && (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies())) {
         co();
       }
 
@@ -98,9 +98,11 @@ const Model: MarketModelType = {
   },
   subscriptions: {
     setup({ dispatch }) {
-      dispatch<FetchUserInfoAction>({
-        type: 'fetchUserInfo',
-      });
+      if (FUtil.Tool.getUserIDByCookies() !== -1) {
+        dispatch<FetchUserInfoAction>({
+          type: 'fetchUserInfo',
+        });
+      }
       // console.log('!@#$!@#$!@#$@#$');
     },
     checkUser({ dispatch }) {

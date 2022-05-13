@@ -248,9 +248,11 @@ const Model: NodesModelType = {
   },
   subscriptions: {
     setup({ dispatch }: SubscriptionAPI) {
-      dispatch<FetchNodesAction>({
-        type: 'fetchNodes',
-      });
+      if (FUtil.Tool.getUserIDByCookies() !== -1) {
+        dispatch<FetchNodesAction>({
+          type: 'fetchNodes',
+        });
+      }
     },
   },
 };
