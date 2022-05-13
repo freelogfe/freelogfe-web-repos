@@ -141,8 +141,8 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
           {
             FUtil1.I18n.message('create_bucket_popup_msg')
               .split('\n')
-              .map((s) => {
-                return (<div>{s}</div>);
+              .map((s, i) => {
+                return (<div key={i}>{s}</div>);
               })
           }
         </div>
@@ -166,8 +166,8 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
             {
               FUtil1.I18n.message('naming_convention_bucket_name')
                 .split('\n')
-                .map((s) => {
-                  return (<div>{s}</div>);
+                .map((s, i) => {
+                  return (<div key={i}>{s}</div>);
                 })
             }
 
