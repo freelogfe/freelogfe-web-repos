@@ -8,7 +8,7 @@ import { ActivitiesPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
 import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage';
 import FLoadingTip from '@/components/FLoadingTip';
-import FResultTip from '@/components/FResultTip';
+// import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
 import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 
@@ -96,8 +96,6 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
           <div style={{ height: 100 }} />
         </>)
       }
-
-
     </div>
   );
 }
