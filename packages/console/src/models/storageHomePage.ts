@@ -8,8 +8,6 @@ import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 
-// import { BUCKET_NAME } from '@freelog/tools-lib/dist/utils/regexp';
-
 export interface StorageHomePageModelState {
   newBucketName: string;
   newBucketNameIsDirty: boolean;
@@ -319,7 +317,7 @@ const Model: StorageHomePageModelType = {
           bucketList: newBucket,
         },
       });
-      
+
       if (newBucket.some((b) => b.bucketName === storageHomePage.activatedBucket)) {
         return;
       }
@@ -432,7 +430,7 @@ const Model: StorageHomePageModelType = {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
-      console.log(payload, 'payload@!@#$!@#$@#!4213424');
+      // console.log(payload, 'payload@!@#$!@#$@#!4213424');
       if (payload[0].size > 50 * 1024 * 1024) {
         fMessage('单个文件不能大于 50 M', 'warning');
         return;
