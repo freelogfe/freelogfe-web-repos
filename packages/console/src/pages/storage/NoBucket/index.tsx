@@ -6,6 +6,8 @@ import {connect, Dispatch} from 'dva';
 import {ChangeAction, StorageHomePageModelState} from "@/models/storageHomePage";
 import {ConnectState} from "@/models/connect";
 import FUtil1 from "@/utils";
+import { router } from 'umi';
+import { FUtil } from '@freelog/tools-lib';
 
 interface NoContentProps {
   dispatch: Dispatch;
@@ -34,14 +36,17 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
         size="large"
         style={{paddingLeft: 50, paddingRight: 50}}
         onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'storageHomePage/change',
-            payload: {
-              newBucketName: '',
-              newBucketNameError: false,
-              newBucketModalVisible: true,
-            },
-          });
+          // dispatch<ChangeAction>({
+          //   type: 'storageHomePage/change',
+          //   payload: {
+          //     newBucketName: '',
+          //     newBucketNameError: false,
+          //     newBucketModalVisible: true,
+          //   },
+          // });
+          router.push(FUtil.LinkTo.storageSpace({
+            createBucket: true,
+          }));
         }}
       >{FUtil1.I18n.message('create_bucket')}</FRectBtn>
       <div style={{height: 200}}/>
