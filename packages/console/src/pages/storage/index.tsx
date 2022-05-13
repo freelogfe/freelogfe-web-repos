@@ -18,6 +18,8 @@ import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHom
 import FUtil1 from '@/utils';
 import { Modal } from 'antd';
 import { FUtil } from '@freelog/tools-lib';
+import FModal from '@/components/FModal';
+import { FTitleText } from '@/components/FText';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -41,8 +43,6 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
   }, [state.bucketName]);
 
   React.useEffect(() => {
-    console.log(state.createBucket, 'state.createBucket0932o2kl4jlk');
-
     if (state.createBucket) {
       dispatch<StorageHomePageChangeAction>({
         type: 'storageHomePage/change',
@@ -109,8 +109,8 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
 
     <Details />
 
-    <Modal
-      title={FUtil1.I18n.message('create_bucket_popup_title')}
+    <FModal
+      title={null}
       visible={storageHomePage.newBucketModalVisible}
       width={640}
       okButtonProps={{
@@ -130,14 +130,22 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         }));
       }}
     >
+      {/*<div style={{ height: 20 }} />*/}
+      <div style={{ padding: 20 }}>
+        <FTitleText text={FUtil1.I18n.message('create_bucket_popup_title')} type='h2' />
+      </div>
+
       <div className={styles.FModalBody}>
         <div style={{ height: 50 }} />
-        <ul className={styles.tip}>
-          {/*{console.log(FUtil1.I18n.message('create_bucket_popup_msg'))}*/}
-          {/*<li>请注意存储空间的名称一但创建则不可修改</li>*/}
-          {/*<li>Freelog为每个用户提供2GB的免费存储空间</li>*/}
-          {FUtil1.I18n.message('create_bucket_popup_msg')}
-        </ul>
+        <div className={styles.tip}>
+          {
+            FUtil1.I18n.message('create_bucket_popup_msg')
+              .split('\n')
+              .map((s) => {
+                return (<div>{s}</div>);
+              })
+          }
+        </div>
         <div style={{ height: 10 }} />
         <FInput
           value={storageHomePage.newBucketName}
@@ -155,16 +163,19 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
           errorText={storageHomePage.newBucketNameError ? (<div>
-            {/*<div>名称全局唯一；</div>*/}
-            {/*<div>只能包括小写字母、数字和短横线（-）；</div>*/}
-            {/*<div>必须以小写字母或者数字开头和结尾 ；</div>*/}
-            {/*<div>长度必须在 1–63 字符之间。</div>*/}
-            <div>{FUtil1.I18n.message('naming_convention_bucket_name')}</div>
+            {
+              FUtil1.I18n.message('naming_convention_bucket_name')
+                .split('\n')
+                .map((s) => {
+                  return (<div>{s}</div>);
+                })
+            }
+
           </div>) : ''}
         />
         <div style={{ height: 100 }} />
       </div>
-    </Modal>
+    </FModal>
   </>);
 }
 

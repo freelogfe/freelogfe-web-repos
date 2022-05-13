@@ -49,7 +49,7 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       set_ActiveIDs(['', '']);
     }
   }, [global.routerHistories]);
-
+  // console.log(storageHomePage.bucketList, '’storageHomePage.bucketList390osd');
   const navs = user.info
     ? [
       {
