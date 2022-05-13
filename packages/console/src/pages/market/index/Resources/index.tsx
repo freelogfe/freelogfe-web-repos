@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketPageModelState} from '@/models/connect';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, MarketPageModelState } from '@/models/connect';
 import styles from '@/pages/market/index/index.less';
 import {
   OnChangeKeywordsAction,
@@ -10,11 +10,11 @@ import {
 } from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
-import {Button} from 'antd';
-import {router} from "umi";
-import FNoDataTip from "@/components/FNoDataTip";
-import {FUtil} from '@freelog/tools-lib';
-import FLoadingTip from "@/components/FLoadingTip";
+import { Button } from 'antd';
+import { router } from 'umi';
+import FNoDataTip from '@/components/FNoDataTip';
+import { FUtil } from '@freelog/tools-lib';
+import FLoadingTip from '@/components/FLoadingTip';
 import * as AHooks from 'ahooks';
 
 interface ResourcesProps {
@@ -22,7 +22,7 @@ interface ResourcesProps {
   marketPage: MarketPageModelState,
 }
 
-function Resources({dispatch, marketPage}: ResourcesProps) {
+function Resources({ dispatch, marketPage }: ResourcesProps) {
 
   AHooks.useMount(() => {
 
@@ -35,7 +35,7 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
   });
 
   return (<>
-    <div style={{height: 30}}/>
+    <div style={{ height: 30 }} />
     <div className={styles.filter}>
       <Labels
         options={marketPage.resourceTypeOptions}
@@ -60,20 +60,20 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
             },
           });
         }}
-        theme="dark"
-        size="small"
+        theme='dark'
+        size='small'
         className={styles.filterInput}
       />
     </div>
 
     {
-      marketPage.totalItem === -1 && (<FLoadingTip height={'calc(100vh - 140px - 50px)'}/>)
+      marketPage.totalItem === -1 && (<FLoadingTip height={'calc(100vh - 140px - 50px)'} />)
     }
 
     {
       marketPage.dataSource.length > 0
         ? (<>
-          <div style={{height: 30}}/>
+          <div style={{ height: 30 }} />
           <div className={styles.Content}>
             {
               marketPage.dataSource.map((resource: any) => (
@@ -82,23 +82,21 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
                   resource={resource}
                   className={styles.FResourceCard}
                   onClick={() => {
-                    // console.log(resource, 'resourceq098upioq');
-                    // return router.push(`/resource/${resource.id}`);
-                    return router.push(FUtil.LinkTo.resourceDetails({
+                    window.open(FUtil.LinkTo.resourceDetails({
                       resourceID: resource.id,
                     }));
                   }}
                 />))
             }
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
           </div>
 
           {
             marketPage.totalItem > marketPage.dataSource.length && (<>
-              <div style={{height: 100}}/>
+              <div style={{ height: 100 }} />
               <div className={styles.bottom}>
                 <Button
                   className={styles.loadMore}
@@ -111,20 +109,20 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
               </div>
             </>)
           }
-          <div style={{height: 200}}/>
+          <div style={{ height: 200 }} />
         </>)
         : marketPage.totalItem === 0
-        ? (<FNoDataTip
-          height={'calc(100vh - 275px)'}
-          tipText={'没有符合条件的资源'}
-        />)
-        : null
+          ? (<FNoDataTip
+            height={'calc(100vh - 275px)'}
+            tipText={'没有符合条件的资源'}
+          />)
+          : null
     }
 
   </>);
 }
 
-export default connect(({marketPage}: ConnectState) => ({
+export default connect(({ marketPage }: ConnectState) => ({
   marketPage: marketPage,
 }))(Resources);
 
@@ -137,7 +135,7 @@ interface Labels {
   onChange?: (value: string) => void;
 }
 
-function Labels({options, value, onChange}: Labels) {
+function Labels({ options, value, onChange }: Labels) {
   return (<div>
     {
       options.map((i, j) => (

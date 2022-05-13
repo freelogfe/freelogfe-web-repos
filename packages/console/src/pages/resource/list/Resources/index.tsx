@@ -7,22 +7,22 @@ import {
   OnMountAction,
   OnUnmountAction,
   ResourceListPageModelState,
-} from "@/models/resourceListPage";
-import {router} from "umi";
-import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
-import {connect, Dispatch} from "dva";
-import {ConnectState} from "@/models/connect";
-import FNoDataTip from "@/components/FNoDataTip";
-import FLoadingTip from "@/components/FLoadingTip";
-import {FUtil} from '@freelog/tools-lib';
-import * as AHooks from "ahooks";
+} from '@/models/resourceListPage';
+import { router } from 'umi';
+import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
+import { connect, Dispatch } from 'dva';
+import { ConnectState } from '@/models/connect';
+import FNoDataTip from '@/components/FNoDataTip';
+import FLoadingTip from '@/components/FLoadingTip';
+import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ResourceProps {
   dispatch: Dispatch;
   resource: ResourceListPageModelState;
 }
 
-function Resources({dispatch, resource}: ResourceProps) {
+function Resources({ dispatch, resource }: ResourceProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountAction>({
@@ -37,7 +37,7 @@ function Resources({dispatch, resource}: ResourceProps) {
   });
 
   if (resource.totalNum === -1) {
-    return (<FLoadingTip height={'calc(100vh - 140px)'}/>);
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }
 
   if (resource.dataSource.length === 0 && resource.inputText === '' && resource.resourceType === '-1' && resource.resourceStatus === '2') {
@@ -80,24 +80,33 @@ function Resources({dispatch, resource}: ResourceProps) {
       });
     }}
     showGotoCreateBtn={true}
-    onClickDetails={(id) => router.push(FUtil.LinkTo.resourceDetails({
-      resourceID: String(id),
-    }))}
-    onClickEditing={(id) => router.push(FUtil.LinkTo.resourceInfo({
-      resourceID: String(id),
-    }))}
-    onClickRevision={(id, record) => router.push(FUtil.LinkTo.resourceCreateVersion({
-      resourceID: String(id),
-    }))}
+    onClickDetails={(id) => {
+      // router.push(FUtil.LinkTo.resourceDetails({
+      //   resourceID: String(id),
+      // }));
+      window.open(FUtil.LinkTo.resourceDetails({
+        resourceID: String(id),
+      }));
+    }}
+    onClickEditing={(id) => {
+      window.open(FUtil.LinkTo.resourceInfo({
+        resourceID: String(id),
+      }));
+    }}
+    onClickRevision={(id, record) => {
+      window.open(FUtil.LinkTo.resourceCreateVersion({
+        resourceID: String(id),
+      }));
+    }}
     // onClickMore={(id) => router.push(`/resource/${id}`)}
     onloadMore={() => {
       dispatch<OnClickLoadingMordAction>({
         type: 'resourceListPage/onClickLoadingMord',
       });
     }}
-  />)
+  />);
 }
 
-export default connect(({resourceListPage}: ConnectState) => ({
+export default connect(({ resourceListPage }: ConnectState) => ({
   resource: resourceListPage,
 }))(Resources);

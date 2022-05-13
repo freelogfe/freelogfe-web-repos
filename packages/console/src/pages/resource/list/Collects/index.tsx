@@ -35,20 +35,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     });
   });
 
-  // React.useEffect(() => {
-  //
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceCollectPage/fetchDataSource',
-  //   });
-  //
-  //   return () => {
-  //     dispatch<InitModelStatesAction>({
-  //       type: 'resourceCollectPage/initModelStates',
-  //     });
-  //   };
-  //
-  // }, []);
-
   if (resource.totalNum === -1) {
     return (<FLoadingTip height={'calc(100vh - 140px)'}/>)
   }
@@ -63,13 +49,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     />);
   }
 
-  // function changeStatus(payload: ChangeStatesAction['payload']) {
-  //   dispatch<ChangeStatesAction>({
-  //     type: 'resourceCollectPage/changeStates',
-  //     payload,
-  //   })
-  // }
-
   return (<FResourceCardsList
     resourceType={resource.resourceType}
     resourceStatus={resource.resourceStatus}
@@ -77,10 +56,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     dataSource={resource.dataSource}
     totalNum={resource.totalNum}
     onChangeResourceType={(value) => {
-      // if (value === resource.resourceType) {
-      //   return;
-      // }
-      // changeStatus({resourceType: value});
       dispatch<OnChangeResourceTypeAction>({
         type: 'resourceCollectPage/onChangeResourceType',
         payload: {
@@ -89,10 +64,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       });
     }}
     onChangeResourceStatus={(value: string) => {
-      // if (value === resource.resourceStatus) {
-      //   return;
-      // }
-      // changeStatus({resourceStatus: value as '0' | '1' | '2'});
       dispatch<OnChangeStatusAction>({
         type: 'resourceCollectPage/onChangeStatus',
         payload: {
@@ -101,10 +72,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       });
     }}
     onChangeInputText={(value) => {
-      // if (value === resource.inputText) {
-      //   return;
-      // }
-      // changeStatus({inputText: value});
       dispatch<OnChangeKeywordsAction>({
         type: 'resourceCollectPage/onChangeKeywords',
         payload: {
@@ -120,15 +87,11 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       })
     }}
     onClickDetails={(id) => {
-      router.push(FUtil.LinkTo.resourceDetails({
+      window.open(FUtil.LinkTo.resourceDetails({
         resourceID: String(id),
       }));
     }}
     onClickMore={() => {
-      // dispatch<FetchDataSourceAction>({
-      //   type: 'resourceCollectPage/fetchDataSource',
-      //   payload: false,
-      // });
       dispatch<OnClickLoadingMordAction>({
         type: 'resourceCollectPage/onClickLoadingMord',
       });
