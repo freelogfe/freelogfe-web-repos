@@ -7,6 +7,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
+
 // import { BUCKET_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 export interface StorageHomePageModelState {
@@ -185,14 +186,14 @@ const Model: StorageHomePageModelType = {
       });
 
 
-      if (bucketList.length === 0 && window.location.pathname.startsWith('/storage')) {
-        router.push(FUtil.LinkTo.storageSpace({}));
-      } else {
-        if (payload?.from !== 'header' && window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
-          // console.log('!!!!!!!!!!!!0923480238402384032840923049');
-          router.push(FUtil.LinkTo.storageSpace({ bucketName: bucketList[0].bucketName }));
-        }
-      }
+      // if (bucketList.length === 0 && window.location.pathname.startsWith('/storage')) {
+      //   router.push(FUtil.LinkTo.storageSpace({}));
+      // } else {
+      //   if (payload?.from !== 'header' && window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
+      //     // console.log('!!!!!!!!!!!!0923480238402384032840923049');
+      //     router.push(FUtil.LinkTo.storageSpace({ bucketName: bucketList[0].bucketName }));
+      //   }
+      // }
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
@@ -242,7 +243,7 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
       router.push(FUtil.LinkTo.storageSpace({
-        bucketName: storageHomePage.activatedBucket,
+        bucketName: storageHomePage.newBucketName,
         createBucket: false,
       }));
       // yield put<ChangeAction>({
@@ -302,10 +303,35 @@ const Model: StorageHomePageModelType = {
         bucketName: payload,
       };
       // console.log(payload, 'DDDDDDDDelete');
-      yield call(FServiceAPI.Storage.deleteBucket, params);
-      yield put<FetchBucketsAction>({
-        type: 'fetchBuckets',
+      const { data } = yield call(FServiceAPI.Storage.deleteBucket, params);
+      // console.log(data, 'DDDD2839iosdflk');
+      // yield put<FetchBucketsAction>({
+      //   type: 'fetchBuckets',
+      // });
+
+      const newBucket: StorageHomePageModelState['bucketList'] = (storageHomePage.bucketList || []).filter((b) => {
+        return b.bucketName !== payload;
       });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          bucketList: newBucket,
+        },
+      });
+      
+      if (newBucket.some((b) => b.bucketName === storageHomePage.activatedBucket)) {
+        return;
+      }
+      if (newBucket.length === 0) {
+        router.push(FUtil.LinkTo.storageSpace({
+          bucketName: '',
+        }));
+      } else {
+        router.push(FUtil.LinkTo.storageSpace({
+          bucketName: newBucket[0].bucketName,
+        }));
+      }
     },
     * createObject({ payload }: CreateObjectAction, { call, select, put }: EffectsCommandMap) {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({

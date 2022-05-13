@@ -100,7 +100,7 @@ function FHeaderNavigation({
           <div className={styles.Menus}>
             {
               menu.map((m) => {
-                console.log(m.emptyItemsTip, 'm.emptyItemsTip');
+                // console.log(m.emptyItemsTip, 'm.emptyItemsTip');
                 return (<FDropdown
                   key={m.id}
                   disabled={m.items.length === 0 && !m.emptyItemsTip}
