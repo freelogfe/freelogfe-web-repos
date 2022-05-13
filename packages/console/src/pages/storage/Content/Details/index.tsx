@@ -283,7 +283,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             }}
             className={styles.FAutoComplete}
             placeholder={FUtil1.I18n.message('hint_choose_resource_type')}
-            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
+            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i, label: i}))}
           />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>
