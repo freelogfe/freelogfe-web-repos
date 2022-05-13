@@ -50,6 +50,92 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
     }
   }, [global.routerHistories]);
 
+  const navs = user.info
+    ? [
+      {
+        id: 'dashboard',
+        text: '概览',
+        href: FUtil.LinkTo.dashboard(),
+        emptyItemsTip: undefined,
+        items: [],
+      },
+      {
+        id: 'resource',
+        text: '资源管理',
+        href: FUtil.LinkTo.myResources(),
+        items: [
+          {
+            id: 'myResource',
+            text: '我的资源',
+            href: FUtil.LinkTo.myResources(),
+          },
+          {
+            id: 'myCollection',
+            text: '我的收藏',
+            href: FUtil.LinkTo.myCollects(),
+          },
+        ],
+      },
+      {
+        id: 'node',
+        text: '节点管理',
+        href: nodes.list.length === 0
+          ? FUtil.LinkTo.nodeCreator()
+          : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
+        items: nodes.list.map((n) => ({
+          id: n.nodeId.toString(),
+          text: n.nodeName,
+          href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
+        })),
+        createBtn: {
+          href: FUtil.LinkTo.nodeCreator(),
+        },
+        emptyItemsTip: {
+          tipText: '自由创作从Freelog开始',
+          btnText: '创建节点',
+          btnHref: FUtil.LinkTo.nodeCreator(),
+        },
+      },
+      {
+        id: 'storage',
+        text: '存储空间',
+        href: FUtil.LinkTo.storageSpace({
+          bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+            ? storageHomePage.bucketList[0].bucketName
+            : '',
+        }),
+        items: (storageHomePage.bucketList || []).map((b) => {
+          return {
+            id: b.bucketName,
+            text: b.bucketName,
+            href: FUtil.LinkTo.storageSpace({
+              bucketName: b.bucketName,
+            }),
+          };
+        }),
+        emptyItemsTip: {
+          tipText: '自由创作从Freelog开始',
+          btnText: '创建Bucket',
+          btnHref: FUtil.LinkTo.storageSpace({
+            createBucket: true,
+          }),
+        },
+        createBtn: {
+          href: FUtil.LinkTo.storageSpace({
+            createBucket: true,
+          }),
+        },
+      },
+    ]
+    : [
+      {
+        id: 'product',
+        text: '产品',
+        href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
+        items: [],
+      },
+    ];
+
   return (
     <Layout
       className={styles.Layout}
@@ -60,80 +146,7 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
           showAlphaTest={user.info?.userType === 1}
           showConsoleBabel={true}
           menu={[
-            {
-              id: 'dashboard',
-              text: '概览',
-              href: FUtil.LinkTo.dashboard(),
-              emptyItemsTip: undefined,
-              items: [],
-            },
-            {
-              id: 'resource',
-              text: '资源管理',
-              href: FUtil.LinkTo.myResources(),
-              items: [
-                {
-                  id: 'myResource',
-                  text: '我的资源',
-                  href: FUtil.LinkTo.myResources(),
-                },
-                {
-                  id: 'myCollection',
-                  text: '我的收藏',
-                  href: FUtil.LinkTo.myCollects(),
-                },
-              ],
-            },
-            {
-              id: 'node',
-              text: '节点管理',
-              href: nodes.list.length === 0
-                ? FUtil.LinkTo.nodeCreator()
-                : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
-              items: nodes.list.map((n) => ({
-                id: n.nodeId.toString(),
-                text: n.nodeName,
-                href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
-              })),
-              createBtn: {
-                href: FUtil.LinkTo.nodeCreator(),
-              },
-              emptyItemsTip: {
-                tipText: '自由创作从Freelog开始',
-                btnText: '创建节点',
-                btnHref: FUtil.LinkTo.nodeCreator(),
-              },
-            },
-            {
-              id: 'storage',
-              text: '存储空间',
-              href: FUtil.LinkTo.storageSpace({
-                bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-                  ? storageHomePage.bucketList[0].bucketName
-                  : '',
-              }),
-              items: (storageHomePage.bucketList || []).map((b) => {
-                return {
-                  id: b.bucketName,
-                  text: b.bucketName,
-                  href: FUtil.LinkTo.storageSpace({
-                    bucketName: b.bucketName,
-                  }),
-                };
-              }),
-              emptyItemsTip: {
-                tipText: '自由创作从Freelog开始',
-                btnText: '创建Bucket',
-                btnHref: FUtil.LinkTo.storageSpace({
-                  createBucket: true,
-                }),
-              },
-              createBtn: {
-                href: FUtil.LinkTo.storageSpace({
-                  createBucket: true,
-                }),
-              },
-            },
+            ...navs,
             {
               id: 'discover',
               text: '发现',
