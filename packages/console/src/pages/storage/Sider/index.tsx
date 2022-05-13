@@ -53,7 +53,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
               ? (<FCircleBtn
                 type="transparent"
                 onClick={() => {
-                  router.push(FUtil.LinkTo.storageSpace({
+                  router.replace(FUtil.LinkTo.storageSpace({
                     bucketName: storageHomePage.activatedBucket,
                     createBucket: true,
                   }));

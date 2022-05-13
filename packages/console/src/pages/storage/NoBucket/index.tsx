@@ -44,7 +44,7 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
           //     newBucketModalVisible: true,
           //   },
           // });
-          router.push(FUtil.LinkTo.storageSpace({
+          router.replace(FUtil.LinkTo.storageSpace({
             createBucket: true,
           }));
         }}

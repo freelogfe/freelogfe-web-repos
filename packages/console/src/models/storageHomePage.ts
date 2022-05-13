@@ -240,7 +240,7 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
-      router.push(FUtil.LinkTo.storageSpace({
+      router.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageHomePage.newBucketName,
         createBucket: false,
       }));
@@ -322,11 +322,11 @@ const Model: StorageHomePageModelType = {
         return;
       }
       if (newBucket.length === 0) {
-        router.push(FUtil.LinkTo.storageSpace({
+        router.replace(FUtil.LinkTo.storageSpace({
           bucketName: '',
         }));
       } else {
-        router.push(FUtil.LinkTo.storageSpace({
+        router.replace(FUtil.LinkTo.storageSpace({
           bucketName: newBucket[0].bucketName,
         }));
       }

@@ -66,7 +66,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           onChange({
             customOptionsDataVisible: false,
           });
-          router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+          router.replace(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
         }}
         type="default"
       >取消</FTextBtn>
@@ -83,7 +83,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               type: storageObjectEditor.type,
             },
           });
-          router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+          router.replace(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
         }}
       >保存</FRectBtn>
     </Space>}
@@ -91,7 +91,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       onChange({
         customOptionsDataVisible: false,
       });
-      router.push(FUtil.LinkTo.storageSpace({
+      router.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
     }}

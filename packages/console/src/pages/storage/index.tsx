@@ -125,7 +125,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         // setModalVisible(false);
       }}
       onCancel={() => {
-        router.push(FUtil.LinkTo.storageSpace({
+        router.replace(FUtil.LinkTo.storageSpace({
           bucketName: storageHomePage.activatedBucket,
         }));
       }}
