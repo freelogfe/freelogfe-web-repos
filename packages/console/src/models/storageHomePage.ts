@@ -7,7 +7,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
-import { BUCKET_NAME } from '@freelog/tools-lib/dist/utils/regexp';
+// import { BUCKET_NAME } from '@freelog/tools-lib/dist/utils/regexp';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -241,12 +241,16 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          newBucketModalVisible: false,
-        },
-      });
+      router.push(FUtil.LinkTo.storageSpace({
+        bucketName: storageHomePage.activatedBucket,
+        createBucket: false,
+      }));
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     newBucketModalVisible: false,
+      //   },
+      // });
       // router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
     },
     * onChangeActivatedBucket({ payload }: OnChangeActivatedBucketAction, { put, select, call }: EffectsCommandMap) {

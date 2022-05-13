@@ -6,7 +6,6 @@ import {Progress, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
-  ChangeAction,
   DeleteBucketByNameAction,
 } from '@/models/storageHomePage';
 import {FDelete} from "@/components/FIcons";
@@ -16,6 +15,7 @@ import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
+import { router } from 'umi';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -53,14 +53,11 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
               ? (<FCircleBtn
                 type="transparent"
                 onClick={() => {
-                  dispatch<ChangeAction>({
-                    type: 'storageHomePage/change',
-                    payload: {
-                      newBucketName: '',
-                      newBucketNameError: false,
-                      newBucketModalVisible: true,
-                    },
-                  });
+                  router.push(FUtil.LinkTo.storageSpace({
+                    bucketName: storageHomePage.activatedBucket,
+                    createBucket: true,
+                  }));
+
                 }}
               />)
               : (<FTooltip

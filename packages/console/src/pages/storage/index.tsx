@@ -4,19 +4,20 @@ import Sider from './Sider';
 import Content from './Content';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import {CreateBucketAction, OnChangeActivatedBucketAction, OnChangeNewBucketAction} from "@/models/storageHomePage";
-import {withRouter} from 'umi';
-import {RouteComponentProps} from "react-router";
-import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
-import Details from "@/pages/storage/Content/Details";
+import { connect, Dispatch } from 'dva';
+import { ConnectState, StorageHomePageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { CreateBucketAction, OnChangeActivatedBucketAction, OnChangeNewBucketAction } from '@/models/storageHomePage';
+import { router, withRouter } from 'umi';
+import { RouteComponentProps } from 'react-router';
+import { ChangeAction, FetchInfoAction, storageObjectEditorInitData } from '@/models/storageObjectEditor';
+import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
-import FInput from "@/components/FInput";
+import FInput from '@/components/FInput';
 // import FModal from "@/components/FModal";
-import {ChangeAction as StorageHomePageChangeAction} from '@/models/storageHomePage';
-import FUtil1 from "@/utils";
+import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHomePage';
+import FUtil1 from '@/utils';
 import { Modal } from 'antd';
+import { FUtil } from '@freelog/tools-lib';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -24,9 +25,9 @@ interface StorageProps extends RouteComponentProps<{}> {
   storageObjectEditor: StorageObjectEditorModelState;
 }
 
-function Storage({match, history, storageHomePage, storageObjectEditor, dispatch}: StorageProps) {
+function Storage({ match, history, storageHomePage, storageObjectEditor, dispatch }: StorageProps) {
 
-  const [state] = useUrlState<{ bucketName: string; objectID: string }>();
+  const [state] = useUrlState<{ bucketName: string; objectID: string; createBucket: string }>();
 
   React.useEffect(() => {
 
@@ -40,6 +41,29 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
   }, [state.bucketName]);
 
   React.useEffect(() => {
+    console.log(state.createBucket, 'state.createBucket0932o2kl4jlk');
+
+    if (state.createBucket) {
+      dispatch<StorageHomePageChangeAction>({
+        type: 'storageHomePage/change',
+        payload: {
+          newBucketModalVisible: true,
+        },
+      });
+    } else {
+      dispatch<StorageHomePageChangeAction>({
+        type: 'storageHomePage/change',
+        payload: {
+          newBucketName: '',
+          newBucketNameError: false,
+          newBucketModalVisible: false,
+        },
+      });
+    }
+
+  }, [state.createBucket]);
+
+  React.useEffect(() => {
     handleObject();
 
     return () => {
@@ -47,7 +71,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
         type: 'storageObjectEditor/change',
         payload: {
           ...storageObjectEditorInitData,
-        }
+        },
       });
     };
   }, [state.objectID]);
@@ -56,7 +80,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
     await dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
       payload: {
-        objectId: state.objectID || ''
+        objectId: state.objectID || '',
       },
     });
 
@@ -71,19 +95,19 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
 
   return (<>
     <FLeftSiderLayout
-      header={storageHomePage.bucketList?.length === 0 ? null : <Header/>}
-      sider={<Sider/>}
-      type="table"
+      header={storageHomePage.bucketList?.length === 0 ? null : <Header />}
+      sider={<Sider />}
+      type='table'
       contentStyles={{
         backgroundColor: storageHomePage.object_List.length === 0 ? 'transparent' : undefined,
         boxShadow: storageHomePage.object_List.length === 0 ? 'none' : undefined,
       }}
       hasBottom={storageHomePage.object_List.length !== 0}
     >
-      <Content/>
+      <Content />
     </FLeftSiderLayout>
 
-    <Details/>
+    <Details />
 
     <Modal
       title={FUtil1.I18n.message('create_bucket_popup_title')}
@@ -101,22 +125,20 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
         // setModalVisible(false);
       }}
       onCancel={() => {
-        dispatch<StorageHomePageChangeAction>({
-          type: 'storageHomePage/change',
-          payload: {
-            newBucketModalVisible: false,
-          },
-        });
+        router.push(FUtil.LinkTo.storageSpace({
+          bucketName: storageHomePage.activatedBucket,
+        }));
       }}
     >
       <div className={styles.FModalBody}>
-        <div style={{height: 50}}/>
+        <div style={{ height: 50 }} />
         <ul className={styles.tip}>
+          {/*{console.log(FUtil1.I18n.message('create_bucket_popup_msg'))}*/}
           {/*<li>请注意存储空间的名称一但创建则不可修改</li>*/}
           {/*<li>Freelog为每个用户提供2GB的免费存储空间</li>*/}
           {FUtil1.I18n.message('create_bucket_popup_msg')}
         </ul>
-        <div style={{height: 10}}/>
+        <div style={{ height: 10 }} />
         <FInput
           value={storageHomePage.newBucketName}
           // onChange={(e) => {
@@ -140,7 +162,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
             <div>{FUtil1.I18n.message('naming_convention_bucket_name')}</div>
           </div>) : ''}
         />
-        <div style={{height: 100}}/>
+        <div style={{ height: 100 }} />
       </div>
     </Modal>
   </>);

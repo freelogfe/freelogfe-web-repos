@@ -122,6 +122,9 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
         },
         createBtn: {
           href: FUtil.LinkTo.storageSpace({
+            bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+              ? storageHomePage.bucketList[0].bucketName
+              : '',
             createBucket: true,
           }),
         },
