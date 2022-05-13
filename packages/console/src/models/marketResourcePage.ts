@@ -9,7 +9,8 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
+
+// import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -282,6 +283,7 @@ const Model: MarketResourcePageModelType = {
       });
     },
     * onChangeVersion({ payload }: OnChangeVersionAction, { put }: EffectsCommandMap) {
+      // console.log('onChangeVersion 9832piohksdflkj');
       yield put({
         type: 'change',
         payload: {
@@ -298,13 +300,7 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
         user,
       }));
-
-      // 获取资源信息详情
-      // const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-      //   resourceIdOrName: marketResourcePage.resourceId,
-      //   isLoadPolicyInfo: 1,
-      // };
-      // const { data } = yield call(FServiceAPI.Resource.info, params);
+      // console.log('fetchInfo ####9823u4oi');
       const params: Parameters<typeof handleResourceBatchInfo>[0] = {
         resourceIDs: [marketResourcePage.resourceId],
       };
@@ -327,12 +323,6 @@ const Model: MarketResourcePageModelType = {
         // 本次要添加的一些列资源信息
         const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
 
-        // const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        //   resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
-        //   isLoadPolicyInfo: 1,
-        // };
-        // const { data: data1 } = yield call(FServiceAPI.Resource.batchInfo, params1);
-        // console.log(data1, 'data12390jsdfo');
         rawSignResources = [
           ...rawSignResources,
           ...data1,
@@ -540,51 +530,23 @@ const Model: MarketResourcePageModelType = {
       });
     },
     * fetchVersionInfo({}: FetchVersionInfoAction, { call, select, put }: EffectsCommandMap) {
+
       const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
       }));
 
-      // console.log('######89987239847982347982349823748723');
+      if (!marketResourcePage.version) {
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
       };
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data, '98sdalkf');
 
-      // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
-      //   resourceId: marketResourcePage.resourceId,
-      //   version: marketResourcePage.version,
-      //   // $version: '0.0.1',
-      //   isContainRootNode: true,
-      // };
-      //
-      // const { data: data2 } = yield call(FServiceAPI.Resource.dependencyTree, params2);
-      // // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
-      // const { nodes: dependencyGraphNodes, edges: dependencyGraphEdges } = handleDependencyGraphData(data2[0]);
-      //
-      // const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
-      //   resourceId: marketResourcePage.resourceId,
-      //   version: marketResourcePage.version,
-      // };
-      //
-      // const { data: data3 } = yield call(FServiceAPI.Resource.authTree, params3);
-      //
-      // // 授权树
-      // const {
-      //   nodes: authorizationGraphNodes,
-      //   edges: authorizationGraphEdges,
-      // } = yield call(handleAuthorizationGraphData, data3, {
-      //   id: data.version,
-      //   resourceId: data.resourceId,
-      //   resourceName: data.resourceName,
-      //   resourceType: data.resourceType,
-      //   version: data.version,
-      //   versionId: data.versionId,
-      // });
-
-      // console.log('授权树', 'marketResourcePage112342342');
+      // console.log(params, 'params0932jklsdjflsdk');
+      // console.log(data, 'data0932jklsdjflsdk');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -616,10 +578,6 @@ const Model: MarketResourcePageModelType = {
                 description: p.remark,
               };
             }),
-          // dependencyGraphNodes: dependencyGraphNodes,
-          // dependencyGraphEdges: dependencyGraphEdges,
-          // authorizationGraphNodes: authorizationGraphNodes,
-          // authorizationGraphEdges: authorizationGraphEdges,
         },
       });
     },
