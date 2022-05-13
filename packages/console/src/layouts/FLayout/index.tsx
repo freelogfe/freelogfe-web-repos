@@ -120,14 +120,16 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
             createBucket: true,
           }),
         },
-        createBtn: {
-          href: FUtil.LinkTo.storageSpace({
-            bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-              ? storageHomePage.bucketList[0].bucketName
-              : '',
-            createBucket: true,
-          }),
-        },
+        createBtn: storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
+          ? undefined
+          : {
+            href: FUtil.LinkTo.storageSpace({
+              bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+                ? storageHomePage.bucketList[0].bucketName
+                : '',
+              createBucket: true,
+            }),
+          },
       },
     ]
     : [
