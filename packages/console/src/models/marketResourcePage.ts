@@ -9,6 +9,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -545,11 +546,11 @@ const Model: MarketResourcePageModelType = {
 
       // console.log('######89987239847982347982349823748723');
 
-      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
       };
-      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
+      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, '98sdalkf');
 
       // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {

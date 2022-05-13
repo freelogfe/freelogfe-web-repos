@@ -213,26 +213,26 @@ export function createVersion({resourceId, ...params}: CreateVersionParamsType) 
 }
 
 // 查看资源版本信息
-interface ResourceVersionInfoParamsType1 {
+interface ResourceVersionInfo1ParamsType {
   resourceId: string;
   version: string;
   projection?: string;
 }
 
-interface ResourceVersionInfoParamsType2 {
+interface ResourceVersionInfo2ParamsType {
   versionId: string;
   projection?: string;
 }
 
-export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
-  if ((params as ResourceVersionInfoParamsType1).version) {
-    return FUtil.Request({
-      method: 'GET',
-      url: `/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`,
-      params: params,
-    });
-  }
+export function resourceVersionInfo1({resourceId, version, ...params}: ResourceVersionInfo1ParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/versions/${version}`,
+    params: params,
+  });
+}
 
+export function resourceVersionInfo2(params: ResourceVersionInfo2ParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/versions/detail`,

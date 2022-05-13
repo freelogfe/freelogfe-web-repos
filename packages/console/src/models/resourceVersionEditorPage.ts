@@ -8,6 +8,7 @@ import {ConnectState} from "@/models/connect";
 // import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
+import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -182,11 +183,11 @@ const Model: ResourceVersionEditorModelType = {
       const {resourceVersionEditorPage}: ConnectState = yield select(({resourceVersionEditorPage}: ConnectState) => ({
         resourceVersionEditorPage,
       }));
-      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
-      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
+      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
       if (!data) {
         router.replace(FUtil.LinkTo.exception403({}));

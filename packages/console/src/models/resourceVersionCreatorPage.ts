@@ -10,6 +10,7 @@ import * as semver from 'semver';
 import moment from 'moment';
 // import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
 // import fConfirmModal from '@/components/fConfirmModal';
 
 export type DepResources = {
@@ -545,11 +546,11 @@ const Model: ResourceVersionCreatorModelType = {
         versions: [],
       };
       if (data.latestVersion) {
-        const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: resourceVersionCreatorPage.resourceId,
           version: data.latestVersion,
         };
-        const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo, params2);
+        const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
         // console.log(data2, 'data2092384u0');
         description = BraftEditor.createEditorState(data2.description);
         preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
