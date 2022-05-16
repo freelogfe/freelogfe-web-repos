@@ -8,20 +8,6 @@ import FCheckbox from '@/components/FCheckbox';
 import { FContentText } from '@/components/FText';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FDrawer from '@/components/FDrawer';
-// import { connect, Dispatch } from 'dva';
-// import {
-//   ConnectState,
-//   InformalNodeManagerPageModelState,
-// } from '@/models/connect';
-// import {
-//   // OnAddExhibitDrawerAfterVisibleChangeAction,
-//   OnAddExhibitDrawerCancelChangeAction,
-//   OnAddExhibitDrawerConfirmChangeAction,
-//   // OnAddExhibitDrawerKeywordsChangeAction,
-//   // OnAddExhibitDrawerListCheckedChangeAction,
-//   // OnAddExhibitDrawerListLoadMoreAction,
-//   // OnAddExhibitDrawerOriginChangeAction,
-// } from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
@@ -34,8 +20,6 @@ interface FAddInformExhibitDrawerProps {
   visible: boolean;
   isTheme: boolean;
   nodeID: number;
-  // usedResourceNames: string[];
-  // usedObjectNames: string[];
 
   onConfirmResources?(resourceNames: string[]): void;
 
@@ -45,7 +29,6 @@ interface FAddInformExhibitDrawerProps {
 }
 
 interface FAddInformExhibitDrawerStates {
-  // tabsOptions: { value: FAddInformExhibitDrawerStates['activatedTab']; title: string }[];
   activatedTab: 'market' | 'resource' | 'collection' | 'object';
 
   bucketOptions: { value: string; text: string }[];
@@ -68,12 +51,6 @@ interface FAddInformExhibitDrawerStates {
 }
 
 const initStates: FAddInformExhibitDrawerStates = {
-  // tabsOptions: [
-  //   { value: 'market', title: '资源市场' },
-  //   { value: 'resource', title: '我的资源' },
-  //   { value: 'collection', title: '我的收藏' },
-  //   { value: 'object', title: '存储空间' },
-  // ],
   activatedTab: 'market',
 
   bucketOptions: [],
@@ -97,7 +74,6 @@ function FAddInformExhibitDrawer({
 
   const containerRef = React.useRef<any>(null);
 
-  // const [tabsOptions, setTabsOptions] = React.useState<FAddInformExhibitDrawerStates['tabsOptions']>(initStates['tabsOptions']);
   const [activatedTab, setActivatedTab] = React.useState<FAddInformExhibitDrawerStates['activatedTab']>(initStates['activatedTab']);
   const [bucketOptions, setBucketOptions] = React.useState<FAddInformExhibitDrawerStates['bucketOptions']>(initStates['bucketOptions']);
   const [selectedBucket, setSelectedBucket] = React.useState<FAddInformExhibitDrawerStates['selectedBucket']>(initStates['selectedBucket']);
@@ -126,8 +102,6 @@ function FAddInformExhibitDrawer({
       bucket: selectedBucket,
       keywords: inputValue,
       skip: formerList.length,
-      // usedResourceNames: usedResourceNames,
-      // usedObjectNames: usedObjectNames,
       ...payload,
     };
 
@@ -197,9 +171,9 @@ function FAddInformExhibitDrawer({
   function onChange_Tabs(value: FAddInformExhibitDrawerStates['activatedTab']) {
     setInputValue('');
     setActivatedTab(value);
-    setSelectedBucket(bucketOptions[0].value);
+    setSelectedBucket(bucketOptions.length > 0 ? bucketOptions[0].value : '');
 
-    if (value !== 'object' && bucketOptions.length === 0) {
+    if (value === 'object' && bucketOptions.length === 0) {
       setList([]);
       setList_State('noData');
       setList_More('noMore');
@@ -281,13 +255,18 @@ function FAddInformExhibitDrawer({
             onChange_Tabs('collection');
           }}
         >我的收藏</a>
-        <div style={{ width: 30 }} />
-        <a
-          className={activatedTab === 'object' ? styles.active : ''}
-          onClick={() => {
-            onChange_Tabs('object');
-          }}
-        >存储空间</a>
+        {
+          bucketOptions.length > 0 && (<>
+            <div style={{ width: 30 }} />
+            <a
+              className={activatedTab === 'object' ? styles.active : ''}
+              onClick={() => {
+                onChange_Tabs('object');
+              }}
+            >存储空间</a>
+          </>)
+        }
+
       </div>
       {
         list_State === 'noData'
@@ -430,7 +409,7 @@ async function handleList(payload: HandleListParams): Promise<{
       status: 1,
     };
     // console.log(params, 'paramsparams1234');
-    const { data } = await FServiceAPI.Resource.list(params);
+    const { data }: { data: any } = await FServiceAPI.Resource.list(params);
     // console.log(data, 'data!~!@#$@!#$@#!411111');
 
     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -485,7 +464,7 @@ async function handleList(payload: HandleListParams): Promise<{
       keywords: payload.keywords,
     };
     // console.log(params, 'paramsparams1234');
-    const { data } = await FServiceAPI.Resource.list(params);
+    const { data }: { data: any } = await FServiceAPI.Resource.list(params);
     // console.log(data, 'data13453');
 
     const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -595,15 +574,15 @@ async function handleList(payload: HandleListParams): Promise<{
 
     const { data } = await FServiceAPI.Storage.objectList(params);
 
-        const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-          nodeID: payload.nodeID,
-          entityType: 'object',
-          entityIDs: data.dataList.map((dl: any) => {
-            return dl.objectId;
-          }),
-        };
+    const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+      nodeID: payload.nodeID,
+      entityType: 'object',
+      entityIDs: data.dataList.map((dl: any) => {
+        return dl.objectId;
+      }),
+    };
 
-        const usedObjectIDs: string[] = await getUsedTargetIDs(params1);
+    const usedObjectIDs: string[] = await getUsedTargetIDs(params1);
 
     // console.log(data, 'dat903jlskdfjlka@#$#');
     if (!data) {
