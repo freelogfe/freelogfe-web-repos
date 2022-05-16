@@ -38,7 +38,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
     >
       {children}
     </Upload>
-    {console.log(image, 'image9320iojsfdlkf')}
+    {/*{console.log(image, 'image9320iojsfdlkf')}*/}
     <FCropperModal imgSrc={image}/>
   </div>);
 }
