@@ -35,6 +35,9 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
     }
   }
 
+  {
+    console.log(rotate, 'rotate8293iosdlkfjl');
+  }
   return (<Modal visible={!!imgSrc} width={950} title={'上传资源图片'} destroyOnClose>
     <div className={styles.content}>
       <div className={styles.contentLeft}>
@@ -45,10 +48,11 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
           zoomTo={scale}
           // initialAspectRatio={1}
           aspectRatio={aspect}
+          rotatable={true}
           rotateTo={rotate}
           preview={'.' + styles.imgPreview}
           src={imgSrc}
-          viewMode={1}
+          viewMode={2}
           minCropBoxHeight={10}
           minCropBoxWidth={10}
           background={true}
@@ -62,30 +66,39 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
         />
         <div style={{ height: 8 }} />
         <Space size={15}>
-          <FTextBtn type='default' onClick={() => {
-            setScale(rotate + .1);
-          }}>
+          <FTextBtn
+            type='default'
+            onClick={() => {
+              setScale(scale + .1);
+            }}
+          >
             <FIncrease
               style={{ fontSize: 16 }}
-
             />
           </FTextBtn>
-          <FTextBtn type='default' onClick={() => {
-            setScale(Math.max(rotate - .1, .1));
-          }}>
+          <FTextBtn
+            type='default'
+            onClick={() => {
+              setScale(Math.max(scale - .1, .1));
+            }}
+          >
             <FDecrease
               style={{ fontSize: 16 }}
-
             />
           </FTextBtn>
-          <FTextBtn type='default' onClick={() => {
-            setRotate((rotate + 90) % 360);
-          }}>
+          <FTextBtn
+            type='default'
+            onClick={() => {
+              setRotate((rotate + 90) % 360);
+            }}
+          >
             <FRotate
               style={{ fontSize: 16 }}
             />
           </FTextBtn>
-          <FTextBtn type='primary'>重新选择</FTextBtn>
+          <FTextBtn
+            type='primary'
+          >重新选择</FTextBtn>
         </Space>
       </div>
       <div className={styles.contentRight}>
