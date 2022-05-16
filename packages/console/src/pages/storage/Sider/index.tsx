@@ -67,7 +67,6 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
               >
                 <FCircleBtn type="transparent"/>
               </FTooltip>)
-
           }
 
         </div>
