@@ -19,7 +19,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
       // accept={'image/gif,image/png,.jpg'}
       accept={'.gif,.png,.jpg,.jpeg,.jpe'}
       beforeUpload={(file: RcFile, FileList: RcFile[]) => {
-        console.log(file, 'file20934u23');
+        // console.log(file, 'file20934u23');
         // setImage(file)
         const reader = new FileReader();
         reader.onload = () => {
