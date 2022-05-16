@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import FUploadImage from '@/components/FUploadImage';
+// import FUploadImage from '@/components/FUploadImage';
+import FUploadCover from '@/components/FUploadCover';
 import { FContentText } from '@/components/FText';
 import { FCloudUpload } from '@/components/FIcons';
 import fMessage from '@/components/fMessage';
@@ -16,7 +17,7 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
 
   return (<div className={styles.cover}>
     {!value
-      ? (<FUploadImage
+      ? (<FUploadCover
         onUploadSuccess={(url) => onChange && onChange(url)}
         onError={(err) => {
           fMessage(err, 'error');
@@ -26,21 +27,21 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
           <FCloudUpload />
           <span>{FUtil1.I18n.message('upload_image')}</span>
         </a>
-      </FUploadImage>)
+      </FUploadCover>)
       : (<div className={styles.FUploadImageChildren}>
         {/*<img src={value} alt=""/>*/}
         <FCoverImage src={value} width={200}/>
       </div>)
     }
     <div className={styles.coverTip}>
-      {value && <FUploadImage
+      {value && <FUploadCover
         onUploadSuccess={(url) => onChange && onChange(url)}
         onError={(err) => {
           fMessage(err, 'error');
         }}
       >
         <a className={styles.ReUpload}>{FUtil1.I18n.message('replace_resource_image')}</a>
-      </FUploadImage>}
+      </FUploadCover>}
       <div style={{ height: 15 }} />
       <FContentText type='additional2' text={FUtil1.I18n.message('rules_resource_image')} />
       <div style={{ height: 5 }} />
