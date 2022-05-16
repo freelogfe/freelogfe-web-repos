@@ -3,3 +3,8 @@ export interface CommonReturn {
   msg: string;
   ret: number;
 }
+
+export interface RequestParamsType {
+  noRedirect?: boolean;
+  noErrorAlert?: boolean;
+}

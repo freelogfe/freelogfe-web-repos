@@ -3,6 +3,7 @@ import NProgress from 'nprogress';
 import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
 import * as LinkTo from './linkTo';
+import {CommonReturn, RequestParamsType} from "../service-API/tools";
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -108,17 +109,21 @@ axios.interceptors.response.use(function (response) {
 
 export default axios;
 
-interface RequestParamsType {
-  noRedirect?: boolean;
-}
 
-export async function request(config: AxiosRequestConfig, {noRedirect = false}: RequestParamsType = {}) {
+export async function request(config: AxiosRequestConfig, {
+  noRedirect = false,
+  noErrorAlert = false,
+}: RequestParamsType = {}): Promise<CommonReturn & { data: any } | void> {
   const result: any = await axios.request(config);
   // console.log(result, 'response');
   // const {data} = response;
 
-  if ((result.errCode === 30 || result.errcode === 30) && !noRedirect) {
+  if ((result.errCode === 30 || result.errCode === 30) && !noRedirect) {
     return window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
+  }
+  if ((result.errcode !== 0 || result.errCode !== 0) && !noErrorAlert) {
+    // window.alert(result.msg);
+    // return;
   }
   return result;
 }
