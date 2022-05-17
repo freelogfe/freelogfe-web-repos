@@ -25,7 +25,7 @@ const initStates: FUploadCoverStates = {
 };
 
 function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps) {
-
+  const ref = React.useRef<any>(null);
   const [naturalFile, setNaturalFile] = React.useState<FUploadCoverStates['naturalFile']>(initStates['naturalFile']);
   const [image, setImage] = React.useState<FUploadCoverStates['image']>(initStates['image']);
 
@@ -73,6 +73,10 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
   }
 
   return (<div className={styles.styles}>
+    {/*<button onClick={() => {*/}
+    {/*  console.log(ref.current.click());*/}
+    {/*}}>upload*/}
+    {/*</button>*/}
     <Upload
       // accept={'image/gif,image/png,.jpg'}
       accept={'.gif,.png,.jpg,.jpeg,.jpe'}
@@ -80,9 +84,12 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
       multiple={false}
       showUploadList={false}
     >
-      {children}
+      <div ref={ref} className={styles.uploadContainer}>
+        {children}
+      </div>
     </Upload>
     <FCropperModal
+      uploadRef={ref}
       imgSrc={image}
       onOk={(info) => {
         upload(info);

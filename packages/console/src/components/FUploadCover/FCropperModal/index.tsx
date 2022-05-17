@@ -11,6 +11,7 @@ import FDecrease from '@/components/FIcons/FDecrease';
 import FRotate from '@/components/FIcons/FRotate';
 
 interface FCropperModalProps {
+  uploadRef: any;
   imgSrc: string;
 
   onOk?(info: {
@@ -23,7 +24,7 @@ interface FCropperModalProps {
   onCancel?(): void;
 }
 
-function FCropperModal({ imgSrc, onOk, onCancel }: FCropperModalProps) {
+function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps) {
   const [cropper, setCropper] = React.useState<any>();
 
   return (<Modal
@@ -108,6 +109,9 @@ function FCropperModal({ imgSrc, onOk, onCancel }: FCropperModalProps) {
           </FTextBtn>
           <FTextBtn
             type='primary'
+            onClick={() => {
+              uploadRef.current.click();
+            }}
           >重新选择</FTextBtn>
         </Space>
       </div>
