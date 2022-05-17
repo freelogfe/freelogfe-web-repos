@@ -23,21 +23,16 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
   const [cropArea, setCropArea] = React.useState<Area | null>(null);
 
   async function upload(file: File) {
-    // console.log(file, 'file!@$!@#$!@#$23423234234234234');
     if (!naturalFile || !cropArea) {
       return;
     }
-    // console.log(naturalFile, 'naturalFilenaturalFile90234jlksdfl');
     const res = await FServiceAPI.Storage.uploadImage({
       file: naturalFile,
     });
-    // console.log(res, '2342342');
     const img = new Image();
     img.src = res.data.url;
 
     img.onload = () => {
-      // console.log(img.width, ' iiii爱上帝就发了；ksadjlfkj');
-      // console.log(img.height, ' iiii爱上帝就发了；ksadjlfkj');
       const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.width}&h=${cropArea.height}&width=${img.width}&height=${img.height}`;
       const url: string = res.data.url + hash;
       // console.log(url, 'url2222222');
@@ -49,13 +44,6 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
   return (
     <div className={styles.styles}>
       <ImgCrop
-        // onCropComplete={(croppedArea: Area, croppedAreaPixels: Area) => {
-        //
-        // }}
-        // onCropAreaChange={(croppedArea: Area, croppedAreaPixels: Area) => {
-        //
-        // }}
-        // zoom={false}
         rotate
         grid
         aspect={4 / 3}
@@ -77,12 +65,8 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
         }}
         cropperProps={{
           onCropComplete(croppedArea: Area, croppedAreaPixels: Area) {
-            // console.log(croppedArea, 'croppedArea');
-            // console.log(croppedAreaPixels, 'croppedAreaPixels');
           },
           onCropAreaChange(croppedArea: Area, croppedAreaPixels: Area) {
-            // console.log(croppedArea, 'croppedArea');
-            // console.log(croppedAreaPixels, 'croppedAreaPixels');
             setCropArea(croppedAreaPixels);
           },
         }}
