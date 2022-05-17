@@ -34,7 +34,13 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
     }
   }
 
-  return (<Modal visible={!!imgSrc} width={950} title={'上传资源图片'} destroyOnClose>
+  return (<Modal
+    visible={!!imgSrc}
+    width={950}
+    title={'上传资源图片'}
+    destroyOnClose
+    bodyStyle={{ padding: '20px 30px' }}
+  >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
         <FTitleText text={'图片选框'} type='h3' />
