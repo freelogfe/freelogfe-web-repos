@@ -1,12 +1,4 @@
 import { defineConfig } from 'umi';
-import {cookie} from './predefined';
-
-// const freelogDir = path.resolve(os.homedir(), '.freelog/');
-// const authInfoPath = path.resolve(freelogDir, 'authInfo.json');
-// if (!fs.existsSync(authInfoPath)) {
-//   throw new Error('请登录');
-// }
-
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -106,7 +98,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        'Cookie': cookie,
       },
     },
     '/v1': {
@@ -114,7 +105,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        'Cookie': cookie,
       },
     },
   },

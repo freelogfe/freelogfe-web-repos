@@ -1,8 +1,6 @@
 import { IConfig } from 'umi-types';
 import routes from './routes';
 
-// import {cookie} from './predefined';
-
 // ref: https://umijs.org/config/
 const config: IConfig | any = {
   treeShaking: true,
@@ -106,8 +104,6 @@ const config: IConfig | any = {
         secure: false,
         changeOrigin: true,
         headers: {
-          // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          // 'Cookie': cookie,
         },
       },
       '/v1': {
@@ -116,8 +112,6 @@ const config: IConfig | any = {
         secure: false,
         changeOrigin: true,
         headers: {
-          // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          // 'Cookie': cookie,
         },
       },
     },

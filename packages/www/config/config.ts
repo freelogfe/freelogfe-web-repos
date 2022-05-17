@@ -1,5 +1,4 @@
 import { defineConfig } from 'umi';
-import {cookie} from './predefined';
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -31,7 +30,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        'Cookie': cookie,
       },
     },
     '/v1': {
@@ -39,7 +37,6 @@ export default defineConfig({
       secure: false,
       changeOrigin: true,
       headers: {
-        'Cookie': cookie,
       },
     },
   },
