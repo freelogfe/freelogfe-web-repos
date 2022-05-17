@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { RcFile, UploadChangeParam } from 'antd/lib/upload/interface';
+import { RcFile } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
 import FCropperModal from '@/components/FUploadCover/FCropperModal';
 import { FServiceAPI } from '@freelog/tools-lib';
@@ -30,6 +30,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
   const [image, setImage] = React.useState<FUploadCoverStates['image']>(initStates['image']);
 
   function beforeUpload(file: RcFile) {
+    console.log(file, 'file')
     if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
       onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
       return false;
@@ -73,10 +74,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
   }
 
   return (<div className={styles.styles}>
-    {/*<button onClick={() => {*/}
-    {/*  console.log(ref.current.click());*/}
-    {/*}}>upload*/}
-    {/*</button>*/}
+
     <Upload
       // accept={'image/gif,image/png,.jpg'}
       accept={'.gif,.png,.jpg,.jpeg,.jpe'}
