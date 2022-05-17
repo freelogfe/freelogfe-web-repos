@@ -19,6 +19,7 @@ interface FCropperModalProps {
     w: number;
     x: number;
     y: number;
+    r: number;
   }): void;
 
   onCancel?(): void;
@@ -30,7 +31,7 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
   return (<Modal
     visible={!!imgSrc}
     width={950}
-    title={'上传资源图片'}
+    title={<FTitleText text={'上传资源图片'} type='popup' />}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
     onOk={() => {
@@ -41,6 +42,7 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
         w: info.width,
         x: info.x,
         y: info.y,
+        r: info.rotate,
       });
     }}
     onCancel={() => {
@@ -77,26 +79,26 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
         />
         <div style={{ height: 8 }} />
         <Space size={15}>
-          <FTextBtn
-            type='default'
-            onClick={() => {
-              cropper.zoom(0.1);
-            }}
-          >
-            <FIncrease
-              style={{ fontSize: 16 }}
-            />
-          </FTextBtn>
-          <FTextBtn
-            type='default'
-            onClick={() => {
-              cropper.zoom(-0.1);
-            }}
-          >
-            <FDecrease
-              style={{ fontSize: 16 }}
-            />
-          </FTextBtn>
+          {/*<FTextBtn*/}
+          {/*  type='default'*/}
+          {/*  onClick={() => {*/}
+          {/*    cropper.zoom(0.1);*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <FIncrease*/}
+          {/*    style={{ fontSize: 16 }}*/}
+          {/*  />*/}
+          {/*</FTextBtn>*/}
+          {/*<FTextBtn*/}
+          {/*  type='default'*/}
+          {/*  onClick={() => {*/}
+          {/*    cropper.zoom(-0.1);*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <FDecrease*/}
+          {/*    style={{ fontSize: 16 }}*/}
+          {/*  />*/}
+          {/*</FTextBtn>*/}
           <FTextBtn
             type='default'
             onClick={() => {

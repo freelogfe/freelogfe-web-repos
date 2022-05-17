@@ -50,7 +50,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
     return false;
   }
 
-  async function upload(cropArea: { x: number, y: number, w: number, h: number }) {
+  async function upload(cropArea: { x: number, y: number, r: number, w: number, h: number }) {
     if (!image || !naturalFile) {
       return;
     }
@@ -61,7 +61,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
     img.src = res.data.url;
 
     img.onload = () => {
-      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.w}&h=${cropArea.h}&width=${img.width}&height=${img.height}`;
+      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&r=${cropArea.r}&w=${cropArea.w}&h=${cropArea.h}&width=${img.width}&height=${img.height}`;
       const url: string = res.data.url + hash;
       // console.log(url, 'url2222222');
       onUploadSuccess && onUploadSuccess(url);
