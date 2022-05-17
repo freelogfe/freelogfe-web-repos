@@ -1,7 +1,7 @@
 import { IConfig } from 'umi-types';
 import routes from './routes';
 
-import {cookie} from './predefined';
+// import {cookie} from './predefined';
 
 // ref: https://umijs.org/config/
 const config: IConfig | any = {
@@ -107,7 +107,7 @@ const config: IConfig | any = {
         changeOrigin: true,
         headers: {
           // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          'Cookie': cookie,
+          // 'Cookie': cookie,
         },
       },
       '/v1': {
@@ -117,7 +117,7 @@ const config: IConfig | any = {
         changeOrigin: true,
         headers: {
           // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          'Cookie': cookie,
+          // 'Cookie': cookie,
         },
       },
     },
