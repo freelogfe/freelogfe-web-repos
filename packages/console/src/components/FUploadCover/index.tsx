@@ -30,7 +30,6 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
   const [image, setImage] = React.useState<FUploadCoverStates['image']>(initStates['image']);
 
   function beforeUpload(file: RcFile) {
-    console.log(file, 'file')
     if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
       onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
       return false;
@@ -70,6 +69,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
       setNaturalFile(initStates['naturalFile']);
       setImage(initStates['image']);
     };
+
 
   }
 
