@@ -3,6 +3,8 @@ import styles from './index.less';
 import { RcFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
 import FCropperModal from '@/components/FUploadCover/FCropperModal';
+import { FServiceAPI } from '@freelog/tools-lib';
+import FUtil1 from '@/utils';
 
 interface FUploadCoverProps {
   children: React.ReactNode;
@@ -12,34 +14,84 @@ interface FUploadCoverProps {
   onError?(error: string): void;
 }
 
+interface FUploadCoverStates {
+  naturalFile: File | null;
+  image: string;
+}
+
+const initStates: FUploadCoverStates = {
+  naturalFile: null,
+  image: '',
+};
+
 function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps) {
-  const [image, setImage] = React.useState('');
+
+  const [naturalFile, setNaturalFile] = React.useState<FUploadCoverStates['naturalFile']>(initStates['naturalFile']);
+  const [image, setImage] = React.useState<FUploadCoverStates['image']>(initStates['image']);
+
+  function beforeUpload(file: RcFile) {
+    if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
+      onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
+      return false;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      onError && onError(FUtil1.I18n.message('limit_resource_image_size'));
+      return false;
+    }
+
+    setNaturalFile(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result as any);
+    };
+    reader.readAsDataURL(file);
+    return false;
+  }
+
+  async function upload(cropArea: { x: number, y: number, w: number, h: number }) {
+    if (!image || !naturalFile) {
+      return;
+    }
+    const res = await FServiceAPI.Storage.uploadImage({
+      file: naturalFile,
+    });
+    const img = new Image();
+    img.src = res.data.url;
+
+    img.onload = () => {
+      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.w}&h=${cropArea.h}&width=${img.width}&height=${img.height}`;
+      const url: string = res.data.url + hash;
+      // console.log(url, 'url2222222');
+      onUploadSuccess && onUploadSuccess(url);
+
+      setNaturalFile(initStates['naturalFile']);
+      setImage(initStates['image']);
+    };
+
+  }
+
   return (<div className={styles.styles}>
     <Upload
       // accept={'image/gif,image/png,.jpg'}
       accept={'.gif,.png,.jpg,.jpeg,.jpe'}
-      beforeUpload={(file: RcFile, FileList: RcFile[]) => {
-        // console.log(file, 'file20934u23');
-        // setImage(file)
-        const reader = new FileReader();
-        reader.onload = () => {
-          setImage(reader.result as any);
-        };
-        reader.readAsDataURL(file);
-        return false;
-        // upload(file);
-        // return false;
-      }}
-      onChange={(info: UploadChangeParam) => {
-        // console.log(info, '########');
-      }}
+      beforeUpload={beforeUpload}
       multiple={false}
       showUploadList={false}
     >
       {children}
     </Upload>
-    {/*{console.log(image, 'image9320iojsfdlkf')}*/}
-    <FCropperModal imgSrc={image}/>
+    <FCropperModal
+      imgSrc={image}
+      onOk={(info) => {
+        upload(info);
+      }}
+      onCancel={() => {
+        setNaturalFile(initStates['naturalFile']);
+        setImage(initStates['image']);
+      }}
+    />
   </div>);
 }
 

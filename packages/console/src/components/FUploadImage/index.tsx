@@ -22,7 +22,7 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
   const [naturalFile, setNaturalFile] = React.useState<File | null>(null);
   const [cropArea, setCropArea] = React.useState<Area | null>(null);
 
-  async function upload(file: File) {
+  async function upload() {
     if (!naturalFile || !cropArea) {
       return;
     }
@@ -76,7 +76,7 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
           accept={'.gif,.png,.jpg,.jpeg,.jpe'}
           beforeUpload={(file: RcFile, FileList: RcFile[]) => {
             // console.log(file, 'file20934u23');
-            upload(file);
+            upload();
             return false;
           }}
           onChange={(info: UploadChangeParam) => {

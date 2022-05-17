@@ -4,35 +4,27 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-import FResourceContractLabels from '@/components/FResourceContractLabels';
 import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import { FTextBtn } from '@/components/FButton';
-import { FClose } from '@/components/FIcons';
 import FIncrease from '@/components/FIcons/FIncrease';
 import FDecrease from '@/components/FIcons/FDecrease';
 import FRotate from '@/components/FIcons/FRotate';
 
 interface FCropperModalProps {
   imgSrc: string;
+
+  onOk?(info: {
+    h: number;
+    w: number;
+    x: number;
+    y: number;
+  }): void;
+
+  onCancel?(): void;
 }
 
-function FCropperModal({ imgSrc }: FCropperModalProps) {
-  // const [image, setImage] = React.useState('');
-  // const [cropData, setCropData] = React.useState('#');
+function FCropperModal({ imgSrc, onOk, onCancel }: FCropperModalProps) {
   const [cropper, setCropper] = React.useState<any>();
-
-  const [rotate, setRotate] = React.useState(0);
-  // const [aspect, setAspect] = React.useState<number | undefined>(4 / 3);
-
-  React.useEffect(() => {
-    // setImage(imgSrc);
-  });
-
-  function getCropData() {
-    if (typeof cropper !== 'undefined') {
-      // setCropData(cropper.getCroppedCanvas().toDataURL());
-    }
-  }
 
   return (<Modal
     visible={!!imgSrc}
@@ -40,6 +32,19 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
     title={'上传资源图片'}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
+    onOk={() => {
+      const info = cropper.getData();
+      // console.log(info, '##SDfsiodlk');
+      onOk && onOk({
+        h: info.height,
+        w: info.width,
+        x: info.x,
+        y: info.y,
+      });
+    }}
+    onCancel={() => {
+      onCancel && onCancel();
+    }}
   >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
@@ -47,11 +52,8 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
         <div style={{ height: 10 }} />
         <Cropper
           style={{ width: 560, height: 420 }}
-          // zoomTo={scale}
-          // initialAspectRatio={1}
           aspectRatio={4 / 3}
           rotatable={true}
-          rotateTo={rotate}
           preview={'.' + styles.imgPreview}
           src={imgSrc}
           viewMode={2}
@@ -65,6 +67,12 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
             setCropper(instance);
           }}
           guides={true}
+          // onChange={(c) => {
+          //   console.log(c, 'c9803iojsodlkfsjdl');
+          // }}
+          // onComplete={(c) => {
+          //   console.log(c, '90io32jklfsdjlfk');
+          // }}
         />
         <div style={{ height: 8 }} />
         <Space size={15}>
@@ -72,7 +80,6 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
             type='default'
             onClick={() => {
               cropper.zoom(0.1);
-
             }}
           >
             <FIncrease
@@ -92,8 +99,6 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
           <FTextBtn
             type='default'
             onClick={() => {
-              // setRotate((rotate + 90) % 360);
-              // console.log('********8329iosd')
               cropper.rotate(90);
             }}
           >
