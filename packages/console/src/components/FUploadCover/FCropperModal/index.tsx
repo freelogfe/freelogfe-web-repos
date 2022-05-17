@@ -99,16 +99,16 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
           {/*    style={{ fontSize: 16 }}*/}
           {/*  />*/}
           {/*</FTextBtn>*/}
-          <FTextBtn
-            type='default'
-            onClick={() => {
-              cropper.rotate(90);
-            }}
-          >
-            <FRotate
-              style={{ fontSize: 16 }}
-            />
-          </FTextBtn>
+          {/*<FTextBtn*/}
+          {/*  type='default'*/}
+          {/*  onClick={() => {*/}
+          {/*    cropper.rotate(90);*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <FRotate*/}
+          {/*    style={{ fontSize: 16 }}*/}
+          {/*  />*/}
+          {/*</FTextBtn>*/}
           <FTextBtn
             type='primary'
             onClick={() => {
