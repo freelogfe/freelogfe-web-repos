@@ -21,9 +21,8 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
   // const [cropData, setCropData] = React.useState('#');
   const [cropper, setCropper] = React.useState<any>();
 
-  const [scale, setScale] = React.useState(.5);
   const [rotate, setRotate] = React.useState(0);
-  const [aspect, setAspect] = React.useState<number | undefined>(4 / 3);
+  // const [aspect, setAspect] = React.useState<number | undefined>(4 / 3);
 
   React.useEffect(() => {
     // setImage(imgSrc);
@@ -35,9 +34,6 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
     }
   }
 
-  {
-    console.log(rotate, 'rotate8293iosdlkfjl');
-  }
   return (<Modal visible={!!imgSrc} width={950} title={'上传资源图片'} destroyOnClose>
     <div className={styles.content}>
       <div className={styles.contentLeft}>
@@ -45,9 +41,9 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
         <div style={{ height: 10 }} />
         <Cropper
           style={{ width: 560, height: 420 }}
-          zoomTo={scale}
+          // zoomTo={scale}
           // initialAspectRatio={1}
-          aspectRatio={aspect}
+          aspectRatio={4 / 3}
           rotatable={true}
           rotateTo={rotate}
           preview={'.' + styles.imgPreview}
@@ -69,7 +65,8 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
           <FTextBtn
             type='default'
             onClick={() => {
-              setScale(scale + .1);
+              cropper.zoom(0.1);
+
             }}
           >
             <FIncrease
@@ -79,7 +76,7 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
           <FTextBtn
             type='default'
             onClick={() => {
-              setScale(Math.max(scale - .1, .1));
+              cropper.zoom(-0.1);
             }}
           >
             <FDecrease
@@ -89,7 +86,9 @@ function FCropperModal({ imgSrc }: FCropperModalProps) {
           <FTextBtn
             type='default'
             onClick={() => {
-              setRotate((rotate + 90) % 360);
+              // setRotate((rotate + 90) % 360);
+              // console.log('********8329iosd')
+              cropper.rotate(90);
             }}
           >
             <FRotate
