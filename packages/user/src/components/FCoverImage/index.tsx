@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { CSSProperties, ImgHTMLAttributes } from 'react';
 import { FUtil } from '@freelog/tools-lib';
+
 // import * as imgSrc from '@/assets/default-resource-cover.jpg';
 
 interface FCoverImageProps {
@@ -18,6 +19,7 @@ interface FCoverImageStates {
     height: number;
     translateX: number;
     translateY: number;
+    transform: string;
   } | null;
 }
 
@@ -29,13 +31,14 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
     if (!src.includes('#')) {
       setImgStyle(null);
     } else {
-      const { x, y, w, h, width: wh, height: ht } = hashString(src);
+      const { x, y, w, h, r, width: wh, height: ht } = hashString(src);
       const scale: number = width / w;
       setImgStyle({
         width: wh * scale,
         height: ht * scale,
         translateX: -x * scale,
         translateY: -y * scale,
+        transform: `rotate(${r})`,
       });
     }
 
@@ -71,7 +74,7 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
           }}
         />)
     }
-  {/*http://static.testfreelog.com/static/default_cover.png*/}
+    {/*http://static.testfreelog.com/static/default_cover.png*/}
   </div>);
 }
 
@@ -82,6 +85,7 @@ interface HashStringReturn {
   y: number;
   w: number;
   h: number;
+  r: number;
   width: number;
   height: number;
 }
@@ -93,6 +97,9 @@ function hashString(str: string): HashStringReturn {
   for (const kv of param) {
     let [key, value] = kv.split('=');
     obj[key] = Number(value);
+  }
+  if (typeof obj['r'] !== 'number') {
+    obj['r'] = 0;
   }
   return obj as any;
 }
