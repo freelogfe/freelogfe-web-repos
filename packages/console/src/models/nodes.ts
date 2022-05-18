@@ -16,11 +16,11 @@ export type NodesModelState = WholeReadonly<{
   }[];
 
   nodeName: string;
-  // nameVerify: 0 | 1 | 2;
+  nameVerify: 'init' | 'verifying' | 'verified';
   nameError: string;
 
   nodeDomain: string;
-  // domainVerify: 0 | 1 | 2;
+  domainVerify: 'init' | 'verifying' | 'verified';
   domainError: string;
 }>;
 
@@ -99,11 +99,11 @@ export interface NodesModelType {
 
 const initStates: Omit<NodesModelState, 'list'> = {
   nodeDomain: '',
-  // domainVerify: 0,
+  domainVerify: 'init',
   domainError: '',
 
   nodeName: '',
-  // nameVerify: 0,
+  nameVerify: 'init',
   nameError: '',
 };
 
@@ -145,7 +145,7 @@ const Model: NodesModelType = {
         type: 'change',
         payload: {
           nodeDomain: payload.value.trim().toLocaleLowerCase(),
-          // domainVerify: 1,
+          domainVerify: 1,
         },
       });
 
@@ -164,6 +164,13 @@ const Model: NodesModelType = {
           '长度必须在 4-24 字符之间。';
       }
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          domainVerify: 'verifying',
+        },
+      });
+
       if (!domainError) {
         const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeDomain: nodes.nodeDomain,
@@ -177,7 +184,7 @@ const Model: NodesModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // domainVerify: 2,
+          domainVerify: 'verified',
           domainError,
         },
       });
@@ -207,6 +214,13 @@ const Model: NodesModelType = {
         nameError = FUtil1.I18n.message('naming_convention_node_name');
       }
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nameVerify: 'verifying',
+        },
+      });
+
       if (!nameError) {
         const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeName: nodes.nodeName,
@@ -220,7 +234,7 @@ const Model: NodesModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // nameVerify: 2,
+          nameVerify: 'verified',
           nameError,
         },
       });

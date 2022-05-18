@@ -69,8 +69,8 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           <FContentText type='negative' text={'.freelog.com'} />
         </div>
         <div style={{ width: 18 }}>
-          {nodes.domainVerify === 1 && <FLoading />}
-          {nodes.domainVerify === 2 && !nodes.domainError && <FCheck />}
+          {nodes.domainVerify === 'verifying' && <FLoading />}
+          {nodes.domainVerify === 'verified' && !nodes.domainError && <FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.domainError}</pre>
@@ -98,15 +98,15 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           </div>
         </div>
         <div style={{ width: 18 }}>
-          {nodes.nameVerify === 1 && <FLoading />}
-          {nodes.nameVerify === 2 && !nodes.nameError && <FCheck />}
+          {nodes.nameVerify === 'verifying' && <FLoading />}
+          {nodes.nameVerify === 'verified' && !nodes.nameError && <FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.nameError}</pre>
       <FRectBtn
         className={styles.button}
-        disabled={nodes.domainVerify !== 2 || !!nodes.domainError
-        || nodes.nameVerify !== 2 || !!nodes.nameError}
+        disabled={nodes.domainVerify !== 'verified' || !!nodes.domainError
+        || nodes.nameVerify !== 'verified' || !!nodes.nameError}
         onClick={() => dispatch<CreateNodeAction>({
           type: 'nodes/createNode',
         })}
