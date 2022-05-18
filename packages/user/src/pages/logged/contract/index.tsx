@@ -3,7 +3,6 @@ import styles from './index.less';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
@@ -34,9 +33,10 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import moment, { Moment } from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
-import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+
+const RangePicker: any = DatePicker.RangePicker;
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -352,7 +352,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       <FContentText
                         text={'签约时间：'}
                       />
-                      <DatePicker.RangePicker
+                      <RangePicker
                         value={contractPage.authorize_Date}
                         onChange={(value: any) => {
                           // console.log(value, '@Asdfai89jhkljrlk');
@@ -364,7 +364,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                           });
                         }}
                         // locale={{lang: 'en'}}
-                        disabledDate={(date) => {
+                        disabledDate={(date: any) => {
                           // console.log(date, 'date234234234');
                           return moment().isBefore(date);
                         }}
@@ -477,7 +477,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     </Space>
                     <Space size={2}>
                       <FContentText text={'签约时间：'} />
-                      <DatePicker.RangePicker
+                      <RangePicker
                         value={contractPage.authorized_Date}
                         onChange={(value: any) => {
                           // console.log(value, '@Asdfai89jhkljrlk');
@@ -489,7 +489,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                           });
                         }}
                         // locale={{lang: 'en'}}
-                        disabledDate={(date) => {
+                        disabledDate={(date: any) => {
                           // console.log(date, 'date234234234');
                           return moment().isBefore(date);
                         }}
