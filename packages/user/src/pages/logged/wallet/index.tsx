@@ -62,6 +62,8 @@ import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
 import FUtil1 from '@/utils';
 
+const RangePicker: any = DatePicker.RangePicker;
+
 interface WalletProps {
   dispatch: Dispatch;
   walletPage: WalletPageModelState;
@@ -247,7 +249,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         text={`${FUtil1.I18n.message('filter_transaction_time')}：`}
                       />
                       <div style={{ width: 5 }} />
-                      <DatePicker.RangePicker
+                      <RangePicker
                         allowClear
                         value={walletPage.table_Filter_Date_Custom}
                         onChange={(values: any) => {
@@ -259,7 +261,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             },
                           });
                         }}
-                        disabledDate={(date) => {
+                        disabledDate={(date: any) => {
                           // console.log(date, 'date234234234');
                           return moment().isBefore(date);
                         }}
