@@ -419,6 +419,13 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ID: '',
+        },
+      });
       const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
@@ -460,47 +467,6 @@ const Model: ExhibitInfoPageModelType = {
         presentableIds: data_PresentableDetails.presentableId,
       };
       const { data: data_ExhibitBatchAuthResults } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
-      // console.log(data1, 'data1123434');
-      //
-      // // 关系树数据
-      // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
-      //   presentableId: data_PresentableDetails.presentableId,
-      // };
-      //
-      // const { data: data_ExhibitRelationTree } = yield call(FServiceAPI.Exhibit.relationTree, params6);
-      // // console.log(data, 'datadatadatadatadatadatadata');
-      // // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
-      //
-      // const {
-      //   nodes: relationGraphNodes,
-      //   edges: relationGraphEdges,
-      // } = yield call(handleExhibitRelationGraphData, data_ExhibitRelationTree, {
-      //   nodeId: data_PresentableDetails.nodeId,
-      //   nodeName: data_NodeDetails.nodeName,
-      //   exhibitId: data_PresentableDetails.presentableId,
-      //   exhibitName: data_PresentableDetails.presentableName,
-      // });
-      //
-      // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
-      //
-      // // 授权树数据
-      // const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
-      //   presentableId: exhibitInfoPage.exhibit_ID,
-      // };
-      //
-      // const { data: data_ExhibitAuthTree } = yield call(FServiceAPI.Exhibit.authTree, params4);
-      //
-      // // console.log(data4, '@@@@@#4234234324234');
-      // const {
-      //   nodes: authorizationGraphNodes,
-      //   edges: authorizationGraphEdges,
-      // } = yield call(handleAuthorizationGraphData, data_ExhibitAuthTree, {
-      //   id: data_PresentableDetails.presentableId,
-      //   nodeId: data_PresentableDetails.nodeId,
-      //   nodeName: data_NodeDetails.nodeName,
-      //   exhibitId: data_PresentableDetails.presentableId,
-      //   exhibitName: data_PresentableDetails.presentableName,
-      // });
 
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
@@ -1219,7 +1185,7 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
         .filter((p: any) => {
           // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
-        })
+        }),
     };
   });
   // console.log(result, 'result2309jd');
