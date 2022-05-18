@@ -137,14 +137,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
           });
         }}
       >
-        {/*{*/}
-        {/*  exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
-        {/*    nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
-        {/*    edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
 
         {
           exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FGraph_Tree_Relationship_Exhibit
@@ -155,15 +147,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
           />)
         }
 
-        {/*{*/}
-        {/*  exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
-        {/*    nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
-        {/*    edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
-        {/*{console.log(exhibitInfoPage.side_Version, 'exhibitInfoPage.side_Version2390iojsdklf')}*/}
         {
           exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
             exhibitID={exhibitInfoPage.exhibit_ID}
