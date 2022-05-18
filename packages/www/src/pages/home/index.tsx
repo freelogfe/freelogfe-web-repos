@@ -1,17 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FRectBtn } from '@/components/FButton';
-import { Space } from 'antd';
 import FPentagram from '@/components/FIcons/FPentagram';
-import FWeChat from '@/components/FIcons/FWeChat';
-import FSina from '@/components/FIcons/FSina';
-import FLinkedin from '@/components/FIcons/FLinkedin';
 
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';
-
-import img_Police from '@/assets/police@2x.png';
 
 import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import Banner2 from '@/pages/home/Banner2';
