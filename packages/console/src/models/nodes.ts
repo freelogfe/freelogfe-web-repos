@@ -16,11 +16,11 @@ export type NodesModelState = WholeReadonly<{
   }[];
 
   nodeName: string;
-  nameVerify: 0 | 1 | 2;
+  // nameVerify: 0 | 1 | 2;
   nameError: string;
 
   nodeDomain: string;
-  domainVerify: 0 | 1 | 2;
+  // domainVerify: 0 | 1 | 2;
   domainError: string;
 }>;
 
@@ -37,14 +37,40 @@ export interface CreateNodeAction extends AnyAction {
   type: 'nodes/createNode';
 }
 
-export interface OnChangeNameAction extends AnyAction {
-  type: 'nodes/onChangeName';
-  payload: string;
+// export interface OnChangeNameAction extends AnyAction {
+//   type: 'nodes/onChangeName';
+//   payload: string;
+// }
+
+// export interface OnChangeDomainAction extends AnyAction {
+//   type: 'nodes/onChangeDomain';
+//   payload: string;
+// }
+
+export interface OnChange_DomainInput_Action extends AnyAction {
+  type: 'nodes/onChange_DomainInput';
+  payload: {
+    value: string;
+  };
 }
 
-export interface OnChangeDomainAction extends AnyAction {
-  type: 'nodes/onChangeDomain';
-  payload: string;
+export interface OnBlur_DomainInput_Action extends AnyAction {
+  type: 'nodes/onBlur_DomainInput';
+}
+
+export interface OnChange_NameInput_Action extends AnyAction {
+  type: 'nodes/onChange_NameInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlur_NameInput_Action extends AnyAction {
+  type: 'nodes/onBlur_NameInput';
+}
+
+export interface OnClick_CreateBtn_Action extends AnyAction {
+  type: 'nodes/onClick_CreateBtn';
 }
 
 export interface InitModelStatesAction extends AnyAction {
@@ -57,9 +83,11 @@ export interface NodesModelType {
   effects: {
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchNodes: (action: FetchNodesAction, effects: EffectsCommandMap) => void;
-    createNode: (action: CreateNodeAction, effects: EffectsCommandMap) => void;
-    onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
-    onChangeDomain: (action: OnChangeDomainAction, effects: EffectsCommandMap) => void;
+    onChange_DomainInput: (action: OnChange_DomainInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_DomainInput: (action: OnBlur_DomainInput_Action, effects: EffectsCommandMap) => void;
+    onChange_NameInput: (action: OnChange_NameInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_NameInput: (action: OnBlur_NameInput_Action, effects: EffectsCommandMap) => void;
+    onClick_CreateBtn: (action: OnClick_CreateBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<NodesModelState, ChangeAction>;
@@ -70,13 +98,13 @@ export interface NodesModelType {
 }
 
 const initStates: Omit<NodesModelState, 'list'> = {
-  nodeName: '',
-  nameVerify: 0,
-  nameError: '',
-
   nodeDomain: '',
-  domainVerify: 0,
+  // domainVerify: 0,
   domainError: '',
+
+  nodeName: '',
+  // nameVerify: 0,
+  nameError: '',
 };
 
 const Model: NodesModelType = {
@@ -110,7 +138,94 @@ const Model: NodesModelType = {
         },
       });
     },
-    * createNode({}: CreateNodeAction, { call, select, put }: EffectsCommandMap) {
+
+    * onChange_DomainInput({ payload }: OnChange_DomainInput_Action, { call, select, put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDomain: payload.value.trim().toLocaleLowerCase(),
+          // domainVerify: 1,
+        },
+      });
+
+
+    },
+    * onBlur_DomainInput({}: OnBlur_DomainInput_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
+        nodes,
+      }));
+
+      let domainError: string = '';
+
+      if (!FUtil.Regexp.NODE_DOMAIN.test(nodes.nodeDomain)) {
+        domainError = '只能包括小写字母、数字和短横线（-）。\n' +
+          '必须以小写字母或者数字开头和结尾。\n' +
+          '长度必须在 4-24 字符之间。';
+      }
+
+      if (!domainError) {
+        const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
+          nodeDomain: nodes.nodeDomain,
+        };
+        const { data: data1 } = yield call(FServiceAPI.Node.details, params1);
+        if (data1) {
+          domainError = '该节点地址已经存在或已经被其它用户使用';
+        }
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          // domainVerify: 2,
+          domainError,
+        },
+      });
+    },
+    * onChange_NameInput({ payload }: OnChange_NameInput_Action, { select, call, put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeName: payload.value.trim().toLowerCase(),
+          // nameVerify: 1,
+        },
+      });
+
+
+    },
+    * onBlur_NameInput(action: OnBlur_NameInput_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
+        nodes,
+      }));
+
+      let nameError: string = '';
+
+      if (!FUtil.Regexp.NODE_NAME.test(nodes.nodeName)) {
+        // nameError = '长度必须在 1-100 字符之间。\n' +
+        //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
+        //   '开头和结尾的空格会自动删除。';
+        nameError = FUtil1.I18n.message('naming_convention_node_name');
+      }
+
+      if (!nameError) {
+        const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
+          nodeName: nodes.nodeName,
+        };
+        const { data: data2 } = yield call(FServiceAPI.Node.details, params2);
+        if (data2) {
+          nameError = '该节点名称已经存在或已经被其它用户使用';
+        }
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          // nameVerify: 2,
+          nameError,
+        },
+      });
+    },
+    * onClick_CreateBtn({}: OnClick_CreateBtn_Action, { call, select, put }: EffectsCommandMap) {
       const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
         nodes,
       }));
@@ -154,87 +269,6 @@ const Model: NodesModelType = {
 
       // router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
       router.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
-
-    },
-    * onChangeName({ payload }: OnChangeNameAction, { select, call, put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          nodeName: payload,
-          nameVerify: 1,
-        },
-      });
-
-      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
-        nodes,
-      }));
-
-      let nameError: string = '';
-
-      if (!FUtil.Regexp.NODE_NAME.test(payload.trim())) {
-        // nameError = '长度必须在 1-100 字符之间。\n' +
-        //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
-        //   '开头和结尾的空格会自动删除。';
-        nameError = FUtil1.I18n.message('naming_convention_node_name');
-      }
-
-      if (!nameError) {
-        const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
-          nodeName: payload.trim(),
-        };
-        const { data: data2 } = yield call(FServiceAPI.Node.details, params2);
-        if (data2) {
-          nameError = '该节点名称已经存在或已经被其它用户使用';
-        }
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          nameVerify: 2,
-          nameError,
-        },
-      });
-    },
-    * onChangeDomain({ payload }: OnChangeDomainAction, { call, select, put }: EffectsCommandMap) {
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          nodeDomain: payload,
-          domainVerify: 1,
-        },
-      });
-
-      const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
-        nodes,
-      }));
-
-      let domainError: string = '';
-
-      if (!FUtil.Regexp.NODE_DOMAIN.test(payload.trim())) {
-        domainError = '只能包括小写字母、数字和短横线（-）。\n' +
-          '必须以小写字母或者数字开头和结尾。\n' +
-          '长度必须在 4-24 字符之间。';
-      }
-
-      if (!domainError) {
-        const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
-          nodeDomain: payload.trim(),
-        };
-        const { data: data1 } = yield call(FServiceAPI.Node.details, params1);
-        if (data1) {
-          domainError = '该节点地址已经存在或已经被其它用户使用';
-        }
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          domainVerify: 2,
-          domainError,
-        },
-      });
     },
   },
   reducers: {

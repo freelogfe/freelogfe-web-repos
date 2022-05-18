@@ -9,8 +9,12 @@ import { ConnectState, NodesModelState } from '@/models/connect';
 import {
   CreateNodeAction,
   InitModelStatesAction,
-  OnChangeDomainAction,
-  OnChangeNameAction,
+  OnBlur_DomainInput_Action,
+  OnBlur_NameInput_Action,
+  OnChange_DomainInput_Action,
+  OnChange_NameInput_Action,
+  // OnChangeDomainAction,
+  // OnChangeNameAction,
 } from '@/models/nodes';
 import { FCheck, FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
@@ -42,13 +46,24 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeDomain}
-              debounce={300}
+              // debounce={300}
               className={styles.input}
               placeholder={'输入节点地址'}
-              onDebounceChange={(value) => dispatch<OnChangeDomainAction>({
-                type: 'nodes/onChangeDomain',
-                payload: value,
-              })}
+              onChange={(e) => {
+                dispatch<OnChange_DomainInput_Action>({
+                  type: 'nodes/onChange_DomainInput',
+                  payload: { value: e.target.value },
+                });
+              }}
+              onBlur={() => {
+                dispatch<OnBlur_DomainInput_Action>({
+                  type: 'nodes/onBlur_DomainInput',
+                });
+              }}
+              // onDebounceChange={(value) => dispatch<OnChangeDomainAction>({
+              //   type: 'nodes/onChangeDomain',
+              //   payload: value,
+              // })}
             />
           </div>
           <FContentText type='negative' text={'.freelog.com'} />
@@ -65,11 +80,18 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeName}
-              debounce={300}
-              onDebounceChange={(value) => dispatch<OnChangeNameAction>({
-                type: 'nodes/onChangeName',
-                payload: value,
-              })}
+              // debounce={300}
+              onChange={(e) => {
+                dispatch<OnChange_NameInput_Action>({
+                  type: 'nodes/onChange_NameInput',
+                  payload: { value: e.target.value },
+                });
+              }}
+              onBlur={() => {
+                dispatch<OnBlur_NameInput_Action>({
+                  type: 'nodes/onBlur_NameInput',
+                });
+              }}
               className={styles.input}
               placeholder={'输入节点名称'}
             />
