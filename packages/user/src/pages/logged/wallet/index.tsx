@@ -117,7 +117,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       },
     },
     {
-      title: (<FTitleText text={'交易方｜支付方式｜流水号'} type='table' />),
+      title: (<FTitleText text={'交易方｜支付方式｜交易记录编号'} type='table' />),
       dataIndex: 'payment',
       key: 'payment',
       render(_, record) {
@@ -127,14 +127,14 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             type='highlight'
           />
           <FContentText
-            text={`流水号 ${record.serialNo}`}
+            text={`交易记录编号 ${record.transactionRecordId}`}
             type='additional1'
           />
         </div>);
       },
     }, {
-      // title: (<FTitleText text={'交易说明'} type='table' />),
-      title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
+      title: (<FTitleText text={'交易说明'} type='table' />),
+      // title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
       dataIndex: 'money',
       key: 'money',
       render(_, record) {

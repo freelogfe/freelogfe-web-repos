@@ -59,6 +59,7 @@ export interface WalletPageModelState {
   table_TotalAmountIncome: number;
   table_DateSource: {
     serialNo: string;
+    transactionRecordId: string;
     date: string;
     time: string;
     digest: string;
@@ -1079,6 +1080,7 @@ const Model: WalletPageModelType = {
           const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
           return {
             serialNo: dl.serialNo,
+            transactionRecordId: dl.transactionRecordId,
             date: date,
             time: time,
             digest: dl.digest,
