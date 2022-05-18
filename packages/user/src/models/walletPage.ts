@@ -283,6 +283,10 @@ export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Table_Filter_ResetBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Table_Filter_ResetBtn';
+}
+
 export interface OnClick_Table_Filter_SearchBtn_Action extends AnyAction {
   type: 'walletPage/onClick_Table_Filter_SearchBtn';
 }
@@ -346,6 +350,7 @@ interface WalletPageModelType {
     onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onBlur_Table_Filter_MaxAmount: (action: OnBlur_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
+    onClick_Table_Filter_ResetBtn: (action: OnClick_Table_Filter_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Table_Filter_SearchBtn: (action: OnClick_Table_Filter_SearchBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
     fetch_TableData: (action: Fetch_TableData_Action, effects: EffectsCommandMap) => void;
@@ -1016,6 +1021,19 @@ const Model: WalletPageModelType = {
         type: 'change',
         payload: {
           table_Filter_StateSelected: payload.value,
+        },
+      });
+    },
+    * onClick_Table_Filter_ResetBtn({}: OnClick_Table_Filter_ResetBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_Date_Type: 'month',
+          table_Filter_Date_Custom: getStartAndEndDate('month'),
+          table_Filter_Keywords: '',
+          table_Filter_MinAmount: '',
+          table_Filter_MaxAmount: '',
+          table_Filter_StateSelected: '0',
         },
       });
     },

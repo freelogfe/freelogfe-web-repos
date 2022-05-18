@@ -50,7 +50,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
   OnClick_Activate_NextBtn_Action,
-  OnClick_Table_Filter_SearchBtn_Action,
+  OnClick_Table_Filter_SearchBtn_Action, OnClick_Table_Filter_ResetBtn_Action,
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -303,7 +303,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     </div>
                     <div className={styles.filter1Keyword}>
                       <FInput
-                        theme='dark'
+                        // theme='dark'
+                        value={walletPage.table_Filter_Keywords}
                         placeholder={FUtil1.I18n.message('hint_search_transctions')}
                         onChange={(e) => {
                           dispatch<OnChange_Table_Filter_Keywords_Action>({
@@ -395,7 +396,15 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         }}
                       />
                     </div>
-                    <div className={styles.filter2Right}>
+                    <Space size={10} className={styles.filter2Right}>
+                      <FRectBtn
+                        type='default'
+                        onClick={() => {
+                          dispatch<OnClick_Table_Filter_ResetBtn_Action>({
+                            type: 'walletPage/onClick_Table_Filter_ResetBtn',
+                          });
+                        }}
+                      >{FUtil1.I18n.message('btn_reset_filter')}</FRectBtn>
                       <FRectBtn
                         type='primary'
                         onClick={() => {
@@ -403,8 +412,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             type: 'walletPage/onClick_Table_Filter_SearchBtn',
                           });
                         }}
-                      >搜索</FRectBtn>
-                    </div>
+                      >{FUtil1.I18n.message('btn_search_transactions')}</FRectBtn>
+                    </Space>
                   </div>
 
                   {
