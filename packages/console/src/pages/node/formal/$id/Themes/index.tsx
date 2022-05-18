@@ -104,7 +104,8 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
               nodeManagerPage.theme_ListState === 'loaded' && (<div className={styles.body}>
                 {
                   nodeManagerPage.theme_List.map((i) => {
-                    const hasActiveBtn: boolean = !i.isOnline && i.isAuth; //&& i.policies.length > 0;
+                    // const hasActiveBtn: boolean = !i.isOnline && i.isAuth; //&& i.policies.length > 0;
+                    const hasActiveBtn: boolean = !i.isOnline; //&& i.policies.length > 0;
                     return (<div
                       className={styles.theme}
                       key={i.id}
@@ -143,6 +144,11 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                   fn() {
                                     if (i.policies.length === 0) {
                                       fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                                      return;
+                                    }
+                                    if (!i.isAuth) {
+                                      // fMessage(F)
+                                      fMessage(i.authErrorText, 'error');
                                       return;
                                     }
                                     if (!nodeManagerPage.nodeThemeId) {
