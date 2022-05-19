@@ -9,8 +9,12 @@ import { ConnectState, NodesModelState } from '@/models/connect';
 import {
   CreateNodeAction,
   InitModelStatesAction,
-  OnChangeDomainAction,
-  OnChangeNameAction,
+  OnBlur_DomainInput_Action,
+  OnBlur_NameInput_Action,
+  OnChange_DomainInput_Action,
+  OnChange_NameInput_Action,
+  // OnChangeDomainAction,
+  // OnChangeNameAction,
 } from '@/models/nodes';
 import { FCheck, FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
@@ -42,20 +46,31 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeDomain}
-              debounce={300}
+              // debounce={300}
               className={styles.input}
               placeholder={'输入节点地址'}
-              onDebounceChange={(value) => dispatch<OnChangeDomainAction>({
-                type: 'nodes/onChangeDomain',
-                payload: value,
-              })}
+              onChange={(e) => {
+                dispatch<OnChange_DomainInput_Action>({
+                  type: 'nodes/onChange_DomainInput',
+                  payload: { value: e.target.value },
+                });
+              }}
+              onBlur={() => {
+                dispatch<OnBlur_DomainInput_Action>({
+                  type: 'nodes/onBlur_DomainInput',
+                });
+              }}
+              // onDebounceChange={(value) => dispatch<OnChangeDomainAction>({
+              //   type: 'nodes/onChangeDomain',
+              //   payload: value,
+              // })}
             />
           </div>
           <FContentText type='negative' text={'.freelog.com'} />
         </div>
         <div style={{ width: 18 }}>
-          {nodes.domainVerify === 1 && <FLoading />}
-          {nodes.domainVerify === 2 && !nodes.domainError && <FCheck />}
+          {nodes.domainVerify === 'verifying' && <FLoading />}
+          {nodes.domainVerify === 'verified' && !nodes.domainError && <FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.domainError}</pre>
@@ -65,26 +80,33 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeName}
-              debounce={300}
-              onDebounceChange={(value) => dispatch<OnChangeNameAction>({
-                type: 'nodes/onChangeName',
-                payload: value,
-              })}
+              // debounce={300}
+              onChange={(e) => {
+                dispatch<OnChange_NameInput_Action>({
+                  type: 'nodes/onChange_NameInput',
+                  payload: { value: e.target.value },
+                });
+              }}
+              onBlur={() => {
+                dispatch<OnBlur_NameInput_Action>({
+                  type: 'nodes/onBlur_NameInput',
+                });
+              }}
               className={styles.input}
               placeholder={'输入节点名称'}
             />
           </div>
         </div>
         <div style={{ width: 18 }}>
-          {nodes.nameVerify === 1 && <FLoading />}
-          {nodes.nameVerify === 2 && !nodes.nameError && <FCheck />}
+          {nodes.nameVerify === 'verifying' && <FLoading />}
+          {nodes.nameVerify === 'verified' && !nodes.nameError && <FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.nameError}</pre>
       <FRectBtn
         className={styles.button}
-        disabled={nodes.domainVerify !== 2 || !!nodes.domainError
-        || nodes.nameVerify !== 2 || !!nodes.nameError}
+        disabled={nodes.domainVerify !== 'verified' || !!nodes.domainError
+        || nodes.nameVerify !== 'verified' || !!nodes.nameError}
         onClick={() => dispatch<CreateNodeAction>({
           type: 'nodes/createNode',
         })}

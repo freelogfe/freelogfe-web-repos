@@ -50,7 +50,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
   OnClick_Activate_NextBtn_Action,
-  OnClick_Table_Filter_SearchBtn_Action,
+  OnClick_Table_Filter_SearchBtn_Action, OnClick_Table_Filter_ResetBtn_Action,
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -61,6 +61,8 @@ import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
 import FUtil1 from '@/utils';
+
+const RangePicker: any = DatePicker.RangePicker;
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -115,7 +117,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       },
     },
     {
-      title: (<FTitleText text={'交易方｜支付方式｜流水号'} type='table' />),
+      title: (<FTitleText text={'交易方｜支付方式｜交易记录编号'} type='table' />),
       dataIndex: 'payment',
       key: 'payment',
       render(_, record) {
@@ -125,14 +127,14 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             type='highlight'
           />
           <FContentText
-            text={`流水号 ${record.serialNo}`}
+            text={`交易记录编号 ${record.transactionRecordId}`}
             type='additional1'
           />
         </div>);
       },
     }, {
-      // title: (<FTitleText text={'交易说明'} type='table' />),
-      title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
+      title: (<FTitleText text={'交易说明'} type='table' />),
+      // title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
       dataIndex: 'money',
       key: 'money',
       render(_, record) {
@@ -247,7 +249,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         text={`${FUtil1.I18n.message('filter_transaction_time')}：`}
                       />
                       <div style={{ width: 5 }} />
-                      <DatePicker.RangePicker
+                      <RangePicker
                         allowClear
                         value={walletPage.table_Filter_Date_Custom}
                         onChange={(values: any) => {
@@ -259,7 +261,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             },
                           });
                         }}
-                        disabledDate={(date) => {
+                        disabledDate={(date: any) => {
                           // console.log(date, 'date234234234');
                           return moment().isBefore(date);
                         }}
@@ -301,7 +303,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     </div>
                     <div className={styles.filter1Keyword}>
                       <FInput
-                        theme='dark'
+                        // theme='dark'
+                        value={walletPage.table_Filter_Keywords}
                         placeholder={FUtil1.I18n.message('hint_search_transctions')}
                         onChange={(e) => {
                           dispatch<OnChange_Table_Filter_Keywords_Action>({
@@ -393,7 +396,15 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         }}
                       />
                     </div>
-                    <div className={styles.filter2Right}>
+                    <Space size={10} className={styles.filter2Right}>
+                      <FRectBtn
+                        type='default'
+                        onClick={() => {
+                          dispatch<OnClick_Table_Filter_ResetBtn_Action>({
+                            type: 'walletPage/onClick_Table_Filter_ResetBtn',
+                          });
+                        }}
+                      >{FUtil1.I18n.message('btn_reset_filter')}</FRectBtn>
                       <FRectBtn
                         type='primary'
                         onClick={() => {
@@ -401,8 +412,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             type: 'walletPage/onClick_Table_Filter_SearchBtn',
                           });
                         }}
-                      >搜索</FRectBtn>
-                    </div>
+                      >{FUtil1.I18n.message('btn_search_transactions')}</FRectBtn>
+                    </Space>
                   </div>
 
                   {

@@ -201,7 +201,7 @@ const Model: RetrievePageModelType = {
         },
       });
     },
-    * onBlurPhoneInput({}: OnBlurPhoneInputAction, { select, put }: EffectsCommandMap) {
+    * onBlurPhoneInput({}: OnBlurPhoneInputAction, { select, call, put }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
         retrievePage,
       }));
@@ -212,6 +212,16 @@ const Model: RetrievePageModelType = {
         phoneInputError = '手机号不能为空';
       } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(retrievePage.phoneInput)) {
         phoneInputError = '输入格式有误，请输入正确的手机号';
+      }
+
+      if (!phoneInputError) {
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          mobile: retrievePage.phoneInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (!data) {
+          phoneInputError = '手机未注册';
+        }
       }
 
       yield put<ChangeAction>({
@@ -229,7 +239,7 @@ const Model: RetrievePageModelType = {
         },
       });
     },
-    * onBlurEmailInput({}: OnBlurEmailInputAction, { select, put }: EffectsCommandMap) {
+    * onBlurEmailInput({}: OnBlurEmailInputAction, { select, call, put }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
         retrievePage,
       }));
@@ -240,6 +250,16 @@ const Model: RetrievePageModelType = {
         emailInputError = '邮箱不能为空';
       } else if (!FUtil.Regexp.EMAIL_ADDRESS.test(retrievePage.emailInput)) {
         emailInputError = '输入格式有误，请输入正确的邮箱';
+      }
+
+      if (!emailInputError) {
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          email: retrievePage.emailInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (!data) {
+          emailInputError = '邮箱未注册';
+        }
       }
 
       yield put<ChangeAction>({

@@ -59,6 +59,7 @@ export interface WalletPageModelState {
   table_TotalAmountIncome: number;
   table_DateSource: {
     serialNo: string;
+    transactionRecordId: string;
     date: string;
     time: string;
     digest: string;
@@ -282,6 +283,10 @@ export interface OnChange_Table_Filter_StateSelected_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Table_Filter_ResetBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_Table_Filter_ResetBtn';
+}
+
 export interface OnClick_Table_Filter_SearchBtn_Action extends AnyAction {
   type: 'walletPage/onClick_Table_Filter_SearchBtn';
 }
@@ -345,6 +350,7 @@ interface WalletPageModelType {
     onChange_Table_Filter_MaxAmount: (action: OnChange_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onBlur_Table_Filter_MaxAmount: (action: OnBlur_Table_Filter_MaxAmount_Action, effects: EffectsCommandMap) => void;
     onChange_Table_Filter_StateSelected: (action: OnChange_Table_Filter_StateSelected_Action, effects: EffectsCommandMap) => void;
+    onClick_Table_Filter_ResetBtn: (action: OnClick_Table_Filter_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Table_Filter_SearchBtn: (action: OnClick_Table_Filter_SearchBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Table_LoadMoreBtn: (action: OnClick_Table_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
     fetch_TableData: (action: Fetch_TableData_Action, effects: EffectsCommandMap) => void;
@@ -836,7 +842,7 @@ const Model: WalletPageModelType = {
       const { data } = yield call(FServiceAPI.Transaction.verifyTransactionPassword, params);
 
       if (!data) {
-        return fMessage('支付密码不正确', 'error');
+        return fMessage(FUtil1.I18n.message('alert_paymentpasswordincorrect '), 'error');
       }
 
       yield put<ChangeAction>({
@@ -1018,6 +1024,19 @@ const Model: WalletPageModelType = {
         },
       });
     },
+    * onClick_Table_Filter_ResetBtn({}: OnClick_Table_Filter_ResetBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          table_Filter_Date_Type: 'month',
+          table_Filter_Date_Custom: getStartAndEndDate('month'),
+          table_Filter_Keywords: '',
+          table_Filter_MinAmount: '',
+          table_Filter_MaxAmount: '',
+          table_Filter_StateSelected: '0',
+        },
+      });
+    },
     * onClick_Table_Filter_SearchBtn({}: OnClick_Table_Filter_SearchBtn_Action, { put }: EffectsCommandMap) {
       yield put<Fetch_TableData_Action>({
         type: 'fetch_TableData',
@@ -1079,6 +1098,7 @@ const Model: WalletPageModelType = {
           const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
           return {
             serialNo: dl.serialNo,
+            transactionRecordId: dl.transactionRecordId,
             date: date,
             time: time,
             digest: dl.digest,

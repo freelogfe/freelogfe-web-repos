@@ -1,17 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FLayout from '@/components/FLayout';
-// import { NavLink } from 'umi';
-// import FDropdown from '@/components/FDropdown';
-// import { FContentText } from '@/components/FText';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { Layout, Space } from 'antd';
-// import { FRectBtn } from '@/components/FButton';
+import { Layout } from 'antd';
 import { connect } from 'dva';
 import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
-// import UserSVG from '@/assets/user.svg';
-// import { history } from 'umi';
-// import FUtil1 from '@/utils';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { history } from '@@/core/history';
 
@@ -22,28 +14,6 @@ interface FBaseLayoutProps {
 }
 
 function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
-
-  // const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
-  //
-  // React.useEffect(() => {
-  //   const curRouter = global.routerHistories[global.routerHistories.length - 1];
-  //   if (curRouter.pathname.startsWith('/logged/wallet')) {
-  //     set_ActiveIDs(['dashboard', '']);
-  //   } else if (curRouter.pathname.startsWith('/resource/list')) {
-  //     set_ActiveIDs(['resource', 'myResource']);
-  //   } else if (curRouter.pathname.startsWith('/resource/collect')) {
-  //     set_ActiveIDs(['resource', 'myCollection']);
-  //   } else if (curRouter.pathname.startsWith('/node/formal/')) {
-  //     const nodeID: string = curRouter.pathname.split('/')[3];
-  //     set_ActiveIDs(['node', nodeID]);
-  //   } else if (curRouter.pathname.startsWith('/storage')) {
-  //     set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
-  //   } else if (curRouter.pathname.startsWith('/market')) {
-  //     set_ActiveIDs(['discover', 'market']);
-  //   } else {
-  //     set_ActiveIDs(['', '']);
-  //   }
-  // }, [global.routerHistories]);
 
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>

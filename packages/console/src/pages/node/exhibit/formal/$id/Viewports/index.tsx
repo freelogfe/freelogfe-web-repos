@@ -5,7 +5,6 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import {
-  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import FDrawer from '@/components/FDrawer';
@@ -30,12 +29,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
     });
   }
 
-// graph_FullScreen: false,
-  //   graph_Viewport_Show: 'relationship',
-  //   graph_Viewport_RelationGraph_Nodes: [],
-  //   graph_Viewport_RelationGraph_Edges: [],
-  //   graph_Viewport_AuthorizationGraph_Nodes: [],
-  //   graph_Viewport_AuthorizationGraph_Edges: [],
   return (<div>
     <div className={styles.title}>
       <FTitleText text={FUtil1.I18n.message('title_exhibit_maps')} type='h3' />
@@ -64,13 +57,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
         exhibitInfoPage.graph_FullScreen
           ? (<div style={{ height: 500 }} />)
           : (<>
-            {/*{*/}
-            {/*  exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
-            {/*    nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
-            {/*    edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
-            {/*    width={860}*/}
-            {/*  />)*/}
-            {/*}*/}
 
             {
               exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FGraph_Tree_Relationship_Exhibit
@@ -80,15 +66,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
                 height={500}
               />)
             }
-
-
-            {/*{*/}
-            {/*  exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
-            {/*    nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
-            {/*    edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
-            {/*    width={860}*/}
-            {/*  />)*/}
-            {/*}*/}
 
             {
               exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
@@ -137,14 +114,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
           });
         }}
       >
-        {/*{*/}
-        {/*  exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
-        {/*    nodes={exhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}
-        {/*    edges={exhibitInfoPage.graph_Viewport_RelationGraph_Edges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
 
         {
           exhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FGraph_Tree_Relationship_Exhibit
@@ -155,15 +124,6 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
           />)
         }
 
-        {/*{*/}
-        {/*  exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FAntvG6AuthorizationGraph*/}
-        {/*    nodes={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Nodes}*/}
-        {/*    edges={exhibitInfoPage.graph_Viewport_AuthorizationGraph_Edges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
-        {/*{console.log(exhibitInfoPage.side_Version, 'exhibitInfoPage.side_Version2390iojsdklf')}*/}
         {
           exhibitInfoPage.graph_Viewport_Show === 'authorization' && (<FGraph_Tree_Authorization_Exhibit
             exhibitID={exhibitInfoPage.exhibit_ID}

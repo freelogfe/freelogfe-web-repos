@@ -3,10 +3,8 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
-// import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
-// import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -57,48 +55,6 @@ export interface ExhibitInfoPageModelState {
 
   graph_FullScreen: boolean;
   graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
-  // graph_Viewport_RelationGraph_Nodes: Array<{
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  //   pending: boolean;
-  //   exception: boolean;
-  // } | {
-  //   id: string;
-  //   nodeName: string;
-  //   exhibitName: string;
-  // }>;
-  // graph_Viewport_RelationGraph_Edges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // graph_Viewport_AuthorizationGraph_Nodes: Array<{
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // } | {
-  //   id: string;
-  //   nodeId: number;
-  //   nodeName: string;
-  //   exhibitId: string;
-  //   exhibitName: string;
-  // } | {
-  //   id: string;
-  //   contracts: {
-  //     contractId: string;
-  //     contractName: string;
-  //     isAuth: boolean;
-  //     updateDate: string;
-  //   }[];
-  // }>;
-  // graph_Viewport_AuthorizationGraph_Edges: {
-  //   source: string;
-  //   target: string;
-  // }[];
 
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
@@ -356,10 +312,6 @@ const initStates: ExhibitInfoPageModelState = {
 
   graph_FullScreen: false,
   graph_Viewport_Show: 'relationship',
-  // graph_Viewport_RelationGraph_Nodes: [],
-  // graph_Viewport_RelationGraph_Edges: [],
-  // graph_Viewport_AuthorizationGraph_Nodes: [],
-  // graph_Viewport_AuthorizationGraph_Edges: [],
 
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
@@ -419,6 +371,13 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ID: '',
+        },
+      });
       const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
@@ -460,47 +419,6 @@ const Model: ExhibitInfoPageModelType = {
         presentableIds: data_PresentableDetails.presentableId,
       };
       const { data: data_ExhibitBatchAuthResults } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
-      // console.log(data1, 'data1123434');
-      //
-      // // 关系树数据
-      // const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
-      //   presentableId: data_PresentableDetails.presentableId,
-      // };
-      //
-      // const { data: data_ExhibitRelationTree } = yield call(FServiceAPI.Exhibit.relationTree, params6);
-      // // console.log(data, 'datadatadatadatadatadatadata');
-      // // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
-      //
-      // const {
-      //   nodes: relationGraphNodes,
-      //   edges: relationGraphEdges,
-      // } = yield call(handleExhibitRelationGraphData, data_ExhibitRelationTree, {
-      //   nodeId: data_PresentableDetails.nodeId,
-      //   nodeName: data_NodeDetails.nodeName,
-      //   exhibitId: data_PresentableDetails.presentableId,
-      //   exhibitName: data_PresentableDetails.presentableName,
-      // });
-      //
-      // // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
-      //
-      // // 授权树数据
-      // const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
-      //   presentableId: exhibitInfoPage.exhibit_ID,
-      // };
-      //
-      // const { data: data_ExhibitAuthTree } = yield call(FServiceAPI.Exhibit.authTree, params4);
-      //
-      // // console.log(data4, '@@@@@#4234234324234');
-      // const {
-      //   nodes: authorizationGraphNodes,
-      //   edges: authorizationGraphEdges,
-      // } = yield call(handleAuthorizationGraphData, data_ExhibitAuthTree, {
-      //   id: data_PresentableDetails.presentableId,
-      //   nodeId: data_PresentableDetails.nodeId,
-      //   nodeName: data_NodeDetails.nodeName,
-      //   exhibitId: data_PresentableDetails.presentableId,
-      //   exhibitName: data_PresentableDetails.presentableName,
-      // });
 
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
@@ -587,10 +505,6 @@ const Model: ExhibitInfoPageModelType = {
                   }),
               };
             }),
-          // graph_Viewport_RelationGraph_Nodes: relationGraphNodes,
-          // graph_Viewport_RelationGraph_Edges: relationGraphEdges,
-          // graph_Viewport_AuthorizationGraph_Nodes: authorizationGraphNodes,
-          // graph_Viewport_AuthorizationGraph_Edges: authorizationGraphEdges,
 
           side_ExhibitCover: data_PresentableDetails.coverImages[0] || '',
           side_ExhibitTitle: data_PresentableDetails.presentableTitle,
@@ -1219,7 +1133,7 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
         .filter((p: any) => {
           // console.log(p, 'PPPpppPPPPppPPPPpppPPP');
           return p.status === 1 && !allContractsUsedPolicyIDs.includes(p.policyId);
-        })
+        }),
     };
   });
   // console.log(result, 'result2309jd');
