@@ -134,16 +134,20 @@ export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
   payload: string;
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
+export interface FetchInfoActionAction extends AnyAction {
+  type: 'fetchInfo';
 }
 
 export interface FetchCollectionInfoAction extends AnyAction {
-  type: 'fetchCollectionInfo' | 'marketResourcePage/fetchCollectionInfo';
+  type: 'fetchCollectionInfo';
+}
+
+export interface FetchSignedNodesAction extends AnyAction {
+  type: 'fetchSignedNodes';
 }
 
 export interface FetchVersionInfoAction extends AnyAction {
-  type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
+  type: 'fetchVersionInfo';
 }
 
 interface MarketResourcePageModelType {
@@ -158,8 +162,9 @@ interface MarketResourcePageModelType {
     onClick_SignBtn: (action: OnClick_SignBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ConfirmSignContract: (action: OnClick_ConfirmSignContract_Action, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchInfo: (action: FetchInfoActionAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
+    fetchSignedNodes: (action: FetchSignedNodesAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -222,8 +227,11 @@ const Model: MarketResourcePageModelType = {
         yield put<FetchCollectionInfoAction>({
           type: 'fetchCollectionInfo',
         });
+        yield put<FetchSignedNodesAction>({
+          type: 'fetchSignedNodes',
+        });
       }
-      yield put<FetchInfoAction>({
+      yield put<FetchInfoActionAction>({
         type: 'fetchInfo',
       });
     },
@@ -522,7 +530,7 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * fetchInfo({}: FetchInfoAction, { call, put, select }: EffectsCommandMap) {
+    * fetchInfo({}: FetchInfoActionAction, { call, put, select }: EffectsCommandMap) {
       const { marketResourcePage, user }: ConnectState = yield select(({ marketResourcePage, user }: ConnectState) => ({
         marketResourcePage,
         user,
@@ -558,14 +566,6 @@ const Model: MarketResourcePageModelType = {
 
       // console.log(rawSignResources, 'rawSignResources2309ef');
 
-      // 获取当前用户与当前资源签过约的所有节点
-      const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        userId: user.info?.userId,
-        resourceIds: marketResourcePage.resourceId,
-        // projection: 'nodeId',
-      };
-
-      const { data: data3 } = yield call(FServiceAPI.Exhibit.presentableList, params3);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -580,7 +580,7 @@ const Model: MarketResourcePageModelType = {
           allVersions: data.resourceVersions.map((v: any) => v.version),
           version: marketResourcePage.version || data.latestVersion,
           //
-          signedNodeIDs: data3.map((p: any) => p.nodeId),
+
           allRawResources: rawSignResources,
 
           signResources: rawSignResources
@@ -638,6 +638,26 @@ const Model: MarketResourcePageModelType = {
         payload: {
           hasCollect: data1[0].isCollected,
           popularity: data2,
+        },
+      });
+    },
+    * fetchSignedNodes({}: FetchSignedNodesAction, { select, call, put }: EffectsCommandMap) {
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
+        marketResourcePage,
+      }));
+      // 获取当前用户与当前资源签过约的所有节点
+      const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+        userId: FUtil.Tool.getUserIDByCookies(),
+        resourceIds: marketResourcePage.resourceId,
+        // projection: 'nodeId',
+      };
+
+      const { data: data3 } = yield call(FServiceAPI.Exhibit.presentableList, params3);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          signedNodeIDs: data3.map((p: any) => p.nodeId),
         },
       });
     },
