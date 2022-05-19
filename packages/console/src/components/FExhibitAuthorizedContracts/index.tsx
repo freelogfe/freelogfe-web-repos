@@ -431,7 +431,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       projection: 'resourceId,resourceName,resourceType,policies',
       isTranslate: 1,
     };
-    const { data } = await FServiceAPI.Resource.batchInfo(params);
+    const { data }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
   }
 
