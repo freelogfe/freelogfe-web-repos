@@ -901,24 +901,43 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onClick_Side_CustomOptions_DeleteBtn({ payload }: OnClick_Side_CustomOptions_DeleteBtn_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
 
+      const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.filter((_, i) => {
+        return i !== payload.index;
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptions: exhibitInfoPage.side_CustomOptions.filter((_, i) => {
-            return i !== payload.index;
-          }),
+          side_CustomOptions: side_CustomOptions,
         },
       });
 
-      yield put<UpdateRewriteAction>({
-        type: 'updateRewrite',
-      });
+      // yield put<UpdateRewriteAction>({
+      //   type: 'updateRewrite',
+      // });
+
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: exhibitInfoPage.side_InheritOptions,
+        side_CustomOptions: side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已删除');
     },
     * onChange_Side_CustomOptions_ValueInput({ payload }: OnChange_Side_CustomOptions_ValueInput_Action, {
       select,
@@ -1001,35 +1020,54 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onConfirm_AddCustomOptionsDrawer({ payload }: OnConfirm_AddCustomOptionsDrawer_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
 
+      const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = [
+        ...exhibitInfoPage.side_CustomOptions,
+        ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
+          return {
+            key: v.key,
+            value: v.defaultValue,
+            description: v.description,
+            option: [],
+            valueInput: v.defaultValue,
+            valueInputError: '',
+          };
+        }),
+      ];
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptions: [
-            ...exhibitInfoPage.side_CustomOptions,
-            ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
-              return {
-                key: v.key,
-                value: v.defaultValue,
-                description: v.description,
-                option: [],
-                valueInput: v.defaultValue,
-                valueInputError: '',
-              };
-            }),
-          ],
+          side_CustomOptions: side_CustomOptions,
           side_CustomOptionsDrawer_Visible: false,
         },
       });
 
-      yield put<UpdateRewriteAction>({
-        type: 'updateRewrite',
-      });
+      // yield put<UpdateRewriteAction>({
+      //   type: 'updateRewrite',
+      // });
+
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: exhibitInfoPage.side_InheritOptions,
+        side_CustomOptions: side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已添加');
     },
     * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
