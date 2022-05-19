@@ -7,6 +7,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FUtil1 from '@/utils';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -458,7 +459,12 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_Name: data_PresentableDetails.presentableName,
           exhibit_Online: data_PresentableDetails.onlineStatus === 1,
           exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
-          exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
+          // exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
+          exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].defaulterIdentityType === 1
+            ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+            : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
+              ? FUtil1.I18n.message('alert_exhibit_no_auth')
+              : '',
           policy_List: data_PresentableDetails.policies,
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
