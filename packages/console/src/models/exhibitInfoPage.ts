@@ -756,32 +756,49 @@ const Model: ExhibitInfoPageModelType = {
 
     * onClick_Side_InheritOptions_ResetBtn({ payload }: OnClick_Side_InheritOptions_ResetBtn_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
 
+      const side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'] = exhibitInfoPage.side_InheritOptions.map((io, i) => {
+        if (i !== payload.index) {
+          return io;
+        }
+        return {
+          ...io,
+          value: io.resetValue,
+          valueInput: io.resetValue,
+          valueInputError: '',
+        };
+      });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
-            if (i !== payload.index) {
-              return io;
-            }
-            return {
-              ...io,
-              value: io.resetValue,
-              valueInput: io.resetValue,
-              valueInputError: '',
-            };
-          }),
+          side_InheritOptions: side_InheritOptions,
         },
       });
 
-      yield put<UpdateRewriteAction>({
-        type: 'updateRewrite',
-      });
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: side_InheritOptions,
+        side_CustomOptions: exhibitInfoPage.side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已重置');
+      // yield put<UpdateRewriteAction>({
+      //   type: 'updateRewrite',
+      // });
     },
     * onChange_Side_InheritOptions_ValueInput({ payload }: OnChange_Side_InheritOptions_ValueInput_Action, {
       select,
@@ -858,7 +875,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('已更新自定义选项');
+      fMessage('自定义选项已更新');
     },
     * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
       select,
@@ -971,7 +988,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('已更新自定义选项');
+      fMessage('自定义选项已更新');
 
     },
     * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
@@ -1066,7 +1083,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('已更新自定义选项');
+      fMessage('自定义选项已更新');
     },
     * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
