@@ -219,11 +219,12 @@ function FPolicyBuilder({
 
   function onChange_TitleInput(value: string) {
     setTitleInput(value);
+    setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
-  function onBlur_TitleInput() {
-    setTitleInputError(verifyTitle(titleInput, alreadyUsedTitles));
-  }
+  // function onBlur_TitleInput() {
+  //   setTitleInputError(verifyTitle(titleInput, alreadyUsedTitles));
+  // }
 
   function onClick_SwitchMode_Code() {
     const code: string = dataToCode(combination_Data);
@@ -828,10 +829,10 @@ function FPolicyBuilder({
                 }}
                 // placeholder={'请输入授权策略名称'}
                 placeholder={'输入策略名称…'}
-                onBlur={() => {
-                  // console.log(titleInput, 'title@@@@@@@@');
-                  onBlur_TitleInput();
-                }}
+                // onBlur={() => {
+                //   // console.log(titleInput, 'title@@@@@@@@');
+                //   onBlur_TitleInput();
+                // }}
               />
 
               <Space size={20}>
@@ -1707,28 +1708,17 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
       getPopupContainer={() => refDev.current}
       dropdownRender={menu => (<>
         {menu}
-        <div className={styles.dropdownRenderAdd}>
-          <FCircleBtn
-            size='small'
-            type='minor'
-            onClick={() => {
-              // console.log('###23948230948230480_))))))');
-              setOpen(false);
-              onClickAddStateBtn && onClickAddStateBtn();
-            }}
-          >
+        <FTextBtn type='primary' className={styles.dropdownRenderAdd} onClick={() => {
+          // console.log('###23948230948230480_))))))');
+          setOpen(false);
+          onClickAddStateBtn && onClickAddStateBtn();
+        }}>
+          <FCircleBtn size='small' type='minor'>
             <FPlus style={{ fontSize: 12 }} />
           </FCircleBtn>
           <div style={{ width: 5 }} />
-          <FTextBtn
-            type='primary'
-            onClick={() => {
-              // console.log('###23948230948230480_))))))');
-              setOpen(false);
-              onClickAddStateBtn && onClickAddStateBtn();
-            }}
-          >新建状态</FTextBtn>
-        </div>
+          新建状态
+        </FTextBtn>
       </>)}
     />
   </div>);
