@@ -5,12 +5,8 @@ import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
 import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-// import { handleDependencyGraphData } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-// import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-
-// import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -64,10 +60,6 @@ export interface MarketResourcePageModelState {
     policies: {
       checked: boolean;
       fullInfo: PolicyFullInfo_Type;
-      // id: string;
-      // status: 0 | 1;
-      // name: string;
-      // text: string;
     }[];
   }[];
   signedResourceExhibitID: string;
@@ -95,36 +87,6 @@ export interface MarketResourcePageModelState {
 
   graphFullScreen: boolean;
   viewportGraphShow: 'dependency' | 'authorization';
-  // dependencyGraphNodes: {
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // }[];
-  // dependencyGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // authorizationGraphNodes: Array<{
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // } | {
-  //   id: string;
-  //   contracts: {
-  //     contractId: string;
-  //     contractName: string;
-  //     isAuth: boolean;
-  //     updateDate: string;
-  //   }[];
-  // }>;
-  // authorizationGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -184,10 +146,6 @@ export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
 
-export interface FetchDependencyGraphData extends AnyAction {
-  type: 'marketResourcePage/fetchDependencyGraphData' | 'fetchDependencyGraphData';
-}
-
 interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
@@ -203,7 +161,6 @@ interface MarketResourcePageModelType {
     onClick_SignBtn: (action: OnClick_SignBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ConfirmSignContract: (action: OnClick_ConfirmSignContract_Action, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
-    fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
@@ -232,7 +189,6 @@ const initStates: MarketResourcePageModelState = {
 
   allRawResources: [],
   signResources: [],
-  // signedResources: null,
   signedResourceExhibitID: '',
 
   allVersions: [],
@@ -249,11 +205,6 @@ const initStates: MarketResourcePageModelState = {
 
   graphFullScreen: false,
   viewportGraphShow: 'dependency',
-  // dependencyGraphNodes: [],
-  // dependencyGraphEdges: [],
-  // authorizationGraphNodes: [],
-  // authorizationGraphEdges: [],
-
 };
 
 const Model: MarketResourcePageModelType = {
@@ -267,11 +218,11 @@ const Model: MarketResourcePageModelType = {
           resourceId: payload.resourceID,
         },
       });
-
-      yield put<FetchCollectionInfoAction>({
-        type: 'fetchCollectionInfo',
-      });
-
+      if (FUtil.Tool.getUserIDByCookies() !== -1) {
+        yield put<FetchCollectionInfoAction>({
+          type: 'fetchCollectionInfo',
+        });
+      }
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -739,9 +690,6 @@ const Model: MarketResourcePageModelType = {
           signExhibitNameErrorTip: '',
         },
       });
-    },
-    * fetchDependencyGraphData({}: FetchDependencyGraphData, { select, call }: EffectsCommandMap) {
-
     },
   },
   reducers: {
