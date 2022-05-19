@@ -166,7 +166,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             checked={record.isOnline}
             onChange={(value) => {
               if (value && record.policies.length === 0) {
-                fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                if (!record.hasPolicy) {
+                  // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                  fMessage(FUtil1.I18n.message('alarm_exhibits_show_plan '), 'error');
+                } else {
+                  fMessage(FUtil1.I18n.message('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                }
                 return;
               }
               dispatch<OnOnlineOrOfflineAction>({

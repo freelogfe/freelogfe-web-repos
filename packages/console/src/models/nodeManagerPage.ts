@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
+import FUtil1 from '@/utils';
 
 export interface NodeManagerModelState {
   nodeId: number;
@@ -30,6 +31,7 @@ export interface NodeManagerModelState {
     type: string;
     resourceName: string;
     policies: string[];
+    hasPolicy: boolean;
     isOnline: boolean;
     resourceId: string;
     version: string;
@@ -46,6 +48,7 @@ export interface NodeManagerModelState {
     cover: string;
     title: string;
     policies: string[];
+    hasPolicy: boolean;
     version: string;
     isOnline: boolean;
     isAuth: boolean;
@@ -639,10 +642,17 @@ const Model: NodeManagerModelType = {
             version: i.version,
             isOnline: i.onlineStatus === 1,
             type: i.resourceInfo.resourceType,
-            policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+            policies: (i.policies as any[])
+              .filter((p: any) => p.status === 1)
+              .map<string>((p) => p.policyName),
+            hasPolicy: i.policies.length > 0,
             resourceId: i.resourceInfo.resourceId,
             isAuth: authInfo.isAuth,
-            authErrorText: authInfo.error,
+            authErrorText: authInfo.defaulterIdentityType === 1
+              ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+              : authInfo.defaulterIdentityType === 2
+                ? FUtil1.I18n.message('alert_exhibit_no_auth')
+                : '',
           };
         }),
       ];
@@ -722,9 +732,16 @@ const Model: NodeManagerModelType = {
           title: i.presentableTitle,
           version: i.version,
           isOnline: i.onlineStatus === 1,
-          policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+          policies: (i.policies as any[])
+            .filter((p: any) => p.status === 1)
+            .map<string>((p) => p.policyName),
+          hasPolicy: i.policies.length > 0,
           isAuth: authInfo.isAuth,
-          authErrorText: authInfo.error,
+          authErrorText: authInfo.defaulterIdentityType === 1
+            ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+            : authInfo.defaulterIdentityType === 2
+              ? FUtil1.I18n.message('alert_exhibit_no_auth')
+              : '',
           resourceId: i.resourceInfo.resourceId,
         };
       }).sort((a, b) => {
