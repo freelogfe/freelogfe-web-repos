@@ -144,7 +144,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 const reader = new FileReader();
                 reader.readAsText(file);
                 reader.onload = function(evt: any) {
-                  console.log(evt, 'evt2222090900980989080980988');
+                  // console.log(evt, 'evt2222090900980989080980988');
                   dispatch<OnLoad_Rule_ImportFileInput_Action>({
                     type: 'informalNodeManagerPage/onLoad_Rule_ImportFileInput',
                     payload: {
@@ -163,32 +163,37 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 </Space>
               </FTextBtn>
             </FUpload>
-            <FTextBtn
-              type='primary'
-              onClick={() => {
-                dispatch<OnClick_Rule_ExportBtn_Action>({
-                  type: 'informalNodeManagerPage/onClick_Rule_ExportBtn',
-                });
-              }}
-            >
-              <Space size={5}>
-                <FExport />
-                <span>导出</span>
-              </Space>
-            </FTextBtn>
-            <FTextBtn
-              type='danger'
-              onClick={() => {
-                dispatch<OnClick_Rule_DeleteBtn_Action>({
-                  type: 'informalNodeManagerPage/onClick_Rule_DeleteBtn',
-                });
-              }}
-            >
-              <Space size={5}>
-                <FDelete />
-                <span>删除</span>
-              </Space>
-            </FTextBtn>
+            {
+              informalNodeManagerPage.rule_RuleList.length > 0 && (<>
+                <FTextBtn
+                  type='primary'
+                  onClick={() => {
+                    dispatch<OnClick_Rule_ExportBtn_Action>({
+                      type: 'informalNodeManagerPage/onClick_Rule_ExportBtn',
+                    });
+                  }}
+                >
+                  <Space size={5}>
+                    <FExport />
+                    <span>导出</span>
+                  </Space>
+                </FTextBtn>
+                <FTextBtn
+                  type='danger'
+                  onClick={() => {
+                    dispatch<OnClick_Rule_DeleteBtn_Action>({
+                      type: 'informalNodeManagerPage/onClick_Rule_DeleteBtn',
+                    });
+                  }}
+                >
+                  <Space size={5}>
+                    <FDelete />
+                    <span>删除</span>
+                  </Space>
+                </FTextBtn>
+              </>)
+            }
+
           </Space>)
         }
 
