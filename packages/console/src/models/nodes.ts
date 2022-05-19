@@ -140,7 +140,6 @@ const Model: NodesModelType = {
     },
 
     * onChange_DomainInput({ payload }: OnChange_DomainInput_Action, { call, select, put }: EffectsCommandMap) {
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -148,8 +147,6 @@ const Model: NodesModelType = {
           domainVerify: 'verified',
         },
       });
-
-
     },
     * onBlur_DomainInput({}: OnBlur_DomainInput_Action, { select, call, put }: EffectsCommandMap) {
       const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
