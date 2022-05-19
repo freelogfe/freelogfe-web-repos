@@ -791,23 +791,26 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
+      const side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'] = exhibitInfoPage.side_InheritOptions.map((io, i) => {
+        if (i !== payload.index) {
+          return io;
+        }
+        return {
+          ...io,
+          valueInput: payload.value,
+        };
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
-            if (i !== payload.index) {
-              return io;
-            }
-            return {
-              ...io,
-              valueInput: payload.value,
-            };
-          }),
+          side_InheritOptions: side_InheritOptions,
         },
       });
     },
     * onBlur_Side_InheritOptions_ValueInput({ payload }: OnBlur_Side_InheritOptions_ValueInput_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       // (value.length > 30 || value === '') ? '1~30个字符' : ''
@@ -815,31 +818,47 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       let currentHasError: boolean = false;
-
+      const side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'] = exhibitInfoPage.side_InheritOptions.map((io, i) => {
+        if (i !== payload.index) {
+          return io;
+        }
+        const valueInputError: string = io.valueInput.length > 140 ? '不超过140个字符' : '';
+        currentHasError = valueInputError !== '';
+        return {
+          ...io,
+          value: valueInputError === '' ? io.valueInput : io.value,
+          valueInputError: valueInputError,
+        };
+      });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_InheritOptions: exhibitInfoPage.side_InheritOptions.map((io, i) => {
-            if (i !== payload.index) {
-              return io;
-            }
-            const valueInputError: string = io.valueInput.length > 140 ? '不超过140个字符' : '';
-            currentHasError = valueInputError !== '';
-            return {
-              ...io,
-              value: valueInputError === '' ? io.valueInput : io.value,
-              valueInputError: valueInputError,
-            };
-          }),
+          side_InheritOptions: side_InheritOptions,
         },
       });
 
-      if (!currentHasError) {
-        yield put<UpdateRewriteAction>({
-          type: 'updateRewrite',
-        });
+      if (currentHasError) {
+        return;
+        // yield put<UpdateRewriteAction>({
+        //   type: 'updateRewrite',
+        // });
       }
 
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: side_InheritOptions,
+        side_CustomOptions: exhibitInfoPage.side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('已更新自定义选项');
     },
     * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
       select,
@@ -909,34 +928,51 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onBlur_Side_CustomOptions_ValueInput({ payload }: OnBlur_Side_CustomOptions_ValueInput_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       let currentHasError: boolean = false;
+      const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.map((co, i) => {
+        if (i !== payload.index) {
+          return co;
+        }
+        const valueInputError: string = co.valueInput.length > 140 ? '不超过140个字符' : '';
+        currentHasError = valueInputError !== '';
+        return {
+          ...co,
+          value: valueInputError === '' ? co.valueInput : co.value,
+          valueInputError: valueInputError,
+        };
+      });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co, i) => {
-            if (i !== payload.index) {
-              return co;
-            }
-            const valueInputError: string = co.valueInput.length > 140 ? '不超过140个字符' : '';
-            currentHasError = valueInputError !== '';
-            return {
-              ...co,
-              value: valueInputError === '' ? co.valueInput : co.value,
-              valueInputError: valueInputError,
-            };
-          }),
+          side_CustomOptions: side_CustomOptions,
         },
       });
-      if (!currentHasError) {
-        yield put<UpdateRewriteAction>({
-          type: 'updateRewrite',
-        });
+      if (currentHasError) {
+        return;
       }
+
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: exhibitInfoPage.side_InheritOptions,
+        side_CustomOptions: side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('已更新自定义选项');
+
     },
     * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1030,7 +1066,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('已更新自定义属性');
+      fMessage('已更新自定义选项');
     },
     * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
