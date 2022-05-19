@@ -665,9 +665,6 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: exhibitInfoPage.exhibit_ID,
         rewriteProperty: [
           ...exhibitInfoPage.side_InheritOptions
-            // .filter((io) => {
-            //   return io.valueInputError === '' && (io.type === 'input' ? (io.value !== io.resetValue) : (io.value !== io.options[0]));
-            // })
             .map((io) => {
               return {
                 key: io.key,
@@ -991,35 +988,49 @@ const Model: ExhibitInfoPageModelType = {
     },
     * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
+      const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.map((co) => {
+        if (co.key !== payload.value.key) {
+          return co;
+        }
+        return {
+          key: co.key,
+          value: payload.value.value,
+          description: payload.value.description,
+          valueInput: payload.value.value,
+          valueInputError: '',
+        };
+      });
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_CustomOptions: exhibitInfoPage.side_CustomOptions.map((co) => {
-            if (co.key !== payload.value.key) {
-              return co;
-            }
-            return {
-              key: co.key,
-              value: payload.value.value,
-              description: payload.value.description,
-              valueInput: payload.value.value,
-              valueInputError: '',
-            };
-          }),
+          side_CustomOptions: side_CustomOptions,
           side_CustomOptionDrawer_Visible: false,
           side_CustomOptionDrawer_DataSource: null,
         },
       });
 
-      yield put<UpdateRewriteAction>({
-        type: 'updateRewrite',
-      });
+      const params: UpdateRewriteParams = {
+        exhibit_ID: exhibitInfoPage.exhibit_ID,
+        side_InheritOptions: exhibitInfoPage.side_InheritOptions,
+        side_CustomOptions: side_CustomOptions,
+      };
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(updateRewrite, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('已更新自定义属性');
     },
     * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1245,4 +1256,39 @@ async function handleFinalResolveResource({
         }),
     };
   });
+}
+
+interface UpdateRewriteParams {
+  exhibit_ID: string;
+  side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'];
+  side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'];
+}
+
+async function updateRewrite({
+                               exhibit_ID,
+                               side_InheritOptions,
+                               side_CustomOptions,
+                             }: UpdateRewriteParams): Promise<any> {
+  const params: Parameters<typeof FServiceAPI.Exhibit.updateRewriteProperty>[0] = {
+    presentableId: exhibit_ID,
+    rewriteProperty: [
+      ...side_InheritOptions
+        .map((io) => {
+          return {
+            key: io.key,
+            value: io.value,
+            remark: io.description,
+          };
+        }),
+      ...side_CustomOptions
+        .map((io) => {
+          return {
+            key: io.key,
+            value: io.value,
+            remark: io.description,
+          };
+        }),
+    ],
+  };
+  return FServiceAPI.Exhibit.updateRewriteProperty(params);
 }
