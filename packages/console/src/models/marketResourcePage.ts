@@ -112,14 +112,6 @@ export interface OnChangeVersionAction extends AnyAction {
   },
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
-}
-
-export interface FetchCollectionInfoAction extends AnyAction {
-  type: 'fetchCollectionInfo' | 'marketResourcePage/fetchCollectionInfo';
-}
-
 export interface OnClickCollectionAction extends AnyAction {
   type: 'marketResourcePage/onClickCollection';
 }
@@ -142,6 +134,14 @@ export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
   payload: string;
 }
 
+export interface FetchInfoAction extends AnyAction {
+  type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
+}
+
+export interface FetchCollectionInfoAction extends AnyAction {
+  type: 'fetchCollectionInfo' | 'marketResourcePage/fetchCollectionInfo';
+}
+
 export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
@@ -153,14 +153,14 @@ interface MarketResourcePageModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
-    fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onClick_SignBtn: (action: OnClick_SignBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ConfirmSignContract: (action: OnClick_ConfirmSignContract_Action, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
+    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
+    fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
@@ -246,125 +246,7 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchVersionInfo',
       });
     },
-    * fetchInfo({}: FetchInfoAction, { call, put, select }: EffectsCommandMap) {
-      const { marketResourcePage, user }: ConnectState = yield select(({ marketResourcePage, user }: ConnectState) => ({
-        marketResourcePage,
-        user,
-      }));
-      // console.log('fetchInfo ####9823u4oi');
-      const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-        resourceIDs: [marketResourcePage.resourceId],
-      };
 
-      // 本次要添加的一些列资源信息
-      const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
-      // console.log(data, ' data2309');
-
-      let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
-
-      // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
-      // 获取上抛资源信息
-      if ((data.baseUpcastResources || []).length > 0) {
-        // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
-
-        const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-          resourceIDs: data.baseUpcastResources.map((r) => r.resourceId),
-        };
-
-        // 本次要添加的一些列资源信息
-        const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
-
-        rawSignResources = [
-          ...rawSignResources,
-          ...data1,
-        ];
-      }
-
-      // console.log(rawSignResources, 'rawSignResources2309ef');
-
-      // 获取当前用户与当前资源签过约的所有节点
-      const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        userId: user.info?.userId,
-        resourceIds: marketResourcePage.resourceId,
-        // projection: 'nodeId',
-      };
-
-      const { data: data3 } = yield call(FServiceAPI.Exhibit.presentableList, params3);
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          resourceInfo: {
-            cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
-            name: data.resourceName,
-            type: data.resourceType,
-            tags: data.tags,
-            about: data.intro,
-          },
-          allVersions: data.resourceVersions.map((v: any) => v.version),
-          version: marketResourcePage.version || data.latestVersion,
-          //
-          signedNodeIDs: data3.map((p: any) => p.nodeId),
-          allRawResources: rawSignResources,
-
-          signResources: rawSignResources
-            .map<MarketResourcePageModelState['signResources'][number]>((rs, i: number) => {
-              return {
-                selected: i === 0,
-                id: rs.resourceId,
-                name: rs.resourceName,
-                type: rs.resourceType,
-                status: rs.status,
-                authProblem: rs.authProblem,
-                contracts: [],
-                policies: rs.policies
-                  .filter((srp) => srp.status === 1)
-                  .map((rsp) => ({
-                    checked: false,
-                    fullInfo: rsp,
-                  })),
-              };
-            }),
-        },
-      });
-      // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
-
-      if (!data.latestVersion || !!marketResourcePage.version) {
-        return;
-      }
-
-      yield put<FetchVersionInfoAction>({
-        type: 'fetchVersionInfo',
-      });
-
-    },
-    * fetchCollectionInfo({}: FetchCollectionInfoAction, { call, select, put }: EffectsCommandMap) {
-      // console.log('进入获取收藏', 'FGHSDGf09uj4k2t;ldfs');
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
-      }));
-
-      const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
-        resourceIds: marketResourcePage.resourceId,
-      };
-
-      const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
-
-      const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
-        resourceId: marketResourcePage.resourceId,
-      };
-
-      const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
-      // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          hasCollect: data1[0].isCollected,
-          popularity: data2,
-        },
-      });
-    },
     * onClickCollection({}: OnClickCollectionAction, { select, call, put }: EffectsCommandMap) {
       const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
@@ -480,58 +362,7 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * fetchVersionInfo({}: FetchVersionInfoAction, { call, select, put }: EffectsCommandMap) {
 
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
-      }));
-
-      if (!marketResourcePage.version) {
-        return;
-      }
-
-      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
-        version: marketResourcePage.version,
-        resourceId: marketResourcePage.resourceId,
-      };
-      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-
-      // console.log(params, 'params0932jklsdjflsdk');
-      // console.log(data, 'data0932jklsdjflsdk');
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          releaseTime: FUtil.Format.formatDateTime(data.createDate),
-          description: data.description,
-          properties: [
-            ...Object.entries(data.systemProperty as object)
-              .map((s) => ({
-                key: s[0],
-                value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
-              })),
-            ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
-              .map((p: any) => {
-                // console.log(p, 'PPPPP()*UOI');
-                return {
-                  key: p.key,
-                  value: p.defaultValue,
-                  description: p.remark,
-                };
-              }),
-          ],
-          options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
-            .map((p: any) => {
-              // console.log(p, '@@@@@@#$#@$@#$@#');
-              return {
-                key: p.key,
-                value: p.defaultValue,
-                description: p.remark,
-              };
-            }),
-        },
-      });
-    },
     * onClick_SignBtn({}: OnClick_SignBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
         marketResourcePage,
@@ -688,6 +519,177 @@ const Model: MarketResourcePageModelType = {
         payload: {
           signExhibitName: payload,
           signExhibitNameErrorTip: '',
+        },
+      });
+    },
+    * fetchInfo({}: FetchInfoAction, { call, put, select }: EffectsCommandMap) {
+      const { marketResourcePage, user }: ConnectState = yield select(({ marketResourcePage, user }: ConnectState) => ({
+        marketResourcePage,
+        user,
+      }));
+      // console.log('fetchInfo ####9823u4oi');
+      const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+        resourceIDs: [marketResourcePage.resourceId],
+      };
+
+      // 本次要添加的一些列资源信息
+      const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+      // console.log(data, ' data2309');
+
+      let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
+
+      // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
+      // 获取上抛资源信息
+      if ((data.baseUpcastResources || []).length > 0) {
+        // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
+
+        const params: Parameters<typeof handleResourceBatchInfo>[0] = {
+          resourceIDs: data.baseUpcastResources.map((r) => r.resourceId),
+        };
+
+        // 本次要添加的一些列资源信息
+        const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+
+        rawSignResources = [
+          ...rawSignResources,
+          ...data1,
+        ];
+      }
+
+      // console.log(rawSignResources, 'rawSignResources2309ef');
+
+      // 获取当前用户与当前资源签过约的所有节点
+      const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
+        userId: user.info?.userId,
+        resourceIds: marketResourcePage.resourceId,
+        // projection: 'nodeId',
+      };
+
+      const { data: data3 } = yield call(FServiceAPI.Exhibit.presentableList, params3);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceInfo: {
+            cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
+            name: data.resourceName,
+            type: data.resourceType,
+            tags: data.tags,
+            about: data.intro,
+          },
+          allVersions: data.resourceVersions.map((v: any) => v.version),
+          version: marketResourcePage.version || data.latestVersion,
+          //
+          signedNodeIDs: data3.map((p: any) => p.nodeId),
+          allRawResources: rawSignResources,
+
+          signResources: rawSignResources
+            .map<MarketResourcePageModelState['signResources'][number]>((rs, i: number) => {
+              return {
+                selected: i === 0,
+                id: rs.resourceId,
+                name: rs.resourceName,
+                type: rs.resourceType,
+                status: rs.status,
+                authProblem: rs.authProblem,
+                contracts: [],
+                policies: rs.policies
+                  .filter((srp) => srp.status === 1)
+                  .map((rsp) => ({
+                    checked: false,
+                    fullInfo: rsp,
+                  })),
+              };
+            }),
+        },
+      });
+      // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
+
+      if (!data.latestVersion || !!marketResourcePage.version) {
+        return;
+      }
+
+      yield put<FetchVersionInfoAction>({
+        type: 'fetchVersionInfo',
+      });
+
+    },
+    * fetchCollectionInfo({}: FetchCollectionInfoAction, { call, select, put }: EffectsCommandMap) {
+      // console.log('进入获取收藏', 'FGHSDGf09uj4k2t;ldfs');
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
+        marketResourcePage,
+      }));
+
+      const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
+        resourceIds: marketResourcePage.resourceId,
+      };
+
+      const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
+
+      const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
+        resourceId: marketResourcePage.resourceId,
+      };
+
+      const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
+      // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          hasCollect: data1[0].isCollected,
+          popularity: data2,
+        },
+      });
+    },
+    * fetchVersionInfo({}: FetchVersionInfoAction, { call, select, put }: EffectsCommandMap) {
+
+      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
+        marketResourcePage,
+      }));
+
+      if (!marketResourcePage.version) {
+        return;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
+        version: marketResourcePage.version,
+        resourceId: marketResourcePage.resourceId,
+      };
+      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
+
+      // console.log(params, 'params0932jklsdjflsdk');
+      // console.log(data, 'data0932jklsdjflsdk');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          releaseTime: FUtil.Format.formatDateTime(data.createDate),
+          description: data.description,
+          properties: [
+            ...Object.entries(data.systemProperty as object)
+              .map((s) => ({
+                key: s[0],
+                value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+              })),
+            ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+              .map((p: any) => {
+                // console.log(p, 'PPPPP()*UOI');
+                return {
+                  key: p.key,
+                  value: p.defaultValue,
+                  description: p.remark,
+                };
+              }),
+          ],
+          options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
+            .map((p: any) => {
+              // console.log(p, '@@@@@@#$#@$@#$@#');
+              return {
+                key: p.key,
+                value: p.defaultValue,
+                description: p.remark,
+              };
+            }),
         },
       });
     },
