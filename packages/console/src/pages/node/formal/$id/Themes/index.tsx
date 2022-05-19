@@ -117,7 +117,7 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                           }
 
                           {
-                            !i.isAuth && (<FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
+                            !i.isAuth && (<FTooltip title={i.authErrorText}>
                               <FWarning />
                             </FTooltip>)
                           }
@@ -143,8 +143,17 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
                                     if (i.policies.length === 0) {
-                                      fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
-                                      return;
+                                      // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                                      // return;
+                                      if (i.policies.length === 0) {
+                                        if (!i.hasPolicy) {
+                                          // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
+                                          fMessage(FUtil1.I18n.message('alarm_exhibits_show_plan '), 'error');
+                                        } else {
+                                          fMessage(FUtil1.I18n.message('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                                        }
+                                        return;
+                                      }
                                     }
                                     if (!i.isAuth) {
                                       // fMessage(F)
