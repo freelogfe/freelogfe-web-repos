@@ -401,7 +401,6 @@ export interface ExhibitInfoPageModelType {
     onChange_Side_Exhibit_EditDeleteAttrInput: (action: OnChange_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_Exhibit_EditDeleteAttrInput: (action: OnBlur_Side_Exhibit_EditDeleteAttrInput_Action, effects: EffectsCommandMap) => void;
     onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn: (action: OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action, effects: EffectsCommandMap) => void;
-    // OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action: (action: OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action, effects: EffectsCommandMap) => void;
 
     onConfirm_CustomOptionsDrawer: (action: OnConfirm_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onCancel_CustomOptionsDrawer: (action: OnCancel_CustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
@@ -1161,7 +1160,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已重置');
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
@@ -1263,7 +1272,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已更新');
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
@@ -1364,13 +1383,23 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      }  = yield call(FServiceAPI.InformalNode.createRules, params);
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
         nodeID: informExhibitInfoPage.node_ID,
         isRematch: true,
       };
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已更新');
 
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params2);
       if (result.status === 2) {
@@ -1462,7 +1491,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已更新');
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
@@ -1530,7 +1569,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      }= yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已删除');
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
@@ -1629,7 +1678,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已添加');
 
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
         nodeID: informExhibitInfoPage.node_ID,
@@ -1711,7 +1770,17 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.node_ID,
         testRuleText: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage('自定义选项已更新');
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
