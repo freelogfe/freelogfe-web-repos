@@ -145,7 +145,7 @@ const Model: NodesModelType = {
         type: 'change',
         payload: {
           nodeDomain: payload.value.trim().toLocaleLowerCase(),
-          domainVerify: 1,
+          domainVerify: 'verified',
         },
       });
 
