@@ -133,7 +133,10 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
     <div className={styles.subjects}>
       {
         authorizedContracts.map((ac, aci) => {
-          return (<React.Fragment key={ac.subjectID}>
+          return (<React.Fragment
+            // key={ac.subjectID}
+            key={aci}
+          >
             {
               aci === 0 && (<div style={{ padding: '0 15px' }}>
                 <div style={{ height: 15 }} />
@@ -250,9 +253,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 <div style={{ height: 15 }} />
                 <FTitleText type='h4'>当前合约</FTitleText>
                 {
-                  selectedAuthorizedContract.contracts.map((sac) => {
+                  selectedAuthorizedContract.contracts.map((sac,sai) => {
                     // console.log(sac.id, 'sac.id@#$@!#$@#4234');
-                    return (<React.Fragment key={sac.contractID}>
+                    return (<React.Fragment
+                      // key={sac.contractID}
+                      key={sai}
+                    >
                       <div style={{ height: 15 }} />
                       <div
                         key={sac.contractID}
@@ -327,11 +333,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <div style={{ height: 25 }} />
               <FTitleText type='h4'>未签约策略</FTitleText>
               {
-                selectedAuthorizedContract.policies.map((sacp) => {
+                selectedAuthorizedContract.policies.map((sacp,saci) => {
                   return (
                     <div
                       className={styles.Policy}
-                      key={sacp.policyId}
+                      // key={sacp.policyId}
+                      key={saci}
                     >
                       <div className={styles.singPolicyHeader}>
                         <FContentText type='highlight'>{sacp.policyName}</FContentText>
