@@ -1,10 +1,10 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
-import {FServiceAPI, FUtil} from "@freelog/tools-lib";
-import {history} from 'umi';
-import fMessage from "@/components/fMessage";
+import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { history } from 'umi';
+import fMessage from '@/components/fMessage';
 
 export interface LoginPageModelState {
   username: string;
@@ -55,8 +55,8 @@ const Model: LoginPageModelType = {
   namespace: 'loginPage',
   state: initStates,
   effects: {
-    * login({payload}: LoginAction, {call, put, select}: EffectsCommandMap) {
-      const {loginPage}: ConnectState = yield select(({loginPage}: ConnectState) => ({
+    * login({ payload }: LoginAction, { call, put, select }: EffectsCommandMap) {
+      const { loginPage }: ConnectState = yield select(({ loginPage }: ConnectState) => ({
         loginPage,
       }));
 
@@ -67,13 +67,15 @@ const Model: LoginPageModelType = {
         },
       });
 
+      const cookiesUserID: number = FUtil.Tool.getUserIDByCookies();
+
       const params: Parameters<typeof FServiceAPI.User.login>[0] = {
         loginName: loginPage.username,
         password: loginPage.password,
         isRemember: 1,
       };
 
-      const {data} = yield call(FServiceAPI.User.login, params);
+      const { data } = yield call(FServiceAPI.User.login, params);
       // console.log(JSON.stringify(data), 'data!!!!!!!11111111');
 
       yield put<ChangeAction>({
@@ -85,7 +87,12 @@ const Model: LoginPageModelType = {
 
       if (data?.userId) {
         if (payload) {
-          window.location.replace(decodeURIComponent(payload));
+          if (cookiesUserID === -1 || data?.userId === cookiesUserID) {
+            window.location.replace(decodeURIComponent(payload));
+          } else {
+            // console.log(new URL(decodeURIComponent(payload)).origin, 'new URL(decodeURIComponent(payload)).origin3092oisdlf')
+            window.location.replace(new URL(decodeURIComponent(payload)).origin);
+          }
         } else {
           history.replace(FUtil.LinkTo.wallet());
         }
@@ -93,7 +100,7 @@ const Model: LoginPageModelType = {
         fMessage('账户或密码错误', 'error');
       }
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -101,18 +108,18 @@ const Model: LoginPageModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
-  }
+    },
+  },
 };
 
 export default Model;
