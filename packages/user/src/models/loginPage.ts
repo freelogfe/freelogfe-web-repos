@@ -90,7 +90,6 @@ const Model: LoginPageModelType = {
           if (cookiesUserID === -1 || data?.userId === cookiesUserID) {
             window.location.replace(decodeURIComponent(payload));
           } else {
-            // console.log(new URL(decodeURIComponent(payload)).origin, 'new URL(decodeURIComponent(payload)).origin3092oisdlf')
             window.location.replace(new URL(decodeURIComponent(payload)).origin);
           }
         } else {
