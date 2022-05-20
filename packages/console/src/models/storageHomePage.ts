@@ -162,7 +162,7 @@ const Model: StorageHomePageModelType = {
   },
   effects: {
     * fetchBuckets({ payload }: FetchBucketsAction, { call, put, select }: EffectsCommandMap) {
-      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
+      // const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
 
       const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
         // bucketType: 0,
@@ -183,15 +183,6 @@ const Model: StorageHomePageModelType = {
         },
       });
 
-
-      // if (bucketList.length === 0 && window.location.pathname.startsWith('/storage')) {
-      //   router.push(FUtil.LinkTo.storageSpace({}));
-      // } else {
-      //   if (payload?.from !== 'header' && window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
-      //     // console.log('!!!!!!!!!!!!0923480238402384032840923049');
-      //     router.push(FUtil.LinkTo.storageSpace({ bucketName: bucketList[0].bucketName }));
-      //   }
-      // }
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
@@ -244,13 +235,6 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.newBucketName,
         createBucket: false,
       }));
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     newBucketModalVisible: false,
-      //   },
-      // });
-      // router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
     },
     * onChangeActivatedBucket({ payload }: OnChangeActivatedBucketAction, { put, select, call }: EffectsCommandMap) {
       const { storageHomePage, user }: ConnectState = yield select(({ storageHomePage, user }: ConnectState) => ({
@@ -302,11 +286,7 @@ const Model: StorageHomePageModelType = {
       };
       // console.log(payload, 'DDDDDDDDelete');
       const { data } = yield call(FServiceAPI.Storage.deleteBucket, params);
-      // console.log(data, 'DDDD2839iosdflk');
-      // yield put<FetchBucketsAction>({
-      //   type: 'fetchBuckets',
-      // });
-
+      
       const newBucket: StorageHomePageModelState['bucketList'] = (storageHomePage.bucketList || []).filter((b) => {
         return b.bucketName !== payload;
       });
