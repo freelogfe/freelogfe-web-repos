@@ -2047,10 +2047,17 @@ const Model: InformalNodeManagerPageModelType = {
           addExhibitDrawer_Visible: false,
         },
       });
-      const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
+
+      const used: boolean[] = yield call(isExhibitsUsed, informalNodeManagerPage.node_ID, payload.names.map((n) => {
+        return n.split('/')[1];
+      }));
+
+      console.log(used, 'used093i2osdlfksdjl');
+
+      const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {
           operation: 'add',
-          exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+          exhibitName: used[index] ? n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}` : n.split('/')[1],
           candidate: {
             name: n,
             versionRange: 'latest',
@@ -2104,6 +2111,8 @@ const Model: InformalNodeManagerPageModelType = {
           addThemeDrawer_Visible: false,
         },
       });
+
+
       const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
         return {
           operation: 'add',
@@ -2823,7 +2832,7 @@ export async function ruleMatchAndResult({
                                          }: RuleMatchAndResultParams): Promise<RuleMatchAndResultReturn> {
 
   if (isRematch) {
-    const { errCode, data } = await FServiceAPI.InformalNode.rulesRematch({
+    const { errCode, data }: any = await FServiceAPI.InformalNode.rulesRematch({
       nodeId: nodeID,
       // isMandatoryMatch: 1,
     });
@@ -2835,7 +2844,7 @@ export async function ruleMatchAndResult({
   }
 
   while (true) {
-    const response = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
+    const response: any = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
       await sleep();
@@ -2942,7 +2951,7 @@ async function mergeAuthInfoToList({ list, nodeID }: MergeAuthInfoToListParams):
     authType: 3,
   };
 
-  const { data } = await FServiceAPI.InformalNode.batchGetAuths(params1);
+  const { data }: any = await FServiceAPI.InformalNode.batchGetAuths(params1);
 
   const exhibitList: InformalNodeManagerPageModelState['exhibit_List'] = list.map((d: any) => {
     return {
@@ -2953,4 +2962,23 @@ async function mergeAuthInfoToList({ list, nodeID }: MergeAuthInfoToListParams):
     };
   });
   return exhibitList;
+}
+
+async function isExhibitsUsed(nodeID: number, names: string[]): Promise<boolean[]> {
+  const params: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+    nodeId: nodeID,
+    testResourceNames: names.map((n) => {
+      return encodeURIComponent(n);
+    }).join(','),
+  };
+
+  const { data }: any = await FServiceAPI.InformalNode.batchTestResources(params);
+  // console.log(data);
+
+  return names.map<boolean>((n) => {
+    return data.some((d: any) => {
+      return d.testResourceName === n;
+    });
+  });
+
 }

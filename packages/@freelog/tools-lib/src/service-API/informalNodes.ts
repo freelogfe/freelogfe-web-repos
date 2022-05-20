@@ -40,6 +40,7 @@ interface BatchTestResourcesParamsType {
   entityType?: 'resource' | 'object';
   entityIds?: string;
   entityNames?: string;
+  testResourceNames?: string;
   projection?: string;
 }
 
