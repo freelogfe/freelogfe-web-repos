@@ -448,6 +448,14 @@ const Model: ExhibitInfoPageModelType = {
         });
       }).flat();
       // console.log(result, 'result111122222333333');
+
+      const policies: PolicyFullInfo_Type[] = data_PresentableDetails.policies;
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -465,7 +473,7 @@ const Model: ExhibitInfoPageModelType = {
             : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
               ? FUtil1.I18n.message('alert_exhibit_no_auth')
               : '',
-          policy_List: data_PresentableDetails.policies,
+          policy_List: policies,
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
           contract_SelectedAssociatedID: result_ContractAssociated.some((rr) => {

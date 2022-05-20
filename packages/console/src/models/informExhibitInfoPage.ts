@@ -17,7 +17,6 @@ import {
   IGraph_Dependency_Edges,
   IGraph_Dependency_Nodes,
 } from '@/components/FAntvG6/FAntvG6DependencyGraph';
-// import { getAllContracts, handleRelation, HandleRelationResult } from '@/models/exhibitInfoPage';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 import { router } from 'umi';
