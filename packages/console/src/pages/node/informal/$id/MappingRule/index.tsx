@@ -296,6 +296,12 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             <FMonacoEditor
               width={'100%'}
               value={informalNodeManagerPage.rule_CodeInput}
+              options={{
+                selectOnLineNumbers: true,
+                minimap: {
+                  enabled: false,
+                },
+              }}
               onChange={(value) => {
                 dispatch<OnChange_Rule_Codemirror_Action>({
                   type: 'informalNodeManagerPage/onChange_Rule_Codemirror',

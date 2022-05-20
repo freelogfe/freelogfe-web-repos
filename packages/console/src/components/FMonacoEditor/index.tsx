@@ -11,7 +11,9 @@ function FMonacoEditor({ width = 800, height = 600, ...props }: FMonacoEditorPro
     style={{ width, height }}
     className={styles.container}
   >
+    {console.log('#9903o9josdlijflk11111sdjl')}
     <MonacoEditor
+
       // width="100%"
       // height={height}
       {...props}
