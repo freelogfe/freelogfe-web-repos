@@ -171,10 +171,18 @@ const Model: ResourceAuthPageModelType = {
         return;
       }
 
+      const policies: PolicyFullInfo_Type[] = data_ResourceDetails.policies || [];
+
+      policies.reverse();
+
+      policies.sort((a,b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          policies: data_ResourceDetails.policies || [],
+          policies: policies,
           baseUastResources: data_ResourceDetails.baseUpcastResources || [],
         },
       });

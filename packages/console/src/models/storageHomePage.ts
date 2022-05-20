@@ -286,7 +286,7 @@ const Model: StorageHomePageModelType = {
       };
       // console.log(payload, 'DDDDDDDDelete');
       const { data } = yield call(FServiceAPI.Storage.deleteBucket, params);
-      
+
       const newBucket: StorageHomePageModelState['bucketList'] = (storageHomePage.bucketList || []).filter((b) => {
         return b.bucketName !== payload;
       });
