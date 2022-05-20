@@ -9,6 +9,8 @@ import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
+import fMessage from '@/components/fMessage';
+import FUtil1 from '@/utils';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -2061,8 +2063,17 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.putRules, params);
 
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage(FUtil1.I18n.message('msg_new_test_exhibit_added'));
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -2111,8 +2122,16 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
       };
-      const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
-
+      const { data, errCode, ret, msg }: {
+        data: boolean;
+        errCode: number;
+        msg: string;
+        ret: number;
+      } = yield call(FServiceAPI.InformalNode.putRules, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        return fMessage(msg, 'error');
+      }
+      fMessage(FUtil1.I18n.message('msg_new_test_exhibit_added'));
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {
