@@ -138,16 +138,18 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
         ><FClose style={{fontSize: 12}}/></FTextBtn>
       </Space>
     </div>
-    {
-      storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
-        className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
-      </div>)
-    }
+
 
     {
       storageHomePage.uploadTaskQueue.length === 0
         ? (<FLoadingTip height={370}/>)
         : (<div className={styles.body} style={{display: storageHomePage.uploadPanelOpen ? 'block' : 'none'}}>
+          {
+            storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
+              className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
+            </div>)
+          }
+
           {
             storageHomePage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
               // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
