@@ -2003,7 +2003,7 @@ const Model: InformalNodeManagerPageModelType = {
       }));
 
       const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rule_CodeInput);
-      console.log(rules, 'rules##@#$$449098uoi234');
+      // console.log(rules, 'rules##@#$$449098uoi234');
       // console.log(errors, errorObjects, 'errorObjects234234');
       if (errorObjects.length > 0) {
         yield put<ChangeAction>({

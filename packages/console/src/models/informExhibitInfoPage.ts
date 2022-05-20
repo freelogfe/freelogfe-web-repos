@@ -659,18 +659,20 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      const rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
+      let rules: Array<IRules['add'] | IRules['alter'] | IRules['activate_theme']> = (informExhibitInfoPage.node_RuleInfo?.testRules || []).map((rr) => {
         return rr.ruleInfo;
       });
 
-      const text: string = decompile(mergeRules({
+      rules = mergeRules({
         oldRules: rules,
         exhibitName: informExhibitInfoPage.exhibit_Name,
         action: {
           operation: 'online',
           content: payload.checked,
         },
-      }));
+      });
+
+      const text: string = decompile(rules);
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.node_ID,
@@ -1388,7 +1390,7 @@ const Model: ExhibitInfoPageModelType = {
         errCode: number;
         msg: string;
         ret: number;
-      }  = yield call(FServiceAPI.InformalNode.createRules, params);
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
 
       //  ##############
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
@@ -1418,7 +1420,11 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInformalExhibitInfo',
       });
     },
-    * onChange_Side_Exhibit_EditDeleteAttrInput({payload}: OnChange_Side_Exhibit_EditDeleteAttrInput_Action, {select, call, put}: EffectsCommandMap) {
+    * onChange_Side_Exhibit_EditDeleteAttrInput({ payload }: OnChange_Side_Exhibit_EditDeleteAttrInput_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -1527,7 +1533,11 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn({ payload }: OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action, { select, call, put }: EffectsCommandMap) {
+    * onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn({ payload }: OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -1574,7 +1584,7 @@ const Model: ExhibitInfoPageModelType = {
         errCode: number;
         msg: string;
         ret: number;
-      }= yield call(FServiceAPI.InformalNode.createRules, params);
+      } = yield call(FServiceAPI.InformalNode.createRules, params);
 
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
@@ -1889,6 +1899,11 @@ export function mergeRules({
       alterRule,
     ];
   }
+
+  needHandleRules.sort((a) => {
+    return a.exhibitName === exhibitName ? -1 : 0;
+  });
+
 
   return needHandleRules;
 }
