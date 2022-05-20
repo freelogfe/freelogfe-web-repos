@@ -22,6 +22,8 @@ import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 
+const AntdDatePicker: any = DatePicker;
+
 const { compile, report } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
@@ -1121,7 +1123,7 @@ function FPolicyBuilder({
                                           text={'于'}
                                         />
                                         <div style={{ width: 10 }} />
-                                        <DatePicker
+                                        <AntdDatePicker
                                           // placeholder={'选择日期时间'}
                                           placeholder={FUil1.I18n.message('hint_time_datetime')}
                                           style={{ width: 480 }}
@@ -1131,7 +1133,7 @@ function FPolicyBuilder({
                                           allowClear={false}
                                           value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
-                                          onChange={(value, dateString) => {
+                                          onChange={(value: any, dateString: any) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
                                               absoluteTime_DateTime: mo,
