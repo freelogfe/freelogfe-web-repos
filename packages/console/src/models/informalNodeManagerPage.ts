@@ -1335,6 +1335,10 @@ const Model: InformalNodeManagerPageModelType = {
         ];
       }
 
+      needHandleRules.sort((a) => {
+        return a.exhibitName === payload.testResourceName ? -1 : 0;
+      });
+
       const text: string = decompile(needHandleRules);
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
@@ -2709,6 +2713,13 @@ const Model: InformalNodeManagerPageModelType = {
         return needHandleRules.find((nhr) => {
           return nhr.exhibitName === s[0] && nhr.operation !== 'activate_theme';
         });
+      });
+
+      const allChangedKey: string[] = simplifiedResults.map((s) => {
+        return s[0];
+      });
+      changedRules.sort((a) => {
+        return allChangedKey.includes(a.exhibitName) ? -1 : 0;
       });
 
       const params3: Parameters<typeof FServiceAPI.InformalNode.rulesPreExecution>[0] = {
