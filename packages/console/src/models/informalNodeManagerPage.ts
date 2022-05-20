@@ -2048,20 +2048,11 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      // const names: string[] = payload.names.map((n) => {
-      //   return n.split('/')[1];
-      // });
-      //
-      // names.sort();
-      // console.log(names, '#09oisdjlfksdjl');
-
-      // for (let i = 1; i< names.length)
-
       const rightNames: string[] = yield call(checkedExhibitUsedNames, informalNodeManagerPage.node_ID, payload.names.map((n) => {
         return n.split('/')[1];
       }));
 
-      console.log(rightNames, 'used093i2osdlfksdjl');
+      // console.log(rightNames, 'used093i2osdlfksdjl');
 
       const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {
@@ -2121,11 +2112,16 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
+      const rightNames: string[] = yield call(checkedExhibitUsedNames, informalNodeManagerPage.node_ID, payload.names.map((n) => {
+        return n.split('/')[1];
+      }));
 
-      const ruleObj: Array<IRules['add']> = payload.names.map((n) => {
+      console.log(rightNames, 'rightNames903weoijsedfk')
+
+      const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {
           operation: 'add',
-          exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+          exhibitName: rightNames[index],
           candidate: {
             name: n,
             versionRange: 'latest',
