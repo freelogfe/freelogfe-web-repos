@@ -15,6 +15,7 @@ import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
+import FUploadCover from '@/components/FUploadCover';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -44,12 +45,12 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
     <div style={{ height: 20 }} />
 
-    <FUploadImage
+    <FUploadCover
       onError={(err) => {
         fMessage(err, 'error');
       }}
       onUploadSuccess={(url: string) => {
-        console.log(url, 'url@#$!@#$@#@#$@#');
+        // console.log(url, 'url@#$!@#$@#@#$@#');
         dispatch<UpdateBaseInfoAction>({
           type: 'exhibitInfoPage/updateBaseInfo',
           payload: {
@@ -70,7 +71,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
           <div>{FUtil1.I18n.message('btn_edit_cover')}</div>
         </div>
       </div>
-    </FUploadImage>
+    </FUploadCover>
 
     <div style={{ height: 20 }} />
 

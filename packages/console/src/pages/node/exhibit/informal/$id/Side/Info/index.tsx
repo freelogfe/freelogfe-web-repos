@@ -19,6 +19,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FCoverImage from '@/components/FCoverImage';
+import FUploadCover from '@/components/FUploadCover';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -35,7 +36,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
       <FContentText text={'基础信息'} type='highlight' />
       <div style={{ height: 20 }} />
 
-      <FUploadImage
+      <FUploadCover
         onError={(err) => {
           fMessage(err, 'error');
         }}
@@ -55,7 +56,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
             <div>修改封面</div>
           </div>
         </div>
-      </FUploadImage>
+      </FUploadCover>
 
       <div style={{ height: 20 }} />
 
