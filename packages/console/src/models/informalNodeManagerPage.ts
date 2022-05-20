@@ -2048,16 +2048,25 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      const used: boolean[] = yield call(isExhibitsUsed, informalNodeManagerPage.node_ID, payload.names.map((n) => {
+      // const names: string[] = payload.names.map((n) => {
+      //   return n.split('/')[1];
+      // });
+      //
+      // names.sort();
+      // console.log(names, '#09oisdjlfksdjl');
+
+      // for (let i = 1; i< names.length)
+
+      const rightNames: string[] = yield call(checkedExhibitUsedNames, informalNodeManagerPage.node_ID, payload.names.map((n) => {
         return n.split('/')[1];
       }));
 
-      console.log(used, 'used093i2osdlfksdjl');
+      console.log(rightNames, 'used093i2osdlfksdjl');
 
       const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {
           operation: 'add',
-          exhibitName: used[index] ? n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}` : n.split('/')[1],
+          exhibitName: rightNames[index],
           candidate: {
             name: n,
             versionRange: 'latest',
@@ -2981,4 +2990,34 @@ async function isExhibitsUsed(nodeID: number, names: string[]): Promise<boolean[
     });
   });
 
+}
+
+
+async function checkedExhibitUsedNames(nodeID: number, names: string[]): Promise<string[]> {
+  const params: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+    nodeId: nodeID,
+    testResourceNames: names.map((n) => {
+      return encodeURIComponent(n);
+    }).join(','),
+  };
+
+  const { data }: any = await FServiceAPI.InformalNode.batchTestResources(params);
+  // console.log(data);
+
+  const newNames: string[] = names.map<string>((n) => {
+    if (data.some((d: any) => {
+      return d.testResourceName === n;
+    })) {
+      return n + FUtil.Tool.generateRandomCode();
+    } else {
+      return n;
+    }
+  });
+  newNames.sort();
+  for (let i: number = 1; i < newNames.length; i++) {
+    if (newNames[i] === newNames[i - 1]) {
+      newNames[i] += FUtil.Tool.generateRandomCode();
+    }
+  }
+  return newNames;
 }
