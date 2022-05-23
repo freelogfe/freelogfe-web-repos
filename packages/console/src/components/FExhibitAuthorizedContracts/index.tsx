@@ -133,10 +133,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
     <div className={styles.subjects}>
       {
         authorizedContracts.map((ac, aci) => {
-          return (<React.Fragment
-            // key={ac.subjectID}
-            key={aci}
-          >
+          return (<React.Fragment key={ac.subjectID}>
             {
               aci === 0 && (<div style={{ padding: '0 15px' }}>
                 <div style={{ height: 15 }} />
@@ -253,12 +250,9 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 <div style={{ height: 15 }} />
                 <FTitleText type='h4'>当前合约</FTitleText>
                 {
-                  selectedAuthorizedContract.contracts.map((sac,sai) => {
+                  selectedAuthorizedContract.contracts.map((sac) => {
                     // console.log(sac.id, 'sac.id@#$@!#$@#4234');
-                    return (<React.Fragment
-                      // key={sac.contractID}
-                      key={sai}
-                    >
+                    return (<React.Fragment key={sac.contractID}>
                       <div style={{ height: 15 }} />
                       <div
                         key={sac.contractID}
@@ -333,12 +327,11 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <div style={{ height: 25 }} />
               <FTitleText type='h4'>未签约策略</FTitleText>
               {
-                selectedAuthorizedContract.policies.map((sacp,saci) => {
+                selectedAuthorizedContract.policies.map((sacp) => {
                   return (
                     <div
                       className={styles.Policy}
-                      // key={sacp.policyId}
-                      key={saci}
+                      key={sacp.policyId}
                     >
                       <div className={styles.singPolicyHeader}>
                         <FContentText type='highlight'>{sacp.policyName}</FContentText>
@@ -438,7 +431,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       projection: 'resourceId,resourceName,resourceType,policies',
       isTranslate: 1,
     };
-    const { data }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
+    const { data } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
   }
 

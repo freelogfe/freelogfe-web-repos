@@ -22,8 +22,6 @@ import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 
-const AntdDatePicker: any = DatePicker;
-
 const { compile, report } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
@@ -221,12 +219,11 @@ function FPolicyBuilder({
 
   function onChange_TitleInput(value: string) {
     setTitleInput(value);
-    setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
-  // function onBlur_TitleInput() {
-  //   setTitleInputError(verifyTitle(titleInput, alreadyUsedTitles));
-  // }
+  function onBlur_TitleInput() {
+    setTitleInputError(verifyTitle(titleInput, alreadyUsedTitles));
+  }
 
   function onClick_SwitchMode_Code() {
     const code: string = dataToCode(combination_Data);
@@ -831,10 +828,10 @@ function FPolicyBuilder({
                 }}
                 // placeholder={'请输入授权策略名称'}
                 placeholder={'输入策略名称…'}
-                // onBlur={() => {
-                //   // console.log(titleInput, 'title@@@@@@@@');
-                //   onBlur_TitleInput();
-                // }}
+                onBlur={() => {
+                  // console.log(titleInput, 'title@@@@@@@@');
+                  onBlur_TitleInput();
+                }}
               />
 
               <Space size={20}>
@@ -1123,7 +1120,7 @@ function FPolicyBuilder({
                                           text={'于'}
                                         />
                                         <div style={{ width: 10 }} />
-                                        <AntdDatePicker
+                                        <DatePicker
                                           // placeholder={'选择日期时间'}
                                           placeholder={FUil1.I18n.message('hint_time_datetime')}
                                           style={{ width: 480 }}
@@ -1133,7 +1130,7 @@ function FPolicyBuilder({
                                           allowClear={false}
                                           value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
-                                          onChange={(value: any, dateString: any) => {
+                                          onChange={(value, dateString) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
                                               absoluteTime_DateTime: mo,
@@ -1244,9 +1241,6 @@ function FPolicyBuilder({
                     value={code_Input}
                     options={{
                       selectOnLineNumbers: true,
-                      minimap: {
-                        enabled: false,
-                      },
                     }}
                     onChange={onChange_Code_Input}
                     editorDidMount={(editor, monaco) => {
@@ -1713,17 +1707,28 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
       getPopupContainer={() => refDev.current}
       dropdownRender={menu => (<>
         {menu}
-        <FTextBtn type='primary' className={styles.dropdownRenderAdd} onClick={() => {
-          // console.log('###23948230948230480_))))))');
-          setOpen(false);
-          onClickAddStateBtn && onClickAddStateBtn();
-        }}>
-          <FCircleBtn size='small' type='minor'>
+        <div className={styles.dropdownRenderAdd}>
+          <FCircleBtn
+            size='small'
+            type='minor'
+            onClick={() => {
+              // console.log('###23948230948230480_))))))');
+              setOpen(false);
+              onClickAddStateBtn && onClickAddStateBtn();
+            }}
+          >
             <FPlus style={{ fontSize: 12 }} />
           </FCircleBtn>
           <div style={{ width: 5 }} />
-          新建状态
-        </FTextBtn>
+          <FTextBtn
+            type='primary'
+            onClick={() => {
+              // console.log('###23948230948230480_))))))');
+              setOpen(false);
+              onClickAddStateBtn && onClickAddStateBtn();
+            }}
+          >新建状态</FTextBtn>
+        </div>
       </>)}
     />
   </div>);

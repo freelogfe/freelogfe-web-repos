@@ -335,7 +335,7 @@ const Model: MarketResourcePageModelType = {
                       };
                     });
                   return {
-                    checked: true,
+                    checked: false,
                     id: c.contractId,
                     name: c.contractName,
                     text: c.policyInfo.policyText,
