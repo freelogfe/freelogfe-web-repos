@@ -178,21 +178,25 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
     });
 
-    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = (currentState.eventTranslateInfos as any[]).map((eti, etiIndex) => {
-      const obj = {
-        eventID: eti.origin.eventId,
-        tip: eti.content,
-        type: eti.origin.name,
-      };
-      if (eti.origin.name === 'TransactionEvent') {
-        return {
-          ...obj,
-          amount: eti.origin.args.amount,
+    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = (currentState.eventTranslateInfos as any[])
+      .filter((eti) => {
+        return eti.origin.name === 'TransactionEvent' || eti.origin.name === 'RelativeTimeEvent' || eti.origin.name === 'TimeEvent';
+      })
+      .map((eti, etiIndex) => {
+        const obj = {
+          eventID: eti.origin.eventId,
+          tip: eti.content,
+          type: eti.origin.name,
         };
-      } else {
-        return obj;
-      }
-    });
+        if (eti.origin.name === 'TransactionEvent') {
+          return {
+            ...obj,
+            amount: eti.origin.args.amount,
+          };
+        } else {
+          return obj;
+        }
+      });
 
     const record_Histories: IContractDisplayStates['record_Histories'] = data_transitionRecords.dataList.map((tr, trIndex) => {
       return {
@@ -296,6 +300,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                 <FContentText text={record_Histories[0].datetime} type='normal' />
               </Space>
 
+
               <div style={{ height: 10 }} />
               <FContentText
                 type='highlight'
@@ -306,61 +311,64 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                 record_Histories[0].contractStatus !== 'terminal' && record_CurrentEvents.length > 0 && (<>
                   <div style={{ height: 10 }} />
                   <Space size={10} direction='vertical' style={{ width: '100%' }}>
+                    {/*{console.log(record_CurrentEvents, 'record_CurrentEvents2390jsdlkfj')}*/}
                     {
-                      record_CurrentEvents.map((eti, etiIndex) => {
-                        if (eti.type === 'TransactionEvent') {
-                          return (<div key={etiIndex} className={styles.Event}>
-                            <FContentText
-                              style={{ flexShrink: 1 }}
-                              type='highlight'
-                              text={eti.tip}
-                            />
-                            {
-                              isSelfLicenseeOwner ?
-                                (<FRectBtn
-                                  style={{ flexShrink: 0 }}
-                                  type='primary'
-                                  size='small'
-                                  onClick={() => {
-                                    if (isSelfLicensorOwner) {
-                                      return fMessage('收款方不能是自己', 'error');
-                                    }
-                                    set_Modal_EventID(eti.eventID);
-                                    // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                                    set_Modal_TransactionAmount(eti.amount);
-                                    readyPay();
-                                  }}
-                                >支付</FRectBtn>)
-                                // : (<FContentText type='negative' text={'待对方执行'} />)
-                                : (<FContentText
-                                  type='negative'
-                                  text={FUtil1.I18n.message('msg_waitfor_theotherparty_excutecontract')}
-                                />)
-                            }
-                          </div>);
-                        } else if (eti.type === 'RelativeTimeEvent') {
-                          return (<div key={etiIndex} className={styles.Event}>
-                            <FContentText
-                              type='highlight'
-                              text={eti.tip}
-                            />
-                          </div>);
-                        } else if (eti.type === 'TimeEvent') {
-                          return (<div key={etiIndex} className={styles.Event}>
-                            <FContentText
-                              type='highlight'
-                              text={eti.tip}
-                            />
-                          </div>);
-                        } else {
-                          return (<div key={'terminal'} className={styles.Event}>
-                            <FContentText
-                              type='highlight'
-                              text={(eti as any).tip}
-                            />
-                          </div>);
-                        }
-                      })
+                      record_CurrentEvents
+                        .map((eti, etiIndex) => {
+                          if (eti.type === 'TransactionEvent') {
+                            return (<div key={etiIndex} className={styles.Event}>
+                              <FContentText
+                                style={{ flexShrink: 1 }}
+                                type='highlight'
+                                text={eti.tip}
+                              />
+                              {
+                                isSelfLicenseeOwner ?
+                                  (<FRectBtn
+                                    style={{ flexShrink: 0 }}
+                                    type='primary'
+                                    size='small'
+                                    onClick={() => {
+                                      if (isSelfLicensorOwner) {
+                                        return fMessage('收款方不能是自己', 'error');
+                                      }
+                                      set_Modal_EventID(eti.eventID);
+                                      // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                      set_Modal_TransactionAmount(eti.amount);
+                                      readyPay();
+                                    }}
+                                  >支付</FRectBtn>)
+                                  // : (<FContentText type='negative' text={'待对方执行'} />)
+                                  : (<FContentText
+                                    type='negative'
+                                    text={FUtil1.I18n.message('msg_waitfor_theotherparty_excutecontract')}
+                                  />)
+                              }
+                            </div>);
+                          } else if (eti.type === 'RelativeTimeEvent') {
+                            return (<div key={etiIndex} className={styles.Event}>
+                              <FContentText
+                                type='highlight'
+                                text={eti.tip}
+                              />
+                            </div>);
+                          } else if (eti.type === 'TimeEvent') {
+                            return (<div key={etiIndex} className={styles.Event}>
+                              <FContentText
+                                type='highlight'
+                                text={eti.tip}
+                              />
+                            </div>);
+                          } else {
+                            // return (<div key={'terminal'} className={styles.Event}>
+                            //   <FContentText
+                            //     type='highlight'
+                            //     text={(eti as any).tip}
+                            //   />
+                            // </div>);
+                            return undefined;
+                          }
+                        })
                     }
                   </Space>
                 </>)
