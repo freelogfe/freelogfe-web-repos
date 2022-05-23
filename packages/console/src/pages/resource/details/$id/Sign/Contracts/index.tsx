@@ -9,6 +9,7 @@ import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FContentText } from '@/components/FText';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -16,8 +17,10 @@ interface ContractsProps {
 }
 
 function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
-  const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
+  const selectedResource = marketResourcePage.signResources.find((r) => r.selected);
+  const contracts = selectedResource?.contracts;
 
   if (!contracts || contracts.length === 0) {
     return null;
@@ -118,15 +121,25 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
       })
     }
 
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <FContentText text={'查看已终止的合约请移至'} type='negative' />
-        <FTextBtn onClick={() => {
-          window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-        }}>合约管理</FTextBtn>
-      </div>
-      <div style={{ height: 25 }} />
-    </div>
+    {
+      selectedResource && selectedResource.terminatedContractIDs.length > 0 && (<div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FContentText text={'查看已终止的合约请移至'} type='negative' />
+          <FTextBtn onClick={() => {
+            // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+            set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
+          }}>合约管理</FTextBtn>
+        </div>
+        <div style={{ height: 25 }} />
+      </div>)
+    }
+
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
   </div>);
 }
 

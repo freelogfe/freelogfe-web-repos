@@ -57,6 +57,7 @@ export interface MarketResourcePageModelState {
         exhibitName: string;
       }[];
     }[];
+    terminatedContractIDs: string[];
     policies: {
       checked: boolean;
       fullInfo: PolicyFullInfo_Type;
@@ -364,6 +365,13 @@ const Model: MarketResourcePageModelType = {
                 status: value.status,
                 authProblem: value.authProblem,
                 contracts: contracts,
+                terminatedContractIDs: result[index]
+                  .filter((c) => {
+                    return c.status === 1;
+                  })
+                  .map((c) => {
+                    return c.contractId;
+                  }),
                 policies: policies,
               };
             }),
@@ -593,6 +601,7 @@ const Model: MarketResourcePageModelType = {
                 status: rs.status,
                 authProblem: rs.authProblem,
                 contracts: [],
+                terminatedContractIDs: [],
                 policies: rs.policies
                   .filter((srp) => srp.status === 1)
                   .map((rsp) => ({
