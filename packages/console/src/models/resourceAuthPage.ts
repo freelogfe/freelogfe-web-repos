@@ -36,6 +36,7 @@ export interface ResourceAuthPageModelState {
       policyId: string;
       versions: { version: string; checked: boolean; disabled: boolean }[];
     }[];
+    terminatedContractIDs: string[];
     // policies: {
     //   id: string;
     //   title: string;
@@ -272,7 +273,7 @@ const Model: ResourceAuthPageModelType = {
           resourceType: currentResource.resourceType,
           version: '',
           contracts: allContracts
-            .filter((c: any) => c.status !== 1)
+            .filter((c: any) => c.status === 0)
             .map((c: any) => {
               // console.log(c, '当前合约');
               // console.log(i, '关系');
@@ -298,6 +299,13 @@ const Model: ResourceAuthPageModelType = {
                   };
                 }),
               };
+            }),
+          terminatedContractIDs: allContracts
+            .filter((c: any) => {
+              return c.status === 1;
+            })
+            .map((c:any) => {
+              return c.contractId;
             }),
           policies: allEnabledPolicies.map((policy: any) => ({
             // id: policy.policyId,
