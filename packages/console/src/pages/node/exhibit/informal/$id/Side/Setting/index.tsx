@@ -26,6 +26,7 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FSelect from '@/components/FSelect';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -195,10 +196,15 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               <FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
-                  dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
-                    type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
-                    payload: {
-                      theKey: pc.theKey,
+                  fConfirmModal({
+                    message: '一旦删除则无法恢复，确认删除吗？',
+                    onOk() {
+                      dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
+                        type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
+                        payload: {
+                          theKey: pc.theKey,
+                        },
+                      });
                     },
                   });
                 }}
