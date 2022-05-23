@@ -112,7 +112,7 @@ function FTerminatedContractListDrawer({
     setTerminatedContracts(resultList);
   }
 
-  console.log(terminatedContracts, 'terminatedContracts90oi23jlksdjflk');
+  // console.log(terminatedContracts, 'terminatedContracts90oi23jlksdjflk');
 
   const columns1: ColumnsType<FTerminatedContractListDrawerStates['terminatedContracts'][number]> = [
     {
@@ -229,8 +229,10 @@ function FTerminatedContractListDrawer({
     onClose={() => {
       onClose && onClose();
     }}
-    afterVisibleChange={() => {
-      handleData();
+    afterVisibleChange={(visible) => {
+      if (visible) {
+        handleData();
+      }
     }}
   >
     <FTable

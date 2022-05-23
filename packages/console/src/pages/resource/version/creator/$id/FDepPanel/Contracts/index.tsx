@@ -12,6 +12,7 @@ import { FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FTextBtn } from '@/components/FButton';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -19,6 +20,7 @@ interface ContractsProps {
 }
 
 function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
@@ -62,74 +64,86 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
     return null;
   }
 
-  return <Space size={15} style={{ width: '100%' }} direction='vertical'>
-    <FContentText type='additional2' text={FUtil1.I18n.message('reusable_contract')} />
-    {
-      resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
+  return (<>
+    <Space size={15} style={{ width: '100%' }} direction='vertical'>
+      <FContentText type='additional2' text={FUtil1.I18n.message('reusable_contract')} />
+      {
+        resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
 
-        <div style={{ height: 15 }} />
-        <div className={styles.PolicyGrammarName}>
-          <Space size={10}>
-            <span>{k.title}</span>
-            {/*<label*/}
-            {/*  className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>*/}
-          </Space>
-          <Checkbox
-            checked={k.checked}
-            disabled={k.status !== 0}
-            onChange={(e) => onChangeChecked(e.target.checked, k)}
-          />
-        </div>
-        {/*<div style={{height: 10}}/>*/}
-
-        {/*<div style={{height: 15}}/>*/}
-        {/*<div className={styles.PolicyGrammar}>*/}
-        {/*  <pre className={styles.highlight}>{k.code}</pre>*/}
-        {/*</div>*/}
-
-        <div style={{ height: 10 }} />
-
-        <div style={{padding: '0 20px'}}>
-          <FContractDisplay contractID={k.id} />
-        </div>
-
-        <div style={{ height: 10 }} />
-
-        <Space style={{ padding: '0 20px' }} size={2}>
-          <FContentText
-            type='additional2'
-            text={FUtil1.I18n.message('contract_id') + '：' + k.id}
-          />
-          <FDivider style={{ fontSize: 14 }} />
-          <FContentText
-            type='additional2'
-            text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
-          />
-        </Space>
-
-        {/*<div style={{height: 10}}/>*/}
-
-        <div className={styles.PolicyInfo}>
-          <FContentText type='additional2' text={'当前合约在此资源上被多个版本应用：'} />
-          <div style={{ height: 8 }} />
-          {/*{FUtil.I18n.message('use_for_version')}：*/}
-          <div className={styles.allVersions}>
-            {k.versions.map((i) => <div key={i}>{i}</div>)}
+          <div style={{ height: 15 }} />
+          <div className={styles.PolicyGrammarName}>
+            <Space size={10}>
+              <span>{k.title}</span>
+              {/*<label*/}
+              {/*  className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>*/}
+            </Space>
+            <Checkbox
+              checked={k.checked}
+              disabled={k.status !== 0}
+              onChange={(e) => onChangeChecked(e.target.checked, k)}
+            />
           </div>
-        </div>
-      </div>))
-    }
+          {/*<div style={{height: 10}}/>*/}
 
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <FContentText text={'查看已终止的合约请移至'} type='negative' />
-        <FTextBtn onClick={() => {
-          window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-        }}>合约管理</FTextBtn>
-        {/*<div style={{ height: 5 }} />*/}
-      </div>
-    </div>
-  </Space>;
+          {/*<div style={{height: 15}}/>*/}
+          {/*<div className={styles.PolicyGrammar}>*/}
+          {/*  <pre className={styles.highlight}>{k.code}</pre>*/}
+          {/*</div>*/}
+
+          <div style={{ height: 10 }} />
+
+          <div style={{ padding: '0 20px' }}>
+            <FContractDisplay contractID={k.id} />
+          </div>
+
+          <div style={{ height: 10 }} />
+
+          <Space style={{ padding: '0 20px' }} size={2}>
+            <FContentText
+              type='additional2'
+              text={FUtil1.I18n.message('contract_id') + '：' + k.id}
+            />
+            <FDivider style={{ fontSize: 14 }} />
+            <FContentText
+              type='additional2'
+              text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
+            />
+          </Space>
+
+          {/*<div style={{height: 10}}/>*/}
+
+          <div className={styles.PolicyInfo}>
+            <FContentText type='additional2' text={'当前合约在此资源上被多个版本应用：'} />
+            <div style={{ height: 8 }} />
+            {/*{FUtil.I18n.message('use_for_version')}：*/}
+            <div className={styles.allVersions}>
+              {k.versions.map((i) => <div key={i}>{i}</div>)}
+            </div>
+          </div>
+        </div>))
+      }
+
+      {
+        resource.terminatedContractIDs.length > 0 && (<div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FContentText text={'查看已终止的合约请移至'} type='negative' />
+            <FTextBtn onClick={() => {
+              // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+              set_TerminatedContractIDs(resource.terminatedContractIDs);
+            }}>合约管理</FTextBtn>
+            {/*<div style={{ height: 5 }} />*/}
+          </div>
+        </div>)
+      }
+
+    </Space>
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
+  </>);
 }
 
 export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({

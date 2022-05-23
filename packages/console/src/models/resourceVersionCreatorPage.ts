@@ -34,6 +34,7 @@ export type DepResources = {
     date: string;
     versions: string[];
   }[];
+  terminatedContractIDs: string[];
   enabledPolicies: {
     checked: boolean;
     id: string;
@@ -791,6 +792,12 @@ const Model: ResourceVersionCreatorModelType = {
                   .versions.map((ccc: any) => ccc.version),
               };
             }),
+          terminatedContractIDs: data_batchContracts
+            .filter((dc: any) => {
+              return dc.licensorId === dr.resourceId && dc.status === 1;
+            }).map((dc: any) => {
+              return dc.contractId;
+            }),
           enabledPolicies: dr.policies
             .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
             .map((policy: any) => {
@@ -993,6 +1000,7 @@ const Model: ResourceVersionCreatorModelType = {
             upthrowDisabled: true,
             authProblem: false,
             enableReuseContracts: [],
+            terminatedContractIDs: [],
             enabledPolicies: [],
           };
         });
@@ -1257,7 +1265,9 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
   // 组织添加的依赖数据
   const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
 
-    const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
+    const depC: any[] = data1.filter((dc: any) => {
+      return dc.licensorId === dr.resourceId && dc.status === 0;
+    });
     const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
     // const theVersion = versions?.find((v) => v.id === dr.resourceId);
     const theVersion = draftData.dependencies.find((v) => v.id === dr.resourceId);
@@ -1288,6 +1298,12 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
             .versions.map((ccc: any) => ccc.version),
         };
       }),
+      terminatedContractIDs: data1
+        .filter((dc: any) => {
+          return dc.licensorId === dr.resourceId && dc.status === 1;
+        }).map((dc: any) => {
+          return dc.contractId;
+        }),
       enabledPolicies: dr.policies
         .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
         .map((policy: any) => {
