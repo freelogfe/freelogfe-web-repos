@@ -15,6 +15,7 @@ import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FUtil } from '@freelog/tools-lib';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -22,7 +23,7 @@ interface ContractProps {
 }
 
 function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
-
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
   const selectedResource = exhibitInfoPage.contract_Associated.find((a) => a.id === exhibitInfoPage.contract_SelectedAssociatedID);
 
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
@@ -199,14 +200,26 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
     }
 
 
-    <div style={{ height: 15 }} />
+    {
+      selectedResource && selectedResource.terminatedContractIDs.length > 0 && (<>
+        <div style={{ height: 15 }} />
 
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <FContentText text={'查看已终止的合约请移至'} type='negative' />
-      <FTextBtn onClick={() => {
-        window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-      }}>合约管理</FTextBtn>
-    </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FContentText text={'查看已终止的合约请移至'} type='negative' />
+          <FTextBtn onClick={() => {
+            set_TerminatedContractIDs(selectedResource.terminatedContractIDs)
+            // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+          }}>合约管理</FTextBtn>
+        </div>
+      </>)
+    }
+
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
 
   </div>);
 }

@@ -514,6 +514,7 @@ const Model: ExhibitInfoPageModelType = {
                     policyId: c.policyId,
                     exhibitOpen: false,
                   })),
+                terminatedContractIDs: r.terminatedContractIDs,
                 policies: r.policies
                   .filter((p) => {
                     // console.log(p, 'p90234');
@@ -1191,6 +1192,7 @@ export type HandleRelationResult = {
     status: 'active' | 'testActive' | 'inactive' | 'terminal';
     policyId: string;
   }[];
+  terminatedContractIDs: string[];
   policies: PolicyFullInfo_Type[];
 }[];
 
@@ -1240,6 +1242,13 @@ export async function handleRelation(params: HandleRelationParams, nodeID: numbe
       resourceType: resource.resourceType,
       status: resource.status,
       contracts: contracts,
+      terminatedContractIDs: allContracts
+        .filter((acts: any) => {
+          return acts.licensorId === resource.resourceId && acts.status === 1;
+        })
+        .map((acts: any) => {
+          return acts.contractId;
+        }),
       policies: resource.policies
         // .filter((p: any) => {
         //   return !allContracts
