@@ -51,6 +51,7 @@ export interface ExhibitInfoPageModelState {
       policyId: string;
       exhibitOpen: boolean;
     }[];
+    terminatedContractIDs: string[];
     policies: PolicyFullInfo_Type[];
   }[];
 
@@ -444,6 +445,7 @@ const Model: ExhibitInfoPageModelType = {
             contractIDs: resvr.contracts.map((cccc: any) => {
               return cccc.contractId;
             }),
+            terminatedContractIDs: [],
           };
         });
       }).flat();

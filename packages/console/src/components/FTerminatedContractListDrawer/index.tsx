@@ -16,6 +16,13 @@ import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 
 interface FTerminatedContractListDrawerProps {
   terminatedContractIDs?: string[];
+
+  counterpartyInfo?: {
+    licenseeIdentityType: 1 | 2 | 3; // 可选	int	乙方身份类型 1:资源方 2:节点方 3:C端用户
+    licensorId: string; // 可选	string	甲方ID
+    licenseeId: string; // 可选	string	乙方ID
+  };
+
   onClose?: () => void;
 }
 
@@ -36,7 +43,6 @@ interface FTerminatedContractListDrawerStates {
     contractID: string;
   }[];
   contractDetailID: string;
-
 }
 
 const initStates: FTerminatedContractListDrawerStates = {
@@ -44,7 +50,11 @@ const initStates: FTerminatedContractListDrawerStates = {
   contractDetailID: '',
 };
 
-function FTerminatedContractListDrawer({ terminatedContractIDs, onClose }: FTerminatedContractListDrawerProps) {
+function FTerminatedContractListDrawer({
+                                         terminatedContractIDs,
+                                         counterpartyInfo,
+                                         onClose,
+                                       }: FTerminatedContractListDrawerProps) {
 
   const [terminatedContracts, setTerminatedContracts] = React.useState<FTerminatedContractListDrawerStates['terminatedContracts']>(initStates['terminatedContracts']);
   const [contractDetailID, setContractDetailID] = React.useState<FTerminatedContractListDrawerStates['contractDetailID']>(initStates['contractDetailID']);
@@ -55,7 +65,10 @@ function FTerminatedContractListDrawer({ terminatedContractIDs, onClose }: FTerm
     //   isLoadPolicyInfo: 1,
     // };
     // console.log(params2, 'params2093lksdjflk');
-    const data = await contractList(terminatedContractIDs || []);
+    const data = await contractList({
+      contractIDs: terminatedContractIDs,
+      counterpartyInfo: counterpartyInfo,
+    });
     // console.log(data, 'data09w3oejlskdfjsdlkfj');
     const resultList: FTerminatedContractListDrawerStates['terminatedContracts'] = [
       ...(data as any[]).map<FTerminatedContractListDrawerStates['terminatedContracts'][number]>((al: any) => {
@@ -271,24 +284,45 @@ function handleContractState({
   return 'exception';
 }
 
-async function contractList(contractIDs: string[]) {
-  // const { data } = await FServiceAPI.Contract.contracts(params);
-  // console.log(data.dataList, 'data@@@@@@@@');
-  const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-    contractIds: contractIDs.join(','),
-    isLoadPolicyInfo: 1,
-  };
-  // console.log(params2, 'params2093lksdjflk');
-  const { data } = await FServiceAPI.Contract.batchContracts(params);
-  // console.log(data, 'data09ojwe3lkjsdlfkj8888');
-  const exhibitIDs: string[] = data
+interface ContractListParams {
+  contractIDs?: string[];
+  counterpartyInfo?: FTerminatedContractListDrawerProps['counterpartyInfo'];
+}
+
+async function contractList({ contractIDs, counterpartyInfo }: ContractListParams): Promise<any[]> {
+
+  if (!contractIDs && counterpartyInfo) {
+    return [];
+  }
+
+  let list: any[] = [];
+
+  if (!!contractIDs) {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+      contractIds: contractIDs.join(','),
+      isLoadPolicyInfo: 1,
+    };
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
+    list = data;
+  }
+
+  if (!!counterpartyInfo) {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+      ...counterpartyInfo,
+      isLoadPolicyInfo: 1,
+    };
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
+    list = data;
+  }
+
+  const exhibitIDs: string[] = list
     .filter((d: any) => {
       return d.subjectType === 2;
     }).map((d: any) => {
       return d.subjectId;
     });
 
-  const resourceIDs: string[] = data
+  const resourceIDs: string[] = list
     .filter((d: any) => {
       return d.subjectType === 1;
     }).map((d: any) => {
@@ -318,9 +352,9 @@ async function contractList(contractIDs: string[]) {
     // console.log(data2, '*******0920938048230480239');
     resources = data2;
   }
-  console.log(exhibits, resources, '####92093840238704230u399999999');
+  // console.log(exhibits, resources, '####92093840238704230u399999999');
   //coverImages
-  return data.map((d: any) => {
+  return list.map((d: any) => {
     // console.log(d, 'd09ioje3wlksdfjl');
     let subjectInfo: any = null;
     if (d.subjectType === 1) {
