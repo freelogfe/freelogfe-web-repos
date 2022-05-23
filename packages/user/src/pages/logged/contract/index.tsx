@@ -304,7 +304,6 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
     <div style={{ height: 30 }} />
 
-
     {
       contractPage.showPage === 'authorize'
         ? (<div className={styles.content}>

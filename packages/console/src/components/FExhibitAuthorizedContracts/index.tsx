@@ -14,6 +14,8 @@ import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FDrawer from '@/components/FDrawer';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -41,14 +43,17 @@ interface FExhibitAuthorizedContractsStates {
         disabled: boolean;
       };
     }[];
+    terminatedContractIDs: string[];
     policies: PolicyFullInfo_Type[];
   }[];
+  terminatedContractIDs: string[];
 }
 
 function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -222,7 +227,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       selectedAuthorizedContract && !selectedAuthorizedContract.disuseAuthorized && (
         <div className={styles.operatorPanel}>
           {
-            selectedAuthorizedContract.policies.length > 0 && (<>
+            selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 15 }} />
               <div className={styles.hasPolicyTip}>
                 <FInfo style={{ fontSize: 14 }} />
@@ -234,7 +239,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
           <>
             {
-              selectedAuthorizedContract.contracts
+              selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.contracts
                 .filter((c) => {
                   return c.applyToCurrentExhibit.checked;
                 })
@@ -317,7 +322,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <FContentText text={'查看已终止的合约请移至'} type='negative' />
               <FTextBtn onClick={() => {
-                window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
+                // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
               }}>合约管理</FTextBtn>
             </div>
           </>
@@ -362,6 +368,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
         </div>)
     }
 
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
   </div>);
 }
 
@@ -501,6 +513,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
         identity: rr.type,
         disuseAuthorized: rr.isSelf,
         contracts: [],
+        terminatedContractIDs: [],
         policies: [],
       };
     }
@@ -536,6 +549,13 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
           },
         };
       });
+    const terminatedContractIDs: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['terminatedContractIDs'] = allUsedContract
+      .filter((auc) => {
+        return auc.subjectId === theResource?.resourceId && auc.status === 1;
+      })
+      .map((auc) => {
+        return auc.contractId;
+      });
     /********* End 处理合约相关数据 *********************************************************/
 
     /************** Start 处理策略相关数据 *********************************************************/
@@ -556,6 +576,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       identity: rr.type,
       disuseAuthorized: rr.isSelf,
       contracts: contracts,
+      terminatedContractIDs: terminatedContractIDs,
       policies: policies,
     };
     /********* End 处理资源 ***********************************************/
