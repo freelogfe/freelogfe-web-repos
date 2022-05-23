@@ -29,6 +29,7 @@ import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -216,10 +217,15 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         <FDelete
                           style={{ color: '#EE4040', cursor: 'pointer' }}
                           onClick={() => {
-                            dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
-                              type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
-                              payload: {
-                                index: index,
+                            fConfirmModal({
+                              message: '一旦删除则无法恢复，确认删除吗？',
+                              onOk() {
+                                dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
+                                  type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
+                                  payload: {
+                                    index: index,
+                                  },
+                                });
                               },
                             });
                           }}
