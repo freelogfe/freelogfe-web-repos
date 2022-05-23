@@ -5,6 +5,7 @@ import {FContentText} from "../FText";
 import FTooltip from "../FTooltip";
 import {FInfo} from "../FIcons";
 import {FCircleBtn} from "../FButton";
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface FBasePropertiesCardsProps {
   rawProperties: {
@@ -81,7 +82,12 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
                     <FCircleBtn
                       type="danger"
                       onClick={() => {
-                        onDelete(bp.theKey);
+                        fConfirmModal({
+                          message: '一旦删除则无法恢复，确认删除吗？',
+                          onOk() {
+                            onDelete(bp.theKey);
+                          },
+                        });
                       }}
                     />
                   </div>
