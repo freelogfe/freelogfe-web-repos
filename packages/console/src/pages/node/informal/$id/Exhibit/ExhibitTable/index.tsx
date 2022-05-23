@@ -19,6 +19,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -227,17 +228,29 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
         </FTooltip>)
       }
 
+      {/*{*/}
+      {/*  onDelete && (<Popconfirm*/}
+      {/*    title={'确定删除吗？'}*/}
+      {/*    // style={{width: 200}}*/}
+      {/*    overlayStyle={{ width: 150 }}*/}
+      {/*    trigger='hover'*/}
+      {/*    getPopupContainer={() => refDom.current || document.body}*/}
+      {/*    onConfirm={() => onDelete()}*/}
+      {/*  >*/}
+      {/*    <div><FTextBtn className={styles.Delete}><FDelete /></FTextBtn></div>*/}
+      {/*  </Popconfirm>)*/}
+      {/*}*/}
       {
-        onDelete && (<Popconfirm
-          title={'确定删除吗？'}
-          // style={{width: 200}}
-          overlayStyle={{ width: 150 }}
-          trigger='hover'
-          getPopupContainer={() => refDom.current || document.body}
-          onConfirm={() => onDelete()}
-        >
-          <div><FTextBtn className={styles.Delete}><FDelete /></FTextBtn></div>
-        </Popconfirm>)
+        onDelete && (<FTextBtn
+          onClick={() => {
+            fConfirmModal({
+              message: '一旦删除则无法恢复，确认删除吗？',
+              onOk() {
+                onDelete()
+              },
+            });
+          }}
+          className={styles.Delete}><FDelete /></FTextBtn>)
       }
 
     </Space>
