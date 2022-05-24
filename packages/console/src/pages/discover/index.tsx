@@ -12,7 +12,7 @@ import { connect } from 'dva';
 import { ConnectState, MarketPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 
-interface DiscoverProps extends RouteComponentProps{
+interface DiscoverProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
   marketPage: MarketPageModelState;
 }
@@ -27,6 +27,7 @@ function Discover({ children, marketPage }: DiscoverProps) {
 
   return (<div>
     <div className={styles.top}>
+      <div style={{ height: 20 }} />
       <Poster />
       <div style={{ height: 10 }} />
       <FNavTabs
