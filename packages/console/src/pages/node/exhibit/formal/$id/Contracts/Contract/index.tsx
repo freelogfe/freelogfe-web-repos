@@ -29,10 +29,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
       payload: payload,
     });
   }
-
-// contract_ExhibitAllContractIDs: [],
-  // contract_SelectedAssociatedID: '',
-  // contract_Associated: [],
+  
   return (<div>
     {
       selectedResource?.contracts && selectedResource?.contracts.length > 0 ? (<>
@@ -204,7 +201,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <FContentText text={'查看已终止的合约请移至'} type='negative' />
           <FTextBtn onClick={() => {
-            set_TerminatedContractIDs(selectedResource.terminatedContractIDs)
+            set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
             // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
           }}>合约管理</FTextBtn>
         </div>
