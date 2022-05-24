@@ -47,7 +47,6 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
           </>)
         }
 
-
         <div style={{ height: 25 }} />
 
         <Policies />
