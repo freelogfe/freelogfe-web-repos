@@ -5,8 +5,8 @@ import styles from '@/pages/market/index/index.less';
 import {
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
-  OnClickLoadMoreBtnAction,
-  OnUnmountMarketPageAction,
+  OnClickLoadMoreBtnAction, OnMountPageAction,
+  OnUnmountMarketPageAction, OnUnmountPageAction,
 } from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
@@ -25,12 +25,14 @@ interface ResourcesProps {
 function Resources({ dispatch, marketPage }: ResourcesProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMountPageAction>({
+      type: 'marketPage/onMountPage',
+    });
   });
 
   AHooks.useUnmount(() => {
-    dispatch<OnUnmountMarketPageAction>({
-      type: 'marketPage/onUnmountMarketPage',
+    dispatch<OnUnmountPageAction>({
+      type: 'marketPage/onUnmountPage',
     });
   });
 
