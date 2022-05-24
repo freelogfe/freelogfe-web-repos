@@ -128,7 +128,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       }],
     };
 
-    const { data } = await FServiceAPI.InformalNode.updateTestResourceContracts(params);
+    await FServiceAPI.InformalNode.updateTestResourceContracts(params);
     // console.log(data, 'data@@#$@#4');
     handleData();
     onChangeAuthorize && onChangeAuthorize();
@@ -443,7 +443,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       projection: 'resourceId,resourceName,resourceType,policies',
       isTranslate: 1,
     };
-    const { data } = await FServiceAPI.Resource.batchInfo(params);
+    const { data }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
   }
 
