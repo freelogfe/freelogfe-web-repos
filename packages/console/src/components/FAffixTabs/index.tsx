@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {Affix, Tabs} from 'antd';
+import { Affix, Tabs } from 'antd';
 import styles from './index.less';
+
 // import {TabsProps} from "antd/lib/tabs";
 
 interface Tab {
@@ -14,13 +15,13 @@ interface FAffixTabsProps {
   onChange?: (value: '1' | '2') => void;
 }
 
-export default function ({options, value, onChange}: FAffixTabsProps) {
+function FAffixTabs({ options, value, onChange }: FAffixTabsProps) {
   return (<>
     <div className={styles.styles}>
       <div>
         <Tabs
           activeKey={value}
-          size="large"
+          size='large'
           className={styles.Tabs}
           onChange={(value: any) => onChange && onChange(value)}
           animated={false}
@@ -28,12 +29,13 @@ export default function ({options, value, onChange}: FAffixTabsProps) {
           // renderTabBar={(props: any, DefaultTabBar: React.ComponentClass) => <div>{DefaultTabBar}</div>}
         >
           {
-            options.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.value}/>))
+            options.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.value} />))
           }
         </Tabs>
       </div>
     </div>
-    <div style={{height: 55}}/>
+    <div style={{ height: 55 }} />
   </>);
 }
 
+export default FAffixTabs;

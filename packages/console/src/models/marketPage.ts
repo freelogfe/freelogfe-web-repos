@@ -106,10 +106,10 @@ export const initStates: MarketPageModelState = {
       value: '1',
       text: '资源市场',
     },
-    // {
-    //   value: '2',
-    //   text: '示例节点',
-    // },
+    {
+      value: '2',
+      text: '示例节点',
+    },
   ],
   tabValue: '1',
   resourceTypeOptions: [

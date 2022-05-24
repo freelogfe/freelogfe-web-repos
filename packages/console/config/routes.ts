@@ -6,14 +6,18 @@ export default [
     routes: [
       { exact: true, path: '.', redirect: '/dashboard' },
       { path: 'dashboard', component: '../pages/dashboard/index' },
-      {
-        path: 'market',
-        routes: [
-          { exact: true, path: '.', component: '../pages/market/index', title: '市场资源 - Freelog' },
-          { exact: true, path: 'example', component: '../pages/market/index', title: '示例节点 - Freelog' },
-          { component: '../pages/exception/404' },
-        ],
-      },
+      { exact: true, path: 'market', component: '../pages/discover/index', title: '市场资源 - Freelog' },
+      { exact: true, path: 'examples', component: '../pages/discover/index', title: '示例节点 - Freelog' },
+      // {
+      //   path: 'market',
+      //   routes: [
+      //     // { exact: true, path: '.', component: '../pages/market/index', title: '市场资源 - Freelog' },
+      //
+      //     // { exact: true, path: 'examples', component: '../pages/market/index', title: '示例节点 - Freelog' },
+      //
+      //     { component: '../pages/exception/404' },
+      //   ],
+      // },
       { exact: true, path: 'storage', component: '../pages/storage', title: '存储空间 - Freelog' },
       {
         path: 'node',

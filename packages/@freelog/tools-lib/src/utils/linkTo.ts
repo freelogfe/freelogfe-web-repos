@@ -42,13 +42,21 @@ export function dashboard({}: DashboardParamsType = {}) {
   return `/dashboard`;
 }
 
-// 市场
+// 资源市场
 interface MarketParamsType {
   // nodeID: number;
 }
 
 export function market({}: MarketParamsType = {}): TReturnType {
   return `/market`;
+}
+
+// 示例节点
+interface ExampleNodesParamsType {
+}
+
+export function exampleNodes({}: ExampleNodesParamsType = {}): TReturnType {
+  return `/examples`;
 }
 
 // 资源详情

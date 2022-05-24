@@ -29,7 +29,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
       payload: payload,
     });
   }
-  
+
   return (<div>
     {
       selectedResource?.contracts && selectedResource?.contracts.length > 0 ? (<>

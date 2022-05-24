@@ -1,0 +1,24 @@
+@import '../../config.less';
+
+.styles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .Link {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+    line-height: 30px;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+
+    &.activated {
+      color: #2784FF;
+      border-bottom-color: #2784FF;
+    }
+  }
+}

@@ -402,7 +402,8 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     };
     errcode: number;
     ret: number;
-  } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+  } | any
+    = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
   if (errcode !== 0 || ret !== 0 || !testResourceDetails) {
     return [];
