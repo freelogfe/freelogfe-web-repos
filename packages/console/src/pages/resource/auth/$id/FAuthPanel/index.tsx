@@ -9,6 +9,7 @@ import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { FContentText } from '@/components/FText';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -17,7 +18,9 @@ export interface FAuthPanelProps {
 
 function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
 
-  // const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
+
+  const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>
@@ -29,22 +32,34 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
       <div className={styles.contentBox}>
         <Contracts />
 
-        <div style={{ height: 15 }} />
+        {
+          activeResource && activeResource.terminatedContractIDs.length > 0 && (<>
+            <div style={{ height: 15 }} />
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FContentText text={'查看已终止的合约请移至'} type='negative' />
+                <FTextBtn onClick={() => {
+                  // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                  set_TerminatedContractIDs(activeResource.terminatedContractIDs);
+                }}>合约管理</FTextBtn>
+              </div>
+            </div>
+          </>)
+        }
 
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FContentText text={'查看已终止的合约请移至'} type='negative' />
-            <FTextBtn onClick={() => {
-              window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-            }}>合约管理</FTextBtn>
-          </div>
-        </div>
 
         <div style={{ height: 25 }} />
 
         <Policies />
       </div>
     </div>
+
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
   </div>);
 }
 
