@@ -14,7 +14,6 @@ import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import FDrawer from '@/components/FDrawer';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface FExhibitAuthorizedContractsProps {
