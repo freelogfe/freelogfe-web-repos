@@ -8,22 +8,38 @@ import Resources from '@/pages/discover/market';
 import Examples from '@/pages/market/examples';
 import FFooter from '@/layouts/FFooter';
 import { withRouter } from 'umi';
-import { connect } from 'dva';
+import { connect, Dispatch } from 'dva';
 import { ConnectState, MarketPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
+import { OnChange_ShowPage_Action } from '@/models/marketPage';
 
 interface DiscoverProps extends RouteComponentProps {
-  children: React.ReactNode | React.ReactNodeArray;
+  dispatch: Dispatch;
   marketPage: MarketPageModelState;
 }
 
-function Discover({ children, marketPage }: DiscoverProps) {
+function Discover({ dispatch, marketPage, match }: DiscoverProps) {
 
-  // function onChangeTab(value: '1' | '2') {
-  //   if (value === '2' && marketPage.tabValue !== '2') {
-  //     return window.open('https://f-presentations.freelog.com');
-  //   }
-  // }
+
+  React.useEffect(() => {
+    // console.log(match, '3908iojskdfjlskj');
+    if (match.path.startsWith(FUtil.LinkTo.market())) {
+      dispatch<OnChange_ShowPage_Action>({
+        type: 'marketPage/onChange_ShowPage',
+        payload: {
+          value: 'market',
+        },
+      });
+    }
+    if (match.path.startsWith(FUtil.LinkTo.exampleNodes())) {
+      dispatch<OnChange_ShowPage_Action>({
+        type: 'marketPage/onChange_ShowPage',
+        payload: {
+          value: 'example',
+        },
+      });
+    }
+  }, [match]);
 
   return (<div>
     <div className={styles.top}>
@@ -43,8 +59,9 @@ function Discover({ children, marketPage }: DiscoverProps) {
             href: FUtil.LinkTo.exampleNodes(),
           },
         ]}
-        activated={'market'}
+        activated={marketPage.showPage}
       />
+      {/*{console.log(marketPage.showPage, 'marketPage.showPage903iolskfdfjl')}*/}
     </div>
     <FCenterLayout>
       {/*<FAffixTabs*/}
@@ -53,8 +70,8 @@ function Discover({ children, marketPage }: DiscoverProps) {
       {/*  onChange={onChangeTab}*/}
       {/*/>*/}
 
-      {marketPage.tabValue === '1' && <Resources />}
-      {marketPage.tabValue === '2' && <Examples />}
+      {marketPage.showPage === 'market' && <Resources />}
+      {marketPage.showPage === 'example' && <Examples />}
     </FCenterLayout>
     <FFooter />
   </div>);

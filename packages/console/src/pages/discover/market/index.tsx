@@ -5,7 +5,7 @@ import styles from '@/pages/market/index/index.less';
 import {
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
-  OnClickLoadMoreBtnAction, OnMountPageAction,
+  OnClickLoadMoreBtnAction, OnMountMarketPageAction, OnMountPageAction,
   OnUnmountMarketPageAction, OnUnmountPageAction,
 } from '@/models/marketPage';
 import FInput from '@/components/FInput';
@@ -17,22 +17,22 @@ import { FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import * as AHooks from 'ahooks';
 
-interface ResourcesProps {
+interface MarketProps {
   dispatch: Dispatch;
   marketPage: MarketPageModelState,
 }
 
-function Resources({ dispatch, marketPage }: ResourcesProps) {
+function Market({ dispatch, marketPage }: MarketProps) {
 
   AHooks.useMount(() => {
-    dispatch<OnMountPageAction>({
-      type: 'marketPage/onMountPage',
+    dispatch<OnMountMarketPageAction>({
+      type: 'marketPage/onMountMarketPage',
     });
   });
 
   AHooks.useUnmount(() => {
-    dispatch<OnUnmountPageAction>({
-      type: 'marketPage/onUnmountPage',
+    dispatch<OnUnmountMarketPageAction>({
+      type: 'marketPage/onUnmountMarketPage',
     });
   });
 
@@ -126,7 +126,7 @@ function Resources({ dispatch, marketPage }: ResourcesProps) {
 
 export default connect(({ marketPage }: ConnectState) => ({
   marketPage: marketPage,
-}))(Resources);
+}))(Market);
 
 interface Labels {
   options: {

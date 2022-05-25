@@ -4,16 +4,16 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
-export interface MarketPageModelState {
-  navOptions: {
-    text: string;
-    value: string;
-  }[];
-  tabValue: '1' | '2';
+const marketStates = {};
+
+export interface DiscoverPageModelState {
+  showPage: 'market' | 'example';
   resourceTypeOptions: {
     text: string;
     value: string;
   }[];
+
+
   resourceType: string;
   inputText: string;
   dataSource: {
@@ -29,7 +29,14 @@ export interface MarketPageModelState {
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'marketPage/change';
-  payload: Partial<MarketPageModelState>;
+  payload: Partial<DiscoverPageModelState>;
+}
+
+export interface OnChange_ShowPage_Action extends AnyAction {
+  type: 'marketPage/onChange_ShowPage';
+  payload: {
+    value: 'market' | 'example';
+  };
 }
 
 export interface OnMountPageAction extends AnyAction {
@@ -46,6 +53,14 @@ export interface OnMountMarketPageAction extends AnyAction {
 
 export interface OnUnmountMarketPageAction extends AnyAction {
   type: 'marketPage/onUnmountMarketPage';
+}
+
+export interface OnMountExamplesPageAction extends AnyAction {
+  type: 'marketPage/onMountExamplesPage';
+}
+
+export interface OnUnmountExamplesPageAction extends AnyAction {
+  type: 'marketPage/onUnmountExamplesPage';
 }
 
 export interface FetchDataSourceAction extends AnyAction {
@@ -78,10 +93,11 @@ export interface OnClickLoadMoreBtnAction extends AnyAction {
   type: 'marketPage/onClickLoadMoreBtn';
 }
 
-export interface MarketModelType {
+export interface DiscoverPageModelType {
   namespace: 'marketPage';
-  state: MarketPageModelState;
+  state: DiscoverPageModelState;
   effects: {
+    onChange_ShowPage: (action: OnChange_ShowPage_Action, effects: EffectsCommandMap) => void;
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onMountMarketPage: (action: OnMountMarketPageAction, effects: EffectsCommandMap) => void;
@@ -93,25 +109,14 @@ export interface MarketModelType {
     onClickLoadMoreBtn: (action: OnClickLoadMoreBtnAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<MarketPageModelState, ChangeAction>;
+    change: DvaReducer<DiscoverPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-export const initStates: MarketPageModelState = {
-  navOptions: [
-    {
-      value: '1',
-      text: '资源市场',
-    },
-    {
-      value: '2',
-      text: '示例节点',
-    },
-  ],
-  tabValue: '1',
+const marketInitStates: Pick<DiscoverPageModelState, 'resourceTypeOptions' | 'resourceType' | 'inputText' | 'dataSource' | 'totalItem'> = {
   resourceTypeOptions: [
     {
       value: '-1',
@@ -125,14 +130,35 @@ export const initStates: MarketPageModelState = {
   totalItem: -1,
 };
 
-const Model: MarketModelType = {
+export const initStates: DiscoverPageModelState = {
+  showPage: 'market',
+
+  ...marketInitStates,
+};
+
+const Model: DiscoverPageModelType = {
 
   namespace: 'marketPage',
 
   state: initStates,
 
   effects: {
+    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+      // console.log(payload, 'payload09io3j2lksdjflkj')
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showPage: payload.value,
+        },
+      });
+    },
     * onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {
+
+    },
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
+
+    },
+    * onMountMarketPage({}: OnMountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -140,16 +166,11 @@ const Model: MarketModelType = {
         },
       });
     },
-    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
+    * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: initStates,
+        payload: marketInitStates,
       });
-    },
-    * onMountMarketPage({}: OnMountMarketPageAction, {}: EffectsCommandMap) {
-    },
-    * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
-
     },
     * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select, take }: EffectsCommandMap) {
 
@@ -157,7 +178,7 @@ const Model: MarketModelType = {
         marketPage,
       }));
 
-      let dataSource: MarketPageModelState['dataSource'] = [];
+      let dataSource: DiscoverPageModelState['dataSource'] = [];
 
       if (!payload.restart) {
         dataSource = marketPage.dataSource;
@@ -187,7 +208,7 @@ const Model: MarketModelType = {
               .filter((i) => {
                 return !existentResourceIDs.includes(i.resourceId);
               })
-              .map<MarketPageModelState['dataSource'][number]>((i: any) => {
+              .map<DiscoverPageModelState['dataSource'][number]>((i: any) => {
                 // console.log(i, 'i#@@#$@#$@#$@#$@#4234098ijosfdlksd');
                 return {
                   id: i.resourceId,
