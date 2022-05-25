@@ -35,9 +35,20 @@ function FPageFooter({}: FPageFooterProps) {
     </div>
 
     <div className={styles.footerRight}>
-      <img src={img_Police} className={styles.policeImg} alt={''} />
-      <div style={{ width: 6 }} />
-      <div className={styles.footerRightText}>粤ICP备17085716号-1</div>
+      {/*<img*/}
+      {/*  src={img_Police}*/}
+      {/*  className={styles.policeImg}*/}
+      {/*  alt={''}*/}
+      {/*  onClick={() => {*/}
+      {/*    window.open('https://beian.miit.gov.cn/');*/}
+      {/*  }}*/}
+      {/*/>*/}
+      {/*<div style={{ width: 6 }} />*/}
+      <a
+        className={styles.footerRightText}
+        href={'https://beian.miit.gov.cn/'}
+        target={'_blank'}
+      >{window.location.origin.includes('.freelog.com') ? '粤ICP备17085716号-1' : '粤ICP备17085716号-2'}</a>
       <div style={{ width: 30 }} />
       <div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>
     </div>

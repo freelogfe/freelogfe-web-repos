@@ -6,6 +6,7 @@ import FTooltip from '../FTooltip';
 import { FInfo } from '../FIcons';
 import FDivider from '../FDivider';
 import { FCircleBtn } from '../FButton';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface FCustomOptionsCardsProps {
   dataSource: {
@@ -78,7 +79,12 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
                   <FCircleBtn
                     style={{ width: 20, height: 20 }}
                     onClick={() => {
-                      onDelete(ds.theKey);
+                      fConfirmModal({
+                        message: '一旦删除则无法恢复，确认删除吗？',
+                        onOk() {
+                          onDelete(ds.theKey);
+                        },
+                      });
                     }}
                     type='danger'
                   />

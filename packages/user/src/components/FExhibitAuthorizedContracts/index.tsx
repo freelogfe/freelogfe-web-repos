@@ -14,6 +14,7 @@ import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -41,14 +42,17 @@ interface FExhibitAuthorizedContractsStates {
         disabled: boolean;
       };
     }[];
+    terminatedContractIDs: string[];
     policies: PolicyFullInfo_Type[];
   }[];
+  terminatedContractIDs: string[];
 }
 
 function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
+  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -91,17 +95,18 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       };
       errcode: number;
       ret: number;
-    } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+    } | any = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
     if (errcode !== 0 || ret !== 0 || !data_testResourceDetails) {
       return fMessage('当前测试展品异常', 'error');
     }
 
-    const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources.find((acon) => {
-      return acon.resourceId === selectedID;
-    })?.contracts.map((cstr) => {
-      return cstr.policyId;
-    }) || [];
+    const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources
+      .find((acon: any) => {
+        return acon.resourceId === selectedID;
+      })?.contracts.map((cstr: any) => {
+        return cstr.policyId;
+      }) || [];
 
     const finalEnabledPolicyIDs: string[] = enabled
       ? [
@@ -123,7 +128,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       }],
     };
 
-    const { data } = await FServiceAPI.InformalNode.updateTestResourceContracts(params);
+    await FServiceAPI.InformalNode.updateTestResourceContracts(params);
     // console.log(data, 'data@@#$@#4');
     handleData();
     onChangeAuthorize && onChangeAuthorize();
@@ -222,7 +227,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       selectedAuthorizedContract && !selectedAuthorizedContract.disuseAuthorized && (
         <div className={styles.operatorPanel}>
           {
-            selectedAuthorizedContract.policies.length > 0 && (<>
+            selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 15 }} />
               <div className={styles.hasPolicyTip}>
                 <FInfo style={{ fontSize: 14 }} />
@@ -234,7 +239,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
           <>
             {
-              selectedAuthorizedContract.contracts
+              selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.contracts
                 .filter((c) => {
                   return c.applyToCurrentExhibit.checked;
                 })
@@ -317,7 +322,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <FContentText text={'查看已终止的合约请移至'} type='negative' />
               <FTextBtn onClick={() => {
-                window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
+                // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
               }}>合约管理</FTextBtn>
             </div>
           </>
@@ -362,6 +368,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
         </div>)
     }
 
+    <FTerminatedContractListDrawer
+      terminatedContractIDs={terminatedContractIDs}
+      onClose={() => {
+        set_TerminatedContractIDs([]);
+      }}
+    />
   </div>);
 }
 
@@ -391,7 +403,8 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     };
     errcode: number;
     ret: number;
-  } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+  } | any
+    = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
   if (errcode !== 0 || ret !== 0 || !testResourceDetails) {
     return [];
@@ -400,14 +413,14 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   // console.log(testResourceDetails, 'data_testResourceDetails 309uoijklsad/lfjlk');
 
   /************** Start 获取所有资源和对象的详细信息  *****************************************/
-  const allResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return rr.type === 'resource';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
-  const allObjectIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allObjectIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return rr.type === 'object';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
 
@@ -431,7 +444,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       projection: 'resourceId,resourceName,resourceType,policies',
       isTranslate: 1,
     };
-    const { data } = await FServiceAPI.Resource.batchInfo(params);
+    const { data }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
     batchResources = data;
   }
 
@@ -458,9 +471,9 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     createDate: string;
   }[] = [];
 
-  const allNeedHandleResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allNeedHandleResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return !rr.isSelf && rr.type === 'resource';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
 
@@ -480,7 +493,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   /*********** End 获取所有需要处理资源的合同 ******************************************************/
 
   /************ Start 组织最终数据 **************************************************************************/
-  const result: FExhibitAuthorizedContractsStates['authorizedContracts'] = testResourceDetails.resolveResources.map((rr) => {
+  const result: FExhibitAuthorizedContractsStates['authorizedContracts'] = testResourceDetails.resolveResources.map((rr: any) => {
 
     /******** Start 处理对象 ***********************************************/
     if (rr.type === 'object') {
@@ -501,6 +514,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
         identity: rr.type,
         disuseAuthorized: rr.isSelf,
         contracts: [],
+        terminatedContractIDs: [],
         policies: [],
       };
     }
@@ -513,7 +527,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
 
     /********* Start 处理合约相关数据 *********************************************************/
 
-    const currentExhibitResolveResources = testResourceDetails.resolveResources.find((rere) => {
+    const currentExhibitResolveResources = testResourceDetails.resolveResources.find((rere: any) => {
       return rere.resourceId === theResource?.resourceId;
     });
 
@@ -522,7 +536,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
         return auc.subjectId === theResource?.resourceId && auc.status !== 1;
       })
       .map((auc) => {
-        const checked: boolean = currentExhibitResolveResources?.contracts.some((contract) => contract.contractId === auc.contractId) || false;
+        const checked: boolean = currentExhibitResolveResources?.contracts.some((contract: any) => contract.contractId === auc.contractId) || false;
         const disabled: boolean = checked && currentExhibitResolveResources && (currentExhibitResolveResources?.contracts.length <= 1) || false;
         return {
           contractID: auc.contractId,
@@ -535,6 +549,13 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
             disabled,
           },
         };
+      });
+    const terminatedContractIDs: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['terminatedContractIDs'] = allUsedContract
+      .filter((auc) => {
+        return auc.subjectId === theResource?.resourceId && auc.status === 1;
+      })
+      .map((auc) => {
+        return auc.contractId;
       });
     /********* End 处理合约相关数据 *********************************************************/
 
@@ -556,6 +577,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
       identity: rr.type,
       disuseAuthorized: rr.isSelf,
       contracts: contracts,
+      terminatedContractIDs: terminatedContractIDs,
       policies: policies,
     };
     /********* End 处理资源 ***********************************************/
