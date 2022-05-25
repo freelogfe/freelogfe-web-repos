@@ -95,17 +95,18 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
       };
       errcode: number;
       ret: number;
-    } = await FServiceAPI.InformalNode.testResourceDetails(params1);
+    } | any = await FServiceAPI.InformalNode.testResourceDetails(params1);
 
     if (errcode !== 0 || ret !== 0 || !data_testResourceDetails) {
       return fMessage('当前测试展品异常', 'error');
     }
 
-    const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources.find((acon) => {
-      return acon.resourceId === selectedID;
-    })?.contracts.map((cstr) => {
-      return cstr.policyId;
-    }) || [];
+    const oldPolicyIDs: string[] = data_testResourceDetails.resolveResources
+      .find((acon: any) => {
+        return acon.resourceId === selectedID;
+      })?.contracts.map((cstr: any) => {
+        return cstr.policyId;
+      }) || [];
 
     const finalEnabledPolicyIDs: string[] = enabled
       ? [
@@ -412,14 +413,14 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   // console.log(testResourceDetails, 'data_testResourceDetails 309uoijklsad/lfjlk');
 
   /************** Start 获取所有资源和对象的详细信息  *****************************************/
-  const allResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return rr.type === 'resource';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
-  const allObjectIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allObjectIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return rr.type === 'object';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
 
@@ -470,9 +471,9 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     createDate: string;
   }[] = [];
 
-  const allNeedHandleResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr) => {
+  const allNeedHandleResourceIDs: string[] = testResourceDetails.resolveResources.filter((rr: any) => {
     return !rr.isSelf && rr.type === 'resource';
-  }).map((rr) => {
+  }).map((rr: any) => {
     return rr.resourceId;
   });
 
@@ -492,7 +493,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
   /*********** End 获取所有需要处理资源的合同 ******************************************************/
 
   /************ Start 组织最终数据 **************************************************************************/
-  const result: FExhibitAuthorizedContractsStates['authorizedContracts'] = testResourceDetails.resolveResources.map((rr) => {
+  const result: FExhibitAuthorizedContractsStates['authorizedContracts'] = testResourceDetails.resolveResources.map((rr: any) => {
 
     /******** Start 处理对象 ***********************************************/
     if (rr.type === 'object') {
@@ -526,7 +527,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
 
     /********* Start 处理合约相关数据 *********************************************************/
 
-    const currentExhibitResolveResources = testResourceDetails.resolveResources.find((rere) => {
+    const currentExhibitResolveResources = testResourceDetails.resolveResources.find((rere: any) => {
       return rere.resourceId === theResource?.resourceId;
     });
 
@@ -535,7 +536,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
         return auc.subjectId === theResource?.resourceId && auc.status !== 1;
       })
       .map((auc) => {
-        const checked: boolean = currentExhibitResolveResources?.contracts.some((contract) => contract.contractId === auc.contractId) || false;
+        const checked: boolean = currentExhibitResolveResources?.contracts.some((contract: any) => contract.contractId === auc.contractId) || false;
         const disabled: boolean = checked && currentExhibitResolveResources && (currentExhibitResolveResources?.contracts.length <= 1) || false;
         return {
           contractID: auc.contractId,
