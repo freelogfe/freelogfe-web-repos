@@ -61,15 +61,8 @@ function Discover({ dispatch, marketPage, match }: DiscoverProps) {
         ]}
         activated={marketPage.showPage}
       />
-      {/*{console.log(marketPage.showPage, 'marketPage.showPage903iolskfdfjl')}*/}
     </div>
     <FCenterLayout>
-      {/*<FAffixTabs*/}
-      {/*  options={marketPage.navOptions}*/}
-      {/*  value={marketPage.tabValue}*/}
-      {/*  onChange={onChangeTab}*/}
-      {/*/>*/}
-
       {marketPage.showPage === 'market' && <Resources />}
       {marketPage.showPage === 'example' && <Examples />}
     </FCenterLayout>
