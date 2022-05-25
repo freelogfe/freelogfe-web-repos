@@ -19,8 +19,6 @@ interface DiscoverProps extends RouteComponentProps {
 }
 
 function Discover({ dispatch, marketPage, match }: DiscoverProps) {
-
-
   React.useEffect(() => {
     // console.log(match, '3908iojskdfjlskj');
     if (match.path.startsWith(FUtil.LinkTo.market())) {
