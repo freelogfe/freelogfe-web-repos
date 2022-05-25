@@ -11,7 +11,7 @@ import {
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';
-import { router } from 'umi';
+// import { router } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
