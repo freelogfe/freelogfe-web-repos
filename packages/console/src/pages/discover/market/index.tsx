@@ -38,6 +38,9 @@ function Market({ dispatch, marketPage }: MarketProps) {
 
   return (<>
     <div style={{ height: 30 }} />
+    <div>
+
+    </div>
     <div className={styles.filter}>
       <Labels
         options={marketPage.resourceTypeOptions}
