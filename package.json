@@ -8,9 +8,22 @@
   },
   "devDependencies": {
     "lerna": "^3.22.1",
-    "xproxy": "^0.2.2"
+    "xproxy": "^0.2.2",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@umijs/preset-react": "1.x",
+    "@umijs/test": "^3.5.23",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2",
+    "yorkie": "^2.0.0"
   },
   "dependencies": {
-    "@freelog/nmr_translator": "^2.2.3"
+    "@freelog/nmr_translator": "^2.2.3",
+    "react": "17.x",
+    "react-dom": "17.x",
+    "typescript": "^4.1.2",
+    "@ant-design/pro-layout": "^6.5.0",
+    "ahooks": "^3.3.8"
   }
 }
