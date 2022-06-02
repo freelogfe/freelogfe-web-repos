@@ -11,6 +11,7 @@ import UserSVG from '@/assets/user.svg';
 import { FUtil } from '@freelog/tools-lib';
 import { IRouteComponentProps, withRouter } from 'umi';
 import FUtil1 from '@/utils';
+import FFooter from '@/layouts/FFooter';
 
 interface LoggedProps extends IRouteComponentProps {
   dispatch: Dispatch;
@@ -66,6 +67,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
 
       <div className={styles.content}>
         {children}
+        <FFooter style={{position: 'relative !important',shrink: 0}}/>
       </div>
     </div>
   </FBaseLayout>);
