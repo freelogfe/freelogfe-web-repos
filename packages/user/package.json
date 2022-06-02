@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.7",
+    "@freelog/tools-lib": "^0.1.89",
     "@umijs/preset-react": "^1.8.8",
     "antd": "^4.15.6",
     "axios": "^0.21.1",
