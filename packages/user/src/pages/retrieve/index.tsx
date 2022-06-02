@@ -141,9 +141,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
         <div className="flex-column align-center flex-1">
-          <div className="flex-1"></div>
-          <div className="flex-1"></div>
-          <div className="flex-1"></div>
+          <div className="flex-3"></div>
           <div className="shrink-0 flex-column-center">
             <FTitleText className="mb-30" text={'重置  密码？'} type="h1" />
             <FTipText
@@ -151,8 +149,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               type="second"
             />
           </div>
-          <div className="flex-1"></div>
-          <div className="flex-1"></div>
+          <div className="flex-2"></div>
         </div>
         <div className=" flex-column-center shrink-0">
           <div className={styles.verificationMode}>

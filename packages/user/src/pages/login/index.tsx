@@ -53,14 +53,11 @@ function Login({ dispatch, loginPage }: LoginProps) {
         >
           {/*<i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')} />*/}
           <div className="flex-column align-center flex-1">
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
+            <div className="flex-3"></div>
             <div className="shrink-0 flex-column-center">
               <FTitleText type="h1" text={'登录freelog'} />
             </div>
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
+            <div className="flex-2"></div>
           </div>
           <div className=" flex-column-center shrink-0">
             <div className={styles.box} ref={boxRef}>

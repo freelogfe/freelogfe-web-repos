@@ -176,9 +176,7 @@ function RetrievePayPassword({
           }
         >
           <div className="flex-column align-center flex-1">
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
+            <div className="flex-3"></div>
             <div className="shrink-0 flex-column-center">
               <FTitleText text={'双重验证'} type="h1" className="mb-30" />
               <FTipText
@@ -188,8 +186,7 @@ function RetrievePayPassword({
                 type="second"
               />
             </div>
-            <div className="flex-1"></div>
-            <div className="flex-1"></div>
+            <div className="flex-2"></div>
           </div>
           <div className=" flex-column-center shrink-0">
             <div className={styles.ActivateAccountContent}>
