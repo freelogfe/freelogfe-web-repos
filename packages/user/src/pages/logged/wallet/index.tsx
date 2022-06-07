@@ -302,6 +302,13 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                       >近一年</a>
                     </div>
                     <div className={styles.filter1Keyword}>
+                      <FContentText
+                        // text={'日期区间：'}
+                        style={{ maxWidth: 70 }}
+                        singleRow
+                        text={'关键字'}
+                      />
+                      <div style={{ width: 5 }} />
                       <FInput
                         // theme='dark'
                         value={walletPage.table_Filter_Keywords}
