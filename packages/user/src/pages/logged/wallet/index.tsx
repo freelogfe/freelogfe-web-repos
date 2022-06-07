@@ -91,7 +91,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         value: walletPage.activating_SentCaptchaWait - 1,
       },
     });
-  }, walletPage.activating_SentCaptchaWait === 0 ? null : 1000);
+  }, walletPage.activating_SentCaptchaWait === 0 ? undefined : 1000);
 
   AHooks.useInterval(() => {
     dispatch<OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action>({
@@ -100,7 +100,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         value: walletPage.changingPassword_CaptchaModal_SentCaptchaWait - 1,
       },
     });
-  }, walletPage.changingPassword_CaptchaModal_SentCaptchaWait === 0 ? null : 1000);
+  }, walletPage.changingPassword_CaptchaModal_SentCaptchaWait === 0 ? undefined : 1000);
 
   const columns: ColumnsType<WalletPageModelState['table_DateSource'][number]> = [
     {
