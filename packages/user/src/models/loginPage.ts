@@ -19,6 +19,17 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<LoginPageModelState>;
 }
 
+export interface OnMountPageAction extends AnyAction {
+  type: 'loginPage/onMountPage';
+  payload: {
+    url: string;
+  };
+}
+
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'loginPage/onUnmountPage';
+}
+
 export interface InitModelStatesAction extends AnyAction {
   type: 'initModelStates';
 }
@@ -32,6 +43,8 @@ interface LoginPageModelType {
   namespace: 'loginPage';
   state: LoginPageModelState;
   effects: {
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     login: (action: LoginAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
@@ -55,6 +68,15 @@ const Model: LoginPageModelType = {
   namespace: 'loginPage',
   state: initStates,
   effects: {
+    * onMountPage({payload}: OnMountPageAction, {}: EffectsCommandMap) {
+      if (FUtil.Tool.getUserIDByCookies() === -1) {
+        return;
+      }
+
+      // window.location.replace(payload.url ? )
+    },
+    * onUnmountPage(action: OnUnmountPageAction, effects: EffectsCommandMap) {
+    },
     * login({ payload }: LoginAction, { call, put, select }: EffectsCommandMap) {
       const { loginPage }: ConnectState = yield select(({ loginPage }: ConnectState) => ({
         loginPage,
