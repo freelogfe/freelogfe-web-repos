@@ -781,7 +781,7 @@ const Model: ResourceVersionCreatorModelType = {
           enableReuseContracts: depC
             .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
               return {
-                checked: true,
+                checked: false,
                 id: c.contractId,
                 policyId: c.policyId,
                 title: c.contractName,
@@ -1286,7 +1286,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
       authProblem: dr.authProblem,
       enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
         return {
-          checked: true,
+          checked: false,
           id: c.contractId,
           policyId: c.policyId,
           title: c.contractName,
