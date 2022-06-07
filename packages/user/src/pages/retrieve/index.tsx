@@ -64,7 +64,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         },
       });
     },
-    retrievePage.verifyCodeReSendWait === 0 ? null : 1000,
+    retrievePage.verifyCodeReSendWait === 0 ? undefined : 1000,
   );
 
   AHooks.useInterval(
@@ -80,7 +80,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         gotoLogin();
       }
     },
-    retrievePage.waitingTimeToLogin === 0 ? null : 1000,
+    retrievePage.waitingTimeToLogin === 0 ? undefined : 1000,
   );
 
   const isVerifyModeValid: boolean =
