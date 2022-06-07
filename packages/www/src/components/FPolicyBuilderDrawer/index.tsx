@@ -1711,14 +1711,19 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
       getPopupContainer={() => refDev.current}
       dropdownRender={menu => (<>
         {menu}
-        <div className={styles.dropdownRenderAdd}>
+        <div
+          className={styles.dropdownRenderAdd}
+          onClick={() => {
+            setOpen(false);
+            onClickAddStateBtn && onClickAddStateBtn();
+          }}
+        >
           <FCircleBtn
             size='small'
             type='minor'
             onClick={() => {
               // console.log('###23948230948230480_))))))');
-              setOpen(false);
-              onClickAddStateBtn && onClickAddStateBtn();
+
             }}
           >
             <FPlus style={{ fontSize: 12 }} />
@@ -1728,8 +1733,8 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             type='primary'
             onClick={() => {
               // console.log('###23948230948230480_))))))');
-              setOpen(false);
-              onClickAddStateBtn && onClickAddStateBtn();
+              // setOpen(false);
+              // onClickAddStateBtn && onClickAddStateBtn();
             }}
           >新建状态</FTextBtn>
         </div>
