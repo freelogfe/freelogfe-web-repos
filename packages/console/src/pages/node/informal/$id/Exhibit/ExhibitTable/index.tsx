@@ -20,6 +20,7 @@ import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 import fConfirmModal from '@/components/fConfirmModal';
+import { MinusOutlined } from '@ant-design/icons';
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -131,7 +132,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       width: 123,
       render(text: any, record) {
         return (<div style={{ width: 123 }}>
-          <FContentText text={record.originInfo.version} />
+          {
+            record.originInfo.version
+              ? (<FContentText text={record.originInfo.version} />)
+              // : (<FContentText text={'---'} />)
+              : (<MinusOutlined />)
+          }
+
         </div>);
       },
     },
