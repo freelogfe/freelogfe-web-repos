@@ -64,7 +64,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         },
       });
     },
-    logonPage.verifyCodeReSendWait === 0 ? null : 1000,
+    logonPage.verifyCodeReSendWait === 0 ? undefined : 1000,
   );
 
   AHooks.useInterval(
@@ -80,7 +80,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         gotoLogin();
       }
     },
-    logonPage.waitingTimeToLogin === 0 ? null : 1000,
+    logonPage.waitingTimeToLogin === 0 ? undefined : 1000,
   );
 
   function gotoLogin() {
