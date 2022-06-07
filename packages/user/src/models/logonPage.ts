@@ -430,9 +430,9 @@ const Model: LogonPageModelType = {
         authCode: logonPage.verificationCodeInput,
       };
 
-      const { data, msg } = yield call(FServiceAPI.User.logon, params);
+      const { data, msg, errCode, ret } = yield call(FServiceAPI.User.logon, params);
 
-      if (!data) {
+      if (ret !== 0 || errCode !== 0 || !data) {
         fMessage(msg, 'error');
         return;
       }
