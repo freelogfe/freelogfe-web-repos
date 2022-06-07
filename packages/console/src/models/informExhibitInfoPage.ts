@@ -1662,6 +1662,8 @@ const Model: ExhibitInfoPageModelType = {
         return nhr;
       });
 
+      console.log(needHandleRules, 'needHandleRules999999');
+
       for (const ds of payload.value) {
         needHandleRules = mergeRules({
           oldRules: needHandleRules,
@@ -1677,11 +1679,11 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
 
-      // console.log(handleRules, '输入#########');
+      console.log(needHandleRules, '输入#########');
 
       const text: string = decompile(needHandleRules);
 
-      // console.log(text, '输出********');
+      console.log(text, '输出********');
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.node_ID,

@@ -19,7 +19,7 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
       <FHeaderNavigation
-        logoBtn={{ href: FUtil.LinkTo.home() }}
+        logoBtn={{ href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home() }}
         // showAlphaTest={true}
         // showConsoleBabel={true}
         menu={[
@@ -95,7 +95,7 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
     </Layout.Header>
 
     <div style={{ height: 70 }} />
-      
+
     <Layout.Content>{children}</Layout.Content>
   </Layout>);
   // return (<FLayout

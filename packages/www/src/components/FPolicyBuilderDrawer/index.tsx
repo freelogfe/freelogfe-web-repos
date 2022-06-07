@@ -1241,6 +1241,9 @@ function FPolicyBuilder({
                     value={code_Input}
                     options={{
                       selectOnLineNumbers: true,
+                      minimap: {
+                        enabled: false,
+                      },
                     }}
                     onChange={onChange_Code_Input}
                     editorDidMount={(editor, monaco) => {
