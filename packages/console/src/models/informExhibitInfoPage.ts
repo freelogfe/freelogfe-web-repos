@@ -1318,7 +1318,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
 
       const theValue: string = payload.theValue;
-      const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+      const textError: string = theValue.length > 30 ? '1~30个字符' : '';
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1429,7 +1429,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
 
       const theValue: string = payload.theValue;
-      const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+      const textError: string = theValue.length > 30 ? '1~30个字符' : '';
 
       yield put<ChangeAction>({
         type: 'change',
