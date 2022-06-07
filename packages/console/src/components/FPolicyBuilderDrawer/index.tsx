@@ -219,6 +219,7 @@ function FPolicyBuilder({
 
   function onChange_TitleInput(value: string) {
     setTitleInput(value);
+    setTitleInputError(verifyTitle(value, alreadyUsedTitles));
   }
 
   function onBlur_TitleInput() {
