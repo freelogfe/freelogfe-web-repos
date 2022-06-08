@@ -3,7 +3,9 @@ import NProgress from 'nprogress';
 import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
 import * as LinkTo from './linkTo';
-import {CommonReturn, RequestParamsType} from "../service-API/tools";
+// import {CommonReturn, RequestParamsType} from "../service-API/tools";
+import FServiceAPI from "../service-API";
+// import  from '../service-API';
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -111,15 +113,18 @@ export default axios;
 
 
 export async function request(config: AxiosRequestConfig, {
+// export async function request(config: any, {
   noRedirect = false,
   noErrorAlert = false,
-}: RequestParamsType = {}): Promise<CommonReturn & { data: any } | void> {
+// }: RequestParamsType = {}): Promise<CommonReturn & { data: any } | void> {
+}: any = {}): Promise<any> {
   const result: any = await axios.request(config);
   // console.log(result, 'response');
   // const {data} = response;
 
   if ((result.errCode === 30 || result.errCode === 30) && !noRedirect) {
-    return window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
+    await FServiceAPI.User.logout();
+    window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
   }
   if ((result.errcode !== 0 || result.errCode !== 0) && !noErrorAlert) {
     // window.alert(result.msg);
