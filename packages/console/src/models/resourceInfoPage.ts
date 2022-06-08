@@ -2,7 +2,7 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceInfo";
-import {MarketPageModelState} from "@/models/marketPage";
+// import {DiscoverPageModelState} from "@/models/discoverPage";
 import {FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceInfoPageModelState {
@@ -48,7 +48,7 @@ export interface ResourceInfoPageModelType {
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<MarketPageModelState, ChangeAction>;
+    change: DvaReducer<ResourceInfoPageModelState, ChangeAction>;
     onChangeIsEditing: DvaReducer<ResourceInfoPageModelState, OnChangeIsEditingAction>;
     onChangeEditor: DvaReducer<ResourceInfoPageModelState, OnChangeEditorAction>;
   };
