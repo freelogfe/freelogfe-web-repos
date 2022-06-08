@@ -28,39 +28,39 @@ export interface DiscoverPageModelState {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change' | 'marketPage/change';
+  type: 'change' | 'discoverPage/change';
   payload: Partial<DiscoverPageModelState>;
 }
 
 export interface OnChange_ShowPage_Action extends AnyAction {
-  type: 'marketPage/onChange_ShowPage';
+  type: 'discoverPage/onChange_ShowPage';
   payload: {
     value: 'market' | 'example';
   };
 }
 
 export interface OnMountPageAction extends AnyAction {
-  type: 'marketPage/onMountPage';
+  type: 'discoverPage/onMountPage';
 }
 
 export interface OnUnmountPageAction extends AnyAction {
-  type: 'marketPage/onUnmountPage';
+  type: 'discoverPage/onUnmountPage';
 }
 
 export interface OnMountMarketPageAction extends AnyAction {
-  type: 'marketPage/onMountMarketPage';
+  type: 'discoverPage/onMountMarketPage';
 }
 
 export interface OnUnmountMarketPageAction extends AnyAction {
-  type: 'marketPage/onUnmountMarketPage';
+  type: 'discoverPage/onUnmountMarketPage';
 }
 
 export interface OnMountExamplesPageAction extends AnyAction {
-  type: 'marketPage/onMountExamplesPage';
+  type: 'discoverPage/onMountExamplesPage';
 }
 
 export interface OnUnmountExamplesPageAction extends AnyAction {
-  type: 'marketPage/onUnmountExamplesPage';
+  type: 'discoverPage/onUnmountExamplesPage';
 }
 
 export interface FetchDataSourceAction extends AnyAction {
@@ -76,25 +76,25 @@ export interface FetchDataSourceAction extends AnyAction {
 // }
 
 export interface OnChangeResourceTypeAction extends AnyAction {
-  type: 'marketPage/onChangeResourceType';
+  type: 'discoverPage/onChangeResourceType';
   payload: {
     value: string;
   };
 }
 
 export interface OnChangeKeywordsAction extends AnyAction {
-  type: 'marketPage/onChangeKeywords';
+  type: 'discoverPage/onChangeKeywords';
   payload: {
     value: string;
   };
 }
 
 export interface OnClickLoadMoreBtnAction extends AnyAction {
-  type: 'marketPage/onClickLoadMoreBtn';
+  type: 'discoverPage/onClickLoadMoreBtn';
 }
 
 export interface DiscoverPageModelType {
-  namespace: 'marketPage';
+  namespace: 'discoverPage';
   state: DiscoverPageModelState;
   effects: {
     onChange_ShowPage: (action: OnChange_ShowPage_Action, effects: EffectsCommandMap) => void;
@@ -138,7 +138,7 @@ export const initStates: DiscoverPageModelState = {
 
 const Model: DiscoverPageModelType = {
 
-  namespace: 'marketPage',
+  namespace: 'discoverPage',
 
   state: initStates,
 
@@ -174,14 +174,14 @@ const Model: DiscoverPageModelType = {
     },
     * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select, take }: EffectsCommandMap) {
 
-      const { marketPage }: ConnectState = yield select(({ marketPage }: ConnectState) => ({
-        marketPage,
+      const { discoverPage }: ConnectState = yield select(({ discoverPage }: ConnectState) => ({
+        discoverPage,
       }));
 
       let dataSource: DiscoverPageModelState['dataSource'] = [];
 
       if (!payload.restart) {
-        dataSource = marketPage.dataSource;
+        dataSource = discoverPage.dataSource;
       }
 
       const existentResourceIDs: string[] = dataSource.map((ds) => {
@@ -192,8 +192,8 @@ const Model: DiscoverPageModelType = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         // startResourceId: dataSource[0]?.id,
-        keywords: marketPage.inputText,
-        resourceType: marketPage.resourceType === '-1' ? undefined : marketPage.resourceType,
+        keywords: discoverPage.inputText,
+        resourceType: discoverPage.resourceType === '-1' ? undefined : discoverPage.resourceType,
         status: 1,
       };
 

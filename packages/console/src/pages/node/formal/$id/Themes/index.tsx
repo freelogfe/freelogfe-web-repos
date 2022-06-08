@@ -14,7 +14,7 @@ import {
 } from '@/models/nodeManagerPage';
 import { router } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
-import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
+import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
@@ -64,8 +64,8 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
             tipText={FUtil1.I18n.message('manage_themes_empty')}
             btnText={FUtil1.I18n.message('btn_add_theme')}
             onClick={() => {
-              dispatch<MarketChangeAction>({
-                type: 'marketPage/change',
+              dispatch<DiscoverChangeAction>({
+                type: 'discoverPage/change',
                 payload: {
                   resourceType: 'theme',
                 },

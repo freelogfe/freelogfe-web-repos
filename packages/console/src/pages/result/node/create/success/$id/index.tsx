@@ -7,13 +7,13 @@ import { ChangeAction } from '@/models/global';
 import { Dispatch, connect } from 'dva';
 import { FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
-import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
+import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
 import FResultTip from '@/components/FResultTip';
-import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
-import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
-import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
+// import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
+// import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
+// import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import FHeaderNavigation from '@/components/FHeaderNavigation';
+// import FHeaderNavigation from '@/components/FHeaderNavigation';
 
 
 const fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'] = {
@@ -57,8 +57,8 @@ function Success({ route, dispatch }: RouterTypes & SuccessProps) {
   }, [route]);
 
   function goto() {
-    dispatch<MarketChangeAction>({
-      type: 'marketPage/change',
+    dispatch<DiscoverChangeAction>({
+      type: 'discoverPage/change',
       payload: {
         resourceType: 'theme',
       },

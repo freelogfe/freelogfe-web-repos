@@ -19,7 +19,7 @@ import {
   OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
-import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
+import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -265,8 +265,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           tipText={FUtil1.I18n.message('manage_exhibits_empty')}
           btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
           onClick={() => {
-            dispatch<MarketChangeAction>({
-              type: 'marketPage/change',
+            dispatch<DiscoverChangeAction>({
+              type: 'discoverPage/change',
               payload: {
                 resourceType: '-1',
               },

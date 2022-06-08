@@ -1,5 +1,5 @@
 import {GlobalSearchingModelState} from './globalSearching';
-import {MarketPageModelState} from './marketPage';
+import {DiscoverPageModelState} from './discoverPage';
 import {ResourceListPageModelState} from './resourceListPage';
 import {ResourceCollectPageModelState} from './resourceCollectPage';
 import {ResourceCreatorPageModelState} from './resourceCreatorPage';
@@ -25,7 +25,7 @@ import {ResourceEditorPageModelState} from './resourceEditorPage';
 export {
   // RouterHistoriesModelState,
   GlobalSearchingModelState,
-  MarketPageModelState,
+  DiscoverPageModelState,
   ResourceListPageModelState,
   ResourceCollectPageModelState,
   ResourceCreatorPageModelState,
@@ -54,7 +54,7 @@ export interface ConnectState {
     location: Location;
   };
   globalSearching: GlobalSearchingModelState,
-  marketPage: MarketPageModelState;
+  discoverPage: DiscoverPageModelState;
   resourceListPage: ResourceListPageModelState;
   resourceCollectPage: ResourceCollectPageModelState;
   resourceCreatorPage: ResourceCreatorPageModelState;

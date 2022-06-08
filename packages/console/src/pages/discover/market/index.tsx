@@ -7,7 +7,7 @@ import {
   OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction, OnMountMarketPageAction, OnMountPageAction,
   OnUnmountMarketPageAction, OnUnmountPageAction,
-} from '@/models/marketPage';
+} from '@/models/discoverPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';

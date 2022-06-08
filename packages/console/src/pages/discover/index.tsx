@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import Poster from '@/pages/market/index/Poster';
+import Poster from './Poster';
 import FNavTabs from '@/components/FNavTabs';
 import { FUtil } from '@freelog/tools-lib';
 import FCenterLayout from '@/layouts/FCenterLayout';
@@ -9,21 +9,21 @@ import Examples from './examples';
 import FFooter from '@/layouts/FFooter';
 import { withRouter } from 'umi';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketPageModelState } from '@/models/connect';
+import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
-import { OnChange_ShowPage_Action } from '@/models/marketPage';
+import { OnChange_ShowPage_Action } from '@/models/discoverPage';
 
 interface DiscoverProps extends RouteComponentProps {
   dispatch: Dispatch;
-  marketPage: MarketPageModelState;
+  discoverPage: DiscoverPageModelState;
 }
 
-function Discover({ dispatch, marketPage, match }: DiscoverProps) {
+function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
   React.useEffect(() => {
     // console.log(match, '3908iojskdfjlskj');
     if (match.path.startsWith(FUtil.LinkTo.market())) {
       dispatch<OnChange_ShowPage_Action>({
-        type: 'marketPage/onChange_ShowPage',
+        type: 'discoverPage/onChange_ShowPage',
         payload: {
           value: 'market',
         },
@@ -31,7 +31,7 @@ function Discover({ dispatch, marketPage, match }: DiscoverProps) {
     }
     if (match.path.startsWith(FUtil.LinkTo.exampleNodes())) {
       dispatch<OnChange_ShowPage_Action>({
-        type: 'marketPage/onChange_ShowPage',
+        type: 'discoverPage/onChange_ShowPage',
         payload: {
           value: 'example',
         },
@@ -57,17 +57,17 @@ function Discover({ dispatch, marketPage, match }: DiscoverProps) {
             href: FUtil.LinkTo.exampleNodes(),
           },
         ]}
-        activated={marketPage.showPage}
+        activated={discoverPage.showPage}
       />
     </div>
     <FCenterLayout>
-      {marketPage.showPage === 'market' && <Resources />}
-      {marketPage.showPage === 'example' && <Examples />}
+      {discoverPage.showPage === 'market' && <Resources />}
+      {discoverPage.showPage === 'example' && <Examples />}
     </FCenterLayout>
     <FFooter />
   </div>);
 }
 
-export default withRouter(connect(({ marketPage }: ConnectState) => ({
-  marketPage,
+export default withRouter(connect(({ discoverPage }: ConnectState) => ({
+  discoverPage,
 }))(Discover));
