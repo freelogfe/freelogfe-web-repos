@@ -317,15 +317,20 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               </>)
             }
 
-            <div style={{ height: 15 }} />
+            {
+              selectedAuthorizedContract.terminatedContractIDs.length > 0 && (<>
+                <div style={{ height: 15 }} />
 
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <FContentText text={'查看已终止的合约请移至'} type='negative' />
-              <FTextBtn onClick={() => {
-                set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
-                // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-              }}>合约管理</FTextBtn>
-            </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <FContentText text={'查看已终止的合约请移至'} type='negative' />
+                  <FTextBtn onClick={() => {
+                    set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
+                    // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                  }}>合约管理</FTextBtn>
+                </div>
+              </>)
+            }
+
           </>
 
           {
