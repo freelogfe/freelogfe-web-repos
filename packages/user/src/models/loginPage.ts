@@ -68,12 +68,11 @@ const Model: LoginPageModelType = {
   namespace: 'loginPage',
   state: initStates,
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, {}: EffectsCommandMap) {
       if (FUtil.Tool.getUserIDByCookies() === -1) {
         return;
       }
-
-      // window.location.replace(payload.url ? )
+      window.location.replace(payload.url || FUtil.Format.completeUrlByDomain('www'));
     },
     * onUnmountPage(action: OnUnmountPageAction, effects: EffectsCommandMap) {
     },

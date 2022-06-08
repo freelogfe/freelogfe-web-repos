@@ -13,7 +13,7 @@ export default defineConfig({
     {
       exact: true,
       path: '/',
-      redirect: '/login',
+      redirect: '/logged',
     },
     {
       exact: true,
