@@ -5,7 +5,8 @@
     "start": "umi dev",
     "build": "umi build",
     "test": "umi test",
-    "lint": "eslint {src,mock,tests}/**/*.{ts,tsx} --fix"
+    "lint": "eslint {src,mock,tests}/**/*.{ts,tsx} --fix",
+    "npmlink": "npm link @freelog/tools-lib"
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.6",

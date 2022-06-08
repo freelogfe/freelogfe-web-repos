@@ -7,7 +7,8 @@
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "test:coverage": "umi-test --coverage",
+    "npmlink": "npm link @freelog/tools-lib"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -22,7 +23,6 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.7",
-    "@freelog/tools-lib": "^0.1.89",
     "@umijs/preset-react": "^1.8.8",
     "ahooks": "^3.4.1",
     "antd": "^4.15.6",
