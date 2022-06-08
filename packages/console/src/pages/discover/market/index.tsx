@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketPageModelState } from '@/models/connect';
-import styles from '@/pages/market/index/index.less';
+import { ConnectState, DiscoverPageModelState } from '@/models/connect';
+import styles from './index.less';
 import {
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
@@ -19,20 +19,20 @@ import * as AHooks from 'ahooks';
 
 interface MarketProps {
   dispatch: Dispatch;
-  marketPage: MarketPageModelState,
+  discoverPage: DiscoverPageModelState,
 }
 
-function Market({ dispatch, marketPage }: MarketProps) {
+function Market({ dispatch, discoverPage }: MarketProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountMarketPageAction>({
-      type: 'marketPage/onMountMarketPage',
+      type: 'discoverPage/onMountMarketPage',
     });
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountMarketPageAction>({
-      type: 'marketPage/onUnmountMarketPage',
+      type: 'discoverPage/onUnmountMarketPage',
     });
   });
 
@@ -43,11 +43,11 @@ function Market({ dispatch, marketPage }: MarketProps) {
     </div>
     <div className={styles.filter}>
       <Labels
-        options={marketPage.resourceTypeOptions}
-        value={marketPage.resourceType}
+        options={discoverPage.resourceTypeOptions}
+        value={discoverPage.resourceType}
         onChange={(value) => {
           dispatch<OnChangeResourceTypeAction>({
-            type: 'marketPage/onChangeResourceType',
+            type: 'discoverPage/onChangeResourceType',
             payload: {
               value: value,
             },
@@ -55,11 +55,11 @@ function Market({ dispatch, marketPage }: MarketProps) {
         }}
       />
       <FInput
-        value={marketPage.inputText}
+        value={discoverPage.inputText}
         debounce={300}
         onDebounceChange={(value) => {
           dispatch<OnChangeKeywordsAction>({
-            type: 'marketPage/onChangeKeywords',
+            type: 'discoverPage/onChangeKeywords',
             payload: {
               value: value,
             },
@@ -72,16 +72,16 @@ function Market({ dispatch, marketPage }: MarketProps) {
     </div>
 
     {
-      marketPage.totalItem === -1 && (<FLoadingTip height={'calc(100vh - 140px - 50px)'} />)
+      discoverPage.totalItem === -1 && (<FLoadingTip height={'calc(100vh - 140px - 50px)'} />)
     }
 
     {
-      marketPage.dataSource.length > 0
+      discoverPage.dataSource.length > 0
         ? (<>
           <div style={{ height: 30 }} />
           <div className={styles.Content}>
             {
-              marketPage.dataSource.map((resource: any) => (
+              discoverPage.dataSource.map((resource: any) => (
                 <FResourceCard
                   key={resource.id}
                   resource={resource}
@@ -100,14 +100,14 @@ function Market({ dispatch, marketPage }: MarketProps) {
           </div>
 
           {
-            marketPage.totalItem > marketPage.dataSource.length && (<>
+            discoverPage.totalItem > discoverPage.dataSource.length && (<>
               <div style={{ height: 100 }} />
               <div className={styles.bottom}>
                 <Button
                   className={styles.loadMore}
                   onClick={() => {
                     dispatch<OnClickLoadMoreBtnAction>({
-                      type: 'marketPage/onClickLoadMoreBtn',
+                      type: 'discoverPage/onClickLoadMoreBtn',
                     });
                   }}
                 >加载更多</Button>
@@ -116,7 +116,7 @@ function Market({ dispatch, marketPage }: MarketProps) {
           }
           <div style={{ height: 200 }} />
         </>)
-        : marketPage.totalItem === 0
+        : discoverPage.totalItem === 0
           ? (<FNoDataTip
             height={'calc(100vh - 275px)'}
             tipText={'没有符合条件的资源'}
@@ -127,8 +127,8 @@ function Market({ dispatch, marketPage }: MarketProps) {
   </>);
 }
 
-export default connect(({ marketPage }: ConnectState) => ({
-  marketPage: marketPage,
+export default connect(({ discoverPage }: ConnectState) => ({
+  discoverPage: discoverPage,
 }))(Market);
 
 interface Labels {

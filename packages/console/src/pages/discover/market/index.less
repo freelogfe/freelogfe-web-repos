@@ -1,0 +1,73 @@
+@import '../../../config.less';
+
+.top {
+  background-color: white;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterTag {
+  line-height: 30px;
+  padding: 0 15px;
+  border-radius: 15px;
+  font-size: 13px;
+  color: #666;
+  display: inline-block;
+}
+
+.filterTagActive {
+  background-color: #FBF5EA;
+  color: #DCA32D;
+
+  &:hover {
+    color: #DCA32D;
+  }
+}
+
+.filterInput {
+  //height: 32px;
+  width: 160px;
+  margin-left: 30px;
+}
+
+.Content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 1540px;
+  margin-bottom: -10px;
+
+  @media (max-width: 1600px) {
+    width: 1230px;
+  }
+}
+
+.bottomPadding {
+  width: 220px;
+
+  @media (min-width: 1700px) {
+    width: 280px;
+  }
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.loadMore {
+  height: 60px;
+  width: 200px;
+  font-size: 20px;
+  color: #666;
+}
+
+.noData {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
