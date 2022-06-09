@@ -11,6 +11,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 // import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
 import AOrLink from '@/components/FHeaderNavigation/AOrLink';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ActivityProps {
   dispatch: Dispatch;
@@ -94,6 +95,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
             <div style={{ width: 560 }} />
           </div>
           <div style={{ height: 100 }} />
+          <FComponentsLib.FPageFooter />
         </>)
       }
     </div>
