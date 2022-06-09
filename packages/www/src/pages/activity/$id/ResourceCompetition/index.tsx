@@ -5,7 +5,8 @@ import Participations from '@/pages/activity/$id/ResourceCompetition/Participati
 import Reward from '@/pages/activity/$id/ResourceCompetition/Reward';
 import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
 import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
-import FPageFooter from '@/components/FPageFooter';
+// import FPageFooter from '@/components/FPageFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourceCompetitionProps {
 
@@ -24,7 +25,7 @@ function ResourceCompetition({}: ResourceCompetitionProps) {
     <div style={{ height: 100 }} />
     <Banner2 />
     <div style={{ height: 100 }} />
-    <FPageFooter />
+    <FComponentsLib.FPageFooter />
   </div>);
 }
 
