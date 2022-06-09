@@ -34,7 +34,8 @@ import moment, { Moment } from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -77,7 +78,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             {/*<Space size={5} className={styles.targetInfoLabels}>*/}
             {/*  <label>{record.contractName}</label>*/}
             {/*</Space>*/}
-            <F_Contract_And_Policy_Labels data={[{ text: record.contractName, dot: '' }]} />
+            <FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: record.contractName, dot: '' }]} />
           </div>
         </div>);
       },
