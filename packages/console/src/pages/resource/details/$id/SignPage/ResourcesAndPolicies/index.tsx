@@ -5,7 +5,8 @@ import { Drawer, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesAndPoliciesProps {
   dispatch: Dispatch;
@@ -44,7 +45,7 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
               />
             </div>
             <div className={styles.resourcePolicies}>
-              <F_Contract_And_Policy_Labels data={[
+              <FComponentsLib.F_Contract_And_Policy_Labels data={[
                 ...r.contracts
                   .filter((c) => {
                     return c.checked;
@@ -113,7 +114,7 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
                     />
                   </div>
                   <div className={styles.resourcePolicies}>
-                    <F_Contract_And_Policy_Labels data={[
+                    <FComponentsLib.F_Contract_And_Policy_Labels data={[
                       ...r.contracts
                         .filter((c) => {
                           return c.checked;

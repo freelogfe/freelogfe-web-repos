@@ -9,7 +9,8 @@ import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -72,7 +73,7 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
               text={r.type}
             />
             <div style={{ height: 5 }} />
-            <F_Contract_And_Policy_Labels data={
+            <FComponentsLib.F_Contract_And_Policy_Labels data={
               [
                 ...r.contracts
                   .filter((c) => {
@@ -169,7 +170,7 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
               text={r.type}
             />
             <div style={{ height: 5 }} />
-            <F_Contract_And_Policy_Labels data={
+            <FComponentsLib.F_Contract_And_Policy_Labels data={
               [
                 ...r.contracts
                   .filter((c) => {

@@ -27,7 +27,8 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import fMessage from '@/components/fMessage';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -220,7 +221,7 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                         <div className={styles.polices}>
                           {
                             i.policies.length > 0
-                              ? (<F_Contract_And_Policy_Labels
+                              ? (<FComponentsLib.F_Contract_And_Policy_Labels
                                 data={i.policies.map((p) => {
                                   return {
                                     text: p,

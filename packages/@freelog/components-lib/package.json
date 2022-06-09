@@ -1,6 +1,7 @@
 {
-
-  "version": "0.1.0",
+  "name": "@freelog/components-lib",
+  "author": "liu-kai-github",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,7 +19,8 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "publish": "npm publish --access public"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -34,8 +36,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@freelog/components-lib",
-  "author": "liu-kai-github",
   "module": "dist/mylib.esm.js",
   "size-limit": [
     {
@@ -62,5 +62,6 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
     "typescript": "^4.7.3"
-  }
+  },
+  "dependencies": {}
 }

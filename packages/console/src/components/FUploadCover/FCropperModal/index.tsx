@@ -4,11 +4,12 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 import { FTextBtn } from '@/components/FButton';
-import FIncrease from '@/components/FIcons/FIncrease';
-import FDecrease from '@/components/FIcons/FDecrease';
-import FRotate from '@/components/FIcons/FRotate';
+// import FIncrease from '@/components/FIcons/FIncrease';
+// import FDecrease from '@/components/FIcons/FDecrease';
+// import FRotate from '@/components/FIcons/FRotate';
 
 interface FCropperModalProps {
   uploadRef: any;
@@ -131,7 +132,7 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
             <FContentText text={'最新版本'} type={'additional2'} />
           </div>
           <div style={{ height: 12 }} />
-          <F_Contract_And_Policy_Labels data={[{ text: '授权策略', dot: '' }]} />
+          <FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: '授权策略', dot: '' }]} />
         </div>
 
         <div style={{ height: 20 }} />

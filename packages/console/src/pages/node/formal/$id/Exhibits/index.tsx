@@ -34,7 +34,8 @@ import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -90,7 +91,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <div className={styles.polices}>
               {
                 record.policies.length > 0
-                  ? (<F_Contract_And_Policy_Labels
+                  ? (<FComponentsLib.F_Contract_And_Policy_Labels
                     data={record.policies.map((l) => {
                       return {
                         text: l,

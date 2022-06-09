@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
-
+// import { Space } from 'antd';
 interface F_Contract_And_Policy_Labels_Props {
   data: {
     text: string;

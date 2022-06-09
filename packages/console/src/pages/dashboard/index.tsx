@@ -9,7 +9,8 @@ import img_Questionnaire from '@/assets/questionnaire.png';
 import img_Invite from '@/assets/invite.png';
 
 import FContent from '@/components/FIcons/FContent';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
@@ -134,7 +135,7 @@ function Dashboard({}: DashboardProps) {
                     <div style={{ height: 8 }} />
                     <FContentText text={'markdown'} />
                     <div style={{ height: 12 }} />
-                    <F_Contract_And_Policy_Labels
+                    <FComponentsLib.F_Contract_And_Policy_Labels
                       data={[{
                         text: '免费',
                         dot: '',
@@ -177,7 +178,7 @@ function Dashboard({}: DashboardProps) {
                     <div style={{ height: 8 }} />
                     <FContentText text={'markdown'} />
                     <div style={{ height: 12 }} />
-                    <F_Contract_And_Policy_Labels
+                    <FComponentsLib.F_Contract_And_Policy_Labels
                       data={[{
                         text: '免费',
                         dot: '',
@@ -220,7 +221,7 @@ function Dashboard({}: DashboardProps) {
                     <div style={{ height: 8 }} />
                     <FContentText text={'markdown'} />
                     <div style={{ height: 12 }} />
-                    <F_Contract_And_Policy_Labels
+                    <FComponentsLib.F_Contract_And_Policy_Labels
                       data={[{
                         text: '免费',
                         dot: '',

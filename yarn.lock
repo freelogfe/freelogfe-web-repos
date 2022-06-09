@@ -554,6 +554,11 @@
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
+"@freelog/components-lib@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.2.tgz#e349d8316382eff7e6b1b890cd74b1b56b1d551b"
+  integrity sha512-prK/XWCHLfmriHbHEFQ07TkOUI9QthmfEvcrpa4xxaLrjE739P1w5N/xQ8eQfirvRtN7qJT9mvziTdBHJsdgGg==
+
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"
   resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.1.26.tgz#328daec30c532421c2dba9fad6d54fa9815da077"

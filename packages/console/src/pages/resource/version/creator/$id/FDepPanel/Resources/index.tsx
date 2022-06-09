@@ -18,7 +18,8 @@ import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -151,7 +152,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       {/*    >{j.title}</label>))*/}
                       {/*}*/}
                       {
-                        !rrr.upthrow && <F_Contract_And_Policy_Labels
+                        !rrr.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
                           data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
                             .filter((k) => k.checked)
                             .map((j) => {
@@ -270,7 +271,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 {/*    >{j.title}</label>))*/}
                 {/*}*/}
                 {
-                  !i.upthrow && <F_Contract_And_Policy_Labels
+                  !i.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
                     data={[...i.enableReuseContracts, ...i.enabledPolicies]
                       .filter((k) => k.checked)
                       .map((j) => {

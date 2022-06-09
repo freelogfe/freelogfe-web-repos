@@ -8,7 +8,8 @@ import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 type EventFunc = () => void
 
@@ -118,7 +119,7 @@ function FResourceCard({
           {
             resource.policy.length > 0
               // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
-              ? (<F_Contract_And_Policy_Labels
+              ? (<FComponentsLib.F_Contract_And_Policy_Labels
                 data={resource.policy.map((p) => {
                   return {
                     text: p,
