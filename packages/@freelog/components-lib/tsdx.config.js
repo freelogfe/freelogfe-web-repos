@@ -4,7 +4,7 @@ module.exports = {
         config.plugins.push(
             postcss({
                 inject: true,
-                extract: !!options.writeMeta,
+                // extract: !!options.writeMeta,
                 modules: true, // 使用css modules
                 // namedExport: true, // 类名导出
                 camelCase: true, // 支持驼峰
