@@ -6,7 +6,8 @@ import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import FCoverImage from '@/components/FCoverImage';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import FResource from '@/components/FIcons/FResource';
 import { FNodes, FUser } from '@/components/FIcons';
@@ -140,7 +141,7 @@ function FTerminatedContractListDrawer({
             {/*<Space size={5} className={styles.targetInfoLabels}>*/}
             {/*  <label>{record.contractName}</label>*/}
             {/*</Space>*/}
-            <F_Contract_And_Policy_Labels data={[{ text: record.contractName, dot: '' }]} />
+            <FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: record.contractName, dot: '' }]} />
           </div>
         </div>);
       },

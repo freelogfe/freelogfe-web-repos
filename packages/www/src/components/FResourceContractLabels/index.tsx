@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FWarning } from '@/components/FIcons';
-import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FResourceContractLabelsProps {
   contracts: {
@@ -19,7 +20,7 @@ function FResourceContractLabels({ contracts }: FResourceContractLabelsProps) {
     </div>);
   }
 
-  return (<F_Contract_And_Policy_Labels
+  return (<FComponentsLib.F_Contract_And_Policy_Labels
     data={contracts.map((c) => {
       return {
         text: c.name,
