@@ -1,0 +1,45 @@
+@import '../../config.less';
+
+.footer {
+  height: 70px;
+  background-color: #FAFBFC;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .footerLeft {
+    display: flex;
+
+    .footerLeft_Link {
+      font-size: 14px;
+      font-weight: 400;
+      color: #222;
+      line-height: 20px;
+      transition: color .2s;
+
+      &:hover {
+        color: @f-primary-color;
+      }
+    }
+  }
+
+  .footerRight {
+    display: flex;
+    align-items: center;
+
+    .policeImg {
+      width: 16px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .footerRightText {
+      font-size: 12px;
+      font-weight: 400;
+      color: #666666;
+      line-height: 18px;
+      cursor: pointer;
+    }
+  }
+}

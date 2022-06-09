@@ -1,0 +1,42 @@
+@import '../../../config.less';
+
+.NavList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .NavItem {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    color: #222;
+    transition: none;
+    padding: 0 70px 0 20px;
+
+    &.active {
+      color: @f-primary-color;
+    }
+
+    &:hover {
+      color: white;
+      background-color: @f-primary-color;
+    }
+  }
+
+  .newButton {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    color: #222;
+    transition: none;
+    border-top: 1px solid #E4E7EB;
+
+    &:hover {
+      color: white;
+      background-color: @f-primary-color;
+    }
+  }
+}
+
+
