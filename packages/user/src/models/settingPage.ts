@@ -692,7 +692,7 @@ const Model: SettingPageModelType = {
             };
           }),
 
-          nodeDataSize: data2?.totalFileSize ? FUtil.Format.humanizeSize(data2.totalFileSize) : '',
+          nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
       });
     },
