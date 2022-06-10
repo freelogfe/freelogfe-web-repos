@@ -11,7 +11,7 @@ import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import * as AHooks from 'ahooks';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 
 import {
   OnBlurConfirmPasswordInputAction,
@@ -421,7 +421,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
           </Space>
         </div>
       </div>
-      <FFooter />
+      {/*<FFooter />*/}
     </div>
   );
 }

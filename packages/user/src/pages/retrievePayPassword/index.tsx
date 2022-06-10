@@ -5,7 +5,7 @@ import FInput from '@/components/FInput';
 import { Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 
 import {
   ConnectState,
@@ -425,7 +425,7 @@ function RetrievePayPassword({
         </div>
       )}
       <div style={{ height: 20 }} />
-      <FFooter />
+      {/*<FFooter />*/}
     </div>
   );
 }

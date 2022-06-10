@@ -15,7 +15,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import { Space } from 'antd';
 import { history } from 'umi';
 import loginCover from '@/assets/loginCover.png';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 import * as AHooks from 'ahooks';
 
 interface LoginProps {
@@ -195,7 +195,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
           </div>
         </div>
       </div>
-      <FFooter />
+      {/*<FFooter />*/}
     </div>
   );
 }

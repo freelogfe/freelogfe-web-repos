@@ -7,7 +7,7 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 
 import {
   OnBlurEmailInputAction,
@@ -408,7 +408,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           </Space>
         </div>
       </div>
-      <FFooter />
+      {/*<FFooter />*/}
     </div>
   );
 }

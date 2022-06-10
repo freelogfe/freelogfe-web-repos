@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { history } from '@@/core/history';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
