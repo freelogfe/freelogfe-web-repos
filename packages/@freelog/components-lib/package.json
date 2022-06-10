@@ -1,7 +1,7 @@
 {
   "name": "@freelog/components-lib",
   "author": "liu-kai-github",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -57,6 +57,7 @@
     "postcss-modules": "^4.3.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "rollup-plugin-img": "^1.1.0",
     "rollup-plugin-postcss": "^4.0.2",
     "size-limit": "^7.0.8",
     "tsdx": "^0.14.1",
