@@ -13,6 +13,7 @@ import * as AHooks from 'ahooks';
 import { ConnectState } from '@/models/connect';
 import FNavTabs from '@/components/FNavTabs';
 import styles from './index.less';
+import FComponentsLib from '@freelog/components-lib';
 
 // const navs = [
 //   {
@@ -98,6 +99,7 @@ function List({ match, dispatch, route }: ListProps & RouterTypes) {
       {showPage === 'myCollections' ? <Collects /> : null}
 
     </FCenterLayout>
+    <FComponentsLib.FPageFooter />
   </div>);
 }
 
