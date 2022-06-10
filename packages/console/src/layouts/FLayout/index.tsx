@@ -45,6 +45,8 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
       set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
     } else if (curRouter.pathname.startsWith('/market')) {
       set_ActiveIDs(['discover', 'market']);
+    } else if (curRouter.pathname.startsWith('/examples')) {
+      set_ActiveIDs(['discover', 'example']);
     } else {
       set_ActiveIDs(['', '']);
     }
