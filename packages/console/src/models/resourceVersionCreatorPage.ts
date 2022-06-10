@@ -1,17 +1,14 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
-import { DvaReducer, WholeReadonly } from './shared';
-import { ConnectState, DiscoverPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { DvaReducer } from './shared';
+import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import moment from 'moment';
-// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
-// import fConfirmModal from '@/components/fConfirmModal';
 
 export type DepResources = {
   id: string;
