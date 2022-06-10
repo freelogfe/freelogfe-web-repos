@@ -233,7 +233,7 @@ function PlayNewer({}: PlayNewerProps) {
           </div>
         </div>
       </div>
-      <div className="footer flex-column align-center">
+      <div className="footer flex-column align-center w-100x" style={{ zIndex: 20 }}>
         <div className="title">Freelog，专业免费的资源发行和运营平台</div>
         <div className="title2">
           支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现
