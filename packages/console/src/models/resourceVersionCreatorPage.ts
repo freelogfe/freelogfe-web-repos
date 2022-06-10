@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer, WholeReadonly } from './shared';
-import { ConnectState, MarketPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { ConnectState, DiscoverPageModelState, StorageObjectEditorModelState } from '@/models/connect';
 import { router } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
@@ -283,7 +283,7 @@ export interface ResourceVersionCreatorModelType {
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<MarketPageModelState, ChangeAction>;
+    change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
 }
