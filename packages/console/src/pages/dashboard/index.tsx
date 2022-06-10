@@ -379,7 +379,7 @@ function Dashboard({}: DashboardProps) {
     </div>
 
     <div style={{ height: 100 }} />
-
+    <FComponentsLib.FPageFooter />
   </div>);
 }
 

@@ -12,6 +12,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import { OnChange_ShowPage_Action } from '@/models/discoverPage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface DiscoverProps extends RouteComponentProps {
   dispatch: Dispatch;
@@ -64,7 +65,8 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
       {discoverPage.showPage === 'market' && <Resources />}
       {discoverPage.showPage === 'example' && <Examples />}
     </FCenterLayout>
-    <FFooter />
+    {/*<FFooter />*/}
+    <FComponentsLib.FPageFooter />
   </div>);
 }
 
