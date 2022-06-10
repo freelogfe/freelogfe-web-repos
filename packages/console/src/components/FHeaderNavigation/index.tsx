@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import { Link } from 'umi';
-// import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';

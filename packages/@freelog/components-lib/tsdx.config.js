@@ -1,4 +1,5 @@
 const postcss = require('rollup-plugin-postcss');
+const image = require('rollup-plugin-img');
 module.exports = {
     rollup(config, options) {
         config.plugins.push(
@@ -15,7 +16,12 @@ module.exports = {
                 //   // Maybe you simply want to convert dash to underscore
                 //   return name.replace(/-/g, '_')
                 // }
-            }),
+            })
+        );
+        config.plugins.push(
+            image({
+                limit: 10000
+            })
         );
         return config;
     },

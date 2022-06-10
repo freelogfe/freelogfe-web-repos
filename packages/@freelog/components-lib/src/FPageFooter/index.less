@@ -1,13 +1,14 @@
 @import '../config.less';
 
 .footer {
-  height: 70px;
-  background-color: #FAFBFC;
+  background-color: white;
   padding: 0 40px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
+  height: 106px;
 
   .footerLeft {
     display: flex;
@@ -15,13 +16,19 @@
     .footerLeft_Link {
       font-size: 14px;
       font-weight: 400;
-      color: #222;
+      color: #666;
       line-height: 20px;
       transition: color .2s;
 
       &:hover {
         color: @f-primary-color;
       }
+    }
+
+    .Divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(0, 0, 0, 0.08);
     }
   }
 
@@ -38,7 +45,7 @@
     .footerRightText {
       font-size: 12px;
       font-weight: 400;
-      color: #666666;
+      color: #666;
       line-height: 18px;
       cursor: pointer;
     }
