@@ -6,7 +6,7 @@ import { FServiceAPI } from '@freelog/tools-lib';
 export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;
-  showActivity: '' | 'ResourceCompetition';
+  showActivity: 'play-newer' | 'ResourceCompetition';
 }
 
 export interface ChangeAction extends AnyAction {
