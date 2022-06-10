@@ -32,7 +32,7 @@ interface FLayoutFooter {
 }
 
 function FFooter({dispatch, global, style}: FLayoutFooter) {
-  console.log(style)
+  // console.log(style)
   function changeLocale(value: 'zh-CN' | 'en-US' | 'pt-BR') {
     // setLocale(value === '1' ? 'zh-CN' : 'en-US');
     console.log(value, 'valuevalue');

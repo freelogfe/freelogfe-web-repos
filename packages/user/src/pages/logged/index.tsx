@@ -67,7 +67,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
 
       <div className={styles.content}>
         {children}
-        <FFooter style={{position: 'relative !important',shrink: 0}}/>
+        {/*<FFooter style={{position: 'relative !important',shrink: 0}}/>*/}
       </div>
     </div>
   </FBaseLayout>);
