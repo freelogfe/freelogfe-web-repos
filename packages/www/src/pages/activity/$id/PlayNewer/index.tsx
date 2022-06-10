@@ -38,7 +38,7 @@ function PlayNewer({}: PlayNewerProps) {
       <div className="h-664 over-h">
         <img src={banner} alt="" className="h-100x" />
       </div>
-      <div className="w-100x flex-column align-center pt-60 pb-50 px-190 profile">
+      <div className="w-100x flex-column align-center pt-60 px-190 profile">
         <div className="h-50 over-h mb-50">
           <img src={profiletitle} alt="" className="h-100x" />
         </div>
@@ -109,7 +109,7 @@ function PlayNewer({}: PlayNewerProps) {
           </div>
         </div>
       </div>
-      <div id="inner-test" className="h-10 push-test"></div>
+      <div id="inner-test" className="h-60 push-test"></div>
       <div className="w-100x flex-column align-center py-60 pl-190 pr-160 test">
         <div className="h-50 over-h mb-60">
           <img src={jointitle} alt="" className="h-100x" />
