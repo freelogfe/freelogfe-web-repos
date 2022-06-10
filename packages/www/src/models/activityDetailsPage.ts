@@ -6,7 +6,8 @@ import { FServiceAPI } from '@freelog/tools-lib';
 export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;
-  showActivity: 'play-newer' | 'ResourceCompetition';
+  pageTitle: string;
+  showActivity: '' | 'play-newer' | 'ResourceCompetition';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -43,6 +44,7 @@ interface ActivityDetailsPageModelType {
 const initStates: ActivityDetailsPageModelState = {
   pageState: 'loading',
   activityID: '',
+  pageTitle: '',
   showActivity: '',
 };
 
@@ -72,7 +74,8 @@ const Model: ActivityDetailsPageModelType = {
         payload: {
           pageState: 'loaded',
           activityID: payload.activityID,
-          showActivity: data.link,
+          showActivity: data?.link || '',
+          pageTitle: data?.title || '活动不存在或者已暂停',
         },
       });
     },

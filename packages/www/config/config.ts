@@ -15,12 +15,28 @@ export default defineConfig({
       component: '@/layouts/FBaseLayout/index',
       routes: [
         { exact: true, path: '.', redirect: '/home' },
-        { path: 'home', component: '@/pages/home/index' },
-        { path: 'activities', component: '@/pages/activities/index' },
-        { path: 'activity/:id', component: '@/pages/activity/$id/index' },
-        { path: 'invite', component: '@/pages/invite/index' },
-      ]
-    }
+        {
+          path: 'home',
+          component: '@/pages/home/index',
+          title: 'Freelog - 创作盛放之地',
+        },
+        {
+          path: 'activities',
+          component: '@/pages/activities/index',
+          title: '活动中心 - Freelog',
+        },
+        {
+          path: 'activity/:id',
+          component: '@/pages/activity/$id/index',
+          title: '活动详情 - Freelog',
+        },
+        {
+          path: 'invite',
+          component: '@/pages/invite/index',
+          title: '邀请 - Freelog',
+        },
+      ],
+    },
   ],
   fastRefresh: {},
   devServer: {},
@@ -29,19 +45,15 @@ export default defineConfig({
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
     '/v1': {
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
   },
   hash: true,
-  locale: {
-
-  }
+  locale: {},
 });
