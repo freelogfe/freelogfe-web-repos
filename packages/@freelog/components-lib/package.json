@@ -1,7 +1,7 @@
 {
   "name": "@freelog/components-lib",
   "author": "liu-kai-github",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
