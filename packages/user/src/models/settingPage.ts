@@ -1732,14 +1732,14 @@ const Model: SettingPageModelType = {
       };
 
       const { data: data2 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
-      console.log(data2, 'data2!@#$@!#$@#4');
+      // console.log(data2, 'data2!@#$@!#$@#4');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeDataDrawerVisible: false,
           nodeDataList: [],
-          // nodeDataSize: FUtil.Format.humanizeSize(data2.totalFileSize),
+          nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
       });
     },

@@ -17,6 +17,8 @@ import {
 } from '@/models/settingPage';
 import { Moment } from 'moment';
 
+const DatePickerAsAnyType: any = DatePicker;
+
 interface ProfileProps {
   dispatch: Dispatch;
   user: UserModelState;
@@ -99,7 +101,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
               <FContentText text={'出生年月'} type='normal' />
             </div>
             <div className={styles.right}>
-              <DatePicker
+              <DatePickerAsAnyType
                 allowClear={false}
                 value={settingPage.birthday}
                 style={{ width: 220, height: 38 }}
