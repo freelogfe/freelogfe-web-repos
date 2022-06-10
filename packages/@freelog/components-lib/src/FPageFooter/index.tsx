@@ -3,6 +3,7 @@ import styles from './index.less';
 import {Space} from 'antd';
 import FIcons from "../FIcons";
 import {FUtil} from '@freelog/tools-lib';
+import {Popover} from 'antd';
 
 interface FPageFooterProps {
 
@@ -34,15 +35,54 @@ function FPageFooter({}: FPageFooterProps) {
             <div className={styles.Divider}/>
             <div style={{width: 30}}/>
             <Space size={25}>
-                <a className={styles.footerLeft_Link}>
-                    <FIcons.FWeChat/>
-                </a>
-                <a className={styles.footerLeft_Link}>
-                    <FIcons.FSina/>
-                </a>
-                <a className={styles.footerLeft_Link}>
-                    <FIcons.FLinkedin/>
-                </a>
+                <Popover
+                    overlayInnerStyle={{
+                        width: 200,
+                        padding: '8px 4px',
+                    }}
+                    content={<div className={styles.PopoverContent}>
+                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
+                        <div style={{height: 20}}/>
+                        <img/>
+                    </div>}
+                    title={null}
+                >
+                    <a className={styles.footerLeft_Link}>
+                        <FIcons.FWeChat/>
+                    </a>
+                </Popover>
+                <Popover
+                    overlayInnerStyle={{
+                        width: 200,
+                        padding: '8px 4px',
+                    }}
+                    content={<div className={styles.PopoverContent}>
+                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
+                        <div style={{height: 20}}/>
+                        <img/>
+                    </div>}
+                    title={null}
+                >
+                    <a className={styles.footerLeft_Link}>
+                        <FIcons.FSina/>
+                    </a>
+                </Popover>
+                <Popover
+                    overlayInnerStyle={{
+                        width: 200,
+                        padding: '8px 4px',
+                    }}
+                    content={<div className={styles.PopoverContent}>
+                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
+                        <div style={{height: 20}}/>
+                        <img/>
+                    </div>}
+                    title={null}
+                >
+                    <a className={styles.footerLeft_Link}>
+                        <FIcons.FLinkedin/>
+                    </a>
+                </Popover>
             </Space>
         </div>
         <div style={{height: 20}}/>
