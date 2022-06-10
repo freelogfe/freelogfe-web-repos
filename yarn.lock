@@ -554,10 +554,10 @@
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
-"@freelog/components-lib@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.2.tgz#e349d8316382eff7e6b1b890cd74b1b56b1d551b"
-  integrity sha512-prK/XWCHLfmriHbHEFQ07TkOUI9QthmfEvcrpa4xxaLrjE739P1w5N/xQ8eQfirvRtN7qJT9mvziTdBHJsdgGg==
+"@freelog/components-lib@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.npmmirror.com/@freelog/components-lib/-/components-lib-0.1.7.tgz#cd39890d1646c7f1f400a23362da3bd02d314625"
+  integrity sha512-itIjFxKMbLxnIEUvmOyZZjX/fbIHZvz3DmCzBqCSMUF3VbuSdX0eU++ZU2zcz7KdX8rgGyXQujkx3Zm0eGnhdg==
 
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"
@@ -569,10 +569,22 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
 
-"@freelog/tools-lib@^0.1.43", "@freelog/tools-lib@^0.1.91":
+"@freelog/tools-lib@^0.1.43":
   version "0.1.91"
   resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.91.tgz#4f9c3308710b2cf5f320d8928ecc6cecd3a0ee4f"
   integrity sha512-N/xcobA9BvojXr8cqiUubDQUnwZ77mOQRt5zsFoJOiXOAaJpyfMtBFLJHQ8w7N23tcn+EkFxVzpim3mmM3o6DA==
+  dependencies:
+    "@freelog/resource-policy-lang" "1.1.26"
+    "@freelog/tools-lib" "^0.1.43"
+    axios "^0.21.1"
+    crypto-js "^4.0.0"
+    moment "^2.29.1"
+    nprogress "^0.2.0"
+
+"@freelog/tools-lib@^0.1.93":
+  version "0.1.93"
+  resolved "https://registry.npmmirror.com/@freelog/tools-lib/-/tools-lib-0.1.93.tgz#4414fa5fd06b120fbec630cee9be527c04262187"
+  integrity sha512-y4DQYG5nggcLCPHmXQVAKHEGEp+3sMnb51kwmkCMUli04//zr/E5l3PJWeAgcoWlIFnGhujr7VkdsURbVnI8bA==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"

@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@freelog/components-lib": "^0.1.2",
-    "@freelog/tools-lib": "^0.1.91",
+    "@freelog/components-lib": "^0.1.7",
+    "@freelog/tools-lib": "^0.1.93",
     "ahooks": "^3.3.8",
     "react": "17.x",
     "react-dom": "17.x",
