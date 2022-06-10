@@ -105,7 +105,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         value: settingPage.changePhone_Old_CaptchaWait - 1,
       },
     });
-  }, settingPage.changePhone_Old_CaptchaWait === 0 ? null : 1000);
+  }, settingPage.changePhone_Old_CaptchaWait === 0 ? undefined : 1000);
 
   AHooks.useInterval(() => {
     dispatch<OnChange_ChangePhone_New_CaptchaWait_Action>({
@@ -114,7 +114,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         value: settingPage.changePhone_New_CaptchaWait - 1,
       },
     });
-  }, settingPage.changePhone_New_CaptchaWait === 0 ? null : 1000);
+  }, settingPage.changePhone_New_CaptchaWait === 0 ? undefined : 1000);
 
   return (<>
     <FFormLayout>
