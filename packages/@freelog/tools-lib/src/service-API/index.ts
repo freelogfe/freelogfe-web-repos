@@ -10,6 +10,7 @@ import * as Transaction from './transactions';
 import * as Captcha from './captcha';
 import * as Event from './events';
 import * as Activity from './activities';
+import * as TestQualification from './testQualifications';
 
 const FServiceAPI = {
   Node,
@@ -24,6 +25,7 @@ const FServiceAPI = {
   Captcha,
   Event,
   Activity,
+  TestQualification,
 };
 
 export default FServiceAPI;

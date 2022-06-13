@@ -5,7 +5,8 @@ export default [
     component: '../layouts/FLayout',
     routes: [
       { exact: true, path: '.', redirect: '/dashboard' },
-      { path: 'dashboard', component: '../pages/dashboard/index' },
+      { exact: true, path: 'invitation', component: '../pages/invitation/index', title: '内测资格申请 - Freelog' },
+      { exact: true, path: 'dashboard', component: '../pages/dashboard/index', title: '概览 - Freelog' },
       { exact: true, path: 'market', component: '../pages/discover/index', title: '市场资源 - Freelog' },
       { exact: true, path: 'examples', component: '../pages/discover/index', title: '示例节点 - Freelog' },
       // {
