@@ -2,6 +2,10 @@ import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import InviteForm from './components/form'
+import Invite from './components/invite'
+import InviteStatus from './components/status'
+import { Form } from 'antd';
 
 interface InvitationProps {
 
@@ -33,8 +37,8 @@ function Invitation({}: InvitationProps) {
   AHooks.useUnmount(() => {
 
   });
-
-  return (<h1>邀请注册</h1>);
+  
+  return (<InviteStatus/>);
 }
 
 export default Invitation;
