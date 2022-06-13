@@ -554,10 +554,10 @@
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
-"@freelog/components-lib@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.8.tgz#f1f56e25ade95c7b42596905b9889c172158b462"
-  integrity sha512-KDeo4xlvV5zOo7BvR3W23Ehgm/vT2J2LOKwpy0VzkK56ucOoSMRDQ0F2Xj4k3syF4+I3SVn4iAvqtlltec0bxw==
+"@freelog/components-lib@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.9.tgz#b5b638943dfa0de02eb9cd47b2828f6a314323ac"
+  integrity sha512-Gqb2g/3JipKPFHzu7uhIUlp74vkrIVALri64Kicva0m6CQNJgYM2zecwIdqmNEczzL9D+fpv4sDVWcKnBh7KTw==
 
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"
@@ -581,11 +581,10 @@
     moment "^2.29.1"
     nprogress "^0.2.0"
 
-"@freelog/tools-lib@^0.1.95":
-  version "0.1.95"
-  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.95.tgz#86ad0cc4682cfeff0dd2107d1bd04571ca124b7f"
-  integrity sha512-BKqsYWVnZEWN7BsE0/V0uMk4lblc7ip6RuXNTzIF30fSspdjCPKwKlkmCYUKCo423rK0HkxTVYc5AH9bB1CM+A==
-
+"@freelog/tools-lib@^0.1.96":
+  version "0.1.96"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.96.tgz#872738f13fc0835ea787209837b2aaf180254327"
+  integrity sha512-LlFs6qCGVJ1kGKLw23k+wy9/c9+a7UQ6FeMOReska3iaEjRvlBLsdMKbq3r+2oYkiblSmaPS6FyA5XYIiPfA7w==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"
