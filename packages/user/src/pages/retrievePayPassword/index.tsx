@@ -6,6 +6,7 @@ import { Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 // import FFooter from '@/layouts/FFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 import {
   ConnectState,
@@ -426,6 +427,7 @@ function RetrievePayPassword({
       )}
       <div style={{ height: 20 }} />
       {/*<FFooter />*/}
+      <FComponentsLib.FPageFooter />
     </div>
   );
 }

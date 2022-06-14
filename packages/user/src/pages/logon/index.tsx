@@ -8,7 +8,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 // import FFooter from '@/layouts/FFooter';
-
+import FComponentsLib from '@freelog/components-lib';
 import {
   OnBlurEmailInputAction,
   OnBlurPasswordInputAction,
@@ -120,7 +120,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           <Space size={0}>
             <FContentText
               text={`${logonPage.waitingTimeToLogin}s后返回登陆界面；`}
-              type="negative"
+              type='negative'
             />
             <FTextBtn
               onClick={() => {
@@ -141,25 +141,25 @@ function Logon({ dispatch, logonPage }: LogonProps) {
       <div
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
-        <div className="flex-column align-center flex-1">
-          <div className="flex-3"></div>
-          <div className="shrink-0 flex-column-center">
-            <FTitleText text={'注册freelog帐户'} type="h1" />
+        <div className='flex-column align-center flex-1'>
+          <div className='flex-3'></div>
+          <div className='shrink-0 flex-column-center'>
+            <FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
-          <div className="flex-2"></div>
+          <div className='flex-2'></div>
         </div>
-        <div className=" flex-column-center shrink-0">
+        <div className=' flex-column-center shrink-0'>
           <div>
             <div>
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'用户名'} />
+                <FTitleText type='h4' text={'用户名'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
             <FInput
-              placeholder="输入用户名"
+              placeholder='输入用户名'
               className={styles.input}
               wrapClassName={styles.input}
               value={logonPage.usernameInput}
@@ -184,12 +184,14 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             )}
           </div>
 
+          <div style={{ height: 20 }} />
+
           <div className={styles.verificationMode}>
             <div className={styles.verificationModeHeader}>
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'注册方式'} />
+                <FTitleText type='h4' text={'注册方式'} />
               </div>
               <Space size={25}>
                 <FRadio
@@ -203,7 +205,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'手机号'} type="additional2" />
+                  <FContentText text={'手机号'} type='additional2' />
                 </FRadio>
                 <FRadio
                   checked={logonPage.accountType === 'email'}
@@ -217,7 +219,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'邮箱'} type="additional2" />
+                  <FContentText text={'邮箱'} type='additional2' />
                 </FRadio>
               </Space>
             </div>
@@ -225,7 +227,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             {logonPage.accountType === 'phone' ? (
               <>
                 <FInput
-                  placeholder="输入11位手机号码"
+                  placeholder='输入11位手机号码'
                   className={styles.verificationModeInput}
                   wrapClassName={styles.verificationModeInput}
                   value={logonPage.phoneInput}
@@ -252,7 +254,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             ) : (
               <>
                 <FInput
-                  placeholder="输入邮箱"
+                  placeholder='输入邮箱'
                   className={styles.verificationModeInput}
                   wrapClassName={styles.verificationModeInput}
                   value={logonPage.emailInput}
@@ -284,7 +286,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'验证码'} />
+                <FTitleText type='h4' text={'验证码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -292,7 +294,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <FInput
                 className={styles.identifyingCodeInput}
                 wrapClassName={styles.identifyingCodeInput}
-                placeholder="输入验证码"
+                placeholder='输入验证码'
                 value={logonPage.verificationCodeInput}
                 onChange={(e) => {
                   dispatch<OnChangeVerifyCodeInputAction>({
@@ -338,13 +340,13 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'密码'} />
+                <FTitleText type='h4' text={'密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
             <FInput
-              type="password"
-              placeholder="密码必须包含数字和字母；且由6-24个字符组成"
+              type='password'
+              placeholder='密码必须包含数字和字母；且由6-24个字符组成'
               className={styles.input}
               wrapClassName={styles.input}
               value={logonPage.passwordInput}
@@ -383,12 +385,12 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           </FRectBtn>
         </div>
 
-        <div className="flex-1 flex-column">
+        <div className='flex-1 flex-column'>
           <Space size={0}>
-            <FContentText className="mt-95" text={'已有账户？'} type="normal" />
+            <FContentText className='mt-95' text={'已有账户？'} type='normal' />
             <FTextBtn
-              className="mt-95"
-              type="primary"
+              className='mt-95'
+              type='primary'
               onClick={() => {
                 // history.replace()
                 // window.location.replace('http://www.testfreelog.com/signup');
@@ -396,8 +398,8 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                   FUtil.LinkTo.login(
                     urlParams.goTo
                       ? {
-                          goTo: decodeURIComponent(urlParams.goTo),
-                        }
+                        goTo: decodeURIComponent(urlParams.goTo),
+                      }
                       : {},
                   ),
                 );
@@ -409,6 +411,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         </div>
       </div>
       {/*<FFooter />*/}
+      <FComponentsLib.FPageFooter />
     </div>
   );
 }
