@@ -1231,6 +1231,7 @@ const Model: SettingPageModelType = {
       }
 
       // fMessage('绑定成功', 'success');
+      fMessage('邮箱修改成功', 'success');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1601,7 +1602,7 @@ const Model: SettingPageModelType = {
       if (errCode !== 0) {
         return fMessage(msg, 'error');
       }
-
+      fMessage('手机号修改成功', 'success');
       // fMessage('绑定成功', 'success');
 
       yield put<ChangeAction>({
