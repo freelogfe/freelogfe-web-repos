@@ -120,8 +120,7 @@ function RetrievePayPassword({
                       style={{ fontSize: 12 }}
                       type='primary'
                       onClick={() => {
-                        const path: string =
-                          FUtil.LinkTo.retrieveUserPassword();
+                        const path: string = FUtil.LinkTo.retrieveUserPassword();
                         // const host: string = FUtil.Format.completeUrlByDomain('user');
                         window.open(path);
                       }}
