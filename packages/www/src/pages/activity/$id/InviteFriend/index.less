@@ -1,0 +1,207 @@
+.keyframes(@fx,@fy,@tx,@ty,@name) {
+  @keyframes @name {
+    0% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(15deg);
+    }
+    50% {
+      transform: rotate(0);
+    }
+    75% {
+      transform: rotate(-15deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  @keyframes cash {
+    0% {
+      transform: translate(0%);
+    }
+
+    100% {
+      transform: translate(192px);
+    }
+  }
+}
+//固定模式
+.animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
+  @animation-iteration-count,
+  @animation-direction) {
+  animation: @arguments;
+}
+.keyframes(0,0,0,0,packet);
+.play-newer {
+  background: #ffffff;
+  .link {
+    font-size: 14px;
+    font-weight: 400;
+    color: #2784ff;
+    line-height: 20px;
+    height: 20px;
+    &:active {
+      border-bottom: 1px solid #2784ff;
+    }
+    &:hover {
+      border-bottom: 1px solid #2784ff;
+    }
+  }
+  .red-pack {
+    cursor: pointer;
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0 30px 30px 0;
+    background: #ffffff;
+    box-shadow: 0px 2px 5px 0px rgba(233, 169, 35, 0.3);
+    border-radius: 10px;
+    .cash {
+      display: none;
+      width: 10px;
+      margin-right: -10px;
+      background: rgba(255, 255, 255, 0.5);
+      height: 100%;
+    }
+    &:hover {
+      box-shadow: 0px 2px 10px 0px rgba(233, 169, 35, 0.5) !important;
+      .packet {
+        .animation(packet,1s,linear,0s,infinite,normal );
+      }
+      .cash {
+        display: block;
+        .animation(cash,1s,linear,0s,infinite,normal );
+      }
+    }
+  }
+  .op-0 {
+    opacity: 0 !important;
+  }
+  .push-test {
+    background: #fafbfc;
+  }
+  .profile-wrap {
+    background: #fafbfc;
+  }
+  .profile {
+    width: 1440px;
+    margin: auto;
+    background: #fafbfc;
+    .titleLabel {
+      width: 16px;
+      margin-right: 20px;
+      height: 16px;
+      background: #fafbfc;
+      opacity: 0.3;
+      border: 2px solid #e9a923;
+      border-radius: 50%;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      width: 416px;
+      white-space: normal;
+      word-break: normal;
+      word-wrap: break-word;
+      color: #222222;
+      line-height: 26px;
+    }
+    .titleLabel2 {
+      width: 10px;
+      height: 2px;
+      margin-top: 10px;
+      margin-right: 23px;
+      margin-left: 3px;
+      background: #e9a923;
+      border-radius: 1px;
+      opacity: 0.3;
+    }
+    .title2 {
+      font-size: 16px;
+      font-weight: 400;
+      width: 420px;
+      white-space: normal;
+      word-break: normal;
+      word-wrap: break-word;
+      color: #222222;
+      line-height: 22px;
+    }
+  }
+  .test-wrap {
+    background: #ffffff;
+  }
+  .test {
+    width: 1440px;
+    margin: auto;
+    z-index: 20;
+    background: #ffffff;
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 28px;
+      margin-bottom: 30px;
+    }
+    .content {
+      font-size: 16px;
+      font-weight: 400;
+      color: #222222;
+      line-height: 22px;
+    }
+    .title-grey {
+      font-size: 14px;
+      font-weight: 400;
+      color: #222222;
+      line-height: 20px;
+      opacity: 40%;
+    }
+    .title-yellow {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e9a923;
+      line-height: 22px;
+      margin-bottom: 4px;
+    }
+    .content2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #222222;
+      line-height: 20px;
+      width: 560px;
+      white-space: normal;
+      margin-bottom: 15px;
+      word-break: normal;
+      word-wrap: break-word;
+    }
+    .tip {
+      font-size: 14px;
+      font-weight: 400;
+      color: #222222;
+      line-height: 20px;
+      opacity: 40%;
+      word-break: normal;
+      word-wrap: break-word;
+    }
+  }
+  .footer {
+    background: #ffffff;
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 26px;
+      margin-bottom: 30px;
+    }
+    .title2 {
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #222222;
+      line-height: 20px;
+      margin-bottom: 82px;
+    }
+  }
+}
