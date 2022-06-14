@@ -25,7 +25,8 @@ import { FLoading } from '@/components/FIcons';
 
 const errorTexts = {
   duplicated: FUtil1.I18n.message('resource_exist'),
-  size: FUtil1.I18n.message('limit_on_file_size'),
+  // size: FUtil1.I18n.message('limit_on_file_size'),
+  size: '文件大小不能超过200MB',
   resourceType: FUtil1.I18n.message('error_wrongfileformat'),
 };
 
@@ -166,8 +167,8 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
    */
   async function beforeUpload(file: RcFile) {
     // setIsChecking(true);
-    // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
-    if (file.size > 350 * 1024 * 1024) {
+    // console.log(file.size, 200 * 1024 * 1024, '########');
+    if (file.size > 200 * 1024 * 1024) {
       // setIsChecking(false);
       return onChange({
         selectedFileStatus: 1,
