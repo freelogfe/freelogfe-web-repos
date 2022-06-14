@@ -1,14 +1,15 @@
 import * as React from 'react';
 import './index.less';
-import banner from '@/assets/testplay/banner.png';
-import cartoon from '@/assets/testplay/cartoon.png';
-import cash from '@/assets/testplay/cash.png';
-import invite from '@/assets/testplay/invite.png';
-import jointitle from '@/assets/testplay/jointitle.png';
-import New from '@/assets/testplay/new.png';
-import profiletitle from '@/assets/testplay/profiletitle.png';
-import quest from '@/assets/testplay/quest.png';
-import redpacket from '@/assets/testplay/redpacket.png';
+import card from '@/assets/invitefriend/card.png';
+import cash from '@/assets/invitefriend/cash.png';
+import code from '@/assets/invitefriend/code.png';
+import friend from '@/assets/invitefriend/friend.png';
+import gift from '@/assets/invitefriend/gift.svg';
+import invite from '@/assets/invitefriend/invite.png';
+import inviteicon from '@/assets/invitefriend/inviteicon.png';
+import menu from '@/assets/invitefriend/menu.png';
+import task from '@/assets/invitefriend/task.png';
+import { FRectBtn } from '@/components/FButton';
 
 interface InviteFriendProps {}
 
@@ -26,217 +27,153 @@ function InviteFriend({}: InviteFriendProps) {
     }
   };
   return (
-    <div className={'play-newer w-100x h-100x flex-column align-center'}>
-      <div
-        className="red-pack flex-row align-center p-15"
-        onClick={() => scrollToAnchor('inner-test')}
-      >
-        <div className="h-40 over-h packet">
-          <img src={redpacket} alt="" className="h-100x" />
-        </div>
-        <div className="h-24 over-h ml-14 flex-row">
-          <div className="cash"></div>
-          <img src={cash} alt="" className="h-100x" />
-        </div>
-      </div>
-      <div className="h-664 over-h">
-        <img src={banner} alt="" className="h-100x" />
-      </div>
-      <div className="profile-wrap w-100x">
-        <div className=" flex-column align-center pt-60 px-190 profile">
-          <div className="h-50 over-h mb-50">
-            <img src={profiletitle} alt="" className="h-100x" />
+    <div className={'invite-friend flex-column align-center'}>
+      <div className="h-680 over-h flex-column w-100x">
+        <img src={invite} alt="" className="h-100x" />
+        <div className="banner">
+          <div className="flex-row mb-15  align-end">
+            <span></span>
+            <span className="title">
+              邀请好友一起参与内测，可领20元现金奖励！
+            </span>
+            <span className="tip">(被邀请好友完成任务可领3元现金奖励)</span>
           </div>
-          <div className="flex-row space-between w-100x">
-            <div className="flex-column">
-              <div className="flex-row align-center mb-40">
-                <div className="titleLabel mt-"></div>
-                <span className="title">创建、发行资源</span>
-              </div>
-              <div className="flex-row mb-27">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  资源作者可通过创建、发行优质数字资源获取资源变现收益
-                </span>
-              </div>
-              <div className="flex-row mb-27">
-                <div className="titleLabel2"></div>
-                <span className="title2">Freelog平台不参与分成</span>
-              </div>
-              <div className="flex-row mb-27">
-                <div className="titleLabel2"></div>
-                <span className="title2">资源作者可100%独享资源变现收益</span>
-              </div>
-              <div className="flex-row  mb-45">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  内测期间成功创建发行一个资源还可领取7元现金奖
-                </span>
-              </div>
-              <div className="flex-row ">
-                <div className="titleLabel2 op-0"></div>
-                <a className="link mr-40">查看图文教程</a>
-                <a className="link">查看视频教程</a>
-              </div>
-            </div>
-            <div className="flex-column">
-              <div className="flex-row align-center mb-25">
-                <div className="titleLabel"></div>
-                <span className="title">创建节点、添加展品</span>
-              </div>
-              <div className="flex-row  mb-15">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  节点商是平台资源的整合、运营推广者
-                </span>
-              </div>
-              <div className="flex-row  mb-15">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  通过创建节点，签约已发行的资源为展品，将漫画、小说等资源以展品的形式推广给资源消费者，利用自媒体流量优势获取中间收益
-                </span>
-              </div>
-              <div className="flex-row  mb-15">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  资源作者可同时创建节点为节点商，签约推广自己或他人的优质资源
-                </span>
-              </div>
-              <div className="flex-row  mb-30">
-                <div className="titleLabel2"></div>
-                <span className="title2">
-                  内测期间成功创建节点、添加展品还可领取7元现金奖
-                </span>
-              </div>
-              <div className="flex-row ">
-                <div className="titleLabel2 op-0"></div>
-                <a className="link mr-40">查看图文教程</a>
-                <a className="link">查看视频教程</a>
-              </div>
-            </div>
+          <div className="flex-row mb-15">
+            <span></span>
+            <span className="title">
+              同时抽取5位成功邀请好友的用户赠送价值400元的京东购物卡！
+            </span>
+          </div>
+          <div className="flex-row mb-70">
+            <span></span>
+            <span className="title">
+              内测活动仅限800人，快快邀请好友参与吧！
+            </span>
+          </div>
+          <div className="flex-row align-end">
+            <span></span>
+            <span className="title">更多现金奖励领取方式尽在</span>
+            <span className="way px-10">Freelog内测玩法指南</span>
+            <span className="tip">(至少可领58元现金奖励哦!)</span>
           </div>
         </div>
       </div>
-      <div id="inner-test" className="h-60 push-test w-100x"></div>
-      <div className="w-100x test-wrap" style={{ zIndex: 20 }}>
-        <div className=" flex-column align-center py-60 pl-190 pr-160 test">
-          <div className="h-50 over-h mb-60">
-            <img src={jointitle} alt="" className="h-100x" />
+      <div className="flex-column praise w-100x align-center">
+        <div className="category">活动奖励</div>
+        <div className="container flex-column align-center">
+          <span className="title mt-50">奖励一</span>
+          <div className="flex-row title2 align-end">
+            <span className="">
+              活动期间，成功邀请好友参与Freelog内测，可获得对应现金奖励，累计最高可得
+            </span>
+            <span className="cash ">20元</span>
+            <span className="">现金</span>
           </div>
-          <div className="flex-row space-between w-100x">
-            <div className="flex-column">
-              <span className="title">一、内测集结！漫画、小说家召集令</span>
-              <span className="title-grey mb-15">活动时间</span>
-              <span className="content mb-30">2022/08/08～2022/10/10</span>
-              <span className="title-grey mb-15">活动内容</span>
-              <span className="content mb-15">
-                1. 创建并发行一个合规漫画或小说资源，选择添加对应的活动标签；
-              </span>
-              <span className="content mb-30">
-                2. 签约参赛资源为展品，按照展品的被签约总次数排名。
-              </span>
-              <span className="title-grey mb-8">活动奖励</span>
-              <span className="title-yellow mb-4">大触奖</span>
-              <span className="content2">
-                小说和漫画两个赛道中，展品被签约总次数排名第一的资源作者，可分别获得2000元现金奖
-              </span>
-              <span className="title-yellow mb-4">大触宣发奖</span>
-              <span className="content2">
-                参赛资源可被不同节点商签约为展品，荣获大触奖展品的节点商可参与瓜分888元现金奖
-              </span>
-              <span className="title-yellow mb-4">优秀奖</span>
-              <span className="content2">
-                两个赛道中，展品被签约总次数排名第2—10名的资源作者，可分别参与瓜分3500元现金奖
-              </span>
-              <span className="title-yellow mb-4">优秀宣发奖</span>
-              <span className="content2">
-                荣获优秀奖展品的节点商可参与瓜分888元现金奖
-              </span>
-              <span className="title-yellow mb-4">普照奖</span>
-              <span className="content2">
-                每创建并发行1个合规资源可领取5—20元现金奖励，其中游戏类资源可获得20元，
-                漫画、小说、图片等其他类型可获得5元(同一用户限领3次资源发行奖励)
-              </span>
-              <span className="title-yellow mb-4">幸运奖</span>
-              <span className="content2">
-                每周抽取一位上周参与排名活动的幸运鹅，赠送价值100元的京东购物卡
-              </span>
-            </div>
-            <div className="flex-column align-center">
-              <div className="h-360 over-h mt-38">
-                <img src={cartoon} alt="" className="h-100x" />
-              </div>
-              <div className="text-align-center mt-60 mb-70">
-                <a href="" className="link ">
-                  快快戳我了解详情参与活动吧！
-                </a>
-              </div>
-
-              <div className="tip w-400">
-                资源创作赛活动仅限漫画、小说类资源参与，无具体类型、主题要求，可直接发布往期作品参赛！
-              </div>
-              <div className="tip w-400">
-                普照奖不限资源类型，上传漫画、小说、图片、游戏、视频、音乐、功能性插件等类型资源均可。
-              </div>
-            </div>
+          <div className="h-180 over-h ">
+            <img src={cash} alt="" className="h-100x" />
           </div>
-          <div className="flex-row space-between w-100x align-center mb-30 mt-75">
-            <div className="h-360 over-h">
-              <img src={New} alt="" className="h-100x" />
+          <span className="title mt-50">奖励二</span>
+          <div className="flex-row title2 align-end">
+            <span className="">抽取5位成功邀请好友的用户，赠送价值</span>
+            <span className="cash ">400元</span>
+            <span className="">的京东购物卡（电子卡）！</span>
+          </div>
+          <div className="h-220 over-h ">
+            <img src={card} alt="" className="h-100x" />
+          </div>
+        </div>
+      </div>
+      <div className="flex-column steps w-100x align-center">
+        <div className="category">参与步骤</div>
+        <div className="container flex-column align-center pt-50">
+          <div className="flex-row space-around w-100x">
+            <span className="des w-180 ">
+              向好友分享
+              <br />
+              链接及邀请码
+            </span>
+            <span className="des w-180 ">
+              好友使用
+              <br />
+              邀请码注册
+            </span>
+            <span className="des w-180 ">
+              好友完成
+              <br />
+              指定任务
+            </span>
+            <span className="des w-180 ">
+              领取
+              <br />
+              现金奖励
+            </span>
+          </div>
+          <div className="flex-row space-around w-100x mt-40">
+            <div className="w-180 flex-column-center">
+              <div className="step flex-column-center">1</div>
             </div>
-            <div className="flex-column align-center w-600 mr-30">
-              <div className="title">二、萌新任务，完成即领20元现金奖</div>
-              <div className="content mt-30 text-break text-align-center">
-                内测活动期间，完成萌新任务中的【基础任务】、【资源任务】、【节点任务】不仅可以快速了解“如何创建发行资源、如何通过Freelog对资源进行推广变现”，
-              </div>
-              <div className="content text-break text-align-center">
-                还能领取20元现金奖励！
-              </div>
-              <a href="" className="link mt-30">
-                完成全部任务仅需**分钟，快戳我领现金奖励吧！
+            <div className="w-180 flex-column-center">
+              <div className="step flex-column-center">2</div>
+            </div>
+            <div className="w-180 flex-column-center">
+              <div className="step flex-column-center mt-12">3</div>
+              <a className="link mt-10" style={{ fontSize: '12px' }}>
+                查看指定任务
               </a>
             </div>
-          </div>
-          <div className="flex-row space-between w-100x align-center mb-30 ">
-            <div className="flex-column align-center w-600 ml-30">
-              <div className="title">三、邀请好友，领20元现金奖</div>
-              <div className="content mt-30 text-break text-align-center">
-                邀请好友参与Freelog内测，累计可领20元现金奖励，好友完成指定任务可额外领取3元现金奖励，同时抽取5位成功邀请好友的用户赠送价值400元的京东购物卡！
-              </div>
-              <div className="content text-break text-align-center">
-                还能领取20元现金奖励！
-              </div>
-              <a href="" className="link mt-30">
-                内测活动仅限800人，快快戳我邀请好友参加吧！
-              </a>
-            </div>
-            <div className="h-360 over-h">
-              <img src={invite} alt="" className="h-100x" />
+            <div className="w-180 flex-column-center">
+              <div className="step flex-column-center">4</div>
             </div>
           </div>
-          <div className="flex-row space-between w-100x align-center ">
-            <div className="h-360 over-h">
-              <img src={quest} alt="" className="h-100x" />
+          <FRectBtn className="invite-button mt-60">立即邀请</FRectBtn>
+          <div className="flex-row w-260 space-between mt-10">
+            <span className="invite-left">还可邀请 1 位好友</span>
+            <a className="get-more link">获取更多名额</a>
+          </div>
+          <div className="record mt-60 w-100x">
+            <div className="flex-row title-row align-end">
+              <div className="flex-row align-end c1">
+                <span className="title">我的邀请记录</span>
+                <span className="tip">
+                  好友在注册后的7天内完成指定任务，即可领取奖励
+                </span>
+              </div>
+              <span className="tip c2">最近更新</span>
+              <span className="tip c3">奖励进度</span>
             </div>
-            <div className="flex-column align-center w-600 mr-30">
-              <div className="title">四、参与问卷调研，领6元现金奖</div>
-              <div className="content mt-30 text-break text-align-center">
-                完成新手任务中的【资源任务】或【节点任务】后，参与用户问卷调研，即可领取6元现金奖，建设性意见或建议被采纳，可额外领取15元现金奖励！
-              </div>
-              <div className="content text-break text-align-center">
-                还能领取20元现金奖励！
-              </div>
-              <a href="" className="link mt-30">
-                快快戳我参与问卷领取现金奖吧！
-              </a>
+            <div className="flex-row row">
+              <span className="item c1">张三（88******q.com）</span>
+              <span className="item c2">2021/02/21</span>
+              <span className="item c3">已到账</span>
             </div>
           </div>
         </div>
       </div>
-      <div className="footer flex-column align-center w-100x" style={{ zIndex: 20 }}>
-        <div className="title">Freelog，专业免费的资源发行和运营平台</div>
-        <div className="title2">
-          支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现
+      <div className="flex-column tutorial w-100x align-center">
+        <div className="category">邀请攻略</div>
+        <div className="flex-row container space-between">
+          <div className="h-590 over-h ">
+            <img src={friend} alt="" className="h-100x" />
+          </div>
+          <div className="h-590 over-h ">
+            <img src={code} alt="" className="h-100x" />
+          </div>
+          <div className="h-590 over-h ">
+            <img src={task} alt="" className="h-100x" />
+          </div>
+        </div>
+      </div>
+      <div className="flex-column rule w-100x align-center">
+        <div className="category">活动规则</div>
+        <div className="flex-column container space-between">
+          <span className="">1.&nbsp; &nbsp;内测活动时间：2021/**/** - 2021/**/**；</span>
+          <span className="">2.&nbsp; &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；</span>
+          <span className="">3.&nbsp; &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；</span>
+          <span className="">4.&nbsp; &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；</span>
+          <span className="">5.&nbsp; &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于2020年***公布；</span>
+          <span className="">6.&nbsp; &nbsp;现金奖励发放方式及提现要求说明；</span>
+          <span className="">7.&nbsp; &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；</span>
+          <span className="">8.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。</span>
         </div>
       </div>
     </div>
