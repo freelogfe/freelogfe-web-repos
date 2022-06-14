@@ -10,46 +10,59 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import {
   OnBlur_BindEmail_EmailInput_Action,
-  OnBlur_BindPhone_PhoneInput_Action, OnBlur_ChangeEmail_New_EmailInput_Action,
-  OnBlur_ChangePassword_New1_PasswordInput_Action, OnBlur_ChangePassword_New2_PasswordInput_Action,
+  OnBlur_BindPhone_PhoneInput_Action,
+  OnBlur_ChangeEmail_New_EmailInput_Action,
+  OnBlur_ChangePassword_New1_PasswordInput_Action,
+  OnBlur_ChangePassword_New2_PasswordInput_Action,
   OnBlur_ChangePhone_New_PhoneInput_Action,
   OnCancel_BindEmail_Modal_Action,
   OnCancel_BindPhone_Modal_Action,
   OnCancel_ChangeEmail_New_Modal_Action,
-  OnCancel_ChangeEmail_Old_Modal_Action,
+  OnCancel_ChangeEmail_Old_Modal_Action, OnCancel_ChangeEmailVerifyPass_Action,
   OnCancel_ChangePassword_Modal_Action,
   OnCancel_ChangePhone_New_Modal_Action,
-  OnCancel_ChangePhone_Old_Modal_Action,
-  OnChange_BindEmail_CaptchaInput_Action, OnChange_BindEmail_CaptchaWait_Action,
+  OnCancel_ChangePhone_Old_Modal_Action, OnCancel_ChangePhoneVerifyPass_Action,
+  OnChange_BindEmail_CaptchaInput_Action,
+  OnChange_BindEmail_CaptchaWait_Action,
   OnChange_BindEmail_EmailInput_Action,
-  OnChange_BindPhone_CaptchaInput_Action, OnChange_BindPhone_CaptchaWait_Action,
+  OnChange_BindPhone_CaptchaInput_Action,
+  OnChange_BindPhone_CaptchaWait_Action,
   OnChange_BindPhone_PhoneInput_Action,
-  OnChange_ChangeEmail_New_CaptchaInput_Action, OnChange_ChangeEmail_New_CaptchaWait_Action,
+  OnChange_ChangeEmail_New_CaptchaInput_Action,
+  OnChange_ChangeEmail_New_CaptchaWait_Action,
   OnChange_ChangeEmail_New_EmailInput_Action,
-  OnChange_ChangeEmail_Old_CaptchaInput_Action, OnChange_ChangeEmail_Old_CaptchaWait_Action,
+  OnChange_ChangeEmail_Old_CaptchaInput_Action,
+  OnChange_ChangeEmail_Old_CaptchaWait_Action,
   OnChange_ChangePassword_New1_PasswordInput_Action,
   OnChange_ChangePassword_New2_PasswordInput_Action,
   OnChange_ChangePassword_Old_PasswordInput_Action,
-  OnChange_ChangePhone_New_CaptchaInput_Action, OnChange_ChangePhone_New_CaptchaWait_Action,
+  OnChange_ChangePhone_New_CaptchaInput_Action,
+  OnChange_ChangePhone_New_CaptchaWait_Action,
   OnChange_ChangePhone_New_PhoneInput_Action,
-  OnChange_ChangePhone_Old_CaptchaInput_Action, OnChange_ChangePhone_Old_CaptchaWait_Action,
+  OnChange_ChangePhone_Old_CaptchaInput_Action,
+  OnChange_ChangePhone_Old_CaptchaWait_Action,
   OnClick_BindEmail_ConfirmBtn_Action,
   OnClick_BindEmail_SendCaptchaBtn_Action,
   OnClick_BindEmailBtn_Action,
   OnClick_BindPhone_ConfirmBtn_Action,
-  OnClick_BindPhone_SendCaptchaBtn_Action, OnClick_BindPhoneBtn_Action,
+  OnClick_BindPhone_SendCaptchaBtn_Action,
+  OnClick_BindPhoneBtn_Action,
   OnClick_ChangeEmail_New_ConfirmBtn_Action,
   OnClick_ChangeEmail_New_SendCaptchaBtn_Action,
   OnClick_ChangeEmail_Old_NextBtn_Action,
-  OnClick_ChangeEmail_Old_SendCaptchaBtn_Action, OnClick_ChangePassword_ConfirmBtn_Action,
+  OnClick_ChangeEmail_Old_SendCaptchaBtn_Action,
+  OnClick_ChangeEmailVerifyPass_NextBtn_Action,
+  OnClick_ChangePassword_ConfirmBtn_Action,
   OnClick_ChangePasswordBtn_Action,
   OnClick_ChangePhone_New_ConfirmBtn_Action,
   OnClick_ChangePhone_New_SendCaptchaBtn_Action,
   OnClick_ChangePhone_Old_NextBtn_Action,
-  OnClick_ChangePhone_Old_SendCaptchaBtn_Action, OnClick_ReplaceEmailBtn_Action,
+  OnClick_ChangePhone_Old_SendCaptchaBtn_Action, OnClick_ChangePhoneVerifyPass_NextBtn_Action,
+  OnClick_ReplaceEmailBtn_Action,
   OnClick_ReplacePhoneBtn_Action,
 } from '@/models/settingPage';
 import * as AHooks from 'ahooks';
+import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
 // import { OnChangeWaitingTimeAction } from '@/models/logonPage';
 // import FDrawer from '@/components/FDrawer';
 
@@ -217,7 +230,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
     <Modal
       title='绑定邮箱'
-      visible={settingPage.bindEmail_ModalVisible}
+      visible={settingPage.showModal === 'bindEmail'}
       onCancel={() => {
         dispatch<OnCancel_BindEmail_Modal_Action>({
           type: 'settingPage/onCancel_BindEmail_Modal',
@@ -303,9 +316,23 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </div>
     </Modal>
 
+    <FVerifyUserPasswordModal
+      visible={settingPage.showModal === 'changeEmail_VerifyPass'}
+      onCancel={() => {
+        dispatch<OnCancel_ChangeEmailVerifyPass_Action>({
+          type: 'settingPage/onCancel_ChangeEmailVerifyPass',
+        });
+      }}
+      onSuccess={() => {
+        dispatch<OnClick_ChangeEmailVerifyPass_NextBtn_Action>({
+          type: 'settingPage/onClick_ChangeEmailVerifyPass_NextBtn',
+        });
+      }}
+    />
+
     <Modal
       title='更换邮箱身份验证'
-      visible={settingPage.changeEmail_Old_ModalVisible}
+      visible={settingPage.showModal === 'changeEmail_Old'}
       onCancel={() => {
         dispatch<OnCancel_ChangeEmail_Old_Modal_Action>({
           type: 'settingPage/onCancel_ChangeEmail_Old_Modal',
@@ -370,7 +397,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
     <Modal
       title='输入新邮箱地址'
-      visible={settingPage.changeEmail_New_ModalVisible}
+      visible={settingPage.showModal === 'changeEmail_New'}
       onCancel={() => {
         dispatch<OnCancel_ChangeEmail_New_Modal_Action>({
           type: 'settingPage/onCancel_ChangeEmail_New_Modal',
@@ -457,7 +484,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
     <Modal
       title='绑定手机'
-      visible={settingPage.bindPhone_ModalVisible}
+      visible={settingPage.showModal === 'bindPhone'}
       onCancel={() => {
         dispatch<OnCancel_BindPhone_Modal_Action>({
           type: 'settingPage/onCancel_BindPhone_Modal',
@@ -541,9 +568,23 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </div>
     </Modal>
 
+    <FVerifyUserPasswordModal
+      visible={settingPage.showModal === 'changePhone_VerifyPass'}
+      onCancel={() => {
+        dispatch<OnCancel_ChangePhoneVerifyPass_Action>({
+          type: 'settingPage/onCancel_ChangePhoneVerifyPass',
+        });
+      }}
+      onSuccess={() => {
+        dispatch<OnClick_ChangePhoneVerifyPass_NextBtn_Action>({
+          type: 'settingPage/onClick_ChangePhoneVerifyPass_NextBtn',
+        });
+      }}
+    />
+
     <Modal
       title='更换手机号身份验证'
-      visible={settingPage.changePhone_Old_ModalVisible}
+      visible={settingPage.showModal === 'changePhone_Old'}
       onCancel={() => {
         dispatch<OnCancel_ChangePhone_Old_Modal_Action>({
           type: 'settingPage/onCancel_ChangePhone_Old_Modal',
@@ -607,7 +648,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
     <Modal
       title='输入新手机号'
-      visible={settingPage.changePhone_New_ModalVisible}
+      visible={settingPage.showModal === 'changePhone_New'}
       onCancel={() => {
         dispatch<OnCancel_ChangePhone_New_Modal_Action>({
           type: 'settingPage/onCancel_ChangePhone_New_Modal',
@@ -696,7 +737,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
     <Modal
       title='修改密码'
-      visible={settingPage.changePassword_ModalVisible}
+      visible={settingPage.showModal === 'changePassword'}
       onCancel={() => {
         dispatch<OnCancel_ChangePassword_Modal_Action>({
           type: 'settingPage/onCancel_ChangePassword_Modal',
