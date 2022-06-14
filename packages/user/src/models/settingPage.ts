@@ -1720,6 +1720,8 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
+      fMessage('密码修改成功', 'success');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {

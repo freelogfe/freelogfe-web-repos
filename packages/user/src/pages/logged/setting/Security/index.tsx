@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
+import { FContentText, FTipText } from '@/components/FText';
 // import FRadio from '@/components/FRadio';
 import FInput from '@/components/FInput';
-import { Cascader, DatePicker, Input, Modal, Space } from 'antd';
+import { Modal, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
@@ -63,8 +63,6 @@ import {
 } from '@/models/settingPage';
 import * as AHooks from 'ahooks';
 import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
-// import { OnChangeWaitingTimeAction } from '@/models/logonPage';
-// import FDrawer from '@/components/FDrawer';
 
 interface SecurityProps {
   dispatch: Dispatch;
