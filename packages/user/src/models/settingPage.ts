@@ -1812,6 +1812,8 @@ const Model: SettingPageModelType = {
         return;
       }
 
+      fMessage('数据清理成功', 'success');
+
       const params2: Parameters<typeof FServiceAPI.Storage.bucketDetails>[0] = {
         bucketName: '.UserNodeData',
       };

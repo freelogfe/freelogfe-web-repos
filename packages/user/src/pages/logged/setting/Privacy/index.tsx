@@ -14,6 +14,7 @@ import {
   OnClick_DataCleaningBtn_Action,
   OnClick_NodeDate_ConfirmBtn_Action,
 } from '@/models/settingPage';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface PrivacyProps {
   dispatch: Dispatch;
@@ -71,9 +72,15 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
           })}
           type='danger1'
           onClick={() => {
-            dispatch<OnClick_NodeDate_ConfirmBtn_Action>({
-              type: 'settingPage/onClick_NodeDate_ConfirmBtn',
+            fConfirmModal({
+              message: '一旦删除则无法恢复，确认删除吗？',
+              onOk() {
+                dispatch<OnClick_NodeDate_ConfirmBtn_Action>({
+                  type: 'settingPage/onClick_NodeDate_ConfirmBtn',
+                });
+              },
             });
+
           }}
         >清理</FRectBtn>
       </Space>}
