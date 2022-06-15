@@ -25,9 +25,10 @@ import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-import FNoDataTip from '@/components/FNoDataTip';
+// import FNoDataTip from '@/components/FNoDataTip';
 import FResultTip from '@/components/FResultTip';
 import FUtil1 from '@/utils';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -62,7 +63,11 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
     });
   }, [state]);
 
-  if (marketResourcePage.isSignPage) {
+  if (marketResourcePage.page_State === 'loading') {
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
+  }
+
+  if (marketResourcePage.page_State === 'signPage') {
     return (<SignPage />);
   }
 
@@ -81,7 +86,6 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
             router.push(FUtil.LinkTo.dashboard());
           }}
         />
-
 
       </div>
     </>;

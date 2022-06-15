@@ -55,7 +55,8 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
           dispatch<ChangeAction>({
             type: 'marketResourcePage/change',
             payload: {
-              isSignPage: false,
+              page_State: 'details',
+              // isSignPage: false,
             },
           });
         }}

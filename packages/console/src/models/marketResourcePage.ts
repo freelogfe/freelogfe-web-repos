@@ -9,10 +9,12 @@ import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface MarketResourcePageModelState {
+  page_State: 'loading' | 'details' | 'signPage';
+
   resourceId: string;
   version: string;
 
-  isSignPage: boolean;
+  // isSignPage: boolean;
 
   resourceInfo: null | {
     cover: string;
@@ -177,8 +179,9 @@ interface MarketResourcePageModelType {
 }
 
 const initStates: MarketResourcePageModelState = {
+  page_State: 'loading',
   resourceId: '',
-  isSignPage: false,
+  // isSignPage: false,
   resourceInfo: {
     cover: '',
     name: '',
@@ -454,7 +457,7 @@ const Model: MarketResourcePageModelType = {
         payload: {
           signExhibitName: signExhibitName,
           signExhibitNameErrorTip: '',
-          isSignPage: true,
+          page_State: 'signPage',
         },
       });
       // window.history.pushState({}, '确认签约');
@@ -578,6 +581,7 @@ const Model: MarketResourcePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          page_State: 'details',
           resourceInfo: {
             cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
             name: data.resourceName,
