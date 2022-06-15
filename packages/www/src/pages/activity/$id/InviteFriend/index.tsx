@@ -27,34 +27,42 @@ function InviteFriend({}: InviteFriendProps) {
     }
   };
   return (
-    <div className={'invite-friend flex-column align-center'}>
-      <div className="h-680 over-h flex-column w-100x">
-        <img src={invite} alt="" className="h-100x" />
-        <div className="banner">
-          <div className="flex-row mb-15  align-end">
-            <span></span>
-            <span className="title">
-              邀请好友一起参与内测，可领20元现金奖励！
-            </span>
-            <span className="tip">(被邀请好友完成任务可领3元现金奖励)</span>
-          </div>
-          <div className="flex-row mb-15">
-            <span></span>
-            <span className="title">
-              同时抽取5位成功邀请好友的用户赠送价值400元的京东购物卡！
-            </span>
-          </div>
-          <div className="flex-row mb-70">
-            <span></span>
-            <span className="title">
-              内测活动仅限800人，快快邀请好友参与吧！
-            </span>
-          </div>
-          <div className="flex-row align-end">
-            <span></span>
-            <span className="title">更多现金奖励领取方式尽在</span>
-            <span className="way px-10">Freelog内测玩法指南</span>
-            <span className="tip">(至少可领58元现金奖励哦!)</span>
+    <div className={'invite-friend flex-column align-center y-auto'}>
+      <div className="h-680 flex-column-center w-100x ">
+        <div className="w-100x h-100x over-h">
+          <img
+            src={invite}
+            alt=""
+            className="h-100x banner-img"
+          />
+        </div>
+        <div className="banner-container flex-column-center w-100x">
+          <div className="banner">
+            <div className="flex-row mb-15  align-end">
+              <span></span>
+              <span className="title">
+                邀请好友一起参与内测，可领20元现金奖励！
+              </span>
+              <span className="tip">(被邀请好友完成任务可领3元现金奖励)</span>
+            </div>
+            <div className="flex-row mb-15">
+              <span></span>
+              <span className="title">
+                同时抽取5位成功邀请好友的用户赠送价值400元的京东购物卡！
+              </span>
+            </div>
+            <div className="flex-row mb-70">
+              <span></span>
+              <span className="title">
+                内测活动仅限800人，快快邀请好友参与吧！
+              </span>
+            </div>
+            <div className="flex-row align-end">
+              <span></span>
+              <span className="title">更多现金奖励领取方式尽在</span>
+              <span className="way px-10">Freelog内测玩法指南</span>
+              <span className="tip">(至少可领58元现金奖励哦!)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -166,14 +174,35 @@ function InviteFriend({}: InviteFriendProps) {
       <div className="flex-column rule w-100x align-center">
         <div className="category">活动规则</div>
         <div className="flex-column container space-between">
-          <span className="">1.&nbsp; &nbsp;内测活动时间：2021/**/** - 2021/**/**；</span>
-          <span className="">2.&nbsp; &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；</span>
-          <span className="">3.&nbsp; &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；</span>
-          <span className="">4.&nbsp; &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；</span>
-          <span className="">5.&nbsp; &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于2020年***公布；</span>
-          <span className="">6.&nbsp; &nbsp;现金奖励发放方式及提现要求说明；</span>
-          <span className="">7.&nbsp; &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；</span>
-          <span className="">8.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。</span>
+          <span className="">
+            1.&nbsp; &nbsp;内测活动时间：2021/**/** - 2021/**/**；
+          </span>
+          <span className="">
+            2.&nbsp;
+            &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；
+          </span>
+          <span className="">
+            3.&nbsp;
+            &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
+          </span>
+          <span className="">
+            4.&nbsp;
+            &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；
+          </span>
+          <span className="">
+            5.&nbsp;
+            &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于2020年***公布；
+          </span>
+          <span className="">
+            6.&nbsp; &nbsp;现金奖励发放方式及提现要求说明；
+          </span>
+          <span className="">
+            7.&nbsp;
+            &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；
+          </span>
+          <span className="">
+            8.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。
+          </span>
         </div>
       </div>
     </div>
