@@ -5,9 +5,58 @@
 }
 
 .filter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .first {
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    line-height: 20px;
+    cursor: pointer;
+    padding: 21px 21px 15px 21px;
+    &:hover {
+      font-weight: 600;
+      color: #222222;
+    }
+    &:active {
+      opacity: 0.8;
+    }
+  }
+  .firstSelected {
+    font-weight: 600;
+    color: #222222;
+    background: #ffffff;
+    border-radius: 4px;
+  }
+  .second {
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #bebebe;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666666;
+    &:hover {
+      font-weight: 600;
+      color: #e9a923;
+      padding: 5px 15px;
+      background: #FFFFFF;
+      border: 1px solid #e9a923;
+    }
+    &:active {
+      opacity: 0.8;
+    }
+  }
+  .secondContainer {
+    background: #ffffff;
+    border-radius: 6px;
+  }
+  .secondSelected {
+    padding: 6px 16px;
+    border: none;
+    font-weight: 600;
+    color: #ffffff;
+    background: #e9a923;
+  }
 }
 
 .filterTag {
@@ -20,11 +69,11 @@
 }
 
 .filterTagActive {
-  background-color: #FBF5EA;
-  color: #DCA32D;
+  background-color: #fbf5ea;
+  color: #dca32d;
 
   &:hover {
-    color: #DCA32D;
+    color: #dca32d;
   }
 }
 
