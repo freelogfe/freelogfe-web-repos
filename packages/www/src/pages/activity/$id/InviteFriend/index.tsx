@@ -9,11 +9,15 @@ import invite from '@/assets/invitefriend/invite.png';
 import inviteicon from '@/assets/invitefriend/inviteicon.png';
 import menu from '@/assets/invitefriend/menu.png';
 import task from '@/assets/invitefriend/task.png';
+import FTooltip from '@/components/FTooltip';
+import copy from 'copy-to-clipboard';
+
 import { FRectBtn } from '@/components/FButton';
 
 interface InviteFriendProps {}
 
 function InviteFriend({}: InviteFriendProps) {
+  const [showInvite, setShowInvite] = React.useState<boolean>(false);
   const scrollToAnchor = (anchorName: any) => {
     let state: any = {
       behavior: 'smooth',
@@ -30,11 +34,7 @@ function InviteFriend({}: InviteFriendProps) {
     <div className={'invite-friend flex-column align-center y-auto'}>
       <div className="h-680 flex-column-center w-100x ">
         <div className="w-100x h-100x over-h">
-          <img
-            src={invite}
-            alt=""
-            className="h-100x banner-img"
-          />
+          <img src={invite} alt="" className="h-100x banner-img" />
         </div>
         <div className="banner-container flex-column-center w-100x">
           <div className="banner">
@@ -94,46 +94,54 @@ function InviteFriend({}: InviteFriendProps) {
       <div className="flex-column steps w-100x align-center">
         <div className="category">参与步骤</div>
         <div className="container flex-column align-center pt-50">
-          <div className="flex-row space-around w-100x">
-            <span className="des w-180 ">
+          <div className="flex-row  w-100x pl-43 pr-35">
+            <span className="des w-180 mr-87">
               向好友分享
               <br />
               链接及邀请码
             </span>
-            <span className="des w-180 ">
+            <span className="des w-180 mr-87">
               好友使用
               <br />
               邀请码注册
             </span>
-            <span className="des w-180 ">
+            <span className="des w-180 mr-87">
               好友完成
               <br />
               指定任务
             </span>
-            <span className="des w-180 ">
+            <span className="des w-180">
               领取
               <br />
               现金奖励
             </span>
           </div>
-          <div className="flex-row space-around w-100x mt-40">
-            <div className="w-180 flex-column-center">
+          <div className="flex-row w-100x mt-40 pl-43 pr-71  align-center">
+            <div className=" flex-column-center pl-65 pr-20">
               <div className="step flex-column-center">1</div>
             </div>
-            <div className="w-180 flex-column-center">
+            <div className="arrow"></div>
+            <div className=" flex-column-center px-20">
               <div className="step flex-column-center">2</div>
             </div>
-            <div className="w-180 flex-column-center">
+            <div className="arrow"></div>
+            <div className=" flex-column-center px-20 p-rel">
               <div className="step flex-column-center mt-12">3</div>
-              <a className="link mt-10" style={{ fontSize: '12px' }}>
-                查看指定任务
-              </a>
+              <div className="flex-column-center look-task">
+                <a className=" mt-10  link">查看指定任务</a>
+              </div>
             </div>
-            <div className="w-180 flex-column-center">
+            <div className="arrow"></div>
+            <div className=" flex-column-center px-20">
               <div className="step flex-column-center">4</div>
             </div>
           </div>
-          <FRectBtn className="invite-button mt-60">立即邀请</FRectBtn>
+          <FRectBtn
+            className="invite-button mt-88"
+            onClick={() => setShowInvite(true)}
+          >
+            立即邀请
+          </FRectBtn>
           <div className="flex-row w-260 space-between mt-10">
             <span className="invite-left">还可邀请 1 位好友</span>
             <a className="get-more link">获取更多名额</a>
@@ -204,6 +212,25 @@ function InviteFriend({}: InviteFriendProps) {
             8.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。
           </span>
         </div>
+      </div>
+      <div
+        className={
+          'invite-text flex-column align-center pt-30 pb-25 ' +
+          (showInvite ? '' : 'd-none')
+        }
+      >
+        <textarea
+          readOnly
+          className="input mb-20"
+          value="邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！"
+        />
+        <FRectBtn
+          onClick={() => {
+            copy(234234243);
+          }}
+        >
+          复制内容
+        </FRectBtn>
       </div>
     </div>
   );

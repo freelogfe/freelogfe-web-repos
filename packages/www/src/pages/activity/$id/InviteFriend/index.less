@@ -47,12 +47,35 @@
     }
   }
 
+  .invite-text {
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 325px);
+    z-index: 11;
+    width: 650px;
+    background: #ffffff;
+    border-radius: 6px;
+    .input {
+      padding: 10px;
+      width: 590px;
+      background: #ffffff;
+      border-radius: 4px;
+      min-height: 150px;
+      border: 1px solid #d8d8d8;
+      font-size: 14px;
+      font-weight: 400;
+      color: #666666;
+      line-height: 20px;
+      outline: none;
+    }
+  }
+
   .op-0 {
     opacity: 0 !important;
   }
   .banner-img {
     width: 1920px;
-    margin-left: calc((100% - 1920px)/2);
+    margin-left: calc((100% - 1920px) / 2);
   }
   .banner-container {
     position: absolute;
@@ -127,6 +150,20 @@
       height: 796px;
       background: rgba(66, 194, 140, 0.05);
       border-radius: 50px;
+      .arrow {
+        width: 175px;
+        border-bottom: 2px dashed #d6d6d6;
+        position: relative;
+        &::after {
+          position: absolute;
+          left: 75px;
+          top: -5px;
+          border-top: 6px solid transparent;
+          border-bottom: 6px solid transparent;
+          border-left: 25px solid #d6d6d6;
+          content: '';
+        }
+      }
       .des {
         font-size: 30px;
         font-weight: 600;
@@ -147,6 +184,20 @@
         padding-bottom: 2px;
         color: #189f66;
       }
+      .look-task {
+        position: absolute;
+        left: 0px;
+        top: 60px;
+        width: 100%;
+        a {
+          height: 18px;
+          font-size: 12px;
+          font-weight: 400;
+          text-align: center;
+          color: #2784ff;
+          line-height: 18px;
+        }
+      }
       .invite-button {
         width: 260px;
         height: 80px !important;
@@ -155,6 +206,9 @@
         font-weight: 600 !important;
         color: #ffffff !important;
         font-size: 30px;
+        &:hover {
+          opacity: 0.6;
+        }
       }
       .invite-left {
         font-size: 14px;
