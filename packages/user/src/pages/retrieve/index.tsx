@@ -144,7 +144,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         <div className='flex-column align-center flex-1'>
           <div className='flex-3'></div>
           <div className='shrink-0 flex-column-center'>
-            <FTitleText className='mb-30' text={'重置  密码？'} type='h1' />
+            <FTitleText className='mb-30' text={'重置密码？'} type='h1' />
             <FTipText
               text={'现在可以重新设置您的密码，重置成功后可再次登录freelog'}
               type='second'

@@ -215,11 +215,14 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             <div className={styles.right}>
               <FContentText text={'密码必须包含数字和字母，长度必须为6-24个字'} type='highlight' />
               <div style={{ width: 30 }} />
-              <FTextBtn onClick={() => {
-                dispatch<OnClick_ChangePasswordBtn_Action>({
-                  type: 'settingPage/onClick_ChangePasswordBtn',
-                });
-              }} type='primary'>修改密码</FTextBtn>
+              <FTextBtn
+                onClick={() => {
+                  dispatch<OnClick_ChangePasswordBtn_Action>({
+                    type: 'settingPage/onClick_ChangePasswordBtn',
+                  });
+                }}
+                type='primary'
+              >修改密码</FTextBtn>
             </div>
           </div>
         </Space>

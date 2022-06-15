@@ -1632,6 +1632,7 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           changePassword_Old_PasswordInput: payload.value,
+          // changePassword_Old_PasswordInputE: payload.value,
         },
       });
     },
@@ -1640,6 +1641,7 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           changePassword_New1_PasswordInput: payload.value,
+          changePassword_New1_PasswordInput_Error: '',
         },
       });
     },
@@ -1677,6 +1679,7 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           changePassword_New2_PasswordInput: payload.value,
+          changePassword_New2_PasswordInput_Error: '',
         },
       });
     },

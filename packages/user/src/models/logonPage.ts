@@ -199,6 +199,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           usernameInput: payload.value,
+          usernameInputError: '',
         },
       });
     },
@@ -250,6 +251,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           phoneInput: payload.value,
+          phoneInputError: '',
         },
       });
     },
@@ -290,6 +292,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           emailInput: payload.value,
+          emailInputError: '',
         },
       });
     },
@@ -329,6 +332,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           verificationCodeInput: payload.value,
+          verificationCodeInputError: '',
         },
       });
     },
@@ -394,6 +398,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           passwordInput: payload.value,
+          passwordInputError: '',
         },
       });
     },
