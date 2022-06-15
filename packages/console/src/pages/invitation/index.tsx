@@ -21,6 +21,7 @@ function Invitation({}: InvitationProps) {
 
   AHooks.useMount(async () => {
 
+    // const { ret, errCode, data } = await FServiceAPI.TestQualification.getBetaApply1();
     // const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     // const { ret, errCode, data } = await FServiceAPI.TestQualification.betaCodesActivate({ codes: '' });
     // const { ret, errCode, data } = await FServiceAPI.TestQualification.betaApply({
