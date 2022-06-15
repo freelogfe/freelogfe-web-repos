@@ -2,27 +2,27 @@ import * as React from 'react';
 import styles from './index.less';
 import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
-import { OnClick_SignBtn_Action } from '@/models/marketResourcePage';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import { OnClick_SignBtn_Action } from '@/models/resourceDetailPage';
 import FLink from '@/components/FLink';
 import { FUtil } from '@freelog/tools-lib';
 
 interface BottomProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Bottom({ dispatch, marketResourcePage }: BottomProps) {
+function Bottom({ dispatch, resourceDetailPage }: BottomProps) {
 
   return (<div className={styles.signBottom}>
     {
-      !marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)
+      !resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID)
         ? (<FRectBtn
           className={styles.signButton}
           disabled={
-            marketResourcePage.selectedNodeID === -1
-            || marketResourcePage.version === ''
-            || marketResourcePage.signResources.map((sr) => {
+            resourceDetailPage.selectedNodeID === -1
+            || resourceDetailPage.version === ''
+            || resourceDetailPage.signResources.map((sr) => {
               return sr.policies.filter((srp) => srp.checked).length + sr.contracts.filter((srp) => srp.checked).length;
             }).includes(0)
             // || !!marketResourcePage.signResources.find((sr) => {
@@ -31,12 +31,12 @@ function Bottom({ dispatch, marketResourcePage }: BottomProps) {
           }
           onClick={async () => {
             dispatch<OnClick_SignBtn_Action>({
-              type: 'marketResourcePage/onClick_SignBtn',
+              type: 'resourceDetailPage/onClick_SignBtn',
             });
           }}
         >立即签约</FRectBtn>)
         : (<span>该资源已签约，可进入<FLink
-          to={FUtil.LinkTo.exhibitManagement({ exhibitID: marketResourcePage.signedResourceExhibitID })}
+          to={FUtil.LinkTo.exhibitManagement({ exhibitID: resourceDetailPage.signedResourceExhibitID })}
           className={styles.gotoExhibitLink}
         >展品管理</FLink>进行授权管理</span>)
     }
@@ -44,8 +44,8 @@ function Bottom({ dispatch, marketResourcePage }: BottomProps) {
   </div>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({
-  marketResourcePage,
+export default connect(({ resourceDetailPage }: ConnectState) => ({
+  resourceDetailPage,
 }))(Bottom);
 
 

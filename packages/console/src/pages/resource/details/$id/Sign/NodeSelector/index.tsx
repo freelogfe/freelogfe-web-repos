@@ -4,8 +4,8 @@ import {Dropdown, Menu, Space} from "antd";
 import {FContentText} from "@/components/FText";
 import {FDown, FPlus} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/models/connect";
-import {OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
+import {ConnectState, ResourceDetailPageModelState, NodesModelState} from "@/models/connect";
+import {OnChangeNodeSelectorAction} from "@/models/resourceDetailPage";
 import {FTextBtn} from '@/components/FButton';
 import {router} from "umi";
 import {FUtil} from '@freelog/tools-lib';
@@ -13,12 +13,12 @@ import FDropdown from "@/components/FDropdown";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
 }
 
-function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) {
-  const selectedNode = nodes.list.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
+function NodeSelector({dispatch, resourceDetailPage, nodes}: NodeSelectorProps) {
+  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.selectedNodeID);
 
   return (<FDropdown
     overlay={nodes.list.length > 0 ? (<div style={{width: 638}}>
@@ -27,7 +27,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
         mode="vertical"
         onClick={(param: any) => {
           dispatch<OnChangeNodeSelectorAction>({
-            type: 'marketResourcePage/onChangeNodeSelector',
+            type: 'resourceDetailPage/onChangeNodeSelector',
             payload: Number(param.key),
           });
         }}
@@ -39,7 +39,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
           >
             <Space size={10}>
               <span>{n.nodeName}</span>
-              {marketResourcePage.signedNodeIDs.includes(n.nodeId) && (
+              {resourceDetailPage.signedNodeIDs.includes(n.nodeId) && (
                 <span className={styles.contracted}>(已签约)</span>)}
             </Space>
           </Menu.Item>))
@@ -77,7 +77,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
                     type="negative"
                     text={'选择签约的节点…'}/>)
               }
-              {marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID || -1) && (
+              {resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID || -1) && (
                 <span className={styles.contracted}>(已签约)</span>)}
             </>)
         }
@@ -87,7 +87,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
   </FDropdown>);
 }
 
-export default connect(({marketResourcePage, nodes}: ConnectState) => ({
-  marketResourcePage,
+export default connect(({resourceDetailPage, nodes}: ConnectState) => ({
+  resourceDetailPage,
   nodes
 }))(NodeSelector);

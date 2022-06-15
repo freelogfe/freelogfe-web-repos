@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import { Dispatch, connect } from 'dva';
-import { ConnectState, MarketResourcePageModelState, NodesModelState } from '@/models/connect';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
@@ -14,31 +14,31 @@ import { FWarning } from '@/components/FIcons';
 
 interface SignProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
-  nodes: NodesModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
+  // nodes: NodesModelState;
 }
 
-function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
+function Sign({ dispatch, resourceDetailPage }: SignProps) {
 
-  const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
+  const resourceInfoLength: number = resourceDetailPage.resourceInfo?.about.length || 0;
 
-  const resource = marketResourcePage.signResources.find((r) => r.selected);
+  const resource = resourceDetailPage.signResources.find((r) => r.selected);
 
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
-        <FCoverImage src={marketResourcePage.resourceInfo?.cover || ''} width={260} style={{ borderRadius: 10 }} />
+        <FCoverImage src={resourceDetailPage.resourceInfo?.cover || ''} width={260} style={{ borderRadius: 10 }} />
         <div style={{ height: 20 }} />
         <div className={styles.babels}>
           {
-            (marketResourcePage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
+            (resourceDetailPage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
               <label key={t}>{t}</label>))
           }
         </div>
         <div style={{ height: 20 }} />
 
         <Tooltip
-          title={marketResourcePage.resourceInfo?.about}
+          title={resourceDetailPage.resourceInfo?.about}
           mouseEnterDelay={3}
           overlayClassName={styles.TooltipOverlay}
           color={'rgba(0, 0, 0, 0.5)'}
@@ -47,7 +47,7 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
         >
           <div>
             <FContentText
-              text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')} />
+              text={resourceInfoLength < 205 ? (resourceDetailPage.resourceInfo?.about || '') : (resourceDetailPage.resourceInfo?.about.substr(0, 205) + '...')} />
           </div>
         </Tooltip>
       </div>
@@ -64,7 +64,7 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
           </div>
           <div className={styles.signRight}>
             {
-              marketResourcePage.selectedNodeID === -1
+              resourceDetailPage.selectedNodeID === -1
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
                 </div>)
@@ -100,7 +100,6 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
   </div>);
 }
 
-export default connect(({ marketResourcePage, nodes }: ConnectState) => ({
-  marketResourcePage,
-  nodes,
+export default connect(({ resourceDetailPage }: ConnectState) => ({
+  resourceDetailPage,
 }))(Sign);
