@@ -411,8 +411,8 @@ const Model: StorageHomePageModelType = {
         storageHomePage,
       }));
       // console.log(payload, 'payload@!@#$!@#$@#!4213424');
-      if (payload[0].size > 50 * 1024 * 1024) {
-        fMessage('单个文件不能大于 50 M', 'warning');
+      if (payload[0].size > 200 * 1024 * 1024) {
+        fMessage('单个文件不能大于 200 M', 'warning');
         return;
       }
       const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);

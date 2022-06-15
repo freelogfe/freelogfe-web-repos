@@ -6,7 +6,7 @@ import { FUtil } from '@freelog/tools-lib';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import Resources from './market';
 import Examples from './examples';
-import FFooter from '@/layouts/FFooter';
+// import FFooter from '@/layouts/FFooter';
 import { withRouter } from 'umi';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';

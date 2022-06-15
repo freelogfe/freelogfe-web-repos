@@ -198,6 +198,7 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           phoneInput: payload.value,
+          phoneInputError: '',
         },
       });
     },
@@ -236,6 +237,7 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           emailInput: payload.value,
+          emailInputError: '',
         },
       });
     },
@@ -274,6 +276,7 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           verifyCode: payload.value,
+          verifyCodeError: '',
         },
       });
     },
@@ -331,6 +334,7 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           newPasswordInput: payload.value,
+          newPasswordInputError: '',
         },
       });
     },
@@ -365,6 +369,7 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           confirmPasswordInput: payload.value,
+          confirmPasswordInputError: '',
         },
       });
     },

@@ -25,6 +25,8 @@ function Invitation({}: InvitationProps) {
   const [status, setStatus] = React.useState<101 | 10 | 0 | 1 | 2>(0);
 
   AHooks.useMount(async () => {
+
+    // const { ret, errCode, data } = await FServiceAPI.TestQualification.getBetaApply1();
     // const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     // const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     console.log();
@@ -34,6 +36,7 @@ function Invitation({}: InvitationProps) {
     //   occupation: '',
     //   description: '',
     // });
+
   });
 
   AHooks.useUnmount(() => {});

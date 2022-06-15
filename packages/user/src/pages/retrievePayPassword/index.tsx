@@ -6,6 +6,7 @@ import { Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 // import FFooter from '@/layouts/FFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 import {
   ConnectState,
@@ -119,8 +120,7 @@ function RetrievePayPassword({
                       style={{ fontSize: 12 }}
                       type='primary'
                       onClick={() => {
-                        const path: string =
-                          FUtil.LinkTo.retrieveUserPassword();
+                        const path: string = FUtil.LinkTo.retrieveUserPassword();
                         // const host: string = FUtil.Format.completeUrlByDomain('user');
                         window.open(path);
                       }}
@@ -426,6 +426,7 @@ function RetrievePayPassword({
       )}
       <div style={{ height: 20 }} />
       {/*<FFooter />*/}
+      <FComponentsLib.FPageFooter />
     </div>
   );
 }

@@ -185,16 +185,18 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 ac.disuseAuthorized
                   ? (<div className={styles.disuseAuthorized}>无需处理授权</div>)
                   // ? (<div className={styles.disuseAuthorized}>{FUtil1.I18n.message('msg_resource_natural_auth')}</div>)
-                  : (<FResourceContractLabels contracts={ac.contracts
-                    .filter((c) => {
-                      return c.applyToCurrentExhibit.checked;
-                    })
-                    .map((c) => {
-                      return {
-                        name: c.contractName,
-                        auth: c.status === 'active' || c.status === 'testActive',
-                      };
-                    })} />)
+                  : (<FResourceContractLabels
+                    contracts={ac.contracts
+                      .filter((c) => {
+                        return c.applyToCurrentExhibit.checked;
+                      })
+                      .map((c) => {
+                        return {
+                          name: c.contractName,
+                          auth: c.status === 'active' || c.status === 'testActive',
+                        };
+                      })}
+                  />)
               }
 
             </div>
@@ -338,8 +340,11 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <div style={{ height: 25 }} />
               <FTitleText type='h4'>未签约策略</FTitleText>
               {
-                selectedAuthorizedContract.policies.map((sacp) => {
-                  return (
+                selectedAuthorizedContract.policies.map((sacp, ind) => {
+                  return (<React.Fragment key={sacp.policyId}>
+                    {
+                      ind !== 0 && (<div style={{ height: 15 }} />)
+                    }
                     <div
                       className={styles.Policy}
                       key={sacp.policyId}
@@ -363,9 +368,10 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                       </div>
 
                     </div>
-                  );
+                  </React.Fragment>);
                 })
               }
+              <div style={{ height: 25 }} />
             </>)
           }
 

@@ -12,6 +12,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import * as AHooks from 'ahooks';
 // import FFooter from '@/layouts/FFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 import {
   OnBlurConfirmPasswordInputAction,
@@ -101,8 +102,8 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
       FUtil.LinkTo.login(
         urlParams.goTo
           ? {
-              goTo: decodeURIComponent(urlParams.goTo),
-            }
+            goTo: decodeURIComponent(urlParams.goTo),
+          }
           : {},
       ),
     );
@@ -119,7 +120,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
           <Space size={0}>
             <FContentText
               text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`}
-              type="negative"
+              type='negative'
             />
             <FTextBtn
               onClick={() => {
@@ -140,24 +141,24 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
       <div
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
-        <div className="flex-column align-center flex-1">
-          <div className="flex-3"></div>
-          <div className="shrink-0 flex-column-center">
-            <FTitleText className="mb-30" text={'重置  密码？'} type="h1" />
+        <div className='flex-column align-center flex-1'>
+          <div className='flex-3'></div>
+          <div className='shrink-0 flex-column-center'>
+            <FTitleText className='mb-30' text={'重置密码？'} type='h1' />
             <FTipText
               text={'现在可以重新设置您的密码，重置成功后可再次登录freelog'}
-              type="second"
+              type='second'
             />
           </div>
-          <div className="flex-2"></div>
+          <div className='flex-2'></div>
         </div>
-        <div className=" flex-column-center shrink-0">
+        <div className=' flex-column-center shrink-0'>
           <div className={styles.verificationMode}>
             <div className={styles.verificationModeHeader}>
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'验证方式'} />
+                <FTitleText type='h4' text={'验证方式'} />
               </div>
               <Space size={25}>
                 <FRadio
@@ -171,7 +172,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                     });
                   }}
                 >
-                  <FContentText text={'手机号'} type="additional2" />
+                  <FContentText text={'手机号'} type='additional2' />
                 </FRadio>
                 <FRadio
                   checked={retrievePage.verifyMode === 'email'}
@@ -184,7 +185,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                     });
                   }}
                 >
-                  <FContentText text={'邮箱'} type="additional2" />
+                  <FContentText text={'邮箱'} type='additional2' />
                 </FRadio>
               </Space>
             </div>
@@ -192,7 +193,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             {retrievePage.verifyMode === 'phone' ? (
               <>
                 <FInput
-                  placeholder="输入11位手机号码"
+                  placeholder='输入11位手机号码'
                   className={styles.verificationModeInput}
                   wrapClassName={styles.verificationModeInput}
                   value={retrievePage.phoneInput}
@@ -219,7 +220,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             ) : (
               <>
                 <FInput
-                  placeholder="输入邮箱"
+                  placeholder='输入邮箱'
                   className={styles.verificationModeInput}
                   wrapClassName={styles.verificationModeInput}
                   value={retrievePage.emailInput}
@@ -251,7 +252,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'验证码'} />
+                <FTitleText type='h4' text={'验证码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -259,7 +260,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <FInput
                 className={styles.identifyingCodeInput}
                 wrapClassName={styles.identifyingCodeInput}
-                placeholder="输入验证码"
+                placeholder='输入验证码'
                 value={retrievePage.verifyCode}
                 onChange={(e) => {
                   dispatch<OnChangeVerifyCodeInputAction>({
@@ -305,13 +306,13 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'新密码'} />
+                <FTitleText type='h4' text={'新密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
             <FInput
-              type="password"
-              placeholder="密码必须包含数字和字母；且由6-24个字符组成"
+              type='password'
+              placeholder='密码必须包含数字和字母；且由6-24个字符组成'
               className={styles.input}
               wrapClassName={styles.input}
               value={retrievePage.newPasswordInput}
@@ -341,15 +342,15 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type="h4" text={'验证新密码'} />
+                <FTitleText type='h4' text={'验证新密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
             <FInput
-              type="password"
+              type='password'
               className={styles.input}
               wrapClassName={styles.input}
-              placeholder="再次输入新密码"
+              placeholder='再次输入新密码'
               value={retrievePage.confirmPasswordInput}
               onChange={(e) => {
                 dispatch<OnChangeConfirmPasswordInputAction>({
@@ -384,17 +385,17 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             重置密码
           </FRectBtn>
         </div>
-        <div className="flex-1 flex-column">
+        <div className='flex-1 flex-column'>
           <Space size={50}>
             <FTextBtn
-              className="mt-95"
+              className='mt-95'
               onClick={() => {
                 history.replace(
                   FUtil.LinkTo.login(
                     urlParams.goTo
                       ? {
-                          goTo: decodeURIComponent(urlParams.goTo),
-                        }
+                        goTo: decodeURIComponent(urlParams.goTo),
+                      }
                       : {},
                   ),
                 );
@@ -403,14 +404,14 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               返回登陆页
             </FTextBtn>
             <FTextBtn
-              className="mt-95"
+              className='mt-95'
               onClick={() => {
                 history.replace(
                   FUtil.LinkTo.logon(
                     urlParams.goTo
                       ? {
-                          goTo: decodeURIComponent(urlParams.goTo),
-                        }
+                        goTo: decodeURIComponent(urlParams.goTo),
+                      }
                       : {},
                   ),
                 );
@@ -422,6 +423,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         </div>
       </div>
       {/*<FFooter />*/}
+      <FComponentsLib.FPageFooter />
     </div>
   );
 }

@@ -5,7 +5,8 @@ import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
-import { LoginAction } from '@/models/loginPage';
+import FUtil1 from '@/utils';
+// import { LoginAction } from '@/models/loginPage';
 
 export type LogonPageModelState = WholeReadonly<{
 
@@ -199,6 +200,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           usernameInput: payload.value,
+          usernameInputError: '',
         },
       });
     },
@@ -250,6 +252,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           phoneInput: payload.value,
+          phoneInputError: '',
         },
       });
     },
@@ -290,6 +293,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           emailInput: payload.value,
+          emailInputError: '',
         },
       });
     },
@@ -329,6 +333,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           verificationCodeInput: payload.value,
+          verificationCodeInputError: '',
         },
       });
     },
@@ -394,6 +399,7 @@ const Model: LogonPageModelType = {
         type: 'change',
         payload: {
           passwordInput: payload.value,
+          passwordInputError: '',
         },
       });
     },
@@ -406,8 +412,10 @@ const Model: LogonPageModelType = {
 
       if (!logonPage.passwordInput) {
         passwordInputError = '密码不能为空';
+      } else if (logonPage.passwordInput.length < 6 || logonPage.passwordInput.length > 24) {
+        passwordInputError = FUtil1.I18n.message('password_length');
       } else if (!FUtil.Regexp.PASSWORD.test(logonPage.passwordInput)) {
-        passwordInputError = '密码必须包含数字和字母；且由6-24个字符组成';
+        passwordInputError = FUtil1.I18n.message('password_include');
       }
 
       yield put<ChangeAction>({
