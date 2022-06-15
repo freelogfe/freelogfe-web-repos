@@ -12,7 +12,7 @@ import {
   OnBlur_DomainInput_Action,
   OnBlur_NameInput_Action,
   OnChange_DomainInput_Action,
-  OnChange_NameInput_Action,
+  OnChange_NameInput_Action, OnClick_CreateBtn_Action,
   // OnChangeDomainAction,
   // OnChangeNameAction,
 } from '@/models/nodes';
@@ -107,9 +107,11 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
         className={styles.button}
         disabled={nodes.domainVerify !== 'verified' || !!nodes.domainError
         || nodes.nameVerify !== 'verified' || !!nodes.nameError}
-        onClick={() => dispatch<CreateNodeAction>({
-          type: 'nodes/createNode',
-        })}
+        onClick={() => {
+          dispatch<OnClick_CreateBtn_Action>({
+            type: 'nodes/onClick_CreateBtn',
+          });
+        }}
         type='primary'
       >创建节点</FRectBtn>
     </div>

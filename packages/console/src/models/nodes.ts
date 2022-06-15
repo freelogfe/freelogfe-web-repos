@@ -33,9 +33,9 @@ interface FetchNodesAction extends AnyAction {
   type: 'fetchNodes';
 }
 
-export interface CreateNodeAction extends AnyAction {
-  type: 'nodes/createNode';
-}
+// export interface CreateNodeAction extends AnyAction {
+//   type: 'nodes/createNode';
+// }
 
 // export interface OnChangeNameAction extends AnyAction {
 //   type: 'nodes/onChangeName';
@@ -237,6 +237,7 @@ const Model: NodesModelType = {
       });
     },
     * onClick_CreateBtn({}: OnClick_CreateBtn_Action, { call, select, put }: EffectsCommandMap) {
+      console.log('OnClick_CreateBtn_Action');
       const { nodes }: ConnectState = yield select(({ nodes }: ConnectState) => ({
         nodes,
       }));
