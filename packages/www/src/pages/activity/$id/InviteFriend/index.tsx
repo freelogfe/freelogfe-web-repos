@@ -226,7 +226,7 @@ function InviteFriend({}: InviteFriendProps) {
         />
         <FRectBtn
           onClick={() => {
-            copy(234234243);
+            copy('234234243');
           }}
         >
           复制内容
