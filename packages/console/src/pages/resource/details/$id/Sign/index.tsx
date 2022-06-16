@@ -64,7 +64,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           </div>
           <div className={styles.signRight}>
             {
-              resourceDetailPage.sign_SelectedNodeID === -1
+              resourceDetailPage.sign_SelectedNodeID === -1 && resourceDetailPage.user_Logged
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
                 </div>)
