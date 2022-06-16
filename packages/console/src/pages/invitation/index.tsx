@@ -30,13 +30,16 @@ function Invitation({}: InvitationProps) {
   const [applyData, setApplyData] = React.useState<any>(null);
   AHooks.useMount(async () => {
     const userData = await FServiceAPI.User.currentUserInfo();
-    console.log(userData);
     if (userData && userData.data && (userData.data.userType & 1) === 1) {
-      router.push('/dashboard');
+      if (urlState.returnUrl) {
+        window.location.href = urlState.returnUrl;
+      } else {
+        router.push('/dashboard');
+      }
       return;
     }
     const { ret, errCode, data } = await FServiceAPI.TestQualification.getBetaApply1();
-    setApplyData(data)
+    setApplyData(data);
     if (data) {
       setStatus(data.status);
       setShowPage('Result');
@@ -60,10 +63,9 @@ function Invitation({}: InvitationProps) {
     }
   });
   function jump(page: InvitationStates['showPage']) {
-    let route = page === 'Apply' ? 'apply': page=== 'InviteCode'? 'code': 'status'
+    let route = page === 'Apply' ? 'apply' : page === 'InviteCode' ? 'code' : 'status';
     router.push(
-      `/invitation?type=${route}` +
-        (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+      `/invitation?type=${route}` + (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
     );
     setShowPage(page);
   }
@@ -71,8 +73,7 @@ function Invitation({}: InvitationProps) {
   function finished(type: 101 | 10 | 0 | 1 | 2) {
     setStatus(type);
     router.push(
-      `/invitation?type=status` +
-        (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+      `/invitation?type=status` + (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
     );
     setShowPage('Result');
   }
@@ -82,11 +83,7 @@ function Invitation({}: InvitationProps) {
   ) : showPage === 'Apply' ? (
     <InviteForm finished={finished} />
   ) : (
-    <InviteStatus
-      status={status}
-      tipData={applyData? applyData.auditMsg : ''}
-      jump={jump} 
-    />
+    <InviteStatus status={status} tipData={applyData ? applyData.auditMsg : ''} jump={jump} />
   );
 }
 

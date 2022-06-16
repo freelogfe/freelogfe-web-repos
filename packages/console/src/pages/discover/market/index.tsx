@@ -3,6 +3,8 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import categoryData from '@/utils/category';
 import styles from './index.less';
+import useUrlState from '@ahooksjs/use-url-state';
+import { router } from 'umi';
 import {
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
@@ -27,11 +29,39 @@ interface MarketProps {
 }
 
 function Market({ dispatch, discoverPage }: MarketProps) {
+  const [urlState] = useUrlState<any>();
   const [category, setCategory] = React.useState<any>({
     first: -1,
     second: '',
   });
+  console.log(urlState);
+
   AHooks.useMount(() => {
+    if (urlState.query) {
+      const data: any = urlState.query.split('%');
+      let first = -1,
+        second = '';
+      categoryData.first.some((item: string, index: number) => {
+        if (item === data[0]) {
+          first = index;
+          return true;
+        }
+      });
+      // @ts-ignore
+      first > -1 &&
+      // @ts-ignore
+        categoryData.second[first].some((item: string, index: number) => {
+          if (item === data[1]) {
+            second = item;
+            return true;
+          }
+        });
+      setCategory({
+        first,
+        second,
+      });
+      console.log(first, second)
+    }
     dispatch<OnMountMarketPageAction>({
       type: 'discoverPage/onMountMarketPage',
     });
@@ -71,7 +101,13 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                 }}
                 key={item}
                 className={
-                  (category.first === index ? [0,1].includes(index) ?  styles.allSelected : styles.firstSelected : '') + ' ' + styles.first
+                  (category.first === index
+                    ? [0, 1].includes(index)
+                      ? styles.allSelected
+                      : styles.firstSelected
+                    : '') +
+                  ' ' +
+                  styles.first
                   // + (index === categoryData.first.length - 1 ? '' : ' mr-30')
                 }
               >

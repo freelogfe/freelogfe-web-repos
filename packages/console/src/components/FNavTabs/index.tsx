@@ -19,6 +19,7 @@ function FNavTabs({ options, activated }: FNavTabsProps) {
       {
         options.map((o) => {
           return (<Link
+           key={o.value}
             className={[styles.Link, activated === o.value ? styles.activated : ''].join(' ')}
             to={o.href}
           >
