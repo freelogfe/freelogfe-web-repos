@@ -10,6 +10,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
+  user_Logged: boolean;
 
   resource_ID: string;
   resource_Info: null | {
@@ -172,6 +173,7 @@ interface ResourceDetailPageModelType {
 
 const initStates: ResourceDetailPageModelState = {
   page_State: 'loading',
+  user_Logged: FUtil.Tool.getUserIDByCookies() !== -1,
 
   resource_ID: '',
   resource_Info: {
@@ -214,17 +216,19 @@ const Model: ResourceDetailPageModelType = {
         type: 'change',
         payload: {
           resource_ID: payload.resourceID,
+          user_Logged: FUtil.Tool.getUserIDByCookies() !== -1,
         },
       });
-      console.log('onMountPage', '####3');
+      // console.log('onMountPage', '####3');
       if (FUtil.Tool.getUserIDByCookies() !== -1) {
-        yield put<FetchCollectionInfoAction>({
-          type: 'fetchCollectionInfo',
-        });
+
         yield put<FetchSignedNodesAction>({
           type: 'fetchSignedNodes',
         });
       }
+      yield put<FetchCollectionInfoAction>({
+        type: 'fetchCollectionInfo',
+      });
       yield put<FetchInfoActionAction>({
         type: 'fetchInfo',
       });
@@ -622,23 +626,28 @@ const Model: ResourceDetailPageModelType = {
         resourceDetailPage,
       }));
 
-      const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
-        resourceIds: resourceDetailPage.resource_ID,
-      };
+      let isCollected: boolean = false;
+      if (resourceDetailPage.user_Logged) {
+        const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
+          resourceIds: resourceDetailPage.resource_ID,
+        };
 
-      const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
+        const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
+
+        isCollected = data1[0].isCollected;
+      }
 
       const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
         resourceId: resourceDetailPage.resource_ID,
       };
 
       const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
-      // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
+      // console.log(data2, '收藏数量FGHSDGf09uj4k2t;ldfs');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_IsCollected: data1[0].isCollected,
+          resource_IsCollected: isCollected,
           resource_Popularity: data2,
         },
       });
@@ -677,8 +686,9 @@ const Model: ResourceDetailPageModelType = {
         version: resourceDetailPage.resourceVersion_SelectedVersion,
         resourceId: resourceDetailPage.resource_ID,
       };
+      console.log('resourceVersionInfo1239weiojfasdlkfjslk');
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-
+      // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');
       // console.log(data, 'data0932jklsdjflsdk');
 
