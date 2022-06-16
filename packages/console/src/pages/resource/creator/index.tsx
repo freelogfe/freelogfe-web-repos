@@ -181,6 +181,7 @@ function ResourceCreator({
 
           <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')} dot={true}>
             <FDropdown
+              className='h-38 flex-column justify-center'
               overlay={
                 <FMenu
                   options={[
@@ -200,14 +201,14 @@ function ResourceCreator({
                     setCategory({
                       ...category,
                       first: value,
-                      second: -1,
+                      second: '',
                     });
                     //onChangeResourceType && onChangeResourceType(value)
                   }}
                 />
               }
             >
-              <span style={{ cursor: 'pointer' }}>
+              <span style={{ cursor: 'pointer' }} className='h-38 flex-row align-center'>
                 {categoryData.first[category.first] || '请选择大类'}
                 <DownOutlined style={{ marginLeft: 8 }} />
               </span>
@@ -215,10 +216,13 @@ function ResourceCreator({
 
             {category.first > 1 ? (
               <>
-                <span className="ml-30">子类：</span>
+                <span className="ml-30">二级类型：</span>
                 <FAutoComplete
                   errorText={resourceCreatorPage.resourceTypeErrorText}
-                  value={resourceCreatorPage.resourceType}
+                  value={
+                    // @ts-ignore
+                    categoryData.second[category.first][category.second] || category.second
+                  }
                   onChange={
                     (value) => {
                       setCategory({

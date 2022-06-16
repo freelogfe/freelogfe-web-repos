@@ -138,7 +138,7 @@ function FResourceCardsList({
 
             {category.first > 1 ? (
               <>
-                <span className="ml-30">子类：</span>
+                <span className="ml-30">二级类型：</span>
                 <FDropdown
                   overlay={
                     <FMenu
