@@ -41,7 +41,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
         <FTextBtn
           onClick={() => {
             onChange({
-              graphFullScreen: true,
+              graph_FullScreen: true,
             });
           }}
           type='default'
@@ -53,13 +53,13 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
           { label: '依赖树', value: 'dependency' },
           { label: '授权链', value: 'authorization' },
         ]}
-        value={resourceDetailPage.viewportGraphShow}
+        value={resourceDetailPage.graph_ViewportGraphShow}
         onChange={(value) => {
-          onChange({ viewportGraphShow: value as 'dependency' });
+          onChange({ graph_ViewportGraphShow: value as 'dependency' });
         }}
       >
         {
-          resourceDetailPage.graphFullScreen
+          resourceDetailPage.graph_FullScreen
             ? (<div style={{ height: 500 }} />)
             : (<>
               {/*{*/}
@@ -69,7 +69,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
               {/*  />)*/}
               {/*}*/}
               {
-                resourceDetailPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
+                resourceDetailPage.graph_ViewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
                   resourceID={resourceDetailPage.resource_ID}
                   version={resourceDetailPage.resourceVersion_SelectedVersion}
                   width={920}
@@ -85,7 +85,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
               {/*}*/}
 
               {
-                resourceDetailPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+                resourceDetailPage.graph_ViewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
                   resourceID={resourceDetailPage.resource_ID}
                   version={resourceDetailPage.resourceVersion_SelectedVersion}
                   width={920}
@@ -100,12 +100,12 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
     <div style={{ height: 20 }} />
 
     <FDrawer
-      visible={resourceDetailPage.graphFullScreen}
+      visible={resourceDetailPage.graph_FullScreen}
       title={'相关视图'}
       destroyOnClose
       width={'100%'}
       onClose={() => {
-        onChange({ graphFullScreen: false });
+        onChange({ graph_FullScreen: false });
       }}
     >
       <FViewportTabs
@@ -113,10 +113,10 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
           { label: '依赖树', value: 'dependency' },
           { label: '授权链', value: 'authorization' },
         ]}
-        value={resourceDetailPage.viewportGraphShow}
+        value={resourceDetailPage.graph_ViewportGraphShow}
         onChange={(value) => {
           onChange({
-            viewportGraphShow: value as 'dependency',
+            graph_ViewportGraphShow: value as 'dependency',
           });
         }}
       >
@@ -131,7 +131,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
         {/*}*/}
 
         {
-          resourceDetailPage.viewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
+          resourceDetailPage.graph_ViewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
             resourceID={resourceDetailPage.resource_ID}
             version={resourceDetailPage.resourceVersion_SelectedVersion}
             width={window.innerWidth - 60}
@@ -149,7 +149,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
         {/*}*/}
 
         {
-          resourceDetailPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+          resourceDetailPage.graph_ViewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
             resourceID={resourceDetailPage.resource_ID}
             version={resourceDetailPage.resourceVersion_SelectedVersion}
             width={window.innerWidth - 60}
