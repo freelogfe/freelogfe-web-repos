@@ -15,7 +15,7 @@ import {
   ChangeAction,
   OnChangeNameAction,
   OnChangeResourceTypeAction,
-  ClearDataAction,
+  ClearDataAction, OnMount_Page_Action, OnUnmount_Page_Action,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
@@ -26,6 +26,7 @@ import Prompt from 'umi/prompt';
 import fConfirmModal from '@/components/fConfirmModal';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -34,6 +35,18 @@ interface ResourceCreatorProps {
 }
 
 function ResourceCreator({ dispatch, route, resourceCreatorPage, user }: ResourceCreatorProps & RouterTypes) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMount_Page_Action>({
+      type: 'resourceCreatorPage/onMount_Page',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceCreatorPage/onUnmount_Page',
+    });
+  });
 
   React.useEffect(() => {
     return () => {
@@ -112,7 +125,8 @@ function ResourceCreator({ dispatch, route, resourceCreatorPage, user }: Resourc
           dot={true}
         >
           <div className={styles.resourceName}>
-            <FContentText text={`${user.info?.username} /`} />
+            {/*<FContentText text={`${user.info?.username} /`} />*/}
+            <FContentText text={`${resourceCreatorPage.userName} /`} />
             &nbsp;
             <FInput
               errorText={resourceCreatorPage.nameErrorText}
