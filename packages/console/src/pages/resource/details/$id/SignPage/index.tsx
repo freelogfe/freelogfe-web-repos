@@ -31,7 +31,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
       window.history.forward();
   });
 
-  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.selectedNodeID);
+  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
 
   if (!selectedNode) {
     router.goBack();
@@ -70,7 +70,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
           type: 'resourceDetailPage/onClick_ConfirmSignContract',
         })}
-        disabled={!!resourceDetailPage.signExhibitNameErrorTip}
+        disabled={!!resourceDetailPage.sign_SignExhibitNameErrorTip}
         type='primary'
       >确认签约</FRectBtn>
     </div>
@@ -97,7 +97,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
           />}
         >
           <FInput
-            value={resourceDetailPage.signExhibitName}
+            value={resourceDetailPage.sign_SignExhibitName}
             className={styles.exhibitNameInput}
             debounce={300}
             onDebounceChange={(value) => {
@@ -108,9 +108,9 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
             }}
           />
           {
-            resourceDetailPage.signExhibitNameErrorTip && (<>
+            resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
               <div style={{ height: 5 }} />
-              <div className={styles.signExhibitNameErrorTip}>{resourceDetailPage.signExhibitNameErrorTip}</div>
+              <div className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
             </>)
           }
 

@@ -18,7 +18,7 @@ interface NodeSelectorProps {
 }
 
 function NodeSelector({dispatch, resourceDetailPage, nodes}: NodeSelectorProps) {
-  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.selectedNodeID);
+  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
 
   return (<FDropdown
     overlay={nodes.list.length > 0 ? (<div style={{width: 638}}>
@@ -39,7 +39,7 @@ function NodeSelector({dispatch, resourceDetailPage, nodes}: NodeSelectorProps) 
           >
             <Space size={10}>
               <span>{n.nodeName}</span>
-              {resourceDetailPage.signedNodeIDs.includes(n.nodeId) && (
+              {resourceDetailPage.sign_SignedNodeIDs.includes(n.nodeId) && (
                 <span className={styles.contracted}>(已签约)</span>)}
             </Space>
           </Menu.Item>))
@@ -77,7 +77,7 @@ function NodeSelector({dispatch, resourceDetailPage, nodes}: NodeSelectorProps) 
                     type="negative"
                     text={'选择签约的节点…'}/>)
               }
-              {resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID || -1) && (
+              {resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID || -1) && (
                 <span className={styles.contracted}>(已签约)</span>)}
             </>)
         }

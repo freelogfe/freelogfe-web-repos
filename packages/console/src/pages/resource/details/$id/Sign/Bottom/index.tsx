@@ -16,13 +16,13 @@ function Bottom({ dispatch, resourceDetailPage }: BottomProps) {
 
   return (<div className={styles.signBottom}>
     {
-      !resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID)
+      !resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID)
         ? (<FRectBtn
           className={styles.signButton}
           disabled={
-            resourceDetailPage.selectedNodeID === -1
+            resourceDetailPage.sign_SelectedNodeID === -1
             || resourceDetailPage.version === ''
-            || resourceDetailPage.signResources.map((sr) => {
+            || resourceDetailPage.sign_SignResources.map((sr) => {
               return sr.policies.filter((srp) => srp.checked).length + sr.contracts.filter((srp) => srp.checked).length;
             }).includes(0)
             // || !!marketResourcePage.signResources.find((sr) => {
@@ -36,7 +36,7 @@ function Bottom({ dispatch, resourceDetailPage }: BottomProps) {
           }}
         >立即签约</FRectBtn>)
         : (<span>该资源已签约，可进入<FLink
-          to={FUtil.LinkTo.exhibitManagement({ exhibitID: resourceDetailPage.signedResourceExhibitID })}
+          to={FUtil.LinkTo.exhibitManagement({ exhibitID: resourceDetailPage.sign_SignedResourceExhibitID })}
           className={styles.gotoExhibitLink}
         >展品管理</FLink>进行授权管理</span>)
     }

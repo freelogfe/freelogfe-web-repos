@@ -15,11 +15,11 @@ interface ResourcesAndPoliciesProps {
 
 function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoliciesProps) {
 
-  const showResource = resourceDetailPage.signResources;
+  const showResource = resourceDetailPage.sign_SignResources;
 
   const [visibleR, setVisibleR] = React.useState<string>('');
 
-  const showRInfo = resourceDetailPage.signResources.find((sr) => sr.id === visibleR);
+  const showRInfo = resourceDetailPage.sign_SignResources.find((sr) => sr.id === visibleR);
 
   return (<>
     <div className={styles.smallTitle}>当前资源</div>

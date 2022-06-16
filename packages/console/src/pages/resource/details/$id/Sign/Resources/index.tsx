@@ -23,7 +23,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
     dispatch<ChangeAction>({
       type: 'resourceDetailPage/change',
       payload: {
-        signResources: resourceDetailPage.signResources.map((sr) => ({
+        sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => ({
           ...sr,
           selected: id === sr.id,
         })),
@@ -35,7 +35,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
     <div style={{ height: 7 }} />
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
-      resourceDetailPage.signResources
+      resourceDetailPage.sign_SignResources
         .filter((r, i: number) => i === 0)
         .map((r) => {
           return (<div
@@ -120,11 +120,11 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
     }
 
     {
-      resourceDetailPage.signResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
+      resourceDetailPage.sign_SignResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
     }
 
     {
-      resourceDetailPage.signResources
+      resourceDetailPage.sign_SignResources
         .filter((r, i: number) => i !== 0)
         .map((r) => {
           // console.log(r, '####902j3l42k3jl');

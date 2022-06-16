@@ -22,13 +22,10 @@ export interface ResourceDetailPageModelState {
   resource_Popularity: number;
   resource_IsCollected: boolean;
 
-
-  version: string;
   // 所有可签约的节点 ID
-  signedNodeIDs: number[];
-  selectedNodeID: number;
-
-  allRawResources: {
+  sign_SignedNodeIDs: number[];
+  sign_SelectedNodeID: number;
+  sign_AllRawResources: {
     resourceId: string;
     resourceName: string;
     resourceType: string;
@@ -36,7 +33,7 @@ export interface ResourceDetailPageModelState {
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
   }[];
-  signResources: {
+  sign_SignResources: {
     selected: boolean;
     id: string;
     name: string;
@@ -62,28 +59,24 @@ export interface ResourceDetailPageModelState {
       fullInfo: PolicyFullInfo_Type;
     }[];
   }[];
-  signedResourceExhibitID: string;
+  sign_SignedResourceExhibitID: string;
+  sign_SignExhibitName: string;
+  sign_SignExhibitNameErrorTip: string;
 
+  version: string;
   allVersions: string[];
-
   releaseTime: string;
-
   description: string;
-
   properties: {
     key: string;
     value: string;
     description?: string;
   }[];
-
   options: {
     key: string;
     value: string;
     description: string;
   }[];
-
-  signExhibitName: string;
-  signExhibitNameErrorTip: string;
 
   graphFullScreen: boolean;
   viewportGraphShow: 'dependency' | 'authorization';
@@ -179,7 +172,6 @@ const initStates: ResourceDetailPageModelState = {
   page_State: 'loading',
 
   resource_ID: '',
-  // isSignPage: false,
   resource_Info: {
     cover: '',
     name: '',
@@ -187,28 +179,23 @@ const initStates: ResourceDetailPageModelState = {
     tags: [],
     about: '',
   },
-
   resource_Popularity: 0,
   resource_IsCollected: false,
 
-  signedNodeIDs: [],
-  selectedNodeID: -1,
-
-  allRawResources: [],
-  signResources: [],
-  signedResourceExhibitID: '',
+  sign_SignedNodeIDs: [],
+  sign_SelectedNodeID: -1,
+  sign_AllRawResources: [],
+  sign_SignResources: [],
+  sign_SignedResourceExhibitID: '',
+  sign_SignExhibitName: '',
+  sign_SignExhibitNameErrorTip: '',
 
   allVersions: [],
   version: '',
   releaseTime: '',
   description: '',
-
   properties: [],
-
   options: [],
-
-  signExhibitName: '',
-  signExhibitNameErrorTip: '',
 
   graphFullScreen: false,
   viewportGraphShow: 'dependency',
@@ -282,7 +269,7 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          selectedNodeID: payload,
+          sign_SelectedNodeID: payload,
         },
       });
 
@@ -290,7 +277,7 @@ const Model: ResourceDetailPageModelType = {
         resourceDetailPage,
       }));
 
-      const allRawResourceIDs = resourceDetailPage.allRawResources.map((r: any) => r.resourceId);
+      const allRawResourceIDs = resourceDetailPage.sign_AllRawResources.map((r: any) => r.resourceId);
 
       const params: GetAllContractsParamsType = {
         nodeID: payload,
@@ -321,10 +308,10 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signedResourceExhibitID: data1?.presentableId || '',
-          signResources: resourceDetailPage.allRawResources
-            .map<ResourceDetailPageModelState['signResources'][number]>((value: any, index: number) => {
-              const contracts: ResourceDetailPageModelState['signResources'][number]['contracts'] = result[index]
+          sign_SignedResourceExhibitID: data1?.presentableId || '',
+          sign_SignResources: resourceDetailPage.sign_AllRawResources
+            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((value: any, index: number) => {
+              const contracts: ResourceDetailPageModelState['sign_SignResources'][number]['contracts'] = result[index]
                 .filter((c) => {
                   return c.status === 0;
                 })
@@ -351,7 +338,7 @@ const Model: ResourceDetailPageModelType = {
               const allContractUsedPolicyIDs: string[] = contracts
                 .filter((cp) => cp.status !== 'terminal')
                 .map<string>((cp) => cp.policyID);
-              const policies: ResourceDetailPageModelState['signResources'][number]['policies'] = value.policies
+              const policies: ResourceDetailPageModelState['sign_SignResources'][number]['policies'] = value.policies
                 .filter((rsp: any) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
                 .map((rsp: any) => ({
                   checked: false,
@@ -388,7 +375,7 @@ const Model: ResourceDetailPageModelType = {
       const needVerifyResource: {
         id: string;
         policyIDs: string[];
-      }[] = resourceDetailPage.signResources.map((sr: any) => {
+      }[] = resourceDetailPage.sign_SignResources.map((sr: any) => {
         return {
           id: sr.id,
           policyIDs: sr.policies.filter((p: any) => {
@@ -445,7 +432,7 @@ const Model: ResourceDetailPageModelType = {
       }
 
       const params: Parameters<typeof getAvailableExhibitName>[0] = {
-        nodeID: resourceDetailPage.selectedNodeID,
+        nodeID: resourceDetailPage.sign_SelectedNodeID,
         exhibitName: resourceDetailPage.resource_Info?.name.split('/')[1] || '',
       };
 
@@ -453,8 +440,8 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signExhibitName: signExhibitName,
-          signExhibitNameErrorTip: '',
+          sign_SignExhibitName: signExhibitName,
+          sign_SignExhibitNameErrorTip: '',
           page_State: 'signPage',
         },
       });
@@ -466,11 +453,11 @@ const Model: ResourceDetailPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
-        nodeId: resourceDetailPage.selectedNodeID,
+        nodeId: resourceDetailPage.sign_SelectedNodeID,
         resourceId: resourceDetailPage.resource_ID,
         version: resourceDetailPage.version,
-        presentableName: resourceDetailPage.signExhibitName,
-        resolveResources: resourceDetailPage.signResources.map((sr: any) => ({
+        presentableName: resourceDetailPage.sign_SignExhibitName,
+        resolveResources: resourceDetailPage.sign_SignResources.map((sr: any) => ({
           resourceId: sr.id,
           contracts: [
             ...sr.contracts.filter((srp: any) => srp.checked && srp.status !== 'terminal')
@@ -504,8 +491,8 @@ const Model: ResourceDetailPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
+            sign_SignExhibitName: payload,
+            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
           },
         });
         return;
@@ -516,7 +503,7 @@ const Model: ResourceDetailPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
-        nodeId: resourceDetailPage.selectedNodeID,
+        nodeId: resourceDetailPage.sign_SelectedNodeID,
         presentableName: payload,
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
@@ -524,8 +511,8 @@ const Model: ResourceDetailPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
+            sign_SignExhibitName: payload,
+            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
           },
         });
         return;
@@ -534,8 +521,8 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signExhibitName: payload,
-          signExhibitNameErrorTip: '',
+          sign_SignExhibitName: payload,
+          sign_SignExhibitNameErrorTip: '',
         },
       });
     },
@@ -552,7 +539,7 @@ const Model: ResourceDetailPageModelType = {
       const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
 
-      let rawSignResources: ResourceDetailPageModelState['allRawResources'] = [data];
+      let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data];
 
       // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
       // 获取上抛资源信息
@@ -573,7 +560,7 @@ const Model: ResourceDetailPageModelType = {
       }
 
       // console.log(rawSignResources, 'rawSignResources2309ef');
-      console.log(data, 'data893lksdflk');
+      // console.log(data, 'data893lksdflk');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -589,10 +576,10 @@ const Model: ResourceDetailPageModelType = {
           allVersions: data.resourceVersions.map((v: any) => v.version),
           version: resourceDetailPage.version || data.latestVersion,
 
-          allRawResources: rawSignResources,
+          sign_AllRawResources: rawSignResources,
 
-          signResources: rawSignResources
-            .map<ResourceDetailPageModelState['signResources'][number]>((rs, i: number) => {
+          sign_SignResources: rawSignResources
+            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((rs, i: number) => {
               return {
                 selected: i === 0,
                 id: rs.resourceId,
@@ -666,7 +653,7 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signedNodeIDs: data3.map((p: any) => p.nodeId),
+          sign_SignedNodeIDs: data3.map((p: any) => p.nodeId),
         },
       });
     },

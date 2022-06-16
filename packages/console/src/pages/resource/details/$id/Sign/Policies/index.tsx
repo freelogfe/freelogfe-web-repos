@@ -20,7 +20,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
 
   const [visibleModalPolicyID, setVisibleModalPolicyID] = React.useState<string>('');
 
-  const policies = resourceDetailPage.signResources.find((r) => r.selected)?.policies;
+  const policies = resourceDetailPage.sign_SignResources.find((r) => r.selected)?.policies;
 
   // console.log(policies, 'policies@#$rsafd980judsafsad');
 
@@ -28,7 +28,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
     return null;
   }
 
-  const isSignedNode: boolean = resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID);
+  const isSignedNode: boolean = resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID);
 
   const modalPolicy = policies.find((pl) => {
     return pl.fullInfo.policyId === visibleModalPolicyID;
@@ -38,7 +38,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
     dispatch<ChangeAction>({
       type: 'resourceDetailPage/change',
       payload: {
-        signResources: resourceDetailPage.signResources.map((sr) => {
+        sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => {
           if (!sr.selected) {
             return sr;
           }

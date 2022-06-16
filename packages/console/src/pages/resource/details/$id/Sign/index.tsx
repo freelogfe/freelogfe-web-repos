@@ -22,7 +22,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
   // console.log(resourceDetailPage.resource_Info, 'resourceDetailPage.resource_Info898888888');
   const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
 
-  const resource = resourceDetailPage.signResources.find((r) => r.selected);
+  const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
 
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
@@ -64,7 +64,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           </div>
           <div className={styles.signRight}>
             {
-              resourceDetailPage.selectedNodeID === -1
+              resourceDetailPage.sign_SelectedNodeID === -1
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
                 </div>)

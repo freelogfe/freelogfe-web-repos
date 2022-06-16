@@ -19,14 +19,14 @@ interface ContractsProps {
 function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
   const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
-  const selectedResource = resourceDetailPage.signResources.find((r) => r.selected);
+  const selectedResource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
   const contracts = selectedResource?.contracts;
 
   if (!contracts || contracts.length === 0) {
     return null;
   }
 
-  const isSignedNode: boolean = resourceDetailPage.signedNodeIDs.includes(resourceDetailPage.selectedNodeID);
+  const isSignedNode: boolean = resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID);
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '当前合约' : '可复用的合约'}</div>
@@ -44,7 +44,7 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
                   dispatch<ChangeAction>({
                     type: 'resourceDetailPage/change',
                     payload: {
-                      signResources: resourceDetailPage.signResources.map((sr) => {
+                      sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => {
                         if (!sr.selected) {
                           return sr;
                         }
