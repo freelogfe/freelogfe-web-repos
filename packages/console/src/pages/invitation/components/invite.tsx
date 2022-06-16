@@ -7,7 +7,6 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { Divider } from 'antd';
 import { router } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
-import url from '../../../../../@freelog/components-lib/src/index.config';
 
 interface InviteProps {
   jump:any;

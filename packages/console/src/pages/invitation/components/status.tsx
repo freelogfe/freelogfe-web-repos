@@ -4,16 +4,18 @@ import * as AHooks from 'ahooks';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { Divider } from 'antd';
 import { FRectBtn } from '@/components/FButton';
+import { router } from 'umi';
+import useUrlState from '@ahooksjs/use-url-state';
 
 interface StatusProps {
   status: 101 | 10 | 0 | 1 | 2;
   tipData: string;
-  goBack: any
+  jump: any;
 }
 
-function Status({ status, tipData, goBack }: StatusProps) {
+function Status({ status, tipData, jump }: StatusProps) {
   const titleData = {
-    10: '内测申请审核未通过',
+    10: '内测申请已提交，待审核',
     0: '内测申请审核中',
     2: '内测申请审核未通过',
     1: '审核通过',
@@ -34,10 +36,15 @@ function Status({ status, tipData, goBack }: StatusProps) {
     101: '返回上一页',
   };
   function act() {
-    if(status === 101){
-      goBack && goBack()
+    if ([101, 2].includes(status)) {
+      jump && jump('Apply');
+    }
+    if ([10, 0].includes(status)) {
+      window.location.href =
+        window.location.origin.replace('//console.', '//www.') + '/user/profile';
     }
   }
+
   AHooks.useMount(async () => {
     // const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     // const { ret, errCode, data } = await FServiceAPI.TestQualification.betaCodesActivate({ codes: '' });
@@ -55,18 +62,23 @@ function Status({ status, tipData, goBack }: StatusProps) {
       <div className="flex-2"></div>
       <div className={'mb-31'}>图片</div>
       <span className={styles.title + ' mb-40'}>{titleData[status]}</span>
-      <span className={styles.title2 + ' mb-40'}>{tipDatas[status]}</span>
-      <div className={styles.tip + ' mb-40'}>
-        经审核，您需要重新提交您常用的创作平台或社区的个人主页网址
-        “https://ones.ai/project/#/team/X4r1vx7D/project/248wHyM4awN6K6r
-        w/component/FUPZ3tkt/view/12H9iFTi”无法打开
-      </div>
+      {status !== 2 && <span className={styles.title2 + ' mb-40'}>{tipDatas[status]}</span>}
+      {status === 2 && <div className={styles.tip + ' mb-40'}>{tipDatas[status]}</div>}
       <div className="flex-row-center">
         <FRectBtn className="mb-40 " onClick={act}>
           {buttonDatas[status]}
         </FRectBtn>
       </div>
-      {[0, 2].includes(status) && <span className={styles.link}>我有内测邀请码</span>}
+      {[0, 2].includes(status) && (
+        <span
+          className={styles.link}
+          onClick={() => {
+            jump('InviteCode');
+          }}
+        >
+          我有内测邀请码
+        </span>
+      )}
       <div className="flex-3"></div>
     </div>
   );

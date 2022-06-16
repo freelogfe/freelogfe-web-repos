@@ -35,7 +35,7 @@ function Form({ finished }: FormProps) {
         return { value: item.code, title: item.name, disabled: false, children: item.children };
       }),
     ]);
-    setCityData(cities); 
+    setCityData(cities);
   });
 
   function submit() {
@@ -50,10 +50,11 @@ function Form({ finished }: FormProps) {
     manual: true,
   });
   React.useEffect(() => {
-    finished && finished(10);
-    // if (data) {
-    //   window.location.href = 'http://user.testfreelog.com';
-    // }
+    console.log(data)
+    if (data && data.errcode === 0) {
+      console.log(data);
+      finished && finished(10);
+    }
   }, [data]);
 
   return (
@@ -122,7 +123,15 @@ function Form({ finished }: FormProps) {
           }}
         />
         <div className="flex-row-center">
-          <FRectBtn className="mt-40 " disabled={city === '0' || !occupation || !description} onClick={()=>{run()}}>提交申请</FRectBtn>
+          <FRectBtn
+            className="mt-40 "
+            disabled={city === '0' || !occupation || !description}
+            onClick={() => {
+              run();
+            }}
+          >
+            提交申请
+          </FRectBtn>
         </div>
       </div>
       <div className="flex-1"></div>

@@ -22,7 +22,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "@freelog/components-lib": "^0.1.9",
-    "@freelog/tools-lib": "^0.1.97",
+    "@freelog/tools-lib": "^0.1.98",
     "ahooks": "^3.3.8",
     "copy-to-clipboard": "^3.3.1",
     "react": "17.x",
