@@ -71,7 +71,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
     return (<SignPage />);
   }
 
-  if (resourceDetailPage.allVersions.length === 0) {
+  if (resourceDetailPage.resourceVersion_AllVersions.length === 0) {
     return <>
       <div style={{ height: 100 }} />
       <div className={styles.modal}>
@@ -135,12 +135,12 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
       <div style={{ height: 10 }} />
 
       {
-        resourceDetailPage.version && (<div className={styles.versionWrap}>
+        resourceDetailPage.resourceVersion_SelectedVersion && (<div className={styles.versionWrap}>
           <div className={styles.versionTitle}>
             <Space size={10}>
-              <FTitleText text={'当前版本 ' + resourceDetailPage.version} />
+              <FTitleText text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion} />
               <FDropdownMenu
-                options={[...resourceDetailPage.allVersions].reverse().map((v) => ({ value: v }))}
+                options={[...resourceDetailPage.resourceVersion_AllVersions].reverse().map((v) => ({ value: v }))}
                 onChange={(value) => {
                   router.push(FUtil.LinkTo.resourceDetails({
                     resourceID: resourceDetailPage.resource_ID,
@@ -153,7 +153,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             </Space>
 
             <FContentText
-              text={'发布时间 ' + resourceDetailPage.releaseTime}
+              text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
               type='negative'
             />
 

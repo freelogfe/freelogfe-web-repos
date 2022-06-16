@@ -63,20 +63,22 @@ export interface ResourceDetailPageModelState {
   sign_SignExhibitName: string;
   sign_SignExhibitNameErrorTip: string;
 
-  version: string;
-  allVersions: string[];
-  releaseTime: string;
-  description: string;
-  properties: {
-    key: string;
-    value: string;
-    description?: string;
-  }[];
-  options: {
-    key: string;
-    value: string;
+  resourceVersion_SelectedVersion: string;
+  resourceVersion_AllVersions: string[];
+  resourceVersion_Info: {
+    releaseTime: string;
     description: string;
-  }[];
+    properties: {
+      key: string;
+      value: string;
+      description?: string;
+    }[];
+    options: {
+      key: string;
+      value: string;
+      description: string;
+    }[];
+  };
 
   graphFullScreen: boolean;
   viewportGraphShow: 'dependency' | 'authorization';
@@ -190,12 +192,14 @@ const initStates: ResourceDetailPageModelState = {
   sign_SignExhibitName: '',
   sign_SignExhibitNameErrorTip: '',
 
-  allVersions: [],
-  version: '',
-  releaseTime: '',
-  description: '',
-  properties: [],
-  options: [],
+  resourceVersion_SelectedVersion: '',
+  resourceVersion_AllVersions: [],
+  resourceVersion_Info: {
+    releaseTime: '',
+    description: '',
+    properties: [],
+    options: [],
+  },
 
   graphFullScreen: false,
   viewportGraphShow: 'dependency',
@@ -455,7 +459,7 @@ const Model: ResourceDetailPageModelType = {
       const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
         nodeId: resourceDetailPage.sign_SelectedNodeID,
         resourceId: resourceDetailPage.resource_ID,
-        version: resourceDetailPage.version,
+        version: resourceDetailPage.resourceVersion_SelectedVersion,
         presentableName: resourceDetailPage.sign_SignExhibitName,
         resolveResources: resourceDetailPage.sign_SignResources.map((sr: any) => ({
           resourceId: sr.id,
@@ -573,8 +577,8 @@ const Model: ResourceDetailPageModelType = {
             tags: data.tags,
             about: data.intro,
           },
-          allVersions: data.resourceVersions.map((v: any) => v.version),
-          version: resourceDetailPage.version || data.latestVersion,
+          resourceVersion_AllVersions: data.resourceVersions.map((v: any) => v.version),
+          resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data.latestVersion,
 
           sign_AllRawResources: rawSignResources,
 
@@ -601,7 +605,7 @@ const Model: ResourceDetailPageModelType = {
       });
       // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
 
-      if (!data.latestVersion || !!resourceDetailPage.version) {
+      if (!data.latestVersion || !!resourceDetailPage.resourceVersion_SelectedVersion) {
         return;
       }
 
@@ -663,12 +667,12 @@ const Model: ResourceDetailPageModelType = {
         resourceDetailPage,
       }));
 
-      if (!resourceDetailPage.version) {
+      if (!resourceDetailPage.resourceVersion_SelectedVersion) {
         return;
       }
 
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
-        version: resourceDetailPage.version,
+        version: resourceDetailPage.resourceVersion_SelectedVersion,
         resourceId: resourceDetailPage.resource_ID,
       };
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
@@ -679,33 +683,35 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          releaseTime: FUtil.Format.formatDateTime(data.createDate),
-          description: data.description,
-          properties: [
-            ...Object.entries(data.systemProperty as object)
-              .map((s) => ({
-                key: s[0],
-                value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
-              })),
-            ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+          resourceVersion_Info: {
+            releaseTime: FUtil.Format.formatDateTime(data.createDate),
+            description: data.description,
+            properties: [
+              ...Object.entries(data.systemProperty as object)
+                .map((s) => ({
+                  key: s[0],
+                  value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+                })),
+              ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+                .map((p: any) => {
+                  // console.log(p, 'PPPPP()*UOI');
+                  return {
+                    key: p.key,
+                    value: p.defaultValue,
+                    description: p.remark,
+                  };
+                }),
+            ],
+            options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
               .map((p: any) => {
-                // console.log(p, 'PPPPP()*UOI');
+                // console.log(p, '@@@@@@#$#@$@#$@#');
                 return {
                   key: p.key,
                   value: p.defaultValue,
                   description: p.remark,
                 };
               }),
-          ],
-          options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
-            .map((p: any) => {
-              // console.log(p, '@@@@@@#$#@$@#$@#');
-              return {
-                key: p.key,
-                value: p.defaultValue,
-                description: p.remark,
-              };
-            }),
+          },
         },
       });
     },
@@ -763,23 +769,23 @@ async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsTyp
   return await Promise.all(allPromises);
 }
 
-interface GetAllContractExhibitsParamsType {
-  resourceIDs: string[];
-  nodeID: number;
-}
-
-async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExhibitsParamsType) {
-  const allPromises = resourceIDs.map(async (rid) => {
-    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-      licenseeIdentityType: 2,
-      licensorId: rid,
-      licenseeId: nodeID,
-    };
-    const { data } = await FServiceAPI.Contract.batchContracts(params);
-    return data;
-  });
-  return await Promise.all(allPromises);
-}
+// interface GetAllContractExhibitsParamsType {
+//   resourceIDs: string[];
+//   nodeID: number;
+// }
+//
+// async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExhibitsParamsType) {
+//   const allPromises = resourceIDs.map(async (rid) => {
+//     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+//       licenseeIdentityType: 2,
+//       licensorId: rid,
+//       licenseeId: nodeID,
+//     };
+//     const { data } = await FServiceAPI.Contract.batchContracts(params);
+//     return data;
+//   });
+//   return await Promise.all(allPromises);
+// }
 
 interface GetAvailableExhibitNameParamType {
   nodeID: number;

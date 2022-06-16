@@ -16,17 +16,17 @@ function Description({dispatch, resourceDetailPage}: DescriptionProps) {
   return (<>
     <div style={{height: 30}}/>
     {
-      !resourceDetailPage.description || resourceDetailPage.description === '<p></p>'
+      !resourceDetailPage.resourceVersion_Info.description || resourceDetailPage.resourceVersion_Info.description === '<p></p>'
         ? (<FContentText
           text={FUtil1.I18n.message('description_empty')}
           type="negative"
         />)
         : (<div className={styles.styles}>
           <FExpandable>
-            {resourceDetailPage.description && (<div
+            {resourceDetailPage.resourceVersion_Info.description && (<div
               // ref={refContainer}
               // style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
-              dangerouslySetInnerHTML={{__html: resourceDetailPage.description}}
+              dangerouslySetInnerHTML={{__html: resourceDetailPage.resourceVersion_Info.description}}
               className={styles.container}
             />)}
           </FExpandable>

@@ -13,7 +13,7 @@ interface PropertyProps {
 }
 
 function Property({dispatch, resourceDetailPage}: PropertyProps) {
-  if (resourceDetailPage.properties.length === 0) {
+  if (resourceDetailPage.resourceVersion_Info.properties.length === 0) {
     return null;
   }
 
@@ -27,7 +27,7 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
       <div style={{height: 20}}/>
       <div className={styles.list}>
         {
-          resourceDetailPage.properties.map((p, index) => {
+          resourceDetailPage.resourceVersion_Info.properties.map((p, index) => {
             return (<div key={p.key}>
               <Space size={10}>
                 <FContentText
