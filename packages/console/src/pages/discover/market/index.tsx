@@ -54,9 +54,11 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                 first: -1,
               });
             }}
-            className={(category.first === -1 ? styles.firstSelected : '') + ' ' + styles.first}
+            className={(category.first === -1 ? styles.allSelected : '') + ' ' + styles.first}
           >
-            全部
+            <span className={styles.left}></span>
+            <span className={styles.text}>全部</span>
+            <span className={styles.right}></span>
           </a>
           {categoryData.first.map((item: string, index: number) => {
             return (
@@ -69,17 +71,19 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                 }}
                 key={item}
                 className={
-                  (category.first === index ? styles.firstSelected : '') + ' ' + styles.first
+                  (category.first === index ? [0,1].includes(index) ?  styles.allSelected : styles.firstSelected : '') + ' ' + styles.first
                   // + (index === categoryData.first.length - 1 ? '' : ' mr-30')
                 }
               >
-                {item}
+                <span className={styles.left}></span>
+                <span className={styles.text}>{item}</span>
+                <span className={styles.right}></span>
               </a>
             );
           })}
         </div>
         {category.first > 1 ? (
-          <div className={"flex-row-center py-15 " + styles.secondContainer}>
+          <div className={'flex-row-center py-15 ' + styles.secondContainer}>
             {category.first > 1 &&
               // @ts-ignore
               categoryData.second[category.first].map((item: string, index: number) => {
@@ -93,9 +97,11 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                     }}
                     key={item}
                     className={
-                      (category.second === item ? styles.secondSelected : '') + ' ' + styles.second
+                      (category.second === item ? styles.secondSelected : '') +
+                      ' ' +
+                      styles.second +
                       // @ts-ignore
-                      + (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')
+                      (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')
                     }
                   >
                     {item}
