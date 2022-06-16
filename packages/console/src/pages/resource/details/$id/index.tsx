@@ -122,7 +122,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
           <div style={{ width: 2 }} />
           <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
           <div style={{ width: 5 }} />
-          <span>({resourceDetailPage.resource_IsCollected}人气)</span>
+          <span>({resourceDetailPage.resource_Popularity}人气)</span>
         </FTextBtn>
       </div>
 
