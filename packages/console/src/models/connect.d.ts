@@ -21,6 +21,7 @@ import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
 import {ResourceEditorPageModelState} from './resourceEditorPage';
+import {DashboardPageModelState} from './dashboardPage';
 
 export {
   // RouterHistoriesModelState,
@@ -47,6 +48,7 @@ export {
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
   ResourceEditorPageModelState,
+  DashboardPageModelState,
 };
 
 export interface ConnectState {
@@ -75,4 +77,5 @@ export interface ConnectState {
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
+  dashboardPage: DashboardPageModelState;
 }

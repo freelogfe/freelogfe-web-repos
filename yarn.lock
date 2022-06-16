@@ -581,10 +581,10 @@
     moment "^2.29.1"
     nprogress "^0.2.0"
 
-"@freelog/tools-lib@^0.1.97":
-  version "0.1.97"
-  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.97.tgz#dd500d781ca3d7b8a916b18432a7cdd559f2faa9"
-  integrity sha512-sOfWeYAUlVaqttcE2CFTjIKCg0oBpWYWhwprxezO6qkfea8od9m2KN0WVJtte7m+0mZey9VZCB+hoMUKpIZoBQ==
+"@freelog/tools-lib@^0.1.99":
+  version "0.1.99"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.99.tgz#e9789f12593991f2543b91d969d4cc647d239fec"
+  integrity sha512-5nllAGmuIDmglrtPcuplrKvHbxn+x4g4gOB75QpZyQMrevfXenz0hTXVGhL48wj8RU+Kd0kLUGYhHRyRnWdP9A==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"

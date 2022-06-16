@@ -2,49 +2,49 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 
-export type TempModelState = WholeReadonly<{
+export interface DashboardPageModelState {
   info: null | {};
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
-  payload: Partial<TempModelState>;
+  payload: Partial<DashboardPageModelState>;
 }
 
 export interface OnMount_Page_Action extends AnyAction {
-  type: 'temp/onMount_Page';
+  type: 'dashboardPage/onMount_Page';
 }
 
 export interface OnUnmount_Page_Action extends AnyAction {
-  type: 'temp/onUnmount_Page';
+  type: 'dashboardPage/OnUnmount_Page';
 }
 
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
 
-interface TempModelType {
-  namespace: 'temp';
-  state: TempModelState;
+interface DashboardPageModelType {
+  namespace: 'dashboardPage';
+  state: DashboardPageModelState;
   effects: {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<TempModelState, ChangeAction>;
+    change: DvaReducer<DashboardPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const initStates: TempModelState = {
+const initStates: DashboardPageModelState = {
   info: null,
 };
 
-const Model: TempModelType = {
-  namespace: 'temp',
+const Model: DashboardPageModelType = {
+  namespace: 'dashboardPage',
   state: initStates,
   effects: {
     * onMount_Page({}: OnMount_Page_Action, {}: EffectsCommandMap) {

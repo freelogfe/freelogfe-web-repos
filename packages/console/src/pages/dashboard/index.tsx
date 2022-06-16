@@ -7,20 +7,36 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FFormLayout from '@/components/FFormLayout';
 import img_Questionnaire from '@/assets/questionnaire.png';
 import img_Invite from '@/assets/invite.png';
-
 import FContent from '@/components/FIcons/FContent';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
 import FLoudspeaker from '@/components/FIcons/FLoudspeaker';
+import * as AHooks from 'ahooks';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, DashboardPageModelState } from '@/models/connect';
+import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPage';
 
 interface DashboardProps {
-
+  dispatch: Dispatch;
+  dashboardPage: DashboardPageModelState;
 }
 
-function Dashboard({}: DashboardProps) {
+function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMount_Page_Action>({
+      type: 'dashboardPage/onMount_Page',
+    });
+  });
+
+  AHooks.useMount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'dashboardPage/OnUnmount_Page',
+    });
+  });
+
   return (<div className={styles.dashboard}>
     <div className={styles.notice}>
       <div className={styles.noticeContent}>
@@ -383,4 +399,6 @@ function Dashboard({}: DashboardProps) {
   </div>);
 }
 
-export default Dashboard;
+export default connect(({ dashboardPage }: ConnectState) => ({
+  dashboardPage,
+}))(Dashboard);
