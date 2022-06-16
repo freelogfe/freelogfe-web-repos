@@ -216,6 +216,7 @@ const Model: ResourceDetailPageModelType = {
           resource_ID: payload.resourceID,
         },
       });
+      console.log('onMountPage', '####3');
       if (FUtil.Tool.getUserIDByCookies() !== -1) {
         yield put<FetchCollectionInfoAction>({
           type: 'fetchCollectionInfo',
@@ -539,27 +540,28 @@ const Model: ResourceDetailPageModelType = {
         resourceIDs: [resourceDetailPage.resource_ID],
       };
 
+
       // 本次要添加的一些列资源信息
-      const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+      const [data_ResourceDetail]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
 
-      let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data];
+      let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data_ResourceDetail];
 
       // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
       // 获取上抛资源信息
-      if ((data.baseUpcastResources || []).length > 0) {
+      if ((data_ResourceDetail.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
 
         const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-          resourceIDs: data.baseUpcastResources.map((r) => r.resourceId),
+          resourceIDs: data_ResourceDetail.baseUpcastResources.map((r) => r.resourceId),
         };
 
         // 本次要添加的一些列资源信息
-        const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+        const data_BatchInfos: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
 
         rawSignResources = [
           ...rawSignResources,
-          ...data1,
+          ...data_BatchInfos,
         ];
       }
 
@@ -571,14 +573,14 @@ const Model: ResourceDetailPageModelType = {
         payload: {
           page_State: 'details',
           resource_Info: {
-            cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
-            name: data.resourceName,
-            type: data.resourceType,
-            tags: data.tags,
-            about: data.intro,
+            cover: data_ResourceDetail.coverImages.length > 0 ? data_ResourceDetail.coverImages[0] : '',
+            name: data_ResourceDetail.resourceName,
+            type: data_ResourceDetail.resourceType,
+            tags: data_ResourceDetail.tags,
+            about: data_ResourceDetail.intro,
           },
-          resourceVersion_AllVersions: data.resourceVersions.map((v: any) => v.version),
-          resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data.latestVersion,
+          resourceVersion_AllVersions: data_ResourceDetail.resourceVersions.map((v: any) => v.version),
+          resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data_ResourceDetail.latestVersion,
 
           sign_AllRawResources: rawSignResources,
 
@@ -605,7 +607,7 @@ const Model: ResourceDetailPageModelType = {
       });
       // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
 
-      if (!data.latestVersion || !!resourceDetailPage.resourceVersion_SelectedVersion) {
+      if (!data_ResourceDetail.latestVersion || !!resourceDetailPage.resourceVersion_SelectedVersion) {
         return;
       }
 
@@ -857,8 +859,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
   // 本次要添加的一些列资源信息
   // const { data: data_batchResourceInfo }: { data: Omit<HandleResourceBatchInfoReturn, 'authProblem'> } = await FServiceAPI.Resource.batchInfo(params);
   const { data: data_batchResourceInfo }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
-
-  // console.log(data_batchResourceInfo, 'data_batchResourceInfo 238998sdhfkjshdfksdf');
+  // console.log(JSON.stringify(data_batchResourceInfo), 'data_batchResourceInfo 238998sdhfkjshdfksdf');
 
   const needGetAuthProblemResourceIDs: string[] = data_batchResourceInfo.filter((dbri) => {
     return dbri.latestVersion !== '';
@@ -875,10 +876,11 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     };
     const { data } = await FServiceAPI.Resource.batchAuth(params1);
     // console.log(data_BatchAuth, 'data_BatchAuth @@@34234wfgsrd');
+    // console.log(data, 'datasdfd*******')
     resourceAuthProblems = data;
   }
 
-  return data_batchResourceInfo.map((dbri) => {
+  const result = data_batchResourceInfo.map((dbri) => {
     const authP = resourceAuthProblems.find((rap) => {
       return rap.resourceId === dbri.resourceId;
     });
@@ -887,4 +889,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
       authProblem: authP ? !authP.isAuth : false,
     };
   });
+
+  // console.log(JSON.stringify(result), 'result23423423');
+  return result;
 }
