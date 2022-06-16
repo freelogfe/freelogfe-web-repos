@@ -216,7 +216,7 @@ function ResourceCreator({
 
             {category.first > 1 ? (
               <>
-                <span className="ml-30">二级类型：</span>
+                <span className="ml-30">子类型：</span>
                 <FAutoComplete
                   errorText={resourceCreatorPage.resourceTypeErrorText}
                   value={

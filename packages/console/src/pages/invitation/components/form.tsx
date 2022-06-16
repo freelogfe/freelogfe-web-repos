@@ -35,13 +35,7 @@ function Form({ finished }: FormProps) {
         return { value: item.code, title: item.name, disabled: false, children: item.children };
       }),
     ]);
-    setCityData(cities);
-    // const { ret, errCode, data } = await FServiceAPI.TestQualification.betaCodesActivate({ codes: '' });
-    // const { ret, errCode, data } = await FServiceAPI.TestQualification.betaApply({
-    //   areaCode: '',
-    //   occupation: '',
-    //   description: '',
-    // });
+    setCityData(cities); 
   });
 
   function submit() {
@@ -61,7 +55,6 @@ function Form({ finished }: FormProps) {
     //   window.location.href = 'http://user.testfreelog.com';
     // }
   }, [data]);
-  AHooks.useUnmount(() => {});
 
   return (
     <div className={'flex-column flex-1 w-100x align-center ' + styles.style}>

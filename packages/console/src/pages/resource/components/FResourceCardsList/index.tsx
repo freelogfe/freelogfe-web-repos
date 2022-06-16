@@ -138,7 +138,7 @@ function FResourceCardsList({
 
             {category.first > 1 ? (
               <>
-                <span className="ml-30">二级类型：</span>
+                <span className="ml-30">子类型：</span>
                 <FDropdown
                   overlay={
                     <FMenu
@@ -219,6 +219,17 @@ function FResourceCardsList({
         <>
           <div style={{ height: 40 }} />
           <div className={styles.Content}>
+            {showGotoCreateBtn && (
+              <div
+                className={'flex-column-center mb-20 m-10 ' + styles.createCard}
+                onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
+              >
+                <div className={'flex-column-center ' + styles.createButton}>
+                  <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
+                </div>
+                <span className={'mt-20 ' + styles.createText}>创建资源</span>
+              </div>
+            )}
             {dataSource.map((i: any, j: number) => (
               <FResourceCard
                 key={i.id}
