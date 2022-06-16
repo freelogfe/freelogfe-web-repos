@@ -43,9 +43,9 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
       <FTitleText type='h1' text={'确认签约'} />
 
       <div className={styles.headerResource}>
-        <FCoverImage src={resourceDetailPage.resourceInfo?.cover || ''} width={36} />
+        <FCoverImage src={resourceDetailPage.resource_Info?.cover || ''} width={36} />
         <div style={{ width: 8 }} />
-        <FContentText text={resourceDetailPage.resourceInfo?.name} />
+        <FContentText text={resourceDetailPage.resource_Info?.name} />
       </div>
     </Space>
 

@@ -11,22 +11,19 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
 
-  resourceId: string;
-  version: string;
-
-  // isSignPage: boolean;
-
-  resourceInfo: null | {
+  resource_ID: string;
+  resource_Info: null | {
     cover: string;
     name: string;
     type: string;
     tags: string[];
     about: string;
   };
+  resource_Popularity: number;
+  resource_IsCollected: boolean;
 
-  popularity: number;
-  hasCollect: boolean;
 
+  version: string;
   // 所有可签约的节点 ID
   signedNodeIDs: number[];
   selectedNodeID: number;
@@ -180,9 +177,10 @@ interface ResourceDetailPageModelType {
 
 const initStates: ResourceDetailPageModelState = {
   page_State: 'loading',
-  resourceId: '',
+
+  resource_ID: '',
   // isSignPage: false,
-  resourceInfo: {
+  resource_Info: {
     cover: '',
     name: '',
     type: '',
@@ -190,8 +188,8 @@ const initStates: ResourceDetailPageModelState = {
     about: '',
   },
 
-  popularity: 0,
-  hasCollect: false,
+  resource_Popularity: 0,
+  resource_IsCollected: false,
 
   signedNodeIDs: [],
   selectedNodeID: -1,
@@ -224,7 +222,7 @@ const Model: ResourceDetailPageModelType = {
       yield put({
         type: 'change',
         payload: {
-          resourceId: payload.resourceID,
+          resource_ID: payload.resourceID,
         },
       });
       if (FUtil.Tool.getUserIDByCookies() !== -1) {
@@ -264,14 +262,14 @@ const Model: ResourceDetailPageModelType = {
         resourceDetailPage,
       }));
 
-      if (!resourceDetailPage.hasCollect) {
+      if (!resourceDetailPage.resource_IsCollected) {
         const params: Parameters<typeof FServiceAPI.Collection.collectResource>[0] = {
-          resourceId: resourceDetailPage.resourceId,
+          resourceId: resourceDetailPage.resource_ID,
         };
         yield call(FServiceAPI.Collection.collectResource, params);
       } else {
         const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
-          resourceId: resourceDetailPage.resourceId,
+          resourceId: resourceDetailPage.resource_ID,
         };
         yield call(FServiceAPI.Collection.deleteCollectResource, params);
       }
@@ -292,7 +290,7 @@ const Model: ResourceDetailPageModelType = {
         resourceDetailPage,
       }));
 
-      const allRawResourceIDs = resourceDetailPage.allRawResources.map((r:any) => r.resourceId);
+      const allRawResourceIDs = resourceDetailPage.allRawResources.map((r: any) => r.resourceId);
 
       const params: GetAllContractsParamsType = {
         nodeID: payload,
@@ -304,7 +302,7 @@ const Model: ResourceDetailPageModelType = {
 
       const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         nodeId: payload,
-        resourceId: resourceDetailPage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
 
@@ -325,7 +323,7 @@ const Model: ResourceDetailPageModelType = {
         payload: {
           signedResourceExhibitID: data1?.presentableId || '',
           signResources: resourceDetailPage.allRawResources
-            .map<ResourceDetailPageModelState['signResources'][number]>((value:any, index: number) => {
+            .map<ResourceDetailPageModelState['signResources'][number]>((value: any, index: number) => {
               const contracts: ResourceDetailPageModelState['signResources'][number]['contracts'] = result[index]
                 .filter((c) => {
                   return c.status === 0;
@@ -354,8 +352,8 @@ const Model: ResourceDetailPageModelType = {
                 .filter((cp) => cp.status !== 'terminal')
                 .map<string>((cp) => cp.policyID);
               const policies: ResourceDetailPageModelState['signResources'][number]['policies'] = value.policies
-                .filter((rsp:any) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
-                .map((rsp:any) => ({
+                .filter((rsp: any) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
+                .map((rsp: any) => ({
                   checked: false,
                   fullInfo: rsp,
                 }));
@@ -390,12 +388,12 @@ const Model: ResourceDetailPageModelType = {
       const needVerifyResource: {
         id: string;
         policyIDs: string[];
-      }[] = resourceDetailPage.signResources.map((sr:any) => {
+      }[] = resourceDetailPage.signResources.map((sr: any) => {
         return {
           id: sr.id,
-          policyIDs: sr.policies.filter((p:any) => {
+          policyIDs: sr.policies.filter((p: any) => {
             return p.checked;
-          }).map((p:any) => {
+          }).map((p: any) => {
             return p.fullInfo.policyId;
           }),
         };
@@ -448,7 +446,7 @@ const Model: ResourceDetailPageModelType = {
 
       const params: Parameters<typeof getAvailableExhibitName>[0] = {
         nodeID: resourceDetailPage.selectedNodeID,
-        exhibitName: resourceDetailPage.resourceInfo?.name.split('/')[1] || '',
+        exhibitName: resourceDetailPage.resource_Info?.name.split('/')[1] || '',
       };
 
       const signExhibitName: string = yield call(getAvailableExhibitName, params);
@@ -469,20 +467,20 @@ const Model: ResourceDetailPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
         nodeId: resourceDetailPage.selectedNodeID,
-        resourceId: resourceDetailPage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
         version: resourceDetailPage.version,
         presentableName: resourceDetailPage.signExhibitName,
-        resolveResources: resourceDetailPage.signResources.map((sr:any) => ({
+        resolveResources: resourceDetailPage.signResources.map((sr: any) => ({
           resourceId: sr.id,
           contracts: [
-            ...sr.contracts.filter((srp:any) => srp.checked && srp.status !== 'terminal')
-              .map((srp:any) => {
+            ...sr.contracts.filter((srp: any) => srp.checked && srp.status !== 'terminal')
+              .map((srp: any) => {
                 return {
                   policyId: srp.policyID,
                 };
               }),
-            ...sr.policies.filter((srp:any) => srp.checked)
-              .map((srp:any) => {
+            ...sr.policies.filter((srp: any) => srp.checked)
+              .map((srp: any) => {
                 return {
                   policyId: srp.fullInfo.policyId,
                 };
@@ -547,7 +545,7 @@ const Model: ResourceDetailPageModelType = {
       }));
       // console.log('fetchInfo ####9823u4oi');
       const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-        resourceIDs: [resourceDetailPage.resourceId],
+        resourceIDs: [resourceDetailPage.resource_ID],
       };
 
       // 本次要添加的一些列资源信息
@@ -575,13 +573,13 @@ const Model: ResourceDetailPageModelType = {
       }
 
       // console.log(rawSignResources, 'rawSignResources2309ef');
-
+      console.log(data, 'data893lksdflk');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           page_State: 'details',
-          resourceInfo: {
+          resource_Info: {
             cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
             name: data.resourceName,
             type: data.resourceType,
@@ -590,7 +588,6 @@ const Model: ResourceDetailPageModelType = {
           },
           allVersions: data.resourceVersions.map((v: any) => v.version),
           version: resourceDetailPage.version || data.latestVersion,
-          //
 
           allRawResources: rawSignResources,
 
@@ -633,13 +630,13 @@ const Model: ResourceDetailPageModelType = {
       }));
 
       const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
-        resourceIds: resourceDetailPage.resourceId,
+        resourceIds: resourceDetailPage.resource_ID,
       };
 
       const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
 
       const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
-        resourceId: resourceDetailPage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
       };
 
       const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
@@ -648,8 +645,8 @@ const Model: ResourceDetailPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          hasCollect: data1[0].isCollected,
-          popularity: data2,
+          resource_IsCollected: data1[0].isCollected,
+          resource_Popularity: data2,
         },
       });
     },
@@ -660,7 +657,7 @@ const Model: ResourceDetailPageModelType = {
       // 获取当前用户与当前资源签过约的所有节点
       const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         userId: FUtil.Tool.getUserIDByCookies(),
-        resourceIds: resourceDetailPage.resourceId,
+        resourceIds: resourceDetailPage.resource_ID,
         // projection: 'nodeId',
       };
 
@@ -685,7 +682,7 @@ const Model: ResourceDetailPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         version: resourceDetailPage.version,
-        resourceId: resourceDetailPage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
       };
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
 

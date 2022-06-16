@@ -93,7 +93,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
 
   return (<div className={styles.style}>
     <Helmet>
-      <title>{`${resourceDetailPage.resourceInfo?.name || ''} - Freelog`}</title>
+      <title>{`${resourceDetailPage.resource_Info?.name || ''} - Freelog`}</title>
     </Helmet>
     <div className={styles.wrap}>
 
@@ -101,11 +101,11 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
 
       <div className={styles.header}>
         <Space size={10}>
-          <label className={styles.resourceType}>{resourceDetailPage.resourceInfo?.type || ''}</label>
+          <label className={styles.resourceType}>{resourceDetailPage.resource_Info?.type || ''}</label>
           <FTitleText
             style={{ width: 700 }}
             singleRow
-            text={resourceDetailPage.resourceInfo?.name || ''}
+            text={resourceDetailPage.resource_Info?.name || ''}
           />
         </Space>
         <FTextBtn
@@ -117,12 +117,12 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
         >
           {/*{marketResourcePage.hasCollect ? <FC}*/}
           <FFavorite
-            filled={resourceDetailPage.hasCollect}
+            filled={resourceDetailPage.resource_IsCollected}
           />
           <div style={{ width: 2 }} />
-          <span>{resourceDetailPage.hasCollect ? '已收藏' : '收藏'}</span>
+          <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
           <div style={{ width: 5 }} />
-          <span>({resourceDetailPage.popularity}人气)</span>
+          <span>({resourceDetailPage.resource_IsCollected}人气)</span>
         </FTextBtn>
       </div>
 
@@ -143,7 +143,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                 options={[...resourceDetailPage.allVersions].reverse().map((v) => ({ value: v }))}
                 onChange={(value) => {
                   router.push(FUtil.LinkTo.resourceDetails({
-                    resourceID: resourceDetailPage.resourceId,
+                    resourceID: resourceDetailPage.resource_ID,
                     version: value,
                   }));
                 }}

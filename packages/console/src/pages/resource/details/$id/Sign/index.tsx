@@ -19,26 +19,26 @@ interface SignProps {
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-
-  const resourceInfoLength: number = resourceDetailPage.resourceInfo?.about.length || 0;
+  // console.log(resourceDetailPage.resource_Info, 'resourceDetailPage.resource_Info898888888');
+  const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
 
   const resource = resourceDetailPage.signResources.find((r) => r.selected);
 
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
-        <FCoverImage src={resourceDetailPage.resourceInfo?.cover || ''} width={260} style={{ borderRadius: 10 }} />
+        <FCoverImage src={resourceDetailPage.resource_Info?.cover || ''} width={260} style={{ borderRadius: 10 }} />
         <div style={{ height: 20 }} />
         <div className={styles.babels}>
           {
-            (resourceDetailPage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
+            (resourceDetailPage.resource_Info?.tags || []).filter((t, i) => i < 5).map((t) => (
               <label key={t}>{t}</label>))
           }
         </div>
         <div style={{ height: 20 }} />
 
         <Tooltip
-          title={resourceDetailPage.resourceInfo?.about}
+          title={resourceDetailPage.resource_Info?.about}
           mouseEnterDelay={3}
           overlayClassName={styles.TooltipOverlay}
           color={'rgba(0, 0, 0, 0.5)'}
@@ -47,7 +47,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
         >
           <div>
             <FContentText
-              text={resourceInfoLength < 205 ? (resourceDetailPage.resourceInfo?.about || '') : (resourceDetailPage.resourceInfo?.about.substr(0, 205) + '...')} />
+              text={resourceInfoLength < 205 ? (resourceDetailPage.resource_Info?.about || '') : (resourceDetailPage.resource_Info?.about.substr(0, 205) + '...')} />
           </div>
         </Tooltip>
       </div>

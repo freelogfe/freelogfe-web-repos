@@ -70,7 +70,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
               {/*}*/}
               {
                 resourceDetailPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-                  resourceID={resourceDetailPage.resourceId}
+                  resourceID={resourceDetailPage.resource_ID}
                   version={resourceDetailPage.version}
                   width={920}
                   height={500}
@@ -86,7 +86,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
 
               {
                 resourceDetailPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-                  resourceID={resourceDetailPage.resourceId}
+                  resourceID={resourceDetailPage.resource_ID}
                   version={resourceDetailPage.version}
                   width={920}
                   height={500}
@@ -132,7 +132,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
 
         {
           resourceDetailPage.viewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
-            resourceID={resourceDetailPage.resourceId}
+            resourceID={resourceDetailPage.resource_ID}
             version={resourceDetailPage.version}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
@@ -150,7 +150,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
 
         {
           resourceDetailPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-            resourceID={resourceDetailPage.resourceId}
+            resourceID={resourceDetailPage.resource_ID}
             version={resourceDetailPage.version}
             width={window.innerWidth - 60}
             // width={'100%'}
