@@ -22,6 +22,7 @@ import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
 import {ResourceEditorPageModelState} from './resourceEditorPage';
 import {DashboardPageModelState} from './dashboardPage';
+import {NodeCreatorPageModelState} from './nodeCreatorPage';
 
 export {
   // RouterHistoriesModelState,
@@ -49,6 +50,7 @@ export {
   InformExhibitInfoPageModelState,
   ResourceEditorPageModelState,
   DashboardPageModelState,
+  NodeCreatorPageModelState,
 };
 
 export interface ConnectState {
@@ -78,4 +80,5 @@ export interface ConnectState {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
   dashboardPage: DashboardPageModelState;
+  nodeCreatorPage: NodeCreatorPageModelState;
 }

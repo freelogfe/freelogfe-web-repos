@@ -19,6 +19,8 @@ import {
 import { FCheck, FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
+import * as AHooks from 'ahooks';
+import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -26,6 +28,18 @@ interface NodeCreatorProps {
 }
 
 function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMount_Page_Action>({
+      type: 'nodeCreatorPage/onMount_Page',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'nodeCreatorPage/onUnmount_Page',
+    });
+  });
   React.useEffect(() => {
     dispatch<InitModelStatesAction>({
       type: 'nodes/initModelStates',
