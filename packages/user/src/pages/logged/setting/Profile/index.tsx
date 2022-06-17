@@ -16,6 +16,7 @@ import {
   OnChange_Residence_Action, OnClick_SubmitUserInfoBtn_Action,
 } from '@/models/settingPage';
 import { Moment } from 'moment';
+import {FServiceAPI} from '@freelog/tools-lib';
 
 const DatePickerAsAnyType: any = DatePicker;
 
@@ -26,6 +27,10 @@ interface ProfileProps {
 }
 
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
+
+  // FServiceAPI.User.uploadHeadImg({
+  //   file: File,
+  // })
 
   return (<>
     <div className={styles.avatar}>
