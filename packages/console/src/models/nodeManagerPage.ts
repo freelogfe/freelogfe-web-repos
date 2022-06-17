@@ -595,7 +595,7 @@ const Model: NodeManagerModelType = {
       };
 
       const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
-      console.log(data_Exhibits, 'data!@$@$@#$@#4');
+      // console.log(data_Exhibits, 'data!@$@$@#$@#4');
 
       if (data_Exhibits.dataList.length === 0) {
         if (nodeManagerPage.exhibit_SelectedType === '-1' && nodeManagerPage.exhibit_SelectedStatus === '2' && nodeManagerPage.exhibit_InputFilter === '') {
