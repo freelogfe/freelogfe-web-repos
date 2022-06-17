@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import img_market1 from '@/assets/market1@x2.png';
-import img_market2 from '@/assets/market2@x2.png';
+// import img_market1 from '@/assets/market1@x2.png';
+// import img_market2 from '@/assets/market2@x2.png';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
