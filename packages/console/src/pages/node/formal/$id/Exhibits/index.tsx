@@ -60,11 +60,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     key: i.id,
     ...i,
   }));
-
+// console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
       title: (<FTitleText
-        text={FUtil1.I18n.message('tableheader_exhibit')}
+        text={`${FUtil1.I18n.message('tableheader_exhibit')}`}
         type='table'
       />),
       dataIndex: 'name',
@@ -202,7 +202,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
       sider={<Sider />}
       header={<div className={styles.header}>
-        <FTitleText type='h1' text={'展品管理'} />
+        <FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
         <Space size={80}>
           <div>
             <span>类型：</span>

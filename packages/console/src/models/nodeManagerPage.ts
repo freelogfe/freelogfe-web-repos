@@ -38,6 +38,7 @@ export interface NodeManagerModelState {
     isAuth: boolean;
     authErrorText: string;
   }[];
+  exhibit_ListTotal: number;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
 
@@ -202,6 +203,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   'exhibit_SelectedStatus' |
   'exhibit_InputFilter' |
   'exhibit_List' |
+  'exhibit_ListTotal' |
   'exhibit_ListState' |
   'exhibit_ListMore'> = {
   exhibit_ResourceTypeOptions: [
@@ -217,6 +219,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_SelectedStatus: '2',
   exhibit_InputFilter: '',
   exhibit_List: [],
+  exhibit_ListTotal: -1,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
 };
@@ -591,10 +594,10 @@ const Model: NodeManagerModelType = {
         omitResourceType: 'theme',
       };
 
-      const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
-      // console.log(data, 'data!@$@$@#$@#4');
+      const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
+      console.log(data_Exhibits, 'data!@$@$@#$@#4');
 
-      if (data.dataList.length === 0) {
+      if (data_Exhibits.dataList.length === 0) {
         if (nodeManagerPage.exhibit_SelectedType === '-1' && nodeManagerPage.exhibit_SelectedStatus === '2' && nodeManagerPage.exhibit_InputFilter === '') {
           yield put<ChangeAction>({
             type: 'change',
@@ -602,6 +605,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListState: 'noData',
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
+              exhibit_ListTotal: data_Exhibits.totalItem,
               listFirstLoaded: true,
             },
           });
@@ -612,6 +616,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListState: 'noSearchResult',
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
+              exhibit_ListTotal: data_Exhibits.totalItem,
               listFirstLoaded: true,
             },
           });
@@ -623,7 +628,7 @@ const Model: NodeManagerModelType = {
       const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
         nodeId: nodeManagerPage.nodeId,
         authType: 3,
-        presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
+        presentableIds: (data_Exhibits.dataList as any[]).map<string>((dl: any) => {
           return dl.presentableId;
         }).join(','),
       };
@@ -632,7 +637,7 @@ const Model: NodeManagerModelType = {
 
       const exhibit_List: NodeManagerModelState['exhibit_List'] = [
         ...list,
-        ...(data.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>((i: any) => {
+        ...(data_Exhibits.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>((i: any) => {
           const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
           return {
             id: i.presentableId,
@@ -661,8 +666,9 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           exhibit_List: exhibit_List,
+          exhibit_ListTotal: data_Exhibits.totalItem,
           exhibit_ListState: 'loaded',
-          exhibit_ListMore: data.totalItem > exhibit_List.length ? 'andMore' : 'noMore',
+          exhibit_ListMore: data_Exhibits.totalItem > exhibit_List.length ? 'andMore' : 'noMore',
           listFirstLoaded: true,
         },
       });
