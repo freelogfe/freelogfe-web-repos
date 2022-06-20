@@ -571,7 +571,7 @@
 
 "@freelog/tools-lib@^0.1.101":
   version "0.1.101"
-  resolved "https://registry.npmmirror.com/@freelog/tools-lib/-/tools-lib-0.1.101.tgz#329dcd4bcbd900e340121e3321e77fe2fe553e12"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.101.tgz#329dcd4bcbd900e340121e3321e77fe2fe553e12"
   integrity sha512-9BYOGQyOAiywjqCYcpAPuOsiR7uXLi/CuMStISLeV7Xpc2ZgdETYvjBSZXQi91dCwHgZwncuXnRnW5LdN1/bWw==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
