@@ -1,1 +1,2 @@
 [0620/141813.336:ERROR:registration_protocol_win.cc(106)] CreateFile: 系统找不到指定的文件。 (0x2)
+[0620/144029.338:ERROR:registration_protocol_win.cc(106)] CreateFile: 系统找不到指定的文件。 (0x2)
