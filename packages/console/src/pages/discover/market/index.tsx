@@ -75,7 +75,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
   return (
     <>
-      <div className={'mb-30 flex-column ' + styles.filter}>
+      <div className={'flex-column ' + styles.filter}>
         <div className="flex-row-center mt-30">
           <a
             onClick={() => {
@@ -157,7 +157,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
               },
             });
           }}
-          wrapClassName="self-end mt-45"
+          wrapClassName="self-end my-31"
           theme="dark"
           size="small"
           className={styles.filterInput}
@@ -180,7 +180,6 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
       {discoverPage.dataSource.length > 0 ? (
         <>
-          <div style={{ height: 30 }} />
           <div className={styles.Content}>
             {discoverPage.dataSource.map((resource: any) => (
               <FResourceCard
