@@ -25,6 +25,7 @@ import {
   OnChange_Residence_Action,
   OnClick_SubmitUserInfoBtn_Action,
 } from '@/models/settingPage';
+import { FetchInfoAction } from '@/models/user';
 import { Moment } from 'moment';
 import { FServiceAPI } from '@freelog/tools-lib';
 
@@ -64,10 +65,15 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
       return;
     }
     if (info.file.status === 'done') {
+      console.log(info.fileList[0])
       await FServiceAPI.User.uploadHeadImg({
         // @ts-ignore
         file: info.fileList[0],
       });
+      dispatch<FetchInfoAction>({
+        type: 'user/fetchInfo',
+      });
+
       setLoading(false);
       // Get this url from response in real world.
       // getBase64(info.file.originFileObj as RcFile, (url) => {
