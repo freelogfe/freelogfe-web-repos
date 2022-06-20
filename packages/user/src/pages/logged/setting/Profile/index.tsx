@@ -49,7 +49,12 @@ const beforeUpload = (file: RcFile) => {
   if (!isLt2M) {
     message.error('Image must smaller than 2MB!');
   }
-  return isJpgOrPng && isLt2M;
+  FServiceAPI.User.uploadHeadImg({
+    // @ts-ignore
+    file: file,
+  });
+  // return isJpgOrPng && isLt2M;
+  return false;
 };
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
   // FServiceAPI.User.uploadHeadImg({
@@ -93,7 +98,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             className="avatar-uploader"
             showUploadList={false}
             beforeUpload={beforeUpload}
-            onChange={handleChange}
+            // onChange={handleChange}
           >
             <img
               src={settingPage.avatar}
