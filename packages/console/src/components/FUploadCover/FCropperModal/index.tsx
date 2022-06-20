@@ -4,12 +4,8 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 import { FTextBtn } from '@/components/FButton';
-// import FIncrease from '@/components/FIcons/FIncrease';
-// import FDecrease from '@/components/FIcons/FDecrease';
-// import FRotate from '@/components/FIcons/FRotate';
 
 interface FCropperModalProps {
   uploadRef: any;
