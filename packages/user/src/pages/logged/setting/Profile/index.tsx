@@ -49,12 +49,9 @@ const beforeUpload = (file: RcFile) => {
   if (!isLt2M) {
     message.error('Image must smaller than 2MB!');
   }
-  FServiceAPI.User.uploadHeadImg({
-    // @ts-ignore
-    file: file,
-  });
-  // return isJpgOrPng && isLt2M;
-  return false;
+
+  return isJpgOrPng && isLt2M;
+  // return false;
 };
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
   // FServiceAPI.User.uploadHeadImg({
@@ -70,10 +67,10 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
       return;
     }
     if (info.file.status === 'done') {
-      console.log(info.fileList[0])
+      console.log(info.file.originFileObj);
       await FServiceAPI.User.uploadHeadImg({
         // @ts-ignore
-        file: info.fileList[0],
+        file: info.file.originFileObj,
       });
       dispatch<FetchInfoAction>({
         type: 'user/fetchInfo',
@@ -98,7 +95,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             className="avatar-uploader"
             showUploadList={false}
             beforeUpload={beforeUpload}
-            // onChange={handleChange}
+            onChange={handleChange}
           >
             <img
               src={settingPage.avatar}
