@@ -1,6 +1,7 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface DashboardPageModelState {
   info: null | {};
@@ -48,7 +49,7 @@ const Model: DashboardPageModelType = {
   state: initStates,
   effects: {
     * onMount_Page({}: OnMount_Page_Action, {}: EffectsCommandMap) {
-
+      FServiceAPI.St
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
