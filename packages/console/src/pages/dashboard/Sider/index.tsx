@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import img_Invite from '@/assets/invite.png';
-import img_Questionnaire from '@/assets/questionnaire.png';
+// import img_Invite from '@/assets/invite.png';
+// import img_Questionnaire from '@/assets/questionnaire.png';
 import FFormLayout from '@/components/FFormLayout';
 import { FTextBtn } from '@/components/FButton';
 import { Space } from 'antd';
