@@ -1,26 +1,28 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Button, Space} from 'antd';
+import { Button, Space } from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
-import {FRectBtn} from '@/components/FButton';
-import {router} from 'umi';
-import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
-import {DownOutlined} from '@ant-design/icons';
+import { FRectBtn } from '@/components/FButton';
+import { router } from 'umi';
+import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
+import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import FDropdown from "@/components/FDropdown";
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import FDropdown from '@/components/FDropdown';
+import categoryData from '@/utils/category';
+import friend from '@/assets/invitefriend/friend.png';
 
 const resourceTypeOptions = [
-  {text: '全部', value: '-1'},
-  ...FUtil.Predefined.resourceTypes.map((i) => ({value: i}))
+  { text: '全部', value: '-1' },
+  ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i })),
 ];
 
 const resourceStatusOptions = [
-  {text: '全部', value: '2'},
-  {text: '已上线', value: '1'},
-  {text: '已下线', value: '0'},
+  { text: '全部', value: '2' },
+  { text: '已上线', value: '1' },
+  { text: '已下线', value: '0' },
 ];
 
 const navs = [
@@ -61,15 +63,29 @@ interface FResourceCardsListProps {
 }
 
 function FResourceCardsList({
-                              resourceType, resourceStatus, inputText, dataSource, totalNum,
-                              onChangeResourceType, onChangeResourceStatus, onChangeInputText, onloadMore,
-                              showGotoCreateBtn = false, isCollect = false,
-                              onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore
-                            }: FResourceCardsListProps) {
-
+  resourceType,
+  resourceStatus,
+  inputText,
+  dataSource,
+  totalNum,
+  onChangeResourceType,
+  onChangeResourceStatus,
+  onChangeInputText,
+  onloadMore,
+  showGotoCreateBtn = false,
+  isCollect = false,
+  onBoomJuice,
+  onClickDetails,
+  onClickEditing,
+  onClickRevision,
+  onClickMore,
+}: FResourceCardsListProps) {
   const [typeText, setTypeText] = React.useState('');
   const [statusText, setStatusText] = React.useState('');
-
+  const [category, setCategory] = React.useState<any>({
+    first: -1,
+    second: '',
+  });
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
     setTypeText(selectedType?.text || selectedType?.value);
@@ -80,56 +96,142 @@ function FResourceCardsList({
     setStatusText(selectedStatus?.text || selectedStatus?.value);
   }, [resourceStatus]);
 
-  return (<>
-    <div style={{height: 40}}/>
-    <div className={styles.filter}>
-      <div className={styles.filterLeft}>
-        <div>
-          <span>{FUtil1.I18n.message('resource_type')}：</span>
-          <FDropdown overlay={<FMenu
-            options={resourceTypeOptions}
-            onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
-          />}>
-              <span style={{cursor: 'pointer'}}>{typeText}<DownOutlined
-                style={{marginLeft: 8}}/></span>
-          </FDropdown>
-        </div>
-        <div style={{marginLeft: 60}}>
-          <span>{FUtil1.I18n.message('resource_state')}：</span>
-          <FDropdown overlay={<FMenu
-            options={resourceStatusOptions}
-            onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')}
-          />}>
-            <span style={{cursor: 'pointer'}}>{statusText}<DownOutlined style={{marginLeft: 10}}/></span>
-          </FDropdown>
-        </div>
+  return (
+    <>
+      <div style={{ height: 40 }} />
+      <div className={styles.filter}>
+        <div className={styles.filterLeft}>
+          <div>
+            <span>{FUtil1.I18n.message('resource_type')}：</span>
+            <FDropdown
+              overlay={
+                <FMenu
+                  options={[
+                    {
+                      value: '-1',
+                      text: '全部',
+                    },
+                    ...categoryData.first.map((i, index) => {
+                      return {
+                        value: index + '',
+                        text: i,
+                      };
+                    }),
+                  ]}
+                  value={category.first}
+                  onClick={(value) => {
+                    setCategory({
+                      ...category,
+                      first: value,
+                      second: -1,
+                    });
+                    //onChangeResourceType && onChangeResourceType(value)
+                  }}
+                />
+              }
+            >
+              <span style={{ cursor: 'pointer' }}>
+                {categoryData.first[category.first] || '全部'}
+                <DownOutlined style={{ marginLeft: 8 }} />
+              </span>
+            </FDropdown>
 
+            {category.first > 1 ? (
+              <>
+                <span className="ml-30">子类型：</span>
+                <FDropdown
+                  overlay={
+                    <FMenu
+                      // @ts-ignore
+                      options={[
+                        {
+                          value: '-1',
+                          text: '全部',
+                        },
+                        // @ts-ignore
+                        ...categoryData.second[category.first].map((i, index) => {
+                          return {
+                            value: index + '',
+                            text: i,
+                          };
+                        }),
+                      ]}
+                      onClick={(value) => {
+                        setCategory({
+                          ...category,
+                          second: value,
+                        });
+                        // onChangeResourceType && onChangeResourceType(value)
+                      }}
+                    />
+                  }
+                >
+                  <span style={{ cursor: 'pointer' }}>
+                    {
+                      // @ts-ignore
+                      categoryData.second[category.first][category.second] || '全部'
+                    }
+                    <DownOutlined style={{ marginLeft: 8 }} />
+                  </span>
+                </FDropdown>
+              </>
+            ) : null}
+          </div>
+          <div style={{ marginLeft: 60 }}>
+            <span>{FUtil1.I18n.message('resource_state')}：</span>
+            <FDropdown
+              overlay={
+                <FMenu
+                  options={resourceStatusOptions}
+                  onClick={(value) =>
+                    onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')
+                  }
+                />
+              }
+            >
+              <span style={{ cursor: 'pointer' }}>
+                {statusText}
+                <DownOutlined style={{ marginLeft: 10 }} />
+              </span>
+            </FDropdown>
+          </div>
+        </div>
+        <Space size={20}>
+          <FInput
+            value={inputText}
+            debounce={300}
+            allowClear={true}
+            // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
+            onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
+            theme="dark"
+            className={styles.FInput}
+            placeholder={FUtil1.I18n.message('search_resource')}
+          />
+          {showGotoCreateBtn && (
+            <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
+              {FUtil1.I18n.message('create_resource')}
+            </FRectBtn>
+          )}
+        </Space>
       </div>
-      <Space size={20}>
-        <FInput
-          value={inputText}
-          debounce={300}
-          allowClear={true}
-          // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
-          onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
-          theme="dark"
-          className={styles.FInput}
-          placeholder={FUtil1.I18n.message('search_resource')}
-        />
-        {showGotoCreateBtn && <FRectBtn
-          onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
-          type="primary"
-        >{FUtil1.I18n.message('create_resource')}</FRectBtn>}
-      </Space>
-    </div>
 
-    {
-      dataSource.length > 0
-        ? (<>
-          <div style={{height: 40}}/>
+      {dataSource.length > 0 ? (
+        <>
+          <div style={{ height: 40 }} />
           <div className={styles.Content}>
-            {
-              dataSource.map((i: any, j: number) => (<FResourceCard
+            {showGotoCreateBtn && (
+              <div
+                className={'flex-column-center mb-20 m-10 ' + styles.createCard}
+                onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
+              >
+                <div className={'flex-column-center ' + styles.createButton}>
+                  <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
+                </div>
+                <span className={'mt-20 ' + styles.createText}>创建资源</span>
+              </div>
+            )}
+            {dataSource.map((i: any, j: number) => (
+              <FResourceCard
                 key={i.id}
                 resource={i}
                 type={isCollect ? 'favorite' : 'resource'}
@@ -139,35 +241,32 @@ function FResourceCardsList({
                 onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
                 onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
                 onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
-              />))
-            }
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
-            <div className={styles.bottomPadding}/>
+              />
+            ))}
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
+            <div className={styles.bottomPadding} />
           </div>
-          <div style={{height: 100}}/>
-        </>)
-        : (<FNoDataTip
-          height={'calc(100vh - 220px)'}
-          tipText={'没有符合条件的资源'}
-        />)
-    }
+          <div style={{ height: 100 }} />
+        </>
+      ) : (
+        <FNoDataTip height={'calc(100vh - 220px)'} tipText={'没有符合条件的资源'} />
+      )}
 
-    {
-      totalNum > dataSource.length && (<>
-
-        <div className={styles.bottom}>
-          <Button
-            className={styles.loadMore}
-            onClick={() => onloadMore && onloadMore()}
-          >加载更多</Button>
-        </div>
-        <div style={{height: 100}}/>
-      </>)
-    }
-    <div style={{height: 100}}/>
-  </>);
+      {totalNum > dataSource.length && (
+        <>
+          <div className={styles.bottom}>
+            <Button className={styles.loadMore} onClick={() => onloadMore && onloadMore()}>
+              加载更多
+            </Button>
+          </div>
+          <div style={{ height: 100 }} />
+        </>
+      )}
+      <div style={{ height: 100 }} />
+    </>
+  );
 }
 
 export default FResourceCardsList;

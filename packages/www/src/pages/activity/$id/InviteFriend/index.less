@@ -1,0 +1,302 @@
+.keyframes(@fx,@fy,@tx,@ty,@name) {
+  @keyframes @name {
+    0% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(15deg);
+    }
+    50% {
+      transform: rotate(0);
+    }
+    75% {
+      transform: rotate(-15deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  @keyframes cash {
+    0% {
+      transform: translate(0%);
+    }
+
+    100% {
+      transform: translate(192px);
+    }
+  }
+}
+//固定模式
+.animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
+  @animation-iteration-count,
+  @animation-direction) {
+  animation: @arguments;
+}
+.keyframes(0,0,0,0,packet);
+.invite-friend {
+  background: #ffffff;
+  height: calc(100vh - 70px);
+  margin: auto;
+  .link {
+    color: #2784ff;
+    &:active {
+      border-bottom: 1px solid #2784ff;
+    }
+    &:hover {
+      border-bottom: 1px solid #2784ff;
+    }
+  }
+
+  .invite-text {
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 325px);
+    z-index: 11;
+    width: 650px;
+    background: #ffffff;
+    border-radius: 6px;
+    .input {
+      padding: 10px;
+      width: 590px;
+      background: #ffffff;
+      border-radius: 4px;
+      min-height: 150px;
+      border: 1px solid #d8d8d8;
+      font-size: 14px;
+      font-weight: 400;
+      color: #666666;
+      line-height: 20px;
+      outline: none;
+    }
+  }
+
+  .op-0 {
+    opacity: 0 !important;
+  }
+  .banner-img {
+    width: 1920px;
+    margin-left: calc((100% - 1920px) / 2);
+  }
+  .banner-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    .banner {
+      width: 1060px;
+      margin-top: 381px;
+      .title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #555555;
+        line-height: 26px;
+      }
+      .tip {
+        font-size: 14px;
+        font-weight: 400;
+        color: #7a869a;
+        line-height: 20px;
+      }
+      .way {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2784ff;
+        line-height: 26px;
+      }
+    }
+  }
+
+  .category {
+    font-size: 40px;
+    font-weight: 400;
+    color: #222222;
+    line-height: 46px;
+    padding-top: 116px;
+    padding-bottom: 50px;
+  }
+  .praise {
+    background: #ffffff;
+    .container {
+      width: 1060px;
+      height: 818px;
+      background: rgba(233, 169, 35, 0.05);
+      border-radius: 50px;
+      .title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #8d640d;
+        line-height: 28px;
+      }
+      .title2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #8d640d;
+        line-height: 24px;
+        margin-top: 30px;
+        text-align: end;
+        margin-bottom: 42px;
+      }
+      .cash {
+        margin: 0 5px;
+        padding-bottom: 3px;
+        font-size: 28px !important;
+        color: #f1bc50 !important;
+      }
+    }
+  }
+  .steps {
+    background: #ffffff;
+    .container {
+      width: 1059px;
+      height: 796px;
+      background: rgba(66, 194, 140, 0.05);
+      border-radius: 50px;
+      .arrow {
+        width: 175px;
+        border-bottom: 2px dashed #d6d6d6;
+        position: relative;
+        &::after {
+          position: absolute;
+          left: 75px;
+          top: -5px;
+          border-top: 6px solid transparent;
+          border-bottom: 6px solid transparent;
+          border-left: 25px solid #d6d6d6;
+          content: '';
+        }
+      }
+      .des {
+        font-size: 30px;
+        font-weight: 600;
+        color: #189f66;
+        line-height: 36px;
+        white-space: normal;
+        word-break: normal;
+        word-wrap: break-word;
+        text-align: center;
+      }
+      .step {
+        width: 50px;
+        height: 50px;
+        background: rgba(179, 231, 209, 0.8);
+        font-size: 24px;
+        font-weight: 600;
+        border-radius: 50%;
+        padding-bottom: 2px;
+        color: #189f66;
+      }
+      .look-task {
+        position: absolute;
+        left: 0px;
+        top: 60px;
+        width: 100%;
+        a {
+          height: 18px;
+          font-size: 12px;
+          font-weight: 400;
+          text-align: center;
+          color: #2784ff;
+          line-height: 18px;
+        }
+      }
+      .invite-button {
+        width: 260px;
+        height: 80px !important;
+        border-radius: 10px !important;
+        background: #42c28c !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
+        font-size: 30px;
+        &:hover {
+          opacity: 0.6;
+        }
+      }
+      .invite-left {
+        font-size: 14px;
+        font-weight: 400;
+        color: #222222;
+        line-height: 20px;
+      }
+      .get-more {
+        font-size: 14px;
+        font-weight: 400;
+        color: #2784ff;
+        height: 20px;
+      }
+      .record {
+        padding: 0 70px;
+        .title-row {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+          padding-bottom: 10px;
+        }
+        .row {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+          padding: 20px 0;
+        }
+        .title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #222222;
+          line-height: 26px;
+          margin-right: 6px;
+        }
+        .tip {
+          font-size: 13px;
+          font-weight: 400;
+          color: #999999;
+          line-height: 18px;
+        }
+        .status0 {
+          color: #42c28c;
+        }
+        .status1 {
+          color: #e9a923;
+        }
+        .status2 {
+          color: #999999;
+        }
+        .c1 {
+          width: 60%;
+        }
+        .c2 {
+          width: 18%;
+        }
+        .c3 {
+          width: 12%;
+        }
+        .c4 {
+          width: 10%;
+        }
+        .item {
+          font-size: 14px;
+          font-weight: 600;
+          color: #222222;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+  .tutorial {
+    background: #ffffff;
+    .container {
+      width: 1059px;
+    }
+  }
+  .rule {
+    background: #ffffff;
+    padding-bottom: 100px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333333;
+    line-height: 22px;
+    white-space: normal;
+    word-break: normal;
+    word-wrap: break-word;
+    .container {
+      padding: 60px 70px;
+      width: 1060px;
+      height: 502px;
+      background: rgba(39, 132, 255, 0.08);
+      border-radius: 50px;
+    }
+  }
+}

@@ -5,6 +5,8 @@ import { connect, Dispatch } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
+import InviteFriend from './InviteFriend';
+
 import * as AHooks from 'ahooks';
 import {
   OnMountPageAction,
@@ -30,6 +32,7 @@ interface ActivityProps extends IRouteComponentProps {
 const Activities: any = {
   'ResourceCompetition': (<ResourceCompetition />),
   'play-newer': (<PlayNewer />),
+  'invite-friend': (<InviteFriend/>)
 };
 
 function Activity({
@@ -77,7 +80,6 @@ function Activity({
       </div>
     );
   }
-
   return (<>
     <Helmet>
       <title>{`${activityDetailsPage.pageTitle} - Freelog`}</title>
