@@ -138,6 +138,7 @@ const Model: DashboardPageModelType = {
         limit: 3,
         // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         isSelf: 1,
+        sort: 'createDate:-1',
       };
       const { data: data_ResourceList } = yield call(FServiceAPI.Resource.list, params5);
       // console.log(data_ResourceList, 'data_ResourceList 0392iojklsdf');
@@ -153,8 +154,8 @@ const Model: DashboardPageModelType = {
         type: 'change',
         payload: {
           resourceStatistic: {
-            totalProfit: data_RT.data,
-            lastWeekProfit: data_RL.data,
+            totalProfit: data_RT,
+            lastWeekProfit: data_RL,
             lastWeekContract: '0',
           },
           latestResources: (data_ResourceList.dataList as any[]).map<DashboardPageModelState['latestResources'][number]>((r) => {
@@ -178,8 +179,8 @@ const Model: DashboardPageModelType = {
           }),
 
           nodeStatistic: {
-            totalProfit: data_NT.data,
-            lastWeekProfit: data_NL.data,
+            totalProfit: data_NT,
+            lastWeekProfit: data_NL,
             lastWeekContract: '0',
           },
 

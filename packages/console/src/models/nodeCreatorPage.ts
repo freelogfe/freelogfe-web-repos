@@ -24,7 +24,7 @@ export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
 
-interface TempModelType {
+interface NodeCreatorPageModelType {
   namespace: 'nodeCreatorPage';
   state: NodeCreatorPageModelState;
   effects: {
@@ -44,7 +44,7 @@ const initStates: NodeCreatorPageModelState = {
   info: null,
 };
 
-const Model: TempModelType = {
+const Model: NodeCreatorPageModelType = {
   namespace: 'nodeCreatorPage',
   state: initStates,
   effects: {
