@@ -19,6 +19,7 @@ import { ConnectState, DashboardPageModelState } from '@/models/connect';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPage';
 import { FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
+import Notice from './Notice';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -40,18 +41,9 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
   });
 
   return (<div className={styles.dashboard}>
-    <div className={styles.notice}>
-      <div className={styles.noticeContent}>
-        <Space size={10}>
-          <FLoudspeaker style={{ color: '#2784FF' }} />
-          <span>系统维护通知：2月1日至3日进行系统维护。</span>
-        </Space>
-        <Space size={15}>
-          <span>2020/12/23</span>
-          <FTextBtn type='primary'>查看详情</FTextBtn>
-        </Space>
-      </div>
-    </div>
+
+    <Notice />
+
     <div className={styles.title}>
       <div style={{ height: 50 }} />
       <div className={styles.title1}>
