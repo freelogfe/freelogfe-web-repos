@@ -1,0 +1,67 @@
+@import '../../../config.less';
+
+.statisticsRight {
+  width: 260px;
+
+  .imgCard {
+    display: block;
+    width: 260px;
+    height: 120px;
+
+    &:hover {
+      border-radius: 6px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    & > img {
+      display: block;
+      width: 260px;
+      height: 120px;
+    }
+  }
+
+  .panelCard {
+    background: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 20px;
+
+    .linkList {
+      margin-bottom: -15px;
+
+      .linkListItem {
+        display: flex;
+        margin-bottom: 15px;
+
+        & > i {
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background: #666666;
+          margin-top: 8px;
+        }
+
+        & > span {
+          display: inline-block;
+          width: 5px;
+        }
+
+        & > a {
+          width: 200px;
+          font-size: 14px;
+          font-weight: 400;
+          color: #222222;
+          line-height: 20px;
+
+          &:hover {
+            color: @f-primary-color;
+          }
+
+          &:active {
+            color: #2376E5;
+          }
+        }
+      }
+    }
+  }
+}
