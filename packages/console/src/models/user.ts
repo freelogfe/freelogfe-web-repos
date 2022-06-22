@@ -5,6 +5,10 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 import FUtil1 from '@/utils';
 import { ConnectState } from '@/models/connect';
+import userPermission from '@/permissions/UserPermission';
+// import routes from '../../config/routes';
+import { router } from 'umi';
+// import { PushRouterAction } from '@/models/global';
 
 export interface UserModelState {
   info: null | {
@@ -57,6 +61,7 @@ export interface MarketModelType {
   subscriptions: {
     setup: Subscription;
     checkUser: Subscription;
+    checkUserPermission: Subscription;
   };
 }
 
@@ -103,6 +108,7 @@ const Model: MarketModelType = {
           type: 'fetchUserInfo',
         });
       }
+
       // console.log('!@#$!@#$!@#$@#$');
     },
     checkUser({ dispatch }) {
@@ -122,6 +128,21 @@ const Model: MarketModelType = {
           console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
         }
       }, false);
+    },
+    checkUserPermission({ dispatch, history }) {
+      // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
+      history.listen((listener) => {
+        // console.log(listener, 'listener098phijnoweklf');
+        userPermission.ready()
+          .then((resolve) => {
+            const { code, goToUrl } = userPermission.checkUrl(history.location.pathname);
+            // console.log(code, goToUrl, 'code, goToUrl90ow3pjfsdlkfjsldk');
+            if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
+              router.replace(goToUrl);
+            }
+          });
+      });
+
     },
   },
 };
@@ -144,3 +165,4 @@ function co() {
     message: FUtil1.I18n.message('msg_account_switched'),
   });
 }
+

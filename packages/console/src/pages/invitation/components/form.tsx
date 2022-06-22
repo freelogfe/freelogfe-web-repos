@@ -50,9 +50,9 @@ function Form({ finished }: FormProps) {
     manual: true,
   });
   React.useEffect(() => {
-    console.log(data)
+    // console.log(data)
     if (data && data.errcode === 0) {
-      console.log(data);
+      // console.log(data);
       finished && finished(10);
     }
   }, [data]);
