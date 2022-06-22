@@ -75,7 +75,7 @@ const Model: MarketModelType = {
   effects: {
     * fetchUserInfo({}: FetchUserInfoAction, { call, put }: EffectsCommandMap) {
       // console.log('!!!!!#423423423423');
-      const { data } = yield call(FServiceAPI.User.currentUserInfo);
+      const data = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
@@ -122,11 +122,8 @@ const Model: MarketModelType = {
         //     hidden: document.hidden,
         //   },
         // });
-        userPermission.ready()
-          .then((resolve) => {
-            const code = userPermission.check();
-            // console.log(code, 'codecodecodecodecode980w3rwoisdfjlfksjdlfk')
-            // console.log(code, goToUrl, 'code, goToUrl90ow3pjfsdlkfjsldk');
+        userPermission.check()
+          .then((code) => {
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
               co();
             }
@@ -143,10 +140,8 @@ const Model: MarketModelType = {
       // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
       history.listen((listener) => {
         // console.log(listener, 'listener098phijnoweklf');
-        userPermission.ready()
-          .then((resolve) => {
-            const { code, goToUrl } = userPermission.checkUrl(history.location.pathname);
-            // console.log(code, goToUrl, 'code, goToUrl90ow3pjfsdlkfjsldk');
+        userPermission.checkUrl(history.location.pathname)
+          .then(({ code, goToUrl }) => {
             if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
               router.replace(goToUrl);
             }

@@ -3,37 +3,19 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 type T_StateCode = 'SUCCESS' | 'ERR_NOT_LOGIN' | 'ERR_NOT_ALPHA_TEST' | 'ERR_SWITCHED_USER';
 
 class UserPermission {
-  private _userInfo: null | {
-    // status: 0;
-    userId: number;
-    userType: 0 | 1; // 用户类型 0:初始账户 1:内测账户
-  } = null;
+  private _userId: number = -1;
+  private _userType: 0 | 1 = 0; // 用户类型 0:初始账户 1:内测账户
+  private _userInfo: null | any = null;
+  private _taskQueue: Function[] = [];
+
+  private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
 
   constructor() {
-    this._userInfo = null;
+    this._ready();
   }
 
-  async ready(userInfo?: { userId: number; userType: 0 | 1; }): Promise<true> {
-    if (!!this._userInfo) {
-      return true;
-    }
-    if (!!userInfo) {
-      this._userInfo = userInfo;
-      return true;
-    }
-    if (FUtil.Tool.getUserIDByCookies() === -1) {
-      return true;
-    }
-    const { data } = await FServiceAPI.User.currentUserInfo();
-
-    this._userInfo = {
-      userId: data.userId,
-      userType: data.userType, // 用户类型 0:初始账户 1:内测账户
-    };
-    return true;
-  }
-
-  check(): T_StateCode {
+  async check(): Promise<T_StateCode> {
+    await this._ready();
     if (!this._userInfo || FUtil.Tool.getUserIDByCookies() === -1) {
       return 'ERR_NOT_LOGIN';
     }
@@ -49,8 +31,8 @@ class UserPermission {
     return 'SUCCESS';
   }
 
-  checkUrl(url: string): { code: T_StateCode; goToUrl?: string; } {
-    const stateCode = this.check();
+  async checkUrl(url: string): Promise<{ code: T_StateCode; goToUrl?: string; }> {
+    const stateCode = await this.check();
     if (
       stateCode === 'SUCCESS' ||
       url.startsWith(FUtil.LinkTo.market()) ||
@@ -87,6 +69,48 @@ class UserPermission {
     return {
       code: stateCode,
     };
+  }
+
+  async getUserInfo() {
+    await this._ready();
+    return this._userInfo;
+  }
+
+  private _ready(): Promise<any> {
+    const exc = () => {
+      while (this._taskQueue.length > 0) {
+        const task = this._taskQueue.shift();
+        task && task();
+      }
+    };
+    const handleTasks = async () => {
+      if (this._loadingData === 'End' || FUtil.Tool.getUserIDByCookies() === -1) {
+        exc();
+        return;
+      }
+      if (this._loadingData === 'Start') {
+        return;
+      }
+
+      // NO_START
+      this._loadingData = 'Start';
+
+      const { data } = await FServiceAPI.User.currentUserInfo();
+
+      this._loadingData = 'End';
+
+      this._userInfo = data;
+      this._userId = data.userId;
+      this._userType = data.userType; // 用户类型 0:初始账户 1:内测账户
+
+      exc();
+    };
+
+    const promise = new Promise((resolve) => {
+      this._taskQueue.push(resolve);
+    });
+    handleTasks();
+    return promise;
   }
 }
 
