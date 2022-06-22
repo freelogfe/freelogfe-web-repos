@@ -207,11 +207,11 @@ function FResourceCardsList({
             className={styles.FInput}
             placeholder={FUtil1.I18n.message('search_resource')}
           />
-          {showGotoCreateBtn && (
+          {/* {showGotoCreateBtn && (
             <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
               {FUtil1.I18n.message('create_resource')}
             </FRectBtn>
-          )}
+          )} */}
         </Space>
       </div>
 
