@@ -132,12 +132,12 @@ const Model: MarketModelType = {
             }
           });
       });
-      window.addEventListener('pagehide', event => {
-        if (event.persisted) {
-          /* the page isn't being discarded, so it can be reused later */
-          console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-        }
-      }, false);
+      // window.addEventListener('pagehide', event => {
+      //   if (event.persisted) {
+      //     /* the page isn't being discarded, so it can be reused later */
+      //     console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
+      //   }
+      // }, false);
     },
     checkUserPermission({ dispatch, history }) {
       // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
