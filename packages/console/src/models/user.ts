@@ -4,10 +4,11 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 import FUtil1 from '@/utils';
-import { ConnectState } from '@/models/connect';
+// import { ConnectState } from '@/models/connect';
 import userPermission from '@/permissions/UserPermission';
 // import routes from '../../config/routes';
 import { router } from 'umi';
+
 // import { PushRouterAction } from '@/models/global';
 
 export interface UserModelState {
@@ -84,12 +85,12 @@ const Model: MarketModelType = {
       });
     },
     * onVisibilityChange({ payload }: OnVisibilityChangeAction, { select }: EffectsCommandMap) {
-      const { user }: ConnectState = yield select(({ user }: ConnectState) => ({
-        user,
-      }));
-      if (FUtil.Tool.getUserIDByCookies() !== -1 && (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies())) {
-        co();
-      }
+      // const { user }: ConnectState = yield select(({ user }: ConnectState) => ({
+      //   user,
+      // }));
+      // if (FUtil.Tool.getUserIDByCookies() !== -1 && (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies())) {
+      //   co();
+      // }
 
     },
   },
@@ -115,12 +116,21 @@ const Model: MarketModelType = {
       window.document.addEventListener('visibilitychange', function() {
         // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
         // Modify behavior...
-        dispatch<OnVisibilityChangeAction>({
-          type: 'onVisibilityChange',
-          payload: {
-            hidden: document.hidden,
-          },
-        });
+        // dispatch<OnVisibilityChangeAction>({
+        //   type: 'onVisibilityChange',
+        //   payload: {
+        //     hidden: document.hidden,
+        //   },
+        // });
+        userPermission.ready()
+          .then((resolve) => {
+            const code = userPermission.check();
+            // console.log(code, 'codecodecodecodecode980w3rwoisdfjlfksjdlfk')
+            // console.log(code, goToUrl, 'code, goToUrl90ow3pjfsdlkfjsldk');
+            if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
+              co();
+            }
+          });
       });
       window.addEventListener('pagehide', event => {
         if (event.persisted) {
@@ -139,6 +149,10 @@ const Model: MarketModelType = {
             // console.log(code, goToUrl, 'code, goToUrl90ow3pjfsdlkfjsldk');
             if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
               router.replace(goToUrl);
+            }
+
+            if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
+              co();
             }
           });
       });

@@ -34,8 +34,12 @@ class UserPermission {
   }
 
   check(): T_StateCode {
-    if (!this._userInfo) {
+    if (!this._userInfo || FUtil.Tool.getUserIDByCookies() === -1) {
       return 'ERR_NOT_LOGIN';
+    }
+
+    if (this._userInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
+      return 'ERR_SWITCHED_USER';
     }
 
     if (this._userInfo.userType === 0) {
@@ -65,6 +69,13 @@ class UserPermission {
       };
     }
 
+    if (stateCode === 'ERR_SWITCHED_USER') {
+      return {
+        code: stateCode,
+        goToUrl: url,
+      };
+    }
+
     if (stateCode === 'ERR_NOT_ALPHA_TEST' && !url.startsWith(FUtil.LinkTo.invitation())) {
       // console.log(FUtil.LinkTo.invitation(), 'FUtil.LinkTo.invitation()90io3jsidkf;sldkfj');
       return {
@@ -72,6 +83,7 @@ class UserPermission {
         goToUrl: FUtil.LinkTo.invitation({ goTo: url }),
       };
     }
+
     return {
       code: stateCode,
     };
