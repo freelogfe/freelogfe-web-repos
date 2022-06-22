@@ -150,10 +150,6 @@ const Model: MarketModelType = {
             if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
               router.replace(goToUrl);
             }
-
-            if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
-              co();
-            }
           });
       });
 
