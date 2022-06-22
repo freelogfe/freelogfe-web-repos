@@ -8,13 +8,13 @@ import Description from './Description';
 import Property from './Property';
 import Option from './Option';
 import Viewport from './Viewport';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import {
   OnClickCollectionAction,
   OnMountPageAction,
   OnChangeVersionAction,
   OnUnmountPageAction,
-} from '@/models/marketResourcePage';
+} from '@/models/resourceDetailPage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
 import SignPage from './SignPage';
@@ -25,22 +25,23 @@ import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-import FNoDataTip from '@/components/FNoDataTip';
+// import FNoDataTip from '@/components/FNoDataTip';
 import FResultTip from '@/components/FResultTip';
 import FUtil1 from '@/utils';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState,
+  resourceDetailPage: ResourceDetailPageModelState,
 }
 
-function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetailsProps) {
+function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetailsProps) {
 
   const [state] = useUrlState<{ version: string }>();
 
   AHooks.useMount(async () => {
     dispatch<OnMountPageAction>({
-      type: 'marketResourcePage/onMountPage',
+      type: 'resourceDetailPage/onMountPage',
       payload: {
         resourceID: match.params.id,
       },
@@ -49,24 +50,28 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
-      type: 'marketResourcePage/onUnmountPage',
+      type: 'resourceDetailPage/onUnmountPage',
     });
   });
 
   React.useEffect(() => {
     dispatch<OnChangeVersionAction>({
-      type: 'marketResourcePage/onChangeVersion',
+      type: 'resourceDetailPage/onChangeVersion',
       payload: {
         version: state.version,
       },
     });
   }, [state]);
 
-  if (marketResourcePage.isSignPage) {
+  if (resourceDetailPage.page_State === 'loading') {
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
+  }
+
+  if (resourceDetailPage.page_State === 'signPage') {
     return (<SignPage />);
   }
 
-  if (marketResourcePage.allVersions.length === 0) {
+  if (resourceDetailPage.resourceVersion_AllVersions.length === 0) {
     return <>
       <div style={{ height: 100 }} />
       <div className={styles.modal}>
@@ -82,14 +87,13 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
           }}
         />
 
-
       </div>
     </>;
   }
 
   return (<div className={styles.style}>
     <Helmet>
-      <title>{`${marketResourcePage.resourceInfo?.name || ''} - Freelog`}</title>
+      <title>{`${resourceDetailPage.resource_Info?.name || ''} - Freelog`}</title>
     </Helmet>
     <div className={styles.wrap}>
 
@@ -97,28 +101,28 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
 
       <div className={styles.header}>
         <Space size={10}>
-          <label className={styles.resourceType}>{marketResourcePage.resourceInfo?.type || ''}</label>
+          <label className={styles.resourceType}>{resourceDetailPage.resource_Info?.type || ''}</label>
           <FTitleText
             style={{ width: 700 }}
             singleRow
-            text={marketResourcePage.resourceInfo?.name || ''}
+            text={resourceDetailPage.resource_Info?.name || ''}
           />
         </Space>
         <FTextBtn
           type='default'
           className={styles.favoriteBtn}
           onClick={() => dispatch<OnClickCollectionAction>({
-            type: 'marketResourcePage/onClickCollection',
+            type: 'resourceDetailPage/onClickCollection',
           })}
         >
           {/*{marketResourcePage.hasCollect ? <FC}*/}
           <FFavorite
-            filled={marketResourcePage.hasCollect}
+            filled={resourceDetailPage.resource_IsCollected}
           />
           <div style={{ width: 2 }} />
-          <span>{marketResourcePage.hasCollect ? '已收藏' : '收藏'}</span>
+          <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
           <div style={{ width: 5 }} />
-          <span>({marketResourcePage.popularity}人气)</span>
+          <span>({resourceDetailPage.resource_Popularity}人气)</span>
         </FTextBtn>
       </div>
 
@@ -131,15 +135,15 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
       <div style={{ height: 10 }} />
 
       {
-        marketResourcePage.version && (<div className={styles.versionWrap}>
+        resourceDetailPage.resourceVersion_SelectedVersion && (<div className={styles.versionWrap}>
           <div className={styles.versionTitle}>
             <Space size={10}>
-              <FTitleText text={'当前版本 ' + marketResourcePage.version} />
+              <FTitleText text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion} />
               <FDropdownMenu
-                options={[...marketResourcePage.allVersions].reverse().map((v) => ({ value: v }))}
+                options={[...resourceDetailPage.resourceVersion_AllVersions].reverse().map((v) => ({ value: v }))}
                 onChange={(value) => {
                   router.push(FUtil.LinkTo.resourceDetails({
-                    resourceID: marketResourcePage.resourceId,
+                    resourceID: resourceDetailPage.resource_ID,
                     version: value,
                   }));
                 }}
@@ -149,7 +153,7 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
             </Space>
 
             <FContentText
-              text={'发布时间 ' + marketResourcePage.releaseTime}
+              text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
               type='negative'
             />
 
@@ -169,6 +173,6 @@ function ResourceDetails({ match, dispatch, marketResourcePage }: ResourceDetail
   </div>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({
-  marketResourcePage,
+export default connect(({ resourceDetailPage }: ConnectState) => ({
+  resourceDetailPage,
 }))(ResourceDetails);

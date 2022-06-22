@@ -2,7 +2,7 @@ import FUtil from '../utils';
 
 // 使用邀请码激活内测资格
 interface BetaCodesActivateParamsType {
-  codes: string;
+  code: string;
 }
 
 export function betaCodesActivate({...params}: BetaCodesActivateParamsType) {

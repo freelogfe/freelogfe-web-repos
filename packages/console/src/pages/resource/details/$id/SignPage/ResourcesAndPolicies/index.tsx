@@ -3,23 +3,23 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Drawer, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 // import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesAndPoliciesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoliciesProps) {
+function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoliciesProps) {
 
-  const showResource = marketResourcePage.signResources;
+  const showResource = resourceDetailPage.sign_SignResources;
 
   const [visibleR, setVisibleR] = React.useState<string>('');
 
-  const showRInfo = marketResourcePage.signResources.find((sr) => sr.id === visibleR);
+  const showRInfo = resourceDetailPage.sign_SignResources.find((sr) => sr.id === visibleR);
 
   return (<>
     <div className={styles.smallTitle}>当前资源</div>
@@ -243,6 +243,6 @@ function ResourcesAndPolicies({ dispatch, marketResourcePage }: ResourcesAndPoli
   </>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({
-  marketResourcePage,
+export default connect(({ resourceDetailPage }: ConnectState) => ({
+  resourceDetailPage,
 }))(ResourcesAndPolicies);

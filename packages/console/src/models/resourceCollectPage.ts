@@ -154,7 +154,7 @@ const Model: ResourceCollectModelType = {
         resourceCollectPage,
       }));
 
-      let dataSource: ResourceListPageModelState['dataSource'] = [];
+      let dataSource: ResourceCollectPageModelState['dataSource'] = [];
       if (!payload) {
         dataSource = resourceCollectPage.dataSource;
       }
@@ -190,7 +190,7 @@ const Model: ResourceCollectModelType = {
         payload: {
           dataSource: [
             ...dataSource,
-            ...(data1 as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
+            ...(data1 as any[]).map<ResourceCollectPageModelState['dataSource'][number]>((i: any) => {
               return {
                 id: i.resourceId,
                 cover: i.coverImages.length > 0 ? i.coverImages[0] : '',

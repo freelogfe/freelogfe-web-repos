@@ -256,6 +256,7 @@ interface HandleDataSourceParams {
 
 function handleDataSource({ data }: HandleDataSourceParams): ResourceNode[] {
   return data.map<ResourceNode>((d) => {
+    // console.log(d, 'd3333#######980');
     return {
       id: d.resourceId + '-' + FUtil.Tool.generateRandomCode(),
       nodeType: 'resource',
@@ -275,10 +276,7 @@ function handleDataSource({ data }: HandleDataSourceParams): ResourceNode[] {
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        // parentInfo: {
-        //   parentID: parentResourceID,
-        //   parentIdentity: 'resource',
-        // },
+        isUpThrow: d.downstreamAuthContractIds.length === 0,
       },
       children: handleDataSource({
         data: d.children,

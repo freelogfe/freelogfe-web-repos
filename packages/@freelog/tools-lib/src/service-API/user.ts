@@ -1,4 +1,5 @@
 import FUtil from '../utils';
+import {AxiosRequestConfig} from "axios";
 
 // 用户登录
 interface LoginParamsType {
@@ -114,7 +115,7 @@ interface UploadHeadImgParamsType {
   file: File;
 }
 
-export function uploadHeadImg(params: UploadHeadImgParamsType) {
+export function uploadHeadImg(params: UploadHeadImgParamsType, config?: AxiosRequestConfig) {
 
   const formData = new FormData();
   for (const [key, value] of Object.entries(params)) {
@@ -126,7 +127,8 @@ export function uploadHeadImg(params: UploadHeadImgParamsType) {
   return FUtil.Request({
     method: 'POST',
     url: `/v2/users/current/uploadHeadImg`,
-    data: params,
+    data: formData,
+    ...config,
   });
 }
 

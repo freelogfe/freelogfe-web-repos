@@ -1,11 +1,13 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
-import {ConnectState} from "@/models/connect";
-import {router} from "umi";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
+import { ConnectState } from '@/models/connect';
+import { router } from 'umi';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCreatorPageModelState {
+  userName: string;
+
   name: string;
   nameVerify: 0 | 1 | 2;
   nameErrorText: string;
@@ -26,6 +28,14 @@ export interface ResourceCreatorPageModelState {
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceCreatorPage/change',
   payload: Partial<ResourceCreatorPageModelState>;
+}
+
+export interface OnMount_Page_Action extends AnyAction {
+  type: 'resourceCreatorPage/onMount_Page';
+}
+
+export interface OnUnmount_Page_Action extends AnyAction {
+  type: 'resourceCreatorPage/onUnmount_Page';
 }
 
 export interface OnCreateAction extends AnyAction {
@@ -50,6 +60,8 @@ export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
   effects: {
+    onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
+    onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
     create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
     onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
@@ -62,6 +74,8 @@ export interface ResourceCreatorPageModelType {
 }
 
 const initStates: ResourceCreatorPageModelState = {
+  userName: '',
+
   name: '',
   nameVerify: 0,
   nameErrorText: '',
@@ -84,14 +98,30 @@ const Model: ResourceCreatorPageModelType = {
   namespace: 'resourceCreatorPage',
   state: initStates,
   effects: {
-    * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
+    * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
+      const { data } = yield call(FServiceAPI.User.currentUserInfo);
+      // console.log(data, 'DDDDDDDD');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          userName: data.username,
+        },
+      });
+    },
+    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceCreatorPage, user} = yield select(({resourceCreatorPage, user}: ConnectState) => ({
+    * clearData({}: ClearDataAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
+    * create({}: OnCreateAction, { call, put, select }: EffectsCommandMap) {
+      const { resourceCreatorPage, user } = yield select(({ resourceCreatorPage, user }: ConnectState) => ({
         resourceCreatorPage,
         user,
       }));
@@ -106,7 +136,7 @@ const Model: ResourceCreatorPageModelType = {
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       };
-      const {data} = yield call(FServiceAPI.Resource.create, params);
+      const { data } = yield call(FServiceAPI.Resource.create, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -124,7 +154,7 @@ const Model: ResourceCreatorPageModelType = {
         resourceID: data.resourceId,
       }));
     },
-    * onChangeName({payload}: OnChangeNameAction, {put, call, select}: EffectsCommandMap) {
+    * onChangeName({ payload }: OnChangeNameAction, { put, call, select }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -141,13 +171,13 @@ const Model: ResourceCreatorPageModelType = {
       } else if (!FUtil.Regexp.RESOURCE_NAME.test(payload)) {
         nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
       } else {
-        const {user} = yield select(({user}: ConnectState) => ({
+        const { user } = yield select(({ user }: ConnectState) => ({
           user,
         }));
         const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: encodeURIComponent(`${user.info.username}/${payload}`),
         };
-        const {data: data1} = yield call(FServiceAPI.Resource.info, params1);
+        const { data: data1 } = yield call(FServiceAPI.Resource.info, params1);
         if (data1) {
           nameErrorText = '资源名已存在';
         }
@@ -162,7 +192,7 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       let resourceTypeErrorText = '';
       if (!payload) {
         resourceTypeErrorText = '请输入资源类型';
@@ -186,7 +216,7 @@ const Model: ResourceCreatorPageModelType = {
   },
 
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -195,7 +225,7 @@ const Model: ResourceCreatorPageModelType = {
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
     },
   },
 

@@ -71,10 +71,7 @@ export interface FNode_Relationship_Resource_Values {
   show_Warning: boolean;
   show_Execute: boolean;
   resourceDetails_Url: string;
-  // parentInfo: {
-  //   parentID: string;
-  //   parentIdentity: 'resource' | 'exhibit';
-  // };
+  isUpThrow?: boolean;
 }
 
 interface FNode_Relationship_Resource_Props {
@@ -91,7 +88,7 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
     show_Warning,
     show_Execute,
     resourceDetails_Url,
-    // parentInfo,
+    isUpThrow = false,
   } = value;
   return (<Group>
     <Rect
@@ -158,22 +155,43 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
           </Rect>)
         }
 
-        <Text
-          style={{
-            fill: '#2E88FF',
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-          onClick={(evt, node, shape, graph) => {
-            // console.log(evt, '#####2342394ui3jk0988uoij32lk');
-            graph.emit('resource:viewContract', {
-              // contractID: contract.contractID,
-              resourceID: resourceID,
-              // parentInfo: parentInfo,
-            });
-          }}
-        >查看合约</Text>
+        {
+          isUpThrow
+            ? (<Text
+              style={{
+                fill: '#EE4040',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+              onClick={(evt, node, shape, graph) => {
+                // console.log(evt, '#####2342394ui3jk0988uoij32lk');
+                graph.emit('resource:viewContract', {
+                  // contractID: contract.contractID,
+                  resourceID: resourceID,
+                  // parentInfo: parentInfo,
+                });
+              }}
+            >已上抛</Text>)
+            : (<Text
+              style={{
+                fill: '#2E88FF',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+              onClick={(evt, node, shape, graph) => {
+                // console.log(evt, '#####2342394ui3jk0988uoij32lk');
+                graph.emit('resource:viewContract', {
+                  // contractID: contract.contractID,
+                  resourceID: resourceID,
+                  // parentInfo: parentInfo,
+                });
+              }}
+            >查看合约</Text>)
+        }
+
+
       </Rect>
     </Rect>
   </Group>);

@@ -8,8 +8,8 @@ import {
   FViewportTabs,
 } from '@/components/FAntvG6';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/marketResourcePage';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceDetailPage';
 import FDrawer from '@/components/FDrawer';
 import { FTextBtn } from '@/components/FButton';
 import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
@@ -18,14 +18,14 @@ import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree
 interface ViewportProps {
   dispatch: Dispatch;
 
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
+function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
 
-  async function onChange(payload: Partial<MarketResourcePageModelState>) {
+  async function onChange(payload: Partial<ResourceDetailPageModelState>) {
     await dispatch<ChangeAction>({
-      type: 'marketResourcePage/change',
+      type: 'resourceDetailPage/change',
       payload,
     });
   }
@@ -41,7 +41,7 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
         <FTextBtn
           onClick={() => {
             onChange({
-              graphFullScreen: true,
+              graph_FullScreen: true,
             });
           }}
           type='default'
@@ -53,13 +53,13 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
           { label: '依赖树', value: 'dependency' },
           { label: '授权链', value: 'authorization' },
         ]}
-        value={marketResourcePage.viewportGraphShow}
+        value={resourceDetailPage.graph_ViewportGraphShow}
         onChange={(value) => {
-          onChange({ viewportGraphShow: value as 'dependency' });
+          onChange({ graph_ViewportGraphShow: value as 'dependency' });
         }}
       >
         {
-          marketResourcePage.graphFullScreen
+          resourceDetailPage.graph_FullScreen
             ? (<div style={{ height: 500 }} />)
             : (<>
               {/*{*/}
@@ -69,9 +69,9 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
               {/*  />)*/}
               {/*}*/}
               {
-                marketResourcePage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-                  resourceID={marketResourcePage.resourceId}
-                  version={marketResourcePage.version}
+                resourceDetailPage.graph_ViewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
+                  resourceID={resourceDetailPage.resource_ID}
+                  version={resourceDetailPage.resourceVersion_SelectedVersion}
                   width={920}
                   height={500}
                 />)
@@ -85,9 +85,9 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
               {/*}*/}
 
               {
-                marketResourcePage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-                  resourceID={marketResourcePage.resourceId}
-                  version={marketResourcePage.version}
+                resourceDetailPage.graph_ViewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+                  resourceID={resourceDetailPage.resource_ID}
+                  version={resourceDetailPage.resourceVersion_SelectedVersion}
                   width={920}
                   height={500}
                 />)
@@ -100,12 +100,12 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
     <div style={{ height: 20 }} />
 
     <FDrawer
-      visible={marketResourcePage.graphFullScreen}
+      visible={resourceDetailPage.graph_FullScreen}
       title={'相关视图'}
       destroyOnClose
       width={'100%'}
       onClose={() => {
-        onChange({ graphFullScreen: false });
+        onChange({ graph_FullScreen: false });
       }}
     >
       <FViewportTabs
@@ -113,10 +113,10 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
           { label: '依赖树', value: 'dependency' },
           { label: '授权链', value: 'authorization' },
         ]}
-        value={marketResourcePage.viewportGraphShow}
+        value={resourceDetailPage.graph_ViewportGraphShow}
         onChange={(value) => {
           onChange({
-            viewportGraphShow: value as 'dependency',
+            graph_ViewportGraphShow: value as 'dependency',
           });
         }}
       >
@@ -131,9 +131,9 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
         {/*}*/}
 
         {
-          marketResourcePage.viewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
-            resourceID={marketResourcePage.resourceId}
-            version={marketResourcePage.version}
+          resourceDetailPage.graph_ViewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
+            resourceID={resourceDetailPage.resource_ID}
+            version={resourceDetailPage.resourceVersion_SelectedVersion}
             width={window.innerWidth - 60}
             height={window.innerHeight - 60 - 70 - 50}
           />)
@@ -149,9 +149,9 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
         {/*}*/}
 
         {
-          marketResourcePage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-            resourceID={marketResourcePage.resourceId}
-            version={marketResourcePage.version}
+          resourceDetailPage.graph_ViewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
+            resourceID={resourceDetailPage.resource_ID}
+            version={resourceDetailPage.resourceVersion_SelectedVersion}
             width={window.innerWidth - 60}
             // width={'100%'}
             height={window.innerHeight - 60 - 70 - 50}
@@ -163,6 +163,6 @@ function Viewport({ dispatch, marketResourcePage }: ViewportProps) {
   </>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({
-  marketResourcePage,
+export default connect(({ resourceDetailPage }: ConnectState) => ({
+  resourceDetailPage,
 }))(Viewport);

@@ -9,10 +9,12 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { router } from 'umi';
-import { ColumnsType } from 'antd/lib/table/interface';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
+import categoryData from '@/utils/category';
+import FDropdown from '@/components/FDropdown';
 
+import { ColumnsType } from 'antd/lib/table/interface';
 import {
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
@@ -37,8 +39,6 @@ import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
-import FDropdown from '@/components/FDropdown';
-import categoryData from '@/utils/category';
 // import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -52,6 +52,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     first: -1,
     second: '',
   });
+
   AHooks.useMount(() => {
     dispatch<OnMount_ExhibitPage_Action>({
       type: 'nodeManagerPage/onMount_ExhibitPage',
@@ -70,10 +71,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       ...i,
     }),
   );
-
+  // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
-      title: <FTitleText text={FUtil1.I18n.message('tableheader_exhibit')} type="table" />,
+      title: <FTitleText text={`${FUtil1.I18n.message('tableheader_exhibit')}`} type="table" />,
       dataIndex: 'name',
       key: 'name',
       render(_, record) {
@@ -213,7 +214,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         sider={<Sider />}
         header={
           <div className={styles.header}>
-            <FTitleText type="h1" text={'展品管理'} />
+            <FTitleText type="h1" text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
             <Space size={80}>
               <div>
                 <span>{FUtil1.I18n.message('resource_type')}：</span>
@@ -292,26 +293,23 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 ) : null}
               </div>
               {/* <div>
-                <span>类型：</span>
-                <FDropdownMenu
-                  options={nodeManagerPage.exhibit_ResourceTypeOptions}
-                  onChange={(value) => {
-                    dispatch<OnChange_Exhibit_SelectedType_Action>({
-                      type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
-                      payload: {
-                        value: value,
-                      },
-                    });
-                  }}
-                >
-                  <span style={{ cursor: 'pointer' }}>
-                    {nodeManagerPage.exhibit_ResourceTypeOptions.find(
-                      (rto) => rto.value === nodeManagerPage.exhibit_SelectedType,
-                    )?.text || ''}
-                    <FDown style={{ marginLeft: 8 }} />
-                  </span>
-                </FDropdownMenu>
-              </div> */}
+            <span>类型：</span>
+            <FDropdownMenu
+              options={nodeManagerPage.exhibit_ResourceTypeOptions}
+              onChange={(value) => {
+                dispatch<OnChange_Exhibit_SelectedType_Action>({
+                  type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
+            >
+            <span
+              style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
+              style={{ marginLeft: 8 }} /></span>
+            </FDropdownMenu>
+          </div> */}
               <div>
                 <span>状态：</span>
                 <FDropdownMenu

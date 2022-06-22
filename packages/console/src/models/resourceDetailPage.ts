@@ -8,28 +8,25 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
-export interface MarketResourcePageModelState {
-  resourceId: string;
-  version: string;
+export interface ResourceDetailPageModelState {
+  page_State: 'loading' | 'details' | 'signPage';
+  user_Logged: boolean;
 
-  isSignPage: boolean;
-
-  resourceInfo: null | {
+  resource_ID: string;
+  resource_Info: null | {
     cover: string;
     name: string;
     type: string;
     tags: string[];
     about: string;
   };
-
-  popularity: number;
-  hasCollect: boolean;
+  resource_Popularity: number;
+  resource_IsCollected: boolean;
 
   // 所有可签约的节点 ID
-  signedNodeIDs: number[];
-  selectedNodeID: number;
-
-  allRawResources: {
+  sign_SignedNodeIDs: number[];
+  sign_SelectedNodeID: number;
+  sign_AllRawResources: {
     resourceId: string;
     resourceName: string;
     resourceType: string;
@@ -37,7 +34,7 @@ export interface MarketResourcePageModelState {
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
   }[];
-  signResources: {
+  sign_SignResources: {
     selected: boolean;
     id: string;
     name: string;
@@ -63,75 +60,73 @@ export interface MarketResourcePageModelState {
       fullInfo: PolicyFullInfo_Type;
     }[];
   }[];
-  signedResourceExhibitID: string;
+  sign_SignedResourceExhibitID: string;
+  sign_SignExhibitName: string;
+  sign_SignExhibitNameErrorTip: string;
 
-  allVersions: string[];
-
-  releaseTime: string;
-
-  description: string;
-
-  properties: {
-    key: string;
-    value: string;
-    description?: string;
-  }[];
-
-  options: {
-    key: string;
-    value: string;
+  resourceVersion_SelectedVersion: string;
+  resourceVersion_AllVersions: string[];
+  resourceVersion_Info: {
+    releaseTime: string;
     description: string;
-  }[];
+    properties: {
+      key: string;
+      value: string;
+      description?: string;
+    }[];
+    options: {
+      key: string;
+      value: string;
+      description: string;
+    }[];
+  };
 
-  signExhibitName: string;
-  signExhibitNameErrorTip: string;
-
-  graphFullScreen: boolean;
-  viewportGraphShow: 'dependency' | 'authorization';
+  graph_FullScreen: boolean;
+  graph_ViewportGraphShow: 'dependency' | 'authorization';
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change' | 'marketResourcePage/change';
-  payload: Partial<MarketResourcePageModelState>;
+  type: 'change' | 'resourceDetailPage/change';
+  payload: Partial<ResourceDetailPageModelState>;
 }
 
 export interface OnMountPageAction extends AnyAction {
-  type: 'marketResourcePage/onMountPage';
+  type: 'resourceDetailPage/onMountPage';
   payload: {
     resourceID: string;
   },
 }
 
 export interface OnUnmountPageAction extends AnyAction {
-  type: 'marketResourcePage/onUnmountPage';
+  type: 'resourceDetailPage/onUnmountPage';
 }
 
 export interface OnChangeVersionAction extends AnyAction {
-  type: 'marketResourcePage/onChangeVersion';
+  type: 'resourceDetailPage/onChangeVersion';
   payload: {
     version: string;
   },
 }
 
 export interface OnClickCollectionAction extends AnyAction {
-  type: 'marketResourcePage/onClickCollection';
+  type: 'resourceDetailPage/onClickCollection';
 }
 
 export interface OnChangeNodeSelectorAction extends AnyAction {
-  type: 'marketResourcePage/onChangeNodeSelector';
+  type: 'resourceDetailPage/onChangeNodeSelector';
   payload: -1 | number;
 }
 
 export interface OnClick_SignBtn_Action extends AnyAction {
-  type: 'marketResourcePage/onClick_SignBtn';
+  type: 'resourceDetailPage/onClick_SignBtn';
 }
 
 export interface OnClick_ConfirmSignContract_Action extends AnyAction {
-  type: 'marketResourcePage/onClick_ConfirmSignContract';
+  type: 'resourceDetailPage/onClick_ConfirmSignContract';
 }
 
 export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
-  type: 'marketResourcePage/onChangeAndVerifySignExhibitName';
+  type: 'resourceDetailPage/onChangeAndVerifySignExhibitName';
   payload: string;
 }
 
@@ -151,9 +146,9 @@ export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo';
 }
 
-interface MarketResourcePageModelType {
-  namespace: 'marketResourcePage';
-  state: MarketResourcePageModelState;
+interface ResourceDetailPageModelType {
+  namespace: 'resourceDetailPage';
+  state: ResourceDetailPageModelState;
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
@@ -169,69 +164,71 @@ interface MarketResourcePageModelType {
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
+    change: DvaReducer<ResourceDetailPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const initStates: MarketResourcePageModelState = {
-  resourceId: '',
-  isSignPage: false,
-  resourceInfo: {
+const initStates: ResourceDetailPageModelState = {
+  page_State: 'loading',
+  user_Logged: FUtil.Tool.getUserIDByCookies() !== -1,
+
+  resource_ID: '',
+  resource_Info: {
     cover: '',
     name: '',
     type: '',
     tags: [],
     about: '',
   },
+  resource_Popularity: 0,
+  resource_IsCollected: false,
 
-  popularity: 0,
-  hasCollect: false,
+  sign_SignedNodeIDs: [],
+  sign_SelectedNodeID: -1,
+  sign_AllRawResources: [],
+  sign_SignResources: [],
+  sign_SignedResourceExhibitID: '',
+  sign_SignExhibitName: '',
+  sign_SignExhibitNameErrorTip: '',
 
-  signedNodeIDs: [],
-  selectedNodeID: -1,
+  resourceVersion_SelectedVersion: '',
+  resourceVersion_AllVersions: [],
+  resourceVersion_Info: {
+    releaseTime: '',
+    description: '',
+    properties: [],
+    options: [],
+  },
 
-  allRawResources: [],
-  signResources: [],
-  signedResourceExhibitID: '',
-
-  allVersions: [],
-  version: '',
-  releaseTime: '',
-  description: '',
-
-  properties: [],
-
-  options: [],
-
-  signExhibitName: '',
-  signExhibitNameErrorTip: '',
-
-  graphFullScreen: false,
-  viewportGraphShow: 'dependency',
+  graph_FullScreen: false,
+  graph_ViewportGraphShow: 'dependency',
 };
 
-const Model: MarketResourcePageModelType = {
-  namespace: 'marketResourcePage',
+const Model: ResourceDetailPageModelType = {
+  namespace: 'resourceDetailPage',
   state: initStates,
   effects: {
     * onMountPage({ payload }: OnMountPageAction, { put }: EffectsCommandMap) {
       yield put({
         type: 'change',
         payload: {
-          resourceId: payload.resourceID,
+          resource_ID: payload.resourceID,
+          user_Logged: FUtil.Tool.getUserIDByCookies() !== -1,
         },
       });
+      // console.log('onMountPage', '####3');
       if (FUtil.Tool.getUserIDByCookies() !== -1) {
-        yield put<FetchCollectionInfoAction>({
-          type: 'fetchCollectionInfo',
-        });
+
         yield put<FetchSignedNodesAction>({
           type: 'fetchSignedNodes',
         });
       }
+      yield put<FetchCollectionInfoAction>({
+        type: 'fetchCollectionInfo',
+      });
       yield put<FetchInfoActionAction>({
         type: 'fetchInfo',
       });
@@ -257,18 +254,18 @@ const Model: MarketResourcePageModelType = {
     },
 
     * onClickCollection({}: OnClickCollectionAction, { select, call, put }: EffectsCommandMap) {
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
-      if (!marketResourcePage.hasCollect) {
+      if (!resourceDetailPage.resource_IsCollected) {
         const params: Parameters<typeof FServiceAPI.Collection.collectResource>[0] = {
-          resourceId: marketResourcePage.resourceId,
+          resourceId: resourceDetailPage.resource_ID,
         };
         yield call(FServiceAPI.Collection.collectResource, params);
       } else {
         const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
-          resourceId: marketResourcePage.resourceId,
+          resourceId: resourceDetailPage.resource_ID,
         };
         yield call(FServiceAPI.Collection.deleteCollectResource, params);
       }
@@ -281,15 +278,15 @@ const Model: MarketResourcePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          selectedNodeID: payload,
+          sign_SelectedNodeID: payload,
         },
       });
 
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
-      const allRawResourceIDs = marketResourcePage.allRawResources.map((r) => r.resourceId);
+      const allRawResourceIDs = resourceDetailPage.sign_AllRawResources.map((r: any) => r.resourceId);
 
       const params: GetAllContractsParamsType = {
         nodeID: payload,
@@ -301,7 +298,7 @@ const Model: MarketResourcePageModelType = {
 
       const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         nodeId: payload,
-        resourceId: marketResourcePage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
 
@@ -320,10 +317,10 @@ const Model: MarketResourcePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signedResourceExhibitID: data1?.presentableId || '',
-          signResources: marketResourcePage.allRawResources
-            .map<MarketResourcePageModelState['signResources'][number]>((value, index: number) => {
-              const contracts: MarketResourcePageModelState['signResources'][number]['contracts'] = result[index]
+          sign_SignedResourceExhibitID: data1?.presentableId || '',
+          sign_SignResources: resourceDetailPage.sign_AllRawResources
+            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((value: any, index: number) => {
+              const contracts: ResourceDetailPageModelState['sign_SignResources'][number]['contracts'] = result[index]
                 .filter((c) => {
                   return c.status === 0;
                 })
@@ -350,9 +347,9 @@ const Model: MarketResourcePageModelType = {
               const allContractUsedPolicyIDs: string[] = contracts
                 .filter((cp) => cp.status !== 'terminal')
                 .map<string>((cp) => cp.policyID);
-              const policies: MarketResourcePageModelState['signResources'][number]['policies'] = value.policies
-                .filter((rsp) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
-                .map((rsp) => ({
+              const policies: ResourceDetailPageModelState['sign_SignResources'][number]['policies'] = value.policies
+                .filter((rsp: any) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
+                .map((rsp: any) => ({
                   checked: false,
                   fullInfo: rsp,
                 }));
@@ -380,19 +377,19 @@ const Model: MarketResourcePageModelType = {
     },
 
     * onClick_SignBtn({}: OnClick_SignBtn_Action, { select, call, put }: EffectsCommandMap) {
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
       const needVerifyResource: {
         id: string;
         policyIDs: string[];
-      }[] = marketResourcePage.signResources.map((sr) => {
+      }[] = resourceDetailPage.sign_SignResources.map((sr: any) => {
         return {
           id: sr.id,
-          policyIDs: sr.policies.filter((p) => {
+          policyIDs: sr.policies.filter((p: any) => {
             return p.checked;
-          }).map((p) => {
+          }).map((p: any) => {
             return p.fullInfo.policyId;
           }),
         };
@@ -444,42 +441,42 @@ const Model: MarketResourcePageModelType = {
       }
 
       const params: Parameters<typeof getAvailableExhibitName>[0] = {
-        nodeID: marketResourcePage.selectedNodeID,
-        exhibitName: marketResourcePage.resourceInfo?.name.split('/')[1] || '',
+        nodeID: resourceDetailPage.sign_SelectedNodeID,
+        exhibitName: resourceDetailPage.resource_Info?.name.split('/')[1] || '',
       };
 
       const signExhibitName: string = yield call(getAvailableExhibitName, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signExhibitName: signExhibitName,
-          signExhibitNameErrorTip: '',
-          isSignPage: true,
+          sign_SignExhibitName: signExhibitName,
+          sign_SignExhibitNameErrorTip: '',
+          page_State: 'signPage',
         },
       });
       // window.history.pushState({}, '确认签约');
     },
     * onClick_ConfirmSignContract({}: OnClick_ConfirmSignContract_Action, { call, select, put }: EffectsCommandMap) {
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
-        nodeId: marketResourcePage.selectedNodeID,
-        resourceId: marketResourcePage.resourceId,
-        version: marketResourcePage.version,
-        presentableName: marketResourcePage.signExhibitName,
-        resolveResources: marketResourcePage.signResources.map((sr) => ({
+        nodeId: resourceDetailPage.sign_SelectedNodeID,
+        resourceId: resourceDetailPage.resource_ID,
+        version: resourceDetailPage.resourceVersion_SelectedVersion,
+        presentableName: resourceDetailPage.sign_SignExhibitName,
+        resolveResources: resourceDetailPage.sign_SignResources.map((sr: any) => ({
           resourceId: sr.id,
           contracts: [
-            ...sr.contracts.filter((srp) => srp.checked && srp.status !== 'terminal')
-              .map((srp) => {
+            ...sr.contracts.filter((srp: any) => srp.checked && srp.status !== 'terminal')
+              .map((srp: any) => {
                 return {
                   policyId: srp.policyID,
                 };
               }),
-            ...sr.policies.filter((srp) => srp.checked)
-              .map((srp) => {
+            ...sr.policies.filter((srp: any) => srp.checked)
+              .map((srp: any) => {
                 return {
                   policyId: srp.fullInfo.policyId,
                 };
@@ -503,96 +500,96 @@ const Model: MarketResourcePageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
+            sign_SignExhibitName: payload,
+            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
           },
         });
         return;
       }
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage, nodes }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage, nodes }: ConnectState) => ({
+        resourceDetailPage,
         nodes,
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
-        nodeId: marketResourcePage.selectedNodeID,
+        nodeId: resourceDetailPage.sign_SelectedNodeID,
         presentableName: payload,
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
       if (data) {
         yield put<ChangeAction>({
-          type: 'marketResourcePage/change',
+          type: 'change',
           payload: {
-            signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
+            sign_SignExhibitName: payload,
+            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
           },
         });
         return;
       }
 
       yield put<ChangeAction>({
-        type: 'marketResourcePage/change',
+        type: 'change',
         payload: {
-          signExhibitName: payload,
-          signExhibitNameErrorTip: '',
+          sign_SignExhibitName: payload,
+          sign_SignExhibitNameErrorTip: '',
         },
       });
     },
     * fetchInfo({}: FetchInfoActionAction, { call, put, select }: EffectsCommandMap) {
-      const { marketResourcePage, user }: ConnectState = yield select(({ marketResourcePage, user }: ConnectState) => ({
-        marketResourcePage,
-        user,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
       // console.log('fetchInfo ####9823u4oi');
       const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-        resourceIDs: [marketResourcePage.resourceId],
+        resourceIDs: [resourceDetailPage.resource_ID],
       };
 
+
       // 本次要添加的一些列资源信息
-      const [data]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+      const [data_ResourceDetail]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
 
-      let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
+      let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data_ResourceDetail];
 
       // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
       // 获取上抛资源信息
-      if ((data.baseUpcastResources || []).length > 0) {
+      if ((data_ResourceDetail.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
 
         const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-          resourceIDs: data.baseUpcastResources.map((r) => r.resourceId),
+          resourceIDs: data_ResourceDetail.baseUpcastResources.map((r) => r.resourceId),
         };
 
         // 本次要添加的一些列资源信息
-        const data1: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
+        const data_BatchInfos: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
 
         rawSignResources = [
           ...rawSignResources,
-          ...data1,
+          ...data_BatchInfos,
         ];
       }
 
       // console.log(rawSignResources, 'rawSignResources2309ef');
-
+      // console.log(data, 'data893lksdflk');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceInfo: {
-            cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
-            name: data.resourceName,
-            type: data.resourceType,
-            tags: data.tags,
-            about: data.intro,
+          page_State: 'details',
+          resource_Info: {
+            cover: data_ResourceDetail.coverImages.length > 0 ? data_ResourceDetail.coverImages[0] : '',
+            name: data_ResourceDetail.resourceName,
+            type: data_ResourceDetail.resourceType,
+            tags: data_ResourceDetail.tags,
+            about: data_ResourceDetail.intro,
           },
-          allVersions: data.resourceVersions.map((v: any) => v.version),
-          version: marketResourcePage.version || data.latestVersion,
-          //
+          resourceVersion_AllVersions: data_ResourceDetail.resourceVersions.map((v: any) => v.version),
+          resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data_ResourceDetail.latestVersion,
 
-          allRawResources: rawSignResources,
+          sign_AllRawResources: rawSignResources,
 
-          signResources: rawSignResources
-            .map<MarketResourcePageModelState['signResources'][number]>((rs, i: number) => {
+          sign_SignResources: rawSignResources
+            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((rs, i: number) => {
               return {
                 selected: i === 0,
                 id: rs.resourceId,
@@ -614,7 +611,7 @@ const Model: MarketResourcePageModelType = {
       });
       // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
 
-      if (!data.latestVersion || !!marketResourcePage.version) {
+      if (!data_ResourceDetail.latestVersion || !!resourceDetailPage.resourceVersion_SelectedVersion) {
         return;
       }
 
@@ -625,39 +622,44 @@ const Model: MarketResourcePageModelType = {
     },
     * fetchCollectionInfo({}: FetchCollectionInfoAction, { call, select, put }: EffectsCommandMap) {
       // console.log('进入获取收藏', 'FGHSDGf09uj4k2t;ldfs');
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
-      const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
-        resourceIds: marketResourcePage.resourceId,
-      };
+      let isCollected: boolean = false;
+      if (resourceDetailPage.user_Logged) {
+        const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
+          resourceIds: resourceDetailPage.resource_ID,
+        };
 
-      const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
+        const { data: data1 } = yield call(FServiceAPI.Collection.isCollected, params1);
+
+        isCollected = data1[0].isCollected;
+      }
 
       const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
-        resourceId: marketResourcePage.resourceId,
+        resourceId: resourceDetailPage.resource_ID,
       };
 
       const { data: data2 } = yield call(FServiceAPI.Collection.collectedCount, params2);
-      // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
+      // console.log(data2, '收藏数量FGHSDGf09uj4k2t;ldfs');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          hasCollect: data1[0].isCollected,
-          popularity: data2,
+          resource_IsCollected: isCollected,
+          resource_Popularity: data2,
         },
       });
     },
     * fetchSignedNodes({}: FetchSignedNodesAction, { select, call, put }: EffectsCommandMap) {
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
       // 获取当前用户与当前资源签过约的所有节点
       const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         userId: FUtil.Tool.getUserIDByCookies(),
-        resourceIds: marketResourcePage.resourceId,
+        resourceIds: resourceDetailPage.resource_ID,
         // projection: 'nodeId',
       };
 
@@ -666,59 +668,62 @@ const Model: MarketResourcePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signedNodeIDs: data3.map((p: any) => p.nodeId),
+          sign_SignedNodeIDs: data3.map((p: any) => p.nodeId),
         },
       });
     },
     * fetchVersionInfo({}: FetchVersionInfoAction, { call, select, put }: EffectsCommandMap) {
 
-      const { marketResourcePage }: ConnectState = yield select(({ marketResourcePage }: ConnectState) => ({
-        marketResourcePage,
+      const { resourceDetailPage }: ConnectState = yield select(({ resourceDetailPage }: ConnectState) => ({
+        resourceDetailPage,
       }));
 
-      if (!marketResourcePage.version) {
+      if (!resourceDetailPage.resourceVersion_SelectedVersion) {
         return;
       }
 
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
-        version: marketResourcePage.version,
-        resourceId: marketResourcePage.resourceId,
+        version: resourceDetailPage.resourceVersion_SelectedVersion,
+        resourceId: resourceDetailPage.resource_ID,
       };
+      console.log('resourceVersionInfo1239weiojfasdlkfjslk');
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-
+      // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');
       // console.log(data, 'data0932jklsdjflsdk');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          releaseTime: FUtil.Format.formatDateTime(data.createDate),
-          description: data.description,
-          properties: [
-            ...Object.entries(data.systemProperty as object)
-              .map((s) => ({
-                key: s[0],
-                value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
-              })),
-            ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+          resourceVersion_Info: {
+            releaseTime: FUtil.Format.formatDateTime(data.createDate),
+            description: data.description,
+            properties: [
+              ...Object.entries(data.systemProperty as object)
+                .map((s) => ({
+                  key: s[0],
+                  value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+                })),
+              ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+                .map((p: any) => {
+                  // console.log(p, 'PPPPP()*UOI');
+                  return {
+                    key: p.key,
+                    value: p.defaultValue,
+                    description: p.remark,
+                  };
+                }),
+            ],
+            options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
               .map((p: any) => {
-                // console.log(p, 'PPPPP()*UOI');
+                // console.log(p, '@@@@@@#$#@$@#$@#');
                 return {
                   key: p.key,
                   value: p.defaultValue,
                   description: p.remark,
                 };
               }),
-          ],
-          options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
-            .map((p: any) => {
-              // console.log(p, '@@@@@@#$#@$@#$@#');
-              return {
-                key: p.key,
-                value: p.defaultValue,
-                description: p.remark,
-              };
-            }),
+          },
         },
       });
     },
@@ -776,23 +781,23 @@ async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsTyp
   return await Promise.all(allPromises);
 }
 
-interface GetAllContractExhibitsParamsType {
-  resourceIDs: string[];
-  nodeID: number;
-}
-
-async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExhibitsParamsType) {
-  const allPromises = resourceIDs.map(async (rid) => {
-    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-      licenseeIdentityType: 2,
-      licensorId: rid,
-      licenseeId: nodeID,
-    };
-    const { data } = await FServiceAPI.Contract.batchContracts(params);
-    return data;
-  });
-  return await Promise.all(allPromises);
-}
+// interface GetAllContractExhibitsParamsType {
+//   resourceIDs: string[];
+//   nodeID: number;
+// }
+//
+// async function getAllContractExhibits({ resourceIDs, nodeID }: GetAllContractExhibitsParamsType) {
+//   const allPromises = resourceIDs.map(async (rid) => {
+//     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+//       licenseeIdentityType: 2,
+//       licensorId: rid,
+//       licenseeId: nodeID,
+//     };
+//     const { data } = await FServiceAPI.Contract.batchContracts(params);
+//     return data;
+//   });
+//   return await Promise.all(allPromises);
+// }
 
 interface GetAvailableExhibitNameParamType {
   nodeID: number;
@@ -864,8 +869,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
   // 本次要添加的一些列资源信息
   // const { data: data_batchResourceInfo }: { data: Omit<HandleResourceBatchInfoReturn, 'authProblem'> } = await FServiceAPI.Resource.batchInfo(params);
   const { data: data_batchResourceInfo }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
-
-  // console.log(data_batchResourceInfo, 'data_batchResourceInfo 238998sdhfkjshdfksdf');
+  // console.log(JSON.stringify(data_batchResourceInfo), 'data_batchResourceInfo 238998sdhfkjshdfksdf');
 
   const needGetAuthProblemResourceIDs: string[] = data_batchResourceInfo.filter((dbri) => {
     return dbri.latestVersion !== '';
@@ -882,10 +886,11 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     };
     const { data } = await FServiceAPI.Resource.batchAuth(params1);
     // console.log(data_BatchAuth, 'data_BatchAuth @@@34234wfgsrd');
+    // console.log(data, 'datasdfd*******')
     resourceAuthProblems = data;
   }
 
-  return data_batchResourceInfo.map((dbri) => {
+  const result = data_batchResourceInfo.map((dbri) => {
     const authP = resourceAuthProblems.find((rap) => {
       return rap.resourceId === dbri.resourceId;
     });
@@ -894,4 +899,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
       authProblem: authP ? !authP.isAuth : false,
     };
   });
+
+  // console.log(JSON.stringify(result), 'result23423423');
+  return result;
 }

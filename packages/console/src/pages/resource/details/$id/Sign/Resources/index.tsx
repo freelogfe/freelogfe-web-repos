@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/marketResourcePage';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
@@ -14,16 +14,16 @@ import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
+function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
   function onChangeSelected(id: string) {
     dispatch<ChangeAction>({
-      type: 'marketResourcePage/change',
+      type: 'resourceDetailPage/change',
       payload: {
-        signResources: marketResourcePage.signResources.map((sr) => ({
+        sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => ({
           ...sr,
           selected: id === sr.id,
         })),
@@ -35,7 +35,7 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
     <div style={{ height: 7 }} />
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
-      marketResourcePage.signResources
+      resourceDetailPage.sign_SignResources
         .filter((r, i: number) => i === 0)
         .map((r) => {
           return (<div
@@ -120,11 +120,11 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
     }
 
     {
-      marketResourcePage.signResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
+      resourceDetailPage.sign_SignResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
     }
 
     {
-      marketResourcePage.signResources
+      resourceDetailPage.sign_SignResources
         .filter((r, i: number) => i !== 0)
         .map((r) => {
           // console.log(r, '####902j3l42k3jl');
@@ -230,4 +230,4 @@ function Resources({ dispatch, marketResourcePage }: ResourcesProps) {
   </>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Resources);
+export default connect(({ resourceDetailPage }: ConnectState) => ({ resourceDetailPage }))(Resources);

@@ -294,6 +294,7 @@ export interface InformalNodeManagerPageModelState {
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
   exhibit_List: IExhibit[];
+  exhibit_ListTotal: number;
   exhibit_PageError: string;
 
   theme_ActivatingThemeName: string;
@@ -827,6 +828,7 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_ListState' |
   'exhibit_ListMore' |
   'exhibit_List' |
+  'exhibit_ListTotal' |
   'exhibit_PageError'> = {
   exhibit_TypeOptions: [
     { text: '全部', value: '-1' },
@@ -845,6 +847,7 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
   exhibit_List: [],
+  exhibit_ListTotal: -1,
   exhibit_PageError: '',
 };
 
@@ -1133,11 +1136,11 @@ const Model: InformalNodeManagerPageModelType = {
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
-      const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
+      const { data: data_informalExhibits } = yield call(FServiceAPI.InformalNode.testResources, params);
 
       const params1: Parameters<typeof mergeAuthInfoToList>[0] = {
         nodeID: informalNodeManagerPage.node_ID,
-        list: data.dataList,
+        list: data_informalExhibits.dataList,
       };
 
       const listWithAuth: any[] = yield call(mergeAuthInfoToList, params1);
@@ -1149,7 +1152,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
-        total_Length: data.totalItem,
+        total_Length: data_informalExhibits.totalItem,
         has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType !== '-1'
           || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
           || informalNodeManagerPage.exhibit_FilterKeywords !== '',
@@ -1160,6 +1163,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           node_RuleInfo: result,
           exhibit_List: exhibitList,
+          exhibit_ListTotal: data_informalExhibits.totalItem,
           exhibit_ListState: state,
           exhibit_ListMore: more,
         },
@@ -1281,6 +1285,7 @@ const Model: InformalNodeManagerPageModelType = {
           exhibit_List: informalNodeManagerPage.exhibit_List.filter((el) => {
             return el.testResourceId !== payload.testResourceId;
           }),
+          exhibit_ListTotal: informalNodeManagerPage.exhibit_ListTotal - 1,
         },
       });
 
@@ -2116,7 +2121,7 @@ const Model: InformalNodeManagerPageModelType = {
         return n.split('/')[1];
       }));
 
-      console.log(rightNames, 'rightNames903weoijsedfk')
+      console.log(rightNames, 'rightNames903weoijsedfk');
 
       const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {

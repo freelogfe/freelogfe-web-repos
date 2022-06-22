@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/marketResourcePage';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceDetailPage';
 import { FContentText, FTitleText } from '@/components/FText';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
@@ -13,14 +13,14 @@ import FModal from '@/components/FModal';
 
 interface PoliciesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
+function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
 
   const [visibleModalPolicyID, setVisibleModalPolicyID] = React.useState<string>('');
 
-  const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
+  const policies = resourceDetailPage.sign_SignResources.find((r) => r.selected)?.policies;
 
   // console.log(policies, 'policies@#$rsafd980judsafsad');
 
@@ -28,7 +28,7 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
     return null;
   }
 
-  const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+  const isSignedNode: boolean = resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID);
 
   const modalPolicy = policies.find((pl) => {
     return pl.fullInfo.policyId === visibleModalPolicyID;
@@ -36,9 +36,9 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
   function onChangeResourceChecked(id: string, checked: boolean) {
     dispatch<ChangeAction>({
-      type: 'marketResourcePage/change',
+      type: 'resourceDetailPage/change',
       payload: {
-        signResources: marketResourcePage.signResources.map((sr) => {
+        sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => {
           if (!sr.selected) {
             return sr;
           }
@@ -141,16 +141,16 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
   </div>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Policies);
+export default connect(({ resourceDetailPage }: ConnectState) => ({ resourceDetailPage }))(Policies);
 
-interface PolicyCardProps {
-  name: string;
-  code: string;
-  checked: boolean;
-
-  onChangeChecked?(checked: boolean): void;
-}
-
-function PolicyCard({ name, code, checked }: PolicyCardProps) {
-
-}
+// interface PolicyCardProps {
+//   name: string;
+//   code: string;
+//   checked: boolean;
+//
+//   onChangeChecked?(checked: boolean): void;
+// }
+//
+// function PolicyCard({ name, code, checked }: PolicyCardProps) {
+//
+// }

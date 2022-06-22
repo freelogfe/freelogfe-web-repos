@@ -13,7 +13,7 @@ import {GlobalModelState} from './global';
 import {StorageHomePageModelState} from './storageHomePage';
 import {StorageObjectEditorModelState} from './storageObjectEditor';
 import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
-import {MarketResourcePageModelState} from './marketResourcePage';
+import {ResourceDetailPageModelState} from './resourceDetailPage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
@@ -21,6 +21,8 @@ import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
 import {ResourceEditorPageModelState} from './resourceEditorPage';
+import {DashboardPageModelState} from './dashboardPage';
+import {NodeCreatorPageModelState} from './nodeCreatorPage';
 
 export {
   // RouterHistoriesModelState,
@@ -39,7 +41,7 @@ export {
   StorageHomePageModelState,
   StorageObjectEditorModelState,
   StorageObjectDepSelectorModelState,
-  MarketResourcePageModelState,
+  ResourceDetailPageModelState,
   NodesModelState,
   NodeManagerModelState,
   ExhibitInfoPageModelState,
@@ -47,6 +49,8 @@ export {
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
   ResourceEditorPageModelState,
+  DashboardPageModelState,
+  NodeCreatorPageModelState,
 };
 
 export interface ConnectState {
@@ -68,11 +72,13 @@ export interface ConnectState {
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
   storageObjectDepSelector: StorageObjectDepSelectorModelState;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
+  dashboardPage: DashboardPageModelState;
+  nodeCreatorPage: NodeCreatorPageModelState;
 }

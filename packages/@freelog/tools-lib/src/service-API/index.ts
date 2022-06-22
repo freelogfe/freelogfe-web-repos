@@ -11,6 +11,7 @@ import * as Captcha from './captcha';
 import * as Event from './events';
 import * as Activity from './activities';
 import * as TestQualification from './testQualifications';
+import * as Statistic from './statistics';
 
 const FServiceAPI = {
   Node,
@@ -26,6 +27,7 @@ const FServiceAPI = {
   Event,
   Activity,
   TestQualification,
+  Statistic,
 };
 
 export default FServiceAPI;

@@ -81,7 +81,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText text={'展品管理'} />
+            <FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
             <Space size={30}>
 
               <FTextBtn

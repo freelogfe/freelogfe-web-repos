@@ -2,9 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/marketResourcePage';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceDetailPage';
+// import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
@@ -13,20 +13,20 @@ import FTerminatedContractListDrawer from '@/components/FTerminatedContractListD
 
 interface ContractsProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
+function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
   const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
-  const selectedResource = marketResourcePage.signResources.find((r) => r.selected);
+  const selectedResource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
   const contracts = selectedResource?.contracts;
 
   if (!contracts || contracts.length === 0) {
     return null;
   }
 
-  const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+  const isSignedNode: boolean = resourceDetailPage.sign_SignedNodeIDs.includes(resourceDetailPage.sign_SelectedNodeID);
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '当前合约' : '可复用的合约'}</div>
@@ -42,9 +42,9 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
                 checked={c.checked}
                 onChange={(e) => {
                   dispatch<ChangeAction>({
-                    type: 'marketResourcePage/change',
+                    type: 'resourceDetailPage/change',
                     payload: {
-                      signResources: marketResourcePage.signResources.map((sr) => {
+                      sign_SignResources: resourceDetailPage.sign_SignResources.map((sr) => {
                         if (!sr.selected) {
                           return sr;
                         }
@@ -143,4 +143,4 @@ function Contracts({ dispatch, marketResourcePage }: ContractsProps) {
   </div>);
 }
 
-export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Contracts);
+export default connect(({ resourceDetailPage }: ConnectState) => ({ resourceDetailPage }))(Contracts);

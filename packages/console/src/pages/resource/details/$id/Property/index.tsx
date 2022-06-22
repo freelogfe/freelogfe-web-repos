@@ -2,18 +2,18 @@ import * as React from 'react';
 import {FContentText, FTitleText} from '@/components/FText';
 import styles from './index.less';
 import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
+import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
 import FTooltip from "@/components/FTooltip";
 import {FInfo} from "@/components/FIcons";
 import {Space} from "antd";
 
 interface PropertyProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState,
+  resourceDetailPage: ResourceDetailPageModelState,
 }
 
-function Property({dispatch, marketResourcePage}: PropertyProps) {
-  if (marketResourcePage.properties.length === 0) {
+function Property({dispatch, resourceDetailPage}: PropertyProps) {
+  if (resourceDetailPage.resourceVersion_Info.properties.length === 0) {
     return null;
   }
 
@@ -27,7 +27,7 @@ function Property({dispatch, marketResourcePage}: PropertyProps) {
       <div style={{height: 20}}/>
       <div className={styles.list}>
         {
-          marketResourcePage.properties.map((p, index) => {
+          resourceDetailPage.resourceVersion_Info.properties.map((p, index) => {
             return (<div key={p.key}>
               <Space size={10}>
                 <FContentText
@@ -121,7 +121,7 @@ function Property({dispatch, marketResourcePage}: PropertyProps) {
   </>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Property);
+export default connect(({resourceDetailPage}: ConnectState) => ({resourceDetailPage}))(Property);
 
 // interface ItemProps {
 //   tTey: string;

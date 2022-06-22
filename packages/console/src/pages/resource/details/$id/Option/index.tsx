@@ -4,17 +4,17 @@ import styles from './index.less';
 import {Space, Tooltip} from 'antd';
 import {FInfo} from '@/components/FIcons';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
+import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
 import FTooltip from "@/components/FTooltip";
 
 interface OptionProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Option({dispatch, marketResourcePage}: OptionProps) {
+function Option({dispatch, resourceDetailPage}: OptionProps) {
 
-  if (marketResourcePage.options.length === 0) {
+  if (resourceDetailPage.resourceVersion_Info.options.length === 0) {
     return null;
   }
 
@@ -28,7 +28,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
       <div style={{height: 20}}/>
       <div className={styles.content}>
         {
-          marketResourcePage.options.map((i) => {
+          resourceDetailPage.resourceVersion_Info.options.map((i) => {
             return (<div key={i.key}>
               <Space size={10}>
                 <FContentText
@@ -54,4 +54,4 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
   </>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Option);
+export default connect(({resourceDetailPage}: ConnectState) => ({resourceDetailPage}))(Option);

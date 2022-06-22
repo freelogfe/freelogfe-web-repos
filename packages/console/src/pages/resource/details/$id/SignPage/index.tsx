@@ -5,14 +5,14 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
-import { ConnectState, MarketResourcePageModelState, NodesModelState } from '@/models/connect';
+import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import { router } from 'umi';
 import {
   ChangeAction,
   OnChangeAndVerifySignExhibitNameAction,
   OnClick_ConfirmSignContract_Action,
-} from '@/models/marketResourcePage';
+} from '@/models/resourceDetailPage';
 import FContentLayout from '@/layouts/FContentLayout';
 import FFormLayout from '@/components/FFormLayout';
 import { FLeft, FNodes } from '@/components/FIcons';
@@ -21,17 +21,17 @@ import * as AHooks from 'ahooks';
 
 interface SignProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageModelState;
+  resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
 }
 
-function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
+function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
   AHooks.useUnmount(() => {
       window.history.forward();
   });
 
-  const selectedNode = nodes.list.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
+  const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
 
   if (!selectedNode) {
     router.goBack();
@@ -43,9 +43,9 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
       <FTitleText type='h1' text={'确认签约'} />
 
       <div className={styles.headerResource}>
-        <FCoverImage src={marketResourcePage.resourceInfo?.cover || ''} width={36} />
+        <FCoverImage src={resourceDetailPage.resource_Info?.cover || ''} width={36} />
         <div style={{ width: 8 }} />
-        <FContentText text={marketResourcePage.resourceInfo?.name} />
+        <FContentText text={resourceDetailPage.resource_Info?.name} />
       </div>
     </Space>
 
@@ -53,9 +53,10 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
       <FTextBtn
         onClick={() => {
           dispatch<ChangeAction>({
-            type: 'marketResourcePage/change',
+            type: 'resourceDetailPage/change',
             payload: {
-              isSignPage: false,
+              page_State: 'details',
+              // isSignPage: false,
             },
           });
         }}
@@ -67,9 +68,9 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
       <div style={{ width: 30 }} />
       <FRectBtn
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
-          type: 'marketResourcePage/onClick_ConfirmSignContract',
+          type: 'resourceDetailPage/onClick_ConfirmSignContract',
         })}
-        disabled={!!marketResourcePage.signExhibitNameErrorTip}
+        disabled={!!resourceDetailPage.sign_SignExhibitNameErrorTip}
         type='primary'
       >确认签约</FRectBtn>
     </div>
@@ -96,20 +97,20 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
           />}
         >
           <FInput
-            value={marketResourcePage.signExhibitName}
+            value={resourceDetailPage.sign_SignExhibitName}
             className={styles.exhibitNameInput}
             debounce={300}
             onDebounceChange={(value) => {
               dispatch<OnChangeAndVerifySignExhibitNameAction>({
-                type: 'marketResourcePage/onChangeAndVerifySignExhibitName',
+                type: 'resourceDetailPage/onChangeAndVerifySignExhibitName',
                 payload: value,
               });
             }}
           />
           {
-            marketResourcePage.signExhibitNameErrorTip && (<>
+            resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
               <div style={{ height: 5 }} />
-              <div className={styles.signExhibitNameErrorTip}>{marketResourcePage.signExhibitNameErrorTip}</div>
+              <div className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
             </>)
           }
 
@@ -125,7 +126,7 @@ function Sign({ dispatch, marketResourcePage, nodes }: SignProps) {
   </FContentLayout>);
 }
 
-export default connect(({ marketResourcePage, nodes }: ConnectState) => ({
-  marketResourcePage,
+export default connect(({ resourceDetailPage, nodes }: ConnectState) => ({
+  resourceDetailPage,
   nodes,
 }))(Sign);
