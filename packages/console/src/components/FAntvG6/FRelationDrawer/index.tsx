@@ -119,12 +119,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     };
 
     const { data: data_ResourceInfos }: {
-      data: {
-        resourceId: string;
-        resourceName: string;
-        userId: number;
-        policies: PolicyFullInfo_Type[];
-      }[];
+      // data: {
+      //   resourceId: string;
+      //   resourceName: string;
+      //   userId: number;
+      //   policies: PolicyFullInfo_Type[];
+      // }[];
+      data: any;
     } = await FServiceAPI.Resource.batchInfo(params0);
 
     // console.log(data_ResourceInfos, 'data_ResourceInfos#@890uiojsd;flsdfklk');
@@ -169,10 +170,10 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
 
     // console.log(JSON.stringify(data_resolveResource), 'data_resolveResource0932ojisdlf');
 
-    const lor = data_ResourceInfos.find((ri) => {
+    const lor = data_ResourceInfos.find((ri: any) => {
       return ri.resourceId === licensor.licensorID;
     });
-    const lee = data_ResourceInfos.find((ri) => {
+    const lee = data_ResourceInfos.find((ri: any) => {
       return ri.resourceId === licensee.licenseeID;
     });
 
@@ -208,7 +209,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
-      validPolicies: lor.policies.filter((p) => {
+      validPolicies: lor.policies.filter((p: any) => {
         return p.status === 1 && !validContracts.some((vcp) => {
           return vcp.policyID === p.policyId;
         });
@@ -262,12 +263,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     };
 
     const { data: data_ResourceDetails }: {
-      data: {
-        resourceId: string;
-        resourceName: string;
-        userId: number;
-        policies: PolicyFullInfo_Type[];
-      };
+      // data: {
+      //   resourceId: string;
+      //   resourceName: string;
+      //   userId: number;
+      //   policies: PolicyFullInfo_Type[];
+      // };
+      data: any;
     } = await FServiceAPI.Resource.info(params1);
 
     const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -342,7 +344,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
-      validPolicies: data_ResourceDetails.policies.filter((p) => {
+      validPolicies: data_ResourceDetails.policies.filter((p: any) => {
         return p.status === 1 && !validContracts.some((vcp) => {
           return vcp.policyID === p.policyId;
         });
