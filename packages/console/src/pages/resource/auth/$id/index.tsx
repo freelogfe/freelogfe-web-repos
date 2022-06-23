@@ -159,6 +159,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
+          dot={resourceAuthPage.policies.length === 0}
           title={FUtil1.I18n.message('authorization_plan')}
           extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
             <FCircleBtn
