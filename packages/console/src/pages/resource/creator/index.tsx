@@ -161,7 +161,7 @@ function ResourceCreator({
         }
       >
         <FFormLayout>
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')} dot={true}>
+          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
               <FContentText text={`${user.info?.username} /`} />
               &nbsp;
@@ -192,7 +192,7 @@ function ResourceCreator({
             </div>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')} dot={true}>
+          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')} asterisk={true}>
             <FDropdown
               className='h-38 flex-column justify-center'
               overlay={

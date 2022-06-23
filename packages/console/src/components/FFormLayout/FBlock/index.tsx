@@ -6,26 +6,33 @@ interface FBlockProps {
   children?: React.ReactNode | React.ReactNodeArray;
   title: string;
   dot?: boolean;
+  asterisk?: boolean;
   subtitle?: React.ReactNode;
   extra?: React.ReactNode;
 }
 
-function FBlock({children, title, dot = false, subtitle, extra}: FBlockProps) {
+function FBlock({ children, title, dot = false, asterisk = false, subtitle, extra }: FBlockProps) {
   return (<div className={styles.styles}>
     <div className={styles.title}>
       <div>
-        <div className={styles.prefix}/>
-        <div style={{width: 5}}/>
-        <FTitleText type="h3" text={title}/>
+        <div className={styles.prefix} />
+        <div style={{ width: 5 }} />
+        <FTitleText type='h3' text={title} />
         {
           dot && (<>
-            <div style={{width: 5}}/>
-            <i className={styles.dot}/>
+            <div style={{ width: 5 }} />
+            <i className={styles.dot} />
+          </>)
+        }
+        {
+          asterisk && (<>
+            <div style={{ width: 5 }} />
+            <i style={{ color: '#EE4040' }}>*</i>
           </>)
         }
         {
           subtitle && (<>
-            <div style={{width: 10}}/>
+            <div style={{ width: 10 }} />
             {subtitle}
           </>)
         }
@@ -36,7 +43,7 @@ function FBlock({children, title, dot = false, subtitle, extra}: FBlockProps) {
       </div>
 
     </div>
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
     <div className={styles.content}>
       {children}
     </div>
