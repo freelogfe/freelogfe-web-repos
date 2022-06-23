@@ -72,11 +72,15 @@ class UserPermission {
   }
 
   async getUserInfo() {
+    // console.log('((((((((((((((((((((((((((9023ipofsd');
     await this._ready();
+    // console.log('))))))))))))))))))))))))))9023ipofsd');
+
     return this._userInfo;
   }
 
   private _ready(): Promise<any> {
+    // console.log('_ready_ready_ready32rfedwsafd');
     const exc = () => {
       while (this._taskQueue.length > 0) {
         const task = this._taskQueue.shift();
@@ -105,11 +109,12 @@ class UserPermission {
 
       exc();
     };
-
+    // console.log('#####PPPPPPP23ewfds');
     const promise = new Promise((resolve) => {
       this._taskQueue.push(resolve);
     });
     handleTasks();
+    // console.log('*****PPPPPPPsdf32rsedf');
     return promise;
   }
 }
