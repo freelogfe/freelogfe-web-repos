@@ -11,6 +11,7 @@ import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import Banner2 from '@/pages/home/Banner2';
 // import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
+import Ads from '@/pages/home/Ads';
 
 interface HomePageProps {
 
@@ -99,9 +100,11 @@ function HomePage({}: HomePageProps) {
 
     <FComponentsLib.FPageFooter />
 
-    <a className={styles.rewardSuspension}>
-      <img src={img_RewardSuspension} alt={''} />
-    </a>
+    <Ads />
+
+    {/*<a className={styles.rewardSuspension}>*/}
+    {/*  <img src={img_RewardSuspension} alt={''} />*/}
+    {/*</a>*/}
   </div>);
 }
 
