@@ -76,8 +76,8 @@ const Model: MarketModelType = {
     * fetchUserInfo({}: FetchUserInfoAction, { call, put }: EffectsCommandMap) {
       // console.log('!!!!!#423423423423');
       // userPermission.getUserInfo();
-      const promise = () => userPermission.getUserInfo();
-      const data = yield call(promise);
+      // const promise = () => userPermission.getUserInfo();
+      const data = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
