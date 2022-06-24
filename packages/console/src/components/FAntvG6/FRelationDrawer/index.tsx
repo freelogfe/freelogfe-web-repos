@@ -325,7 +325,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       }[];
     } = await FServiceAPI.Exhibit.presentableList(params5);
 
-    console.log(data_ResolveResourceExhibit, 'data_ResolveResourceExhibit');
+    // console.log(data_ResolveResourceExhibit, 'data_ResolveResourceExhibit');
 
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
