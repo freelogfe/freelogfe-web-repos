@@ -69,7 +69,6 @@ interface FRelationDrawerStates {
     exhibitDetailsUrl: string;
     policyIDs: string[];
   }[];
-
 }
 
 const initData: FRelationDrawerStates = {
@@ -79,6 +78,7 @@ const initData: FRelationDrawerStates = {
 };
 
 function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRelationDrawerProps) {
+  // console.log(bothSidesInfo, 'bothSidesInfo8903wqioj;sdlkfjsdlfkj');
 
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
@@ -290,7 +290,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         status: 0 | 1;
       }[];
     } = await FServiceAPI.Contract.batchContracts(params2);
-    console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
+    // console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
 
     const validContracts = data_Contracts
       .filter((dc) => {
@@ -325,7 +325,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       }[];
     } = await FServiceAPI.Exhibit.presentableList(params5);
 
-    // console.log(data_ResolveResourceExhibit, 'data_AllPresentables');
+    console.log(data_ResolveResourceExhibit, 'data_ResolveResourceExhibit');
 
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
@@ -576,13 +576,14 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
           </Space>
 
         </FFormLayout.FBlock>
-
+        {/*{console.log(dataSource.licensee, 'dataSource.licensee.isCurrentUser90o3lsfdfl')}*/}
         {
           dataSource.validPolicies.length > 0 && (<FFormLayout.FBlock title={'可签约的策略'}>
             <Space size={15} direction='vertical' style={{ width: '100%' }}>
               {
                 dataSource.validPolicies.map((vp) => {
                   return (<FContract_AvailablePolicy_Card
+                    canSign={dataSource.licensee.isCurrentUser}
                     key={vp.policyId}
                     fullInfo={vp}
                     allVersions={versions.map((vs) => {

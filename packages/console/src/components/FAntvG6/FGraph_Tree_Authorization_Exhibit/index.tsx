@@ -15,6 +15,7 @@ import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FErrorBoundary from '@/components/FErrorBoundary';
 import { presentableDetails } from '@freelog/tools-lib/dist/service-API/presentables';
+import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
 
 type ServerDataNodes = {
   resourceId: string;
@@ -66,11 +67,22 @@ interface ContractNode {
 interface FGraph_Tree_Authorization_Exhibit_States {
   dataSource: ExhibitNode | null;
   contractID: string;
+  bothSidesInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licenseeIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
 }
 
 const initStates: FGraph_Tree_Authorization_Exhibit_States = {
   dataSource: null,
   contractID: '',
+  bothSidesInfo: null,
 };
 
 function FGraph_Tree_Authorization_Exhibit({
@@ -83,6 +95,8 @@ function FGraph_Tree_Authorization_Exhibit({
   // console.log(version, 'version@##4093uijol()((((((((((((');
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Exhibit_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Exhibit_States['contractID']>(initStates['contractID']);
+  const [bothSidesInfo, set_BothSidesInfo] = React.useState<FGraph_Tree_Authorization_Exhibit_States['bothSidesInfo']>(initStates['bothSidesInfo']);
+
 
   React.useEffect(() => {
     handleData();
@@ -197,31 +211,58 @@ function FGraph_Tree_Authorization_Exhibit({
           // console.log(contractID, 'contractID@#@##$@#$@#');
           set_ContractID(contractID);
         });
+
+        graph.on('contract:resource2Node', (params: any) => {
+          console.log(params, 'contract:resource2Node 3290wisokpdef');
+          // console.log(contractID, 'contractID@#@##$@#$@#');
+          // set_ContractID();
+          set_BothSidesInfo({
+            licensor: {
+              licensorID: params.licensor.resourceID,
+              licensorIdentityType: 'resource',
+            },
+            licensee: {
+              licenseeID: params.licensee.exhibitID,
+              licenseeIdentityType: 'exhibit',
+            },
+          });
+        });
       }}
     />);
   }, [dataSource]);
 
   return (<>
-      {
-        !dataSource
-          ? (<FLoadingTip height={height} />)
-          : dataSource.children.length === 0
-            ? (<div
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
-              <FResultTip h1={'无授权树'} />
-            </div>)
-            : Gra
-      }
+    {
+      !dataSource
+        ? (<FLoadingTip height={height} />)
+        : dataSource.children.length === 0
+          ? (<div
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: width, height: height }}>
+            <FResultTip h1={'无授权树'} />
+          </div>)
+          : Gra
+    }
 
-      <FContractDetailsDrawer
-        contractID={contractID}
-        onClose={() => {
-          set_ContractID('');
-        }}
-        onChange_SomeContract={() => {
-          handleData();
-        }}
-      />
+    <FContractDetailsDrawer
+      contractID={contractID}
+      onClose={() => {
+        set_ContractID('');
+      }}
+      onChange_SomeContract={() => {
+        handleData();
+      }}
+    />
+
+    <FRelationDrawer
+      bothSidesInfo={bothSidesInfo}
+      onClose={() => {
+        set_BothSidesInfo(null);
+      }}
+      onChange_Authorization={() => {
+        handleData();
+        set_BothSidesInfo(null);
+      }}
+    />
   </>);
 }
 

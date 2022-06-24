@@ -686,7 +686,7 @@ const Model: ResourceDetailPageModelType = {
         version: resourceDetailPage.resourceVersion_SelectedVersion,
         resourceId: resourceDetailPage.resource_ID,
       };
-      console.log('resourceVersionInfo1239weiojfasdlkfjslk');
+      // console.log('resourceVersionInfo1239weiojfasdlkfjslk');
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');

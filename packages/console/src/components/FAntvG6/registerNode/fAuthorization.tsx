@@ -180,7 +180,6 @@ interface FNode_Authorization_Contract_Props {
 
 function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Props) {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
-  // const contracts = (cfg as any).value as FNode_Authorization_Contract_Values;
   const contracts = value;
   // console.log(cfg, 'contracts@##3433333333');
 
@@ -216,17 +215,37 @@ function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Pr
             margin: [3, 0, 0],
           }}
           onClick={(evt, node, shape, graph) => {
-            // graph.emit('contract:view', {
-            //   contractID: contract.contractID,
-            // });
-            window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.contract());
+            console.log(node, 'NNNoikewsdflkjdlfksdl');
+
+            // const licenseeIdentityType = node?._cfg?.parent._cfg.model?.nodeType;
+            // const licensor = {
+            //   licensorID: (node?._cfg?.model?.children as any[])[0].value?.resourceID,
+            //   licensorName: (node?._cfg?.model?.children as any)[0].value?.resourceName,
+            // };
+            const licensee = {
+              licenseeID: node?._cfg?.parent._cfg.model?.value?.resourceID,
+              licenseeName: node?._cfg?.parent._cfg?.model?.value?.resourceName,
+            };
+            if (node?._cfg?.parent._cfg.model?.nodeType === 'resource') {
+              graph.emit('contract:resource2Resource', {
+                licensor: (node?._cfg?.model?.children as any[])[0].value,
+                licensee: node?._cfg?.parent._cfg.model?.value,
+              });
+            }
+
+            if (node?._cfg?.parent._cfg.model?.nodeType === 'exhibit') {
+              graph.emit('contract:resource2Node', {
+                licensor: (node?._cfg?.model?.children as any[])[0].value,
+                licensee: node?._cfg?.parent._cfg.model?.value,
+              });
+            }
           }}
-        >查看已终止的合约</Text>
+        >重新获取授权</Text>
       </Rect>
     </Group>);
   }
-  return (<Group draggable={true}>
 
+  return (<Group draggable={true}>
     {
       contracts.map((contract) => {
         return (<Rect
@@ -299,7 +318,7 @@ function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Pr
 }
 
 function FNode_Authorization({ cfg = {} }: any) {
-  // console.log(value, 'value@#38s9dio');
+
   if (cfg.nodeType === 'resource') {
     return (<FNode_Authorization_Resource
       value={cfg.value}
@@ -311,8 +330,12 @@ function FNode_Authorization({ cfg = {} }: any) {
     />);
   }
   if (cfg.nodeType === 'contract') {
+    // console.log(cfg, 'value@#38s9dio');
     return (<FNode_Authorization_Contract
       value={cfg.value}
+      onClick={() => {
+        console.log('FFFFFFFF09iojsklj');
+      }}
     />);
   }
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
