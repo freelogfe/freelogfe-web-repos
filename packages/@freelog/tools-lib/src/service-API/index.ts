@@ -12,6 +12,7 @@ import * as Event from './events';
 import * as Activity from './activities';
 import * as TestQualification from './testQualifications';
 import * as Statistic from './statistics';
+import * as I18n from './i18n';
 
 const FServiceAPI = {
   Node,
@@ -28,6 +29,7 @@ const FServiceAPI = {
   Activity,
   TestQualification,
   Statistic,
+  I18n,
 };
 
 export default FServiceAPI;

@@ -25,7 +25,7 @@ import * as H from 'history';
 import Prompt from 'umi/prompt';
 import fConfirmModal from '@/components/fConfirmModal';
 import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, fI18nNext } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
@@ -161,7 +161,8 @@ function ResourceCreator({
         }
       >
         <FFormLayout>
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')} asterisk={true}>
+          {/*<FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')} asterisk={true}>*/}
+          <FFormLayout.FBlock title={fI18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
               <FContentText text={`${user.info?.username} /`} />
               &nbsp;
