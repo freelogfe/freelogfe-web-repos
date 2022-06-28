@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {Space} from 'antd';
 import FIcons from "../FIcons";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, fI18nNext} from '@freelog/tools-lib';
 import {Popover} from 'antd';
 
 interface FPageFooterProps {
@@ -29,7 +29,17 @@ function FPageFooter({}: FPageFooterProps) {
                 <div className={styles.Divider}/>
                 <a className={styles.footerLeft_Link}>联系我们</a>
                 <div className={styles.Divider}/>
-                <a className={styles.footerLeft_Link}>English</a>
+                <a
+                    className={styles.footerLeft_Link}
+                    onClick={() => {
+                        const allLanguage = fI18nNext.getAllLanguage();
+                        console.log(allLanguage, 'allLanguage903iosdlfkj');
+                        const currentLanguage = fI18nNext.getCurrentLanguage();
+                        console.log(currentLanguage, 'currentLanguage90i3osdlkfjsdlk');
+                        fI18nNext.changeLanguage(currentLanguage !== 'zh_CN' ? 'zh_CN' : 'en_US');
+                        window.location.reload();
+                    }}
+                >{fI18nNext.getCurrentLanguage() !== 'zh_CN' ? '简体中文' : 'English'}</a>
             </Space>
             <div style={{width: 20}}/>
             <div className={styles.Divider}/>

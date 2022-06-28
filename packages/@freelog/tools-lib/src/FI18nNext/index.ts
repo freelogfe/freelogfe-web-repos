@@ -1,9 +1,12 @@
 import i18next, {Resource} from 'i18next';
 import axios from "axios";
 
+type LanguageKeyType = 'zh_CN' | 'en_US';
+
 const ossJsonUrl: string = 'https://freelog-i18n.oss-cn-shenzhen.aliyuncs.com/configs/i18n.json';
 const localStorage_i18nextLng_key: string = 'i18nextLng';
 const localStorage_i18nextResources_key: string = 'i18nextResources';
+
 const allLanguage = [
   {value: 'en_US', label: 'English'},
   {value: 'zh_CN', label: '简体中文'},
@@ -15,7 +18,7 @@ class FI18nNext {
 
   private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
   private _taskQueue: Function[] = [];
-  private _currentLanguage: 'zh_CN' | 'en_US' = window.localStorage.getItem(localStorage_i18nextLng_key) as null || 'zh_CN';
+  private _currentLanguage: LanguageKeyType = window.localStorage.getItem(localStorage_i18nextLng_key) as null || 'zh_CN';
 
   constructor() {
     self = this;
@@ -56,16 +59,16 @@ class FI18nNext {
     return i18next.t(key, options);
   }
 
-  changeLanguage(lng: string) {
+  changeLanguage(lng: LanguageKeyType) {
     // return i18next.changeLanguage(lng);
     window.localStorage.setItem(localStorage_i18nextLng_key, lng)
   }
 
-  getAllLanguage(): { [key: string]: string }[] {
+  getAllLanguage(): typeof allLanguage {
     return allLanguage;
   }
 
-  getCurrentLanguage(): string {
+  getCurrentLanguage(): LanguageKeyType {
     return self._currentLanguage;
   }
 
