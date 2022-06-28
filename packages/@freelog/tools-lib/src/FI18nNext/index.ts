@@ -98,7 +98,9 @@ class FI18nNext {
   }
 
   private async _fetchData(): Promise<Resource> {
-    const res: any = await axios.get(ossJsonUrl);
+    const res: any = await axios.get(ossJsonUrl, {
+      withCredentials: false,
+    });
     // console.log(res, 'data09oiw3qjelsfkdfjlsdkfjl');
 
     const en_US: { [key: string]: string } = {};
