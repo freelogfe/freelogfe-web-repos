@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, fI18nNext } from '@freelog/tools-lib';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
@@ -184,7 +184,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               {
                 ac.disuseAuthorized
                   ? (<div className={styles.disuseAuthorized}>无需处理授权</div>)
-                  // ? (<div className={styles.disuseAuthorized}>{FUtil1.I18n.message('msg_resource_natural_auth')}</div>)
+                  // ? (<div className={styles.disuseAuthorized}>{fI18nNext.t('msg_resource_natural_auth')}</div>)
                   : (<FResourceContractLabels
                     contracts={ac.contracts
                       .filter((c) => {
@@ -219,7 +219,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           <div style={{ height: 30 }} />
           <FContentText
             text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
-            // text={FUtil1.I18n.message('msg_resource_natural_auth')}
+            // text={fI18nNext.t('msg_resource_natural_auth')}
             type={'additional2'}
           />
         </div>)
@@ -284,12 +284,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                         <Space style={{ padding: '0 20px' }} size={5}>
                           <FContentText
                             type='additional2'
-                            text={FUtil1.I18n.message('contract_id') + '：' + sac.contractID}
+                            text={fI18nNext.t('contract_id') + '：' + sac.contractID}
                           />
                           <FDivider style={{ fontSize: 14 }} />
                           <FContentText
                             type='additional2'
-                            text={FUtil1.I18n.message('contract_signed_time') + '：' + sac.createTime}
+                            text={fI18nNext.t('contract_signed_time') + '：' + sac.createTime}
                           />
                         </Space>
                         <div style={{ height: 10 }} />
@@ -297,7 +297,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                           <div className={styles.action}>
                             <FContentText
                               // text={exhibitInfoPage.pName}
-                              text={FUtil1.I18n.message('use_in_current_exhibit')}
+                              text={fI18nNext.t('use_in_current_exhibit')}
                               type='highlight'
                             />
                             <FSwitch

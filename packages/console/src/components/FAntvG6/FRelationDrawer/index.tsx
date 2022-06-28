@@ -2,13 +2,13 @@ import * as React from 'react';
 import FFormLayout from '@/components/FFormLayout';
 import { FContentText, FTitleText } from '@/components/FText';
 import FDrawer from '@/components/FDrawer';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, fI18nNext } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import styles from './index.less';
 import FContractDisplay from '@/components/FContractDisplay';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
@@ -490,12 +490,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                   <Space style={{ padding: '0 20px' }} size={2}>
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_id') + '：' + k.contractID}
+                      text={fI18nNext.t('contract_id') + '：' + k.contractID}
                     />
                     <FDivider style={{ fontSize: 14 }} />
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_signed_time') + '：' + k.createDate}
+                      text={fI18nNext.t('contract_signed_time') + '：' + k.createDate}
                     />
                   </Space>
 

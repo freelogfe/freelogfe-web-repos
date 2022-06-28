@@ -4,7 +4,8 @@ import {Dispatch, connect} from 'dva';
 import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
 import FExpandable from "./FExpandable";
 import {FContentText} from "@/components/FText";
-import FUtil1 from "@/utils";
+// import FUtil1 from "@/utils";
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface DescriptionProps {
   dispatch: Dispatch;
@@ -18,7 +19,7 @@ function Description({dispatch, resourceDetailPage}: DescriptionProps) {
     {
       !resourceDetailPage.resourceVersion_Info.description || resourceDetailPage.resourceVersion_Info.description === '<p></p>'
         ? (<FContentText
-          text={FUtil1.I18n.message('description_empty')}
+          text={fI18nNext.t('description_empty')}
           type="negative"
         />)
         : (<div className={styles.styles}>
