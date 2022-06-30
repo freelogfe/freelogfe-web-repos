@@ -12,8 +12,8 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FTooltip from '@/components/FTooltip';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { fI18nNext } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
 
@@ -39,7 +39,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
   return (<>
 
     <FContentText
-      text={FUtil1.I18n.message('exhibit_info')}
+      text={fI18nNext.t('exhibit_info')}
       type='highlight'
     />
 
@@ -68,14 +68,14 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
           <FEdit style={{ fontSize: 32 }} />
           <div style={{ height: 10 }} />
-          <div>{FUtil1.I18n.message('btn_edit_cover')}</div>
+          <div>{fI18nNext.t('btn_edit_cover')}</div>
         </div>
       </div>
     </FUploadCover>
 
     <div style={{ height: 20 }} />
 
-    <FTitleText text={FUtil1.I18n.message('exhibit_title')} type='h4' />
+    <FTitleText text={fI18nNext.t('exhibit_title')} type='h4' />
     <div style={{ height: 15 }} />
     {
       exhibitInfoPage.side_ExhibitInputTitle === null
@@ -102,7 +102,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
               type='default'
               // size="small"
               onClick={() => onChangePInputTitle(null)}
-            >{FUtil1.I18n.message('btn_cancel')}</FTextBtn>
+            >{fI18nNext.t('btn_cancel')}</FTextBtn>
             <div style={{ width: 15 }} />
             <FRectBtn
               size='small'
@@ -115,14 +115,14 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
                 });
                 onChangePInputTitle(null);
               }}
-            >{FUtil1.I18n.message('btn_save')}</FRectBtn>
+            >{fI18nNext.t('btn_save')}</FRectBtn>
           </div>
 
         </>)
     }
     <div style={{ height: 30 }} />
 
-    <FTitleText text={FUtil1.I18n.message('exhibit_tag')} type='h4' />
+    <FTitleText text={fI18nNext.t('exhibit_tag')} type='h4' />
     <div style={{ height: 15 }} />
     <FLabelEditor
       values={exhibitInfoPage.side_ExhibitTags}

@@ -1,15 +1,14 @@
 import * as React from 'react';
-// import Policy from './Policy';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
+import { fI18nNext } from '@freelog/tools-lib';
 
 type EventFunc = () => void
 
@@ -111,7 +110,7 @@ function FResourceCard({
           />
           <FContentText
             type='additional1'
-            text={resource.version ? (FUtil1.I18n.message('latest_version') + ' ' + resource.version) : '暂无版本'}
+            text={resource.version ? (fI18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
         </div>
         <div style={{ height: '15px' }} />

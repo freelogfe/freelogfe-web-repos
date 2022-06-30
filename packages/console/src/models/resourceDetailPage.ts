@@ -3,8 +3,8 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
-import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI,fI18nNext } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -425,15 +425,15 @@ const Model: ResourceDetailPageModelType = {
         });
 
         if ((res?.policyIDs.length || 0) === 0) {
-          fMessage(FUtil1.I18n.message('alarm_resource_not_available'), 'error');
+          fMessage(fI18nNext.t('alarm_resource_not_available'), 'error');
           return;
         }
 
         // console.log(res, r1, '#######02948093u4o23uj4ojlk');
         for (const p1 of r1.policyIDs) {
           if (!res?.policyIDs.includes(p1)) {
-            // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
-            fMessage(FUtil1.I18n.message('alarm_plan_not_available'), 'error');
+            // fMessage(fI18nNext.t('alarm_resource_not_available'));
+            fMessage(fI18nNext.t('alarm_plan_not_available'), 'error');
             return;
           }
         }
@@ -501,7 +501,7 @@ const Model: ResourceDetailPageModelType = {
           type: 'change',
           payload: {
             sign_SignExhibitName: payload,
-            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
+            sign_SignExhibitNameErrorTip: fI18nNext.t('naming_convention_exhibits_name'),
           },
         });
         return;
@@ -521,7 +521,7 @@ const Model: ResourceDetailPageModelType = {
           type: 'change',
           payload: {
             sign_SignExhibitName: payload,
-            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
+            sign_SignExhibitNameErrorTip: fI18nNext.t('exhibits_name_exist'),
           },
         });
         return;

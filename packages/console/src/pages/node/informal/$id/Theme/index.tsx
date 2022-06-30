@@ -23,8 +23,8 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FUtil } from '@freelog/tools-lib';
-import FUtil1 from '@/utils';
+import { FUtil, fI18nNext } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import FCoverImage from '@/components/FCoverImage';
@@ -92,7 +92,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                 }}>
                 <Space size={5}>
                   <FAdd />
-                  <span>{FUtil1.I18n.message('btn_add_test_theme')}</span>
+                  <span>{fI18nNext.t('btn_add_test_theme')}</span>
                 </Space>
               </FTextBtn>
 
@@ -105,7 +105,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                 }}>
                 <Space size={5}>
                   <FMappingRuleReplace />
-                  <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
+                  <span>{fI18nNext.t('btn_replace_resource')}</span>
                 </Space>
               </FTextBtn>
 

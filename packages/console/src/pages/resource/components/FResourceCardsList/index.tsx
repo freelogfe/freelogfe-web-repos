@@ -8,11 +8,11 @@ import { router } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, fI18nNext } from '@freelog/tools-lib';
 import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
-import friend from '@/assets/invitefriend/friend.png';
+// import friend from '@/assets/invitefriend/friend.png';
 
 const resourceTypeOptions = [
   { text: '全部', value: '-1' },
@@ -102,7 +102,7 @@ function FResourceCardsList({
       <div className={styles.filter}>
         <div className={styles.filterLeft}>
           <div>
-            <span>{FUtil1.I18n.message('resource_type')}：</span>
+            <span>{fI18nNext.t('resource_type')}：</span>
             <FDropdown
               overlay={
                 <FMenu
@@ -178,7 +178,7 @@ function FResourceCardsList({
             ) : null}
           </div>
           <div style={{ marginLeft: 60 }}>
-            <span>{FUtil1.I18n.message('resource_state')}：</span>
+            <span>{fI18nNext.t('resource_state')}：</span>
             <FDropdown
               overlay={
                 <FMenu
@@ -205,11 +205,11 @@ function FResourceCardsList({
             onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
             theme="dark"
             className={styles.FInput}
-            placeholder={FUtil1.I18n.message('search_resource')}
+            placeholder={fI18nNext.t('search_resource')}
           />
           {showGotoCreateBtn && (
             <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
-              {FUtil1.I18n.message('create_resource')}
+              {fI18nNext.t('create_resource')}
             </FRectBtn>
           )}
         </Space>

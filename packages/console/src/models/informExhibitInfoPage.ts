@@ -2,8 +2,8 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI ,fI18nNext} from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import {
   IGraph_Relationship_Edges,
@@ -593,8 +593,8 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_OnlineSwitchObj: {
             checked: isChecked,
             text: testResourceDetail.resourceType === 'theme'
-              ? FUtil1.I18n.message('toggle_activate_theme')
-              : FUtil1.I18n.message('btn_show_exhibit'),
+              ? fI18nNext.t('toggle_activate_theme')
+              : fI18nNext.t('btn_show_exhibit'),
             disabled: isDisabled,
           },
           exhibit_Info: {

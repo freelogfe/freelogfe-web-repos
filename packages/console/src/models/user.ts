@@ -1,15 +1,11 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { fI18nNext } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
-// import { ConnectState } from '@/models/connect';
+// import FUtil1 from '@/utils';
 import userPermission from '@/permissions/UserPermission';
-// import routes from '../../config/routes';
 import { router } from 'umi';
-
-// import { PushRouterAction } from '@/models/global';
 
 export interface UserModelState {
   info: null | {
@@ -169,7 +165,7 @@ function co() {
         display: 'none',
       },
     },
-    message: FUtil1.I18n.message('msg_account_switched'),
+    message: fI18nNext.t('msg_account_switched'),
   });
 }
 

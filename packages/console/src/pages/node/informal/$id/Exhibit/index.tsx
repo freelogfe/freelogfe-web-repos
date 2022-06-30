@@ -29,10 +29,11 @@ import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import { Helmet } from 'react-helmet';
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -94,7 +95,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 <Space size={5}>
                   <FAdd />
                   {/*<FContentText text={}/>*/}
-                  <span>{FUtil1.I18n.message('title_add_test_exhibit')}</span>
+                  <span>{fI18nNext.t('title_add_test_exhibit')}</span>
                 </Space>
               </FTextBtn>
 
@@ -108,8 +109,8 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 }}>
                 <Space size={5}>
                   <FMappingRuleReplace />
-                  {/*<FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>*/}
-                  <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
+                  {/*<FContentText text={fI18nNext.t('btn_replace_resource')}/>*/}
+                  <span>{fI18nNext.t('btn_replace_resource')}</span>
                 </Space>
               </FTextBtn>
 

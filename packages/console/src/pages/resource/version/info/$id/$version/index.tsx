@@ -28,8 +28,8 @@ import {
   // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
-import FUtil1 from '@/utils';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FServiceAPI, fI18nNext } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import { FTipText } from '@/components/FText';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
@@ -165,7 +165,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
-          title={FUtil1.I18n.message('version_description')}
+          title={fI18nNext.t('version_description')}
           extra={<Space size={10}>
             {
               isEditing
@@ -180,11 +180,11 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   <FTextBtn
                     type='default'
                     onClick={() => setIsEditing(false)}
-                  >{FUtil1.I18n.message('cancel')}</FTextBtn>
+                  >{fI18nNext.t('cancel')}</FTextBtn>
                   <FTextBtn
                     type='primary'
                     onClick={onUpdateEditorText}
-                  >{FUtil1.I18n.message('save')}</FTextBtn>
+                  >{fI18nNext.t('save')}</FTextBtn>
                 </>)
                 : !!resourceVersionEditorPage.description
                   ? (<>
@@ -662,11 +662,11 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   onChange({ descriptionFullScreen: false });
                 }
               }}
-            >{FUtil1.I18n.message('cancel')}</FTextBtn>
+            >{fI18nNext.t('cancel')}</FTextBtn>
             <FTextBtn
               type='primary'
               onClick={onUpdateEditorText}
-            >{FUtil1.I18n.message('save')}</FTextBtn>
+            >{fI18nNext.t('save')}</FTextBtn>
           </>)
           : (<>
             <FTextBtn
@@ -734,9 +734,9 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
       <FTitleText text={version} type='h1' />
       <div style={{ height: 10 }} />
       <Space size={0}>
-        <FContentText type='additional2' text={FUtil1.I18n.message('release_date') + '：' + signingDate} />
+        <FContentText type='additional2' text={fI18nNext.t('release_date') + '：' + signingDate} />
         <div style={{ width: 40 }} />
-        <FContentText type='additional2' text={FUtil1.I18n.message('object_id') + '：' + resourceID} />
+        <FContentText type='additional2' text={fI18nNext.t('object_id') + '：' + resourceID} />
         <div style={{ width: 20 }} />
         <FTooltip title={'下载'}>
           <div>

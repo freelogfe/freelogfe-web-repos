@@ -38,15 +38,16 @@ import {
   OnClick_Rule_Delete_CancelBtn_Action,
   OnClick_Rule_Delete_ConfirmBtn_Action,
   OnChange_Rule_Codemirror_Action,
-  OnClick_Rule_SaveBtn_Action, IRules,
+  OnClick_Rule_SaveBtn_Action,
+  // IRules,
 } from '@/models/informalNodeManagerPage';
 import FUpload from '@/components/FUpload';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, fI18nNext } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -276,7 +277,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 type: 'informalNodeManagerPage/onClick_Rule_Delete_CancelBtn',
               });
             }}
-          >{FUtil1.I18n.message('btn_cancel')}</FTextBtn>
+          >{fI18nNext.t('btn_cancel')}</FTextBtn>
           <FRectBtn
             type='danger1'
             onClick={async () => {
@@ -320,7 +321,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   type: 'informalNodeManagerPage/onClick_Rule_SaveBtn',
                 });
               }}
-            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FUtil1.I18n.message('msg_verifying') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rule_CodeState === 'checking' ? fI18nNext.t('msg_verifying') : '校验并保存'}</FRectBtn>
 
             <div style={{ height: 20 }} />
 

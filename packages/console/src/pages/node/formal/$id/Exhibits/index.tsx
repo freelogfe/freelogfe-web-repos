@@ -26,8 +26,8 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, fI18nNext } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
@@ -64,7 +64,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
       title: (<FTitleText
-        text={`${FUtil1.I18n.message('tableheader_exhibit')}`}
+        text={`${fI18nNext.t('tableheader_exhibit')}`}
         type='table'
       />),
       dataIndex: 'name',
@@ -115,7 +115,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       className: styles.tableEdit,
       render(_, record): any {
         return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
-          <FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
+          <FTooltip title={fI18nNext.t('tip_edit_exhibit')}>
             <FTextBtn
               type='primary'
               onClick={() => {
@@ -126,7 +126,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             ><FEdit /></FTextBtn>
           </FTooltip>
 
-          <FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
+          <FTooltip title={fI18nNext.t('tip_check_relevant_resource')}>
             <FTextBtn
               type='primary'
               onClick={() => {
@@ -141,7 +141,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     {
       title: (<FTitleText
         type='table'
-        text={FUtil1.I18n.message('tableheader_exhibit_version')}
+        text={fI18nNext.t('tableheader_exhibit_version')}
       />),
       dataIndex: 'version',
       key: 'version',
@@ -154,7 +154,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     {
       title: (<FTitleText
         type='table'
-        text={FUtil1.I18n.message('tableheader_show_exhibit')}
+        text={fI18nNext.t('tableheader_show_exhibit')}
       />),
       dataIndex: 'status',
       key: 'status',
@@ -168,10 +168,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             onChange={(value) => {
               if (value && record.policies.length === 0) {
                 if (!record.hasPolicy) {
-                  // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
-                  fMessage(FUtil1.I18n.message('alarm_exhibits_show_plan '), 'error');
+                  // fMessage(fI18nNext.t('error_show_exhibit_no_authorization_plan '), 'error');
+                  fMessage(fI18nNext.t('alarm_exhibits_show_plan '), 'error');
                 } else {
-                  fMessage(FUtil1.I18n.message('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                  fMessage(fI18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
                 }
                 return;
               }
@@ -263,8 +263,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       {
         nodeManagerPage.exhibit_ListState === 'noData' ? (<FNoDataTip
           height={'calc(100vh - 70px)'}
-          tipText={FUtil1.I18n.message('manage_exhibits_empty')}
-          btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
+          tipText={fI18nNext.t('manage_exhibits_empty')}
+          btnText={fI18nNext.t('btn_go_to_resource_market')}
           onClick={() => {
             dispatch<DiscoverChangeAction>({
               type: 'discoverPage/change',

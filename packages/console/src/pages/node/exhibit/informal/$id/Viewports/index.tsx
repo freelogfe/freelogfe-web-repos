@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FTitleText } from '@/components/FText';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import { FTextBtn } from '@/components/FButton';
 import {
-  FAntvG6AuthorizationGraph,
-  FAntvG6DependencyGraph,
-  FAntvG6RelationshipGraph,
+  // FAntvG6AuthorizationGraph,
+  // FAntvG6DependencyGraph,
+  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import FDrawer from '@/components/FDrawer';
@@ -19,6 +19,7 @@ import {
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FResultTip from '@/components/FResultTip';
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -43,7 +44,7 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={FUtil1.I18n.message('title_exhibit_maps')} type='h3' />
+      <FTitleText text={fI18nNext.t('title_exhibit_maps')} type='h3' />
       <FTextBtn
         type='default'
         onClick={() => {
@@ -56,7 +57,7 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
     <div style={{ height: 20 }} />
     <FViewportTabs
       // options={[
-      //   { value: 'relationship', label: FUtil1.I18n.message('quick_decision_map') },
+      //   { value: 'relationship', label: fI18nNext.t('quick_decision_map') },
       //   { value: 'authorization', label: '授权链视图' },
       //   { value: 'dependency', label: '授权链视图' },
       // ]}

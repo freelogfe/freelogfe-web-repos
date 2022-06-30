@@ -12,8 +12,8 @@ import { FContentText, FTitleText } from '../FText';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
-import { FUtil } from '@freelog/tools-lib';
-import FUil1 from '@/utils';
+import { FUtil , fI18nNext} from '@freelog/tools-lib';
+// import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
@@ -238,12 +238,12 @@ function FPolicyBuilder({
       return setEditMode('composition');
     }
     fConfirmModal({
-      message: FUil1.I18n.message('alarm_switchto_visualeditor'),
+      message: fI18nNext.t('alarm_switchto_visualeditor'),
       onOk() {
         setEditMode('composition');
       },
-      okText: FUil1.I18n.message('btn_switch'),
-      cancelText: FUil1.I18n.message('btn_cancel'),
+      okText: fI18nNext.t('btn_switch'),
+      cancelText: fI18nNext.t('btn_cancel'),
     });
   }
 
@@ -1024,14 +1024,14 @@ function FPolicyBuilder({
                                           <div style={{ width: 10 }} />
                                           <FInput
                                             // min={1}
-                                            placeholder={FUil1.I18n.message('hint_transaction_amount')}
+                                            placeholder={fI18nNext.t('hint_transaction_amount')}
                                             style={{ width: 120 }}
                                             value={et.payment_Amount}
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let payment_AmountError: string = '';
                                               if (!FUtil.Regexp.MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
-                                                payment_AmountError = FUil1.I18n.message('alert_authplan_transactionevent_amount_error');
+                                                payment_AmountError = fI18nNext.t('alert_authplan_transactionevent_amount_error');
                                               }
                                               onChangeCombinationEvent({
                                                 payment_Amount: e.target.value,
@@ -1072,14 +1072,14 @@ function FPolicyBuilder({
                                           <FInput
                                             // min={1}
                                             // placeholder={'输入周期数目'}
-                                            placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
+                                            placeholder={fI18nNext.t('hint_relativetime_cyclecount')}
                                             style={{ width: 250 }}
                                             value={et.relativeTime_Num}
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let relativeTime_NumError: string = '';
                                               if (!FUtil.Regexp.POSITIVE_INTEGER.test(value)) {
-                                                relativeTime_NumError = FUil1.I18n.message('alert_authplan_cycle_amount_error');
+                                                relativeTime_NumError = fI18nNext.t('alert_authplan_cycle_amount_error');
                                               }
                                               onChangeCombinationEvent({
                                                 relativeTime_Num: value,
@@ -1089,7 +1089,7 @@ function FPolicyBuilder({
                                           />
                                           <div style={{ width: 10 }} />
                                           <FSelect
-                                            placeholder={FUil1.I18n.message('hint_relativetime_unit')}
+                                            placeholder={fI18nNext.t('hint_relativetime_unit')}
                                             value={et.relativeTime_Unit || null}
                                             // value={''}
                                             style={{ width: 250 }}
@@ -1123,7 +1123,7 @@ function FPolicyBuilder({
                                         <div style={{ width: 10 }} />
                                         <DatePicker
                                           // placeholder={'选择日期时间'}
-                                          placeholder={FUil1.I18n.message('hint_time_datetime')}
+                                          placeholder={fI18nNext.t('hint_time_datetime')}
                                           style={{ width: 480 }}
                                           showTime={{ format: 'HH:mm' }}
                                           format='YYYY-MM-DD HH:mm'
@@ -1301,9 +1301,9 @@ function FPolicyBuilder({
               return onClick_SelectTemplateBtn(num);
             }
             Modal.confirm({
-              title: FUil1.I18n.message('alert_plan_cover '),
-              okText: FUil1.I18n.message('btn_import'),
-              cancelText: FUil1.I18n.message('btn_cancel'),
+              title: fI18nNext.t('alert_plan_cover '),
+              okText: fI18nNext.t('btn_import'),
+              cancelText: fI18nNext.t('btn_cancel'),
               onOk() {
                 onClick_SelectTemplateBtn(num);
               },

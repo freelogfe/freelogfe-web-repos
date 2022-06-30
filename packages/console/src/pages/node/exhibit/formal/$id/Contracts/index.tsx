@@ -8,7 +8,8 @@ import { ChangeAction } from '@/models/exhibitInfoPage';
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -29,7 +30,7 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
   }
 
   return (<div>
-    <FTitleText text={FUtil1.I18n.message('title_relevant_contracts')} type='h3' />
+    <FTitleText text={fI18nNext.t('title_relevant_contracts')} type='h3' />
 
     <div style={{ height: 20 }} />
 

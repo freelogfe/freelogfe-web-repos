@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FUploadImage from '@/components/FUploadImage';
 import FUploadCover from '@/components/FUploadCover';
 import { FContentText } from '@/components/FText';
 import { FCloudUpload } from '@/components/FIcons';
 import fMessage from '@/components/fMessage';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface FUploadResourceCoverProps {
   value?: string;
@@ -25,7 +25,7 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
       >
         <a className={styles.FUploadImageChildren}>
           <FCloudUpload />
-          <span>{FUtil1.I18n.message('upload_image')}</span>
+          <span>{fI18nNext.t('upload_image')}</span>
         </a>
       </FUploadCover>)
       : (<div className={styles.FUploadImageChildren}>
@@ -40,10 +40,10 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
           fMessage(err, 'error');
         }}
       >
-        <a className={styles.ReUpload}>{FUtil1.I18n.message('replace_resource_image')}</a>
+        <a className={styles.ReUpload}>{fI18nNext.t('replace_resource_image')}</a>
       </FUploadCover>}
       <div style={{ height: 15 }} />
-      <FContentText type='additional2' text={FUtil1.I18n.message('rules_resource_image')} />
+      <FContentText type='additional2' text={fI18nNext.t('rules_resource_image')} />
       <div style={{ height: 5 }} />
       <FContentText type='additional2' text={'未上传封面时，默认使用系统封面。'} />
     </div>

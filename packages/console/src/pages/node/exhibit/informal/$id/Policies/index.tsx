@@ -8,7 +8,8 @@ import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/ex
 import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
+import { fI18nNext } from '@freelog/tools-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -54,7 +55,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               },
             })}
             type='primary'
-          >{FUtil1.I18n.message('add_authorization_plan')}</FRectBtn>
+          >{fI18nNext.t('add_authorization_plan')}</FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {

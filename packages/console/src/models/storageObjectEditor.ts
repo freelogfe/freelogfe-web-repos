@@ -3,8 +3,8 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import fMessage from "@/components/fMessage";
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+// import FUtil1 from "@/utils";
+import {FUtil, FServiceAPI, fI18nNext} from '@freelog/tools-lib';
 import {router} from "umi";
 
 interface DepR {
@@ -339,7 +339,7 @@ const Model: StorageObjectEditorModelType = {
         const {data} = yield call(FServiceAPI.Storage.fileProperty, params);
         if (!data) {
           // resourceTypeErrorText = '不能设置为' + payload + '类型';
-          resourceTypeErrorText = FUtil1.I18n.message('file_format_incorrect');
+          resourceTypeErrorText = fI18nNext.t('file_format_incorrect');
         }
       }
 

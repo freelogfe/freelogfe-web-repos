@@ -3,9 +3,9 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, fI18nNext } from '@freelog/tools-lib';
 import { router } from 'umi';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 export interface NodeManagerModelState {
   nodeId: number;
@@ -654,9 +654,9 @@ const Model: NodeManagerModelType = {
             resourceId: i.resourceInfo.resourceId,
             isAuth: authInfo.isAuth,
             authErrorText: authInfo.defaulterIdentityType === 1
-              ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+              ? fI18nNext.t('alert_exhibit_auth_abnormal')
               : authInfo.defaulterIdentityType === 2
-                ? FUtil1.I18n.message('alert_exhibit_no_auth')
+                ? fI18nNext.t('alert_exhibit_no_auth')
                 : '',
           };
         }),
@@ -744,9 +744,9 @@ const Model: NodeManagerModelType = {
           hasPolicy: i.policies.length > 0,
           isAuth: authInfo.isAuth,
           authErrorText: authInfo.defaulterIdentityType === 1
-            ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+            ? fI18nNext.t('alert_exhibit_auth_abnormal')
             : authInfo.defaulterIdentityType === 2
-              ? FUtil1.I18n.message('alert_exhibit_no_auth')
+              ? fI18nNext.t('alert_exhibit_no_auth')
               : '',
           resourceId: i.resourceInfo.resourceId,
         };

@@ -13,8 +13,8 @@ import FTooltip from "@/components/FTooltip";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+// import FUtil1 from "@/utils";
+import {FUtil, fI18nNext} from '@freelog/tools-lib';
 import { router } from 'umi';
 
 interface SiderProps {
@@ -39,7 +39,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <Space size={10}>
             <FTitleText
               // text={`我的存储空间`}
-              text={FUtil1.I18n.message('my_buckets')}
+              text={fI18nNext.t('my_buckets')}
               type="h4"
             />
             <FTitleText
@@ -61,7 +61,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 }}
               />)
               : (<FTooltip
-                title={FUtil1.I18n.message('msg_bucket_quantity_exceed ')}
+                title={fI18nNext.t('msg_bucket_quantity_exceed ')}
                 trigger="click"
                 placement="topLeft"
               >
@@ -88,7 +88,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                   >
                     <span>{b.bucketName}</span>
                     <FTooltip
-                      title={FUtil1.I18n.message('tip_delete')}
+                      title={fI18nNext.t('tip_delete')}
                       // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
@@ -121,7 +121,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
             <FContentText
               type="additional2"
               // text={'单击“ + ”创建您的第一个项目。'}
-              text={FUtil1.I18n.message('my_buckets_list_empty')}
+              text={fI18nNext.t('my_buckets_list_empty')}
             />
           </div>)
         }
