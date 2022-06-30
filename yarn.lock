@@ -384,6 +384,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.17.2":
+  version "7.18.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.6.tgz#6a1ef59f838debd670421f8c7f2cbb8da9751580"
+  integrity sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.12.7", "@babel/template@^7.16.7", "@babel/template@^7.3.3":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.16.7.tgz#8d126c8701fde4d66b264b3eba3d96f07666d155"
@@ -554,10 +561,10 @@
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
-"@freelog/components-lib@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.9.tgz#b5b638943dfa0de02eb9cd47b2828f6a314323ac"
-  integrity sha512-Gqb2g/3JipKPFHzu7uhIUlp74vkrIVALri64Kicva0m6CQNJgYM2zecwIdqmNEczzL9D+fpv4sDVWcKnBh7KTw==
+"@freelog/components-lib@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.10.tgz#a067030a1143db1bcafed1beb5958ef712d2e69e"
+  integrity sha512-MSY2ccZVOs8jFpnzPPUAk8WeBg2SDvBqVu09FrOCo6/dUco6NxW7sLX3vtMrSy55p9SZ+5T/iyZN1mxzVGQQDA==
 
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"
@@ -569,15 +576,16 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
 
-"@freelog/tools-lib@^0.1.104":
-  version "0.1.104"
-  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.104.tgz#9dad30ee7ca41a8d3a88abb275229ecbabf88edd"
-  integrity sha512-Fi71UyE89yuY0wrS5tkl++l2ezJuB+r1jSwVZydHXEetvGHIoWTbbdG+zbmgiW9JwgafuLNg8gPYf5MPEFG8MA==
+"@freelog/tools-lib@^0.1.105":
+  version "0.1.105"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.105.tgz#bf57bc902f5ffb3ffd0d09b0ddc37e2c5acc5ffa"
+  integrity sha512-/d3sEKQnoqdmBVYiKDai6uTpadtKxIReWwVmQ0ZtuJ1e4PgHzadPjAeQ8unmbWulMPq99L33vslvXvqYRe8BNg==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"
     axios "^0.21.1"
     crypto-js "^4.0.0"
+    i18next "^21.8.10"
     moment "^2.29.1"
     nprogress "^0.2.0"
 
@@ -5211,6 +5219,13 @@ humanize-number@0.0.2:
   version "0.0.2"
   resolved "https://registry.npm.taobao.org/humanize-number/download/humanize-number-0.0.2.tgz#11c0af6a471643633588588048f1799541489c18"
   integrity sha1-EcCvakcWQ2M1iFiASPF5lUFInBg=
+
+i18next@^21.8.10:
+  version "21.8.11"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.8.11.tgz#197aac04be51b7083999a2cb63deb831cf1ba4c8"
+  integrity sha512-+s8N6kQShwNK+Ua/+VsS/Sji24NUJJLBk9QIucygj1f97f4hPNDWmLP9fQCI4d5+XLfXJ3JctX4g+zJla967Vw==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.24:
   version "0.4.24"
