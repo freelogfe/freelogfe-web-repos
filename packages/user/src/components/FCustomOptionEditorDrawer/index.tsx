@@ -6,8 +6,8 @@ import FDrawer from '../FDrawer';
 import { FTitleText } from '../FText';
 import FInput from '../FInput';
 import FSelect from '../FSelect';
-import { FUtil } from '@freelog/tools-lib';
-import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 
 interface FCustomOptionEditorDrawerProps {
   visible: boolean;
@@ -261,7 +261,7 @@ function FCustomOptionEditorDrawer({
                   className={styles.input}
                   wrapClassName={styles.input}
                   // placeholder={'输入自定义选项'}
-                  placeholder={FUtil1.I18n.message('msg_customdropdownlist')}
+                  placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}
                   value={valueInput}
                   onChange={(e) => {
                     const value: string = e.target.value;

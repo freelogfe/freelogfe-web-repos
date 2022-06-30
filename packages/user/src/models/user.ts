@@ -1,10 +1,10 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 export type UserModelState = WholeReadonly<{
   userInfo: null | {
@@ -110,7 +110,7 @@ const Model: UserModelType = {
               display: 'none',
             },
           },
-          message: FUtil1.I18n.message('msg_account_switched'),
+          message: FI18n.i18nNext.t('msg_account_switched'),
         });
       }
 

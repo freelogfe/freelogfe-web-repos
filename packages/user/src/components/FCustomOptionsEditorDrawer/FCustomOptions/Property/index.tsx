@@ -4,8 +4,8 @@ import { Col, Row, Space, Switch } from 'antd';
 import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
 import { Data } from '../index';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil , FI18n} from '@freelog/tools-lib';
 import { FTitleText } from '../../../FText';
 
 interface PropertyProps {
@@ -28,7 +28,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           <i className={styles.dot} />
-          <FTitleText type='h4' text={FUtil1.I18n.message('key')} />
+          <FTitleText type='h4' text={FI18n.i18nNext.t('key')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
@@ -64,7 +64,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       </Col>
       <Col span={12}>
         <Space size={5}>
-          <FTitleText type='h4' text={FUtil1.I18n.message('property_remark')} />
+          <FTitleText type='h4' text={FI18n.i18nNext.t('property_remark')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
@@ -99,7 +99,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
         !hideTypeSelect && (<Col span={6}>
           <Space size={5}>
             <i className={styles.dot} />
-            <FTitleText type='h4' text={FUtil1.I18n.message('value_input_mode')} />
+            <FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />
           </Space>
           <div style={{ height: 5 }} />
           <FSelect
@@ -167,7 +167,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               className={styles.input}
               wrapClassName={styles.input}
               // placeholder={'输入属性说明'}
-              placeholder={FUtil1.I18n.message('msg_customdropdownlist')}
+              placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}
               value={data.customOption}
               onChange={(e) => {
                 const value: string = e.target.value;

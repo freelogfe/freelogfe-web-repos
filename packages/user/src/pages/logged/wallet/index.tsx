@@ -54,13 +54,13 @@ import {
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil,FI18n } from '@freelog/tools-lib';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -104,7 +104,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
   const columns: ColumnsType<WalletPageModelState['table_DateSource'][number]> = [
     {
-      title: (<FTitleText text={FUtil1.I18n.message('header_tran_time')} type='table' />),
+      title: (<FTitleText text={FI18n.i18nNext.t('header_tran_time')} type='table' />),
       dataIndex: 'dataTime',
       key: 'dataTime',
       render(_, record) {
@@ -134,7 +134,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       },
     }, {
       title: (<FTitleText text={'交易说明'} type='table' />),
-      // title: (<FTitleText text={FUtil1.I18n.message('header_tran_description')} type='table' />),
+      // title: (<FTitleText text={FI18n.i18nNext.t('header_tran_description')} type='table' />),
       dataIndex: 'money',
       key: 'money',
       render(_, record) {
@@ -151,7 +151,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       },
     }, {
       // title: (<FTitleText text={'金额（枚）'} type='table' />),
-      title: (<FTitleText text={FUtil1.I18n.message('header_tran_amount')} type='table' />),
+      title: (<FTitleText text={FI18n.i18nNext.t('header_tran_amount')} type='table' />),
       dataIndex: 'amount',
       key: 'amount',
       render(_, record) {
@@ -194,7 +194,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
     {
       walletPage.accountStatus === 'inactive'
         ? (<div className={styles.Inactive}>
-          <FTipText text={FUtil1.I18n.message('msg_activate_feather_account')} type='second' />
+          <FTipText text={FI18n.i18nNext.t('msg_activate_feather_account')} type='second' />
           <div style={{ width: 30 }} />
           <FRectBtn
             type='primary'
@@ -203,7 +203,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 type: 'walletPage/onClick_Activate_AccountBtn',
               });
             }}
-          >{FUtil1.I18n.message('btn_activate_feather_account_now')}</FRectBtn>
+          >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FRectBtn>
         </div>)
         : (<>
           <div className={styles.AccountInfo}>
@@ -230,7 +230,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </div>
 
           <div style={{ height: 40 }} />
-          <FTitleText type='h1' text={FUtil1.I18n.message('title_feather_tranaction_history')} />
+          <FTitleText type='h1' text={FI18n.i18nNext.t('title_feather_tranaction_history')} />
           <div style={{ height: 20 }} />
 
           <div className={styles.TableBody}>
@@ -246,7 +246,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         // text={'日期区间：'}
                         style={{ maxWidth: 70 }}
                         singleRow
-                        text={`${FUtil1.I18n.message('filter_transaction_time')}：`}
+                        text={`${FI18n.i18nNext.t('filter_transaction_time')}：`}
                       />
                       <div style={{ width: 5 }} />
                       <RangePicker
@@ -312,7 +312,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                       <FInput
                         // theme='dark'
                         value={walletPage.table_Filter_Keywords}
-                        placeholder={FUtil1.I18n.message('hint_search_transctions')}
+                        placeholder={FI18n.i18nNext.t('hint_search_transctions')}
                         onChange={(e) => {
                           dispatch<OnChange_Table_Filter_Keywords_Action>({
                             type: 'walletPage/onChange_Table_Filter_Keywords',
@@ -336,7 +336,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         // text={'金额区间：'}
                         style={{ maxWidth: 70 }}
                         singleRow
-                        text={`${FUtil1.I18n.message('filter_transaction_amount ')}：`}
+                        text={`${FI18n.i18nNext.t('filter_transaction_amount ')}：`}
                       />
                       <div style={{ width: 5 }} />
                       <FInput
@@ -411,7 +411,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             type: 'walletPage/onClick_Table_Filter_ResetBtn',
                           });
                         }}
-                      >{FUtil1.I18n.message('btn_reset_filter')}</FRectBtn>
+                      >{FI18n.i18nNext.t('btn_reset_filter')}</FRectBtn>
                       <FRectBtn
                         type='primary'
                         onClick={() => {
@@ -419,7 +419,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                             type: 'walletPage/onClick_Table_Filter_SearchBtn',
                           });
                         }}
-                      >{FUtil1.I18n.message('btn_search_transactions')}</FRectBtn>
+                      >{FI18n.i18nNext.t('btn_search_transactions')}</FRectBtn>
                     </Space>
                   </div>
 
@@ -482,7 +482,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       destroyOnClose
       title={<FTitleText
         // text={'激活账户验证'}
-        text={FUtil1.I18n.message('title_activate_feather_account')}
+        text={FI18n.i18nNext.t('title_activate_feather_account')}
         type='popup'
       />}
       visible={walletPage.activating_VisibleModal === 'captcha'}
@@ -656,7 +656,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_Activate_ConfirmBtn',
             });
           }}
-        >{FUtil1.I18n.message('btn_activate_feather_account_now')}</FRectBtn>
+        >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FRectBtn>
       </div>
 
     </Modal>

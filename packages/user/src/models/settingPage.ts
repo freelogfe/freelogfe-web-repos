@@ -1,12 +1,12 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { FetchInfoAction } from '@/models/user';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 type ResidenceOptions = {
   value: string | number;
@@ -1660,9 +1660,9 @@ const Model: SettingPageModelType = {
       if (settingPage.changePassword_New1_PasswordInput === '') {
         changePassword_New1_PasswordInput_Error = '请输入新密码';
       } else if (settingPage.changePassword_New1_PasswordInput.length < 6 || settingPage.changePassword_New1_PasswordInput.length > 24) {
-        changePassword_New1_PasswordInput_Error = FUtil1.I18n.message('password_length');
+        changePassword_New1_PasswordInput_Error = FI18n.i18nNext.t('password_length');
       } else if (!FUtil.Regexp.PASSWORD.test(settingPage.changePassword_New1_PasswordInput)) {
-        changePassword_New1_PasswordInput_Error = FUtil1.I18n.message('password_include');
+        changePassword_New1_PasswordInput_Error = FI18n.i18nNext.t('password_include');
       }
 
       if (settingPage.changePassword_New1_PasswordInput !== '' && settingPage.changePassword_New2_PasswordInput !== '' && (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput)) {
