@@ -12,9 +12,9 @@ const allLanguage = [
   {value: 'zh_CN', label: '简体中文'},
 ];
 
-let self: FI18nNext;
+let self: I18nNext;
 
-class FI18nNext {
+class I18nNext {
 
   private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
   private _taskQueue: Function[] = [];
@@ -131,4 +131,4 @@ class FI18nNext {
   }
 }
 
-export default FI18nNext;
+export default I18nNext;

@@ -1,11 +1,9 @@
 import FUtil from './utils';
 import FServiceAPI from './service-API';
-import FI18nNext from './FI18nNext';
-
-const fI18nNext: FI18nNext = new FI18nNext();
+import FI18n from './i18n';
 
 export {
   FUtil,
   FServiceAPI,
-  fI18nNext,
+  FI18n,
 };
