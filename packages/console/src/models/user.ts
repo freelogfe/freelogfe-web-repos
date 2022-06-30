@@ -1,7 +1,7 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 // import FUtil1 from '@/utils';
 import userPermission from '@/permissions/UserPermission';
@@ -165,7 +165,7 @@ function co() {
         display: 'none',
       },
     },
-    message: fI18nNext.t('msg_account_switched'),
+    message: FI18n.i18nNext.t('msg_account_switched'),
   });
 }
 

@@ -7,7 +7,7 @@ import {ChangeAction} from "@/models/resourceVersionCreatorPage";
 import {FInfo} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 // import FUtil1 from "@/utils";
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface IsUpthrowProps {
   dispatch: Dispatch;
@@ -54,7 +54,7 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
         <span style={{color: '#666'}}>上抛</span>
       </Space>
 
-      <FTooltip title={fI18nNext.t('info_upcast')}>
+      <FTooltip title={FI18n.i18nNext.t('info_upcast')}>
         <div><FInfo/></div>
       </FTooltip>
     </Space>
@@ -69,9 +69,9 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
           disabled={resource.upthrowDisabled}
           onClick={() => onChangeIsUpthrow(false)}
         />
-        <span style={{color: '#666'}}>{fI18nNext.t('sign_contract')}</span>
+        <span style={{color: '#666'}}>{FI18n.i18nNext.t('sign_contract')}</span>
       </Space>
-      <FTooltip title={fI18nNext.t('info_sign_contract')}>
+      <FTooltip title={FI18n.i18nNext.t('info_sign_contract')}>
         <div><FInfo/></div>
       </FTooltip>
 

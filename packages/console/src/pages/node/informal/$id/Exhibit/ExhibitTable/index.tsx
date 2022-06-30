@@ -15,7 +15,7 @@ import {
   OnChange_Exhibits_StatusSwitch_Action,
   OnClick_Exhibits_DeleteBtn_Action,
 } from '@/models/informalNodeManagerPage';
-import { FServiceAPI, FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 // import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
@@ -210,7 +210,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
   return (<div ref={refDom}>
     <Space size={25}>
       {
-        onEdit && (<FTooltip title={fI18nNext.t('tip_edit_exhibit')}>
+        onEdit && (<FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
           <span>
           <FTextBtn
             type='primary'
@@ -223,7 +223,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
       }
 
       {
-        onSearch && (<FTooltip title={fI18nNext.t('tip_check_relevant_resource')}>
+        onSearch && (<FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
           <span>
           <FTextBtn
             type='primary'

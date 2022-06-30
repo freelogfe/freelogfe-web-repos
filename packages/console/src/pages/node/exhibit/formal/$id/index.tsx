@@ -19,7 +19,7 @@ import { FLoading, FWarning } from '@/components/FIcons';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -92,9 +92,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           {
             exhibitInfoPage.side_ResourceType === 'theme'
               ? (<span
-                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{fI18nNext.t('toggle_activate_theme')}</span>)
+                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>)
               : (<span
-                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{fI18nNext.t('btn_show_exhibit')}</span>)
+                style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('btn_show_exhibit')}</span>)
           }
 
           <FSwitch
@@ -104,13 +104,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
               if (value && exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0) {
                 if (exhibitInfoPage.policy_List.length === 0) {
-                  // fMessage(fI18nNext.t('error_show_exhibit_no_authorization_plan '), 'error');
-                  fMessage(fI18nNext.t('alarm_exhibits_show_plan '), 'error');
+                  fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
                 } else {
-                  fMessage(fI18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                  fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
                 }
                 return;
-                // fMessage(fI18nNext.t('error_show_exhibit_no_authorization_plan '), 'error');
                 // return;
               }
 

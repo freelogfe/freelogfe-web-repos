@@ -13,7 +13,7 @@ import { FTextBtn } from '@/components/FButton';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
 import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
 import FGraph_Tree_Dependency_Exhibit from '@/components/FAntvG6/FGraph_Tree_Dependency_Exhibit';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -32,7 +32,7 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={fI18nNext.t('title_exhibit_maps')} type='h3' />
+      <FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
       <FTextBtn
         type='default'
         onClick={() => {
@@ -45,7 +45,7 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
     <div style={{ height: 20 }} />
     <FViewportTabs
       options={[
-        { value: 'relationship', label: fI18nNext.t('quick_decision_map') },
+        { value: 'relationship', label: FI18n.i18nNext.t('quick_decision_map') },
         { value: 'authorization', label: '授权链视图' },
         { value: 'dependency', label: '依赖树' },
       ]}
@@ -104,7 +104,7 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
       <FViewportTabs
         options={[
-          { value: 'relationship', label: fI18nNext.t('quick_decision_map') },
+          { value: 'relationship', label: FI18n.i18nNext.t('quick_decision_map') },
           { value: 'authorization', label: '授权链视图' },
           { value: 'dependency', label: '依赖树' },
         ]}

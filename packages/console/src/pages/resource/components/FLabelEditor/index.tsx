@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Input, Form } from 'antd';
 // import FUtil1 from '@/utils';
 import { FClose } from '@/components/FIcons';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FLabelEditor {
   values?: string[];
@@ -61,7 +61,7 @@ export default function({ values = [], onChange }: FLabelEditor) {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <Input
           className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
-          placeholder={fI18nNext.t('hint_add_resource_tag')}
+          placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
           ref={inputElementRef}
           value={input}
           onChange={onChangeInputText}

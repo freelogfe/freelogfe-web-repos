@@ -17,7 +17,7 @@ import FFormLayout from '@/components/FFormLayout';
 // import FUtil1 from '@/utils';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -70,26 +70,26 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
     <FLeftSiderLayout
       sider={<Sider />}
       header={<FTitleText
-        text={fI18nNext.t('resource_information')}
+        text={FI18n.i18nNext.t('resource_information')}
         type='h1'
       />}
     >
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
-        <FFormLayout.FBlock title={fI18nNext.t('resource_name')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')}>
           <FContentText type='highlight' text={resourceInfo.info?.resourceName || ''} />
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={fI18nNext.t('resource_type')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')}>
           <FContentText type='highlight' text={resourceInfo.info.resourceType} />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
-          title={fI18nNext.t('resource_short_description')}
+          title={FI18n.i18nNext.t('resource_short_description')}
           extra={<Space size={10}>
             {
               resourceInfo.info?.intro && !resourceInfoPage.isEditing
               && (<FTextBtn onClick={() => {
                 onChangeIsEditing(true);
-              }}>{fI18nNext.t('edit')}</FTextBtn>)
+              }}>{FI18n.i18nNext.t('edit')}</FTextBtn>)
             }
             {
               resourceInfoPage.isEditing && (<>
@@ -98,7 +98,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
                   onClick={() => {
                     onChangeIsEditing(false);
                   }}
-                >{fI18nNext.t('cancel')}</FTextBtn>
+                >{FI18n.i18nNext.t('cancel')}</FTextBtn>
                 <FTextBtn
                   onClick={() => {
                     onChangeIsEditing(false);
@@ -109,7 +109,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
                       id: resourceInfo.info?.resourceId || '',
                     });
                   }}
-                >{fI18nNext.t('save')}</FTextBtn>
+                >{FI18n.i18nNext.t('save')}</FTextBtn>
               </>)
             }
           </Space>}
@@ -142,7 +142,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
           }
 
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={fI18nNext.t('resource_image')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>
           <FUploadResourceCover
             value={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
             onChange={(value) => dispatch<OnChangeInfoAction>({
@@ -152,7 +152,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
             })}
           />
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={fI18nNext.t('resource_tag')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
           <FLabelEditor
             values={resourceInfo.info?.tags}
             onChange={(value) => dispatch<OnChangeInfoAction>({

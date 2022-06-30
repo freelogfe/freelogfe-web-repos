@@ -8,7 +8,7 @@ import { OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
 import { withRouter } from 'umi';
 import FLink from '@/components/FLink';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 
 interface SiderProps {
@@ -60,7 +60,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 },
               });
             }}
-          >{fI18nNext.t('tab_manage_nodes')}</a>
+          >{FI18n.i18nNext.t('tab_manage_nodes')}</a>
           <a
             className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
             onClick={() => {
@@ -71,16 +71,16 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 },
               });
             }}
-          >{fI18nNext.t('manage_theme')}</a>
+          >{FI18n.i18nNext.t('manage_theme')}</a>
         </div>
       </div>
 
       <div className={styles.gotoTest}>
-        <span>{fI18nNext.t('msg_navigate_to_test_node')}</span>
+        <span>{FI18n.i18nNext.t('msg_navigate_to_test_node')}</span>
         <FLink
           // to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
           to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
-        >{fI18nNext.t('btn_navigate_to_test_node')}</FLink>
+        >{FI18n.i18nNext.t('btn_navigate_to_test_node')}</FLink>
         <div style={{ height: 40 }} />
       </div>
 

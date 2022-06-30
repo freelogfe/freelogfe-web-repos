@@ -6,7 +6,7 @@ import 'antd/es/slider/style';
 import styles from './index.less';
 import { RcFile, UploadChangeParam } from 'antd/lib/upload/interface';
 // import FUtil1 from '@/utils';
-import { FServiceAPI, fI18nNext } from '@freelog/tools-lib';
+import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { Area } from 'react-easy-crop/types';
 
 interface FUploadImageProps {
@@ -50,12 +50,12 @@ export default function({ children, onUploadSuccess, onError }: FUploadImageProp
         beforeCrop={(file) => {
           // console.log(file, '#FSDFSDFSDF');
           if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
-            onError && onError(fI18nNext.t('limit_resource_image_format'));
+            onError && onError(FI18n.i18nNext.t('limit_resource_image_format'));
             return false;
           }
 
           if (file.size > 5 * 1024 * 1024) {
-            onError && onError(fI18nNext.t('limit_resource_image_size'));
+            onError && onError(FI18n.i18nNext.t('limit_resource_image_size'));
             return false;
           }
 

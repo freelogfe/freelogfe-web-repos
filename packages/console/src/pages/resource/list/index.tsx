@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { ChangeAction } from '@/models/global';
 import { Dispatch, connect } from 'dva';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import * as AHooks from 'ahooks';
 import { ConnectState } from '@/models/connect';
@@ -18,11 +18,9 @@ import FComponentsLib from '@freelog/components-lib';
 // const navs = [
 //   {
 //     value: '1',
-//     text: fI18nNext.t('my_resources'),
 //   },
 //   {
 //     value: '2',
-//     text: fI18nNext.t('my_collections'),
 //   },
 // ];
 
@@ -76,12 +74,12 @@ function List({ match, dispatch, route }: ListProps & RouterTypes) {
         options={[
           {
             value: 'myResources',
-            label: fI18nNext.t('my_resources'),
+            label: FI18n.i18nNext.t('my_resources'),
             href: FUtil.LinkTo.myResources(),
           },
           {
             value: 'myCollections',
-            label: fI18nNext.t('my_collections'),
+            label: FI18n.i18nNext.t('my_collections'),
             href: FUtil.LinkTo.myCollects(),
           },
         ]}

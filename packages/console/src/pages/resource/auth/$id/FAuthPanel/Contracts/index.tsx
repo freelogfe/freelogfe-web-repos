@@ -14,7 +14,7 @@ import FDivider from '@/components/FDivider';
 import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -73,12 +73,12 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         <Space style={{ padding: '0 20px' }} size={2}>
           <FContentText
             type='additional2'
-            text={fI18nNext.t('contract_id') + '：' + k.id}
+            text={FI18n.i18nNext.t('contract_id') + '：' + k.id}
           />
           <FDivider style={{ fontSize: 14 }} />
           <FContentText
             type='additional2'
-            text={fI18nNext.t('contract_signed_time') + '：' + k.date}
+            text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
           />
         </Space>
         <div style={{ height: 10 }} />

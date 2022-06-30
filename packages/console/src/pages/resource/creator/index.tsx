@@ -25,7 +25,7 @@ import * as H from 'history';
 import Prompt from 'umi/prompt';
 import fConfirmModal from '@/components/fConfirmModal';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
@@ -161,8 +161,7 @@ function ResourceCreator({
         }
       >
         <FFormLayout>
-          {/*<FFormLayout.FBlock title={fI18nNext.t('resource_name')} asterisk={true}>*/}
-          <FFormLayout.FBlock title={fI18nNext.t('resource_name')} asterisk={true}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
               <FContentText text={`${user.info?.username} /`} />
               &nbsp;
@@ -182,7 +181,7 @@ function ResourceCreator({
                   });
                 }}
                 className={styles.FInput}
-                placeholder={fI18nNext.t('hint_enter_resource_name')}
+                placeholder={FI18n.i18nNext.t('hint_enter_resource_name')}
                 lengthLimit={60}
               />
               <div style={{ width: 10 }} />
@@ -193,7 +192,7 @@ function ResourceCreator({
             </div>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={fI18nNext.t('resource_type')} asterisk={true}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
             <FDropdown
               className='h-38 flex-column justify-center'
               overlay={
@@ -250,7 +249,7 @@ function ResourceCreator({
                     // })
                   }
                   className={styles.FSelect}
-                  placeholder={fI18nNext.t('hint_choose_resource_type')}
+                  placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}
                   options={[
                     // @ts-ignore
                     ...categoryData.second[category.first].map((i, index) => {
@@ -265,7 +264,7 @@ function ResourceCreator({
             ) : null}
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={fI18nNext.t('resource_short_description')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>
             <FIntroductionEditor
               value={resourceCreatorPage.introduction}
               onChange={(e) =>
@@ -274,11 +273,11 @@ function ResourceCreator({
                   introduction: e.target.value,
                 })
               }
-              placeholder={fI18nNext.t('hint_enter_resource_short_description')}
+              placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={fI18nNext.t('resource_image')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>
             <FUploadResourceCover
               value={resourceCreatorPage.cover}
               onChange={(value) =>
@@ -289,7 +288,7 @@ function ResourceCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={fI18nNext.t('resource_tag')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
             <FLabelEditor
               values={resourceCreatorPage.labels}
               onChange={(value) =>
@@ -321,7 +320,7 @@ function Header({ onClickCreate, disabled = false }: HeaderProps) {
 
       <Space size={30}>
         <FRectBtn disabled={disabled} onClick={onClickCreate}>
-          {fI18nNext.t('create')}
+          {FI18n.i18nNext.t('create')}
         </FRectBtn>
       </Space>
     </div>

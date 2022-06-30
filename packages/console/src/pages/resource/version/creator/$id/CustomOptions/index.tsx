@@ -23,7 +23,7 @@ import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer'
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -124,7 +124,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             <span>自定义选项（高级）</span>
             {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
           </FTextBtn>
-          <FTooltip title={fI18nNext.t('info_versionoptions')}>
+          <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
             <div><FInfo /></div>
           </FTooltip>
         </Space>

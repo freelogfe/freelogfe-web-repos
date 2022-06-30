@@ -8,7 +8,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
 // import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
@@ -24,10 +24,9 @@ import * as AHooks from 'ahooks';
 import { FLoading } from '@/components/FIcons';
 
 const errorTexts = {
-  duplicated: fI18nNext.t('resource_exist'),
-  // size: fI18nNext.t('limit_on_file_size'),
+  duplicated: FI18n.i18nNext.t('resource_exist'),
   size: '文件大小不能超过200MB',
-  resourceType: fI18nNext.t('error_wrongfileformat'),
+  resourceType: FI18n.i18nNext.t('error_wrongfileformat'),
 };
 
 export interface FSelectObject {
@@ -280,7 +279,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
-                  <span>{fI18nNext.t('verifying')}<FLoading style={{ paddingLeft: 10 }} /></span>
+                  <span>{FI18n.i18nNext.t('verifying')}<FLoading style={{ paddingLeft: 10 }} /></span>
                   <span style={{ color: '#666' }}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
                 : (<Space size={15}>
@@ -294,7 +293,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                   >
                     <FRectBtn
                       type='default'
-                    >{fI18nNext.t('upload_from_local')}</FRectBtn>
+                    >{FI18n.i18nNext.t('upload_from_local')}</FRectBtn>
                   </FUpload>
                   <FRectBtn
                     type='default'
@@ -304,7 +303,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                         selectedFileObjectDrawerVisible: true,
                       });
                     }}
-                  >{fI18nNext.t('choose_from_storage')}</FRectBtn>
+                  >{FI18n.i18nNext.t('choose_from_storage')}</FRectBtn>
                 </Space>)
             }
 

@@ -19,7 +19,7 @@ import {
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FResultTip from '@/components/FResultTip';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -44,7 +44,7 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={fI18nNext.t('title_exhibit_maps')} type='h3' />
+      <FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
       <FTextBtn
         type='default'
         onClick={() => {
@@ -57,7 +57,6 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
     <div style={{ height: 20 }} />
     <FViewportTabs
       // options={[
-      //   { value: 'relationship', label: fI18nNext.t('quick_decision_map') },
       //   { value: 'authorization', label: '授权链视图' },
       //   { value: 'dependency', label: '授权链视图' },
       // ]}

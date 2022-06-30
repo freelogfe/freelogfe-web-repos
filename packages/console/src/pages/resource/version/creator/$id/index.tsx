@@ -38,7 +38,7 @@ import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
 import FPaperPlane from '@/components/FIcons/FPaperPlane';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -150,7 +150,7 @@ function VersionCreator({
         <FFormLayout>
           <FFormLayout.FBlock
             dot={true}
-            title={fI18nNext.t('version_number')}
+            title={FI18n.i18nNext.t('version_number')}
           >
             <FInput
               value={resourceVersionCreatorPage.version}
@@ -175,17 +175,17 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={true} title={fI18nNext.t('release_object')}>
+          <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
             <FSelectObject />
 
             <CustomOptions />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={fI18nNext.t('rely')}>
+          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
             <FDepPanel />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={fI18nNext.t('version_description')}>
+          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
               onChange={(value) => {
@@ -221,7 +221,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
       <FTextBtn
         type='default'
         onClick={onClickCache}
-      >{fI18nNext.t('save_as_draft')}</FTextBtn>
+      >{FI18n.i18nNext.t('save_as_draft')}</FTextBtn>
       <FRectBtn
         style={{ display: 'flex', alignItems: 'center' }}
         onClick={onClickCreate}
@@ -229,7 +229,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
       >
         <FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
         <div style={{ width: 5 }} />
-        {fI18nNext.t('release_to_market')}
+        {FI18n.i18nNext.t('release_to_market')}
       </FRectBtn>
     </Space>
   </div>);

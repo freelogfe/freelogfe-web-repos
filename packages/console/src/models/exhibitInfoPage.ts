@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI , fI18nNext} from '@freelog/tools-lib';
+import { FUtil, FServiceAPI , FI18n} from '@freelog/tools-lib';
 import { router } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
@@ -471,9 +471,9 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
           // exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
           exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].defaulterIdentityType === 1
-            ? fI18nNext.t('alert_exhibit_auth_abnormal')
+            ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
             : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
-              ? fI18nNext.t('alert_exhibit_no_auth')
+              ? FI18n.i18nNext.t('alert_exhibit_no_auth')
               : '',
           policy_List: policies,
 

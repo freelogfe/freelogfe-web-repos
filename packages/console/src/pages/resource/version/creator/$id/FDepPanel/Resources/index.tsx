@@ -12,7 +12,7 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 // import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
@@ -130,7 +130,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                           ? <span style={{ paddingRight: 5 }}>暂无版本</span>
                           : <>
                     <span
-                      style={{ paddingRight: 5 }}>{fI18nNext.t('version_range')}：{rrr.versionRange}</span>
+                      style={{ paddingRight: 5 }}>{FI18n.i18nNext.t('version_range')}：{rrr.versionRange}</span>
                             <FVersionHandlerPopover
                               value={rrr.versionRange}
                               versionOptions={rrr.versions}
@@ -213,7 +213,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
       <FContentText
         type='additional2'
         // text={'此资源存在以下基础上抛'}
-        text={fI18nNext.t('upcast')}
+        text={FI18n.i18nNext.t('upcast')}
       />
     </div>
     {

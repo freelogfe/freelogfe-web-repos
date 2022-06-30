@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FServiceAPI, FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '../FText';
 import { FRectBtn, FTextBtn } from '../FButton';
@@ -247,7 +247,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     }
 
     fetchInitData();
-    fMessage(fI18nNext.t('msg_payment_successful'));
+    fMessage(FI18n.i18nNext.t('msg_payment_successful'));
     // fMessage('支付成功');
     set_Modal_Visible(false);
     set_Modal_Password('');
@@ -341,7 +341,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                   // : (<FContentText type='negative' text={'待对方执行'} />)
                                   : (<FContentText
                                     type='negative'
-                                    text={fI18nNext.t('msg_waitfor_theotherparty_excutecontract')}
+                                    text={FI18n.i18nNext.t('msg_waitfor_theotherparty_excutecontract')}
                                   />)
                               }
                             </div>);

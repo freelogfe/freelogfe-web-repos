@@ -22,7 +22,7 @@ import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import { FNodes, FUser } from '@/components/FIcons';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
@@ -154,13 +154,13 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
     <FLeftSiderLayout
       sider={<Sider />}
       header={<FTitleText
-        text={fI18nNext.t('authorization_infomation')}
+        text={FI18n.i18nNext.t('authorization_infomation')}
         type='h1'
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
           dot={resourceAuthPage.policies.length === 0}
-          title={fI18nNext.t('authorization_plan')}
+          title={FI18n.i18nNext.t('authorization_plan')}
           extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
             <FCircleBtn
               size='small'
@@ -187,7 +187,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
 
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={fI18nNext.t('licencee_contract')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('licencee_contract')}>
 
           <Space style={{ width: '100%' }} direction='vertical' size={20}>
             {
@@ -215,7 +215,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
 
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={fI18nNext.t('authorizing_contracts')}>
+        <FFormLayout.FBlock title={FI18n.i18nNext.t('authorizing_contracts')}>
 
           {
             resourceAuthPage.contractsAuthorize?.length > 0

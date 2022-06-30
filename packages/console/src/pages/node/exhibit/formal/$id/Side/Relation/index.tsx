@@ -4,7 +4,7 @@ import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import FCoverImage from '@/components/FCoverImage';
 
@@ -16,7 +16,7 @@ interface RelationProps {
 function Relation({ exhibitInfoPage }: RelationProps) {
   return (<div className={styles.info}>
     <FContentText
-      text={fI18nNext.t('relevant_resource')}
+      text={FI18n.i18nNext.t('relevant_resource')}
       type='highlight'
     />
     <div style={{ height: 20 }} />

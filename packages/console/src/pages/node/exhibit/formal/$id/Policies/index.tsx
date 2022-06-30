@@ -9,7 +9,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 // import FUtil1 from '@/utils';
 import FPolicyList from '@/components/FPolicyList';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -21,7 +21,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
   return (<div>
     <Space size={15}>
       <FTitleText
-        text={fI18nNext.t('title_auth_plan')}
+        text={FI18n.i18nNext.t('title_auth_plan')}
         type='h3'
       />
       {
@@ -45,7 +45,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           <FTipText
             type='second'
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
-            text={fI18nNext.t('exhibit_auth_plan_empty')}
+            text={FI18n.i18nNext.t('exhibit_auth_plan_empty')}
           />
           <div style={{ height: 20 }} />
           <FRectBtn
@@ -56,7 +56,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               },
             })}
             type='primary'
-          >{fI18nNext.t('btn_create_auth_plan')}</FRectBtn>
+          >{FI18n.i18nNext.t('btn_create_auth_plan')}</FRectBtn>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={exhibitInfoPage.exhibit_Online}

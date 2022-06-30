@@ -17,7 +17,7 @@ import FDrawer from '@/components/FDrawer';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FWarning } from '@/components/FIcons';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -53,7 +53,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
-        >{fI18nNext.t('import_from_previous_version')}</FRectBtn>
+        >{FI18n.i18nNext.t('import_from_previous_version')}</FRectBtn>
       }
 
     </Space>
@@ -78,7 +78,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 <div className={styles.errorBox}>
                   <FForbid className={styles.errorIcon} />
                   <FTipText
-                    text={fI18nNext.t('authorization_issue_offline_resource')}
+                    text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
                     type='second'
                   />
                 </div>)
@@ -87,7 +87,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               resource?.status === 2 && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
                 <FTipText
-                  text={fI18nNext.t('authorization_issue_circular_reply')}
+                  text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
                   type='second'
                 />
               </div>)

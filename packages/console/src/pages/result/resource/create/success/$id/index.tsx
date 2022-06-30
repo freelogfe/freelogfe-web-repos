@@ -8,7 +8,7 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
 // import FUtil1 from "@/utils";
-import {FUtil,fI18nNext} from '@freelog/tools-lib';
+import {FUtil,FI18n} from '@freelog/tools-lib';
 import {RouteComponentProps} from "react-router";
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
@@ -39,11 +39,11 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type="second" text={fI18nNext.t('resource_created_successfully')}/>
+      <FTipText type="second" text={FI18n.i18nNext.t('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type="third" text={fI18nNext.t('hint_create_1st_version')}/>
+      <FTipText type="third" text={FI18n.i18nNext.t('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
-      <FRectBtn onClick={goto}>{fI18nNext.t('create_first_version')}</FRectBtn>
+      <FRectBtn onClick={goto}>{FI18n.i18nNext.t('create_first_version')}</FRectBtn>
     </div>
   </FCenterLayout>)
 }

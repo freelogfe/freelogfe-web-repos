@@ -9,7 +9,7 @@ import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 // import FUtil1 from '@/utils';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
 // import friend from '@/assets/invitefriend/friend.png';
@@ -102,7 +102,7 @@ function FResourceCardsList({
       <div className={styles.filter}>
         <div className={styles.filterLeft}>
           <div>
-            <span>{fI18nNext.t('resource_type')}：</span>
+            <span>{FI18n.i18nNext.t('resource_type')}：</span>
             <FDropdown
               overlay={
                 <FMenu
@@ -178,7 +178,7 @@ function FResourceCardsList({
             ) : null}
           </div>
           <div style={{ marginLeft: 60 }}>
-            <span>{fI18nNext.t('resource_state')}：</span>
+            <span>{FI18n.i18nNext.t('resource_state')}：</span>
             <FDropdown
               overlay={
                 <FMenu
@@ -205,11 +205,11 @@ function FResourceCardsList({
             onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
             theme="dark"
             className={styles.FInput}
-            placeholder={fI18nNext.t('search_resource')}
+            placeholder={FI18n.i18nNext.t('search_resource')}
           />
           {showGotoCreateBtn && (
             <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
-              {fI18nNext.t('create_resource')}
+              {FI18n.i18nNext.t('create_resource')}
             </FRectBtn>
           )}
         </Space>

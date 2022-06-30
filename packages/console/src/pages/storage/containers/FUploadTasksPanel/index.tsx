@@ -18,7 +18,7 @@ import fConfirmModal from "@/components/fConfirmModal";
 // import FUtil1 from "@/utils";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FClose, FDown, FUp} from "@/components/FIcons";
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -126,7 +126,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
             if (exits) {
               fConfirmModal({
-                message: fI18nNext.t('cancel_all_uploading_task'),
+                message: FI18n.i18nNext.t('cancel_all_uploading_task'),
                 onOk() {
                   closeAll();
                 },

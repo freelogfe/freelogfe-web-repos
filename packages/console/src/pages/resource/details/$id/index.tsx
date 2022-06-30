@@ -29,7 +29,7 @@ import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
 // import FUtil1 from '@/utils';
 import FLoadingTip from '@/components/FLoadingTip';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -77,11 +77,8 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
       <div style={{ height: 100 }} />
       <div className={styles.modal}>
         <FResultTip
-          h1={fI18nNext.t('msg_resource_status_prepareforrelease')}
-          // h1={fI18nNext.t('msg_resource_status_prepareforrelease')}
-          // h2={fI18nNext.t('msg_nodecreatedsuccessfully')}
+          h1={FI18n.i18nNext.t('msg_resource_status_prepareforrelease')}
           // h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}
-          // btnText={fI18nNext.t('cta_btn_add_theme')}
           btnText={'返回首页'}
           onClickBtn={() => {
             router.push(FUtil.LinkTo.dashboard());

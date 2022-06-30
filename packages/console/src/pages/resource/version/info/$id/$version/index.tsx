@@ -29,7 +29,7 @@ import {
   FViewportTabs,
 } from '@/components/FAntvG6';
 // import FUtil1 from '@/utils';
-import { FServiceAPI, fI18nNext } from '@freelog/tools-lib';
+import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import { FTipText } from '@/components/FText';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
@@ -165,7 +165,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
-          title={fI18nNext.t('version_description')}
+          title={FI18n.i18nNext.t('version_description')}
           extra={<Space size={10}>
             {
               isEditing
@@ -180,11 +180,11 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   <FTextBtn
                     type='default'
                     onClick={() => setIsEditing(false)}
-                  >{fI18nNext.t('cancel')}</FTextBtn>
+                  >{FI18n.i18nNext.t('cancel')}</FTextBtn>
                   <FTextBtn
                     type='primary'
                     onClick={onUpdateEditorText}
-                  >{fI18nNext.t('save')}</FTextBtn>
+                  >{FI18n.i18nNext.t('save')}</FTextBtn>
                 </>)
                 : !!resourceVersionEditorPage.description
                   ? (<>
@@ -662,11 +662,11 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   onChange({ descriptionFullScreen: false });
                 }
               }}
-            >{fI18nNext.t('cancel')}</FTextBtn>
+            >{FI18n.i18nNext.t('cancel')}</FTextBtn>
             <FTextBtn
               type='primary'
               onClick={onUpdateEditorText}
-            >{fI18nNext.t('save')}</FTextBtn>
+            >{FI18n.i18nNext.t('save')}</FTextBtn>
           </>)
           : (<>
             <FTextBtn
@@ -734,9 +734,9 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
       <FTitleText text={version} type='h1' />
       <div style={{ height: 10 }} />
       <Space size={0}>
-        <FContentText type='additional2' text={fI18nNext.t('release_date') + '：' + signingDate} />
+        <FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
         <div style={{ width: 40 }} />
-        <FContentText type='additional2' text={fI18nNext.t('object_id') + '：' + resourceID} />
+        <FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
         <div style={{ width: 20 }} />
         <FTooltip title={'下载'}>
           <div>

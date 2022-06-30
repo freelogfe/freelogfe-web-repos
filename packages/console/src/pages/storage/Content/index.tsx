@@ -28,7 +28,7 @@ import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 // import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI, fI18nNext} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI, FI18n} from '@freelog/tools-lib';
 import NoBucket from "@/pages/storage/NoBucket";
 // import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
 import FListFooter from '@/components/FListFooter';
@@ -44,7 +44,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
     {
-      title: (<FTitleText type="table" text={fI18nNext.t('object_name')}/>),
+      title: (<FTitleText type="table" text={FI18n.i18nNext.t('object_name')}/>),
       dataIndex: 'name',
       key: 'name',
       render(text: any, record: any) {
@@ -53,7 +53,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
           <div className={styles.hoverVisible}>
             <FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
-              title={fI18nNext.t('copy_object_name')}
+              title={FI18n.i18nNext.t('copy_object_name')}
             />
           </div>
         </Space>);
@@ -86,7 +86,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type="table" text={fI18nNext.t('resource_type')}/>),
+      title: (<FTitleText type="table" text={FI18n.i18nNext.t('resource_type')}/>),
       dataIndex: 'type',
       key: 'type',
       width: 140,
@@ -99,7 +99,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type="table" text={fI18nNext.t('size')}/>),
+      title: (<FTitleText type="table" text={FI18n.i18nNext.t('size')}/>),
       dataIndex: 'size',
       key: 'size',
       width: 120,
@@ -109,7 +109,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       }
     },
     {
-      title: (<FTitleText type="table" text={fI18nNext.t('last_updated_time')}/>),
+      title: (<FTitleText type="table" text={FI18n.i18nNext.t('last_updated_time')}/>),
       dataIndex: 'updateTime',
       key: 'updateTime',
       width: 150,
@@ -141,7 +141,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
         <FNoDataTip
           height={'calc(100vh - 170px)'}
           // tipText={'当前Bucket还没有上传任何对象'}
-          tipText={fI18nNext.t('objects_list_empty')}
+          tipText={FI18n.i18nNext.t('objects_list_empty')}
           btn={<FUpload
             showUploadList={false}
             multiple={true}
@@ -158,7 +158,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
               size="large"
               type="primary"
               style={{paddingLeft: 50, paddingRight: 50}}
-            >{fI18nNext.t('upload_object')}</FRectBtn>
+            >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
           </FUpload>}
         />
       </>)
@@ -233,7 +233,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
-      showEdit && (<FTooltip title={fI18nNext.t('tip_edit_object')}>
+      showEdit && (<FTooltip title={FI18n.i18nNext.t('tip_edit_object')}>
         <FLink to={FUtil.LinkTo.objectDetails({
           bucketName,
           objectID: objectID,
@@ -241,7 +241,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
       </FTooltip>)
     }
     {
-      showDownload && (<FTooltip title={fI18nNext.t('tip_download_object')}>
+      showDownload && (<FTooltip title={FI18n.i18nNext.t('tip_download_object')}>
         <span>
           <FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
@@ -252,7 +252,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     }
     {
       showDelete && (
-        <FTooltip title={fI18nNext.t('tip_delete')}>
+        <FTooltip title={FI18n.i18nNext.t('tip_delete')}>
           <span>
             <FTextBtn
               onClick={() => onClickDelete && onClickDelete()}

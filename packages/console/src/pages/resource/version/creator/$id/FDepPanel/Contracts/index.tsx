@@ -8,7 +8,7 @@ import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
 // import FUtil1 from '@/utils';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FTextBtn } from '@/components/FButton';
@@ -66,7 +66,7 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
 
   return (<>
     <Space size={15} style={{ width: '100%' }} direction='vertical'>
-      <FContentText type='additional2' text={fI18nNext.t('reusable_contract')} />
+      <FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
       {
         resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
 
@@ -101,12 +101,12 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
           <Space style={{ padding: '0 20px' }} size={2}>
             <FContentText
               type='additional2'
-              text={fI18nNext.t('contract_id') + '：' + k.id}
+              text={FI18n.i18nNext.t('contract_id') + '：' + k.id}
             />
             <FDivider style={{ fontSize: 14 }} />
             <FContentText
               type='additional2'
-              text={fI18nNext.t('contract_signed_time') + '：' + k.date}
+              text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
             />
           </Space>
 

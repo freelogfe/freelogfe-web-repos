@@ -2,7 +2,7 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FUtil, FServiceAPI,fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
@@ -2089,7 +2089,7 @@ const Model: InformalNodeManagerPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage(fI18nNext.t('msg_new_test_exhibit_added'));
+      fMessage(FI18n.i18nNext.t('msg_new_test_exhibit_added'));
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -2154,7 +2154,7 @@ const Model: InformalNodeManagerPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage(fI18nNext.t('msg_new_test_exhibit_added'));
+      fMessage(FI18n.i18nNext.t('msg_new_test_exhibit_added'));
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {

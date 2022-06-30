@@ -14,7 +14,7 @@ import {
 } from 'umi-plugin-react/locale';
 // import { History } from 'history';
 import { ConnectState } from '@/models/connect';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface GlobalModelState {
   globalLoading: boolean;
@@ -140,7 +140,7 @@ const Model: GlobalModelType = {
       }, false);
     },
     readyI18n({ dispatch }) {
-      fI18nNext.ready().then(() => {
+      FI18n.i18nNext.ready().then(() => {
         dispatch<ChangeAction>({
           type: 'change',
           payload: {

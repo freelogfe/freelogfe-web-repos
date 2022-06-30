@@ -7,7 +7,7 @@ import { router } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { nodeCreateSuccess } from '@freelog/tools-lib/dist/utils/linkTo';
 import fMessage from '@/components/fMessage';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -209,7 +209,7 @@ const Model: NodesModelType = {
         // nameError = '长度必须在 1-100 字符之间。\n' +
         //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
         //   '开头和结尾的空格会自动删除。';
-        nameError = fI18nNext.t('naming_convention_node_name');
+        nameError = FI18n.i18nNext.t('naming_convention_node_name');
       }
 
       yield put<ChangeAction>({

@@ -47,7 +47,7 @@ import Prompt from 'umi/prompt';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-import { FUtil, fI18nNext } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -277,7 +277,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 type: 'informalNodeManagerPage/onClick_Rule_Delete_CancelBtn',
               });
             }}
-          >{fI18nNext.t('btn_cancel')}</FTextBtn>
+          >{FI18n.i18nNext.t('btn_cancel')}</FTextBtn>
           <FRectBtn
             type='danger1'
             onClick={async () => {
@@ -321,7 +321,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   type: 'informalNodeManagerPage/onClick_Rule_SaveBtn',
                 });
               }}
-            >{informalNodeManagerPage.rule_CodeState === 'checking' ? fI18nNext.t('msg_verifying') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FI18n.i18nNext.t('msg_verifying') : '校验并保存'}</FRectBtn>
 
             <div style={{ height: 20 }} />
 

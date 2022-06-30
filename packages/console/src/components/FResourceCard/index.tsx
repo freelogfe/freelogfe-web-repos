@@ -8,7 +8,7 @@ import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 type EventFunc = () => void
 
@@ -110,7 +110,7 @@ function FResourceCard({
           />
           <FContentText
             type='additional1'
-            text={resource.version ? (fI18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
+            text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
         </div>
         <div style={{ height: '15px' }} />

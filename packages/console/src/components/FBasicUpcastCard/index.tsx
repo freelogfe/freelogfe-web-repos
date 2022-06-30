@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FInfo } from '../FIcons';
 import FTooltip from '../FTooltip';
 // import FUtil1 from '@/utils';
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FBasicUpcastCardProps {
   dataSource: {
@@ -34,7 +34,7 @@ function FBasicUpcastCard({ dataSource, onClick }: FBasicUpcastCardProps) {
     <div className={styles.title}>
       <span>基础上抛</span>
       <div style={{ width: 5 }} />
-      <FTooltip title={fI18nNext.t('info_upcast').split('\n').map((u, i) => {
+      <FTooltip title={FI18n.i18nNext.t('info_upcast').split('\n').map((u, i) => {
         return (<div key={i}>{u}</div>);
       })}>
         <div style={{ cursor: 'pointer' }}>

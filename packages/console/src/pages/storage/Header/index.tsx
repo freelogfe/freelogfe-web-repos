@@ -9,7 +9,7 @@ import {StorageHomePageModelState, UploadFilesAction} from '@/models/storageHome
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
 // import FUtil1 from "@/utils";
-import { fI18nNext } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -33,8 +33,8 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
       <FTitleText type="h1" text={bucket.bucketName}/>
       <div style={{height: 5}}/>
       <Space size={40}>
-        <div>{fI18nNext.t('created_time')} {bucket.createDate}</div>
-        <div>{fI18nNext.t('object_quantity')} {bucket.totalFileQuantity}</div>
+        <div>{FI18n.i18nNext.t('created_time')} {bucket.createDate}</div>
+        <div>{FI18n.i18nNext.t('object_quantity')} {bucket.totalFileQuantity}</div>
       </Space>
     </div>
     {
@@ -55,7 +55,7 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
         >
           <FRectBtn
             type="primary"
-          >{fI18nNext.t('upload_object')}</FRectBtn>
+          >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
         </FUpload>
       )
     }
