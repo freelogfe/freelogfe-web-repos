@@ -576,16 +576,17 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
 
-"@freelog/tools-lib@^0.1.105":
-  version "0.1.105"
-  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.105.tgz#bf57bc902f5ffb3ffd0d09b0ddc37e2c5acc5ffa"
-  integrity sha512-/d3sEKQnoqdmBVYiKDai6uTpadtKxIReWwVmQ0ZtuJ1e4PgHzadPjAeQ8unmbWulMPq99L33vslvXvqYRe8BNg==
+"@freelog/tools-lib@^0.1.106":
+  version "0.1.106"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.106.tgz#7fd40ed6a1282dc72302227672533cb2dae33705"
+  integrity sha512-h04eVWd/8nvZYbbZ0HGuoZ59nImupRTvfEasbAkzsWjy2KWw2jbwQfqDBZQb3uSzy2f1bOefs3P09Pp0rL0jvg==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"
     axios "^0.21.1"
     crypto-js "^4.0.0"
     i18next "^21.8.10"
+    js-cookie "^3.0.1"
     moment "^2.29.1"
     nprogress "^0.2.0"
 
@@ -6264,6 +6265,11 @@ js-cookie@^2.x.x:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
   integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
+
+js-cookie@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-3.0.1.tgz#9e39b4c6c2f56563708d7d31f6f5f21873a92414"
+  integrity sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
