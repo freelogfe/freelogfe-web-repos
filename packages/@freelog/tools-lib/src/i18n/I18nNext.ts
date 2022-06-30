@@ -1,10 +1,12 @@
 import i18next, {Resource} from 'i18next';
 import axios from "axios";
+import Cookies from 'js-cookie';
+import FUtil from '../utils';
 
 type LanguageKeyType = 'zh_CN' | 'en_US';
 
 const ossJsonUrl: string = 'https://freelog-i18n.oss-cn-shenzhen.aliyuncs.com/configs/i18n.json';
-const localStorage_i18nextLng_key: string = 'i18nextLng';
+const localStorage_i18nextLng_key: string = 'locale';
 const localStorage_i18nextResources_key: string = 'i18nextResources';
 
 const allLanguage = [
@@ -18,7 +20,8 @@ class I18nNext {
 
   private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
   private _taskQueue: Function[] = [];
-  private _currentLanguage: LanguageKeyType = window.localStorage.getItem(localStorage_i18nextLng_key) as null || 'zh_CN';
+  // private _currentLanguage: LanguageKeyType = window.localStorage.getItem(localStorage_i18nextLng_key) as null || 'zh_CN';
+  private _currentLanguage: LanguageKeyType = Cookies.get(localStorage_i18nextLng_key) as undefined || 'zh_CN';
 
   constructor() {
     self = this;
@@ -61,7 +64,11 @@ class I18nNext {
 
   changeLanguage(lng: LanguageKeyType) {
     // return i18next.changeLanguage(lng);
-    window.localStorage.setItem(localStorage_i18nextLng_key, lng)
+    // window.localStorage.setItem(localStorage_i18nextLng_key, lng)
+    Cookies.set(localStorage_i18nextLng_key, lng, {
+      expires: 36525,
+      domain: FUtil.Format.completeUrlByDomain('').replace(/http(s)?:\/\//, ''),
+    });
   }
 
   getAllLanguage(): typeof allLanguage {
@@ -76,6 +83,7 @@ class I18nNext {
 
     const lng: string = self._currentLanguage;
     const resource: string | null = window.localStorage.getItem(localStorage_i18nextResources_key);
+    // const resource: string | undefined = Cookies.get(decodeURIComponent(localStorage_i18nextResources_key));
     let i18nextResources: Resource | null = resource ? JSON.parse(resource) : null;
 
     if (!i18nextResources) {
@@ -126,6 +134,10 @@ class I18nNext {
 
     // console.log(result, 'result093sdolkfjlsdkjl');
     window.localStorage.setItem(localStorage_i18nextResources_key, JSON.stringify(result));
+    // Cookies.set(localStorage_i18nextResources_key, encodeURIComponent(JSON.stringify(result)), {
+    //   expires: 36525,
+    //   domain: FUtil.Format.completeUrlByDomain('').replace(/http(s)?:\/\//, ''),
+    // });
 
     return result;
   }
