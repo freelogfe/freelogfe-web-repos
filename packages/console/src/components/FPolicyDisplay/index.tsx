@@ -6,7 +6,7 @@ import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
 // import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
-import FGraph_State_Machine2 from '@/components/FAntvG6/FGraph_State_Machine2';
+// import FGraph_State_Machine2 from '@/components/FAntvG6/FGraph_State_Machine2';
 import FGraph_State_Machine3 from '@/components/FAntvG6/FGraph_State_Machine3';
 
 interface FPolicyDisplayProps {
