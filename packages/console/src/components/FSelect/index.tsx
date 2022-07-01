@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Select} from 'antd';
+import { Select } from 'antd';
 import { RefSelectProps, SelectProps } from 'antd/lib/select';
 import styles from './index.less';
 
@@ -13,8 +13,16 @@ interface FSelectProps extends SelectProps<any> {
   dataSource: Option[];
 }
 
-function FSelect({dataSource, className, ...props}: FSelectProps, ref: React.Ref<RefSelectProps> | undefined) {
-  return (<Select ref={ref} className={className + ' ' + styles.Select} {...props}>
+function FSelect({
+                   dataSource,
+                   className,
+                   ...props
+                 }: FSelectProps, ref: React.Ref<RefSelectProps> | undefined) {
+  return (<Select
+    ref={ref}
+    className={className + ' ' + styles.Select}
+    {...props}
+  >
     {
       dataSource.map((i: Option) => (
         <Select.Option

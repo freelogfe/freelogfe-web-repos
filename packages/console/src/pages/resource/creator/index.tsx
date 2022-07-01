@@ -15,7 +15,7 @@ import {
   ChangeAction,
   OnChangeNameAction,
   // OnChangeResourceTypeAction,
-  ClearDataAction, OnMount_Page_Action, OnUnmount_Page_Action,
+  ClearDataAction, OnMount_Page_Action, OnUnmount_Page_Action, OnChange_Resource_Type_Action,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
@@ -31,6 +31,7 @@ import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
 import { DownOutlined } from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
+import FSelect from '@/components/FSelect';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -39,15 +40,15 @@ interface ResourceCreatorProps {
 }
 
 function ResourceCreator({
-  dispatch,
-  route,
-  resourceCreatorPage,
-  user,
-}: ResourceCreatorProps & RouterTypes) {
-  const [category, setCategory] = React.useState<any>({
-    first: -1,
-    second: '',
-  });
+                           dispatch,
+                           route,
+                           resourceCreatorPage,
+                           user,
+                         }: ResourceCreatorProps & RouterTypes) {
+  // const [category, setCategory] = React.useState<any>({
+  //   first: -1,
+  //   second: '',
+  // });
 
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
@@ -168,7 +169,8 @@ function ResourceCreator({
               <FInput
                 errorText={resourceCreatorPage.nameErrorText}
                 value={resourceCreatorPage.name}
-                onChange={(e) => {}}
+                onChange={(e) => {
+                }}
                 debounce={300}
                 onDebounceChange={(value) => {
                   onChange({
@@ -193,75 +195,191 @@ function ResourceCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
-            <FDropdown
-              className='h-38 flex-column justify-center'
-              overlay={
-                <FMenu
-                  options={[
-                    {
-                      value: '-1',
-                      text: '请选择大类',
-                    },
-                    ...categoryData.first.map((i, index) => {
-                      return {
-                        value: index + '',
-                        text: i,
-                      };
-                    }),
-                  ]}
-                  value={category.first}
-                  onClick={(value) => {
-                    setCategory({
-                      ...category,
-                      first: value,
-                      second: '',
+            <Space size={10}>
+              {
+                resourceCreatorPage.resource_Type.length > 0 && (<FSelect
+                  // key={resourceCreatorPage.resource_Type[0].value}
+                  dataSource={resourceCreatorPage.resource_Type[0].options.map((o) => {
+                    return {
+                      value: o,
+                      title: o,
+                    };
+                  })}
+                  value={resourceCreatorPage.resource_Type[0].value || undefined}
+                  onChange={(value) => {
+                    dispatch<OnChange_Resource_Type_Action>({
+                      type: 'resourceCreatorPage/onChange_Resource_Type',
+                      payload: {
+                        index: 0,
+                        value: value,
+                      },
                     });
-                    //onChangeResourceType && onChangeResourceType(value)
                   }}
-                />
+                  className={styles.FSelect}
+                  placeholder={'请选择大类'}
+                />)
               }
-            >
-              <span style={{ cursor: 'pointer' }} className='h-38 flex-row align-center'>
-                {categoryData.first[category.first] || '请选择大类'}
-                <DownOutlined style={{ marginLeft: 8 }} />
-              </span>
-            </FDropdown>
 
-            {category.first > 1 ? (
-              <>
-                <span className="ml-30">子类型：</span>
-                <FAutoComplete
+              {
+                resourceCreatorPage.resource_Type.length > 1 && (<FAutoComplete
+                  // key={rt.value}
+                  options={resourceCreatorPage.resource_Type[1].options.map((o) => {
+                    return {
+                      value: o,
+                      label: o,
+                    };
+                  })}
+                  value={resourceCreatorPage.resource_Type[1].value}
                   errorText={resourceCreatorPage.resourceTypeErrorText}
-                  value={
-                    // @ts-ignore
-                    categoryData.second[category.first][category.second] || category.second
-                  }
-                  onChange={
-                    (value) => {
-                      setCategory({
-                        ...category,
-                        second: value,
-                      });
-                    }
-                    // dispatch<OnChangeResourceTypeAction>({
-                    //   type: 'resourceCreatorPage/onChangeResourceType',
-                    //   payload: value,
-                    // })
-                  }
+                  onChange={(value) => {
+                    dispatch<OnChange_Resource_Type_Action>({
+                      type: 'resourceCreatorPage/onChange_Resource_Type',
+                      payload: {
+                        index: 1,
+                        value: value,
+                      },
+                    });
+                  }}
                   className={styles.FSelect}
                   placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}
-                  options={[
-                    // @ts-ignore
-                    ...categoryData.second[category.first].map((i, index) => {
-                      return {
-                        value: index + '',
-                        label: i,
-                      };
-                    }),
-                  ]}
-                />
-              </>
-            ) : null}
+                />)
+              }
+              {/*{*/}
+              {/*  resourceCreatorPage.resource_Type.map((rt, rti) => {*/}
+              {/*    if (rti === 0) {*/}
+              {/*      return (<FSelect*/}
+              {/*        key={rt.value}*/}
+              {/*        dataSource={rt.options.map((o) => {*/}
+              {/*          return {*/}
+              {/*            value: o,*/}
+              {/*            title: o,*/}
+              {/*          };*/}
+              {/*        })}*/}
+              {/*        value={rt.value || undefined}*/}
+              {/*        onChange={(value) => {*/}
+              {/*          dispatch<OnChange_Resource_Type_Action>({*/}
+              {/*            type: 'resourceCreatorPage/onChange_Resource_Type',*/}
+              {/*            payload: {*/}
+              {/*              index: rti,*/}
+              {/*              value: value,*/}
+              {/*            },*/}
+              {/*          });*/}
+              {/*        }}*/}
+              {/*        className={styles.FSelect}*/}
+              {/*        placeholder={'请选择大类'}*/}
+              {/*      />);*/}
+              {/*    }*/}
+              {/*    return (<FAutoComplete*/}
+              {/*      key={rt.value}*/}
+              {/*      options={rt.options.map((o) => {*/}
+              {/*        return {*/}
+              {/*          value: o,*/}
+              {/*          label: o,*/}
+              {/*        };*/}
+              {/*      })}*/}
+              {/*      value={rt.value}*/}
+              {/*      errorText={resourceCreatorPage.resourceTypeErrorText}*/}
+              {/*      onChange={(value) => {*/}
+              {/*        dispatch<OnChange_Resource_Type_Action>({*/}
+              {/*          type: 'resourceCreatorPage/onChange_Resource_Type',*/}
+              {/*          payload: {*/}
+              {/*            index: rti,*/}
+              {/*            value: value,*/}
+              {/*          },*/}
+              {/*        });*/}
+              {/*      }}*/}
+              {/*      className={styles.FSelect}*/}
+              {/*      placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
+              {/*    />);*/}
+              {/*  })*/}
+              {/*}*/}
+            </Space>
+            {/*<FDropdown*/}
+            {/*  className='h-38 flex-column justify-center'*/}
+            {/*  overlay={*/}
+            {/*    <FMenu*/}
+            {/*      options={[*/}
+            {/*        {*/}
+            {/*          value: '-1',*/}
+            {/*          text: '请选择大类',*/}
+            {/*        },*/}
+            {/*        ...categoryData.first.map((i, index) => {*/}
+            {/*          return {*/}
+            {/*            value: index + '',*/}
+            {/*            text: i,*/}
+            {/*          };*/}
+            {/*        }),*/}
+            {/*      ]}*/}
+            {/*      value={resourceCreatorPage.category.first.toString()}*/}
+            {/*      onClick={(value) => {*/}
+            {/*        // setCategory({*/}
+            {/*        //   ...category,*/}
+            {/*        //   first: value,*/}
+            {/*        //   second: '',*/}
+            {/*        // });*/}
+            {/*        dispatch<ChangeAction>({*/}
+            {/*          type: 'resourceCreatorPage/change',*/}
+            {/*          payload: {*/}
+            {/*            category: {*/}
+            {/*              ...resourceCreatorPage.category,*/}
+            {/*              first: Number(value),*/}
+            {/*              second: '',*/}
+            {/*            },*/}
+            {/*          },*/}
+            {/*        });*/}
+            {/*        //onChangeResourceType && onChangeResourceType(value)*/}
+            {/*      }}*/}
+            {/*    />*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <span style={{ cursor: 'pointer' }} className='h-38 flex-row align-center'>*/}
+            {/*    {categoryData.first[resourceCreatorPage.category.first] || '请选择大类'}*/}
+            {/*    <DownOutlined style={{ marginLeft: 8 }} />*/}
+            {/*  </span>*/}
+            {/*</FDropdown>*/}
+
+            {/*{resourceCreatorPage.category.first > 1 ? (*/}
+            {/*  <>*/}
+            {/*    <span className='ml-30'>子类型：</span>*/}
+            {/*    <FAutoComplete*/}
+            {/*      errorText={resourceCreatorPage.resourceTypeErrorText}*/}
+            {/*      value={*/}
+
+            {/*        (categoryData.second as any)[resourceCreatorPage.category.first][resourceCreatorPage.category.second] || resourceCreatorPage.category.second*/}
+            {/*      }*/}
+            {/*      onChange={(value) => {*/}
+            {/*        dispatch<ChangeAction>({*/}
+            {/*          type: 'resourceCreatorPage/change',*/}
+            {/*          payload: {*/}
+            {/*            category: {*/}
+            {/*              ...resourceCreatorPage.category,*/}
+            {/*              second: value,*/}
+            {/*            },*/}
+            {/*          },*/}
+            {/*        });*/}
+            {/*        // setCategory({*/}
+            {/*        //   ...resourceCreatorPage.category,*/}
+            {/*        //   second: value,*/}
+            {/*        // });*/}
+            {/*      }*/}
+            {/*        // dispatch<OnChangeResourceTypeAction>({*/}
+            {/*        //   type: 'resourceCreatorPage/onChangeResourceType',*/}
+            {/*        //   payload: value,*/}
+            {/*        // })*/}
+            {/*      }*/}
+            {/*      className={styles.FSelect}*/}
+            {/*      placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
+            {/*      options={[*/}
+            {/*        ...(categoryData.second as any)[resourceCreatorPage.category.first].map((i: any, index: number) => {*/}
+            {/*          return {*/}
+            {/*            value: index + '',*/}
+            {/*            label: i,*/}
+            {/*          };*/}
+            {/*        }),*/}
+            {/*      ]}*/}
+            {/*    />*/}
+            {/*  </>*/}
+            {/*) : null}*/}
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>
@@ -315,7 +433,7 @@ function Header({ onClickCreate, disabled = false }: HeaderProps) {
       <FTitleText
         // text={FUtil.I18n.message('create_resource')}
         text={'创建资源'}
-        type="h1"
+        type='h1'
       />
 
       <Space size={30}>
