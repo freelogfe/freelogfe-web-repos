@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import FUploadImage from '@/components/FUploadImage';
+// import FUploadImage from '@/components/FUploadImage';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
 import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
