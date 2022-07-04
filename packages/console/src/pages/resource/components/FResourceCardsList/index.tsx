@@ -8,11 +8,9 @@ import { router } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
-// import friend from '@/assets/invitefriend/friend.png';
 
 const resourceTypeOptions = [
   { text: '全部', value: '-1' },

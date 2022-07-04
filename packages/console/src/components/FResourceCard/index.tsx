@@ -21,7 +21,7 @@ export interface FResourceCardProps {
     title: string;
     version: string;
     policy: string[];
-    type: string;
+    type: string[];
     status: 0 | 1;
     authProblem?: boolean;
   };
@@ -106,7 +106,7 @@ function FResourceCard({
         <div className={styles.MetaInfo}>
           <FContentText
             type='additional1'
-            text={resource.type}
+            text={resource.type.join(' / ')}
           />
           <FContentText
             type='additional1'
