@@ -648,44 +648,44 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.selectedFileSha1) {
-        return;
-      }
-
-      const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-        sha1: resourceVersionCreatorPage.selectedFileSha1,
-        resourceType: resourceVersionCreatorPage.resourceType,
-      };
-
-      const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
-
-      if (!data) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-            selectedFileStatus: 2,
-          },
-          caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
-        });
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-            return {
-              key: rp[0],
-              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-            };
-          }),
-        },
-        caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-      });
+      // const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+      //   resourceVersionCreatorPage,
+      // }));
+      //
+      // if (!resourceVersionCreatorPage.selectedFileSha1) {
+      //   return;
+      // }
+      //
+      // const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+      //   sha1: resourceVersionCreatorPage.selectedFileSha1,
+      //   resourceType: resourceVersionCreatorPage.resourceType,
+      // };
+      //
+      // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
+      //
+      // if (!data) {
+      //   return yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       rawProperties: [],
+      //       selectedFileStatus: 2,
+      //     },
+      //     caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
+      //   });
+      // }
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+      //       return {
+      //         key: rp[0],
+      //         value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+      //       };
+      //     }),
+      //   },
+      //   caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+      // });
     },
     * addDeps({ payload: { relationships, versions } }: AddDepsAction, { select, put, call }: EffectsCommandMap) {
 

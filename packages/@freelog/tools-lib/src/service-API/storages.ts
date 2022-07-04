@@ -301,7 +301,7 @@ export function batchObjectList(params: BatchObjectListParamsType) {
 // 根据sha1和类型获取文件属性
 interface FilePropertyParamsType {
   sha1: string;
-  resourceType: string;
+  // resourceType: string;
 }
 
 export function fileProperty({sha1, ...params}: FilePropertyParamsType) {

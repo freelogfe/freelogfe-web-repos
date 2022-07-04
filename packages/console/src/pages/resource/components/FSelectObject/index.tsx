@@ -228,7 +228,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
       });
       const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
         file: file,
-        resourceType: resourceVersionCreatorPage.resourceType,
+        // resourceType: resourceVersionCreatorPage.resourceType,
       }, {
         onUploadProgress(progressEvent: any) {
           setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
