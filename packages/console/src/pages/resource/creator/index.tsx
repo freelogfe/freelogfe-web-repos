@@ -36,6 +36,7 @@ import * as AHooks from 'ahooks';
 // import { DownOutlined } from '@ant-design/icons';
 // import FMenu from '@/components/FMenu';
 import FSelect from '@/components/FSelect';
+import FResourceTypeInput from '@/components/FResourceTypeInput';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -207,105 +208,116 @@ function ResourceCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
-            <Space size={10}>
-              {
-                resourceCreatorPage.resource_Type.length > 0 && (<FSelect
-                  // key={resourceCreatorPage.resource_Type[0].value}
-                  dataSource={resourceCreatorPage.resource_Type[0].options.map((o) => {
-                    return {
-                      value: o,
-                      title: o,
-                    };
-                  })}
-                  value={resourceCreatorPage.resource_Type[0].value || undefined}
-                  onChange={(value) => {
-                    dispatch<OnChange_Resource_Type_Action>({
-                      type: 'resourceCreatorPage/onChange_Resource_Type',
-                      payload: {
-                        index: 0,
-                        value: value,
-                      },
-                    });
-                  }}
-                  className={styles.FSelect}
-                  placeholder={'请选择大类'}
-                />)
-              }
+            <FResourceTypeInput
+              dataSource={resourceCreatorPage.resource_Type}
+              onChange={(value) => {
+                dispatch<OnChange_Resource_Type_Action>({
+                  type: 'resourceCreatorPage/onChange_Resource_Type',
+                  payload: {
+                    value,
+                  },
+                });
+              }}
+            />
+            {/*<Space size={10}>*/}
+            {/*  {*/}
+            {/*    resourceCreatorPage.resource_Type.length > 0 && (<FSelect*/}
+            {/*      // key={resourceCreatorPage.resource_Type[0].value}*/}
+            {/*      dataSource={resourceCreatorPage.resource_Type[0].options.map((o) => {*/}
+            {/*        return {*/}
+            {/*          value: o,*/}
+            {/*          title: o,*/}
+            {/*        };*/}
+            {/*      })}*/}
+            {/*      value={resourceCreatorPage.resource_Type[0].value || undefined}*/}
+            {/*      onChange={(value) => {*/}
+            {/*        dispatch<OnChange_Resource_Type_Action>({*/}
+            {/*          type: 'resourceCreatorPage/onChange_Resource_Type',*/}
+            {/*          payload: {*/}
+            {/*            index: 0,*/}
+            {/*            value: value,*/}
+            {/*          },*/}
+            {/*        });*/}
+            {/*      }}*/}
+            {/*      className={styles.FSelect}*/}
+            {/*      placeholder={'请选择大类'}*/}
+            {/*    />)*/}
+            {/*  }*/}
 
-              {
-                resourceCreatorPage.resource_Type.length > 1 && (<FAutoComplete
-                  // key={rt.value}
-                  options={resourceCreatorPage.resource_Type[1].options.map((o) => {
-                    return {
-                      value: o,
-                      label: o,
-                    };
-                  })}
-                  value={resourceCreatorPage.resource_Type[1].value}
-                  errorText={resourceCreatorPage.resource_Type[1].valueError}
-                  onChange={(value) => {
-                    dispatch<OnChange_Resource_Type_Action>({
-                      type: 'resourceCreatorPage/onChange_Resource_Type',
-                      payload: {
-                        index: 1,
-                        value: value,
-                      },
-                    });
-                  }}
-                  className={styles.FSelect}
-                  placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}
-                />)
-              }
-              {/*{*/}
-              {/*  resourceCreatorPage.resource_Type.map((rt, rti) => {*/}
-              {/*    if (rti === 0) {*/}
-              {/*      return (<FSelect*/}
-              {/*        key={rt.value}*/}
-              {/*        dataSource={rt.options.map((o) => {*/}
-              {/*          return {*/}
-              {/*            value: o,*/}
-              {/*            title: o,*/}
-              {/*          };*/}
-              {/*        })}*/}
-              {/*        value={rt.value || undefined}*/}
-              {/*        onChange={(value) => {*/}
-              {/*          dispatch<OnChange_Resource_Type_Action>({*/}
-              {/*            type: 'resourceCreatorPage/onChange_Resource_Type',*/}
-              {/*            payload: {*/}
-              {/*              index: rti,*/}
-              {/*              value: value,*/}
-              {/*            },*/}
-              {/*          });*/}
-              {/*        }}*/}
-              {/*        className={styles.FSelect}*/}
-              {/*        placeholder={'请选择大类'}*/}
-              {/*      />);*/}
-              {/*    }*/}
-              {/*    return (<FAutoComplete*/}
-              {/*      key={rt.value}*/}
-              {/*      options={rt.options.map((o) => {*/}
-              {/*        return {*/}
-              {/*          value: o,*/}
-              {/*          label: o,*/}
-              {/*        };*/}
-              {/*      })}*/}
-              {/*      value={rt.value}*/}
-              {/*      errorText={resourceCreatorPage.resourceTypeErrorText}*/}
-              {/*      onChange={(value) => {*/}
-              {/*        dispatch<OnChange_Resource_Type_Action>({*/}
-              {/*          type: 'resourceCreatorPage/onChange_Resource_Type',*/}
-              {/*          payload: {*/}
-              {/*            index: rti,*/}
-              {/*            value: value,*/}
-              {/*          },*/}
-              {/*        });*/}
-              {/*      }}*/}
-              {/*      className={styles.FSelect}*/}
-              {/*      placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
-              {/*    />);*/}
-              {/*  })*/}
-              {/*}*/}
-            </Space>
+            {/*  {*/}
+            {/*    resourceCreatorPage.resource_Type.length > 1 && (<FAutoComplete*/}
+            {/*      // key={rt.value}*/}
+            {/*      options={resourceCreatorPage.resource_Type[1].options.map((o) => {*/}
+            {/*        return {*/}
+            {/*          value: o,*/}
+            {/*          label: o,*/}
+            {/*        };*/}
+            {/*      })}*/}
+            {/*      value={resourceCreatorPage.resource_Type[1].value}*/}
+            {/*      errorText={resourceCreatorPage.resource_Type[1].valueError}*/}
+            {/*      onChange={(value) => {*/}
+            {/*        dispatch<OnChange_Resource_Type_Action>({*/}
+            {/*          type: 'resourceCreatorPage/onChange_Resource_Type',*/}
+            {/*          payload: {*/}
+            {/*            index: 1,*/}
+            {/*            value: value,*/}
+            {/*          },*/}
+            {/*        });*/}
+            {/*      }}*/}
+            {/*      className={styles.FSelect}*/}
+            {/*      placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
+            {/*    />)*/}
+            {/*  }*/}
+            {/*  /!*{*!/*/}
+            {/*  /!*  resourceCreatorPage.resource_Type.map((rt, rti) => {*!/*/}
+            {/*  /!*    if (rti === 0) {*!/*/}
+            {/*  /!*      return (<FSelect*!/*/}
+            {/*  /!*        key={rt.value}*!/*/}
+            {/*  /!*        dataSource={rt.options.map((o) => {*!/*/}
+            {/*  /!*          return {*!/*/}
+            {/*  /!*            value: o,*!/*/}
+            {/*  /!*            title: o,*!/*/}
+            {/*  /!*          };*!/*/}
+            {/*  /!*        })}*!/*/}
+            {/*  /!*        value={rt.value || undefined}*!/*/}
+            {/*  /!*        onChange={(value) => {*!/*/}
+            {/*  /!*          dispatch<OnChange_Resource_Type_Action>({*!/*/}
+            {/*  /!*            type: 'resourceCreatorPage/onChange_Resource_Type',*!/*/}
+            {/*  /!*            payload: {*!/*/}
+            {/*  /!*              index: rti,*!/*/}
+            {/*  /!*              value: value,*!/*/}
+            {/*  /!*            },*!/*/}
+            {/*  /!*          });*!/*/}
+            {/*  /!*        }}*!/*/}
+            {/*  /!*        className={styles.FSelect}*!/*/}
+            {/*  /!*        placeholder={'请选择大类'}*!/*/}
+            {/*  /!*      />);*!/*/}
+            {/*  /!*    }*!/*/}
+            {/*  /!*    return (<FAutoComplete*!/*/}
+            {/*  /!*      key={rt.value}*!/*/}
+            {/*  /!*      options={rt.options.map((o) => {*!/*/}
+            {/*  /!*        return {*!/*/}
+            {/*  /!*          value: o,*!/*/}
+            {/*  /!*          label: o,*!/*/}
+            {/*  /!*        };*!/*/}
+            {/*  /!*      })}*!/*/}
+            {/*  /!*      value={rt.value}*!/*/}
+            {/*  /!*      errorText={resourceCreatorPage.resourceTypeErrorText}*!/*/}
+            {/*  /!*      onChange={(value) => {*!/*/}
+            {/*  /!*        dispatch<OnChange_Resource_Type_Action>({*!/*/}
+            {/*  /!*          type: 'resourceCreatorPage/onChange_Resource_Type',*!/*/}
+            {/*  /!*          payload: {*!/*/}
+            {/*  /!*            index: rti,*!/*/}
+            {/*  /!*            value: value,*!/*/}
+            {/*  /!*          },*!/*/}
+            {/*  /!*        });*!/*/}
+            {/*  /!*      }}*!/*/}
+            {/*  /!*      className={styles.FSelect}*!/*/}
+            {/*  /!*      placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*!/*/}
+            {/*  /!*    />);*!/*/}
+            {/*  /!*  })*!/*/}
+            {/*  /!*}*!/*/}
+            {/*</Space>*/}
             {/*<FDropdown*/}
             {/*  className='h-38 flex-column justify-center'*/}
             {/*  overlay={*/}

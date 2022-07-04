@@ -23,7 +23,7 @@ export interface ResourceCreatorPageModelState {
   resource_Type: {
     value: string;
     valueError: string;
-    options: string[];
+    // options: string[];
   }[];
   resource_TypeData: {
     value: string;
@@ -72,9 +72,12 @@ export interface OnChangeNameAction extends AnyAction {
 
 export interface OnChange_Resource_Type_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_Resource_Type';
+  // payload: {
+  //   index: number;
+  //   value: string;
+  // };
   payload: {
-    index: number;
-    value: string;
+    value: ResourceCreatorPageModelState['resource_Type'],
   };
 }
 
@@ -120,15 +123,15 @@ export const initStates: ResourceCreatorPageModelState = {
     {
       value: '',
       valueError: '',
-      options: [
-        '主题',
-        '插件',
-        '阅读',
-        '音频',
-        '图片',
-        '视频',
-        '游戏',
-      ],
+      // options: [
+      //   '主题',
+      //   '插件',
+      //   '阅读',
+      //   '音频',
+      //   '图片',
+      //   '视频',
+      //   '游戏',
+      // ],
     },
   ],
   resource_TypeData: [
@@ -317,60 +320,60 @@ const Model: ResourceCreatorPageModelType = {
     //   });
     // },
     * onChange_Resource_Type({ payload }: OnChange_Resource_Type_Action, { select, put }: EffectsCommandMap) {
-      const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
-        resourceCreatorPage,
-      }));
-
-      let valueError: string = '';
-      if (payload.value === '') {
-        valueError = '请输入资源类型';
-      }
-        // else if (payload.value.length < 3) {
-        //   valueError = '不少于3个字符';
+      // const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
+      //   resourceCreatorPage,
+      // }));
+      //
+      // let valueError: string = '';
+      // if (payload.value === '') {
+      //   valueError = '请输入资源类型';
       // }
-      else if (payload.value.length > 20) {
-        valueError = '不多于20个字符';
-      }
-      // else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload.value)) {
-      //   valueError = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      //   // else if (payload.value.length < 3) {
+      //   //   valueError = '不少于3个字符';
+      // // }
+      // else if (payload.value.length > 20) {
+      //   valueError = '不多于20个字符';
       // }
-
-      let resource_Type: ResourceCreatorPageModelState['resource_Type'] = resourceCreatorPage.resource_Type.slice(0, payload.index + 1);
-      resource_Type = resource_Type.map((i, j) => {
-        // [payload.index]['value'] = payload.value;
-        if (j !== payload.index) {
-          return i;
-        }
-        return {
-          ...i,
-          value: payload.value,
-          valueError,
-        };
-      });
-
-      if (!!resourceCreatorPage.resource_TypeData[payload.index + 1]) {
-        const next: ResourceCreatorPageModelState['resource_TypeData'][0] = resourceCreatorPage.resource_TypeData[payload.index + 1].filter((i: any) => {
-          return i.parentValue === payload.value;
-        });
-        if (next.length > 0) {
-          const resource_Type1: ResourceCreatorPageModelState['resource_Type'][0] = {
-            value: '',
-            valueError: '',
-            options: next.map((n) => {
-              return n.value;
-            }),
-          };
-          resource_Type = [
-            ...resource_Type,
-            resource_Type1,
-          ];
-        }
-      }
+      // // else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload.value)) {
+      // //   valueError = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      // // }
+      //
+      // let resource_Type: ResourceCreatorPageModelState['resource_Type'] = resourceCreatorPage.resource_Type.slice(0, payload.index + 1);
+      // resource_Type = resource_Type.map((i, j) => {
+      //   // [payload.index]['value'] = payload.value;
+      //   if (j !== payload.index) {
+      //     return i;
+      //   }
+      //   return {
+      //     ...i,
+      //     value: payload.value,
+      //     valueError,
+      //   };
+      // });
+      //
+      // if (!!resourceCreatorPage.resource_TypeData[payload.index + 1]) {
+      //   const next: ResourceCreatorPageModelState['resource_TypeData'][0] = resourceCreatorPage.resource_TypeData[payload.index + 1].filter((i: any) => {
+      //     return i.parentValue === payload.value;
+      //   });
+      //   if (next.length > 0) {
+      //     const resource_Type1: ResourceCreatorPageModelState['resource_Type'][0] = {
+      //       value: '',
+      //       valueError: '',
+      //       options: next.map((n) => {
+      //         return n.value;
+      //       }),
+      //     };
+      //     resource_Type = [
+      //       ...resource_Type,
+      //       resource_Type1,
+      //     ];
+      //   }
+      // }
       // console.log(resource_Type, 'resource_Type30w29iosdlf;kjsdlk');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_Type,
+          resource_Type: payload.value,
         },
       });
     },
