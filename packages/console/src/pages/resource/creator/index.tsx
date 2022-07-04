@@ -11,11 +11,15 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
-  OnCreateAction,
+  // OnCreateAction,
   ChangeAction,
   OnChangeNameAction,
   // OnChangeResourceTypeAction,
-  ClearDataAction, OnMount_Page_Action, OnUnmount_Page_Action, OnChange_Resource_Type_Action,
+  ClearDataAction,
+  OnMount_Page_Action,
+  OnUnmount_Page_Action,
+  OnChange_Resource_Type_Action,
+  initStates, OnClick_CreateBtn_Action,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
@@ -27,10 +31,10 @@ import fConfirmModal from '@/components/fConfirmModal';
 // import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FDropdown from '@/components/FDropdown';
-import categoryData from '@/utils/category';
-import { DownOutlined } from '@ant-design/icons';
-import FMenu from '@/components/FMenu';
+// import FDropdown from '@/components/FDropdown';
+// import categoryData from '@/utils/category';
+// import { DownOutlined } from '@ant-design/icons';
+// import FMenu from '@/components/FMenu';
 import FSelect from '@/components/FSelect';
 
 interface ResourceCreatorProps {
@@ -45,6 +49,7 @@ function ResourceCreator({
                            resourceCreatorPage,
                            user,
                          }: ResourceCreatorProps & RouterTypes) {
+
   // const [category, setCategory] = React.useState<any>({
   //   first: -1,
   //   second: '',
@@ -73,11 +78,11 @@ function ResourceCreator({
   React.useEffect(() => {
     // const func = () => 1234;
     if (
-      resourceCreatorPage.name !== '' ||
-      resourceCreatorPage.resourceType !== '' ||
-      resourceCreatorPage.introduction !== '' ||
-      resourceCreatorPage.cover !== '' ||
-      resourceCreatorPage.labels.length !== 0
+      resourceCreatorPage.name !== initStates['name'] ||
+      resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
+      resourceCreatorPage.introduction !== initStates['introduction'] ||
+      resourceCreatorPage.cover !== initStates['cover'] ||
+      resourceCreatorPage.labels !== initStates['labels']
     ) {
       window.onbeforeunload = () => true;
     } else {
@@ -85,18 +90,18 @@ function ResourceCreator({
     }
   }, [
     resourceCreatorPage.name,
-    resourceCreatorPage.resourceType,
+    resourceCreatorPage.resource_Type,
     resourceCreatorPage.introduction,
     resourceCreatorPage.cover,
     resourceCreatorPage.labels,
   ]);
 
-  function onClickCreate() {
-    // console.log('onClickCreate', '0932jdlfsf');
-    dispatch<OnCreateAction>({
-      type: 'resourceCreatorPage/create',
-    });
-  }
+  // function onClickCreate() {
+  //   // console.log('onClickCreate', '0932jdlfsf');
+  //   dispatch<OnCreateAction>({
+  //     type: 'resourceCreatorPage/create',
+  //   });
+  // }
 
   function onChange(payload: ChangeAction['payload']) {
     dispatch<ChangeAction>({
@@ -109,12 +114,12 @@ function ResourceCreator({
     <>
       <Prompt
         when={
-          resourceCreatorPage.promptLeavePath === '' &&
-          (resourceCreatorPage.name !== '' ||
-            resourceCreatorPage.resourceType !== '' ||
-            resourceCreatorPage.introduction !== '' ||
-            resourceCreatorPage.cover !== '' ||
-            resourceCreatorPage.labels.length !== 0)
+          resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] &&
+          (resourceCreatorPage.name !== initStates['name'] ||
+            resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
+            resourceCreatorPage.introduction !== initStates['introduction'] ||
+            resourceCreatorPage.cover !== initStates['cover'] ||
+            resourceCreatorPage.labels !== initStates['labels'])
         }
         message={(location: H.Location, action: H.Action) => {
           // console.log(location, action, 'LAAAAL');
@@ -151,13 +156,20 @@ function ResourceCreator({
         header={
           <Header
             disabled={
+              resourceCreatorPage.name === '' ||
               resourceCreatorPage.nameVerify !== 2 ||
-              resourceCreatorPage.resourceTypeVerify !== 2 ||
-              !!resourceCreatorPage.nameErrorText ||
-              !!resourceCreatorPage.resourceTypeErrorText ||
+              // resourceCreatorPage.resourceTypeVerify !== 2 ||
+              resourceCreatorPage.nameErrorText !== '' ||
+              // !!resourceCreatorPage.resourceTypeErrorText ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
               !!resourceCreatorPage.introductionErrorText
             }
-            onClickCreate={onClickCreate}
+            onClickCreate={() => {
+              dispatch<OnClick_CreateBtn_Action>({
+                type: 'resourceCreatorPage/onClick_CreateBtn',
+              });
+            }}
           />
         }
       >
@@ -230,7 +242,7 @@ function ResourceCreator({
                     };
                   })}
                   value={resourceCreatorPage.resource_Type[1].value}
-                  errorText={resourceCreatorPage.resourceTypeErrorText}
+                  errorText={resourceCreatorPage.resource_Type[1].valueError}
                   onChange={(value) => {
                     dispatch<OnChange_Resource_Type_Action>({
                       type: 'resourceCreatorPage/onChange_Resource_Type',

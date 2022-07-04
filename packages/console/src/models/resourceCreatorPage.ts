@@ -12,13 +12,13 @@ export interface ResourceCreatorPageModelState {
   nameVerify: 0 | 1 | 2;
   nameErrorText: string;
 
-  resourceType: string;
-  resourceTypeVerify: 0 | 2;
-  resourceTypeErrorText: string;
-  category: {
-    first: any
-    second: number | string;
-  };
+  // resourceType: string;
+  // resourceTypeVerify: 0 | 2;
+  // resourceTypeErrorText: string;
+  // category: {
+  //   first: any
+  //   second: number | string;
+  // };
 
   resource_Type: {
     value: string;
@@ -52,8 +52,12 @@ export interface OnUnmount_Page_Action extends AnyAction {
   type: 'resourceCreatorPage/onUnmount_Page';
 }
 
-export interface OnCreateAction extends AnyAction {
-  type: 'resourceCreatorPage/create';
+// export interface OnCreateAction extends AnyAction {
+//   type: 'resourceCreatorPage/create';
+// }
+
+export interface OnClick_CreateBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_CreateBtn';
 }
 
 export interface OnChangeNameAction extends AnyAction {
@@ -61,10 +65,10 @@ export interface OnChangeNameAction extends AnyAction {
   payload: string;
 }
 
-export interface OnChangeResourceTypeAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeResourceType';
-  payload: string;
-}
+// export interface OnChangeResourceTypeAction extends AnyAction {
+//   type: 'resourceCreatorPage/onChangeResourceType';
+//   payload: string;
+// }
 
 export interface OnChange_Resource_Type_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_Resource_Type';
@@ -85,9 +89,11 @@ export interface ResourceCreatorPageModelType {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
-    create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
+    // create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
+    onClick_CreateBtn: (action: OnClick_CreateBtn_Action, effects: EffectsCommandMap) => void;
+
     onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
-    onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
+    // onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChange_Resource_Type: (action: OnChange_Resource_Type_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -96,20 +102,20 @@ export interface ResourceCreatorPageModelType {
   subscriptions: { setup: Subscription };
 }
 
-const initStates: ResourceCreatorPageModelState = {
+export const initStates: ResourceCreatorPageModelState = {
   userName: '',
 
   name: '',
   nameVerify: 0,
   nameErrorText: '',
 
-  resourceType: '',
-  resourceTypeVerify: 0,
-  resourceTypeErrorText: '',
-  category: {
-    first: -1,
-    second: '',
-  },
+  // resourceType: '',
+  // resourceTypeVerify: 0,
+  // resourceTypeErrorText: '',
+  // category: {
+  //   first: -1,
+  //   second: '',
+  // },
   resource_Type: [
     {
       value: '',
@@ -189,34 +195,62 @@ const Model: ResourceCreatorPageModelType = {
         payload: initStates,
       });
     },
-    * create({}: OnCreateAction, { call, put, select }: EffectsCommandMap) {
-      const { resourceCreatorPage, user } = yield select(({ resourceCreatorPage, user }: ConnectState) => ({
+    // * create({}: OnCreateAction, { call, put, select }: EffectsCommandMap) {
+    //   const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
+    //     resourceCreatorPage,
+    //   }));
+    //   if (resourceCreatorPage.nameErrorText || !!resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError) {
+    //     return;
+    //   }
+    //   const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
+    //     name: resourceCreatorPage.name,
+    //     resourceType: resourceCreatorPage.resourceType,
+    //     policies: [],
+    //     coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
+    //     intro: resourceCreatorPage.introduction,
+    //     tags: resourceCreatorPage.labels,
+    //   };
+    //   const { data } = yield call(FServiceAPI.Resource.create, params);
+    //   // yield put<ChangeAction>({
+    //   //   type: 'change',
+    //   //   payload: initStates,
+    //   //   // payload: {
+    //   //   //   name: '',
+    //   //   //   nameErrorText: '',
+    //   //   //   // resourceType: '',
+    //   //   //   // resourceTypeErrorText: '',
+    //   //   //   introduction: '',
+    //   //   //   cover: '',
+    //   //   //   labels: [],
+    //   //   // },
+    //   // });
+    //
+    //   router.replace(FUtil.LinkTo.resourceCreateSuccess({
+    //     resourceID: data.resourceId,
+    //   }));
+    // },
+    * onClick_CreateBtn({}: OnClick_CreateBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
-        user,
       }));
-      if (resourceCreatorPage.nameErrorText || resourceCreatorPage.resourceTypeErrorText) {
-        return;
-      }
+      // if (resourceCreatorPage.nameErrorText || !!resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError) {
+      //   return;
+      // }
       const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
         name: resourceCreatorPage.name,
-        resourceType: resourceCreatorPage.resourceType,
+        resourceType: resourceCreatorPage.resource_Type.map((rt: any) => {
+          return rt.value;
+        }),
         policies: [],
         coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       };
       const { data } = yield call(FServiceAPI.Resource.create, params);
+
       yield put<ChangeAction>({
         type: 'change',
-        payload: {
-          name: '',
-          nameErrorText: '',
-          // resourceType: '',
-          // resourceTypeErrorText: '',
-          introduction: '',
-          cover: '',
-          labels: [],
-        },
+        payload: initStates,
       });
 
       router.replace(FUtil.LinkTo.resourceCreateSuccess({
@@ -261,31 +295,46 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
-      let resourceTypeErrorText = '';
-      if (!payload) {
-        resourceTypeErrorText = '请输入资源类型';
-      } else if (payload.length < 3) {
-        resourceTypeErrorText = '不少于3个字符';
-      } else if (payload.length > 20) {
-        resourceTypeErrorText = '不多于20个字符';
-      } else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload)) {
-        resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          // resourceType: payload,
-          // resourceTypeVerify: 2,
-          // resourceTypeErrorText,
-        },
-      });
-    },
+    // * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
+    //   let resourceTypeErrorText = '';
+    //   if (!payload) {
+    //     resourceTypeErrorText = '请输入资源类型';
+    //   } else if (payload.length < 3) {
+    //     resourceTypeErrorText = '不少于3个字符';
+    //   } else if (payload.length > 20) {
+    //     resourceTypeErrorText = '不多于20个字符';
+    //   } else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload)) {
+    //     resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+    //   }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       // resourceType: payload,
+    //       // resourceTypeVerify: 2,
+    //       // resourceTypeErrorText,
+    //     },
+    //   });
+    // },
     * onChange_Resource_Type({ payload }: OnChange_Resource_Type_Action, { select, put }: EffectsCommandMap) {
       const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
       }));
+
+      let valueError: string = '';
+      if (payload.value === '') {
+        valueError = '请输入资源类型';
+      }
+        // else if (payload.value.length < 3) {
+        //   valueError = '不少于3个字符';
+      // }
+      else if (payload.value.length > 20) {
+        valueError = '不多于20个字符';
+      }
+      // else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload.value)) {
+      //   valueError = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      // }
+
       let resource_Type: ResourceCreatorPageModelState['resource_Type'] = resourceCreatorPage.resource_Type.slice(0, payload.index + 1);
       resource_Type = resource_Type.map((i, j) => {
         // [payload.index]['value'] = payload.value;
@@ -295,6 +344,7 @@ const Model: ResourceCreatorPageModelType = {
         return {
           ...i,
           value: payload.value,
+          valueError,
         };
       });
 
@@ -312,7 +362,7 @@ const Model: ResourceCreatorPageModelType = {
           };
           resource_Type = [
             ...resource_Type,
-            resource_Type1
+            resource_Type1,
           ];
         }
       }
