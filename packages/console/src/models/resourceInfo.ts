@@ -18,7 +18,7 @@ export interface ResourceInfoModelState {
 
   info: null | {
     resourceId: string;
-    resourceType: string;
+    resourceType: string[];
     resourceName: string;
     userId: number;
     username: number;

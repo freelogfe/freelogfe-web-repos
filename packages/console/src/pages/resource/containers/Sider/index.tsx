@@ -110,7 +110,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         className={styles.resourceName}
       >{resourceInfo.info?.resourceName}</FLink>
       <div style={{ height: 10 }} />
-      <label className={styles.label}>{resourceInfo.info.resourceType}</label>
+      <label className={styles.label}>{resourceInfo.info.resourceType.join(' / ')}</label>
     </div>
     <div style={{ height: 35 }} />
     <div className={styles.radios}>

@@ -80,7 +80,10 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
           <FContentText type='highlight' text={resourceInfo.info?.resourceName || ''} />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')}>
-          <FContentText type='highlight' text={resourceInfo.info.resourceType} />
+          <FContentText
+            type='highlight'
+            text={resourceInfo.info.resourceType.join(' / ')}
+          />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
           title={FI18n.i18nNext.t('resource_short_description')}
