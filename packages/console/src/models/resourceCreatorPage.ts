@@ -25,10 +25,6 @@ export interface ResourceCreatorPageModelState {
     valueError: string;
     // options: string[];
   }[];
-  resource_TypeData: {
-    value: string;
-    parentValue: string;
-  }[][];
 
   introduction: string;
   introductionErrorText: string;
@@ -123,43 +119,7 @@ export const initStates: ResourceCreatorPageModelState = {
     {
       value: '',
       valueError: '',
-      // options: [
-      //   '主题',
-      //   '插件',
-      //   '阅读',
-      //   '音频',
-      //   '图片',
-      //   '视频',
-      //   '游戏',
-      // ],
     },
-  ],
-  resource_TypeData: [
-    [
-      // { value: '请选择大类', parentValue: '' },
-      { value: '主题', parentValue: '' },
-      { value: '插件', parentValue: '' },
-      { value: '阅读', parentValue: '' },
-      { value: '音频', parentValue: '' },
-      { value: '图片', parentValue: '' },
-      { value: '视频', parentValue: '' },
-      { value: '游戏', parentValue: '' },
-    ],
-    [
-      { value: '文章', parentValue: '阅读' },
-      { value: '演示文稿', parentValue: '阅读' },
-      { value: '音效', parentValue: '音频' },
-      { value: '音乐', parentValue: '音频' },
-      { value: '播客节目', parentValue: '音频' },
-      { value: '照片', parentValue: '图片' },
-      { value: '插画', parentValue: '图片' },
-      { value: '播客节目', parentValue: '图片' },
-      { value: '动态影像', parentValue: '视频' },
-      { value: '实拍片段', parentValue: '视频' },
-      { value: '短视频', parentValue: '视频' },
-      { value: '长视频', parentValue: '视频' },
-      { value: '红白机', parentValue: '游戏' },
-    ],
   ],
 
   introduction: '',
