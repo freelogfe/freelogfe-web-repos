@@ -2,13 +2,12 @@ import * as React from 'react';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
-// import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 type EventFunc = () => void
 
@@ -106,7 +105,7 @@ function FResourceCard({
         <div className={styles.MetaInfo}>
           <FContentText
             type='additional1'
-            text={resource.type.join(' / ')}
+            text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
           />
           <FContentText
             type='additional1'

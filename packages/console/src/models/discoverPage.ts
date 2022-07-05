@@ -22,7 +22,7 @@ export interface DiscoverPageModelState {
     title: string,
     version: string,
     policy: string[],
-    type: string,
+    type: string[],
   }[];
   totalItem: number;
 }
