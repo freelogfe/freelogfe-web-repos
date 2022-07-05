@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
-import { CloseCircleFilled } from '@ant-design/icons';
+// import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
