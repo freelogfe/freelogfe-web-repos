@@ -280,17 +280,6 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
-          {/*<FAutoComplete*/}
-          {/*  errorText={storageObjectEditor.typeError}*/}
-          {/*  value={storageObjectEditor.type}*/}
-          {/*  debounce={300}*/}
-          {/*  onDebounceChange={(value) => {*/}
-          {/*    onChangeType(value);*/}
-          {/*  }}*/}
-          {/*  className={styles.FAutoComplete}*/}
-          {/*  placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
-          {/*  options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i, label: i}))}*/}
-          {/*/>*/}
           <FResourceTypeInput
             dataSource={storageObjectEditor.resource_Type}
             onChange={(value) => {
