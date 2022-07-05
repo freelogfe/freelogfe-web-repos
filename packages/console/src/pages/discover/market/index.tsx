@@ -34,8 +34,23 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     first: -1,
     second: '',
   });
-  console.log(urlState);
-
+  React.useEffect(() => {
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first]
+    // @ts-ignore
+    if(categoryData.second[category.first] && category.second){
+      // @ts-ignore
+      str += categoryData.second[category.first][category.second]
+    } 
+    dispatch<OnChangeResourceTypeAction>({
+      type: 'discoverPage/onChangeResourceType',
+      payload: {
+        value: str,
+      },
+    });
+  }, [category]);
   AHooks.useMount(() => {
     if (urlState.query) {
       const data: any = urlState.query.split('%');
@@ -49,7 +64,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       });
       // @ts-ignore
       first > -1 &&
-      // @ts-ignore
+        // @ts-ignore
         categoryData.second[first].some((item: string, index: number) => {
           if (item === data[1]) {
             second = item;
@@ -60,7 +75,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         first,
         second,
       });
-      console.log(first, second)
+      console.log(first, second);
     }
     dispatch<OnMountMarketPageAction>({
       type: 'discoverPage/onMountMarketPage',
@@ -80,7 +95,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
           <a
             onClick={() => {
               setCategory({
-                ...category,
+                second: '',
                 first: -1,
               });
             }}
@@ -94,8 +109,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             return (
               <a
                 onClick={() => {
+
                   setCategory({
-                    ...category,
+                    second: category.first === index ? category.second : '',
                     first: index,
                   });
                 }}

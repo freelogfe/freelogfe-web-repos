@@ -23,6 +23,12 @@ export default defineConfig({
     },
     {
       exact: true,
+      path: '/bind',
+      component: '@/pages/bind/index',
+      title: '绑定账户 - Freelog',
+    },
+    {
+      exact: true,
       path: '/logon',
       component: '@/pages/logon/index',
       title: '注册freelog帐户 - Freelog',
