@@ -13,7 +13,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 export type DepResources = {
   id: string;
   title: string;
-  resourceType: string;
+  resourceType: string[];
   status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/ | 4 /*上抛资源，无法获取授权*/;
   versionRange: string;
   versions: string[];
