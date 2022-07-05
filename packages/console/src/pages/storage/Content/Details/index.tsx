@@ -38,7 +38,9 @@ interface DetailsProps {
 function Details({ storageObjectEditor, dispatch }: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
-  const hasError: boolean = storageObjectEditor.resource_Type[storageObjectEditor.resource_Type.length - 1].valueError !== '';
+  const hasError: boolean = storageObjectEditor.resource_Type.some((rt, rti) => {
+    return (rti !== 0 && rt.value === '') || rt.valueError !== '';
+  });
 
   // function onChangeType(value: string) {
   //   if (value === storageObjectEditor.type) {

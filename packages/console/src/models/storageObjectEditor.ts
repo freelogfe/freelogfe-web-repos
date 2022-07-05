@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
+import { UpdateAObjectAction } from '@/models/storageHomePage';
 
 interface DepR {
   id: string;
@@ -298,6 +299,17 @@ const Model: StorageObjectEditorModelType = {
           objectName: data.objectName,
           sha1: data.sha1,
           // type: data.resourceType,
+          resource_Type: data.resourceType.length > 0
+            ? data.resourceType.map((rt: string) => {
+              return {
+                value: rt,
+                valueError: '',
+              };
+            })
+            : [{
+              value: '',
+              valueError: '',
+            }],
           size: data.systemProperty.fileSize,
           rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
             key: s[0],
@@ -336,12 +348,16 @@ const Model: StorageObjectEditorModelType = {
       const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({
         storageObjectEditor,
       }));
-      console.log(storageObjectEditor.resource_Type, 'storageObjectEditor.resource_Type09owpjsdlkfj');
+      // console.log(storageObjectEditor.resource_Type, 'storageObjectEditor.resource_Type09owpjsdlkfj');
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        resourceType: storageObjectEditor.resource_Type.map<string>((rt) => {
-          return rt.value;
-        }),
+        resourceType: storageObjectEditor.resource_Type
+          .map<string>((rt) => {
+            return rt.value;
+          })
+          .filter((s) => {
+            return s !== '';
+          }),
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
@@ -375,8 +391,18 @@ const Model: StorageObjectEditorModelType = {
           }),
         ],
       };
-      console.log(params, 'params098io3wkqlsaejfdlkjfl');
+      // console.log(params, 'params098io3wkqlsaejfdlkjfl');
       yield call(FServiceAPI.Storage.updateObject, params);
+
+      put<UpdateAObjectAction>({
+        type: 'storageHomePage/updateAObject',
+        payload: {
+          id: storageObjectEditor.objectId,
+          type: storageObjectEditor.resource_Type.map<string>((rt) => {
+            return rt.value;
+          }),
+        },
+      });
     },
     * onChangeType({ payload }: OnChangeTypeAction, { put, select, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
