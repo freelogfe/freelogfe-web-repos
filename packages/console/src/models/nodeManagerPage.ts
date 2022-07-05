@@ -28,7 +28,7 @@ export interface NodeManagerModelState {
     id: string;
     cover: string;
     title: string;
-    type: string;
+    type: string[];
     resourceName: string;
     policies: string[];
     hasPolicy: boolean;

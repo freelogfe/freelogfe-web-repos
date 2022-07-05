@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FEdit, FFileSearch, FLoading, FWarning } from '@/components/FIcons';
+import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
@@ -26,7 +26,6 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
@@ -34,7 +33,6 @@ import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ExhibitsProps {
@@ -80,7 +78,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               text={record.resourceName}
             />
             <div className={styles.sub}>
-              <label>{record.type}</label>
+              <label>{FUtil.Format.resourceTypeKeyArrToResourceType(record.type)}</label>
               <div style={{ width: 5 }} />
               <FContentText
                 type='additional2'
@@ -168,9 +166,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             onChange={(value) => {
               if (value && record.policies.length === 0) {
                 if (!record.hasPolicy) {
-                  fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
+                  fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan'), 'error');
                 } else {
-                  fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                  fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'), 'error');
                 }
                 return;
               }
