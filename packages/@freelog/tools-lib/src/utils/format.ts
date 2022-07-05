@@ -87,3 +87,12 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
     };
   }
 }
+
+
+/**
+ * 将资源类型关键字数组,转换成标准展示文字
+ * @param arr 关键字数组
+ */
+export function resourceTypeKeyArrToResourceType(arr: string[]): string {
+  return arr.join(' / ');
+}
