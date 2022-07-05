@@ -215,7 +215,7 @@ function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Pr
             margin: [3, 0, 0],
           }}
           onClick={(evt, node, shape, graph) => {
-            console.log(node, 'NNNoikewsdflkjdlfksdl');
+            // console.log(node, 'NNNoikewsdflkjdlfksdl');
 
             // const licenseeIdentityType = node?._cfg?.parent._cfg.model?.nodeType;
             // const licensor = {
