@@ -900,7 +900,7 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             rawProperties: Object.entries(data4 as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-              console.log(rp, 'rprprprprpyu2341234');
+              // console.log(rp, 'rprprprprpyu2341234');
               return {
                 key: rp[0],
                 value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
