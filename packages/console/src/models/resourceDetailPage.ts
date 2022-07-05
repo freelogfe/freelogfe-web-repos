@@ -16,7 +16,7 @@ export interface ResourceDetailPageModelState {
   resource_Info: null | {
     cover: string;
     name: string;
-    type: string;
+    type: string[];
     tags: string[];
     about: string;
   };
@@ -29,7 +29,7 @@ export interface ResourceDetailPageModelState {
   sign_AllRawResources: {
     resourceId: string;
     resourceName: string;
-    resourceType: string;
+    resourceType: string[];
     status: 0 | 1;
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
@@ -38,7 +38,7 @@ export interface ResourceDetailPageModelState {
     selected: boolean;
     id: string;
     name: string;
-    type: string;
+    type: string[];
     status: 0 | 1;
     authProblem: boolean;
     contracts: {
@@ -179,7 +179,7 @@ const initStates: ResourceDetailPageModelState = {
   resource_Info: {
     cover: '',
     name: '',
-    type: '',
+    type: [],
     tags: [],
     about: '',
   },
@@ -833,7 +833,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   latestVersion: string;
   coverImages: string[];
   status: 0 | 1;

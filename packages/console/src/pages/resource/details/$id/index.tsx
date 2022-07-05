@@ -25,9 +25,7 @@ import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
-// import FNoDataTip from '@/components/FNoDataTip';
 import FResultTip from '@/components/FResultTip';
-// import FUtil1 from '@/utils';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n } from '@freelog/tools-lib';
 
