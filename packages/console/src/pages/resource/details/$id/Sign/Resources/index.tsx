@@ -9,7 +9,6 @@ import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
