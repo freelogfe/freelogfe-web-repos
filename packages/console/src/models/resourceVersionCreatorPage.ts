@@ -883,7 +883,7 @@ const Model: ResourceVersionCreatorModelType = {
 
       const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
         sha1: data.sha1,
-        resourceType: resourceVersionCreatorPage.resourceType,
+        // resourceType: resourceVersionCreatorPage.resourceType,
       };
 
       const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
