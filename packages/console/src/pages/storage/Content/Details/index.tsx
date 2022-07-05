@@ -1,53 +1,54 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
-import {FTextBtn, FRectBtn} from '@/components/FButton';
-import {Space} from 'antd';
+import { FContentText } from '@/components/FText';
+import { FTextBtn, FRectBtn } from '@/components/FButton';
+import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import FAutoComplete from '@/components/FAutoComplete';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+// import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
   ChangeAction,
-  OnChangeTypeAction,
-  UpdateObjectInfoAction
+  OnChangeTypeAction, OnClick_SaveBtn_Action,
+  // UpdateObjectInfoAction,
 } from '@/models/storageObjectEditor';
-import {UpdateAObjectAction} from '@/models/storageHomePage';
+// import { UpdateAObjectAction } from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
-import FBaseProperties from "@/components/FBaseProperties";
-import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
-import {FDown, FInfo, FUp, FDownload} from "@/components/FIcons";
-import FFormLayout from "@/components/FFormLayout";
-import FDrawer from "@/components/FDrawer";
-import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
-import {router} from "umi";
-import FTooltip from "@/components/FTooltip";
+import FBaseProperties from '@/components/FBaseProperties';
+import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+import { FDown, FInfo, FUp, FDownload } from '@/components/FIcons';
+import FFormLayout from '@/components/FFormLayout';
+import FDrawer from '@/components/FDrawer';
+import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+import { router } from 'umi';
+import FTooltip from '@/components/FTooltip';
 // import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI, FI18n} from '@freelog/tools-lib';
-import FCustomOptionsCards from "@/components/FCustomOptionsCards";
-import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
-import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
+import FCustomOptionsCards from '@/components/FCustomOptionsCards';
+import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
+import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+import FResourceTypeInput from '@/components/FResourceTypeInput';
 
 interface DetailsProps {
   dispatch: Dispatch;
   storageObjectEditor: StorageObjectEditorModelState;
 }
 
-function Details({storageObjectEditor, dispatch}: DetailsProps) {
+function Details({ storageObjectEditor, dispatch }: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
-  const hasError: boolean = !!storageObjectEditor.typeError;
+  const hasError: boolean = storageObjectEditor.resource_Type[storageObjectEditor.resource_Type.length - 1].valueError !== '';
 
-  function onChangeType(value: string) {
-    if (value === storageObjectEditor.type) {
-      return;
-    }
-    dispatch<OnChangeTypeAction>({
-      type: 'storageObjectEditor/onChangeType',
-      payload: value,
-    });
-  }
+  // function onChangeType(value: string) {
+  //   if (value === storageObjectEditor.type) {
+  //     return;
+  //   }
+  //   dispatch<OnChangeTypeAction>({
+  //     type: 'storageObjectEditor/onChangeType',
+  //     payload: value,
+  //   });
+  // }
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
@@ -66,24 +67,27 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           onChange({
             customOptionsDataVisible: false,
           });
-          router.replace(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+          router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
-        type="default"
+        type='default'
       >取消</FTextBtn>
       <FRectBtn
-        disabled={storageObjectEditor.typeVerify === 1 || hasError}
+        disabled={hasError}
         onClick={async () => {
-          await dispatch<UpdateObjectInfoAction>({
-            type: 'storageObjectEditor/updateObjectInfo',
+          dispatch<OnClick_SaveBtn_Action>({
+            type: 'storageObjectEditor/onClick_SaveBtn',
           });
-          dispatch<UpdateAObjectAction>({
-            type: 'storageHomePage/updateAObject',
-            payload: {
-              id: storageObjectEditor.objectId,
-              type: storageObjectEditor.type,
-            },
-          });
-          router.replace(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+          // await dispatch<UpdateObjectInfoAction>({
+          //   type: 'storageObjectEditor/updateObjectInfo',
+          // });
+          // dispatch<UpdateAObjectAction>({
+          //   type: 'storageHomePage/updateAObject',
+          //   payload: {
+          //     id: storageObjectEditor.objectId,
+          //     type: storageObjectEditor.type,
+          //   },
+          // });
+          router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
       >保存</FRectBtn>
     </Space>}
@@ -104,37 +108,37 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             <Space size={10}>
               <FContentText
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
-                type="highlight"
+                type='highlight'
                 className={styles.objectName}
                 singleRow
               />
             </Space>
             <Space size={15}>
               <FCopyToClipboard
-                iconStyle={{fontSize: 14}}
+                iconStyle={{ fontSize: 14 }}
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
                 title={FI18n.i18nNext.t('copy_object_name')}
               />
               <FTooltip title={FI18n.i18nNext.t('tip_download_object')}>
                 <div>
                   <FTextBtn
-                    type="primary"
+                    type='primary'
                     onClick={() => {
                       FServiceAPI.Storage.downloadObject({
-                        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
+                        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
                       });
                     }}
-                  ><FDownload style={{fontSize: 14}}/></FTextBtn>
+                  ><FDownload style={{ fontSize: 14 }} /></FTextBtn>
                 </div>
               </FTooltip>
             </Space>
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FBaseProperties
             basics={storageObjectEditor.rawProperties}
             additions={storageObjectEditor.baseProperties}
             onChangeAdditions={(value) => {
-              onChange({baseProperties: value});
+              onChange({ baseProperties: value });
             }}
             onClickEdit={(theKey: string) => {
               const index: number = storageObjectEditor.baseProperties.findIndex((bp) => {
@@ -152,8 +156,8 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             }}
             rightTop={<Space size={20}>
               <FTextBtn
-                style={{fontSize: 12, fontWeight: 600}}
-                type="primary"
+                style={{ fontSize: 12, fontWeight: 600 }}
+                type='primary'
                 onClick={() => {
                   onChange({
                     basePropertiesEditorVisible: true,
@@ -171,7 +175,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             </Space>}
           />
 
-          <div style={{height: 20}}/>
+          <div style={{ height: 20 }} />
 
           <Space>
             <FTextBtn
@@ -180,15 +184,15 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                   customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
                 });
               }}
-              type="default"
-              style={{fontSize: 12, fontWeight: 600}}
+              type='default'
+              style={{ fontSize: 12, fontWeight: 600 }}
             >
               <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
+              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
             </FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
-                <FInfo/>
+                <FInfo />
               </div>
             </FTooltip>
           </Space>
@@ -196,7 +200,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           {
             storageObjectEditor.customOptionsDataVisible && (<>
 
-              <div style={{height: 20}}/>
+              <div style={{ height: 20 }} />
 
               <Space size={40}>
                 <FTextBtn
@@ -219,13 +223,13 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                       },
                     });
                   }}
-                  type="primary"
-                  style={{fontSize: 12, fontWeight: 600}}
+                  type='primary'
+                  style={{ fontSize: 12, fontWeight: 600 }}
                 >添加选项</FTextBtn>
 
               </Space>
 
-              <div style={{height: 20}}/>
+              <div style={{ height: 20 }} />
               {
                 storageObjectEditor.customOptionsData.length > 0 ? (<FCustomOptionsCards
                     dataSource={storageObjectEditor.customOptionsData.map((cod) => {
@@ -234,7 +238,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                         description: cod.description,
                         type: cod.custom,
                         value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,
-                      }
+                      };
                     })}
                     onDelete={(theKey) => {
                       dispatch<ChangeAction>({
@@ -244,7 +248,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                             return cod.key !== theKey;
                           }),
                         },
-                      })
+                      });
                     }}
                     onEdit={(theKey) => {
                       const index: number = storageObjectEditor.customOptionsData.findIndex((cod) => {
@@ -267,29 +271,40 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                       });
                     }}
                   />)
-                  : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+                  : (<FContentText text={'暂无自定义选项…'} type='negative' />)
               }
             </>)
           }
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
-          <FAutoComplete
-            errorText={storageObjectEditor.typeError}
-            value={storageObjectEditor.type}
-            debounce={300}
-            onDebounceChange={(value) => {
-              onChangeType(value);
+          {/*<FAutoComplete*/}
+          {/*  errorText={storageObjectEditor.typeError}*/}
+          {/*  value={storageObjectEditor.type}*/}
+          {/*  debounce={300}*/}
+          {/*  onDebounceChange={(value) => {*/}
+          {/*    onChangeType(value);*/}
+          {/*  }}*/}
+          {/*  className={styles.FAutoComplete}*/}
+          {/*  placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}*/}
+          {/*  options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i, label: i}))}*/}
+          {/*/>*/}
+          <FResourceTypeInput
+            dataSource={storageObjectEditor.resource_Type}
+            onChange={(value) => {
+              dispatch<OnChangeTypeAction>({
+                type: 'storageObjectEditor/onChangeType',
+                payload: {
+                  value: value,
+                },
+              });
             }}
-            className={styles.FAutoComplete}
-            placeholder={FI18n.i18nNext.t('hint_choose_resource_type')}
-            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i, label: i}))}
           />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>
           <Space size={10}>
             <FRectBtn
-              type="default"
+              type='default'
               onClick={() => setDepInfoVisible(true)}
             >添加依赖</FRectBtn>
           </Space>
@@ -328,13 +343,13 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       </FFormLayout>
 
       <FDrawer
-        title="添加依赖"
+        title='添加依赖'
         width={640}
         visible={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
         destroyOnClose
       >
-        <SelectDeps/>
+        <SelectDeps />
       </FDrawer>
     </div>
 
@@ -466,8 +481,8 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               ...value,
             ],
             customOptionsEditorVisible: false,
-          }
-        })
+          },
+        });
       }}
     />
 
@@ -510,12 +525,12 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           }),
           customOptionIndex: -1,
           customOptionEditorData: null,
-        })
+        });
       }}
     />
   </FDrawer>);
 }
 
-export default connect(({storageObjectEditor}: ConnectState) => ({
+export default connect(({ storageObjectEditor }: ConnectState) => ({
   storageObjectEditor: storageObjectEditor,
 }))(Details);
