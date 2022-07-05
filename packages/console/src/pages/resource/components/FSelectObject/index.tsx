@@ -7,7 +7,6 @@ import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
-// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
@@ -20,7 +19,6 @@ import {
 import FTable from '@/components/FTable';
 import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
-// import FLoadingTip from "@/components/FLoadingTip";
 import { FLoading } from '@/components/FIcons';
 
 const errorTexts = {
