@@ -51,15 +51,17 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
       <div style={{ height: 5 }} />
       <FContentText
         type='additional2'
-        text={mainResource.type}
+        text={FUtil.Format.resourceTypeKeyArrToResourceType(mainResource.type)}
       />
       <div style={{ height: 5 }} />
-      <FResourceContractLabels contracts={mainResource.contracts.map((c) => {
-        return {
-          name: c.name,
-          auth: c.status === 'active' || c.status === 'testActive',
-        };
-      })} />
+      <FResourceContractLabels
+        contracts={mainResource.contracts.map((c) => {
+          return {
+            name: c.name,
+            auth: c.status === 'active' || c.status === 'testActive',
+          };
+        })}
+      />
     </a>
 
     {
@@ -92,15 +94,17 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         <div style={{ height: 5 }} />
         <FContentText
           type='additional2'
-          text={r.type}
+          text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
         />
         <div style={{ height: 5 }} />
-        <FResourceContractLabels contracts={r.contracts.map((c) => {
-          return {
-            name: c.name,
-            auth: c.status === 'active' || c.status === 'testActive',
-          };
-        })} />
+        <FResourceContractLabels
+          contracts={r.contracts.map((c) => {
+            return {
+              name: c.name,
+              auth: c.status === 'active' || c.status === 'testActive',
+            };
+          })}
+        />
       </a>))
     }
   </>);

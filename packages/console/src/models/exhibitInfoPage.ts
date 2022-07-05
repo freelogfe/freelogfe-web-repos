@@ -35,7 +35,7 @@ export interface ExhibitInfoPageModelState {
     // selected: boolean;
     id: string;
     name: string;
-    type: string;
+    type: string[];
 
     exhibits: {
       id: string;
@@ -1182,7 +1182,7 @@ export type HandleRelationParams = {
 export type HandleRelationResult = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   status: 0 | 1;
   contracts: {
     contractId: string;
