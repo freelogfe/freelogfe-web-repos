@@ -272,13 +272,13 @@ interface UpdateObjectParamsType {
     type: string;
     versionRange?: string;
   }[];
-  resourceType?: string;
+  resourceType?: string[];
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
   return FUtil.Request({
     method: 'PUT',
-    url: `/v1/storages/objects/${objectIdOrName}`,
+    url: `/v2/storages/objects/${objectIdOrName}`,
     data: params,
   });
 }
