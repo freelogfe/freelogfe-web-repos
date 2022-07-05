@@ -394,7 +394,7 @@ const Model: StorageObjectEditorModelType = {
       // console.log(params, 'params098io3wkqlsaejfdlkjfl');
       yield call(FServiceAPI.Storage.updateObject, params);
 
-      put<UpdateAObjectAction>({
+      yield put<UpdateAObjectAction>({
         type: 'storageHomePage/updateAObject',
         payload: {
           id: storageObjectEditor.objectId,
@@ -403,6 +403,8 @@ const Model: StorageObjectEditorModelType = {
           }),
         },
       });
+
+      router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
     },
     * onChangeType({ payload }: OnChangeTypeAction, { put, select, call }: EffectsCommandMap) {
       yield put<ChangeAction>({

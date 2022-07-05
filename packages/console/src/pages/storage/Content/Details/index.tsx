@@ -89,7 +89,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           //     type: storageObjectEditor.type,
           //   },
           // });
-          router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
+          // router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
       >保存</FRectBtn>
     </Space>}
