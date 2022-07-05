@@ -19,7 +19,7 @@ import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
 type ServerDataNodes = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   contracts: {
     contractId: string;
@@ -109,7 +109,7 @@ function FGraph_Tree_Authorization_Resource({
       data: {
         resourceId: string;
         resourceName: string;
-        resourceType: string;
+        resourceType: string[];
       };
     } = await FServiceAPI.Resource.info(parmas1);
 
@@ -152,7 +152,7 @@ function FGraph_Tree_Authorization_Resource({
       children: partyResult,
       // children: [],
     };
-
+    console.log(finalDataSource, 'finalDataSource93sdlkfjsdlfkj');
     set_DataSource(finalDataSource);
   }
 

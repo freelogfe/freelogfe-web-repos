@@ -35,7 +35,7 @@ const initStates: FGraph_Relationship_States = {
 interface ServerDataNode {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   dependencies: ServerDataNode[];
 }

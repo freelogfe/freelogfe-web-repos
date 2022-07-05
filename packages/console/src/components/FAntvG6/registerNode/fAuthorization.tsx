@@ -11,7 +11,7 @@ import { FUtil } from '@freelog/tools-lib';
 export interface FNode_Authorization_Resource_Values {
   resourceID: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   resourceDetails_Url: string;
 }
@@ -61,7 +61,7 @@ function FNode_Authorization_Resource({ value }: FNode_Authorization_Resource_Pr
         fontWeight: 400,
         fill: '#666',
         padding: [3, 0],
-      }}>{resourceType} | {version}</Text>
+      }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</Text>
     </Rect>
   </Group>);
 }

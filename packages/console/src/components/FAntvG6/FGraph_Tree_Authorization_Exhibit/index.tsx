@@ -13,14 +13,14 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
-import FErrorBoundary from '@/components/FErrorBoundary';
-import { presentableDetails } from '@freelog/tools-lib/dist/service-API/presentables';
+// import FErrorBoundary from '@/components/FErrorBoundary';
+// import { presentableDetails } from '@freelog/tools-lib/dist/service-API/presentables';
 import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
 
 type ServerDataNodes = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   contracts: {
     contractId: string;
@@ -96,7 +96,7 @@ function FGraph_Tree_Authorization_Exhibit({
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Exhibit_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Exhibit_States['contractID']>(initStates['contractID']);
   const [bothSidesInfo, set_BothSidesInfo] = React.useState<FGraph_Tree_Authorization_Exhibit_States['bothSidesInfo']>(initStates['bothSidesInfo']);
-
+  // console.log(dataSource, 'dataSource093iosjdlfksdjlfk');
 
   React.useEffect(() => {
     handleData();
@@ -141,6 +141,7 @@ function FGraph_Tree_Authorization_Exhibit({
     };
 
     const { data: data_AuthorizationTree }: { data: ServerDataNodes } = await FServiceAPI.Exhibit.authTree(params2);
+    console.log(data_AuthorizationTree, 'data_AuthorizationTree093oiwjsdkfsdlfkjsdlfkj');
     // console.log(data_AuthorizationTree, 'data_AuthorizationTree@#@#42342342343');
     // console.log('handleDataSource handleDataSource handleDataSource');
     const allContractIDs: string[] = getAllContractIDs({ data: data_AuthorizationTree });
@@ -276,6 +277,7 @@ interface HandleDataSourceParams {
 type HandleDataSourceReturn = ContractNode[];
 
 function handleDataSource({ data, data_Contracts }: HandleDataSourceParams): HandleDataSourceReturn {
+  // console.log(data, 'data09ioqwj;lfksdjflk');
   return (data || []).map((d) => {
 
     return {
