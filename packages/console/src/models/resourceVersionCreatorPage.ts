@@ -754,61 +754,62 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       // 组织添加的依赖数据
-      const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
-        // console.log(data1, 'data112323423');
-        const depC: any[] = data_batchContracts.filter((dc: any) => {
-          return dc.licensorId === dr.resourceId && dc.status === 0;
+      const dependencies: DepResources = data_batchResourceInfo
+        .map<DepResources[number]>((dr) => {
+          // console.log(data1, 'data112323423');
+          const depC: any[] = data_batchContracts.filter((dc: any) => {
+            return dc.licensorId === dr.resourceId && dc.status === 0;
+          });
+          // console.log(depC, 'depC902342lk3jlk');
+          const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
+          const theVersion = versions?.find((v) => v.id === dr.resourceId);
+
+          const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
+
+          return {
+            id: dr.resourceId,
+            title: dr.resourceName,
+            resourceType: dr.resourceType,
+            status: isUpthrow ? 4 : dr.status,
+            versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
+            versions: dr.resourceVersions.map((version: any) => version.version),
+            upthrow: isUpthrow,
+            upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
+            authProblem: dr.authProblem,
+            enableReuseContracts: depC
+              .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+                return {
+                  checked: false,
+                  id: c.contractId,
+                  policyId: c.policyId,
+                  title: c.contractName,
+                  status: c.status,
+                  code: c.policyInfo.policyText,
+                  date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+                  versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
+                    .versions.map((ccc: any) => ccc.version),
+                };
+              }),
+            terminatedContractIDs: data_batchContracts
+              .filter((dc: any) => {
+                return dc.licensorId === dr.resourceId && dc.status === 1;
+              }).map((dc: any) => {
+                return dc.contractId;
+              }),
+            enabledPolicies: dr.policies
+              .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
+              .map((policy: any) => {
+                // console.log(policy, 'PPPPafwe98iokl');
+                return {
+                  checked: false,
+                  id: policy.policyId,
+                  title: policy.policyName,
+                  code: policy.policyText,
+                  status: policy.status,
+                };
+              }),
+          };
         });
-        // console.log(depC, 'depC902342lk3jlk');
-        const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
-        const theVersion = versions?.find((v) => v.id === dr.resourceId);
-
-        const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
-
-        return {
-          id: dr.resourceId,
-          title: dr.resourceName,
-          resourceType: dr.resourceType,
-          status: isUpthrow ? 4 : dr.status,
-          versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
-          versions: dr.resourceVersions.map((version: any) => version.version),
-          upthrow: isUpthrow,
-          upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
-          authProblem: dr.authProblem,
-          enableReuseContracts: depC
-            .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
-              return {
-                checked: false,
-                id: c.contractId,
-                policyId: c.policyId,
-                title: c.contractName,
-                status: c.status,
-                code: c.policyInfo.policyText,
-                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-                versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
-                  .versions.map((ccc: any) => ccc.version),
-              };
-            }),
-          terminatedContractIDs: data_batchContracts
-            .filter((dc: any) => {
-              return dc.licensorId === dr.resourceId && dc.status === 1;
-            }).map((dc: any) => {
-              return dc.contractId;
-            }),
-          enabledPolicies: dr.policies
-            .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
-            .map((policy: any) => {
-              // console.log(policy, 'PPPPafwe98iokl');
-              return {
-                checked: false,
-                id: policy.policyId,
-                title: policy.policyName,
-                code: policy.policyText,
-                status: policy.status,
-              };
-            }),
-        };
-      });
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -989,7 +990,7 @@ const Model: ResourceVersionCreatorModelType = {
           return {
             id: dpo.name,
             title: dpo.name,
-            resourceType: '',
+            resourceType: [],
             status: 3,
             versionRange: '',
             versions: [],
@@ -1007,11 +1008,6 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            // rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
-            //   key: s[0],
-            //   value: s[1],
-            // })),
-
             dependencies: allDepObjects,
             depRelationship: allRelationship,
           },
@@ -1331,7 +1327,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   latestVersion: string;
   status: 0 | 1;
   policies: {
