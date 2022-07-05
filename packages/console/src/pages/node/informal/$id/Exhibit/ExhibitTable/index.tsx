@@ -6,7 +6,7 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-import { Popconfirm, Space } from 'antd';
+import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
@@ -16,7 +16,6 @@ import {
   OnClick_Exhibits_DeleteBtn_Action,
 } from '@/models/informalNodeManagerPage';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-// import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 import fConfirmModal from '@/components/fConfirmModal';
@@ -37,13 +36,11 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       width: 120,
       render(text, record) {
         return (<div className={styles.cover}>
-
           <FCoverImage
             src={record.stateInfo.coverInfo.coverImages[0] || ''}
             width={120}
             style={{ borderRadius: 4 }}
           />
-
           <div className={styles.Identity}>
             <FIdentityTypeBadge
               status={record.associatedPresentableId === '' ? record.originInfo.type : 'exhibit'}
@@ -65,7 +62,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             singleRow
           />
           <div className={styles.type}>
-            <label>{record.originInfo.resourceType}</label>
+            <label>{FUtil.Format.resourceTypeKeyArrToResourceType(record.originInfo.resourceType)}</label>
             <div>
               <FContentText
                 type='additional2'
@@ -253,7 +250,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
             fConfirmModal({
               message: '一旦删除则无法恢复，确认删除吗？',
               onOk() {
-                onDelete()
+                onDelete();
               },
             });
           }}

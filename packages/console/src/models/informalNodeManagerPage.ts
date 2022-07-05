@@ -27,7 +27,7 @@ export interface IExhibit {
   originInfo: {
     id: string;
     name: string;
-    resourceType: string;
+    resourceType: string[];
     type: 'resource' | 'object';
     version: string; // 测试资源引用的实体版本
     versionRange: string; // 测试资源引用的实体版本范围
