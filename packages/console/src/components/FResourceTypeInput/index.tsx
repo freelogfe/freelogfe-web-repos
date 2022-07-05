@@ -74,12 +74,12 @@ function FResourceTypeInput({ dataSource, onChange }: FResourceTypeInputProps) {
         valueError,
       };
     });
-    console.log(resource_Type, 'resource_Typeresource_Typeresource_Typeresource_Type89io3qwefsdlkf');
+    // console.log(resource_Type, 'resource_Typeresource_Typeresource_Typeresource_Type89io3qwefsdlkf');
 
     const nextOptions = resource_TypeData.filter((i) => {
       return i.parentValue === value;
     });
-    console.log(nextOptions, 'nextOptions290iojweokfjsdlkj');
+    // console.log(nextOptions, 'nextOptions290iojweokfjsdlkj');
     if (nextOptions.length > 0) {
       resource_Type = [
         ...resource_Type,
