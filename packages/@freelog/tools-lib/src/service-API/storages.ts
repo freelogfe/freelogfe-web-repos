@@ -346,7 +346,7 @@ export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {
 
 // 批量查询文件信息通过sha1
 interface FilesListInfoParamsType {
-  sha1: string[];
+  sha1: string;
 }
 
 export function filesListInfo({...params}: FilesListInfoParamsType) {

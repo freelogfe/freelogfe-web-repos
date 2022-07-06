@@ -1,4 +1,4 @@
-import * as FUtil from '../../utils/tools';
+import * as Tool from '../../utils/tools';
 import * as Storage from '../storages';
 
 interface FileInfo {
@@ -23,8 +23,9 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
   let allData: FileInfo[] = [];
 
   while (true) {
+    console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
     const {data} = await Storage.filesListInfo({
-      sha1: needHandleSha1,
+      sha1: needHandleSha1.join(','),
     });
     needHandleSha1 = data
       .filter((d: any) => {
@@ -59,7 +60,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     if (needHandleSha1.length === 0) {
       break;
     }
-    await FUtil.promiseSleep(3000)
+    await Tool.promiseSleep(3000)
   }
   return allData;
 }
