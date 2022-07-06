@@ -45,10 +45,13 @@ export function dashboard({}: DashboardParamsType = {}) {
 // 资源市场
 interface MarketParamsType {
   // nodeID: number;
+  query?: string;
 }
 
-export function market({}: MarketParamsType = {}): TReturnType {
-  return `/market`;
+export function market({query}: MarketParamsType = {}): TReturnType {
+  return `/market${handleQuery({
+    query,
+  })}`;
 }
 
 // 示例节点
@@ -142,10 +145,12 @@ export function nodeCreator({}: NodeCreatorParamsType = {}): TReturnType {
 // 节点管理
 interface NodeManagementParamsType {
   nodeID: number;
+  showPage?: 'exhibit' | 'theme';
+
 }
 
-export function nodeManagement({nodeID}: NodeManagementParamsType): TReturnType {
-  return `/node/formal/${nodeID}`;
+export function nodeManagement({nodeID, showPage = 'exhibit', ...params}: NodeManagementParamsType): TReturnType {
+  return `/node/formal/${nodeID}${handleQuery({showPage, ...params})}`;
 }
 
 // 展品管理
