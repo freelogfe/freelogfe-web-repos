@@ -13,6 +13,8 @@ import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
+import useUrlState from '@ahooksjs/use-url-state';
+import { OnChangePageAction } from '@/models/informalNodeManagerPage';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -49,6 +51,18 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
       });
     }
   }, [match.params.id]);
+
+  const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
+  console.error(showPage)
+
+  React.useEffect(() => {
+    dispatch<OnChangePageAction>({
+      type: 'informalNodeManagerPage/onChangePage',
+      payload: {
+        value: showPage,
+      },
+    });
+  }, [showPage]);
 
   // React.useEffect(() => {
   //

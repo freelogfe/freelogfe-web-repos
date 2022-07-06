@@ -142,10 +142,12 @@ export function nodeCreator({}: NodeCreatorParamsType = {}): TReturnType {
 // 节点管理
 interface NodeManagementParamsType {
   nodeID: number;
+  showPage?: 'exhibit' | 'theme' | 'mappingRule';
 }
 
-export function nodeManagement({nodeID}: NodeManagementParamsType): TReturnType {
-  return `/node/formal/${nodeID}`;
+export function nodeManagement({nodeID, showPage = 'exhibit'}: NodeManagementParamsType): TReturnType {
+  console.error(`/node/formal/${nodeID}${handleQuery({showPage})}`)
+  return `/node/formal/${nodeID}${handleQuery({showPage})}`;
 }
 
 // 展品管理
