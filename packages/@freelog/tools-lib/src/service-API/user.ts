@@ -189,7 +189,7 @@ export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
   });
 }
 
-// 绑定或换绑手机号和邮箱
+// 第三方注册或绑定
 interface RegisterOrBindParamsType {
   loginName: string;
   password: string;
