@@ -35,7 +35,8 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     second: '',
   });
   React.useEffect(() => {
-    if (category.first === -1) {
+    
+if (category.first === -1) {
       return;
     }
     let str = categoryData.first[category.first]
@@ -109,7 +110,6 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             return (
               <a
                 onClick={() => {
-
                   setCategory({
                     second: category.first === index ? category.second : '',
                     first: index,

@@ -57,7 +57,24 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
       type: 'informalNodeManagerPage/onUnmountExhibitPage',
     });
   });
-
+  React.useEffect(() => {
+    
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first];
+    // @ts-ignore
+    if (categoryData.second[category.first] && category.second) {
+      // @ts-ignore
+      str += categoryData.second[category.first][category.second];
+    }
+    dispatch<OnChangeExhibitTypeAction>({
+      type: 'informalNodeManagerPage/onChangeExhibitType',
+      payload: {
+        value: str,
+      },
+    });
+  }, [category]);
   if (informalNodeManagerPage.exhibit_PageError) {
     return (
       <FNoDataTip
@@ -149,7 +166,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                             setCategory({
                               ...category,
                               first: value,
-                              second: -1,
+                              second: category.first === value ? category.second : '',
                             });
                             //onChangeResourceType && onChangeResourceType(value)
                           }}

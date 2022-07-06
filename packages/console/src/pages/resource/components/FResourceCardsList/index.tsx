@@ -86,6 +86,19 @@ function FResourceCardsList({
     first: -1,
     second: '',
   });
+
+  React.useEffect(() => {
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first];
+    // @ts-ignore
+    if (categoryData.second[category.first] && category.second) {
+      // @ts-ignore
+      str += categoryData.second[category.first][category.second];
+    }
+    onChangeResourceType && onChangeResourceType(str);
+  }, [category]);
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
     setTypeText(selectedType?.text || selectedType?.value);
@@ -123,7 +136,7 @@ function FResourceCardsList({
                     setCategory({
                       ...category,
                       first: value,
-                      second: -1,
+                      second: category.first === value ? category.second : '',
                     });
                     //onChangeResourceType && onChangeResourceType(value)
                   }}
@@ -202,7 +215,9 @@ function FResourceCardsList({
             debounce={300}
             allowClear={true}
             // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
-            onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
+            onDebounceChange={(value) => {
+              onChangeInputText && onChangeInputText(value);
+            }}
             theme="dark"
             className={styles.FInput}
             placeholder={FUtil1.I18n.message('search_resource')}

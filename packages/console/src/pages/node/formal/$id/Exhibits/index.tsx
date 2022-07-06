@@ -65,6 +65,24 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     });
   });
 
+  React.useEffect(() => {
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first];
+    // @ts-ignore
+    if (categoryData.second[category.first] && category.second) {
+      // @ts-ignore
+      str += categoryData.second[category.first][category.second];
+    }
+    dispatch<OnChange_Exhibit_SelectedType_Action>({
+      type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+      payload: {
+        value: str,
+      },
+    });
+  }, [category]);
+
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map(
     (i) => ({
       key: i.id,
@@ -238,7 +256,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         setCategory({
                           ...category,
                           first: value,
-                          second: -1,
+                          second: category.first === value ? category.second : '',
                         });
                         //onChangeResourceType && onChangeResourceType(value)
                       }}
