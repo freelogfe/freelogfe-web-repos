@@ -247,23 +247,6 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       </div>);
                     })
                   }
-
-                  {/*<div className={styles.node}>*/}
-                  {/*  <FContentText text={'The official node of freelog'} type='highlight' />*/}
-
-                  {/*  <Space size={20}>*/}
-                  {/*    <FTextBtn type='primary'>打开节点</FTextBtn>*/}
-                  {/*    <FTextBtn type='primary'>管理节点</FTextBtn>*/}
-                  {/*  </Space>*/}
-                  {/*</div>*/}
-                  {/*<div className={styles.node}>*/}
-                  {/*  <FContentText text={'The official node of freelog'} type='highlight' />*/}
-
-                  {/*  <Space size={20}>*/}
-                  {/*    <FTextBtn type='primary'>打开节点</FTextBtn>*/}
-                  {/*    <FTextBtn type='primary'>管理节点</FTextBtn>*/}
-                  {/*  </Space>*/}
-                  {/*</div>*/}
                 </div>
               </FFormLayout.FBlock>
             </FFormLayout>
