@@ -13,7 +13,7 @@ import * as Activity from './activities';
 import * as TestQualification from './testQualifications';
 import * as Statistic from './statistics';
 import * as I18n from './i18n';
-import * as combination from './combinations';
+import * as recombination from './recombinations';
 
 const FServiceAPI = {
   Node,
@@ -31,7 +31,7 @@ const FServiceAPI = {
   TestQualification,
   Statistic,
   I18n,
-  combination,
+  recombination,
 };
 
 export default FServiceAPI;
