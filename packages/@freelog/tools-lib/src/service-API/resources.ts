@@ -504,7 +504,7 @@ interface ResourcesRecommendParamsType {
 export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v2/resources/recommend?recommendType=2`,
+    url: `/v2/resources/recommend`,
     params: params,
   });
 }
