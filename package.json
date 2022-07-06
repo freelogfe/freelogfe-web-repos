@@ -22,10 +22,10 @@
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "@freelog/components-lib": "^0.1.9",
-    "@freelog/tools-lib": "^0.1.101",
+    "@freelog/tools-lib": "^0.1.111",
     "ahooks": "^3.3.8",
-    "moment": "^2.29.3",
     "copy-to-clipboard": "^3.3.1",
+    "moment": "^2.29.3",
     "react": "17.x",
     "react-dom": "17.x",
     "react-helmet": "^6.1.0",

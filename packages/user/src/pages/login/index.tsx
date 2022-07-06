@@ -204,11 +204,11 @@ function Login({ dispatch, loginPage }: LoginProps) {
                     location.host.includes('user.testfreelog.com')
                       ? 'test/'
                       : ''
-                  }v2/thirdParty/weChat/codeHandle?returnUrl=` +
-                    (urlParams.goTo ||
+                  }v2/thirdParty/weChat/codeHandle?returnUrl=` + 
+                    (urlParams.goTo || 
                     location.host.includes('user.testfreelog.com')
-                      ? 'http:console.testfreelog.com'
-                      : 'https:console.freelog.com'),
+                      ? 'http://user.testfreelog.com/'
+                      : 'https:user.freelog.com'),
                 )}&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect`;
               }}
             >

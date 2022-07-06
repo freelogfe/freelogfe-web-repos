@@ -12,9 +12,14 @@ import { history } from 'umi';
 import loginCover from '@/assets/loginCover.png';
 // import FFooter from '@/layouts/FFooter';
 import * as AHooks from 'ahooks';
+import fMessage from '@/components/fMessage';
 
 function Login() {
-  const [urlParams] = useUrlState<{ goTo: string; identityId: string }>();
+  const [urlParams] = useUrlState<{
+    goTo: string;
+    identityId: string;
+    returnUrl: string;
+  }>();
   const boxRef = React.useRef(null);
   const [bindData, setBindData] = React.useState({
     loginName: '',
@@ -28,24 +33,15 @@ function Login() {
   AHooks.useUnmount(() => {});
 
   async function submit() {
-    fetch('http://api.testfreelog.com/v2/thirdParty/registerOrBind', {
-      method: 'post',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        identityId: urlParams.identityId,
-        loginName: bindData.loginName,
-        password: bindData.password,
-      }),
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const data = await FServiceAPI.User.registerOrBind({
+      identityId: urlParams.identityId,
+      loginName: bindData.loginName,
+      password: bindData.password,
+    });
+    fMessage(data.msg, 'error');
+    if (data.errCode === 0) {
+      location.replace(urlParams.returnUrl);
+    }
   }
 
   return (
