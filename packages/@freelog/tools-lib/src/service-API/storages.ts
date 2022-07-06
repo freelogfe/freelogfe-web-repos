@@ -343,3 +343,16 @@ export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {
     data: params,
   });
 }
+
+// 批量查询文件信息通过sha1
+interface FilesListInfoParamsType {
+  sha1: string[];
+}
+
+export function filesListInfo({...params}: FilesListInfoParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/storages/files/list/info`,
+    params: params,
+  });
+}

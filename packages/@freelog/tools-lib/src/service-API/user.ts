@@ -188,3 +188,18 @@ export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
     data: params,
   });
 }
+
+// 绑定或换绑手机号和邮箱
+interface RegisterOrBindParamsType {
+  loginName: string;
+  password: string;
+  identityId: string;
+}
+
+export function registerOrBind(params: RegisterOrBindParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/thirdParty/registerOrBind`,
+    data: params,
+  }, {noRedirect: true});
+}
