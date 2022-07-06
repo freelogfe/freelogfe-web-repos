@@ -189,7 +189,7 @@ export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
   });
 }
 
-// 第三方注册或绑定
+// 非登录用户绑定与自动注册流程
 interface RegisterOrBindParamsType {
   loginName: string;
   password: string;
@@ -203,3 +203,30 @@ export function registerOrBind(params: RegisterOrBindParamsType) {
     data: params,
   }, {noRedirect: true});
 }
+
+// 登录用户解绑第三方登录
+interface ThirdPartyUnbindParamsType {
+  thirdPartyType: string;
+  password: string;
+}
+
+export function thirdPartyUnbind(params: ThirdPartyUnbindParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/thirdParty/unbind`,
+    data: params,
+  });
+}
+
+// 查询登录用户已绑定的第三方信息
+interface ThirdPartyListParamsType {
+}
+
+export function thirdPartyList(params: ThirdPartyListParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/thirdParty/list`,
+    data: params,
+  });
+}
+

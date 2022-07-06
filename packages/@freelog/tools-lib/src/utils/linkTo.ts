@@ -48,10 +48,8 @@ interface MarketParamsType {
   query?: string;
 }
 
-export function market({query}: MarketParamsType = {}): TReturnType {
-  return `/market${handleQuery({
-    query,
-  })}`;
+export function market({...params}: MarketParamsType = {}): TReturnType {
+  return `/market${handleQuery(params)}`;
 }
 
 // 示例节点
@@ -146,7 +144,6 @@ export function nodeCreator({}: NodeCreatorParamsType = {}): TReturnType {
 interface NodeManagementParamsType {
   nodeID: number;
   showPage?: 'exhibit' | 'theme';
-
 }
 
 export function nodeManagement({nodeID, showPage = 'exhibit', ...params}: NodeManagementParamsType): TReturnType {
