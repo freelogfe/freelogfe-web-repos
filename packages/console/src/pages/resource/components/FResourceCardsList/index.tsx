@@ -95,7 +95,7 @@ function FResourceCardsList({
     // @ts-ignore
     if (categoryData.second[category.first] && category.second) {
       // @ts-ignore
-      str += categoryData.second[category.first][category.second];
+      str = categoryData.second[category.first][category.second];
     }
     onChangeResourceType && onChangeResourceType(str);
   }, [category]);

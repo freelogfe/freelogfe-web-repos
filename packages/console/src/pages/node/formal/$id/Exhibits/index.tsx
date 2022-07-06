@@ -73,7 +73,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     // @ts-ignore
     if (categoryData.second[category.first] && category.second) {
       // @ts-ignore
-      str += categoryData.second[category.first][category.second];
+      str = categoryData.second[category.first][category.second];
     }
     dispatch<OnChange_Exhibit_SelectedType_Action>({
       type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
