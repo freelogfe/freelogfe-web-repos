@@ -49,6 +49,25 @@ export function currentUserInfo() {
   });
 }
 
+// 分页查看用户列表
+interface UsersParamsType {
+  skip?: number;
+  limit?: number;
+  keywords?: string;
+  userId?: number;
+  tagIds?: string;
+  startRegisteredDate?: string;
+  endRegisteredDate?: string;
+}
+
+export function users(params: UsersParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users`,
+    params: params,
+  });
+}
+
 // 查看用户详情
 interface UserDetailsParamsType {
   mobile?: string;

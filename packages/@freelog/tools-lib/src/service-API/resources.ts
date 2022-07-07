@@ -87,6 +87,7 @@ interface ListParamsType {
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
   sort?: string;
+  userId?: number;
 }
 
 interface ListReturnType extends CommonReturn {
