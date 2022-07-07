@@ -18,12 +18,14 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     return [];
   }
 
+  let delay: number = 500;
+
   let needHandleSha1: string[] = [...sha1];
 
   let allData: FileInfo[] = [];
 
   while (true) {
-    console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
+    // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
     const {data} = await Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
     });
@@ -60,7 +62,8 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     if (needHandleSha1.length === 0) {
       break;
     }
-    await Tool.promiseSleep(3000)
+    await Tool.promiseSleep(delay);
+    delay += 500;
   }
   return allData;
 }
