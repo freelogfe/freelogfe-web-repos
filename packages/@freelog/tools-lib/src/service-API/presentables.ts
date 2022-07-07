@@ -13,6 +13,11 @@ export interface CreatePresentableParamsType {
   }[];
   presentableName: string;
   tags?: string[];
+  policies?: {
+    policyName: string;
+    policyText: string;
+    status?: 0 | 1;
+  }[];
 }
 
 export function createPresentable(params: CreatePresentableParamsType) {

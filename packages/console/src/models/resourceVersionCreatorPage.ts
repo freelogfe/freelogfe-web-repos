@@ -648,13 +648,14 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      // const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-      //   resourceVersionCreatorPage,
-      // }));
-      //
-      // if (!resourceVersionCreatorPage.selectedFileSha1) {
-      //   return;
-      // }
+      // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      if (!resourceVersionCreatorPage.selectedFileSha1) {
+        return;
+      }
       //
       // const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
       //   sha1: resourceVersionCreatorPage.selectedFileSha1,
@@ -662,6 +663,14 @@ const Model: ResourceVersionCreatorModelType = {
       // };
       //
       // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
+
+      const params: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+        sha1: [resourceVersionCreatorPage.selectedFileSha1],
+      };
+      // console.log('*(*********');
+      const result = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
+      // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
+
       //
       // if (!data) {
       //   return yield put<ChangeAction>({
@@ -674,18 +683,21 @@ const Model: ResourceVersionCreatorModelType = {
       //   });
       // }
       //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-      //       return {
-      //         key: rp[0],
-      //         value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-      //       };
-      //     }),
-      //   },
-      //   caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-      // });
+      if (result[0].state === 'success') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+              return {
+                key: rp[0],
+                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              };
+            }),
+          },
+          caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+      }
+
     },
     * addDeps({ payload: { relationships, versions } }: AddDepsAction, { select, put, call }: EffectsCommandMap) {
 
@@ -1390,3 +1402,67 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     };
   });
 }
+
+// interface FileInfo {
+//   sha1: string;
+//   state: 'success' | 'fail' | 'nonentity';
+//   info: {
+//     [key: string]: any;
+//   };
+// }
+//
+// interface GetFileInfosBySha1Params {
+//   sha1: string[];
+// }
+//
+// export async function getFilesSha1Info({ sha1 }: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<FileInfo[]> {
+//   if (sha1.length === 0) {
+//     return [];
+//   }
+//
+//   let needHandleSha1: string[] = [...sha1];
+//   console.log(needHandleSha1, 'needHandleSha109ow3iejflsdkfjsdlk');
+//   let allData: FileInfo[] = [];
+//
+//   while (true) {
+//     console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk');
+//     const { data } = await FServiceAPI.Storage.filesListInfo({
+//       sha1: needHandleSha1.join(','),
+//     });
+//     needHandleSha1 = data
+//       .filter((d: any) => {
+//         return d.metaAnalyzeStatus && d.metaAnalyzeStatus === 1;
+//       })
+//       .map((d: any) => {
+//         return d.sha1;
+//       });
+//     const finishedInfo: FileInfo[] = data
+//       .filter((d: any) => {
+//         return !d.metaAnalyzeStatus || d.metaAnalyzeStatus !== 1;
+//       })
+//       .map((d: any) => {
+//         let state: 'success' | 'fail' | 'nonentity' = 'fail';
+//         if (!d.metaAnalyzeStatus) {
+//           state = 'nonentity';
+//         } else if (d.metaAnalyzeStatus === 2) {
+//           state = 'success';
+//         }
+//         return {
+//           sha1: d.sha1,
+//           state,
+//           info: d,
+//         };
+//       });
+//     cdPartially && cdPartially(finishedInfo);
+//     allData = [
+//       ...allData,
+//       ...finishedInfo,
+//     ];
+//
+//     if (needHandleSha1.length === 0) {
+//       break;
+//     }
+//     await FUtil.Tool.promiseSleep(3000);
+//   }
+//   return allData;
+// }

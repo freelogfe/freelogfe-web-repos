@@ -576,10 +576,10 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
 
-"@freelog/tools-lib@^0.1.107":
-  version "0.1.107"
-  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.107.tgz#9d81f2ab22c364092139c3da4fab437f0c8882cd"
-  integrity sha512-w8u/caZpOVHJ8UeVuV5I3lg6cmnpYh4bSZwe28yJnUYVMOTE6MzTFdaPunwgYwDwpk5DgcouI2PNmgbLl2gKvQ==
+"@freelog/tools-lib@^0.1.112":
+  version "0.1.112"
+  resolved "https://registry.yarnpkg.com/@freelog/tools-lib/-/tools-lib-0.1.112.tgz#0db89511c7a81b63b2119164f26fbc0572e789bc"
+  integrity sha512-2PtpIRYWy7OnQBPSZPR3KQgyCBeAas57eV8xtX21uPtIiVNTwrPkSf2zX1bWYdhsAiXaZk0GiQySm6YDfrDEVw==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     "@freelog/tools-lib" "^0.1.43"
