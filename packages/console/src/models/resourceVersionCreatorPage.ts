@@ -918,7 +918,7 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+            rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp:any) => {
               // console.log(rp, 'rprprprprpyu2341234');
               return {
                 key: rp[0],
