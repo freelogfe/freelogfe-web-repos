@@ -85,6 +85,7 @@ export interface ResourceVersionCreatorPageModelState {
     key: string;
     value: string;
   }[];
+  rawPropertiesState: 'parsing' | 'success' | 'fail';
 
   baseProperties: {
     key: string;
@@ -303,6 +304,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   selectedFileObjectDrawerVisible: false,
 
   rawProperties: [],
+  rawPropertiesState: 'success',
 
   baseProperties: [],
   basePropertiesEditorVisible: false,
@@ -664,6 +666,13 @@ const Model: ResourceVersionCreatorModelType = {
       //
       // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawPropertiesState: 'parsing',
+        },
+      });
+
       const params: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileSha1],
       };
@@ -693,6 +702,7 @@ const Model: ResourceVersionCreatorModelType = {
                 value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
               };
             }),
+            rawPropertiesState: 'success',
           },
           caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
         });
@@ -912,45 +922,45 @@ const Model: ResourceVersionCreatorModelType = {
       const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
         sha1: data.sha1,
       };
-      const data4 = yield call(FServiceAPI.recombination.getFilesSha1Info,params4);
+      const data4 = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
       // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
 
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp:any) => {
-              // console.log(rp, 'rprprprprpyu2341234');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+            // console.log(rp, 'rprprprprpyu2341234');
+            return {
+              key: rp[0],
+              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+            };
+          }),
+          baseProperties: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
               return {
-                key: rp[0],
-                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                key: cpd.key,
+                value: cpd.defaultValue,
+                description: cpd.remark,
               };
             }),
-            baseProperties: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type === 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  value: cpd.defaultValue,
-                  description: cpd.remark,
-                };
-              }),
-            customOptionsData: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  // keyError: '',
-                  description: cpd.remark,
-                  // descriptionError: '',
-                  custom: cpd.type === 'editableText' ? 'input' : 'select',
-                  defaultValue: cpd.defaultValue,
-                  // defaultValueError: '',
-                  customOption: cpd.candidateItems.join(','),
-                  // customOptionError: '',
-                };
-              }),
-          },
-        });
+          customOptionsData: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                // keyError: '',
+                description: cpd.remark,
+                // descriptionError: '',
+                custom: cpd.type === 'editableText' ? 'input' : 'select',
+                defaultValue: cpd.defaultValue,
+                // defaultValueError: '',
+                customOption: cpd.candidateItems.join(','),
+                // customOptionError: '',
+              };
+            }),
+        },
+      });
       // }
 
       yield put<ChangeAction>({

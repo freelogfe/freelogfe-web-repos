@@ -12,7 +12,6 @@ import {
 import FUp from '@/components/FIcons/FUp';
 import { FDown, FInfo } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
-// import FUtil1 from '@/utils';
 import { FContentText } from '@/components/FText';
 import {
   ConnectState,
@@ -24,6 +23,7 @@ import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { FI18n } from '@freelog/tools-lib';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -108,6 +108,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             });
           }}
         />
+        {
+          resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{backgroundColor: '#F7F8F9'}}>
+            <FLoadingTip height={100} />
+          </div>)
+        }
+
 
         <div style={{ height: 20 }} />
 
