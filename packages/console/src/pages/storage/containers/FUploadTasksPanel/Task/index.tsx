@@ -1,23 +1,23 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
+import { FContentText } from '@/components/FText';
 import Uploading from '../Uploading';
 import UploadSuccess from '../UploadSuccess';
 import UploadCancel from '../UploadCancel';
 import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
-import {Canceler} from "axios";
-import {StorageHomePageModelState} from "@/models/storageHomePage";
-import fConfirmModal from "@/components/fConfirmModal";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { Canceler } from 'axios';
+import { StorageHomePageModelState } from '@/models/storageHomePage';
+import fConfirmModal from '@/components/fConfirmModal';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
   bucketName: string;
 
-  onSucceed?({uid, objectName, sha1}: { uid: string; objectName: string; sha1: string; }): void;
+  onSucceed?({ uid, objectName, sha1 }: { uid: string; objectName: string; sha1: string; }): void;
 
-  onFail?({uid, objectName}: { uid: string; objectName: string; }): void;
+  onFail?({ uid, objectName }: { uid: string; objectName: string; }): void;
 }
 
 interface TaskStates {
@@ -29,7 +29,7 @@ let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
 function Task({
                 file, bucketName,
-                onSucceed, onFail
+                onSucceed, onFail,
               }: TaskProps) {
 
   const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
@@ -39,7 +39,7 @@ function Task({
 
     if (file.sameName) {
       setStatus('sameName');
-      onFail && onFail({uid: file.uid, objectName: file.name});
+      onFail && onFail({ uid: file.uid, objectName: file.name });
       return;
     }
     startUploadFile();
@@ -56,7 +56,7 @@ function Task({
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
-    const {data: data1} = await FServiceAPI.Storage.batchObjectList(params1);
+    const { data: data1 } = await FServiceAPI.Storage.batchObjectList(params1);
     // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       startUploadFile();
@@ -65,32 +65,11 @@ function Task({
     }
   }
 
-  async function startUploadFile(isVerifyTypeCompatible: boolean = false) {
-    if (file.exist) {
-      if (isVerifyTypeCompatible) {
-        if (await verifyTypeCompatible({
-          objectName: bucketName + '/' + file.name,
-          sha1: file.sha1,
-        })) {
-          setStatus('success');
-          onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-        } else {
-          fConfirmModal({
-            message: '文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？',
-            onOk() {
-              setStatus('success');
-              onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-            },
-          });
-        }
-      } else {
-        setStatus('success');
-        onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-      }
-
-    } else {
+  // async function startUploadFile(isVerifyTypeCompatible: boolean = false) {
+  async function startUploadFile() {
+    if (!file.exist) {
       const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
-        file: file.file
+        file: file.file,
       };
       const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(params, {
         onUploadProgress(progressEvent) {
@@ -102,42 +81,29 @@ function Task({
       setStatus('uploading');
       setProgress(0);
       try {
-        const {data} = await promise;
-
-        if (isVerifyTypeCompatible) {
-          if (await verifyTypeCompatible({
-            objectName: bucketName + '/' + file.name,
-            sha1: file.sha1,
-          })) {
-            setStatus('success');
-            onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-          } else {
-            fConfirmModal({
-              message: '文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？',
-              onOk() {
-                setStatus('success');
-                onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-              },
-              onCancel() {
-                setStatus('failed');
-              },
-            });
-          }
-        } else {
-          setStatus('success');
-          onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-        }
+        const { data } = await promise;
         // setStatus('success');
-        // onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: data.sha1});
+        // onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
       } catch (e) {
         if (status !== 'uploading') {
           setStatus('failed');
-          onFail && onFail({uid: file.uid, objectName: file.name});
+          onFail && onFail({ uid: file.uid, objectName: file.name });
+          return;
         }
       }
     }
 
+    const result = await FServiceAPI.recombination.getFilesSha1Info({
+      sha1: [file.sha1],
+    });
 
+    if (result[0].state === 'success') {
+      setStatus('success');
+      onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
+      return;
+    }
+    setStatus('failed');
+    onFail && onFail({ uid: file.uid, objectName: file.name });
   }
 
   return (<div className={styles.taskItem}>
@@ -146,7 +112,7 @@ function Task({
         text={file.name}
         singleRow={true}
       />
-      <div style={{height: 2}}/>
+      <div style={{ height: 2 }} />
       <FContentText
         text={FUtil.Format.humanizeSize(file.file.size)}
       />
@@ -160,27 +126,27 @@ function Task({
           c && c();
           setStatus('canceled');
           setProgress(0);
-          onFail && onFail({uid: file.uid, objectName: file.name});
+          onFail && onFail({ uid: file.uid, objectName: file.name });
         }}
       />)
     }
     {
-      status === 'success' && (<UploadSuccess/>)
+      status === 'success' && (<UploadSuccess />)
     }
     {
       status === 'canceled' && (<UploadCancel onClick={() => {
         verifySameName();
-      }}/>)
+      }} />)
     }
     {
       status === 'sameName' && (<UploadSameName onClick={() => {
-        startUploadFile(true);
-      }}/>)
+        startUploadFile();
+      }} />)
     }
     {
       status === 'failed' && (<UploadFailed onClick={() => {
         verifySameName();
-      }}/>)
+      }} />)
     }
   </div>);
 }
@@ -192,21 +158,21 @@ interface VerifyTypeCompatibleParamsType {
   sha1: string;
 }
 
-async function verifyTypeCompatible({objectName, sha1}: VerifyTypeCompatibleParamsType): Promise<boolean> {
-  const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
-    objectIdOrName: objectName,
-  };
-
-  const {data} = await FServiceAPI.Storage.objectDetails(params);
-  if (!data.resourceType) {
-    return true;
-  }
-
-  const params1: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-    sha1: sha1,
-    resourceType: data.resourceType,
-  };
-
-  const {data: data1} = await FServiceAPI.Storage.fileProperty(params1);
-  return !!data1;
-}
+// async function verifyTypeCompatible({ objectName, sha1 }: VerifyTypeCompatibleParamsType): Promise<boolean> {
+//   const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+//     objectIdOrName: objectName,
+//   };
+//
+//   const { data } = await FServiceAPI.Storage.objectDetails(params);
+//   if (!data.resourceType) {
+//     return true;
+//   }
+//
+//   const params1: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+//     sha1: sha1,
+//     resourceType: data.resourceType,
+//   };
+//
+//   const { data: data1 } = await FServiceAPI.Storage.fileProperty(params1);
+//   return !!data1;
+// }

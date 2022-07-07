@@ -14,7 +14,6 @@ import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
 import FInput from '@/components/FInput';
 import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHomePage';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FModal from '@/components/FModal';
 import { FTitleText } from '@/components/FText';
