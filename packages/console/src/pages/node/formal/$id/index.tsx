@@ -5,6 +5,7 @@ import Themes from './Themes';
 import { withRouter } from 'umi';
 import { Dispatch, connect } from 'dva';
 import {
+  OnChange_ShowPage_Action,
   OnMount_Page_Action,
   OnUnmount_Page_Action,
 } from '@/models/nodeManagerPage';
@@ -14,7 +15,6 @@ import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
 import useUrlState from '@ahooksjs/use-url-state';
-import { OnChangePageAction } from '@/models/informalNodeManagerPage';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -22,7 +22,6 @@ interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
 }
 
 function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
-
   AHooks.useMount(() => {
     // dispatch<OnMount_Page_Action>({
     //   type: 'nodeManagerPage/onMount_Page',
@@ -38,7 +37,15 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
     // });
   });
 
-  React.useEffect( () => {
+  const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
+
+  React.useEffect(() => {
+    dispatch<OnChange_ShowPage_Action>({
+      type: 'nodeManagerPage/onChange_ShowPage',
+      payload: {
+        value: showPage,
+      },
+    });
     dispatch<OnMount_Page_Action>({
       type: 'nodeManagerPage/onMount_Page',
       payload: {
@@ -49,20 +56,8 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
       dispatch<OnUnmount_Page_Action>({
         type: 'nodeManagerPage/onUnmount_Page',
       });
-    }
+    };
   }, [match.params.id]);
-
-  const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
-  console.error(showPage)
-
-  React.useEffect(() => {
-    dispatch<OnChangePageAction>({
-      type: 'informalNodeManagerPage/onChangePage',
-      payload: {
-        value: showPage,
-      },
-    });
-  }, [showPage]);
 
   // React.useEffect(() => {
   //
@@ -97,16 +92,11 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
   // }, []);
 
   if (nodeManagerPage.nodeInfoState === 'loading' || !nodeManagerPage.listFirstLoaded) {
-    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
+    return <FLoadingTip height={'calc(100vh - 70px)'} />;
   }
 
-  return (<>
-    {
-      nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />
-    }
-  </>);
+  return <>{nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />}</>;
 }
-
 
 export default connect(({ nodeManagerPage, nodes }: ConnectState) => ({
   nodeManagerPage,

@@ -39,7 +39,7 @@
     .tip-icon {
       font-size: 64px;
       color: #44c28c;
-      animation: icon 0.3s linear both;
+      animation: scale 0.3s linear both;
     }
 
     .tip-text {
@@ -270,6 +270,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    animation: modal 0.2s ease-in;
 
     .empty-popup {
       position: relative;
@@ -280,6 +281,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      animation: scale 0.2s ease;
 
       .title {
         font-size: 18px;
@@ -352,6 +354,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      animation: scale 0.2s ease;
 
       .success-icon {
         font-size: 64px;
@@ -391,7 +394,7 @@
   }
 }
 
-@keyframes icon {
+@keyframes scale {
   from {
     transform: scale(0);
   }
@@ -428,6 +431,15 @@
   100% {
     height: auto;
     padding-bottom: 112px;
+    opacity: 1;
+  }
+}
+
+@keyframes modal {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
