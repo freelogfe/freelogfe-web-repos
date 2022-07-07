@@ -7,8 +7,8 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { router, withRouter } from 'umi';
 import { OnMountPageSiderAction } from '@/models/informalNodeManagerPage';
 import { RouteComponentProps } from 'react-router';
-import { FUtil } from '@freelog/tools-lib';
-import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
@@ -47,7 +47,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <FCopyToClipboard
         text={informalNodeManagerPage.node_TestUrl}
         iconStyle={{ fontSize: 14 }}
-        title={FUtil1.I18n.message('tip_copy_node_domain')}
+        title={FI18n.i18nNext.t('tip_copy_node_domain')}
       />
     </Space>
     <div style={{ height: 35 }} />

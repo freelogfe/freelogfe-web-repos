@@ -1,10 +1,11 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
-import { ConnectState } from '@/models/connect';
+// import FUtil1 from '@/utils';
+import userPermission from '@/permissions/UserPermission';
+import { router } from 'umi';
 
 export interface UserModelState {
   info: null | {
@@ -57,6 +58,7 @@ export interface MarketModelType {
   subscriptions: {
     setup: Subscription;
     checkUser: Subscription;
+    checkUserPermission: Subscription;
   };
 }
 
@@ -69,7 +71,9 @@ const Model: MarketModelType = {
   effects: {
     * fetchUserInfo({}: FetchUserInfoAction, { call, put }: EffectsCommandMap) {
       // console.log('!!!!!#423423423423');
-      const { data } = yield call(FServiceAPI.User.currentUserInfo);
+      // userPermission.getUserInfo();
+      // const promise = () => userPermission.getUserInfo();
+      const data = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
@@ -79,12 +83,12 @@ const Model: MarketModelType = {
       });
     },
     * onVisibilityChange({ payload }: OnVisibilityChangeAction, { select }: EffectsCommandMap) {
-      const { user }: ConnectState = yield select(({ user }: ConnectState) => ({
-        user,
-      }));
-      if (FUtil.Tool.getUserIDByCookies() !== -1 && (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies())) {
-        co();
-      }
+      // const { user }: ConnectState = yield select(({ user }: ConnectState) => ({
+      //   user,
+      // }));
+      // if (FUtil.Tool.getUserIDByCookies() !== -1 && (!payload.hidden && user.info?.userId !== FUtil.Tool.getUserIDByCookies())) {
+      //   co();
+      // }
 
     },
   },
@@ -98,30 +102,50 @@ const Model: MarketModelType = {
   },
   subscriptions: {
     setup({ dispatch }) {
-      if (FUtil.Tool.getUserIDByCookies() !== -1) {
-        dispatch<FetchUserInfoAction>({
-          type: 'fetchUserInfo',
-        });
-      }
+      // if (FUtil.Tool.getUserIDByCookies() !== -1) {
+      dispatch<FetchUserInfoAction>({
+        type: 'fetchUserInfo',
+      });
+      // }
+
       // console.log('!@#$!@#$!@#$@#$');
     },
     checkUser({ dispatch }) {
       window.document.addEventListener('visibilitychange', function() {
         // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
         // Modify behavior...
-        dispatch<OnVisibilityChangeAction>({
-          type: 'onVisibilityChange',
-          payload: {
-            hidden: document.hidden,
-          },
-        });
+        // dispatch<OnVisibilityChangeAction>({
+        //   type: 'onVisibilityChange',
+        //   payload: {
+        //     hidden: document.hidden,
+        //   },
+        // });
+        userPermission.check()
+          .then((code) => {
+            if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
+              co();
+            }
+          });
       });
-      window.addEventListener('pagehide', event => {
-        if (event.persisted) {
-          /* the page isn't being discarded, so it can be reused later */
-          console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-        }
-      }, false);
+      // window.addEventListener('pagehide', event => {
+      //   if (event.persisted) {
+      //     /* the page isn't being discarded, so it can be reused later */
+      //     console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
+      //   }
+      // }, false);
+    },
+    checkUserPermission({ dispatch, history }) {
+      // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
+      history.listen((listener) => {
+        // console.log(listener, 'listener098phijnoweklf');
+        userPermission.checkUrl(history.location.pathname)
+          .then(({ code, goToUrl }) => {
+            if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
+              router.replace(goToUrl);
+            }
+          });
+      });
+
     },
   },
 };
@@ -141,6 +165,7 @@ function co() {
         display: 'none',
       },
     },
-    message: FUtil1.I18n.message('msg_account_switched'),
+    message: FI18n.i18nNext.t('msg_account_switched'),
   });
 }
+

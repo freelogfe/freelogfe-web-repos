@@ -17,7 +17,7 @@ export interface ResourceCollectPageModelState {
     title: string;
     version: string;
     policy: string[];
-    type: string;
+    type: string[];
     status: 0 | 1;
   }[];
 }

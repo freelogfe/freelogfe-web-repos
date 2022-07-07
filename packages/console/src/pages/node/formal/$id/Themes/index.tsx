@@ -20,14 +20,13 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import fMessage from '@/components/fMessage';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ThemesProps {
@@ -62,8 +61,8 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
         nodeManagerPage.theme_ListState === 'noData'
           ? (<FNoDataTip
             height={'calc(100vh - 70px)'}
-            tipText={FUtil1.I18n.message('manage_themes_empty')}
-            btnText={FUtil1.I18n.message('btn_add_theme')}
+            tipText={FI18n.i18nNext.t('manage_themes_empty')}
+            btnText={FI18n.i18nNext.t('btn_add_theme')}
             onClick={() => {
               dispatch<DiscoverChangeAction>({
                 type: 'discoverPage/change',
@@ -114,7 +113,7 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                       <div className={styles.cover}>
                         <Space size={10}>
                           {
-                            i.isOnline && (<label className={styles.label}>{FUtil1.I18n.message('state_active')}</label>)
+                            i.isOnline && (<label className={styles.label}>{FI18n.i18nNext.t('state_active')}</label>)
                           }
 
                           {
@@ -144,14 +143,12 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
                                     if (i.policies.length === 0) {
-                                      // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
                                       // return;
                                       if (i.policies.length === 0) {
                                         if (!i.hasPolicy) {
-                                          // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
-                                          fMessage(FUtil1.I18n.message('alarm_exhibits_show_plan '), 'error');
+                                          fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
                                         } else {
-                                          fMessage(FUtil1.I18n.message('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                                          fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
                                         }
                                         return;
                                       }
@@ -172,11 +169,11 @@ function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
                                     }
 
                                     fConfirmModal({
-                                      message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                      message: FI18n.i18nNext.t('msg_change_theme_confirm'),
                                       // message: '激活该主题，将下线其它主题',
-                                      okText: FUtil1.I18n.message('active_new_theme'),
+                                      okText: FI18n.i18nNext.t('active_new_theme'),
                                       // okText: '激活',
-                                      cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                      cancelText: FI18n.i18nNext.t('keep_current_theme'),
                                       // cancelText: '保持当前主题',
                                       onOk() {
                                         dispatch<OnActiveAction>({

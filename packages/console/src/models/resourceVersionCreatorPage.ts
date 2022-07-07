@@ -13,7 +13,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 export type DepResources = {
   id: string;
   title: string;
-  resourceType: string;
+  resourceType: string[];
   status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/ | 4 /*上抛资源，无法获取授权*/;
   versionRange: string;
   versions: string[];
@@ -648,44 +648,44 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.selectedFileSha1) {
-        return;
-      }
-
-      const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-        sha1: resourceVersionCreatorPage.selectedFileSha1,
-        resourceType: resourceVersionCreatorPage.resourceType,
-      };
-
-      const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
-
-      if (!data) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-            selectedFileStatus: 2,
-          },
-          caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
-        });
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-            return {
-              key: rp[0],
-              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-            };
-          }),
-        },
-        caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-      });
+      // const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+      //   resourceVersionCreatorPage,
+      // }));
+      //
+      // if (!resourceVersionCreatorPage.selectedFileSha1) {
+      //   return;
+      // }
+      //
+      // const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+      //   sha1: resourceVersionCreatorPage.selectedFileSha1,
+      //   resourceType: resourceVersionCreatorPage.resourceType,
+      // };
+      //
+      // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
+      //
+      // if (!data) {
+      //   return yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       rawProperties: [],
+      //       selectedFileStatus: 2,
+      //     },
+      //     caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
+      //   });
+      // }
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+      //       return {
+      //         key: rp[0],
+      //         value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+      //       };
+      //     }),
+      //   },
+      //   caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+      // });
     },
     * addDeps({ payload: { relationships, versions } }: AddDepsAction, { select, put, call }: EffectsCommandMap) {
 
@@ -754,61 +754,62 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       // 组织添加的依赖数据
-      const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
-        // console.log(data1, 'data112323423');
-        const depC: any[] = data_batchContracts.filter((dc: any) => {
-          return dc.licensorId === dr.resourceId && dc.status === 0;
+      const dependencies: DepResources = data_batchResourceInfo
+        .map<DepResources[number]>((dr) => {
+          // console.log(data1, 'data112323423');
+          const depC: any[] = data_batchContracts.filter((dc: any) => {
+            return dc.licensorId === dr.resourceId && dc.status === 0;
+          });
+          // console.log(depC, 'depC902342lk3jlk');
+          const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
+          const theVersion = versions?.find((v) => v.id === dr.resourceId);
+
+          const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
+
+          return {
+            id: dr.resourceId,
+            title: dr.resourceName,
+            resourceType: dr.resourceType,
+            status: isUpthrow ? 4 : dr.status,
+            versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
+            versions: dr.resourceVersions.map((version: any) => version.version),
+            upthrow: isUpthrow,
+            upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
+            authProblem: dr.authProblem,
+            enableReuseContracts: depC
+              .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+                return {
+                  checked: false,
+                  id: c.contractId,
+                  policyId: c.policyId,
+                  title: c.contractName,
+                  status: c.status,
+                  code: c.policyInfo.policyText,
+                  date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+                  versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
+                    .versions.map((ccc: any) => ccc.version),
+                };
+              }),
+            terminatedContractIDs: data_batchContracts
+              .filter((dc: any) => {
+                return dc.licensorId === dr.resourceId && dc.status === 1;
+              }).map((dc: any) => {
+                return dc.contractId;
+              }),
+            enabledPolicies: dr.policies
+              .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
+              .map((policy: any) => {
+                // console.log(policy, 'PPPPafwe98iokl');
+                return {
+                  checked: false,
+                  id: policy.policyId,
+                  title: policy.policyName,
+                  code: policy.policyText,
+                  status: policy.status,
+                };
+              }),
+          };
         });
-        // console.log(depC, 'depC902342lk3jlk');
-        const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
-        const theVersion = versions?.find((v) => v.id === dr.resourceId);
-
-        const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
-
-        return {
-          id: dr.resourceId,
-          title: dr.resourceName,
-          resourceType: dr.resourceType,
-          status: isUpthrow ? 4 : dr.status,
-          versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
-          versions: dr.resourceVersions.map((version: any) => version.version),
-          upthrow: isUpthrow,
-          upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
-          authProblem: dr.authProblem,
-          enableReuseContracts: depC
-            .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
-              return {
-                checked: false,
-                id: c.contractId,
-                policyId: c.policyId,
-                title: c.contractName,
-                status: c.status,
-                code: c.policyInfo.policyText,
-                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-                versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
-                  .versions.map((ccc: any) => ccc.version),
-              };
-            }),
-          terminatedContractIDs: data_batchContracts
-            .filter((dc: any) => {
-              return dc.licensorId === dr.resourceId && dc.status === 1;
-            }).map((dc: any) => {
-              return dc.contractId;
-            }),
-          enabledPolicies: dr.policies
-            .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
-            .map((policy: any) => {
-              // console.log(policy, 'PPPPafwe98iokl');
-              return {
-                checked: false,
-                id: policy.policyId,
-                title: policy.policyName,
-                code: policy.policyText,
-                status: policy.status,
-              };
-            }),
-        };
-      });
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -883,7 +884,7 @@ const Model: ResourceVersionCreatorModelType = {
 
       const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
         sha1: data.sha1,
-        resourceType: resourceVersionCreatorPage.resourceType,
+        // resourceType: resourceVersionCreatorPage.resourceType,
       };
 
       const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
@@ -900,7 +901,7 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             rawProperties: Object.entries(data4 as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-              console.log(rp, 'rprprprprpyu2341234');
+              // console.log(rp, 'rprprprprpyu2341234');
               return {
                 key: rp[0],
                 value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
@@ -989,7 +990,7 @@ const Model: ResourceVersionCreatorModelType = {
           return {
             id: dpo.name,
             title: dpo.name,
-            resourceType: '',
+            resourceType: [],
             status: 3,
             versionRange: '',
             versions: [],
@@ -1007,11 +1008,6 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            // rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
-            //   key: s[0],
-            //   value: s[1],
-            // })),
-
             dependencies: allDepObjects,
             depRelationship: allRelationship,
           },
@@ -1331,7 +1327,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   latestVersion: string;
   status: 0 | 1;
   policies: {

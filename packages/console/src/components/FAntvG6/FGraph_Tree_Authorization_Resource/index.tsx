@@ -13,12 +13,13 @@ import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
+import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
 // import FErrorBoundary from '@/components/FErrorBoundary';
 
 type ServerDataNodes = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   contracts: {
     contractId: string;
@@ -58,11 +59,22 @@ interface ContractNode {
 interface FGraph_Tree_Authorization_Resource_States {
   dataSource: ResourceNode | null;
   contractID: string;
+  bothSidesInfo: {
+    licensor: {
+      licensorID: string;
+      licensorIdentityType: 'resource';
+    };
+    licensee: {
+      licenseeID: string;
+      licenseeIdentityType: 'resource' | 'exhibit';
+    };
+  } | null;
 }
 
 const initStates: FGraph_Tree_Authorization_Resource_States = {
   dataSource: null,
   contractID: '',
+  bothSidesInfo: null,
 };
 
 function FGraph_Tree_Authorization_Resource({
@@ -74,6 +86,7 @@ function FGraph_Tree_Authorization_Resource({
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Resource_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Resource_States['contractID']>(initStates['contractID']);
+  const [bothSidesInfo, set_BothSidesInfo] = React.useState<FGraph_Tree_Authorization_Resource_States['bothSidesInfo']>(initStates['bothSidesInfo']);
 
   React.useEffect(() => {
     handleData();
@@ -96,7 +109,7 @@ function FGraph_Tree_Authorization_Resource({
       data: {
         resourceId: string;
         resourceName: string;
-        resourceType: string;
+        resourceType: string[];
       };
     } = await FServiceAPI.Resource.info(parmas1);
 
@@ -139,7 +152,7 @@ function FGraph_Tree_Authorization_Resource({
       children: partyResult,
       // children: [],
     };
-
+    console.log(finalDataSource, 'finalDataSource93sdlkfjsdlfkj');
     set_DataSource(finalDataSource);
   }
 
@@ -164,10 +177,26 @@ function FGraph_Tree_Authorization_Resource({
       behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']}
       onReady={(graph) => {
         appendAutoShapeListener(graph as Graph);
-        graph.on('contract:view', ({ contractID }: any) => {
+        graph.on('contract:view', (params: any) => {
           // console.log(params, 'params23908isdflk');
           // console.log(contractID, 'contractID@#@##$@#$@#');
-          set_ContractID(contractID);
+          set_ContractID(params.contractID);
+        });
+
+        graph.on('contract:resource2Resource', (params: any) => {
+          // console.log(params, 'contract:bothSides 3290wisokpdef');
+          // console.log(contractID, 'contractID@#@##$@#$@#');
+          // set_ContractID(params);
+          set_BothSidesInfo({
+            licensor: {
+              licensorID: params.licensor.resourceID,
+              licensorIdentityType: 'resource',
+            },
+            licensee: {
+              licenseeID: params.licensee.resourceID,
+              licenseeIdentityType: 'resource',
+            },
+          });
         });
       }}
     />);
@@ -196,6 +225,16 @@ function FGraph_Tree_Authorization_Resource({
         set_ContractID('');
       }}
       onChange_SomeContract={() => {
+        handleData();
+      }}
+    />
+
+    <FRelationDrawer
+      bothSidesInfo={bothSidesInfo}
+      onClose={() => {
+        set_BothSidesInfo(null);
+      }}
+      onChange_Authorization={() => {
         handleData();
       }}
     />

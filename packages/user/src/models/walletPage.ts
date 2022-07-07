@@ -2,12 +2,12 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { listStateAndListMore } from '@/components/FListFooter';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 export interface WalletPageModelState {
   userID: number;
@@ -597,7 +597,7 @@ const Model: WalletPageModelType = {
 
       if (errCode !== 0 || !data) {
         // return fMessage('验证码错误', 'error');
-        return fMessage(FUtil1.I18n.message('wrong_verified_code'), 'error');
+        return fMessage(FI18n.i18nNext.t('wrong_verified_code'), 'error');
       }
 
       yield put<ChangeAction>({
@@ -670,7 +670,7 @@ const Model: WalletPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage(FUtil1.I18n.message('msg_feather_account_successfully_actived'));
+      fMessage(FI18n.i18nNext.t('msg_feather_account_successfully_actived'));
 
       const params1: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: walletPage.userID,
@@ -798,7 +798,7 @@ const Model: WalletPageModelType = {
 
       if (errCode !== 0 || !data) {
         // return fMessage('验证码错误', 'error');
-        return fMessage(FUtil1.I18n.message('wrong_verified_code'), 'error');
+        return fMessage(FI18n.i18nNext.t('wrong_verified_code'), 'error');
       }
 
       yield put<ChangeAction>({
@@ -842,7 +842,7 @@ const Model: WalletPageModelType = {
       const { data } = yield call(FServiceAPI.Transaction.verifyTransactionPassword, params);
 
       if (!data) {
-        return fMessage(FUtil1.I18n.message('alert_paymentpasswordincorrect '), 'error');
+        return fMessage(FI18n.i18nNext.t('alert_paymentpasswordincorrect '), 'error');
       }
 
       yield put<ChangeAction>({

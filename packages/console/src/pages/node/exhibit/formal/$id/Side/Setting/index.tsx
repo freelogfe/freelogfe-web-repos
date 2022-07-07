@@ -26,10 +26,11 @@ import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
+import { FI18n } from '@freelog/tools-lib';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -39,10 +40,10 @@ interface SettingProps {
 function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
 
   return (<>
-    <FContentText text={FUtil1.I18n.message('advanced_setting')} type='highlight' />
+    <FContentText text={FI18n.i18nNext.t('advanced_setting')} type='highlight' />
     <div style={{ height: 20 }} />
 
-    <FTitleText text={FUtil1.I18n.message('exhibit_version')} type='h4' />
+    <FTitleText text={FI18n.i18nNext.t('exhibit_version')} type='h4' />
     <div style={{ height: 15 }} />
     <FDropdownMenu
       options={[...exhibitInfoPage.side_AllVersions].reverse().map((av: string) => ({ value: av, text: av }))}
@@ -61,7 +62,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       exhibitInfoPage.side_SettingUnfold && (<>
         <div style={{ height: 30 }} />
 
-        <FTitleText text={FUtil1.I18n.message('resource_property')} type='h4' />
+        <FTitleText text={FI18n.i18nNext.t('resource_property')} type='h4' />
         <div style={{ height: 15 }} />
         <div className={styles.attr}>
           <table>
@@ -78,7 +79,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
         <div style={{ height: 30 }} />
 
         <FTitleText
-          text={FUtil1.I18n.message('custom_option')}
+          text={FI18n.i18nNext.t('custom_option')}
           type='h4'
         />
 
@@ -103,7 +104,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                     }
                   </Space>
 
-                  <FTooltip title={FUtil1.I18n.message('tip_reset_value')}>
+                  <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
                     <div>
                       <FTextBtn
                         onClick={() => {
@@ -197,7 +198,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                     }
                   </Space>
                   <Space size={10}>
-                    <FTooltip title={FUtil1.I18n.message('tips_edit')}>
+                    <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
                       <div>
                         <FTextBtn
                           // theme="primary"
@@ -212,7 +213,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         ><FEdit /></FTextBtn>
                       </div>
                     </FTooltip>
-                    <FTooltip title={FUtil1.I18n.message('tip_delete_custom_option')}>
+                    <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
                       <div>
                         <FDelete
                           style={{ color: '#EE4040', cursor: 'pointer' }}
@@ -236,7 +237,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
-                  placeholder={FUtil1.I18n.message('hint_value_null')}
+                  placeholder={FI18n.i18nNext.t('hint_value_null')}
                   className={styles.FInput}
                   value={co.valueInput}
                   // errorText={co.valueInputError}
@@ -301,7 +302,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             },
           });
         }}
-      >{exhibitInfoPage.side_SettingUnfold ? <>{FUtil1.I18n.message('btn_show_less')}
+      >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
         <FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FTextBtn>
     </div>
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FSwitch from '../FSwitch';
 import { Space } from 'antd';
 import { FContentText, FTitleText } from '../FText';
@@ -8,6 +8,7 @@ import FModal from '../FModal';
 import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FPolicyListProps {
 
@@ -67,7 +68,7 @@ function PolicyCard({ fullInfo, onlineDisable, onOnlineChange }: PolicyCardProps
       />
       <Space size={8}>
         <label
-          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
+          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
         <FSwitch
           disabled={onlineDisable}
           checked={fullInfo.status === 1}
@@ -105,7 +106,7 @@ function PolicyCard({ fullInfo, onlineDisable, onOnlineChange }: PolicyCardProps
         <FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
         <label
-          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
+          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
         <div style={{ width: 10 }} />
         <FSwitch
           disabled={onlineDisable}

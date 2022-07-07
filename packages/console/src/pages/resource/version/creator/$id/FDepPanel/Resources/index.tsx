@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
-import { CloseCircleFilled } from '@ant-design/icons';
+// import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
@@ -11,26 +11,18 @@ import {
   DepResources,
 } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
-
-// type T = DepResources[0];
-
-// interface DataS extends T {
-//   unresolved: DepResources;
-// }
 
 function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
 
@@ -123,14 +115,14 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                   <FContentText type='additional2'>
                     <div>
                       {/*{rrr.resourceType || '暂无类型'}*/}
-                      {rrr.resourceType}
-                      {rrr.resourceType ? ' | ' : ''}
+                      {FUtil.Format.resourceTypeKeyArrToResourceType(rrr.resourceType)}
+                      {rrr.resourceType.length > 0 ? ' | ' : ''}
                       {
                         rrr.versions?.length === 0
                           ? <span style={{ paddingRight: 5 }}>暂无版本</span>
                           : <>
                     <span
-                      style={{ paddingRight: 5 }}>{FUtil1.I18n.message('version_range')}：{rrr.versionRange}</span>
+                      style={{ paddingRight: 5 }}>{FI18n.i18nNext.t('version_range')}：{rrr.versionRange}</span>
                             <FVersionHandlerPopover
                               value={rrr.versionRange}
                               versionOptions={rrr.versions}
@@ -143,14 +135,6 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                   <>
                     <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
-                      {/*{*/}
-                      {/*  !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]*/}
-                      {/*    .filter((k) => k.checked)*/}
-                      {/*    .map((j) => (<label*/}
-                      {/*      key={j.id}*/}
-                      {/*      className={styles.labelInfo}*/}
-                      {/*    >{j.title}</label>))*/}
-                      {/*}*/}
                       {
                         !rrr.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
                           data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
@@ -213,7 +197,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
       <FContentText
         type='additional2'
         // text={'此资源存在以下基础上抛'}
-        text={FUtil1.I18n.message('upcast')}
+        text={FI18n.i18nNext.t('upcast')}
       />
     </div>
     {

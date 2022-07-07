@@ -5,10 +5,11 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import { FRectBtn } from '@/components/FButton';
 import FPolicyList from '@/components/FPolicyList';
 import fConfirmModal from '@/components/fConfirmModal';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FPoliciesProps {
   dispatch: Dispatch;
@@ -57,7 +58,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
         ? (<div className={styles.empty}>
           <FTipText
             type='second'
-            text={FUtil1.I18n.message('hint_add_authorization_plan')}
+            text={FI18n.i18nNext.t('hint_add_authorization_plan')}
           />
           <div style={{ height: 20 }} />
           <FRectBtn
@@ -72,12 +73,12 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             if (usedCount === 1 && !data.using) {
               fConfirmModal({
                 // message: '一旦删除则无法恢复，确认删除吗？',
-                message: FUtil1.I18n.message('alert_disable_auth_plan_confirm'),
+                message: FI18n.i18nNext.t('alert_disable_auth_plan_confirm'),
                 onOk() {
                   onPolicyStatusChange(data.id, data.using);
                 },
-                okText: FUtil1.I18n.message('btn_disable_auth_plan'),
-                cancelText: FUtil1.I18n.message('btn_cancel'),
+                okText: FI18n.i18nNext.t('btn_disable_auth_plan'),
+                cancelText: FI18n.i18nNext.t('btn_cancel'),
               });
             } else {
               onPolicyStatusChange(data.id, data.using);

@@ -5,8 +5,8 @@ import FInput from '../../FInput';
 import FSelect from '../../FSelect';
 import {Data} from '../index';
 import Field from '../Field';
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+// import FUtil1 from "@/utils";
+import {FUtil, FI18n} from '@freelog/tools-lib';
 
 interface PropertyProps {
   data: Data;
@@ -26,7 +26,7 @@ function Property({data, onChange}: PropertyProps) {
     <div className={styles.Content}>
     <div style={{height: 10}}/>
   <Space size={20} className={styles.row}>
-    <Field title={FUtil1.I18n.message('key')} dot={true}>
+    <Field title={FI18n.i18nNext.t('key')} dot={true}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.key}
@@ -49,7 +49,7 @@ function Property({data, onChange}: PropertyProps) {
       />
       {data.keyError && <div className={styles.error}>{data.keyError}</div>}
     </Field>
-    <Field title={FUtil1.I18n.message('property_remark')}>
+    <Field title={FI18n.i18nNext.t('property_remark')}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.description}
@@ -74,15 +74,15 @@ function Property({data, onChange}: PropertyProps) {
     <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
       <Field
         className={styles.FSelect}
-        title={FUtil1.I18n.message('value_input_mode')}
+        title={FI18n.i18nNext.t('value_input_mode')}
       >
         <FSelect
           value={data.custom}
           onChange={(value) => onChangeData({custom: value})}
           className={styles.FSelect}
           dataSource={[
-            {value: 'input', title: FUtil1.I18n.message('textfield')},
-            {value: 'select', title: FUtil1.I18n.message('dropdownlist')},
+            {value: 'input', title: FI18n.i18nNext.t('textfield')},
+            {value: 'select', title: FI18n.i18nNext.t('dropdownlist')},
           ]}
           placeholder={'请选择'}
         />

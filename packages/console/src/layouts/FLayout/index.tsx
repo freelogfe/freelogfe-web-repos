@@ -13,6 +13,7 @@ import {
 import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -142,6 +143,10 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
         items: [],
       },
     ];
+
+  if (global.globalLoading) {
+    return (<FLoadingTip height={window.innerHeight} />);
+  }
 
   return (
     <Layout

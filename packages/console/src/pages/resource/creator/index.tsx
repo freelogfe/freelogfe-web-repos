@@ -11,11 +11,15 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
-  OnCreateAction,
+  // OnCreateAction,
   ChangeAction,
   OnChangeNameAction,
-  OnChangeResourceTypeAction,
-  ClearDataAction, OnMount_Page_Action, OnUnmount_Page_Action,
+  // OnChangeResourceTypeAction,
+  ClearDataAction,
+  OnMount_Page_Action,
+  OnUnmount_Page_Action,
+  OnChange_Resource_Type_Action,
+  initStates, OnClick_CreateBtn_Action,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
@@ -24,13 +28,15 @@ import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import Prompt from 'umi/prompt';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FDropdown from '@/components/FDropdown';
-import categoryData from '@/utils/category';
-import { DownOutlined } from '@ant-design/icons';
-import FMenu from '@/components/FMenu';
+// import FDropdown from '@/components/FDropdown';
+// import categoryData from '@/utils/category';
+// import { DownOutlined } from '@ant-design/icons';
+// import FMenu from '@/components/FMenu';
+import FSelect from '@/components/FSelect';
+import FResourceTypeInput from '@/components/FResourceTypeInput';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -39,15 +45,16 @@ interface ResourceCreatorProps {
 }
 
 function ResourceCreator({
-  dispatch,
-  route,
-  resourceCreatorPage,
-  user,
-}: ResourceCreatorProps & RouterTypes) {
-  const [category, setCategory] = React.useState<any>({
-    first: -1,
-    second: '',
-  });
+                           dispatch,
+                           route,
+                           resourceCreatorPage,
+                           user,
+                         }: ResourceCreatorProps & RouterTypes) {
+
+  // const [category, setCategory] = React.useState<any>({
+  //   first: -1,
+  //   second: '',
+  // });
 
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
@@ -72,11 +79,11 @@ function ResourceCreator({
   React.useEffect(() => {
     // const func = () => 1234;
     if (
-      resourceCreatorPage.name !== '' ||
-      resourceCreatorPage.resourceType !== '' ||
-      resourceCreatorPage.introduction !== '' ||
-      resourceCreatorPage.cover !== '' ||
-      resourceCreatorPage.labels.length !== 0
+      resourceCreatorPage.name !== initStates['name'] ||
+      resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
+      resourceCreatorPage.introduction !== initStates['introduction'] ||
+      resourceCreatorPage.cover !== initStates['cover'] ||
+      resourceCreatorPage.labels !== initStates['labels']
     ) {
       window.onbeforeunload = () => true;
     } else {
@@ -84,18 +91,18 @@ function ResourceCreator({
     }
   }, [
     resourceCreatorPage.name,
-    resourceCreatorPage.resourceType,
+    resourceCreatorPage.resource_Type,
     resourceCreatorPage.introduction,
     resourceCreatorPage.cover,
     resourceCreatorPage.labels,
   ]);
 
-  function onClickCreate() {
-    // console.log('onClickCreate', '0932jdlfsf');
-    dispatch<OnCreateAction>({
-      type: 'resourceCreatorPage/create',
-    });
-  }
+  // function onClickCreate() {
+  //   // console.log('onClickCreate', '0932jdlfsf');
+  //   dispatch<OnCreateAction>({
+  //     type: 'resourceCreatorPage/create',
+  //   });
+  // }
 
   function onChange(payload: ChangeAction['payload']) {
     dispatch<ChangeAction>({
@@ -108,12 +115,12 @@ function ResourceCreator({
     <>
       <Prompt
         when={
-          resourceCreatorPage.promptLeavePath === '' &&
-          (resourceCreatorPage.name !== '' ||
-            resourceCreatorPage.resourceType !== '' ||
-            resourceCreatorPage.introduction !== '' ||
-            resourceCreatorPage.cover !== '' ||
-            resourceCreatorPage.labels.length !== 0)
+          resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] &&
+          (resourceCreatorPage.name !== initStates['name'] ||
+            resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
+            resourceCreatorPage.introduction !== initStates['introduction'] ||
+            resourceCreatorPage.cover !== initStates['cover'] ||
+            resourceCreatorPage.labels !== initStates['labels'])
         }
         message={(location: H.Location, action: H.Action) => {
           // console.log(location, action, 'LAAAAL');
@@ -150,25 +157,33 @@ function ResourceCreator({
         header={
           <Header
             disabled={
+              resourceCreatorPage.name === '' ||
               resourceCreatorPage.nameVerify !== 2 ||
-              resourceCreatorPage.resourceTypeVerify !== 2 ||
-              !!resourceCreatorPage.nameErrorText ||
-              !!resourceCreatorPage.resourceTypeErrorText ||
+              // resourceCreatorPage.resourceTypeVerify !== 2 ||
+              resourceCreatorPage.nameErrorText !== '' ||
+              // !!resourceCreatorPage.resourceTypeErrorText ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
               !!resourceCreatorPage.introductionErrorText
             }
-            onClickCreate={onClickCreate}
+            onClickCreate={() => {
+              dispatch<OnClick_CreateBtn_Action>({
+                type: 'resourceCreatorPage/onClick_CreateBtn',
+              });
+            }}
           />
         }
       >
         <FFormLayout>
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')} dot={true}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
               <FContentText text={`${user.info?.username} /`} />
               &nbsp;
               <FInput
                 errorText={resourceCreatorPage.nameErrorText}
                 value={resourceCreatorPage.name}
-                onChange={(e) => {}}
+                onChange={(e) => {
+                }}
                 debounce={300}
                 onDebounceChange={(value) => {
                   onChange({
@@ -181,7 +196,7 @@ function ResourceCreator({
                   });
                 }}
                 className={styles.FInput}
-                placeholder={FUtil1.I18n.message('hint_enter_resource_name')}
+                placeholder={FI18n.i18nNext.t('hint_enter_resource_name')}
                 lengthLimit={60}
               />
               <div style={{ width: 10 }} />
@@ -192,79 +207,21 @@ function ResourceCreator({
             </div>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')} dot={true}>
-            <FDropdown
-              className='h-38 flex-column justify-center'
-              overlay={
-                <FMenu
-                  options={[
-                    {
-                      value: '-1',
-                      text: '请选择大类',
-                    },
-                    ...categoryData.first.map((i, index) => {
-                      return {
-                        value: index + '',
-                        text: i,
-                      };
-                    }),
-                  ]}
-                  value={category.first}
-                  onClick={(value) => {
-                    setCategory({
-                      ...category,
-                      first: value,
-                      second: '',
-                    });
-                    //onChangeResourceType && onChangeResourceType(value)
-                  }}
-                />
-              }
-            >
-              <span style={{ cursor: 'pointer' }} className='h-38 flex-row align-center'>
-                {categoryData.first[category.first] || '请选择大类'}
-                <DownOutlined style={{ marginLeft: 8 }} />
-              </span>
-            </FDropdown>
-
-            {category.first > 1 ? (
-              <>
-                <span className="ml-30">子类型：</span>
-                <FAutoComplete
-                  errorText={resourceCreatorPage.resourceTypeErrorText}
-                  value={
-                    // @ts-ignore
-                    categoryData.second[category.first][category.second] || category.second
-                  }
-                  onChange={
-                    (value) => {
-                      setCategory({
-                        ...category,
-                        second: value,
-                      });
-                    }
-                    // dispatch<OnChangeResourceTypeAction>({
-                    //   type: 'resourceCreatorPage/onChangeResourceType',
-                    //   payload: value,
-                    // })
-                  }
-                  className={styles.FSelect}
-                  placeholder={FUtil1.I18n.message('hint_choose_resource_type')}
-                  options={[
-                    // @ts-ignore
-                    ...categoryData.second[category.first].map((i, index) => {
-                      return {
-                        value: index + '',
-                        label: i,
-                      };
-                    }),
-                  ]}
-                />
-              </>
-            ) : null}
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
+            <FResourceTypeInput
+              dataSource={resourceCreatorPage.resource_Type}
+              onChange={(value) => {
+                dispatch<OnChange_Resource_Type_Action>({
+                  type: 'resourceCreatorPage/onChange_Resource_Type',
+                  payload: {
+                    value,
+                  },
+                });
+              }}
+            />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_short_description')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>
             <FIntroductionEditor
               value={resourceCreatorPage.introduction}
               onChange={(e) =>
@@ -273,11 +230,11 @@ function ResourceCreator({
                   introduction: e.target.value,
                 })
               }
-              placeholder={FUtil1.I18n.message('hint_enter_resource_short_description')}
+              placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_image')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>
             <FUploadResourceCover
               value={resourceCreatorPage.cover}
               onChange={(value) =>
@@ -288,7 +245,7 @@ function ResourceCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FUtil1.I18n.message('resource_tag')}>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
             <FLabelEditor
               values={resourceCreatorPage.labels}
               onChange={(value) =>
@@ -315,12 +272,12 @@ function Header({ onClickCreate, disabled = false }: HeaderProps) {
       <FTitleText
         // text={FUtil.I18n.message('create_resource')}
         text={'创建资源'}
-        type="h1"
+        type='h1'
       />
 
       <Space size={30}>
         <FRectBtn disabled={disabled} onClick={onClickCreate}>
-          {FUtil1.I18n.message('create')}
+          {FI18n.i18nNext.t('create')}
         </FRectBtn>
       </Space>
     </div>

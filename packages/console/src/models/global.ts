@@ -12,10 +12,12 @@ import {
   setLocale,
   getLocale,
 } from 'umi-plugin-react/locale';
-import { History } from 'history';
+// import { History } from 'history';
 import { ConnectState } from '@/models/connect';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface GlobalModelState {
+  globalLoading: boolean;
   locale: 'zh-CN' | 'en-US' | 'pt-BR';
   route: any;
   routerHistories: {
@@ -34,10 +36,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<GlobalModelState>;
 }
 
-export interface SetLocaleAction extends AnyAction {
-  type: 'global/setLocale';
-  payload: GlobalModelState['locale'];
-}
+// export interface SetLocaleAction extends AnyAction {
+//   type: 'global/setLocale';
+//   payload: GlobalModelState['locale'];
+// }
 
 export interface PushRouterAction extends AnyAction {
   type: 'pushRouter';
@@ -48,7 +50,7 @@ export interface GlobalModelType {
   namespace: 'global';
   state: GlobalModelState;
   effects: {
-    setLocale: (action: SetLocaleAction, effects: EffectsCommandMap) => void;
+    // setLocale: (action: SetLocaleAction, effects: EffectsCommandMap) => void;
     pushRouter: (action: PushRouterAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -58,28 +60,30 @@ export interface GlobalModelType {
     setup: Subscription;
     historyListen: Subscription;
     activatedWindow: Subscription;
+    readyI18n: Subscription;
   };
 }
 
 const Model: GlobalModelType = {
   namespace: 'global',
   state: {
+    globalLoading: true,
     locale: getLocale() as GlobalModelState['locale'],
     route: null,
     routerHistories: [],
     // backgroundColor: '',
   },
   effects: {
-    * setLocale({ payload }: SetLocaleAction, { call, put }: EffectsCommandMap) {
-      yield call(setLocale, payload);
-      // yield call(window.localStorage.setItem, 'local', payload);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          locale: payload,
-        },
-      });
-    },
+    // * setLocale({ payload }: SetLocaleAction, { call, put }: EffectsCommandMap) {
+    //   yield call(setLocale, payload);
+    //   // yield call(window.localStorage.setItem, 'local', payload);
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       locale: payload,
+    //     },
+    //   });
+    // },
     * pushRouter({ payload }: PushRouterAction, { put, select }: EffectsCommandMap) {
       const { routerHistories } = yield select(({ global }: ConnectState) => ({
         routerHistories: global.routerHistories,
@@ -135,7 +139,18 @@ const Model: GlobalModelType = {
         }
       }, false);
     },
+    readyI18n({ dispatch }) {
+      FI18n.i18nNext.ready().then(() => {
+        dispatch<ChangeAction>({
+          type: 'change',
+          payload: {
+            globalLoading: false,
+          },
+        });
+      });
+    },
   },
+
 };
 
 export default Model;

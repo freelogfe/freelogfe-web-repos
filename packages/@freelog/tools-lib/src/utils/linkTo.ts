@@ -228,6 +228,18 @@ export function nodeCreateSuccess({nodeID}: NodeCreateSuccessParamsType) {
   return `/result/node/create/success/${nodeID}`;
 }
 
+// 节点创建成功
+interface InvitationParamsType {
+  goTo?: string;
+}
+
+export function invitation({...params}: InvitationParamsType = {}) {
+  // console.log(params.goTo, 'goTo9iowjefklsdj;flksdjflk')
+  return `/invitation${handleQuery({
+    returnUrl: params.goTo ? encodeURIComponent(params.goTo) : undefined,
+  })}`;
+}
+
 // 403
 interface Exception403ParamsType {
   from?: string;

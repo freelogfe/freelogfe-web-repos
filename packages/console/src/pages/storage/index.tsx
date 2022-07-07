@@ -14,8 +14,8 @@ import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
 import FInput from '@/components/FInput';
 import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHomePage';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FModal from '@/components/FModal';
 import { FTitleText } from '@/components/FText';
 
@@ -115,7 +115,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         disabled: !storageHomePage.newBucketName || storageHomePage.newBucketNameError,
         // disabled: true,
       }}
-      cancelText={FUtil1.I18n.message('btn_cancel')}
+      cancelText={FI18n.i18nNext.t('btn_cancel')}
       onOk={() => {
         dispatch<CreateBucketAction>({
           type: 'storageHomePage/createBucket',
@@ -130,14 +130,14 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
     >
       {/*<div style={{ height: 20 }} />*/}
       <div style={{ padding: 20 }}>
-        <FTitleText text={FUtil1.I18n.message('create_bucket_popup_title')} type='h2' />
+        <FTitleText text={FI18n.i18nNext.t('create_bucket_popup_title')} type='h2' />
       </div>
 
       <div className={styles.FModalBody}>
         <div style={{ height: 50 }} />
         <div className={styles.tip}>
           {
-            FUtil1.I18n.message('create_bucket_popup_msg')
+            FI18n.i18nNext.t('create_bucket_popup_msg')
               .split('\n')
               .map((s, i) => {
                 return (<div key={i}>{s}</div>);
@@ -150,7 +150,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
           // onChange={(e) => {
           //
           // }}
-          placeholder={FUtil1.I18n.message('enter_bucket_name')}
+          placeholder={FI18n.i18nNext.t('enter_bucket_name')}
           debounce={300}
           onDebounceChange={(value) => {
             dispatch<OnChangeNewBucketAction>({
@@ -162,7 +162,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
           className={styles.FInput}
           errorText={storageHomePage.newBucketNameError ? (<div>
             {
-              FUtil1.I18n.message('naming_convention_bucket_name')
+              FI18n.i18nNext.t('naming_convention_bucket_name')
                 .split('\n')
                 .map((s, i) => {
                   return (<div key={i}>{s}</div>);

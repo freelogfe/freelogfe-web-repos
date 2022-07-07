@@ -32,12 +32,13 @@ import FFormLayout from '@/components/FFormLayout';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
 import FPaperPlane from '@/components/FIcons/FPaperPlane';
+import { FI18n } from '@freelog/tools-lib';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -149,7 +150,7 @@ function VersionCreator({
         <FFormLayout>
           <FFormLayout.FBlock
             dot={true}
-            title={FUtil1.I18n.message('version_number')}
+            title={FI18n.i18nNext.t('version_number')}
           >
             <FInput
               value={resourceVersionCreatorPage.version}
@@ -174,17 +175,17 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={true} title={FUtil1.I18n.message('release_object')}>
+          <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
             <FSelectObject />
 
             <CustomOptions />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('rely')}>
+          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
             <FDepPanel />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('version_description')}>
+          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
               onChange={(value) => {
@@ -220,7 +221,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
       <FTextBtn
         type='default'
         onClick={onClickCache}
-      >{FUtil1.I18n.message('save_as_draft')}</FTextBtn>
+      >{FI18n.i18nNext.t('save_as_draft')}</FTextBtn>
       <FRectBtn
         style={{ display: 'flex', alignItems: 'center' }}
         onClick={onClickCreate}
@@ -228,7 +229,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
       >
         <FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
         <div style={{ width: 5 }} />
-        {FUtil1.I18n.message('release_to_market')}
+        {FI18n.i18nNext.t('release_to_market')}
       </FRectBtn>
     </Space>
   </div>);

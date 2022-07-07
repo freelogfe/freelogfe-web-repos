@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FTextBtn} from '@/components/FButton';
-import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
+// import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -15,9 +15,10 @@ import {
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
 import fConfirmModal from "@/components/fConfirmModal";
-import FUtil1 from "@/utils";
+// import FUtil1 from "@/utils";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FClose, FDown, FUp} from "@/components/FIcons";
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -125,7 +126,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
             if (exits) {
               fConfirmModal({
-                message: FUtil1.I18n.message('cancel_all_uploading_task'),
+                message: FI18n.i18nNext.t('cancel_all_uploading_task'),
                 onOk() {
                   closeAll();
                 },

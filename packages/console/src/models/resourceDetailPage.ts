@@ -3,8 +3,8 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
-import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -16,7 +16,7 @@ export interface ResourceDetailPageModelState {
   resource_Info: null | {
     cover: string;
     name: string;
-    type: string;
+    type: string[];
     tags: string[];
     about: string;
   };
@@ -29,7 +29,7 @@ export interface ResourceDetailPageModelState {
   sign_AllRawResources: {
     resourceId: string;
     resourceName: string;
-    resourceType: string;
+    resourceType: string[];
     status: 0 | 1;
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
@@ -38,7 +38,7 @@ export interface ResourceDetailPageModelState {
     selected: boolean;
     id: string;
     name: string;
-    type: string;
+    type: string[];
     status: 0 | 1;
     authProblem: boolean;
     contracts: {
@@ -179,7 +179,7 @@ const initStates: ResourceDetailPageModelState = {
   resource_Info: {
     cover: '',
     name: '',
-    type: '',
+    type: [],
     tags: [],
     about: '',
   },
@@ -425,15 +425,14 @@ const Model: ResourceDetailPageModelType = {
         });
 
         if ((res?.policyIDs.length || 0) === 0) {
-          fMessage(FUtil1.I18n.message('alarm_resource_not_available'), 'error');
+          fMessage(FI18n.i18nNext.t('alarm_resource_not_available'), 'error');
           return;
         }
 
         // console.log(res, r1, '#######02948093u4o23uj4ojlk');
         for (const p1 of r1.policyIDs) {
           if (!res?.policyIDs.includes(p1)) {
-            // fMessage(FUtil1.I18n.message('alarm_resource_not_available'));
-            fMessage(FUtil1.I18n.message('alarm_plan_not_available'), 'error');
+            fMessage(FI18n.i18nNext.t('alarm_plan_not_available'), 'error');
             return;
           }
         }
@@ -501,7 +500,7 @@ const Model: ResourceDetailPageModelType = {
           type: 'change',
           payload: {
             sign_SignExhibitName: payload,
-            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
+            sign_SignExhibitNameErrorTip: FI18n.i18nNext.t('naming_convention_exhibits_name'),
           },
         });
         return;
@@ -521,7 +520,7 @@ const Model: ResourceDetailPageModelType = {
           type: 'change',
           payload: {
             sign_SignExhibitName: payload,
-            sign_SignExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
+            sign_SignExhibitNameErrorTip: FI18n.i18nNext.t('exhibits_name_exist'),
           },
         });
         return;
@@ -686,7 +685,7 @@ const Model: ResourceDetailPageModelType = {
         version: resourceDetailPage.resourceVersion_SelectedVersion,
         resourceId: resourceDetailPage.resource_ID,
       };
-      console.log('resourceVersionInfo1239weiojfasdlkfjslk');
+      // console.log('resourceVersionInfo1239weiojfasdlkfjslk');
       const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');
@@ -834,7 +833,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   latestVersion: string;
   coverImages: string[];
   status: 0 | 1;

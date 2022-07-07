@@ -3,8 +3,9 @@ import styles from './index.less';
 import img from '@/assets/file-object.svg';
 import {FContentText} from '@/components/FText';
 import {Progress} from 'antd';
-import FUtil1 from "@/utils";
+// import FUtil1 from "@/utils";
 import {FTextBtn} from "@/components/FButton";
+import { FI18n } from '@freelog/tools-lib';
 
 interface ObjectCardProps {
   resourceObject: {
@@ -53,7 +54,7 @@ function ObjectCard({resourceObject, progress = null, onClickDelete}: ObjectCard
     <FTextBtn
       type="danger"
       onClick={() => onClickDelete && onClickDelete()}
-      className={styles.delete}>{progress !== null ? FUtil1.I18n.message('cancel_uploading') : FUtil1.I18n.message('remove')}</FTextBtn>
+      className={styles.delete}>{progress !== null ? FI18n.i18nNext.t('cancel_uploading') : FI18n.i18nNext.t('remove')}</FTextBtn>
   </div>)
 }
 

@@ -4,7 +4,8 @@ import {FContentText} from "@/components/FText";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
 import {FTextBtn} from "@/components/FButton";
 import FDropdownMenu from "@/components/FDropdownMenu";
-import FUtil1 from "@/utils";
+// import FUtil1 from "@/utils";
+import { FI18n } from '@freelog/tools-lib';
 
 interface PolicyCardProps {
   title: string;
@@ -27,8 +28,8 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
         text={<StatusLabel status={status}/>}
         options={[
           // {value: 'executing', text: FUtil.I18n.message('enabled')},
-          {value: 'executing', text: FUtil1.I18n.message('enabled')},
-          {value: 'stopped', text: FUtil1.I18n.message('disabled')},
+          {value: 'executing', text: FI18n.i18nNext.t('enabled')},
+          {value: 'stopped', text: FI18n.i18nNext.t('disabled')},
         ]}
       />
     </div>

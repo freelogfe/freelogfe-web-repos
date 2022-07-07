@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import FUploadImage from '@/components/FUploadImage';
+// import FUploadImage from '@/components/FUploadImage';
 import {
-  ChangeAction,
+  // ChangeAction,
   OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
   OnChangePTitleInputAction,
   OnClick_Side_Exhibit_Title_Action,

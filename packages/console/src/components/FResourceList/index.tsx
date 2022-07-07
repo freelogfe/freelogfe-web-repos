@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {List} from 'antd';
-import {FRectBtn} from '../FButton';
-import {FContentText} from '../FText';
-import FResourceStatusBadge from "../FResourceStatusBadge";
+import { List } from 'antd';
+import { FRectBtn } from '../FButton';
+import { FContentText } from '../FText';
+import FResourceStatusBadge from '../FResourceStatusBadge';
+import { FUtil } from '@freelog/tools-lib';
+
 
 export interface FResourceListProps {
   loading: boolean;
@@ -11,7 +13,7 @@ export interface FResourceListProps {
   resourceObjects: {
     id: string;
     title: string;
-    resourceType: string;
+    resourceType: string[];
     time: string;
     status: 0 | 1;
     latestVersion: string;
@@ -34,10 +36,10 @@ function FResourceList({
                        }: FResourceListProps) {
   return (<List
     loading={loading}
-    itemLayout="horizontal"
+    itemLayout='horizontal'
     loadMore={stillMore
       ? (<div>
-        <div style={{height: 10}}/>
+        <div style={{ height: 10 }} />
         <div className={styles.footer}>
           <FRectBtn
             onClick={() => onLoadMord && onLoadMord()}
@@ -45,8 +47,8 @@ function FResourceList({
         </div>
       </div>)
       : (resourceObjects.length > 0 && (
-        <div style={{display: 'flex', justifyContent: 'center', padding: '10px 0'}}>
-          <FContentText type="additional1" text={'没有更多了~'}/>
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+          <FContentText type='additional1' text={'没有更多了~'} />
         </div>))}
     dataSource={resourceObjects}
     renderItem={(i: FResourceListProps['resourceObjects'][number]) => (
@@ -59,26 +61,26 @@ function FResourceList({
                 text={i.title}
               />
             </div>
-            <div style={{width: 5}}/>
-            {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased' : 'offline'}/>}
+            <div style={{ width: 5 }} />
+            {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased' : 'offline'} />}
           </div>
-          <div style={{height: 2}}/>
+          <div style={{ height: 2 }} />
           <FContentText
             type={'additional2'}
-            text={(i.resourceType ? `资源类型 ${i.resourceType}` : '未设置类型') + ` | 更新时间 ${i.time}`}
+            text={(i.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(i.resourceType)}` : '未设置类型') + ` | 更新时间 ${i.time}`}
           />
         </div>
         {
           (!showRemoveIDsOrNames?.includes(i.title) && !showRemoveIDsOrNames?.includes(i.id))
             ? (<FRectBtn
-              type="secondary"
-              size="small"
+              type='secondary'
+              size='small'
               onClick={() => onSelect && onSelect(i)}
               disabled={!i.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
             >选择</FRectBtn>)
             : (<FRectBtn
-              type="danger2"
-              size="small"
+              type='danger2'
+              size='small'
               onClick={() => onDelete && onDelete(i)}
               disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
             >移除</FRectBtn>)

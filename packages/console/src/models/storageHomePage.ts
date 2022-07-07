@@ -29,7 +29,7 @@ export interface StorageHomePageModelState {
     id: string;
     name: string;
     bucketName: string;
-    type: string;
+    type: string[];
     size: number;
     updateTime: string;
   }[];

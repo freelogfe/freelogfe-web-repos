@@ -3,8 +3,8 @@ import styles from './index.less';
 import { RcFile } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
 import FCropperModal from '@/components/FUploadCover/FCropperModal';
-import { FServiceAPI } from '@freelog/tools-lib';
-import FUtil1 from '@/utils';
+import { FServiceAPI, FI18n } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 
 interface FUploadCoverProps {
   children: React.ReactNode;
@@ -31,12 +31,12 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
 
   function beforeUpload(file: RcFile) {
     if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
-      onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
+      onError && onError(FI18n.i18nNext.t('limit_resource_image_format'));
       return false;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      onError && onError(FUtil1.I18n.message('limit_resource_image_size'));
+      onError && onError(FI18n.i18nNext.t('limit_resource_image_size'));
       return false;
     }
 

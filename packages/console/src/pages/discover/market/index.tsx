@@ -4,15 +4,15 @@ import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import categoryData from '@/utils/category';
 import styles from './index.less';
 import useUrlState from '@ahooksjs/use-url-state';
-import { router } from 'umi';
+// import { router } from 'umi';
 import {
   OnChangeKeywordsAction,
-  OnChangeResourceTypeAction,
+  // OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnMountMarketPageAction,
-  OnMountPageAction,
+  // OnMountPageAction,
   OnUnmountMarketPageAction,
-  OnUnmountPageAction,
+  // OnUnmountPageAction,
 } from '@/models/discoverPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';

@@ -30,10 +30,11 @@ import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import { Helmet } from 'react-helmet';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ExhibitProps {
   dispatch: Dispatch;

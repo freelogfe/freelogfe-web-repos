@@ -2,7 +2,7 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
@@ -10,7 +10,7 @@ import { listStateAndListMore } from '@/components/FListFooter';
 import { mergeRules } from '@/models/informExhibitInfoPage';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 import fMessage from '@/components/fMessage';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -27,7 +27,7 @@ export interface IExhibit {
   originInfo: {
     id: string;
     name: string;
-    resourceType: string;
+    resourceType: string[];
     type: 'resource' | 'object';
     version: string; // 测试资源引用的实体版本
     versionRange: string; // 测试资源引用的实体版本范围
@@ -2089,7 +2089,7 @@ const Model: InformalNodeManagerPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage(FUtil1.I18n.message('msg_new_test_exhibit_added'));
+      fMessage(FI18n.i18nNext.t('msg_new_test_exhibit_added'));
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -2154,7 +2154,7 @@ const Model: InformalNodeManagerPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage(FUtil1.I18n.message('msg_new_test_exhibit_added'));
+      fMessage(FI18n.i18nNext.t('msg_new_test_exhibit_added'));
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {

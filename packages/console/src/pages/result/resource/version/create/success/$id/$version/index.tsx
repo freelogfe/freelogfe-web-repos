@@ -6,8 +6,8 @@ import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
-import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+// import FUtil1 from "@/utils";
+import {FUtil, FServiceAPI, FI18n} from '@freelog/tools-lib';
 import {RouteComponentProps} from 'react-router';
 
 interface SuccessProps extends RouteComponentProps<{
@@ -68,7 +68,7 @@ function Success({match, dispatch}: SuccessProps) {
           <div style={{height: 20}}/>
           <FTipText
             type="second"
-            text={FUtil1.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}
+            text={FI18n.i18nNext.t('version_created_successfully', {VersionNumber: match.params.version})}
           />
         </>)
       }
@@ -95,12 +95,12 @@ function Success({match, dispatch}: SuccessProps) {
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FTipText type="third" text={FUtil1.I18n.message('jump_to_version_edit', {timer: count})}/>
+          <FTipText type="third" text={FI18n.i18nNext.t('jump_to_version_edit', {timer: count})}/>
           <div style={{width: 10}}/>
           <FTextBtn
             // theme={'primary'}
             onClick={gotoVersionInfo}
-          >{FUtil1.I18n.message('jump_now')}</FTextBtn>
+          >{FI18n.i18nNext.t('jump_now')}</FTextBtn>
         </div>)
       }
     </div>

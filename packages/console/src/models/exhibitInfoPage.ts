@@ -3,11 +3,11 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI , FI18n} from '@freelog/tools-lib';
 import { router } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -35,7 +35,7 @@ export interface ExhibitInfoPageModelState {
     // selected: boolean;
     id: string;
     name: string;
-    type: string;
+    type: string[];
 
     exhibits: {
       id: string;
@@ -471,9 +471,9 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
           // exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
           exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].defaulterIdentityType === 1
-            ? FUtil1.I18n.message('alert_exhibit_auth_abnormal')
+            ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
             : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
-              ? FUtil1.I18n.message('alert_exhibit_no_auth')
+              ? FI18n.i18nNext.t('alert_exhibit_no_auth')
               : '',
           policy_List: policies,
 
@@ -1182,7 +1182,7 @@ export type HandleRelationParams = {
 export type HandleRelationResult = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   status: 0 | 1;
   contracts: {
     contractId: string;

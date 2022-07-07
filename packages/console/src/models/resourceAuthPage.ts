@@ -37,12 +37,6 @@ export interface ResourceAuthPageModelState {
       versions: { version: string; checked: boolean; disabled: boolean }[];
     }[];
     terminatedContractIDs: string[];
-    // policies: {
-    //   id: string;
-    //   title: string;
-    //   code: string;
-    //   allEnabledVersions: string[];
-    // }[];
     policies: {
       fullInfo: PolicyFullInfo_Type;
       allEnabledVersions: string[];
@@ -94,7 +88,6 @@ export interface FetchAuthorizedAction extends AnyAction {
 
 export interface FetchAuthorizeAction extends AnyAction {
   type: 'resourceAuthPage/fetchAuthorize',
-  // payload: string;
 }
 
 export interface UpdateAuthorizedAction extends AnyAction {
@@ -114,7 +107,6 @@ interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
-    // fetchPolicies: (action: FetchPoliciesAction, effects: EffectsCommandMap) => void;
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;

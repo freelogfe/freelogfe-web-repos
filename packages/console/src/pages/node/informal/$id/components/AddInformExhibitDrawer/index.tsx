@@ -8,10 +8,10 @@ import FCheckbox from '@/components/FCheckbox';
 import { FContentText } from '@/components/FText';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FDrawer from '@/components/FDrawer';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FDropdownMenu from '@/components/FDropdownMenu';
@@ -215,7 +215,7 @@ function FAddInformExhibitDrawer({
   }
 
   return (<FDrawer
-    title={isTheme ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
+    title={isTheme ? FI18n.i18nNext.t('import_test_theme') : '添加测试展品'}
     visible={visible}
     topRight={<Space size={30}>
       <FTextBtn
@@ -437,7 +437,7 @@ async function handleList(payload: HandleListParams): Promise<{
 
         if (usedResourceIDs.includes(rs.resourceId)) {
           disabled = true;
-          disabledReason = FUtil1.I18n.message('tag_added');
+          disabledReason = FI18n.i18nNext.t('tag_added');
         }
 
         return {
@@ -488,10 +488,10 @@ async function handleList(payload: HandleListParams): Promise<{
         if (usedResourceIDs.includes(rs.resourceId)) {
           disabled = true;
           // disabledReason = '已被使用';
-          disabledReason = FUtil1.I18n.message('tag_added');
+          disabledReason = FI18n.i18nNext.t('tag_added');
         } else if (rs.latestVersion === '') {
           disabled = true;
-          disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
+          disabledReason = FI18n.i18nNext.t('alarm_resource_unreleased ');
         }
         return {
           id: rs.resourceId,
@@ -541,10 +541,10 @@ async function handleList(payload: HandleListParams): Promise<{
         if (usedResourceIDs.includes(rs.resourceId)) {
           disabled = true;
           // disabledReason = '已被使用';
-          disabledReason = FUtil1.I18n.message('tag_added');
+          disabledReason = FI18n.i18nNext.t('tag_added');
         } else if (rs.latestVersion === '') {
           disabled = true;
-          disabledReason = FUtil1.I18n.message('alarm_resource_unreleased ');
+          disabledReason = FI18n.i18nNext.t('alarm_resource_unreleased ');
         }
 
         return {
@@ -604,10 +604,10 @@ async function handleList(payload: HandleListParams): Promise<{
           if (usedObjectIDs.includes(ob.objectId)) {
             disabled = true;
             // disabledReason = '已被使用';
-            disabledReason = FUtil1.I18n.message('tag_added');
+            disabledReason = FI18n.i18nNext.t('tag_added');
           } else if (ob.resourceType === '') {
             disabled = true;
-            disabledReason = FUtil1.I18n.message('msg_set_resource_type');
+            disabledReason = FI18n.i18nNext.t('msg_set_resource_type');
           }
 
           return {

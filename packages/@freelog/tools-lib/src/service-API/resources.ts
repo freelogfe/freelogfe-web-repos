@@ -17,7 +17,7 @@ interface IResourceInfo {
   }[];
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   resourceVersions: {
     createDate: string;
     version: string;
@@ -33,7 +33,7 @@ interface IResourceInfo {
 // 创建资源
 export interface CreateParamsType {
   name: string;
-  resourceType: string;
+  resourceType: string[]
   policies?: any[];
   coverImages?: string[];
   intro?: string;

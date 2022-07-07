@@ -11,14 +11,13 @@ import UpthrowList from './UpthrowList';
 import Market from './Market';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
-// import { CloseCircleFilled } from '@ant-design/icons';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-import FUtil1 from '@/utils';
-// import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FWarning } from '@/components/FIcons';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -54,7 +53,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
-        >{FUtil1.I18n.message('import_from_previous_version')}</FRectBtn>
+        >{FI18n.i18nNext.t('import_from_previous_version')}</FRectBtn>
       }
 
     </Space>
@@ -79,7 +78,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 <div className={styles.errorBox}>
                   <FForbid className={styles.errorIcon} />
                   <FTipText
-                    text={FUtil1.I18n.message('authorization_issue_offline_resource')}
+                    text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
                     type='second'
                   />
                 </div>)
@@ -88,7 +87,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               resource?.status === 2 && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
                 <FTipText
-                  text={FUtil1.I18n.message('authorization_issue_circular_reply')}
+                  text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
                   type='second'
                 />
               </div>)

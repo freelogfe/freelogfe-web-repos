@@ -2,13 +2,13 @@ import * as React from 'react';
 import FFormLayout from '@/components/FFormLayout';
 import { FContentText, FTitleText } from '@/components/FText';
 import FDrawer from '@/components/FDrawer';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import styles from './index.less';
 import FContractDisplay from '@/components/FContractDisplay';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
@@ -69,7 +69,6 @@ interface FRelationDrawerStates {
     exhibitDetailsUrl: string;
     policyIDs: string[];
   }[];
-
 }
 
 const initData: FRelationDrawerStates = {
@@ -79,6 +78,7 @@ const initData: FRelationDrawerStates = {
 };
 
 function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRelationDrawerProps) {
+  // console.log(bothSidesInfo, 'bothSidesInfo8903wqioj;sdlkfjsdlfkj');
 
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
@@ -119,12 +119,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     };
 
     const { data: data_ResourceInfos }: {
-      data: {
-        resourceId: string;
-        resourceName: string;
-        userId: number;
-        policies: PolicyFullInfo_Type[];
-      }[];
+      // data: {
+      //   resourceId: string;
+      //   resourceName: string;
+      //   userId: number;
+      //   policies: PolicyFullInfo_Type[];
+      // }[];
+      data: any;
     } = await FServiceAPI.Resource.batchInfo(params0);
 
     // console.log(data_ResourceInfos, 'data_ResourceInfos#@890uiojsd;flsdfklk');
@@ -169,10 +170,10 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
 
     // console.log(JSON.stringify(data_resolveResource), 'data_resolveResource0932ojisdlf');
 
-    const lor = data_ResourceInfos.find((ri) => {
+    const lor = data_ResourceInfos.find((ri: any) => {
       return ri.resourceId === licensor.licensorID;
     });
-    const lee = data_ResourceInfos.find((ri) => {
+    const lee = data_ResourceInfos.find((ri: any) => {
       return ri.resourceId === licensee.licenseeID;
     });
 
@@ -208,7 +209,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
-      validPolicies: lor.policies.filter((p) => {
+      validPolicies: lor.policies.filter((p: any) => {
         return p.status === 1 && !validContracts.some((vcp) => {
           return vcp.policyID === p.policyId;
         });
@@ -262,12 +263,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
     };
 
     const { data: data_ResourceDetails }: {
-      data: {
-        resourceId: string;
-        resourceName: string;
-        userId: number;
-        policies: PolicyFullInfo_Type[];
-      };
+      // data: {
+      //   resourceId: string;
+      //   resourceName: string;
+      //   userId: number;
+      //   policies: PolicyFullInfo_Type[];
+      // };
+      data: any;
     } = await FServiceAPI.Resource.info(params1);
 
     const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -288,7 +290,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         status: 0 | 1;
       }[];
     } = await FServiceAPI.Contract.batchContracts(params2);
-    console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
+    // console.log(data_Contracts, 'data_Contracts23890io9873928uoijlk');
 
     const validContracts = data_Contracts
       .filter((dc) => {
@@ -323,7 +325,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       }[];
     } = await FServiceAPI.Exhibit.presentableList(params5);
 
-    // console.log(data_ResolveResourceExhibit, 'data_AllPresentables');
+    // console.log(data_ResolveResourceExhibit, 'data_ResolveResourceExhibit');
 
     const data: FRelationDrawerStates['dataSource'] = {
       licensor: {
@@ -342,7 +344,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
-      validPolicies: data_ResourceDetails.policies.filter((p) => {
+      validPolicies: data_ResourceDetails.policies.filter((p: any) => {
         return p.status === 1 && !validContracts.some((vcp) => {
           return vcp.policyID === p.policyId;
         });
@@ -488,12 +490,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                   <Space style={{ padding: '0 20px' }} size={2}>
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_id') + '：' + k.contractID}
+                      text={FI18n.i18nNext.t('contract_id') + '：' + k.contractID}
                     />
                     <FDivider style={{ fontSize: 14 }} />
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_signed_time') + '：' + k.createDate}
+                      text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.createDate}
                     />
                   </Space>
 
@@ -574,13 +576,14 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
           </Space>
 
         </FFormLayout.FBlock>
-
+        {/*{console.log(dataSource.licensee, 'dataSource.licensee.isCurrentUser90o3lsfdfl')}*/}
         {
           dataSource.validPolicies.length > 0 && (<FFormLayout.FBlock title={'可签约的策略'}>
             <Space size={15} direction='vertical' style={{ width: '100%' }}>
               {
                 dataSource.validPolicies.map((vp) => {
                   return (<FContract_AvailablePolicy_Card
+                    canSign={dataSource.licensee.isCurrentUser}
                     key={vp.policyId}
                     fullInfo={vp}
                     allVersions={versions.map((vs) => {

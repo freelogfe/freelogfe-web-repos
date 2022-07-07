@@ -2,10 +2,10 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 // import { LoginAction } from '@/models/loginPage';
 
 export type LogonPageModelState = WholeReadonly<{
@@ -413,9 +413,9 @@ const Model: LogonPageModelType = {
       if (!logonPage.passwordInput) {
         passwordInputError = '密码不能为空';
       } else if (logonPage.passwordInput.length < 6 || logonPage.passwordInput.length > 24) {
-        passwordInputError = FUtil1.I18n.message('password_length');
+        passwordInputError = FI18n.i18nNext.t('password_length');
       } else if (!FUtil.Regexp.PASSWORD.test(logonPage.passwordInput)) {
-        passwordInputError = FUtil1.I18n.message('password_include');
+        passwordInputError = FI18n.i18nNext.t('password_include');
       }
 
       yield put<ChangeAction>({

@@ -386,7 +386,11 @@
 
 "@babel/runtime@^7.17.2":
   version "7.18.6"
+<<<<<<< HEAD
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.18.6.tgz#6a1ef59f838debd670421f8c7f2cbb8da9751580"
+=======
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.6.tgz#6a1ef59f838debd670421f8c7f2cbb8da9751580"
+>>>>>>> dev@0.8.0
   integrity sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==
   dependencies:
     regenerator-runtime "^0.13.4"
@@ -561,10 +565,10 @@
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
-"@freelog/components-lib@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.9.tgz#b5b638943dfa0de02eb9cd47b2828f6a314323ac"
-  integrity sha512-Gqb2g/3JipKPFHzu7uhIUlp74vkrIVALri64Kicva0m6CQNJgYM2zecwIdqmNEczzL9D+fpv4sDVWcKnBh7KTw==
+"@freelog/components-lib@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.10.tgz#a067030a1143db1bcafed1beb5958ef712d2e69e"
+  integrity sha512-MSY2ccZVOs8jFpnzPPUAk8WeBg2SDvBqVu09FrOCo6/dUco6NxW7sLX3vtMrSy55p9SZ+5T/iyZN1mxzVGQQDA==
 
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"
@@ -5222,9 +5226,15 @@ humanize-number@0.0.2:
   integrity sha1-EcCvakcWQ2M1iFiASPF5lUFInBg=
 
 i18next@^21.8.10:
+<<<<<<< HEAD
   version "21.8.12"
   resolved "https://registry.npmmirror.com/i18next/-/i18next-21.8.12.tgz#30a1ca4a9556d9d523c9dad0fa3c01f81aa5ee72"
   integrity sha512-BCJsQq9DtmLb88ksPZgpjbXhPAhFmDTNrY2Jh8VvgwnTHvL8xbuSribdTsi2WPRk1kbhjtbkoqyCVr12w2XTCA==
+=======
+  version "21.8.11"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.8.11.tgz#197aac04be51b7083999a2cb63deb831cf1ba4c8"
+  integrity sha512-+s8N6kQShwNK+Ua/+VsS/Sji24NUJJLBk9QIucygj1f97f4hPNDWmLP9fQCI4d5+XLfXJ3JctX4g+zJla967Vw==
+>>>>>>> dev@0.8.0
   dependencies:
     "@babel/runtime" "^7.17.2"
 
@@ -6268,7 +6278,11 @@ js-cookie@^2.x.x:
 
 js-cookie@^3.0.1:
   version "3.0.1"
+<<<<<<< HEAD
   resolved "https://registry.npmmirror.com/js-cookie/-/js-cookie-3.0.1.tgz#9e39b4c6c2f56563708d7d31f6f5f21873a92414"
+=======
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-3.0.1.tgz#9e39b4c6c2f56563708d7d31f6f5f21873a92414"
+>>>>>>> dev@0.8.0
   integrity sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:

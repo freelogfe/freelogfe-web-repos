@@ -19,7 +19,7 @@ import FRelationDrawer from '../FRelationDrawer';
 interface ServerDataNode {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   versions: string[];
   versionRanges: string[];
   // versions?: string[];

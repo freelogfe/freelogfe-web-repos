@@ -13,6 +13,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 interface FContract_AvailablePolicy_Card_Props {
   fullInfo: PolicyFullInfo_Type;
   allVersions: string[];
+  canSign?: boolean;
 
   onClickLicense?(versions: string[]): void;
 }
@@ -21,12 +22,14 @@ interface FContract_AvailablePolicy_Card_States {
   fullScreenVisible: boolean;
   drawerVisible: boolean;
   checkedVersions: string[];
+
 }
 
 function FContract_AvailablePolicy_Card({
                                           fullInfo,
                                           allVersions,
                                           onClickLicense,
+                                          canSign = true,
                                         }: FContract_AvailablePolicy_Card_Props) {
   const [fullScreenVisible, setFullScreenVisible] = React.useState<FContract_AvailablePolicy_Card_States['fullScreenVisible']>(false);
   const [drawerVisible, setDrawerVisible] = React.useState<FContract_AvailablePolicy_Card_States['drawerVisible']>(false);
@@ -82,17 +85,20 @@ function FContract_AvailablePolicy_Card({
           <span>{fullInfo.policyName}</span>
         </Space>
 
-        <FRectBtn
-          size='small'
-          onClick={() => {
-            if (allVersions.length > 0) {
-              setDrawerVisible(true);
-            } else {
-              onClickLicense && onClickLicense([]);
-            }
+        {
+          canSign && (<FRectBtn
+            size='small'
+            onClick={() => {
+              if (allVersions.length > 0) {
+                setDrawerVisible(true);
+              } else {
+                onClickLicense && onClickLicense([]);
+              }
 
-          }}
-        >获取授权</FRectBtn>
+            }}
+          >获取授权</FRectBtn>)
+        }
+
       </div>
       <div style={{ height: 10 }} />
       <div style={{ padding: '0 20px' }}>

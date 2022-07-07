@@ -8,8 +8,8 @@ import { withRouter, router } from 'umi';
 import RouterTypes from 'umi/routerTypes';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 import FLink from '@/components/FLink';
-import FUtil1 from '@/utils';
-import { FUtil } from '@freelog/tools-lib';
+// import FUtil1 from '@/utils';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
 import { Popconfirm, Space } from 'antd';
@@ -110,7 +110,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         className={styles.resourceName}
       >{resourceInfo.info?.resourceName}</FLink>
       <div style={{ height: 10 }} />
-      <label className={styles.label}>{resourceInfo.info.resourceType}</label>
+      <label className={styles.label}>{resourceInfo.info.resourceType.join(' / ')}</label>
     </div>
     <div style={{ height: 35 }} />
     <div className={styles.radios}>
@@ -119,7 +119,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         to={FUtil.LinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
-      >{FUtil1.I18n.message('resource_information')}</FLink>
+      >{FI18n.i18nNext.t('resource_information')}</FLink>
       <FLink
         className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FUtil.LinkTo.resourceAuth({
@@ -127,14 +127,14 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         })}
       >
         <Space size={10}>
-          <span>{FUtil1.I18n.message('authorization_infomation')}</span>
+          <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
           {resourceInfo.authProblem && (<FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>)}
         </Space>
         {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot} />)}
       </FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
-          <div style={{ cursor: 'default' }}>{FUtil1.I18n.message('verions')}</div>
+          <div style={{ cursor: 'default' }}>{FI18n.i18nNext.t('verions')}</div>
 
           {
             // match.path === '/resource/:id/$version/creator'
@@ -147,7 +147,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
               />)
               : resourceInfo.draftData
                 ? (<Popconfirm
-                  title={FUtil1.I18n.message('error_unreleasedverionexisted')}
+                  title={FI18n.i18nNext.t('error_unreleasedverionexisted')}
                   // icon={<FInfo/>}
                   onConfirm={() => {
                     gotoCreator();
@@ -157,7 +157,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
                       display: 'none',
                     },
                   }}
-                  okText={FUtil1.I18n.message('btn_check')}
+                  okText={FI18n.i18nNext.t('btn_check')}
                 ><FCircleBtn type='transparent' />
                 </Popconfirm>)
                 : (<FCircleBtn onClick={gotoCreator} type='transparent' />)
@@ -178,7 +178,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
                   className={[styles.version, resourceInfo.showPage.creator ? styles.activatedVersion : ''].join(' ')}
                   to={FUtil.LinkTo.resourceCreateVersion({
                     resourceID: match.params.id,
-                  })}>{FUtil1.I18n.message('unnamed_version')}</FLink>)
+                  })}>{FI18n.i18nNext.t('unnamed_version')}</FLink>)
                 : null
           }
 

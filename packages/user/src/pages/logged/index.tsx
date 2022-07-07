@@ -8,9 +8,9 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, UserModelState } from '@/models/connect';
 import { FetchInfoAction } from '@/models/user';
 import UserSVG from '@/assets/user.svg';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, FI18n} from '@freelog/tools-lib';
 import { IRouteComponentProps, withRouter } from 'umi';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 // import FFooter from '@/layouts/FFooter';
 
 interface LoggedProps extends IRouteComponentProps {
@@ -52,15 +52,15 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
           <FLink
             to={FUtil.LinkTo.wallet()}
             className={[styles.FLink, showPage === 'wallet' ? styles.FLinkActive : ''].join(' ')}>
-            {FUtil1.I18n.message('tab_my_wallet')}
+            {FI18n.i18nNext.t('tab_my_wallet')}
           </FLink>
           <FLink to={FUtil.LinkTo.contract()}
                  className={[styles.FLink, showPage === 'contract' ? styles.FLinkActive : ''].join(' ')}>
-            {FUtil1.I18n.message('tab_my_contracts')}
+            {FI18n.i18nNext.t('tab_my_contracts')}
           </FLink>
           <FLink to={FUtil.LinkTo.setting()}
                  className={[styles.FLink, showPage === 'setting' ? styles.FLinkActive : ''].join(' ')}>
-            {FUtil1.I18n.message('tab_settings')}
+            {FI18n.i18nNext.t('tab_settings')}
           </FLink>
         </div>
       </div>

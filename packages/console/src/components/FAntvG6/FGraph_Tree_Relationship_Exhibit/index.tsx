@@ -12,13 +12,13 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { appendAutoShapeListener } from '@/components/FAntvG6/tools';
 import { Graph } from '@antv/g6';
 import FResultTip from '@/components/FResultTip';
-import FErrorBoundary from '@/components/FErrorBoundary';
+// import FErrorBoundary from '@/components/FErrorBoundary';
 import FRelationDrawer from '@/components/FAntvG6/FRelationDrawer';
 
 interface ServerDataNode {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   versions?: string[];
   versionRanges?: string[];
   downstreamAuthContractIds: string[];

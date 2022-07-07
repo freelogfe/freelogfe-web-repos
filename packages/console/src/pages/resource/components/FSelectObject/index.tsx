@@ -7,8 +7,7 @@ import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
-import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
@@ -20,14 +19,12 @@ import {
 import FTable from '@/components/FTable';
 import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
-// import FLoadingTip from "@/components/FLoadingTip";
 import { FLoading } from '@/components/FIcons';
 
 const errorTexts = {
-  duplicated: FUtil1.I18n.message('resource_exist'),
-  // size: FUtil1.I18n.message('limit_on_file_size'),
+  duplicated: FI18n.i18nNext.t('resource_exist'),
   size: '文件大小不能超过200MB',
-  resourceType: FUtil1.I18n.message('error_wrongfileformat'),
+  resourceType: FI18n.i18nNext.t('error_wrongfileformat'),
 };
 
 export interface FSelectObject {
@@ -88,7 +85,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
 
     const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
       sha1: data.sha1,
-      resourceType: resourceVersionCreatorPage.resourceType,
+      // resourceType: resourceVersionCreatorPage.resourceType,
     };
 
     const { data: data4 } = await FServiceAPI.Storage.fileProperty(params4);
@@ -229,7 +226,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
       });
       const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
         file: file,
-        resourceType: resourceVersionCreatorPage.resourceType,
+        // resourceType: resourceVersionCreatorPage.resourceType,
       }, {
         onUploadProgress(progressEvent: any) {
           setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
@@ -280,7 +277,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
-                  <span>{FUtil1.I18n.message('verifying')}<FLoading style={{ paddingLeft: 10 }} /></span>
+                  <span>{FI18n.i18nNext.t('verifying')}<FLoading style={{ paddingLeft: 10 }} /></span>
                   <span style={{ color: '#666' }}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
                 : (<Space size={15}>
@@ -294,7 +291,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                   >
                     <FRectBtn
                       type='default'
-                    >{FUtil1.I18n.message('upload_from_local')}</FRectBtn>
+                    >{FI18n.i18nNext.t('upload_from_local')}</FRectBtn>
                   </FUpload>
                   <FRectBtn
                     type='default'
@@ -304,7 +301,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                         selectedFileObjectDrawerVisible: true,
                       });
                     }}
-                  >{FUtil1.I18n.message('choose_from_storage')}</FRectBtn>
+                  >{FI18n.i18nNext.t('choose_from_storage')}</FRectBtn>
                 </Space>)
             }
 

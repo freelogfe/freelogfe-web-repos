@@ -114,8 +114,5 @@ export default defineConfig({
       },
     },
   },
-  hash: true,
-  locale: {
-
-  }
+  hash: true
 });

@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import FUtil1 from '@/utils';
+// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
@@ -13,6 +13,7 @@ import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -33,7 +34,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
   return (<div>
     {
       selectedResource?.contracts && selectedResource?.contracts.length > 0 ? (<>
-          <FTitleText type='h4'>{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
+          <FTitleText type='h4'>{FI18n.i18nNext.t('valid_contracts_list')}</FTitleText>
           <div style={{ height: 5 }} />
           <Space style={{ width: '100%' }} size={15} direction='vertical'>
             {
@@ -66,12 +67,12 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                   <Space style={{ padding: '0 20px' }} size={5}>
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_id') + '：' + c.id}
+                      text={FI18n.i18nNext.t('contract_id') + '：' + c.id}
                     />
                     <FDivider style={{ fontSize: 14 }} />
                     <FContentText
                       type='additional2'
-                      text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
+                      text={FI18n.i18nNext.t('contract_signed_time') + '：' + c.createTime}
                     />
                   </Space>
                   <div style={{ height: 10 }} />
@@ -80,7 +81,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                     <div className={styles.action}>
                       <FContentText
                         // text={exhibitInfoPage.pName}
-                        text={FUtil1.I18n.message('use_in_current_exhibit')}
+                        text={FI18n.i18nNext.t('use_in_current_exhibit')}
                         type='highlight'
                       />
                       <FSwitch
@@ -130,7 +131,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                             });
                           }}>
                             <FTitleText type='h4'>
-                              <span>{FUtil1.I18n.message('use_for_exhibit')}</span>
+                              <span>{FI18n.i18nNext.t('use_for_exhibit')}</span>
                               &nbsp;
                               {
                                 c.exhibitOpen
