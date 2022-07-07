@@ -27,7 +27,7 @@ export type UserModelState = WholeReadonly<{
 }>;
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'user/change';
   payload: Partial<UserModelState>;
 }
 

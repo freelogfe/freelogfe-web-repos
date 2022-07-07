@@ -93,7 +93,7 @@ export interface SettingPageModelState {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'settingPage/change';
   payload: Partial<SettingPageModelState>;
 }
 

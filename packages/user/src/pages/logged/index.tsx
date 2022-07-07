@@ -8,7 +8,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, UserModelState } from '@/models/connect';
 import { FetchInfoAction } from '@/models/user';
 import UserSVG from '@/assets/user.svg';
-import { FUtil, FI18n} from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { IRouteComponentProps, withRouter } from 'umi';
 // import FUtil1 from '@/utils';
 // import FFooter from '@/layouts/FFooter';
@@ -39,10 +39,22 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
       <div className={styles.sider}>
         <div style={{ height: 35 }} />
         <div className={styles.userInfo}>
-          <img
-            alt=''
-            src={(user.userInfo?.headImage || UserSVG) as string}
-            className={styles.img}
+          {/*<img*/}
+          {/*  alt=''*/}
+          {/*  src={(user.userInfo?.headImage || UserSVG) as string}*/}
+          {/*  className={styles.img}*/}
+          {/*/>*/}
+          <div
+            // src={settingPage.avatar}
+            // alt="avatar"
+            style={{
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundImage: `url(${user.userInfo?.headImage || UserSVG})`,
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+            }}
           />
           <div style={{ height: 20 }} />
           <FTitleText type='h3' text={user.userInfo?.username || ''} />
