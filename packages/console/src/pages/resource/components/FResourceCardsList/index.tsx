@@ -86,15 +86,17 @@ function FResourceCardsList({
   });
 
   React.useEffect(() => {
+    // 初始化前-1，后面选全部为字符串‘-1’
     if (category.first === -1) {
       return;
     }
-    let str = categoryData.first[category.first];
+    let str = categoryData.first[category.first] || '';
     // @ts-ignore
-    if (categoryData.second[category.first] && category.second) {
+    if (categoryData.second[category.first] && category.second !== '-1') {
       // @ts-ignore
       str = categoryData.second[category.first][category.second];
     }
+    console.log(str)
     onChangeResourceType && onChangeResourceType(str);
   }, [category]);
   React.useEffect(() => {
@@ -134,7 +136,7 @@ function FResourceCardsList({
                     setCategory({
                       ...category,
                       first: value,
-                      second: category.first === value ? category.second : '',
+                      second: category.first === value ? category.second : '-1',
                     });
                     //onChangeResourceType && onChangeResourceType(value)
                   }}

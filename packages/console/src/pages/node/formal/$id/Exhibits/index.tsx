@@ -47,7 +47,7 @@ interface ExhibitsProps {
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   const [category, setCategory] = React.useState<any>({
-    first: -1,
+    first: '-1',
     second: '',
   });
 
@@ -64,12 +64,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   });
 
   React.useEffect(() => {
-    if (category.first === -1) {
+    // 初始化前-1，后面选全部为字符串‘-1’
+    if (category.first === '-1') {
       return;
     }
-    let str = categoryData.first[category.first];
+    let str = categoryData.first[category.first] || '';
     // @ts-ignore
-    if (categoryData.second[category.first] && category.second) {
+    if (categoryData.second[category.first] && category.second !== '-1') {
       // @ts-ignore
       str = categoryData.second[category.first][category.second];
     }
@@ -90,7 +91,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
-      title: <FTitleText text={`${FUtil1.I18n.message('tableheader_exhibit')}`} type="table" />,
+      title: <FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type="table" />,
       dataIndex: 'name',
       key: 'name',
       render(_, record) {
@@ -135,7 +136,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       render(_, record): any {
         return (
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
-            <FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
+            <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
               <FTextBtn
                 type="primary"
                 onClick={() => {
@@ -150,7 +151,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               </FTextBtn>
             </FTooltip>
 
-            <FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
+            <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
               <FTextBtn
                 type="primary"
                 onClick={() => {
@@ -169,7 +170,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       },
     },
     {
-      title: <FTitleText type="table" text={FUtil1.I18n.message('tableheader_exhibit_version')} />,
+      title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_exhibit_version')} />,
       dataIndex: 'version',
       key: 'version',
       // width: 125,
@@ -179,7 +180,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       },
     },
     {
-      title: <FTitleText type="table" text={FUtil1.I18n.message('tableheader_show_exhibit')} />,
+      title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
       dataIndex: 'status',
       key: 'status',
       // width: 65,
@@ -193,10 +194,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               onChange={(value) => {
                 if (value && record.policies.length === 0) {
                   if (!record.hasPolicy) {
-                    // fMessage(FUtil1.I18n.message('error_show_exhibit_no_authorization_plan '), 'error');
-                    fMessage(FUtil1.I18n.message('alarm_exhibits_show_plan '), 'error');
+                    // fMessage(FI18n.i18nNext.t('error_show_exhibit_no_authorization_plan '), 'error');
+                    fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
                   } else {
-                    fMessage(FUtil1.I18n.message('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                    fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
                   }
                   return;
                 }
@@ -233,7 +234,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <FTitleText type="h1" text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
             <Space size={80}>
               <div>
-                <span>{FUtil1.I18n.message('resource_type')}：</span>
+                <span>{FI18n.i18nNext.t('resource_type')}：</span>
                 <FDropdown
                   overlay={
                     <FMenu
@@ -254,7 +255,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         setCategory({
                           ...category,
                           first: value,
-                          second: category.first === value ? category.second : '',
+                          second: category.first === value ? category.second : '-1',
                         });
                         //onChangeResourceType && onChangeResourceType(value)
                       }}
@@ -372,8 +373,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         {nodeManagerPage.exhibit_ListState === 'noData' ? (
           <FNoDataTip
             height={'calc(100vh - 70px)'}
-            tipText={FUtil1.I18n.message('manage_exhibits_empty')}
-            btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
+            tipText={FI18n.i18nNext.t('manage_exhibits_empty')}
+            btnText={FI18n.i18nNext.t('btn_go_to_resource_market')}
             onClick={() => {
               dispatch<DiscoverChangeAction>({
                 type: 'discoverPage/change',

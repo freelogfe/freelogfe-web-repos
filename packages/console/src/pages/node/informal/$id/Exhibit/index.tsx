@@ -43,7 +43,7 @@ interface ExhibitProps {
 
 function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
   const [category, setCategory] = React.useState<any>({
-    first: -1,
+    first: '-1',
     second: '',
   });
 
@@ -59,13 +59,13 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
     });
   });
   React.useEffect(() => {
-    
+    // 初始化前-1，后面选全部为字符串‘-1’
     if (category.first === -1) {
       return;
     }
-    let str = categoryData.first[category.first];
+    let str = categoryData.first[category.first] || '';
     // @ts-ignore
-    if (categoryData.second[category.first] && category.second) {
+    if (categoryData.second[category.first] && category.second !== '-1') {
       // @ts-ignore
       str = categoryData.second[category.first][category.second];
     }
@@ -124,7 +124,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                   <Space size={5}>
                     <FAdd />
                     {/*<FContentText text={}/>*/}
-                    <span>{FUtil1.I18n.message('title_add_test_exhibit')}</span>
+                    <span>{FI18n.i18nNext.t('title_add_test_exhibit')}</span>
                   </Space>
                 </FTextBtn>
 
@@ -139,14 +139,14 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 >
                   <Space size={5}>
                     <FMappingRuleReplace />
-                    {/*<FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>*/}
-                    <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
+                    {/*<FContentText text={FI18n.i18nNext.t('btn_replace_resource')}/>*/}
+                    <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                   </Space>
                 </FTextBtn>
 
                 <div>
                   <div>
-                    <span>{FUtil1.I18n.message('resource_type')}：</span>
+                    <span>{FI18n.i18nNext.t('resource_type')}：</span>
                     <FDropdown
                       overlay={
                         <FMenu
@@ -167,7 +167,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                             setCategory({
                               ...category,
                               first: value,
-                              second: category.first === value ? category.second : '',
+                              second: category.first === value ? category.second : '-1',
                             });
                             //onChangeResourceType && onChangeResourceType(value)
                           }}
