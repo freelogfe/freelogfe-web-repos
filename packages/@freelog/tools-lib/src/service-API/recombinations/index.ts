@@ -63,7 +63,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
       break;
     }
     await Tool.promiseSleep(delay);
-    delay += 500;
+    // delay += 500;
   }
   return allData;
 }
