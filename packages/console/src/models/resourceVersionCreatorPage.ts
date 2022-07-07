@@ -51,7 +51,7 @@ export type Relationships = {
 export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
   latestVersion: string;
-  resourceType: string;
+  resourceType: string[];
   baseUpcastResources: {
     resourceId: string;
     resourceName: string;
@@ -288,7 +288,7 @@ export interface ResourceVersionCreatorModelType {
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceId: '',
   latestVersion: '',
-  resourceType: '',
+  resourceType: [],
   baseUpcastResources: [],
 
   version: '',
@@ -894,25 +894,31 @@ const Model: ResourceVersionCreatorModelType = {
       const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
 
-      const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-        sha1: data.sha1,
-        // resourceType: resourceVersionCreatorPage.resourceType,
-      };
-
-      const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
+      // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+      //   sha1: data.sha1,
+      //   // resourceType: resourceVersionCreatorPage.resourceType,
+      // };
+      //
+      // const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
       // console.log(data4, '@#@#@#@#@#@##@$@#$data4');
-      if (!data4) {
+      // if (!data4) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       selectedFileStatus: 2,
+      //     },
+      //   });
+      // } else {
+      const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+        sha1: data.sha1,
+      };
+      const data4 = yield call(FServiceAPI.recombination.getFilesSha1Info,params4);
+      // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
+
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            selectedFileStatus: 2,
-          },
-        });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: Object.entries(data4 as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+            rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
               // console.log(rp, 'rprprprprpyu2341234');
               return {
                 key: rp[0],
@@ -945,7 +951,7 @@ const Model: ResourceVersionCreatorModelType = {
               }),
           },
         });
-      }
+      // }
 
       yield put<ChangeAction>({
         type: 'change',
