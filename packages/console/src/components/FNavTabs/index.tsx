@@ -11,6 +11,7 @@ interface FNavTabsProps {
     href: string;
   }[];
   activated: string;
+  className?: string;
 }
 
 function FNavTabs({ options, activated }: FNavTabsProps) {
