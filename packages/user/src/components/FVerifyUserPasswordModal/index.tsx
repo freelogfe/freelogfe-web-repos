@@ -16,12 +16,16 @@ interface FVerifyUserPasswordModalProps {
   visible?: boolean;
 
   onCancel?(): void;
-
-  onSuccess?(): void;
+  actionReturn?(password: string): void;
+  onSuccess?(data?: any): void;
 }
 
-function FVerifyUserPasswordModal({ visible = false, onSuccess, onCancel }: FVerifyUserPasswordModalProps) {
-
+function FVerifyUserPasswordModal({
+  visible = false,
+  onSuccess,
+  onCancel,
+  actionReturn,
+}: FVerifyUserPasswordModalProps) {
   const [password, set_password] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -39,58 +43,66 @@ function FVerifyUserPasswordModal({ visible = false, onSuccess, onCancel }: FVer
     if (!data?.isVerifySuccessful) {
       return fMessage('密码输入错误', 'error');
     }
-    onSuccess && onSuccess();
+    if (actionReturn) {
+      actionReturn(password);
+      return;
+    }
+    onSuccess && onSuccess(data);
   }
 
-  return (<Modal
-    title='验证登陆密码'
-    visible={visible}
-    onCancel={() => {
-      onCancel && onCancel();
-    }}
-    footer={null}
-    width={540}
-  >
-    <div className={styles.ModalContainer}>
-      <div style={{ height: 15 }} />
-      <div className={styles.userPassword}>
-        <FTipText type='third' text={'用户登录密码'} />
-        <FTextBtn
-          style={{ fontSize: 12 }}
-          type='primary'
-          onClick={() => {
-            const path: string = FUtil.LinkTo.retrieveUserPassword();
-            window.open(path);
-          }}
-        >
-          忘记登录密码？
-        </FTextBtn>
-      </div>
+  return (
+    <Modal
+      title="验证登陆密码"
+      visible={visible}
+      onCancel={() => {
+        onCancel && onCancel();
+      }}
+      footer={null}
+      width={540}
+    >
+      <div className={styles.ModalContainer}>
+        <div style={{ height: 15 }} />
+        <div className={styles.userPassword}>
+          <FTipText type="third" text={'用户登录密码'} />
+          <FTextBtn
+            style={{ fontSize: 12 }}
+            type="primary"
+            onClick={() => {
+              const path: string = FUtil.LinkTo.retrieveUserPassword();
+              window.open(path);
+            }}
+          >
+            忘记登录密码？
+          </FTextBtn>
+        </div>
 
-      <div style={{ height: 5 }} />
-      <FInput
-        value={password}
-        onChange={(e) => {
-          set_password(e.target.value);
-        }}
-        type='password'
-        placeholder='请输入登录密码'
-        className={styles.modalBlockInput}
-        wrapClassName={styles.modalBlockInput}
-      />
-      <div style={{ height: 80 }} />
-      <div className={styles.modalFooter}>
-        <FRectBtn
-          disabled={password === ''}
-          type='primary'
-          onClick={() => {
-            verify();
+        <div style={{ height: 5 }} />
+        <FInput
+          value={password}
+          onChange={(e) => {
+            set_password(e.target.value);
           }}
-        >下一步</FRectBtn>
+          type="password"
+          placeholder="请输入登录密码"
+          className={styles.modalBlockInput}
+          wrapClassName={styles.modalBlockInput}
+        />
+        <div style={{ height: 80 }} />
+        <div className={styles.modalFooter}>
+          <FRectBtn
+            disabled={password === ''}
+            type="primary"
+            onClick={() => {
+              verify();
+            }}
+          >
+            下一步
+          </FRectBtn>
+        </div>
+        <div style={{ height: 5 }} />
       </div>
-      <div style={{ height: 5 }} />
-    </div>
-  </Modal>);
+    </Modal>
+  );
 }
 
 export default FVerifyUserPasswordModal;

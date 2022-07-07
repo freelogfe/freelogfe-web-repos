@@ -34,8 +34,22 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     first: -1,
     second: '',
   });
-  console.log(urlState);
-
+  React.useEffect(() => {
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first];
+    // @ts-ignore
+    if (categoryData.second[category.first] && category.second) {
+      str = category.second;
+    }
+    dispatch<OnChangeResourceTypeAction>({
+      type: 'discoverPage/onChangeResourceType',
+      payload: {
+        value: str,
+      },
+    });
+  }, [category]);
   AHooks.useMount(() => {
     if (urlState.query) {
       const data: any = urlState.query.split('%');
@@ -49,7 +63,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       });
       // @ts-ignore
       first > -1 &&
-      // @ts-ignore
+        // @ts-ignore
         categoryData.second[first].some((item: string, index: number) => {
           if (item === data[1]) {
             second = item;
@@ -60,7 +74,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         first,
         second,
       });
-      console.log(first, second)
+      console.log(first, second);
     }
     dispatch<OnMountMarketPageAction>({
       type: 'discoverPage/onMountMarketPage',
@@ -75,12 +89,12 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
   return (
     <>
-      <div className={'mb-30 flex-column ' + styles.filter}>
+      <div className={'flex-column ' + styles.filter}>
         <div className="flex-row-center mt-30">
           <a
             onClick={() => {
               setCategory({
-                ...category,
+                second: '',
                 first: -1,
               });
             }}
@@ -95,7 +109,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
               <a
                 onClick={() => {
                   setCategory({
-                    ...category,
+                    second: category.first === index ? category.second : '',
                     first: index,
                   });
                 }}
@@ -126,9 +140,10 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                 return (
                   <a
                     onClick={() => {
+                      console.log(item);
                       setCategory({
                         ...category,
-                        second: item,
+                        second: item === category.second ? '' : item,
                       });
                     }}
                     key={item}
@@ -157,7 +172,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
               },
             });
           }}
-          wrapClassName="self-end mt-45"
+          wrapClassName="self-end my-31"
           theme="dark"
           size="small"
           className={styles.filterInput}
@@ -180,7 +195,6 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
       {discoverPage.dataSource.length > 0 ? (
         <>
-          <div style={{ height: 30 }} />
           <div className={styles.Content}>
             {discoverPage.dataSource.map((resource: any) => (
               <FResourceCard

@@ -84,6 +84,21 @@ function FResourceCardsList({
     first: -1,
     second: '',
   });
+
+  React.useEffect(() => {
+    // 初始化前-1，后面选全部为字符串‘-1’
+    if (category.first === -1) {
+      return;
+    }
+    let str = categoryData.first[category.first] || '';
+    // @ts-ignore
+    if (categoryData.second[category.first] && category.second !== '-1') {
+      // @ts-ignore
+      str = categoryData.second[category.first][category.second];
+    }
+    console.log(str)
+    onChangeResourceType && onChangeResourceType(str);
+  }, [category]);
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
     setTypeText(selectedType?.text || selectedType?.value);
@@ -121,7 +136,7 @@ function FResourceCardsList({
                     setCategory({
                       ...category,
                       first: value,
-                      second: -1,
+                      second: category.first === value ? category.second : '-1',
                     });
                     //onChangeResourceType && onChangeResourceType(value)
                   }}
@@ -200,16 +215,18 @@ function FResourceCardsList({
             debounce={300}
             allowClear={true}
             // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
-            onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
+            onDebounceChange={(value) => {
+              onChangeInputText && onChangeInputText(value);
+            }}
             theme="dark"
             className={styles.FInput}
             placeholder={FI18n.i18nNext.t('search_resource')}
           />
-          {showGotoCreateBtn && (
+          {/* {showGotoCreateBtn && (
             <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
               {FI18n.i18nNext.t('create_resource')}
             </FRectBtn>
-          )}
+          )} */}
         </Space>
       </div>
 
