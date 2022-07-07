@@ -50,9 +50,9 @@ interface TransformServerAPIContractStateParams {
 }
 
 export function transformServerAPIContractState({
-                                           status,
-                                           authStatus,
-                                         }: TransformServerAPIContractStateParams): 'active' | 'testActive' | 'inactive' | 'terminal' | 'exception' {
+                                                  status,
+                                                  authStatus,
+                                                }: TransformServerAPIContractStateParams): 'active' | 'testActive' | 'inactive' | 'terminal' | 'exception' {
   if (status === 0) {
     if (authStatus === 1 || authStatus === 3) {
       return 'active';
@@ -70,3 +70,16 @@ export function transformServerAPIContractState({
   }
   return 'exception';
 }
+
+/**
+ * 暂时休眠
+ * @param ms 休眠时常(毫秒)
+ */
+export function promiseSleep(ms: number = 300): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
+

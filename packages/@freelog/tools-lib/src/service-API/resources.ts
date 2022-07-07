@@ -495,3 +495,17 @@ export function batchAuth({...params}: BatchAuthParamsType) {
     params: params,
   });
 }
+
+// 批量查询资源授权结果
+interface ResourcesRecommendParamsType {
+  recommendType: 1 | 2; // 1: 推荐主题  2:占位主题
+}
+
+export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/recommend`,
+    params: params,
+  });
+}
+

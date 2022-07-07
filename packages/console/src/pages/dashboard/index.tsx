@@ -5,14 +5,11 @@ import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 import { FContentText, FTitleText } from '@/components/FText';
 import FFormLayout from '@/components/FFormLayout';
-// import img_Questionnaire from '@/assets/questionnaire.png';
-// import img_Invite from '@/assets/invite.png';
 import FContent from '@/components/FIcons/FContent';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
-import FLoudspeaker from '@/components/FIcons/FLoudspeaker';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, DashboardPageModelState } from '@/models/connect';
@@ -158,7 +155,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           singleRow
                         />
                         <div style={{ height: 8 }} />
-                        <FContentText text={lr.type} />
+                        <FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />
                         <div style={{ height: 12 }} />
                         <FComponentsLib.F_Contract_And_Policy_Labels
                           data={lr.policies.map((p) => {
@@ -250,23 +247,6 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       </div>);
                     })
                   }
-
-                  {/*<div className={styles.node}>*/}
-                  {/*  <FContentText text={'The official node of freelog'} type='highlight' />*/}
-
-                  {/*  <Space size={20}>*/}
-                  {/*    <FTextBtn type='primary'>打开节点</FTextBtn>*/}
-                  {/*    <FTextBtn type='primary'>管理节点</FTextBtn>*/}
-                  {/*  </Space>*/}
-                  {/*</div>*/}
-                  {/*<div className={styles.node}>*/}
-                  {/*  <FContentText text={'The official node of freelog'} type='highlight' />*/}
-
-                  {/*  <Space size={20}>*/}
-                  {/*    <FTextBtn type='primary'>打开节点</FTextBtn>*/}
-                  {/*    <FTextBtn type='primary'>管理节点</FTextBtn>*/}
-                  {/*  </Space>*/}
-                  {/*</div>*/}
                 </div>
               </FFormLayout.FBlock>
             </FFormLayout>

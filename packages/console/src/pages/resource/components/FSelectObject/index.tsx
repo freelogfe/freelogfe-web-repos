@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FObjectCard from './ObjectCard';
-import { LoadingOutlined } from '@ant-design/icons';
+// import { LoadingOutlined } from '@ant-design/icons';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
