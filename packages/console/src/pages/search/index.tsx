@@ -233,7 +233,7 @@ function Search({}: SearchProps) {
           <span
             onClick={() => {
               setTab('resource');
-              setShowUserResource(true);
+              setShowUserResource(false);
             }}
             className={
               (tab === 'resource' ? styles.active : styles.inactive) + ' mr-20  ' + styles.tab
@@ -279,7 +279,7 @@ function Search({}: SearchProps) {
                       </div>
                       <span className={styles.userName}>{selectedUser.username}</span>
                       <span className={styles.userResource}>
-                        上架的资源（{userResourcesListPure.length}）
+                        上架的资源（{selectedUser.createdResourceCount}）
                       </span>
                     </div>
                     <div
@@ -331,7 +331,7 @@ function Search({}: SearchProps) {
               )}
               <div
                 className={
-                  'flex-row flex-wrap h-100x  w-100x px-115 ' +
+                  'flex-row flex-wrap h-100x  w-100x  ' +
                   (resourcesListPure.length > 3 ? ' space-between' : '')
                 }
               >

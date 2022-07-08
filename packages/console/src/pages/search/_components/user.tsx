@@ -24,7 +24,6 @@ export default function ResourceList({
 }: ResourceListProps) {
   return (
     <>
-      {' '}
       {!userList.length ? (
         <div className="flex-column-center w-100x h-100x">
           <div className="flex-2"></div>
@@ -48,7 +47,9 @@ export default function ResourceList({
             </div>
             <div className=" flex-column ml-20 h-100x flex-1 justify-center">
               <span className={styles.userName}>{item.username}</span>
-              <span className={styles.userResource + ' mt-10'}>已上架{item.createdResourceCount}个资源</span>
+              <span className={styles.userResource + ' mt-10'}>
+                已上架{item.createdResourceCount}个资源
+              </span>
             </div>
           </div>
         ))}
