@@ -482,6 +482,20 @@ export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParams
   });
 }
 
+// 查看资源创建数量
+interface ResourcesCountParamsType {
+  userIds: string;
+  status?: 0 | 1 | 2 | 3; // 0:下架 1:上架 2:冻结(冻结时处于下架状态) 3:冻结(冻结时处于上架状态)
+}
+
+export function resourcesCount({...params}: ResourcesCountParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/count`,
+    params: params,
+  });
+}
+
 // 批量查询资源授权结果
 interface BatchAuthParamsType {
   resourceIds: string;
