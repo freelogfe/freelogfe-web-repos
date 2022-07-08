@@ -6,13 +6,9 @@ import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
-import { resolveResources } from '../../../../@freelog/tools-lib/src/service-API/resources';
-import { Divider } from 'antd';
-import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
-import CardContainer from './_components/resource/cardContainer';
-import ResourceImage from './_components/resource/image';
-import ResourceInfo from './_components/resource/info';
-import PolicyTag from './_components/resource/policyTag';
+import ResourceList from './_components/resource';
+import UserList from './_components/user';
+import Drawer from './_components/drawer';
 interface SearchProps {}
 
 function Search({}: SearchProps) {
@@ -20,6 +16,7 @@ function Search({}: SearchProps) {
     search: string;
   }>();
   const [keywords, setKeywords] = useState<string>('');
+  const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showUserResource, setShowUserResource] = useState(false);
   const [tab, setTab] = useState<'resource' | 'user'>('resource');
   const container: any = useRef(null);
@@ -44,7 +41,7 @@ function Search({}: SearchProps) {
   });
   const [userResourcePageData, setUserResourcePageData] = useState({
     skip: 0,
-    limit: 100,
+    limit: 30,
     totalItem: -1,
   });
   const getResources = () => {
@@ -69,9 +66,9 @@ function Search({}: SearchProps) {
       keywords: keywords,
       // resourceType: selectedTags[0],
       status: 1,
-      userId: '',
-      limit: pageData.limit,
-      skip: pageData.skip,
+      userId: selectedUser.userId,
+      limit: userResourcePageData.limit,
+      skip: userResourcePageData.skip,
     });
   };
   const getData = () => {
@@ -90,7 +87,7 @@ function Search({}: SearchProps) {
     refreshDeps: [keywords, pageData.skip, userPageData.skip],
   });
   useEffect(() => {
-    run();
+    if (keywords) run();
   }, [keywords]);
   useEffect(() => {
     if (userPageData.skip > 0) {
@@ -108,13 +105,18 @@ function Search({}: SearchProps) {
     }
   }, [userResourcePageData.skip]);
   useEffect(() => {
-    if (tab === 'resource' && !resourcesListPure.length) {
+    if (tab === 'resource' && !resourcesListPure.length && keywords) {
       run();
     }
-    if (tab === 'user' && !userList.length) {
+    if (tab === 'user' && !userList.length && keywords) {
       run();
     }
   }, [tab]);
+  useEffect(() => {
+    if (selectedUser) {
+      run();
+    }
+  }, [selectedUser]);
   const resolveResources = (res: any) => {
     let dataList: any = res.dataList;
     let supplyArray: any = [];
@@ -145,10 +147,22 @@ function Search({}: SearchProps) {
     setResourcesListPure(dataList);
     setResourcesList([...dataList, ...supplyArray]);
   };
-  const resolveUsers = (res: any) => {
-    setUserPageData({ ...pageData, totalItem: res.totalItem });
+  const resolveUsers = async (res: any) => {
+    const ids = res.dataList.map((item: any) => item.userId).join(',');
+    const data = await FServiceAPI.Resource.resourcesCount({ userIds: ids, stauts: 1 });
+    console.log(data);
+    res.dataList.forEach((item: any) => {
+      data.data.some((i: any) => {
+        if (i.userId === item.userId) {
+          item.createdResourceCount = i.createdResourceCount;
+          return true;
+        }
+        return false;
+      });
+    });
+
+    setUserPageData({ ...userPageData, totalItem: res.totalItem });
     setUserList(res.dataList);
-    console.log(res.dataList)
   };
   const resolveUserResources = (res: any) => {
     let dataList: any = res.dataList;
@@ -156,7 +170,7 @@ function Search({}: SearchProps) {
     if (userResourceContainer) {
       const maxCount = Math.floor(userResourceContainer.current.clientWidth / 300);
       let supply = 0;
-      if (userPageData.skip > 0) {
+      if (userResourcePageData.skip > 0) {
         dataList = [...userResourcesListPure, ...dataList];
       } else {
         userResourceContainer.current.scrollTop = 0;
@@ -176,13 +190,12 @@ function Search({}: SearchProps) {
         });
       }
     }
-    setUserResourcePageData({ ...userPageData, totalItem: res.totalItem });
+    setUserResourcePageData({ ...userResourcePageData, totalItem: res.totalItem });
     setUserResourcesListPure(dataList);
     setUserResourcesList([...dataList, ...supplyArray]);
   };
   useEffect(() => {
     if (!data) return;
-    console.log(data);
     // @ts-ignore
     const res: any = data.data;
     if (tab === 'resource') {
@@ -218,7 +231,10 @@ function Search({}: SearchProps) {
         />
         <div className="flex-row ">
           <span
-            onClick={() => setTab('resource')}
+            onClick={() => {
+              setTab('resource');
+              setShowUserResource(true);
+            }}
             className={
               (tab === 'resource' ? styles.active : styles.inactive) + ' mr-20  ' + styles.tab
             }
@@ -233,78 +249,103 @@ function Search({}: SearchProps) {
           </span>
         </div>
       </div>
-      <div className={styles.list + ' flex-1 w-100x over-h'}>
-        {tab === 'user' && showUserResource ? <div ref={userResourceContainer}></div> : null}
-        <div className="w-100x h-100x y-auto  px-115 flex-column-center">
-          <div
-            className={
-              'flex-row flex-wrap h-100x   pt-40 h-100x' +
-              (resourcesList.length > 3 ? ' space-between' : '')
-            }
-            ref={container}
-          >
-            {(!resourcesList.length && tab === 'resource') ||
-            (tab === 'user' && !userResourcesList.length) ? (
-              <div className="flex-column-center w-100x h-100x">
-                <div className="flex-2"></div>
-                <span className={styles.none}>
-                  抱歉，没有找到与{' ' + keywords + ' '}相关的结果
-                </span>
-                <div className="flex-3"></div>
-              </div>
-            ) : (
-              <div className={styles.tip + ' mb-40 w-100x'}>
-                以下是{' ' + keywords + ' '}相关的结果（{resourcesListPure.length}）
-              </div>
-            )}
-            {resourcesList.map((item: any, index: number) => {
-              return !item._fake ? (
-                <CardContainer
-                  key={item.resourceId + index}
-                  // onClick={() => goDetail(item.resourceId)}
-                >
-                  <ResourceImage
-                    imgSrc={
-                      item.coverImages[0]
-                        ? item.coverImages[0]
-                        : 'http://static.testfreelog.com/static/default_cover.png'
-                    }
-                  />
-                  <ResourceInfo
-                    name={item.resourceName}
-                    type={item.resourceType}
-                    version={item.latestVersion}
-                  />
-                  <div className="flex-row over-h">
-                    {item.policies.map((policy: any) => (
-                      <PolicyTag name={policy.policyName} key={policy.policyId} />
-                    ))}
-                  </div>
-                </CardContainer>
-              ) : (
-                <CardContainer className="d-none" diabled key={item.resourceId + index} />
-              );
-            })}
-            {pageData.totalItem > resourcesListPure.length ? (
-              <div className="flex-column-center w-100x py-50 cur-pointer">
+      <div className={styles.list + ' flex-1 w-100x '}>
+        {tab === 'user' ? (
+          <div className="w-100x h-100x    flex-column align-center">
+            {showUserResource && (
+              <div className="w-100x h-100x   px-115 flex-column-center">
                 <div
-                  onClick={() => {
-                    console.log(pageData, pageData.totalItem, resourcesListPure.length);
-                    setPageData({
-                      ...pageData,
-                      skip: resourcesListPure.length,
-                    });
-                  }}
-                  className={styles.getMore}
+                  className={
+                    'flex-row flex-wrap h-100x   pt-40 w-100x' +
+                    (userResourcesList.length > 3 ? ' space-between' : '')
+                  }
+                  ref={userResourceContainer}
                 >
-                  加载更多
+                  <Drawer
+                    className={styles.drawer}
+                    close={() => {
+                      setShowUserResource(false);
+                    }}
+                  >
+                    <div
+                      className={styles.closeContainer + ' flex-column-center'}
+                      onClick={() => setShowUserResource(false)}
+                    >
+                      <i className={styles.close + ' freelog fl-icon-guanbi'} />
+                    </div>
+                    <div className="flex-row align-center mb-20 mt-6 px-115">
+                      <div className={styles.userimg + ' over-h shrink-0'}>
+                        <img src={selectedUser.headImage} className="w-100x" />
+                      </div>
+                      <span className={styles.userName}>{selectedUser.username}</span>
+                      <span className={styles.userResource}>
+                        上架的资源（{userResourcesListPure.length}）
+                      </span>
+                    </div>
+                    <div
+                      className={
+                        'flex-row flex-wrap h-100x  w-100x px-115 ' +
+                        (userResourcesListPure.length > 3 ? ' space-between' : '')
+                      }
+                    >
+                      <ResourceList
+                        resourcesList={userResourcesList}
+                        keywords={keywords}
+                        resourcesListPure={userResourcesListPure}
+                        pageData={userResourcePageData}
+                        setPageData={setUserResourcePageData}
+                      ></ResourceList>
+                    </div>
+                  </Drawer>
                 </div>
               </div>
-            ) : (
-              <div className="h-50 w-100x"></div>
             )}
+            <div className={'flex-column h-100x   pt-40 w-920 '}>
+              <UserList
+                setShowUserResource={(user: any) => {
+                  setSelectedUser(user);
+                  setShowUserResource(true);
+                }}
+                userList={userList}
+                keywords={keywords}
+                userPageData={userPageData}
+                setUserPageData={setUserPageData}
+              ></UserList>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-100x h-100x   px-115 flex-column-center">
+            <div className={'h-100x   pt-40 w-100x'} ref={container}>
+              {!resourcesListPure.length ? (
+                <div className="flex-column-center w-100x h-100x">
+                  <div className="flex-2"></div>
+                  <span className={styles.none}>
+                    抱歉，没有找到与{' ' + keywords + ' '}相关的结果
+                  </span>
+                  <div className="flex-3"></div>
+                </div>
+              ) : (
+                <div className={styles.tip + ' mb-20 w-100x'}>
+                  以下是{' ' + keywords + ' '}相关的结果（{resourcesListPure.length}）
+                </div>
+              )}
+              <div
+                className={
+                  'flex-row flex-wrap h-100x  w-100x px-115 ' +
+                  (resourcesListPure.length > 3 ? ' space-between' : '')
+                }
+              >
+                <ResourceList
+                  resourcesList={resourcesList}
+                  keywords={keywords}
+                  resourcesListPure={resourcesListPure}
+                  pageData={pageData}
+                  setPageData={setPageData}
+                ></ResourceList>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

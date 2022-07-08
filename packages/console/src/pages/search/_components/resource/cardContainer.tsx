@@ -13,6 +13,9 @@ export default function CardContainer(props: CardContainerProps) {
       className={
         (props.diabled ? '' : styles.container) + ' flex-column over-h mb-10 w-300 h-314 p-20'
       }
+      style={{
+        cursor: 'pointer',
+      }}
     >
       {props.children}
     </div>
