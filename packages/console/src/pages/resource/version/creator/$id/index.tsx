@@ -91,6 +91,7 @@ function VersionCreator({
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
     // 选择的文件对象
     || resourceVersionCreatorPage.selectedFileStatus !== -3
+    || resourceVersionCreatorPage.rawPropertiesState !== 'success'
     // 依赖
     || resourceVersionCreatorPage.dependencies.some((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.some((erc) => erc.checked) && !dd.enabledPolicies.some((ep) => ep.checked);
