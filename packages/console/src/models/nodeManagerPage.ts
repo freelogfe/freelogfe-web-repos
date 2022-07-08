@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
+
 // import FUtil1 from '@/utils';
 
 export interface NodeManagerModelState {
@@ -273,6 +274,11 @@ const Model: NodeManagerModelType = {
       // console.log(data, 'data12341234');
       if (!data || data.ownerUserId !== FUtil.Tool.getUserIDByCookies()) {
         router.replace(FUtil.LinkTo.exception403());
+        return;
+      }
+
+      if ((data.status & 4) === 4) {
+        router.replace(FUtil.LinkTo.nodeFreeze({ nodeID: payload.nodeID }));
         return;
       }
 

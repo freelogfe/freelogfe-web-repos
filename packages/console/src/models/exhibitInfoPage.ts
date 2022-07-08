@@ -3,10 +3,11 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI , FI18n} from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+
 // import FUtil1 from '@/utils';
 
 export interface ExhibitInfoPageModelState {
@@ -396,6 +397,11 @@ const Model: ExhibitInfoPageModelType = {
 
       const { data: data_NodeDetails } = yield call(FServiceAPI.Node.details, params3);
       // console.log(data3, 'data90j23rlkfjasdfa');
+
+      if ((data_NodeDetails.status & 4) === 4) {
+        router.replace(FUtil.LinkTo.nodeFreeze({ nodeID: data_PresentableDetails.nodeId }));
+        return;
+      }
 
       const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: data_PresentableDetails.resourceInfo.resourceId,

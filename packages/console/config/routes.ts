@@ -96,6 +96,12 @@ export default [
                   },
                 ],
               },
+              {
+                exact: true,
+                path: 'freeze/:id',
+                component: '../pages/result/node/freeze/$id',
+                title: '节点冻结 - Freelog',
+              },
             ],
           },
           {

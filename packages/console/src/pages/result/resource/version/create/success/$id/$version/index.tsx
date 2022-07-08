@@ -29,7 +29,7 @@ function Success({match, dispatch}: SuccessProps) {
     if (c === 0) {
       gotoVersionInfo();
     }
-  }, gotoState === 2 ? 1000 : null);
+  }, gotoState === 2 ? 1000 : undefined);
 
   AHooks.useMount(async () => {
     const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {

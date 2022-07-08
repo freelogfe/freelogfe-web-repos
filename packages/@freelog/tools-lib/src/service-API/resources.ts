@@ -88,6 +88,7 @@ interface ListParamsType {
   projection?: string;
   sort?: string;
   userId?: number;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface ListReturnType extends CommonReturn {
@@ -109,6 +110,7 @@ interface InfoParamsType {
   isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface InfoReturnType extends CommonReturn {
@@ -131,6 +133,7 @@ interface BatchInfoParamsType {
   isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface BatchInfoReturnType extends CommonReturn {

@@ -1,20 +1,21 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTextBtn} from '../FButton';
+import { FTextBtn } from '../FButton';
 // @ts-ignore
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {Tooltip} from 'antd';
-import {FCopy} from "../FIcons";
-import {CSSProperties} from "react";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Tooltip } from 'antd';
+import { FCopy } from '../FIcons';
+import { CSSProperties } from 'react';
 
 interface FCopyToClipboardProps {
   text: string;
   title: string;
   iconStyle?: CSSProperties;
   success?: string;
+  children?: React.ReactNode;
 }
 
-function FCopyToClipboard({text, title, success,iconStyle}: FCopyToClipboardProps) {
+function FCopyToClipboard({ text, title, success, iconStyle, children }: FCopyToClipboardProps) {
 
   const [tip, setTip] = React.useState<string>(title);
   const [visibleTooltip, setVisibleTooltip] = React.useState<boolean>(false);
@@ -22,10 +23,10 @@ function FCopyToClipboard({text, title, success,iconStyle}: FCopyToClipboardProp
 
   return (<Tooltip
     // visible={visibleTooltip}
-    trigger="hover"
+    trigger='hover'
     title={<span className={styles.color}>{tip}</span>}
     color={'#fff'}
-    placement="bottomLeft"
+    placement='bottomLeft'
     mouseLeaveDelay={0}
     mouseEnterDelay={0}
   >
@@ -41,7 +42,9 @@ function FCopyToClipboard({text, title, success,iconStyle}: FCopyToClipboardProp
         }
       }}
     >
-      <FTextBtn><FCopy style={iconStyle}/></FTextBtn>
+      {
+        children || (<FTextBtn><FCopy style={iconStyle} /></FTextBtn>)
+      }
     </CopyToClipboard>
       </span>
   </Tooltip>);

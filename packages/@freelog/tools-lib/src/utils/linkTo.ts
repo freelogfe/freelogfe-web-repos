@@ -260,6 +260,15 @@ export function exception403({...params}: Exception403ParamsType = {}) {
   })}`;
 }
 
+// 节点封禁
+interface NodeFreezeParamsType {
+  nodeID: number;
+}
+
+export function nodeFreeze({nodeID}: NodeFreezeParamsType) {
+  return `/result/node/freeze/${nodeID}`;
+}
+
 /************** console End ******************************************************/
 
 
@@ -329,6 +338,8 @@ interface SettingParamsType {
 export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
+
+
 
 /************** user End ******************************************************/
 

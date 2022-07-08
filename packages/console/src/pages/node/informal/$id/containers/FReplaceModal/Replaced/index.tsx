@@ -38,9 +38,10 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
     <div className={styles.filter}>
       <FAutoComplete
         value={informalNodeManagerPage.replaceModal_Replaced_Keywords}
-        options={informalNodeManagerPage.replaceModal_Replaced_DependencyTreeList.map<{ value: string; }>((dt) => {
+        options={informalNodeManagerPage.replaceModal_Replaced_DependencyTreeList.map<{ value: string; label: string; }>((dt) => {
           return {
             value: dt,
+            label: dt,
           };
         })}
         debounce={300}
