@@ -136,16 +136,32 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
                       {
-                        !rrr.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
-                          data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
-                            .filter((k) => k.checked)
-                            .map((j) => {
-                              return {
-                                text: j.title,
-                                dot: '',
-                              };
-                            })}
-                        />
+                        !rrr.upthrow && (<>
+
+                          {
+                            [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                              .filter((k) => k.checked)
+                              .length === 0
+                              ? (<div style={{
+                                color: '#E9A923',
+                                fontSize: 12,
+                                lineHeight: '18px',
+                                fontWeight: 400,
+                              }}>未处理授权</div>)
+                              : (<FComponentsLib.F_Contract_And_Policy_Labels
+                                data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                                  .filter((k) => k.checked)
+                                  .map((j) => {
+                                    return {
+                                      text: j.title,
+                                      dot: '',
+                                    };
+                                  })}
+                              />)
+                          }
+
+                        </>)
+
                       }
                       {
                         rrr.upthrow && (<label
