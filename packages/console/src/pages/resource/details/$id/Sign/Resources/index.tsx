@@ -72,32 +72,43 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />
             <div style={{ height: 5 }} />
-            <FComponentsLib.F_Contract_And_Policy_Labels
-              data={
-                [
-                  ...r.contracts
-                    .filter((c) => {
-                      return c.checked;
-                    })
-                    .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
-                      return {
-                        text: c.name,
-                        dot: c.status === 'inactive' ? 'yellow' : 'green',
-                      };
-                    }),
-                  ...r.policies
-                    .filter((p) => {
-                      return p.checked;
-                    })
-                    .map<{ text: string; dot: '' }>((p) => {
-                      return {
-                        text: p.fullInfo.policyName,
-                        dot: '',
-                      };
-                    }),
-                ]
-              }
-            />
+            {
+              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+                .filter((c) => {
+                  return c.checked;
+                })
+                .length === 0
+                ? (<div style={{
+                  color: '#E9A923',
+                  fontSize: 12,
+                  lineHeight: '18px',
+                  fontWeight: 400,
+                }}>未处理授权</div>)
+                : (<FComponentsLib.F_Contract_And_Policy_Labels
+                  data={[
+                    ...r.contracts
+                      .filter((c) => {
+                        return c.checked;
+                      })
+                      .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                        return {
+                          text: c.name,
+                          dot: c.status === 'inactive' ? 'yellow' : 'green',
+                        };
+                      }),
+                    ...r.policies
+                      .filter((p) => {
+                        return p.checked;
+                      })
+                      .map<{ text: string; dot: '' }>((p) => {
+                        return {
+                          text: p.fullInfo.policyName,
+                          dot: '',
+                        };
+                      }),
+                  ]}
+                />)
+            }
           </div>);
         })
     }
@@ -152,30 +163,44 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />
             <div style={{ height: 5 }} />
-            <FComponentsLib.F_Contract_And_Policy_Labels data={
-              [
-                ...r.contracts
-                  .filter((c) => {
-                    return c.checked;
-                  })
-                  .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
-                    return {
-                      text: c.name,
-                      dot: c.status === 'inactive' ? 'yellow' : 'green',
-                    };
-                  }),
-                ...r.policies
-                  .filter((p) => {
-                    return p.checked;
-                  })
-                  .map<{ text: string; dot: '' }>((p) => {
-                    return {
-                      text: p.fullInfo.policyName,
-                      dot: '',
-                    };
-                  }),
-              ]
-            } />
+            {
+              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+                .filter((c) => {
+                  return c.checked;
+                })
+                .length === 0
+                ? (<div style={{
+                  color: '#E9A923',
+                  fontSize: 12,
+                  lineHeight: '18px',
+                  fontWeight: 400,
+                }}>未处理授权</div>)
+                : (<FComponentsLib.F_Contract_And_Policy_Labels
+                  data={[
+                    ...r.contracts
+                      .filter((c) => {
+                        return c.checked;
+                      })
+                      .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                        return {
+                          text: c.name,
+                          dot: c.status === 'inactive' ? 'yellow' : 'green',
+                        };
+                      }),
+                    ...r.policies
+                      .filter((p) => {
+                        return p.checked;
+                      })
+                      .map<{ text: string; dot: '' }>((p) => {
+                        return {
+                          text: p.fullInfo.policyName,
+                          dot: '',
+                        };
+                      }),
+                  ]}
+                />)
+            }
+
           </div>);
         })
     }
