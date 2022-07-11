@@ -38,8 +38,10 @@ function FResourceCard({
                          onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick,
                        }: FResourceCardProps) {
   return (
-    <div onClick={() => onClick && onClick()}
-         className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}>
+    <div
+      onClick={() => onClick && onClick()}
+      className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}
+    >
       <div className={styles.Cover}>
         <FCoverImage src={resource.cover} width={280} style={{ borderRadius: 4 }} />
         {
@@ -85,7 +87,13 @@ function FResourceCard({
             </nav>
             <div className={styles.Status}>
               <FResourceStatusBadge
-                status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
+                status={(resource.status & 2) === 2
+                  ? 'freeze'
+                  : resource.status === 1
+                    ? 'online'
+                    : !resource.version
+                      ? 'unreleased'
+                      : 'offline'}
               />
               <div style={{ width: 10 }} />
               {resource.authProblem && <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>}
