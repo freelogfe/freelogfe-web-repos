@@ -315,6 +315,15 @@ export function retrievePayPassword({}: RetrievePayPasswordParamsType = {}) {
   return `/retrievePayPassword`;
 }
 
+// 用户冻结
+interface UserFreezeParamsType {
+  // goTo?: string;
+}
+
+export function userFreeze({}: UserFreezeParamsType = {}) {
+  return `/freeze`;
+}
+
 // 我的钱包
 interface WalletParamsType {
 }

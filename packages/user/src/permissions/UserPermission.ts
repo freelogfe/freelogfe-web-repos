@@ -42,18 +42,17 @@ class UserPermission {
 
   async checkUrl(url: string): Promise<{ code: T_StateCode; goToUrl?: string; }> {
     const stateCode = await self.check();
-    if (
-      stateCode === 'SUCCESS' ||
-      url.startsWith(FUtil.LinkTo.market()) ||
-      url.startsWith(FUtil.LinkTo.resourceDetails({ resourceID: 'resourceID' }).replace('resourceID', '')) ||
-      url.startsWith(FUtil.LinkTo.exampleNodes())
-    ) {
+    if (stateCode === 'SUCCESS') {
       return {
         code: stateCode,
       };
     }
 
-    if (stateCode === 'ERR_NOT_LOGIN') {
+    if (stateCode === 'ERR_NOT_LOGIN' && (
+      !url.startsWith(FUtil.LinkTo.login()) ||
+      !url.startsWith(FUtil.LinkTo.logon()) ||
+      !url.startsWith(FUtil.LinkTo.retrieveUserPassword())
+    )) {
       return {
         code: stateCode,
         goToUrl: FUtil.LinkTo.login({ goTo: url }),
@@ -67,11 +66,11 @@ class UserPermission {
       };
     }
 
-    if (stateCode === 'ERR_NOT_ALPHA_TEST' && !url.startsWith(FUtil.LinkTo.invitation())) {
+    if (stateCode === 'ERR_FREEZE' && url.startsWith('/logged')) {
       // console.log(FUtil.LinkTo.invitation(), 'FUtil.LinkTo.invitation()90io3jsidkf;sldkfj');
       return {
         code: stateCode,
-        goToUrl: FUtil.LinkTo.invitation({ goTo: url }),
+        goToUrl: FUtil.LinkTo.userFreeze(),
       };
     }
 

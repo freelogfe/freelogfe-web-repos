@@ -191,11 +191,12 @@ const Model: UserModelType = {
         // console.log(listener, 'listener098phijnoweklf');
         userPermission.checkUrl(history.location.pathname)
           .then(({ code, goToUrl }) => {
+            // console.log(code, goToUrl, '********(8998989');
             // if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
             //   router.replace(goToUrl);
             // }
-            if (code === 'ERR_FREEZE') {
-              // router.replace()
+            if (code === 'ERR_FREEZE' && !!goToUrl) {
+              history.replace(goToUrl);
             }
           });
       });
