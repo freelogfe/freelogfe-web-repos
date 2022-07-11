@@ -100,7 +100,13 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
     <div className={styles.header}>
       <FResourceCover
         src={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
-        status={resourceInfo.info?.status === 1 ? 'online' : !!resourceInfo.info?.latestVersion ? 'offline' : 'unreleased'}
+        status={(resourceInfo.info?.status & 2) === 2
+          ? 'freeze'
+          : resourceInfo.info?.status === 1
+            ? 'online'
+            : !!resourceInfo.info?.latestVersion
+              ? 'offline'
+              : 'unreleased'}
       />
       <div style={{ height: 15 }} />
       <FLink
