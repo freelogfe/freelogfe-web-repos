@@ -67,6 +67,14 @@ class UserPermission {
       };
     }
 
+    if (stateCode === 'ERR_FREEZE') {
+      // console.log(FUtil.LinkTo.invitation(), 'FUtil.LinkTo.invitation()90io3jsidkf;sldkfj');
+      return {
+        code: stateCode,
+        goToUrl: FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.userFreeze(),
+      };
+    }
+
     if (stateCode === 'ERR_NOT_ALPHA_TEST' && !url.startsWith(FUtil.LinkTo.invitation())) {
       // console.log(FUtil.LinkTo.invitation(), 'FUtil.LinkTo.invitation()90io3jsidkf;sldkfj');
       return {

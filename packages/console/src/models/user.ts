@@ -144,8 +144,8 @@ const Model: MarketModelType = {
             if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
               router.replace(goToUrl);
             }
-            if (code === 'ERR_FREEZE') {
-              // router.replace()
+            if (code === 'ERR_FREEZE' && !!goToUrl) {
+              window.location.replace(goToUrl);
             }
           });
       });
