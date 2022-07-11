@@ -4,7 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
 // import FUtil1 from '@/utils';
-import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -543,10 +543,14 @@ const Model: ResourceDetailPageModelType = {
         resourceIDs: [resourceDetailPage.resource_ID],
       };
 
-
       // 本次要添加的一些列资源信息
       const [data_ResourceDetail]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
+
+      if ((data_ResourceDetail.status & 2) === 2) {
+        router.replace(FUtil.LinkTo.resourceFreeze({resourceID: resourceDetailPage.resource_ID}));
+        return;
+      }
 
       let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data_ResourceDetail];
 
@@ -849,6 +853,7 @@ type HandleResourceBatchInfoReturn = {
   tags: string[];
   intro: string;
   authProblem: boolean;
+  freezeReason: string;
 }[];
 
 async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoParams): Promise<HandleResourceBatchInfoReturn> {

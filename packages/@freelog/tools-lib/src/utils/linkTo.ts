@@ -269,6 +269,15 @@ export function nodeFreeze({nodeID}: NodeFreezeParamsType) {
   return `/result/node/freeze/${nodeID}`;
 }
 
+// 资源封禁
+interface ResourceFreezeParamsType {
+  resourceID: string;
+}
+
+export function resourceFreeze({resourceID}: ResourceFreezeParamsType) {
+  return `/result/resource/freeze/${resourceID}`;
+}
+
 /************** console End ******************************************************/
 
 

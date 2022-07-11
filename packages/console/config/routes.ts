@@ -134,6 +134,12 @@ export default [
                   },
                 ],
               },
+              {
+                exact: true,
+                path: 'freeze/:id',
+                component: '../pages/result/resource/freeze/$id',
+                title: '资源冻结 - Freelog',
+              },
             ],
           },
         ],

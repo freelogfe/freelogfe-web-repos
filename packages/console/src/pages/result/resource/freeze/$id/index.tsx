@@ -16,13 +16,13 @@ interface FreezeProps extends RouteComponentProps<{ id: string }> {
 }
 
 interface FreezeStates {
-  nodeName: string;
+  resourceName: string;
   freezeReason: string;
 }
 
 function Freeze({ match }: FreezeProps) {
 
-  const [nodeName, set_nodeName] = React.useState<FreezeStates['nodeName']>('');
+  const [resourceName, set_resourceName] = React.useState<FreezeStates['resourceName']>('');
   const [freezeReason, set_freezeReason] = React.useState<FreezeStates['freezeReason']>('');
 
   AHooks.useMount(() => {
@@ -34,25 +34,29 @@ function Freeze({ match }: FreezeProps) {
   });
 
   async function handleData() {
-    const { data } = await FServiceAPI.Node.details({ nodeId: Number(match.params.id) });
-    // console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
+    const { data }: any = await FServiceAPI.Resource.info({
+      resourceIdOrName: match.params.id,
+      isLoadFreezeReason: 1,
+    });
+    // (status & 2 ) === 2
+    console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
 
-    if ((data.status & 4) !== 4) {
-      router.replace(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));
+    if ((data.status & 2) !== 2) {
+      router.replace(FUtil.LinkTo.resourceDetails({ resourceID: match.params.id }));
       return;
     }
 
-    set_nodeName(data.nodeName);
+    set_resourceName(data.resourceName);
     set_freezeReason(data.freezeReason || '其他违法违规');
   }
 
   return (<div className={styles.container}>
     <FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    <FTitleText text={'你的节点已经被封停'} type='h1' />
+    <FTitleText text={'该资源已经被封停'} type='h1' />
     <div style={{ height: 80 }} />
     <div className={styles.content}>
-      <FContentText text={`经核实，节点 ${nodeName} ，严重违`} />
+      <FContentText text={`经核实，资源 ${resourceName} ，严重违`} />
       <FTextBtn onClick={() => {
 
       }}>&nbsp;查看服务协议&nbsp;</FTextBtn>
