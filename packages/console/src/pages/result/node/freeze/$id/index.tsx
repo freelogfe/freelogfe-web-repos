@@ -35,7 +35,7 @@ function Freeze({ match }: FreezeProps) {
 
   async function handleData() {
     const { data } = await FServiceAPI.Node.details({ nodeId: Number(match.params.id) });
-    console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
+    // console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
 
     if ((data.status & 4) !== 4) {
       router.replace(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));

@@ -45,6 +45,12 @@ export default defineConfig({
       component: '@/pages/retrievePayPassword/index',
       title: '找回支付密码 - Freelog',
     },
+    {
+      exact: true,
+      path: '/freeze',
+      component: '@/pages/freeze/index',
+      title: '用户封禁 - Freelog',
+    },
     // {
     //   exact: true,
     //   path: '/result/resetPassword/success',
@@ -103,16 +109,14 @@ export default defineConfig({
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
     '/v1': {
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
   },
-  hash: true
+  hash: true,
 });
