@@ -87,7 +87,8 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     <FTextBtn
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (rrr.status === 3) {
+                        // if (rrr.status === 3) {
+                        if (rrr.error === 'storageObject') {
                           return goToObject(rrr.id);
                         }
                         return window.open(FUtil.LinkTo.resourceDetails({
@@ -104,11 +105,15 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       />
                     </FTextBtn>
                     <div style={{ width: 5 }} />
-                    {rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
-                    {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
-                    {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
-                    {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
-                    {rrr.status === 1 && rrr.authProblem && (
+                    {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
+                    {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                    {/*{rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {/*{rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {/*{rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.error === '' && rrr.warning === 'authException' && (
                       <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
@@ -231,7 +236,8 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               <FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (i.status === 3) {
+                  // if (i.status === 3) {
+                  if (i.error === 'storageObject') {
                     return goToObject(i.id);
                   }
                   return window.open(FUtil.LinkTo.resourceDetails({
@@ -248,11 +254,15 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 />
               </FTextBtn>
               <div style={{ width: 5 }} />
-              {i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
-              {i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
-              {i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
-              {i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
-              {i.status === 1 && i.authProblem && (
+              {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
+              {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+              {/*{i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+              {/*{i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+              {/*{i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+              {i.error === '' && i.warning === 'authException' && (
                 <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
