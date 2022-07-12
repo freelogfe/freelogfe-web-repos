@@ -1,1 +1,117 @@
-@import '../../config.less';
+.container {
+  height: calc(100vh - 70px);
+
+  .operation {
+    background: #ffffff;
+    padding-top: 40px;
+
+    .input {
+      width: 500px;
+    }
+
+    .active {
+      border-bottom: 2px solid #2784ff;
+      color: #2376e5;
+
+      &:hover {
+        border-bottom: 2px solid #529dff;
+      }
+    }
+
+    .inactive {
+      color: #222222;
+    }
+
+    .tab {
+      cursor: pointer;
+      margin-top: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 22px;
+      padding-bottom: 5px;
+
+      &:hover {
+        color: #529dff;
+      }
+    }
+  }
+
+  .list {
+    background: #fafbfc;
+
+    .tip {
+      font-size: 14px;
+      font-weight: 400;
+      color: #999999;
+      line-height: 20px;
+    }
+
+    .getMore {
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+      padding: 16px 60px;
+      color: #666666;
+      font-size: 20px;
+      font-weight: 400;
+
+      &:hover {
+        border: 1px solid #2784ff;
+        color: #2784ff;
+      }
+    }
+
+    .none {
+      font-size: 30px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #666666;
+      line-height: 36px;
+    }
+  }
+}
+
+.drawer {
+  height: calc(100vh - 70px);
+}
+
+.userimg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222222;
+  line-height: 20px;
+  margin-left: 10px;
+}
+
+.userResource {
+  font-size: 14px;
+  font-weight: 400;
+  color: #999999;
+  line-height: 20px;
+  margin-left: 20px;
+}
+
+.closeContainer {
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.2000);
+  backdrop-filter: blur(10px);
+  &:hover{
+    backdrop-filter: blur(20px); 
+  }
+  border-radius: 50%;
+}
+
+.close {
+  color:  white;
+  font-size: 13px;
+}
