@@ -76,9 +76,9 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put }: EffectsCommandMap) {
-      if (!FUtil.Tool.getUserIDByCookies()) {
-        return;
-      }
+      // if (!FUtil.Tool.getUserIDByCookies()) {
+      //   return;
+      // }
       // const { data } = yield call(FServiceAPI.User.currentUserInfo);
       // // console.log(data, '!@#$!@#$@#$@#$');
       // yield put<ChangeAction>({
@@ -93,8 +93,7 @@ const Model: UserModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // @ts-ignore
-          info: data,
+          userInfo: data,
         },
       });
     },
