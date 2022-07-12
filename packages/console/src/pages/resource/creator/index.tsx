@@ -21,7 +21,7 @@ import {
   OnChange_Resource_Type_Action,
   initStates, OnClick_CreateBtn_Action,
 } from '@/models/resourceCreatorPage';
-import FAutoComplete from '@/components/FAutoComplete';
+// import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
 import { FCheck, FInfo, FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
