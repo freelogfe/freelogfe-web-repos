@@ -13,7 +13,6 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-// import FUtil1 from '@/utils';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FWarning } from '@/components/FIcons';
@@ -74,7 +73,8 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
           <div className={styles.DepPanelContent}>
 
             {
-              resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
+              // resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
+              resource?.error === 'offline' && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
                   <FForbid className={styles.errorIcon} />
                   <FTipText
@@ -84,7 +84,8 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 </div>)
             }
             {
-              resource?.status === 2 && (<div className={styles.errorBox}>
+              // resource?.status === 2 && (<div className={styles.errorBox}>
+              resource?.error === 'cyclicDependency' && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
                 <FTipText
                   text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
@@ -93,19 +94,31 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               </div>)
             }
             {
-              resource?.status === 3 && (<div className={styles.errorBox}>
+              // resource?.status === 3 && (<div className={styles.errorBox}>
+              resource?.error === 'storageObject' && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
                 <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type='second' />
               </div>)
             }
             {
-              resource?.status === 4 && (<div className={styles.errorBox}>
+              // resource?.status === 4 && (<div className={styles.errorBox}>
+              resource?.error === 'upThrow' && (<div className={styles.errorBox}>
                 <FUpcast className={styles.errorIcon} />
                 <FTipText text={'此依赖为当前资源的基础上抛'} type='second' />
               </div>)
             }
             {
-              (resource?.status === 1 || (resource?.status === 0 && (resource?.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)))
+              resource?.error === 'freeze' && (<div className={styles.errorBox}>
+                <FForbid className={styles.errorIcon} />
+                <FTipText text={'此资源因违规无法授权'} type='second' />
+              </div>)
+            }
+            {
+              // (resource?.status === 1
+              (resource?.error === ''
+                // || (resource?.status === 0
+                || (resource?.error === 'offline'
+                  && (resource?.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)))
               && (<Space
                 style={{ width: '100%' }}
                 size={25}
@@ -113,7 +126,8 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               >
 
                 {
-                  resource.authProblem && (<Space size={10}>
+                  // resource.authProblem && (<Space size={10}>
+                  resource.warning === 'authException' && (<Space size={10}>
                     <FWarning style={{ fontSize: 20 }} />
                     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
                   </Space>)

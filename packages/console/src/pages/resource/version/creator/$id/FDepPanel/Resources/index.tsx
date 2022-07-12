@@ -113,6 +113,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     {rrr.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
                     {/*{rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
                     {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
                     {rrr.error === '' && rrr.warning === 'authException' && (
                       <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
@@ -262,6 +263,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               {i.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
               {/*{i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
               {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+              {i.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
               {i.error === '' && i.warning === 'authException' && (
                 <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>

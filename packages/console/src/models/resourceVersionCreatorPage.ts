@@ -816,7 +816,7 @@ const Model: ResourceVersionCreatorModelType = {
               ? 'upThrow'
               : dr.status === 0
                 ? 'offline'
-                : (dr.status & 4) === 4
+                : (dr.status & 2) === 2
                   ? 'freeze'
                   : '',
             warning: dr.authProblem ? 'authException' : '',
@@ -1336,7 +1336,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
         ? 'upThrow'
         : dr.status === 0
           ? 'offline'
-          : (dr.status & 4) === 4
+          : (dr.status & 2) === 2
             ? 'freeze'
             : '',
       warning: dr.authProblem ? 'authException' : '',
