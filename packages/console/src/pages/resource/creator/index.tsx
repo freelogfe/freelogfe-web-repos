@@ -28,14 +28,8 @@ import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import Prompt from 'umi/prompt';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-// import FDropdown from '@/components/FDropdown';
-// import categoryData from '@/utils/category';
-// import { DownOutlined } from '@ant-design/icons';
-// import FMenu from '@/components/FMenu';
-import FSelect from '@/components/FSelect';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 
 interface ResourceCreatorProps {
@@ -46,15 +40,9 @@ interface ResourceCreatorProps {
 
 function ResourceCreator({
                            dispatch,
-                           route,
                            resourceCreatorPage,
                            user,
                          }: ResourceCreatorProps & RouterTypes) {
-
-  // const [category, setCategory] = React.useState<any>({
-  //   first: -1,
-  //   second: '',
-  // });
 
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
@@ -167,6 +155,7 @@ function ResourceCreator({
               !!resourceCreatorPage.introductionErrorText
             }
             onClickCreate={() => {
+              window.onbeforeunload = null;
               dispatch<OnClick_CreateBtn_Action>({
                 type: 'resourceCreatorPage/onClick_CreateBtn',
               });
