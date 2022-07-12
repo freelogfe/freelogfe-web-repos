@@ -83,7 +83,7 @@ function Freeze({ match }: FreezeProps) {
         </div>
       </>)
     }
-    
+
   </div>);
 }
 
