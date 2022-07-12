@@ -794,10 +794,27 @@ const Model: ResourceVersionCreatorModelType = {
         coverageVersions = data2;
       }
 
+      const allUserID: number[] = data_batchResourceInfo.map<number>((dbr) => {
+        return dbr.userId;
+      });
+
+      const params3: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+        userIds: allUserID.join(','),
+      };
+
+      const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
+      // console.log(data_batchUserList, 'data_batchUserList09io3jlksfdfjlsdkjflsdkjflkj');
+      // status: 1
+      // tokenSn: "f609bc141b4c4b2d8a7cc3c0b2ca1fb0"
+      // userId: 50061
       // 组织添加的依赖数据
       const dependencies: DepResources = data_batchResourceInfo
         .map<DepResources[number]>((dr) => {
           // console.log(data1, 'data112323423');
+          const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+            return dbu.userId === dr.userId;
+          });
+
           const depC: any[] = data_batchContracts.filter((dc: any) => {
             return dc.licensorId === dr.resourceId && dc.status === 0;
           });
@@ -819,7 +836,11 @@ const Model: ResourceVersionCreatorModelType = {
                 : (dr.status & 2) === 2
                   ? 'freeze'
                   : '',
-            warning: dr.authProblem ? 'authException' : '',
+            warning: ownerUserInfo.status === 1
+              ? 'ownerFreeze'
+              : dr.authProblem
+                ? 'authException'
+                : '',
             versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
             versions: dr.resourceVersions.map((version: any) => version.version),
             upthrow: isUpthrow,
@@ -1313,8 +1334,20 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
     coverageVersions = data2;
   }
 
+  const allUserID: number[] = data_batchResourceInfo.map<number>((dbr) => {
+    return dbr.userId;
+  });
+
+  const params4: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+    userIds: allUserID.join(','),
+  };
+
+  const { data: data_batchUserList } = await FServiceAPI.User.batchUserList(params4)
   // 组织添加的依赖数据
   const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
+    const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+      return dbu.userId === dr.userId;
+    });
 
     const depC: any[] = data1.filter((dc: any) => {
       return dc.licensorId === dr.resourceId && dc.status === 0;
@@ -1339,7 +1372,11 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
           : (dr.status & 2) === 2
             ? 'freeze'
             : '',
-      warning: dr.authProblem ? 'authException' : '',
+      warning: ownerUserInfo.status === 1
+        ? 'ownerFreeze'
+        :dr.authProblem
+          ? 'authException'
+          : '',
 
       versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
       versions: dr.resourceVersions.map((version: any) => version.version),
@@ -1409,6 +1446,7 @@ type HandleResourceBatchInfoReturn = {
     createDate: string;
     version: string;
   }[];
+  userId: number;
   authProblem: boolean;
 }[];
 
@@ -1422,7 +1460,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     resourceIds: resourceIDs.join(','),
     isLoadPolicyInfo: 1,
     isLoadLatestVersionInfo: 1,
-    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions',
+    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
     // isLoadFreezeReason: 1,
   };
 

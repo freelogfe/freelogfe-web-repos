@@ -4,7 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
-export type ResourceDepSelectorModelState = WholeReadonly<{
+export interface ResourceDepSelectorModelState{
   selected: '1' | '2' | '3';
   input: string;
 
@@ -14,13 +14,13 @@ export type ResourceDepSelectorModelState = WholeReadonly<{
   resourceList: {
     resourceId: string;
     resourceName: string;
-    resourceType: string;
+    resourceType: string[];
     updateDate: string;
     status: 0 | 1;
     latestVersion: string;
     baseUpcastResources: any;
   }[];
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceDepSelector/change';

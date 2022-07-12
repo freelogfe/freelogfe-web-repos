@@ -25,28 +25,11 @@ interface LogoutParamsType {
 }
 
 export function logout({...params}: LogoutParamsType = {}) {
-  // return FUtil.Axios.get(`/passport/logout`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: '/v2/passport/logout',
     params: params,
   }, {noRedirect: true});
-}
-
-// 获取当前登录用户信息
-// interface CurrentUserInfoParamsType {
-
-// }
-
-export function currentUserInfo() {
-  // return FUtil.Axios.get(`/v1/userinfos/current`);
-  return FUtil.Request({
-    method: 'GET',
-    url: '/v2/users/current',
-    // params: params,
-  });
 }
 
 // 分页查看用户列表
@@ -65,6 +48,33 @@ export function users(params: UsersParamsType) {
     method: 'GET',
     url: `/v2/users`,
     params: params,
+  });
+}
+
+// 批量获取用户列表
+interface BatchUserListParamsType {
+  userIds: string;
+}
+
+export function batchUserList(params: BatchUserListParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users/list`,
+    params: params,
+  });
+}
+
+// 获取当前登录用户信息
+interface CurrentUserInfoParamsType {
+
+}
+
+export function currentUserInfo({}: CurrentUserInfoParamsType = {}) {
+  // return FUtil.Axios.get(`/v1/userinfos/current`);
+  return FUtil.Request({
+    method: 'GET',
+    url: '/v2/users/current',
+    // params: params,
   });
 }
 

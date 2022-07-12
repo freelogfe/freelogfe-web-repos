@@ -116,6 +116,8 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     {rrr.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
                     {rrr.error === '' && rrr.warning === 'authException' && (
                       <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                    {rrr.error === '' && rrr.warning === 'ownerFreeze' && (
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
                   <FContentText type='additional2'>
@@ -266,6 +268,8 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               {i.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
               {i.error === '' && i.warning === 'authException' && (
                 <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+              {i.error === '' && i.warning === 'ownerFreeze' && (
+                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
             <FContentText type='additional2'>

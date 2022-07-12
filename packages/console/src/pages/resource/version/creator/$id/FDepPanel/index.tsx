@@ -133,6 +133,14 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                   </Space>)
                 }
 
+                {
+                  // resource.authProblem && (<Space size={10}>
+                  resource.warning === 'ownerFreeze' && (<Space size={10}>
+                    <FWarning style={{ fontSize: 20 }} />
+                    <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
+                  </Space>)
+                }
+
                 <IsUpthrow />
 
                 <Contracts />
