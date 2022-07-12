@@ -407,6 +407,12 @@ const Model: ResourceVersionCreatorModelType = {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
       const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
         .filter((dep) => dep.upthrow)
         .map((dep) => dep.id);

@@ -70,6 +70,7 @@ function VersionCreator({
 
   React.useEffect(() => {
     // const func = () => 1234;
+    // console.log('#######89iowkejsldfjl')
     if (resourceVersionCreatorPage.dataIsDirty) {
       window.onbeforeunload = () => true;
     } else {
@@ -136,6 +137,7 @@ function VersionCreator({
         sider={<Sider />}
         header={<Header
           onClickCreate={() => {
+            // window.onbeforeunload = null;
             dispatch<OnClickCreateBtnAction>({
               type: 'resourceVersionCreatorPage/onClickCreateBtn',
             });
