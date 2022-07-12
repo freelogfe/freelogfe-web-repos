@@ -18,12 +18,14 @@ interface FreezeProps extends RouteComponentProps<{ id: string }> {
 interface FreezeStates {
   resourceName: string;
   freezeReason: string;
+  isOwner: boolean;
 }
 
 function Freeze({ match }: FreezeProps) {
 
   const [resourceName, set_resourceName] = React.useState<FreezeStates['resourceName']>('');
   const [freezeReason, set_freezeReason] = React.useState<FreezeStates['freezeReason']>('');
+  const [isOwner, set_isOwner] = React.useState<FreezeStates['isOwner']>(true);
 
   AHooks.useMount(() => {
     handleData();
@@ -39,7 +41,7 @@ function Freeze({ match }: FreezeProps) {
       isLoadFreezeReason: 1,
     });
     // (status & 2 ) === 2
-    console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
+    // console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
 
     if ((data.status & 2) !== 2) {
       router.replace(FUtil.LinkTo.resourceDetails({ resourceID: match.params.id }));
@@ -48,6 +50,7 @@ function Freeze({ match }: FreezeProps) {
 
     set_resourceName(data.resourceName);
     set_freezeReason(data.freezeReason || '其他违法违规');
+    set_isOwner(data.userId === FUtil.Tool.getUserIDByCookies());
   }
 
   return (<div className={styles.container}>
@@ -62,24 +65,25 @@ function Freeze({ match }: FreezeProps) {
       }}>&nbsp;查看服务协议&nbsp;</FTextBtn>
       <FContentText text={` ，涉嫌 ${freezeReason} ，已经被封停。`} />
     </div>
-    <div style={{ height: 20 }} />
-    <div className={styles.content}>
-      <FContentText text={'如果你对此存在异议，可向Freelog提交相关证明材料进行申诉。'} />
-    </div>
-    <div style={{ height: 20 }} />
-    <div className={styles.content}>
-      <FContentText text={'联系邮箱：service@freelog.com'} />
-      <FCopyToClipboard
-        text={'service@freelog.com'}
-        title={'复制'}
-      >
-        <FTextBtn>&nbsp;复制&nbsp;</FTextBtn>
-      </FCopyToClipboard>
-    </div>
-    {/*<div style={{ height: 80 }} />*/}
-    {/*<FTextBtn onClick={() => {*/}
-
-    {/*}}>返回登录页</FTextBtn>*/}
+    {
+      isOwner && (<>
+        <div style={{ height: 20 }} />
+        <div className={styles.content}>
+          <FContentText text={'如果你对此存在异议，可向Freelog提交相关证明材料进行申诉。'} />
+        </div>
+        <div style={{ height: 20 }} />
+        <div className={styles.content}>
+          <FContentText text={'联系邮箱：service@freelog.com'} />
+          <FCopyToClipboard
+            text={'service@freelog.com'}
+            title={'复制'}
+          >
+            <FTextBtn>&nbsp;复制&nbsp;</FTextBtn>
+          </FCopyToClipboard>
+        </div>
+      </>)
+    }
+    
   </div>);
 }
 

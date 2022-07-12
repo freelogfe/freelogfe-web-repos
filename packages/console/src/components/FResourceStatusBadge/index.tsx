@@ -9,7 +9,7 @@ const statusTextObj = {
   online: '已上线',
   offline: '未上线',
   unreleased: '未发行',
-  freeze: '被冻结',
+  freeze: '已封停',
 };
 
 function FResourceStatusBadge({ status = 'online' }: FResourceStatusBadgeProps) {
