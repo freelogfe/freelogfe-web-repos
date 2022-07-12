@@ -271,16 +271,24 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 {/*    >{j.title}</label>))*/}
                 {/*}*/}
                 {
-                  !i.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
-                    data={[...i.enableReuseContracts, ...i.enabledPolicies]
-                      .filter((k) => k.checked)
-                      .map((j) => {
-                        return {
-                          text: j.title,
-                          dot: '',
-                        };
-                      })}
-                  />
+                  !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                    .filter((k) => k.checked).length === 0
+                    ? (<div style={{
+                      color: '#E9A923',
+                      fontSize: 12,
+                      lineHeight: '18px',
+                      fontWeight: 400,
+                    }}>未处理授权</div>)
+                    : (<FComponentsLib.F_Contract_And_Policy_Labels
+                      data={[...i.enableReuseContracts, ...i.enabledPolicies]
+                        .filter((k) => k.checked)
+                        .map((j) => {
+                          return {
+                            text: j.title,
+                            dot: '',
+                          };
+                        })}
+                    />)
                 }
                 {
                   i.upthrow && (<label

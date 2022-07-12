@@ -33,15 +33,17 @@ function Freeze({}: FreezeProps) {
 
   async function handleData() {
 
-    const data = await userPermission.getUserInfo()
+    const data = await userPermission.getUserInfo();
 
-    // const { data } = await FServiceAPI.User.currentUserInfo();
-    // console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
+    const check = await userPermission.check();
 
-    // if (data.)
+    if (check === 'SUCCESS') {
+      window.location.replace(FUtil.LinkTo.wallet());
+      return;
+    }
 
-    set_userName(data.username);
-    set_freezeReason(data.userDetail.reason || '其他违法违规');
+    set_userName(data?.username || '');
+    set_freezeReason(data?.userDetail.reason || '其他违法违规');
   }
 
   return (<div className={styles.container}>
