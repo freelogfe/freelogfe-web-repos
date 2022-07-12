@@ -14,7 +14,13 @@ export type DepResources = {
   id: string;
   title: string;
   resourceType: string[];
-  status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/ | 4 /*上抛资源，无法获取授权*/;
+  status: 0 /*该资源已下线，无法获取授权。*/
+    | 1
+    | 2 /*循环依赖不支持授权。*/
+    | 3 /*该依赖是存储空间对象，无法获取授权。*/
+    | 4 /*上抛资源，无法获取授权*/;
+  error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
+  warning: '' | 'authException' | 'ownerFreeze';
   versionRange: string;
   versions: string[];
   upthrow: boolean;
@@ -64,7 +70,14 @@ export interface ResourceVersionCreatorPageModelState {
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */
+  selectedFileStatus: -3 /* 上传成功 */
+    | -2 /* 正在上传 */
+    | -1 /* 正在校验 */
+    | 0 /* 未上传 */
+    | 1 /* 文件太大 */
+    | 2 /* 类型不符 */
+    | 3 /* 自己已上传 */
+    | 4 /* 他人已上传 */
   ;
   selectedFileUsedResource: {
     resourceID: string;
@@ -799,6 +812,14 @@ const Model: ResourceVersionCreatorModelType = {
             title: dr.resourceName,
             resourceType: dr.resourceType,
             status: isUpthrow ? 4 : dr.status,
+            error: isUpthrow
+              ? 'upThrow'
+              : dr.status === 0
+                ? 'offline'
+                : (dr.status & 4) === 4
+                  ? 'freeze'
+                  : '',
+            warning: dr.authProblem ? 'authException' : '',
             versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
             versions: dr.resourceVersions.map((version: any) => version.version),
             upthrow: isUpthrow,
@@ -868,6 +889,7 @@ const Model: ResourceVersionCreatorModelType = {
               return {
                 ...d,
                 status: 2,
+                error: 'cyclicDependency',
               };
             }),
           ],
@@ -1026,6 +1048,8 @@ const Model: ResourceVersionCreatorModelType = {
             title: dpo.name,
             resourceType: [],
             status: 3,
+            error: 'storageObject',
+            warning: '',
             versionRange: '',
             versions: [],
             upthrow: false,
@@ -1306,6 +1330,17 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
       title: dr.resourceName,
       resourceType: dr.resourceType,
       status: isUpthrow ? 4 : dr.status,
+
+      // status: isUpthrow ? 4 : dr.status,
+      error: isUpthrow
+        ? 'upThrow'
+        : dr.status === 0
+          ? 'offline'
+          : (dr.status & 4) === 4
+            ? 'freeze'
+            : '',
+      warning: dr.authProblem ? 'authException' : '',
+
       versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
       versions: dr.resourceVersions.map((version: any) => version.version),
       upthrow: isUpthrow,
@@ -1388,6 +1423,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     isLoadPolicyInfo: 1,
     isLoadLatestVersionInfo: 1,
     projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions',
+    // isLoadFreezeReason: 1,
   };
 
   // 本次要添加的一些列资源信息
@@ -1420,7 +1456,8 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     });
     return {
       ...dbri,
-      authProblem: authP ? !authP.isAuth : false,
+      // authProblem: authP ? !authP.isAuth : false,
+      authProblem: true,
     };
   });
 }
