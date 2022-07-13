@@ -10,6 +10,9 @@ import FLink from '@/components/FLink';
 // import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
+import { FShare } from '@/components/FShare';
+import { FTextBtn } from '@/components/FButton';
+import FTooltip from '@/components/FTooltip';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -22,28 +25,34 @@ interface SiderProps {
 }
 
 function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
-
-  return (<div className={styles.styles}>
+  return (
+    <div className={styles.styles}>
       <div className={styles.header}>
         <div style={{ height: 30 }} />
 
         <div className={styles.title}>
-          <FTitleText
-            type='h2'
-            text={nodeManagerPage.nodeName}
-          />
+          <FTitleText type="h2" text={nodeManagerPage.nodeName} />
           <div style={{ height: 15 }} />
-          <Space size={5} className={styles.url}>
+          <Space size={10} className={styles.url}>
             <a
               onClick={() => {
                 window.open(nodeManagerPage.nodeUrl);
               }}
-            >{nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}</a>
+            >
+              {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
+            </a>
             <FCopyToClipboard
               text={nodeManagerPage.nodeUrl}
               title={'复制节点地址'}
               iconStyle={{ fontSize: 14 }}
             />
+            <FShare type="node" title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
+              <FTextBtn>
+                <FTooltip title="分享节点">
+                  <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+                </FTooltip>
+              </FTextBtn>
+            </FShare>
           </Space>
         </div>
 
@@ -60,7 +69,9 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 },
               });
             }}
-          >{FI18n.i18nNext.t('tab_manage_nodes')}</a>
+          >
+            {FI18n.i18nNext.t('tab_manage_nodes')}
+          </a>
           <a
             className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
             onClick={() => {
@@ -71,7 +82,9 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 },
               });
             }}
-          >{FI18n.i18nNext.t('manage_theme')}</a>
+          >
+            {FI18n.i18nNext.t('manage_theme')}
+          </a>
         </div>
       </div>
 
@@ -79,15 +92,21 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <span>{FI18n.i18nNext.t('msg_navigate_to_test_node')}</span>
         <FLink
           // to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
-          to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
-        >{FI18n.i18nNext.t('btn_navigate_to_test_node')}</FLink>
+          to={FUtil.LinkTo.informNodeManagement({
+            nodeID: Number(match.params.id),
+            showPage: 'exhibit',
+          })}
+        >
+          {FI18n.i18nNext.t('btn_navigate_to_test_node')}
+        </FLink>
         <div style={{ height: 40 }} />
       </div>
-
     </div>
   );
 }
 
-export default withRouter(connect(({ nodeManagerPage }: ConnectState) => ({
-  nodeManagerPage,
-}))(Sider));
+export default withRouter(
+  connect(({ nodeManagerPage }: ConnectState) => ({
+    nodeManagerPage,
+  }))(Sider),
+);

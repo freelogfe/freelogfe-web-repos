@@ -10,6 +10,7 @@ import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
+import FForbid from '@/components/FIcons/FForbid';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -52,16 +53,30 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               />
 
               {
-                r.status === 0 && (<>
+                r.error === 'offline' && (<>
                   <FResourceStatusBadge status={'offline'} />
                   <div style={{ width: 5 }} />
                 </>)
               }
 
               {
-                r.status === 1 && r.authProblem && (<>
+                r.error === 'freeze' && (<>
+                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  <div style={{ width: 5 }} />
+                </>)
+              }
+
+              {
+                r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
                   <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                </>)
+              }
+
+              {
+                r.error === '' && r.warning === 'ownerFreeze' && (<>
+                  <div style={{ width: 5 }} />
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
@@ -143,16 +158,44 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                   style={{ maxWidth: r.status === 0 ? 170 : 225 }}
                 />
               </FTextBtn>
+              {/*{*/}
+              {/*  r.status === 0 && (<>*/}
+              {/*    <FResourceStatusBadge status={'offline'} />*/}
+              {/*    <div style={{ width: 5 }} />*/}
+              {/*  </>)*/}
+              {/*}*/}
+              {/*{*/}
+              {/*  r.status === 1 && r.authProblem && (<>*/}
+              {/*    <div style={{ width: 5 }} />*/}
+              {/*    <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>*/}
+              {/*  </>)*/}
+              {/*}*/}
+
               {
-                r.status === 0 && (<>
-                  <FResourceStatusBadge status={'offline'} />
+                r.error === 'offline' && (<>
                   <div style={{ width: 5 }} />
+                  <FResourceStatusBadge status={'offline'} />
                 </>)
               }
+
               {
-                r.status === 1 && r.authProblem && (<>
+                r.error === 'freeze' && (<>
+                  <div style={{ width: 5 }} />
+                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                </>)
+              }
+
+              {
+                r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
                   <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                </>)
+              }
+
+              {
+                r.error === '' && r.warning === 'ownerFreeze' && (<>
+                  <div style={{ width: 5 }} />
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 

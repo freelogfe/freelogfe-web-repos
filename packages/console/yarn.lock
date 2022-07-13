@@ -1623,6 +1623,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.17.2":
+  version "7.18.6"
+  resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.18.6.tgz#6a1ef59f838debd670421f8c7f2cbb8da9751580"
+  integrity sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@7.4.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.4.4.tgz#f4b88d1225689a08f5bc3a17483545be9e4ed237"
@@ -1733,6 +1740,16 @@
   dependencies:
     antlr4 "4.8.0"
 
+"@freelog/resource-policy-lang@1.1.26":
+  version "1.1.26"
+  resolved "https://registry.npmmirror.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.1.26.tgz#328daec30c532421c2dba9fad6d54fa9815da077"
+  integrity sha512-fUhIaeDV167hJJw4wEWUxuC9VDQycxaGnEU1EA2waHsW0s17gySZzPwZn6wFOA4HR4Z6YiC0lfr3se4WS+El2g==
+  dependencies:
+    "@types/node" "^15.3.1"
+    antlr4 "4.8.0"
+    decimal.js "^10.2.1"
+    moment "^2.29.1"
+
 "@freelog/resource-policy-lang@^1.4.8":
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.4.8.tgz#65ee4930c49b2075d38f0f53421adc3930359ecf"
@@ -1743,6 +1760,19 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
     ts-node "^10.7.0"
+
+"@freelog/tools-lib@^0.1.115":
+  version "0.1.115"
+  resolved "https://registry.npmmirror.com/@freelog/tools-lib/-/tools-lib-0.1.115.tgz#fe803961472fca06ed16cf90b4493db38d10155d"
+  integrity sha512-CM39Fo94AhwSxqAVxE4McR8AjZ/Hq2t1oR6nuxtO0891eCdhqqRCFPr6EoJxqNsXD50pb20G25ay4pe7wYvsmg==
+  dependencies:
+    "@freelog/resource-policy-lang" "1.1.26"
+    axios "^0.21.1"
+    crypto-js "^4.0.0"
+    i18next "^21.8.10"
+    js-cookie "^3.0.1"
+    moment "^2.29.1"
+    nprogress "^0.2.0"
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
@@ -8797,6 +8827,13 @@ husky@^0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
+i18next@^21.8.10:
+  version "21.8.13"
+  resolved "https://registry.npmmirror.com/i18next/-/i18next-21.8.13.tgz#e5583bfe333bc41716b5a14693615d94a3dfd2cf"
+  integrity sha512-DpzwrJq7Y8tjUHxx6ByOkUIjrGYdQI5Mfv4XEI7q2RWdknQ7TaO9bKi8hS/LqYD6pBV5YGxJLReyLkOCxIpouA==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+
 iconv-lite@0.4.24, iconv-lite@^0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -10215,6 +10252,11 @@ js-base64@^2.1.9:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
+
+js-cookie@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmmirror.com/js-cookie/-/js-cookie-3.0.1.tgz#9e39b4c6c2f56563708d7d31f6f5f21873a92414"
+  integrity sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==
 
 js-levenshtein@^1.1.3:
   version "1.1.6"
@@ -13491,6 +13533,11 @@ q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
+
+qrcode.react@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-3.1.0.tgz#5c91ddc0340f768316fbdb8fff2765134c2aecd8"
+  integrity sha512-oyF+Urr3oAMUG/OiOuONL3HXM+53wvuH3mtIWQrYmsXoAq0DkvZp2RYUWFSMFtbdOpuS++9v+WAkzNVkMlNW6Q==
 
 qs@6.10.3:
   version "6.10.3"

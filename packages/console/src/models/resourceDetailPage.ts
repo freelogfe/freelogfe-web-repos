@@ -3,7 +3,6 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
-// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
@@ -33,6 +32,7 @@ export interface ResourceDetailPageModelState {
     status: 0 | 1;
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
+    userId: number;
   }[];
   sign_SignResources: {
     selected: boolean;
@@ -41,6 +41,8 @@ export interface ResourceDetailPageModelState {
     type: string[];
     status: 0 | 1;
     authProblem: boolean;
+    error: '' | 'offline' | 'freeze';
+    warning: '' | 'authException' | 'ownerFreeze';
     contracts: {
       checked: boolean;
       id: string;
@@ -314,12 +316,22 @@ const Model: ResourceDetailPageModelType = {
         data2 = data;
       }
 
+      const allUserID: number[] = resourceDetailPage.sign_AllRawResources.map<number>((dbr) => {
+        return dbr.userId;
+      });
+
+      const params3: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+        userIds: allUserID.join(','),
+      };
+
+      const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           sign_SignedResourceExhibitID: data1?.presentableId || '',
           sign_SignResources: resourceDetailPage.sign_AllRawResources
-            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((value: any, index: number) => {
+            .map<ResourceDetailPageModelState['sign_SignResources'][number]>((value, index) => {
               const contracts: ResourceDetailPageModelState['sign_SignResources'][number]['contracts'] = result[index]
                 .filter((c) => {
                   return c.status === 0;
@@ -354,6 +366,10 @@ const Model: ResourceDetailPageModelType = {
                   fullInfo: rsp,
                 }));
 
+              const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+                return dbu.userId === value.userId;
+              });
+
               return {
                 selected: index === 0,
                 id: value.resourceId,
@@ -361,6 +377,16 @@ const Model: ResourceDetailPageModelType = {
                 type: value.resourceType,
                 status: value.status,
                 authProblem: value.authProblem,
+                error: value.status === 0
+                  ? 'offline'
+                  : (value.status & 2) === 2
+                    ? 'freeze'
+                    : '',
+                warning: ownerUserInfo.status === 1
+                  ? 'ownerFreeze'
+                  : value.authProblem
+                    ? 'authException'
+                    : '',
                 contracts: contracts,
                 terminatedContractIDs: result[index]
                   .filter((c) => {
@@ -548,7 +574,7 @@ const Model: ResourceDetailPageModelType = {
       // console.log(data, ' data2309');
 
       if ((data_ResourceDetail.status & 2) === 2) {
-        router.replace(FUtil.LinkTo.resourceFreeze({resourceID: resourceDetailPage.resource_ID}));
+        router.replace(FUtil.LinkTo.resourceFreeze({ resourceID: resourceDetailPage.resource_ID }));
         return;
       }
 
@@ -575,6 +601,16 @@ const Model: ResourceDetailPageModelType = {
       // console.log(rawSignResources, 'rawSignResources2309ef');
       // console.log(data, 'data893lksdflk');
 
+      const allUserID: number[] = rawSignResources.map<number>((dbr) => {
+        return dbr.userId;
+      });
+
+      const params3: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+        userIds: allUserID.join(','),
+      };
+
+      const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -593,6 +629,9 @@ const Model: ResourceDetailPageModelType = {
 
           sign_SignResources: rawSignResources
             .map<ResourceDetailPageModelState['sign_SignResources'][number]>((rs, i: number) => {
+              const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+                return dbu.userId === rs.userId;
+              });
               return {
                 selected: i === 0,
                 id: rs.resourceId,
@@ -600,6 +639,16 @@ const Model: ResourceDetailPageModelType = {
                 type: rs.resourceType,
                 status: rs.status,
                 authProblem: rs.authProblem,
+                error: rs.status === 0 ?
+                  'offline'
+                  : (rs.status & 2) === 2
+                    ? 'freeze'
+                    : '',
+                warning: ownerUserInfo.status === 1
+                  ? 'ownerFreeze'
+                  : rs.authProblem
+                    ? 'authException'
+                    : '',
                 contracts: [],
                 terminatedContractIDs: [],
                 policies: rs.policies
@@ -854,6 +903,7 @@ type HandleResourceBatchInfoReturn = {
   intro: string;
   authProblem: boolean;
   freezeReason: string;
+  userId: number;
 }[];
 
 async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoParams): Promise<HandleResourceBatchInfoReturn> {
@@ -867,7 +917,7 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     isLoadPolicyInfo: 1,
     isTranslate: 1,
     isLoadLatestVersionInfo: 1,
-    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,baseUpcastResources,coverImages,tags,intro',
+    // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,baseUpcastResources,coverImages,tags,intro',
   };
 
   // 本次要添加的一些列资源信息

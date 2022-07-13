@@ -20,8 +20,8 @@ export interface NodeManagerModelState {
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  exhibit_ResourceTypeOptions: { text: string, value: string }[];
-  exhibit_ResourceStateOptions: { text: string, value: string }[];
+  exhibit_ResourceTypeOptions: { text: string; value: string }[];
+  exhibit_ResourceStateOptions: { text: string; value: string }[];
   exhibit_SelectedType: string;
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
@@ -31,6 +31,7 @@ export interface NodeManagerModelState {
     title: string;
     type: string[];
     resourceName: string;
+    policiesList: any[];
     policies: string[];
     hasPolicy: boolean;
     isOnline: boolean;
@@ -60,10 +61,13 @@ export interface NodeManagerModelState {
   // themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
+
+  policyEditorVisible: boolean;
+  policyOperaterVisible: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'nodeManagerPage/change';
   payload: Partial<NodeManagerModelState>;
 }
 
@@ -144,14 +148,14 @@ export interface OnOnlineOrOfflineAction {
   payload: {
     id: string;
     onlineStatus: 0 | 1;
-  },
+  };
 }
 
 export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
     id: string;
-  },
+  };
 }
 
 export interface FetchExhibitsAction extends AnyAction {
@@ -174,14 +178,29 @@ export interface NodeManagerModelType {
     // onChange_NodeID: (action: OnChange_NodeID_Action, effects: EffectsCommandMap) => void;
     onChange_ShowPage: (action: OnChange_ShowPage_Action, effects: EffectsCommandMap) => void;
     onMount_ExhibitPage: (action: OnMount_ExhibitPage_Action, effects: EffectsCommandMap) => void;
-    onUnmount_ExhibitPage: (action: OnUnmount_ExhibitPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_ExhibitPage: (
+      action: OnUnmount_ExhibitPage_Action,
+      effects: EffectsCommandMap,
+    ) => void;
     onMount_ThemePage: (action: OnMount_ThemePage_Action, effects: EffectsCommandMap) => void;
     onUnmount_ThemePage: (action: OnUnmount_ThemePage_Action, effects: EffectsCommandMap) => void;
 
-    onChange_Exhibit_SelectedType: (action: OnChange_Exhibit_SelectedType_Action, effects: EffectsCommandMap) => void;
-    onChange_Exhibit_SelectedStatus: (action: OnChange_Exhibit_SelectedStatus_Action, effects: EffectsCommandMap) => void;
-    onChange_Exhibit_InputFilter: (action: OnChange_Exhibit_InputFilter_Action, effects: EffectsCommandMap) => void;
-    onLoadMore_ExhibitList: (action: OnLoadMore_ExhibitList_Action, effects: EffectsCommandMap) => void;
+    onChange_Exhibit_SelectedType: (
+      action: OnChange_Exhibit_SelectedType_Action,
+      effects: EffectsCommandMap,
+    ) => void;
+    onChange_Exhibit_SelectedStatus: (
+      action: OnChange_Exhibit_SelectedStatus_Action,
+      effects: EffectsCommandMap,
+    ) => void;
+    onChange_Exhibit_InputFilter: (
+      action: OnChange_Exhibit_InputFilter_Action,
+      effects: EffectsCommandMap,
+    ) => void;
+    onLoadMore_ExhibitList: (
+      action: OnLoadMore_ExhibitList_Action,
+      effects: EffectsCommandMap,
+    ) => void;
     onOnlineOrOffline: (action: OnOnlineOrOfflineAction, effects: EffectsCommandMap) => void;
     onActive: (action: OnActiveAction, effects: EffectsCommandMap) => void;
     onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
@@ -197,16 +216,18 @@ export interface NodeManagerModelType {
   };
 }
 
-const exhibitInitStates: Pick<NodeManagerModelState,
-  'exhibit_ResourceTypeOptions' |
-  'exhibit_ResourceStateOptions' |
-  'exhibit_SelectedType' |
-  'exhibit_SelectedStatus' |
-  'exhibit_InputFilter' |
-  'exhibit_List' |
-  'exhibit_ListTotal' |
-  'exhibit_ListState' |
-  'exhibit_ListMore'> = {
+const exhibitInitStates: Pick<
+  NodeManagerModelState,
+  | 'exhibit_ResourceTypeOptions'
+  | 'exhibit_ResourceStateOptions'
+  | 'exhibit_SelectedType'
+  | 'exhibit_SelectedStatus'
+  | 'exhibit_InputFilter'
+  | 'exhibit_List'
+  | 'exhibit_ListTotal'
+  | 'exhibit_ListState'
+  | 'exhibit_ListMore'
+> = {
   exhibit_ResourceTypeOptions: [
     { text: '全部', value: '-1' },
     ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
@@ -225,19 +246,20 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_ListMore: 'loading',
 };
 
-const themeInitStates: Pick<NodeManagerModelState,
-  'theme_ActivatingThemeID' |
-  'theme_InputFilter' |
-  'theme_List' |
-  'theme_ListState' |
-  'theme_ListMore'> = {
+const themeInitStates: Pick<
+  NodeManagerModelState,
+  | 'theme_ActivatingThemeID'
+  | 'theme_InputFilter'
+  | 'theme_List'
+  | 'theme_ListState'
+  | 'theme_ListMore'
+> = {
   theme_InputFilter: '',
   theme_ActivatingThemeID: '',
   theme_List: [],
   theme_ListState: 'loading',
   theme_ListMore: 'loading',
 };
-
 
 const initStates: NodeManagerModelState = {
   nodeId: -1,
@@ -254,17 +276,21 @@ const initStates: NodeManagerModelState = {
   ...exhibitInitStates,
 
   ...themeInitStates,
-};
 
+  policyEditorVisible: false,
+  policyOperaterVisible: false,
+};
 
 const Model: NodeManagerModelType = {
   namespace: 'nodeManagerPage',
   state: initStates,
   effects: {
-    * onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
+    *onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(
+        ({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
 
       const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
         nodeId: payload.nodeID,
@@ -309,7 +335,7 @@ const Model: NodeManagerModelType = {
         });
       }
     },
-    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+    *onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -320,7 +346,7 @@ const Model: NodeManagerModelType = {
     // * onChange_NodeID({ payload }: OnChange_NodeID_Action, { select, call, put }: EffectsCommandMap) {
     //
     // },
-    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    *onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       if (payload.value === 'exhibit') {
         yield put<ChangeAction>({
           type: 'change',
@@ -352,9 +378,8 @@ const Model: NodeManagerModelType = {
           },
         });
       }
-
     },
-    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
+    *onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
       // console.log('OnMount_ExhibitPage_Action###@4234234234234');
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
@@ -368,9 +393,8 @@ const Model: NodeManagerModelType = {
       //     },
       //   });
       // }
-
     },
-    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
+    *onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
@@ -378,7 +402,7 @@ const Model: NodeManagerModelType = {
       //   },
       // });
     },
-    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+    *onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
       // }));
@@ -389,7 +413,7 @@ const Model: NodeManagerModelType = {
       //   });
       // }
     },
-    * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
+    *onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
@@ -426,7 +450,10 @@ const Model: NodeManagerModelType = {
     //     },
     //   });
     // },
-    * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
+    *onChange_Exhibit_SelectedType(
+      { payload }: OnChange_Exhibit_SelectedType_Action,
+      { put }: EffectsCommandMap,
+    ) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -441,7 +468,10 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onChange_Exhibit_SelectedStatus({ payload }: OnChange_Exhibit_SelectedStatus_Action, { put }: EffectsCommandMap) {
+    *onChange_Exhibit_SelectedStatus(
+      { payload }: OnChange_Exhibit_SelectedStatus_Action,
+      { put }: EffectsCommandMap,
+    ) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -456,7 +486,10 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onChange_Exhibit_InputFilter({ payload }: OnChange_Exhibit_InputFilter_Action, { put }: EffectsCommandMap) {
+    *onChange_Exhibit_InputFilter(
+      { payload }: OnChange_Exhibit_InputFilter_Action,
+      { put }: EffectsCommandMap,
+    ) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -471,7 +504,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
+    *onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
       yield put<FetchExhibitsAction>({
         type: 'fetchExhibits',
         payload: {
@@ -480,11 +513,16 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    * onOnlineOrOffline({ payload }: OnOnlineOrOfflineAction, { call, put, select }: EffectsCommandMap) {
+    *onOnlineOrOffline(
+      { payload }: OnOnlineOrOfflineAction,
+      { call, put, select }: EffectsCommandMap,
+    ) {
       // console.log(payload, 'PPPPPP');
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
+      const { nodeManagerPage }: ConnectState = yield select(
+        ({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: payload.id,
@@ -519,7 +557,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
+    *onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
       // }));
@@ -555,7 +593,7 @@ const Model: NodeManagerModelType = {
       //   type: 'fetchNodeInfo',
       // });
     },
-    * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
+    *onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -567,12 +605,16 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
+    *fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(
+        ({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
 
-      const list: NodeManagerModelState['exhibit_List'] = payload.restart ? [] : nodeManagerPage.exhibit_List;
+      const list: NodeManagerModelState['exhibit_List'] = payload.restart
+        ? []
+        : nodeManagerPage.exhibit_List;
       if (payload.restart) {
         yield put<ChangeAction>({
           type: 'change',
@@ -596,15 +638,24 @@ const Model: NodeManagerModelType = {
         skip: list.length,
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
-        resourceType: nodeManagerPage.exhibit_SelectedType === '-1' ? undefined : nodeManagerPage.exhibit_SelectedType,
-        omitResourceType: 'theme',
+        resourceType:
+          nodeManagerPage.exhibit_SelectedType === '-1'
+            ? undefined
+            : nodeManagerPage.exhibit_SelectedType,
+        omitResourceType: '主题',
+        isLoadPolicyInfo: 1,
+        isTranslate: 1
       };
 
       const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
       // console.log(data_Exhibits, 'data!@$@$@#$@#4');
 
       if (data_Exhibits.dataList.length === 0) {
-        if (nodeManagerPage.exhibit_SelectedType === '-1' && nodeManagerPage.exhibit_SelectedStatus === '2' && nodeManagerPage.exhibit_InputFilter === '') {
+        if (
+          nodeManagerPage.exhibit_SelectedType === '-1' &&
+          nodeManagerPage.exhibit_SelectedStatus === '2' &&
+          nodeManagerPage.exhibit_InputFilter === ''
+        ) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
@@ -634,38 +685,44 @@ const Model: NodeManagerModelType = {
       const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
         nodeId: nodeManagerPage.nodeId,
         authType: 3,
-        presentableIds: (data_Exhibits.dataList as any[]).map<string>((dl: any) => {
-          return dl.presentableId;
-        }).join(','),
+        presentableIds: (data_Exhibits.dataList as any[])
+          .map<string>((dl: any) => {
+            return dl.presentableId;
+          })
+          .join(','),
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       batchAuthPs = data1;
 
       const exhibit_List: NodeManagerModelState['exhibit_List'] = [
         ...list,
-        ...(data_Exhibits.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>((i: any) => {
-          const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
-          return {
-            id: i.presentableId,
-            cover: i.coverImages[0],
-            title: i.presentableTitle,
-            resourceName: i.presentableName,
-            version: i.version,
-            isOnline: i.onlineStatus === 1,
-            type: i.resourceInfo.resourceType,
-            policies: (i.policies as any[])
-              .filter((p: any) => p.status === 1)
-              .map<string>((p) => p.policyName),
-            hasPolicy: i.policies.length > 0,
-            resourceId: i.resourceInfo.resourceId,
-            isAuth: authInfo.isAuth,
-            authErrorText: authInfo.defaulterIdentityType === 1
-              ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-              : authInfo.defaulterIdentityType === 2
-                ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                : '',
-          };
-        }),
+        ...(data_Exhibits.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>(
+          (i: any) => {
+            const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
+            return {
+              id: i.presentableId,
+              cover: i.coverImages[0],
+              title: i.presentableTitle,
+              resourceName: i.presentableName,
+              version: i.version,
+              isOnline: i.onlineStatus === 1,
+              type: i.resourceInfo.resourceType,
+              policiesList: i.policies,
+              policies: (i.policies as any[])
+                .filter((p: any) => p.status === 1)
+                .map<string>((p) => p.policyName),
+              hasPolicy: i.policies.length > 0,
+              resourceId: i.resourceInfo.resourceId,
+              isAuth: authInfo.isAuth,
+              authErrorText:
+                authInfo.defaulterIdentityType === 1
+                  ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
+                  : authInfo.defaulterIdentityType === 2
+                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                  : '',
+            };
+          },
+        ),
       ];
 
       yield put<ChangeAction>({
@@ -679,11 +736,13 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
+    *fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
       // console.log(23423423, '0923jfdslk');
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
+      const { nodeManagerPage }: ConnectState = yield select(
+        ({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
 
       yield put<ChangeAction>({
         type: 'change',
@@ -697,7 +756,7 @@ const Model: NodeManagerModelType = {
         limit: FUtil.Predefined.pageSize,
         keywords: nodeManagerPage.theme_InputFilter || undefined,
         onlineStatus: 2,
-        resourceType: 'theme',
+        resourceType: '主题',
       };
 
       const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
@@ -729,39 +788,44 @@ const Model: NodeManagerModelType = {
       const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
         nodeId: nodeManagerPage.nodeId,
         authType: 3,
-        presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
-          return dl.presentableId;
-        }).join(','),
+        presentableIds: (data.dataList as any[])
+          .map<string>((dl: any) => {
+            return dl.presentableId;
+          })
+          .join(','),
       };
       const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       batchAuthTs = data1;
 
-      const theme_List: NodeManagerModelState['theme_List'] = (data.dataList as any[]).map<NodeManagerModelState['theme_List'][number]>((i: any) => {
-        const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
-        return {
-          id: i.presentableId,
-          cover: i.coverImages[0],
-          title: i.presentableTitle,
-          version: i.version,
-          isOnline: i.onlineStatus === 1,
-          policies: (i.policies as any[])
-            .filter((p: any) => p.status === 1)
-            .map<string>((p) => p.policyName),
-          hasPolicy: i.policies.length > 0,
-          isAuth: authInfo.isAuth,
-          authErrorText: authInfo.defaulterIdentityType === 1
-            ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-            : authInfo.defaulterIdentityType === 2
-              ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-              : '',
-          resourceId: i.resourceInfo.resourceId,
-        };
-      }).sort((a, b) => {
-        if (a.isOnline && !b.isOnline) {
-          return -1;
-        }
-        return 0;
-      });
+      const theme_List: NodeManagerModelState['theme_List'] = (data.dataList as any[])
+        .map<NodeManagerModelState['theme_List'][number]>((i: any) => {
+          const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
+          return {
+            id: i.presentableId,
+            cover: i.coverImages[0],
+            title: i.presentableTitle,
+            version: i.version,
+            isOnline: i.onlineStatus === 1,
+            policies: (i.policies as any[])
+              .filter((p: any) => p.status === 1)
+              .map<string>((p) => p.policyName),
+            hasPolicy: i.policies.length > 0,
+            isAuth: authInfo.isAuth,
+            authErrorText:
+              authInfo.defaulterIdentityType === 1
+                ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
+                : authInfo.defaulterIdentityType === 2
+                ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                : '',
+            resourceId: i.resourceInfo.resourceId,
+          };
+        })
+        .sort((a, b) => {
+          if (a.isOnline && !b.isOnline) {
+            return -1;
+          }
+          return 0;
+        });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -782,9 +846,7 @@ const Model: NodeManagerModelType = {
     },
   },
   subscriptions: {
-    setup({}) {
-
-    },
+    setup({}) {},
   },
 };
 
