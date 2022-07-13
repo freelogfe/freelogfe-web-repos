@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-// import { FRectBtn } from '@/components/FButton';
-// import { ChangeAction } from '@/models/storageHomePage';
 import { Link } from 'umi';
-// import { FUtil } from '@freelog/tools-lib';
 
 interface EmptyAndCreateProps {
   tipText: string;

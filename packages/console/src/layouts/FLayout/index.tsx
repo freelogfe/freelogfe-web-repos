@@ -14,6 +14,7 @@ import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
+import FInput from '@/components/FInput';
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -196,8 +197,14 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
             },
           ]}
           activeIDs={activeIDs}
-          showGlobalSearch={true}
+          // showGlobalSearch={true}
           // showGotoConsole={true}
+          extra={(<FInput
+            size='small'
+            theme='dark'
+            style={{ width: 200 }}
+            value={''}
+          />)}
           createBtnMenu={[
             {
               id: 'createResource',
