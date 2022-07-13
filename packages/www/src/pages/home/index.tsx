@@ -12,6 +12,7 @@ import Banner2 from '@/pages/home/Banner2';
 // import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
+import { Popover } from 'antd';
 
 interface HomePageProps {
 
@@ -98,7 +99,26 @@ function HomePage({}: HomePageProps) {
       <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
     </div>
 
-    <FComponentsLib.FPageFooter />
+    {/*<div style={{display: 'flex', justifyContent: 'center', width: 1000}}>*/}
+    {/*  <Popover*/}
+    {/*    // getPopupContainer={() => ref.current}*/}
+    {/*    overlayInnerStyle={{*/}
+    {/*      width: 200,*/}
+    {/*      padding: '8px 4px',*/}
+    {/*    }}*/}
+    {/*    content={<div className={styles.PopoverContent}>*/}
+    {/*      <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>*/}
+    {/*      <div style={{height: 20}}/>*/}
+    {/*      <img src={'//static.freelog.com/static/WeChatQR.jpg'}/>*/}
+    {/*    </div>}*/}
+    {/*    title={null}*/}
+    {/*  >*/}
+    {/*    <a className={styles.footerLeft_Link}>*/}
+    {/*      微信*/}
+    {/*    </a>*/}
+    {/*  </Popover>*/}
+    {/*</div>*/}
+    <FComponentsLib.FPageFooter PopoverPatch={Popover} />
 
     <Ads />
 

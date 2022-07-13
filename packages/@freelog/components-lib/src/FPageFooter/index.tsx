@@ -6,10 +6,12 @@ import {FUtil, FI18n} from '@freelog/tools-lib';
 import {Popover} from 'antd';
 
 interface FPageFooterProps {
-
+    PopoverPatch?: React.Component;
 }
 
-function FPageFooter({}: FPageFooterProps) {
+function FPageFooter({PopoverPatch}: FPageFooterProps) {
+
+    const FPopover = PopoverPatch || Popover;
 
     const ref = React.useRef<any>(null);
 
@@ -35,10 +37,10 @@ function FPageFooter({}: FPageFooterProps) {
                 <a
                     className={styles.footerLeft_Link}
                     onClick={() => {
-                        const allLanguage = FI18n.i18nNext.getAllLanguage();
-                        console.log(allLanguage, 'allLanguage903iosdlfkj');
+                        // const allLanguage: string[] = FI18n.i18nNext.getAllLanguage();
+                        // console.log(allLanguage, 'allLanguage903iosdlfkj');
                         const currentLanguage = FI18n.i18nNext.getCurrentLanguage();
-                        console.log(currentLanguage, 'currentLanguage90i3osdlkfjsdlk');
+                        // console.log(currentLanguage, 'currentLanguage90i3osdlkfjsdlk');
                         FI18n.i18nNext.changeLanguage(currentLanguage !== 'zh_CN' ? 'zh_CN' : 'en_US');
                         window.location.reload();
                     }}
@@ -48,8 +50,8 @@ function FPageFooter({}: FPageFooterProps) {
             <div className={styles.Divider}/>
             <div style={{width: 30}}/>
             <Space size={25}>
-                <Popover
-                    getPopupContainer={() => ref.current}
+                <FPopover
+                    // getPopupContainer={() => ref.current}
                     overlayInnerStyle={{
                         width: 200,
                         padding: '8px 4px',
@@ -64,7 +66,7 @@ function FPageFooter({}: FPageFooterProps) {
                     <a className={styles.footerLeft_Link}>
                         <FIcons.FWeChat/>
                     </a>
-                </Popover>
+                </FPopover>
                 {/*<Popover*/}
                 {/*    overlayInnerStyle={{*/}
                 {/*        width: 200,*/}
