@@ -10,7 +10,10 @@ interface FPageFooterProps {
 }
 
 function FPageFooter({}: FPageFooterProps) {
-    return (<footer className={styles.footer}>
+
+    const ref = React.useRef<any>(null);
+
+    return (<footer ref={ref} className={styles.footer}>
         <div className={styles.footerLeft}>
             <Space size={20}>
                 <a
@@ -46,6 +49,7 @@ function FPageFooter({}: FPageFooterProps) {
             <div style={{width: 30}}/>
             <Space size={25}>
                 <Popover
+                    getPopupContainer={() => ref.current}
                     overlayInnerStyle={{
                         width: 200,
                         padding: '8px 4px',
@@ -53,7 +57,7 @@ function FPageFooter({}: FPageFooterProps) {
                     content={<div className={styles.PopoverContent}>
                         <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
                         <div style={{height: 20}}/>
-                        <img/>
+                        <img src={'//static.freelog.com/static/WeChatQR.jpg'}/>
                     </div>}
                     title={null}
                 >
@@ -61,38 +65,38 @@ function FPageFooter({}: FPageFooterProps) {
                         <FIcons.FWeChat/>
                     </a>
                 </Popover>
-                <Popover
-                    overlayInnerStyle={{
-                        width: 200,
-                        padding: '8px 4px',
-                    }}
-                    content={<div className={styles.PopoverContent}>
-                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
-                        <div style={{height: 20}}/>
-                        <img/>
-                    </div>}
-                    title={null}
-                >
-                    <a className={styles.footerLeft_Link}>
-                        <FIcons.FSina/>
-                    </a>
-                </Popover>
-                <Popover
-                    overlayInnerStyle={{
-                        width: 200,
-                        padding: '8px 4px',
-                    }}
-                    content={<div className={styles.PopoverContent}>
-                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
-                        <div style={{height: 20}}/>
-                        <img/>
-                    </div>}
-                    title={null}
-                >
-                    <a className={styles.footerLeft_Link}>
-                        <FIcons.FLinkedin/>
-                    </a>
-                </Popover>
+                {/*<Popover*/}
+                {/*    overlayInnerStyle={{*/}
+                {/*        width: 200,*/}
+                {/*        padding: '8px 4px',*/}
+                {/*    }}*/}
+                {/*    content={<div className={styles.PopoverContent}>*/}
+                {/*        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>*/}
+                {/*        <div style={{height: 20}}/>*/}
+                {/*        <img/>*/}
+                {/*    </div>}*/}
+                {/*    title={null}*/}
+                {/*>*/}
+                <a href={'//weibo.com/u/7762454686'} target={'_blank'} className={styles.footerLeft_Link}>
+                    <FIcons.FSina/>
+                </a>
+                {/*</Popover>*/}
+                {/*<Popover*/}
+                {/*    overlayInnerStyle={{*/}
+                {/*        width: 200,*/}
+                {/*        padding: '8px 4px',*/}
+                {/*    }}*/}
+                {/*    content={<div className={styles.PopoverContent}>*/}
+                {/*        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>*/}
+                {/*        <div style={{height: 20}}/>*/}
+                {/*        <img src={'//static.freelog.com/static/WeChatQR.jpg'}/>*/}
+                {/*    </div>}*/}
+                {/*    title={null}*/}
+                {/*>*/}
+                {/*    <a className={styles.footerLeft_Link}>*/}
+                {/*        <FIcons.FLinkedin/>*/}
+                {/*    </a>*/}
+                {/*</Popover>*/}
             </Space>
         </div>
         <div style={{height: 20}}/>
