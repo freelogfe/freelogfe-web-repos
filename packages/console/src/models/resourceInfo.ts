@@ -4,6 +4,7 @@ import { DvaReducer, WholeReadonly } from './shared';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -46,6 +47,10 @@ export interface ResourceInfoModelState {
   authProblem: boolean;
 
   draftData: null | { [key: string]: any };
+
+  policyEditorVisible: boolean;
+  policies: PolicyFullInfo_Type[];
+  policyOperaterVisible: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -93,6 +98,10 @@ const initStates: ResourceInfoModelState = {
   authProblem: false,
   draftData: null,
   // hasPermission: true,
+  policyEditorVisible: false,
+  policyOperaterVisible: false,
+
+  policies: [],
 };
 
 const Model: ResourceInfoModelType = {
@@ -101,14 +110,14 @@ const Model: ResourceInfoModelType = {
   state: initStates,
 
   effects: {
-    * fetchDataSource({ payload }: FetchDataSourceAction, {
-      call,
-      put,
-      select,
-    }: EffectsCommandMap): Generator<any, void, any> {
+    *fetchDataSource(
+      { payload }: FetchDataSourceAction,
+      { call, put, select }: EffectsCommandMap,
+    ): Generator<any, void, any> {
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
       const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
@@ -140,8 +149,23 @@ const Model: ResourceInfoModelType = {
       yield put<FetchDraftDataAction>({
         type: 'fetchDraftData',
       });
+
+      const policies: PolicyFullInfo_Type[] = data.policies || [];
+
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return a.status === 1 && b.status === 0 ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policies: policies,
+        },
+      });
     },
-    * fetchDraftData({}: FetchDraftDataAction, { select, put, call }: EffectsCommandMap) {
+    *fetchDraftData({}: FetchDraftDataAction, { select, put, call }: EffectsCommandMap) {
       const { resourceInfo }: ConnectState = yield select(({ resourceInfo }: ConnectState) => ({
         resourceInfo,
       }));
@@ -165,7 +189,7 @@ const Model: ResourceInfoModelType = {
         },
       });
     },
-    * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
+    *initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -193,7 +217,6 @@ const Model: ResourceInfoModelType = {
       // console.log(history, 'historyhistory');
     },
   },
-
 };
 
 export default Model;

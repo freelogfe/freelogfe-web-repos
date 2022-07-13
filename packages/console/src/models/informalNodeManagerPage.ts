@@ -1131,7 +1131,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: 50,
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
-        omitResourceType: 'theme',
+        omitResourceType: '主题',
         resourceType: informalNodeManagerPage.exhibit_SelectedType === '-1' ? undefined : informalNodeManagerPage.exhibit_SelectedType,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
@@ -1429,7 +1429,7 @@ const Model: InformalNodeManagerPageModelType = {
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: 2,
-        resourceType: 'theme',
+        resourceType: '主题',
         // limit: FUtil.Predefined.pageSize,
         limit: 50,
         keywords: informalNodeManagerPage.theme_FilterKeywords || undefined,

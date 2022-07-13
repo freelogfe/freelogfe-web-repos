@@ -1,6 +1,25 @@
 .Sider {
   //padding: 0 39px 0 40px;
 
+  .switcher {
+    width: 200px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    .switcher-label {
+      font-size: 14px;
+      color: #222222;
+      line-height: 20px;
+    }
+  }
+
   .header {
     padding: 0 40px;
 
@@ -13,7 +32,7 @@
   .label {
     font-size: 12px;
     line-height: 20px;
-    background-color: #E4E7EB;
+    background-color: #e4e7eb;
     border-radius: 4px;
     padding: 0 5px;
     color: #666;
@@ -38,7 +57,7 @@
 
       &.activatedRadio {
         background: rgba(0, 0, 0, 0.02);
-        color: #2784FF;
+        color: #2784ff;
       }
     }
   }
@@ -53,7 +72,6 @@
     }
 
     .versions {
-
       .version {
         height: 50px;
         align-items: center;
@@ -64,17 +82,101 @@
 
         &.activatedVersion {
           background: rgba(0, 0, 0, 0.02);
-          color: #2784FF;
+          color: #2784ff;
+        }
+      }
+    }
+  }
+
+  .no-longer {
+    font-size: 12px;
+    color: #999999;
+    line-height: 18px;
+    padding: 0 5px;
+  }
+
+  .result-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade 0.2s ease;
+
+    .result-popup {
+      width: 312px;
+      height: 200px;
+      background: #ffffff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: scale 0.2s ease;
+
+      .loader {
+        display: flex;
+        align-items: center;
+        color: #2784ff;
+
+        .loader-icon {
+          font-size: 16px;
+        }
+
+        .loader-text {
+          font-size: 16px;
+          line-height: 22px;
+          margin-left: 10px;
+        }
+      }
+
+      .result {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .result-icon {
+          font-size: 76px;
+
+          &.up {
+            color: #42c28c;
+          }
+
+          &.down {
+            color: #e9a923;
+            transform: rotate(180deg);
+          }
+        }
+
+        .result-text {
+          font-size: 18px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #222222;
+          line-height: 24px;
+          margin-top: 20px;
         }
       }
     }
   }
 }
 
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
-
-
-
-
-
-
+@keyframes scale {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

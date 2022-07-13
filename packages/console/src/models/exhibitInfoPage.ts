@@ -97,6 +97,9 @@ export interface ExhibitInfoPageModelState {
   side_ResourceName: string;
   side_ResourceType: string;
   side_ResourceCover: string;
+
+  policyEditorVisible: boolean;
+  policyOperaterVisible: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -333,6 +336,9 @@ const initStates: ExhibitInfoPageModelState = {
   side_ResourceName: '',
   side_ResourceType: '',
   side_ResourceCover: '',
+
+  policyEditorVisible: false,
+  policyOperaterVisible: false,
 
 };
 

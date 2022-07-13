@@ -30,6 +30,7 @@ export interface NodeManagerModelState {
     title: string;
     type: string;
     resourceName: string;
+    policiesList: any[];
     policies: string[];
     hasPolicy: boolean;
     isOnline: boolean;
@@ -59,10 +60,13 @@ export interface NodeManagerModelState {
   // themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
+
+  policyEditorVisible: boolean;
+  policyOperaterVisible: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'nodeManagerPage/change';
   payload: Partial<NodeManagerModelState>;
 }
 
@@ -271,6 +275,9 @@ const initStates: NodeManagerModelState = {
   ...exhibitInitStates,
 
   ...themeInitStates,
+
+  policyEditorVisible: false,
+  policyOperaterVisible: false,
 };
 
 const Model: NodeManagerModelType = {
@@ -629,7 +636,9 @@ const Model: NodeManagerModelType = {
           nodeManagerPage.exhibit_SelectedType === '-1'
             ? undefined
             : nodeManagerPage.exhibit_SelectedType,
-        omitResourceType: 'theme',
+        omitResourceType: '主题',
+        isLoadPolicyInfo: 1,
+        isTranslate: 1
       };
 
       const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
@@ -692,6 +701,7 @@ const Model: NodeManagerModelType = {
               version: i.version,
               isOnline: i.onlineStatus === 1,
               type: i.resourceInfo.resourceType,
+              policiesList: i.policies,
               policies: (i.policies as any[])
                 .filter((p: any) => p.status === 1)
                 .map<string>((p) => p.policyName),
