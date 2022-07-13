@@ -97,7 +97,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                             <div style={{ height: 15 }} />
                             <Space size={10}>
                               <FWarning style={{ fontSize: 20 }} />
-                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处</span>
+                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
                             </Space>
                           </>)
                         }
