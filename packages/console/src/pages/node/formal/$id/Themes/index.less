@@ -394,10 +394,20 @@
           padding: 0 20px;
           display: flex;
           align-items: center;
+          border-radius: 4px;
           font-size: 14px;
           color: #666666;
           line-height: 20px;
           cursor: pointer;
+          transition: all 0.2s linear;
+
+          &:hover {
+            background: #ededed;
+          }
+
+          &:active {
+            background: #e6e6e6;
+          }
         }
 
         .active-btn {
@@ -412,6 +422,15 @@
           color: #ffffff;
           margin-left: 10px;
           cursor: pointer;
+          transition: all 0.2s linear;
+
+          &:hover {
+            background: #529dff;
+          }
+
+          &:active {
+            background: #2376e5;
+          }
 
           .loader {
             margin-right: 10px;
@@ -430,6 +449,15 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        transition: all 0.2s linear;
+
+        &:hover {
+          color: #529dff;
+        }
+
+        &:active {
+          color: #2376e5;
+        }
       }
     }
   }

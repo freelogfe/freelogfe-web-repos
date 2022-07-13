@@ -2,16 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
-import { Space } from 'antd';
+import { Radio, Space } from 'antd';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
 import { connect, Dispatch } from 'dva';
-import {
-  ConnectState,
-  InformExhibitInfoPageModelState,
-  NodesModelState,
-} from '@/models/connect';
+import { ConnectState, InformExhibitInfoPageModelState, NodesModelState } from '@/models/connect';
 import {
   OnPageMountAction,
   OnChange_Exhibit_OnlineSwitch_Action,
@@ -30,6 +26,8 @@ import { Helmet } from 'react-helmet';
 // import { IExhibit } from '@/models/informalNodeManagerPage';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
+import { FDialog } from '@/components/FDialog';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -38,6 +36,10 @@ interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
 }
 
 function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformExhibitProps) {
+  const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
+  const [resultPopupType, setResultPopupType] = React.useState<null | boolean>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnPageMountAction>({
@@ -54,110 +56,216 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
     });
   });
 
-
   if (informExhibitInfoPage.pageLoading) {
-    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
+    return <FLoadingTip height={'calc(100vh - 140px)'} />;
   }
 
-  return (<div className={styles.styles}>
-    <Helmet>
-      <title>{`编辑展品信息 · ${informExhibitInfoPage.exhibit_Name} - Freelog`}</title>
-    </Helmet>
-    <div>
-      <div className={styles.header}>
-        <div className={styles.nav}>
-          <label>test</label>
-          <div style={{ width: 5 }} />
-          <FTextBtn onClick={() => {
-            router.push(FUtil.LinkTo.informNodeManagement({
-              nodeID: informExhibitInfoPage.node_ID,
-              showPage: 'exhibit',
-            }));
-          }}>
-            <FContentText
-              type='negative'
-              // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
-              text={informExhibitInfoPage.node_Name}
-            />
-          </FTextBtn>
-          <div style={{ width: 2 }} />
-          <FContentText
-            type='negative'
-            text={'>'}
-          />
-          <div style={{ width: 10 }} />
-          <FIdentityTypeBadge status={informExhibitInfoPage.exhibit_Identity} />
-          <div style={{ width: 10 }} />
-          <FTitleText
-            style={{ maxWidth: 600 }}
-            singleRow
-            text={informExhibitInfoPage.exhibit_Name}
-          />
+  /** 上下架 */
+  const changeStatus = (value: boolean) => {
+    if (value) {
+      // 上架
+      upOrDownExhibit(value);
+    } else {
+      // 下架
+      const resourceNoTip = localStorage.getItem('exhibitNoTip') || false;
+      if (resourceNoTip) {
+        inactiveResource();
+      } else {
+        setInactiveDialogShow(true);
+      }
+    }
+  };
 
-          <div style={{ width: 20 }} />
-          {
-            informExhibitInfoPage.exhibit_Info && (<div style={{ maxWidth: 500, overflow: 'hidden' }}>
-              <MappingRule
-                operationAndActionRecords={informExhibitInfoPage.exhibit_Info.operationAndActionRecords}
-                placement='bottom'
-              />
-            </div>)
-          }
+  /** 下架 */
+  const inactiveResource = () => {
+    if (inactiveDialogShow && noLonger) localStorage.setItem('exhibitNoTip', 'true');
 
-        </div>
-        <Space size={20}>
-          {
-            informExhibitInfoPage.exhibit_OnlineSwitchObj && (<>
-              <span
-                style={{ color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked ? '#44C28C' : '#666' }}>{informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}</span>
-              <FSwitch
-                disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
-                checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
-                onChange={(value) => {
-                  if (informExhibitInfoPage.exhibit_Info?.originInfo.resourceType === 'theme') {
-                    dispatch<OnChange_Theme_OnlineSwitch_Action>({
-                      type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
-                      payload: {
-                        checked: true,
-                      },
-                    });
-                  } else {
-                    dispatch<OnChange_Exhibit_OnlineSwitch_Action>({
-                      type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch',
-                      payload: {
-                        checked: value,
-                      },
-                    });
-                  }
+    upOrDownExhibit(false);
+  };
 
-                }}
-              />
-            </>)
-          }
+  /** 上下架请求 */
+  const upOrDownExhibit = (value: boolean) => {
+    setInactiveDialogShow(false);
+    setLoading(true);
+    setResultPopupType(value);
+    if (informExhibitInfoPage.exhibit_Info?.originInfo.resourceType.includes('主题')) {
+      dispatch<OnChange_Theme_OnlineSwitch_Action>({
+        type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
+        payload: {
+          checked: true,
+        },
+      });
+    } else {
+      dispatch<OnChange_Exhibit_OnlineSwitch_Action>({
+        type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch',
+        payload: {
+          checked: value,
+        },
+      });
+    }
 
-          {
-            !informExhibitInfoPage.exhibit_Info?.isAuth && (<FTooltip
-              // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
-              title={'存在授权问题'}
+    setTimeout(() => {
+      setLoading(false);
+      setTimeout(() => {
+        setResultPopupType(null);
+      }, 1000);
+    }, 1000);
+  };
+
+  return (
+    <div className={styles.styles}>
+      <Helmet>
+        <title>{`编辑展品信息 · ${informExhibitInfoPage.exhibit_Name} - Freelog`}</title>
+      </Helmet>
+      <div>
+        <div className={styles.header}>
+          <div className={styles.nav}>
+            <label>test</label>
+            <div style={{ width: 5 }} />
+            <FTextBtn
+              onClick={() => {
+                router.push(
+                  FUtil.LinkTo.informNodeManagement({
+                    nodeID: informExhibitInfoPage.node_ID,
+                    showPage: 'exhibit',
+                  }),
+                );
+              }}
             >
-              <FWarning />
-            </FTooltip>)
-          }
-        </Space>
-      </div>
-      <div className={styles.body}>
-        <div className={styles.content}>
-          <Space direction='vertical' size={50}>
-            <Contracts />
-            <Viewports />
+              <FContentText
+                type="negative"
+                // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
+                text={informExhibitInfoPage.node_Name}
+              />
+            </FTextBtn>
+            <div style={{ width: 2 }} />
+            <FContentText type="negative" text={'>'} />
+            <div style={{ width: 10 }} />
+            <FIdentityTypeBadge status={informExhibitInfoPage.exhibit_Identity} />
+            <div style={{ width: 10 }} />
+            <FTitleText
+              style={{ maxWidth: 600 }}
+              singleRow
+              text={informExhibitInfoPage.exhibit_Name}
+            />
+
+            <div style={{ width: 20 }} />
+            {informExhibitInfoPage.exhibit_Info && (
+              <div style={{ maxWidth: 500, overflow: 'hidden' }}>
+                <MappingRule
+                  operationAndActionRecords={
+                    informExhibitInfoPage.exhibit_Info.operationAndActionRecords
+                  }
+                  placement="bottom"
+                />
+              </div>
+            )}
+          </div>
+          <Space size={20}>
+            {informExhibitInfoPage.exhibit_OnlineSwitchObj && (
+              <>
+                <span
+                  style={{
+                    color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked
+                      ? '#44C28C'
+                      : '#666',
+                  }}
+                >
+                  {informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}
+                </span>
+                <FSwitch
+                  disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
+                  checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
+                  loading={loading}
+                  onClick={(checked) => changeStatus(checked)}
+                  // onChange={(value) => {
+                  //   if (informExhibitInfoPage.exhibit_Info?.originInfo.resourceType === 'theme') {
+                  //     dispatch<OnChange_Theme_OnlineSwitch_Action>({
+                  //       type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
+                  //       payload: {
+                  //         checked: true,
+                  //       },
+                  //     });
+                  //   } else {
+                  //     dispatch<OnChange_Exhibit_OnlineSwitch_Action>({
+                  //       type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch',
+                  //       payload: {
+                  //         checked: value,
+                  //       },
+                  //     });
+                  //   }
+                  // }}
+                />
+              </>
+            )}
+
+            {!informExhibitInfoPage.exhibit_Info?.isAuth && (
+              <FTooltip
+                // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+                title={'存在授权问题'}
+              >
+                <FWarning />
+              </FTooltip>
+            )}
           </Space>
         </div>
-        <div style={{ width: 10 }} />
-        <Side />
+        <div className={styles.body}>
+          <div className={styles.content}>
+            <Space direction="vertical" size={50}>
+              <Contracts />
+              <Viewports />
+            </Space>
+          </div>
+          <div style={{ width: 10 }} />
+          <Side />
+        </div>
       </div>
+      <div style={{ height: 100 }} />
+
+      <FDialog
+        show={inactiveDialogShow}
+        title="提醒"
+        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
+        sureText="下架资源"
+        cancel={() => {
+          setInactiveDialogShow(false);
+        }}
+        sure={inactiveResource}
+        loading={loading}
+        footer={
+          <Radio
+            className={styles['no-longer']}
+            checked={noLonger}
+            onClick={() => setNoLonger(!noLonger)}
+          >
+            不再提醒
+          </Radio>
+        }
+      ></FDialog>
+
+      {resultPopupType !== null && (
+        <div className={styles['result-modal']}>
+          <div className={styles['result-popup']}>
+            {loading ? (
+              <div className={styles['loader']}>
+                <LoadingOutlined className={styles['loader-icon']} />
+                <div className={styles['loader-text']}>正在{resultPopupType ? '上架' : '下架'}</div>
+              </div>
+            ) : (
+              <div className={styles['result']}>
+                <i
+                  className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
+                    styles[resultPopupType ? 'up' : 'down']
+                  }`}
+                ></i>
+                <div className={styles['result-text']}>已{resultPopupType ? '上架' : '下架'}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
-    <div style={{ height: 100 }} />
-  </div>);
+  );
 }
 
 export default connect(({ informExhibitInfoPage, nodes }: ConnectState) => ({

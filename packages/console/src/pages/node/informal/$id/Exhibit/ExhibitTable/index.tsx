@@ -6,7 +6,7 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-import { Space } from 'antd';
+import { Popconfirm, Radio, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
@@ -19,7 +19,8 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 import fConfirmModal from '@/components/fConfirmModal';
-import { MinusOutlined } from '@ant-design/icons';
+import { LoadingOutlined, MinusOutlined } from '@ant-design/icons';
+import { FDialog } from '@/components/FDialog';
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -27,10 +28,15 @@ interface ExhibitTableProps {
 }
 
 function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) {
+  let [operateExhibit, setOperateExhibit] = React.useState<any>(null);
+  const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
+  const [resultPopupType, setResultPopupType] = React.useState<null | boolean>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [noLonger, setNoLonger] = React.useState(false);
 
   const columns: ColumnsType<InformalNodeManagerPageModelState['exhibit_List'][number]> = [
     {
-      title: (<FTitleText type='table' text={'来源｜封面'} />),
+      title: <FTitleText type="table" text={'来源｜封面'} />,
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
@@ -45,12 +51,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             <FIdentityTypeBadge
               status={record.associatedPresentableId === '' ? record.originInfo.type : 'exhibit'}
             />
+            </div>
           </div>
-        </div>);
+        );
       },
     },
     {
-      title: (<FTitleText type='table' text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />),
+      title: <FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />,
       dataIndex: 'name',
       key: 'name',
       render(text, record) {
@@ -72,121 +79,232 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             </div>
           </div>
           <div style={{ maxWidth: 500, overflow: 'hidden' }}>
-            <MappingRule
-              operationAndActionRecords={record.operationAndActionRecords}
-            />
+            <MappingRule operationAndActionRecords={record.operationAndActionRecords}/>
           </div>
         </div>);
       },
     },
     {
-      title: (<FTitleText type='table' text={''} />),
+      title: <FTitleText type="table" text={''} />,
       dataIndex: 'action',
       key: 'action',
       width: 110,
       render(text: any, record) {
-        return (<div
-          style={{ width: 110 }}
-          className={styles.hoverVisible}
-        >
-          <Actions
-            onEdit={() => {
-              window.open(FUtil.LinkTo.informExhibitManagement({ exhibitID: record.testResourceId }));
-            }}
-            onSearch={async () => {
-              // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
-              if (record.originInfo.type === 'resource') {
-                return window.open(FUtil.LinkTo.resourceDetails({ resourceID: record.originInfo.id }));
+        return (
+          <div style={{ width: 110 }} className={styles.hoverVisible}>
+            <Actions
+              onEdit={() => {
+                window.open(
+                  FUtil.LinkTo.informExhibitManagement({ exhibitID: record.testResourceId }),
+                );
+              }}
+              onSearch={async () => {
+                // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
+                if (record.originInfo.type === 'resource') {
+                  return window.open(
+                    FUtil.LinkTo.resourceDetails({ resourceID: record.originInfo.id }),
+                  );
+                }
+
+                const { data } = await FServiceAPI.Storage.objectDetails({
+                  objectIdOrName: record.originInfo.id,
+                });
+
+                // console.log(data, '!@!#$!@#$@!#$@#$@#$@#');
+                window.open(
+                  FUtil.LinkTo.objectDetails({
+                    bucketName: data.bucketName,
+                    objectID: record.originInfo.id,
+                  }),
+                );
+              }}
+              onDelete={
+                record.associatedPresentableId !== ''
+                  ? undefined
+                  : () => {
+                      dispatch<OnClick_Exhibits_DeleteBtn_Action>({
+                        type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
+                        payload: {
+                          testResourceId: record.testResourceId,
+                          testResourceName: record.testResourceName,
+                        },
+                      });
+                    }
               }
-
-              const { data } = await FServiceAPI.Storage.objectDetails({
-                objectIdOrName: record.originInfo.id,
-              });
-
-              // console.log(data, '!@!#$!@#$@!#$@#$@#$@#');
-              window.open(FUtil.LinkTo.objectDetails({
-                bucketName: data.bucketName,
-                objectID: record.originInfo.id,
-              }));
-            }}
-            onDelete={record.associatedPresentableId !== '' ? undefined : () => {
-              dispatch<OnClick_Exhibits_DeleteBtn_Action>({
-                type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
-                payload: {
-                  testResourceId: record.testResourceId,
-                  testResourceName: record.testResourceName,
-                },
-              });
-            }}
-          />
-        </div>);
+            />
+          </div>
+        );
       },
     },
     {
-      title: (<FTitleText type='table' text={'展示版本'} />),
+      title: <FTitleText type="table" text={'展示版本'} />,
       dataIndex: 'version',
       key: 'version',
       width: 123,
       render(text: any, record) {
-        return (<div style={{ width: 123 }}>
-          {
-            record.originInfo.version
-              ? (<FContentText text={record.originInfo.version} />)
+        return (
+          <div style={{ width: 123 }}>
+            {record.originInfo.version ? (
+              <FContentText text={record.originInfo.version} />
+            ) : (
               // : (<FContentText text={'---'} />)
-              : (<MinusOutlined />)
-          }
-
-        </div>);
+              <MinusOutlined />
+            )}
+          </div>
+        );
       },
     },
     {
-      title: (<FTitleText type='table' text={'上线'} />),
+      title: <FTitleText type="table" text={'上架'} />,
       dataIndex: 'online',
       key: 'online',
       width: 65,
       render(text: any, record) {
-        return (<div style={{ width: 65 }}>
-          <Space size={15}>
-            <FSwitch
-              // disabled={!record.isAuth}
-              checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
-              onChange={(value) => {
-                dispatch<OnChange_Exhibits_StatusSwitch_Action>({
-                  type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch',
-                  payload: {
-                    testResourceId: record.testResourceId,
-                    testResourceName: record.testResourceName,
-                    checked: value,
-                  },
-                });
-              }}
-            />
-            {
-              !record.isAuth && (<FTooltip
-                // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
-                title={'存在授权问题'}
-              >
-                <FWarning />
-              </FTooltip>)
-            }
-
-          </Space>
-        </div>);
+        return (
+          <div style={{ width: 65 }}>
+            <Space size={15}>
+              <FSwitch
+                // disabled={!record.isAuth}
+                checked={record.stateInfo.onlineStatusInfo.onlineStatus === 1}
+                loading={loading && operateExhibit.testResourceId === record.testResourceId}
+                onClick={(checked) => changeStatus(checked, record)}
+                // onChange={(value) => {
+                //   dispatch<OnChange_Exhibits_StatusSwitch_Action>({
+                //     type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch',
+                //     payload: {
+                //       testResourceId: record.testResourceId,
+                //       testResourceName: record.testResourceName,
+                //       checked: value,
+                //     },
+                //   });
+                // }}
+              />
+              {!record.isAuth && (
+                <FTooltip
+                  // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+                  title={'存在授权问题'}
+                >
+                  <FWarning />
+                </FTooltip>
+              )}
+            </Space>
+          </div>
+        );
       },
     },
   ];
 
-  return (<FTable
-    className={styles.table}
-    dataSource={informalNodeManagerPage.exhibit_List.map((el) => {
-      return {
-        key: el.testResourceId,
-        ...el,
-      };
-    })}
-    columns={columns}
-    rowClassName={styles.rowClassName}
-  />);
+  /** 上下架 */
+  const changeStatus = (value: boolean, exhibit: any) => {
+    operateExhibit = exhibit;
+    setOperateExhibit(exhibit);
+
+    if (value) {
+      // 上架
+        upOrDownExhibit(value);
+    } else {
+      // 下架
+      const resourceNoTip = localStorage.getItem('exhibitNoTip') || false;
+      if (resourceNoTip) {
+        inactiveResource();
+      } else {
+        setInactiveDialogShow(true);
+      }
+    }
+  };
+
+  /** 下架 */
+  const inactiveResource = () => {
+    if (inactiveDialogShow && noLonger) localStorage.setItem('exhibitNoTip', 'true');
+
+    upOrDownExhibit(false);
+  };
+
+  /** 上下架请求 */
+  const upOrDownExhibit = (value: boolean) => {
+    setInactiveDialogShow(false);
+    setLoading(true);
+    setResultPopupType(value);
+
+    dispatch<OnChange_Exhibits_StatusSwitch_Action>({
+      type: 'informalNodeManagerPage/onChange_Exhibits_StatusSwitch',
+      payload: {
+        testResourceId: operateExhibit.testResourceId,
+        testResourceName: operateExhibit.testResourceName,
+        checked: value,
+      },
+    });
+
+    setTimeout(() => {
+      setLoading(false);
+      setTimeout(() => {
+        setResultPopupType(null);
+      }, 1000);
+    }, 1000);
+  }
+
+  return (
+    <>
+      <FTable
+        className={styles.table}
+        dataSource={informalNodeManagerPage.exhibit_List.map((el) => {
+          return {
+            key: el.testResourceId,
+            ...el,
+          };
+        })}
+        columns={columns}
+        rowClassName={styles.rowClassName}
+      />
+
+      <FDialog
+        show={inactiveDialogShow}
+        title="提醒"
+        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
+        sureText="下架资源"
+        cancel={() => {
+          setInactiveDialogShow(false);
+        }}
+        sure={inactiveResource}
+        loading={loading}
+        footer={
+          <Radio
+            className={styles['no-longer']}
+            checked={noLonger}
+            onClick={() => setNoLonger(!noLonger)}
+          >
+            不再提醒
+          </Radio>
+        }
+      ></FDialog>
+
+      {resultPopupType !== null && (
+        <div className={styles['result-modal']}>
+          <div className={styles['result-popup']}>
+            {loading ? (
+              <div className={styles['loader']}>
+                <LoadingOutlined className={styles['loader-icon']} />
+                <div className={styles['loader-text']}>
+                  正在{resultPopupType ? '上架' : '下架'}
+                </div>
+              </div>
+            ) : (
+              <div className={styles['result']}>
+                <i
+                  className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
+                    styles[resultPopupType ? 'up' : 'down']
+                  }`}
+                ></i>
+                <div className={styles['result-text']}>
+                  已{resultPopupType ? '上架' : '下架'}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default connect(({ informalNodeManagerPage }: ConnectState) => ({
@@ -205,45 +323,27 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
   const refDom = React.useRef(null);
 
   return (<div ref={refDom}>
-    <Space size={25}>
-      {
-        onEdit && (<FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
-          <span>
-          <FTextBtn
-            type='primary'
-            onClick={() => onEdit()}
-          >
-            <FEdit />
-          </FTextBtn>
+      <Space size={25}>
+        {onEdit && (
+          <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
+            <span>
+              <FTextBtn type="primary" onClick={() => onEdit()}>
+                <FEdit />
+              </FTextBtn>
             </span>
-        </FTooltip>)
-      }
+          </FTooltip>
+        )}
 
-      {
-        onSearch && (<FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-          <span>
-          <FTextBtn
-            type='primary'
-            onClick={() => onSearch()}
-          >
-            <FFileSearch />
-          </FTextBtn>
+        {onSearch && (
+          <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+            <span>
+              <FTextBtn type="primary" onClick={() => onSearch()}>
+                <FFileSearch />
+              </FTextBtn>
             </span>
-        </FTooltip>)
-      }
+          </FTooltip>
+        )}
 
-      {/*{*/}
-      {/*  onDelete && (<Popconfirm*/}
-      {/*    title={'确定删除吗？'}*/}
-      {/*    // style={{width: 200}}*/}
-      {/*    overlayStyle={{ width: 150 }}*/}
-      {/*    trigger='hover'*/}
-      {/*    getPopupContainer={() => refDom.current || document.body}*/}
-      {/*    onConfirm={() => onDelete()}*/}
-      {/*  >*/}
-      {/*    <div><FTextBtn className={styles.Delete}><FDelete /></FTextBtn></div>*/}
-      {/*  </Popconfirm>)*/}
-      {/*}*/}
       {
         onDelete && (<FTextBtn
           onClick={() => {
