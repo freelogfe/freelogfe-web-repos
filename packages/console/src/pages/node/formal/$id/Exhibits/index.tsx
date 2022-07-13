@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { FContentText, FTitleText } from '@/components/FText';
-import { Space } from 'antd';
+import { Radio, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
@@ -16,6 +16,8 @@ import FDropdown from '@/components/FDropdown';
 
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
+  ChangeAction,
+  FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
   OnChange_Exhibit_SelectedType_Action,
@@ -31,7 +33,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
@@ -39,6 +41,10 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
+import { FDialog } from '@/components/FDialog';
+import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
+import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -46,10 +52,17 @@ interface ExhibitsProps {
 }
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
+
   const [category, setCategory] = React.useState<any>({
     first: '-1',
     second: '',
   });
+  let [operateExhibit, setOperateExhibit] = React.useState<any>(null);
+  const [activeDialogShow, setActiveDialogShow] = React.useState(false);
+  const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
+  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnMount_ExhibitPage_Action>({
@@ -63,24 +76,162 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     });
   });
 
-  React.useEffect(() => {
-    // 初始化前-1，后面选全部为字符串‘-1’
-    if (category.first === '-1') {
-      return;
+  /** 上下架 */
+  const changeStatus = (value: boolean, exhibit: any) => {
+    operateExhibit = exhibit;
+    setOperateExhibit(exhibit);
+
+    if (value) {
+      // 上架
+      const { policiesList } = exhibit;
+      if (policiesList.length === 0) {
+        setActiveDialogShow(true);
+      } else if (
+        policiesList.filter((item: { status: number }) => item.status === 1).length === 0
+      ) {
+        exhibit.policiesList.forEach((item: any) => {
+          item.checked = false;
+        });
+        dispatch<ChangeAction>({
+          type: 'nodeManagerPage/change',
+          payload: {
+            policyOperaterVisible: true,
+          },
+        });
+      } else {
+        const data = { onlineStatus: 1 };
+        upOrDownExhibit(data);
+      }
+    } else {
+      // 下架
+      const resourceNoTip = localStorage.getItem('exhibitNoTip') || false;
+      if (resourceNoTip) {
+        inactiveResource();
+      } else {
+        setInactiveDialogShow(true);
+      }
     }
-    let str = categoryData.first[category.first] || '';
-    // @ts-ignore
-    if (categoryData.second[category.first] && category.second !== '-1') {
-      // @ts-ignore
-      str = categoryData.second[category.first][category.second];
-    }
-    dispatch<OnChange_Exhibit_SelectedType_Action>({
-      type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+  };
+
+  /** 打开添加策略弹窗 */
+  const openPolicyBuilder = () => {
+    dispatch<ChangeAction>({
+      type: 'nodeManagerPage/change',
       payload: {
-        value: str,
+        policyEditorVisible: true,
       },
     });
-  }, [category]);
+    setActiveDialogShow(false);
+  };
+
+  /** 上架 */
+  const activeResource = () => {
+    const updatePolicies = operateExhibit.policiesList
+      .filter((item: { checked: boolean }) => item.checked)
+      .map((item: { policyId: string }) => {
+        return { policyId: item.policyId, status: 1 };
+      });
+    const data = { onlineStatus: 1, updatePolicies };
+    upOrDownExhibit(data);
+  };
+
+  /** 下架 */
+  const inactiveResource = () => {
+    if (inactiveDialogShow && noLonger) localStorage.setItem('exhibitNoTip', 'true');
+
+    const data = { onlineStatus: 0 };
+    upOrDownExhibit(data);
+  };
+
+  /** 资源上下架 */
+  const upOrDownExhibit = async (data: any) => {
+    setActiveDialogShow(false);
+    setInactiveDialogShow(false);
+    setLoading(true);
+    setResultPopupType(data.onlineStatus);
+
+    const result = await FUtil.Request({
+      method: 'PUT',
+      url: `/v2/presentables/${operateExhibit.id}/onlineStatus`,
+      data,
+    });
+    if (result.errCode === 0) {
+      setTimeout(() => {
+        setLoading(false);
+        setTimeout(() => {
+          setResultPopupType(null);
+        }, 1000);
+      }, 1000);
+
+      const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
+      nodeManagerPage.exhibit_List[index].isOnline = data.onlineStatus === 1;
+      if (data.updatePolicies) {
+        dispatch<ChangeAction>({
+          type: 'nodeManagerPage/change',
+          payload: {
+            policyOperaterVisible: false,
+          },
+        });
+        data.updatePolicies.forEach((item: any) => {
+          const i = nodeManagerPage.exhibit_List[index].policiesList.findIndex(
+            (policy) => policy.policyId === item.policyId,
+          );
+          nodeManagerPage.exhibit_List[index].policiesList[i].status = 1;
+        });
+        nodeManagerPage.exhibit_List[index].policies = nodeManagerPage.exhibit_List[
+          index
+        ].policiesList
+          .filter((item) => item.status === 1)
+          .map((item: { policyName: any }) => item.policyName);
+      }
+
+      dispatch<ChangeAction>({
+        type: 'nodeManagerPage/change',
+        payload: {
+          exhibit_List: nodeManagerPage.exhibit_List,
+        },
+      });
+    } else {
+      fMessage(result.msg, 'error');
+      setLoading(false);
+      setResultPopupType(null);
+    }
+  };
+
+  /** 添加授权策略 */
+  const addPolicy = async (title: string, text: string) => {
+    const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+      presentableId: operateExhibit.id,
+      addPolicies: [
+        {
+          policyName: title,
+          policyText: text,
+          status: operateExhibit.status,
+        },
+      ],
+    };
+    const result = await FServiceAPI.Exhibit.updatePresentable(params);
+    if (result.errCode !== 0) {
+      fMessage(result.msg, 'error');
+      return;
+    }
+
+    const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
+    nodeManagerPage.exhibit_List[index].policies.push(title);
+    nodeManagerPage.exhibit_List[index].policiesList = result.data.policies;
+    dispatch<ChangeAction>({
+      type: 'nodeManagerPage/change',
+      payload: {
+        exhibit_List: nodeManagerPage.exhibit_List,
+      },
+    });
+    dispatch<ChangeAction>({
+      type: 'nodeManagerPage/change',
+      payload: {
+        policyEditorVisible: false,
+      },
+    });
+  };
 
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map(
     (i) => ({
@@ -180,7 +331,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       },
     },
     {
-      title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
+      // title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
+      title: <FTitleText type="table" text={'上架'} />,
       dataIndex: 'status',
       key: 'status',
       // width: 65,
@@ -191,24 +343,25 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <FSwitch
               disabled={!record.isAuth && !record.isOnline}
               checked={record.isOnline}
-              onChange={(value) => {
-                if (value && record.policies.length === 0) {
-                  if (!record.hasPolicy) {
-                    // fMessage(FI18n.i18nNext.t('error_show_exhibit_no_authorization_plan '), 'error');
-                    fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
-                  } else {
-                    fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
-                  }
-                  return;
-                }
-                dispatch<OnOnlineOrOfflineAction>({
-                  type: 'nodeManagerPage/onOnlineOrOffline',
-                  payload: {
-                    id: record.id,
-                    onlineStatus: value ? 1 : 0,
-                  },
-                });
-              }}
+              loading={loading && operateExhibit.id === record.id}
+              onClick={(checked) => changeStatus(checked, record)}
+              // onChange={(value) => {
+              //   if (value && record.policies.length === 0) {
+              //     if (!record.hasPolicy) {
+              //       fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
+              //     } else {
+              //       fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
+              //     }
+              //     return;
+              //   }
+              //   dispatch<OnOnlineOrOfflineAction>({
+              //     type: 'nodeManagerPage/onOnlineOrOffline',
+              //     payload: {
+              //       id: record.id,
+              //       onlineStatus: value ? 1 : 0,
+              //     },
+              //   });
+              // }}
             />
             {!record.isAuth && (
               <FTooltip title={record.authErrorText}>
@@ -309,24 +462,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </>
                 ) : null}
               </div>
-              {/* <div>
-            <span>类型：</span>
-            <FDropdownMenu
-              options={nodeManagerPage.exhibit_ResourceTypeOptions}
-              onChange={(value) => {
-                dispatch<OnChange_Exhibit_SelectedType_Action>({
-                  type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
-                  payload: {
-                    value: value,
-                  },
-                });
-              }}
-            >
-            <span
-              style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
-              style={{ marginLeft: 8 }} /></span>
-            </FDropdownMenu>
-          </div> */}
               <div>
                 <span>状态：</span>
                 <FDropdownMenu
@@ -391,6 +526,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               <FLoadingTip height={'calc(100vh - 270px)'} />
             )}
 
+
             {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
               <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
             )}
@@ -415,37 +551,125 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               </div>
             )}
 
-            {/*{*/}
-            {/*  nodeManagerPage.exhibit_ListState === 'loaded' && (<InfiniteScroll*/}
-            {/*    pageStart={0}*/}
-            {/*    initialLoad={false}*/}
-            {/*    loadMore={() => {*/}
-            {/*      // console.log('@@@@8888QQQQQQ');*/}
-            {/*      dispatch<FetchExhibitsAction>({*/}
-            {/*        type: 'nodeManagerPage/fetchExhibits',*/}
-            {/*        payload: false,*/}
-            {/*      });*/}
-            {/*    }}*/}
-            {/*    // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}*/}
-            {/*    hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}*/}
-            {/*    // hasMore={true}*/}
-            {/*  >*/}
-            {/*    <div className={styles.body}>*/}
-            {/*      <FTable*/}
-            {/*        rowClassName={styles.rowClassName}*/}
-            {/*        columns={columns}*/}
-            {/*        dataSource={dataSource as any}*/}
-            {/*        pagination={false}*/}
-            {/*      />*/}
+            {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
+              <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
+            )}
 
-            {/*      {*/}
-            {/*        nodeManagerPage.exhibit_ListMore === 'loading' &&*/}
-            {/*        <div className={styles.loader} key={0}>Loading ...</div>*/}
-            {/*      }*/}
-            {/*    </div>*/}
-            {/*  </InfiniteScroll>)*/}
-            {/*}*/}
+            {nodeManagerPage.exhibit_ListState === 'loaded' && (
+              <div className={styles.body}>
+                <FTable
+                  rowClassName={styles.rowClassName}
+                  columns={columns}
+                  dataSource={dataSource as any}
+                  pagination={false}
+                />
+
+                <FListFooter
+                  state={nodeManagerPage.exhibit_ListMore}
+                  onClickLoadMore={() => {
+                    dispatch<OnLoadMore_ExhibitList_Action>({
+                      type: 'nodeManagerPage/onLoadMore_ExhibitList',
+                    });
+                  }}
+                />
+              </div>
+            )}
+
           </>
+        )}
+
+        <FDialog
+          show={activeDialogShow}
+          title="提醒"
+          desc="请先为资源添加一个授权策略，再进行上架操作"
+          sureText="添加策略"
+          cancel={() => {
+            setActiveDialogShow(false);
+          }}
+          sure={openPolicyBuilder}
+          loading={loading}
+        />
+
+        <FDialog
+          show={inactiveDialogShow}
+          title="提醒"
+          desc="下架后其它用户将无法签约该资源，确认要下架吗？"
+          sureText="下架资源"
+          cancel={() => {
+            setInactiveDialogShow(false);
+          }}
+          sure={inactiveResource}
+          loading={loading}
+          footer={
+            <Radio
+              className={styles['no-longer']}
+              checked={noLonger}
+              onClick={() => setNoLonger(!noLonger)}
+            >
+              不再提醒
+            </Radio>
+          }
+        />
+
+        <FPolicyBuilderDrawer
+          visible={nodeManagerPage.policyEditorVisible}
+          alreadyUsedTexts={operateExhibit?.policiesList.map((ip: any) => {
+            return ip.policyText;
+          })}
+          alreadyUsedTitles={operateExhibit?.policiesList.map((ip: any) => {
+            return ip.policyName;
+          })}
+          targetType="resource"
+          onCancel={() => {
+            dispatch<ChangeAction>({
+              type: 'nodeManagerPage/change',
+              payload: {
+                policyEditorVisible: false,
+              },
+            });
+          }}
+          onConfirm={({ title, text }) => addPolicy(title, text)}
+        />
+
+        <FPolicyOperaterDrawer
+          visible={nodeManagerPage.policyOperaterVisible}
+          type="resource"
+          policiesList={operateExhibit?.policiesList || []}
+          onCancel={() => {
+            dispatch<ChangeAction>({
+              type: 'nodeManagerPage/change',
+              payload: {
+                policyOperaterVisible: false,
+              },
+            });
+          }}
+          onConfirm={activeResource}
+        />
+
+        {resultPopupType !== null && (
+          <div className={styles['result-modal']}>
+            <div className={styles['result-popup']}>
+              {loading ? (
+                <div className={styles['loader']}>
+                  <LoadingOutlined className={styles['loader-icon']} />
+                  <div className={styles['loader-text']}>
+                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles['result']}>
+                  <i
+                    className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
+                      styles[resultPopupType === 1 ? 'up' : 'down']
+                    }`}
+                  />
+                  <div className={styles['result-text']}>
+                    已{resultPopupType === 1 ? '上架' : '下架'}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </FLeftSiderLayout>
     </>

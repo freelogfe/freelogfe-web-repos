@@ -592,9 +592,10 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_Name: testResourceDetail.testResourceName,
           exhibit_OnlineSwitchObj: {
             checked: isChecked,
-            text: testResourceDetail.resourceType === 'theme'
+            text: testResourceDetail.resourceType.includes('主题')
               ? FI18n.i18nNext.t('toggle_activate_theme')
-              : FI18n.i18nNext.t('btn_show_exhibit'),
+              // : FI18n.i18nNext.t('btn_show_exhibit'),
+              : '上架',
             disabled: isDisabled,
           },
           exhibit_Info: {

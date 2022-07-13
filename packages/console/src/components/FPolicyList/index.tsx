@@ -49,12 +49,12 @@ export default FPolicyList;
 
 interface PolicyCardProps {
   fullInfo: PolicyFullInfo_Type;
-  onlineDisable: boolean;
-
+  onlineDisable?: boolean;
+  activeBtnShow?: boolean;
   onOnlineChange?(bool: boolean): void;
 }
 
-function PolicyCard({ fullInfo, onlineDisable, onOnlineChange }: PolicyCardProps) {
+export function PolicyCard({ fullInfo, onlineDisable = false, activeBtnShow = true, onOnlineChange }: PolicyCardProps) {
 
   const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
 
@@ -66,17 +66,19 @@ function PolicyCard({ fullInfo, onlineDisable, onOnlineChange }: PolicyCardProps
         style={{ maxWidth: 150 }}
         singleRow
       />
-      <Space size={8}>
-        <label
-          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
-        <FSwitch
-          disabled={onlineDisable}
-          checked={fullInfo.status === 1}
-          onChange={(value) => {
-            onOnlineChange && onOnlineChange(value);
-          }}
-        />
-      </Space>
+      {activeBtnShow && 
+        <Space size={8}>
+          <label
+            style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
+          <FSwitch
+            disabled={onlineDisable}
+            checked={fullInfo.status === 1}
+            onChange={(value) => {
+              onOnlineChange && onOnlineChange(value);
+            }}
+          />
+        </Space>
+      }
     </div>
     <div style={{ height: 10 }} />
     <div style={{ padding: '0 20px' }}>
