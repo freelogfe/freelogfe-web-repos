@@ -3,7 +3,6 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { router } from 'umi';
-// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
@@ -41,6 +40,8 @@ export interface ResourceDetailPageModelState {
     type: string[];
     status: 0 | 1;
     authProblem: boolean;
+    error: '' | 'offline' | 'freeze';
+    warning: '' | 'authException' | 'ownerFreeze';
     contracts: {
       checked: boolean;
       id: string;
@@ -361,6 +362,12 @@ const Model: ResourceDetailPageModelType = {
                 type: value.resourceType,
                 status: value.status,
                 authProblem: value.authProblem,
+                error: value.status === 0
+                  ? 'offline'
+                  : (value.status & 2) === 2
+                    ? 'freeze'
+                    : '',
+                warning: value.authProblem ? 'authException' : '',
                 contracts: contracts,
                 terminatedContractIDs: result[index]
                   .filter((c) => {
@@ -548,7 +555,7 @@ const Model: ResourceDetailPageModelType = {
       // console.log(data, ' data2309');
 
       if ((data_ResourceDetail.status & 2) === 2) {
-        router.replace(FUtil.LinkTo.resourceFreeze({resourceID: resourceDetailPage.resource_ID}));
+        router.replace(FUtil.LinkTo.resourceFreeze({ resourceID: resourceDetailPage.resource_ID }));
         return;
       }
 
@@ -600,6 +607,12 @@ const Model: ResourceDetailPageModelType = {
                 type: rs.resourceType,
                 status: rs.status,
                 authProblem: rs.authProblem,
+                error: rs.status === 0 ?
+                  'offline'
+                  : (rs.status & 2) === 2
+                    ? 'freeze'
+                    : '',
+                warning: rs.authProblem ? 'authException' : '',
                 contracts: [],
                 terminatedContractIDs: [],
                 policies: rs.policies

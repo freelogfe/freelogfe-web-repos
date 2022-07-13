@@ -68,25 +68,48 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
                 </div>)
-                : (resource?.policies || []).length === 0 && (resource?.contracts || []).length === 0
-                  ? (<div className={styles.noNode}>
-                    无策略可用…
-                  </div>)
-                  : (<>
+                : (<>
+                  {
+                    resource?.error === 'offline' && (<div className={styles.noNode}>
+                      资源已下线
+                    </div>)
+                  }
+                  {
+                    resource?.error === 'freeze' && <div className={styles.noNode}>
+                      资源已封禁
+                    </div>
+                  }
+                  <>
                     {
-                      resource?.status === 1 && resource.authProblem && (<>
+                      resource?.error === '' && (<>
+                        {
+                          resource.warning === 'authException' && (<>
+                            <div style={{ height: 15 }} />
+                            <Space size={10}>
+                              <FWarning style={{ fontSize: 20 }} />
+                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
+                            </Space>
+                          </>)
+                        }
+
+                        {
+                          resource.warning === 'ownerFreeze' && (<>
+                            <div style={{ height: 15 }} />
+                            <Space size={10}>
+                              <FWarning style={{ fontSize: 20 }} />
+                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处</span>
+                            </Space>
+                          </>)
+                        }
+
                         <div style={{ height: 15 }} />
-                        <Space size={10}>
-                          <FWarning style={{ fontSize: 20 }} />
-                          <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
-                        </Space>
+                        <Contracts />
+                        <Policies />
+                        <div style={{ height: 15 }} />
                       </>)
                     }
-                    <div style={{ height: 15 }} />
-                    <Contracts />
-                    <Policies />
-                    <div style={{ height: 15 }} />
-                  </>)
+                  </>
+                </>)
             }
 
           </div>
