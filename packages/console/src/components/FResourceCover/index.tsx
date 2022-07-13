@@ -8,7 +8,7 @@ interface FResourceCoverProps {
   // width?: number | string;
   // height?: number | string;
   src?: string;
-  status?: 'online' | 'offline' | 'unreleased';
+  status?: 'online' | 'offline' | 'unreleased' | 'freeze';
   // children?: React.ReactNode | React.ReactNodeArray;
 }
 

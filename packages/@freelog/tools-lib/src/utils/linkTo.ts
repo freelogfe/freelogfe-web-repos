@@ -45,10 +45,11 @@ export function dashboard({}: DashboardParamsType = {}) {
 // 资源市场
 interface MarketParamsType {
   // nodeID: number;
+  query?: string;
 }
 
-export function market({}: MarketParamsType = {}): TReturnType {
-  return `/market`;
+export function market({...params}: MarketParamsType = {}): TReturnType {
+  return `/market${handleQuery(params)}`;
 }
 
 // 示例节点
@@ -145,9 +146,8 @@ interface NodeManagementParamsType {
   showPage?: 'exhibit' | 'theme' | 'mappingRule';
 }
 
-export function nodeManagement({nodeID, showPage = 'exhibit'}: NodeManagementParamsType): TReturnType {
-  console.error(`/node/formal/${nodeID}${handleQuery({showPage})}`)
-  return `/node/formal/${nodeID}${handleQuery({showPage})}`;
+export function nodeManagement({nodeID, showPage = 'exhibit', ...params}: NodeManagementParamsType): TReturnType {
+  return `/node/formal/${nodeID}${handleQuery({showPage, ...params})}`;
 }
 
 // 展品管理
@@ -260,6 +260,24 @@ export function exception403({...params}: Exception403ParamsType = {}) {
   })}`;
 }
 
+// 节点封禁
+interface NodeFreezeParamsType {
+  nodeID: number;
+}
+
+export function nodeFreeze({nodeID}: NodeFreezeParamsType) {
+  return `/result/node/freeze/${nodeID}`;
+}
+
+// 资源封禁
+interface ResourceFreezeParamsType {
+  resourceID: string;
+}
+
+export function resourceFreeze({resourceID}: ResourceFreezeParamsType) {
+  return `/result/resource/freeze/${resourceID}`;
+}
+
 /************** console End ******************************************************/
 
 
@@ -306,6 +324,15 @@ export function retrievePayPassword({}: RetrievePayPasswordParamsType = {}) {
   return `/retrievePayPassword`;
 }
 
+// 用户冻结
+interface UserFreezeParamsType {
+  // goTo?: string;
+}
+
+export function userFreeze({}: UserFreezeParamsType = {}) {
+  return `/freeze`;
+}
+
 // 我的钱包
 interface WalletParamsType {
 }
@@ -329,6 +356,8 @@ interface SettingParamsType {
 export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
+
+
 
 /************** user End ******************************************************/
 

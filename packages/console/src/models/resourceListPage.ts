@@ -16,7 +16,7 @@ export interface ResourceListPageModelState {
     title: string;
     version: string;
     policy: string[],
-    type: string;
+    type: string[];
     status: 0 | 1;
     authProblem: boolean;
   }[];

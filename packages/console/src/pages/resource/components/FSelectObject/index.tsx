@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FObjectCard from './ObjectCard';
-import { LoadingOutlined } from '@ant-design/icons';
+// import { LoadingOutlined } from '@ant-design/icons';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
@@ -83,19 +83,19 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
     };
     const { data } = await FServiceAPI.Storage.objectDetails(params);
 
-    const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-      sha1: data.sha1,
-      // resourceType: resourceVersionCreatorPage.resourceType,
-    };
-
-    const { data: data4 } = await FServiceAPI.Storage.fileProperty(params4);
-    // console.log(data4, 'data4data4data4data4');
-    if (!data4) {
-      return onChange({
-        selectedFileStatus: 2,
-        selectedFileObjectDrawerVisible: false,
-      });
-    }
+    // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+    //   sha1: data.sha1,
+    //   // resourceType: resourceVersionCreatorPage.resourceType,
+    // };
+    //
+    // const { data: data4 } = await FServiceAPI.Storage.fileProperty(params4);
+    // console.log(data4, 'data4data4data4data4(((((((');
+    // if (!data4) {
+    //   return onChange({
+    //     selectedFileStatus: 2,
+    //     selectedFileObjectDrawerVisible: false,
+    //   });
+    // }
 
     await onChange({
       selectedFileName: data.objectName,
@@ -441,7 +441,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
       width={820}
     >
       <FObjectSelector
-        visibleResourceType={resourceVersionCreatorPage.resourceType}
+        visibleResourceType={resourceVersionCreatorPage.resourceType[resourceVersionCreatorPage.resourceType.length - 1]}
         // showRemoveIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
         disabledIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
         onSelect={onSelectObject}

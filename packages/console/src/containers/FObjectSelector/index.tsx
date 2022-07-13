@@ -2,17 +2,17 @@ import * as React from 'react';
 
 import styles from './index.less';
 import FInput from '@/components/FInput';
-import FResourceList, {FResourceListProps} from '@/components/FResourceList';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from '@/models/connect';
-import {DownOutlined} from '@ant-design/icons';
+import FResourceList, { FResourceListProps } from '@/components/FResourceList';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState } from '@/models/connect';
+import { DownOutlined } from '@ant-design/icons';
 import {
   ChangeAction,
   FetchObjectsAction,
   OnChangeOConditionsAction, storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
-import FDropdownMenu from "@/components/FDropdownMenu";
-import {storageObjectEditorInitData} from "@/models/storageObjectEditor";
+import FDropdownMenu from '@/components/FDropdownMenu';
+import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -20,9 +20,9 @@ interface FObjectSelectorProps {
   visibleResourceType?: string;
   isLoadingTypeless?: 0 | 1;
 
-  onSelect?({id, name}: { id: string; name: string; }): void;
+  onSelect?({ id, name }: { id: string; name: string; }): void;
 
-  onDelete?({id, name}: { id: string; name: string; }): void;
+  onDelete?({ id, name }: { id: string; name: string; }): void;
 
   dispatch: Dispatch;
   selector: StorageObjectDepSelectorModelState;
@@ -30,7 +30,7 @@ interface FObjectSelectorProps {
 }
 
 const defaultSelectOptions: { text?: string, value: string }[] = [
-  {text: '全部Bucket', value: '_all'},
+  { text: '全部Bucket', value: '_all' },
 ];
 
 function FObjectSelector({
@@ -42,9 +42,9 @@ function FObjectSelector({
                            onDelete,
                            dispatch,
                            selector,
-                           storageHomePage
+                           storageHomePage,
                          }: FObjectSelectorProps) {
-
+  // console.log(visibleResourceType, 'visibleResourceType90weiofjsdlkfjdlkfjlk');
   React.useEffect(() => {
     init();
   }, []);
@@ -85,10 +85,10 @@ function FObjectSelector({
         }}
       >
         <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text} <DownOutlined
-          style={{marginLeft: 8}}/></a>
+          style={{ marginLeft: 8 }} /></a>
       </FDropdownMenu>
       <FInput
-        theme="dark"
+        theme='dark'
         debounce={300}
         value={selector.oInput}
         onDebounceChange={(value) => {
@@ -115,10 +115,10 @@ function FObjectSelector({
       loading={selector.oTotal === -1}
       stillMore={selector.oTotal > selector.objectList.length}
       onSelect={(value) => {
-        onSelect && onSelect({id: value.id, name: value.title});
+        onSelect && onSelect({ id: value.id, name: value.title });
       }}
       onDelete={(value) => {
-        onDelete && onDelete({id: value.id, name: value.title});
+        onDelete && onDelete({ id: value.id, name: value.title });
       }}
       onLoadMord={() => {
         dispatch<FetchObjectsAction>({
@@ -130,7 +130,7 @@ function FObjectSelector({
   </>);
 }
 
-export default connect(({storageObjectDepSelector, storageHomePage}: ConnectState) => ({
+export default connect(({ storageObjectDepSelector, storageHomePage }: ConnectState) => ({
   selector: storageObjectDepSelector,
   storageHomePage: storageHomePage,
 }))(FObjectSelector);

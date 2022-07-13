@@ -27,7 +27,7 @@ import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
-import { IExhibit } from '@/models/informalNodeManagerPage';
+// import { IExhibit } from '@/models/informalNodeManagerPage';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
 

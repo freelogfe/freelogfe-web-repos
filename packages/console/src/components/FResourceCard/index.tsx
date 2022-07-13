@@ -2,13 +2,12 @@ import * as React from 'react';
 import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
-// import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 type EventFunc = () => void
 
@@ -39,8 +38,10 @@ function FResourceCard({
                          onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick,
                        }: FResourceCardProps) {
   return (
-    <div onClick={() => onClick && onClick()}
-         className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}>
+    <div
+      onClick={() => onClick && onClick()}
+      className={[styles.styles, className, type === 'market' ? styles.gesture : ''].join(' ')}
+    >
       <div className={styles.Cover}>
         <FCoverImage src={resource.cover} width={280} style={{ borderRadius: 4 }} />
         {
@@ -86,7 +87,13 @@ function FResourceCard({
             </nav>
             <div className={styles.Status}>
               <FResourceStatusBadge
-                status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
+                status={(resource.status & 2) === 2
+                  ? 'freeze'
+                  : resource.status === 1
+                    ? 'online'
+                    : !resource.version
+                      ? 'unreleased'
+                      : 'offline'}
               />
               <div style={{ width: 10 }} />
               {resource.authProblem && <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>}
@@ -106,7 +113,7 @@ function FResourceCard({
         <div className={styles.MetaInfo}>
           <FContentText
             type='additional1'
-            text={resource.type.join(' / ')}
+            text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
           />
           <FContentText
             type='additional1'

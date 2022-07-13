@@ -70,6 +70,7 @@ function VersionCreator({
 
   React.useEffect(() => {
     // const func = () => 1234;
+    // console.log('#######89iowkejsldfjl')
     if (resourceVersionCreatorPage.dataIsDirty) {
       window.onbeforeunload = () => true;
     } else {
@@ -91,6 +92,7 @@ function VersionCreator({
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
     // 选择的文件对象
     || resourceVersionCreatorPage.selectedFileStatus !== -3
+    || resourceVersionCreatorPage.rawPropertiesState !== 'success'
     // 依赖
     || resourceVersionCreatorPage.dependencies.some((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.some((erc) => erc.checked) && !dd.enabledPolicies.some((ep) => ep.checked);
@@ -135,6 +137,7 @@ function VersionCreator({
         sider={<Sider />}
         header={<Header
           onClickCreate={() => {
+            // window.onbeforeunload = null;
             dispatch<OnClickCreateBtnAction>({
               type: 'resourceVersionCreatorPage/onClickCreateBtn',
             });

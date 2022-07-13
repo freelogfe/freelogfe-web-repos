@@ -16,7 +16,7 @@ export interface DashboardPageModelState {
     resourceID: string;
     resourceName: string;
     cover: string;
-    type: string;
+    type: string[];
     policies: string[];
     dataTime: string;
     detailUrl: string;

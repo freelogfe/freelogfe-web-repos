@@ -13,8 +13,14 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 export type DepResources = {
   id: string;
   title: string;
-  resourceType: string;
-  status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/ | 4 /*上抛资源，无法获取授权*/;
+  resourceType: string[];
+  status: 0 /*该资源已下线，无法获取授权。*/
+    | 1
+    | 2 /*循环依赖不支持授权。*/
+    | 3 /*该依赖是存储空间对象，无法获取授权。*/
+    | 4 /*上抛资源，无法获取授权*/;
+  error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
+  warning: '' | 'authException' | 'ownerFreeze';
   versionRange: string;
   versions: string[];
   upthrow: boolean;
@@ -51,7 +57,7 @@ export type Relationships = {
 export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
   latestVersion: string;
-  resourceType: string;
+  resourceType: string[];
   baseUpcastResources: {
     resourceId: string;
     resourceName: string;
@@ -64,7 +70,14 @@ export interface ResourceVersionCreatorPageModelState {
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */
+  selectedFileStatus: -3 /* 上传成功 */
+    | -2 /* 正在上传 */
+    | -1 /* 正在校验 */
+    | 0 /* 未上传 */
+    | 1 /* 文件太大 */
+    | 2 /* 类型不符 */
+    | 3 /* 自己已上传 */
+    | 4 /* 他人已上传 */
   ;
   selectedFileUsedResource: {
     resourceID: string;
@@ -85,6 +98,7 @@ export interface ResourceVersionCreatorPageModelState {
     key: string;
     value: string;
   }[];
+  rawPropertiesState: 'parsing' | 'success' | 'fail';
 
   baseProperties: {
     key: string;
@@ -288,7 +302,7 @@ export interface ResourceVersionCreatorModelType {
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceId: '',
   latestVersion: '',
-  resourceType: '',
+  resourceType: [],
   baseUpcastResources: [],
 
   version: '',
@@ -303,6 +317,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   selectedFileObjectDrawerVisible: false,
 
   rawProperties: [],
+  rawPropertiesState: 'success',
 
   baseProperties: [],
   basePropertiesEditorVisible: false,
@@ -405,6 +420,12 @@ const Model: ResourceVersionCreatorModelType = {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
       const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
         .filter((dep) => dep.upthrow)
         .map((dep) => dep.id);
@@ -648,13 +669,14 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      // const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-      //   resourceVersionCreatorPage,
-      // }));
-      //
-      // if (!resourceVersionCreatorPage.selectedFileSha1) {
-      //   return;
-      // }
+      // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      if (!resourceVersionCreatorPage.selectedFileSha1) {
+        return;
+      }
       //
       // const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
       //   sha1: resourceVersionCreatorPage.selectedFileSha1,
@@ -662,6 +684,21 @@ const Model: ResourceVersionCreatorModelType = {
       // };
       //
       // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawPropertiesState: 'parsing',
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+        sha1: [resourceVersionCreatorPage.selectedFileSha1],
+      };
+      // console.log('*(*********');
+      const result = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
+      // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
+
       //
       // if (!data) {
       //   return yield put<ChangeAction>({
@@ -674,18 +711,22 @@ const Model: ResourceVersionCreatorModelType = {
       //   });
       // }
       //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-      //       return {
-      //         key: rp[0],
-      //         value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-      //       };
-      //     }),
-      //   },
-      //   caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-      // });
+      if (result[0].state === 'success') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+              return {
+                key: rp[0],
+                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              };
+            }),
+            rawPropertiesState: 'success',
+          },
+          caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+      }
+
     },
     * addDeps({ payload: { relationships, versions } }: AddDepsAction, { select, put, call }: EffectsCommandMap) {
 
@@ -753,62 +794,92 @@ const Model: ResourceVersionCreatorModelType = {
         coverageVersions = data2;
       }
 
-      // 组织添加的依赖数据
-      const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
-        // console.log(data1, 'data112323423');
-        const depC: any[] = data_batchContracts.filter((dc: any) => {
-          return dc.licensorId === dr.resourceId && dc.status === 0;
-        });
-        // console.log(depC, 'depC902342lk3jlk');
-        const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
-        const theVersion = versions?.find((v) => v.id === dr.resourceId);
-
-        const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
-
-        return {
-          id: dr.resourceId,
-          title: dr.resourceName,
-          resourceType: dr.resourceType,
-          status: isUpthrow ? 4 : dr.status,
-          versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
-          versions: dr.resourceVersions.map((version: any) => version.version),
-          upthrow: isUpthrow,
-          upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
-          authProblem: dr.authProblem,
-          enableReuseContracts: depC
-            .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
-              return {
-                checked: false,
-                id: c.contractId,
-                policyId: c.policyId,
-                title: c.contractName,
-                status: c.status,
-                code: c.policyInfo.policyText,
-                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-                versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
-                  .versions.map((ccc: any) => ccc.version),
-              };
-            }),
-          terminatedContractIDs: data_batchContracts
-            .filter((dc: any) => {
-              return dc.licensorId === dr.resourceId && dc.status === 1;
-            }).map((dc: any) => {
-              return dc.contractId;
-            }),
-          enabledPolicies: dr.policies
-            .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
-            .map((policy: any) => {
-              // console.log(policy, 'PPPPafwe98iokl');
-              return {
-                checked: false,
-                id: policy.policyId,
-                title: policy.policyName,
-                code: policy.policyText,
-                status: policy.status,
-              };
-            }),
-        };
+      const allUserID: number[] = data_batchResourceInfo.map<number>((dbr) => {
+        return dbr.userId;
       });
+
+      const params3: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+        userIds: allUserID.join(','),
+      };
+
+      const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
+      // console.log(data_batchUserList, 'data_batchUserList09io3jlksfdfjlsdkjflsdkjflkj');
+      // status: 1
+      // tokenSn: "f609bc141b4c4b2d8a7cc3c0b2ca1fb0"
+      // userId: 50061
+      // 组织添加的依赖数据
+      const dependencies: DepResources = data_batchResourceInfo
+        .map<DepResources[number]>((dr) => {
+          // console.log(data1, 'data112323423');
+          const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+            return dbu.userId === dr.userId;
+          });
+
+          const depC: any[] = data_batchContracts.filter((dc: any) => {
+            return dc.licensorId === dr.resourceId && dc.status === 0;
+          });
+          // console.log(depC, 'depC902342lk3jlk');
+          const allDepCIDs: string[] = depC.map<string>((adcs: any) => adcs.policyId);
+          const theVersion = versions?.find((v) => v.id === dr.resourceId);
+
+          const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
+
+          return {
+            id: dr.resourceId,
+            title: dr.resourceName,
+            resourceType: dr.resourceType,
+            status: isUpthrow ? 4 : dr.status,
+            error: isUpthrow
+              ? 'upThrow'
+              : dr.status === 0
+                ? 'offline'
+                : (dr.status & 2) === 2
+                  ? 'freeze'
+                  : '',
+            warning: ownerUserInfo.status === 1
+              ? 'ownerFreeze'
+              : dr.authProblem
+                ? 'authException'
+                : '',
+            versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
+            versions: dr.resourceVersions.map((version: any) => version.version),
+            upthrow: isUpthrow,
+            upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
+            authProblem: dr.authProblem,
+            enableReuseContracts: depC
+              .map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+                return {
+                  checked: false,
+                  id: c.contractId,
+                  policyId: c.policyId,
+                  title: c.contractName,
+                  status: c.status,
+                  code: c.policyInfo.policyText,
+                  date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+                  versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
+                    .versions.map((ccc: any) => ccc.version),
+                };
+              }),
+            terminatedContractIDs: data_batchContracts
+              .filter((dc: any) => {
+                return dc.licensorId === dr.resourceId && dc.status === 1;
+              }).map((dc: any) => {
+                return dc.contractId;
+              }),
+            enabledPolicies: dr.policies
+              .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
+              .map((policy: any) => {
+                // console.log(policy, 'PPPPafwe98iokl');
+                return {
+                  checked: false,
+                  id: policy.policyId,
+                  title: policy.policyName,
+                  code: policy.policyText,
+                  status: policy.status,
+                };
+              }),
+          };
+        });
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -839,6 +910,7 @@ const Model: ResourceVersionCreatorModelType = {
               return {
                 ...d,
                 status: 2,
+                error: 'cyclicDependency',
               };
             }),
           ],
@@ -881,58 +953,64 @@ const Model: ResourceVersionCreatorModelType = {
       const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
 
-      const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-        sha1: data.sha1,
-        // resourceType: resourceVersionCreatorPage.resourceType,
-      };
-
-      const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
+      // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+      //   sha1: data.sha1,
+      //   // resourceType: resourceVersionCreatorPage.resourceType,
+      // };
+      //
+      // const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
       // console.log(data4, '@#@#@#@#@#@##@$@#$data4');
-      if (!data4) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            selectedFileStatus: 2,
-          },
-        });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: Object.entries(data4 as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
-              // console.log(rp, 'rprprprprpyu2341234');
+      // if (!data4) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       selectedFileStatus: 2,
+      //     },
+      //   });
+      // } else {
+      const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+        sha1: data.sha1,
+      };
+      const data4 = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
+      // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+            // console.log(rp, 'rprprprprpyu2341234');
+            return {
+              key: rp[0],
+              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+            };
+          }),
+          baseProperties: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
               return {
-                key: rp[0],
-                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                key: cpd.key,
+                value: cpd.defaultValue,
+                description: cpd.remark,
               };
             }),
-            baseProperties: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type === 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  value: cpd.defaultValue,
-                  description: cpd.remark,
-                };
-              }),
-            customOptionsData: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  // keyError: '',
-                  description: cpd.remark,
-                  // descriptionError: '',
-                  custom: cpd.type === 'editableText' ? 'input' : 'select',
-                  defaultValue: cpd.defaultValue,
-                  // defaultValueError: '',
-                  customOption: cpd.candidateItems.join(','),
-                  // customOptionError: '',
-                };
-              }),
-          },
-        });
-      }
+          customOptionsData: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                // keyError: '',
+                description: cpd.remark,
+                // descriptionError: '',
+                custom: cpd.type === 'editableText' ? 'input' : 'select',
+                defaultValue: cpd.defaultValue,
+                // defaultValueError: '',
+                customOption: cpd.candidateItems.join(','),
+                // customOptionError: '',
+              };
+            }),
+        },
+      });
+      // }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -989,8 +1067,10 @@ const Model: ResourceVersionCreatorModelType = {
           return {
             id: dpo.name,
             title: dpo.name,
-            resourceType: '',
+            resourceType: [],
             status: 3,
+            error: 'storageObject',
+            warning: '',
             versionRange: '',
             versions: [],
             upthrow: false,
@@ -1007,11 +1087,6 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            // rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
-            //   key: s[0],
-            //   value: s[1],
-            // })),
-
             dependencies: allDepObjects,
             depRelationship: allRelationship,
           },
@@ -1259,8 +1334,20 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
     coverageVersions = data2;
   }
 
+  const allUserID: number[] = data_batchResourceInfo.map<number>((dbr) => {
+    return dbr.userId;
+  });
+
+  const params4: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+    userIds: allUserID.join(','),
+  };
+
+  const { data: data_batchUserList } = await FServiceAPI.User.batchUserList(params4)
   // 组织添加的依赖数据
   const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
+    const ownerUserInfo = data_batchUserList.find((dbu: any) => {
+      return dbu.userId === dr.userId;
+    });
 
     const depC: any[] = data1.filter((dc: any) => {
       return dc.licensorId === dr.resourceId && dc.status === 0;
@@ -1276,6 +1363,21 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
       title: dr.resourceName,
       resourceType: dr.resourceType,
       status: isUpthrow ? 4 : dr.status,
+
+      // status: isUpthrow ? 4 : dr.status,
+      error: isUpthrow
+        ? 'upThrow'
+        : dr.status === 0
+          ? 'offline'
+          : (dr.status & 2) === 2
+            ? 'freeze'
+            : '',
+      warning: ownerUserInfo.status === 1
+        ? 'ownerFreeze'
+        :dr.authProblem
+          ? 'authException'
+          : '',
+
       versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
       versions: dr.resourceVersions.map((version: any) => version.version),
       upthrow: isUpthrow,
@@ -1331,7 +1433,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   latestVersion: string;
   status: 0 | 1;
   policies: {
@@ -1344,6 +1446,7 @@ type HandleResourceBatchInfoReturn = {
     createDate: string;
     version: string;
   }[];
+  userId: number;
   authProblem: boolean;
 }[];
 
@@ -1357,7 +1460,8 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     resourceIds: resourceIDs.join(','),
     isLoadPolicyInfo: 1,
     isLoadLatestVersionInfo: 1,
-    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions',
+    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
+    // isLoadFreezeReason: 1,
   };
 
   // 本次要添加的一些列资源信息
@@ -1390,7 +1494,72 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     });
     return {
       ...dbri,
-      authProblem: authP ? !authP.isAuth : false,
+      // authProblem: authP ? !authP.isAuth : false,
+      authProblem: true,
     };
   });
 }
+
+// interface FileInfo {
+//   sha1: string;
+//   state: 'success' | 'fail' | 'nonentity';
+//   info: {
+//     [key: string]: any;
+//   };
+// }
+//
+// interface GetFileInfosBySha1Params {
+//   sha1: string[];
+// }
+//
+// export async function getFilesSha1Info({ sha1 }: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<FileInfo[]> {
+//   if (sha1.length === 0) {
+//     return [];
+//   }
+//
+//   let needHandleSha1: string[] = [...sha1];
+//   console.log(needHandleSha1, 'needHandleSha109ow3iejflsdkfjsdlk');
+//   let allData: FileInfo[] = [];
+//
+//   while (true) {
+//     console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk');
+//     const { data } = await FServiceAPI.Storage.filesListInfo({
+//       sha1: needHandleSha1.join(','),
+//     });
+//     needHandleSha1 = data
+//       .filter((d: any) => {
+//         return d.metaAnalyzeStatus && d.metaAnalyzeStatus === 1;
+//       })
+//       .map((d: any) => {
+//         return d.sha1;
+//       });
+//     const finishedInfo: FileInfo[] = data
+//       .filter((d: any) => {
+//         return !d.metaAnalyzeStatus || d.metaAnalyzeStatus !== 1;
+//       })
+//       .map((d: any) => {
+//         let state: 'success' | 'fail' | 'nonentity' = 'fail';
+//         if (!d.metaAnalyzeStatus) {
+//           state = 'nonentity';
+//         } else if (d.metaAnalyzeStatus === 2) {
+//           state = 'success';
+//         }
+//         return {
+//           sha1: d.sha1,
+//           state,
+//           info: d,
+//         };
+//       });
+//     cdPartially && cdPartially(finishedInfo);
+//     allData = [
+//       ...allData,
+//       ...finishedInfo,
+//     ];
+//
+//     if (needHandleSha1.length === 0) {
+//       break;
+//     }
+//     await FUtil.Tool.promiseSleep(3000);
+//   }
+//   return allData;
+// }

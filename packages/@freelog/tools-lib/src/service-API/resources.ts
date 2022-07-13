@@ -17,7 +17,7 @@ interface IResourceInfo {
   }[];
   resourceId: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   resourceVersions: {
     createDate: string;
     version: string;
@@ -87,6 +87,8 @@ interface ListParamsType {
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
   sort?: string;
+  userId?: number;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface ListReturnType extends CommonReturn {
@@ -108,6 +110,7 @@ interface InfoParamsType {
   isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface InfoReturnType extends CommonReturn {
@@ -130,6 +133,7 @@ interface BatchInfoParamsType {
   isTranslate?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
+  isLoadFreezeReason?: 0 | 1;
 }
 
 interface BatchInfoReturnType extends CommonReturn {
@@ -481,6 +485,20 @@ export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParams
   });
 }
 
+// 查看资源创建数量
+interface ResourcesCountParamsType {
+  userIds: string;
+  status?: 0 | 1 | 2 | 3; // 0:下架 1:上架 2:冻结(冻结时处于下架状态) 3:冻结(冻结时处于上架状态)
+}
+
+export function resourcesCount({...params}: ResourcesCountParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/count`,
+    params: params,
+  });
+}
+
 // 批量查询资源授权结果
 interface BatchAuthParamsType {
   resourceIds: string;
@@ -495,3 +513,17 @@ export function batchAuth({...params}: BatchAuthParamsType) {
     params: params,
   });
 }
+
+// 批量查询资源授权结果
+interface ResourcesRecommendParamsType {
+  recommendType: 1 | 2; // 1: 推荐主题  2:占位主题
+}
+
+export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/recommend`,
+    params: params,
+  });
+}
+

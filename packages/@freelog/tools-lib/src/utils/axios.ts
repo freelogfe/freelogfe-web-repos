@@ -121,10 +121,13 @@ export async function request(config: AxiosRequestConfig, {
   const result: any = await axios.request(config);
   // console.log(result, 'response');
   // const {data} = response;
-
-  if ((result.errCode === 30 || result.errCode === 30) && !noRedirect) {
+  // console.log(result, 'result90iowjksdfjlsdkj')
+  if (result.ret === 0 && result.errCode === 30 && !noRedirect) {
     await FServiceAPI.User.logout();
     window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
+  }
+  if (result.ret === 4 && result.errCode === 10 && !noRedirect) {
+    window.location.replace(`${completeUrlByDomain('user')}${LinkTo.userFreeze({goTo: window.location.href})}`);
   }
   if ((result.errcode !== 0 || result.errCode !== 0) && !noErrorAlert) {
     // window.alert(result.msg);

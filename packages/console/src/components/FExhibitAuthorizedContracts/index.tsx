@@ -28,7 +28,7 @@ interface FExhibitAuthorizedContractsStates {
     subjectID: string;
     subjectName: string;
     detailsUrl: string;
-    type: string;
+    type: string[];
     identity: 'resource' | 'object';
     disuseAuthorized: boolean;
     contracts: {
@@ -178,7 +178,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
               <div style={{ height: 5 }} />
               <FContentText
                 type='additional2'
-                text={ac.type}
+                text={FUtil.Format.resourceTypeKeyArrToResourceType(ac.type)}
               />
               <div style={{ height: 5 }} />
               {

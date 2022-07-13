@@ -23,6 +23,12 @@ export default defineConfig({
     },
     {
       exact: true,
+      path: '/bind',
+      component: '@/pages/bind/index',
+      title: '绑定账户 - Freelog',
+    },
+    {
+      exact: true,
       path: '/logon',
       component: '@/pages/logon/index',
       title: '注册freelog帐户 - Freelog',
@@ -38,6 +44,12 @@ export default defineConfig({
       path: '/retrievePayPassword',
       component: '@/pages/retrievePayPassword/index',
       title: '找回支付密码 - Freelog',
+    },
+    {
+      exact: true,
+      path: '/freeze',
+      component: '@/pages/freeze/index',
+      title: '用户封禁 - Freelog',
     },
     // {
     //   exact: true,
@@ -97,16 +109,14 @@ export default defineConfig({
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
     '/v1': {
       target: 'http://qi.testfreelog.com',
       secure: false,
       changeOrigin: true,
-      headers: {
-      },
+      headers: {},
     },
   },
-  hash: true
+  hash: true,
 });

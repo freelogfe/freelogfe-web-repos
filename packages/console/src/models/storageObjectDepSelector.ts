@@ -8,7 +8,7 @@ export interface StorageObjectDepSelectorModelState {
   resourceList: {
     resourceId: string;
     resourceName: string;
-    resourceType: string;
+    resourceType: string[];
     updateDate: string;
     status: 0 | 1;
     latestVersion: string;
@@ -23,7 +23,7 @@ export interface StorageObjectDepSelectorModelState {
     objectId: string;
     bucketName: string;
     objectName: string;
-    resourceType: string;
+    resourceType: string[];
     updateDate: string;
   }[];
   oPageSize: number;

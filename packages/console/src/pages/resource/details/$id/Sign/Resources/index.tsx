@@ -9,7 +9,6 @@ import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
@@ -70,51 +69,46 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             <div style={{ height: 5 }} />
             <FContentText
               type='additional2'
-              text={r.type}
+              text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />
             <div style={{ height: 5 }} />
-            <FComponentsLib.F_Contract_And_Policy_Labels data={
-              [
-                ...r.contracts
-                  .filter((c) => {
-                    return c.checked;
-                  })
-                  .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
-                    return {
-                      text: c.name,
-                      dot: c.status === 'inactive' ? 'yellow' : 'green',
-                    };
-                  }),
-                ...r.policies
-                  .filter((p) => {
-                    return p.checked;
-                  })
-                  .map<{ text: string; dot: '' }>((p) => {
-                    return {
-                      text: p.fullInfo.policyName,
-                      dot: '',
-                    };
-                  }),
-              ]
-            } />
-            {/*<div className={styles.policeTags}>*/}
-            {/*  {*/}
-            {/*    r.policies.filter((p) => p.checked)*/}
-            {/*      .map((p) => (<div key={p.fullInfo.policyId}>{p.fullInfo.policyName}</div>))*/}
-            {/*  }*/}
-            {/*  {*/}
-            {/*    r.contracts.map((c) => (<div key={c.id}>*/}
-            {/*      <span>{c.name}</span>*/}
-            {/*      <div style={{ width: 5 }} />*/}
-            {/*      <label style={{*/}
-            {/*        backgroundColor: c.status === 'terminal'*/}
-            {/*          ? '#999' :*/}
-            {/*          c.status === 'inactive'*/}
-            {/*            ? '#E9A923' : '#42C28C',*/}
-            {/*      }} />*/}
-            {/*    </div>))*/}
-            {/*  }*/}
-            {/*</div>*/}
+            {
+              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+                .filter((c) => {
+                  return c.checked;
+                })
+                .length === 0
+                ? (<div style={{
+                  color: '#E9A923',
+                  fontSize: 12,
+                  lineHeight: '18px',
+                  fontWeight: 400,
+                }}>未处理授权</div>)
+                : (<FComponentsLib.F_Contract_And_Policy_Labels
+                  data={[
+                    ...r.contracts
+                      .filter((c) => {
+                        return c.checked;
+                      })
+                      .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                        return {
+                          text: c.name,
+                          dot: c.status === 'inactive' ? 'yellow' : 'green',
+                        };
+                      }),
+                    ...r.policies
+                      .filter((p) => {
+                        return p.checked;
+                      })
+                      .map<{ text: string; dot: '' }>((p) => {
+                        return {
+                          text: p.fullInfo.policyName,
+                          dot: '',
+                        };
+                      }),
+                  ]}
+                />)
+            }
           </div>);
         })
     }
@@ -155,7 +149,6 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                   <div style={{ width: 5 }} />
                 </>)
               }
-              {/*{console.log(r, 'r903i2jrlksjdlfkjdflksdj')}*/}
               {
                 r.status === 1 && r.authProblem && (<>
                   <div style={{ width: 5 }} />
@@ -167,63 +160,47 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             <div style={{ height: 5 }} />
             <FContentText
               type='additional2'
-              text={r.type}
+              text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />
             <div style={{ height: 5 }} />
-            <FComponentsLib.F_Contract_And_Policy_Labels data={
-              [
-                ...r.contracts
-                  .filter((c) => {
-                    return c.checked;
-                  })
-                  .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
-                    return {
-                      text: c.name,
-                      dot: c.status === 'inactive' ? 'yellow' : 'green',
-                    };
-                  }),
-                ...r.policies
-                  .filter((p) => {
-                    return p.checked;
-                  })
-                  .map<{ text: string; dot: '' }>((p) => {
-                    return {
-                      text: p.fullInfo.policyName,
-                      dot: '',
-                    };
-                  }),
-              ]
-            } />
-            {/*<div className={styles.policeTags}>*/}
-            {/*  {*/}
-            {/*    r.contracts*/}
-            {/*      .filter((c) => {*/}
-            {/*        return c.checked;*/}
-            {/*      })*/}
-            {/*      .map((c) => {*/}
-            {/*        // console.log(c, 'cCCCCC89ulik');*/}
-            {/*        return (<div key={c.id}>*/}
-            {/*          <span>{c.name}</span>*/}
-            {/*          <div style={{ width: 5 }} />*/}
-            {/*          <label style={{*/}
-            {/*            backgroundColor: c.status === 'terminal'*/}
-            {/*              ? '#999' :*/}
-            {/*              c.status === 'inactive'*/}
-            {/*                ? '#E9A923' : '#42C28C',*/}
-            {/*          }} />*/}
-            {/*        </div>);*/}
-            {/*      })*/}
-            {/*  }*/}
-            {/*  {*/}
-            {/*    r.policies*/}
-            {/*      .filter((p) => {*/}
-            {/*        return p.checked;*/}
-            {/*      })*/}
-            {/*      .map((p) => {*/}
-            {/*        return (<div key={p.fullInfo.policyId}>{p.fullInfo.policyName}</div>);*/}
-            {/*      })*/}
-            {/*  }*/}
-            {/*</div>*/}
+            {
+              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+                .filter((c) => {
+                  return c.checked;
+                })
+                .length === 0
+                ? (<div style={{
+                  color: '#E9A923',
+                  fontSize: 12,
+                  lineHeight: '18px',
+                  fontWeight: 400,
+                }}>未处理授权</div>)
+                : (<FComponentsLib.F_Contract_And_Policy_Labels
+                  data={[
+                    ...r.contracts
+                      .filter((c) => {
+                        return c.checked;
+                      })
+                      .map<{ text: string; dot: 'yellow' | 'green' }>((c) => {
+                        return {
+                          text: c.name,
+                          dot: c.status === 'inactive' ? 'yellow' : 'green',
+                        };
+                      }),
+                    ...r.policies
+                      .filter((p) => {
+                        return p.checked;
+                      })
+                      .map<{ text: string; dot: '' }>((p) => {
+                        return {
+                          text: p.fullInfo.policyName,
+                          dot: '',
+                        };
+                      }),
+                  ]}
+                />)
+            }
+
           </div>);
         })
     }

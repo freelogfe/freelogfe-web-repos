@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FCodeFormatter from '../FCodeFormatter';
 import * as AHooks from 'ahooks';
-// import { FUtil } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
 // import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
@@ -68,11 +67,11 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
       {/*{console.log(JSON.stringify(fullInfo?.fsmDescriptionInfo), '9823ijhosdklfjlsdjflsdkjl')}*/}
       {
         activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
-          {fullInfo && (<FGraph_State_Machine3
-            fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}
-            width={1200}
-            height={770}
-          />)}
+          {/*{fullInfo && (<FGraph_State_Machine3*/}
+          {/*  fsmDescriptionInfo={fullInfo?.fsmDescriptionInfo}*/}
+          {/*  width={1200}*/}
+          {/*  height={770}*/}
+          {/*/>)}*/}
 
         </div>)
       }

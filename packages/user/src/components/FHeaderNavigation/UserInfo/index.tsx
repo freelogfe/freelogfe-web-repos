@@ -53,7 +53,17 @@ function UserInfo({ data }: UserInfoProps) {
     <div className={styles.userPanelHeader}>
       {
         info.avatar
-          ? (<img src={info.avatar} alt='headImage' />)
+          // ? (<img src={info.avatar} alt='headImage' />)
+          ? (<div
+            style={{
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundImage: `url(${info.avatar})`,
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+            }}
+          />)
           : (<FUser style={{fontSize: 36}} />)
       }
 
@@ -82,7 +92,17 @@ function UserInfo({ data }: UserInfoProps) {
     <a className={styles.avatar}>
       {
         info.avatar
-          ? (<img src={info.avatar} alt='avatar' />)
+          // ? (<img src={info.avatar} alt='avatar' />)
+          ? (<div
+            style={{
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundImage: `url(${info.avatar})`,
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+            }}
+          />)
           : (<FUser style={{fontSize: 18}} />)
       }
     </a>

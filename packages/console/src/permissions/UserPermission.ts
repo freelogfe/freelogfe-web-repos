@@ -1,6 +1,6 @@
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
-type T_StateCode = 'SUCCESS' | 'ERR_NOT_LOGIN' | 'ERR_NOT_ALPHA_TEST' | 'ERR_SWITCHED_USER';
+type T_StateCode = 'SUCCESS' | 'ERR_NOT_LOGIN' | 'ERR_FREEZE' | 'ERR_NOT_ALPHA_TEST' | 'ERR_SWITCHED_USER';
 
 let self: UserPermission;
 
@@ -28,7 +28,12 @@ class UserPermission {
       return 'ERR_SWITCHED_USER';
     }
 
-    if (self._userInfo.userType === 0) {
+    if (self._userInfo.status === 1) {
+      return 'ERR_FREEZE';
+    }
+
+
+    if (self._userInfo.status === 2 || self._userInfo.status === 3) {
       return 'ERR_NOT_ALPHA_TEST';
     }
 
@@ -59,6 +64,14 @@ class UserPermission {
       return {
         code: stateCode,
         goToUrl: url,
+      };
+    }
+
+    if (stateCode === 'ERR_FREEZE') {
+      // console.log(FUtil.LinkTo.invitation(), 'FUtil.LinkTo.invitation()90io3jsidkf;sldkfj');
+      return {
+        code: stateCode,
+        goToUrl: FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.userFreeze(),
       };
     }
 

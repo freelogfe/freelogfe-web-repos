@@ -25,9 +25,6 @@ interface LogoutParamsType {
 }
 
 export function logout({...params}: LogoutParamsType = {}) {
-  // return FUtil.Axios.get(`/passport/logout`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: '/v2/passport/logout',
@@ -35,12 +32,44 @@ export function logout({...params}: LogoutParamsType = {}) {
   }, {noRedirect: true});
 }
 
+// 分页查看用户列表
+interface UsersParamsType {
+  skip?: number;
+  limit?: number;
+  keywords?: string;
+  userId?: number;
+  tagIds?: string;
+  startRegisteredDate?: string;
+  endRegisteredDate?: string;
+}
+
+export function users(params: UsersParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users`,
+    params: params,
+  });
+}
+
+// 批量获取用户列表
+interface BatchUserListParamsType {
+  userIds: string;
+}
+
+export function batchUserList(params: BatchUserListParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users/list`,
+    params: params,
+  });
+}
+
 // 获取当前登录用户信息
-// interface CurrentUserInfoParamsType {
+interface CurrentUserInfoParamsType {
 
-// }
+}
 
-export function currentUserInfo() {
+export function currentUserInfo({}: CurrentUserInfoParamsType = {}) {
   // return FUtil.Axios.get(`/v1/userinfos/current`);
   return FUtil.Request({
     method: 'GET',
@@ -188,3 +217,45 @@ export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
     data: params,
   });
 }
+
+// 非登录用户绑定与自动注册流程
+interface RegisterOrBindParamsType {
+  loginName: string;
+  password: string;
+  identityId: string;
+}
+
+export function registerOrBind(params: RegisterOrBindParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/thirdParty/registerOrBind`,
+    data: params,
+  }, {noRedirect: true});
+}
+
+// 登录用户解绑第三方登录
+interface ThirdPartyUnbindParamsType {
+  thirdPartyType: string;
+  password: string;
+}
+
+export function thirdPartyUnbind(params: ThirdPartyUnbindParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/thirdParty/unbind`,
+    data: params,
+  });
+}
+
+// 查询登录用户已绑定的第三方信息
+interface ThirdPartyListParamsType {
+}
+
+export function thirdPartyList(params: ThirdPartyListParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/thirdParty/list`,
+    data: params,
+  });
+}
+

@@ -4,11 +4,12 @@ import img_warning from '@/assets/warning.svg';
 import img_execute from '@/assets/execute.svg';
 import G6 from '@antv/g6';
 import React from 'react';
+import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Relationship_RootResource_Values {
   resourceID: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   resourceDetails_Url: string;
 }
@@ -58,7 +59,7 @@ function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResou
         fontWeight: 400,
         fill: '#666',
         padding: [3, 0],
-      }}>{resourceType} | {version}</Text>
+      }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</Text>
     </Rect>
   </Group>);
 }
@@ -66,7 +67,7 @@ function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResou
 export interface FNode_Relationship_Resource_Values {
   resourceID: string;
   resourceName: string;
-  resourceType: string;
+  resourceType: string[];
   version: string;
   show_Warning: boolean;
   show_Execute: boolean;
@@ -128,13 +129,13 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
             fontWeight: 400,
             fill: '#666',
             padding: [3, 0],
-          }}>{resourceType} | {version}</Text>)
+          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</Text>)
           : ((<Text style={{
             fontSize: 12,
             fontWeight: 400,
             fill: '#666',
             padding: [3, 0],
-          }}>{resourceType}</Text>))
+          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)}</Text>))
       }
 
       {/*<Text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '未授权' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</Text>*/}

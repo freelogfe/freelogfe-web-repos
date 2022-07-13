@@ -118,6 +118,11 @@ const Model: ResourceInfoModelType = {
         return;
       }
 
+      if ((data.status & 2) === 2) {
+        router.replace(FUtil.LinkTo.resourceFreeze({resourceID: data.resourceId}));
+        return;
+      }
+
       let authProblem: boolean = false;
       if (data['latestVersion'] !== '') {
         const params1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {

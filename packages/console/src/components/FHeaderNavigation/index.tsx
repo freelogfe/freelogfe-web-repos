@@ -40,7 +40,7 @@ interface FHeaderNavigationProps {
     },
   }[];
   activeIDs?: [string, string];
-  showGlobalSearch?: boolean;
+  extra?: React.ReactNode;
   showGotoConsole?: boolean;
   createBtnMenu?: {
     id: string;
@@ -68,7 +68,7 @@ function FHeaderNavigation({
                              showConsoleBabel = false,
                              menu = [],
                              activeIDs = ['', ''],
-                             showGlobalSearch = false,
+                             extra,
                              showGotoConsole = false,
                              createBtnMenu = [],
                              userPanel,
@@ -126,17 +126,20 @@ function FHeaderNavigation({
 
     </div>
     <div className={styles.FHeaderNavigation_Right}>
-      {
-        showGlobalSearch && (<>
-          <FInput
-            size='small'
-            theme='dark'
-            style={{ width: 200 }}
-            value={''}
-          />
-          <div style={{ width: 30 }} />
-        </>)
-      }
+      {/*{*/}
+      {/*  showGlobalSearch && (<>*/}
+      {/*    <FInput*/}
+      {/*      size='small'*/}
+      {/*      theme='dark'*/}
+      {/*      style={{ width: 200 }}*/}
+      {/*      value={''}*/}
+      {/*    />*/}
+      {/*    <div style={{ width: 30 }} />*/}
+      {/*  </>)*/}
+      {/*}*/}
+      {extra}
+
+      <div style={{ width: 30 }} />
 
       {
         showGotoConsole && (<>

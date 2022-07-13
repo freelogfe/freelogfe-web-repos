@@ -16,7 +16,6 @@ import { FRectBtn } from '@/components/FButton';
 import type { UploadChangeParam } from 'antd/es/upload';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
 import {
   OnChange_Birthday_Action,
   OnChange_Career_Action,
@@ -24,11 +23,11 @@ import {
   OnChange_ProfileText_Action,
   OnChange_Residence_Action,
   OnClick_SubmitUserInfoBtn_Action,
+  ChangeAction as SettingPageChangeAction,
 } from '@/models/settingPage';
-import { FetchInfoAction } from '@/models/user';
+import { FetchInfoAction, ChangeAction as UserChangeAction } from '@/models/user';
 import { Moment } from 'moment';
 import { FServiceAPI } from '@freelog/tools-lib';
-
 const DatePickerAsAnyType: any = DatePicker;
 
 interface ProfileProps {
@@ -37,25 +36,7 @@ interface ProfileProps {
   settingPage: SettingPageModelState;
 }
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' ||
-    file.type === 'image/png' ||
-    file.type === 'image/gif';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG/gif file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  FServiceAPI.User.uploadHeadImg({
-    // @ts-ignore
-    file: file,
-  });
-  // return isJpgOrPng && isLt2M;
-  return false;
-};
+
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
   // FServiceAPI.User.uploadHeadImg({
   //   file: File,
@@ -70,10 +51,10 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
       return;
     }
     if (info.file.status === 'done') {
-      console.log(info.fileList[0])
+      // console.log(info.file.originFileObj);
       await FServiceAPI.User.uploadHeadImg({
         // @ts-ignore
-        file: info.fileList[0],
+        file: info.file.originFileObj,
       });
       dispatch<FetchInfoAction>({
         type: 'user/fetchInfo',
@@ -87,6 +68,55 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
       // });
     }
   };
+
+  async function beforeUpload(file: RcFile) {
+    const isJpgOrPng =
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/gif';
+    if (!isJpgOrPng) {
+      return message.error('You can only upload JPG/PNG/gif file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      return message.error('Image must smaller than 2MB!');
+    }
+
+    // return isJpgOrPng && isLt2M;
+    const { data } = await FServiceAPI.User.uploadHeadImg({
+      file: file,
+    });
+
+    const nowTime: number = Date.now();
+
+    dispatch<SettingPageChangeAction>({
+      type: 'settingPage/change',
+      payload: {
+        avatar: data + '&' + nowTime,
+      },
+    });
+    // console.log(data, '0983ioslkdfsldkjflsdkj');
+
+    dispatch<UserChangeAction>({
+      type: 'user/change',
+      payload: {
+        // @ts-ignore
+        userInfo: {
+          ...(user?.userInfo || {}),
+          headImage: data + '&' + nowTime,
+        }
+      }
+    });
+    // setTimeout(() => {
+    //   dispatch<FetchInfoAction>({
+    //     type: 'user/fetchInfo',
+    //   });
+    // }, 1000);
+
+
+    return false;
+  }
+
   return (
     <>
       <div className={styles.avatar + ' flex-row-center'}>
@@ -94,16 +124,23 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           className={'container over-h flex-column-center ' + styles.container}
         >
           <Upload
-            name="avatar"
-            className="avatar-uploader"
+            name='avatar'
+            className='avatar-uploader'
             showUploadList={false}
             beforeUpload={beforeUpload}
             // onChange={handleChange}
           >
-            <img
-              src={settingPage.avatar}
-              alt="avatar"
-              style={{ width: '100%' }}
+            <div
+              // src={settingPage.avatar}
+              // alt="avatar"
+              style={{
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundImage: `url(${settingPage.avatar})`,
+                width: 130,
+                height: 130,
+                borderRadius: '50%',
+              }}
             />
             <div
               className={styles.hoverDiv}
@@ -117,10 +154,10 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
       <div style={{ height: 30 }} />
       <FFormLayout>
         <FFormLayout.FBlock title={'基本信息'}>
-          <Space size={10} direction="vertical" className={styles.info}>
+          <Space size={10} direction='vertical' className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'性别'} type="normal" />
+                <FContentText text={'性别'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FRadio
@@ -155,7 +192,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'个人简介'} type="normal" />
+                <FContentText text={'个人简介'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput
@@ -179,7 +216,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'出生年月'} type="normal" />
+                <FContentText text={'出生年月'} type='normal' />
               </div>
               <div className={styles.right}>
                 <DatePickerAsAnyType
@@ -201,7 +238,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'居住地'} type="normal" />
+                <FContentText text={'居住地'} type='normal' />
               </div>
               <div className={styles.right}>
                 <Cascader
@@ -209,7 +246,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                   className={styles.Cascader}
                   options={settingPage.residenceOptions}
                   value={settingPage.residence}
-                  placeholder="常驻城市"
+                  placeholder='常驻城市'
                   onChange={(value) => {
                     dispatch<OnChange_Residence_Action>({
                       type: 'settingPage/onChange_Residence',
@@ -224,7 +261,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'职业'} type="normal" />
+                <FContentText text={'职业'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput
@@ -237,7 +274,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                       },
                     });
                   }}
-                  placeholder="职位名称"
+                  placeholder='职位名称'
                   className={styles.widthInput}
                   wrapClassName={styles.widthInput}
                 />
@@ -247,7 +284,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           <div style={{ height: 40 }} />
           <div className={styles.submit}>
             <FRectBtn
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_SubmitUserInfoBtn_Action>({
                   type: 'settingPage/onClick_SubmitUserInfoBtn',

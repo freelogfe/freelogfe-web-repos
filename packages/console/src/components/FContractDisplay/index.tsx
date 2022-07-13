@@ -563,14 +563,14 @@ async function paymentStatus(recordId: string): Promise<boolean> {
     } else if (data.status === 3) {
       return false;
     }
-    await sleep(300);
+    await FUtil.Tool.promiseSleep(300);
   } while (true);
 }
 
-function sleep(ms: number = 300): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-}
+// function sleep(ms: number = 300): Promise<void> {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, ms);
+//   });
+// }

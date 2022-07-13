@@ -1,36 +1,32 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
-import {FRectBtn, FTextBtn} from '@/components/FButton';
-import {Space} from 'antd';
+import { FContentText, FTitleText } from '@/components/FText';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { Space } from 'antd';
 import FTable from '@/components/FTable';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
   UploadFilesAction,
-  // ChangeAction as HomePageChangeAction,
   FetchObjectsAction,
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
-import {FDelete, FEdit,
-  // FWarning
-} from "@/components/FIcons";
-import FNoDataTip from "@/components/FNoDataTip";
-import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
-import FUpload from "@/components/FUpload";
-import {RcFile} from "antd/lib/upload/interface";
-import FLoadingTip from "@/components/FLoadingTip";
-// import InfiniteScroll from 'react-infinite-scroller';
-import FDownload from "@/components/FIcons/FDownload";
-import {ColumnsType} from "antd/lib/table/interface";
-import FTooltip from "@/components/FTooltip";
-import FLink from "@/components/FLink";
-import fConfirmModal from "@/components/fConfirmModal";
-// import FUtil1 from "@/utils";
-import {FUtil, FServiceAPI, FI18n} from '@freelog/tools-lib';
-import NoBucket from "@/pages/storage/NoBucket";
-// import { OnLoadMore_ExhibitList_Action } from '@/models/nodeManagerPage';
+import {
+  FDelete, FEdit,
+} from '@/components/FIcons';
+import FNoDataTip from '@/components/FNoDataTip';
+import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
+import FUpload from '@/components/FUpload';
+import { RcFile } from 'antd/lib/upload/interface';
+import FLoadingTip from '@/components/FLoadingTip';
+import FDownload from '@/components/FIcons/FDownload';
+import { ColumnsType } from 'antd/lib/table/interface';
+import FTooltip from '@/components/FTooltip';
+import FLink from '@/components/FLink';
+import fConfirmModal from '@/components/fConfirmModal';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
+import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
 
 interface ContentProps {
@@ -38,18 +34,18 @@ interface ContentProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-function Content({storageHomePage, dispatch}: ContentProps) {
+function Content({ storageHomePage, dispatch }: ContentProps) {
 
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
     {
-      title: (<FTitleText type="table" text={FI18n.i18nNext.t('object_name')}/>),
+      title: (<FTitleText type='table' text={FI18n.i18nNext.t('object_name')} />),
       dataIndex: 'name',
       key: 'name',
-      render(text: any, record: any) {
+      render(text, record) {
         return (<Space size={10}>
-          <FContentText type="normal" text={text}/>
+          <FContentText type='normal' text={text} />
           <div className={styles.hoverVisible}>
             <FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
@@ -64,14 +60,14 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       dataIndex: 'tool',
       key: 'tool',
       width: 150,
-      render(text: any, record) {
+      render(text, record) {
         return (<div className={styles.hoverVisible}>
           <ToolsBar
             bucketName={record.bucketName}
             objectID={record.id}
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
-            onClickDownload={() => FServiceAPI.Storage.downloadObject({objectIdOrName: record.id})}
+            onClickDownload={() => FServiceAPI.Storage.downloadObject({ objectIdOrName: record.id })}
             onClickDelete={() => {
               fConfirmModal({
                 message: '存储空间对象一旦删除则无法恢复，确认删除吗？',
@@ -86,37 +82,38 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type="table" text={FI18n.i18nNext.t('resource_type')}/>),
+      title: (<FTitleText type='table' text={FI18n.i18nNext.t('resource_type')} />),
       dataIndex: 'type',
       key: 'type',
       width: 140,
-      render(text: any, record: any) {
-        if (!text) {
-          return (<FContentText type="negative" text={'未设置类型'}/>);
+      render(text, record) {
+        console.log(record, 'record');
+        if (record.type.length === 0) {
+          return (<FContentText type='negative' text={'未设置类型'} />);
         }
-        return (<FContentText text={text}/>);
+        return (<FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(record.type)} />);
       },
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type="table" text={FI18n.i18nNext.t('size')}/>),
+      title: (<FTitleText type='table' text={FI18n.i18nNext.t('size')} />),
       dataIndex: 'size',
       key: 'size',
       width: 120,
       // className: styles.columns,
       render(text: any, record: any): any {
-        return (<FContentText type="normal" text={text}/>);
-      }
+        return (<FContentText type='normal' text={text} />);
+      },
     },
     {
-      title: (<FTitleText type="table" text={FI18n.i18nNext.t('last_updated_time')}/>),
+      title: (<FTitleText type='table' text={FI18n.i18nNext.t('last_updated_time')} />),
       dataIndex: 'updateTime',
       key: 'updateTime',
       width: 150,
       // className: styles.columns,
       render(text: any, record: any): any {
-        return (<FContentText type="normal" text={text}/>);
-      }
+        return (<FContentText type='normal' text={text} />);
+      },
     },
   ];
 
@@ -128,12 +125,12 @@ function Content({storageHomePage, dispatch}: ContentProps) {
   }
 
   if (storageHomePage.bucketList?.length === 0) {
-    return (<NoBucket/>);
+    return (<NoBucket />);
   }
 
   return (<div>
     {
-      storageHomePage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'}/>)
+      storageHomePage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'} />)
     }
 
     {
@@ -155,34 +152,15 @@ function Content({storageHomePage, dispatch}: ContentProps) {
               return false;
             }}>
             <FRectBtn
-              size="large"
-              type="primary"
-              style={{paddingLeft: 50, paddingRight: 50}}
+              size='large'
+              type='primary'
+              style={{ paddingLeft: 50, paddingRight: 50 }}
             >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
           </FUpload>}
         />
       </>)
     }
 
-    {/* pageStart={0}
-        initialLoad={false}
-        loadMore={() => {
-          if (storageHomePage.isLoading || storageHomePage.total === -1) {
-            return;
-          }
-          dispatch<HomePageChangeAction>({
-            type: 'storageHomePage/change',
-            payload: {
-              isLoading: true,
-            },
-          });
-          dispatch<FetchObjectsAction>({
-            type: 'storageHomePage/fetchObjects',
-            payload: 'append',
-          });
-        }}
-        hasMore={!storageHomePage.isLoading && storageHomePage.total !== -1 && storageHomePage.objectList.length < storageHomePage.total}*/}
-    {/* {storageHomePage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>} */}
     {
       storageHomePage.total > 0 && (<>
         <div className={styles.body}>
@@ -206,12 +184,12 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       </>)
     }
 
-    <FUploadTasksPanel/>
+    <FUploadTasksPanel />
   </div>);
 }
 
 
-export default connect(({storageHomePage}: ConnectState) => ({
+export default connect(({ storageHomePage }: ConnectState) => ({
   storageHomePage: storageHomePage,
 }))(Content);
 
@@ -227,7 +205,15 @@ interface ToolsBarProps {
   onClickDelete?(): void;
 }
 
-function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, showDelete = true, onClickDownload, onClickDelete}: ToolsBarProps) {
+function ToolsBar({
+                    bucketName,
+                    objectID,
+                    showEdit = true,
+                    showDownload = true,
+                    showDelete = true,
+                    onClickDownload,
+                    onClickDelete,
+                  }: ToolsBarProps) {
   return (<Space
     className={styles.toolBar}
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
@@ -237,7 +223,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
         <FLink to={FUtil.LinkTo.objectDetails({
           bucketName,
           objectID: objectID,
-        })}><FEdit/></FLink>
+        })}><FEdit /></FLink>
       </FTooltip>)
     }
     {
@@ -245,8 +231,8 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
         <span>
           <FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
-            type="primary"
-          ><FDownload/></FTextBtn>
+            type='primary'
+          ><FDownload /></FTextBtn>
         </span>
       </FTooltip>)
     }
@@ -257,10 +243,10 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
             <FTextBtn
               onClick={() => onClickDelete && onClickDelete()}
               className={styles.Delete}
-            ><FDelete/></FTextBtn>
+            ><FDelete /></FTextBtn>
           </span>
         </FTooltip>
       )
     }
-  </Space>)
+  </Space>);
 }

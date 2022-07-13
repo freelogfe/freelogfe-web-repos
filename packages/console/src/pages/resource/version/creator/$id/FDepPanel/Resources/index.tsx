@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
-import { CloseCircleFilled } from '@ant-design/icons';
+// import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
@@ -11,26 +11,18 @@ import {
   DepResources,
 } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-// import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FEdit, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
-
-// type T = DepResources[0];
-
-// interface DataS extends T {
-//   unresolved: DepResources;
-// }
 
 function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
 
@@ -95,7 +87,8 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     <FTextBtn
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (rrr.status === 3) {
+                        // if (rrr.status === 3) {
+                        if (rrr.error === 'storageObject') {
                           return goToObject(rrr.id);
                         }
                         return window.open(FUtil.LinkTo.resourceDetails({
@@ -112,19 +105,26 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       />
                     </FTextBtn>
                     <div style={{ width: 5 }} />
-                    {rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
-                    {rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
-                    {rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
-                    {rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
-                    {rrr.status === 1 && rrr.authProblem && (
+                    {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
+                    {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                    {/*{rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {/*{rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {/*{rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
+                    {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.error === '' && rrr.warning === 'authException' && (
                       <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                    {rrr.error === '' && rrr.warning === 'ownerFreeze' && (
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
                   <FContentText type='additional2'>
                     <div>
                       {/*{rrr.resourceType || '暂无类型'}*/}
-                      {rrr.resourceType}
-                      {rrr.resourceType ? ' | ' : ''}
+                      {FUtil.Format.resourceTypeKeyArrToResourceType(rrr.resourceType)}
+                      {rrr.resourceType.length > 0 ? ' | ' : ''}
                       {
                         rrr.versions?.length === 0
                           ? <span style={{ paddingRight: 5 }}>暂无版本</span>
@@ -143,25 +143,33 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                   <>
                     <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
-                      {/*{*/}
-                      {/*  !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]*/}
-                      {/*    .filter((k) => k.checked)*/}
-                      {/*    .map((j) => (<label*/}
-                      {/*      key={j.id}*/}
-                      {/*      className={styles.labelInfo}*/}
-                      {/*    >{j.title}</label>))*/}
-                      {/*}*/}
                       {
-                        !rrr.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
-                          data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
-                            .filter((k) => k.checked)
-                            .map((j) => {
-                              return {
-                                text: j.title,
-                                dot: '',
-                              };
-                            })}
-                        />
+                        !rrr.upthrow && (<>
+
+                          {
+                            [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                              .filter((k) => k.checked)
+                              .length === 0
+                              ? (<div style={{
+                                color: '#E9A923',
+                                fontSize: 12,
+                                lineHeight: '18px',
+                                fontWeight: 400,
+                              }}>未处理授权</div>)
+                              : (<FComponentsLib.F_Contract_And_Policy_Labels
+                                data={[...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                                  .filter((k) => k.checked)
+                                  .map((j) => {
+                                    return {
+                                      text: j.title,
+                                      dot: '',
+                                    };
+                                  })}
+                              />)
+                          }
+
+                        </>)
+
                       }
                       {
                         rrr.upthrow && (<label
@@ -231,7 +239,8 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               <FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (i.status === 3) {
+                  // if (i.status === 3) {
+                  if (i.error === 'storageObject') {
                     return goToObject(i.id);
                   }
                   return window.open(FUtil.LinkTo.resourceDetails({
@@ -248,12 +257,19 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 />
               </FTextBtn>
               <div style={{ width: 5 }} />
-              {i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}
-              {i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}
-              {i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}
-              {i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}
-              {i.status === 1 && i.authProblem && (
+              {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
+              {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+              {/*{i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+              {/*{i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+              {/*{i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
+              {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+              {i.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.error === '' && i.warning === 'authException' && (
                 <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+              {i.error === '' && i.warning === 'ownerFreeze' && (
+                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
             <FContentText type='additional2'>
@@ -271,16 +287,24 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 {/*    >{j.title}</label>))*/}
                 {/*}*/}
                 {
-                  !i.upthrow && <FComponentsLib.F_Contract_And_Policy_Labels
-                    data={[...i.enableReuseContracts, ...i.enabledPolicies]
-                      .filter((k) => k.checked)
-                      .map((j) => {
-                        return {
-                          text: j.title,
-                          dot: '',
-                        };
-                      })}
-                  />
+                  !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                    .filter((k) => k.checked).length === 0
+                    ? (<div style={{
+                      color: '#E9A923',
+                      fontSize: 12,
+                      lineHeight: '18px',
+                      fontWeight: 400,
+                    }}>未处理授权</div>)
+                    : (<FComponentsLib.F_Contract_And_Policy_Labels
+                      data={[...i.enableReuseContracts, ...i.enabledPolicies]
+                        .filter((k) => k.checked)
+                        .map((j) => {
+                          return {
+                            text: j.title,
+                            dot: '',
+                          };
+                        })}
+                    />)
                 }
                 {
                   i.upthrow && (<label

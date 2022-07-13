@@ -27,7 +27,7 @@ export interface IExhibit {
   originInfo: {
     id: string;
     name: string;
-    resourceType: string;
+    resourceType: string[];
     type: 'resource' | 'object';
     version: string; // 测试资源引用的实体版本
     versionRange: string; // 测试资源引用的实体版本范围
@@ -2857,19 +2857,19 @@ export async function ruleMatchAndResult({
     const response: any = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
-      await sleep();
+      await FUtil.Tool.promiseSleep(200);
     } else {
       return response.data;
     }
   }
 
-  function sleep(ms: number = 200): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, ms);
-    });
-  }
+  // function sleep(ms: number = 200): Promise<void> {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       resolve();
+  //     }, ms);
+  //   });
+  // }
 }
 
 interface UpdateTreeDataParams {
