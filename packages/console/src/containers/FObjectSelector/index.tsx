@@ -44,7 +44,7 @@ function FObjectSelector({
                            selector,
                            storageHomePage,
                          }: FObjectSelectorProps) {
-  console.log(visibleResourceType, 'visibleResourceType90weiofjsdlkfjdlkfjlk');
+  // console.log(visibleResourceType, 'visibleResourceType90weiofjsdlkfjdlkfjlk');
   React.useEffect(() => {
     init();
   }, []);
