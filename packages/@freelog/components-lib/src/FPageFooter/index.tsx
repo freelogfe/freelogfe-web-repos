@@ -13,8 +13,6 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
 
     const FPopover = PopoverPatch || Popover;
 
-    // const ref = React.useRef<any>(null);
-
     return (<footer className={styles.footer}>
         <div className={styles.footerLeft}>
             <Space size={20}>
@@ -37,10 +35,10 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                 <a
                     className={styles.footerLeft_Link}
                     onClick={() => {
-                        const allLanguage = FI18n.i18nNext.getAllLanguage();
-                        console.log(allLanguage, 'allLanguage903iosdlfkj');
+                        // const allLanguage: string[] = FI18n.i18nNext.getAllLanguage();
+                        // console.log(allLanguage, 'allLanguage903iosdlfkj');
                         const currentLanguage = FI18n.i18nNext.getCurrentLanguage();
-                        console.log(currentLanguage, 'currentLanguage90i3osdlkfjsdlk');
+                        // console.log(currentLanguage, 'currentLanguage90i3osdlkfjsdlk');
                         FI18n.i18nNext.changeLanguage(currentLanguage !== 'zh_CN' ? 'zh_CN' : 'en_US');
                         window.location.reload();
                     }}
@@ -50,7 +48,8 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
             <div className={styles.Divider}/>
             <div style={{width: 30}}/>
             <Space size={25}>
-                <Popover
+                <FPopover
+                    // getPopupContainer={() => ref.current}
                     overlayInnerStyle={{
                         width: 200,
                         padding: '8px 4px',
@@ -58,59 +57,21 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                     content={<div className={styles.PopoverContent}>
                         <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
                         <div style={{height: 20}}/>
-                        <img/>
+                        <img src={'//static.freelog.com/static/WeChatQR.jpg'} alt={''}/>
                     </div>}
                     title={null}
                 >
                     <a className={styles.footerLeft_Link}>
                         <FIcons.FWeChat/>
                     </a>
-                </Popover>
-                <FPopover
-                    overlayInnerStyle={{
-                        width: 200,
-                        padding: '8px 4px',
-                    }}
-                    content={<div className={styles.PopoverContent}>
-                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
-                        <div style={{height: 20}}/>
-                        <img/>
-                    </div>}
-                    title={null}
-                >
-                    <a className={styles.footerLeft_Link}>
-                        <FIcons.FSina/>
-                    </a>
                 </FPopover>
-                <Popover
-                    overlayInnerStyle={{
-                        width: 200,
-                        padding: '8px 4px',
-                    }}
-                    content={<div className={styles.PopoverContent}>
-                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
-                        <div style={{height: 20}}/>
-                        <img/>
-                    </div>}
-                    title={null}
-                >
-                    <a className={styles.footerLeft_Link}>
-                        <FIcons.FLinkedin/>
-                    </a>
-                </Popover>
+                <a href={'//weibo.com/u/7762454686'} target={'_blank'} className={styles.footerLeft_Link}>
+                    <FIcons.FSina/>
+                </a>
             </Space>
         </div>
         <div style={{height: 20}}/>
         <div className={styles.footerRight}>
-            {/*<img*/}
-            {/*  src={img_Police}*/}
-            {/*  className={styles.policeImg}*/}
-            {/*  alt={''}*/}
-            {/*  onClick={() => {*/}
-            {/*    window.open('https://beian.miit.gov.cn/');*/}
-            {/*  }}*/}
-            {/*/>*/}
-            {/*<div style={{ width: 6 }} />*/}
             <a
                 className={styles.footerRightText}
                 href={'https://beian.miit.gov.cn/'}

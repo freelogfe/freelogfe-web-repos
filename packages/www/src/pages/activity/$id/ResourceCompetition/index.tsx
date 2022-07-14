@@ -13,7 +13,7 @@ interface ResourceCompetitionProps {
 
 }
 
-function ResourceCompetition({}: ResourceCompetitionProps) {
+function ResourceCompetition({}: ResourceCompetitionProps): React.ReactElement {
   return (<div className={styles.style}>
     {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <Banner1 />
@@ -28,6 +28,7 @@ function ResourceCompetition({}: ResourceCompetitionProps) {
     <div style={{ height: 100 }} />
 
     <FComponentsLib.FPageFooter PopoverPatch={Popover} />
+
   </div>);
 }
 

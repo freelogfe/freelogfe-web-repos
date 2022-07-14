@@ -5,330 +5,55 @@ import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
 import { FTextBtn } from '@/components/FButton';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import BoardCard1 from './_components/BoardCard1'
+import BoardCard2 from './_components/BoardCard2'
+import BoardCard3 from './_components/BoardCard3'
 
-interface BoardCardProps {
-
-}
+interface BoardCardProps {}
 
 function BoardCard({}: BoardCardProps) {
   const [unfoldIndex, setUnfoldIndex] = React.useState<0 | 1 | 2>(0);
-  return (<div className={styles.boards}>
-    <BoardCard1
-      unfold={unfoldIndex === 0}
-      onMouseEnter={() => {
-        setUnfoldIndex(0);
-      }}
-    />
-    <BoardCard2
-      unfold={unfoldIndex === 1}
-      onMouseEnter={() => {
-        setUnfoldIndex(1);
-      }}
-    />
-    <BoardCard3
-      unfold={unfoldIndex === 2}
-      onMouseEnter={() => {
-        setUnfoldIndex(2);
-      }}
-    />
-  </div>);
+  const [datas, setDatas] = React.useState<any>([]);
+  const getData = async () => {
+    Promise.all([
+      FServiceAPI.Activity.getBaseTaskInfo(),
+      FServiceAPI.Activity.getResourceTaskInfo(),
+      FServiceAPI.Activity.getNodeTaskInfo(),
+    ]).then((res) => {
+      setDatas(res.map((data) => data.data));
+    });
+  };
+  React.useEffect(() => {
+    getData();
+  }, []);
+  return (
+    <div className={styles.boards}>
+      <BoardCard1
+        unfold={unfoldIndex === 0}
+        data={datas[0] || []}
+        onMouseEnter={() => {
+          setUnfoldIndex(0);
+        }}
+      />
+      <BoardCard2
+        data={datas[1] || []}
+        unfold={unfoldIndex === 1}
+        onMouseEnter={() => {
+          setUnfoldIndex(1);
+        }}
+      />
+      <BoardCard3
+        data={datas[2] || []}
+        unfold={unfoldIndex === 2}
+        onMouseEnter={() => {
+          setUnfoldIndex(2);
+        }}
+      />
+    </div>
+  );
 }
 
 export default BoardCard;
 
-interface BoardCard1Props {
-  unfold: boolean;
-
-  onMouseEnter?(): void;
-}
-
-function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
-  return (<div
-    className={styles.board1}
-    style={{ width: unfold ? 700 : 245 }}
-    onMouseEnter={() => {
-      onMouseEnter && onMouseEnter();
-    }}
-  >
-    <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
-      <div />
-      <div className={styles.title1}>基础任务</div>
-      <div
-        className={styles.title2}
-        style={{ height: unfold ? 60 : 150 }}>完成下列基础任务可以了解Freelog的基本功能，以便更顺畅的使用Freelog完成资源、节点创建和推广
-      </div>
-      <div className={styles.title3}>还差5步领取 <span>6元</span> 奖励</div>
-      <div />
-    </div>
-    <div className={styles.tasks}>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'完善「个人中心」里的标星内容即可，更了解你一点，才能为你提供更精准的高质量内容哦。'} type='highlight' />
-          </div>}
-        >
-          <div className={styles.taskTitle}>1.完善个人信息</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'Freelog平台存在资源作者和节点商两个角色：'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i style={{
-                width: 3,
-                height: 3,
-                borderRadius: '50%',
-                marginTop: 8,
-                marginRight: 5,
-                backgroundColor: '#666',
-              }} />
-              <FContentText text={'「资源作者」可通过创建并发行资源获取收益；'} type='highlight' />
-            </div>
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i style={{
-                width: 3,
-                height: 3,
-                borderRadius: '50%',
-                marginTop: 8,
-                marginRight: 5,
-                backgroundColor: '#666',
-              }} />
-              <FContentText text={'「节点商」是资源的整合者，通过在节点展示推广资源获取中间人收益。'} type='highlight' />
-            </div>
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'查看'} />
-              <a type='primary'>资源作者使用教程</a>
-              <FContentText text={'或'} />
-              <a type='primary'>节点商使用教</a>
-            </Space>
-          </div>}
-        >
-          <div className={styles.taskTitle}>2.查看Freelog使用教程</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'Freelog社区旨在提供一个由用户创建高质量内容的论坛社区，资源讨论、节点运营、产品吐槽等均可。'} type='highlight' />
-          </div>}>
-          <div className={styles.taskTitle}>3.Freelog论坛签到</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'浏览Freelog推荐节点，喜欢就赶紧签约吧！'} type='highlight' />
-          </div>}>
-          <div className={styles.taskTitle}>4.浏览推荐节点</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'参与「邀请好友活动」邀请更多好友加入Freelog吧，可重复领取邀请好友活动奖励， 且被邀请好友可领取3元现金奖励哦。'} type='highlight' />
-          </div>}>
-          <div className={styles.taskTitle}>5.邀请一位好友</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-    </div>
-
-  </div>);
-}
-
-interface BoardCard2Props {
-  unfold: boolean;
-
-  onMouseEnter?(): void;
-}
-
-function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
-  return (<div
-    className={styles.board2}
-    style={{ width: unfold ? 700 : 245 }}
-    onMouseEnter={() => {
-      onMouseEnter && onMouseEnter();
-    }}
-  >
-    <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
-      <div />
-      <div className={styles.title1}>资源任务</div>
-      <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>完成“资源任务”可成为Freelog资源创作者，可通过创建发行资源获取创作收益</div>
-      <div className={styles.title3}>还差4步领取 <span>7元</span> 奖励</div>
-      <div />
-    </div>
-    <div className={styles.tasks}>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>资源作者使用教程</a>
-              <FContentText text={'（视频）或'} />
-              <a type='primary'>资源创建教程</a>
-              <FContentText text={'（图文）创建资源。'} />
-            </Space>
-          </div>}>
-          <div className={styles.taskTitle}>1.创建1个资源</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'通过更新资源版本可以优化和调整资源内容，以便在相同的资源中保留多个资源文件。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>资源版本发布教程</a>
-              <FContentText text={'（图文）或'} />
-              <a type='primary'>资源作者使用教程</a>
-              <FContentText text={'（视频）发布资源版本。'} />
-            </Space>
-          </div>}>
-          <div className={styles.taskTitle}>2.发布资源版本</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'授权策略（免费/收费）是资源作者对资源授权的权利声明，也是资源作者获取收益的重要部分。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>资源授权策略添加教程</a>
-              <FContentText text={'（图文）或'} />
-              <a type='primary'>资源作者使用教程</a>
-              <FContentText text={'(视频) 为资源添加授权策略。'} />
-            </Space>
-          </div>}>
-          <div className={styles.taskTitle}>3.添加资源授权策略</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'分享资源可以获得更多签约，快去资源详情页和好友分享已发行的资源吧。'} type='highlight' />
-          </div>}>
-          <div className={styles.taskTitle}>4.分享我的资源</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-    </div>
-  </div>);
-}
-
-interface BoardCard3Props {
-  unfold: boolean;
-
-  onMouseEnter?(): void;
-}
-
-function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
-  return (<div
-    className={styles.board3}
-    style={{ width: unfold ? 700 : 245 }}
-    onMouseEnter={() => {
-      onMouseEnter && onMouseEnter();
-    }}
-  >
-    <div className={styles.instruction} style={{ height: unfold ? 200 : 500 }}>
-      <div />
-      <div className={styles.title1}>节点任务</div>
-      <div className={styles.title2}
-           style={{ height: unfold ? 60 : 150 }}>完成“节点任务”即可成为Freelog节点商，节点商是平台资源的整合方，通过在节点上展示资源和制定授权策略获取资运营收益
-      </div>
-      <div className={styles.title3}>还差4步领取 <span>7元</span> 奖励</div>
-      <div />
-    </div>
-    <div className={styles.tasks}>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'成功创建1个节点即可。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>节点商使用教程</a>
-              <FContentText text={'（视频）或'} />
-              <a type='primary'>节点创建教程</a>
-              <FContentText text={'（图文）创建节点。'} />
-            </Space>
-          </div>}>
-          <div className={styles.taskTitle}>1.创建1个节点</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'资源被签约到节点即变为展品。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>展品添加上线教程</a>
-              <FContentText text={'（图文）或'} />
-              <a type='primary'>节点商使用教程</a>
-              <FContentText text={'（视频）在资源市场添加并上线展品。'} />
-            </Space>
-            <div style={{ height: 15 }} />
-            <div style={{ color: '#EE4040' }}>*只有处于上线状态的展品才能被用户签约消费。</div>
-          </div>}>
-          <div className={styles.taskTitle}>2.添加并上线1个展品</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'主题决定节点的展示外观。'} type='highlight' />
-            <div style={{ height: 15 }} />
-            <Space size={5}>
-              <FContentText text={'可查阅'} />
-              <a type='primary'>主题激活教程</a>
-              <FContentText text={'（图文）或'} />
-              <a type='primary'>节点商使用教程</a>
-              <FContentText text={'（视频）激活主题。'} />
-            </Space>
-          </div>}>
-          <div className={styles.taskTitle}>3.激活1个主题</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-      <div className={styles.task}>
-        <FPopover
-          placement='right'
-          content={<div className={styles.tooltipDisplay}>
-            <FContentText text={'分享节点可以获得更多签约消费，快去复制链接和好友分享你的节点吧。'} type='highlight' />
-          </div>}>
-          <div className={styles.taskTitle}>4.分享我的节点</div>
-        </FPopover>
-        <div className={styles.taskState}>未完成</div>
-      </div>
-    </div>
-  </div>);
-}
+ 

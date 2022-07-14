@@ -96,6 +96,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
           </div>
           <div style={{ height: 100 }} />
           <FComponentsLib.FPageFooter PopoverPatch={Popover} />
+
         </>)
       }
     </div>

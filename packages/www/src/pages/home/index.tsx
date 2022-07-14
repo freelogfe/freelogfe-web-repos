@@ -7,9 +7,7 @@ import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';
 
-import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import Banner2 from '@/pages/home/Banner2';
-// import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
