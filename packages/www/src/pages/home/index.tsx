@@ -118,7 +118,7 @@ function HomePage({}: HomePageProps) {
     {/*    </a>*/}
     {/*  </Popover>*/}
     {/*</div>*/}
-    <FComponentsLib.FPageFooter PopoverPatch={Popover} />
+    <FComponentsLib.FPageFooter PopoverPatch={Popover as any} />
 
     <Ads />
 

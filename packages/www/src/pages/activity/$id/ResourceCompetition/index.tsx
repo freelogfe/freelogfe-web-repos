@@ -7,12 +7,13 @@ import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
 import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
 // import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
+import { Popover } from 'antd';
 
 interface ResourceCompetitionProps {
 
 }
 
-function ResourceCompetition({}: ResourceCompetitionProps) {
+function ResourceCompetition({}: ResourceCompetitionProps): React.ReactElement {
   return (<div className={styles.style}>
     {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <Banner1 />
@@ -25,7 +26,7 @@ function ResourceCompetition({}: ResourceCompetitionProps) {
     <div style={{ height: 100 }} />
     <Banner2 />
     <div style={{ height: 100 }} />
-    <FComponentsLib.FPageFooter />
+    <FComponentsLib.FPageFooter PopoverPatch={Popover as any} />
   </div>);
 }
 

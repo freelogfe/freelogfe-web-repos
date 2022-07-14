@@ -6,12 +6,12 @@ import {FUtil, FI18n} from '@freelog/tools-lib';
 import {Popover} from 'antd';
 
 interface FPageFooterProps {
-    PopoverPatch?: React.Component;
+    PopoverPatch?: React.ReactElement;
 }
 
-function FPageFooter({PopoverPatch}: FPageFooterProps) {
+function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
 
-    const FPopover = PopoverPatch || Popover;
+    const FPopover: any = PopoverPatch || Popover;
 
     const ref = React.useRef<any>(null);
 
@@ -59,7 +59,7 @@ function FPageFooter({PopoverPatch}: FPageFooterProps) {
                     content={<div className={styles.PopoverContent}>
                         <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
                         <div style={{height: 20}}/>
-                        <img src={'//static.freelog.com/static/WeChatQR.jpg'}/>
+                        <img src={'//static.freelog.com/static/WeChatQR.jpg'} alt={''}/>
                     </div>}
                     title={null}
                 >
