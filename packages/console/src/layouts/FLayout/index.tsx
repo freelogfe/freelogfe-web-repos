@@ -15,6 +15,9 @@ import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FInput from '@/components/FInput';
+import { Input, Space } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
+const { Search } = Input;
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -28,7 +31,15 @@ interface FLayoutProps extends RouteComponentProps {
   user: UserModelState;
 }
 
-function FLayout({ router: routerObj, dispatch, children, global, storageHomePage, nodes, user }: FLayoutProps) {
+function FLayout({
+  router: routerObj,
+  dispatch,
+  children,
+  global,
+  storageHomePage,
+  nodes,
+  user,
+}: FLayoutProps) {
   // console.log(global, 'global09234jl23kl');
   const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
 
@@ -56,103 +67,105 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
   // console.log(storageHomePage.bucketList, '’storageHomePage.bucketList390osd');
   const navs = user.info
     ? [
-      {
-        id: 'dashboard',
-        text: '概览',
-        href: FUtil.LinkTo.dashboard(),
-        emptyItemsTip: undefined,
-        items: [],
-      },
-      {
-        id: 'resource',
-        text: '资源管理',
-        href: FUtil.LinkTo.myResources(),
-        items: [
-          {
-            id: 'myResource',
-            text: '我的资源',
-            href: FUtil.LinkTo.myResources(),
+        {
+          id: 'dashboard',
+          text: '概览',
+          href: FUtil.LinkTo.dashboard(),
+          emptyItemsTip: undefined,
+          items: [],
+        },
+        {
+          id: 'resource',
+          text: '资源管理',
+          href: FUtil.LinkTo.myResources(),
+          items: [
+            {
+              id: 'myResource',
+              text: '我的资源',
+              href: FUtil.LinkTo.myResources(),
+            },
+            {
+              id: 'myCollection',
+              text: '我的收藏',
+              href: FUtil.LinkTo.myCollects(),
+            },
+          ],
+        },
+        {
+          id: 'node',
+          text: '节点管理',
+          href:
+            nodes.list.length === 0
+              ? FUtil.LinkTo.nodeCreator()
+              : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
+          items: nodes.list.map((n) => ({
+            id: n.nodeId.toString(),
+            text: n.nodeName,
+            href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
+          })),
+          createBtn: {
+            href: FUtil.LinkTo.nodeCreator(),
           },
-          {
-            id: 'myCollection',
-            text: '我的收藏',
-            href: FUtil.LinkTo.myCollects(),
+          emptyItemsTip: {
+            tipText: '自由创作从Freelog开始',
+            btnText: '创建节点',
+            btnHref: FUtil.LinkTo.nodeCreator(),
           },
-        ],
-      },
-      {
-        id: 'node',
-        text: '节点管理',
-        href: nodes.list.length === 0
-          ? FUtil.LinkTo.nodeCreator()
-          : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
-        items: nodes.list.map((n) => ({
-          id: n.nodeId.toString(),
-          text: n.nodeName,
-          href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
-        })),
-        createBtn: {
-          href: FUtil.LinkTo.nodeCreator(),
         },
-        emptyItemsTip: {
-          tipText: '自由创作从Freelog开始',
-          btnText: '创建节点',
-          btnHref: FUtil.LinkTo.nodeCreator(),
-        },
-      },
-      {
-        id: 'storage',
-        text: '存储空间',
-        href: FUtil.LinkTo.storageSpace({
-          bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-            ? storageHomePage.bucketList[0].bucketName
-            : '',
-        }),
-        items: (storageHomePage.bucketList || []).map((b) => {
-          return {
-            id: b.bucketName,
-            text: b.bucketName,
-            href: FUtil.LinkTo.storageSpace({
-              bucketName: b.bucketName,
-            }),
-          };
-        }),
-        emptyItemsTip: {
-          tipText: '自由创作从Freelog开始',
-          btnText: '创建Bucket',
-          btnHref: FUtil.LinkTo.storageSpace({
-            createBucket: true,
-          }),
-        },
-        createBtn: storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
-          ? undefined
-          : {
-            href: FUtil.LinkTo.storageSpace({
-              bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+        {
+          id: 'storage',
+          text: '存储空间',
+          href: FUtil.LinkTo.storageSpace({
+            bucketName:
+              storageHomePage.bucketList && storageHomePage.bucketList.length > 0
                 ? storageHomePage.bucketList[0].bucketName
                 : '',
+          }),
+          items: (storageHomePage.bucketList || []).map((b) => {
+            return {
+              id: b.bucketName,
+              text: b.bucketName,
+              href: FUtil.LinkTo.storageSpace({
+                bucketName: b.bucketName,
+              }),
+            };
+          }),
+          emptyItemsTip: {
+            tipText: '自由创作从Freelog开始',
+            btnText: '创建Bucket',
+            btnHref: FUtil.LinkTo.storageSpace({
               createBucket: true,
             }),
           },
-      },
-    ]
+          createBtn:
+            storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
+              ? undefined
+              : {
+                  href: FUtil.LinkTo.storageSpace({
+                    bucketName:
+                      storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+                        ? storageHomePage.bucketList[0].bucketName
+                        : '',
+                    createBucket: true,
+                  }),
+                },
+        },
+      ]
     : [
-      {
-        id: 'product',
-        text: '产品',
-        href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
-        items: [],
-      },
-    ];
+        {
+          id: 'product',
+          text: '产品',
+          href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
+          items: [],
+        },
+      ];
 
   if (global.globalLoading) {
-    return (<FLoadingTip height={window.innerHeight} />);
+    return <FLoadingTip height={window.innerHeight} />;
   }
 
   return (
-    <Layout
-      className={styles.Layout}
-    >
+    <Layout className={styles.Layout}>
       <Layout.Header className={styles.header}>
         <FHeaderNavigation
           logoBtn={{ href: FUtil.LinkTo.dashboard() }}
@@ -199,12 +212,29 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
           activeIDs={activeIDs}
           // showGlobalSearch={true}
           // showGotoConsole={true}
-          extra={(<FInput
-            size='small'
-            theme='dark'
-            style={{ width: 200 }}
-            value={''}
-          />)}
+          extra={
+            <Search
+              placeholder="输入用户名或资源名称"
+              onSearch={(value: string) => {
+                location.href = location.origin + `/search?search=${value}`;
+              }}
+              style={{ width: 200 }}
+            />
+
+            // <FInput
+            //   size="small"
+            //   theme="dark"
+            //   style={{ width: 200 }}
+            //   onDebounceChange={(value) => {
+            //     setPageData({
+            //       ...pageData,
+            //       skip: 0,
+            //     });
+            //     setKeywords(value);
+            //   }}
+            //   // value={''}
+            // />
+          }
           createBtnMenu={[
             {
               id: 'createResource',
@@ -217,43 +247,52 @@ function FLayout({ router: routerObj, dispatch, children, global, storageHomePag
               href: '/node/creator',
             },
           ]}
-          userPanel={user.info ? {
-            info: {
-              avatar: user.info.headImage,
-              userName: user.info.username,
-              email: user.info.email,
-              phone: user.info.mobile,
-            },
-            menu: [
-              {
-                text: '个人中心',
-                onClick() {
-                  window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
-                },
-              },
-              {
-                text: '登出',
-                async onClick() {
-                  await FServiceAPI.User.logout();
-                  return window.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login());
-                },
-              },
-            ],
-          } : null}
+          userPanel={
+            user.info
+              ? {
+                  info: {
+                    avatar: user.info.headImage,
+                    userName: user.info.username,
+                    email: user.info.email,
+                    phone: user.info.mobile,
+                  },
+                  menu: [
+                    {
+                      text: '个人中心',
+                      onClick() {
+                        window.open(
+                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet(),
+                        );
+                      },
+                    },
+                    {
+                      text: '登出',
+                      async onClick() {
+                        await FServiceAPI.User.logout();
+                        return window.location.replace(
+                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login(),
+                        );
+                      },
+                    },
+                  ],
+                }
+              : null
+          }
         />
       </Layout.Header>
 
       <div style={{ height: 70 }} />
 
       <Layout.Content className={styles.Content}>{children}</Layout.Content>
-
     </Layout>
   );
 }
 
-export default withRouter(connect(({ global, storageHomePage, nodes, user }: ConnectState) => ({
-  global: global,
-  storageHomePage: storageHomePage,
-  nodes: nodes,
-  user: user,
-}))(FLayout));
+export default withRouter(
+  connect(({ global, storageHomePage, nodes, user }: ConnectState) => ({
+    global: global,
+    storageHomePage: storageHomePage,
+    nodes: nodes,
+    user: user,
+  }))(FLayout),
+);

@@ -149,8 +149,7 @@ function Search({}: SearchProps) {
   };
   const resolveUsers = async (res: any) => {
     const ids = res.dataList.map((item: any) => item.userId).join(',');
-    const data = await FServiceAPI.Resource.resourcesCount({ userIds: ids, stauts: 1 });
-    console.log(data);
+    const data = await FServiceAPI.Resource.resourcesCount({ userIds: ids, status: 1 });
     res.dataList.forEach((item: any) => {
       data.data.some((i: any) => {
         if (i.userId === item.userId) {
