@@ -6,10 +6,15 @@ import {FUtil, FI18n} from '@freelog/tools-lib';
 import {Popover} from 'antd';
 
 interface FPageFooterProps {
-
+    PopoverPatch?: React.ForwardRefExoticComponent<any>;
 }
 
-function FPageFooter({}: FPageFooterProps) {
+function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
+
+    const FPopover = PopoverPatch || Popover;
+
+    // const ref = React.useRef<any>(null);
+
     return (<footer className={styles.footer}>
         <div className={styles.footerLeft}>
             <Space size={20}>
@@ -61,7 +66,7 @@ function FPageFooter({}: FPageFooterProps) {
                         <FIcons.FWeChat/>
                     </a>
                 </Popover>
-                <Popover
+                <FPopover
                     overlayInnerStyle={{
                         width: 200,
                         padding: '8px 4px',
@@ -76,7 +81,7 @@ function FPageFooter({}: FPageFooterProps) {
                     <a className={styles.footerLeft_Link}>
                         <FIcons.FSina/>
                     </a>
-                </Popover>
+                </FPopover>
                 <Popover
                     overlayInnerStyle={{
                         width: 200,

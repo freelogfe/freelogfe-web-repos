@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { Input, Radio, Space } from 'antd';
+import { Input, Popover, Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, RetrievePageModelState } from '@/models/connect';
@@ -423,7 +423,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         </div>
       </div>
       {/*<FFooter />*/}
-      <FComponentsLib.FPageFooter />
+      <FComponentsLib.FPageFooter PopoverPatch={Popover} />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
-import { Space } from 'antd';
+import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
@@ -411,7 +411,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         </div>
       </div>
       {/*<FFooter />*/}
-      <FComponentsLib.FPageFooter />
+      <FComponentsLib.FPageFooter PopoverPatch={Popover} />
     </div>
   );
 }

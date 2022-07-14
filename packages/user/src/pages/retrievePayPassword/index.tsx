@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { Radio, Space } from 'antd';
+import { Popover, Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 // import FFooter from '@/layouts/FFooter';
@@ -426,7 +426,7 @@ function RetrievePayPassword({
       )}
       <div style={{ height: 20 }} />
       {/*<FFooter />*/}
-      <FComponentsLib.FPageFooter />
+      <FComponentsLib.FPageFooter PopoverPatch={Popover} />
     </div>
   );
 }

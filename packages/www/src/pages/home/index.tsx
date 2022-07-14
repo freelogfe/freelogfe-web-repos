@@ -12,6 +12,7 @@ import Banner2 from '@/pages/home/Banner2';
 // import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
+import { Popover } from 'antd';
 
 interface HomePageProps {
 

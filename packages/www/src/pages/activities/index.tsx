@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
-import { Space } from 'antd';
+import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ActivitiesPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
@@ -95,7 +95,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
             <div style={{ width: 560 }} />
           </div>
           <div style={{ height: 100 }} />
-          <FComponentsLib.FPageFooter />
+          <FComponentsLib.FPageFooter PopoverPatch={Popover} />
         </>)
       }
     </div>
