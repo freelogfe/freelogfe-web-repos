@@ -10,7 +10,7 @@ interface CodeDetails2ParamsType {
 
 export function codeDetails1({code}: CodeDetails1ParamsType) {
   return FUtil.Request({
-    method: 'POST',
+    method: 'GET',
     url: `/v2/testQualifications/beta/codes/${code}`,
     // data: params,
   });
@@ -18,7 +18,7 @@ export function codeDetails1({code}: CodeDetails1ParamsType) {
 
 export function codeDetails2({}: CodeDetails2ParamsType) {
   return FUtil.Request({
-    method: 'POST',
+    method: 'GET',
     url: `/v2/testQualifications/beta/codes/userActivateCode`,
     // data: params,
   });

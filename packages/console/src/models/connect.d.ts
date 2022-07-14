@@ -16,6 +16,7 @@ import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
 import {ResourceDetailPageModelState} from './resourceDetailPage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
+import {NodeManager_Contract_Page_ModelState} from './nodeManager_Contract_Page';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
 import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
@@ -44,6 +45,7 @@ export {
   ResourceDetailPageModelState,
   NodesModelState,
   NodeManagerModelState,
+  NodeManager_Contract_Page_ModelState,
   ExhibitInfoPageModelState,
   ResourceDepSelectorModelState,
   InformalNodeManagerPageModelState,
@@ -75,6 +77,7 @@ export interface ConnectState {
   resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
+  nodeManager_Contract_Page: NodeManager_Contract_Page_ModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
