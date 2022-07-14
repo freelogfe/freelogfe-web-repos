@@ -634,7 +634,7 @@ const Model: NodeManager_Contract_Page_ModelType = {
         limit: FUtil.Predefined.pageSize,
         // limit: 100,
         identityType: 2,
-        licenseeId: nodeManagerPage.nodeId,
+        licenseeId: String(nodeManagerPage.nodeId),
         subjectType: subjectType[nodeManager_Contract_Page.authorized_SubjectType],
         status: nodeManager_Contract_Page.authorized_Status === 'all' ? undefined : status[nodeManager_Contract_Page.authorized_Status],
         authStatus: nodeManager_Contract_Page.authorized_Status === 'all' ? undefined : authStatus[nodeManager_Contract_Page.authorized_Status],
