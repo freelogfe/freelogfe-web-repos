@@ -24,7 +24,7 @@
     "@freelog/components-lib": "^0.1.11",
     "@freelog/tools-lib": "^0.1.119",
     "ahooks": "^3.3.8",
-    "antd": "4",
+    "antd": "^4.21.6",
     "copy-to-clipboard": "^3.3.1",
     "moment": "^2.29.3",
     "react": "17.x",

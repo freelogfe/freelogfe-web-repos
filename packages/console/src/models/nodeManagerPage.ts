@@ -15,7 +15,7 @@ export interface NodeManagerModelState {
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showPage: 'exhibit' | 'theme';
+  showPage: 'exhibit' | 'theme' | 'contract';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
@@ -91,7 +91,7 @@ export interface OnUnmount_Page_Action extends AnyAction {
 export interface OnChange_ShowPage_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_ShowPage';
   payload: {
-    value: 'exhibit' | 'theme';
+    value: 'exhibit' | 'theme' | 'contract';
   };
 }
 
@@ -216,8 +216,7 @@ export interface NodeManagerModelType {
   };
 }
 
-const exhibitInitStates: Pick<
-  NodeManagerModelState,
+const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ResourceTypeOptions'
   | 'exhibit_ResourceStateOptions'
   | 'exhibit_SelectedType'
@@ -226,8 +225,7 @@ const exhibitInitStates: Pick<
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
-  | 'exhibit_ListMore'
-> = {
+  | 'exhibit_ListMore'> = {
   exhibit_ResourceTypeOptions: [
     { text: '全部', value: '-1' },
     ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
@@ -246,14 +244,12 @@ const exhibitInitStates: Pick<
   exhibit_ListMore: 'loading',
 };
 
-const themeInitStates: Pick<
-  NodeManagerModelState,
+const themeInitStates: Pick<NodeManagerModelState,
   | 'theme_ActivatingThemeID'
   | 'theme_InputFilter'
   | 'theme_List'
   | 'theme_ListState'
-  | 'theme_ListMore'
-> = {
+  | 'theme_ListMore'> = {
   theme_InputFilter: '',
   theme_ActivatingThemeID: '',
   theme_List: [],
@@ -285,7 +281,7 @@ const Model: NodeManagerModelType = {
   namespace: 'nodeManagerPage',
   state: initStates,
   effects: {
-    *onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
+    * onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -335,7 +331,7 @@ const Model: NodeManagerModelType = {
         });
       }
     },
-    *onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -346,7 +342,7 @@ const Model: NodeManagerModelType = {
     // * onChange_NodeID({ payload }: OnChange_NodeID_Action, { select, call, put }: EffectsCommandMap) {
     //
     // },
-    *onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       if (payload.value === 'exhibit') {
         yield put<ChangeAction>({
           type: 'change',
@@ -378,8 +374,25 @@ const Model: NodeManagerModelType = {
           },
         });
       }
+
+      if (payload.value === 'contract') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showPage: payload.value,
+            ...exhibitInitStates,
+            ...themeInitStates,
+          },
+        });
+        // yield put<FetchThemesAction>({
+        //   type: 'fetchThemes',
+        //   payload: {
+        //     restart: true,
+        //   },
+        // });
+      }
     },
-    *onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
+    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
       // console.log('OnMount_ExhibitPage_Action###@4234234234234');
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
@@ -394,7 +407,7 @@ const Model: NodeManagerModelType = {
       //   });
       // }
     },
-    *onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
+    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
@@ -402,7 +415,7 @@ const Model: NodeManagerModelType = {
       //   },
       // });
     },
-    *onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
       // }));
@@ -413,7 +426,7 @@ const Model: NodeManagerModelType = {
       //   });
       // }
     },
-    *onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
+    * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
@@ -450,7 +463,7 @@ const Model: NodeManagerModelType = {
     //     },
     //   });
     // },
-    *onChange_Exhibit_SelectedType(
+    * onChange_Exhibit_SelectedType(
       { payload }: OnChange_Exhibit_SelectedType_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -468,7 +481,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onChange_Exhibit_SelectedStatus(
+    * onChange_Exhibit_SelectedStatus(
       { payload }: OnChange_Exhibit_SelectedStatus_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -486,7 +499,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onChange_Exhibit_InputFilter(
+    * onChange_Exhibit_InputFilter(
       { payload }: OnChange_Exhibit_InputFilter_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -504,7 +517,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
+    * onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
       yield put<FetchExhibitsAction>({
         type: 'fetchExhibits',
         payload: {
@@ -513,7 +526,7 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    *onOnlineOrOffline(
+    * onOnlineOrOffline(
       { payload }: OnOnlineOrOfflineAction,
       { call, put, select }: EffectsCommandMap,
     ) {
@@ -557,7 +570,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
+    * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
       // }));
@@ -593,7 +606,7 @@ const Model: NodeManagerModelType = {
       //   type: 'fetchNodeInfo',
       // });
     },
-    *onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
+    * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -605,7 +618,7 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    *fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
+    * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -644,7 +657,8 @@ const Model: NodeManagerModelType = {
             : nodeManagerPage.exhibit_SelectedType,
         omitResourceType: '主题',
         isLoadPolicyInfo: 1,
-        isTranslate: 1
+        // @ts-ignore
+        isTranslate: 1,
       };
 
       const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
@@ -718,8 +732,8 @@ const Model: NodeManagerModelType = {
                 authInfo.defaulterIdentityType === 1
                   ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
                   : authInfo.defaulterIdentityType === 2
-                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                  : '',
+                    ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                    : '',
             };
           },
         ),
@@ -736,7 +750,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
+    * fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
       // console.log(23423423, '0923jfdslk');
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
@@ -815,8 +829,8 @@ const Model: NodeManagerModelType = {
               authInfo.defaulterIdentityType === 1
                 ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
                 : authInfo.defaulterIdentityType === 2
-                ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                : '',
+                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                  : '',
             resourceId: i.resourceInfo.resourceId,
           };
         })
@@ -846,7 +860,8 @@ const Model: NodeManagerModelType = {
     },
   },
   subscriptions: {
-    setup({}) {},
+    setup({}) {
+    },
   },
 };
 
