@@ -36,6 +36,8 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
 // import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
+import Sider from '@/pages/node/formal/$id/Sider';
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -277,303 +279,314 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
     },
   ];
 
-  return (<div className={styles.styles}>
-    <div style={{ height: 30 }} />
-    <div className={styles.header}>
-      <a
-        className={nodeManager_Contract_Page.showPage === 'authorize' ? styles.active : ''}
-        onClick={() => {
-          dispatch<OnChangeShowPageAction>({
-            type: 'nodeManager_Contract_Page/onChangeShowPage',
-            payload: {
-              value: 'authorize',
-            },
-          });
-        }}>授权合约</a>
-      <div style={{ width: 30 }} />
-      <a
-        className={nodeManager_Contract_Page.showPage === 'authorized' ? styles.active : ''}
-        onClick={() => {
-          dispatch<OnChangeShowPageAction>({
-            type: 'nodeManager_Contract_Page/onChangeShowPage',
-            payload: {
-              value: 'authorized',
-            },
-          });
-        }}>被授权合约</a>
-    </div>
+  return (<FLeftSiderLayout
+    type={'empty'}
+    sider={<Sider />}
+  >
+    <div className={styles.styles}>
+      <div style={{ height: 30 }} />
+      <div className={styles.header}>
+        <a
+          className={nodeManager_Contract_Page.showPage === 'authorize' ? styles.active : ''}
+          onClick={() => {
+            dispatch<OnChangeShowPageAction>({
+              type: 'nodeManager_Contract_Page/onChangeShowPage',
+              payload: {
+                value: 'authorize',
+              },
+            });
+          }}>授权合约</a>
+        <div style={{ width: 30 }} />
+        <a
+          className={nodeManager_Contract_Page.showPage === 'authorized' ? styles.active : ''}
+          onClick={() => {
+            dispatch<OnChangeShowPageAction>({
+              type: 'nodeManager_Contract_Page/onChangeShowPage',
+              payload: {
+                value: 'authorized',
+              },
+            });
+          }}>被授权合约</a>
+      </div>
 
-    <div style={{ height: 30 }} />
+      <div style={{ height: 30 }} />
 
-    {
-      nodeManager_Contract_Page.showPage === 'authorize'
-        ? (<div className={styles.content}>
-          {
-            nodeManager_Contract_Page.authorize_ListState === 'noData'
-              ? (<FNoDataTip height={600} tipText={'无数据'} />)
-              : (<>
-                <div className={styles.filter}>
-                  <Space size={50}>
-                    <Space size={2}>
-                      <FContentText text={'标的物类型：'} />
-                      <FDropdownMenu
-                        options={nodeManager_Contract_Page.authorize_SubjectType_Options}
-                        text={nodeManager_Contract_Page.authorize_SubjectType_Options.find((so) => {
-                          return nodeManager_Contract_Page.authorize_SubjectType === so.value;
-                        })?.text || ''}
-                        onChange={(value) => {
-                          dispatch<OnChange_Authorize_SubjectType_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorize_SubjectType',
-                            payload: {
-                              value: value as 'all',
-                            },
-                          });
-                        }}
-                      />
-                    </Space>
-                    <Space size={2}>
-                      <FContentText text={'合约状态：'} />
-                      <FDropdownMenu
-                        options={nodeManager_Contract_Page.authorize_Status_Options}
-                        text={nodeManager_Contract_Page.authorize_Status_Options.find((so) => {
-                          return so.value === nodeManager_Contract_Page.authorize_Status;
-                        })?.text || ''}
-                        onChange={(value) => {
-                          dispatch<OnChange_Authorize_Status_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorize_Status',
-                            payload: {
-                              value: value as 'all',
-                            },
-                          });
-                        }}
-                      />
-                    </Space>
-                    <Space size={2}>
-                      <FContentText
-                        text={'签约时间：'}
-                      />
-                      <RangePicker
-                        value={nodeManager_Contract_Page.authorize_Date}
-                        onChange={(value: any) => {
-                          // console.log(value, '@Asdfai89jhkljrlk');
-                          dispatch<OnChange_Authorize_Date_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorize_Date',
-                            payload: {
-                              value: value,
-                            },
-                          });
-                        }}
-                        // locale={{lang: 'en'}}
-                        disabledDate={(date: any) => {
-                          // console.log(date, 'date234234234');
-                          return moment().isBefore(date);
-                        }}
-                      />
-                    </Space>
-                  </Space>
-                  <FInput
-                    className={styles.filterInput}
-                    wrapClassName={styles.filterInput}
-                    theme='dark'
-                    debounce={300}
-                    onDebounceChange={(value) => {
-                      dispatch<OnChange_Authorize_KeywordsInput_Action>({
-                        type: 'nodeManager_Contract_Page/onChange_Authorize_KeywordsInput',
-                        payload: {
-                          value: value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-                {
-                  nodeManager_Contract_Page.authorize_ListState === 'loading' && (<FLoadingTip height={600} />)
-                }
-
-                {
-                  nodeManager_Contract_Page.authorize_ListState === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无搜索结果'} />)
-                }
-                {
-                  nodeManager_Contract_Page.authorize_ListState === 'loaded' && (<><FTable
-                    className={styles.table}
-                    rowClassName={styles.rowClassName}
-                    columns={columns1}
-                    dataSource={nodeManager_Contract_Page.authorize_List.map((al) => {
-                      return {
-                        key: al.contractID,
-                        ...al,
-                      };
-                    })}
-                  />
-                    <div className={styles.contentFooter}>
-                      {
-                        nodeManager_Contract_Page.authorize_ListMore === 'andMore' && (<FRectBtn
-                          type='primary'
-                          onClick={() => {
-                            dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
-                              type: 'nodeManager_Contract_Page/onClick_Authorize_LoadMoreBtn',
+      {
+        nodeManager_Contract_Page.showPage === 'authorize'
+          ? (<div className={styles.content}>
+            {
+              nodeManager_Contract_Page.authorize_ListState === 'noData'
+                ? (<FNoDataTip height={600} tipText={'无数据'} />)
+                : (<>
+                  <div className={styles.filter}>
+                    <Space size={50}>
+                      {/*<Space size={2}>*/}
+                      {/*  <FContentText text={'标的物类型：'} />*/}
+                      {/*  <FDropdownMenu*/}
+                      {/*    options={nodeManager_Contract_Page.authorize_SubjectType_Options}*/}
+                      {/*    text={nodeManager_Contract_Page.authorize_SubjectType_Options.find((so) => {*/}
+                      {/*      return nodeManager_Contract_Page.authorize_SubjectType === so.value;*/}
+                      {/*    })?.text || ''}*/}
+                      {/*    onChange={(value) => {*/}
+                      {/*      dispatch<OnChange_Authorize_SubjectType_Action>({*/}
+                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorize_SubjectType',*/}
+                      {/*        payload: {*/}
+                      {/*          value: value as 'all',*/}
+                      {/*        },*/}
+                      {/*      });*/}
+                      {/*    }}*/}
+                      {/*  />*/}
+                      {/*</Space>*/}
+                      <Space size={2}>
+                        <FContentText text={'合约状态：'} />
+                        <FDropdownMenu
+                          options={nodeManager_Contract_Page.authorize_Status_Options}
+                          text={nodeManager_Contract_Page.authorize_Status_Options.find((so) => {
+                            return so.value === nodeManager_Contract_Page.authorize_Status;
+                          })?.text || ''}
+                          onChange={(value) => {
+                            dispatch<OnChange_Authorize_Status_Action>({
+                              type: 'nodeManager_Contract_Page/onChange_Authorize_Status',
+                              payload: {
+                                value: value as 'all',
+                              },
                             });
                           }}
-                        >
-                          加载更多
-                        </FRectBtn>)
-                      }
-
-                      {
-                        nodeManager_Contract_Page.authorize_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
-                      }
-
-                      {
-                        nodeManager_Contract_Page.authorize_ListMore === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
-                      }
-
-                    </div>
-                  </>)
-                }
-              </>)
-          }
-
-        </div>)
-        : (<div className={styles.content}>
-          {
-            nodeManager_Contract_Page.authorized_ListState === 'noData'
-              ? (<FNoDataTip height={600} tipText={'无数据'} />)
-              : (<>
-                <div className={styles.filter}>
-                  <Space size={50}>
-                    <Space size={2}>
-                      <FContentText text={'标的物类型：'} />
-                      <FDropdownMenu
-                        options={nodeManager_Contract_Page.authorized_SubjectType_Options}
-                        text={nodeManager_Contract_Page.authorized_SubjectType_Options.find((so) => {
-                          return nodeManager_Contract_Page.authorized_SubjectType === so.value;
-                        })?.text || ''}
-                        onChange={(value) => {
-                          dispatch<OnChange_Authorized_SubjectType_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorized_SubjectType',
-                            payload: {
-                              value: value as 'all',
-                            },
-                          });
-                        }}
-                      />
+                        />
+                      </Space>
+                      <Space size={2}>
+                        <FContentText
+                          text={'签约时间：'}
+                        />
+                        <RangePicker
+                          value={nodeManager_Contract_Page.authorize_Date}
+                          onChange={(value: any) => {
+                            // console.log(value, '@Asdfai89jhkljrlk');
+                            dispatch<OnChange_Authorize_Date_Action>({
+                              type: 'nodeManager_Contract_Page/onChange_Authorize_Date',
+                              payload: {
+                                value: value,
+                              },
+                            });
+                          }}
+                          // locale={{lang: 'en'}}
+                          disabledDate={(date: any) => {
+                            // console.log(date, 'date234234234');
+                            return moment().isBefore(date);
+                          }}
+                        />
+                      </Space>
                     </Space>
-                    <Space size={2}>
-                      <FContentText text={'合约状态：'} />
-                      <FDropdownMenu
-                        options={nodeManager_Contract_Page.authorized_Status_Options}
-                        text={nodeManager_Contract_Page.authorized_Status_Options.find((so) => {
-                          return so.value === nodeManager_Contract_Page.authorized_Status;
-                        })?.text || ''}
-                        onChange={(value) => {
-                          dispatch<OnChange_Authorized_Status_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorized_Status',
-                            payload: {
-                              value: value as 'all',
-                            },
-                          });
-                        }}
-                      />
-                    </Space>
-                    <Space size={2}>
-                      <FContentText text={'签约时间：'} />
-                      <RangePicker
-                        value={nodeManager_Contract_Page.authorized_Date}
-                        onChange={(value: any) => {
-                          // console.log(value, '@Asdfai89jhkljrlk');
-                          dispatch<OnChange_Authorized_Date_Action>({
-                            type: 'nodeManager_Contract_Page/onChange_Authorized_Date',
-                            payload: {
-                              value: value,
-                            },
-                          });
-                        }}
-                        // locale={{lang: 'en'}}
-                        disabledDate={(date: any) => {
-                          // console.log(date, 'date234234234');
-                          return moment().isBefore(date);
-                        }}
-                      />
-                    </Space>
-                  </Space>
-                  <FInput
-                    className={styles.filterInput}
-                    wrapClassName={styles.filterInput}
-                    theme='dark'
-                    debounce={300}
-                    onDebounceChange={(value) => {
-                      dispatch<OnChange_Authorized_KeywordsInput_Action>({
-                        type: 'nodeManager_Contract_Page/onChange_Authorized_KeywordsInput',
-                        payload: {
-                          value: value,
-                        },
-                      });
-                    }}
-                  />
-                </div>
-                {
-                  nodeManager_Contract_Page.authorized_ListState === 'loading' && (<FLoadingTip height={600} />)
-                }
+                    <FInput
+                      className={styles.filterInput}
+                      wrapClassName={styles.filterInput}
+                      theme='dark'
+                      debounce={300}
+                      onDebounceChange={(value) => {
+                        dispatch<OnChange_Authorize_KeywordsInput_Action>({
+                          type: 'nodeManager_Contract_Page/onChange_Authorize_KeywordsInput',
+                          payload: {
+                            value: value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  {
+                    nodeManager_Contract_Page.authorize_ListState === 'loading' && (<FLoadingTip height={600} />)
+                  }
 
-                {
-                  nodeManager_Contract_Page.authorized_ListState === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无搜索结果'} />)
-                }
-                {
-                  nodeManager_Contract_Page.authorized_ListState === 'loaded' && (<>
-                    <FTable
+                  {
+                    nodeManager_Contract_Page.authorize_ListState === 'noSearchResult' && (
+                      <FNoDataTip height={600} tipText={'无搜索结果'} />)
+                  }
+                  {
+                    nodeManager_Contract_Page.authorize_ListState === 'loaded' && (<><FTable
                       className={styles.table}
                       rowClassName={styles.rowClassName}
-                      columns={columns2}
-                      dataSource={nodeManager_Contract_Page.authorized_List.map((al) => {
+                      columns={columns1}
+                      dataSource={nodeManager_Contract_Page.authorize_List.map((al) => {
                         return {
                           key: al.contractID,
                           ...al,
                         };
                       })}
                     />
-                    <div className={styles.contentFooter}>
-                      {
-                        nodeManager_Contract_Page.authorized_ListMore === 'andMore' && (<FRectBtn
-                          type='primary'
-                          onClick={() => {
-                            dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
-                              type: 'nodeManager_Contract_Page/onClick_Authorized_LoadMoreBtn',
+                      <div className={styles.contentFooter}>
+                        {
+                          nodeManager_Contract_Page.authorize_ListMore === 'andMore' && (<FRectBtn
+                            type='primary'
+                            onClick={() => {
+                              dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
+                                type: 'nodeManager_Contract_Page/onClick_Authorize_LoadMoreBtn',
+                              });
+                            }}
+                          >
+                            加载更多
+                          </FRectBtn>)
+                        }
+
+                        {
+                          nodeManager_Contract_Page.authorize_ListMore === 'loading' && (
+                            <FLoading style={{ fontSize: 24 }} />)
+                        }
+
+                        {
+                          nodeManager_Contract_Page.authorize_ListMore === 'noMore' && (
+                            <FTipText text={'没有更多~'} type='third' />)
+                        }
+
+                      </div>
+                    </>)
+                  }
+                </>)
+            }
+
+          </div>)
+          : (<div className={styles.content}>
+            {
+              nodeManager_Contract_Page.authorized_ListState === 'noData'
+                ? (<FNoDataTip height={600} tipText={'无数据'} />)
+                : (<>
+                  <div className={styles.filter}>
+                    <Space size={50}>
+                      {/*<Space size={2}>*/}
+                      {/*  <FContentText text={'标的物类型：'} />*/}
+                      {/*  <FDropdownMenu*/}
+                      {/*    options={nodeManager_Contract_Page.authorized_SubjectType_Options}*/}
+                      {/*    text={nodeManager_Contract_Page.authorized_SubjectType_Options.find((so) => {*/}
+                      {/*      return nodeManager_Contract_Page.authorized_SubjectType === so.value;*/}
+                      {/*    })?.text || ''}*/}
+                      {/*    onChange={(value) => {*/}
+                      {/*      dispatch<OnChange_Authorized_SubjectType_Action>({*/}
+                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorized_SubjectType',*/}
+                      {/*        payload: {*/}
+                      {/*          value: value as 'all',*/}
+                      {/*        },*/}
+                      {/*      });*/}
+                      {/*    }}*/}
+                      {/*  />*/}
+                      {/*</Space>*/}
+                      <Space size={2}>
+                        <FContentText text={'合约状态：'} />
+                        <FDropdownMenu
+                          options={nodeManager_Contract_Page.authorized_Status_Options}
+                          text={nodeManager_Contract_Page.authorized_Status_Options.find((so) => {
+                            return so.value === nodeManager_Contract_Page.authorized_Status;
+                          })?.text || ''}
+                          onChange={(value) => {
+                            dispatch<OnChange_Authorized_Status_Action>({
+                              type: 'nodeManager_Contract_Page/onChange_Authorized_Status',
+                              payload: {
+                                value: value as 'all',
+                              },
                             });
                           }}
-                        >
-                          加载更多
-                        </FRectBtn>)
-                      }
+                        />
+                      </Space>
+                      <Space size={2}>
+                        <FContentText text={'签约时间：'} />
+                        <RangePicker
+                          value={nodeManager_Contract_Page.authorized_Date}
+                          onChange={(value: any) => {
+                            // console.log(value, '@Asdfai89jhkljrlk');
+                            dispatch<OnChange_Authorized_Date_Action>({
+                              type: 'nodeManager_Contract_Page/onChange_Authorized_Date',
+                              payload: {
+                                value: value,
+                              },
+                            });
+                          }}
+                          // locale={{lang: 'en'}}
+                          disabledDate={(date: any) => {
+                            // console.log(date, 'date234234234');
+                            return moment().isBefore(date);
+                          }}
+                        />
+                      </Space>
+                    </Space>
+                    <FInput
+                      className={styles.filterInput}
+                      wrapClassName={styles.filterInput}
+                      theme='dark'
+                      debounce={300}
+                      onDebounceChange={(value) => {
+                        dispatch<OnChange_Authorized_KeywordsInput_Action>({
+                          type: 'nodeManager_Contract_Page/onChange_Authorized_KeywordsInput',
+                          payload: {
+                            value: value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  {
+                    nodeManager_Contract_Page.authorized_ListState === 'loading' && (<FLoadingTip height={600} />)
+                  }
 
-                      {
-                        nodeManager_Contract_Page.authorized_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
-                      }
+                  {
+                    nodeManager_Contract_Page.authorized_ListState === 'noSearchResult' && (
+                      <FNoDataTip height={600} tipText={'无搜索结果'} />)
+                  }
+                  {
+                    nodeManager_Contract_Page.authorized_ListState === 'loaded' && (<>
+                      <FTable
+                        className={styles.table}
+                        rowClassName={styles.rowClassName}
+                        columns={columns2}
+                        dataSource={nodeManager_Contract_Page.authorized_List.map((al) => {
+                          return {
+                            key: al.contractID,
+                            ...al,
+                          };
+                        })}
+                      />
+                      <div className={styles.contentFooter}>
+                        {
+                          nodeManager_Contract_Page.authorized_ListMore === 'andMore' && (<FRectBtn
+                            type='primary'
+                            onClick={() => {
+                              dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
+                                type: 'nodeManager_Contract_Page/onClick_Authorized_LoadMoreBtn',
+                              });
+                            }}
+                          >
+                            加载更多
+                          </FRectBtn>)
+                        }
 
-                      {
-                        nodeManager_Contract_Page.authorized_ListMore === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
-                      }
+                        {
+                          nodeManager_Contract_Page.authorized_ListMore === 'loading' && (
+                            <FLoading style={{ fontSize: 24 }} />)
+                        }
 
-                    </div>
-                  </>)
-                }
-              </>)
-          }
+                        {
+                          nodeManager_Contract_Page.authorized_ListMore === 'noMore' && (
+                            <FTipText text={'没有更多~'} type='third' />)
+                        }
+
+                      </div>
+                    </>)
+                  }
+                </>)
+            }
 
 
-        </div>)
-    }
+          </div>)
+      }
 
-    <div style={{ height: 100 }} />
+      <div style={{ height: 100 }} />
 
-    <FContractDetailsDrawer
-      contractID={nodeManager_Contract_Page.contractDetailsID}
-      onClose={() => {
-        dispatch<OnCloseContractDetailsDrawerAction>({
-          type: 'nodeManager_Contract_Page/onCloseContractDetailsDrawer',
-        });
-      }}
-    />
-  </div>);
+      <FContractDetailsDrawer
+        contractID={nodeManager_Contract_Page.contractDetailsID}
+        onClose={() => {
+          dispatch<OnCloseContractDetailsDrawerAction>({
+            type: 'nodeManager_Contract_Page/onCloseContractDetailsDrawer',
+          });
+        }}
+      />
+    </div>
+  </FLeftSiderLayout>);
 }
 
 export default connect(({ nodeManager_Contract_Page }: ConnectState) => ({
