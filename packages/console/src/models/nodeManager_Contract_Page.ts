@@ -445,8 +445,12 @@ const Model: NodeManager_Contract_Page_ModelType = {
     },
 
     * fetch_Authorize_List({ payload }: Fetch_Authorize_List_Action, { select, call, put }: EffectsCommandMap) {
-      const { nodeManager_Contract_Page }: ConnectState = yield select(({ nodeManager_Contract_Page }: ConnectState) => ({
+      const { nodeManager_Contract_Page, nodeManagerPage }: ConnectState = yield select(({
+                                                                                           nodeManager_Contract_Page,
+                                                                                           nodeManagerPage,
+                                                                                         }: ConnectState) => ({
         nodeManager_Contract_Page,
+        nodeManagerPage,
       }));
       // console.log('#@#$@#$23423422222@@@@@@@@');
 
@@ -499,7 +503,8 @@ const Model: NodeManager_Contract_Page_ModelType = {
         limit: FUtil.Predefined.pageSize,
         // limit: 100,
         identityType: 1,
-        subjectType: subjectType[nodeManager_Contract_Page.authorize_SubjectType],
+        // subjectType: subjectType[nodeManager_Contract_Page.authorize_SubjectType],
+        licensorId: String(nodeManagerPage.nodeId),
         status: nodeManager_Contract_Page.authorize_Status === 'all' ? undefined : status[nodeManager_Contract_Page.authorize_Status],
         authStatus: nodeManager_Contract_Page.authorize_Status === 'all' ? undefined : authStatus[nodeManager_Contract_Page.authorize_Status],
         startDate: nodeManager_Contract_Page.authorize_Date ? nodeManager_Contract_Page.authorize_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
@@ -570,8 +575,12 @@ const Model: NodeManager_Contract_Page_ModelType = {
       });
     },
     * fetch_Authorized_List({ payload }: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
-      const { nodeManager_Contract_Page }: ConnectState = yield select(({ nodeManager_Contract_Page }: ConnectState) => ({
+      const { nodeManager_Contract_Page, nodeManagerPage }: ConnectState = yield select(({
+                                                                                           nodeManager_Contract_Page,
+                                                                                           nodeManagerPage,
+                                                                                         }: ConnectState) => ({
         nodeManager_Contract_Page,
+        nodeManagerPage,
       }));
       // console.log('#@#$@#$23423422222@@@@@@@@');
 
@@ -625,6 +634,7 @@ const Model: NodeManager_Contract_Page_ModelType = {
         limit: FUtil.Predefined.pageSize,
         // limit: 100,
         identityType: 2,
+        licenseeId: nodeManagerPage.nodeId,
         subjectType: subjectType[nodeManager_Contract_Page.authorized_SubjectType],
         status: nodeManager_Contract_Page.authorized_Status === 'all' ? undefined : status[nodeManager_Contract_Page.authorized_Status],
         authStatus: nodeManager_Contract_Page.authorized_Status === 'all' ? undefined : authStatus[nodeManager_Contract_Page.authorized_Status],
