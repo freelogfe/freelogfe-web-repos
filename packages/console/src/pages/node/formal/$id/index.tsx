@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
+import Contracts from './Contracts';
 import { withRouter } from 'umi';
 import { Dispatch, connect } from 'dva';
 import {
@@ -95,7 +96,11 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
     return <FLoadingTip height={'calc(100vh - 70px)'} />;
   }
 
-  return <>{nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />}</>;
+  return <>
+    {nodeManagerPage.showPage === 'exhibit' && (<Exhibits />)}
+    {nodeManagerPage.showPage === 'theme' && (<Themes />)}
+    {nodeManagerPage.showPage === 'contract' && (<Contracts />)}
+  </>;
 }
 
 export default connect(({ nodeManagerPage, nodes }: ConnectState) => ({

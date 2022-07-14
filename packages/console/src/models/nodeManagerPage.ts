@@ -5,8 +5,11 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
+import moment, { Moment } from 'moment';
 
-// import FUtil1 from '@/utils';
+type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
+
+type Authorized_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
 export interface NodeManagerModelState {
   nodeId: number;
@@ -15,7 +18,7 @@ export interface NodeManagerModelState {
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showPage: 'exhibit' | 'theme';
+  showPage: 'exhibit' | 'theme' | 'contract';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
@@ -62,6 +65,62 @@ export interface NodeManagerModelState {
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
 
+  /******* contract Start ***********************/
+  contract_ShowPage: 'authorize' | 'authorized';
+
+  contract_Authorize_Status_Options: {
+    value: 'all' | Authorize_Status
+    text: string;
+  }[];
+  contract_Authorize_Status: 'all' | Authorize_Status;
+  contract_Authorize_Date: [Moment, Moment] | null;
+  contract_Authorize_Keywords: string;
+  contract_Authorize_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  contract_Authorize_ListMore: 'loading' | 'andMore' | 'noMore';
+  contract_Authorize_List: {
+    cover: string;
+    subjectType: 'resource' | 'exhibit';
+    subjectName: string;
+    contractName: string;
+    licensorId: string;
+    licensorType: 'resource' | 'node';
+    licensorName: string;
+    licenseeId: string;
+    licenseeType: 'resource' | 'node' | 'user';
+    licenseeName: string;
+    status: Authorize_Status;
+    dataTime: string;
+    contractID: string;
+  }[];
+
+  contract_Authorized_Status_Options: {
+    value: 'all' | Authorized_Status;
+    text: string;
+  }[];
+  contract_Authorized_Status: 'all' | Authorized_Status;
+  contract_Authorized_Date: [Moment, Moment] | null;
+  contract_Authorized_Keywords: string;
+  contract_Authorized_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  contract_Authorized_ListMore: 'loading' | 'andMore' | 'noMore';
+  contract_Authorized_List: {
+    cover: string;
+    subjectType: 'resource' | 'exhibit';
+    subjectName: string;
+    contractName: string;
+    licensorId: string;
+    licensorType: 'resource' | 'node';
+    licensorName: string;
+    licenseeId: string;
+    licenseeType: 'resource' | 'node' | 'user';
+    licenseeName: string;
+    status: Authorized_Status;
+    dataTime: string;
+    contractID: string;
+  }[];
+
+  contract_ContractDetailsID: string;
+  /****** contract End ************************/
+
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
 }
@@ -82,16 +141,10 @@ export interface OnUnmount_Page_Action extends AnyAction {
   type: 'nodeManagerPage/onUnmount_Page';
 }
 
-// export interface OnChange_NodeID_Action extends AnyAction {
-//   type: 'nodeManagerPage/onChange_NodeID';
-//   payload: {
-//     nodeID: number;
-//   };
-// }
 export interface OnChange_ShowPage_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_ShowPage';
   payload: {
-    value: 'exhibit' | 'theme';
+    value: 'exhibit' | 'theme' | 'contract';
   };
 }
 
@@ -158,6 +211,106 @@ export interface OnActiveAction {
   };
 }
 
+/********* Contract start *********************************/
+// export interface OnChangeShowPageAction extends AnyAction {
+//   type: 'contractPage/onChangeShowPage';
+//   payload: {
+//     value: 'authorize' | 'authorized';
+//   };
+// }
+//
+// export interface OnClickViewDetailsBtnAction extends AnyAction {
+//   type: 'contractPage/onClickViewDetailsBtn';
+//   payload: {
+//     value: string;
+//   };
+// }
+//
+// export interface OnCloseContractDetailsDrawerAction extends AnyAction {
+//   type: 'contractPage/onCloseContractDetailsDrawer';
+// }
+//
+// export interface OnChange_Authorize_SubjectType_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorize_SubjectType';
+//   payload: {
+//     value: 'all' | Authorize_SubjectType;
+//   };
+// }
+//
+// export interface OnChange_Authorize_Status_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorize_Status';
+//   payload: {
+//     value: 'all' | Authorize_Status;
+//   };
+// }
+//
+// export interface OnChange_Authorize_Date_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorize_Date';
+//   payload: {
+//     value: [Moment, Moment] | null;
+//   };
+// }
+//
+// export interface OnChange_Authorize_KeywordsInput_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorize_KeywordsInput';
+//   payload: {
+//     value: string
+//   };
+// }
+//
+// export interface OnClick_Authorize_LoadMoreBtn_Action extends AnyAction {
+//   type: 'contractPage/onClick_Authorize_LoadMoreBtn';
+// }
+//
+// export interface OnChange_Authorized_SubjectType_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorized_SubjectType';
+//   payload: {
+//     value: 'all' | Authorized_SubjectType;
+//   };
+// }
+//
+// export interface OnChange_Authorized_Status_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorized_Status';
+//   payload: {
+//     value: 'all' | Authorized_Status;
+//   };
+// }
+//
+// export interface OnChange_Authorized_Date_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorized_Date';
+//   payload: {
+//     value: [Moment, Moment] | null;
+//   };
+// }
+//
+// export interface OnChange_Authorized_KeywordsInput_Action extends AnyAction {
+//   type: 'contractPage/onChange_Authorized_KeywordsInput';
+//   payload: {
+//     value: string
+//   };
+// }
+//
+// export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
+//   type: 'contractPage/onClick_Authorized_LoadMoreBtn';
+// }
+//
+// export interface Fetch_Authorize_List_Action extends AnyAction {
+//   type: 'fetch_Authorize_List';
+//   payload?: {
+//     loadMore: boolean;
+//   };
+// }
+//
+// export interface Fetch_Authorized_List_Action extends AnyAction {
+//   type: 'fetch_Authorized_List';
+//   payload?: {
+//     loadMore: boolean;
+//   };
+// }
+
+/********* Contract End *********************************/
+
+
 export interface FetchExhibitsAction extends AnyAction {
   type: 'nodeManagerPage/fetchExhibits' | 'fetchExhibits';
   payload: {
@@ -167,6 +320,10 @@ export interface FetchExhibitsAction extends AnyAction {
 
 export interface FetchThemesAction extends AnyAction {
   type: 'nodeManagerPage/fetchThemes' | 'fetchThemes';
+}
+
+export interface FetchContractsAction extends AnyAction {
+  type: 'fetchContracts';
 }
 
 export interface NodeManagerModelType {
@@ -216,9 +373,7 @@ export interface NodeManagerModelType {
   };
 }
 
-const exhibitInitStates: Pick<
-  NodeManagerModelState,
-  | 'exhibit_ResourceTypeOptions'
+const exhibitInitStates: Pick<NodeManagerModelState, 'exhibit_ResourceTypeOptions'
   | 'exhibit_ResourceStateOptions'
   | 'exhibit_SelectedType'
   | 'exhibit_SelectedStatus'
@@ -226,8 +381,7 @@ const exhibitInitStates: Pick<
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
-  | 'exhibit_ListMore'
-> = {
+  | 'exhibit_ListMore'> = {
   exhibit_ResourceTypeOptions: [
     { text: '全部', value: '-1' },
     ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
@@ -246,19 +400,78 @@ const exhibitInitStates: Pick<
   exhibit_ListMore: 'loading',
 };
 
-const themeInitStates: Pick<
-  NodeManagerModelState,
-  | 'theme_ActivatingThemeID'
+const themeInitStates: Pick<NodeManagerModelState, 'theme_ActivatingThemeID'
   | 'theme_InputFilter'
   | 'theme_List'
   | 'theme_ListState'
-  | 'theme_ListMore'
-> = {
+  | 'theme_ListMore'> = {
   theme_InputFilter: '',
   theme_ActivatingThemeID: '',
   theme_List: [],
   theme_ListState: 'loading',
   theme_ListMore: 'loading',
+};
+
+const contractInitStates: Pick<NodeManagerModelState,
+  'contract_ShowPage' |
+  'contract_Authorize_Status_Options' |
+  'contract_Authorize_Status' |
+  'contract_Authorize_Date' |
+  'contract_Authorize_Keywords' |
+  'contract_Authorize_ListState' |
+  'contract_Authorize_ListMore' |
+  'contract_Authorize_List' |
+  'contract_Authorized_Status_Options' |
+  'contract_Authorized_Status' |
+  'contract_Authorized_Date' |
+  'contract_Authorized_Keywords' |
+  'contract_Authorized_ListState' |
+  'contract_Authorized_ListMore' |
+  'contract_Authorized_List' |
+  'contract_ContractDetailsID'> = {
+  contract_ShowPage: 'authorize',
+
+  contract_Authorize_Status_Options: [{
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'authorized',
+    text: '已授权',
+  }, {
+    value: 'unauthorized',
+    text: '未授权',
+  }, {
+    value: 'terminated',
+    text: '已终止',
+  }],
+  contract_Authorize_Status: 'all',
+  contract_Authorize_Date: null,
+  contract_Authorize_Keywords: '',
+  contract_Authorize_ListState: 'loading',
+  contract_Authorize_ListMore: 'loading',
+  contract_Authorize_List: [],
+
+  contract_Authorized_Status_Options: [{
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'authorized',
+    text: '已授权',
+  }, {
+    value: 'unauthorized',
+    text: '未授权',
+  }, {
+    value: 'terminated',
+    text: '已终止',
+  }],
+  contract_Authorized_Status: 'all',
+  contract_Authorized_Date: null,
+  contract_Authorized_Keywords: '',
+  contract_Authorized_ListState: 'loading',
+  contract_Authorized_ListMore: 'loading',
+  contract_Authorized_List: [],
+
+  contract_ContractDetailsID: '',
 };
 
 const initStates: NodeManagerModelState = {
@@ -277,6 +490,8 @@ const initStates: NodeManagerModelState = {
 
   ...themeInitStates,
 
+  ...contractInitStates,
+
   policyEditorVisible: false,
   policyOperaterVisible: false,
 };
@@ -285,7 +500,7 @@ const Model: NodeManagerModelType = {
   namespace: 'nodeManagerPage',
   state: initStates,
   effects: {
-    *onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
+    * onMount_Page({ payload }: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -335,7 +550,7 @@ const Model: NodeManagerModelType = {
         });
       }
     },
-    *onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -346,7 +561,7 @@ const Model: NodeManagerModelType = {
     // * onChange_NodeID({ payload }: OnChange_NodeID_Action, { select, call, put }: EffectsCommandMap) {
     //
     // },
-    *onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       if (payload.value === 'exhibit') {
         yield put<ChangeAction>({
           type: 'change',
@@ -378,79 +593,38 @@ const Model: NodeManagerModelType = {
           },
         });
       }
+
+      if (payload.value === 'contract') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showPage: payload.value,
+            ...exhibitInitStates,
+            ...themeInitStates,
+          },
+        });
+        // yield put<FetchThemesAction>({
+        //   type: 'fetchThemes',
+        //   payload: {
+        //     restart: true,
+        //   },
+        // });
+      }
     },
-    *onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
-      // console.log('OnMount_ExhibitPage_Action###@4234234234234');
-      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-      //   nodeManagerPage,
-      // }));
-      // console.log(nodeManagerPage.nodeId, 'nodeManagerPage.nodeIdnodeManagerPage.nodeId!@#$');
-      // if (nodeManagerPage.nodeId !== -1) {
-      //   yield put<FetchExhibitsAction>({
-      //     type: 'fetchExhibits',
-      //     payload: {
-      //       restart: true,
-      //     },
-      //   });
-      // }
+    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
+
     },
-    *onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     ...exhibitInitStates,
-      //   },
-      // });
+    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
+
     },
-    *onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-      //   nodeManagerPage,
-      // }));
-      //
-      // if (nodeManagerPage.nodeId !== -1) {
-      //   yield put<FetchThemesAction>({
-      //     type: 'fetchThemes',
-      //   });
-      // }
+    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+
     },
-    *onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     ...themeInitStates,
-      //   },
-      // });
+    * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
+
     },
 
-    // * fetchNodeInfo({}: FetchNodeInfoAction, { put, select, call }: EffectsCommandMap) {
-    //
-    // },
-
-    // * onChangeExhibit({ payload }: OnChangeExhibitAction, { put }: EffectsCommandMap) {
-    //   if (payload.pageCurrent) {
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         // pageCurrent: payload.pageCurrent,
-    //       },
-    //     });
-    //   } else {
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         // ...payload,
-    //         // pageCurrent: 1,
-    //       },
-    //     });
-    //   }
-    //   yield put<FetchExhibitsAction>({
-    //     type: 'fetchExhibits',
-    //     payload: {
-    //       restart: true,
-    //     },
-    //   });
-    // },
-    *onChange_Exhibit_SelectedType(
+    * onChange_Exhibit_SelectedType(
       { payload }: OnChange_Exhibit_SelectedType_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -468,7 +642,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onChange_Exhibit_SelectedStatus(
+    * onChange_Exhibit_SelectedStatus(
       { payload }: OnChange_Exhibit_SelectedStatus_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -486,7 +660,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onChange_Exhibit_InputFilter(
+    * onChange_Exhibit_InputFilter(
       { payload }: OnChange_Exhibit_InputFilter_Action,
       { put }: EffectsCommandMap,
     ) {
@@ -504,7 +678,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
+    * onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
       yield put<FetchExhibitsAction>({
         type: 'fetchExhibits',
         payload: {
@@ -513,7 +687,7 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    *onOnlineOrOffline(
+    * onOnlineOrOffline(
       { payload }: OnOnlineOrOfflineAction,
       { call, put, select }: EffectsCommandMap,
     ) {
@@ -557,7 +731,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
+    * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
       // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
       //   nodeManagerPage,
       // }));
@@ -593,7 +767,7 @@ const Model: NodeManagerModelType = {
       //   type: 'fetchNodeInfo',
       // });
     },
-    *onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
+    * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -605,7 +779,7 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    *fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
+    * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -644,7 +818,8 @@ const Model: NodeManagerModelType = {
             : nodeManagerPage.exhibit_SelectedType,
         omitResourceType: '主题',
         isLoadPolicyInfo: 1,
-        isTranslate: 1
+        // @ts-ignore
+        isTranslate: 1,
       };
 
       const { data: data_Exhibits } = yield call(FServiceAPI.Exhibit.presentables, params);
@@ -718,8 +893,8 @@ const Model: NodeManagerModelType = {
                 authInfo.defaulterIdentityType === 1
                   ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
                   : authInfo.defaulterIdentityType === 2
-                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                  : '',
+                    ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                    : '',
             };
           },
         ),
@@ -736,7 +911,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    *fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
+    * fetchThemes({}: FetchThemesAction, { call, put, select }: EffectsCommandMap) {
       // console.log(23423423, '0923jfdslk');
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
@@ -815,8 +990,8 @@ const Model: NodeManagerModelType = {
               authInfo.defaulterIdentityType === 1
                 ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
                 : authInfo.defaulterIdentityType === 2
-                ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                : '',
+                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+                  : '',
             resourceId: i.resourceInfo.resourceId,
           };
         })
@@ -846,7 +1021,8 @@ const Model: NodeManagerModelType = {
     },
   },
   subscriptions: {
-    setup({}) {},
+    setup({}) {
+    },
   },
 };
 

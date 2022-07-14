@@ -85,6 +85,17 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           >
             {FI18n.i18nNext.t('manage_theme')}
           </a>
+          <a
+            className={nodeManagerPage.showPage === 'contract' ? styles.activated : ''}
+            onClick={() => {
+              dispatch<OnChange_ShowPage_Action>({
+                type: 'nodeManagerPage/onChange_ShowPage',
+                payload: {
+                  value: 'contract',
+                },
+              });
+            }}
+          >合约管理</a>
         </div>
       </div>
 
