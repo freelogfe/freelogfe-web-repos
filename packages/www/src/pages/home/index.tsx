@@ -99,7 +99,7 @@ function HomePage({}: HomePageProps) {
       <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
     </div>
 
-    <FComponentsLib.FPageFooter />
+    <FComponentsLib.FPageFooter PopoverPatch={Popover} />
 
     <Ads />
 
