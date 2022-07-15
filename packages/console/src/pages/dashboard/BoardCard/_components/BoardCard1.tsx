@@ -10,6 +10,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 interface BoardCard1Props {
   unfold: boolean;
   data: any;
+
   onMouseEnter?(): void;
 }
 
@@ -39,12 +40,12 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
             <div className={styles.task} key={item.taskConfigCode}>
               {item.taskConfigCode === 'TS000011' ? (
                 <FPopover
-                  placement="right"
+                  placement='right'
                   content={
                     <div className={styles.tooltipDisplay}>
                       <FContentText
                         text={'Freelog平台存在资源作者和节点商两个角色：'}
-                        type="highlight"
+                        type='highlight'
                       />
                       <div style={{ height: 15 }} />
                       <div style={{ display: 'flex' }}>
@@ -60,7 +61,7 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                         />
                         <FContentText
                           text={'「资源作者」可通过创建并发行资源获取收益；'}
-                          type="highlight"
+                          type='highlight'
                         />
                       </div>
                       <div style={{ height: 15 }} />
@@ -77,15 +78,23 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                         />
                         <FContentText
                           text={'「节点商」是资源的整合者，通过在节点展示推广资源获取中间人收益。'}
-                          type="highlight"
+                          type='highlight'
                         />
                       </div>
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'查看'} />
-                        <a type="primary">资源作者使用教程</a>
+                        <a
+                          href={''}
+                          target={'_blank'}
+                          type='primary'
+                        >资源作者使用教程</a>
                         <FContentText text={'或'} />
-                        <a type="primary">节点商使用教</a>
+                        <a
+                          href={''}
+                          target={'_blank'}
+                          type='primary'
+                        >节点商使用教</a>
                       </Space>
                     </div>
                   }
@@ -94,10 +103,10 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                 </FPopover>
               ) : (
                 <FPopover
-                  placement="right"
+                  placement='right'
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={item.taskConfigDescription} type="highlight" />
+                      <FContentText text={item.taskConfigDescription} type='highlight' />
                     </div>
                   }
                 >
@@ -122,4 +131,5 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
     </div>
   );
 }
+
 export default BoardCard1;

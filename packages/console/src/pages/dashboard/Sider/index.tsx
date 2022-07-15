@@ -71,7 +71,12 @@ function Sider({}: SiderProps) {
       <FFormLayout>
         <FFormLayout.FBlock
           title={'常见问题'}
-          extra={<FTextBtn type='default'>更多 &gt;</FTextBtn>}
+          extra={<FTextBtn
+            type='default'
+            onClick={() => {
+              window.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d04f456ff0002e329537')
+            }}
+          >更多 &gt;</FTextBtn>}
         >
           <div className={styles.linkList}>
             <div className={styles.linkListItem}>

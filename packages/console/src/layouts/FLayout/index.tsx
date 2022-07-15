@@ -199,7 +199,8 @@ function FLayout({
             {
               id: 'community',
               text: '社区',
-              href: '',
+              href: 'https://forum.freelog.com/',
+              target: '_blank',
               items: [],
             },
             {

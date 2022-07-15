@@ -55,7 +55,8 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
           {
             id: 'community',
             text: '社区',
-            href: '',
+            href: 'https://forum.freelog.com/',
+            target: '_blank',
             items: [],
           },
           {
