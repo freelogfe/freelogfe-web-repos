@@ -33,7 +33,7 @@ class UserPermission {
     }
 
 
-    if (self._userInfo.status === 2 || self._userInfo.status === 3) {
+    if (self._userInfo.userType === 0) {
       return 'ERR_NOT_ALPHA_TEST';
     }
 
