@@ -7,14 +7,16 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { Divider } from 'antd';
 import { router } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
+import fMessage from '@/components/fMessage';
 
 interface InviteProps {
-  jump:any;
+  jump: any;
 }
 
-function Invite({jump}: InviteProps) {
+function Invite({ jump }: InviteProps) {
   const [code, setCode] = React.useState<string>('');
   const [isCorrect, setIsCorrect] = React.useState<boolean>(true);
+  const [loading, setLoading] = React.useState<boolean>(false);
   function submit() {
     return FServiceAPI.TestQualification.betaCodesActivate({
       // @ts-ignore
@@ -23,19 +25,30 @@ function Invite({jump}: InviteProps) {
   }
   const [urlState] = useUrlState<any>();
 
-  const { loading, data, error, run } = AHooks.useRequest(submit, {
-    loadingDelay: 400,
+  const { data, error, run } = AHooks.useRequest(submit, {
+    loadingDelay: 100,
     manual: true,
   });
   React.useEffect(() => {
-    if (data) {
-      if (data.errCode) {
-        setIsCorrect(false);
-      }
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+        if (data) {
+          if (data.errCode) {
+            setIsCorrect(false);
+          } else {
+            fMessage('验证成功！', 'success');
+            setTimeout(() => {
+              if (urlState.returnUrl) {
+                window.location.href = urlState.returnUrl;
+              } else {
+                router.push('/dashboard');
+              }
+            }, 1500);
+          }
+        }
+      }, 1000);
     }
-    // if (data) {
-    //   window.location.href = 'http://user.testfreelog.com';
-    // }
   }, [data]);
 
   AHooks.useUnmount(() => {});
@@ -62,7 +75,13 @@ function Invite({jump}: InviteProps) {
           }}
         />
         <div className={styles.codeError}>{isCorrect ? '' : '无效邀请码，请重新输入'}</div>
-        <FRectBtn onClick={run} disabled={!code || !isCorrect}>
+        <FRectBtn
+          onClick={() => {
+            run();
+            setLoading(true);
+          }}
+          disabled={!code || !isCorrect}
+        >
           验证邀请码
         </FRectBtn>
       </div>
@@ -72,8 +91,11 @@ function Invite({jump}: InviteProps) {
           <span
             className={styles.link}
             onClick={() => {
-              router.push('/invitation?type=apply' + (urlState.returnUrl? '&returnUrl=' + urlState.returnUrl : ''));
-              jump('Apply')
+              router.push(
+                '/invitation?type=apply' +
+                  (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+              );
+              jump('Apply');
             }}
           >
             申请参加内测
