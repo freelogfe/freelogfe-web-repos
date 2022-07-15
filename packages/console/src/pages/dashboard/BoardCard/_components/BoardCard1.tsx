@@ -85,13 +85,13 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                       <Space size={5}>
                         <FContentText text={'查看'} />
                         <a
-                          href={''}
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type='primary'
                         >资源作者使用教程</a>
                         <FContentText text={'或'} />
                         <a
-                          href={''}
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type='primary'
                         >节点商使用教</a>

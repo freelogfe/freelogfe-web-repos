@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTooltip from '@/components/FTooltip';
+// import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-import { FTextBtn } from '@/components/FButton';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+// import { FTextBtn } from '@/components/FButton';
+// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface BoardCard3Props {
   unfold: boolean;
@@ -46,9 +46,17 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">节点商使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >节点商使用教程</a>
                         <FContentText text={'（视频）或'} />
-                        <a type="primary">节点创建教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >节点创建教程</a>
                         <FContentText text={'（图文）创建节点。'} />
                       </Space>
                     </div>
@@ -65,9 +73,17 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">展品添加上线教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >展品添加上线教程</a>
                         <FContentText text={'（图文）或'} />
-                        <a type="primary">节点商使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >节点商使用教程</a>
                         <FContentText text={'（视频）在资源市场添加并上线展品。'} />
                       </Space>
                       <div style={{ height: 15 }} />
@@ -88,9 +104,17 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">主题激活教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >主题激活教程</a>
                         <FContentText text={'（图文）或'} />
-                        <a type="primary">节点商使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >节点商使用教程</a>
                         <FContentText text={'（视频）激活主题。'} />
                       </Space>
                     </div>
@@ -134,9 +158,17 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                 <div style={{ height: 15 }} />
                 <Space size={5}>
                   <FContentText text={'可查阅'} />
-                  <a type="primary">主题激活教程</a>
+                  <a
+                    href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                    target={'_blank'}
+                    type="primary"
+                  >主题激活教程</a>
                   <FContentText text={'（图文）或'} />
-                  <a type="primary">节点商使用教程</a>
+                  <a
+                    href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                    target={'_blank'}
+                    type="primary"
+                  >节点商使用教程</a>
                   <FContentText text={'（视频）激活主题。'} />
                 </Space>
               </div>

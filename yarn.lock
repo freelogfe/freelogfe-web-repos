@@ -505,10 +505,10 @@
   resolved "https://registry.npmmirror.com/@formatjs/intl-utils/-/intl-utils-2.3.0.tgz#2dc8c57044de0340eb53a7ba602e59abf80dc799"
   integrity sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==
 
-"@freelog/components-lib@^0.1.9":
-  version "0.1.11"
-  resolved "https://registry.npmmirror.com/@freelog/components-lib/-/components-lib-0.1.11.tgz#6f877516b6232d2932d40c2af4c786f4f24cfb83"
-  integrity sha512-1BMdy7mCxclR/lWSHPlDEMQ6LjivPeRQU1lull+9A7Wfxuyt3ZSz4JmVP4MqdfWUK4YIfaI8HLtuCaJ1GE4VPA==
+"@freelog/components-lib@^0.1.12":
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/@freelog/components-lib/-/components-lib-0.1.12.tgz#304fae7e02bb18889c2493ebb6f1f140af486246"
+  integrity sha512-prCoKSEG2fc5sFug0r+2P81/CyJrqJsnK7Zvo7CWTB8k/Sdn8/EdIpJulzwTMb3F8dyPWEy1al7kzz0AG8LvHA==
 
 "@freelog/resource-policy-lang@1.1.26":
   version "1.1.26"

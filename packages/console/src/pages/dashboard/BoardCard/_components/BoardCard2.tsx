@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTooltip from '@/components/FTooltip';
+// import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-import { FTextBtn } from '@/components/FButton';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+// import { FTextBtn } from '@/components/FButton';
+// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface BoardCard2Props {
   unfold: boolean;
@@ -51,9 +51,17 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">资源作者使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源作者使用教程</a>
                         <FContentText text={'（视频）或'} />
-                        <a type="primary">资源创建教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源创建教程</a>
                         <FContentText text={'（图文）创建资源。'} />
                       </Space>
                     </div>
@@ -75,9 +83,17 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">资源版本发布教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源版本发布教程</a>
                         <FContentText text={'（图文）或'} />
-                        <a type="primary">资源作者使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源作者使用教程</a>
                         <FContentText text={'（视频）发布资源版本。'} />
                       </Space>
                     </div>
@@ -99,9 +115,17 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       <div style={{ height: 15 }} />
                       <Space size={5}>
                         <FContentText text={'可查阅'} />
-                        <a type="primary">资源授权策略添加教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源授权策略添加教程</a>
                         <FContentText text={'（图文）或'} />
-                        <a type="primary">资源作者使用教程</a>
+                        <a
+                          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                          target={'_blank'}
+                          type="primary"
+                        >资源作者使用教程</a>
                         <FContentText text={'(视频) 为资源添加授权策略。'} />
                       </Space>
                     </div>

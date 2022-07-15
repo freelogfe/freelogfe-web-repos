@@ -14,9 +14,9 @@ import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { Input, Space } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
+// import { AudioOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 interface FLayoutProps extends RouteComponentProps {
@@ -217,7 +217,7 @@ function FLayout({
             <Search
               placeholder="输入用户名或资源名称"
               onSearch={(value: string) => {
-                location.href = location.origin + `/search?search=${value}`;
+                window.location.href = window.location.origin + `/search?search=${value}`;
               }}
               style={{ width: 200 }}
             />

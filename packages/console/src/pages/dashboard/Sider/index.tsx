@@ -82,27 +82,42 @@ function Sider({}: SiderProps) {
             <div className={styles.linkListItem}>
               <i />
               <span />
-              <a href={'#'} target='_blank'>如何创建资源？</a>
+              <a
+                href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                target={'_blank'}
+              >如何创建资源？</a>
             </div>
             <div className={styles.linkListItem}>
               <i />
               <span />
-              <a href={'#'} target='_blank'>如何创建节点？</a>
+              <a
+                href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                target={'_blank'}
+              >如何创建节点？</a>
             </div>
             <div className={styles.linkListItem}>
               <i />
               <span />
-              <a href={'#'} target='_blank'>Freelog有哪些使用场景？</a>
+              <a
+                href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                target={'_blank'}
+              >Freelog有哪些使用场景？</a>
             </div>
             <div className={styles.linkListItem}>
               <i />
               <span />
-              <a href={'#'} target='_blank'>资源作者和节点商有什么区别？</a>
+              <a
+                href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                target={'_blank'}
+              >资源作者和节点商有什么区别？</a>
             </div>
             <div className={styles.linkListItem}>
               <i />
               <span />
-              <a href={'#'} target='_blank'>如何添加授权策略？</a>
+              <a
+                href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                target={'_blank'}
+              >如何添加授权策略？</a>
             </div>
           </div>
         </FFormLayout.FBlock>
