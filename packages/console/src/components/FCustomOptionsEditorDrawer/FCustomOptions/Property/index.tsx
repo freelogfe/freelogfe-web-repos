@@ -174,8 +174,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 let errorText: string = '';
                 if (value === '') {
                   errorText = '请输入';
-                } else if (value.length > 50) {
-                  errorText = '不超过15个字符';
+                } else if (value.length > 500) {
+                  errorText = '不超过500个字符';
                 } else if (value.split(',').length > 30) {
                   errorText = '不超过30个选项';
                 }

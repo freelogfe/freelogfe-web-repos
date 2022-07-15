@@ -8,7 +8,7 @@ const config: IConfig | any = {
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
-      // antd: true,
+      antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
       title: 'console',
