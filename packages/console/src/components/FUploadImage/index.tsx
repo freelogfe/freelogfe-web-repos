@@ -7,7 +7,7 @@ import styles from './index.less';
 import { RcFile, UploadChangeParam } from 'antd/lib/upload/interface';
 // import FUtil1 from '@/utils';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { Area } from 'react-easy-crop/types';
+// import { Area } from 'react-easy-crop/types';
 
 interface FUploadImageProps {
   children: React.ReactNode;
@@ -20,24 +20,24 @@ interface FUploadImageProps {
 export default function({ children, onUploadSuccess, onError }: FUploadImageProps) {
 
   const [naturalFile, setNaturalFile] = React.useState<File | null>(null);
-  const [cropArea, setCropArea] = React.useState<Area | null>(null);
+  // const [cropArea, setCropArea] = React.useState<Area | null>(null);
 
   async function upload() {
-    if (!naturalFile || !cropArea) {
-      return;
-    }
-    const res = await FServiceAPI.Storage.uploadImage({
-      file: naturalFile,
-    });
-    const img = new Image();
-    img.src = res.data.url;
-
-    img.onload = () => {
-      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.width}&h=${cropArea.height}&width=${img.width}&height=${img.height}`;
-      const url: string = res.data.url + hash;
-      // console.log(url, 'url2222222');
-      onUploadSuccess && onUploadSuccess(url);
-    }
+    // if (!naturalFile || !cropArea) {
+    //   return;
+    // }
+    // const res = await FServiceAPI.Storage.uploadImage({
+    //   file: naturalFile,
+    // });
+    // const img = new Image();
+    // img.src = res.data.url;
+    //
+    // img.onload = () => {
+    //   const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&w=${cropArea.width}&h=${cropArea.height}&width=${img.width}&height=${img.height}`;
+    //   const url: string = res.data.url + hash;
+    //   // console.log(url, 'url2222222');
+    //   onUploadSuccess && onUploadSuccess(url);
+    // }
 
   }
 
