@@ -82,9 +82,9 @@ function Form({ finished }: FormProps) {
       </div>
       <div className="shrink-0 flex-column  w-900">
         <div className={styles.title2 + ' mb-10'}>用户名</div>
-        <div className={styles.title3 + ' mb-30'}>YANGHONGTIAN</div>
+        <div className={styles.title3 + ' mb-30'}>{userData.username}</div>
         <div className={styles.title2 + ' mb-10'}>申请结果通知方式</div>
-        <div className={styles.title3 + ' mb-20'}>13487639088</div>
+        <div className={styles.title3 + ' mb-20'}>{userData.mobile || userData.email}</div>
         <div className="flex-row align-center mb-5">
           <span className={styles.must}></span>
           <span className={styles.title4}>职业</span>
