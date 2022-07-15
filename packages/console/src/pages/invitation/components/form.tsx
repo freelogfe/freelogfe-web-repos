@@ -20,9 +20,23 @@ function Form({ finished }: FormProps) {
   const [city, setCity] = React.useState<string>('0');
   const [occupation, setOccupation] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
+  const [userData, setUserData] = React.useState<any>({});
   AHooks.useMount(async () => {
+    const res = await FServiceAPI.User.currentUserInfo();
+    const userData = res.data
+    setUserData(userData)
     const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     const cities = new Map<string, any>();
+    data.some((province:any)=>{
+      return province.children.some((city:any)=>{
+        if(userData.userDetail.areaCode === city.code){
+          setProvince(province.code)
+          setCity(city.code)
+          return true
+        }
+      })
+    })
+    setOccupation(userData.userDetail.occupation)
     setAreaData([
       { value: '0', title: '请选择省', disabled: false },
       ...data.map((item: any) => {
@@ -68,9 +82,9 @@ function Form({ finished }: FormProps) {
       </div>
       <div className="shrink-0 flex-column  w-900">
         <div className={styles.title2 + ' mb-10'}>用户名</div>
-        <div className={styles.title3 + ' mb-30'}>YANGHONGTIAN</div>
+        <div className={styles.title3 + ' mb-30'}>{userData.username}</div>
         <div className={styles.title2 + ' mb-10'}>申请结果通知方式</div>
-        <div className={styles.title3 + ' mb-20'}>13487639088</div>
+        <div className={styles.title3 + ' mb-20'}>{userData.mobile || userData.email}</div>
         <div className="flex-row align-center mb-5">
           <span className={styles.must}></span>
           <span className={styles.title4}>职业</span>

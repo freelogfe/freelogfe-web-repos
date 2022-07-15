@@ -62,7 +62,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         }
       });
       // @ts-ignore
-      first > -1 &&
+      first > 1 &&
         // @ts-ignore
         categoryData.second[first].some((item: string, index: number) => {
           if (item === data[1]) {
