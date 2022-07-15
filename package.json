@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@freelog/components-lib": "^0.1.11",
-    "@freelog/tools-lib": "^0.1.119",
+    "@freelog/components-lib": "^0.1.9",
+    "@freelog/tools-lib": "^0.1.121",
     "ahooks": "^3.3.8",
     "antd": "^4.21.6",
     "copy-to-clipboard": "^3.3.1",

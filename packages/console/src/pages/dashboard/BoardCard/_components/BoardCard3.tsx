@@ -14,7 +14,6 @@ interface BoardCard3Props {
 }
 
 function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
-  console.log(data);
   return (
     <div
       className={styles.board3}
