@@ -44,7 +44,7 @@ function Invitation({}: InvitationProps) {
       setStatus(data.status);
       setShowPage('Result');
       router.push(
-        '/invitation?type=status' + (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+        '/invitation?type=status' + (urlState.returnUrl ? '&returnUrl=' + decodeURIComponent(urlState.returnUrl) : ''),
       );
     } else {
       if (urlState.type) {
