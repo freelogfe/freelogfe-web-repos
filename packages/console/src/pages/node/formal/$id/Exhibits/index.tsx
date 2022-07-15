@@ -180,7 +180,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         });
         nodeManagerPage.exhibit_List[index].policies = nodeManagerPage.exhibit_List[
           index
-        ].policiesList
+          ].policiesList
           .filter((item) => item.status === 1)
           .map((item: { policyName: any }) => item.policyName);
       }
@@ -242,7 +242,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
-      title: <FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type="table" />,
+      title: <FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type='table' />,
       dataIndex: 'name',
       key: 'name',
       render(_, record) {
@@ -256,7 +256,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               <div className={styles.sub}>
                 <label>{record.type}</label>
                 <div style={{ width: 5 }} />
-                <FContentText type="additional2" text={record.title} singleRow />
+                <FContentText type='additional2' text={record.title} singleRow />
               </div>
               <div className={styles.polices}>
                 {record.policies.length > 0 ? (
@@ -270,7 +270,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     singleRow
                   />
                 ) : (
-                  <FContentText text={'暂无策略…'} type="additional2" />
+                  <FContentText text={'暂无策略…'} type='additional2' />
                 )}
               </div>
             </div>
@@ -289,7 +289,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
             <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
               <FTextBtn
-                type="primary"
+                type='primary'
                 onClick={() => {
                   window.open(
                     FUtil.LinkTo.exhibitManagement({
@@ -304,7 +304,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
             <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
               <FTextBtn
-                type="primary"
+                type='primary'
                 onClick={() => {
                   window.open(
                     FUtil.LinkTo.resourceDetails({
@@ -321,7 +321,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       },
     },
     {
-      title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_exhibit_version')} />,
+      title: <FTitleText type='table' text={FI18n.i18nNext.t('tableheader_exhibit_version')} />,
       dataIndex: 'version',
       key: 'version',
       // width: 125,
@@ -332,7 +332,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     },
     {
       // title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
-      title: <FTitleText type="table" text={'上架'} />,
+      title: <FTitleText type='table' text={'上架'} />,
       dataIndex: 'status',
       key: 'status',
       // width: 65,
@@ -384,7 +384,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         sider={<Sider />}
         header={
           <div className={styles.header}>
-            <FTitleText type="h1" text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
+            <FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
             <Space size={80}>
               <div>
                 <span>{FI18n.i18nNext.t('resource_type')}：</span>
@@ -423,7 +423,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
                 {category.first > 1 ? (
                   <>
-                    <span className="ml-30">子类型：</span>
+                    <span className='ml-30'>子类型：</span>
                     <FDropdown
                       overlay={
                         <FMenu
@@ -488,7 +488,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               <div>
                 <FInput
                   className={styles.input}
-                  theme="dark"
+                  theme='dark'
                   value={nodeManagerPage.exhibit_InputFilter}
                   debounce={300}
                   onDebounceChange={(value) => {
@@ -505,7 +505,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           </div>
         }
       >
-        {nodeManagerPage.exhibit_ListState === 'noData' ? (
+        {nodeManagerPage.exhibit_ListState === 'noData' && (
           <FNoDataTip
             height={'calc(100vh - 70px)'}
             tipText={FI18n.i18nNext.t('manage_exhibits_empty')}
@@ -520,69 +520,43 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               router.push(FUtil.LinkTo.market());
             }}
           />
-        ) : (
-          <>
-            {nodeManagerPage.exhibit_ListState === 'loading' && (
-              <FLoadingTip height={'calc(100vh - 270px)'} />
-            )}
+        )}
+
+        {nodeManagerPage.exhibit_ListState === 'loading' && (
+          <FLoadingTip height={'calc(100vh - 270px)'} />
+        )}
 
 
-            {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
-              <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
-            )}
+        {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
+          <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
+        )}
 
-            {nodeManagerPage.exhibit_ListState === 'loaded' && (
-              <div className={styles.body}>
-                <FTable
-                  rowClassName={styles.rowClassName}
-                  columns={columns}
-                  dataSource={dataSource as any}
-                  pagination={false}
-                />
 
-                <FListFooter
-                  state={nodeManagerPage.exhibit_ListMore}
-                  onClickLoadMore={() => {
-                    dispatch<OnLoadMore_ExhibitList_Action>({
-                      type: 'nodeManagerPage/onLoadMore_ExhibitList',
-                    });
-                  }}
-                />
-              </div>
-            )}
+        {nodeManagerPage.exhibit_ListState === 'loaded' && (
+          <div className={styles.body}>
+            <FTable
+              rowClassName={styles.rowClassName}
+              columns={columns}
+              dataSource={dataSource as any}
+              pagination={false}
+            />
 
-            {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
-              <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
-            )}
-
-            {nodeManagerPage.exhibit_ListState === 'loaded' && (
-              <div className={styles.body}>
-                <FTable
-                  rowClassName={styles.rowClassName}
-                  columns={columns}
-                  dataSource={dataSource as any}
-                  pagination={false}
-                />
-
-                <FListFooter
-                  state={nodeManagerPage.exhibit_ListMore}
-                  onClickLoadMore={() => {
-                    dispatch<OnLoadMore_ExhibitList_Action>({
-                      type: 'nodeManagerPage/onLoadMore_ExhibitList',
-                    });
-                  }}
-                />
-              </div>
-            )}
-
-          </>
+            <FListFooter
+              state={nodeManagerPage.exhibit_ListMore}
+              onClickLoadMore={() => {
+                dispatch<OnLoadMore_ExhibitList_Action>({
+                  type: 'nodeManagerPage/onLoadMore_ExhibitList',
+                });
+              }}
+            />
+          </div>
         )}
 
         <FDialog
           show={activeDialogShow}
-          title="提醒"
-          desc="请先为资源添加一个授权策略，再进行上架操作"
-          sureText="添加策略"
+          title='提醒'
+          desc='请先为资源添加一个授权策略，再进行上架操作'
+          sureText='添加策略'
           cancel={() => {
             setActiveDialogShow(false);
           }}
@@ -592,9 +566,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={inactiveDialogShow}
-          title="提醒"
-          desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-          sureText="下架资源"
+          title='提醒'
+          desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+          sureText='下架资源'
           cancel={() => {
             setInactiveDialogShow(false);
           }}
@@ -619,7 +593,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           alreadyUsedTitles={operateExhibit?.policiesList.map((ip: any) => {
             return ip.policyName;
           })}
-          targetType="resource"
+          targetType='resource'
           onCancel={() => {
             dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
@@ -633,7 +607,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FPolicyOperaterDrawer
           visible={nodeManagerPage.policyOperaterVisible}
-          type="resource"
+          type='resource'
           policiesList={operateExhibit?.policiesList || []}
           onCancel={() => {
             dispatch<ChangeAction>({
