@@ -40,7 +40,7 @@ function Invitation({}: InvitationProps) {
     }
     const { ret, errCode, data } = await FServiceAPI.TestQualification.getBetaApply1();
     setApplyData(data);
-    if (data ) {
+    if (data) {
       setStatus(data.status);
       setShowPage('Result');
       router.push(
