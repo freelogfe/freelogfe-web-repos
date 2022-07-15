@@ -30,7 +30,7 @@ function Invitation({}: InvitationProps) {
   const [applyData, setApplyData] = React.useState<any>(null);
   AHooks.useMount(async () => {
     const userData = await FServiceAPI.User.currentUserInfo();
-    if (userData && userData.data && (userData.data.userType & 1) === 1) {
+    if ((userData.data.userType & 1) === 1) {
       if (urlState.returnUrl) {
         window.location.href = urlState.returnUrl;
       } else {
