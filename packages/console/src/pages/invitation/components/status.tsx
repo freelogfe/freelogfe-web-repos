@@ -35,13 +35,19 @@ function Status({ status, tipData, jump }: StatusProps) {
     1: '进入个人中心',
     101: '返回上一页',
   };
+  const iconColor = {
+    10: '#E9A923',
+    0: '#E9A923',
+    2: 'rgb(237 74 81)',
+    1: '#E9A923',
+    101: 'rgb(237 74 81)',
+  };
   function act() {
     if ([101, 2].includes(status)) {
       jump && jump('Apply');
     }
     if ([10, 0].includes(status)) {
-      window.location.href =
-        window.location.origin.replace('//console.', '//www.') + '/user/profile';
+      location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting();
     }
   }
 
@@ -60,7 +66,12 @@ function Status({ status, tipData, jump }: StatusProps) {
   return (
     <div className={'flex-column-center ' + styles.style}>
       <div className="flex-2"></div>
-      <div className={'mb-31'}>图片</div>
+      <div className={'mb-31 h-78'}>
+        <i
+          className={['freelog', 'fl-icon-shenhe'].join(' ')}
+          style={{ fontSize: '78px', color: iconColor[status] }}
+        />
+      </div>
       <span className={styles.title + ' mb-40'}>{titleData[status]}</span>
       {status !== 2 && <span className={styles.title2 + ' mb-40'}>{tipDatas[status]}</span>}
       {status === 2 && <div className={styles.tip + ' mb-40'}>{tipDatas[status]}</div>}

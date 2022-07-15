@@ -20,9 +20,23 @@ function Form({ finished }: FormProps) {
   const [city, setCity] = React.useState<string>('0');
   const [occupation, setOccupation] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
+  const [userData, setUserData] = React.useState<any>({});
   AHooks.useMount(async () => {
+    const res = await FServiceAPI.User.currentUserInfo();
+    const userData = res.data
+    setUserData(userData)
     const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     const cities = new Map<string, any>();
+    data.some((province:any)=>{
+      return province.children.some((city:any)=>{
+        if(userData.userDetail.areaCode === city.code){
+          setProvince(province.code)
+          setCity(city.code)
+          return true
+        }
+      })
+    })
+    setOccupation(userData.userDetail.occupation)
     setAreaData([
       { value: '0', title: '请选择省', disabled: false },
       ...data.map((item: any) => {

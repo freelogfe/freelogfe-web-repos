@@ -30,7 +30,7 @@ function Invitation({}: InvitationProps) {
   const [applyData, setApplyData] = React.useState<any>(null);
   AHooks.useMount(async () => {
     const userData = await FServiceAPI.User.currentUserInfo();
-    if (userData && userData.data && (userData.data.userType & 1) === 1) {
+    if ((userData.data.userType & 1) === 1) {
       if (urlState.returnUrl) {
         window.location.href = urlState.returnUrl;
       } else {
@@ -40,7 +40,7 @@ function Invitation({}: InvitationProps) {
     }
     const { ret, errCode, data } = await FServiceAPI.TestQualification.getBetaApply1();
     setApplyData(data);
-    if (data) {
+    if (data ) {
       setStatus(data.status);
       setShowPage('Result');
       router.push(
