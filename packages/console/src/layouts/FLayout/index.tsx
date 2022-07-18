@@ -12,7 +12,7 @@ import {
 } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 // import FInput from '@/components/FInput';
 import { Input, Space } from 'antd';
@@ -32,14 +32,14 @@ interface FLayoutProps extends RouteComponentProps {
 }
 
 function FLayout({
-  router: routerObj,
-  dispatch,
-  children,
-  global,
-  storageHomePage,
-  nodes,
-  user,
-}: FLayoutProps) {
+                   router: routerObj,
+                   dispatch,
+                   children,
+                   global,
+                   storageHomePage,
+                   nodes,
+                   user,
+                 }: FLayoutProps) {
   // console.log(global, 'global09234jl23kl');
   const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
 
@@ -67,98 +67,99 @@ function FLayout({
   // console.log(storageHomePage.bucketList, '’storageHomePage.bucketList390osd');
   const navs = user.info
     ? [
-        {
-          id: 'dashboard',
-          text: '概览',
-          href: FUtil.LinkTo.dashboard(),
-          emptyItemsTip: undefined,
-          items: [],
-        },
-        {
-          id: 'resource',
-          text: '资源管理',
-          href: FUtil.LinkTo.myResources(),
-          items: [
-            {
-              id: 'myResource',
-              text: '我的资源',
-              href: FUtil.LinkTo.myResources(),
-            },
-            {
-              id: 'myCollection',
-              text: '我的收藏',
-              href: FUtil.LinkTo.myCollects(),
-            },
-          ],
-        },
-        {
-          id: 'node',
-          text: '节点管理',
-          href:
-            nodes.list.length === 0
-              ? FUtil.LinkTo.nodeCreator()
-              : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
-          items: nodes.list.map((n) => ({
-            id: n.nodeId.toString(),
-            text: n.nodeName,
-            href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
-          })),
-          createBtn: {
-            href: FUtil.LinkTo.nodeCreator(),
+      {
+        id: 'dashboard',
+        text: FI18n.i18nNext.t('nav_dashboard'),
+        href: FUtil.LinkTo.dashboard(),
+        emptyItemsTip: undefined,
+        items: [],
+      },
+      {
+        id: 'resource',
+        text: FI18n.i18nNext.t('nav_ManageResources'),
+        href: FUtil.LinkTo.myResources(),
+        items: [
+          {
+            id: 'myResource',
+            text: '我的资源',
+            href: FUtil.LinkTo.myResources(),
           },
-          emptyItemsTip: {
-            tipText: '自由创作从Freelog开始',
-            btnText: '创建节点',
-            btnHref: FUtil.LinkTo.nodeCreator(),
+          {
+            id: 'myCollection',
+            text: '我的收藏',
+            href: FUtil.LinkTo.myCollects(),
           },
+        ],
+      },
+      {
+        id: 'node',
+        text: FI18n.i18nNext.t('nav_ManageNodes'),
+        href:
+          nodes.list.length === 0
+            ? FUtil.LinkTo.nodeCreator()
+            : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
+        items: nodes.list.map((n) => ({
+          id: n.nodeId.toString(),
+          text: n.nodeName,
+          href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
+        })),
+        createBtn: {
+          href: FUtil.LinkTo.nodeCreator(),
         },
-        {
-          id: 'storage',
-          text: '存储空间',
-          href: FUtil.LinkTo.storageSpace({
-            bucketName:
-              storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-                ? storageHomePage.bucketList[0].bucketName
-                : '',
-          }),
-          items: (storageHomePage.bucketList || []).map((b) => {
-            return {
-              id: b.bucketName,
-              text: b.bucketName,
-              href: FUtil.LinkTo.storageSpace({
-                bucketName: b.bucketName,
-              }),
-            };
-          }),
-          emptyItemsTip: {
-            tipText: '自由创作从Freelog开始',
-            btnText: '创建Bucket',
-            btnHref: FUtil.LinkTo.storageSpace({
-              createBucket: true,
+        emptyItemsTip: {
+          tipText: '自由创作从Freelog开始',
+          btnText: '创建节点',
+          btnHref: FUtil.LinkTo.nodeCreator(),
+        },
+      },
+      {
+        id: 'storage',
+        text: FI18n.i18nNext.t('nav_storage'),
+        href: FUtil.LinkTo.storageSpace({
+          bucketName:
+            storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+              ? storageHomePage.bucketList[0].bucketName
+              : '',
+        }),
+        items: (storageHomePage.bucketList || []).map((b) => {
+          return {
+            id: b.bucketName,
+            text: b.bucketName,
+            href: FUtil.LinkTo.storageSpace({
+              bucketName: b.bucketName,
             }),
-          },
-          createBtn:
-            storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
-              ? undefined
-              : {
-                  href: FUtil.LinkTo.storageSpace({
-                    bucketName:
-                      storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-                        ? storageHomePage.bucketList[0].bucketName
-                        : '',
-                    createBucket: true,
-                  }),
-                },
+          };
+        }),
+        emptyItemsTip: {
+          tipText: '自由创作从Freelog开始',
+          btnText: '创建Bucket',
+          btnHref: FUtil.LinkTo.storageSpace({
+            createBucket: true,
+          }),
         },
-      ]
+        createBtn:
+          storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
+            ? undefined
+            : {
+              href: FUtil.LinkTo.storageSpace({
+                bucketName:
+                  storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+                    ? storageHomePage.bucketList[0].bucketName
+                    : '',
+                createBucket: true,
+              }),
+            },
+      },
+    ]
     : [
-        {
-          id: 'product',
-          text: '产品',
-          href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
-          items: [],
-        },
-      ];
+      {
+        id: 'product',
+        // text: '产品',
+        text: FI18n.i18nNext.t('nav_product'),
+        href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
+        items: [],
+      },
+    ];
 
   if (global.globalLoading) {
     return <FLoadingTip height={window.innerHeight} />;
@@ -175,7 +176,7 @@ function FLayout({
             ...navs,
             {
               id: 'discover',
-              text: '发现',
+              text: FI18n.i18nNext.t('nav_explore'),
               href: FUtil.LinkTo.market(),
               items: [
                 {
@@ -192,20 +193,20 @@ function FLayout({
             },
             {
               id: 'activity',
-              text: '活动',
+              text: FI18n.i18nNext.t('nav_events'),
               href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activities(),
               items: [],
             },
             {
               id: 'community',
-              text: '社区',
+              text: FI18n.i18nNext.t('nav_communitiy'),
               href: 'https://forum.freelog.com/',
               target: '_blank',
               items: [],
             },
             {
               id: 'help',
-              text: '帮助',
+              text: FI18n.i18nNext.t('nav_docs'),
               href: '',
               items: [],
             },
@@ -215,7 +216,7 @@ function FLayout({
           // showGotoConsole={true}
           extra={
             <Search
-              placeholder="输入用户名或资源名称"
+              placeholder='输入用户名或资源名称'
               onSearch={(value: string) => {
                 window.location.href = window.location.origin + `/search?search=${value}`;
               }}
@@ -251,32 +252,32 @@ function FLayout({
           userPanel={
             user.info
               ? {
-                  info: {
-                    avatar: user.info.headImage,
-                    userName: user.info.username,
-                    email: user.info.email,
-                    phone: user.info.mobile,
+                info: {
+                  avatar: user.info.headImage,
+                  userName: user.info.username,
+                  email: user.info.email,
+                  phone: user.info.mobile,
+                },
+                menu: [
+                  {
+                    text: '个人中心',
+                    onClick() {
+                      window.open(
+                        FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet(),
+                      );
+                    },
                   },
-                  menu: [
-                    {
-                      text: '个人中心',
-                      onClick() {
-                        window.open(
-                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet(),
-                        );
-                      },
+                  {
+                    text: '登出',
+                    async onClick() {
+                      await FServiceAPI.User.logout();
+                      return window.location.replace(
+                        FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login(),
+                      );
                     },
-                    {
-                      text: '登出',
-                      async onClick() {
-                        await FServiceAPI.User.logout();
-                        return window.location.replace(
-                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login(),
-                        );
-                      },
-                    },
-                  ],
-                }
+                  },
+                ],
+              }
               : null
           }
         />

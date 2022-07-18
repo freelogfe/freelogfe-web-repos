@@ -28,25 +28,26 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                     href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cf872542afc0002f1d8b0c'}
                     target="_blank"
                     className={styles.footerLeft_Link}
-                >产品动态</a>
+                {/*>产品动态</a>*/}
+                >{FI18n.i18nNext.t('nav_ProductDevActivities')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
                     href={'https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2'}
                     target="_blank"
-                >服务协议</a>
+                >{FI18n.i18nNext.t('nav_TermsPrivacy')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
                     href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
                     target="_blank"
-                >关于我们</a>
+                >{FI18n.i18nNext.t('nav_AboutUs')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
                     href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
                     target="_blank"
-                >联系我们</a>
+                >{FI18n.i18nNext.t('nav_ContactUs')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
