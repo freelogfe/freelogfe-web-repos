@@ -25,7 +25,7 @@ const resource_TypeData: {
   { value: '播客节目', parentValue: '音频' },
   { value: '照片', parentValue: '图片' },
   { value: '插画', parentValue: '图片' },
-  { value: '播客节目', parentValue: '图片' },
+  // { value: '播客节目', parentValue: '图片' },
   { value: '动态影像', parentValue: '视频' },
   { value: '实拍片段', parentValue: '视频' },
   { value: '短视频', parentValue: '视频' },

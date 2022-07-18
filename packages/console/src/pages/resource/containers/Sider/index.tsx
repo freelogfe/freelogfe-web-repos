@@ -7,8 +7,8 @@ import { ConnectState, ResourceInfoModelState } from '@/models/connect';
 import { withRouter, router } from 'umi';
 import RouterTypes from 'umi/routerTypes';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
+import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
@@ -21,6 +21,7 @@ import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
+import * as AHooks from 'ahooks';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -38,6 +39,16 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
   const [loading, setLoading] = React.useState(false);
   const [active, setActive] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
+
+  AHooks.useMount(() => {
+    dispatch<ResourceAuthPage_ChangeAction>({
+      type: 'resourceAuthPage/change',
+      payload: {
+        resourceID: match.params.id,
+      },
+    });
+
+  });
 
   React.useEffect(() => {
     if (match.path === '/resource/info/:id') {
