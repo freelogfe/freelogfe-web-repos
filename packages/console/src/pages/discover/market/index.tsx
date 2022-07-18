@@ -35,14 +35,15 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     second: '',
   });
   React.useEffect(() => {
-    if (category.first === -1) {
-      return;
+    let str = '';
+    if (category.first !== -1) {
+      str = categoryData.first[category.first];
+      // @ts-ignore
+      if (categoryData.second[category.first] && category.second) {
+        str = category.second;
+      }
     }
-    let str = categoryData.first[category.first];
-    // @ts-ignore
-    if (categoryData.second[category.first] && category.second) {
-      str = category.second;
-    }
+    console.log(str)
     dispatch<OnChangeResourceTypeAction>({
       type: 'discoverPage/onChangeResourceType',
       payload: {
@@ -74,7 +75,6 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         first,
         second,
       });
-      console.log(first, second);
     }
     dispatch<OnMountMarketPageAction>({
       type: 'discoverPage/onMountMarketPage',
