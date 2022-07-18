@@ -216,7 +216,7 @@ function Search({}: SearchProps) {
   }, [data]);
 
   return (
-    <div className={styles.container + '  flex-column ' }>
+    <div className={styles.container + '  flex-column '}>
       <div className={styles.operation + ' flex-column align-center w-100x'}>
         <FInput
           value={keywords}
@@ -277,29 +277,31 @@ function Search({}: SearchProps) {
                     >
                       <i className={styles.close + ' freelog fl-icon-guanbi'} />
                     </div>
-                    <div className="flex-row align-center mb-20 mt-6 px-115">
-                      <div className={styles.userimg + ' over-h shrink-0'}>
-                        <img src={selectedUser.headImage} className="w-100x" />
+                    <div className={'h-100x ' + styles.cContainer}>
+                      <div className="flex-row align-center mb-20 mt-6 ">
+                        <div className={styles.userimg + ' over-h shrink-0'}>
+                          <img src={selectedUser.headImage} className="w-100x" />
+                        </div>
+                        <span className={styles.userName}>{selectedUser.username}</span>
+                        <span className={styles.userResource}>
+                          上架的资源（{selectedUser.createdResourceCount}）
+                        </span>
                       </div>
-                      <span className={styles.userName}>{selectedUser.username}</span>
-                      <span className={styles.userResource}>
-                        上架的资源（{selectedUser.createdResourceCount}）
-                      </span>
-                    </div>
-                    <div
-                      className={
-                        'flex-row flex-wrap h-100x   ' + styles.cContainer + 
-                        (userResourcesListPure.length > 3 ? ' space-between' : '')
-                      }
-                      ref={userResourceContainer}
-                    >
-                      <ResourceList
-                        resourcesList={userResourcesList}
-                        keywords={keywords}
-                        resourcesListPure={userResourcesListPure}
-                        pageData={userResourcePageData}
-                        setPageData={setUserResourcePageData}
-                      ></ResourceList>
+                      <div
+                        className={
+                          'flex-row flex-wrap h-100x   w-100x ' + 
+                          (userResourcesListPure.length > 3 ? ' space-between' : '')
+                        }
+                        ref={userResourceContainer}
+                      >
+                        <ResourceList
+                          resourcesList={userResourcesList}
+                          keywords={keywords}
+                          resourcesListPure={userResourcesListPure}
+                          pageData={userResourcePageData}
+                          setPageData={setUserResourcePageData}
+                        ></ResourceList>
+                      </div>
                     </div>
                   </Drawer>
                 </div>
@@ -320,7 +322,7 @@ function Search({}: SearchProps) {
           </div>
         ) : (
           <div className="w-100x h-100x   px-115 flex-column-center">
-            <div className={'h-100x   pt-40 w-100x flex-column-center'}>
+            <div className={'h-100x   pt-40  flex-column-center ' + styles.rContainer}>
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
                   <div className="flex-2"></div>
@@ -336,7 +338,7 @@ function Search({}: SearchProps) {
               )}
               <div
                 className={
-                  'flex-row flex-wrap h-100x    ' + styles.rContainer + 
+                  'flex-row flex-wrap h-100x w-100x   ' +
                   (resourcesListPure.length > 3 ? ' space-between' : '')
                 }
                 ref={container}
