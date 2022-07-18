@@ -150,7 +150,6 @@ function Search({}: SearchProps) {
     setResourcesList([...dataList, ...supplyArray]);
   };
   const resolveUsers = async (res: any) => {
-    console.log(res)
     const ids = res.dataList.map((item: any) => item.userId).join(',');
     const data = await FServiceAPI.Resource.resourcesCount({ userIds: ids, status: 1 });
     res.dataList.forEach((item: any) => {
@@ -170,7 +169,7 @@ function Search({}: SearchProps) {
     let dataList: any = res.dataList;
     let supplyArray: any = [];
     if (userResourceContainer) {
-      const maxCount = Math.floor(userResourceContainer.current.clientWidth / 300);
+      const maxCount = Math.floor((userResourceContainer.current.clientWidth - 230) / 300);
       let supply = 0;
       if (userResourcePageData.skip > 0) {
         dataList = [...userResourcesListPure, ...dataList];
@@ -192,6 +191,7 @@ function Search({}: SearchProps) {
         });
       }
     }
+    console.log(supplyArray)
     setUserResourcePageData({ ...userResourcePageData, totalItem: res.totalItem });
     setUserResourcesListPure(dataList);
     setUserResourcesList([...dataList, ...supplyArray]);
@@ -265,7 +265,6 @@ function Search({}: SearchProps) {
                     'flex-row flex-wrap h-100x   pt-40 w-100x' +
                     (userResourcesList.length > 3 ? ' space-between' : '')
                   }
-                  ref={userResourceContainer}
                 >
                   <Drawer
                     className={styles.drawer}
@@ -293,6 +292,8 @@ function Search({}: SearchProps) {
                         'flex-row flex-wrap h-100x  w-100x px-115 ' +
                         (userResourcesListPure.length > 3 ? ' space-between' : '')
                       }
+                      style={{maxWidth: '1700px'}}
+                      ref={userResourceContainer}
                     >
                       <ResourceList
                         resourcesList={userResourcesList}
@@ -321,7 +322,7 @@ function Search({}: SearchProps) {
           </div>
         ) : (
           <div className="w-100x h-100x   px-115 flex-column-center">
-            <div className={'h-100x   pt-40 w-100x'} ref={container}>
+            <div className={'h-100x   pt-40 w-100x'} >
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
                   <div className="flex-2"></div>
@@ -340,6 +341,8 @@ function Search({}: SearchProps) {
                   'flex-row flex-wrap h-100x  w-100x  ' +
                   (resourcesListPure.length > 3 ? ' space-between' : '')
                 }
+                style={{maxWidth: '1700px'}}
+                ref={container}
               >
                 <ResourceList
                   resourcesList={resourcesList}

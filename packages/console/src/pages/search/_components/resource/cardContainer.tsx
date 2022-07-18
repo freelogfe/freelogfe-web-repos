@@ -11,7 +11,7 @@ export default function CardContainer(props: CardContainerProps) {
     <div
       onClick={props.onClick}
       className={
-        (props.diabled ? '' : styles.container) + ' flex-column over-h mb-10 w-300 h-314 p-20'
+        (props.diabled ? '' : styles.container) + ' flex-column over-h mb-10 w-300  p-10'
       }
       style={{
         cursor: 'pointer',
