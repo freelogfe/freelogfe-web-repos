@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';
 // import FDropdown from '@/components/FDropdown';
