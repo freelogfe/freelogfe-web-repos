@@ -151,6 +151,10 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
+      if (!resourceAuthPage.resourceID) {
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceAuthPage.resourceID,
         isLoadPolicyInfo: 1,
@@ -168,7 +172,7 @@ const Model: ResourceAuthPageModelType = {
 
       policies.reverse();
 
-      policies.sort((a,b) => {
+      policies.sort((a, b) => {
         return (a.status === 1 && b.status === 0) ? -1 : 0;
       });
 
@@ -296,7 +300,7 @@ const Model: ResourceAuthPageModelType = {
             .filter((c: any) => {
               return c.status === 1;
             })
-            .map((c:any) => {
+            .map((c: any) => {
               return c.contractId;
             }),
           policies: allEnabledPolicies.map((policy: any) => ({

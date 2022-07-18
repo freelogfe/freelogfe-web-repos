@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Layout } from 'antd';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { connect } from 'dva';
@@ -76,13 +76,14 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
         menu={[
           {
             id: 'product',
-            text: '产品',
+            text: FI18n.i18nNext.t('nav_product'),
             href: FUtil.LinkTo.home(),
             items: [],
           },
           {
             id: 'discover',
-            text: '发现',
+            // text: '发现',
+            text: FI18n.i18nNext.t('nav_explore'),
             href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
             items: [
               {
@@ -99,20 +100,21 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
           },
           {
             id: 'activities',
-            text: '活动',
+            // text: '活动',
+            text: FI18n.i18nNext.t('nav_events'),
             href: FUtil.LinkTo.activities(),
             items: [],
           },
           {
             id: 'community',
-            text: '社区',
+            text: FI18n.i18nNext.t('nav_communitiy'),
             href: 'https://forum.freelog.com/',
             target: '_blank',
             items: [],
           },
           {
             id: 'help',
-            text: '帮助',
+            text: FI18n.i18nNext.t('nav_docs'),
             href: '',
             items: [],
           },
