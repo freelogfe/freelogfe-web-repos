@@ -12,8 +12,7 @@ import { router } from 'umi';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
 import categoryData from '@/utils/category';
-import FDropdown from '@/components/FDropdown';
-
+// import FDropdown from '@/components/FDropdown';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
@@ -388,7 +387,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <Space size={80}>
               <div>
                 <span>{FI18n.i18nNext.t('resource_type')}：</span>
-                <FDropdown
+                <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
                       options={[
@@ -419,12 +418,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     {categoryData.first[category.first] || '全部'}
                     <DownOutlined style={{ marginLeft: 8 }} />
                   </span>
-                </FDropdown>
+                </FComponentsLib.FDropdown>
 
                 {category.first > 1 ? (
                   <>
                     <span className='ml-30'>子类型：</span>
-                    <FDropdown
+                    <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
                           // @ts-ignore
@@ -458,7 +457,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         }
                         <DownOutlined style={{ marginLeft: 8 }} />
                       </span>
-                    </FDropdown>
+                    </FComponentsLib.FDropdown>
                   </>
                 ) : null}
               </div>

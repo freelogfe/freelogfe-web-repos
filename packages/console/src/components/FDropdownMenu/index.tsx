@@ -2,9 +2,10 @@ import * as React from 'react';
 
 import styles from './index.less';
 import FMenu, {FMenuProps} from '../FMenu';
-import {Dropdown} from 'antd';
+// import {Dropdown} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
-import FDropdown from "../FDropdown";
+// import FDropdown from "../FDropdown";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FDropdownMenuProps extends FMenuProps {
   children?: React.ReactNode;
@@ -13,7 +14,7 @@ interface FDropdownMenuProps extends FMenuProps {
 }
 
 function FDropdownMenu({options, children, text, onChange}: FDropdownMenuProps) {
-  return (<FDropdown
+  return (<FComponentsLib.FDropdown
     overlay={<FMenu
       onClick={onChange}
       options={options}/>}>
@@ -21,7 +22,7 @@ function FDropdownMenu({options, children, text, onChange}: FDropdownMenuProps) 
       {text}
       <DownOutlined className={styles.DownOutlined}/>
     </div>) : children}
-  </FDropdown>)
+  </FComponentsLib.FDropdown>)
 }
 
 export default FDropdownMenu;

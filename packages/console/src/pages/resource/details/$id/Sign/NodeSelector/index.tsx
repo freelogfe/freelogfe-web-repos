@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dropdown, Menu, Space } from 'antd';
+import { Menu, Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import { FDown, FPlus } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
@@ -9,7 +9,8 @@ import { OnChangeNodeSelectorAction } from '@/models/resourceDetailPage';
 import { FTextBtn } from '@/components/FButton';
 import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
-import FDropdown from '@/components/FDropdown';
+// import FDropdown from '@/components/FDropdown';
+import FComponentsLib from '@freelog/components-lib';
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
@@ -17,12 +18,14 @@ interface NodeSelectorProps {
   nodes: NodesModelState;
 }
 
+const FMenu: any = Menu;
+
 function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps) {
   const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
 
-  return (<FDropdown
+  return (<FComponentsLib.FDropdown
     overlay={nodes.list.length > 0 ? (<div style={{ width: 638 }}>
-      <Menu
+      <FMenu
         className={styles.Menu}
         mode='vertical'
         onClick={(param: any) => {
@@ -33,7 +36,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
         }}
       >
         {
-          nodes.list.map((n) => (<Menu.Item
+          nodes.list.map((n) => (<FMenu.Item
             key={n.nodeId}
             className={styles.MenuItem}
           >
@@ -42,9 +45,9 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
               {resourceDetailPage.sign_SignedNodeIDs.includes(n.nodeId) && (
                 <span className={styles.contracted}>(已签约)</span>)}
             </Space>
-          </Menu.Item>))
+          </FMenu.Item>))
         }
-      </Menu>
+      </FMenu>
       <a
         href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}
@@ -97,7 +100,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
       </Space>
       <FDown />
     </div>
-  </FDropdown>);
+  </FComponentsLib.FDropdown>);
 }
 
 export default connect(({ resourceDetailPage, nodes }: ConnectState) => ({

@@ -13,7 +13,7 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
 import categoryData from '@/utils/category';
-import FDropdown from '@/components/FDropdown';
+// import FDropdown from '@/components/FDropdown';
 import {
   FetchExhibitListAction,
   OnCancel_AddExhibitDrawer_Action,
@@ -30,11 +30,11 @@ import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-// import FUtil1 from '@/utils';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -147,7 +147,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 <div>
                   <div>
                     <span>{FI18n.i18nNext.t('resource_type')}：</span>
-                    <FDropdown
+                    <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
                           options={[
@@ -178,12 +178,12 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                         {categoryData.first[category.first] || '全部'}
                         <DownOutlined style={{ marginLeft: 8 }} />
                       </span>
-                    </FDropdown>
+                    </FComponentsLib.FDropdown>
 
                     {category.first > 1 ? (
                       <>
                         <span className="ml-30">子类型：</span>
-                        <FDropdown
+                        <FComponentsLib.FDropdown
                           overlay={
                             <FMenu
                               // @ts-ignore
@@ -217,7 +217,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                             }
                             <DownOutlined style={{ marginLeft: 8 }} />
                           </span>
-                        </FDropdown>
+                        </FComponentsLib.FDropdown>
                       </>
                     ) : null}
                   </div>

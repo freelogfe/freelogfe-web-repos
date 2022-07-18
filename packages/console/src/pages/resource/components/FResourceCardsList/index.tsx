@@ -9,8 +9,9 @@ import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import FDropdown from '@/components/FDropdown';
+// import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
+import FComponentsLib from '@freelog/components-lib';
 
 const resourceTypeOptions = [
   { text: '全部', value: '-1' },
@@ -116,7 +117,7 @@ function FResourceCardsList({
         <div className={styles.filterLeft}>
           <div>
             <span>{FI18n.i18nNext.t('resource_type')}：</span>
-            <FDropdown
+            <FComponentsLib.FDropdown
               overlay={
                 <FMenu
                   options={[
@@ -147,12 +148,12 @@ function FResourceCardsList({
                 {categoryData.first[category.first] || '全部'}
                 <DownOutlined style={{ marginLeft: 8 }} />
               </span>
-            </FDropdown>
+            </FComponentsLib.FDropdown>
 
             {category.first > 1 ? (
               <>
                 <span className="ml-30">子类型：</span>
-                <FDropdown
+                <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
                       // @ts-ignore
@@ -186,13 +187,13 @@ function FResourceCardsList({
                     }
                     <DownOutlined style={{ marginLeft: 8 }} />
                   </span>
-                </FDropdown>
+                </FComponentsLib.FDropdown>
               </>
             ) : null}
           </div>
           <div style={{ marginLeft: 60 }}>
             <span>{FI18n.i18nNext.t('resource_state')}：</span>
-            <FDropdown
+            <FComponentsLib.FDropdown
               overlay={
                 <FMenu
                   options={resourceStatusOptions}
@@ -206,7 +207,7 @@ function FResourceCardsList({
                 {statusText}
                 <DownOutlined style={{ marginLeft: 10 }} />
               </span>
-            </FDropdown>
+            </FComponentsLib.FDropdown>
           </div>
         </div>
         <Space size={20}>
