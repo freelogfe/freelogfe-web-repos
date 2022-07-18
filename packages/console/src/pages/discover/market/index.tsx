@@ -7,7 +7,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 // import { router } from 'umi';
 import {
   OnChangeKeywordsAction,
-  // OnChangeResourceTypeAction,
+  OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnMountMarketPageAction,
   // OnMountPageAction,
@@ -76,9 +76,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         second,
       });
     }
-    dispatch<OnMountMarketPageAction>({
-      type: 'discoverPage/onMountMarketPage',
-    });
+    // dispatch<OnMountMarketPageAction>({
+    //   type: 'discoverPage/onMountMarketPage',
+    // });
   });
 
   AHooks.useUnmount(() => {
