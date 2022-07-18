@@ -9,6 +9,8 @@ import useUrlState from '@ahooksjs/use-url-state';
 import ResourceList from './_components/resource';
 import UserList from './_components/user';
 import Drawer from './_components/drawer';
+import fMessage from '@/components/fMessage';
+
 interface SearchProps {}
 
 function Search({}: SearchProps) {
@@ -148,6 +150,7 @@ function Search({}: SearchProps) {
     setResourcesList([...dataList, ...supplyArray]);
   };
   const resolveUsers = async (res: any) => {
+    console.log(res)
     const ids = res.dataList.map((item: any) => item.userId).join(',');
     const data = await FServiceAPI.Resource.resourcesCount({ userIds: ids, status: 1 });
     res.dataList.forEach((item: any) => {
@@ -195,6 +198,10 @@ function Search({}: SearchProps) {
   };
   useEffect(() => {
     if (!data) return;
+    if(data.errCode){
+      fMessage(data.msg, 'error');
+      return
+    }
     // @ts-ignore
     const res: any = data.data;
     if (tab === 'resource') {
