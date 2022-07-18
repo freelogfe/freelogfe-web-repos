@@ -7,7 +7,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 // import { router } from 'umi';
 import {
   OnChangeKeywordsAction,
-  // OnChangeResourceTypeAction,
+  OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnMountMarketPageAction,
   // OnMountPageAction,
@@ -31,17 +31,20 @@ interface MarketProps {
 function Market({ dispatch, discoverPage }: MarketProps) {
   const [urlState] = useUrlState<any>();
   const [category, setCategory] = React.useState<any>({
-    first: -1,
+    first: -2,
     second: '',
   });
   React.useEffect(() => {
-    if (category.first === -1) {
+    if (category.first === -2) {
       return;
     }
-    let str = categoryData.first[category.first];
-    // @ts-ignore
-    if (categoryData.second[category.first] && category.second) {
-      str = category.second;
+    let str = '';
+    if (category.first !== -1) {
+      str = categoryData.first[category.first];
+      // @ts-ignore
+      if (categoryData.second[category.first] && category.second) {
+        str = category.second;
+      }
     }
     dispatch<OnChangeResourceTypeAction>({
       type: 'discoverPage/onChangeResourceType',
@@ -74,11 +77,15 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         first,
         second,
       });
-      console.log(first, second);
+    } else {
+      setCategory({
+        first: -1,
+        second: '',
+      });
     }
-    dispatch<OnMountMarketPageAction>({
-      type: 'discoverPage/onMountMarketPage',
-    });
+    // dispatch<OnMountMarketPageAction>({
+    //   type: 'discoverPage/onMountMarketPage',
+    // });
   });
 
   AHooks.useUnmount(() => {

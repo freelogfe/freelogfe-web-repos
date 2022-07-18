@@ -9,6 +9,8 @@ import useUrlState from '@ahooksjs/use-url-state';
 import ResourceList from './_components/resource';
 import UserList from './_components/user';
 import Drawer from './_components/drawer';
+import fMessage from '@/components/fMessage';
+
 interface SearchProps {}
 
 function Search({}: SearchProps) {
@@ -31,17 +33,17 @@ function Search({}: SearchProps) {
   const [userResourcesListPure, setUserResourcesListPure] = useState<any[]>([]);
   const [pageData, setPageData] = useState({
     skip: 0,
-    limit: 30,
+    limit: 40,
     totalItem: -1,
   });
   const [userPageData, setUserPageData] = useState({
     skip: 0,
-    limit: 100,
+    limit: 40,
     totalItem: -1,
   });
   const [userResourcePageData, setUserResourcePageData] = useState({
     skip: 0,
-    limit: 30,
+    limit: 40,
     totalItem: -1,
   });
   const getResources = () => {
@@ -167,7 +169,7 @@ function Search({}: SearchProps) {
     let dataList: any = res.dataList;
     let supplyArray: any = [];
     if (userResourceContainer) {
-      const maxCount = Math.floor(userResourceContainer.current.clientWidth / 300);
+      const maxCount = Math.floor((userResourceContainer.current.clientWidth - 230) / 300);
       let supply = 0;
       if (userResourcePageData.skip > 0) {
         dataList = [...userResourcesListPure, ...dataList];
@@ -195,6 +197,10 @@ function Search({}: SearchProps) {
   };
   useEffect(() => {
     if (!data) return;
+    if(data.errCode){
+      fMessage(data.msg, 'error');
+      return
+    }
     // @ts-ignore
     const res: any = data.data;
     if (tab === 'resource') {
@@ -258,7 +264,6 @@ function Search({}: SearchProps) {
                     'flex-row flex-wrap h-100x   pt-40 w-100x' +
                     (userResourcesList.length > 3 ? ' space-between' : '')
                   }
-                  ref={userResourceContainer}
                 >
                   <Drawer
                     className={styles.drawer}
@@ -286,6 +291,8 @@ function Search({}: SearchProps) {
                         'flex-row flex-wrap h-100x  w-100x px-115 ' +
                         (userResourcesListPure.length > 3 ? ' space-between' : '')
                       }
+                      style={{maxWidth: '1700px'}}
+                      ref={userResourceContainer}
                     >
                       <ResourceList
                         resourcesList={userResourcesList}
@@ -314,7 +321,7 @@ function Search({}: SearchProps) {
           </div>
         ) : (
           <div className="w-100x h-100x   px-115 flex-column-center">
-            <div className={'h-100x   pt-40 w-100x'} ref={container}>
+            <div className={'h-100x   pt-40 w-100x'} >
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
                   <div className="flex-2"></div>
@@ -325,7 +332,7 @@ function Search({}: SearchProps) {
                 </div>
               ) : (
                 <div className={styles.tip + ' mb-20 w-100x'}>
-                  以下是{' ' + keywords + ' '}相关的结果（{resourcesListPure.length}）
+                  以下是{' ' + keywords + ' '}相关的结果（{pageData.totalItem}）
                 </div>
               )}
               <div
@@ -333,6 +340,8 @@ function Search({}: SearchProps) {
                   'flex-row flex-wrap h-100x  w-100x  ' +
                   (resourcesListPure.length > 3 ? ' space-between' : '')
                 }
+                style={{maxWidth: '1700px'}}
+                ref={container}
               >
                 <ResourceList
                   resourcesList={resourcesList}

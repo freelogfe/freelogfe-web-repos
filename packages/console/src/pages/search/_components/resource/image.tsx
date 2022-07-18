@@ -10,7 +10,7 @@ export default function Image(props: ImageProps) {
     <div
       className="over-h w-100x "
       style={{
-        height: '180px',
+        height: '210px',
         borderRadius: '4px'
       }}
     >
