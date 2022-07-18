@@ -37,16 +37,12 @@ interface UsersParamsType {
   skip?: number;
   limit?: number;
   keywords?: string;
-  userId?: number;
-  tagIds?: string;
-  startRegisteredDate?: string;
-  endRegisteredDate?: string;
 }
 
 export function users(params: UsersParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v2/users`,
+    url: `/v2/users/search`,
     params: params,
   });
 }
