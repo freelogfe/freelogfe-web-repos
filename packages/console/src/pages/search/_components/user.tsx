@@ -32,7 +32,7 @@ export default function ResourceList({
         </div>
       ) : (
         <div className={styles.tip + ' mb-40 w-100x'}>
-          以下是{' ' + keywords + ' '}相关的结果（{userList.length}）
+          以下是{' ' + keywords + ' '}相关的结果（{userPageData.totalItem}）
         </div>
       )}
       <div className="flex-row flex-wrap space-between">

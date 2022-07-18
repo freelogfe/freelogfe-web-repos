@@ -33,17 +33,17 @@ function Search({}: SearchProps) {
   const [userResourcesListPure, setUserResourcesListPure] = useState<any[]>([]);
   const [pageData, setPageData] = useState({
     skip: 0,
-    limit: 30,
+    limit: 40,
     totalItem: -1,
   });
   const [userPageData, setUserPageData] = useState({
     skip: 0,
-    limit: 100,
+    limit: 40,
     totalItem: -1,
   });
   const [userResourcePageData, setUserResourcePageData] = useState({
     skip: 0,
-    limit: 30,
+    limit: 40,
     totalItem: -1,
   });
   const getResources = () => {
@@ -332,7 +332,7 @@ function Search({}: SearchProps) {
                 </div>
               ) : (
                 <div className={styles.tip + ' mb-20 w-100x'}>
-                  以下是{' ' + keywords + ' '}相关的结果（{resourcesListPure.length}）
+                  以下是{' ' + keywords + ' '}相关的结果（{pageData.totalItem}）
                 </div>
               )}
               <div
