@@ -191,7 +191,6 @@ function Search({}: SearchProps) {
         });
       }
     }
-    console.log(supplyArray)
     setUserResourcePageData({ ...userResourcePageData, totalItem: res.totalItem });
     setUserResourcesListPure(dataList);
     setUserResourcesList([...dataList, ...supplyArray]);
