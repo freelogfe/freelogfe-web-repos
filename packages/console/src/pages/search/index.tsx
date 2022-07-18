@@ -197,9 +197,9 @@ function Search({}: SearchProps) {
   };
   useEffect(() => {
     if (!data) return;
-    if(data.errCode){
+    if (data.errCode) {
       fMessage(data.msg, 'error');
-      return
+      return;
     }
     // @ts-ignore
     const res: any = data.data;
@@ -216,7 +216,7 @@ function Search({}: SearchProps) {
   }, [data]);
 
   return (
-    <div className={styles.container + '  w-100x flex-column'}>
+    <div className={styles.container + '  flex-column ' }>
       <div className={styles.operation + ' flex-column align-center w-100x'}>
         <FInput
           value={keywords}
@@ -288,10 +288,9 @@ function Search({}: SearchProps) {
                     </div>
                     <div
                       className={
-                        'flex-row flex-wrap h-100x  w-100x px-115 ' +
+                        'flex-row flex-wrap h-100x   ' + styles.cContainer + 
                         (userResourcesListPure.length > 3 ? ' space-between' : '')
                       }
-                      style={{maxWidth: '1700px'}}
                       ref={userResourceContainer}
                     >
                       <ResourceList
@@ -321,7 +320,7 @@ function Search({}: SearchProps) {
           </div>
         ) : (
           <div className="w-100x h-100x   px-115 flex-column-center">
-            <div className={'h-100x   pt-40 w-100x'} >
+            <div className={'h-100x   pt-40 w-100x flex-column-center'}>
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
                   <div className="flex-2"></div>
@@ -337,10 +336,9 @@ function Search({}: SearchProps) {
               )}
               <div
                 className={
-                  'flex-row flex-wrap h-100x  w-100x  ' +
+                  'flex-row flex-wrap h-100x    ' + styles.rContainer + 
                   (resourcesListPure.length > 3 ? ' space-between' : '')
                 }
-                style={{maxWidth: '1700px'}}
                 ref={container}
               >
                 <ResourceList
