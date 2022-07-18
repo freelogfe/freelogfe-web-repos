@@ -28,7 +28,6 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                     href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cf872542afc0002f1d8b0c'}
                     target="_blank"
                     className={styles.footerLeft_Link}
-                {/*>产品动态</a>*/}
                 >{FI18n.i18nNext.t('nav_ProductDevActivities')}</a>
                 <div className={styles.Divider}/>
                 <a
@@ -72,7 +71,7 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                         padding: '8px 4px',
                     }}
                     content={<div className={styles.PopoverContent}>
-                        <div className={styles.PopoverContentTitle}>freeolg平台公众号名称</div>
+                        <div className={styles.PopoverContentTitle}>Freelog飞致</div>
                         <div style={{height: 20}}/>
                         <img src={'//static.freelog.com/static/WeChatQR.jpg'} alt={''}/>
                     </div>}
