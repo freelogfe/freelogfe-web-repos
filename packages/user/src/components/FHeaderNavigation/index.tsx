@@ -3,12 +3,13 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';
-import FDropdown from '@/components/FDropdown';
+// import FDropdown from '@/components/FDropdown';
 import EmptyAndCreate from './EmptyAndCreate';
 import NavList from './NavList';
 import FPlus from '../FIcons/FPlus';
 import AOrLink from './AOrLink';
 import { FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FHeaderNavigationProps {
   logoBtn: {
@@ -99,7 +100,7 @@ function FHeaderNavigation({
             {
               menu.map((m) => {
                 // console.log(m.emptyItemsTip, 'm.emptyItemsTip');
-                return (<FDropdown
+                return (<FComponentsLib.FDropdown
                   key={m.id}
                   disabled={m.items.length === 0 && !m.emptyItemsTip}
                   overlay={m.items.length === 0 && m.emptyItemsTip
@@ -115,7 +116,7 @@ function FHeaderNavigation({
                     target={m.target}
                     className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
                   ><span>{m.text}</span></AOrLink>
-                </FDropdown>);
+                </FComponentsLib.FDropdown>);
 
               })
             }
@@ -153,7 +154,7 @@ function FHeaderNavigation({
 
       {
         createBtnMenu && createBtnMenu.length > 0 && (<>
-          <FDropdown
+          <FComponentsLib.FDropdown
             overlay={<NavList items={createBtnMenu} />}
           >
             <a className={styles.createBtnMenu}>
@@ -161,7 +162,7 @@ function FHeaderNavigation({
               <FPlus />
             </span>
             </a>
-          </FDropdown>
+          </FComponentsLib.FDropdown>
           <div style={{ width: 30 }} />
         </>)
       }

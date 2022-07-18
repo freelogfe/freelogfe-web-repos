@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-import FDropdown from '@/components/FDropdown';
+// import FDropdown from '@/components/FDropdown';
 import { FUtil } from '@freelog/tools-lib';
 import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import { FUser } from '@/components/FIcons';
+import FComponentsLib from '@freelog/components-lib';
 
 interface UserInfoProps {
   data: {
@@ -49,7 +50,7 @@ function UserInfo({ data }: UserInfoProps) {
 
   const { info, menu } = data;
 
-  return (<FDropdown overlay={<div className={styles.userPanel}>
+  return (<FComponentsLib.FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
       {
         info.avatar
@@ -106,7 +107,7 @@ function UserInfo({ data }: UserInfoProps) {
           : (<FUser style={{fontSize: 18}} />)
       }
     </a>
-  </FDropdown>);
+  </FComponentsLib.FDropdown>);
 }
 
 export default UserInfo;
