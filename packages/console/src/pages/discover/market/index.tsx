@@ -31,10 +31,13 @@ interface MarketProps {
 function Market({ dispatch, discoverPage }: MarketProps) {
   const [urlState] = useUrlState<any>();
   const [category, setCategory] = React.useState<any>({
-    first: -1,
+    first: -2,
     second: '',
   });
   React.useEffect(() => {
+    if (category.first === -2) {
+      return;
+    }
     let str = '';
     if (category.first !== -1) {
       str = categoryData.first[category.first];
@@ -43,7 +46,6 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         str = category.second;
       }
     }
-    console.log(str)
     dispatch<OnChangeResourceTypeAction>({
       type: 'discoverPage/onChangeResourceType',
       payload: {
@@ -74,6 +76,11 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       setCategory({
         first,
         second,
+      });
+    } else {
+      setCategory({
+        first: -1,
+        second: '',
       });
     }
     // dispatch<OnMountMarketPageAction>({
