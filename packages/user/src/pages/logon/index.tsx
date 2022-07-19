@@ -152,7 +152,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           <div>
             <div>
               <div className={styles.title}>
-                <i />
+                <i>*</i>
                 <div style={{ width: 5 }} />
                 <FTitleText type='h4' text={'用户名'} />
               </div>
@@ -189,7 +189,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           <div className={styles.verificationMode}>
             <div className={styles.verificationModeHeader}>
               <div className={styles.title}>
-                <i />
+                <i>*</i>
                 <div style={{ width: 5 }} />
                 <FTitleText type='h4' text={'注册方式'} />
               </div>
@@ -284,7 +284,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           <div className={styles.identifyingCode}>
             <div className={styles.identifyingCodeHeader}>
               <div className={styles.title}>
-                <i />
+                <i>*</i>
                 <div style={{ width: 5 }} />
                 <FTitleText type='h4' text={'验证码'} />
               </div>
@@ -338,7 +338,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           <div>
             <div>
               <div className={styles.title}>
-                <i />
+                <i>*</i>
                 <div style={{ width: 5 }} />
                 <FTitleText type='h4' text={'密码'} />
               </div>
