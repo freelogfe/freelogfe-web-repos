@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import * as React from 'react';
 import styles from './index.less';
-import FNavTabs from '@/components/FNavTabs';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
