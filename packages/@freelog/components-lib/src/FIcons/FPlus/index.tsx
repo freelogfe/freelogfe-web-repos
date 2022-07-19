@@ -1,11 +1,11 @@
 import * as React from 'react';
-import styles from './index.less';
-import {PlusOutlined} from '@ant-design/icons';
-import {CSSProperties, ReactElement, ReactEventHandler, ReactPropTypes} from "react";
+// import styles from './index.less';
+// import {PlusOutlined} from '@ant-design/icons';
+// import {CSSProperties} from "react";
 
 interface FPlusProps {
   className?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
 
   onClick?(): void;
 }
