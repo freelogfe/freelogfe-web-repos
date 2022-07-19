@@ -2,7 +2,7 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { router } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
@@ -1124,7 +1124,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...informalNodeManagerPage.exhibit_List,
         ];
       }
-
+      // console.log(informalNodeManagerPage.exhibit_SelectedType, 'informalNodeManagerPage.exhibit_SelectedTypeiosejlkfsdjlk');
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         skip: list.length,
         // limit: FUtil.Predefined.pageSize,
@@ -1132,7 +1132,7 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: '主题',
-        resourceType: informalNodeManagerPage.exhibit_SelectedType === '-1' ? undefined : informalNodeManagerPage.exhibit_SelectedType,
+        resourceType: (informalNodeManagerPage.exhibit_SelectedType === '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
