@@ -36,6 +36,15 @@
     }
   }
 
+  .rContainer {
+    width: 1540px;
+    margin: 0 auto -10px;
+
+    @media (max-width: 1600px) {
+      width: 1230px;
+      margin: 0;
+    }
+  }
   .list {
     background: #fafbfc;
 
@@ -72,8 +81,18 @@
 
 .drawer {
   height: calc(100vh - 70px);
+  min-width: 1000px;
+  overflow-y: auto;
 }
+.cContainer {
+  width: 1540px;
+  margin: 0 auto -10px;
 
+  @media (max-width: 1600px) {
+    width: 1230px;
+    margin: 0 auto;
+  }
+}
 .userimg {
   width: 40px;
   height: 40px;
@@ -103,15 +122,15 @@
   top: 20px;
   width: 40px;
   height: 40px;
-  background: rgba(0, 0, 0, 0.2000);
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
-  &:hover{
-    backdrop-filter: blur(20px); 
+  &:hover {
+    backdrop-filter: blur(20px);
   }
   border-radius: 50%;
 }
 
 .close {
-  color:  white;
+  color: white;
   font-size: 13px;
 }
