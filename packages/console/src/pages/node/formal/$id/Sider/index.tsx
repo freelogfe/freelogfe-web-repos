@@ -30,7 +30,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 30 }} />
 
         <div className={styles.title}>
-          <FTitleText type="h2" text={nodeManagerPage.nodeName} />
+          <FTitleText type='h2' text={nodeManagerPage.nodeName} />
           <div style={{ height: 15 }} />
           <Space size={10} className={styles.url}>
             <a
@@ -45,9 +45,9 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               title={'复制节点地址'}
               iconStyle={{ fontSize: 14 }}
             />
-            <FShare type="node" title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
+            <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
               <FTextBtn>
-                <FTooltip title="分享节点">
+                <FTooltip title='分享节点'>
                   <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 </FTooltip>
               </FTextBtn>
@@ -106,6 +106,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             nodeID: Number(match.params.id),
             showPage: 'exhibit',
           })}
+          target='_blank'
         >
           {FI18n.i18nNext.t('btn_navigate_to_test_node')}
         </FLink>

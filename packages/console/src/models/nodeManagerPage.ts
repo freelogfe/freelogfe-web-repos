@@ -529,7 +529,7 @@ const Model: NodeManagerModelType = {
           nodeId: payload.nodeID,
           nodeName: data?.nodeName,
           nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
-          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + (data?.nodeDomain || '')),
+          testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
           nodeThemeId: data.nodeThemeId,
           nodeInfoState: 'loaded',
         },

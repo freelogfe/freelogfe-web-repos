@@ -1079,7 +1079,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           node_Name: data.nodeName,
           node_Url: FUtil.Format.completeUrlByDomain(data.nodeDomain || ''),
-          node_TestUrl: FUtil.Format.completeUrlByDomain('t.' + data.nodeDomain),
+          node_TestUrl: FUtil.Format.completeUrlByDomain(data.nodeDomain + '.t'),
         },
       });
     },
