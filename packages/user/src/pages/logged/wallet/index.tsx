@@ -107,6 +107,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       title: (<FTitleText text={FI18n.i18nNext.t('header_tran_time')} type='table' />),
       dataIndex: 'dataTime',
       key: 'dataTime',
+      width: 100,
       render(_, record) {
         return (<div>
           {
@@ -120,6 +121,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       title: (<FTitleText text={'交易方｜支付方式｜交易记录编号'} type='table' />),
       dataIndex: 'payment',
       key: 'payment',
+      width: 220,
       render(_, record) {
         return (<div>
           <FContentText
@@ -137,6 +139,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       // title: (<FTitleText text={FI18n.i18nNext.t('header_tran_description')} type='table' />),
       dataIndex: 'money',
       key: 'money',
+      width: 320,
       render(_, record) {
         return (<div>
           <FContentText
@@ -154,6 +157,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       title: (<FTitleText text={FI18n.i18nNext.t('header_tran_amount')} type='table' />),
       dataIndex: 'amount',
       key: 'amount',
+      width: 160,
       render(_, record) {
         return (<div>
           <FTitleText
