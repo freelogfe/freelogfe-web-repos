@@ -62,7 +62,8 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
           {
             id: 'help',
             text: FI18n.i18nNext.t('nav_docs'),
-            href: '',
+            href: 'https://freelog3.freelog.com/',
+            target: '_blank',
             items: [],
           },
         ]}
