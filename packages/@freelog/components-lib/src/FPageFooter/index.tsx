@@ -94,7 +94,8 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                 target={'_blank'}
             >{window.location.origin.includes('.freelog.com') ? '粤ICP备17085716号-1' : '粤ICP备17085716号-2'}</a>
             <div style={{width: 20}}/>
-            <div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>
+            {/*<div className={styles.footerRightText}>Copyright© 2020 freelog.com</div>*/}
+            <div className={styles.footerRightText}>{FI18n.i18nNext.t('nav_copyright')}</div>
         </div>
     </footer>);
 }

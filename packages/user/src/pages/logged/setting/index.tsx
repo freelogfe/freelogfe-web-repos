@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import FFormLayout from '@/components/FFormLayout';
-import { Space } from 'antd';
+// import FFormLayout from '@/components/FFormLayout';
+// import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import Profile from './Profile';
@@ -28,7 +28,7 @@ function Setting({ dispatch, settingPage }: SettingProps) {
     dispatch<OnMount_Page_Action>({
       type: 'settingPage/onMount_Page',
     });
-    if ((urlParams.type = 'wechat')) {
+    if ((urlParams.type === 'wechat')) {
       dispatch<OnChange_ShowPage_Action>({
         type: 'settingPage/onChange_ShowPage',
         payload: {
