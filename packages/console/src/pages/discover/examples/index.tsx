@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FTextBtn } from '@/components/FButton';
 import FPlayer from '@/components/FIcons/FPlayer';
 import { FContentText, FTitleText } from '@/components/FText';
-import { Space } from 'antd';
+import { FI18n } from '@freelog/tools-lib';
 
 const nodeData: {
   id: string;
@@ -16,34 +16,42 @@ const nodeData: {
   {
     id: '1',
     cover: 'http://static.testfreelog.com/static/default_cover.png',
-    title: '小说阅读',
+    title: FI18n.i18nNext.t('flnode_reading'),
     tags: [],
-    text: '这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介',
-    href: 'https://www.baidu.com',
+    text: FI18n.i18nNext.t('flnode_reading_descr'),
+    href: FI18n.i18nNext.t('flnode_reading_addr'),
   },
   {
     id: '2',
     cover: 'http://static.testfreelog.com/static/default_cover.png',
-    title: '图片瀑布流节点',
-    tags: ['瀑布流1', '瀑布流2', '瀑布流3'],
-    text: '这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介',
-    href: 'https://www.baidu.com',
+    title: FI18n.i18nNext.t('flnode_comics'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_comics_descr'),
+    href: FI18n.i18nNext.t('flnode_comics_addr'),
   },
   {
     id: '3',
     cover: 'http://static.testfreelog.com/static/default_cover.png',
-    title: '图片瀑布流节点',
-    tags: ['瀑布流1', '瀑布流2', '瀑布流3'],
-    text: '这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介',
-    href: 'https://www.baidu.com',
+    title: FI18n.i18nNext.t('flnode_blog'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_blog_descr'),
+    href: FI18n.i18nNext.t('flnode_blog_addr'),
   },
   {
     id: '4',
     cover: 'http://static.testfreelog.com/static/default_cover.png',
-    title: '图片瀑布流节点',
-    tags: ['瀑布流1', '瀑布流2', '瀑布流3'],
-    text: '这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介',
-    href: 'https://www.baidu.com',
+    title: FI18n.i18nNext.t('flnode_stock'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_stock_descr'),
+    href: FI18n.i18nNext.t('flnode_stock_addr'),
+  },
+  {
+    id: '5',
+    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    title: FI18n.i18nNext.t('flnode_docs'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_docs_descr'),
+    href: FI18n.i18nNext.t('flnode_docs_addr'),
   },
 ];
 
