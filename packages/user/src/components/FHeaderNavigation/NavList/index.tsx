@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FPlus } from '@/components/FIcons';
 import AOrLink from '../AOrLink';
+import FComponentsLib from '@freelog/components-lib';
 
 interface NavListProps {
   items: {
@@ -37,7 +38,7 @@ function NavList({ items, createBtn = null, activeID = '' }: NavListProps) {
           href={createBtn.href}
           target={createBtn.target}
         >
-          <FPlus style={{ fontSize: 14 }} />
+          <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
         </AOrLink>
       </>)
     }

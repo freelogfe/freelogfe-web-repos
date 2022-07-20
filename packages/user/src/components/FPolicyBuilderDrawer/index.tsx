@@ -13,7 +13,6 @@ import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FUil1 from '@/utils';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
@@ -21,6 +20,7 @@ import FMonacoEditor from '../FMonacoEditor';
 import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 const { compile, report } = require('@freelog/resource-policy-lang');
 
@@ -1207,7 +1207,7 @@ function FPolicyBuilder({
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FCircleBtn>
                                 <div style={{ width: 5 }} />
                                 <FTextBtn
                                   type='primary'
@@ -1726,7 +1726,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
 
             }}
           >
-            <FPlus style={{ fontSize: 12 }} />
+            <FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} />
           </FCircleBtn>
           <div style={{ width: 5 }} />
           <FTextBtn

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
-import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
+import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '../FDrawer';
