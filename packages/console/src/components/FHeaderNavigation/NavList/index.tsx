@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FPlus } from '@/components/FIcons';
+// import { FPlus } from '@/components/FIcons';
 import AOrLink from '../AOrLink';
 import FComponentsLib from '@freelog/components-lib';
 
