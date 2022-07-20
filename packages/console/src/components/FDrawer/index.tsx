@@ -15,6 +15,7 @@ interface FDrawerProps extends DrawerProps {
 
 function FDrawer({children, topRight, width = 720, title, onClose, ...props}: FDrawerProps) {
   return (<Drawer
+    className={styles.style}
     title={null}
     headerStyle={{display: 'none'}}
     bodyStyle={{padding: 0}}

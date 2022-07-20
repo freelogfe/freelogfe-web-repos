@@ -110,7 +110,6 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
       onClick={() => {
         // console.log('#######98ioklj');
       }}
-
     >
       <FText
         style={{
@@ -195,8 +194,6 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
               }}
             >查看合约</FText>)
         }
-
-
       </FRect>
     </FRect>
   </FGroup>);
