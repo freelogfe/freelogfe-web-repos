@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
+import { FDown, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Radio, Space } from 'antd';

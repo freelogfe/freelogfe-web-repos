@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Menu, Space } from 'antd';
 import { FContentText } from '@/components/FText';
-import { FDown, FPlus } from '@/components/FIcons';
+import { FDown } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import { OnChangeNodeSelectorAction } from '@/models/resourceDetailPage';

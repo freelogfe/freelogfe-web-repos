@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import { CSSProperties } from 'react';
-import {
-  // FEdit, FLine,
-  FPlus,
-} from '../../FIcons';
+// import {
+//   // FEdit, FLine,
+//   FPlus,
+// } from '../../FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FCircleBtnProps {
