@@ -53,7 +53,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
         className={styles.newButton}
       >
         <Space size={10}>
-          <FPlus style={{ fontSize: 14 }} />
+          <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
           <span>创建节点</span>
         </Space>
       </a>

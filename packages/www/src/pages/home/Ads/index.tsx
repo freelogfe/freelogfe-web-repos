@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import img_RewardSuspension from '@/assets/home/reward-suspension.png';
+// import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import AOrLink from '@/components/FHeaderNavigation/AOrLink';

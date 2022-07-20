@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import {
-  FEdit, FLine,
+  // FEdit, FLine,
   FMappingRuleAdd,
   FMappingRuleAttr,
   FMappingRuleCover,
@@ -47,7 +47,7 @@ function MappingRule({
                      }: MappingRuleProps) {
 
   if (operationAndActionRecords.length === 0) {
-    return (<FLine />);
+    return (<FComponentsLib.FIcons.FLine />);
   }
 
   // console.log(attrs, 'attrs@#RFSADj89HJUIO:');
