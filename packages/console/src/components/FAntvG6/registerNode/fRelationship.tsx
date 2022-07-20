@@ -6,6 +6,10 @@ import G6 from '@antv/g6';
 import React from 'react';
 import { FUtil } from '@freelog/tools-lib';
 
+const FGroup: any = Group;
+const FRect: any = Rect;
+const FText: any = Text;
+
 export interface FNode_Relationship_RootResource_Values {
   resourceID: string;
   resourceName: string;
@@ -26,8 +30,8 @@ function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResou
     version,
     resourceDetails_Url,
   } = value;
-  return (<Group>
-    <Rect
+  return (<FGroup>
+    <FRect
       draggable
       style={{
         fill: '#fff',
@@ -40,7 +44,7 @@ function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResou
         // console.log('#######98ioklj');
       }}
     >
-      <Text
+      <FText
         style={{
           fontSize: 14,
           fontWeight: 600,
@@ -52,16 +56,16 @@ function FNode_Relationship_RootResource({ value }: FNode_Relationship_RootResou
           // console.log('#####2342394ui3jk');
           window.open(resourceDetails_Url);
         }}
-      >{textOverflowEllipsis(resourceName)}</Text>
-      <Rect style={{ height: 10 }} />
-      <Text style={{
+      >{textOverflowEllipsis(resourceName)}</FText>
+      <FRect style={{ height: 10 }} />
+      <FText style={{
         fontSize: 12,
         fontWeight: 400,
         fill: '#666',
         padding: [3, 0],
-      }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</Text>
-    </Rect>
-  </Group>);
+      }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</FText>
+    </FRect>
+  </FGroup>);
 }
 
 export interface FNode_Relationship_Resource_Values {
@@ -91,8 +95,8 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
     resourceDetails_Url,
     isUpThrow = false,
   } = value;
-  return (<Group>
-    <Rect
+  return (<FGroup>
+    <FRect
       draggable
       style={{
         // width: 200,
@@ -108,7 +112,7 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
       }}
 
     >
-      <Text
+      <FText
         style={{
           fontSize: 14,
           fontWeight: 600,
@@ -120,29 +124,29 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
           // console.log('#####2342394ui3jk');
           window.open(resourceDetails_Url);
         }}
-      >{textOverflowEllipsis(resourceName, 18)}</Text>
-      <Rect style={{ height: 10 }} />
+      >{textOverflowEllipsis(resourceName, 18)}</FText>
+      <FRect style={{ height: 10 }} />
       {
         version
-          ? (<Text style={{
+          ? (<FText style={{
             fontSize: 12,
             fontWeight: 400,
             fill: '#666',
             padding: [3, 0],
-          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</Text>)
-          : ((<Text style={{
+          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)} | {version}</FText>)
+          : ((<FText style={{
             fontSize: 12,
             fontWeight: 400,
             fill: '#666',
             padding: [3, 0],
-          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)}</Text>))
+          }}>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)}</FText>))
       }
 
       {/*<Text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '未授权' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</Text>*/}
-      <Rect style={{ height: 15 }} />
-      <Rect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
+      <FRect style={{ height: 15 }} />
+      <FRect style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
         {
-          (show_Execute || show_Warning) && (<Rect
+          (show_Execute || show_Warning) && (<FRect
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
             {
               show_Execute && (<Image style={{ width: 16, height: 16, img: img_execute, next: 'inline' }} />)
@@ -153,19 +157,19 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
             {
               show_Warning && (<Image style={{ width: 16, height: 16, img: img_warning, next: 'inline' }} />)
             }
-          </Rect>)
+          </FRect>)
         }
 
         {
           isUpThrow
-            ? (<Text
+            ? (<FText
               style={{
                 fill: '#EE4040',
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
-              onClick={(evt, node, shape, graph) => {
+              onClick={(evt: any, node: any, shape: any, graph: any) => {
                 // console.log(evt, '#####2342394ui3jk0988uoij32lk');
                 graph.emit('resource:viewContract', {
                   // contractID: contract.contractID,
@@ -173,15 +177,15 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
                   // parentInfo: parentInfo,
                 });
               }}
-            >已上抛</Text>)
-            : (<Text
+            >已上抛</FText>)
+            : (<FText
               style={{
                 fill: '#2E88FF',
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
-              onClick={(evt, node, shape, graph) => {
+              onClick={(evt: any, node: any, shape: any, graph: any) => {
                 // console.log(evt, '#####2342394ui3jk0988uoij32lk');
                 graph.emit('resource:viewContract', {
                   // contractID: contract.contractID,
@@ -189,13 +193,13 @@ function FNode_Relationship_Resource({ value }: FNode_Relationship_Resource_Prop
                   // parentInfo: parentInfo,
                 });
               }}
-            >查看合约</Text>)
+            >查看合约</FText>)
         }
 
 
-      </Rect>
-    </Rect>
-  </Group>);
+      </FRect>
+    </FRect>
+  </FGroup>);
 }
 
 export interface FNode_Relationship_Exhibit_Values {
@@ -216,8 +220,8 @@ function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props)
     nodeID,
     nodeName,
   } = value;
-  return (<Group>
-    <Rect
+  return (<FGroup>
+    <FRect
       draggable
       style={{
         fill: '#fff',
@@ -230,14 +234,14 @@ function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props)
 
       }}
     >
-      <Text style={{
+      <FText style={{
         fontSize: 12,
         fontWeight: 600,
         fill: '#7F8388',
         padding: [3, 0],
-      }}>节点：</Text>
-      <Rect style={{ height: 10 }} />
-      <Text
+      }}>节点：</FText>
+      <FRect style={{ height: 10 }} />
+      <FText
         style={{
           fontSize: 14,
           fontWeight: 600,
@@ -245,16 +249,16 @@ function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props)
           padding: [3, 0],
           cursor: 'pointer',
         }}
-      >{textOverflowEllipsis(nodeName)}</Text>
-      <Rect style={{ height: 15 }} />
-      <Text style={{
+      >{textOverflowEllipsis(nodeName)}</FText>
+      <FRect style={{ height: 15 }} />
+      <FText style={{
         fontSize: 12,
         fontWeight: 600,
         fill: '#7F8388',
         padding: [3, 0],
-      }}>展品：</Text>
-      <Rect style={{ height: 10 }} />
-      <Text
+      }}>展品：</FText>
+      <FRect style={{ height: 10 }} />
+      <FText
         style={{
           fontSize: 14,
           fontWeight: 600,
@@ -262,9 +266,9 @@ function FNode_Relationship_Exhibit({ value }: FNode_Relationship_Exhibit_Props)
           padding: [3, 0],
           cursor: 'pointer',
         }}
-      >{textOverflowEllipsis(exhibitName)}</Text>
-    </Rect>
-  </Group>);
+      >{textOverflowEllipsis(exhibitName)}</FText>
+    </FRect>
+  </FGroup>);
 }
 
 function FNode_Relationship({ cfg = {} }: any) {
@@ -285,7 +289,7 @@ function FNode_Relationship({ cfg = {} }: any) {
     />);
   }
 
-  return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
+  return (<FGroup><FText style={{ fill: '#222' }}>Error</FText></FGroup>);
 }
 
 export const F_RELATIONSHIP_NODE_TYPE: string = 'FNode_Relationship';
