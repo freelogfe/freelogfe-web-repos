@@ -22,11 +22,11 @@ interface ServerDataNode {
   resourceType: string[];
   versions: string[];
   versionRanges: string[];
-  // versions?: string[];
   downstreamAuthContractIds: string[];
   downstreamIsAuth?: boolean;
   selfAndUpstreamIsAuth?: boolean;
   children: ServerDataNode[];
+  isUpcast?: boolean;
 }
 
 interface FGraph_Tree_Relationship_Resource_Props {
@@ -276,7 +276,7 @@ function handleDataSource({ data }: HandleDataSourceParams): ResourceNode[] {
           resourceID: d.resourceId,
           // version: d.version,
         }),
-        isUpThrow: d.downstreamAuthContractIds.length === 0,
+        isUpThrow: !!d.isUpcast,
       },
       children: handleDataSource({
         data: d.children,
