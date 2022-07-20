@@ -1094,7 +1094,7 @@ const Model: SettingPageModelType = {
       };
 
       const { data, errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (!data) {
+      if (msg !== 0 || errCode !== 0 && !data) {
         return fMessage('验证码错误', 'error');
       }
 
