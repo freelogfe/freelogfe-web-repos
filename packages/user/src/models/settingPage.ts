@@ -1093,8 +1093,8 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { data, errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (msg !== 0 || errCode !== 0 && !data) {
+      const { data, errCode, ret, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
 
@@ -1225,9 +1225,9 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.changeEmail_New_EmailInput,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
-      if (errCode !== 0) {
+      if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
       }
 
@@ -1356,9 +1356,9 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.bindPhone_PhoneInput,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
-      if (errCode !== 0) {
+      if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
       }
 
@@ -1466,8 +1466,8 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (!data) {
+      const { data, errCode, ret, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
       yield put<ChangeAction>({
@@ -1598,9 +1598,9 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.changePhone_New_PhoneInput,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
-      if (errCode !== 0) {
+      if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
       }
       fMessage('手机号修改成功', 'success');
