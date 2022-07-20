@@ -27,7 +27,7 @@ function UserInfo({ data }: UserInfoProps) {
 
   if (!data) {
     return (<Space size={10}>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='default'
         size='small'
         onClick={() => {
@@ -35,8 +35,8 @@ function UserInfo({ data }: UserInfoProps) {
             goTo: window.location.href,
           });
         }}
-      >登录</FRectBtn>
-      <FRectBtn
+      >登录</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
         type='primary'
         size='small'
         onClick={() => {
@@ -44,7 +44,7 @@ function UserInfo({ data }: UserInfoProps) {
             goTo: window.location.href,
           });
         }}
-      >注册</FRectBtn>
+      >注册</FComponentsLib.FRectBtn>
     </Space>);
   }
 
