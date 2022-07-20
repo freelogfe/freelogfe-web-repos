@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FContentText } from '@/components/FText';
 // import FDropdown from '@/components/FDropdown';
 import { FUtil } from '@freelog/tools-lib';
-import { FRectBtn } from '@/components/FButton';
+// import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import { FUser } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';

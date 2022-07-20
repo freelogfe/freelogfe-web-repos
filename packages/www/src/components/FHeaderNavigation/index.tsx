@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
-import { FRectBtn } from '@/components/FButton';
+// import { FRectBtn } from '@/components/FButton';
 import UserInfo from './UserInfo';
 // import FDropdown from '@/components/FDropdown';
 import EmptyAndCreate from './EmptyAndCreate';
@@ -141,13 +141,13 @@ function FHeaderNavigation({
 
       {
         showGotoConsole && (<>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             size='small'
             type='secondary'
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard());
             }}
-          >进入工作台</FRectBtn>
+          >进入工作台</FComponentsLib.FRectBtn>
           <div style={{ width: 30 }} />
         </>)
       }
