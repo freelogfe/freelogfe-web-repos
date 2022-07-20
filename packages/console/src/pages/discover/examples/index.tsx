@@ -16,8 +16,8 @@ const nodeData: {
   {
     id: '1',
     cover: 'http://static.testfreelog.com/static/default_cover.png',
-    title: '图片瀑布流节点',
-    tags: ['瀑布流1', '瀑布流2', '瀑布流3'],
+    title: '小说阅读',
+    tags: [],
     text: '这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介这里是节点简介',
     href: 'https://www.baidu.com',
   },
@@ -62,14 +62,14 @@ function Examples({}) {
               <div style={{ width: 20 }} />
               <div className={styles.content}>
                 <FTitleText type='h1' text={n.title} />
-                <div style={{ height: 10 }} />
-                <Space size={10}>
-                  {
-                    n.tags.map((t) => {
-                      return (<label key={t} className={styles.contentLabel}>{t}</label>);
-                    })
-                  }
-                </Space>
+                {/*<div style={{ height: 10 }} />*/}
+                {/*<Space size={10}>*/}
+                {/*  {*/}
+                {/*    n.tags.map((t) => {*/}
+                {/*      return (<label key={t} className={styles.contentLabel}>{t}</label>);*/}
+                {/*    })*/}
+                {/*  }*/}
+                {/*</Space>*/}
                 <div style={{ height: 10 }} />
                 <div className={styles.contentText}>{n.text}</div>
               </div>
