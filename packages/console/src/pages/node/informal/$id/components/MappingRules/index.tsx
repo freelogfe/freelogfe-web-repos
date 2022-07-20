@@ -10,6 +10,7 @@ import {
 } from '@/components/FIcons';
 import { FContentText } from '@/components/FText';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
+import FComponentsLib from '@freelog/components-lib';
 
 interface AddRuleProps {
   exhibit: string;
@@ -46,7 +47,7 @@ interface AlterRuleProps {
 
 export function AlterRule({ alter }: AlterRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FEdit /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FEdit /></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'修改'} /></div>
       <div><label className={styles.exhibitLabel}>{alter}</label></div>

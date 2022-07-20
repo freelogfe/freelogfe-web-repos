@@ -21,6 +21,7 @@ import FCoverImage from '@/components/FCoverImage';
 import fConfirmModal from '@/components/fConfirmModal';
 import { LoadingOutlined, MinusOutlined } from '@ant-design/icons';
 import { FDialog } from '@/components/FDialog';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -328,7 +329,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
           <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
             <span>
               <FTextBtn type="primary" onClick={() => onEdit()}>
-                <FEdit />
+                <FComponentsLib.FIcons.FEdit />
               </FTextBtn>
             </span>
           </FTooltip>

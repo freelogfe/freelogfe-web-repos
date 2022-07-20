@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
 import { FEdit, FLine, FPlus} from "../../FIcons";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCircleBtnProps {
   children?: React.ReactNode;
@@ -58,11 +59,10 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FEdit style={{
+    >{children || <FComponentsLib.FIcons.FEdit style={{
       fontSize: 14,
     }}/>}</button>);
   }
-  // <FEdit/>
 
   return (<button
     className={[styles.Danger, className].join(' ')}

@@ -31,6 +31,7 @@ import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer'
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -210,7 +211,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                               },
                             });
                           }}
-                        ><FEdit /></FTextBtn>
+                        ><FComponentsLib.FIcons.FEdit /></FTextBtn>
                       </div>
                     </FTooltip>
                     <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>

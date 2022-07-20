@@ -297,7 +297,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   );
                 }}
               >
-                <FEdit />
+                <FComponentsLib.FIcons.FEdit />
               </FTextBtn>
             </FTooltip>
 

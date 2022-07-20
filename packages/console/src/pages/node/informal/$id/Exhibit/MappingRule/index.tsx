@@ -33,12 +33,7 @@ import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 import FTooltip from '@/components/FTooltip';
-
-// interface ICandidate {
-//   name: string;
-//   versionRange?: string;
-//   type: 'resource' | 'object';
-// }
+import FComponentsLib from '@freelog/components-lib';
 
 interface MappingRuleProps {
   operationAndActionRecords: OperationAndActionRecords;
@@ -160,7 +155,7 @@ function MappingRule({
             return (<FMappingRuleAdd key={oaarIndex} />);
           }
           if (oaar.type === 'alter') {
-            return (<FEdit key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FEdit key={oaarIndex} />);
           }
           if (oaar.type === 'activate_theme') {
             return (<FMappingRuleActive key={oaarIndex} />);

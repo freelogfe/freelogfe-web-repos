@@ -5,9 +5,10 @@ import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleBtn, FTextBtn} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
-import {FEdit} from "@/components/FIcons";
+// import {FEdit} from "@/components/FIcons";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDivider from "@/components/FDivider";
+import FComponentsLib from '@freelog/components-lib';
 
 interface DepsCardsProps {
   title: string;
@@ -89,7 +90,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                           }
                         }));
                       }}
-                    ><FTextBtn><FEdit style={{fontSize: 12}}/></FTextBtn></FVersionHandlerPopover>
+                    ><FTextBtn><FComponentsLib.FIcons.FEdit style={{fontSize: 12}}/></FTextBtn></FVersionHandlerPopover>
                   </Space>
                 </>)
               }

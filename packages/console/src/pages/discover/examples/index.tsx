@@ -49,7 +49,14 @@ const nodeData: {
 
 function Examples({}) {
   return (<div>
-    <div style={{ height: 30 }} />
+    <div style={{ height: 50 }} />
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <FContentText
+        type='negative'
+        text={'Freelog为用户展示了一些场景示例，用户可以根据自己的需求选择主题或创建主题来搭建自己的节点'}
+      />
+    </div>
+    <div style={{ height: 50 }} />
     <div className={styles.nodeList}>
       {
         nodeData.map((n) => {

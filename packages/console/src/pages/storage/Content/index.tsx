@@ -28,6 +28,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -223,7 +224,7 @@ function ToolsBar({
         <FLink to={FUtil.LinkTo.objectDetails({
           bucketName,
           objectID: objectID,
-        })}><FEdit /></FLink>
+        })}><FComponentsLib.FIcons.FEdit /></FLink>
       </FTooltip>)
     }
     {

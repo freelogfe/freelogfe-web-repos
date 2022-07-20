@@ -20,6 +20,7 @@ import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect'
 import fMessage from '@/components/fMessage';
 import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -51,7 +52,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
         <div className={styles.cover}>
           <FCoverImage src={informExhibitInfoPage.side_Exhibit_Cover || ''} width={220} style={{ borderRadius: 10 }} />
           <div className={styles.coverEdit}>
-            <FEdit style={{ fontSize: 32 }} />
+            <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
             <div style={{ height: 10 }} />
             <div>修改封面</div>
           </div>
@@ -78,7 +79,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
               dispatch<OnClickPTitleEditBtnAction>({
                 type: 'informExhibitInfoPage/onClickPTitleEditBtn',
               });
-            }}><FEdit /></a>
+            }}><FComponentsLib.FIcons.FEdit /></a>
           </Space>)
           : (<>
             <FInput

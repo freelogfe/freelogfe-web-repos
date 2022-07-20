@@ -135,7 +135,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                               value={rrr.versionRange}
                               versionOptions={rrr.versions}
                               onChange={(version) => onChangeVersion(version, i.id)}
-                            ><FEdit style={{ fontSize: 14 }} /></FVersionHandlerPopover>
+                            ><FComponentsLib.FIcons.FEdit style={{ fontSize: 14 }} /></FVersionHandlerPopover>
                           </>
                       }
                     </div>

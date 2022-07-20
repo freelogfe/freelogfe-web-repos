@@ -6,6 +6,7 @@ import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
 import FCancelCollect from '@/components/FIcons/FCancelCollect';
 import FUpdate from '@/components/FIcons/FUpdate';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -21,7 +22,7 @@ const btnMap: any = {
   },
   edit: {
     text: '编辑',
-    icon: (<FEdit />),
+    icon: (<FComponentsLib.FIcons.FEdit />),
   },
   resourceDetails: {
     text: '资源详情',

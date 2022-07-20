@@ -27,6 +27,7 @@ import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer'
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FSelect from '@/components/FSelect';
 import fConfirmModal from '@/components/fConfirmModal';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -192,7 +193,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                     },
                   });
                 }}
-              ><FEdit /></FTextBtn>
+              ><FComponentsLib.FIcons.FEdit /></FTextBtn>
               <FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {

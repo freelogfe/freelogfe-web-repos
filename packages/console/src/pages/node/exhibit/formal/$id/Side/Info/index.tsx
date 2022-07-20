@@ -16,6 +16,7 @@ import FTooltip from '@/components/FTooltip';
 import { FI18n } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -66,7 +67,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
         <FCoverImage src={exhibitInfoPage.side_ExhibitCover || ''} width={220} style={{ borderRadius: 10 }} />
         <div className={styles.coverEdit}>
 
-          <FEdit style={{ fontSize: 32 }} />
+          <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
           <div style={{ height: 10 }} />
           <div>{FI18n.i18nNext.t('btn_edit_cover')}</div>
         </div>
@@ -85,7 +86,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             <div>
               <FTextBtn onClick={() => {
                 onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-              }}><FEdit /></FTextBtn>
+              }}><FComponentsLib.FIcons.FEdit /></FTextBtn>
             </div>
           </FTooltip>
         </Space>)
