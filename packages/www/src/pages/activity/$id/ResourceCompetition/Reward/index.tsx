@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import FPentagram from '@/components/FIcons/FPentagram';
-import FLine from '../../../../../components/FIcons/FLine';
+// import FLine from '../../../../../components/FIcons/FLine';
 import { Space } from 'antd';
 import { FRectBtn } from '@/components/FButton';
+import FComponentsLib from '@freelog/components-lib';
 
 interface RewardProps {
 
@@ -24,11 +25,11 @@ function Reward({}: RewardProps) {
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
           <div style={{ width: 20 }} />
           <span>奖金2000元</span>
           <div style={{ width: 20 }} />
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
         </div>
         <div style={{ height: 30 }} />
 
@@ -50,11 +51,11 @@ function Reward({}: RewardProps) {
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
           <div style={{ width: 20 }} />
           <span>奖金888元</span>
           <div style={{ width: 20 }} />
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
         </div>
         <div style={{ height: 30 }} />
 
@@ -76,11 +77,11 @@ function Reward({}: RewardProps) {
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
           <div style={{ width: 20 }} />
           <span>奖金3500元</span>
           <div style={{ width: 20 }} />
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
         </div>
         <div style={{ height: 30 }} />
 
@@ -102,11 +103,11 @@ function Reward({}: RewardProps) {
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
           <div style={{ width: 20 }} />
           <span>奖金888元</span>
           <div style={{ width: 20 }} />
-          <FLine />
+          <FComponentsLib.FIcons.FLine />
         </div>
         <div style={{ height: 30 }} />
 

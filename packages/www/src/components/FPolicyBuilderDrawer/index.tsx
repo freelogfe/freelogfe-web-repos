@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
-import { Space, Divider, DatePicker, InputNumber, Modal, Select } from 'antd';
-import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '../FIcons';
+import { Space, Divider, DatePicker, Modal } from 'antd';
+import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '../FDrawer';
@@ -21,6 +21,7 @@ import FMonacoEditor from '../FMonacoEditor';
 import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 const { compile, report } = require('@freelog/resource-policy-lang');
 
@@ -1207,7 +1208,7 @@ function FPolicyBuilder({
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FCircleBtn>
                                 <div style={{ width: 5 }} />
                                 <FTextBtn
                                   type='primary'
@@ -1247,7 +1248,7 @@ function FPolicyBuilder({
                       },
                     }}
                     onChange={onChange_Code_Input}
-                    editorDidMount={(editor, monaco) => {
+                    editorDidMount={(editor:any, monaco:any) => {
                       // console.log('editorDidMount', editor, monaco);
                       editor.focus();
                     }}
@@ -1726,7 +1727,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
 
             }}
           >
-            <FPlus style={{ fontSize: 12 }} />
+            <FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} />
           </FCircleBtn>
           <div style={{ width: 5 }} />
           <FTextBtn

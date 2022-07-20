@@ -159,7 +159,7 @@ function FHeaderNavigation({
           >
             <a className={styles.createBtnMenu}>
             <span>
-              <FPlus />
+              <FComponentsLib.FIcons.FPlus />
             </span>
             </a>
           </FComponentsLib.FDropdown>

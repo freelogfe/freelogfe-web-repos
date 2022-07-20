@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
-import { FEdit, FLine, FPlus} from "../../FIcons";
+// import { FEdit, FLine, FPlus} from "../../FIcons";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCircleBtnProps {
   children?: React.ReactNode;
@@ -26,7 +27,7 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FPlus
+    >{children || <FComponentsLib.FIcons.FPlus
       style={{
         fontSize: size === 'middle' ? 16 : 12,
       }}
@@ -43,7 +44,7 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FPlus style={{
+    >{children || <FComponentsLib.FIcons.FPlus style={{
       fontSize: 14,
     }}/>}</button>);
   }
@@ -58,7 +59,7 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FEdit style={{
+    >{children || <FComponentsLib.FIcons.FEdit style={{
       fontSize: 14,
     }}/>}</button>);
   }
@@ -70,7 +71,7 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
     onClick={(event: any) => {
       onClick && onClick(event);
     }}
-  >{children || <FLine style={{fontSize: 12}}/>}</button>);
+  >{children || <FComponentsLib.FIcons.FLine style={{fontSize: 12}}/>}</button>);
 
 }
 
