@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {
-  FEdit,
+  // FEdit,
   FMappingRuleAdd, FMappingRuleAttr,
   FMappingRuleCover,
   FMappingRuleLabel, FMappingRuleOffline, FMappingRuleOnline, FMappingRuleReplace,
