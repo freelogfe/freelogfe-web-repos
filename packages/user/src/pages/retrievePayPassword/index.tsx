@@ -3,11 +3,8 @@ import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
-// import FFooter from '@/layouts/FFooter';
 import FComponentsLib from '@freelog/components-lib';
-
 import {
   ConnectState,
   RetrievePayPasswordPageModelState,
@@ -116,7 +113,7 @@ function RetrievePayPassword({
                 <div>
                   <div className={styles.userPassword}>
                     <FTipText type='third' text={'用户登录密码'} />
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       style={{ fontSize: 12 }}
                       type='primary'
                       onClick={() => {
@@ -126,7 +123,7 @@ function RetrievePayPassword({
                       }}
                     >
                       忘记登录密码？
-                    </FTextBtn>
+                    </FComponentsLib.FTextBtn>
                   </div>
                   <div style={{ height: 5 }} />
                   <FInput
@@ -149,7 +146,7 @@ function RetrievePayPassword({
                 </div>
               </Space>
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 type='primary'
                 disabled={
                   retrievePayPasswordPage.userPassword_PasswordInput === ''
@@ -162,7 +159,7 @@ function RetrievePayPassword({
                 // style={{ width: 360 }}
               >
                 下一步
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
           </div>
           <div className='flex-1'></div>
@@ -257,7 +254,7 @@ function RetrievePayPassword({
                         });
                       }}
                     />
-                    <FRectBtn
+                    <FComponentsLib.FRectBtn
                       style={{ width: 110 }}
                       disabled={
                         retrievePayPasswordPage.captcha_SentCaptchaWait > 0
@@ -272,12 +269,12 @@ function RetrievePayPassword({
                       {retrievePayPasswordPage.captcha_SentCaptchaWait === 0
                         ? '获取验证码'
                         : `${retrievePayPasswordPage.captcha_SentCaptchaWait}秒`}
-                    </FRectBtn>
+                    </FComponentsLib.FRectBtn>
                   </Space>
                 </div>
               </Space>
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 type='primary'
                 disabled={retrievePayPasswordPage.captcha_CaptchaInput === ''}
                 onClick={() => {
@@ -288,7 +285,7 @@ function RetrievePayPassword({
                 // style={{ width: 360 }}
               >
                 下一步
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
           </div>
           <div className='flex-1'></div>
@@ -371,7 +368,7 @@ function RetrievePayPassword({
                 </div>
               </Space>
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 type='primary'
                 disabled={
                   retrievePayPasswordPage.paymentPassword_Password1Input
@@ -391,7 +388,7 @@ function RetrievePayPassword({
                 // style={{ width: 360 }}
               >
                 修改支付密码
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
           </div>
           <div className='flex-1'></div>
@@ -410,7 +407,7 @@ function RetrievePayPassword({
                 text={`${retrievePayPasswordPage.success_CloseWait}s后关闭当前页面`}
                 type='negative'
               />
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   dispatch<OnClick_Success_CloseBtn_Action>({
@@ -419,7 +416,7 @@ function RetrievePayPassword({
                 }}
               >
                 立即关闭
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </Space>
           </div>
         </div>

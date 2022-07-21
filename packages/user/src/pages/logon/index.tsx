@@ -1,13 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
+import { FContentText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
-// import FFooter from '@/layouts/FFooter';
 import FComponentsLib from '@freelog/components-lib';
 import {
   OnBlurEmailInputAction,
@@ -122,13 +120,13 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               text={`${logonPage.waitingTimeToLogin}s后返回登陆界面；`}
               type='negative'
             />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 gotoLogin();
               }}
             >
               立即登录
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
         </div>
@@ -310,7 +308,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                   });
                 }}
               />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 style={{ width: 110 }}
                 disabled={
                   logonPage.verifyCodeReSendWait > 0 || isVerifyAccountError
@@ -324,7 +322,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                 {logonPage.verifyCodeReSendWait === 0
                   ? '获取验证码'
                   : `${logonPage.verifyCodeReSendWait}秒`}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
             {logonPage.verificationCodeInputError && (
               <div className={styles.errorTip}>
@@ -372,7 +370,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           </div>
 
           <div style={{ height: 40 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             style={{ width: 360 }}
             disabled={isVerifyAllFormError}
             onClick={() => {
@@ -382,13 +380,13 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             }}
           >
             注册
-          </FRectBtn>
+          </FComponentsLib.FRectBtn>
         </div>
 
         <div className='flex-1 flex-column'>
           <Space size={0}>
             <FContentText className='mt-95' text={'已有账户？'} type='normal' />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               className='mt-95'
               type='primary'
               onClick={() => {
@@ -406,7 +404,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               }}
             >
               马上登录
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>
       </div>

@@ -2,17 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
-import { connect, Dispatch } from 'dva';
-import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import { Space } from 'antd';
 import { history } from 'umi';
-import loginCover from '@/assets/loginCover.png';
-// import FFooter from '@/layouts/FFooter';
 import * as AHooks from 'ahooks';
 import fMessage from '@/components/fMessage';
+import FComponentsLib from '@freelog/components-lib';
 
 function Login() {
   const [urlParams] = useUrlState<{
@@ -125,13 +121,13 @@ function Login() {
               {bindData.passwordError && <div>{bindData.passwordError}</div>}
 
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 className={styles.btn}
                 disabled={bindData.loading}
                 onClick={submit}
               >
                 {bindData.loading ? '完成设置并登录' : '完成设置并登录'}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
           </div>
           <div className="flex-1 flex-column">
@@ -141,7 +137,7 @@ function Login() {
                 text={'已有帐户？'}
                 type="normal"
               />
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type="primary"
                 className="mt-95"
                 onClick={() => {
@@ -157,7 +153,7 @@ function Login() {
                 }}
               >
                 马上登录
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </Space>
           </div>
         </div>

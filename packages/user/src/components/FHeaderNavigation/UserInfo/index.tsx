@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-// import FDropdown from '@/components/FDropdown';
 import { FUtil } from '@freelog/tools-lib';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import { FUser } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
@@ -27,7 +25,7 @@ function UserInfo({ data }: UserInfoProps) {
 
   if (!data) {
     return (<Space size={10}>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='default'
         size='small'
         onClick={() => {
@@ -35,8 +33,8 @@ function UserInfo({ data }: UserInfoProps) {
             goTo: window.location.href,
           });
         }}
-      >登录</FRectBtn>
-      <FRectBtn
+      >登录</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
         type='primary'
         size='small'
         onClick={() => {
@@ -44,7 +42,7 @@ function UserInfo({ data }: UserInfoProps) {
             goTo: window.location.href,
           });
         }}
-      >注册</FRectBtn>
+      >注册</FComponentsLib.FRectBtn>
     </Space>);
   }
 

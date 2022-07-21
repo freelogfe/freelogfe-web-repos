@@ -2,8 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { Input, Popover, Radio, Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { Popover, Radio, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, RetrievePageModelState } from '@/models/connect';
 import { history } from 'umi';
@@ -11,9 +10,7 @@ import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import * as AHooks from 'ahooks';
-// import FFooter from '@/layouts/FFooter';
 import FComponentsLib from '@freelog/components-lib';
-
 import {
   OnBlurConfirmPasswordInputAction,
   OnBlurEmailInputAction,
@@ -122,13 +119,13 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`}
               type='negative'
             />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 gotoLogin();
               }}
             >
               立即登录
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
         </div>
@@ -276,7 +273,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                   });
                 }}
               />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 style={{ width: 110 }}
                 disabled={
                   retrievePage.verifyCodeReSendWait > 0 || !isVerifyModeValid
@@ -290,7 +287,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                 {retrievePage.verifyCodeReSendWait === 0
                   ? '获取验证码'
                   : `${retrievePage.verifyCodeReSendWait}秒`}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
             {retrievePage.verifyCodeError && (
               <div className={styles.errorTip}>
@@ -373,7 +370,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             )}
           </div>
           <div style={{ height: 40 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             style={{ width: 360 }}
             disabled={!isVerifyAllForm}
             onClick={() => {
@@ -383,11 +380,11 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             }}
           >
             重置密码
-          </FRectBtn>
+          </FComponentsLib.FRectBtn>
         </div>
         <div className='flex-1 flex-column'>
           <Space size={50}>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               className='mt-95'
               onClick={() => {
                 history.replace(
@@ -402,8 +399,8 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               }}
             >
               返回登陆页
-            </FTextBtn>
-            <FTextBtn
+            </FComponentsLib.FTextBtn>
+            <FComponentsLib.FTextBtn
               className='mt-95'
               onClick={() => {
                 history.replace(
@@ -418,7 +415,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               }}
             >
               注册新帐户
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>
       </div>

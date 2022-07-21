@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { FTitleText } from '@/components/FText';
 import img_Cartoon1 from '@/assets/activity/cartoon1@2x.png';
 import img_Cartoon2 from '@/assets/activity/cartoon2@2x.png';
@@ -13,6 +12,7 @@ import img_Novel3 from '@/assets/activity/novel3@2x.png';
 import img_Novel4 from '@/assets/activity/novel4@2x.png';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ParticipationsProps {
 
@@ -182,14 +182,14 @@ function Participations({}: ParticipationsProps) {
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
-          >立即参赛</FRectBtn>
-          <FTextBtn type='primary'>如何参赛？</FTextBtn>
+          >立即参赛</FComponentsLib.FRectBtn>
+          <FComponentsLib.FTextBtn type='primary'>如何参赛？</FComponentsLib.FTextBtn>
         </Space>
       </div>
       <div
@@ -265,14 +265,14 @@ function Participations({}: ParticipationsProps) {
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
-          >立即参赛</FRectBtn>
-          <FTextBtn type='primary'>如何参赛？</FTextBtn>
+          >立即参赛</FComponentsLib.FRectBtn>
+          <FComponentsLib.FTextBtn type='primary'>如何参赛？</FComponentsLib.FTextBtn>
         </Space>
       </div>
     </div>

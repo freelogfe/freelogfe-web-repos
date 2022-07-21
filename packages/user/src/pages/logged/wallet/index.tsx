@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
@@ -60,7 +59,7 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
-// import FUtil1 from '@/utils';
+import FComponentsLib from '@freelog/components-lib';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -200,14 +199,14 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         ? (<div className={styles.Inactive}>
           <FTipText text={FI18n.i18nNext.t('msg_activate_feather_account')} type='second' />
           <div style={{ width: 30 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type='primary'
             onClick={() => {
               dispatch<OnClick_Activate_AccountBtn_Action>({
                 type: 'walletPage/onClick_Activate_AccountBtn',
               });
             }}
-          >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FRectBtn>
+          >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FComponentsLib.FRectBtn>
         </div>)
         : (<>
           <div className={styles.AccountInfo}>
@@ -408,22 +407,22 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                       />
                     </div>
                     <Space size={10} className={styles.filter2Right}>
-                      <FRectBtn
+                      <FComponentsLib.FRectBtn
                         type='default'
                         onClick={() => {
                           dispatch<OnClick_Table_Filter_ResetBtn_Action>({
                             type: 'walletPage/onClick_Table_Filter_ResetBtn',
                           });
                         }}
-                      >{FI18n.i18nNext.t('btn_reset_filter')}</FRectBtn>
-                      <FRectBtn
+                      >{FI18n.i18nNext.t('btn_reset_filter')}</FComponentsLib.FRectBtn>
+                      <FComponentsLib.FRectBtn
                         type='primary'
                         onClick={() => {
                           dispatch<OnClick_Table_Filter_SearchBtn_Action>({
                             type: 'walletPage/onClick_Table_Filter_SearchBtn',
                           });
                         }}
-                      >{FI18n.i18nNext.t('btn_search_transactions')}</FRectBtn>
+                      >{FI18n.i18nNext.t('btn_search_transactions')}</FComponentsLib.FRectBtn>
                     </Space>
                   </div>
 
@@ -562,7 +561,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   });
                 }}
               />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 style={{ width: 110 }}
                 type='primary'
                 disabled={walletPage.activating_SentCaptchaWait > 0}
@@ -571,12 +570,12 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     type: 'walletPage/onClick_Activate_SentCaptchaBtn',
                   });
                 }}
-              >{walletPage.activating_SentCaptchaWait === 0 ? '获取验证码' : `${walletPage.activating_SentCaptchaWait}秒`}</FRectBtn>
+              >{walletPage.activating_SentCaptchaWait === 0 ? '获取验证码' : `${walletPage.activating_SentCaptchaWait}秒`}</FComponentsLib.FRectBtn>
             </Space>
           </div>
         </Space>
         <div style={{ height: 40 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={!walletPage.activating_Captcha}
           onClick={() => {
@@ -584,7 +583,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_Activate_NextBtn',
             });
           }}
-        >下一步</FRectBtn>
+        >下一步</FComponentsLib.FRectBtn>
       </div>
 
     </Modal>
@@ -649,7 +648,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </div>
         </Space>
         <div style={{ height: 40 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={walletPage.activating_PasswordOne === ''
           || walletPage.activating_PasswordTwo === ''
@@ -660,7 +659,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_Activate_ConfirmBtn',
             });
           }}
-        >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FRectBtn>
+        >{FI18n.i18nNext.t('btn_activate_feather_account_now')}</FComponentsLib.FRectBtn>
       </div>
 
     </Modal>
@@ -742,7 +741,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   });
                 }}
               />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 style={{ width: 110 }}
                 disabled={walletPage.changingPassword_CaptchaModal_SentCaptchaWait > 0}
                 type='primary'
@@ -751,12 +750,12 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     type: 'walletPage/onClick_ChangingPassword_CaptchaModal_SendBtn',
                   });
                 }}
-              >{walletPage.changingPassword_CaptchaModal_SentCaptchaWait === 0 ? '获取验证码' : `${walletPage.changingPassword_CaptchaModal_SentCaptchaWait}秒`}</FRectBtn>
+              >{walletPage.changingPassword_CaptchaModal_SentCaptchaWait === 0 ? '获取验证码' : `${walletPage.changingPassword_CaptchaModal_SentCaptchaWait}秒`}</FComponentsLib.FRectBtn>
             </Space>
           </div>
         </Space>
         <div style={{ height: 40 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={walletPage.changingPassword_CaptchaModal_CaptchaInput === ''}
           onClick={() => {
@@ -764,7 +763,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_ChangingPassword_CaptchaModal_NextBtn',
             });
           }}
-        >下一步</FRectBtn>
+        >下一步</FComponentsLib.FRectBtn>
       </div>
 
     </Modal>
@@ -787,7 +786,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           <div>
             <div className={styles.payPassword}>
               <FTipText type='third' text={'原支付密码'} />
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 style={{ fontSize: 12 }}
                 type='primary'
                 onClick={() => {
@@ -795,7 +794,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   // const host: string = FUtil.Format.completeUrlByDomain('user');
                   window.open(path);
                 }}
-              >忘记密码？</FTextBtn>
+              >忘记密码？</FComponentsLib.FTextBtn>
             </div>
             <div style={{ height: 5 }} />
             <FPaymentPasswordInput
@@ -814,7 +813,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         </Space>
 
         <div style={{ height: 40 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={walletPage.changingPassword_OldPasswordModal_PasswordInput.length !== 6}
           onClick={() => {
@@ -822,7 +821,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_ChangingPassword_OldPasswordModal_NextBtn',
             });
           }}
-        >下一步</FRectBtn>
+        >下一步</FComponentsLib.FRectBtn>
       </div>
     </Modal>
 
@@ -888,7 +887,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         </Space>
 
         <div style={{ height: 40 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={walletPage.changingPassword_NewPasswordModal_Password1 === ''
           || walletPage.changingPassword_NewPasswordModal_Password1Error !== ''
@@ -899,7 +898,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               type: 'walletPage/onClick_ChangingPassword_NewPasswordModal_ConfirmBtn',
             });
           }}
-        >修改支付密码</FRectBtn>
+        >修改支付密码</FComponentsLib.FRectBtn>
       </div>
     </Modal>
   </div>);

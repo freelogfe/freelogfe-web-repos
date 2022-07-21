@@ -7,7 +7,6 @@ import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
 import { FLoading, FNodes, FUser } from '@/components/FIcons';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ContractPageModelState } from '@/models/connect';
@@ -34,7 +33,6 @@ import moment, { Moment } from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 const RangePicker: any = DatePicker.RangePicker;
@@ -148,7 +146,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div style={{ height: 5 }} />
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             className={styles.hoverVisible}
             type='primary'
             onClick={() => {
@@ -159,7 +157,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 },
               });
             }}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },
@@ -260,7 +258,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div style={{ height: 5 }} />
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               dispatch<OnClickViewDetailsBtnAction>({
@@ -271,7 +269,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
               });
             }}
             className={styles.hoverVisible}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },
@@ -407,7 +405,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   />
                     <div className={styles.contentFooter}>
                       {
-                        contractPage.authorize_ListMore === 'andMore' && (<FRectBtn
+                        contractPage.authorize_ListMore === 'andMore' && (<FComponentsLib.FRectBtn
                           type='primary'
                           onClick={() => {
                             dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
@@ -416,7 +414,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                           }}
                         >
                           加载更多
-                        </FRectBtn>)
+                        </FComponentsLib.FRectBtn>)
                       }
 
                       {
@@ -533,7 +531,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     />
                     <div className={styles.contentFooter}>
                       {
-                        contractPage.authorized_ListMore === 'andMore' && (<FRectBtn
+                        contractPage.authorized_ListMore === 'andMore' && (<FComponentsLib.FRectBtn
                           type='primary'
                           onClick={() => {
                             dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
@@ -542,7 +540,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                           }}
                         >
                           加载更多
-                        </FRectBtn>)
+                        </FComponentsLib.FRectBtn>)
                       }
 
                       {

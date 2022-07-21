@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
+import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   LoginAction,
@@ -13,12 +12,11 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-import { Space } from 'antd';
 import { history } from 'umi';
 import loginCover from '@/assets/loginCover.png';
 import wechatPng from '@/assets/wechat.png';
-// import FFooter from '@/layouts/FFooter';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -108,7 +106,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 }}
               >
                 <FTitleText type="h4" text={'密码'} />
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   style={{ fontSize: 12 }}
                   type="primary"
                   onClick={() => {
@@ -124,7 +122,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                   }}
                 >
                   忘记密码？
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -159,7 +157,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
               {loginPage.passwordError && <div>{loginPage.passwordError}</div>}
 
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 className={styles.btn}
                 disabled={submitBtnDisabled}
                 onClick={() => {
@@ -170,10 +168,10 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 }}
               >
                 {loginPage.btnState === 'verify' ? '正在登录' : '登 录'}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
             <div className="w-100x flex-row-reverse ">
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type="primary"
                 className="mt-5"
                 onClick={() => {
@@ -189,7 +187,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 }}
               >
                 注册新账号
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </div>
           </div>
           <div className="flex-1 flex-column align-center">
@@ -204,8 +202,8 @@ function Login({ dispatch, loginPage }: LoginProps) {
                     location.host.includes('user.testfreelog.com')
                       ? 'test/'
                       : ''
-                  }v2/thirdParty/weChat/codeHandle?returnUrl=` + 
-                    (urlParams.goTo || 
+                  }v2/thirdParty/weChat/codeHandle?returnUrl=` +
+                    (urlParams.goTo ||
                     location.host.includes('user.testfreelog.com')
                       ? 'http://user.testfreelog.com/'
                       : 'https:user.freelog.com'),

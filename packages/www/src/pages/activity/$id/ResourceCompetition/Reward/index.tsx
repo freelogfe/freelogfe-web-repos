@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FPentagram from '@/components/FIcons/FPentagram';
-// import FLine from '../../../../../components/FIcons/FLine';
 import { Space } from 'antd';
-import { FRectBtn } from '@/components/FButton';
 import FComponentsLib from '@freelog/components-lib';
 
 interface RewardProps {
@@ -148,7 +146,7 @@ function Reward({}: RewardProps) {
             borderRadius: 10,
           }}>
           <span>15元现金奖励待领取</span>
-          <FRectBtn type='primary'>立即领取</FRectBtn>
+          <FComponentsLib.FRectBtn type='primary'>立即领取</FComponentsLib.FRectBtn>
         </Space>
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
