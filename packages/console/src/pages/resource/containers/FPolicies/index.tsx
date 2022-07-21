@@ -5,11 +5,10 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-// import FUtil1 from '@/utils';
-import { FRectBtn } from '@/components/FButton';
 import FPolicyList from '@/components/FPolicyList';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FPoliciesProps {
   dispatch: Dispatch;
@@ -61,8 +60,8 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             text={FI18n.i18nNext.t('hint_add_authorization_plan')}
           />
           <div style={{ height: 20 }} />
-          <FRectBtn
-            onClick={openNewVisible}>{'添加授权策略'}</FRectBtn>
+          <FComponentsLib.FRectBtn
+            onClick={openNewVisible}>{'添加授权策略'}</FComponentsLib.FRectBtn>
         </div>)
         : (<FPolicyList
           dataSource={resourceAuthPage.policies}

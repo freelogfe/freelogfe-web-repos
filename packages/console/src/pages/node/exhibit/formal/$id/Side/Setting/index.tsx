@@ -4,7 +4,6 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
 import { FDelete, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
-import { FCircleBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -269,7 +268,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
         </div>
         <div style={{ height: 20 }} />
         <Space className={styles.addCustomTitle}>
-          <FCircleBtn
+          <FComponentsLib.FCircleBtn
             // theme="text"
             size='small'
             onClick={() => {

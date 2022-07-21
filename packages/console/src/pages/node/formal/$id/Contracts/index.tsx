@@ -7,7 +7,6 @@ import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
 import { FLoading, FNodes, FUser } from '@/components/FIcons';
-import { FRectBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManager_Contract_Page_ModelState } from '@/models/connect';
@@ -413,7 +412,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                     />
                       <div className={styles.contentFooter}>
                         {
-                          nodeManager_Contract_Page.authorize_ListMore === 'andMore' && (<FRectBtn
+                          nodeManager_Contract_Page.authorize_ListMore === 'andMore' && (<FComponentsLib.FRectBtn
                             type='primary'
                             onClick={() => {
                               dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
@@ -422,7 +421,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                             }}
                           >
                             加载更多
-                          </FRectBtn>)
+                          </FComponentsLib.FRectBtn>)
                         }
 
                         {
@@ -542,7 +541,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                       />
                       <div className={styles.contentFooter}>
                         {
-                          nodeManager_Contract_Page.authorized_ListMore === 'andMore' && (<FRectBtn
+                          nodeManager_Contract_Page.authorized_ListMore === 'andMore' && (<FComponentsLib.FRectBtn
                             type='primary'
                             onClick={() => {
                               dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
@@ -551,7 +550,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                             }}
                           >
                             加载更多
-                          </FRectBtn>)
+                          </FComponentsLib.FRectBtn>)
                         }
 
                         {

@@ -4,7 +4,6 @@ import { FContentText, FTitleText } from '@/components/FText';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
@@ -102,7 +101,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
               onClick={() => onChangePInputTitle(null)}
             >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
             <div style={{ width: 15 }} />
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               size='small'
               onClick={() => {
                 dispatch<UpdateBaseInfoAction>({
@@ -113,7 +112,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
                 });
                 onChangePInputTitle(null);
               }}
-            >{FI18n.i18nNext.t('btn_save')}</FRectBtn>
+            >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
           </div>
 
         </>)

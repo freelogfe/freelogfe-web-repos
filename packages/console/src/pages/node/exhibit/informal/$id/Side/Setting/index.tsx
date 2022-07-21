@@ -3,7 +3,6 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FDelete, FRedo, FSwap } from '@/components/FIcons';
-import { FCircleBtn } from '@/components/FButton';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
@@ -243,7 +242,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     </div>
     <div style={{ height: 20 }} />
     <Space className={styles.addCustomTitle}>
-      <FCircleBtn
+      <FComponentsLib.FCircleBtn
         // type='transparent'
         size='small'
         onClick={() => {

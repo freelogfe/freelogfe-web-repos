@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FTipText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
@@ -17,6 +16,7 @@ import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FWarning } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -31,13 +31,13 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
 
   return (<>
     <Space size={15}>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         onClick={() => setModalVisible(true)}
         type='default'
-      >添加依赖</FRectBtn>
+      >添加依赖</FComponentsLib.FRectBtn>
       {
         resourceVersionCreatorPage.preVersionDeps.relationships.length > 0 &&
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='default'
           onClick={() => {
             dispatch<ImportLastVersionDataAction>({
@@ -52,7 +52,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
-        >{FI18n.i18nNext.t('import_from_previous_version')}</FRectBtn>
+        >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
       }
 
     </Space>

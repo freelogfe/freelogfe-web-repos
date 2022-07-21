@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleBtn} from '@/components/FButton';
 import {Progress, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -13,9 +12,9 @@ import FTooltip from "@/components/FTooltip";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
-// import FUtil1 from "@/utils";
 import {FUtil, FI18n} from '@freelog/tools-lib';
 import { router } from 'umi';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -50,7 +49,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
 
           {
             (storageHomePage.bucketList || []).length < 5
-              ? (<FCircleBtn
+              ? (<FComponentsLib.FCircleBtn
                 type="transparent"
                 onClick={() => {
                   router.replace(FUtil.LinkTo.storageSpace({
@@ -65,7 +64,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 trigger="click"
                 placement="topLeft"
               >
-                <FCircleBtn type="transparent"/>
+                <FComponentsLib.FCircleBtn type="transparent"/>
               </FTooltip>)
           }
 

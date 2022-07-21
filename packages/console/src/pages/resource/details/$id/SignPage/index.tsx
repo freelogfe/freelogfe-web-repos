@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FTitleText, FContentText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -67,13 +66,13 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         <>返回上一步</>
       </FComponentsLib.FTextBtn>
       <div style={{ width: 30 }} />
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
           type: 'resourceDetailPage/onClick_ConfirmSignContract',
         })}
         disabled={!!resourceDetailPage.sign_SignExhibitNameErrorTip}
         type='primary'
-      >确认签约</FRectBtn>
+      >确认签约</FComponentsLib.FRectBtn>
     </div>
   </div>}>
 

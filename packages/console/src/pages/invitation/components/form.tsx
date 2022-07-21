@@ -1,13 +1,11 @@
 import * as React from 'react';
 import * as AHooks from 'ahooks';
 import styles from './form.less';
-
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { FRectBtn } from '@/components/FButton';
+import { FServiceAPI } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import { event } from '../../../../../www/src/.umi/plugin-locale/locale';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FormProps {
   finished: any;
@@ -137,7 +135,7 @@ function Form({ finished }: FormProps) {
           }}
         />
         <div className="flex-row-center">
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             className="mt-40 "
             disabled={city === '0' || !occupation || !description}
             onClick={() => {
@@ -145,7 +143,7 @@ function Form({ finished }: FormProps) {
             }}
           >
             提交申请
-          </FRectBtn>
+          </FComponentsLib.FRectBtn>
         </div>
       </div>
       <div className="flex-1"></div>

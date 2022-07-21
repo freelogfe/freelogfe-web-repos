@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space, Row, Col } from 'antd';
-import { FRectBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { FTitleText } from '../FText';
 import FInput from '../FInput';
@@ -105,7 +104,7 @@ function FCustomOptionEditorDrawer({
             onCancel && onCancel();
           }}
         >取消</FComponentsLib.FTextBtn>
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={keyInput === '' || keyInputError !== ''
           || descriptionInputError !== ''
@@ -119,7 +118,7 @@ function FCustomOptionEditorDrawer({
               valueType: valueTypeSelect,
             });
           }}
-        >保存</FRectBtn>
+        >保存</FComponentsLib.FRectBtn>
       </Space>}
     >
       <div className={styles.option}>

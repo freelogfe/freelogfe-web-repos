@@ -5,7 +5,6 @@ import { Space } from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState } from '@/models/connect';
 import { OnChangeInfoAction, ChangeAction, InitModelStatesAction } from '@/models/resourceInfoPage';
@@ -135,13 +134,13 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
                 ? (<div className={styles.aboutPanel}>
                   <FContentText text={resourceInfo.info?.intro} />
                 </div>)
-                : (<FRectBtn
+                : (<FComponentsLib.FRectBtn
                   type='default'
                   onClick={() => onChangeIsEditing(true)}
                 >
                   {/*{FUtil.I18n.message('resource_short_description')}*/}
                   添加简介
-                </FRectBtn>)
+                </FComponentsLib.FRectBtn>)
           }
 
         </FFormLayout.FBlock>

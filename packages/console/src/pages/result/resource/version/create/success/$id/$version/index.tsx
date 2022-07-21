@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FRectBtn} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
@@ -79,12 +78,12 @@ function Success({match, dispatch}: SuccessProps) {
         gotoState === 1 && (<div className={styles.goto1}>
           <FTipText type="third" text={'未添加策略的资源不会出现在资源市场中'}/>
           <div style={{height: 30}}/>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             onClick={() => {
               gotoAuth();
             }}
             style={{padding: '0 20px'}}
-          >立即添加授权策略</FRectBtn>
+          >立即添加授权策略</FComponentsLib.FRectBtn>
           <div style={{height: 15}}/>
           <FComponentsLib.FTextBtn
             onClick={() => {

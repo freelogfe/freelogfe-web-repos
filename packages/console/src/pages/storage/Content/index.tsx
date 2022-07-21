@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FTable from '@/components/FTable';
 import { connect, Dispatch } from 'dva';
@@ -152,11 +151,11 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               }
               return false;
             }}>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               size='large'
               type='primary'
               style={{ paddingLeft: 50, paddingRight: 50 }}
-            >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
+            >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
           </FUpload>}
         />
       </>)

@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '../../FDrawer';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn } from '../../FButton';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -60,12 +59,12 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
           <FContentText type='negative' text={'示例：1 周之后'} />
         </div>
       </div>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='secondary'
         size='small'
         onClick={() => {
           onSelectEvent('relativeTime');
-        }}>选择</FRectBtn>
+        }}>选择</FComponentsLib.FRectBtn>
     </div>
 
     <div style={{ height: 10 }} />
@@ -79,12 +78,12 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
           <FContentText type='negative' text={'示例：于 2021/05/03'} />
         </div>
       </div>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='secondary'
         size='small'
         onClick={() => {
           onSelectEvent('absoluteTime');
-        }}>选择</FRectBtn>
+        }}>选择</FComponentsLib.FRectBtn>
     </div>
 
     <div style={{ height: 10 }} />
@@ -98,14 +97,14 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
           <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />
         </div>
       </div>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='secondary'
         size='small'
         disabled={!areAccountActivated}
         onClick={() => {
           onSelectEvent('payment');
         }}
-      >选择</FRectBtn>
+      >选择</FComponentsLib.FRectBtn>
     </div>
     {
       !areAccountActivated && (<>
@@ -135,14 +134,14 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
       <div>
         <FContentText type='normal' text={'状态机终止，停止接收事件'} />
       </div>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='secondary'
         size='small'
         disabled={disabledTerminateEvent}
         onClick={() => {
           onSelectEvent('terminate');
         }}
-      >选择</FRectBtn>
+      >选择</FComponentsLib.FRectBtn>
     </div>
   </FDrawer>);
 }

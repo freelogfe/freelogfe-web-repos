@@ -4,8 +4,8 @@ import {Space} from "antd";
 import {FContentText} from "../FText";
 import FTooltip from "../FTooltip";
 import {FInfo} from "../FIcons";
-import {FCircleBtn} from "../FButton";
 import fConfirmModal from '@/components/fConfirmModal';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasePropertiesCardsProps {
   rawProperties: {
@@ -66,7 +66,7 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
               {
                 onEdit && (<FTooltip title={'编辑'}>
                   <div>
-                    <FCircleBtn
+                    <FComponentsLib.FCircleBtn
                       type="minor"
                       onClick={() => {
                         onEdit(bp.theKey);
@@ -79,7 +79,7 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
               {
                 onDelete && (<FTooltip title={'删除'}>
                   <div>
-                    <FCircleBtn
+                    <FComponentsLib.FCircleBtn
                       type="danger"
                       onClick={() => {
                         fConfirmModal({

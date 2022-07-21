@@ -2,14 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from '@/components/FText';
 import {Space} from 'antd';
-import {FRectBtn} from '@/components/FButton';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
 import {StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
-// import FUtil1 from "@/utils";
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -53,9 +52,9 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
             return false;
           }}
         >
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type="primary"
-          >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
+          >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
         </FUpload>
       )
     }

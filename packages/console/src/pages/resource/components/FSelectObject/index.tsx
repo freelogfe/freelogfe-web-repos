@@ -2,13 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FObjectCard from './ObjectCard';
-// import { LoadingOutlined } from '@ant-design/icons';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
@@ -290,11 +288,11 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                     }}
                     showUploadList={false}
                   >
-                    <FRectBtn
+                    <FComponentsLib.FRectBtn
                       type='default'
-                    >{FI18n.i18nNext.t('upload_from_local')}</FRectBtn>
+                    >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
                   </FUpload>
-                  <FRectBtn
+                  <FComponentsLib.FRectBtn
                     type='default'
                     onClick={() => {
                       // setModalVisible(true)
@@ -302,7 +300,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                         selectedFileObjectDrawerVisible: true,
                       });
                     }}
-                  >{FI18n.i18nNext.t('choose_from_storage')}</FRectBtn>
+                  >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
                 </Space>)
             }
 

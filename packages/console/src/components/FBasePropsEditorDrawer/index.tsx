@@ -3,7 +3,6 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText, FTitleText } from '../FText';
 import FInput from '../FInput';
-import { FCircleBtn, FRectBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -91,7 +90,7 @@ function FBasePropsEditorDrawer({
           onCancel && onCancel();
         }}
       >取消</FComponentsLib.FTextBtn>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         disabled={!!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || !eds.value || !!eds.valueError
@@ -100,7 +99,7 @@ function FBasePropsEditorDrawer({
         onClick={() => {
           onConfirm && onConfirm();
         }}
-      >确定</FRectBtn>
+      >确定</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -191,7 +190,7 @@ function FBasePropsEditorDrawer({
             <div>
               <div style={{ height: 22 }} />
               <div className={styles.delete}>
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   type='danger'
                   onClick={() => {
                     onChange && onChange(dataSource.filter((eds, edsIndex) => {
@@ -211,7 +210,7 @@ function FBasePropsEditorDrawer({
     }
 
     <Space size={10}>
-      <FCircleBtn
+      <FComponentsLib.FCircleBtn
         size='small'
         onClick={() => {
           onChange && onChange([

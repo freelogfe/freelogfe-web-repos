@@ -3,7 +3,6 @@ import {Divider, Popover, Space} from 'antd';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
-import {FCircleBtn} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDivider from "@/components/FDivider";
@@ -112,7 +111,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
             </Space>
           </div>
           <div className={styles.resourceRight}>
-            <FCircleBtn
+            <FComponentsLib.FCircleBtn
               type="danger"
               onClick={() => {
                 changeData(dataSource.filter((ds, index) => index !== i))

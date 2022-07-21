@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import Property from './Property';
-import { FCircleBtn } from '../../FButton';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface Data {
   key: string;
@@ -58,7 +58,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
               />
             </div>
             <div style={{ width: 30, flexShrink: 0 }} />
-            <FCircleBtn
+            <FComponentsLib.FCircleBtn
               type='danger'
               onClick={() => {
                 const data: Data[] = dataSource.filter((ds, index) => index !== j);

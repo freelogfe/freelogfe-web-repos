@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FRectBtn } from '@/components/FButton';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
@@ -79,12 +78,12 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
           <span>{fullInfo.policyName}</span>
         </Space>
 
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           size='small'
           onClick={() => {
             setDrawerVisible(true);
           }}
-        >获取授权</FRectBtn>
+        >获取授权</FComponentsLib.FRectBtn>
       </div>
       <div style={{ height: 10 }} />
       <div style={{ padding: '0 20px' }}>
@@ -115,12 +114,12 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
       <div className={styles.ModalTile}>
         <FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           size='small'
           onClick={() => {
             setDrawerVisible(true);
           }}
-        >获取授权</FRectBtn>
+        >获取授权</FComponentsLib.FRectBtn>
       </div>
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
@@ -143,11 +142,11 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
           }}
         >取消</FComponentsLib.FTextBtn>
 
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={checkedVersions.length === 0}
           onClick={onConfirm_VersionsDrawer}
-        >签约</FRectBtn>
+        >签约</FComponentsLib.FRectBtn>
       </Space>}
       afterVisibleChange={onChange_VersionsDrawer_Visible}
     >

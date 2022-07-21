@@ -22,7 +22,6 @@ import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import { FNodes, FUser } from '@/components/FIcons';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import { FCircleBtn } from '@/components/FButton';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
 import FResource from '@/components/FIcons/FResource';
@@ -162,7 +161,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
           dot={resourceAuthPage.policies.length === 0}
           title={FI18n.i18nNext.t('authorization_plan')}
           extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
-            <FCircleBtn
+            <FComponentsLib.FCircleBtn
               size='small'
               onClick={() => {
                 dispatch<ChangeAction>({

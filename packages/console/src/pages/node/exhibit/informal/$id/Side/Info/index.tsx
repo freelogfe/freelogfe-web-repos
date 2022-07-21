@@ -10,7 +10,6 @@ import {
 } from '@/models/informExhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
@@ -102,7 +101,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
                 }}
               >取消</FComponentsLib.FTextBtn>
               <div style={{ width: 15 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 size='small'
                 onClick={async () => {
                   dispatch<OnClick_Side_Exhibit_Title_Action>({
@@ -110,7 +109,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
                   });
                 }}
                 type='primary'
-              >确定</FRectBtn>
+              >确定</FComponentsLib.FRectBtn>
             </div>
 
           </>)

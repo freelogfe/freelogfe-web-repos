@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Space } from 'antd';
-import { FRectBtn } from '@/components/FButton';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCheckbox from '@/components/FCheckbox';
@@ -224,11 +223,11 @@ function FAddInformExhibitDrawer({
           onCancel && onCancel();
         }}
       >取消</FComponentsLib.FTextBtn>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         disabled={!list.some((l) => l.checked)}
         onClick={onConfirm_Drawer}
         type='primary'
-      >添加</FRectBtn>
+      >添加</FComponentsLib.FRectBtn>
     </Space>}
     afterVisibleChange={onChange_DrawerVisible}
   >

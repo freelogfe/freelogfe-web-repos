@@ -3,7 +3,6 @@ import styles from './index.less';
 import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
@@ -225,7 +224,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
         type='default'
         onClick={onClickCache}
       >{FI18n.i18nNext.t('save_as_draft')}</FComponentsLib.FTextBtn>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         style={{ display: 'flex', alignItems: 'center' }}
         onClick={onClickCreate}
         disabled={disabledCreate}
@@ -233,7 +232,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
         <FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
         <div style={{ width: 5 }} />
         {FI18n.i18nNext.t('release_to_market')}
-      </FRectBtn>
+      </FComponentsLib.FRectBtn>
     </Space>
   </div>);
 }

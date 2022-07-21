@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import { connect, Dispatch } from 'dva';
@@ -213,9 +212,9 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 type='second'
               />
               <div style={{ height: 20 }} />
-              <FRectBtn onClick={() => {
+              <FComponentsLib.FRectBtn onClick={() => {
                 setIsEditing(true);
-              }}>添加版本描述</FRectBtn>
+              }}>添加版本描述</FComponentsLib.FRectBtn>
             </div>)
           }
 
@@ -407,7 +406,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           }}
         >取消</FComponentsLib.FTextBtn>
 
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
           onClick={async () => {
@@ -432,7 +431,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               type: 'resourceVersionEditorPage/syncAllProperties',
             });
           }}
-        >保存</FRectBtn>
+        >保存</FComponentsLib.FRectBtn>
       </Space>}
     >
       <Space

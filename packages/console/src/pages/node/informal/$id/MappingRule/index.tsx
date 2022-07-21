@@ -15,7 +15,6 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
@@ -255,14 +254,14 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
               });
             }}
           >取消</FComponentsLib.FTextBtn>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type='primary'
             onClick={() => {
               dispatch<OnClick_Rule_Export_ConfirmBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Export_ConfirmBtn',
               });
             }}
-          >导出</FRectBtn>
+          >导出</FComponentsLib.FRectBtn>
         </Space>)
       }
 
@@ -277,14 +276,14 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
               });
             }}
           >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             type='danger1'
             onClick={async () => {
               dispatch<OnClick_Rule_Delete_ConfirmBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Delete_ConfirmBtn',
               });
             }}
-          >删除</FRectBtn>
+          >删除</FComponentsLib.FRectBtn>
         </Space>)
       }
     </div>
@@ -313,14 +312,14 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             />
 
             <div style={{ height: 15 }} />
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               disabled={!informalNodeManagerPage.rule_CodeIsDirty || informalNodeManagerPage.rule_CodeState === 'checking'}
               onClick={() => {
                 dispatch<OnClick_Rule_SaveBtn_Action>({
                   type: 'informalNodeManagerPage/onClick_Rule_SaveBtn',
                 });
               }}
-            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FI18n.i18nNext.t('msg_verifying') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FI18n.i18nNext.t('msg_verifying') : '校验并保存'}</FComponentsLib.FRectBtn>
 
             <div style={{ height: 20 }} />
 

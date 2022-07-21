@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FRectBtn} from "../FButton";
 import {FTitleText} from "../FText";
 import FInput from "../FInput";
 import FDrawer from "../FDrawer";
@@ -48,13 +47,13 @@ function FBasePropEditorDrawer({
         }}
       >取消</FComponentsLib.FTextBtn>
 
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type="primary"
         disabled={!!keyInputError || !!valueInputError || !!descriptionInputError}
         onClick={async () => {
           onConfirm && onConfirm();
         }}
-      >保存</FRectBtn>
+      >保存</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space

@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCenterLayout from '@/layouts/FCenterLayout';
 import { FTitleText, FContentText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
-import { Input, Space } from 'antd';
+import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodesModelState } from '@/models/connect';
 import {
@@ -21,6 +19,7 @@ import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -117,7 +116,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.nameError}</pre>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         className={styles.button}
         disabled={nodes.domainVerify !== 'verified' || !!nodes.domainError
         || nodes.nameVerify !== 'verified' || !!nodes.nameError}
@@ -127,7 +126,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
           });
         }}
         type='primary'
-      >创建节点</FRectBtn>
+      >创建节点</FComponentsLib.FRectBtn>
     </div>
   </FContentLayout>);
 }

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import { connect, Dispatch } from 'dva';
@@ -71,7 +70,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         }}
         type='default'
       >取消</FComponentsLib.FTextBtn>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         disabled={hasError}
         onClick={async () => {
           dispatch<OnClick_SaveBtn_Action>({
@@ -89,7 +88,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           // });
           // router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
-      >保存</FRectBtn>
+      >保存</FComponentsLib.FRectBtn>
     </Space>}
     onClose={() => {
       onChange({
@@ -292,10 +291,10 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>
           <Space size={10}>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               type='default'
               onClick={() => setDepInfoVisible(true)}
-            >添加依赖</FRectBtn>
+            >添加依赖</FComponentsLib.FRectBtn>
           </Space>
           {
             storageObjectEditor.depRs.length > 0 && (<DepsCards

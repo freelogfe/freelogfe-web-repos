@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText } from '../FText';
-import { FCircleBtn, FRectBtn } from '../FButton';
 import FCustomOptions, { Data } from './FCustomOptions';
 import FDrawer from '../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
@@ -74,7 +73,7 @@ function FCustomOptionsEditorDrawer({
           onCancel && onCancel();
         }}
       >取消</FComponentsLib.FTextBtn>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
@@ -82,7 +81,7 @@ function FCustomOptionsEditorDrawer({
             || eds.descriptionError !== '';
         })}
         onClick={onClick_ConfirmBtn}
-      >确定</FRectBtn>
+      >确定</FComponentsLib.FRectBtn>
     </Space>}
     afterVisibleChange={(visible) => {
       if (!visible) {
@@ -105,7 +104,7 @@ function FCustomOptionsEditorDrawer({
     }
 
     <Space size={10}>
-      <FCircleBtn
+      <FComponentsLib.FCircleBtn
         size='small'
         onClick={onClick_AddNewItem}
       />

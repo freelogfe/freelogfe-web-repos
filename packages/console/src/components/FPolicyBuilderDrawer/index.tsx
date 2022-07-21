@@ -3,7 +3,6 @@ import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
-import { FCircleBtn, FRectBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
@@ -673,28 +672,28 @@ function FPolicyBuilder({
       showView === 'edit' && <>
         {
           isVerifying
-            ? (<FRectBtn
+            ? (<FComponentsLib.FRectBtn
               disabled={true}
               type='primary'
-            >校验中</FRectBtn>)
-            : (<FRectBtn
+            >校验中</FComponentsLib.FRectBtn>)
+            : (<FComponentsLib.FRectBtn
               onClick={onClick_VerifyBtn}
               type='primary'
               disabled={disabledExecute}
-            >校验</FRectBtn>)
+            >校验</FComponentsLib.FRectBtn>)
         }
       </>
     }
 
     {
-      showView === 'fail' && (<FRectBtn
+      showView === 'fail' && (<FComponentsLib.FRectBtn
         disabled={true}
         type='primary'
-      >校验失败</FRectBtn>)
+      >校验失败</FComponentsLib.FRectBtn>)
     }
 
     {
-      showView === 'success' && (<FRectBtn
+      showView === 'success' && (<FComponentsLib.FRectBtn
         onClick={() => {
           onConfirm && onConfirm({
             title: successResult?.title || '',
@@ -702,7 +701,7 @@ function FPolicyBuilder({
           });
         }}
         type='primary'
-      >创建</FRectBtn>)
+      >创建</FComponentsLib.FRectBtn>)
     }
 
   </Space>);
@@ -1186,7 +1185,7 @@ function FPolicyBuilder({
 
                                   </div>
 
-                                  <FCircleBtn
+                                  <FComponentsLib.FCircleBtn
                                     type='danger'
                                     onClick={() => {
                                       onClickDeleteEventBtn(cd.randomID, et.randomID);
@@ -1204,12 +1203,12 @@ function FPolicyBuilder({
                               return et.type === 'terminate';
                             }) && (<>
                               <div className={styles.compositionStateFooter}>
-                                <FCircleBtn
+                                <FComponentsLib.FCircleBtn
                                   type='minor'
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FComponentsLib.FCircleBtn>
                                 <div style={{ width: 5 }} />
                                 <FComponentsLib.FTextBtn
                                   type='primary'
@@ -1231,11 +1230,11 @@ function FPolicyBuilder({
 
                   <div style={{ height: 15 }} />
 
-                  <FRectBtn
+                  <FComponentsLib.FRectBtn
                     type='default'
                     onClick={onClickAddStateBtn}
 
-                  >新建状态</FRectBtn>
+                  >新建状态</FComponentsLib.FRectBtn>
                   <div ref={refBottomDiv} />
                 </div>)
                 : (<>
@@ -1345,7 +1344,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：1 周之后'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1364,7 +1363,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：于 2021/05/03'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1383,7 +1382,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1402,7 +1401,7 @@ function FPolicyBuilder({
       {/*    <div>*/}
       {/*      <FContentText type='normal' text={'状态机终止，停止接收事件'} />*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      disabled={!!(combination_Data.find((cd) => {*/}
@@ -1720,7 +1719,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             onClickAddStateBtn && onClickAddStateBtn();
           }}
         >
-          <FCircleBtn
+          <FComponentsLib.FCircleBtn
             size='small'
             type='minor'
             onClick={() => {
@@ -1729,7 +1728,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             }}
           >
             <FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} />
-          </FCircleBtn>
+          </FComponentsLib.FCircleBtn>
           <div style={{ width: 5 }} />
           <FComponentsLib.FTextBtn
             type='primary'

@@ -1,7 +1,6 @@
 import { Checkbox, Space } from 'antd';
 import * as React from 'react';
 import styles from './index.less';
-import { FRectBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { PolicyCard } from '../FPolicyList';
 import { FTitleText } from '../FText';
@@ -47,9 +46,9 @@ export const FPolicyOperaterDrawer = ({
         topRight={
           <Space size={30}>
             <FComponentsLib.FTextBtn onClick={() => onCancel()}>取消</FComponentsLib.FTextBtn>
-            <FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type="primary">
+            <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type="primary">
               上架{typeMapping[type]}
-            </FRectBtn>
+            </FComponentsLib.FRectBtn>
           </Space>
         }
       >

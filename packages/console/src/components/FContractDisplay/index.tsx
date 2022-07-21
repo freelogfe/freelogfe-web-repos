@@ -3,7 +3,6 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '../FText';
-import { FRectBtn } from '../FButton';
 import FModal from '../FModal';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
@@ -324,7 +323,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                               />
                               {
                                 isSelfLicenseeOwner ?
-                                  (<FRectBtn
+                                  (<FComponentsLib.FRectBtn
                                     style={{ flexShrink: 0 }}
                                     type='primary'
                                     size='small'
@@ -337,7 +336,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                       set_Modal_TransactionAmount(eti.amount);
                                       readyPay();
                                     }}
-                                  >支付</FRectBtn>)
+                                  >支付</FComponentsLib.FRectBtn>)
                                   // : (<FContentText type='negative' text={'待对方执行'} />)
                                   : (<FContentText
                                     type='negative'

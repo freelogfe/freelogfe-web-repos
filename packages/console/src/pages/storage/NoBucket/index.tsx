@@ -1,14 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, StorageHomePageModelState} from "@/models/storageHomePage";
+import {StorageHomePageModelState} from "@/models/storageHomePage";
 import {ConnectState} from "@/models/connect";
-// import FUtil1 from "@/utils";
 import { router } from 'umi';
-import { FUtil } from '@freelog/tools-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface NoContentProps {
   dispatch: Dispatch;
@@ -32,7 +30,7 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
         type="second"
       />
       <div style={{height: 30}}/>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type="primary"
         size="large"
         style={{paddingLeft: 50, paddingRight: 50}}
@@ -49,7 +47,7 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
             createBucket: true,
           }));
         }}
-      >{FI18n.i18nNext.t('create_bucket')}</FRectBtn>
+      >{FI18n.i18nNext.t('create_bucket')}</FComponentsLib.FRectBtn>
       <div style={{height: 200}}/>
     </div>
   </>);

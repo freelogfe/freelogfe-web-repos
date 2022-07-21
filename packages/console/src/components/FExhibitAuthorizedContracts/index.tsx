@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-import { FRectBtn } from '@/components/FButton';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import { FInfo } from '@/components/FIcons';
@@ -349,13 +348,13 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                     >
                       <div className={styles.singPolicyHeader}>
                         <FContentText type='highlight'>{sacp.policyName}</FContentText>
-                        <FRectBtn
+                        <FComponentsLib.FRectBtn
                           style={{ height: 26, padding: '0 15px' }}
                           size='small'
                           onClick={() => {
                             enableAndUnable(sacp.policyId, true);
                           }}
-                        >签约</FRectBtn>
+                        >签约</FComponentsLib.FRectBtn>
                       </div>
                       <div style={{ height: 10 }} />
                       <div style={{ padding: '0 20px' }}>

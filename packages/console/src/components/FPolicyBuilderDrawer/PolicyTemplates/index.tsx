@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { FTitleText } from '../../FText';
 import FCodeFormatter from '../../FCodeFormatter';
-import { FRectBtn } from '../../FButton';
 import * as AHooks from 'ahooks';
 import { policyCodeTranslationToText } from '../index';
 import FComponentsLib from '@freelog/components-lib';
@@ -82,13 +81,13 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
   return (<div className={styles.PolicyTemplate}>
     <div className={styles.header}>
       <FTitleText type='h1' text={title} />
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type='primary'
         size='small'
         onClick={() => {
           onSelect && onSelect();
         }}
-      >选择</FRectBtn>
+      >选择</FComponentsLib.FRectBtn>
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.translation}>

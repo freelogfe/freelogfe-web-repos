@@ -5,8 +5,8 @@ import { FContentText } from '../FText';
 import FTooltip from '../FTooltip';
 import { FInfo } from '../FIcons';
 import FDivider from '../FDivider';
-import { FCircleBtn } from '../FButton';
 import fConfirmModal from '@/components/fConfirmModal';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCustomOptionsCardsProps {
   dataSource: {
@@ -63,7 +63,7 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
             {
               onEdit && (<FTooltip title={'编辑'}>
                 <div>
-                  <FCircleBtn
+                  <FComponentsLib.FCircleBtn
                     type='minor'
                     onClick={() => {
                       onEdit(ds.theKey);
@@ -76,7 +76,7 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
             {
               onDelete && (<FTooltip title={'删除'}>
                 <div>
-                  <FCircleBtn
+                  <FComponentsLib.FCircleBtn
                     style={{ width: 20, height: 20 }}
                     onClick={() => {
                       fConfirmModal({

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import { FCircleBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState } from '@/models/connect';
 import { withRouter, router } from 'umi';
@@ -12,7 +11,7 @@ import FLink from '@/components/FLink';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
-import { Popconfirm, Radio, Space, Switch } from 'antd';
+import { Popconfirm, Radio, Space } from 'antd';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
@@ -22,6 +21,7 @@ import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -300,7 +300,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
             {
               // match.path === '/resource/:id/$version/creator'
               resourceInfo.showPage.creator ? (
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   type="transparent"
                   onClick={() => {
                     fMessage('正在创建版本', 'warning');
@@ -320,10 +320,10 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
                   }}
                   okText={FI18n.i18nNext.t('btn_check')}
                 >
-                  <FCircleBtn type="transparent" />
+                  <FComponentsLib.FCircleBtn type="transparent" />
                 </Popconfirm>
               ) : (
-                <FCircleBtn onClick={gotoCreator} type="transparent" />
+                <FComponentsLib.FCircleBtn onClick={gotoCreator} type="transparent" />
               )
             }
           </div>

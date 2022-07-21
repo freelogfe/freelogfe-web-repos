@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-import { FCircleBtn } from '@/components/FButton';
-// import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
@@ -179,7 +177,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     </div>
                   </>
                 </div>
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   onClick={(e) => {
                     e.stopPropagation();
                     return onDeleteResource(i.id);
