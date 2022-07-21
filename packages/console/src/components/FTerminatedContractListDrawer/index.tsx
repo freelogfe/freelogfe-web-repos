@@ -11,7 +11,6 @@ import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import FResource from '@/components/FIcons/FResource';
 import { FNodes, FUser } from '@/components/FIcons';
-import { FTextBtn } from '@/components/FButton';
 import FTable from '@/components/FTable';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 
@@ -211,13 +210,13 @@ function FTerminatedContractListDrawer({
           <div style={{ height: 5 }} />
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             className={styles.hoverVisible}
             type='primary'
             onClick={() => {
               setContractDetailID(record.contractID);
             }}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },

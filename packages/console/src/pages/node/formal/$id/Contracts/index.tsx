@@ -7,7 +7,7 @@ import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
 import { FLoading, FNodes, FUser } from '@/components/FIcons';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManager_Contract_Page_ModelState } from '@/models/connect';
@@ -15,11 +15,11 @@ import {
   OnChange_Authorize_Date_Action,
   OnChange_Authorize_KeywordsInput_Action,
   OnChange_Authorize_Status_Action,
-  OnChange_Authorize_SubjectType_Action,
+  // OnChange_Authorize_SubjectType_Action,
   OnChange_Authorized_Date_Action,
   OnChange_Authorized_KeywordsInput_Action,
   OnChange_Authorized_Status_Action,
-  OnChange_Authorized_SubjectType_Action,
+  // OnChange_Authorized_SubjectType_Action,
   OnChangeShowPageAction,
   OnClick_Authorize_LoadMoreBtn_Action,
   OnClick_Authorized_LoadMoreBtn_Action,
@@ -34,7 +34,6 @@ import moment, { Moment } from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -150,7 +149,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
           <div style={{ height: 5 }} />
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             className={styles.hoverVisible}
             type='primary'
             onClick={() => {
@@ -161,7 +160,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                 },
               });
             }}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },
@@ -262,7 +261,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
           <div style={{ height: 5 }} />
           <FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               dispatch<OnClickViewDetailsBtnAction>({
@@ -273,7 +272,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
               });
             }}
             className={styles.hoverVisible}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },

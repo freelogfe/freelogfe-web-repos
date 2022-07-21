@@ -4,8 +4,6 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-// import { FTextBtn } from '@/components/FButton';
-// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface BoardCard3Props {
   unfold: boolean;

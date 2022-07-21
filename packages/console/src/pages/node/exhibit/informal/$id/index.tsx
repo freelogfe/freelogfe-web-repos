@@ -14,7 +14,6 @@ import {
   OnChange_Theme_OnlineSwitch_Action,
   OnPageUnmountAction,
 } from '@/models/informExhibitInfoPage';
-import { FTextBtn } from '@/components/FButton';
 import { router } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
@@ -23,11 +22,11 @@ import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
-// import { IExhibit } from '@/models/informalNodeManagerPage';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
 import { FDialog } from '@/components/FDialog';
 import { LoadingOutlined } from '@ant-design/icons';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -122,7 +121,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
           <div className={styles.nav}>
             <label>test</label>
             <div style={{ width: 5 }} />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 router.push(
                   FUtil.LinkTo.informNodeManagement({
@@ -137,7 +136,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
                 text={informExhibitInfoPage.node_Name}
               />
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
             <div style={{ width: 2 }} />
             <FContentText type="negative" text={'>'} />
             <div style={{ width: 10 }} />

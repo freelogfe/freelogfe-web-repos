@@ -7,12 +7,11 @@ import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/con
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
-import { FTextBtn } from '@/components/FButton';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -127,10 +126,10 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
         resource.terminatedContractIDs.length > 0 && (<div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-            <FTextBtn onClick={() => {
+            <FComponentsLib.FTextBtn onClick={() => {
               // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
               set_TerminatedContractIDs(resource.terminatedContractIDs);
-            }}>查看已终止合约</FTextBtn>
+            }}>查看已终止合约</FComponentsLib.FTextBtn>
             {/*<div style={{ height: 5 }} />*/}
           </div>
         </div>)

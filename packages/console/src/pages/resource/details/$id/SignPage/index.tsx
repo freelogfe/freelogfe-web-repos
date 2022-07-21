@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FTitleText, FContentText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -18,6 +18,7 @@ import FFormLayout from '@/components/FFormLayout';
 import { FLeft, FNodes } from '@/components/FIcons';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -50,7 +51,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
     </Space>
 
     <div className={styles.action}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'resourceDetailPage/change',
@@ -64,7 +65,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
       >
         <FLeft />
         <>返回上一步</>
-      </FTextBtn>
+      </FComponentsLib.FTextBtn>
       <div style={{ width: 30 }} />
       <FRectBtn
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({

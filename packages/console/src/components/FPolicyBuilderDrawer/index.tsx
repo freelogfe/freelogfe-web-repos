@@ -3,7 +3,7 @@ import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
+import { FCircleBtn, FRectBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
@@ -664,10 +664,10 @@ function FPolicyBuilder({
   });
 
   const DrawerTopRight = (<Space size={30}>
-    <FTextBtn
+    <FComponentsLib.FTextBtn
       onClick={() => {
         onCancel && onCancel();
-      }}>取消</FTextBtn>
+      }}>取消</FComponentsLib.FTextBtn>
 
     {
       showView === 'edit' && <>
@@ -755,13 +755,13 @@ function FPolicyBuilder({
               text={successResult?.title || ''}
             />
 
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
                 setShowView('edit');
                 setSuccessResult(null);
               }}
-            >返回编辑</FTextBtn>
+            >返回编辑</FComponentsLib.FTextBtn>
           </div>
 
           <div style={{ height: 30 }} />
@@ -788,7 +788,7 @@ function FPolicyBuilder({
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div />
 
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
                 // setCheckResult('unchecked');
@@ -796,7 +796,7 @@ function FPolicyBuilder({
                 // setSuccessResult(null);
                 setFailResult(null);
               }}
-            >返回编辑</FTextBtn>
+            >返回编辑</FComponentsLib.FTextBtn>
           </div>
 
           <div style={{ height: 30 }} />
@@ -840,7 +840,7 @@ function FPolicyBuilder({
               <Space size={20}>
                 {
                   editMode === 'code'
-                    ? (<FTextBtn
+                    ? (<FComponentsLib.FTextBtn
                       type='default'
                       // disabled={codeMirrorInputHasError || isVerifying}
                       onClick={onClick_SwitchMode_Composition}>
@@ -848,8 +848,8 @@ function FPolicyBuilder({
                         <FComposition />
                         <span>组合模式</span>
                       </Space>
-                    </FTextBtn>)
-                    : (<FTextBtn
+                    </FComponentsLib.FTextBtn>)
+                    : (<FComponentsLib.FTextBtn
                       type='default'
                       // disabled={combinationDataHasError}
                       onClick={onClick_SwitchMode_Code}>
@@ -857,17 +857,17 @@ function FPolicyBuilder({
                         <FCode />
                         <span>代码模式</span>
                       </Space>
-                    </FTextBtn>)
+                    </FComponentsLib.FTextBtn>)
                 }
 
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => setTemplateVisible(true)}>
                   <Space size={4}>
                     <FFileText />
                     <span>策略模板</span>
                   </Space>
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
               </Space>
             </div>
             {titleInputError && <>
@@ -938,12 +938,12 @@ function FPolicyBuilder({
                                         }}
                                       />
                                     </div>
-                                    <FTextBtn
+                                    <FComponentsLib.FTextBtn
                                       type='danger'
                                       onClick={() => {
                                         onClickDeleteStateBtn(cd.randomID);
                                       }}
-                                    >删除</FTextBtn>
+                                    >删除</FComponentsLib.FTextBtn>
                                   </div>
                                   {
                                     cd.nameError
@@ -1211,12 +1211,12 @@ function FPolicyBuilder({
                                   }}
                                 ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FCircleBtn>
                                 <div style={{ width: 5 }} />
-                                <FTextBtn
+                                <FComponentsLib.FTextBtn
                                   type='primary'
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                >添加事件或指令</FTextBtn>
+                                >添加事件或指令</FComponentsLib.FTextBtn>
                               </div>
 
                               <div style={{ height: 15 }} />
@@ -1731,14 +1731,14 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             <FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} />
           </FCircleBtn>
           <div style={{ width: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               // console.log('###23948230948230480_))))))');
               // setOpen(false);
               // onClickAddStateBtn && onClickAddStateBtn();
             }}
-          >新建状态</FTextBtn>
+          >新建状态</FComponentsLib.FTextBtn>
         </div>
       </>)}
     />

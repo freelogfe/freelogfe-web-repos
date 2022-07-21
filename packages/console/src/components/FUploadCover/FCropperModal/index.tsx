@@ -5,7 +5,6 @@ import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
 import FComponentsLib from '@freelog/components-lib';
-import { FTextBtn } from '@/components/FButton';
 
 interface FCropperModalProps {
   uploadRef: any;
@@ -106,12 +105,12 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
           {/*    style={{ fontSize: 16 }}*/}
           {/*  />*/}
           {/*</FTextBtn>*/}
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               uploadRef.current.click();
             }}
-          >重新选择</FTextBtn>
+          >重新选择</FComponentsLib.FTextBtn>
         </Space>
       </div>
       <div className={styles.contentRight}>

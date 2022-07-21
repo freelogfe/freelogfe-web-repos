@@ -4,7 +4,6 @@ import FInput from '@/components/FInput';
 import { Radio, Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import { FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import {
   ConnectState, InformalNodeManagerPageModelState,
@@ -22,6 +21,7 @@ import {
 import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ReplacerProps {
   dispatch: Dispatch,
@@ -213,14 +213,14 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
                             });
                           }}
                         >
-                          <FTextBtn
+                          <FComponentsLib.FTextBtn
                             type='default'
                             style={{ fontSize: 12 }}
                           >
                             {rl.versionRange || '最新版本'}
                             &nbsp;
                             <FDown />
-                          </FTextBtn>
+                          </FComponentsLib.FTextBtn>
 
                         </FVersionHandlerPopover>)
                     }

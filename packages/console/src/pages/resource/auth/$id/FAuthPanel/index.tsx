@@ -3,13 +3,10 @@ import styles from './index.less';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
-// import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-import { FContentText } from '@/components/FText';
-import { FTextBtn } from '@/components/FButton';
-// import { FUtil } from '@freelog/tools-lib';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -38,10 +35,10 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
             <div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={() => {
                   // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
                   set_TerminatedContractIDs(activeResource.terminatedContractIDs);
-                }}>查看已终止合约</FTextBtn>
+                }}>查看已终止合约</FComponentsLib.FTextBtn>
               </div>
             </div>
           </>)

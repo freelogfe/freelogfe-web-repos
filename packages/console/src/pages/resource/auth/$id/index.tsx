@@ -21,9 +21,8 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import { FNodes, FUser } from '@/components/FIcons';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
+import { FCircleBtn } from '@/components/FButton';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
 import FResource from '@/components/FIcons/FResource';
@@ -32,6 +31,7 @@ import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
+import FComponentsLib from '@freelog/components-lib';
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -130,12 +130,12 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
       dataIndex: 'operation',
       width: 80,
       render: (_: any, record) => {
-        return (<FTextBtn onClick={() => {
+        return (<FComponentsLib.FTextBtn onClick={() => {
           onChange({
             detailContractID: record.contractID,
           });
 
-        }}>查看合约</FTextBtn>);
+        }}>查看合约</FComponentsLib.FTextBtn>);
       },
     },
   ];
@@ -173,14 +173,14 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
                 });
               }}
             />
-            <FTextBtn type='primary' onClick={() => {
+            <FComponentsLib.FTextBtn type='primary' onClick={() => {
               dispatch<ChangeAction>({
                 type: 'resourceAuthPage/change',
                 payload: {
                   policyEditorVisible: true,
                 },
               });
-            }}>添加策略</FTextBtn>
+            }}>添加策略</FComponentsLib.FTextBtn>
           </Space>)}
         >
           <FPolicies />

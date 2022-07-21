@@ -6,10 +6,8 @@ import { FDown } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import { OnChangeNodeSelectorAction } from '@/models/resourceDetailPage';
-import { FTextBtn } from '@/components/FButton';
 import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
-// import FDropdown from '@/components/FDropdown';
 import FComponentsLib from '@freelog/components-lib';
 
 interface NodeSelectorProps {
@@ -64,23 +62,23 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
           !resourceDetailPage.user_Logged ?
             (<>
               <span className={styles.nodeSelectorLabel}>选择签约节点</span>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   // router.replace(FUtil.LinkTo.lo);
                   window.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
                     goTo: window.location.href,
                   }));
-                }}>登录后选择节点签约</FTextBtn>
+                }}>登录后选择节点签约</FComponentsLib.FTextBtn>
             </>)
             : nodes.list.length === 0
               ? (<>
                 <span className={styles.nodeSelectorLabel}>您还没有创建节点</span>
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type='primary'
                   onClick={() => {
                     router.push(FUtil.LinkTo.nodeCreator());
-                  }}>创建节点</FTextBtn>
+                  }}>创建节点</FComponentsLib.FTextBtn>
               </>)
               : (<>
                 <span className={styles.nodeSelectorLabel}>签约节点</span>

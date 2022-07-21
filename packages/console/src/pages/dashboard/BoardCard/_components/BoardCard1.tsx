@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
 import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-import { FTextBtn } from '@/components/FButton';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface BoardCard1Props {
   unfold: boolean;

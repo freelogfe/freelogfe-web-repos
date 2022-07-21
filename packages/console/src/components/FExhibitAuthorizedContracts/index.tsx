@@ -2,19 +2,19 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
-// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -162,7 +162,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 set_SelectedID(ac.subjectID);
               }}
             >
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(ac.detailsUrl);
@@ -174,7 +174,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                   singleRow
                   className={styles.FContentText}
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               <div style={{ height: 5 }} />
               <FContentText
                 type='additional2'
@@ -323,10 +323,10 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                  <FTextBtn onClick={() => {
+                  <FComponentsLib.FTextBtn onClick={() => {
                     set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
                     // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                  }}>查看已终止合约</FTextBtn>
+                  }}>查看已终止合约</FComponentsLib.FTextBtn>
                 </div>
               </>)
             }

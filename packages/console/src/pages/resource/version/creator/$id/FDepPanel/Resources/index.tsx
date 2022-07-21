@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
+import { FCircleBtn } from '@/components/FButton';
 // import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
@@ -13,7 +13,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FEdit, FWarning } from '@/components/FIcons';
+import { FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
@@ -84,7 +84,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
               >
                 <div>
                   <div className={styles.title}>
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       onClick={(e) => {
                         e.stopPropagation();
                         // if (rrr.status === 3) {
@@ -103,7 +103,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                         singleRow
                         type='highlight'
                       />
-                    </FTextBtn>
+                    </FComponentsLib.FTextBtn>
                     <div style={{ width: 5 }} />
                     {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
                     {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -236,7 +236,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
             className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
           >
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   // if (i.status === 3) {
@@ -255,7 +255,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                   singleRow
                   type='highlight'
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               <div style={{ width: 5 }} />
               {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
               {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}

@@ -15,8 +15,8 @@ import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
 import FContractAppliedExhibits, { serverData_2_ContractAppliedExhibits } from '@/components/FContractAppliedExhibits';
-import { FTextBtn } from '@/components/FButton';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FRelationDrawerProps {
   bothSidesInfo: {
@@ -572,12 +572,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
             {
               dataSource.invalidContracts.length > 0 && (<div style={{ display: 'flex', alignItems: 'center' }}>
                 {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={() => {
                   // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
                   set_terminatedContractIDs(dataSource.invalidContracts.map((ic) => {
                     return ic.contractId;
                   }))
-                }}>查看已终止合约</FTextBtn>
+                }}>查看已终止合约</FComponentsLib.FTextBtn>
               </div>)
             }
 

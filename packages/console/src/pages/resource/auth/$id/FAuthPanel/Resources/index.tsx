@@ -4,9 +4,9 @@ import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -45,7 +45,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
           className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
           <div>
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 style={{
                   flexShrink: 1,
                 }}
@@ -64,7 +64,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                   className={styles.FContentText}
                   type='highlight'
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
 
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
               {/*  <FResourceStatusBadge*/}

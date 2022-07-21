@@ -1,18 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-// import FUploadImage from '@/components/FUploadImage';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
-import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FTooltip from '@/components/FTooltip';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
@@ -84,9 +81,9 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
           <FContentText text={exhibitInfoPage.side_ExhibitTitle} />
           <FTooltip title={'编辑'}>
             <div>
-              <FTextBtn onClick={() => {
+              <FComponentsLib.FTextBtn onClick={() => {
                 onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-              }}><FComponentsLib.FIcons.FEdit /></FTextBtn>
+              }}><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
             </div>
           </FTooltip>
         </Space>)
@@ -99,11 +96,11 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
           />
           <div style={{ height: 10 }} />
           <div className={styles.btn}>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='default'
               // size="small"
               onClick={() => onChangePInputTitle(null)}
-            >{FI18n.i18nNext.t('btn_cancel')}</FTextBtn>
+            >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
             <div style={{ width: 15 }} />
             <FRectBtn
               size='small'

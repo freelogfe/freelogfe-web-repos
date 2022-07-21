@@ -3,9 +3,8 @@ import {Divider, Popover, Space} from 'antd';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
-import {FCircleBtn, FTextBtn} from '@/components/FButton';
+import {FCircleBtn} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
-// import {FEdit} from "@/components/FIcons";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDivider from "@/components/FDivider";
 import FComponentsLib from '@freelog/components-lib';
@@ -55,7 +54,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         >
           <div className={styles.resourceLeft}>
             <Space size={8}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={() => window.open(d.linkTo)}
                 // type="default"
               >
@@ -65,7 +64,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                   text={d.name}
                   className={styles.resourceName}
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               {d.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
             </Space>
             <div style={{height: 9}}/>
@@ -90,7 +89,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                           }
                         }));
                       }}
-                    ><FTextBtn><FComponentsLib.FIcons.FEdit style={{fontSize: 12}}/></FTextBtn></FVersionHandlerPopover>
+                    ><FComponentsLib.FTextBtn><FComponentsLib.FIcons.FEdit style={{fontSize: 12}}/></FComponentsLib.FTextBtn></FVersionHandlerPopover>
                   </Space>
                 </>)
               }

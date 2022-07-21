@@ -4,12 +4,11 @@ import { Checkbox, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
-// import FContractStatusBadge from '@/components/FContractStatusBadge';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
 import { FContentText } from '@/components/FText';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -95,7 +94,7 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
                 c.exhibits.map((et) => {
                   return (<Space key={et.exhibitID} size={2} style={{ display: 'flex', alignItems: 'center' }}>
                     <div>展品</div>
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       style={{
                         fontSize: 12,
                         overflow: 'hidden',
@@ -109,7 +108,7 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
                           exhibitID: et.exhibitID,
                         }));
                       }}
-                    >{et.exhibitName}</FTextBtn>
+                    >{et.exhibitName}</FComponentsLib.FTextBtn>
                     <div>的授权链；</div>
                   </Space>);
                 })
@@ -125,10 +124,10 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
       selectedResource && selectedResource.terminatedContractIDs.length > 0 && (<div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-          <FTextBtn onClick={() => {
+          <FComponentsLib.FTextBtn onClick={() => {
             // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
             set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
-          }}>查看已终止合约</FTextBtn>
+          }}>查看已终止合约</FComponentsLib.FTextBtn>
         </div>
         <div style={{ height: 25 }} />
       </div>)

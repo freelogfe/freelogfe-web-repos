@@ -2,9 +2,10 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText } from '../FText';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
+import { FCircleBtn, FRectBtn } from '../FButton';
 import FCustomOptions, { Data } from './FCustomOptions';
 import FDrawer from '../FDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCustomOptionsEditorDrawerProps {
   visible: boolean;
@@ -67,12 +68,12 @@ function FCustomOptionsEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
+      >取消</FComponentsLib.FTextBtn>
       <FRectBtn
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {

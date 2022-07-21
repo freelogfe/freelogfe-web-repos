@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space, Row, Col } from 'antd';
-import { FRectBtn, FTextBtn } from '../FButton';
+import { FRectBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { FTitleText } from '../FText';
 import FInput from '../FInput';
 import FSelect from '../FSelect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FUtil1 from '@/utils';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCustomOptionEditorDrawerProps {
   visible: boolean;
@@ -99,12 +99,12 @@ function FCustomOptionEditorDrawer({
         }
       }}
       topRight={<Space size={30}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='default'
           onClick={() => {
             onCancel && onCancel();
           }}
-        >取消</FTextBtn>
+        >取消</FComponentsLib.FTextBtn>
         <FRectBtn
           type='primary'
           disabled={keyInput === '' || keyInputError !== ''

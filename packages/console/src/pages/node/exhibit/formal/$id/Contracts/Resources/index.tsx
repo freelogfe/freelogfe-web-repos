@@ -3,10 +3,10 @@ import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -33,7 +33,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         onChange({ contract_SelectedAssociatedID: mainResource.id });
       }}
     >
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         onClick={(e) => {
           e.stopPropagation();
           window.open(FUtil.LinkTo.resourceDetails({
@@ -47,7 +47,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           singleRow
           className={styles.FContentText}
         />
-      </FTextBtn>
+      </FComponentsLib.FTextBtn>
       <div style={{ height: 5 }} />
       <FContentText
         type='additional2'
@@ -76,7 +76,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
         key={r.id}
       >
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           onClick={(e) => {
             e.stopPropagation();
             window.open(FUtil.LinkTo.resourceDetails({
@@ -90,7 +90,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             singleRow
             className={styles.FContentText}
           />
-        </FTextBtn>
+        </FComponentsLib.FTextBtn>
         <div style={{ height: 5 }} />
         <FContentText
           type='additional2'

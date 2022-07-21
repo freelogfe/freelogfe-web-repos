@@ -8,7 +8,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
@@ -20,6 +20,7 @@ import FTable from '@/components/FTable';
 import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
 import { FLoading } from '@/components/FIcons';
+import FComponentsLib from '@freelog/components-lib';
 
 const errorTexts = {
   duplicated: FI18n.i18nNext.t('resource_exist'),
@@ -323,7 +324,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
               resourceVersionCreatorPage.selectedFileStatus === 3 &&
               (<Space size={10}>
                 <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
-                <FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={() => {
                   onChange({
                     // resourceObject: value,
                     // resourceObjectError: {sha1: '', text: ''},
@@ -334,7 +335,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                   //   type: 'resourceVersionCreatorPage/fetchRawProps',
                   // });
                   handleDataUploadOrImportObject();
-                }}>继续上传/导入</FTextBtn>
+                }}>继续上传/导入</FComponentsLib.FTextBtn>
               </Space>)
             }
 
@@ -387,9 +388,9 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       title: '操作',
                       dataIndex: 'operation',
                       render(value: any, record: any, index: number) {
-                        return (<FTextBtn onClick={() => {
+                        return (<FComponentsLib.FTextBtn onClick={() => {
                           window.open(record.url);
-                        }}>查看</FTextBtn>);
+                        }}>查看</FComponentsLib.FTextBtn>);
                       },
                     },
                   ]}

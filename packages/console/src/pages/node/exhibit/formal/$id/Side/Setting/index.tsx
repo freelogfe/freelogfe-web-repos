@@ -4,7 +4,7 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
 import { FDelete, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
+import { FCircleBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -106,7 +106,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
 
                   <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
                     <div>
-                      <FTextBtn
+                      <FComponentsLib.FTextBtn
                         onClick={() => {
                           // onChangeCustomAttrs({ key: pc.key, value: pc.defaultValue || '' }, true);
                           dispatch<OnClick_Side_InheritOptions_ResetBtn_Action>({
@@ -116,7 +116,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                             },
                           });
                         }}
-                      ><FRedo /></FTextBtn>
+                      ><FRedo /></FComponentsLib.FTextBtn>
                     </div>
                   </FTooltip>
                 </div>
@@ -200,7 +200,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   <Space size={10}>
                     <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
                       <div>
-                        <FTextBtn
+                        <FComponentsLib.FTextBtn
                           // theme="primary"
                           onClick={() => {
                             dispatch<OnClick_Side_CustomOptions_EditBtn_Action>({
@@ -210,7 +210,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                               },
                             });
                           }}
-                        ><FComponentsLib.FIcons.FEdit /></FTextBtn>
+                        ><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
                       </div>
                     </FTooltip>
                     <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
@@ -292,7 +292,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
 
     <div style={{ height: 30 }} />
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           dispatch<ChangeAction>({
@@ -303,7 +303,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           });
         }}
       >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
-        <FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FTextBtn>
+        <FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FComponentsLib.FTextBtn>
     </div>
 
     <FCustomOptionsEditorDrawer

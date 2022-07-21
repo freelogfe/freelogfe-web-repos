@@ -5,7 +5,6 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
@@ -143,7 +142,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(FUtil.LinkTo.resourceDetails({
@@ -157,7 +156,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                   className={styles.titleText}
                   style={{ maxWidth: r.status === 0 ? 170 : 225 }}
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               {/*{*/}
               {/*  r.status === 0 && (<>*/}
               {/*    <FResourceStatusBadge status={'offline'} />*/}

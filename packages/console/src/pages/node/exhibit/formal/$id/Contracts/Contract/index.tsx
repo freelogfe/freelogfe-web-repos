@@ -4,16 +4,15 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
-import { FTextBtn } from '@/components/FButton';
 import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -109,7 +108,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                         <div className={styles.otherTitle}>
                           <div style={{ height: 10 }} />
 
-                          <FTextBtn onClick={() => {
+                          <FComponentsLib.FTextBtn onClick={() => {
                             onChange({
                               contract_Associated: exhibitInfoPage.contract_Associated.map((asso) => {
                                 if (asso.id !== selectedResource.id) {
@@ -139,7 +138,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                                   : (<FDown />)
                               }
                             </FTitleText>
-                          </FTextBtn>
+                          </FComponentsLib.FTextBtn>
                         </div>
 
                         {
@@ -201,10 +200,10 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-          <FTextBtn onClick={() => {
+          <FComponentsLib.FTextBtn onClick={() => {
             set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
             // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-          }}>查看已终止合约</FTextBtn>
+          }}>查看已终止合约</FComponentsLib.FTextBtn>
         </div>
       </>)
     }

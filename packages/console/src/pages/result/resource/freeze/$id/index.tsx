@@ -2,14 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import FForbid from '@/components/FIcons/FForbid';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FTextBtn } from '@/components/FButton';
 import { RouteComponentProps } from 'react-router';
 import { router, withRouter } from 'umi';
 import { connect } from 'dva';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-// import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FreezeProps extends RouteComponentProps<{ id: string }> {
 
@@ -60,9 +59,9 @@ function Freeze({ match }: FreezeProps) {
     <div style={{ height: 80 }} />
     <div className={styles.content}>
       <FContentText text={`经核实，资源 ${resourceName} ，严重违`} />
-      <FTextBtn onClick={() => {
+      <FComponentsLib.FTextBtn onClick={() => {
 
-      }}>&nbsp;查看服务协议&nbsp;</FTextBtn>
+      }}>&nbsp;查看服务协议&nbsp;</FComponentsLib.FTextBtn>
       <FContentText text={` ，涉嫌 ${freezeReason} ，已经被封停。`} />
     </div>
     {
@@ -78,7 +77,7 @@ function Freeze({ match }: FreezeProps) {
             text={'service@freelog.com'}
             title={'复制'}
           >
-            <FTextBtn>&nbsp;复制&nbsp;</FTextBtn>
+            <FComponentsLib.FTextBtn>&nbsp;复制&nbsp;</FComponentsLib.FTextBtn>
           </FCopyToClipboard>
         </div>
       </>)

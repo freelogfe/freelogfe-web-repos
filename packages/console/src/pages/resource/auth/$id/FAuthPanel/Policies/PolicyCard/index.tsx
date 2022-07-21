@@ -2,13 +2,14 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PolicyCardProps {
   fullInfo: PolicyFullInfo_Type;
@@ -135,12 +136,12 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
       width={720}
       title={'获取授权'}
       topRight={<Space size={30}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='default'
           onClick={() => {
             onCancel_VersionsDrawer();
           }}
-        >取消</FTextBtn>
+        >取消</FComponentsLib.FTextBtn>
 
         <FRectBtn
           type='primary'

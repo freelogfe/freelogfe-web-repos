@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FRectBtn, FTextBtn} from "../FButton";
+import {FRectBtn} from "../FButton";
 import {FTitleText} from "../FText";
 import FInput from "../FInput";
 import FDrawer from "../FDrawer";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasePropEditorDrawerProps {
   visible?: boolean;
@@ -40,12 +41,12 @@ function FBasePropEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type="default"
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
+      >取消</FComponentsLib.FTextBtn>
 
       <FRectBtn
         type="primary"

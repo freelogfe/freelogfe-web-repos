@@ -23,13 +23,12 @@ import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n } from '@freelog/tools-lib';
 import { FShare } from '@/components/FShare';
-import FTooltip from '@/components/FTooltip';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -114,13 +113,13 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               title={resourceDetailPage.resource_Info?.name || ''}
               url={window.location.href}
             >
-              <FTextBtn type="default" className={styles.btn}>
+              <FComponentsLib.FTextBtn type="default" className={styles.btn}>
                 <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 <div style={{ width: 5 }} />
                 <span>分享</span>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FShare>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type="default"
               className={styles.favoriteBtn}
               onClick={() =>
@@ -135,7 +134,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
               <div style={{ width: 5 }} />
               <span>({resourceDetailPage.resource_Popularity}人气)</span>
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </div>
         </div>
 

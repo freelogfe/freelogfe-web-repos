@@ -5,7 +5,7 @@ import { Space } from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState } from '@/models/connect';
 import { OnChangeInfoAction, ChangeAction, InitModelStatesAction } from '@/models/resourceInfoPage';
@@ -14,10 +14,10 @@ import { RouterTypes } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-// import FUtil1 from '@/utils';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -90,19 +90,19 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
           extra={<Space size={10}>
             {
               resourceInfo.info?.intro && !resourceInfoPage.isEditing
-              && (<FTextBtn onClick={() => {
+              && (<FComponentsLib.FTextBtn onClick={() => {
                 onChangeIsEditing(true);
-              }}>{FI18n.i18nNext.t('edit')}</FTextBtn>)
+              }}>{FI18n.i18nNext.t('edit')}</FComponentsLib.FTextBtn>)
             }
             {
               resourceInfoPage.isEditing && (<>
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => {
                     onChangeIsEditing(false);
                   }}
-                >{FI18n.i18nNext.t('cancel')}</FTextBtn>
-                <FTextBtn
+                >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn
                   onClick={() => {
                     onChangeIsEditing(false);
                     dispatch<OnChangeInfoAction>({
@@ -112,7 +112,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
                       id: resourceInfo.info?.resourceId || '',
                     });
                   }}
-                >{FI18n.i18nNext.t('save')}</FTextBtn>
+                >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
               </>)
             }
           </Space>}

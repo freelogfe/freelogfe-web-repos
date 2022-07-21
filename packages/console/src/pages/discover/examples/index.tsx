@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './index.less';
-import { FTextBtn } from '@/components/FButton';
 import FPlayer from '@/components/FIcons/FPlayer';
 import { FContentText, FTitleText } from '@/components/FText';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 const nodeData: {
   id: string;
@@ -90,7 +90,7 @@ function Examples({}) {
               </div>
             </div>
             <div className={styles.nodeItem_Right}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={() => {
                   window.open(n.href);
                 }}
@@ -98,7 +98,7 @@ function Examples({}) {
                 <FPlayer />
                 &nbsp;
                 <span>浏览节点</span>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </div>
           </div>);
         })

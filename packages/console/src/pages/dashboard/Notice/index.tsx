@@ -2,9 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FLoudspeaker from '@/components/FIcons/FLoudspeaker';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface NoticeProps {
 
@@ -63,12 +63,12 @@ function Notice({}: NoticeProps) {
           </Space>
           <Space size={15}>
             <span>2020/12/23</span>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
                 window.open(n.href);
               }}
-            >查看详情</FTextBtn>
+            >查看详情</FComponentsLib.FTextBtn>
           </Space>
         </div>);
       })

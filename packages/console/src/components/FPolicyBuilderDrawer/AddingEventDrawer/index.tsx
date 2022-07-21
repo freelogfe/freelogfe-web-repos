@@ -2,8 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '../../FDrawer';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '../../FButton';
+import { FRectBtn } from '../../FButton';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FAddingEventDrawerProps {
   visible: boolean;
@@ -110,13 +111,13 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
       !areAccountActivated && (<>
         <div style={{ height: 5 }} />
         <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
             type='primary'
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
             }}
-          >马上激活</FTextBtn>
+          >马上激活</FComponentsLib.FTextBtn>
           <div style={{ width: 5 }} />
           <span style={{ fontSize: 12, color: '#666' }}>你的羽币账户未激活，无法添加支付事件</span>
         </div>

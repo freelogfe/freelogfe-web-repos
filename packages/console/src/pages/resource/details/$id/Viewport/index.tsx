@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { FContentText, FTitleText } from '@/components/FText';
+import { FTitleText } from '@/components/FText';
 import styles from './index.less';
 import {
-  // FAntvG6AuthorizationGraph,
-  // FAntvG6DependencyGraph,
-  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FDrawer from '@/components/FDrawer';
-import { FTextBtn } from '@/components/FButton';
 import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ViewportProps {
   dispatch: Dispatch;
@@ -38,14 +35,14 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
           text={'相关视图'}
           type='h3'
         />
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           onClick={() => {
             onChange({
               graph_FullScreen: true,
             });
           }}
           type='default'
-        >全屏查看</FTextBtn>
+        >全屏查看</FComponentsLib.FTextBtn>
       </div>
       <div style={{ height: 20 }} />
       <FViewportTabs

@@ -17,8 +17,7 @@ import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import FReplaceModal from './containers/FReplaceModal';
 import * as AHooks from 'ahooks';
-import { FTextBtn } from '@/components/FButton';
-import { Helmet } from 'react-helmet';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -59,13 +58,13 @@ function InformalNode({ match, dispatch, informalNodeManagerPage }: InformalNode
         <span>这里是测试节点管理页面，如需管理正式节点，你可以</span>
         &nbsp;
         {/*<FLink to={FUtil.LinkTo.nodeManagement({nodeID: Number(match.params.id)})}> 进入正式节点</FLink></div>*/}
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='primary'
           style={{ fontSize: 12 }}
           onClick={() => {
             window.open(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));
           }}
-        >进入正式节点</FTextBtn>
+        >进入正式节点</FComponentsLib.FTextBtn>
       </div>
       <div style={{ height: 24 }} />
       <div style={{ minHeight: 'calc(100vh - 94px)' }} className={styles.container}>

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTextBtn } from '../FButton';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tooltip } from 'antd';
 import { FCopy } from '../FIcons';
 import { CSSProperties } from 'react';
+import FComponentsLib from '@freelog/components-lib';
 
 
 interface FCopyToClipboardProps {
@@ -44,7 +44,7 @@ function FCopyToClipboard({ text, title, success, iconStyle, children }: FCopyTo
       }}
     >
       {
-        children || (<FTextBtn><FCopy style={iconStyle} /></FTextBtn>)
+        children || (<FComponentsLib.FTextBtn><FCopy style={iconStyle} /></FComponentsLib.FTextBtn>)
       }
     </CopyToClipboard>
       </span>

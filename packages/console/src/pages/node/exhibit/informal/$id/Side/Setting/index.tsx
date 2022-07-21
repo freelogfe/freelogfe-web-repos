@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FDelete, FEdit, FRedo, FSwap } from '@/components/FIcons';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
+import { FDelete, FRedo, FSwap } from '@/components/FIcons';
+import { FCircleBtn } from '@/components/FButton';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
@@ -102,7 +102,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
             <FContentText text={pc.theKey} />
 
             <Space size={10}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   dispatch<OnClick_Side_Exhibit_OnlyEditAttrInputOrSelect_ResetBtn_Action>({
@@ -113,7 +113,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                   });
 
                 }}
-              ><FRedo /></FTextBtn>
+              ><FRedo /></FComponentsLib.FTextBtn>
 
             </Space>
 
@@ -182,7 +182,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
             <FContentText text={pc.theKey} />
 
             <Space size={10}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   dispatch<OnHandleAttrModalAction>({
@@ -193,7 +193,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                     },
                   });
                 }}
-              ><FComponentsLib.FIcons.FEdit /></FTextBtn>
+              ><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
               <FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {

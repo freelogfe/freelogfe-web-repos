@@ -1,19 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-// import FUploadImage from '@/components/FUploadImage';
 import {
-  // ChangeAction,
   OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
   OnChangePTitleInputAction,
   OnClick_Side_Exhibit_Title_Action,
   OnClickPTitleCancelBtnAction,
   OnClickPTitleEditBtnAction,
 } from '@/models/informExhibitInfoPage';
-import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
@@ -96,14 +93,14 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
             />
             <div style={{ height: 10 }} />
             <div className={styles.btn}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='default'
                 onClick={() => {
                   dispatch<OnClickPTitleCancelBtnAction>({
                     type: 'informExhibitInfoPage/onClickPTitleCancelBtn',
                   });
                 }}
-              >取消</FTextBtn>
+              >取消</FComponentsLib.FTextBtn>
               <div style={{ width: 15 }} />
               <FRectBtn
                 size='small'

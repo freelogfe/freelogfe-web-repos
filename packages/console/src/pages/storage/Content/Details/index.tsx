@@ -1,19 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText } from '@/components/FText';
-import { FTextBtn, FRectBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
-// import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
   ChangeAction,
   OnChangeTypeAction, OnClick_SaveBtn_Action,
   // UpdateObjectInfoAction,
 } from '@/models/storageObjectEditor';
-// import { UpdateAObjectAction } from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
 import FBaseProperties from '@/components/FBaseProperties';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
@@ -23,12 +21,12 @@ import FDrawer from '@/components/FDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import { router } from 'umi';
 import FTooltip from '@/components/FTooltip';
-// import FUtil1 from "@/utils";
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
+import FComponentsLib from '@freelog/components-lib';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -64,7 +62,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
     visible={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         onClick={() => {
           onChange({
             customOptionsDataVisible: false,
@@ -72,7 +70,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
         type='default'
-      >取消</FTextBtn>
+      >取消</FComponentsLib.FTextBtn>
       <FRectBtn
         disabled={hasError}
         onClick={async () => {
@@ -123,14 +121,14 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               />
               <FTooltip title={FI18n.i18nNext.t('tip_download_object')}>
                 <div>
-                  <FTextBtn
+                  <FComponentsLib.FTextBtn
                     type='primary'
                     onClick={() => {
                       FServiceAPI.Storage.downloadObject({
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
                       });
                     }}
-                  ><FDownload style={{ fontSize: 14 }} /></FTextBtn>
+                  ><FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
                 </div>
               </FTooltip>
             </Space>
@@ -157,7 +155,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               });
             }}
             rightTop={<Space size={20}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 style={{ fontSize: 12, fontWeight: 600 }}
                 type='primary'
                 onClick={() => {
@@ -173,14 +171,14 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                     }],
                   });
                 }}
-              >补充属性</FTextBtn>
+              >补充属性</FComponentsLib.FTextBtn>
             </Space>}
           />
 
           <div style={{ height: 20 }} />
 
           <Space>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 onChange({
                   customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
@@ -191,7 +189,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
             >
               <span>自定义选项（高级）</span>
               {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
                 <FInfo />
@@ -205,7 +203,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               <div style={{ height: 20 }} />
 
               <Space size={40}>
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   onClick={() => {
                     dispatch<ChangeAction>({
                       type: 'storageObjectEditor/change',
@@ -227,7 +225,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                   }}
                   type='primary'
                   style={{ fontSize: 12, fontWeight: 600 }}
-                >添加选项</FTextBtn>
+                >添加选项</FComponentsLib.FTextBtn>
 
               </Space>
 

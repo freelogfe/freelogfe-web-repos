@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FTable from '@/components/FTable';
 import { connect, Dispatch } from 'dva';
@@ -13,7 +13,7 @@ import {
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
-  FDelete, FEdit,
+  FDelete,
 } from '@/components/FIcons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
@@ -230,10 +230,10 @@ function ToolsBar({
     {
       showDownload && (<FTooltip title={FI18n.i18nNext.t('tip_download_object')}>
         <span>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
             type='primary'
-          ><FDownload /></FTextBtn>
+          ><FDownload /></FComponentsLib.FTextBtn>
         </span>
       </FTooltip>)
     }
@@ -241,10 +241,10 @@ function ToolsBar({
       showDelete && (
         <FTooltip title={FI18n.i18nNext.t('tip_delete')}>
           <span>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => onClickDelete && onClickDelete()}
               className={styles.Delete}
-            ><FDelete /></FTextBtn>
+            ><FDelete /></FComponentsLib.FTextBtn>
           </span>
         </FTooltip>
       )

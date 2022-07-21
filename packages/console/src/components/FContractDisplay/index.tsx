@@ -3,15 +3,15 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '../FText';
-import { FRectBtn, FTextBtn } from '../FButton';
+import { FRectBtn } from '../FButton';
 import FModal from '../FModal';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
-// import FUtil1 from '@/utils';
 import { ContractStatus } from '@/type/contractTypes';
 import FContractStatusBadge from '@/components/FContractStatusBadge';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -415,20 +415,20 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
               <div className={styles.recodeFold}>
                 {
                   recodeFold
-                    ? (<FTextBtn
+                    ? (<FComponentsLib.FTextBtn
                       type='default'
                       onClick={() => {
                         setRecodeFold(false);
                       }}
                       style={{ fontSize: 12, color: '#7A869A' }}
-                    >展开流转记录 <FDown /></FTextBtn>)
-                    : (<FTextBtn
+                    >展开流转记录 <FDown /></FComponentsLib.FTextBtn>)
+                    : (<FComponentsLib.FTextBtn
                       type='default'
                       onClick={() => {
                         setRecodeFold(true);
                       }}
                       style={{ fontSize: 12, color: '#7A869A' }}
-                    >收起流转记录 <FUp /></FTextBtn>)
+                    >收起流转记录 <FUp /></FComponentsLib.FTextBtn>)
                 }
               </div>
             </>)
@@ -534,12 +534,12 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             }}
           />
           <div style={{ height: 20 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='default'
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.retrievePayPassword());
             }}
-          >忘记支付密码</FTextBtn>
+          >忘记支付密码</FComponentsLib.FTextBtn>
         </div>
 
       </div>

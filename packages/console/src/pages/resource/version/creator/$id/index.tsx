@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
@@ -32,13 +32,13 @@ import FFormLayout from '@/components/FFormLayout';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
 import FPaperPlane from '@/components/FIcons/FPaperPlane';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -221,10 +221,10 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
     <FTitleText text={'创建版本'} type='h1' />
 
     <Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={onClickCache}
-      >{FI18n.i18nNext.t('save_as_draft')}</FTextBtn>
+      >{FI18n.i18nNext.t('save_as_draft')}</FComponentsLib.FTextBtn>
       <FRectBtn
         style={{ display: 'flex', alignItems: 'center' }}
         onClick={onClickCreate}

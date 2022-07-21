@@ -16,13 +16,13 @@ import categoryData from '@/utils/category';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
-  FetchExhibitsAction,
+  // FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
-  OnChange_Exhibit_SelectedType_Action,
+  // OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
   OnMount_ExhibitPage_Action,
-  OnOnlineOrOfflineAction,
+  // OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -34,7 +34,6 @@ import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
@@ -287,7 +286,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         return (
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
             <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -298,11 +297,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FComponentsLib.FIcons.FEdit />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FTooltip>
 
             <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -313,7 +312,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FFileSearch />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FTooltip>
           </Space>
         );

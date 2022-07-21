@@ -6,10 +6,9 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-import { Popconfirm, Radio, Space } from 'antd';
+import { Radio, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
-import { FTextBtn } from '@/components/FButton';
+import { FDelete, FFileSearch, FWarning } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
@@ -328,9 +327,9 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
         {onEdit && (
           <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
             <span>
-              <FTextBtn type="primary" onClick={() => onEdit()}>
+              <FComponentsLib.FTextBtn type="primary" onClick={() => onEdit()}>
                 <FComponentsLib.FIcons.FEdit />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>
         )}
@@ -338,15 +337,15 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
         {onSearch && (
           <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
             <span>
-              <FTextBtn type="primary" onClick={() => onSearch()}>
+              <FComponentsLib.FTextBtn type="primary" onClick={() => onSearch()}>
                 <FFileSearch />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>
         )}
 
       {
-        onDelete && (<FTextBtn
+        onDelete && (<FComponentsLib.FTextBtn
           onClick={() => {
             fConfirmModal({
               message: '一旦删除则无法恢复，确认删除吗？',
@@ -355,7 +354,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
               },
             });
           }}
-          className={styles.Delete}><FDelete /></FTextBtn>)
+          className={styles.Delete}><FDelete /></FComponentsLib.FTextBtn>)
       }
 
     </Space>

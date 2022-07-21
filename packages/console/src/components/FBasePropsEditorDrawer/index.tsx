@@ -3,9 +3,10 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { FContentText, FTitleText } from '../FText';
 import FInput from '../FInput';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
+import { FCircleBtn, FRectBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasePropsEditorDrawerProps {
   visible: boolean;
@@ -84,12 +85,12 @@ function FBasePropsEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
+      >取消</FComponentsLib.FTextBtn>
       <FRectBtn
         disabled={!!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
