@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import Replacer from './Replacer';
 import Replaced from './Replaced';
 import FModal from '@/components/FModal';
@@ -12,6 +11,7 @@ import {
 } from '@/models/informalNodeManagerPage';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import FThickArrowRight from '@/components/FIcons/FThickArrowRight';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FReplaceModalProps {
   dispatch: Dispatch;
@@ -49,7 +49,7 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
     <div style={{ height: 30 }} />
     <div className={styles.replaceHandler}>
       <div className={styles.replacer}>
-        <FTitleText type='h3' text={'选择替换资源'} />
+        <FComponentsLib.FTitleText type='h3' text={'选择替换资源'} />
         <div style={{ height: 5 }} />
         <div className={styles.content}>
           <Replacer />
@@ -61,7 +61,7 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
         />
       </div>
       <div className={styles.replaced}>
-        <FTitleText
+        <FComponentsLib.FTitleText
           type='h3'
           text={'选择被替换资源'}
         />

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText } from '../FText';
 import FCustomOptions, { Data } from './FCustomOptions';
 import FDrawer from '../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
@@ -112,7 +111,7 @@ function FCustomOptionsEditorDrawer({
         style={{ cursor: 'pointer', display: 'inline-block' }}
         onClick={onClick_AddNewItem}
       >
-        <FContentText
+        <FComponentsLib.FContentText
           text={'新增一项属性'}
         />
       </div>

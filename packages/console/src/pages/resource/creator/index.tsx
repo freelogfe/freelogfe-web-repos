@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
@@ -165,7 +164,7 @@ function ResourceCreator({
         <FFormLayout>
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
-              <FContentText text={`${user.info?.username} /`} />
+              <FComponentsLib.FContentText text={`${user.info?.username} /`} />
               &nbsp;
               <FInput
                 errorText={resourceCreatorPage.nameErrorText}
@@ -257,7 +256,7 @@ interface HeaderProps {
 function Header({ onClickCreate, disabled = false }: HeaderProps) {
   return (
     <div className={styles.Header}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         // text={FUtil.I18n.message('create_resource')}
         text={'创建资源'}
         type='h1'

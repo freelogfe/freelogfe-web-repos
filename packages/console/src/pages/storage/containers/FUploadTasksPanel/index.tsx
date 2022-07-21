@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -100,7 +99,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     // style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
   >
     <div className={styles.title}>
-      <FContentText text={'任务列表'}/>
+      <FComponentsLib.FContentText text={'任务列表'}/>
       <Space size={20}>
         <FComponentsLib.FTextBtn
           onClick={() => {

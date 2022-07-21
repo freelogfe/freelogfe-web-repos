@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FUtil1 from '@/utils';
 import FSwitch from '../FSwitch';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '../FText';
 import FModal from '../FModal';
 import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FPolicyListProps {
 
@@ -60,13 +59,13 @@ export function PolicyCard({ fullInfo, onlineDisable = false, activeBtnShow = tr
 
   return (<div className={styles.policy}>
     <div className={styles.header}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='highlight'
         text={fullInfo.policyName}
         style={{ maxWidth: 150 }}
         singleRow
       />
-      {activeBtnShow && 
+      {activeBtnShow &&
         <Space size={8}>
           <label
             style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
@@ -105,7 +104,7 @@ export function PolicyCard({ fullInfo, onlineDisable = false, activeBtnShow = tr
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={fullInfo.policyName} type='h2' />
+        <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
         <label
           style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>

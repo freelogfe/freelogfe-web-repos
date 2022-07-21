@@ -4,12 +4,10 @@ import { Checkbox, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
-import { FContentText, FTitleText } from '@/components/FText';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
-// import FUtil1 from '@/utils';
-// import FSwitch from '@/components/FSwitch';
 import FModal from '@/components/FModal';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -69,7 +67,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
           key={p.fullInfo.policyId}
         >
           <div className={styles.singPolicyTitle}>
-            <FContentText text={p.fullInfo.policyName} type='highlight' />
+            <FComponentsLib.FContentText text={p.fullInfo.policyName} type='highlight' />
             {
               !isSignedNode && (<Checkbox
                 checked={p.checked}
@@ -114,7 +112,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={modalPolicy?.fullInfo.policyName || ''} type='h2' />
+        <FComponentsLib.FTitleText text={modalPolicy?.fullInfo.policyName || ''} type='h2' />
         <div style={{ width: 20 }} />
 
         {

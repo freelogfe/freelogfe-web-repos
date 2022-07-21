@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Menu, Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import { FDown } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
@@ -84,9 +83,9 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
                 <span className={styles.nodeSelectorLabel}>签约节点</span>
                 {
                   selectedNode
-                    ? (<FContentText
+                    ? (<FComponentsLib.FContentText
                       text={selectedNode.nodeName} />)
-                    : (<FContentText
+                    : (<FComponentsLib.FContentText
                       type='negative'
                       text={'选择签约的节点…'} />)
                 }

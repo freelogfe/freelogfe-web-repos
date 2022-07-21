@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
@@ -130,7 +129,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
     />
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <FTitleText text={'映射规则管理'} />
+        <FComponentsLib.FTitleText text={'映射规则管理'} />
         <div style={{ width: 10 }} />
         <TypesCaption />
         <div style={{ width: 50 }} />

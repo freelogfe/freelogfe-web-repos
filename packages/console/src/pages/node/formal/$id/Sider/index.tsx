@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
@@ -30,7 +29,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 30 }} />
 
         <div className={styles.title}>
-          <FTitleText type='h2' text={nodeManagerPage.nodeName} />
+          <FComponentsLib.FTitleText type='h2' text={nodeManagerPage.nodeName} />
           <div style={{ height: 15 }} />
           <Space size={10} className={styles.url}>
             <a

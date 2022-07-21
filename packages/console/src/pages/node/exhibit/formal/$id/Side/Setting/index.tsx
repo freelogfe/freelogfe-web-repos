@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
 import { FDelete, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
@@ -39,10 +38,10 @@ interface SettingProps {
 function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
 
   return (<>
-    <FContentText text={FI18n.i18nNext.t('advanced_setting')} type='highlight' />
+    <FComponentsLib.FContentText text={FI18n.i18nNext.t('advanced_setting')} type='highlight' />
     <div style={{ height: 20 }} />
 
-    <FTitleText text={FI18n.i18nNext.t('exhibit_version')} type='h4' />
+    <FComponentsLib.FTitleText text={FI18n.i18nNext.t('exhibit_version')} type='h4' />
     <div style={{ height: 15 }} />
     <FDropdownMenu
       options={[...exhibitInfoPage.side_AllVersions].reverse().map((av: string) => ({ value: av, text: av }))}
@@ -53,7 +52,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
         });
       }}
     >
-      <Space style={{ cursor: 'pointer' }} size={15}><FContentText
+      <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
         text={exhibitInfoPage.side_Version} /><FSwap /></Space>
     </FDropdownMenu>
 
@@ -61,15 +60,15 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       exhibitInfoPage.side_SettingUnfold && (<>
         <div style={{ height: 30 }} />
 
-        <FTitleText text={FI18n.i18nNext.t('resource_property')} type='h4' />
+        <FComponentsLib.FTitleText text={FI18n.i18nNext.t('resource_property')} type='h4' />
         <div style={{ height: 15 }} />
         <div className={styles.attr}>
           <table>
             <tbody>
             {
               exhibitInfoPage.side_BaseAttrs.map((pb) => (<tr key={pb.key}>
-                <td><FContentText text={pb.key} /></td>
-                <td><FContentText text={pb.value} /></td>
+                <td><FComponentsLib.FContentText text={pb.key} /></td>
+                <td><FComponentsLib.FContentText text={pb.value} /></td>
               </tr>))
             }
             </tbody>
@@ -77,7 +76,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
         </div>
         <div style={{ height: 30 }} />
 
-        <FTitleText
+        <FComponentsLib.FTitleText
           text={FI18n.i18nNext.t('custom_option')}
           type='h4'
         />
@@ -90,7 +89,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               return (<div key={io.key}>
                 <div className={styles.optionTitle}>
                   <Space size={10}>
-                    <FContentText text={io.key} />
+                    <FComponentsLib.FContentText text={io.key} />
                     {
                       io.description && (<FTooltip
                         title={io.description}
@@ -184,7 +183,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               return (<div key={co.key}>
                 <div className={styles.optionTitle}>
                   <Space size={10}>
-                    <FContentText text={co.key} />
+                    <FComponentsLib.FContentText text={co.key} />
                     {
                       co.description && (<FTooltip
                         title={co.description}

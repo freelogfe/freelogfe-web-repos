@@ -2,9 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import { GraphData } from '@antv/g6/lib';
-import { FTipText } from '../../FText';
 import { FServiceAPI } from '@freelog/tools-lib';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourceNode {
   id: string;
@@ -289,7 +289,7 @@ function FAntvG6AuthorizationGraph({ nodes, edges, width = 920, height = 500 }: 
         height: height,
       }}
     >
-      <FTipText
+      <FComponentsLib.FTipText
         type='first'
         text={'无授权树'}
       />

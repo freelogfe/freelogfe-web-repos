@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
@@ -25,7 +24,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
   }
 
   return (<>
-    <FTitleText type='h4'>主资源</FTitleText>
+    <FComponentsLib.FTitleText type='h4'>主资源</FComponentsLib.FTitleText>
 
     <a
       className={styles.signResource + ' ' + (mainResource.id === exhibitInfoPage.contract_SelectedAssociatedID ? styles.activatedSignResource : '')}
@@ -41,7 +40,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           }));
         }}
       >
-        <FContentText
+        <FComponentsLib.FContentText
           type='highlight'
           text={mainResource.name}
           singleRow
@@ -49,7 +48,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         />
       </FComponentsLib.FTextBtn>
       <div style={{ height: 5 }} />
-      <FContentText
+      <FComponentsLib.FContentText
         type='additional2'
         text={FUtil.Format.resourceTypeKeyArrToResourceType(mainResource.type)}
       />
@@ -65,7 +64,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
     </a>
 
     {
-      otherResource.length > 0 && (<FTitleText type='h4'>基础上抛</FTitleText>)
+      otherResource.length > 0 && (<FComponentsLib.FTitleText type='h4'>基础上抛</FComponentsLib.FTitleText>)
     }
 
     {
@@ -84,7 +83,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             }));
           }}
         >
-          <FContentText
+          <FComponentsLib.FContentText
             type='highlight'
             text={r.name}
             singleRow
@@ -92,7 +91,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           />
         </FComponentsLib.FTextBtn>
         <div style={{ height: 5 }} />
-        <FContentText
+        <FComponentsLib.FContentText
           type='additional2'
           text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
         />

@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import {Drawer} from 'antd';
 import {DrawerProps} from "antd/lib/drawer";
-import {FTitleText} from '../FText';
 import {FClose} from '../FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -25,7 +24,7 @@ function FDrawer({children, topRight, width = 720, title, onClose, ...props}: FD
     {...props}
   >
     <div className={styles.header} style={{width: width}}>
-      {typeof title === 'string' ? <FTitleText type="h2" text={title}/> : title}
+      {typeof title === 'string' ? <FComponentsLib.FTitleText type="h2" text={title}/> : title}
       {
         topRight || (<FComponentsLib.FTextBtn type="default" onClick={(e: any) => onClose && onClose(e)}><FClose/></FComponentsLib.FTextBtn>)
       }

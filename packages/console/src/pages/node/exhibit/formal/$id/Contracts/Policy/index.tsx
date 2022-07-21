@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { Space } from 'antd';
@@ -30,7 +29,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
 
   return (<div>
     <div style={{ height: 10 }} />
-    <FTitleText type='h4'>未签约策略</FTitleText>
+    <FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>
     <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>
       {
@@ -39,7 +38,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
           key={p.policyId}
         >
           <div className={styles.singPolicyHeader}>
-            <FContentText type='highlight'>{p.policyName}</FContentText>
+            <FComponentsLib.FContentText type='highlight'>{p.policyName}</FComponentsLib.FContentText>
 
             <FComponentsLib.FRectBtn
               style={{ height: 26, padding: '0 15px' }}
@@ -80,7 +79,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={fullScreenPolicy?.policyName || ''} type='h2' />
+        <FComponentsLib.FTitleText text={fullScreenPolicy?.policyName || ''} type='h2' />
         <div style={{ width: 20 }} />
         <FComponentsLib.FRectBtn
           style={{ height: 26, padding: '0 15px' }}

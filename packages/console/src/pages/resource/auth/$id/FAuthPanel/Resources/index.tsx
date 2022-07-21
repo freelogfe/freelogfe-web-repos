@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
@@ -57,7 +56,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                   }));
                 }}
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   text={i.title}
                   singleRow
                   style={{ maxWidth: 280 }}
@@ -73,9 +72,9 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
               {/*</div>*/}
             </div>
             <div style={{ height: 9 }} />
-            <FContentText type='additional2'>
+            <FComponentsLib.FContentText type='additional2'>
               <span>{i.resourceType}</span>
-            </FContentText>
+            </FComponentsLib.FContentText>
             <div style={{ height: 9 }} />
             <FResourceContractLabels contracts={i.contracts.map((j) => {
               return {

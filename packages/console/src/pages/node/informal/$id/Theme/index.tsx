@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import {
   InformalNodeManagerPageModelState,
@@ -79,7 +78,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText text={'主题管理'} />
+            <FComponentsLib.FTitleText text={'主题管理'} />
             <Space size={30}>
 
               <FComponentsLib.FTextBtn
@@ -269,7 +268,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                             status={t.associatedPresentableId === '' ? t.originInfo.type : 'exhibit'}
                           />
                           <div style={{ width: 5 }} />
-                          <FContentText
+                          <FComponentsLib.FContentText
                             type='highlight'
                             text={t.testResourceName}
                             singleRow
@@ -279,7 +278,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         <div style={{ height: 6 }} />
                         <div className={styles.itemVersion}>
                           {
-                            t.originInfo.type !== 'object' && (<FContentText
+                            t.originInfo.type !== 'object' && (<FComponentsLib.FContentText
                               text={`展示版本 ${t.originInfo.version}`}
                               type='additional1'
                             />)

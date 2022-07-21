@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
@@ -112,7 +111,7 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={fullInfo.policyName} type='h2' />
+        <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
         <FComponentsLib.FRectBtn
           size='small'
@@ -160,7 +159,7 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
             onChange_SelectAllCheckbox(e.target.checked);
           }}
         />
-        <FContentText text={'全选'} type='highlight' />
+        <FComponentsLib.FContentText text={'全选'} type='highlight' />
       </Space>
       <div style={{ height: 10, borderBottom: '1px solid #E5E7EB' }} />
       {
@@ -173,7 +172,7 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
                   onChange_VersionSelected(version, e.target.checked);
                 }}
               />
-              <FContentText text={version} type='highlight' />
+              <FComponentsLib.FContentText text={version} type='highlight' />
             </Space>
           </div>);
         })

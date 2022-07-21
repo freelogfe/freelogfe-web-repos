@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '../../FDrawer';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -48,15 +47,15 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
       }
     }}
   >
-    <FTitleText type='h3' text={'事件'} />
+    <FComponentsLib.FTitleText type='h3' text={'事件'} />
     <div style={{ height: 20 }} />
     <div className={styles.templateEvent}>
       <div>
         <div style={{ width: 130 }}>
-          <FContentText type='normal' text={'相对时间事件'} />
+          <FComponentsLib.FContentText type='normal' text={'相对时间事件'} />
         </div>
         <div>
-          <FContentText type='negative' text={'示例：1 周之后'} />
+          <FComponentsLib.FContentText type='negative' text={'示例：1 周之后'} />
         </div>
       </div>
       <FComponentsLib.FRectBtn
@@ -72,10 +71,10 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
     <div className={styles.templateEvent}>
       <div>
         <div style={{ width: 130 }}>
-          <FContentText type='normal' text={'绝对时间事件'} />
+          <FComponentsLib.FContentText type='normal' text={'绝对时间事件'} />
         </div>
         <div>
-          <FContentText type='negative' text={'示例：于 2021/05/03'} />
+          <FComponentsLib.FContentText type='negative' text={'示例：于 2021/05/03'} />
         </div>
       </div>
       <FComponentsLib.FRectBtn
@@ -91,10 +90,10 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
     <div className={styles.templateEvent}>
       <div>
         <div style={{ width: 130 }}>
-          <FContentText type='normal' text={'支付事件'} />
+          <FComponentsLib.FContentText type='normal' text={'支付事件'} />
         </div>
         <div>
-          <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />
+          <FComponentsLib.FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />
         </div>
       </div>
       <FComponentsLib.FRectBtn
@@ -126,13 +125,13 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
 
     <div style={{ height: 30 }} />
 
-    <FTitleText type='h3' text={'指令'} />
+    <FComponentsLib.FTitleText type='h3' text={'指令'} />
 
     <div style={{ height: 20 }} />
 
     <div className={styles.templateEvent}>
       <div>
-        <FContentText type='normal' text={'状态机终止，停止接收事件'} />
+        <FComponentsLib.FContentText type='normal' text={'状态机终止，停止接收事件'} />
       </div>
       <FComponentsLib.FRectBtn
         type='secondary'

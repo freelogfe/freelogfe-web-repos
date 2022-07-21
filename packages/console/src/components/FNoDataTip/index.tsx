@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTipText } from '../FText';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FNoDataTipProps {
@@ -19,7 +18,7 @@ function FNoDataTip({ height, tipText, btnText, btn, onClick }: FNoDataTipProps)
   >
     <div />
     <div>
-      <FTipText
+      <FComponentsLib.FTipText
         type='first'
         text={tipText}
       />

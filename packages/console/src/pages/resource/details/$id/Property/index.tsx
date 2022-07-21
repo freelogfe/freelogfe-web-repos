@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {FContentText, FTitleText} from '@/components/FText';
 import styles from './index.less';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
 import FTooltip from "@/components/FTooltip";
 import {FInfo} from "@/components/FIcons";
 import {Space} from "antd";
+import FComponentsLib from '@freelog/components-lib';
 
 interface PropertyProps {
   dispatch: Dispatch;
@@ -20,7 +20,7 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'基础属性'}
         type="h3"
       />
@@ -30,7 +30,7 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
           resourceDetailPage.resourceVersion_Info.properties.map((p, index) => {
             return (<div key={p.key}>
               <Space size={10}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={p.key}
                   type="negative"
                 />
@@ -45,7 +45,7 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
                 }
               </Space>
               <div style={{height: 10}}/>
-              <FContentText
+              <FComponentsLib.FContentText
                 style={{maxWidth: 215}}
                 text={p.value}
                 singleRow

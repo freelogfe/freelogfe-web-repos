@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
@@ -95,7 +94,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       }}
                       type='default'
                     >
-                      <FContentText
+                      <FComponentsLib.FContentText
                         className={styles.titleText}
                         text={rrr.title}
                         singleRow
@@ -118,7 +117,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
-                  <FContentText type='additional2'>
+                  <FComponentsLib.FContentText type='additional2'>
                     <div>
                       {/*{rrr.resourceType || '暂无类型'}*/}
                       {FUtil.Format.resourceTypeKeyArrToResourceType(rrr.resourceType)}
@@ -137,7 +136,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                           </>
                       }
                     </div>
-                  </FContentText>
+                  </FComponentsLib.FContentText>
                   <>
                     <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
@@ -216,7 +215,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
 
   return (<div className={styles.children}>
     <div style={{ padding: '5px 0 5px 15px' }}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='additional2'
         // text={'此资源存在以下基础上抛'}
         text={FI18n.i18nNext.t('upcast')}
@@ -247,7 +246,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 }}
                 type='default'
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   className={styles.titleText}
                   text={i.title}
                   singleRow
@@ -270,9 +269,9 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
-            <FContentText type='additional2'>
+            <FComponentsLib.FContentText type='additional2'>
               <div>{i.resourceType || '暂无类型'}</div>
-            </FContentText>
+            </FComponentsLib.FContentText>
             <>
               <div style={{ height: 5 }} />
               <div className={styles.DepPanelLabels}>

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import { connect, Dispatch } from 'dva';
@@ -105,7 +104,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         <FFormLayout.FBlock title={'对象'}>
           <div className={styles.Header}>
             <Space size={10}>
-              <FContentText
+              <FComponentsLib.FContentText
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
                 type='highlight'
                 className={styles.objectName}
@@ -270,7 +269,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                       });
                     }}
                   />)
-                  : (<FContentText text={'暂无自定义选项…'} type='negative' />)
+                  : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
               }
             </>)
           }

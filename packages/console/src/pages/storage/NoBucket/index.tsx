@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTipText} from '@/components/FText';
 import {connect, Dispatch} from 'dva';
 import {StorageHomePageModelState} from "@/models/storageHomePage";
 import {ConnectState} from "@/models/connect";
@@ -18,13 +17,13 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
 
   return (<>
     <div className={styles.styles} style={{height: 'calc(100vh - 70px)'}}>
-      <FTipText
+      <FComponentsLib.FTipText
         // text={'自由创作从Freelog开始'}
         text={FI18n.i18nNext.t('manage_buckets_empty_title')}
         type="first"
       />
       <div style={{height: 30}}/>
-      <FTipText
+      <FComponentsLib.FTipText
         // text={'在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。'}
         text={FI18n.i18nNext.t('manage_buckets_empty_msg')}
         type="second"

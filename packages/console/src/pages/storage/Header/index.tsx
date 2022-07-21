@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from '@/components/FText';
 import {Space} from 'antd';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
@@ -29,7 +28,7 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
 
   return (<div className={styles.header}>
     <div className={styles.headerLeft}>
-      <FTitleText type="h1" text={bucket.bucketName}/>
+      <FComponentsLib.FTitleText type="h1" text={bucket.bucketName}/>
       <div style={{height: 5}}/>
       <Space size={40}>
         <div>{FI18n.i18nNext.t('created_time')} {bucket.createDate}</div>

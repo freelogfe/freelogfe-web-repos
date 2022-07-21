@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
-import {FTipText} from '@/components/FText';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction} from "@/models/global";
@@ -38,9 +37,9 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type="second" text={FI18n.i18nNext.t('resource_created_successfully')}/>
+      <FComponentsLib.FTipText type="second" text={FI18n.i18nNext.t('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type="third" text={FI18n.i18nNext.t('hint_create_1st_version')}/>
+      <FComponentsLib.FTipText type="third" text={FI18n.i18nNext.t('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
       <FComponentsLib.FRectBtn onClick={goto}>{FI18n.i18nNext.t('create_first_version')}</FComponentsLib.FRectBtn>
     </div>

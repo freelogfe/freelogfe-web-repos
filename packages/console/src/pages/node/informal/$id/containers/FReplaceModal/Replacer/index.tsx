@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Radio, Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { connect, Dispatch } from 'dva';
 import {
@@ -176,7 +175,7 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
               <div className={styles.replacerListItemContent}>
                 <div>
                   <div>
-                    <FContentText
+                    <FComponentsLib.FContentText
                       text={rl.name}
                       type='highlight'
                       style={{ width: 270 }}
@@ -187,11 +186,11 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
                   <div>
                     {
                       rl.identity === 'resource'
-                        ? (<FContentText
+                        ? (<FComponentsLib.FContentText
                           text={`${rl.type} | ${rl.latestVersion || '暂无版本'} | ${rl.updateTime}`}
                           type='additional2'
                         />)
-                        : (<FContentText
+                        : (<FComponentsLib.FContentText
                           text={`${rl.type || '未设置类型'} | ${rl.updateTime}`}
                           type='additional2'
                         />)

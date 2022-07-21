@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Dispatch, connect } from 'dva';
 import Sign from './Sign';
-import { FTitleText, FContentText } from '@/components/FText';
 import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
@@ -101,7 +100,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             <label className={styles.resourceType}>
               {resourceDetailPage.resource_Info?.type || ''}
             </label>
-            <FTitleText
+            <FComponentsLib.FTitleText
               style={{ width: 650 }}
               singleRow
               text={resourceDetailPage.resource_Info?.name || ''}
@@ -150,7 +149,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
           <div className={styles.versionWrap}>
             <div className={styles.versionTitle}>
               <Space size={10}>
-                <FTitleText
+                <FComponentsLib.FTitleText
                   text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion}
                 />
                 <FDropdownMenu
@@ -170,7 +169,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                 </FDropdownMenu>
               </Space>
 
-              <FContentText
+              <FComponentsLib.FContentText
                 text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
                 type="negative"
               />

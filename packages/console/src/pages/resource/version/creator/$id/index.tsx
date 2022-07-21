@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
@@ -217,7 +216,7 @@ interface HeaderProps {
 function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderProps) {
   return (<div className={styles.Header}>
     {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-    <FTitleText text={'创建版本'} type='h1' />
+    <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
 
     <Space size={30}>
       <FComponentsLib.FTextBtn

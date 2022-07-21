@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/exhibitInfoPage';
@@ -31,7 +30,7 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
+      <FComponentsLib.FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
       <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {

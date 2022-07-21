@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space, Row, Col } from 'antd';
 import FDrawer from '../FDrawer';
-import { FTitleText } from '../FText';
 import FInput from '../FInput';
 import FSelect from '../FSelect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -126,7 +125,7 @@ function FCustomOptionEditorDrawer({
           <Col span={12}>
             <Space size={5}>
               <i className={styles.dot} />
-              <FTitleText type='h4' text={'key'} />
+              <FComponentsLib.FTitleText type='h4' text={'key'} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
@@ -161,7 +160,7 @@ function FCustomOptionEditorDrawer({
           </Col>
           <Col span={12}>
             <Space size={5}>
-              <FTitleText type='h4' text={'属性说明'} />
+              <FComponentsLib.FTitleText type='h4' text={'属性说明'} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
@@ -193,7 +192,7 @@ function FCustomOptionEditorDrawer({
             !hideValueTypeSelect && (<Col span={6}>
               <Space size={5}>
                 <i className={styles.dot} />
-                <FTitleText type='h4' text={'属性值输入方式'} />
+                <FComponentsLib.FTitleText type='h4' text={'属性值输入方式'} />
               </Space>
               <div style={{ height: 5 }} />
               <FSelect
@@ -222,7 +221,7 @@ function FCustomOptionEditorDrawer({
                 <Space size={5}>
                   {/*<i className={styles.dot} />*/}
                   {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
-                  <FTitleText type='h4' text={'自定义选项'} />
+                  <FComponentsLib.FTitleText type='h4' text={'自定义选项'} />
                 </Space>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -253,7 +252,7 @@ function FCustomOptionEditorDrawer({
               : (<Col span={18}>
                 <Space size={5}>
                   <i className={styles.dot} />
-                  <FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
+                  <FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
                 </Space>
                 <div style={{ height: 5 }} />
                 <FInput

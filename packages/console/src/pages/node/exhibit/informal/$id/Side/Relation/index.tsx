@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FCoverImage from '@/components/FCoverImage';
@@ -17,7 +16,7 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
   }
 
   return (<div className={styles.info}>
-    <FContentText text={informExhibitInfoPage.side_Resource_Relation?.cardTitle} type='highlight' />
+    <FComponentsLib.FContentText text={informExhibitInfoPage.side_Resource_Relation?.cardTitle} type='highlight' />
     <div style={{ height: 20 }} />
     <div className={styles.cover}>
       {/*<img*/}
@@ -42,7 +41,7 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
         window.open(informExhibitInfoPage.side_Resource_Relation?.linkToDetails);
       }}
     >
-      <FContentText
+      <FComponentsLib.FContentText
         style={{ width: 220 }}
         singleRow
         text={informExhibitInfoPage.side_Resource_Relation?.name}

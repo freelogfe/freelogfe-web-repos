@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
 import {Progress, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -36,12 +35,12 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
         <div style={{height: 30}}/>
         <div className={styles.title}>
           <Space size={10}>
-            <FTitleText
+            <FComponentsLib.FTitleText
               // text={`我的存储空间`}
               text={FI18n.i18nNext.t('my_buckets')}
               type="h4"
             />
-            <FTitleText
+            <FComponentsLib.FTitleText
               text={`${(storageHomePage.bucketList || []).length}/5`}
               type="h4"
             />
@@ -117,7 +116,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 })
             }
           </div>) : (<div style={{padding: '0 40px'}}>
-            <FContentText
+            <FComponentsLib.FContentText
               type="additional2"
               // text={'单击“ + ”创建您的第一个项目。'}
               text={FI18n.i18nNext.t('my_buckets_list_empty')}
@@ -141,7 +140,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <div style={{height: 60}}/>
 
           <div className={styles.title}>
-            <FTitleText text={'系统存储空间'} type="h4"/>
+            <FComponentsLib.FTitleText text={'系统存储空间'} type="h4"/>
           </div>
 
           {/*<div style={{height: 18}}/>*/}

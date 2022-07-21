@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
@@ -68,7 +67,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
     </Helmet>
     <FLeftSiderLayout
       sider={<Sider />}
-      header={<FTitleText
+      header={<FComponentsLib.FTitleText
         text={FI18n.i18nNext.t('resource_information')}
         type='h1'
       />}
@@ -76,10 +75,10 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
         <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')}>
-          <FContentText type='highlight' text={resourceInfo.info?.resourceName || ''} />
+          <FComponentsLib.FContentText type='highlight' text={resourceInfo.info?.resourceName || ''} />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')}>
-          <FContentText
+          <FComponentsLib.FContentText
             type='highlight'
             text={resourceInfo.info.resourceType.join(' / ')}
           />
@@ -132,7 +131,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
               />)
               : resourceInfo.info?.intro
                 ? (<div className={styles.aboutPanel}>
-                  <FContentText text={resourceInfo.info?.intro} />
+                  <FComponentsLib.FContentText text={resourceInfo.info?.intro} />
                 </div>)
                 : (<FComponentsLib.FRectBtn
                   type='default'

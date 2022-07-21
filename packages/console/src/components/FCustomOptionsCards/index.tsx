@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText } from '../FText';
 import FTooltip from '../FTooltip';
 import { FInfo } from '../FIcons';
 import FDivider from '../FDivider';
@@ -29,7 +28,7 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
         return (<div key={ds.theKey} className={styles.customOptions1Item}>
           <div>
             <Space size={5}>
-              <FContentText text={ds.theKey} type='additional2' />
+              <FComponentsLib.FContentText text={ds.theKey} type='additional2' />
               {
                 ds.description
                   ? (<FTooltip title={ds.description}><FInfo style={{ cursor: 'pointer', fontSize: 14 }} /></FTooltip>)
@@ -39,16 +38,16 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
             </Space>
             <div style={{ height: 10 }} />
             <Space size={5}>
-              <FContentText text={ds.type === 'select' ? '下拉框' : '输入框'} />
+              <FComponentsLib.FContentText text={ds.type === 'select' ? '下拉框' : '输入框'} />
               <FDivider />
               {
                 ds.value !== ''
-                  ? (<FContentText
+                  ? (<FComponentsLib.FContentText
                     text={ds.value}
                     style={{ maxWidth: 500 }}
                     singleRow
                   />)
-                  : (<FContentText
+                  : (<FComponentsLib.FContentText
                     text={'未填写默认值'}
                     style={{ maxWidth: 500 }}
                     singleRow

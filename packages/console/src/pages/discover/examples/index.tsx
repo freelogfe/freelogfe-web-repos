@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './index.less';
 import FPlayer from '@/components/FIcons/FPlayer';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -59,7 +58,7 @@ function Examples({}) {
   return (<div>
     <div style={{ height: 50 }} />
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='negative'
         text={'Freelog为用户展示了一些场景示例，用户可以根据自己的需求选择主题或创建主题来搭建自己的节点'}
       />
@@ -76,7 +75,7 @@ function Examples({}) {
               />
               <div style={{ width: 20 }} />
               <div className={styles.content}>
-                <FTitleText type='h1' text={n.title} />
+                <FComponentsLib.FTitleText type='h1' text={n.title} />
                 {/*<div style={{ height: 10 }} />*/}
                 {/*<Space size={10}>*/}
                 {/*  {*/}

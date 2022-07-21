@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { Dispatch, connect } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import Contracts from './Contracts';
@@ -11,6 +10,7 @@ import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import { FWarning } from '@/components/FIcons';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -46,7 +46,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           placement='right'
         >
           <div>
-            <FContentText
+            <FComponentsLib.FContentText
               text={resourceInfoLength < 205 ? (resourceDetailPage.resource_Info?.about || '') : (resourceDetailPage.resource_Info?.about.substr(0, 205) + '...')} />
           </div>
         </Tooltip>

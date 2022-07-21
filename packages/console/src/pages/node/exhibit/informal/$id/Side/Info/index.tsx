@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import {
   OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
   OnChangePTitleInputAction,
@@ -30,7 +29,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
   }
 
   return (<>
-      <FContentText text={'基础信息'} type='highlight' />
+      <FComponentsLib.FContentText text={'基础信息'} type='highlight' />
       <div style={{ height: 20 }} />
 
       <FUploadCover
@@ -57,7 +56,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
 
       <div style={{ height: 20 }} />
 
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'展品标题'}
         type='h4'
       />
@@ -69,7 +68,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
               maxWidth: 192,
               overflowWrap: 'break-word',
             }}>
-              <FContentText text={informExhibitInfoPage.side_Exhibit_Title} />
+              <FComponentsLib.FContentText text={informExhibitInfoPage.side_Exhibit_Title} />
             </div>
             <a onClick={() => {
               dispatch<OnClickPTitleEditBtnAction>({
@@ -116,7 +115,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
       }
       <div style={{ height: 30 }} />
 
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'展品标签'}
         type='h4'
       />

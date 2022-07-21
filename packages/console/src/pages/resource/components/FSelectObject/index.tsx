@@ -15,7 +15,6 @@ import {
   HandleObjectInfoAction,
 } from '@/models/resourceVersionCreatorPage';
 import FTable from '@/components/FTable';
-import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
 import { FLoading } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
@@ -357,7 +356,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       dataIndex: 'resourceName',
                       width: 400,
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceName}
                           style={{ maxWidth: 370 }}
                         />);
@@ -368,7 +367,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       dataIndex: 'resourceType',
                       width: 100,
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceType}
                         />);
                       },
@@ -377,7 +376,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       title: '版本',
                       dataIndex: 'resourceVersion',
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceVersion}
                         />);
                       },

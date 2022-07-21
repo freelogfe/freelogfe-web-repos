@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { List } from 'antd';
-import { FContentText } from '../FText';
 import FResourceStatusBadge from '../FResourceStatusBadge';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -47,7 +46,7 @@ function FResourceList({
       </div>)
       : (resourceObjects.length > 0 && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-          <FContentText type='additional1' text={'没有更多了~'} />
+          <FComponentsLib.FContentText type='additional1' text={'没有更多了~'} />
         </div>))}
     dataSource={resourceObjects}
     renderItem={(i: FResourceListProps['resourceObjects'][number]) => (
@@ -55,7 +54,7 @@ function FResourceList({
         <div>
           <div className={styles.title}>
             <div>
-              <FContentText
+              <FComponentsLib.FContentText
                 singleRow={true}
                 text={i.title}
               />
@@ -64,7 +63,7 @@ function FResourceList({
             {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased' : 'offline'} />}
           </div>
           <div style={{ height: 2 }} />
-          <FContentText
+          <FComponentsLib.FContentText
             type={'additional2'}
             text={(i.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(i.resourceType)}` : '未设置类型') + ` | 更新时间 ${i.time}`}
           />

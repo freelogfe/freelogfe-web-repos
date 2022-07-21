@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Drawer, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesAndPoliciesProps {
@@ -34,14 +32,14 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
             onClick={() => setVisibleR(r.id)}
           >
             <div>
-              <FContentText
+              <FComponentsLib.FContentText
                 type='highlight'
                 text={r.name}
               />
               <div style={{ height: 5 }} />
-              <FContentText
+              <FComponentsLib.FContentText
                 type='additional2'
-                text={r.type}
+                text={r.type.join(' / ')}
               />
             </div>
             <div className={styles.resourcePolicies}>
@@ -103,14 +101,14 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
                   onClick={() => setVisibleR(r.id)}
                 >
                   <div>
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='highlight'
                       text={r.name}
                     />
                     <div style={{ height: 5 }} />
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='additional2'
-                      text={r.type}
+                      text={r.type.join(' / ')}
                     />
                   </div>
                   <div className={styles.resourcePolicies}>
@@ -173,17 +171,17 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
       onClose={() => setVisibleR('')}
       maskClosable={false}
     >
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={showRInfo?.name}
         type='h3'
       />
       <div style={{ height: 10 }} />
-      <FContentText
+      <FComponentsLib.FContentText
         type='additional1'
-        text={showRInfo?.type}
+        text={showRInfo?.type.join(' / ')}
       />
       <div style={{ height: 50 }} />
-      <FTitleText
+      <FComponentsLib.FTitleText
         type='h3'
         text={'已选策略'}
       />
@@ -201,7 +199,7 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
               key={rp.id}
             >
               <div style={{ padding: '10px 20px 0' }}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={rp.name}
                   type='highlight'
                 />
@@ -224,7 +222,7 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
               key={rp.fullInfo.policyId}
             >
               <div style={{ padding: '10px 20px 0' }}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={rp.fullInfo.policyName}
                   type='highlight'
                 />

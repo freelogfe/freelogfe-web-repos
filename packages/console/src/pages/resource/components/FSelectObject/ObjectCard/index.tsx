@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import img from '@/assets/file-object.svg';
-import {FContentText} from '@/components/FText';
 import {Progress} from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -21,7 +20,7 @@ function ObjectCard({resourceObject, progress = null, onClickDelete}: ObjectCard
       <img src={img} className={styles.img} alt=""/>
       <div style={{width: 20}}/>
       <div>
-        <FContentText
+        <FComponentsLib.FContentText
           type="highlight"
           text={resourceObject.name}
         />
@@ -29,7 +28,7 @@ function ObjectCard({resourceObject, progress = null, onClickDelete}: ObjectCard
         <div className={styles.info}>
           {
             progress === null
-              ? <FContentText
+              ? <FComponentsLib.FContentText
                 className={styles.infoSize}
                 type="additional1"
                 text={resourceObject.path}

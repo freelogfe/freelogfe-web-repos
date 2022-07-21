@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FTipText } from '@/components/FText';
 import { Space } from 'antd';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
 import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
@@ -19,7 +18,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
 
   return (<div>
     <Space size={15}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={FI18n.i18nNext.t('title_auth_plan')}
         type='h3'
       />
@@ -41,7 +40,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     {
       exhibitInfoPage.policy_List.length === 0
         ? (<div className={styles.empty}>
-          <FTipText
+          <FComponentsLib.FTipText
             type='second'
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={FI18n.i18nNext.t('exhibit_auth_plan_empty')}

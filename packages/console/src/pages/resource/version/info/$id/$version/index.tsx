@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import { connect, Dispatch } from 'dva';
@@ -29,7 +28,6 @@ import {
 } from '@/components/FAntvG6';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
-import { FTipText } from '@/components/FText';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { RouteComponentProps } from 'react-router';
 import FBasePropertiesCards from '@/components/FBasePropertiesCards';
@@ -207,7 +205,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           {
             !resourceVersionEditorPage.description && !isEditing
             && (<div className={styles.noDescription}>
-              <FTipText
+              <FComponentsLib.FTipText
                 text={'动动手，让你的资源看起来更丰富多彩吧～'}
                 type='second'
               />
@@ -442,7 +440,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot} />
-            <FTitleText type='h4'>key</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -455,7 +453,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot} />
-            <FTitleText type='h4'>value</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -485,7 +483,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
         <div className={styles.input}>
           <div className={styles.title}>
-            <FTitleText type='h4'>属性说明</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -730,12 +728,12 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
 
   return (
     <div className={styles.Header}>
-      <FTitleText text={version} type='h1' />
+      <FComponentsLib.FTitleText text={version} type='h1' />
       <div style={{ height: 10 }} />
       <Space size={0}>
-        <FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
+        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
         <div style={{ width: 40 }} />
-        <FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
+        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
         <div style={{ width: 20 }} />
         <FTooltip title={'下载'}>
           <div>

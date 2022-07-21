@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import {
   FViewportTabs,
 } from '@/components/FAntvG6';

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTipText } from '@/components/FText';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FResultTipProps {
@@ -20,7 +19,7 @@ function FResultTip({ h1, h2, btnText, onClickBtn }: FResultTipProps) {
 
     {
       h1Text.map((h, i) => {
-        return (<FTipText key={i} type='first' text={h} />);
+        return (<FComponentsLib.FTipText key={i} type='first' text={h} />);
       })
     }
 
@@ -29,7 +28,7 @@ function FResultTip({ h1, h2, btnText, onClickBtn }: FResultTipProps) {
         <div style={{ height: 30 }} />
         {
           h2Text.map((h, i) => {
-            return (<FTipText key={i} type='second' text={h} />);
+            return (<FComponentsLib.FTipText key={i} type='second' text={h} />);
           })
         }
       </>)

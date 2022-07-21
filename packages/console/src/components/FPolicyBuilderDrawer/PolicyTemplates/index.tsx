@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '../../FText';
 import FCodeFormatter from '../../FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { policyCodeTranslationToText } from '../index';
@@ -80,7 +79,7 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
 
   return (<div className={styles.PolicyTemplate}>
     <div className={styles.header}>
-      <FTitleText type='h1' text={title} />
+      <FComponentsLib.FTitleText type='h1' text={title} />
       <FComponentsLib.FRectBtn
         type='primary'
         size='small'

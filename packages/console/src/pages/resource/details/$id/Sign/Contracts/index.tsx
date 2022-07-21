@@ -6,7 +6,6 @@ import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
-import { FContentText } from '@/components/FText';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -35,7 +34,7 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
         return (<div key={c.id} className={styles.Contracts}>
           <div style={{ height: 15 }} />
           <div className={styles.contractTitle}>
-            <FContentText text={c.name} type='highlight' />
+            <FComponentsLib.FContentText text={c.name} type='highlight' />
             {
               !isSignedNode && (<Checkbox
                 checked={c.checked}

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -14,7 +13,7 @@ interface RelationProps {
 
 function Relation({ exhibitInfoPage }: RelationProps) {
   return (<div className={styles.info}>
-    <FContentText
+    <FComponentsLib.FContentText
       text={FI18n.i18nNext.t('relevant_resource')}
       type='highlight'
     />
@@ -45,7 +44,7 @@ function Relation({ exhibitInfoPage }: RelationProps) {
         window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.side_ResourceID }));
       }}
     >
-      <FContentText
+      <FComponentsLib.FContentText
         style={{ width: 220 }}
         singleRow
         text={exhibitInfoPage.side_ResourceName}

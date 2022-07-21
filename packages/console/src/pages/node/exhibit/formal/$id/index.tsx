@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
 import { Radio, Space } from 'antd';
 import Policies from './Policies';
@@ -228,7 +227,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               style={{ fontWeight: 600 }}
               type="default"
             >
-              <FContentText
+              <FComponentsLib.FContentText
                 type="negative"
                 text={exhibitInfoPage.exhibit_BelongNode_Name}
                 className={styles.nodeName}
@@ -236,9 +235,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             </FComponentsLib.FTextBtn>
             {/*</FLink>*/}
             <div style={{ width: 2 }} />
-            <FContentText type="negative" text={'>'} />
+            <FComponentsLib.FContentText type="negative" text={'>'} />
             <div style={{ width: 2 }} />
-            <FTitleText
+            <FComponentsLib.FTitleText
               text={exhibitInfoPage.exhibit_Name}
               style={{
                 maxWidth: 800,

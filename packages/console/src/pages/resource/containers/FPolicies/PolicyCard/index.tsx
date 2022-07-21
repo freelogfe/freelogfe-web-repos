@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from "@/components/FText";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import { FI18n } from '@freelog/tools-lib';
@@ -17,7 +16,7 @@ interface PolicyCardProps {
 function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCardProps) {
   return (<div className={styles.policy}>
     <div className={styles.policyHeader}>
-      <FContentText text={title} singleRow={true}/>
+      <FComponentsLib.FContentText text={title} singleRow={true}/>
       <FDropdownMenu
         onChange={(value: any) => {
           if (value !== status) {

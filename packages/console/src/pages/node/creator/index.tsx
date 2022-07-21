@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodesModelState } from '@/models/connect';
@@ -45,7 +44,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
     });
   }, []);
 
-  return (<FContentLayout header={<FTitleText
+  return (<FContentLayout header={<FComponentsLib.FTitleText
     type='h1'
     text={'创建节点'} />}
   >
@@ -55,7 +54,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
     <div className={styles.body}>
       <Space size={10}>
         <div className={styles.domain}>
-          <FContentText type='negative' text={'节点地址'} />
+          <FComponentsLib.FContentText type='negative' text={'节点地址'} />
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeDomain}
@@ -79,7 +78,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
               // })}
             />
           </div>
-          <FContentText type='negative' text={'.freelog.com'} />
+          <FComponentsLib.FContentText type='negative' text={'.freelog.com'} />
         </div>
         <div style={{ width: 18 }}>
           {nodes.domainVerify === 'verifying' && <FLoading />}
@@ -89,7 +88,7 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
       <pre className={styles.errorTip}>{nodes.domainError}</pre>
       <Space size={10}>
         <div className={styles.name}>
-          <FContentText type='negative' text={'节点名称'} />
+          <FComponentsLib.FContentText type='negative' text={'节点名称'} />
           <div className={styles.inputWrap}>
             <FInput
               value={nodes.nodeName}

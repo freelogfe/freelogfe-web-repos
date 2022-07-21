@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText, FTipText } from '@/components/FText';
 import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
@@ -21,7 +20,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
 
   return (<div>
     <Space size={15}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'授权策略'}
         type='h3'
       />
@@ -40,7 +39,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     {
       exhibitInfoPage.policy_List.length === 0
         ? (<div className={styles.empty}>
-          <FTipText
+          <FComponentsLib.FTipText
             type='second'
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={'无策略'}
@@ -63,7 +62,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               key={p.policyId}
             >
               <div className={styles.title}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={p.policyName}
                 />
                 <Space size={8}>

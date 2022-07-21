@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '../FText';
 import FInput from '../FInput';
 import FDrawer from '../FDrawer';
 import { FUtil } from '@freelog/tools-lib';
@@ -113,7 +112,7 @@ function FBasePropsEditorDrawer({
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot} />
-                <FTitleText type='h4'>key</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -141,7 +140,7 @@ function FBasePropsEditorDrawer({
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot} />
-                <FTitleText type='h4'>value</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -166,7 +165,7 @@ function FBasePropsEditorDrawer({
             </div>
             <div className={styles.input}>
               <div className={styles.title}>
-                <FTitleText type='h4'>属性说明</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -226,7 +225,7 @@ function FBasePropsEditorDrawer({
           ]);
         }}
       />
-      <FContentText
+      <FComponentsLib.FContentText
         text={'新增一项属性'}
       />
     </Space>

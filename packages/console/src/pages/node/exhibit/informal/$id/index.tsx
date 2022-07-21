@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
 import { Radio, Space } from 'antd';
 import Contracts from './Contracts';
@@ -131,18 +130,18 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 );
               }}
             >
-              <FContentText
+              <FComponentsLib.FContentText
                 type="negative"
                 // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
                 text={informExhibitInfoPage.node_Name}
               />
             </FComponentsLib.FTextBtn>
             <div style={{ width: 2 }} />
-            <FContentText type="negative" text={'>'} />
+            <FComponentsLib.FContentText type="negative" text={'>'} />
             <div style={{ width: 10 }} />
             <FIdentityTypeBadge status={informExhibitInfoPage.exhibit_Identity} />
             <div style={{ width: 10 }} />
-            <FTitleText
+            <FComponentsLib.FTitleText
               style={{ maxWidth: 600 }}
               singleRow
               text={informExhibitInfoPage.exhibit_Name}

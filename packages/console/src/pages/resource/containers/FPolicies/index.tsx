@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FTipText } from '@/components/FText';
 import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
@@ -55,7 +54,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
     {
       resourceAuthPage.policies.length === 0
         ? (<div className={styles.empty}>
-          <FTipText
+          <FComponentsLib.FTipText
             type='second'
             text={FI18n.i18nNext.t('hint_add_authorization_plan')}
           />
