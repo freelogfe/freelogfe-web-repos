@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
-import { FDelete, FEdit, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
+import { FDelete, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
 import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
