@@ -26,7 +26,6 @@ import FInput from '@/components/FInput';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
-// import FUtil1 from '@/utils';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
