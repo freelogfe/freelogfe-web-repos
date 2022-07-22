@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import * as umi from 'umi';
+import {Link} from 'umi';
 
 interface AOrLinkProps {
   children: any;
@@ -20,12 +20,12 @@ function AOrLink({ children, href, target, className = '', style = {} }: AOrLink
           href={href}
           target={target}
         >{children}</a>)
-        : (<umi.Link
+        : (<Link
           className={className}
           style={style}
           to={href}
           target={target}
-        >{children}</umi.Link>)
+        >{children}</Link>)
     }
   </>);
 }
