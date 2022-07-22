@@ -1494,8 +1494,8 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     });
     return {
       ...dbri,
-      // authProblem: authP ? !authP.isAuth : false,
-      authProblem: true,
+      authProblem: authP ? !authP.isAuth : false,
+      // authProblem: true,
     };
   });
 }
