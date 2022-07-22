@@ -1,3 +1,5 @@
+@import '../../config.less';
+
 .popup {
   position: fixed;
   left: 0;
@@ -8,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: @f-zIndex-modal;
   animation: popup 0.2s ease-in;
 
   .share-popup {

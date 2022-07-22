@@ -1,3 +1,5 @@
+@import '../../../../../config.less';
+
 .header {
   height: 100px;
   display: flex;
@@ -358,7 +360,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: @f-zIndex-modal;
     animation: modal 0.2s ease-in;
 
     .empty-popup {
