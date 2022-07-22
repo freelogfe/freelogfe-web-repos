@@ -68,16 +68,17 @@ export function PolicyCard({
     <div className={styles.policy}>
       <div className={styles.header}>
         <FComponentsLib.FContentText
-          type='highlight'
+          type="highlight"
           text={fullInfo.policyName}
           style={{ maxWidth: 150 }}
           singleRow
         />
-            
-      {activeBtnShow &&
-        <Space size={8}>
-          <label
-            style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
+
+        {activeBtnShow && (
+          <Space size={8}>
+            <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
+              {FI18n.i18nNext.t('btn_activate_auth_plan')}
+            </label>
 
             <FTooltip
               title={'已上架的标的物必须启用至少一个授权策略'}
@@ -97,50 +98,47 @@ export function PolicyCard({
         )}
       </div>
       <div style={{ height: 10 }} />
-    <div style={{ padding: '0 20px' }}>
-      <FPolicyDisplay
-        containerHeight={170}
-        fullInfo={fullInfo}
-      />
-    </div>
-
-    <a
-      className={styles.PolicyFullScreenBtn}
-      onClick={() => {
-        setFullScreenVisible(true);
-      }}
-    ><FFullScreen style={{ fontSize: 12 }} /></a>
-    <FModal
-      title={null}
-      visible={fullScreenVisible}
-      onCancel={() => {
-        setFullScreenVisible(false);
-      }}
-      width={1240}
-      footer={null}
-      centered
-    >
-      <div className={styles.ModalTile}>
-        <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
-        <div style={{ width: 20 }} />
-        <label
-          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
-        <div style={{ width: 10 }} />
-        <FSwitch
-          disabled={onlineDisable}
-          checked={fullInfo.status === 1}
-          onChange={(value) => {
-            onOnlineChange && onOnlineChange(value);
-          }}
-        />
-      </div>
       <div style={{ padding: '0 20px' }}>
-        <FPolicyDisplay
-          containerHeight={770}
-          fullInfo={fullInfo}
-        />
+        <FPolicyDisplay containerHeight={170} fullInfo={fullInfo} />
       </div>
-    </FModal>
 
-  </div>);
+      <a
+        className={styles.PolicyFullScreenBtn}
+        onClick={() => {
+          setFullScreenVisible(true);
+        }}
+      >
+        <FFullScreen style={{ fontSize: 12 }} />
+      </a>
+      <FModal
+        title={null}
+        visible={fullScreenVisible}
+        onCancel={() => {
+          setFullScreenVisible(false);
+        }}
+        width={1240}
+        footer={null}
+        centered
+      >
+        <div className={styles.ModalTile}>
+          <FComponentsLib.FTitleText text={fullInfo.policyName} type="h2" />
+          <div style={{ width: 20 }} />
+          <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
+            {FI18n.i18nNext.t('btn_activate_auth_plan')}
+          </label>
+          <div style={{ width: 10 }} />
+          <FSwitch
+            disabled={onlineDisable}
+            checked={fullInfo.status === 1}
+            onChange={(value) => {
+              onOnlineChange && onOnlineChange(value);
+            }}
+          />
+        </div>
+        <div style={{ padding: '0 20px' }}>
+          <FPolicyDisplay containerHeight={770} fullInfo={fullInfo} />
+        </div>
+      </FModal>
+    </div>
+  );
 }

@@ -74,9 +74,9 @@ export const FPolicyOperaterDrawer = ({
             </div>
           );
         })}
-        <FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type="primary">
+        <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type="primary">
           创建新授权策略
-        </FRectBtn>
+        </FComponentsLib.FRectBtn>
       </FDrawer>
     </>
   );
