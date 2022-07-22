@@ -4,14 +4,13 @@ import styles from './index.less';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tooltip } from 'antd';
 import { FCopy } from '../FIcons';
-import { CSSProperties } from 'react';
 import FComponentsLib from '@freelog/components-lib';
 
 
 interface FCopyToClipboardProps {
   text: string;
   title: string;
-  iconStyle?: CSSProperties;
+  iconStyle?: React.CSSProperties;
   success?: string;
   children?: React.ReactNode;
 }
@@ -19,7 +18,7 @@ interface FCopyToClipboardProps {
 function FCopyToClipboard({ text, title, success, iconStyle, children }: FCopyToClipboardProps) {
 
   const [tip, setTip] = React.useState<string>(title);
-  const [visibleTooltip, setVisibleTooltip] = React.useState<boolean>(false);
+  // const [visibleTooltip, setVisibleTooltip] = React.useState<boolean>(false);
   // const [timeout, setTimeout] = React.useState<any>(null);
 
   return (<Tooltip
