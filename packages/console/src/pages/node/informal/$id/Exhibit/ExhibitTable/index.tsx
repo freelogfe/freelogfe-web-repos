@@ -6,7 +6,7 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import { ColumnsType } from 'antd/lib/table/interface';
 import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-import { Popconfirm, Radio, Space } from 'antd';
+import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
@@ -208,6 +208,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -268,13 +269,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
         sure={inactiveResource}
         loading={loading}
         footer={
-          <Radio
+          <Checkbox
             className={styles['no-longer']}
             checked={noLonger}
-            onClick={() => setNoLonger(!noLonger)}
+            onChange={(e) => setNoLonger(e.target.checked)}
           >
             不再提醒
-          </Radio>
+          </Checkbox>
         }
       ></FDialog>
 

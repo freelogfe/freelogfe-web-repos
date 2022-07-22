@@ -882,7 +882,7 @@ const Model: NodeManagerModelType = {
               version: i.version,
               isOnline: i.onlineStatus === 1,
               type: i.resourceInfo.resourceType,
-              policiesList: i.policies,
+              policiesList: i.policies.reverse(),
               policies: (i.policies as any[])
                 .filter((p: any) => p.status === 1)
                 .map<string>((p) => p.policyName),

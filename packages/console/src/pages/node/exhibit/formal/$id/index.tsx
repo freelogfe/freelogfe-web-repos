@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
-import { Radio, Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
@@ -109,6 +109,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -352,13 +353,13 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         sure={inactiveResource}
         loading={loading}
         footer={
-          <Radio
+          <Checkbox
             className={styles['no-longer']}
             checked={noLonger}
-            onClick={() => setNoLonger(!noLonger)}
+            onChange={(e) => setNoLonger(e.target.checked)}
           >
             不再提醒
-          </Radio>
+          </Checkbox>
         }
       ></FDialog>
 
@@ -387,6 +388,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         type="resource"
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
+          dispatch<FetchInfoAction>({
+            type: 'exhibitInfoPage/fetchInfo',
+          });
           dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
             payload: {
@@ -395,6 +399,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           });
         }}
         onConfirm={activeResource}
+        onNewPolicy={openPolicyBuilder}
       />
 
       {resultPopupType !== null && (

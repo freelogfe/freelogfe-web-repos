@@ -54,6 +54,8 @@ export interface ResourceAuthPageModelState {
   }[];
 
   detailContractID: string;
+
+  status: 0 | 1;
 }
 
 export interface UpdatePoliciesAction {
@@ -144,6 +146,8 @@ const Model: ResourceAuthPageModelType = {
     contractsAuthorize: [],
 
     detailContractID: '',
+
+    status: 0,
   },
   effects: {
     * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
@@ -177,6 +181,7 @@ const Model: ResourceAuthPageModelType = {
         payload: {
           policies: policies,
           baseUastResources: data_ResourceDetails.baseUpcastResources || [],
+          status: data_ResourceDetails.status
         },
       });
     },

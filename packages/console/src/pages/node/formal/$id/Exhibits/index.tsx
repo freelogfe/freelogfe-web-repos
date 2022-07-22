@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { FContentText, FTitleText } from '@/components/FText';
-import { Radio, Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
@@ -52,7 +52,6 @@ interface ExhibitsProps {
 }
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
-
   const [category, setCategory] = React.useState<any>({
     first: '-1',
     second: '',
@@ -108,6 +107,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -216,18 +216,22 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       return;
     }
 
+    const info = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/presentables/${operateExhibit.id}`,
+      params: { isLoadPolicyInfo: 1, isTranslate: 1 },
+    });
+    const { policies } = info.data;
     const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
-    nodeManagerPage.exhibit_List[index].policies.push(title);
-    nodeManagerPage.exhibit_List[index].policiesList = result.data.policies;
+    nodeManagerPage.exhibit_List[index].policies = policies
+      .filter((item: any) => item.status === 1)
+      .map((item: any) => item.policyName);
+    nodeManagerPage.exhibit_List[index].policiesList = policies.reverse();
+    setOperateExhibit(nodeManagerPage.exhibit_List[index]);
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
       payload: {
         exhibit_List: nodeManagerPage.exhibit_List,
-      },
-    });
-    dispatch<ChangeAction>({
-      type: 'nodeManagerPage/change',
-      payload: {
         policyEditorVisible: false,
       },
     });
@@ -526,7 +530,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               <FLoadingTip height={'calc(100vh - 270px)'} />
             )}
 
-
             {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
               <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
             )}
@@ -574,7 +577,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 />
               </div>
             )}
-
           </>
         )}
 
@@ -601,13 +603,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           sure={inactiveResource}
           loading={loading}
           footer={
-            <Radio
+            <Checkbox
               className={styles['no-longer']}
               checked={noLonger}
-              onClick={() => setNoLonger(!noLonger)}
+              onChange={(e) => setNoLonger(e.target.checked)}
             >
               不再提醒
-            </Radio>
+            </Checkbox>
           }
         />
 
@@ -644,6 +646,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             });
           }}
           onConfirm={activeResource}
+          onNewPolicy={openPolicyBuilder}
         />
 
         {resultPopupType !== null && (
