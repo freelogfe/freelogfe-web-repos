@@ -14,9 +14,8 @@ import { RouteComponentProps } from 'react-router';
 import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
-// import FInput from '@/components/FInput';
-import { Input, Space } from 'antd';
-// import { AudioOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+import FComponentsLib from '@freelog/components-lib';
 const { Search } = Input;
 
 interface FLayoutProps extends RouteComponentProps {
@@ -168,7 +167,7 @@ function FLayout({
   return (
     <Layout className={styles.Layout}>
       <Layout.Header className={styles.header}>
-        <FHeaderNavigation
+        <FComponentsLib.FHeaderNavigation
           logoBtn={{ href: FUtil.LinkTo.dashboard() }}
           showAlphaTest={user.info?.userType === 1}
           showConsoleBabel={!!user.info}
