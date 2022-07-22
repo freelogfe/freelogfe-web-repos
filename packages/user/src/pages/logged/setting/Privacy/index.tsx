@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
@@ -29,10 +28,10 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
         <Space size={10} direction='vertical' className={styles.info}>
           <div className={styles.row}>
             <div className={styles.left}>
-              <FContentText text={'已存储的节点数据文件'} type='normal' />
+              <FComponentsLib.FContentText text={'已存储的节点数据文件'} type='normal' />
             </div>
             <div className={styles.right}>
-              <FContentText text={settingPage.nodeDataSize} type='highlight' />
+              <FComponentsLib.FContentText text={settingPage.nodeDataSize} type='highlight' />
               <div style={{ width: 30 }} />
               {
                 settingPage.nodeDataSize !== '0 B' && (<FComponentsLib.FTextBtn
@@ -107,13 +106,13 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
             />
           </div>
           <div className={styles.nodeName}>
-            <FTitleText text={'节点名称/地址'} type='table' />
+            <FComponentsLib.FTitleText text={'节点名称/地址'} type='table' />
           </div>
           <div className={styles.nodeSize}>
-            <FTitleText text={'数据文件大小'} type='table' />
+            <FComponentsLib.FTitleText text={'数据文件大小'} type='table' />
           </div>
           <div className={styles.nodeDateTime}>
-            <FTitleText text={'最近访问时间'} type='table' />
+            <FComponentsLib.FTitleText text={'最近访问时间'} type='table' />
           </div>
         </div>
 
@@ -135,15 +134,15 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
                 />
               </div>
               <div className={styles.nodeName}>
-                <FContentText text={nd.name} type='highlight' />
+                <FComponentsLib.FContentText text={nd.name} type='highlight' />
                 <div style={{ height: 2 }} />
-                <FContentText text={nd.url} type='additional2' />
+                <FComponentsLib.FContentText text={nd.url} type='additional2' />
               </div>
               <div className={styles.nodeSize}>
-                <FContentText text={nd.size} type='highlight' />
+                <FComponentsLib.FContentText text={nd.size} type='highlight' />
               </div>
               <div className={styles.nodeDateTime}>
-                <FContentText text={nd.dateTime} type='highlight' />
+                <FComponentsLib.FContentText text={nd.dateTime} type='highlight' />
               </div>
             </div>);
           })

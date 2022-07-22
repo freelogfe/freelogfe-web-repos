@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -98,8 +97,8 @@ function RetrievePayPassword({
             <div className='flex-1'></div>
             <div className='flex-1'></div>
             <div className='shrink-0 flex-column-center'>
-              <FTitleText className='mb-30' text={'验证登陆密码'} type='h1' />
-              <FTipText
+              <FComponentsLib.FTitleText className='mb-30' text={'验证登陆密码'} type='h1' />
+              <FComponentsLib.FTipText
                 text={'设置新的支付密码前，首先需要进行登陆密码的验证'}
                 type='second'
               />
@@ -112,7 +111,7 @@ function RetrievePayPassword({
               <Space size={25} direction='vertical' style={{ width: 360 }}>
                 <div>
                   <div className={styles.userPassword}>
-                    <FTipText type='third' text={'用户登录密码'} />
+                    <FComponentsLib.FTipText type='third' text={'用户登录密码'} />
                     <FComponentsLib.FTextBtn
                       style={{ fontSize: 12 }}
                       type='primary'
@@ -175,8 +174,8 @@ function RetrievePayPassword({
           <div className='flex-column align-center flex-1'>
             <div className='flex-3'></div>
             <div className='shrink-0 flex-column-center'>
-              <FTitleText text={'双重验证'} type='h1' className='mb-30' />
-              <FTipText
+              <FComponentsLib.FTitleText text={'双重验证'} type='h1' className='mb-30' />
+              <FComponentsLib.FTipText
                 text={
                   '为了您的支付安全，请进行双重验证，验证成功后即可设置新的支付密码'
                 }
@@ -189,7 +188,7 @@ function RetrievePayPassword({
             <div className={styles.ActivateAccountContent}>
               <Space size={25} direction='vertical' style={{ width: 360 }}>
                 <Space size={15} direction='vertical'>
-                  <FTipText type='third' text={'验证方式'} />
+                  <FComponentsLib.FTipText type='third' text={'验证方式'} />
                   {retrievePayPasswordPage.userPhone && (
                     <Space size={2}>
                       <Radio
@@ -205,7 +204,7 @@ function RetrievePayPassword({
                           });
                         }}
                       />
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={retrievePayPasswordPage.userPhone}
                         type='normal'
                       />
@@ -227,7 +226,7 @@ function RetrievePayPassword({
                           });
                         }}
                       />
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={retrievePayPasswordPage.userEmail}
                         type='normal'
                       />
@@ -236,7 +235,7 @@ function RetrievePayPassword({
                 </Space>
 
                 <div>
-                  <FTipText type='third' text={'验证码'} />
+                  <FComponentsLib.FTipText type='third' text={'验证码'} />
                   <div style={{ height: 5 }} />
                   <Space size={10}>
                     <FInput
@@ -303,8 +302,8 @@ function RetrievePayPassword({
             <div className='flex-1'></div>
             <div className='flex-1'></div>
             <div className='shrink-0 flex-column-center'>
-              <FTitleText className='mb-30' text={'重置支付密码'} type='h1' />
-              <FTipText
+              <FComponentsLib.FTitleText className='mb-30' text={'重置支付密码'} type='h1' />
+              <FComponentsLib.FTipText
                 text={'现在您可以设置新的支付密码，重置成功后即可进行支付服务'}
                 type='second'
               />
@@ -316,7 +315,7 @@ function RetrievePayPassword({
             <div className={styles.ActivateAccountContent}>
               <Space size={25} direction='vertical'>
                 <div>
-                  <FTipText type='third' text={'支付密码'} />
+                  <FComponentsLib.FTipText type='third' text={'支付密码'} />
                   <div style={{ height: 5 }} />
                   <FPaymentPasswordInput
                     autoFocus
@@ -340,7 +339,7 @@ function RetrievePayPassword({
                 </div>
 
                 <div>
-                  <FTipText type='third' text={'验证支付密码'} />
+                  <FComponentsLib.FTipText type='third' text={'验证支付密码'} />
                   <div style={{ height: 5 }} />
                   <FPaymentPasswordInput
                     value={
@@ -400,10 +399,10 @@ function RetrievePayPassword({
           <div className={styles.box}>
             <FCheck style={{ fontSize: 96 }} />
             <div style={{ height: 30 }} />
-            <FTitleText text={'支付密码重置成功'} />
+            <FComponentsLib.FTitleText text={'支付密码重置成功'} />
             <div style={{ height: 40 }} />
             <Space size={10}>
-              <FContentText
+              <FComponentsLib.FContentText
                 text={`${retrievePayPasswordPage.success_CloseWait}s后关闭当前页面`}
                 type='negative'
               />

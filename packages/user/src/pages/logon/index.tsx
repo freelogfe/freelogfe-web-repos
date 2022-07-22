@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -113,10 +112,10 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         <div className={styles.box}>
           <FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
-          <FTitleText text={'注册成功'} />
+          <FComponentsLib.FTitleText text={'注册成功'} />
           <div style={{ height: 40 }} />
           <Space size={0}>
-            <FContentText
+            <FComponentsLib.FContentText
               text={`${logonPage.waitingTimeToLogin}s后返回登陆界面；`}
               type='negative'
             />
@@ -142,7 +141,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         <div className='flex-column align-center flex-1'>
           <div className='flex-3'></div>
           <div className='shrink-0 flex-column-center'>
-            <FTitleText text={'注册freelog帐户'} type='h1' />
+            <FComponentsLib.FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
           <div className='flex-2'></div>
         </div>
@@ -152,7 +151,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'用户名'} />
+                <FComponentsLib.FTitleText type='h4' text={'用户名'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -189,7 +188,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'注册方式'} />
+                <FComponentsLib.FTitleText type='h4' text={'注册方式'} />
               </div>
               <Space size={25}>
                 <FRadio
@@ -203,7 +202,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'手机号'} type='additional2' />
+                  <FComponentsLib.FContentText text={'手机号'} type='additional2' />
                 </FRadio>
                 <FRadio
                   checked={logonPage.accountType === 'email'}
@@ -217,7 +216,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'邮箱'} type='additional2' />
+                  <FComponentsLib.FContentText text={'邮箱'} type='additional2' />
                 </FRadio>
               </Space>
             </div>
@@ -284,7 +283,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'验证码'} />
+                <FComponentsLib.FTitleText type='h4' text={'验证码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -338,7 +337,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'密码'} />
+                <FComponentsLib.FTitleText type='h4' text={'密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -385,7 +384,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
 
         <div className='flex-1 flex-column'>
           <Space size={0}>
-            <FContentText className='mt-95' text={'已有账户？'} type='normal' />
+            <FComponentsLib.FContentText className='mt-95' text={'已有账户？'} type='normal' />
             <FComponentsLib.FTextBtn
               className='mt-95'
               type='primary'

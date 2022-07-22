@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FLoading } from '../FIcons';
-import { FTipText } from '../FText';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FListFooterProps {
@@ -28,7 +27,7 @@ function FListFooter({ state, onClickLoadMore }: FListFooterProps) {
     }
 
     {
-      state === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
+      state === 'noMore' && (<FComponentsLib.FTipText text={'没有更多~'} type='third' />)
     }
 
   </div>);

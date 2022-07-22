@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FUser } from '@/components/FIcons';
@@ -67,12 +66,12 @@ function UserInfo({ data }: UserInfoProps) {
       }
 
       <div style={{ height: 10 }} />
-      <FContentText
+      <FComponentsLib.FContentText
         type='highlight'
         text={info.userName}
       />
       <div style={{ height: 8 }} />
-      <FContentText text={info.phone || info.email} />
+      <FComponentsLib.FContentText text={info.phone || info.email} />
     </div>
     <div className={styles.userPanelMenu}>
       {

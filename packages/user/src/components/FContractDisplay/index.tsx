@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil , FI18n} from '@freelog/tools-lib';
 import { Space } from 'antd';
-import { FContentText, FTipText, FTitleText } from '../FText';
 import FModal from '../FModal';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
@@ -296,12 +295,12 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
               <Space size={5}>
                 <FContractStatusBadge status={record_Histories[0].contractStatus} />
 
-                <FContentText text={record_Histories[0].datetime} type='normal' />
+                <FComponentsLib.FContentText text={record_Histories[0].datetime} type='normal' />
               </Space>
 
 
               <div style={{ height: 10 }} />
-              <FContentText
+              <FComponentsLib.FContentText
                 type='highlight'
                 text={record_Histories[0].description}
               />
@@ -316,7 +315,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         .map((eti, etiIndex) => {
                           if (eti.type === 'TransactionEvent') {
                             return (<div key={etiIndex} className={styles.Event}>
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 style={{ flexShrink: 1 }}
                                 type='highlight'
                                 text={eti.tip}
@@ -338,7 +337,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                     }}
                                   >支付</FComponentsLib.FRectBtn>)
                                   // : (<FContentText type='negative' text={'待对方执行'} />)
-                                  : (<FContentText
+                                  : (<FComponentsLib.FContentText
                                     type='negative'
                                     text={FI18n.i18nNext.t('msg_waitfor_theotherparty_excutecontract')}
                                   />)
@@ -346,14 +345,14 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                             </div>);
                           } else if (eti.type === 'RelativeTimeEvent') {
                             return (<div key={etiIndex} className={styles.Event}>
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 type='highlight'
                                 text={eti.tip}
                               />
                             </div>);
                           } else if (eti.type === 'TimeEvent') {
                             return (<div key={etiIndex} className={styles.Event}>
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 type='highlight'
                                 text={eti.tip}
                               />
@@ -394,10 +393,10 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         <Space size={5}>
                           <FContractStatusBadge status={hs.contractStatus} />
 
-                          <FContentText text={hs.datetime} type='normal' />
+                          <FComponentsLib.FContentText text={hs.datetime} type='normal' />
                         </Space>
                         <div style={{ height: 10 }} />
-                        <FContentText
+                        <FComponentsLib.FContentText
                           type='highlight'
                           text={hs.description}
                         />
@@ -467,7 +466,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       destroyOnClose={true}
     >
       <div className={styles.ModalTitle}>
-        <FTitleText
+        <FComponentsLib.FTitleText
           text={'支付'}
           type='h3'
         />
@@ -476,32 +475,32 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       <div className={styles.paymentAmount}>
         <label>{modal_TransactionAmount}</label>
         <div style={{ width: 10 }} />
-        <FTipText text={'羽币'} type='third' />
+        <FComponentsLib.FTipText text={'羽币'} type='third' />
       </div>
       <div style={{ height: 40 }} />
       <div className={styles.paymentInfo}>
         <Space size={20} direction='vertical' style={{ width: 440 }}>
           <div className={styles.paymentInfoRow}>
-            <div><FContentText text={'标的物'} type='normal' /></div>
-            <div><FContentText text={modal_Target} type='highlight' /></div>
+            <div><FComponentsLib.FContentText text={'标的物'} type='normal' /></div>
+            <div><FComponentsLib.FContentText text={modal_Target} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
-            <div><FContentText text={'授权合约'} type='normal' /></div>
-            <div><FContentText text={modal_ContractName} type='highlight' /></div>
+            <div><FComponentsLib.FContentText text={'授权合约'} type='normal' /></div>
+            <div><FComponentsLib.FContentText text={modal_ContractName} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
-            <div><FContentText text={'收款方'} type='normal' /></div>
-            <div><FContentText text={modal_Payee} type='highlight' /></div>
+            <div><FComponentsLib.FContentText text={'收款方'} type='normal' /></div>
+            <div><FComponentsLib.FContentText text={modal_Payee} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
-            <div><FContentText text={'支付方式'} type='normal' /></div>
+            <div><FComponentsLib.FContentText text={'支付方式'} type='normal' /></div>
             <div>
-              <FContentText text={'羽币账户'} type='highlight' />
+              <FComponentsLib.FContentText text={'羽币账户'} type='highlight' />
               <div style={{ width: 10 }} />
-              <FContentText text={`(余额 ${modal_AccountBalance}枚 )`} type='negative' />
+              <FComponentsLib.FContentText text={`(余额 ${modal_AccountBalance}枚 )`} type='negative' />
             </div>
           </div>
 
@@ -513,7 +512,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           {
             modal_IsPaying
               ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
-              : (<FContentText text={'输入支付密码进行支付'} type='normal' />)
+              : (<FComponentsLib.FContentText text={'输入支付密码进行支付'} type='normal' />)
           }
 
 

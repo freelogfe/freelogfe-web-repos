@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -112,10 +111,10 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         <div className={styles.box}>
           <FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
-          <FTitleText text={'重置密码成功'} />
+          <FComponentsLib.FTitleText text={'重置密码成功'} />
           <div style={{ height: 40 }} />
           <Space size={0}>
-            <FContentText
+            <FComponentsLib.FContentText
               text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`}
               type='negative'
             />
@@ -141,8 +140,8 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
         <div className='flex-column align-center flex-1'>
           <div className='flex-3'></div>
           <div className='shrink-0 flex-column-center'>
-            <FTitleText className='mb-30' text={'重置密码？'} type='h1' />
-            <FTipText
+            <FComponentsLib.FTitleText className='mb-30' text={'重置密码？'} type='h1' />
+            <FComponentsLib.FTipText
               text={'现在可以重新设置您的密码，重置成功后可再次登录freelog'}
               type='second'
             />
@@ -155,7 +154,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'验证方式'} />
+                <FComponentsLib.FTitleText type='h4' text={'验证方式'} />
               </div>
               <Space size={25}>
                 <FRadio
@@ -169,7 +168,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                     });
                   }}
                 >
-                  <FContentText text={'手机号'} type='additional2' />
+                  <FComponentsLib.FContentText text={'手机号'} type='additional2' />
                 </FRadio>
                 <FRadio
                   checked={retrievePage.verifyMode === 'email'}
@@ -182,7 +181,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                     });
                   }}
                 >
-                  <FContentText text={'邮箱'} type='additional2' />
+                  <FComponentsLib.FContentText text={'邮箱'} type='additional2' />
                 </FRadio>
               </Space>
             </div>
@@ -249,7 +248,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'验证码'} />
+                <FComponentsLib.FTitleText type='h4' text={'验证码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -303,7 +302,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'新密码'} />
+                <FComponentsLib.FTitleText type='h4' text={'新密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -339,7 +338,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'验证新密码'} />
+                <FComponentsLib.FTitleText type='h4' text={'验证新密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />

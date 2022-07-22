@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTipText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Modal } from 'antd';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
@@ -58,7 +57,7 @@ function FVerifyUserPasswordModal({
       <div className={styles.ModalContainer}>
         <div style={{ height: 15 }} />
         <div className={styles.userPassword}>
-          <FTipText type="third" text={'用户登录密码'} />
+          <FComponentsLib.FTipText type="third" text={'用户登录密码'} />
           <FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
             type="primary"

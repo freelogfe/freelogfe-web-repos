@@ -7,7 +7,6 @@ import {
   SettingPageModelState,
   UserModelState,
 } from '@/models/connect';
-import { FContentText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
@@ -157,7 +156,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           <Space size={10} direction='vertical' className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'性别'} type='normal' />
+                <FComponentsLib.FContentText text={'性别'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FRadio
@@ -192,7 +191,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'个人简介'} type='normal' />
+                <FComponentsLib.FContentText text={'个人简介'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput
@@ -216,7 +215,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'出生年月'} type='normal' />
+                <FComponentsLib.FContentText text={'出生年月'} type='normal' />
               </div>
               <div className={styles.right}>
                 <DatePickerAsAnyType
@@ -238,7 +237,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'居住地'} type='normal' />
+                <FComponentsLib.FContentText text={'居住地'} type='normal' />
               </div>
               <div className={styles.right}>
                 <Cascader
@@ -261,7 +260,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'职业'} type='normal' />
+                <FComponentsLib.FContentText text={'职业'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput

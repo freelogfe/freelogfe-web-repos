@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import {
   ChangeAction,
@@ -71,13 +70,13 @@ function Login({ dispatch, loginPage }: LoginProps) {
           <div className="flex-column align-center flex-1">
             <div className="flex-3"></div>
             <div className="shrink-0 flex-column-center">
-              <FTitleText type="h1" text={'登录freelog'} />
+              <FComponentsLib.FTitleText type="h1" text={'登录freelog'} />
             </div>
             <div className="flex-2"></div>
           </div>
           <div className=" flex-column-center shrink-0">
             <div className={styles.box} ref={boxRef}>
-              <FTitleText type="h4" text={'用户名/手机号/邮箱'} />
+              <FComponentsLib.FTitleText type="h4" text={'用户名/手机号/邮箱'} />
               <div style={{ height: 5 }} />
               <FInput
                 name="username"
@@ -105,7 +104,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                   justifyContent: 'space-between',
                 }}
               >
-                <FTitleText type="h4" text={'密码'} />
+                <FComponentsLib.FTitleText type="h4" text={'密码'} />
                 <FComponentsLib.FTextBtn
                   style={{ fontSize: 12 }}
                   type="primary"

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { FContentText, FTipText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Modal, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -269,20 +268,20 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <Space size={10} direction="vertical" className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'用户名'} type="normal" />
+                <FComponentsLib.FContentText text={'用户名'} type="normal" />
               </div>
               <div className={styles.right}>
-                <FContentText text={settingPage.username} type="highlight" />
+                <FComponentsLib.FContentText text={settingPage.username} type="highlight" />
               </div>
             </div>
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'邮箱'} type="normal" />
+                <FComponentsLib.FContentText text={'邮箱'} type="normal" />
               </div>
               {settingPage.email === '' ? (
                 <div className={styles.right}>
-                  <FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
@@ -298,7 +297,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FContentText text={settingPage.email} type="highlight" />
+                  <FComponentsLib.FContentText text={settingPage.email} type="highlight" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="primary"
@@ -317,11 +316,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'手机号'} type="normal" />
+                <FComponentsLib.FContentText text={'手机号'} type="normal" />
               </div>
               {settingPage.phone === '' ? (
                 <div className={styles.right}>
-                  <FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
@@ -337,7 +336,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FContentText text={settingPage.phone} type="highlight" />
+                  <FComponentsLib.FContentText text={settingPage.phone} type="highlight" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="primary"
@@ -356,10 +355,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'登陆密码'} type="normal" />
+                <FComponentsLib.FContentText text={'登陆密码'} type="normal" />
               </div>
               <div className={styles.right}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={'密码必须包含数字和字母，长度必须为6-24个字'}
                   type="highlight"
                 />
@@ -382,11 +381,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <Space size={10} direction="vertical" className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'微信'} type="normal" />
+                <FComponentsLib.FContentText text={'微信'} type="normal" />
               </div>
               {!bindMap.get('weChat') ? (
                 <div className={styles.right}>
-                  <FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
@@ -407,7 +406,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FContentText text={bindMap.get('weChat').name} type="highlight" />
+                  <FComponentsLib.FContentText text={bindMap.get('weChat').name} type="highlight" />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="danger"
@@ -508,7 +507,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'邮箱地址'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -533,7 +532,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -620,12 +619,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'原邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'原邮箱地址'} type="third" />
 
           <div style={{ height: 5 }} />
           <div className={styles.modalOldMedium}>{settingPage.email}</div>
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -689,7 +688,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'新邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'新邮箱地址'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -713,7 +712,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -788,7 +787,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'手机号'} type="third" />
+          <FComponentsLib.FTipText text={'手机号'} type="third" />
           <div style={{ height: 5 }} />
           <FInput
             value={settingPage.bindPhone_PhoneInput}
@@ -811,7 +810,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -898,12 +897,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'原手机号'} type="third" />
+          <FComponentsLib.FTipText text={'原手机号'} type="third" />
 
           <div style={{ height: 5 }} />
           <div className={styles.modalOldMedium}>{settingPage.phone}</div>
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -966,7 +965,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'新手机号'} type="third" />
+          <FComponentsLib.FTipText text={'新手机号'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -991,7 +990,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type="third" />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -1067,7 +1066,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FTipText text={'原密码'} type="third" />
+          <FComponentsLib.FTipText text={'原密码'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -1087,7 +1086,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           />
           <div style={{ height: 25 }} />
 
-          <FTipText text={'新密码'} type="third" />
+          <FComponentsLib.FTipText text={'新密码'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -1114,7 +1113,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
           <div style={{ height: 25 }} />
 
-          <FTipText text={'重新输入新密码'} type="third" />
+          <FComponentsLib.FTipText text={'重新输入新密码'} type="third" />
 
           <div style={{ height: 5 }} />
           <FInput
