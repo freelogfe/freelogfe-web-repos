@@ -2,10 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Layout } from 'antd';
-import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { connect } from 'dva';
 import { ConnectState, GlobalModelState } from '@/models/connect';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
+import { Link } from 'umi';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -69,7 +70,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
 
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
-      <FHeaderNavigation
+      <FComponentsLib.FHeaderNavigation
+        UmiLinkPatch={Link}
         logoBtn={{ href: FUtil.LinkTo.home() }}
         // showAlphaTest={true}
         // showConsoleBabel={true}

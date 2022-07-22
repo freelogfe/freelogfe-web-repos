@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
 import { history } from '@@/core/history';
 import FComponentsLib from '@freelog/components-lib';
+import { Link } from 'umi';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -92,6 +93,7 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
             },
           ],
         } : null}
+        UmiLinkPatch={Link}
       />
     </Layout.Header>
 
