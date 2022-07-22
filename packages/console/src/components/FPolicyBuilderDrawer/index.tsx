@@ -1308,9 +1308,6 @@ function FPolicyBuilder({
               onOk() {
                 onClick_SelectTemplateBtn(num);
               },
-              bodyStyle: {
-                zIndex: 20000000000
-              }
             });
           }}
         />
