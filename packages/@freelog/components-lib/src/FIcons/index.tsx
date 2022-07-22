@@ -1,4 +1,4 @@
-// import * as React from 'react';
+import './index.less';
 import FLinkedin from './FLinkedin';
 import FSina from './FSina';
 import FWeChat from './FWeChat';
@@ -6,7 +6,7 @@ import FFreelog from './FFreelog';
 import FEdit from './FEdit';
 import FLine from './FLine';
 import FPlus from './FPlus';
-import './index.less';
+import FUser from './FUser';
 
 const FIcons = {
     FLinkedin,
@@ -16,5 +16,6 @@ const FIcons = {
     FEdit,
     FLine,
     FPlus,
+    FUser,
 };
 export default FIcons;
