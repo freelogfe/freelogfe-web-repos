@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FTitleText } from '@/components/FText';
 import img_Cartoon1 from '@/assets/activity/cartoon1@2x.png';
 import img_Cartoon2 from '@/assets/activity/cartoon2@2x.png';
 import img_Cartoon3 from '@/assets/activity/cartoon3@2x.png';
@@ -214,7 +213,7 @@ function Participations({}: ParticipationsProps) {
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
-                <FTitleText text={d.description} type='h3' singleRow />
+                <FComponentsLib.FTitleText text={d.description} type='h3' singleRow />
               </a>);
             })
           }
@@ -247,7 +246,7 @@ function Participations({}: ParticipationsProps) {
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
-                <FTitleText text={d.description} type='h3' singleRow />
+                <FComponentsLib.FTitleText text={d.description} type='h3' singleRow />
               </a>);
             })
           }
