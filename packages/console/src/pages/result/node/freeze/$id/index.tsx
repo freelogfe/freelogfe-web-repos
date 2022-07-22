@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FForbid from '@/components/FIcons/FForbid';
-import { FContentText, FTitleText } from '@/components/FText';
 import { RouteComponentProps } from 'react-router';
 import { router, withRouter } from 'umi';
 import { connect } from 'dva';
@@ -48,22 +47,22 @@ function Freeze({ match }: FreezeProps) {
   return (<div className={styles.container}>
     <FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    <FTitleText text={'你的节点已经被封停'} type='h1' />
+    <FComponentsLib.FTitleText text={'你的节点已经被封停'} type='h1' />
     <div style={{ height: 80 }} />
     <div className={styles.content}>
-      <FContentText text={`经核实，节点 ${nodeName} ，严重违`} />
+      <FComponentsLib.FContentText text={`经核实，节点 ${nodeName} ，严重违`} />
       <FComponentsLib.FTextBtn onClick={() => {
 
       }}>&nbsp;查看服务协议&nbsp;</FComponentsLib.FTextBtn>
-      <FContentText text={` ，涉嫌 ${freezeReason} ，已经被封停。`} />
+      <FComponentsLib.FContentText text={` ，涉嫌 ${freezeReason} ，已经被封停。`} />
     </div>
     <div style={{ height: 20 }} />
     <div className={styles.content}>
-      <FContentText text={'如果你对此存在异议，可向Freelog提交相关证明材料进行申诉。'} />
+      <FComponentsLib.FContentText text={'如果你对此存在异议，可向Freelog提交相关证明材料进行申诉。'} />
     </div>
     <div style={{ height: 20 }} />
     <div className={styles.content}>
-      <FContentText text={'联系邮箱：service@freelog.com'} />
+      <FComponentsLib.FContentText text={'联系邮箱：service@freelog.com'} />
       <FCopyToClipboard
         text={'service@freelog.com'}
         title={'复制'}

@@ -3,7 +3,6 @@ import { Space } from 'antd';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCheckbox from '@/components/FCheckbox';
-import { FContentText } from '@/components/FText';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FDrawer from '@/components/FDrawer';
 import FTooltip from '@/components/FTooltip';
@@ -345,7 +344,7 @@ function FAddInformExhibitDrawer({
                         <div style={{ width: 15 }} />
                         <div className={styles.itemContent}>
                           <div className={styles.itemName}>
-                            <FContentText
+                            <FComponentsLib.FContentText
                               singleRow
                               text={l.name}
                             />
@@ -354,7 +353,7 @@ function FAddInformExhibitDrawer({
                             {l.disabledReason && <label className={styles.itemNameLabel}>{l.disabledReason}</label>}
                           </div>
                           <div style={{ height: 2 }} />
-                          <FContentText
+                          <FComponentsLib.FContentText
                             text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
                             type='additional2'
                           />

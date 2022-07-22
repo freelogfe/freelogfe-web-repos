@@ -1,6 +1,5 @@
 import * as React from 'react';
 import FFormLayout from '@/components/FFormLayout';
-import { FContentText, FTitleText } from '@/components/FText';
 import FDrawer from '@/components/FDrawer';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
@@ -8,7 +7,6 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import styles from './index.less';
 import FContractDisplay from '@/components/FContractDisplay';
-// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FContractAppliedVersions from '@/components/FContractAppliedVersions';
 import fMessage from '@/components/fMessage';
@@ -452,7 +450,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         <FFormLayout.FBlock title={'授权方'}>
           <Space size={10}>
             <FIdentityTypeBadge status={dataSource.licensor.licensorIdentityType} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='highlight'
               text={dataSource.licensor.licensorName}
             />
@@ -462,7 +460,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
         <FFormLayout.FBlock title={'被授权方'}>
           <Space size={10}>
             <FIdentityTypeBadge status={dataSource.licensee.licensorIdentityType} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='highlight'
               text={dataSource.licensee.licenseeName}
             />
@@ -493,12 +491,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                   </div>
                   <div style={{ height: 10 }} />
                   <Space style={{ padding: '0 20px' }} size={2}>
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='additional2'
                       text={FI18n.i18nNext.t('contract_id') + '：' + k.contractID}
                     />
                     <FDivider style={{ fontSize: 14 }} />
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='additional2'
                       text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.createDate}
                     />
@@ -511,7 +509,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                         padding: '12px 20px',
                         borderTop: '1px solid #E5E7EB',
                       }}>
-                        <FTitleText
+                        <FComponentsLib.FTitleText
                           // text={`当前合约资源 ${dataSource.licensee.licenseeName} 中各个版本的应用情况`}
                           // text={`当前合约在此资源上被多个版本应用`}
                           text={`当前合约应用版本`}
@@ -542,7 +540,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                         padding: '12px 20px',
                         borderTop: '1px solid #E5E7EB',
                       }}>
-                        <FTitleText
+                        <FComponentsLib.FTitleText
                           // text={`当前合约资源 ${dataSource.licensee.licenseeName} 中各个版本的应用情况`}
                           // text={`当前合约在此资源上被多个版本应用`}
                           text={`当前合约应用展品`}

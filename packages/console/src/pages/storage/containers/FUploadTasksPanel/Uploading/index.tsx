@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Progress, Space} from "antd";
-import {FContentText} from '@/components/FText';
 import {CloseOutlined} from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -17,7 +16,7 @@ function Uploading({progress, cancel}: UploadingProps) {
       className={styles.status}
       size={10}
     >
-      <FContentText text={progress + '%'}/>
+      <FComponentsLib.FContentText text={progress + '%'}/>
       <div style={{width: 100}}>
         <Progress type={'line'} percent={progress} showInfo={false}/>
       </div>

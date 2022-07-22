@@ -16,7 +16,7 @@ import FInput from '@/components/FInput';
 import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHomePage';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FModal from '@/components/FModal';
-import { FTitleText } from '@/components/FText';
+import FComponentsLib from '@freelog/components-lib';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -129,7 +129,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
     >
       {/*<div style={{ height: 20 }} />*/}
       <div style={{ padding: 20 }}>
-        <FTitleText text={FI18n.i18nNext.t('create_bucket_popup_title')} type='h2' />
+        <FComponentsLib.FTitleText text={FI18n.i18nNext.t('create_bucket_popup_title')} type='h2' />
       </div>
 
       <div className={styles.FModalBody}>

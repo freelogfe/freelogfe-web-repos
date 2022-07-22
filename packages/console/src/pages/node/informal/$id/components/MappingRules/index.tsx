@@ -8,7 +8,6 @@ import {
   FMappingRuleTitle,
   FMappingRuleVersion,
 } from '@/components/FIcons';
-import { FContentText } from '@/components/FText';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -25,16 +24,16 @@ export function AddRule({ exhibit, source }: AddRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleAdd /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'新增'} /></div>
+      <div><FComponentsLib.FContentText text={'新增'} /></div>
       <div><label className={styles.exhibitLabel}>{exhibit}</label></div>
-      <div><FContentText text={'，来源'} /></div>
+      <div><FComponentsLib.FContentText text={'，来源'} /></div>
       <div><label
         className={source.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{source.name}</label>
       </div>
       {
         !!source.versionRange && source.versionRange !== 'latest' && (<>
-          <div><FContentText text={'展示版本'} /></div>
-          <div><FContentText type='highlight' text={source.versionRange} /></div>
+          <div><FComponentsLib.FContentText text={'展示版本'} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={source.versionRange} /></div>
         </>)
       }
     </div>
@@ -49,7 +48,7 @@ export function AlterRule({ alter }: AlterRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FComponentsLib.FIcons.FEdit /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'修改'} /></div>
+      <div><FComponentsLib.FContentText text={'修改'} /></div>
       <div><label className={styles.exhibitLabel}>{alter}</label></div>
     </div>
   </div>);
@@ -63,7 +62,7 @@ export function ActiveRule({ active }: ActiveRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleActive /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'激活主题'} /></div>
+      <div><FComponentsLib.FContentText text={'激活主题'} /></div>
       <div><label className={styles.exhibitLabel}>{active}</label></div>
     </div>
   </div>);
@@ -77,8 +76,8 @@ export function VersionRule({ version }: VersionRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleVersion /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'展示版本'} /></div>
-      <div><FContentText type='highlight' text={version} /></div>
+      <div><FComponentsLib.FContentText text={'展示版本'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={version} /></div>
     </div>
   </div>);
 }
@@ -91,8 +90,8 @@ export function LabelRule({ labels }: LabelRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleLabel /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'设置标签'} /></div>
-      <div><FContentText type='highlight' text={labels.join(', ')} /></div>
+      <div><FComponentsLib.FContentText text={'设置标签'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={labels.join(', ')} /></div>
     </div>
   </div>);
 }
@@ -105,8 +104,8 @@ export function CoverRule({ cover }: CoverRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleCover /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'设置封面'} /></div>
-      <div><FContentText type='highlight' text={cover} /></div>
+      <div><FComponentsLib.FContentText text={'设置封面'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={cover} /></div>
     </div>
   </div>);
 }
@@ -119,8 +118,8 @@ export function TitleRule({ title }: TitleRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleTitle /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'设置标题'} /></div>
-      <div><FContentText type='highlight' text={title} /></div>
+      <div><FComponentsLib.FContentText text={'设置标题'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={title} /></div>
     </div>
   </div>);
 }
@@ -133,8 +132,8 @@ export function OnlineRule({ online }: OnlineRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleOnline /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'展品状态'} /></div>
-      <div><FContentText type='highlight' text={'上线'} /></div>
+      <div><FComponentsLib.FContentText text={'展品状态'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={'上线'} /></div>
     </div>
   </div>);
 }
@@ -147,8 +146,8 @@ export function OfflineRule({ offline }: OfflineRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleOffline /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'展品状态'} /></div>
-      <div><FContentText type='highlight' text={'下线'} /></div>
+      <div><FComponentsLib.FContentText text={'展品状态'} /></div>
+      <div><FComponentsLib.FContentText type='highlight' text={'下线'} /></div>
     </div>
   </div>);
 }
@@ -166,24 +165,24 @@ export function AttrRule({ type, theKey, value, description }: AttrRuleProps) {
     {
       type === 'add'
         ? (<div className={styles.ruleContent}>
-          <div><FContentText text={'添加属性'} /></div>
-          <div><FContentText text={'键'} /></div>
-          <div><FContentText type='highlight' text={theKey} /></div>
-          <div><FContentText text={'值'} /></div>
-          <div><FContentText type='highlight' text={value || ''} /></div>
+          <div><FComponentsLib.FContentText text={'添加属性'} /></div>
+          <div><FComponentsLib.FContentText text={'键'} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={theKey} /></div>
+          <div><FComponentsLib.FContentText text={'值'} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={value || ''} /></div>
           {
             description && (<>
-              <div><FContentText text={'描述'} /></div>
+              <div><FComponentsLib.FContentText text={'描述'} /></div>
               {/*<div><FTitleText type="h5" text={'description1'}/></div>*/}
-              <div><FContentText type='highlight' text={description} /></div>
+              <div><FComponentsLib.FContentText type='highlight' text={description} /></div>
             </>)
           }
         </div>)
         : (<div className={styles.ruleContent}>
-          <div><FContentText text={'删除属性'} /></div>
-          <div><FContentText text={'键'} /></div>
+          <div><FComponentsLib.FContentText text={'删除属性'} /></div>
+          <div><FComponentsLib.FContentText text={'键'} /></div>
           {/*<div><FTitleText type="h5" text={theKey}/></div>*/}
-          <div><FContentText type='highlight' text={theKey} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={theKey} /></div>
         </div>)
     }
 
@@ -206,38 +205,38 @@ export function ReplaceRule({ replacer, replaced, scopes }: ReplaceRuleProps) {
   return (<div className={styles.rule}>
     <div className={styles.ruleIcon}><FMappingRuleReplace /></div>
     <div className={styles.ruleContent}>
-      <div><FContentText text={'替换'} /></div>
+      <div><FComponentsLib.FContentText text={'替换'} /></div>
       {/*<div><label className={styles.resourceLabel}>{replaced}</label></div>*/}
       <div><label
         className={replaced.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replaced.name}</label>
       </div>
       {
         replaced.versionRange && replaced.versionRange !== '*' && (<>
-          <div><FContentText text={'版本'} /></div>
-          <div><FContentText type='highlight' text={replaced.versionRange} /></div>
+          <div><FComponentsLib.FContentText text={'版本'} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={replaced.versionRange} /></div>
         </>)
       }
-      <div><FContentText text={'为'} /></div>
+      <div><FComponentsLib.FContentText text={'为'} /></div>
       <div><label
         className={replacer.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replacer.name}</label>
       </div>
       {
         replacer.versionRange && replacer.versionRange !== 'latest' && (<>
-          <div><FContentText text={'版本'} /></div>
-          <div><FContentText type='highlight' text={replacer.versionRange} /></div>
+          <div><FComponentsLib.FContentText text={'版本'} /></div>
+          <div><FComponentsLib.FContentText type='highlight' text={replacer.versionRange} /></div>
         </>)
       }
       {
         scopes && scopes.length > 0 && (<>
-          <div><FContentText text={'，作用域'} /></div>
+          <div><FComponentsLib.FContentText text={'，作用域'} /></div>
           {
             scopes.map((sco, index) => {
               return (<React.Fragment key={index}>
-                {index !== 0 && (<div><FContentText text={','} /></div>)}
+                {index !== 0 && (<div><FComponentsLib.FContentText text={','} /></div>)}
                 {
                   sco.map((s, i) => {
                     return (<React.Fragment key={i}>
-                      {i !== 0 && (<div><FContentText text={'-'} /></div>)}
+                      {i !== 0 && (<div><FComponentsLib.FContentText text={'-'} /></div>)}
                       {/*<div><label className={styles.resourceLabel}>{s}</label></div>*/}
                       <div><label
                         className={s.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{s.name}</label>

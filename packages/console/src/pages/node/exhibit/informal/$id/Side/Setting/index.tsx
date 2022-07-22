@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FDelete, FRedo, FSwap } from '@/components/FIcons';
 import {
@@ -36,7 +35,7 @@ interface SettingProps {
 function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
 
   return (<>
-    <FContentText
+    <FComponentsLib.FContentText
       text={'高级设置'}
       type='highlight'
     />
@@ -47,7 +46,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
       informExhibitInfoPage.side_Exhibit_AllVersions.length > 0 && (<>
 
 
-        <FTitleText text={'展示版本'} type='h4' />
+        <FComponentsLib.FTitleText text={'展示版本'} type='h4' />
         <div style={{ height: 15 }} />
         <FDropdownMenu
           options={informExhibitInfoPage.side_Exhibit_AllVersions.map((av: string) => ({ value: av, text: av }))}
@@ -60,7 +59,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
             });
           }}
         >
-          <Space style={{ cursor: 'pointer' }} size={15}><FContentText
+          <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
             text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
         </FDropdownMenu>
         <div style={{ height: 30 }} />
@@ -71,15 +70,15 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     {/*  informExhibitInfoPage.settingUnfold && (<>*/}
 
 
-    <FTitleText text={'基础属性'} type='h4' />
+    <FComponentsLib.FTitleText text={'基础属性'} type='h4' />
     <div style={{ height: 15 }} />
     <div className={styles.attr}>
       <table>
         <tbody>
         {
           informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
-            <td><FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>
-            <td><FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>
+            <td><FComponentsLib.FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>
+            <td><FComponentsLib.FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>
           </tr>))
         }
         </tbody>
@@ -87,7 +86,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
     </div>
     <div style={{ height: 30 }} />
 
-    <FTitleText
+    <FComponentsLib.FTitleText
       text={'自定义选项'}
       type='h4'
     />
@@ -98,7 +97,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
       {
         informExhibitInfoPage.side_Exhibit_OnlyEditAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.theKey} />
+            <FComponentsLib.FContentText text={pc.theKey} />
 
             <Space size={10}>
               <FComponentsLib.FTextBtn
@@ -178,7 +177,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
       {
         informExhibitInfoPage.side_Exhibit_EditDeleteAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.theKey} />
+            <FComponentsLib.FContentText text={pc.theKey} />
 
             <Space size={10}>
               <FComponentsLib.FTextBtn

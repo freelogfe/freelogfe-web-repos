@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
-import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
@@ -109,7 +108,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         ) : (
           <>
             <div className={styles.header}>
-              <FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
+              <FComponentsLib.FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
               <Space size={30}>
                 <FComponentsLib.FTextBtn
                   type="default"

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -40,12 +39,12 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
   return (<FContentLayout header={<div className={styles.header}>
     <Space size={20}>
-      <FTitleText type='h1' text={'确认签约'} />
+      <FComponentsLib.FTitleText type='h1' text={'确认签约'} />
 
       <div className={styles.headerResource}>
         <FCoverImage src={resourceDetailPage.resource_Info?.cover || ''} width={36} />
         <div style={{ width: 8 }} />
-        <FContentText text={resourceDetailPage.resource_Info?.name} />
+        <FComponentsLib.FContentText text={resourceDetailPage.resource_Info?.name} />
       </div>
     </Space>
 
@@ -81,7 +80,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         <FFormLayout.FBlock title={'确认签约节点'}>
           <Space size={5}>
             <FNodes className={styles.yellow} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='highlight'
               text={selectedNode?.nodeName}
             />
@@ -90,7 +89,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
         <FFormLayout.FBlock
           title={'输入展品名称'}
-          subtitle={<FContentText
+          subtitle={<FComponentsLib.FContentText
             type='additional2'
             className={styles.yellow}
             text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}

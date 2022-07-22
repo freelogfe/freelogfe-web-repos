@@ -7,7 +7,6 @@ import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
-import { FContentText, FTitleText } from '../FText';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
@@ -711,7 +710,7 @@ function FPolicyBuilder({
   return (<>
     <FDrawer
       title={<Space size={10}>
-        <FTitleText type='h2' text={'添加授权策略'} />
+        <FComponentsLib.FTitleText type='h2' text={'添加授权策略'} />
         <FTooltip title={'点击查看帮助文档'}>
           <label
             onClick={() => {
@@ -749,7 +748,7 @@ function FPolicyBuilder({
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FTitleText
+            <FComponentsLib.FTitleText
               type='h1'
               text={successResult?.title || ''}
             />
@@ -801,7 +800,7 @@ function FPolicyBuilder({
           <div style={{ height: 30 }} />
 
           <div>
-            <FContentText text={failResult?.errorText || ''} />
+            <FComponentsLib.FContentText text={failResult?.errorText || ''} />
           </div>
 
         </div>)
@@ -902,13 +901,13 @@ function FPolicyBuilder({
                                   <div>
                                     <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
                                     <div style={{ width: 15 }} />
-                                    <FTitleText
+                                    <FComponentsLib.FTitleText
                                       type='h3'
                                       text={cd.name}
                                     />
                                   </div>
 
-                                  <FContentText
+                                  <FComponentsLib.FContentText
                                     text={'初始状态不可删除'}
                                     type='negative'
                                   />
@@ -986,7 +985,7 @@ function FPolicyBuilder({
                                           }, cd.randomID);
                                         }}
                                       />
-                                      <FContentText
+                                      <FComponentsLib.FContentText
                                         text={authMap[ao]} />
                                     </Space>);
                                   })
@@ -1011,7 +1010,7 @@ function FPolicyBuilder({
                                     {
                                       et.type !== 'terminate' && (<>
                                         <div>
-                                          <FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
+                                          <FComponentsLib.FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
                                         </div>
 
                                         <div style={{ height: 10 }} />
@@ -1021,7 +1020,7 @@ function FPolicyBuilder({
                                     {
                                       et.type === 'payment' && (<>
                                         <div>
-                                          <FContentText text={'支付'} type='normal' />
+                                          <FComponentsLib.FContentText text={'支付'} type='normal' />
                                           <div style={{ width: 10 }} />
                                           <FInput
                                             // min={1}
@@ -1048,7 +1047,7 @@ function FPolicyBuilder({
                                             dataSource={currencies}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText text={'至'} type='normal' />
+                                          <FComponentsLib.FContentText text={'至'} type='normal' />
                                           <div style={{ width: 10 }} />
                                           <FSelect
                                             value={'my'}
@@ -1057,7 +1056,7 @@ function FPolicyBuilder({
                                             dataSource={accounts}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText
+                                          <FComponentsLib.FContentText
                                             type='normal'
                                             text={'之后'}
                                           />
@@ -1102,7 +1101,7 @@ function FPolicyBuilder({
                                             }}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText
+                                          <FComponentsLib.FContentText
                                             type='normal'
                                             text={'之后'}
                                           />
@@ -1117,7 +1116,7 @@ function FPolicyBuilder({
 
                                     {
                                       et.type === 'absoluteTime' && (<div>
-                                        <FContentText
+                                        <FComponentsLib.FContentText
                                           type='normal'
                                           text={'于'}
                                         />
@@ -1140,7 +1139,7 @@ function FPolicyBuilder({
                                           }}
                                         />
                                         <div style={{ width: 10 }} />
-                                        <FContentText
+                                        <FComponentsLib.FContentText
                                           type='normal'
                                           text={'之后'}
                                         />
@@ -1149,7 +1148,7 @@ function FPolicyBuilder({
 
                                     {
                                       et.type === 'terminate' && (<div>
-                                        <FContentText type='normal' text={'状态机终止，不再接受事件'} />
+                                        <FComponentsLib.FContentText type='normal' text={'状态机终止，不再接受事件'} />
                                       </div>)
                                     }
 
@@ -1158,14 +1157,14 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                                          </FTitleText>
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                          </FComponentsLib.FTitleText>
                                         </Divider>
 
                                         <div style={{ height: 10 }} />
 
                                         <div>
-                                          <FTitleText type='h4' text={'目标状态'} />
+                                          <FComponentsLib.FTitleText type='h4' text={'目标状态'} />
                                         </div>
 
                                         <div style={{ height: 10 }} />

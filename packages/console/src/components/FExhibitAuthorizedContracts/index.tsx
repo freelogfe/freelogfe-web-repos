@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
@@ -141,7 +140,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             {
               aci === 0 && (<div style={{ padding: '0 15px' }}>
                 <div style={{ height: 15 }} />
-                <FTitleText type='h4'>主资源</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>主资源</FComponentsLib.FTitleText>
                 <div style={{ height: 5 }} />
               </div>)
             }
@@ -149,7 +148,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             {
               aci === 1 && (<div style={{ padding: '0 15px' }}>
                 <div style={{ height: 15 }} />
-                <FTitleText type='h4'>基础上抛</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>基础上抛</FComponentsLib.FTitleText>
                 <div style={{ height: 5 }} />
               </div>)
             }
@@ -167,7 +166,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                   window.open(ac.detailsUrl);
                 }}
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   type='highlight'
                   text={ac.subjectName}
                   singleRow
@@ -175,7 +174,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 />
               </FComponentsLib.FTextBtn>
               <div style={{ height: 5 }} />
-              <FContentText
+              <FComponentsLib.FContentText
                 type='additional2'
                 text={FUtil.Format.resourceTypeKeyArrToResourceType(ac.type)}
               />
@@ -209,13 +208,13 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
     {
       selectedAuthorizedContract && selectedAuthorizedContract.disuseAuthorized && (
         <div className={styles.disuseAuthorizedPanel}>
-          <FTitleText
+          <FComponentsLib.FTitleText
             text={'无需处理授权'}
             type={'h2'}
             style={{ color: '#42C28C' }}
           />
           <div style={{ height: 30 }} />
-          <FContentText
+          <FComponentsLib.FContentText
             text={'在测试节点测试，你可以自由测试自己发布资源或者上传的对象，无需处理授权'}
             type={'additional2'}
           />
@@ -252,7 +251,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             {
               selectedAuthorizedContract.contracts.length > 0 && (<>
                 <div style={{ height: 15 }} />
-                <FTitleText type='h4'>当前合约</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>当前合约</FComponentsLib.FTitleText>
                 {
                   selectedAuthorizedContract.contracts.map((sac) => {
                     // console.log(sac.id, 'sac.id@#$@!#$@#4234');
@@ -264,7 +263,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                       >
                         <div style={{ height: 10 }} />
                         <Space style={{ padding: '0 20px' }} size={10}>
-                          <FContentText type='highlight' text={sac.contractName} />
+                          <FComponentsLib.FContentText type='highlight' text={sac.contractName} />
                         </Space>
                         <div style={{ height: 10 }} />
 
@@ -279,12 +278,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
                         <div style={{ height: 10 }} />
                         <Space style={{ padding: '0 20px' }} size={5}>
-                          <FContentText
+                          <FComponentsLib.FContentText
                             type='additional2'
                             text={FI18n.i18nNext.t('contract_id') + '：' + sac.contractID}
                           />
                           <FDivider style={{ fontSize: 14 }} />
-                          <FContentText
+                          <FComponentsLib.FContentText
                             type='additional2'
                             text={FI18n.i18nNext.t('contract_signed_time') + '：' + sac.createTime}
                           />
@@ -292,7 +291,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                         <div style={{ height: 10 }} />
                         <div className={styles.footer}>
                           <div className={styles.action}>
-                            <FContentText
+                            <FComponentsLib.FContentText
                               // text={exhibitInfoPage.pName}
                               text={FI18n.i18nNext.t('use_in_current_exhibit')}
                               type='highlight'
@@ -335,7 +334,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           {
             selectedAuthorizedContract && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 25 }} />
-              <FTitleText type='h4'>未签约策略</FTitleText>
+              <FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>
               {
                 selectedAuthorizedContract.policies.map((sacp, ind) => {
                   return (<React.Fragment key={sacp.policyId}>
@@ -347,7 +346,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                       key={sacp.policyId}
                     >
                       <div className={styles.singPolicyHeader}>
-                        <FContentText type='highlight'>{sacp.policyName}</FContentText>
+                        <FComponentsLib.FContentText type='highlight'>{sacp.policyName}</FComponentsLib.FContentText>
                         <FComponentsLib.FRectBtn
                           style={{ height: 26, padding: '0 15px' }}
                           size='small'

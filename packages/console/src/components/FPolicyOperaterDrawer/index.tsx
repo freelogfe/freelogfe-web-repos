@@ -3,7 +3,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '../FDrawer';
 import { PolicyCard } from '../FPolicyList';
-import { FTitleText } from '../FText';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FPolicyOperaterDrawerProps {
@@ -38,7 +37,7 @@ export const FPolicyOperaterDrawer = ({
         visible={visible}
         title={
           <Space size={10}>
-            <FTitleText type="h2" text={`启用策略并上架${typeMapping[type]}`} />
+            <FComponentsLib.FTitleText type="h2" text={`启用策略并上架${typeMapping[type]}`} />
           </Space>
         }
         width={700}

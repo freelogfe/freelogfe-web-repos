@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTipText} from '@/components/FText';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
@@ -65,7 +64,7 @@ function Success({match, dispatch}: SuccessProps) {
         gotoState !== 0 && (<>
           <i className={'freelog fl-icon-shenqingchenggong'}/>
           <div style={{height: 20}}/>
-          <FTipText
+          <FComponentsLib.FTipText
             type="second"
             text={FI18n.i18nNext.t('version_created_successfully', {VersionNumber: match.params.version})}
           />
@@ -76,7 +75,7 @@ function Success({match, dispatch}: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FTipText type="third" text={'未添加策略的资源不会出现在资源市场中'}/>
+          <FComponentsLib.FTipText type="third" text={'未添加策略的资源不会出现在资源市场中'}/>
           <div style={{height: 30}}/>
           <FComponentsLib.FRectBtn
             onClick={() => {
@@ -94,7 +93,7 @@ function Success({match, dispatch}: SuccessProps) {
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FTipText type="third" text={FI18n.i18nNext.t('jump_to_version_edit', {timer: count})}/>
+          <FComponentsLib.FTipText type="third" text={FI18n.i18nNext.t('jump_to_version_edit', {timer: count})}/>
           <div style={{width: 10}}/>
           <FComponentsLib.FTextBtn
             // theme={'primary'}

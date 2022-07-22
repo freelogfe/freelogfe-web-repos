@@ -11,7 +11,6 @@ import {
 import FUp from '@/components/FIcons/FUp';
 import { FDown, FInfo } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
-import { FContentText } from '@/components/FText';
 import {
   ConnectState,
   // StorageObjectEditorModelState
@@ -217,7 +216,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     });
                   }}
                 />)
-                : (<FContentText text={'暂无自定义选项…'} type='negative' />)
+                : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
             }
 
           </>)

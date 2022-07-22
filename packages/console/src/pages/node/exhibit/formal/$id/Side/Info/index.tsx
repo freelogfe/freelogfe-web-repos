@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
@@ -35,7 +34,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
   return (<>
 
-    <FContentText
+    <FComponentsLib.FContentText
       text={FI18n.i18nNext.t('exhibit_info')}
       type='highlight'
     />
@@ -72,12 +71,12 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
     <div style={{ height: 20 }} />
 
-    <FTitleText text={FI18n.i18nNext.t('exhibit_title')} type='h4' />
+    <FComponentsLib.FTitleText text={FI18n.i18nNext.t('exhibit_title')} type='h4' />
     <div style={{ height: 15 }} />
     {
       exhibitInfoPage.side_ExhibitInputTitle === null
         ? (<Space size={10}>
-          <FContentText text={exhibitInfoPage.side_ExhibitTitle} />
+          <FComponentsLib.FContentText text={exhibitInfoPage.side_ExhibitTitle} />
           <FTooltip title={'编辑'}>
             <div>
               <FComponentsLib.FTextBtn onClick={() => {
@@ -119,7 +118,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     }
     <div style={{ height: 30 }} />
 
-    <FTitleText text={FI18n.i18nNext.t('exhibit_tag')} type='h4' />
+    <FComponentsLib.FTitleText text={FI18n.i18nNext.t('exhibit_tag')} type='h4' />
     <div style={{ height: 15 }} />
     <FLabelEditor
       values={exhibitInfoPage.side_ExhibitTags}

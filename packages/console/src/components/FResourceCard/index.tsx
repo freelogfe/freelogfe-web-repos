@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FContentText } from '../FText';
 import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
 import FCoverImage from '@/components/FCoverImage';
@@ -105,17 +104,17 @@ function FResourceCard({
 
       <div className={styles.Meta}>
         <div style={{ height: '12px' }} />
-        <FContentText
+        <FComponentsLib.FContentText
           singleRow={true}
           text={resource.title}
         />
         <div style={{ height: '6px' }} />
         <div className={styles.MetaInfo}>
-          <FContentText
+          <FComponentsLib.FContentText
             type='additional1'
             text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
           />
-          <FContentText
+          <FComponentsLib.FContentText
             type='additional1'
             text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
@@ -134,7 +133,7 @@ function FResourceCard({
                 })}
                 singleRow
               />)
-              : (<FContentText text={'暂无策略…'} type='additional2' />)
+              : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
           }
         </div>
       </div>

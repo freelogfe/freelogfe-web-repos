@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { FWarning } from '@/components/FIcons';
@@ -15,13 +14,11 @@ import {
 } from '@/models/nodeManagerPage';
 import { router, RouterTypes, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
-import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
@@ -238,7 +235,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
         ) : (
           <>
             <div className={styles.header}>
-              <FTitleText type="h1" text={'主题管理'} />
+              <FComponentsLib.FTitleText type="h1" text={'主题管理'} />
               <FInput
                 className={styles.input}
                 theme="dark"
@@ -375,9 +372,9 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
                         )}
                       </div>
                       <div style={{ height: 12 }} />
-                      <FContentText text={i.title} singleRow type="highlight" />
+                      <FComponentsLib.FContentText text={i.title} singleRow type="highlight" />
                       <div style={{ height: 6 }} />
-                      <FContentText type="additional1" text={'展示版本 ' + i.version} />
+                      <FComponentsLib.FContentText type="additional1" text={'展示版本 ' + i.version} />
                       <div style={{ height: 15 }} />
                       <div className={styles.bottom}>
                         <div className={styles.polices}>
@@ -391,7 +388,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
                               })}
                             />
                           ) : (
-                            <FContentText text={'暂无策略…'} type="additional2" />
+                            <FComponentsLib.FContentText text={'暂无策略…'} type="additional2" />
                           )}
                         </div>
                       </div>
