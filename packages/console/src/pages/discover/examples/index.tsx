@@ -3,6 +3,11 @@ import styles from './index.less';
 import FPlayer from '@/components/FIcons/FPlayer';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import img_blog from '@/assets/flnode_blog.jpg';
+import img_comics from '@/assets/flnode_comics.jpg';
+import img_docs from '@/assets/flnode_docs.jpg';
+import img_reading from '@/assets/flnode_reading.jpg';
+import img_stock from '@/assets/flnode_stock.jpg';
 
 const nodeData: {
   id: string;
@@ -14,7 +19,7 @@ const nodeData: {
 }[] = [
   {
     id: '1',
-    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    cover: img_reading,
     title: FI18n.i18nNext.t('flnode_reading'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_reading_descr'),
@@ -22,7 +27,7 @@ const nodeData: {
   },
   {
     id: '2',
-    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    cover: img_comics,
     title: FI18n.i18nNext.t('flnode_comics'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_comics_descr'),
@@ -30,7 +35,7 @@ const nodeData: {
   },
   {
     id: '3',
-    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    cover: img_blog,
     title: FI18n.i18nNext.t('flnode_blog'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_blog_descr'),
@@ -38,7 +43,7 @@ const nodeData: {
   },
   {
     id: '4',
-    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    cover: img_stock,
     title: FI18n.i18nNext.t('flnode_stock'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_stock_descr'),
@@ -46,7 +51,7 @@ const nodeData: {
   },
   {
     id: '5',
-    cover: 'http://static.testfreelog.com/static/default_cover.png',
+    cover: img_docs,
     title: FI18n.i18nNext.t('flnode_docs'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_docs_descr'),
