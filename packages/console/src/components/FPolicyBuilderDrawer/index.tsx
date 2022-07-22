@@ -10,7 +10,7 @@ import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
-import { FUtil , FI18n} from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
@@ -1131,7 +1131,7 @@ function FPolicyBuilder({
                                           allowClear={false}
                                           value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
-                                          onChange={(value:any, dateString:any) => {
+                                          onChange={(value: any, dateString: any) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
                                               absoluteTime_DateTime: mo,
@@ -1157,7 +1157,8 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown
+                                            style={{ fontSize: 10 }} />
                                           </FComponentsLib.FTitleText>
                                         </Divider>
 
@@ -1307,6 +1308,9 @@ function FPolicyBuilder({
               onOk() {
                 onClick_SelectTemplateBtn(num);
               },
+              bodyStyle: {
+                zIndex: 20000000000
+              }
             });
           }}
         />
