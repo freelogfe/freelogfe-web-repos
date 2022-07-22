@@ -61,7 +61,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 
   return (<>
     <Helmet>
-      <title>{`[T]测试主题管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+      <title>{`测试主题管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
     </Helmet>
 
     {
