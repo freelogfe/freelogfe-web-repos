@@ -3,10 +3,10 @@ import styles from './index.less';
 // import img_Invite from '@/assets/invite.png';
 // import img_Questionnaire from '@/assets/questionnaire.png';
 import FFormLayout from '@/components/FFormLayout';
-import { FTextBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps {
 
@@ -71,12 +71,12 @@ function Sider({}: SiderProps) {
       <FFormLayout>
         <FFormLayout.FBlock
           title={'常见问题'}
-          extra={<FTextBtn
+          extra={<FComponentsLib.FTextBtn
             type='default'
             onClick={() => {
               window.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d04f456ff0002e329537')
             }}
-          >更多 &gt;</FTextBtn>}
+          >更多 &gt;</FComponentsLib.FTextBtn>}
         >
           <div className={styles.linkList}>
             <div className={styles.linkListItem}>
@@ -128,7 +128,7 @@ function Sider({}: SiderProps) {
       <FFormLayout>
         <FFormLayout.FBlock
           title={'热门讨论'}
-          extra={<FTextBtn type='default'>更多 &gt;</FTextBtn>}
+          extra={<FComponentsLib.FTextBtn type='default'>更多 &gt;</FComponentsLib.FTextBtn>}
         >
           <div className={styles.linkList}>
             <div className={styles.linkListItem}>

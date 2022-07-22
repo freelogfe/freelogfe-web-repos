@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FUtil } from '@freelog/tools-lib';
 import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -8,7 +7,6 @@ import { ActivitiesPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
 import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage';
 import FLoadingTip from '@/components/FLoadingTip';
-// import FResultTip from '@/components/FResultTip';
 import FNoDataTip from '@/components/FNoDataTip';
 import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 import FComponentsLib from '@freelog/components-lib';
@@ -35,7 +33,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
   return (<div className={styles.activity}>
       <div className={styles.title}>
         <div style={{ height: 35 }} />
-        <FTitleText text={'活动中心'} type='h1' />
+        <FComponentsLib.FTitleText text={'活动中心'} type='h1' />
         <div style={{ height: 35 }} />
       </div>
       {
@@ -77,7 +75,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
                       m.status === 'end' && (<label className={styles.closedLabel}>已结束</label>)
                     }
 
-                    <FContentText
+                    <FComponentsLib.FContentText
                       text={m.activityTitle}
                       type='highlight'
                       singleRow
@@ -85,7 +83,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
                     />
                   </Space>
                   <div style={{ height: 10 }} />
-                  <FContentText
+                  <FComponentsLib.FContentText
                     text={'活动时限：' + (m.persis ? '持续进行' : `${m.startTime}-${m.limitTime}`)}
                     type='additional2'
                   />

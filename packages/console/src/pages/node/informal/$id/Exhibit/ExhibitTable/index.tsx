@@ -4,12 +4,10 @@ import FTable from '@/components/FTable';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { FContentText, FTitleText } from '@/components/FText';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
-import { FTextBtn } from '@/components/FButton';
+import { FDelete, FFileSearch, FWarning } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
@@ -37,7 +35,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
 
   const columns: ColumnsType<InformalNodeManagerPageModelState['exhibit_List'][number]> = [
     {
-      title: <FTitleText type="table" text={'来源｜封面'} />,
+      title: <FComponentsLib.FTitleText type="table" text={'来源｜封面'} />,
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
@@ -58,12 +56,12 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />,
+      title: <FComponentsLib.FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />,
       dataIndex: 'name',
       key: 'name',
       render(text, record) {
         return (<div className={styles.name}>
-          <FContentText
+          <FComponentsLib.FContentText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
             text={record.testResourceName}
             type='highlight'
@@ -72,7 +70,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
           <div className={styles.type}>
             <label>{FUtil.Format.resourceTypeKeyArrToResourceType(record.originInfo.resourceType)}</label>
             <div>
-              <FContentText
+              <FComponentsLib.FContentText
                 type='additional2'
                 text={record.stateInfo.titleInfo.title}
                 singleRow
@@ -86,7 +84,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FTitleText type="table" text={''} />,
+      title: <FComponentsLib.FTitleText type="table" text={''} />,
       dataIndex: 'action',
       key: 'action',
       width: 110,
@@ -138,7 +136,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FTitleText type="table" text={'展示版本'} />,
+      title: <FComponentsLib.FTitleText type="table" text={'展示版本'} />,
       dataIndex: 'version',
       key: 'version',
       width: 123,
@@ -146,7 +144,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
         return (
           <div style={{ width: 123 }}>
             {record.originInfo.version ? (
-              <FContentText text={record.originInfo.version} />
+              <FComponentsLib.FContentText text={record.originInfo.version} />
             ) : (
               // : (<FContentText text={'---'} />)
               <MinusOutlined />
@@ -156,7 +154,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FTitleText type="table" text={'上架'} />,
+      title: <FComponentsLib.FTitleText type="table" text={'上架'} />,
       dataIndex: 'online',
       key: 'online',
       width: 65,
@@ -329,9 +327,9 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
         {onEdit && (
           <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
             <span>
-              <FTextBtn type="primary" onClick={() => onEdit()}>
+              <FComponentsLib.FTextBtn type="primary" onClick={() => onEdit()}>
                 <FComponentsLib.FIcons.FEdit />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>
         )}
@@ -339,15 +337,15 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
         {onSearch && (
           <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
             <span>
-              <FTextBtn type="primary" onClick={() => onSearch()}>
+              <FComponentsLib.FTextBtn type="primary" onClick={() => onSearch()}>
                 <FFileSearch />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>
         )}
 
       {
-        onDelete && (<FTextBtn
+        onDelete && (<FComponentsLib.FTextBtn
           onClick={() => {
             fConfirmModal({
               message: '一旦删除则无法恢复，确认删除吗？',
@@ -356,7 +354,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
               },
             });
           }}
-          className={styles.Delete}><FDelete /></FTextBtn>)
+          className={styles.Delete}><FDelete /></FComponentsLib.FTextBtn>)
       }
 
     </Space>

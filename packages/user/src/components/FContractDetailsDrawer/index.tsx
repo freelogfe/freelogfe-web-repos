@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '@/components/FText';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
@@ -14,6 +13,7 @@ import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface BaseInfo {
   subjectId: string;
@@ -321,7 +321,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
             <Space size={10}>
               <FCoverImage src={baseInfo?.subjectCover || ''} width={60} />
               <div>
-                <FContentText
+                <FComponentsLib.FContentText
                   type='highlight'
                   text={baseInfo?.subjectName}
                 />
@@ -336,7 +336,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
           <FFormLayout.FBlock title={'缔约方'}>
             <Space size={10}>
               <div style={{ width: 80 }}>
-                <FContentText type='negative' text={'授权方'} />
+                <FComponentsLib.FContentText type='negative' text={'授权方'} />
               </div>
               <Space size={10}>
                 {
@@ -348,7 +348,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                 {
                   baseInfo?.licensorIdentityType === 'user' && (<FUser />)
                 }
-                <FContentText
+                <FComponentsLib.FContentText
                   type='highlight'
                   text={baseInfo?.licensorName}
                 />
@@ -357,7 +357,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
             <div style={{ height: 15 }} />
             <Space size={10}>
               <div style={{ width: 80 }}>
-                <FContentText
+                <FComponentsLib.FContentText
                   type='negative'
                   text={'被授权方'}
                 />
@@ -372,7 +372,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                 {
                   baseInfo?.licenseeIdentityType === 'user' && (<FUser />)
                 }
-                <FContentText
+                <FComponentsLib.FContentText
                   type='highlight'
                   text={baseInfo?.licenseeName}
                 />
@@ -385,7 +385,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
               <div style={{ height: 15 }} />
               <div style={{ padding: '0 20px' }}>
                 <Space size={10}>
-                  <FContentText
+                  <FComponentsLib.FContentText
                     text={baseInfo?.contractName}
                     type='highlight'
                   />
@@ -395,12 +395,12 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
 
               <div style={{ padding: '0 20px' }}>
                 <Space size={5}>
-                  <FContentText
+                  <FComponentsLib.FContentText
                     type='additional2'
                     text={`签约时间：${baseInfo?.contractCreateDate}`}
                   />
                   <FDivider style={{ fontSize: 14 }} />
-                  <FContentText
+                  <FComponentsLib.FContentText
                     type='additional2'
                     text={`合约ID：${baseInfo?.contractId}`}
                   />
@@ -494,7 +494,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                       >
                         <div>
                           <Space size={10}>
-                            <FContentText
+                            <FComponentsLib.FContentText
                               text={ac.contractName}
                               type='highlight'
                             />
@@ -502,20 +502,20 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                           <div style={{ height: 10 }} />
                           <Space size={40}>
                             <Space size={10}>
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 text={'签约时间'}
                                 type='additional2'
                               />
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 text={ac.contractCreateDate}
                               />
                             </Space>
                             <Space size={10}>
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 text={'合约ID'}
                                 type='additional2'
                               />
-                              <FContentText
+                              <FComponentsLib.FContentText
                                 text={ac.contractId}
                               />
                             </Space>
@@ -636,7 +636,7 @@ function FVersions({
                      onChangeVersionContractIDs,
                    }: FVersionsProps) {
   return (<>
-    <FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' style={{ fontSize: 12 }} />
+    <FComponentsLib.FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' style={{ fontSize: 12 }} />
 
     <div style={{ height: 10 }} />
 
@@ -698,7 +698,7 @@ function FExhibits({
                    }: FExhibitsProps) {
 
   return (<>
-    <FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' style={{ fontSize: 12 }} />
+    <FComponentsLib.FTitleText text={`当前合约在节点 ${nodeName} 上的应用情况`} type='table' style={{ fontSize: 12 }} />
     {/*<div style={{ height: 10 }} />*/}
     <div className={styles.nodeExhibits}>
       {

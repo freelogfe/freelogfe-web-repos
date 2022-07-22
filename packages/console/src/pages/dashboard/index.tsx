@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FAdd, FInfo, FWarning } from '@/components/FIcons';
+import { FAdd, FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
-import { FTextBtn } from '@/components/FButton';
-import { FContentText, FTitleText } from '@/components/FText';
 import FFormLayout from '@/components/FFormLayout';
 import FContent from '@/components/FIcons/FContent';
 import FComponentsLib from '@freelog/components-lib';
@@ -45,10 +43,10 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       <div style={{ height: 50 }} />
       <div className={styles.title1}>
         <span>萌新任务，完成即领20元现金奖励！</span>
-        <FTextBtn>
+        <FComponentsLib.FTextBtn>
           <FInfo />
           <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
-        </FTextBtn>
+        </FComponentsLib.FTextBtn>
       </div>
       <div style={{ height: 20 }} />
       <div className={styles.title2}>
@@ -64,7 +62,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     <div className={styles.statistics}>
       <div className={styles.statisticsContent}>
         <div className={styles.statisticsLeft}>
-          <FTitleText text={'资源'} />
+          <FComponentsLib.FTitleText text={'资源'} />
           <div style={{ height: 20 }} />
           <div className={styles.statisticsLeft_Panel}>
             <FFormLayout>
@@ -73,19 +71,19 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               >
                 <div className={styles.statisticsLeft_Panel_Total}>
                   <span>{dashboardPage.resourceStatistic.totalProfit}</span>
-                  <FContentText text={'总收益（枚）'} type='normal' />
+                  <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
                 </div>
                 <div style={{ height: 10 }} />
                 <Space size={20} className={styles.statisticsLeft_Panel_Week}>
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日收益（枚）</span>
                     <div style={{ height: 10 }} />
-                    <FTitleText text={dashboardPage.resourceStatistic.lastWeekProfit} type='h1' />
+                    <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekProfit} type='h1' />
                   </div>
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日签约量</span>
                     <div style={{ height: 10 }} />
-                    <FTitleText text={dashboardPage.resourceStatistic.lastWeekContract} type='h1' />
+                    <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekContract} type='h1' />
                   </div>
                   {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
                   {/*  <span>近7日浏览量</span>*/}
@@ -98,23 +96,23 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               <FFormLayout.FBlock
                 title={'最近发布'}
                 extra={<Space size={25}>
-                  <FTextBtn
+                  <FComponentsLib.FTextBtn
                     onClick={() => {
                       window.open(FUtil.LinkTo.resourceCreator());
                     }}
                     type='default'>
                     <FAdd style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>新资源</span>
-                  </FTextBtn>
+                  </FComponentsLib.FTextBtn>
 
-                  <FTextBtn
+                  <FComponentsLib.FTextBtn
                     onClick={() => {
                       window.open(FUtil.LinkTo.myResources());
                     }}
                     type='default'>
                     <FContent style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>查看全部</span>
-                  </FTextBtn>
+                  </FComponentsLib.FTextBtn>
                 </Space>}
               >
                 <div className={styles.releasedResources}>
@@ -148,14 +146,14 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           </div>
                         </div>
                         <div style={{ height: 10 }} />
-                        <FContentText
+                        <FComponentsLib.FContentText
                           style={{ width: 250 }}
                           text={lr.resourceName}
                           type='highlight'
                           singleRow
                         />
                         <div style={{ height: 8 }} />
-                        <FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />
+                        <FComponentsLib.FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />
                         <div style={{ height: 12 }} />
                         <FComponentsLib.F_Contract_And_Policy_Labels
                           data={lr.policies.map((p) => {
@@ -167,7 +165,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           singleRow
                         />
                         <div style={{ height: 15 }} />
-                        <FContentText
+                        <FComponentsLib.FContentText
                           text={lr.dataTime}
                           type='additional2'
                         />
@@ -182,7 +180,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
           </div>
 
           <div style={{ height: 40 }} />
-          <FTitleText text={'节点'} />
+          <FComponentsLib.FTitleText text={'节点'} />
           <div style={{ height: 20 }} />
           <div className={styles.statisticsLeft_Panel}>
             <FFormLayout>
@@ -191,19 +189,19 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               >
                 <div className={styles.statisticsLeft_Panel_Total}>
                   <span>{dashboardPage.nodeStatistic.totalProfit}</span>
-                  <FContentText text={'总收益（枚）'} type='normal' />
+                  <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
                 </div>
                 <div style={{ height: 10 }} />
                 <Space size={20} className={styles.statisticsLeft_Panel_Week}>
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日收益（枚）</span>
                     <div style={{ height: 10 }} />
-                    <FTitleText text={dashboardPage.nodeStatistic.lastWeekProfit} type='h1' />
+                    <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekProfit} type='h1' />
                   </div>
                   <div className={styles.statisticsLeft_Panel_Week_Card}>
                     <span>近7日签约量</span>
                     <div style={{ height: 10 }} />
-                    <FTitleText text={dashboardPage.nodeStatistic.lastWeekContract} type='h1' />
+                    <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekContract} type='h1' />
                   </div>
                   {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
                   {/*  <span>近7日浏览量</span>*/}
@@ -215,7 +213,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
 
               <FFormLayout.FBlock
                 title={'我的节点'}
-                extra={<FTextBtn
+                extra={<FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => {
                     window.open(FUtil.LinkTo.nodeCreator());
@@ -223,26 +221,26 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 >
                   <FAdd style={{ fontSize: 16 }} />
                   <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
-                </FTextBtn>}
+                </FComponentsLib.FTextBtn>}
               >
                 <div className={styles.nodeList}>
                   {
                     dashboardPage.allNode.map((an) => {
                       return (<div key={an.nodeID} className={styles.node}>
-                        <FContentText text={an.nodeName} type='highlight' />
+                        <FComponentsLib.FContentText text={an.nodeName} type='highlight' />
                         <Space size={20}>
-                          <FTextBtn
+                          <FComponentsLib.FTextBtn
                             type='primary'
                             onClick={() => {
                               window.open(an.displayUrl);
                             }}
-                          >打开节点</FTextBtn>
-                          <FTextBtn
+                          >打开节点</FComponentsLib.FTextBtn>
+                          <FComponentsLib.FTextBtn
                             type='primary'
                             onClick={() => {
                               window.open(an.managingUrl);
                             }}
-                          >管理节点</FTextBtn>
+                          >管理节点</FComponentsLib.FTextBtn>
                         </Space>
                       </div>);
                     })

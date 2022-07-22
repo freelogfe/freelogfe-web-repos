@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTipText } from '../FText';
-import { FRectBtn } from '../FButton';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FNoDataTipProps {
   height: number | string;
@@ -19,7 +18,7 @@ function FNoDataTip({ height, tipText, btnText, btn, onClick }: FNoDataTipProps)
   >
     <div />
     <div>
-      <FTipText
+      <FComponentsLib.FTipText
         type='first'
         text={tipText}
       />
@@ -27,11 +26,11 @@ function FNoDataTip({ height, tipText, btnText, btn, onClick }: FNoDataTipProps)
       {
         btnText && (<>
           <div style={{ height: 30 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             size='large'
             className={styles.btn}
             onClick={() => onClick && onClick()}
-          >{btnText}</FRectBtn>
+          >{btnText}</FComponentsLib.FRectBtn>
         </>)
       }
 

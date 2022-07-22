@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
-import { FTextBtn, FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import { connect, Dispatch } from 'dva';
@@ -28,10 +26,8 @@ import {
   // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
-// import FUtil1 from '@/utils';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
-import { FTipText } from '@/components/FText';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { RouteComponentProps } from 'react-router';
 import FBasePropertiesCards from '@/components/FBasePropertiesCards';
@@ -40,6 +36,7 @@ import { Helmet } from 'react-helmet';
 import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
 import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
 import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
+import FComponentsLib from '@freelog/components-lib';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -170,35 +167,35 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
             {
               isEditing
                 ? (<>
-                  <FTextBtn
+                  <FComponentsLib.FTextBtn
                     type='default'
                     onClick={() => {
                       onChange({ descriptionFullScreen: true });
                     }}
-                  >全屏编辑</FTextBtn>
+                  >全屏编辑</FComponentsLib.FTextBtn>
                   <FDivider />
-                  <FTextBtn
+                  <FComponentsLib.FTextBtn
                     type='default'
                     onClick={() => setIsEditing(false)}
-                  >{FI18n.i18nNext.t('cancel')}</FTextBtn>
-                  <FTextBtn
+                  >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn
                     type='primary'
                     onClick={onUpdateEditorText}
-                  >{FI18n.i18nNext.t('save')}</FTextBtn>
+                  >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
                 </>)
                 : !!resourceVersionEditorPage.description
                   ? (<>
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       type='default'
                       onClick={() => {
                         onChange({ descriptionFullScreen: true });
                       }}
-                    >全屏查看</FTextBtn>
+                    >全屏查看</FComponentsLib.FTextBtn>
                     <FDivider />
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       type='primary'
                       onClick={() => setIsEditing(true)}
-                    >编辑</FTextBtn>
+                    >编辑</FComponentsLib.FTextBtn>
                   </>)
                   : undefined
             }
@@ -208,14 +205,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           {
             !resourceVersionEditorPage.description && !isEditing
             && (<div className={styles.noDescription}>
-              <FTipText
+              <FComponentsLib.FTipText
                 text={'动动手，让你的资源看起来更丰富多彩吧～'}
                 type='second'
               />
               <div style={{ height: 20 }} />
-              <FRectBtn onClick={() => {
+              <FComponentsLib.FRectBtn onClick={() => {
                 setIsEditing(true);
-              }}>添加版本描述</FRectBtn>
+              }}>添加版本描述</FComponentsLib.FRectBtn>
             </div>)
           }
 
@@ -238,14 +235,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
           title={'相关视图'}
-          extra={<FTextBtn
+          extra={<FComponentsLib.FTextBtn
             type='default'
             onClick={() => {
               onChange({
                 graphFullScreen: true,
               });
             }}
-          >全屏查看</FTextBtn>}
+          >全屏查看</FComponentsLib.FTextBtn>}
         >
           <FViewportTabs
             options={[
@@ -400,14 +397,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       visible={resourceVersionEditorPage.basePEditorVisible}
       width={720}
       topRight={<Space size={30}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='default'
           onClick={() => {
             onCloseBaseAttrDrawer();
           }}
-        >取消</FTextBtn>
+        >取消</FComponentsLib.FTextBtn>
 
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
           onClick={async () => {
@@ -432,7 +429,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               type: 'resourceVersionEditorPage/syncAllProperties',
             });
           }}
-        >保存</FRectBtn>
+        >保存</FComponentsLib.FRectBtn>
       </Space>}
     >
       <Space
@@ -443,7 +440,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot} />
-            <FTitleText type='h4'>key</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -456,7 +453,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot} />
-            <FTitleText type='h4'>value</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -486,7 +483,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
         <div className={styles.input}>
           <div className={styles.title}>
-            <FTitleText type='h4'>属性说明</FTitleText>
+            <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -647,14 +644,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       topRight={<Space size={25}>
         {isEditing
           ? (<>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
                 onChange({ descriptionFullScreen: false });
               }}
-            >取消全屏</FTextBtn>
+            >取消全屏</FComponentsLib.FTextBtn>
             <FDivider />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
                 setIsEditing(false);
@@ -662,24 +659,24 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   onChange({ descriptionFullScreen: false });
                 }
               }}
-            >{FI18n.i18nNext.t('cancel')}</FTextBtn>
-            <FTextBtn
+            >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={onUpdateEditorText}
-            >{FI18n.i18nNext.t('save')}</FTextBtn>
+            >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
           </>)
           : (<>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
                 onChange({ descriptionFullScreen: false });
               }}
-            >取消全屏</FTextBtn>
+            >取消全屏</FComponentsLib.FTextBtn>
             <FDivider />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => setIsEditing(true)}
-            >编辑</FTextBtn>
+            >编辑</FComponentsLib.FTextBtn>
           </>)}
       </Space>}
     >
@@ -731,23 +728,23 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
 
   return (
     <div className={styles.Header}>
-      <FTitleText text={version} type='h1' />
+      <FComponentsLib.FTitleText text={version} type='h1' />
       <div style={{ height: 10 }} />
       <Space size={0}>
-        <FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
+        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
         <div style={{ width: 40 }} />
-        <FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
+        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
         <div style={{ width: 20 }} />
         <FTooltip title={'下载'}>
           <div>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => onClickDownload && onClickDownload()}
             >
               <FDownload
                 style={{ fontSize: 16, fontWeight: 600 }}
               />
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </div>
         </FTooltip>
       </Space>

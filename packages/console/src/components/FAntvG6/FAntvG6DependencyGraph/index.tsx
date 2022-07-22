@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import { GraphData } from '@antv/g6/lib';
-import { FTipText } from '../../FText';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
+import FComponentsLib from '@freelog/components-lib';
 
 G6.registerNode('dependency-resource', {
   jsx: (cfg: any) => `
@@ -146,7 +146,7 @@ function FAntvG6DependencyGraph({ nodes, edges, width = 920, height = 500 }: FAn
         height: height,
       }}
     >
-      <FTipText
+      <FComponentsLib.FTipText
         type='first'
         text={'无依赖树'}
       />

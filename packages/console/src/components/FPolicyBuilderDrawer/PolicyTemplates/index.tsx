@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '../../FText';
 import FCodeFormatter from '../../FCodeFormatter';
-import { FRectBtn, FTextBtn } from '../../FButton';
 import * as AHooks from 'ahooks';
 import { policyCodeTranslationToText } from '../index';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PolicyTemplatesProps {
   onSelect?({ title, text }: { title: string, text: string }): void;
@@ -80,14 +79,14 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
 
   return (<div className={styles.PolicyTemplate}>
     <div className={styles.header}>
-      <FTitleText type='h1' text={title} />
-      <FRectBtn
+      <FComponentsLib.FTitleText type='h1' text={title} />
+      <FComponentsLib.FRectBtn
         type='primary'
         size='small'
         onClick={() => {
           onSelect && onSelect();
         }}
-      >选择</FRectBtn>
+      >选择</FComponentsLib.FRectBtn>
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.translation}>
@@ -97,32 +96,32 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
     <div className={styles.navs}>
       {
         visible === 'code'
-          ? (<FTextBtn
+          ? (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               setVisible('none');
-            }}>隐藏代码</FTextBtn>)
-          : (<FTextBtn
+            }}>隐藏代码</FComponentsLib.FTextBtn>)
+          : (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               setVisible('code');
-            }}>显示代码</FTextBtn>)
+            }}>显示代码</FComponentsLib.FTextBtn>)
       }
 
       <div style={{ width: 20 }} />
 
       {
         visible === 'view'
-          ? (<FTextBtn
+          ? (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               setVisible('none');
-            }}>隐藏状态机视图</FTextBtn>)
-          : (<FTextBtn
+            }}>隐藏状态机视图</FComponentsLib.FTextBtn>)
+          : (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               setVisible('view');
-            }}>显示状态机视图</FTextBtn>)
+            }}>显示状态机视图</FComponentsLib.FTextBtn>)
       }
 
     </div>

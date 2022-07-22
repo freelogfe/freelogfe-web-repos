@@ -1,11 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTooltip from '@/components/FTooltip';
-import { Space } from 'antd';
-import { FContentText } from '@/components/FText';
-import FPopover from '@/components/FPopover';
-import { FTextBtn } from '@/components/FButton';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI } from '@freelog/tools-lib';
 import BoardCard1 from './_components/BoardCard1'
 import BoardCard2 from './_components/BoardCard2'
 import BoardCard3 from './_components/BoardCard3'
@@ -56,4 +51,3 @@ function BoardCard({}: BoardCardProps) {
 
 export default BoardCard;
 
- 

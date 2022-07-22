@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-// import { FTextBtn } from '@/components/FButton';
-// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface BoardCard2Props {
   unfold: boolean;
@@ -42,7 +39,7 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={
                           '成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'
                         }
@@ -50,19 +47,19 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源作者使用教程</a>
-                        <FContentText text={'（视频）或'} />
+                        <FComponentsLib.FContentText text={'（视频）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源创建教程</a>
-                        <FContentText text={'（图文）创建资源。'} />
+                        <FComponentsLib.FContentText text={'（图文）创建资源。'} />
                       </Space>
                     </div>
                   }
@@ -74,7 +71,7 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={
                           '通过更新资源版本可以优化和调整资源内容，以便在相同的资源中保留多个资源文件。'
                         }
@@ -82,19 +79,19 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源版本发布教程</a>
-                        <FContentText text={'（图文）或'} />
+                        <FComponentsLib.FContentText text={'（图文）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源作者使用教程</a>
-                        <FContentText text={'（视频）发布资源版本。'} />
+                        <FComponentsLib.FContentText text={'（视频）发布资源版本。'} />
                       </Space>
                     </div>
                   }
@@ -106,7 +103,7 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={
                           '授权策略（免费/收费）是资源作者对资源授权的权利声明，也是资源作者获取收益的重要部分。'
                         }
@@ -114,19 +111,19 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                       />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源授权策略添加教程</a>
-                        <FContentText text={'（图文）或'} />
+                        <FComponentsLib.FContentText text={'（图文）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >资源作者使用教程</a>
-                        <FContentText text={'(视频) 为资源添加授权策略。'} />
+                        <FComponentsLib.FContentText text={'(视频) 为资源添加授权策略。'} />
                       </Space>
                     </div>
                   }
@@ -138,7 +135,7 @@ function BoardCard2({ unfold, onMouseEnter, data }: BoardCard2Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={item.taskConfigDescription} type="highlight" />
+                      <FComponentsLib.FContentText text={item.taskConfigDescription} type="highlight" />
                     </div>
                   }
                 >

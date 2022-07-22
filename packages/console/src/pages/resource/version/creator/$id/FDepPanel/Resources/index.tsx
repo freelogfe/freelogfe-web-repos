@@ -1,8 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
-// import { CloseCircleFilled } from '@ant-design/icons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
@@ -13,7 +10,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FEdit, FWarning } from '@/components/FIcons';
+import { FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
@@ -84,7 +81,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
               >
                 <div>
                   <div className={styles.title}>
-                    <FTextBtn
+                    <FComponentsLib.FTextBtn
                       onClick={(e) => {
                         e.stopPropagation();
                         // if (rrr.status === 3) {
@@ -97,13 +94,13 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       }}
                       type='default'
                     >
-                      <FContentText
+                      <FComponentsLib.FContentText
                         className={styles.titleText}
                         text={rrr.title}
                         singleRow
                         type='highlight'
                       />
-                    </FTextBtn>
+                    </FComponentsLib.FTextBtn>
                     <div style={{ width: 5 }} />
                     {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
                     {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -120,7 +117,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                       <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
-                  <FContentText type='additional2'>
+                  <FComponentsLib.FContentText type='additional2'>
                     <div>
                       {/*{rrr.resourceType || '暂无类型'}*/}
                       {FUtil.Format.resourceTypeKeyArrToResourceType(rrr.resourceType)}
@@ -139,7 +136,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                           </>
                       }
                     </div>
-                  </FContentText>
+                  </FComponentsLib.FContentText>
                   <>
                     <div style={{ height: 5 }} />
                     <div className={styles.DepPanelLabels}>
@@ -179,7 +176,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     </div>
                   </>
                 </div>
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   onClick={(e) => {
                     e.stopPropagation();
                     return onDeleteResource(i.id);
@@ -218,7 +215,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
 
   return (<div className={styles.children}>
     <div style={{ padding: '5px 0 5px 15px' }}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='additional2'
         // text={'此资源存在以下基础上抛'}
         text={FI18n.i18nNext.t('upcast')}
@@ -236,7 +233,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
             className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
           >
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   // if (i.status === 3) {
@@ -249,13 +246,13 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 }}
                 type='default'
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   className={styles.titleText}
                   text={i.title}
                   singleRow
                   type='highlight'
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               <div style={{ width: 5 }} />
               {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
               {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -272,9 +269,9 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                 <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
-            <FContentText type='additional2'>
+            <FComponentsLib.FContentText type='additional2'>
               <div>{i.resourceType || '暂无类型'}</div>
-            </FContentText>
+            </FComponentsLib.FContentText>
             <>
               <div style={{ height: 5 }} />
               <div className={styles.DepPanelLabels}>

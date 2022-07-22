@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FRectBtn, FTextBtn} from "../FButton";
-import {FTitleText} from "../FText";
 import FInput from "../FInput";
 import FDrawer from "../FDrawer";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasePropEditorDrawerProps {
   visible?: boolean;
@@ -40,20 +39,20 @@ function FBasePropEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type="default"
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
+      >取消</FComponentsLib.FTextBtn>
 
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         type="primary"
         disabled={!!keyInputError || !!valueInputError || !!descriptionInputError}
         onClick={async () => {
           onConfirm && onConfirm();
         }}
-      >保存</FRectBtn>
+      >保存</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -64,7 +63,7 @@ function FBasePropEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           <i className={styles.dot}/>
-          <FTitleText type="h4">key</FTitleText>
+          <FComponentsLib.FTitleText type="h4">key</FComponentsLib.FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -96,7 +95,7 @@ function FBasePropEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           <i className={styles.dot}/>
-          <FTitleText type="h4">value</FTitleText>
+          <FComponentsLib.FTitleText type="h4">value</FComponentsLib.FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -125,7 +124,7 @@ function FBasePropEditorDrawer({
 
       <div className={styles.input}>
         <div className={styles.title}>
-          <FTitleText type="h4">属性说明</FTitleText>
+          <FComponentsLib.FTitleText type="h4">属性说明</FComponentsLib.FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput

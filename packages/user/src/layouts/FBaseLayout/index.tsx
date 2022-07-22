@@ -4,9 +4,9 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Layout } from 'antd';
 import { connect } from 'dva';
 import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
-import FHeaderNavigation from '@/components/FHeaderNavigation';
 import { history } from '@@/core/history';
-// import FFooter from '@/layouts/FFooter';
+import FComponentsLib from '@freelog/components-lib';
+import { Link } from 'umi';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
 
   return (<Layout className={styles.Layout}>
     <Layout.Header className={styles.Header}>
-      <FHeaderNavigation
+      <FComponentsLib.FHeaderNavigation
         logoBtn={{ href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home() }}
         // showAlphaTest={true}
         // showConsoleBabel={true}
@@ -93,6 +93,7 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
             },
           ],
         } : null}
+        UmiLinkPatch={Link}
       />
     </Layout.Header>
 

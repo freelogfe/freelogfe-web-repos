@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '../FText';
 import FInput from '../FInput';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasePropsEditorDrawerProps {
   visible: boolean;
@@ -84,13 +83,13 @@ function FBasePropsEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
-      <FRectBtn
+      >取消</FComponentsLib.FTextBtn>
+      <FComponentsLib.FRectBtn
         disabled={!!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || !eds.value || !!eds.valueError
@@ -99,7 +98,7 @@ function FBasePropsEditorDrawer({
         onClick={() => {
           onConfirm && onConfirm();
         }}
-      >确定</FRectBtn>
+      >确定</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -113,7 +112,7 @@ function FBasePropsEditorDrawer({
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot} />
-                <FTitleText type='h4'>key</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -141,7 +140,7 @@ function FBasePropsEditorDrawer({
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot} />
-                <FTitleText type='h4'>value</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -166,7 +165,7 @@ function FBasePropsEditorDrawer({
             </div>
             <div className={styles.input}>
               <div className={styles.title}>
-                <FTitleText type='h4'>属性说明</FTitleText>
+                <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -190,7 +189,7 @@ function FBasePropsEditorDrawer({
             <div>
               <div style={{ height: 22 }} />
               <div className={styles.delete}>
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   type='danger'
                   onClick={() => {
                     onChange && onChange(dataSource.filter((eds, edsIndex) => {
@@ -210,7 +209,7 @@ function FBasePropsEditorDrawer({
     }
 
     <Space size={10}>
-      <FCircleBtn
+      <FComponentsLib.FCircleBtn
         size='small'
         onClick={() => {
           onChange && onChange([
@@ -226,7 +225,7 @@ function FBasePropsEditorDrawer({
           ]);
         }}
       />
-      <FContentText
+      <FComponentsLib.FContentText
         text={'新增一项属性'}
       />
     </Space>

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
-// import { FRectBtn } from '@/components/FButton';
-// import { ChangeAction } from '@/models/storageHomePage';
 import { Link } from 'umi';
-// import { FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface EmptyAndCreateProps {
   tipText: string;
@@ -15,7 +12,7 @@ interface EmptyAndCreateProps {
 
 function EmptyAndCreate({ tipText, btnText, btnHref, target = '_self' }: EmptyAndCreateProps) {
   return (<div className={styles.emptyDropdown}>
-    <FContentText text={tipText} />
+    <FComponentsLib.FContentText text={tipText} />
     <div style={{ height: 30 }} />
     {
       btnHref.startsWith('http')

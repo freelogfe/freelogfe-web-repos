@@ -1,16 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {
-  OnBlur_ChangePhone_New_PhoneInput_Action,
-  OnCancel_ChangeEmail_Old_Modal_Action,
-  OnChange_ChangePhone_New_PhoneInput_Action,
-} from '@/models/settingPage';
-import { FTipText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { Modal } from 'antd';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FVerifyUserPasswordModalProps {
   visible?: boolean;
@@ -63,8 +57,8 @@ function FVerifyUserPasswordModal({
       <div className={styles.ModalContainer}>
         <div style={{ height: 15 }} />
         <div className={styles.userPassword}>
-          <FTipText type="third" text={'用户登录密码'} />
-          <FTextBtn
+          <FComponentsLib.FTipText type="third" text={'用户登录密码'} />
+          <FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
             type="primary"
             onClick={() => {
@@ -73,7 +67,7 @@ function FVerifyUserPasswordModal({
             }}
           >
             忘记登录密码？
-          </FTextBtn>
+          </FComponentsLib.FTextBtn>
         </div>
 
         <div style={{ height: 5 }} />
@@ -89,7 +83,7 @@ function FVerifyUserPasswordModal({
         />
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             disabled={password === ''}
             type="primary"
             onClick={() => {
@@ -97,7 +91,7 @@ function FVerifyUserPasswordModal({
             }}
           >
             下一步
-          </FRectBtn>
+          </FComponentsLib.FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import Uploading from '../Uploading';
 import UploadSuccess from '../UploadSuccess';
 import UploadCancel from '../UploadCancel';
@@ -8,8 +7,8 @@ import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
 import { Canceler } from 'axios';
 import { StorageHomePageModelState } from '@/models/storageHomePage';
-import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -108,12 +107,12 @@ function Task({
 
   return (<div className={styles.taskItem}>
     <div className={styles.taskInfo}>
-      <FContentText
+      <FComponentsLib.FContentText
         text={file.name}
         singleRow={true}
       />
       <div style={{ height: 2 }} />
-      <FContentText
+      <FComponentsLib.FContentText
         text={FUtil.Format.humanizeSize(file.file.size)}
       />
     </div>

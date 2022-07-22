@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTipText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
@@ -17,6 +15,7 @@ import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FWarning } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -31,13 +30,13 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
 
   return (<>
     <Space size={15}>
-      <FRectBtn
+      <FComponentsLib.FRectBtn
         onClick={() => setModalVisible(true)}
         type='default'
-      >添加依赖</FRectBtn>
+      >添加依赖</FComponentsLib.FRectBtn>
       {
         resourceVersionCreatorPage.preVersionDeps.relationships.length > 0 &&
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='default'
           onClick={() => {
             dispatch<ImportLastVersionDataAction>({
@@ -52,7 +51,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
-        >{FI18n.i18nNext.t('import_from_previous_version')}</FRectBtn>
+        >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
       }
 
     </Space>
@@ -77,7 +76,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               resource?.error === 'offline' && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
                   <FForbid className={styles.errorIcon} />
-                  <FTipText
+                  <FComponentsLib.FTipText
                     text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
                     type='second'
                   />
@@ -87,7 +86,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               // resource?.status === 2 && (<div className={styles.errorBox}>
               resource?.error === 'cyclicDependency' && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
-                <FTipText
+                <FComponentsLib.FTipText
                   text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
                   type='second'
                 />
@@ -97,20 +96,20 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               // resource?.status === 3 && (<div className={styles.errorBox}>
               resource?.error === 'storageObject' && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
-                <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type='second' />
+                <FComponentsLib.FTipText text={'该依赖是存储空间对象，无法获取授权。'} type='second' />
               </div>)
             }
             {
               // resource?.status === 4 && (<div className={styles.errorBox}>
               resource?.error === 'upThrow' && (<div className={styles.errorBox}>
                 <FUpcast className={styles.errorIcon} />
-                <FTipText text={'此依赖为当前资源的基础上抛'} type='second' />
+                <FComponentsLib.FTipText text={'此依赖为当前资源的基础上抛'} type='second' />
               </div>)
             }
             {
               resource?.error === 'freeze' && (<div className={styles.errorBox}>
                 <FForbid className={styles.errorIcon} />
-                <FTipText text={'此资源因违规无法授权'} type='second' />
+                <FComponentsLib.FTipText text={'此资源因违规无法授权'} type='second' />
               </div>)
             }
             {

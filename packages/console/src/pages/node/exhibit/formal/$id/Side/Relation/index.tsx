@@ -1,12 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
 import FCoverImage from '@/components/FCoverImage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -15,7 +13,7 @@ interface RelationProps {
 
 function Relation({ exhibitInfoPage }: RelationProps) {
   return (<div className={styles.info}>
-    <FContentText
+    <FComponentsLib.FContentText
       text={FI18n.i18nNext.t('relevant_resource')}
       type='highlight'
     />
@@ -40,18 +38,18 @@ function Relation({ exhibitInfoPage }: RelationProps) {
     </div>
 
     <div style={{ height: 12 }} />
-    <FTextBtn
+    <FComponentsLib.FTextBtn
       type='default'
       onClick={() => {
         window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.side_ResourceID }));
       }}
     >
-      <FContentText
+      <FComponentsLib.FContentText
         style={{ width: 220 }}
         singleRow
         text={exhibitInfoPage.side_ResourceName}
       />
-    </FTextBtn>
+    </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
     <div style={{ fontSize: 12, color: '#666' }}>{exhibitInfoPage.side_ResourceType}</div>
   </div>);

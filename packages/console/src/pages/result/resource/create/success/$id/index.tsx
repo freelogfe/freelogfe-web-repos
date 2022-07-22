@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
-import {FTipText} from '@/components/FText';
-import {FRectBtn} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
-// import FUtil1 from "@/utils";
 import {FUtil,FI18n} from '@freelog/tools-lib';
 import {RouteComponentProps} from "react-router";
+import FComponentsLib from '@freelog/components-lib';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -39,11 +37,11 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type="second" text={FI18n.i18nNext.t('resource_created_successfully')}/>
+      <FComponentsLib.FTipText type="second" text={FI18n.i18nNext.t('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type="third" text={FI18n.i18nNext.t('hint_create_1st_version')}/>
+      <FComponentsLib.FTipText type="third" text={FI18n.i18nNext.t('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
-      <FRectBtn onClick={goto}>{FI18n.i18nNext.t('create_first_version')}</FRectBtn>
+      <FComponentsLib.FRectBtn onClick={goto}>{FI18n.i18nNext.t('create_first_version')}</FComponentsLib.FRectBtn>
     </div>
   </FCenterLayout>)
 }

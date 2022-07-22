@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Dispatch, connect } from 'dva';
 import Sign from './Sign';
-import { FTitleText, FContentText } from '@/components/FText';
 import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
@@ -23,13 +22,12 @@ import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
 import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n } from '@freelog/tools-lib';
 import { FShare } from '@/components/FShare';
-import FTooltip from '@/components/FTooltip';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -102,7 +100,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             <label className={styles.resourceType}>
               {resourceDetailPage.resource_Info?.type || ''}
             </label>
-            <FTitleText
+            <FComponentsLib.FTitleText
               style={{ width: 650 }}
               singleRow
               text={resourceDetailPage.resource_Info?.name || ''}
@@ -114,13 +112,13 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               title={resourceDetailPage.resource_Info?.name || ''}
               url={window.location.href}
             >
-              <FTextBtn type="default" className={styles.btn}>
+              <FComponentsLib.FTextBtn type="default" className={styles.btn}>
                 <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 <div style={{ width: 5 }} />
                 <span>分享</span>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FShare>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type="default"
               className={styles.favoriteBtn}
               onClick={() =>
@@ -135,7 +133,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
               <div style={{ width: 5 }} />
               <span>({resourceDetailPage.resource_Popularity}人气)</span>
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </div>
         </div>
 
@@ -151,7 +149,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
           <div className={styles.versionWrap}>
             <div className={styles.versionTitle}>
               <Space size={10}>
-                <FTitleText
+                <FComponentsLib.FTitleText
                   text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion}
                 />
                 <FDropdownMenu
@@ -171,7 +169,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                 </FDropdownMenu>
               </Space>
 
-              <FContentText
+              <FComponentsLib.FContentText
                 text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
                 type="negative"
               />

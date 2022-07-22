@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import { GraphData } from '@antv/g6/lib';
-import { FTipText } from '../../FText';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
+import FComponentsLib from '@freelog/components-lib';
 
 // // <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '待执行' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
 G6.registerNode('relationship-resource', {
@@ -202,7 +202,7 @@ function FAntvG6RelationshipGraph({ nodes, edges, width = 920, height = 500 }: F
         height: height,
       }}
     >
-      <FTipText
+      <FComponentsLib.FTipText
         type='first'
         text={'无关系树'}
       />

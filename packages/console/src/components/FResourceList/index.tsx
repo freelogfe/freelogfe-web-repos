@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import { List } from 'antd';
-import { FRectBtn } from '../FButton';
-import { FContentText } from '../FText';
 import FResourceStatusBadge from '../FResourceStatusBadge';
 import { FUtil } from '@freelog/tools-lib';
-
+import FComponentsLib from '@freelog/components-lib';
 
 export interface FResourceListProps {
   loading: boolean;
@@ -41,14 +39,14 @@ function FResourceList({
       ? (<div>
         <div style={{ height: 10 }} />
         <div className={styles.footer}>
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             onClick={() => onLoadMord && onLoadMord()}
-          >加载更多</FRectBtn>
+          >加载更多</FComponentsLib.FRectBtn>
         </div>
       </div>)
       : (resourceObjects.length > 0 && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-          <FContentText type='additional1' text={'没有更多了~'} />
+          <FComponentsLib.FContentText type='additional1' text={'没有更多了~'} />
         </div>))}
     dataSource={resourceObjects}
     renderItem={(i: FResourceListProps['resourceObjects'][number]) => (
@@ -56,7 +54,7 @@ function FResourceList({
         <div>
           <div className={styles.title}>
             <div>
-              <FContentText
+              <FComponentsLib.FContentText
                 singleRow={true}
                 text={i.title}
               />
@@ -65,25 +63,25 @@ function FResourceList({
             {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased' : 'offline'} />}
           </div>
           <div style={{ height: 2 }} />
-          <FContentText
+          <FComponentsLib.FContentText
             type={'additional2'}
             text={(i.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(i.resourceType)}` : '未设置类型') + ` | 更新时间 ${i.time}`}
           />
         </div>
         {
           (!showRemoveIDsOrNames?.includes(i.title) && !showRemoveIDsOrNames?.includes(i.id))
-            ? (<FRectBtn
+            ? (<FComponentsLib.FRectBtn
               type='secondary'
               size='small'
               onClick={() => onSelect && onSelect(i)}
               disabled={!i.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-            >选择</FRectBtn>)
-            : (<FRectBtn
+            >选择</FComponentsLib.FRectBtn>)
+            : (<FComponentsLib.FRectBtn
               type='danger2'
               size='small'
               onClick={() => onDelete && onDelete(i)}
               disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-            >移除</FRectBtn>)
+            >移除</FComponentsLib.FRectBtn>)
         }
       </div>
     )}

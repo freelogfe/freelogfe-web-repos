@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './status.less';
 import * as AHooks from 'ahooks';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { Divider } from 'antd';
-import { FRectBtn } from '@/components/FButton';
-import { router } from 'umi';
-import useUrlState from '@ahooksjs/use-url-state';
+import { FUtil } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface StatusProps {
   status: 101 | 10 | 0 | 1 | 2;
@@ -47,7 +44,7 @@ function Status({ status, tipData, jump }: StatusProps) {
       jump && jump('Apply');
     }
     if ([10, 0].includes(status)) {
-      location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting();
+      window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting();
     }
   }
 
@@ -76,9 +73,9 @@ function Status({ status, tipData, jump }: StatusProps) {
       {status !== 2 && <span className={styles.title2 + ' mb-40'}>{tipDatas[status]}</span>}
       {status === 2 && <div className={styles.tip + ' mb-40'}>{tipDatas[status]}</div>}
       <div className="flex-row-center">
-        <FRectBtn className="mb-40 " onClick={act}>
+        <FComponentsLib.FRectBtn className="mb-40 " onClick={act}>
           {buttonDatas[status]}
-        </FRectBtn>
+        </FComponentsLib.FRectBtn>
       </div>
       {[0, 2].includes(status) && (
         <span

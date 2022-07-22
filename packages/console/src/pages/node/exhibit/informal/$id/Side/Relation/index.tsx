@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
-import { FTextBtn } from '@/components/FButton';
 import FCoverImage from '@/components/FCoverImage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -17,7 +16,7 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
   }
 
   return (<div className={styles.info}>
-    <FContentText text={informExhibitInfoPage.side_Resource_Relation?.cardTitle} type='highlight' />
+    <FComponentsLib.FContentText text={informExhibitInfoPage.side_Resource_Relation?.cardTitle} type='highlight' />
     <div style={{ height: 20 }} />
     <div className={styles.cover}>
       {/*<img*/}
@@ -36,18 +35,18 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
     </div>
 
     <div style={{ height: 12 }} />
-    <FTextBtn
+    <FComponentsLib.FTextBtn
       type='default'
       onClick={() => {
         window.open(informExhibitInfoPage.side_Resource_Relation?.linkToDetails);
       }}
     >
-      <FContentText
+      <FComponentsLib.FContentText
         style={{ width: 220 }}
         singleRow
         text={informExhibitInfoPage.side_Resource_Relation?.name}
       />
-    </FTextBtn>
+    </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
     <div style={{ fontSize: 12, color: '#666' }}>{informExhibitInfoPage.side_Resource_Relation?.type}</div>
   </div>);

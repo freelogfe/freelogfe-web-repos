@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
@@ -44,7 +42,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FContentText
+              <FComponentsLib.FContentText
                 type='highlight'
                 text={r.name}
                 singleRow
@@ -82,7 +80,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
             </div>
             <div style={{ height: 5 }} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='additional2'
               text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />
@@ -143,21 +141,21 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: r.id,
                   }));
                 }}>
-                <FContentText
+                <FComponentsLib.FContentText
                   type='highlight'
                   text={r.name}
                   singleRow
                   className={styles.titleText}
                   style={{ maxWidth: r.status === 0 ? 170 : 225 }}
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               {/*{*/}
               {/*  r.status === 0 && (<>*/}
               {/*    <FResourceStatusBadge status={'offline'} />*/}
@@ -201,7 +199,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
             </div>
             <div style={{ height: 5 }} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='additional2'
               text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
             />

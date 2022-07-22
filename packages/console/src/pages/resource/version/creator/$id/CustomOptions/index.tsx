@@ -3,7 +3,6 @@ import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
-import { FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   ImportLastVersionDataAction,
@@ -12,7 +11,6 @@ import {
 import FUp from '@/components/FIcons/FUp';
 import { FDown, FInfo } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
-import { FContentText } from '@/components/FText';
 import {
   ConnectState,
   // StorageObjectEditorModelState
@@ -24,6 +22,7 @@ import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
+import FComponentsLib from '@freelog/components-lib';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -55,7 +54,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             });
           }}
           rightTop={<Space size={20}>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               style={{ fontSize: 12, fontWeight: 600 }}
               type='primary'
               onClick={() => {
@@ -71,10 +70,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   }],
                 });
               }}
-            >补充属性</FTextBtn>
+            >补充属性</FComponentsLib.FTextBtn>
             {
               resourceVersionCreatorPage.preVersionBaseProperties.length > 0
-                ? (<FTextBtn
+                ? (<FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={() => {
@@ -84,7 +83,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     });
                     onChange({ dataIsDirty: true });
                   }}
-                >从上个版本导入</FTextBtn>)
+                >从上个版本导入</FComponentsLib.FTextBtn>)
                 : undefined
             }
           </Space>}
@@ -118,7 +117,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         <div style={{ height: 20 }} />
 
         <Space size={5}>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             style={{ fontSize: 12, fontWeight: 600 }}
             type='default'
             onClick={() => {
@@ -129,7 +128,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           >
             <span>自定义选项（高级）</span>
             {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
-          </FTextBtn>
+          </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
             <div><FInfo /></div>
           </FTooltip>
@@ -141,7 +140,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             <div style={{ height: 20 }} />
 
             <Space size={40}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 style={{ fontSize: 12, fontWeight: 600 }}
                 onClick={() => {
                   onChange({
@@ -159,9 +158,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     customOptionsEditorVisible: true,
                   });
                 }}
-              >添加选项</FTextBtn>
+              >添加选项</FComponentsLib.FTextBtn>
               {
-                resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FTextBtn
+                resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
                   onClick={() => {
                     dispatch<ImportLastVersionDataAction>({
@@ -169,7 +168,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       payload: 'optionProps',
                     });
                     onChange({ dataIsDirty: true });
-                  }}>从上个版本导入</FTextBtn>)
+                  }}>从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
             </Space>
@@ -217,7 +216,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     });
                   }}
                 />)
-                : (<FContentText text={'暂无自定义选项…'} type='negative' />)
+                : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
             }
 
           </>)

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText } from '../FText';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import FCustomOptions, { Data } from './FCustomOptions';
 import FDrawer from '../FDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FCustomOptionsEditorDrawerProps {
   visible: boolean;
@@ -67,13 +66,13 @@ function FCustomOptionsEditorDrawer({
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
-      <FRectBtn
+      >取消</FComponentsLib.FTextBtn>
+      <FComponentsLib.FRectBtn
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
@@ -81,7 +80,7 @@ function FCustomOptionsEditorDrawer({
             || eds.descriptionError !== '';
         })}
         onClick={onClick_ConfirmBtn}
-      >确定</FRectBtn>
+      >确定</FComponentsLib.FRectBtn>
     </Space>}
     afterVisibleChange={(visible) => {
       if (!visible) {
@@ -104,7 +103,7 @@ function FCustomOptionsEditorDrawer({
     }
 
     <Space size={10}>
-      <FCircleBtn
+      <FComponentsLib.FCircleBtn
         size='small'
         onClick={onClick_AddNewItem}
       />
@@ -112,7 +111,7 @@ function FCustomOptionsEditorDrawer({
         style={{ cursor: 'pointer', display: 'inline-block' }}
         onClick={onClick_AddNewItem}
       >
-        <FContentText
+        <FComponentsLib.FContentText
           text={'新增一项属性'}
         />
       </div>

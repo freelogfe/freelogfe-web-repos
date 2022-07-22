@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
@@ -21,9 +19,8 @@ import {
   OnChange_Resource_Type_Action,
   initStates, OnClick_CreateBtn_Action,
 } from '@/models/resourceCreatorPage';
-// import FAutoComplete from '@/components/FAutoComplete';
 import { router, RouterTypes } from 'umi';
-import { FCheck, FInfo, FLoading } from '@/components/FIcons';
+import { FCheck, FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import Prompt from 'umi/prompt';
@@ -31,6 +28,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -166,7 +164,7 @@ function ResourceCreator({
         <FFormLayout>
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
-              <FContentText text={`${user.info?.username} /`} />
+              <FComponentsLib.FContentText text={`${user.info?.username} /`} />
               &nbsp;
               <FInput
                 errorText={resourceCreatorPage.nameErrorText}
@@ -258,16 +256,16 @@ interface HeaderProps {
 function Header({ onClickCreate, disabled = false }: HeaderProps) {
   return (
     <div className={styles.Header}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         // text={FUtil.I18n.message('create_resource')}
         text={'创建资源'}
         type='h1'
       />
 
       <Space size={30}>
-        <FRectBtn disabled={disabled} onClick={onClickCreate}>
+        <FComponentsLib.FRectBtn disabled={disabled} onClick={onClickCreate}>
           {FI18n.i18nNext.t('create')}
-        </FRectBtn>
+        </FComponentsLib.FRectBtn>
       </Space>
     </div>
   );

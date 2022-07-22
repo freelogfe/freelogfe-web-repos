@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Col, Row, Space, Switch } from 'antd';
+import { Col, Row, Space } from 'antd';
 import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
 import { Data } from '../index';
-// import FUtil1 from '@/utils';
 import { FUtil ,FI18n} from '@freelog/tools-lib';
-import { FTitleText } from '../../../FText';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PropertyProps {
   data: Data;
@@ -28,7 +27,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           <i className={styles.dot} />
-          <FTitleText type='h4' text={FI18n.i18nNext.t('key')} />
+          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('key')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
@@ -64,7 +63,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       </Col>
       <Col span={12}>
         <Space size={5}>
-          <FTitleText type='h4' text={FI18n.i18nNext.t('property_remark')} />
+          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('property_remark')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
@@ -99,7 +98,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
         !hideTypeSelect && (<Col span={6}>
           <Space size={5}>
             <i className={styles.dot} />
-            <FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />
+            <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />
           </Space>
           <div style={{ height: 5 }} />
           <FSelect
@@ -127,7 +126,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <Space size={5}>
               {/*<i className={styles.dot} />*/}
               {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
-              <FTitleText type='h4' text={'自定义选项'} />
+              <FComponentsLib.FTitleText type='h4' text={'自定义选项'} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
@@ -160,7 +159,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           : (<Col span={18}>
             <Space size={5}>
               <i className={styles.dot} />
-              <FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
+              <FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput

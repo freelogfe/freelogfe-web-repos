@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
-import { FTitleText, FContentText } from '@/components/FText';
 import FAuthPanel from './FAuthPanel';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
@@ -21,9 +20,7 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import { FNodes, FUser } from '@/components/FIcons';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import { FCircleBtn, FTextBtn } from '@/components/FButton';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
 import FResource from '@/components/FIcons/FResource';
@@ -32,6 +29,7 @@ import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
+import FComponentsLib from '@freelog/components-lib';
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -67,7 +65,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
 
   const columns: ColumnsType<ResourceAuthPageModelState['contractsAuthorize'][number]> = [
     {
-      title: (<FTitleText
+      title: (<FComponentsLib.FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'被授权方'}
         type='table'
@@ -85,7 +83,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
           {
             record.licenseeIdentityType === 'user' && (<FUser />)
           }
-          <FContentText
+          <FComponentsLib.FContentText
             type='highlight'
             text={record.authorizedParty}
           />
@@ -93,7 +91,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
       },
     },
     {
-      title: (<FTitleText
+      title: (<FComponentsLib.FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'所签授权策略｜合约状态'}
         type='table'
@@ -106,7 +104,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
         //  (<FContentText text={record.authorizedParty}/>)
         return (<div>
           <Space size={5}>
-            <FContentText
+            <FComponentsLib.FContentText
               type='highlight'
               text={record.contractName}
             />
@@ -115,14 +113,14 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
             />
           </Space>
           <div style={{ height: 5 }} />
-          <FContentText type='additional2' text={'创建时间：' + record.createDate} />
-          <FContentText type='additional2' text={'合约ID：' + record.contractID} />
+          <FComponentsLib.FContentText type='additional2' text={'创建时间：' + record.createDate} />
+          <FComponentsLib.FContentText type='additional2' text={'合约ID：' + record.contractID} />
         </div>);
       },
     },
     {
       // title: FUtil.I18n.message('contract_signed_time'),
-      title: (<FTitleText
+      title: (<FComponentsLib.FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'操作'}
         type='table'
@@ -130,12 +128,12 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
       dataIndex: 'operation',
       width: 80,
       render: (_: any, record) => {
-        return (<FTextBtn onClick={() => {
+        return (<FComponentsLib.FTextBtn onClick={() => {
           onChange({
             detailContractID: record.contractID,
           });
 
-        }}>查看合约</FTextBtn>);
+        }}>查看合约</FComponentsLib.FTextBtn>);
       },
     },
   ];
@@ -153,7 +151,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
     </Helmet>
     <FLeftSiderLayout
       sider={<Sider />}
-      header={<FTitleText
+      header={<FComponentsLib.FTitleText
         text={FI18n.i18nNext.t('authorization_infomation')}
         type='h1'
       />}>
@@ -162,7 +160,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
           dot={resourceAuthPage.policies.length === 0}
           title={FI18n.i18nNext.t('authorization_plan')}
           extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
-            <FCircleBtn
+            <FComponentsLib.FCircleBtn
               size='small'
               onClick={() => {
                 dispatch<ChangeAction>({
@@ -173,14 +171,14 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
                 });
               }}
             />
-            <FTextBtn type='primary' onClick={() => {
+            <FComponentsLib.FTextBtn type='primary' onClick={() => {
               dispatch<ChangeAction>({
                 type: 'resourceAuthPage/change',
                 payload: {
                   policyEditorVisible: true,
                 },
               });
-            }}>添加策略</FTextBtn>
+            }}>添加策略</FComponentsLib.FTextBtn>
           </Space>)}
         >
           <FPolicies />
@@ -209,7 +207,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
             {
               resourceAuthPage.contractsAuthorized.length > 0
                 ? (<FAuthPanel />)
-                : ((<FContentText type='negative' text={'暂无合约'} />))
+                : ((<FComponentsLib.FContentText type='negative' text={'暂无合约'} />))
             }
           </Space>
 
@@ -224,7 +222,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
                 dataSource={resourceAuthPage.contractsAuthorize}
                 pagination={false}
               />)
-              : (<FContentText type='negative' text={'暂无合约'} />)
+              : (<FComponentsLib.FContentText type='negative' text={'暂无合约'} />)
           }
 
           <FContractDetailsDrawer

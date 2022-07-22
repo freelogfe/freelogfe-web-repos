@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styles from "./index.less";
 import FInput from "@/components/FInput";
-import {FContentText} from "@/components/FText";
-import {FRectBtn} from "@/components/FButton";
 import {FMenuProps} from "@/components/FMenu";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import {FServiceAPI} from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface ResourceObject {
   id: string;
@@ -94,14 +93,14 @@ function Storage({onSelect}: StorageProps) {
         (resourceObjects || []).map((i: ResourceObject) => (
           <div key={i.id} className={styles.bucket}>
             <div>
-              <FContentText text={i.path}/>
+              <FComponentsLib.FContentText text={i.path}/>
               <div style={{height: 2}}/>
-              <FContentText type={'additional2'} text={`资源类型 ${i.type} | 更新时间 ${i.time}`}/>
+              <FComponentsLib.FContentText type={'additional2'} text={`资源类型 ${i.type} | 更新时间 ${i.time}`}/>
             </div>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               type="secondary"
               onClick={() => onSelect && onSelect(i)}
-            >选择</FRectBtn>
+            >选择</FComponentsLib.FRectBtn>
           </div>
         ))
       }

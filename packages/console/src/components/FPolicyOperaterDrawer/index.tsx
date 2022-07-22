@@ -1,10 +1,9 @@
 import { Checkbox, Space } from 'antd';
 import * as React from 'react';
 import styles from './index.less';
-import { FRectBtn, FTextBtn } from '../FButton';
 import FDrawer from '../FDrawer';
 import { PolicyCard } from '../FPolicyList';
-import { FTitleText } from '../FText';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FPolicyOperaterDrawerProps {
   visible: boolean;
@@ -40,17 +39,17 @@ export const FPolicyOperaterDrawer = ({
         visible={visible}
         title={
           <Space size={10}>
-            <FTitleText type="h2" text={`启用策略并上架${typeMapping[type]}`} />
+            <FComponentsLib.FTitleText type="h2" text={`启用策略并上架${typeMapping[type]}`} />
           </Space>
         }
         width={700}
         onClose={() => onCancel()}
         topRight={
           <Space size={30}>
-            <FTextBtn onClick={() => onCancel()}>取消</FTextBtn>
-            <FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type="primary">
+            <FComponentsLib.FTextBtn onClick={() => onCancel()}>取消</FComponentsLib.FTextBtn>
+            <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type="primary">
               上架{typeMapping[type]}
-            </FRectBtn>
+            </FComponentsLib.FRectBtn>
           </Space>
         }
       >

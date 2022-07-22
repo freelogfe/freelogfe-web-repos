@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from './index.less';
-import { FTextBtn } from '@/components/FButton';
 import FPlayer from '@/components/FIcons/FPlayer';
-import { FContentText, FTitleText } from '@/components/FText';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 const nodeData: {
   id: string;
@@ -59,7 +58,7 @@ function Examples({}) {
   return (<div>
     <div style={{ height: 50 }} />
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='negative'
         text={'Freelog为用户展示了一些场景示例，用户可以根据自己的需求选择主题或创建主题来搭建自己的节点'}
       />
@@ -76,7 +75,7 @@ function Examples({}) {
               />
               <div style={{ width: 20 }} />
               <div className={styles.content}>
-                <FTitleText type='h1' text={n.title} />
+                <FComponentsLib.FTitleText type='h1' text={n.title} />
                 {/*<div style={{ height: 10 }} />*/}
                 {/*<Space size={10}>*/}
                 {/*  {*/}
@@ -90,7 +89,7 @@ function Examples({}) {
               </div>
             </div>
             <div className={styles.nodeItem_Right}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={() => {
                   window.open(n.href);
                 }}
@@ -98,7 +97,7 @@ function Examples({}) {
                 <FPlayer />
                 &nbsp;
                 <span>浏览节点</span>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </div>
           </div>);
         })

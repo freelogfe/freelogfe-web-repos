@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import PolicyCard from './PolicyCard';
 import { Dispatch, connect } from 'dva';
 import { ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/resourceAuthPage';
 import { Space } from 'antd';
 import { ConnectState } from '@/models/connect';
-import { FContentText } from '@/components/FText';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -26,7 +25,7 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
     style={{ width: '100%' }}
     direction='vertical'
   >
-    <FContentText type='additional2' text={'可签约的合约'} />
+    <FComponentsLib.FContentText type='additional2' text={'可签约的合约'} />
 
     {activeResource?.policies.map((i) => (
       <FContract_AvailablePolicy_Card

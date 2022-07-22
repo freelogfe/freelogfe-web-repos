@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
 import {RedoOutlined} from '@ant-design/icons';
-import {FTextBtn} from "@/components/FButton";
+import FComponentsLib from '@freelog/components-lib';
 
 interface UploadFailedProps {
   onClick?(): void;
@@ -11,9 +10,9 @@ interface UploadFailedProps {
 function UploadFailed({onClick}: UploadFailedProps) {
   return (<div className={styles.UploadFailed}>
     <span>上传失败</span>
-    <FTextBtn type="primary" onClick={() => onClick && onClick()}>
+    <FComponentsLib.FTextBtn type="primary" onClick={() => onClick && onClick()}>
       <RedoOutlined/>
-    </FTextBtn>
+    </FComponentsLib.FTextBtn>
   </div>);
 }
 

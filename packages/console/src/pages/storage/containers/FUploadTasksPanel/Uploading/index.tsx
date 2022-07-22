@@ -1,10 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Progress, Space} from "antd";
-import {FContentText} from '@/components/FText';
-import {FTextBtn} from '@/components/FButton';
 import {CloseOutlined} from '@ant-design/icons';
-import {Canceler} from "axios";
+import FComponentsLib from '@freelog/components-lib';
 
 interface UploadingProps {
   progress: number;
@@ -18,15 +16,15 @@ function Uploading({progress, cancel}: UploadingProps) {
       className={styles.status}
       size={10}
     >
-      <FContentText text={progress + '%'}/>
+      <FComponentsLib.FContentText text={progress + '%'}/>
       <div style={{width: 100}}>
         <Progress type={'line'} percent={progress} showInfo={false}/>
       </div>
     </Space>
     <div className={styles.action}>
-      <FTextBtn type="default" onClick={() => cancel && cancel()}>
+      <FComponentsLib.FTextBtn type="default" onClick={() => cancel && cancel()}>
         <CloseOutlined/>
-      </FTextBtn>
+      </FComponentsLib.FTextBtn>
     </div>
   </div>);
 }

@@ -2,11 +2,10 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import { FContentText, FTitleText } from '@/components/FText';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -25,7 +24,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
   }
 
   return (<>
-    <FTitleText type='h4'>主资源</FTitleText>
+    <FComponentsLib.FTitleText type='h4'>主资源</FComponentsLib.FTitleText>
 
     <a
       className={styles.signResource + ' ' + (mainResource.id === exhibitInfoPage.contract_SelectedAssociatedID ? styles.activatedSignResource : '')}
@@ -33,7 +32,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         onChange({ contract_SelectedAssociatedID: mainResource.id });
       }}
     >
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         onClick={(e) => {
           e.stopPropagation();
           window.open(FUtil.LinkTo.resourceDetails({
@@ -41,15 +40,15 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
           }));
         }}
       >
-        <FContentText
+        <FComponentsLib.FContentText
           type='highlight'
           text={mainResource.name}
           singleRow
           className={styles.FContentText}
         />
-      </FTextBtn>
+      </FComponentsLib.FTextBtn>
       <div style={{ height: 5 }} />
-      <FContentText
+      <FComponentsLib.FContentText
         type='additional2'
         text={FUtil.Format.resourceTypeKeyArrToResourceType(mainResource.type)}
       />
@@ -65,7 +64,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
     </a>
 
     {
-      otherResource.length > 0 && (<FTitleText type='h4'>基础上抛</FTitleText>)
+      otherResource.length > 0 && (<FComponentsLib.FTitleText type='h4'>基础上抛</FComponentsLib.FTitleText>)
     }
 
     {
@@ -76,7 +75,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
         key={r.id}
       >
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           onClick={(e) => {
             e.stopPropagation();
             window.open(FUtil.LinkTo.resourceDetails({
@@ -84,15 +83,15 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             }));
           }}
         >
-          <FContentText
+          <FComponentsLib.FContentText
             type='highlight'
             text={r.name}
             singleRow
             className={styles.FContentText}
           />
-        </FTextBtn>
+        </FComponentsLib.FTextBtn>
         <div style={{ height: 5 }} />
-        <FContentText
+        <FComponentsLib.FContentText
           type='additional2'
           text={FUtil.Format.resourceTypeKeyArrToResourceType(r.type)}
         />

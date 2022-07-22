@@ -2,18 +2,16 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
-import { FTextBtn } from '@/components/FButton';
 import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -34,7 +32,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
   return (<div>
     {
       selectedResource?.contracts && selectedResource?.contracts.length > 0 ? (<>
-          <FTitleText type='h4'>{FI18n.i18nNext.t('valid_contracts_list')}</FTitleText>
+          <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('valid_contracts_list')}</FComponentsLib.FTitleText>
           <div style={{ height: 5 }} />
           <Space style={{ width: '100%' }} size={15} direction='vertical'>
             {
@@ -48,7 +46,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                 >
                   <div style={{ height: 10 }} />
                   <Space style={{ padding: '0 20px' }} size={10}>
-                    <FContentText type='highlight' text={c.name} />
+                    <FComponentsLib.FContentText type='highlight' text={c.name} />
                   </Space>
                   <div style={{ height: 10 }} />
 
@@ -65,12 +63,12 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
                   <div style={{ height: 10 }} />
                   <Space style={{ padding: '0 20px' }} size={5}>
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='additional2'
                       text={FI18n.i18nNext.t('contract_id') + '：' + c.id}
                     />
                     <FDivider style={{ fontSize: 14 }} />
-                    <FContentText
+                    <FComponentsLib.FContentText
                       type='additional2'
                       text={FI18n.i18nNext.t('contract_signed_time') + '：' + c.createTime}
                     />
@@ -79,7 +77,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
                   <div className={styles.footer}>
                     <div className={styles.action}>
-                      <FContentText
+                      <FComponentsLib.FContentText
                         // text={exhibitInfoPage.pName}
                         text={FI18n.i18nNext.t('use_in_current_exhibit')}
                         type='highlight'
@@ -109,7 +107,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                         <div className={styles.otherTitle}>
                           <div style={{ height: 10 }} />
 
-                          <FTextBtn onClick={() => {
+                          <FComponentsLib.FTextBtn onClick={() => {
                             onChange({
                               contract_Associated: exhibitInfoPage.contract_Associated.map((asso) => {
                                 if (asso.id !== selectedResource.id) {
@@ -130,7 +128,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                               }),
                             });
                           }}>
-                            <FTitleText type='h4'>
+                            <FComponentsLib.FTitleText type='h4'>
                               <span>{FI18n.i18nNext.t('use_for_exhibit')}</span>
                               &nbsp;
                               {
@@ -138,8 +136,8 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                                   ? (<FUp />)
                                   : (<FDown />)
                               }
-                            </FTitleText>
-                          </FTextBtn>
+                            </FComponentsLib.FTitleText>
+                          </FComponentsLib.FTextBtn>
                         </div>
 
                         {
@@ -152,7 +150,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                                   });
                                   const currentExhibitChecked = currentExhibit?.contractIDs.includes(c.id);
                                   return (<div key={ex.id} className={styles.otherAction}>
-                                    <FContentText
+                                    <FComponentsLib.FContentText
                                       text={ex.name}
                                       type='highlight'
                                     />
@@ -201,10 +199,10 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-          <FTextBtn onClick={() => {
+          <FComponentsLib.FTextBtn onClick={() => {
             set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
             // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-          }}>查看已终止合约</FTextBtn>
+          }}>查看已终止合约</FComponentsLib.FTextBtn>
         </div>
       </>)
     }

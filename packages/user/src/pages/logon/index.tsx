@@ -1,13 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { Popover, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
-// import FFooter from '@/layouts/FFooter';
 import FComponentsLib from '@freelog/components-lib';
 import {
   OnBlurEmailInputAction,
@@ -115,20 +112,20 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         <div className={styles.box}>
           <FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
-          <FTitleText text={'注册成功'} />
+          <FComponentsLib.FTitleText text={'注册成功'} />
           <div style={{ height: 40 }} />
           <Space size={0}>
-            <FContentText
+            <FComponentsLib.FContentText
               text={`${logonPage.waitingTimeToLogin}s后返回登陆界面；`}
               type='negative'
             />
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 gotoLogin();
               }}
             >
               立即登录
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
         </div>
@@ -144,7 +141,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         <div className='flex-column align-center flex-1'>
           <div className='flex-3'></div>
           <div className='shrink-0 flex-column-center'>
-            <FTitleText text={'注册freelog帐户'} type='h1' />
+            <FComponentsLib.FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
           <div className='flex-2'></div>
         </div>
@@ -154,7 +151,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'用户名'} />
+                <FComponentsLib.FTitleText type='h4' text={'用户名'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -191,7 +188,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'注册方式'} />
+                <FComponentsLib.FTitleText type='h4' text={'注册方式'} />
               </div>
               <Space size={25}>
                 <FRadio
@@ -205,7 +202,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'手机号'} type='additional2' />
+                  <FComponentsLib.FContentText text={'手机号'} type='additional2' />
                 </FRadio>
                 <FRadio
                   checked={logonPage.accountType === 'email'}
@@ -219,7 +216,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                     });
                   }}
                 >
-                  <FContentText text={'邮箱'} type='additional2' />
+                  <FComponentsLib.FContentText text={'邮箱'} type='additional2' />
                 </FRadio>
               </Space>
             </div>
@@ -286,7 +283,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'验证码'} />
+                <FComponentsLib.FTitleText type='h4' text={'验证码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -310,7 +307,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                   });
                 }}
               />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 style={{ width: 110 }}
                 disabled={
                   logonPage.verifyCodeReSendWait > 0 || isVerifyAccountError
@@ -324,7 +321,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                 {logonPage.verifyCodeReSendWait === 0
                   ? '获取验证码'
                   : `${logonPage.verifyCodeReSendWait}秒`}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
             {logonPage.verificationCodeInputError && (
               <div className={styles.errorTip}>
@@ -340,7 +337,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               <div className={styles.title}>
                 <i>*</i>
                 <div style={{ width: 5 }} />
-                <FTitleText type='h4' text={'密码'} />
+                <FComponentsLib.FTitleText type='h4' text={'密码'} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -372,7 +369,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           </div>
 
           <div style={{ height: 40 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             style={{ width: 360 }}
             disabled={isVerifyAllFormError}
             onClick={() => {
@@ -382,13 +379,13 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             }}
           >
             注册
-          </FRectBtn>
+          </FComponentsLib.FRectBtn>
         </div>
 
         <div className='flex-1 flex-column'>
           <Space size={0}>
-            <FContentText className='mt-95' text={'已有账户？'} type='normal' />
-            <FTextBtn
+            <FComponentsLib.FContentText className='mt-95' text={'已有账户？'} type='normal' />
+            <FComponentsLib.FTextBtn
               className='mt-95'
               type='primary'
               onClick={() => {
@@ -406,7 +403,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               }}
             >
               马上登录
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>
       </div>

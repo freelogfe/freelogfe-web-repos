@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import {
   // FEdit, FLine,
   FMappingRuleAdd,
@@ -141,7 +140,7 @@ function MappingRule({
 
     </Space>}
     title={<div className={styles.popoverTitle}>
-      <FContentText
+      <FComponentsLib.FContentText
         type='highlight'
         text={'映射规则'}
       />

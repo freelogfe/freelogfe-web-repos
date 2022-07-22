@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleBtn} from '@/components/FButton';
 import {Progress, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -13,9 +11,9 @@ import FTooltip from "@/components/FTooltip";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
-// import FUtil1 from "@/utils";
 import {FUtil, FI18n} from '@freelog/tools-lib';
 import { router } from 'umi';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -37,12 +35,12 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
         <div style={{height: 30}}/>
         <div className={styles.title}>
           <Space size={10}>
-            <FTitleText
+            <FComponentsLib.FTitleText
               // text={`我的存储空间`}
               text={FI18n.i18nNext.t('my_buckets')}
               type="h4"
             />
-            <FTitleText
+            <FComponentsLib.FTitleText
               text={`${(storageHomePage.bucketList || []).length}/5`}
               type="h4"
             />
@@ -50,7 +48,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
 
           {
             (storageHomePage.bucketList || []).length < 5
-              ? (<FCircleBtn
+              ? (<FComponentsLib.FCircleBtn
                 type="transparent"
                 onClick={() => {
                   router.replace(FUtil.LinkTo.storageSpace({
@@ -65,7 +63,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 trigger="click"
                 placement="topLeft"
               >
-                <FCircleBtn type="transparent"/>
+                <FComponentsLib.FCircleBtn type="transparent"/>
               </FTooltip>)
           }
 
@@ -118,7 +116,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 })
             }
           </div>) : (<div style={{padding: '0 40px'}}>
-            <FContentText
+            <FComponentsLib.FContentText
               type="additional2"
               // text={'单击“ + ”创建您的第一个项目。'}
               text={FI18n.i18nNext.t('my_buckets_list_empty')}
@@ -142,7 +140,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <div style={{height: 60}}/>
 
           <div className={styles.title}>
-            <FTitleText text={'系统存储空间'} type="h4"/>
+            <FComponentsLib.FTitleText text={'系统存储空间'} type="h4"/>
           </div>
 
           {/*<div style={{height: 18}}/>*/}

@@ -1,12 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
-// import FUtil1 from '@/utils';
-import { FTextBtn } from '@/components/FButton';
 import {
-  // FAntvG6AuthorizationGraph,
-  // FAntvG6DependencyGraph,
-  // FAntvG6RelationshipGraph,
   FViewportTabs,
 } from '@/components/FAntvG6';
 import FDrawer from '@/components/FDrawer';
@@ -20,6 +14,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FResultTip from '@/components/FResultTip';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -45,14 +40,14 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
   return (<div>
     <div className={styles.title}>
       <FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
           dispatch<OnClick_Graph_FullScreenBtn_Action>({
             type: 'informExhibitInfoPage/onClick_Graph_FullScreenBtn',
           });
         }}
-      >全屏查看</FTextBtn>
+      >全屏查看</FComponentsLib.FTextBtn>
     </div>
     <div style={{ height: 20 }} />
     <FViewportTabs

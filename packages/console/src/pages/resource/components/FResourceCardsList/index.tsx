@@ -3,13 +3,11 @@ import styles from './index.less';
 import { Button, Space } from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
-import { FRectBtn } from '@/components/FButton';
 import { router } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FDropdown from '@/components/FDropdown';
 import categoryData from '@/utils/category';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -224,9 +222,9 @@ function FResourceCardsList({
             placeholder={FI18n.i18nNext.t('search_resource')}
           />
           {/* {showGotoCreateBtn && (
-            <FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
+            <FComponentsLib.FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
               {FI18n.i18nNext.t('create_resource')}
-            </FRectBtn>
+            </FComponentsLib.FRectBtn>
           )} */}
         </Space>
       </div>

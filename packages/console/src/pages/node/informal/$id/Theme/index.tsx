@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FTextBtn } from '@/components/FButton';
 import {
   InformalNodeManagerPageModelState,
   OnCancel_AddThemeDrawer_Action,
@@ -24,7 +22,6 @@ import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import FCoverImage from '@/components/FCoverImage';
@@ -33,6 +30,7 @@ import FTooltip from '@/components/FTooltip';
 import { FWarning } from '@/components/FIcons';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -80,10 +78,10 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText text={'主题管理'} />
+            <FComponentsLib.FTitleText text={'主题管理'} />
             <Space size={30}>
 
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='default'
                 onClick={() => {
                   dispatch<OnClickThemesAddBtnAction>({
@@ -94,9 +92,9 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   <FAdd />
                   <span>{FI18n.i18nNext.t('btn_add_test_theme')}</span>
                 </Space>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
 
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='default'
                 onClick={() => {
                   dispatch<OnClickThemesReplaceBtnAction>({
@@ -107,7 +105,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   <FMappingRuleReplace />
                   <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                 </Space>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
 
               <div>
                 <FInput
@@ -270,7 +268,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                             status={t.associatedPresentableId === '' ? t.originInfo.type : 'exhibit'}
                           />
                           <div style={{ width: 5 }} />
-                          <FContentText
+                          <FComponentsLib.FContentText
                             type='highlight'
                             text={t.testResourceName}
                             singleRow
@@ -280,7 +278,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                         <div style={{ height: 6 }} />
                         <div className={styles.itemVersion}>
                           {
-                            t.originInfo.type !== 'object' && (<FContentText
+                            t.originInfo.type !== 'object' && (<FComponentsLib.FContentText
                               text={`展示版本 ${t.originInfo.version}`}
                               type='additional1'
                             />)

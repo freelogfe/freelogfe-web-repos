@@ -4,8 +4,8 @@ import { Checkbox, Space } from 'antd';
 import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
-import { FContentText } from '@/components/FText';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -60,7 +60,7 @@ function Policies({ resourceVersionCreatorPage, dispatch }: PoliciesProps) {
     direction='vertical'
   >
     {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
-    <FContentText type='additional2' text={'可签约的策略'} />
+    <FComponentsLib.FContentText type='additional2' text={'可签约的策略'} />
     {enabledPolicies.map((i) => (
       <div key={i.id} className={styles.Policy}>
         <div style={{ height: 15 }} />

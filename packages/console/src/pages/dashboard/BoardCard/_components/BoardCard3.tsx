@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-// import { FTextBtn } from '@/components/FButton';
-// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface BoardCard3Props {
   unfold: boolean;
@@ -42,22 +39,22 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={'成功创建1个节点即可。'} type="highlight" />
+                      <FComponentsLib.FContentText text={'成功创建1个节点即可。'} type="highlight" />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >节点商使用教程</a>
-                        <FContentText text={'（视频）或'} />
+                        <FComponentsLib.FContentText text={'（视频）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >节点创建教程</a>
-                        <FContentText text={'（图文）创建节点。'} />
+                        <FComponentsLib.FContentText text={'（图文）创建节点。'} />
                       </Space>
                     </div>
                   }
@@ -69,22 +66,22 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={'资源被签约到节点即变为展品。'} type="highlight" />
+                      <FComponentsLib.FContentText text={'资源被签约到节点即变为展品。'} type="highlight" />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >展品添加上线教程</a>
-                        <FContentText text={'（图文）或'} />
+                        <FComponentsLib.FContentText text={'（图文）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >节点商使用教程</a>
-                        <FContentText text={'（视频）在资源市场添加并上线展品。'} />
+                        <FComponentsLib.FContentText text={'（视频）在资源市场添加并上线展品。'} />
                       </Space>
                       <div style={{ height: 15 }} />
                       <div style={{ color: '#EE4040' }}>
@@ -100,22 +97,22 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={'主题决定节点的展示外观。'} type="highlight" />
+                      <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type="highlight" />
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'可查阅'} />
+                        <FComponentsLib.FContentText text={'可查阅'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >主题激活教程</a>
-                        <FContentText text={'（图文）或'} />
+                        <FComponentsLib.FContentText text={'（图文）或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type="primary"
                         >节点商使用教程</a>
-                        <FContentText text={'（视频）激活主题。'} />
+                        <FComponentsLib.FContentText text={'（视频）激活主题。'} />
                       </Space>
                     </div>
                   }
@@ -127,7 +124,7 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
                   placement="right"
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={item.taskConfigDescription} type="highlight" />
+                      <FComponentsLib.FContentText text={item.taskConfigDescription} type="highlight" />
                     </div>
                   }
                 >
@@ -154,22 +151,22 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
             placement="right"
             content={
               <div className={styles.tooltipDisplay}>
-                <FContentText text={'主题决定节点的展示外观。'} type="highlight" />
+                <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type="highlight" />
                 <div style={{ height: 15 }} />
                 <Space size={5}>
-                  <FContentText text={'可查阅'} />
+                  <FComponentsLib.FContentText text={'可查阅'} />
                   <a
                     href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                     target={'_blank'}
                     type="primary"
                   >主题激活教程</a>
-                  <FContentText text={'（图文）或'} />
+                  <FComponentsLib.FContentText text={'（图文）或'} />
                   <a
                     href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                     target={'_blank'}
                     type="primary"
                   >节点商使用教程</a>
-                  <FContentText text={'（视频）激活主题。'} />
+                  <FComponentsLib.FContentText text={'（视频）激活主题。'} />
                 </Space>
               </div>
             }
@@ -183,7 +180,7 @@ function BoardCard3({ unfold, onMouseEnter, data }: BoardCard3Props) {
             placement="right"
             content={
               <div className={styles.tooltipDisplay}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={'分享节点可以获得更多签约消费，快去复制链接和好友分享你的节点吧。'}
                   type="highlight"
                 />

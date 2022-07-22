@@ -2,13 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FObjectCard from './ObjectCard';
-// import { LoadingOutlined } from '@ant-design/icons';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FObjectSelector from '@/containers/FObjectSelector';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
@@ -17,9 +15,9 @@ import {
   HandleObjectInfoAction,
 } from '@/models/resourceVersionCreatorPage';
 import FTable from '@/components/FTable';
-import { FContentText } from '@/components/FText';
 import * as AHooks from 'ahooks';
 import { FLoading } from '@/components/FIcons';
+import FComponentsLib from '@freelog/components-lib';
 
 const errorTexts = {
   duplicated: FI18n.i18nNext.t('resource_exist'),
@@ -289,11 +287,11 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                     }}
                     showUploadList={false}
                   >
-                    <FRectBtn
+                    <FComponentsLib.FRectBtn
                       type='default'
-                    >{FI18n.i18nNext.t('upload_from_local')}</FRectBtn>
+                    >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
                   </FUpload>
-                  <FRectBtn
+                  <FComponentsLib.FRectBtn
                     type='default'
                     onClick={() => {
                       // setModalVisible(true)
@@ -301,7 +299,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                         selectedFileObjectDrawerVisible: true,
                       });
                     }}
-                  >{FI18n.i18nNext.t('choose_from_storage')}</FRectBtn>
+                  >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
                 </Space>)
             }
 
@@ -323,7 +321,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
               resourceVersionCreatorPage.selectedFileStatus === 3 &&
               (<Space size={10}>
                 <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
-                <FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={() => {
                   onChange({
                     // resourceObject: value,
                     // resourceObjectError: {sha1: '', text: ''},
@@ -334,7 +332,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                   //   type: 'resourceVersionCreatorPage/fetchRawProps',
                   // });
                   handleDataUploadOrImportObject();
-                }}>继续上传/导入</FTextBtn>
+                }}>继续上传/导入</FComponentsLib.FTextBtn>
               </Space>)
             }
 
@@ -358,7 +356,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       dataIndex: 'resourceName',
                       width: 400,
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceName}
                           style={{ maxWidth: 370 }}
                         />);
@@ -369,7 +367,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       dataIndex: 'resourceType',
                       width: 100,
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceType}
                         />);
                       },
@@ -378,7 +376,7 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       title: '版本',
                       dataIndex: 'resourceVersion',
                       render(value: any, record: any, index: number) {
-                        return (<FContentText
+                        return (<FComponentsLib.FContentText
                           text={record.resourceVersion}
                         />);
                       },
@@ -387,9 +385,9 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
                       title: '操作',
                       dataIndex: 'operation',
                       render(value: any, record: any, index: number) {
-                        return (<FTextBtn onClick={() => {
+                        return (<FComponentsLib.FTextBtn onClick={() => {
                           window.open(record.url);
-                        }}>查看</FTextBtn>);
+                        }}>查看</FComponentsLib.FTextBtn>);
                       },
                     },
                   ]}

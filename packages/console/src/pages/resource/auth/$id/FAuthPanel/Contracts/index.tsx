@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import {
   // FetchAuthorizedAction,
   OnTrigger_AuthorizedContractEvent_Action,
@@ -9,12 +8,12 @@ import {
   UpdateAuthorizedAction,
 } from '@/models/resourceAuthPage';
 import { connect, Dispatch } from 'dva';
-// import FUtil1 from '@/utils';
 import FDivider from '@/components/FDivider';
 import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -46,7 +45,7 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
     style={{ width: '100%' }}
     direction='vertical'
   >
-    <FContentText type='additional2' text={'当前合约'} />
+    <FComponentsLib.FContentText type='additional2' text={'当前合约'} />
 
     {
       activeResource?.contracts.map((k) => (<div key={k.id} className={styles.Policy}>
@@ -71,12 +70,12 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         </div>
         <div style={{ height: 10 }} />
         <Space style={{ padding: '0 20px' }} size={2}>
-          <FContentText
+          <FComponentsLib.FContentText
             type='additional2'
             text={FI18n.i18nNext.t('contract_id') + '：' + k.id}
           />
           <FDivider style={{ fontSize: 14 }} />
-          <FContentText
+          <FComponentsLib.FContentText
             type='additional2'
             text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
           />
@@ -86,7 +85,7 @@ function Contracts({ resourceAuthPage, dispatch }: ContractsProps) {
         {
           (<div className={styles.PolicyInfo}>
             <div className={styles.versionControl}>
-              <FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FContentText>
+              <FComponentsLib.FContentText type='additional2'>当前合约在此资源上被多个版本应用：</FComponentsLib.FContentText>
               <div style={{ height: 8 }} />
               <div className={styles.allVersions}>
                 {k.versions.map((i) => <Space size={8} key={i.version}>

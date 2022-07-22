@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import { FCircleBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState } from '@/models/connect';
 import { withRouter, router } from 'umi';
@@ -22,6 +21,7 @@ import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -302,7 +302,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
             {
               // match.path === '/resource/:id/$version/creator'
               resourceInfo.showPage.creator ? (
-                <FCircleBtn
+                <FComponentsLib.FCircleBtn
                   type="transparent"
                   onClick={() => {
                     fMessage('正在创建版本', 'warning');
@@ -322,10 +322,10 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
                   }}
                   okText={FI18n.i18nNext.t('btn_check')}
                 >
-                  <FCircleBtn type="transparent" />
+                  <FComponentsLib.FCircleBtn type="transparent" />
                 </Popconfirm>
               ) : (
-                <FCircleBtn onClick={gotoCreator} type="transparent" />
+                <FComponentsLib.FCircleBtn onClick={gotoCreator} type="transparent" />
               )
             }
           </div>

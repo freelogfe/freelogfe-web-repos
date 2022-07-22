@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FContentText, FTipText } from '@/components/FText';
-import { FCircleBtn, FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
 import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -22,12 +20,12 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
 
   return (<div>
     <Space size={15}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'授权策略'}
         type='h3'
       />
       {
-        exhibitInfoPage.policy_List.length !== 0 && (<FCircleBtn
+        exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
           onClick={() => dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
             payload: {
@@ -41,13 +39,13 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     {
       exhibitInfoPage.policy_List.length === 0
         ? (<div className={styles.empty}>
-          <FTipText
+          <FComponentsLib.FTipText
             type='second'
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={'无策略'}
           />
           <div style={{ height: 20 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             onClick={() => dispatch<ChangeAction>({
               type: 'exhibitInfoPage/change',
               payload: {
@@ -55,7 +53,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               },
             })}
             type='primary'
-          >{FI18n.i18nNext.t('add_authorization_plan')}</FRectBtn>
+          >{FI18n.i18nNext.t('add_authorization_plan')}</FComponentsLib.FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {
@@ -64,7 +62,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               key={p.policyId}
             >
               <div className={styles.title}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={p.policyName}
                 />
                 <Space size={8}>

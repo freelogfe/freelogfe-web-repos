@@ -1,15 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FUtil1 from '@/utils';
 import FSwitch from '../FSwitch';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '../FText';
 import FModal from '../FModal';
 import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FI18n } from '@freelog/tools-lib';
 import FTooltip from '../FTooltip';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FPolicyListProps {
   dataSource: PolicyFullInfo_Type[];
@@ -68,17 +67,18 @@ export function PolicyCard({
   return (
     <div className={styles.policy}>
       <div className={styles.header}>
-        <FContentText
-          type="highlight"
+        <FComponentsLib.FContentText
+          type='highlight'
           text={fullInfo.policyName}
           style={{ maxWidth: 150 }}
           singleRow
         />
-        {activeBtnShow && (
-          <Space size={8}>
-            <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
-              {FI18n.i18nNext.t('btn_activate_auth_plan')}
-            </label>
+            
+      {activeBtnShow &&
+        <Space size={8}>
+          <label
+            style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
+
             <FTooltip
               title={'已上架的标的物必须启用至少一个授权策略'}
               zIndex={onlineDisable ? 1 : -1}
@@ -97,47 +97,50 @@ export function PolicyCard({
         )}
       </div>
       <div style={{ height: 10 }} />
-      <div style={{ padding: '0 20px' }}>
-        <FPolicyDisplay containerHeight={170} fullInfo={fullInfo} />
-      </div>
-
-      <a
-        className={styles.PolicyFullScreenBtn}
-        onClick={() => {
-          setFullScreenVisible(true);
-        }}
-      >
-        <FFullScreen style={{ fontSize: 12 }} />
-      </a>
-      <FModal
-        title={null}
-        visible={fullScreenVisible}
-        onCancel={() => {
-          setFullScreenVisible(false);
-        }}
-        width={1240}
-        footer={null}
-        centered
-      >
-        <div className={styles.ModalTile}>
-          <FTitleText text={fullInfo.policyName} type="h2" />
-          <div style={{ width: 20 }} />
-          <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
-            {FI18n.i18nNext.t('btn_activate_auth_plan')}
-          </label>
-          <div style={{ width: 10 }} />
-          <FSwitch
-            disabled={onlineDisable}
-            checked={fullInfo.status === 1}
-            onChange={(value) => {
-              onOnlineChange && onOnlineChange(value);
-            }}
-          />
-        </div>
-        <div style={{ padding: '0 20px' }}>
-          <FPolicyDisplay containerHeight={770} fullInfo={fullInfo} />
-        </div>
-      </FModal>
+    <div style={{ padding: '0 20px' }}>
+      <FPolicyDisplay
+        containerHeight={170}
+        fullInfo={fullInfo}
+      />
     </div>
-  );
+
+    <a
+      className={styles.PolicyFullScreenBtn}
+      onClick={() => {
+        setFullScreenVisible(true);
+      }}
+    ><FFullScreen style={{ fontSize: 12 }} /></a>
+    <FModal
+      title={null}
+      visible={fullScreenVisible}
+      onCancel={() => {
+        setFullScreenVisible(false);
+      }}
+      width={1240}
+      footer={null}
+      centered
+    >
+      <div className={styles.ModalTile}>
+        <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
+        <div style={{ width: 20 }} />
+        <label
+          style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>{FI18n.i18nNext.t('btn_activate_auth_plan')}</label>
+        <div style={{ width: 10 }} />
+        <FSwitch
+          disabled={onlineDisable}
+          checked={fullInfo.status === 1}
+          onChange={(value) => {
+            onOnlineChange && onOnlineChange(value);
+          }}
+        />
+      </div>
+      <div style={{ padding: '0 20px' }}>
+        <FPolicyDisplay
+          containerHeight={770}
+          fullInfo={fullInfo}
+        />
+      </div>
+    </FModal>
+
+  </div>);
 }

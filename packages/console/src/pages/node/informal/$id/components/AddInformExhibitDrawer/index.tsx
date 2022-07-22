@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import styles from './index.less';
-// import FSelect from '@/components/FSelect';
 import FInput from '@/components/FInput';
 import FCheckbox from '@/components/FCheckbox';
-import { FContentText } from '@/components/FText';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FDrawer from '@/components/FDrawer';
-// import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FAddInformExhibitDrawerProps {
   visible: boolean;
@@ -218,18 +215,18 @@ function FAddInformExhibitDrawer({
     title={isTheme ? FI18n.i18nNext.t('import_test_theme') : '添加测试展品'}
     visible={visible}
     topRight={<Space size={30}>
-      <FTextBtn
+      <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
 
           onCancel && onCancel();
         }}
-      >取消</FTextBtn>
-      <FRectBtn
+      >取消</FComponentsLib.FTextBtn>
+      <FComponentsLib.FRectBtn
         disabled={!list.some((l) => l.checked)}
         onClick={onConfirm_Drawer}
         type='primary'
-      >添加</FRectBtn>
+      >添加</FComponentsLib.FRectBtn>
     </Space>}
     afterVisibleChange={onChange_DrawerVisible}
   >
@@ -347,7 +344,7 @@ function FAddInformExhibitDrawer({
                         <div style={{ width: 15 }} />
                         <div className={styles.itemContent}>
                           <div className={styles.itemName}>
-                            <FContentText
+                            <FComponentsLib.FContentText
                               singleRow
                               text={l.name}
                             />
@@ -356,7 +353,7 @@ function FAddInformExhibitDrawer({
                             {l.disabledReason && <label className={styles.itemNameLabel}>{l.disabledReason}</label>}
                           </div>
                           <div style={{ height: 2 }} />
-                          <FContentText
+                          <FComponentsLib.FContentText
                             text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
                             type='additional2'
                           />

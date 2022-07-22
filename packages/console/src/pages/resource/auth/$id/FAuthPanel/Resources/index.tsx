@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
-import { FTextBtn } from '@/components/FButton';
 import { FUtil } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -45,7 +44,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
           className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
           <div>
             <div className={styles.title}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 style={{
                   flexShrink: 1,
                 }}
@@ -57,14 +56,14 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                   }));
                 }}
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   text={i.title}
                   singleRow
                   style={{ maxWidth: 280 }}
                   className={styles.FContentText}
                   type='highlight'
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
 
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
               {/*  <FResourceStatusBadge*/}
@@ -73,9 +72,9 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
               {/*</div>*/}
             </div>
             <div style={{ height: 9 }} />
-            <FContentText type='additional2'>
+            <FComponentsLib.FContentText type='additional2'>
               <span>{i.resourceType}</span>
-            </FContentText>
+            </FComponentsLib.FContentText>
             <div style={{ height: 9 }} />
             <FResourceContractLabels contracts={i.contracts.map((j) => {
               return {

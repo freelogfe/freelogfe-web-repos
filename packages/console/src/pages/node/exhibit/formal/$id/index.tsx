@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
 import { Checkbox, Space } from 'antd';
 import Policies from './Policies';
@@ -12,18 +11,16 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
   AddAPolicyAction,
   ChangeAction,
-  FetchInfoAction,
+  // FetchInfoAction,
   OnMountPageAction,
   OnUnmountPageAction,
-  UpdateStatusAction,
+  // UpdateStatusAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
-import { FLoading, FWarning } from '@/components/FIcons';
+import { FWarning } from '@/components/FIcons';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
-import { FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
@@ -32,6 +29,7 @@ import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -221,7 +219,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         <div className={styles.header}>
           <div className={styles.nav}>
             {/*<FLink to={}>*/}
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => {
                 window.open(
                   FUtil.LinkTo.nodeManagement({ nodeID: exhibitInfoPage.exhibit_BelongNode_ID }),
@@ -230,17 +228,17 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               style={{ fontWeight: 600 }}
               type="default"
             >
-              <FContentText
+              <FComponentsLib.FContentText
                 type="negative"
                 text={exhibitInfoPage.exhibit_BelongNode_Name}
                 className={styles.nodeName}
               />
-            </FTextBtn>
+            </FComponentsLib.FTextBtn>
             {/*</FLink>*/}
             <div style={{ width: 2 }} />
-            <FContentText type="negative" text={'>'} />
+            <FComponentsLib.FContentText type="negative" text={'>'} />
             <div style={{ width: 2 }} />
-            <FTitleText
+            <FComponentsLib.FTitleText
               text={exhibitInfoPage.exhibit_Name}
               style={{
                 maxWidth: 800,

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { FContentText, FTitleText } from '@/components/FText';
-import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import FDrawer from '@/components/FDrawer';
@@ -15,6 +12,7 @@ import {
   OnClick_NodeDate_ConfirmBtn_Action,
 } from '@/models/settingPage';
 import fConfirmModal from '@/components/fConfirmModal';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PrivacyProps {
   dispatch: Dispatch;
@@ -30,13 +28,13 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
         <Space size={10} direction='vertical' className={styles.info}>
           <div className={styles.row}>
             <div className={styles.left}>
-              <FContentText text={'已存储的节点数据文件'} type='normal' />
+              <FComponentsLib.FContentText text={'已存储的节点数据文件'} type='normal' />
             </div>
             <div className={styles.right}>
-              <FContentText text={settingPage.nodeDataSize} type='highlight' />
+              <FComponentsLib.FContentText text={settingPage.nodeDataSize} type='highlight' />
               <div style={{ width: 30 }} />
               {
-                settingPage.nodeDataSize !== '0 B' && (<FTextBtn
+                settingPage.nodeDataSize !== '0 B' && (<FComponentsLib.FTextBtn
                   type='danger'
                   onClick={() => {
                     // OnClick_DataCleaningBtn_Action
@@ -44,7 +42,7 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
                       type: 'settingPage/onClick_DataCleaningBtn',
                     });
                   }}
-                >清理节点数据</FTextBtn>)
+                >清理节点数据</FComponentsLib.FTextBtn>)
               }
 
             </div>
@@ -58,15 +56,15 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
       title={'清理节点数据'}
       width={700}
       topRight={<Space size={30}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='default'
           onClick={() => {
             dispatch<OnCancel_NodeDate_Drawer_Action>({
               type: 'settingPage/onCancel_NodeDate_Drawer',
             });
           }}
-        >取消</FTextBtn>
-        <FRectBtn
+        >取消</FComponentsLib.FTextBtn>
+        <FComponentsLib.FRectBtn
           disabled={!settingPage.nodeDataList.some((nd) => {
             return nd.checked;
           })}
@@ -82,7 +80,7 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
             });
 
           }}
-        >清理</FRectBtn>
+        >清理</FComponentsLib.FRectBtn>
       </Space>}
     >
       <div className={styles.nodesList}>
@@ -108,13 +106,13 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
             />
           </div>
           <div className={styles.nodeName}>
-            <FTitleText text={'节点名称/地址'} type='table' />
+            <FComponentsLib.FTitleText text={'节点名称/地址'} type='table' />
           </div>
           <div className={styles.nodeSize}>
-            <FTitleText text={'数据文件大小'} type='table' />
+            <FComponentsLib.FTitleText text={'数据文件大小'} type='table' />
           </div>
           <div className={styles.nodeDateTime}>
-            <FTitleText text={'最近访问时间'} type='table' />
+            <FComponentsLib.FTitleText text={'最近访问时间'} type='table' />
           </div>
         </div>
 
@@ -136,15 +134,15 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
                 />
               </div>
               <div className={styles.nodeName}>
-                <FContentText text={nd.name} type='highlight' />
+                <FComponentsLib.FContentText text={nd.name} type='highlight' />
                 <div style={{ height: 2 }} />
-                <FContentText text={nd.url} type='additional2' />
+                <FComponentsLib.FContentText text={nd.url} type='additional2' />
               </div>
               <div className={styles.nodeSize}>
-                <FContentText text={nd.size} type='highlight' />
+                <FComponentsLib.FContentText text={nd.size} type='highlight' />
               </div>
               <div className={styles.nodeDateTime}>
-                <FContentText text={nd.dateTime} type='highlight' />
+                <FComponentsLib.FContentText text={nd.dateTime} type='highlight' />
               </div>
             </div>);
           })

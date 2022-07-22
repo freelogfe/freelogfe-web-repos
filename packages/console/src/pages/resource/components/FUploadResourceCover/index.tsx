@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import FUploadCover from '@/components/FUploadCover';
-import { FContentText } from '@/components/FText';
 import { FCloudUpload } from '@/components/FIcons';
 import fMessage from '@/components/fMessage';
-// import FUtil1 from '@/utils';
 import FCoverImage from '@/components/FCoverImage';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FUploadResourceCoverProps {
   value?: string;
@@ -43,9 +42,9 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
         <a className={styles.ReUpload}>{FI18n.i18nNext.t('replace_resource_image')}</a>
       </FUploadCover>}
       <div style={{ height: 15 }} />
-      <FContentText type='additional2' text={FI18n.i18nNext.t('rules_resource_image')} />
+      <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('rules_resource_image')} />
       <div style={{ height: 5 }} />
-      <FContentText type='additional2' text={'未上传封面时，默认使用系统封面。'} />
+      <FComponentsLib.FContentText type='additional2' text={'未上传封面时，默认使用系统封面。'} />
     </div>
   </div>);
 }

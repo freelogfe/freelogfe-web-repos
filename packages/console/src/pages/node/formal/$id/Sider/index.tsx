@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
@@ -10,8 +9,8 @@ import FLink from '@/components/FLink';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FShare } from '@/components/FShare';
-import { FTextBtn } from '@/components/FButton';
 import FTooltip from '@/components/FTooltip';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -30,7 +29,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 30 }} />
 
         <div className={styles.title}>
-          <FTitleText type='h2' text={nodeManagerPage.nodeName} />
+          <FComponentsLib.FTitleText type='h2' text={nodeManagerPage.nodeName} />
           <div style={{ height: 15 }} />
           <Space size={10} className={styles.url}>
             <a
@@ -46,11 +45,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               iconStyle={{ fontSize: 14 }}
             />
             <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
-              <FTextBtn>
+              <FComponentsLib.FTextBtn>
                 <FTooltip title='分享节点'>
                   <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 </FTooltip>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FShare>
           </Space>
         </div>

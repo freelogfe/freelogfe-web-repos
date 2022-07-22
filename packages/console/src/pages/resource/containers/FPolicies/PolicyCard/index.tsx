@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from "@/components/FText";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
-import {FTextBtn} from "@/components/FButton";
 import FDropdownMenu from "@/components/FDropdownMenu";
-// import FUtil1 from "@/utils";
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PolicyCardProps {
   title: string;
@@ -18,7 +16,7 @@ interface PolicyCardProps {
 function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCardProps) {
   return (<div className={styles.policy}>
     <div className={styles.policyHeader}>
-      <FContentText text={title} singleRow={true}/>
+      <FComponentsLib.FContentText text={title} singleRow={true}/>
       <FDropdownMenu
         onChange={(value: any) => {
           if (value !== status) {
@@ -39,7 +37,7 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
     </div>
     <div style={{height: 3}}/>
     <div className={styles.fullscreen}>
-      <FTextBtn type="default" onClick={onPreview}>全屏查看</FTextBtn>
+      <FComponentsLib.FTextBtn type="default" onClick={onPreview}>全屏查看</FComponentsLib.FTextBtn>
     </div>
   </div>);
 }

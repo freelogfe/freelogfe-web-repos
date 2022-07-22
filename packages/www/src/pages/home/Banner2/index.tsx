@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
 import img_CircularBlue from '@/assets/home/circular-blue.png';
 import img_CircularGreen from '@/assets/home/circular-green.png';
 import img_LatticeBlue from '@/assets/home/lattice-blue.png';
@@ -14,6 +12,7 @@ import img_Case5 from '@/assets/home/case5.jpg';
 import img_Case6 from '@/assets/home/case6.jpg';
 import img_Case7 from '@/assets/home/case7.jpg';
 import img_Case8 from '@/assets/home/case8.jpg';
+import FComponentsLib from '@freelog/components-lib';
 
 import 'animate.css';
 
@@ -84,14 +83,14 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FTitleText text={'小说/漫画连载'} type='h1' />
+          <FComponentsLib.FTitleText text={'小说/漫画连载'} type='h1' />
           <div style={{ height: 15 }} />
-          <FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
+          <FComponentsLib.FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small' style={{ padding: '0 15px' }}>小说场景</FRectBtn>
+            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>小说场景</FComponentsLib.FRectBtn>
             <div style={{ width: 10 }} />
-            <FRectBtn size='small' style={{ padding: '0 15px' }}>漫画场景</FRectBtn>
+            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>漫画场景</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -105,12 +104,12 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FTitleText text={'摄影/设计作品集'} type='h1' />
+          <FComponentsLib.FTitleText text={'摄影/设计作品集'} type='h1' />
           <div style={{ height: 15 }} />
-          <FTitleText text={'版权保护 • 再创作变现'} type='h4' />
+          <FComponentsLib.FTitleText text={'版权保护 • 再创作变现'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FRectBtn>
+            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -124,12 +123,12 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FTitleText text={'游戏中心'} type='h1' />
+          <FComponentsLib.FTitleText text={'游戏中心'} type='h1' />
           <div style={{ height: 15 }} />
-          <FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
+          <FComponentsLib.FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FRectBtn>
+            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -143,12 +142,12 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FTitleText text={'更多可能，等你探索'} type='h1' />
+          <FComponentsLib.FTitleText text={'更多可能，等你探索'} type='h1' />
           <div style={{ height: 15 }} />
-          <FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
+          <FComponentsLib.FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FRectBtn size='small' style={{ padding: '0 15px' }}>马上注册</FRectBtn>
+            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>马上注册</FComponentsLib.FRectBtn>
           </div>
         </div>
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {FTitleText, FContentText} from '@/components/FText';
 import styles from './index.less';
-import {Space, Tooltip} from 'antd';
+import {Space} from 'antd';
 import {FInfo} from '@/components/FIcons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
 import FTooltip from "@/components/FTooltip";
+import FComponentsLib from '@freelog/components-lib';
 
 interface OptionProps {
   dispatch: Dispatch;
@@ -21,7 +21,7 @@ function Option({dispatch, resourceDetailPage}: OptionProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'自定义选项'}
         type="h3"
       />
@@ -31,7 +31,7 @@ function Option({dispatch, resourceDetailPage}: OptionProps) {
           resourceDetailPage.resourceVersion_Info.options.map((i) => {
             return (<div key={i.key}>
               <Space size={10}>
-                <FContentText
+                <FComponentsLib.FContentText
                   text={i.key}
                 />
                 {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
@@ -15,7 +14,6 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
@@ -42,7 +40,6 @@ import {
   // IRules,
 } from '@/models/informalNodeManagerPage';
 import FUpload from '@/components/FUpload';
-// import FUtil1 from '@/utils';
 import Prompt from 'umi/prompt';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
@@ -53,8 +50,8 @@ import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
-// import FForbid from '@/components/FIcons/FForbid';
 import FFail from '@/components/FIcons/FFail';
+import FComponentsLib from '@freelog/components-lib';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -132,7 +129,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
     />
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <FTitleText text={'映射规则管理'} />
+        <FComponentsLib.FTitleText text={'映射规则管理'} />
         <div style={{ width: 10 }} />
         <TypesCaption />
         <div style={{ width: 50 }} />
@@ -157,16 +154,16 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
               }}
               showUploadList={false}
             >
-              <FTextBtn type='primary'>
+              <FComponentsLib.FTextBtn type='primary'>
                 <Space size={5}>
                   <FImport />
                   <span>导入</span>
                 </Space>
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FUpload>
             {
               informalNodeManagerPage.rule_RuleList.length > 0 && (<>
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type='primary'
                   onClick={() => {
                     dispatch<OnClick_Rule_ExportBtn_Action>({
@@ -178,8 +175,8 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                     <FExport />
                     <span>导出</span>
                   </Space>
-                </FTextBtn>
-                <FTextBtn
+                </FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn
                   type='danger'
                   onClick={() => {
                     dispatch<OnClick_Rule_DeleteBtn_Action>({
@@ -191,7 +188,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                     <FDelete />
                     <span>删除</span>
                   </Space>
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
               </>)
             }
 
@@ -201,7 +198,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
       </div>
 
       {
-        informalNodeManagerPage.rule_PageStatus === 'normal' && (<FTextBtn
+        informalNodeManagerPage.rule_PageStatus === 'normal' && (<FComponentsLib.FTextBtn
           onClick={() => {
             dispatch<OnClick_Rule_EntryCodingBtn_Action>({
               type: 'informalNodeManagerPage/onClick_Rule_EntryCodingBtn',
@@ -211,12 +208,12 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             <FCode />
             <span>进入代码模式</span>
           </Space>
-        </FTextBtn>)
+        </FComponentsLib.FTextBtn>)
       }
 
       {
         informalNodeManagerPage.rule_PageStatus === 'coding'
-        && (<FTextBtn
+        && (<FComponentsLib.FTextBtn
           onClick={() => {
             if (informalNodeManagerPage.rule_CodeIsDirty) {
               fConfirmModal({
@@ -242,50 +239,50 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             <FExit />
             <span>退出代码模式</span>
           </Space>
-        </FTextBtn>)
+        </FComponentsLib.FTextBtn>)
       }
 
       {
         informalNodeManagerPage.rule_PageStatus === 'export'
         && (<Space size={30}>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='default'
             onClick={() => {
               dispatch<OnClick_Rule_Export_CancelBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Export_CancelBtn',
               });
             }}
-          >取消</FTextBtn>
-          <FRectBtn
+          >取消</FComponentsLib.FTextBtn>
+          <FComponentsLib.FRectBtn
             type='primary'
             onClick={() => {
               dispatch<OnClick_Rule_Export_ConfirmBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Export_ConfirmBtn',
               });
             }}
-          >导出</FRectBtn>
+          >导出</FComponentsLib.FRectBtn>
         </Space>)
       }
 
       {
         informalNodeManagerPage.rule_PageStatus === 'delete'
         && (<Space size={30}>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='default'
             onClick={() => {
               dispatch<OnClick_Rule_Delete_CancelBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Delete_CancelBtn',
               });
             }}
-          >{FI18n.i18nNext.t('btn_cancel')}</FTextBtn>
-          <FRectBtn
+          >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
+          <FComponentsLib.FRectBtn
             type='danger1'
             onClick={async () => {
               dispatch<OnClick_Rule_Delete_ConfirmBtn_Action>({
                 type: 'informalNodeManagerPage/onClick_Rule_Delete_ConfirmBtn',
               });
             }}
-          >删除</FRectBtn>
+          >删除</FComponentsLib.FRectBtn>
         </Space>)
       }
     </div>
@@ -314,14 +311,14 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             />
 
             <div style={{ height: 15 }} />
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               disabled={!informalNodeManagerPage.rule_CodeIsDirty || informalNodeManagerPage.rule_CodeState === 'checking'}
               onClick={() => {
                 dispatch<OnClick_Rule_SaveBtn_Action>({
                   type: 'informalNodeManagerPage/onClick_Rule_SaveBtn',
                 });
               }}
-            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FI18n.i18nNext.t('msg_verifying') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rule_CodeState === 'checking' ? FI18n.i18nNext.t('msg_verifying') : '校验并保存'}</FComponentsLib.FRectBtn>
 
             <div style={{ height: 20 }} />
 

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FExhibitAuthorizedContracts from '@/components/FExhibitAuthorizedContracts';
 import { OnChanged_ExhibitAuthorized_Action } from '@/models/informExhibitInfoPage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -14,7 +14,7 @@ interface ContractsProps {
 function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
 
   return (<div>
-    <FTitleText
+    <FComponentsLib.FTitleText
       text={'关联合约'}
       type='h3'
     />

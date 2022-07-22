@@ -1,11 +1,8 @@
 import * as React from 'react';
 import {Divider, Popover, Space} from 'antd';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
-import {FCircleBtn, FTextBtn} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
-// import {FEdit} from "@/components/FIcons";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDivider from "@/components/FDivider";
 import FComponentsLib from '@freelog/components-lib';
@@ -45,7 +42,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
     ref={(div) => setRef(div)}
   >
     <div style={{height: 30}}/>
-    <FContentText text={title}/>
+    <FComponentsLib.FContentText text={title}/>
     <div style={{height: 15}}/>
     <div className={styles.resources}>
       {
@@ -55,27 +52,27 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         >
           <div className={styles.resourceLeft}>
             <Space size={8}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 onClick={() => window.open(d.linkTo)}
                 // type="default"
               >
-                <FContentText
+                <FComponentsLib.FContentText
                   type="highlight"
                   singleRow={true}
                   text={d.name}
                   className={styles.resourceName}
                 />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
               {d.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
             </Space>
             <div style={{height: 9}}/>
             <Space size={5} className={styles.resourceInfo}>
-              <FContentText type="additional2">{d.type || '未设置类型'}</FContentText>
+              <FComponentsLib.FContentText type="additional2">{d.type || '未设置类型'}</FComponentsLib.FContentText>
               {
                 d.version && (<>
                   <FDivider style={{fontSize: 14}}/>
                   <Space size={5}>
-                    <FContentText type="additional2">版本范围：{d.version}</FContentText>
+                    <FComponentsLib.FContentText type="additional2">版本范围：{d.version}</FComponentsLib.FContentText>
                     <FVersionHandlerPopover
                       value={d.version}
                       versionOptions={d.versions || []}
@@ -90,7 +87,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                           }
                         }));
                       }}
-                    ><FTextBtn><FComponentsLib.FIcons.FEdit style={{fontSize: 12}}/></FTextBtn></FVersionHandlerPopover>
+                    ><FComponentsLib.FTextBtn><FComponentsLib.FIcons.FEdit style={{fontSize: 12}}/></FComponentsLib.FTextBtn></FVersionHandlerPopover>
                   </Space>
                 </>)
               }
@@ -104,7 +101,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                     }}
                     content={<BasisUpthrows dataSource={d.baseUpthrows || []}/>}
                   >
-                    <div><FContentText type="additional2">{d.baseUpthrows?.length || 0}个基础上抛</FContentText></div>
+                    <div><FComponentsLib.FContentText type="additional2">{d.baseUpthrows?.length || 0}个基础上抛</FComponentsLib.FContentText></div>
                   </Popover>
                   }
                 </>)
@@ -113,7 +110,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
             </Space>
           </div>
           <div className={styles.resourceRight}>
-            <FCircleBtn
+            <FComponentsLib.FCircleBtn
               type="danger"
               onClick={() => {
                 changeData(dataSource.filter((ds, index) => index !== i))

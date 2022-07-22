@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FRectBtn } from '../FButton';
 import { FLoading } from '../FIcons';
-import { FTipText } from '../FText';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FListFooterProps {
   state: 'andMore' | 'loading' | 'noMore';
@@ -13,14 +12,14 @@ interface FListFooterProps {
 function FListFooter({ state, onClickLoadMore }: FListFooterProps) {
   return (<div className={styles.styles}>
     {
-      state === 'andMore' && (<FRectBtn
+      state === 'andMore' && (<FComponentsLib.FRectBtn
         type='primary'
         onClick={() => {
           onClickLoadMore && onClickLoadMore();
         }}
       >
         加载更多
-      </FRectBtn>)
+      </FComponentsLib.FRectBtn>)
     }
 
     {
@@ -28,7 +27,7 @@ function FListFooter({ state, onClickLoadMore }: FListFooterProps) {
     }
 
     {
-      state === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
+      state === 'noMore' && (<FComponentsLib.FTipText text={'没有更多~'} type='third' />)
     }
 
   </div>);

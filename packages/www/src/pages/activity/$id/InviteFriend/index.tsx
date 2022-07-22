@@ -4,17 +4,12 @@ import card from '@/assets/invitefriend/card.png';
 import cash from '@/assets/invitefriend/cash.png';
 import code from '@/assets/invitefriend/code.png';
 import friend from '@/assets/invitefriend/friend.png';
-// import gift from '@/assets/invitefriend/gift.svg';
 import invite from '@/assets/invitefriend/invite.png';
-// import inviteicon from '@/assets/invitefriend/inviteicon.png';
-// import menu from '@/assets/invitefriend/menu.png';
 import task from '@/assets/invitefriend/task.png';
-// import FTooltip from '@/components/FTooltip';
 import copy from 'copy-to-clipboard';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
-
-import { FRectBtn } from '@/components/FButton';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InviteFriendProps {}
 
@@ -168,7 +163,7 @@ function InviteFriend({}: InviteFriendProps) {
                 <div className="step flex-column-center">4</div>
               </div>
             </div>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               className="invite-button mt-88"
               disabled={userData.usedCount >= userData.limitCount}
               onClick={(e) => {
@@ -177,7 +172,7 @@ function InviteFriend({}: InviteFriendProps) {
               }}
             >
               立即邀请
-            </FRectBtn>
+            </FComponentsLib.FRectBtn>
             <div className="flex-row w-260 space-between mt-10">
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
@@ -263,14 +258,14 @@ function InviteFriend({}: InviteFriendProps) {
           className="input mb-20"
           value={userData.textCopy || ''}
         />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           onClick={() => {
             copy(userData.textCopy);
             fMessage(<span>复制成功！</span>, 'success');
           }}
         >
           复制内容
-        </FRectBtn>
+        </FComponentsLib.FRectBtn>
       </div>
     </div>
   );

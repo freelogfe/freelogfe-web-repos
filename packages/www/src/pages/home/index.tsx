@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FRectBtn } from '@/components/FButton';
 import FPentagram from '@/components/FIcons/FPentagram';
 
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
@@ -33,7 +32,7 @@ function HomePage({}: HomePageProps) {
         <div style={{ height: 20 }} />
         <h3 className={styles.banner1H3}>支持漫画、小说、图片、游戏、视频、音乐、插件、主题等各类型资源</h3>
         <div style={{ height: 40 }} />
-        <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
+        <FComponentsLib.FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FComponentsLib.FRectBtn>
       </div>
     </div>
 
@@ -54,7 +53,7 @@ function HomePage({}: HomePageProps) {
           <div style={{ height: 30 }} />
           <div className={styles.banner3_Content_DisplayH2}>根据不同人群创建不同授权策略，实现交易定制化、自动化，满足你的多样变现需求。</div>
           <div style={{ height: 30 }} />
-          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
         </div>
       </div>
 
@@ -67,7 +66,7 @@ function HomePage({}: HomePageProps) {
           <div style={{ height: 30 }} />
           <div className={styles.banner3_Content_DisplayH2}>资源可被他人签约为素材进行再创作，拓宽资源变现渠道。</div>
           <div style={{ height: 30 }} />
-          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
         </div>
         <div />
       </div>
@@ -82,7 +81,7 @@ function HomePage({}: HomePageProps) {
           <div style={{ height: 30 }} />
           <div className={styles.banner3_Content_DisplayH2}>新增节点商角色，专注资源运营，提高变现效率， 你可以专注生产优质资源，轻松获益。</div>
           <div style={{ height: 30 }} />
-          <FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FRectBtn>
+          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
         </div>
       </div>
 
@@ -94,7 +93,7 @@ function HomePage({}: HomePageProps) {
       <div style={{ height: 40 }} />
       <h3 className={styles.banner4H2}>支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现</h3>
       <div style={{ height: 40 }} />
-      <FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FRectBtn>
+      <FComponentsLib.FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FComponentsLib.FRectBtn>
     </div>
 
     <FComponentsLib.FPageFooter PopoverPatch={Popover} />

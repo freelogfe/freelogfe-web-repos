@@ -1,18 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
-import { FTextBtn } from '@/components/FButton';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -66,7 +64,7 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
 
   return (<>
     <Space size={15} style={{ width: '100%' }} direction='vertical'>
-      <FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
+      <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
       {
         resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
 
@@ -99,12 +97,12 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
           <div style={{ height: 10 }} />
 
           <Space style={{ padding: '0 20px' }} size={2}>
-            <FContentText
+            <FComponentsLib.FContentText
               type='additional2'
               text={FI18n.i18nNext.t('contract_id') + '：' + k.id}
             />
             <FDivider style={{ fontSize: 14 }} />
-            <FContentText
+            <FComponentsLib.FContentText
               type='additional2'
               text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
             />
@@ -113,7 +111,7 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
           {/*<div style={{height: 10}}/>*/}
 
           <div className={styles.PolicyInfo}>
-            <FContentText type='additional2' text={'当前合约在此资源上被多个版本应用：'} />
+            <FComponentsLib.FContentText type='additional2' text={'当前合约在此资源上被多个版本应用：'} />
             <div style={{ height: 8 }} />
             {/*{FUtil.I18n.message('use_for_version')}：*/}
             <div className={styles.allVersions}>
@@ -127,10 +125,10 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
         resource.terminatedContractIDs.length > 0 && (<div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-            <FTextBtn onClick={() => {
+            <FComponentsLib.FTextBtn onClick={() => {
               // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
               set_TerminatedContractIDs(resource.terminatedContractIDs);
-            }}>查看已终止合约</FTextBtn>
+            }}>查看已终止合约</FComponentsLib.FTextBtn>
             {/*<div style={{ height: 5 }} />*/}
           </div>
         </div>)

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
-import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
-import { FTextBtn } from '@/components/FButton';
 import FAdd from '@/components/FIcons/FAdd';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { connect, Dispatch } from 'dva';
@@ -13,7 +11,6 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
 import categoryData from '@/utils/category';
-// import FDropdown from '@/components/FDropdown';
 import {
   FetchExhibitListAction,
   OnCancel_AddExhibitDrawer_Action,
@@ -111,9 +108,9 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         ) : (
           <>
             <div className={styles.header}>
-              <FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
+              <FComponentsLib.FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
               <Space size={30}>
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type="default"
                   onClick={() => {
                     dispatch<OnClickExhibitsAddBtnAction>({
@@ -126,9 +123,9 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                     {/*<FContentText text={}/>*/}
                     <span>{FI18n.i18nNext.t('title_add_test_exhibit')}</span>
                   </Space>
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
 
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type="default"
                   onClick={() => {
                     // onChange({replaceModalVisible: true});
@@ -142,7 +139,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                     {/*<FContentText text={FI18n.i18nNext.t('btn_replace_resource')}/>*/}
                     <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                   </Space>
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
 
                 <div>
                   <div>

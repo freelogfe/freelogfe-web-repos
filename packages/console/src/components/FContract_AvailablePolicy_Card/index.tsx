@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FContract_AvailablePolicy_Card_Props {
   fullInfo: PolicyFullInfo_Type;
@@ -86,7 +85,7 @@ function FContract_AvailablePolicy_Card({
         </Space>
 
         {
-          canSign && (<FRectBtn
+          canSign && (<FComponentsLib.FRectBtn
             size='small'
             onClick={() => {
               if (allVersions.length > 0) {
@@ -96,7 +95,7 @@ function FContract_AvailablePolicy_Card({
               }
 
             }}
-          >获取授权</FRectBtn>)
+          >获取授权</FComponentsLib.FRectBtn>)
         }
 
       </div>
@@ -125,9 +124,9 @@ function FContract_AvailablePolicy_Card({
       centered
     >
       <div className={styles.ModalTile}>
-        <FTitleText text={fullInfo.policyName} type='h2' />
+        <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
         <div style={{ width: 20 }} />
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           size='small'
           onClick={() => {
             if (allVersions.length > 0) {
@@ -136,7 +135,7 @@ function FContract_AvailablePolicy_Card({
               onClickLicense && onClickLicense([]);
             }
           }}
-        >获取授权</FRectBtn>
+        >获取授权</FComponentsLib.FRectBtn>
       </div>
       <div style={{ padding: '0 20px' }}>
         <FPolicyDisplay
@@ -152,18 +151,18 @@ function FContract_AvailablePolicy_Card({
       width={720}
       title={'获取授权'}
       topRight={<Space size={30}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           type='default'
           onClick={() => {
             onCancel_VersionsDrawer();
           }}
-        >取消</FTextBtn>
+        >取消</FComponentsLib.FTextBtn>
 
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           type='primary'
           disabled={checkedVersions.length === 0}
           onClick={onConfirm_VersionsDrawer}
-        >签约</FRectBtn>
+        >签约</FComponentsLib.FRectBtn>
       </Space>}
       afterVisibleChange={onChange_VersionsDrawer_Visible}
     >
@@ -177,7 +176,7 @@ function FContract_AvailablePolicy_Card({
             onChange_SelectAllCheckbox(e.target.checked);
           }}
         />
-        <FContentText text={'全选'} type='highlight' />
+        <FComponentsLib.FContentText text={'全选'} type='highlight' />
       </Space>
       <div style={{ height: 10, borderBottom: '1px solid #E5E7EB' }} />
       {
@@ -190,7 +189,7 @@ function FContract_AvailablePolicy_Card({
                   onChange_VersionSelected(version, e.target.checked);
                 }}
               />
-              <FContentText text={version} type='highlight' />
+              <FComponentsLib.FContentText text={version} type='highlight' />
             </Space>
           </div>);
         })

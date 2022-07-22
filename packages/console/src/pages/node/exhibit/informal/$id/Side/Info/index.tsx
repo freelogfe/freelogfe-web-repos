@@ -1,19 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
-// import FUploadImage from '@/components/FUploadImage';
 import {
-  // ChangeAction,
   OnChange_Side_Exhibit_Cover_Action, OnChange_Side_Exhibit_Tags_Action,
   OnChangePTitleInputAction,
   OnClick_Side_Exhibit_Title_Action,
   OnClickPTitleCancelBtnAction,
   OnClickPTitleEditBtnAction,
 } from '@/models/informExhibitInfoPage';
-import { FEdit } from '@/components/FIcons';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
@@ -34,7 +29,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
   }
 
   return (<>
-      <FContentText text={'基础信息'} type='highlight' />
+      <FComponentsLib.FContentText text={'基础信息'} type='highlight' />
       <div style={{ height: 20 }} />
 
       <FUploadCover
@@ -61,7 +56,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
 
       <div style={{ height: 20 }} />
 
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'展品标题'}
         type='h4'
       />
@@ -73,7 +68,7 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
               maxWidth: 192,
               overflowWrap: 'break-word',
             }}>
-              <FContentText text={informExhibitInfoPage.side_Exhibit_Title} />
+              <FComponentsLib.FContentText text={informExhibitInfoPage.side_Exhibit_Title} />
             </div>
             <a onClick={() => {
               dispatch<OnClickPTitleEditBtnAction>({
@@ -96,16 +91,16 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
             />
             <div style={{ height: 10 }} />
             <div className={styles.btn}>
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type='default'
                 onClick={() => {
                   dispatch<OnClickPTitleCancelBtnAction>({
                     type: 'informExhibitInfoPage/onClickPTitleCancelBtn',
                   });
                 }}
-              >取消</FTextBtn>
+              >取消</FComponentsLib.FTextBtn>
               <div style={{ width: 15 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 size='small'
                 onClick={async () => {
                   dispatch<OnClick_Side_Exhibit_Title_Action>({
@@ -113,14 +108,14 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
                   });
                 }}
                 type='primary'
-              >确定</FRectBtn>
+              >确定</FComponentsLib.FRectBtn>
             </div>
 
           </>)
       }
       <div style={{ height: 30 }} />
 
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={'展品标签'}
         type='h4'
       />

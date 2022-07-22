@@ -3,15 +3,12 @@ import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { FContentText, FTitleText } from '@/components/FText';
 import FCoverImage from '@/components/FCoverImage';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import FResource from '@/components/FIcons/FResource';
 import { FNodes, FUser } from '@/components/FIcons';
-import { FTextBtn } from '@/components/FButton';
 import FTable from '@/components/FTable';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 
@@ -117,7 +114,7 @@ function FTerminatedContractListDrawer({
 
   const columns1: ColumnsType<FTerminatedContractListDrawerStates['terminatedContracts'][number]> = [
     {
-      title: (<FTitleText type='table' text={'标的物 | 类型 | 所签授权策略'} />),
+      title: (<FComponentsLib.FTitleText type='table' text={'标的物 | 类型 | 所签授权策略'} />),
       dataIndex: 'target',
       key: 'target',
       render(_: any, record) {
@@ -136,7 +133,7 @@ function FTerminatedContractListDrawer({
 
           <div style={{ width: 10 }} />
           <div className={styles.targetInfo}>
-            <FContentText text={record.subjectName} type='highlight' />
+            <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
             <div style={{ height: 10 }} />
             {/*<Space size={5} className={styles.targetInfoLabels}>*/}
             {/*  <label>{record.contractName}</label>*/}
@@ -147,7 +144,7 @@ function FTerminatedContractListDrawer({
       },
     },
     {
-      title: (<FTitleText type='table' text={'授权方 | 被授权方'} />),
+      title: (<FComponentsLib.FTitleText type='table' text={'授权方 | 被授权方'} />),
       dataIndex: 'signatory',
       key: 'signatory',
       render(_: any, record) {
@@ -164,7 +161,7 @@ function FTerminatedContractListDrawer({
             {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
             {/*}*/}
 
-            <FContentText text={record.licensorName} type='highlight' />
+            <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
           </Space>
           <div style={{ height: 10 }} />
           <Space size={5}>
@@ -179,13 +176,13 @@ function FTerminatedContractListDrawer({
               record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
             }
 
-            <FContentText text={record.licenseeName} type='highlight' />
+            <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
           </Space>
         </div>);
       },
     },
     {
-      title: (<FTitleText type='table' text={'合约状态 | 签约时间 | 合约ID'} />),
+      title: (<FComponentsLib.FTitleText type='table' text={'合约状态 | 签约时间 | 合约ID'} />),
       dataIndex: 'contract',
       key: 'contract',
       width: 190,
@@ -207,17 +204,17 @@ function FTerminatedContractListDrawer({
             record.status === 'terminated' && (<span className={styles.terminated}>已终止</span>)
           }
           <div style={{ height: 5 }} />
-          <FContentText text={record.dataTime} type='additional2' />
+          <FComponentsLib.FContentText text={record.dataTime} type='additional2' />
           <div style={{ height: 5 }} />
-          <FContentText text={record.contractID} type='additional2' />
+          <FComponentsLib.FContentText text={record.contractID} type='additional2' />
           <div style={{ height: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             className={styles.hoverVisible}
             type='primary'
             onClick={() => {
               setContractDetailID(record.contractID);
             }}
-          >查看合约详情</FTextBtn>
+          >查看合约详情</FComponentsLib.FTextBtn>
         </div>);
       },
     },

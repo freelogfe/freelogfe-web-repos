@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
-import { FContentText } from '@/components/FText';
 import FPopover from '@/components/FPopover';
-import { FTextBtn } from '@/components/FButton';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface BoardCard1Props {
   unfold: boolean;
@@ -43,7 +40,7 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                   placement='right'
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText
+                      <FComponentsLib.FContentText
                         text={'Freelog平台存在资源作者和节点商两个角色：'}
                         type='highlight'
                       />
@@ -59,7 +56,7 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                             backgroundColor: '#666',
                           }}
                         />
-                        <FContentText
+                        <FComponentsLib.FContentText
                           text={'「资源作者」可通过创建并发行资源获取收益；'}
                           type='highlight'
                         />
@@ -76,20 +73,20 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                             backgroundColor: '#666',
                           }}
                         />
-                        <FContentText
+                        <FComponentsLib.FContentText
                           text={'「节点商」是资源的整合者，通过在节点展示推广资源获取中间人收益。'}
                           type='highlight'
                         />
                       </div>
                       <div style={{ height: 15 }} />
                       <Space size={5}>
-                        <FContentText text={'查看'} />
+                        <FComponentsLib.FContentText text={'查看'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
                           type='primary'
                         >资源作者使用教程</a>
-                        <FContentText text={'或'} />
+                        <FComponentsLib.FContentText text={'或'} />
                         <a
                           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                           target={'_blank'}
@@ -106,7 +103,7 @@ function BoardCard1({ unfold, onMouseEnter, data }: BoardCard1Props) {
                   placement='right'
                   content={
                     <div className={styles.tooltipDisplay}>
-                      <FContentText text={item.taskConfigDescription} type='highlight' />
+                      <FComponentsLib.FContentText text={item.taskConfigDescription} type='highlight' />
                     </div>
                   }
                 >

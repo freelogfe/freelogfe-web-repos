@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { FDown, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
-import { FContentText, FTitleText } from '@/components/FText';
 import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
@@ -16,13 +15,13 @@ import categoryData from '@/utils/category';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
-  FetchExhibitsAction,
+  // FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
-  OnChange_Exhibit_SelectedType_Action,
+  // OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
   OnMount_ExhibitPage_Action,
-  OnOnlineOrOfflineAction,
+  // OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -34,7 +33,6 @@ import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { FTextBtn } from '@/components/FButton';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
@@ -245,7 +243,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
-      title: <FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type="table" />,
+      title: <FComponentsLib.FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type='table' />,
       dataIndex: 'name',
       key: 'name',
       render(_, record) {
@@ -255,11 +253,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <FCoverImage src={record.cover || ''} width={120} style={{ borderRadius: 4 }} />
             <div style={{ width: 10, flexShrink: 0 }} />
             <div className={styles.infos}>
-              <FContentText singleRow text={record.resourceName} />
+              <FComponentsLib.FContentText singleRow text={record.resourceName} />
               <div className={styles.sub}>
                 <label>{record.type}</label>
                 <div style={{ width: 5 }} />
-                <FContentText type="additional2" text={record.title} singleRow />
+                <FComponentsLib.FContentText type='additional2' text={record.title} singleRow />
               </div>
               <div className={styles.polices}>
                 {record.policies.length > 0 ? (
@@ -273,7 +271,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     singleRow
                   />
                 ) : (
-                  <FContentText text={'暂无策略…'} type="additional2" />
+                  <FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />
                 )}
               </div>
             </div>
@@ -291,8 +289,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         return (
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
             <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
-              <FTextBtn
-                type="primary"
+              <FComponentsLib.FTextBtn
+                type='primary'
                 onClick={() => {
                   window.open(
                     FUtil.LinkTo.exhibitManagement({
@@ -302,12 +300,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FComponentsLib.FIcons.FEdit />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FTooltip>
 
             <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-              <FTextBtn
-                type="primary"
+              <FComponentsLib.FTextBtn
+                type='primary'
                 onClick={() => {
                   window.open(
                     FUtil.LinkTo.resourceDetails({
@@ -317,25 +315,25 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FFileSearch />
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </FTooltip>
           </Space>
         );
       },
     },
     {
-      title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_exhibit_version')} />,
+      title: <FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('tableheader_exhibit_version')} />,
       dataIndex: 'version',
       key: 'version',
       // width: 125,
       className: styles.tableVersion,
       render(_, record): any {
-        return <FContentText text={record.version} />;
+        return <FComponentsLib.FContentText text={record.version} />;
       },
     },
     {
       // title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
-      title: <FTitleText type="table" text={'上架'} />,
+      title: <FComponentsLib.FTitleText type='table' text={'上架'} />,
       dataIndex: 'status',
       key: 'status',
       // width: 65,
@@ -387,7 +385,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         sider={<Sider />}
         header={
           <div className={styles.header}>
-            <FTitleText type="h1" text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
+            <FComponentsLib.FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
             <Space size={80}>
               <div>
                 <span>{FI18n.i18nNext.t('resource_type')}：</span>

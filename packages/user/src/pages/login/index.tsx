@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import {
   ChangeAction,
   LoginAction,
@@ -13,12 +11,11 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-import { Space } from 'antd';
 import { history } from 'umi';
 import loginCover from '@/assets/loginCover.png';
 import wechatPng from '@/assets/wechat.png';
-// import FFooter from '@/layouts/FFooter';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -73,13 +70,13 @@ function Login({ dispatch, loginPage }: LoginProps) {
           <div className="flex-column align-center flex-1">
             <div className="flex-3"></div>
             <div className="shrink-0 flex-column-center">
-              <FTitleText type="h1" text={'登录freelog'} />
+              <FComponentsLib.FTitleText type="h1" text={'登录freelog'} />
             </div>
             <div className="flex-2"></div>
           </div>
           <div className=" flex-column-center shrink-0">
             <div className={styles.box} ref={boxRef}>
-              <FTitleText type="h4" text={'用户名/手机号/邮箱'} />
+              <FComponentsLib.FTitleText type="h4" text={'用户名/手机号/邮箱'} />
               <div style={{ height: 5 }} />
               <FInput
                 name="username"
@@ -107,8 +104,8 @@ function Login({ dispatch, loginPage }: LoginProps) {
                   justifyContent: 'space-between',
                 }}
               >
-                <FTitleText type="h4" text={'密码'} />
-                <FTextBtn
+                <FComponentsLib.FTitleText type="h4" text={'密码'} />
+                <FComponentsLib.FTextBtn
                   style={{ fontSize: 12 }}
                   type="primary"
                   onClick={() => {
@@ -124,7 +121,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                   }}
                 >
                   忘记密码？
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -159,7 +156,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
               {loginPage.passwordError && <div>{loginPage.passwordError}</div>}
 
               <div style={{ height: 40 }} />
-              <FRectBtn
+              <FComponentsLib.FRectBtn
                 className={styles.btn}
                 disabled={submitBtnDisabled}
                 onClick={() => {
@@ -170,10 +167,10 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 }}
               >
                 {loginPage.btnState === 'verify' ? '正在登录' : '登 录'}
-              </FRectBtn>
+              </FComponentsLib.FRectBtn>
             </div>
             <div className="w-100x flex-row-reverse ">
-              <FTextBtn
+              <FComponentsLib.FTextBtn
                 type="primary"
                 className="mt-5"
                 onClick={() => {
@@ -189,7 +186,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 }}
               >
                 注册新账号
-              </FTextBtn>
+              </FComponentsLib.FTextBtn>
             </div>
           </div>
           <div className="flex-1 flex-column align-center">
@@ -204,8 +201,8 @@ function Login({ dispatch, loginPage }: LoginProps) {
                     location.host.includes('user.testfreelog.com')
                       ? 'test/'
                       : ''
-                  }v2/thirdParty/weChat/codeHandle?returnUrl=` + 
-                    (urlParams.goTo || 
+                  }v2/thirdParty/weChat/codeHandle?returnUrl=` +
+                    (urlParams.goTo ||
                     location.host.includes('user.testfreelog.com')
                       ? 'http://user.testfreelog.com/'
                       : 'https:user.freelog.com'),

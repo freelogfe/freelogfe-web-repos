@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FBaseLayout from '@/layouts/FBaseLayout';
-import { FContentText, FTitleText } from '@/components/FText';
 import FLink from '@/components/FLink';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
@@ -10,8 +9,7 @@ import { FetchInfoAction } from '@/models/user';
 import UserSVG from '@/assets/user.svg';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { IRouteComponentProps, withRouter } from 'umi';
-// import FUtil1 from '@/utils';
-// import FFooter from '@/layouts/FFooter';
+import FComponentsLib from '@freelog/components-lib';
 
 interface LoggedProps extends IRouteComponentProps {
   dispatch: Dispatch;
@@ -57,9 +55,9 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
             }}
           />
           <div style={{ height: 20 }} />
-          <FTitleText type='h3' text={user.userInfo?.username || ''} />
+          <FComponentsLib.FTitleText type='h3' text={user.userInfo?.username || ''} />
           <div style={{ height: 10 }} />
-          <FContentText type='highlight' text={user.userInfo?.mobile || user.userInfo?.email || ''} />
+          <FComponentsLib.FContentText type='highlight' text={user.userInfo?.mobile || user.userInfo?.email || ''} />
           <div style={{ height: 35 }} />
           <FLink
             to={FUtil.LinkTo.wallet()}

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import styles from './invite.less';
 import * as AHooks from 'ahooks';
-import { FRectBtn } from '@/components/FButton';
 import FInput from '@/components/FInput';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { Divider } from 'antd';
+import { FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
 import fMessage from '@/components/fMessage';
+import FComponentsLib from '@freelog/components-lib';
 
 interface InviteProps {
   jump: any;
@@ -75,7 +74,7 @@ function Invite({ jump }: InviteProps) {
           }}
         />
         <div className={styles.codeError}>{isCorrect ? '' : '无效邀请码，请重新输入'}</div>
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           onClick={() => {
             run();
             setLoading(true);
@@ -83,7 +82,7 @@ function Invite({ jump }: InviteProps) {
           disabled={!code || !isCorrect}
         >
           验证邀请码
-        </FRectBtn>
+        </FComponentsLib.FRectBtn>
       </div>
       <div className="flex-1 flex-column align-center ">
         <div className={'flex-row mt-130'}>

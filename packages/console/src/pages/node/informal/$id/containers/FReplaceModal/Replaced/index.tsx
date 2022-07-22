@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from "@/components/FInput";
 import FDropdownMenu from "@/components/FDropdownMenu";
-import {FContentText} from '@/components/FText';
 import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
@@ -13,6 +11,7 @@ import {
   OnReplacedMountAction, OnReplacedTreeLoadDataAction, OnReplacedUnmountAction,
 } from "@/models/informalNodeManagerPage";
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ReplacedProps {
   dispatch: Dispatch;
@@ -72,7 +71,7 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
           }}
         >
           <div style={{cursor: 'pointer'}}>
-            <FContentText
+            <FComponentsLib.FContentText
               type="additional2"
               text={informalNodeManagerPage.replaceModal_Replaced_TargetSelectedVersion?.text}
             />

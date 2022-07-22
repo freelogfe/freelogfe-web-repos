@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FContentText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import FTable from '@/components/FTable';
 import { connect, Dispatch } from 'dva';
@@ -13,7 +11,7 @@ import {
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
-  FDelete, FEdit,
+  FDelete,
 } from '@/components/FIcons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
@@ -41,12 +39,12 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
     {
-      title: (<FTitleText type='table' text={FI18n.i18nNext.t('object_name')} />),
+      title: (<FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('object_name')} />),
       dataIndex: 'name',
       key: 'name',
       render(text, record) {
         return (<Space size={10}>
-          <FContentText type='normal' text={text} />
+          <FComponentsLib.FContentText type='normal' text={text} />
           <div className={styles.hoverVisible}>
             <FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
@@ -83,37 +81,37 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type='table' text={FI18n.i18nNext.t('resource_type')} />),
+      title: (<FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('resource_type')} />),
       dataIndex: 'type',
       key: 'type',
       width: 140,
       render(text, record) {
         console.log(record, 'record');
         if (record.type.length === 0) {
-          return (<FContentText type='negative' text={'未设置类型'} />);
+          return (<FComponentsLib.FContentText type='negative' text={'未设置类型'} />);
         }
-        return (<FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(record.type)} />);
+        return (<FComponentsLib.FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(record.type)} />);
       },
       // className: styles.columns,
     },
     {
-      title: (<FTitleText type='table' text={FI18n.i18nNext.t('size')} />),
+      title: (<FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('size')} />),
       dataIndex: 'size',
       key: 'size',
       width: 120,
       // className: styles.columns,
       render(text: any, record: any): any {
-        return (<FContentText type='normal' text={text} />);
+        return (<FComponentsLib.FContentText type='normal' text={text} />);
       },
     },
     {
-      title: (<FTitleText type='table' text={FI18n.i18nNext.t('last_updated_time')} />),
+      title: (<FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('last_updated_time')} />),
       dataIndex: 'updateTime',
       key: 'updateTime',
       width: 150,
       // className: styles.columns,
       render(text: any, record: any): any {
-        return (<FContentText type='normal' text={text} />);
+        return (<FComponentsLib.FContentText type='normal' text={text} />);
       },
     },
   ];
@@ -152,11 +150,11 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               }
               return false;
             }}>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               size='large'
               type='primary'
               style={{ paddingLeft: 50, paddingRight: 50 }}
-            >{FI18n.i18nNext.t('upload_object')}</FRectBtn>
+            >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
           </FUpload>}
         />
       </>)
@@ -230,10 +228,10 @@ function ToolsBar({
     {
       showDownload && (<FTooltip title={FI18n.i18nNext.t('tip_download_object')}>
         <span>
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
             type='primary'
-          ><FDownload /></FTextBtn>
+          ><FDownload /></FComponentsLib.FTextBtn>
         </span>
       </FTooltip>)
     }
@@ -241,10 +239,10 @@ function ToolsBar({
       showDelete && (
         <FTooltip title={FI18n.i18nNext.t('tip_delete')}>
           <span>
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               onClick={() => onClickDelete && onClickDelete()}
               className={styles.Delete}
-            ><FDelete /></FTextBtn>
+            ><FDelete /></FComponentsLib.FTextBtn>
           </span>
         </FTooltip>
       )

@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText, FTipText } from '@/components/FText';
-import { FCircleBtn, FRectBtn } from '@/components/FButton';
 import { Space } from 'antd';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
 import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-// import FUtil1 from '@/utils';
 import FPolicyList from '@/components/FPolicyList';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -20,12 +18,12 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
 
   return (<div>
     <Space size={15}>
-      <FTitleText
+      <FComponentsLib.FTitleText
         text={FI18n.i18nNext.t('title_auth_plan')}
         type='h3'
       />
       {
-        exhibitInfoPage.policy_List.length !== 0 && (<FCircleBtn
+        exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
           size='small'
           onClick={() => {
             dispatch<ChangeAction>({
@@ -42,13 +40,13 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     {
       exhibitInfoPage.policy_List.length === 0
         ? (<div className={styles.empty}>
-          <FTipText
+          <FComponentsLib.FTipText
             type='second'
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={FI18n.i18nNext.t('exhibit_auth_plan_empty')}
           />
           <div style={{ height: 20 }} />
-          <FRectBtn
+          <FComponentsLib.FRectBtn
             onClick={() => dispatch<ChangeAction>({
               type: 'exhibitInfoPage/change',
               payload: {
@@ -56,7 +54,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
               },
             })}
             type='primary'
-          >{FI18n.i18nNext.t('btn_create_auth_plan')}</FRectBtn>
+          >{FI18n.i18nNext.t('btn_create_auth_plan')}</FComponentsLib.FRectBtn>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={exhibitInfoPage.exhibit_Online}

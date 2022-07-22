@@ -3,12 +3,10 @@ import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
-import { FCircleBtn, FRectBtn, FTextBtn } from '../FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
-import { FContentText, FTitleText } from '../FText';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
@@ -664,37 +662,37 @@ function FPolicyBuilder({
   });
 
   const DrawerTopRight = (<Space size={30}>
-    <FTextBtn
+    <FComponentsLib.FTextBtn
       onClick={() => {
         onCancel && onCancel();
-      }}>取消</FTextBtn>
+      }}>取消</FComponentsLib.FTextBtn>
 
     {
       showView === 'edit' && <>
         {
           isVerifying
-            ? (<FRectBtn
+            ? (<FComponentsLib.FRectBtn
               disabled={true}
               type='primary'
-            >校验中</FRectBtn>)
-            : (<FRectBtn
+            >校验中</FComponentsLib.FRectBtn>)
+            : (<FComponentsLib.FRectBtn
               onClick={onClick_VerifyBtn}
               type='primary'
               disabled={disabledExecute}
-            >校验</FRectBtn>)
+            >校验</FComponentsLib.FRectBtn>)
         }
       </>
     }
 
     {
-      showView === 'fail' && (<FRectBtn
+      showView === 'fail' && (<FComponentsLib.FRectBtn
         disabled={true}
         type='primary'
-      >校验失败</FRectBtn>)
+      >校验失败</FComponentsLib.FRectBtn>)
     }
 
     {
-      showView === 'success' && (<FRectBtn
+      showView === 'success' && (<FComponentsLib.FRectBtn
         onClick={() => {
           onConfirm && onConfirm({
             title: successResult?.title || '',
@@ -702,7 +700,7 @@ function FPolicyBuilder({
           });
         }}
         type='primary'
-      >创建</FRectBtn>)
+      >创建</FComponentsLib.FRectBtn>)
     }
 
   </Space>);
@@ -712,7 +710,7 @@ function FPolicyBuilder({
   return (<>
     <FDrawer
       title={<Space size={10}>
-        <FTitleText type='h2' text={'添加授权策略'} />
+        <FComponentsLib.FTitleText type='h2' text={'添加授权策略'} />
         <FTooltip title={'点击查看帮助文档'}>
           <label
             onClick={() => {
@@ -750,18 +748,18 @@ function FPolicyBuilder({
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FTitleText
+            <FComponentsLib.FTitleText
               type='h1'
               text={successResult?.title || ''}
             />
 
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
                 setShowView('edit');
                 setSuccessResult(null);
               }}
-            >返回编辑</FTextBtn>
+            >返回编辑</FComponentsLib.FTextBtn>
           </div>
 
           <div style={{ height: 30 }} />
@@ -788,7 +786,7 @@ function FPolicyBuilder({
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div />
 
-            <FTextBtn
+            <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
                 // setCheckResult('unchecked');
@@ -796,13 +794,13 @@ function FPolicyBuilder({
                 // setSuccessResult(null);
                 setFailResult(null);
               }}
-            >返回编辑</FTextBtn>
+            >返回编辑</FComponentsLib.FTextBtn>
           </div>
 
           <div style={{ height: 30 }} />
 
           <div>
-            <FContentText text={failResult?.errorText || ''} />
+            <FComponentsLib.FContentText text={failResult?.errorText || ''} />
           </div>
 
         </div>)
@@ -840,7 +838,7 @@ function FPolicyBuilder({
               <Space size={20}>
                 {
                   editMode === 'code'
-                    ? (<FTextBtn
+                    ? (<FComponentsLib.FTextBtn
                       type='default'
                       // disabled={codeMirrorInputHasError || isVerifying}
                       onClick={onClick_SwitchMode_Composition}>
@@ -848,8 +846,8 @@ function FPolicyBuilder({
                         <FComposition />
                         <span>组合模式</span>
                       </Space>
-                    </FTextBtn>)
-                    : (<FTextBtn
+                    </FComponentsLib.FTextBtn>)
+                    : (<FComponentsLib.FTextBtn
                       type='default'
                       // disabled={combinationDataHasError}
                       onClick={onClick_SwitchMode_Code}>
@@ -857,17 +855,17 @@ function FPolicyBuilder({
                         <FCode />
                         <span>代码模式</span>
                       </Space>
-                    </FTextBtn>)
+                    </FComponentsLib.FTextBtn>)
                 }
 
-                <FTextBtn
+                <FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => setTemplateVisible(true)}>
                   <Space size={4}>
                     <FFileText />
                     <span>策略模板</span>
                   </Space>
-                </FTextBtn>
+                </FComponentsLib.FTextBtn>
               </Space>
             </div>
             {titleInputError && <>
@@ -903,13 +901,13 @@ function FPolicyBuilder({
                                   <div>
                                     <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
                                     <div style={{ width: 15 }} />
-                                    <FTitleText
+                                    <FComponentsLib.FTitleText
                                       type='h3'
                                       text={cd.name}
                                     />
                                   </div>
 
-                                  <FContentText
+                                  <FComponentsLib.FContentText
                                     text={'初始状态不可删除'}
                                     type='negative'
                                   />
@@ -938,12 +936,12 @@ function FPolicyBuilder({
                                         }}
                                       />
                                     </div>
-                                    <FTextBtn
+                                    <FComponentsLib.FTextBtn
                                       type='danger'
                                       onClick={() => {
                                         onClickDeleteStateBtn(cd.randomID);
                                       }}
-                                    >删除</FTextBtn>
+                                    >删除</FComponentsLib.FTextBtn>
                                   </div>
                                   {
                                     cd.nameError
@@ -987,7 +985,7 @@ function FPolicyBuilder({
                                           }, cd.randomID);
                                         }}
                                       />
-                                      <FContentText
+                                      <FComponentsLib.FContentText
                                         text={authMap[ao]} />
                                     </Space>);
                                   })
@@ -1012,7 +1010,7 @@ function FPolicyBuilder({
                                     {
                                       et.type !== 'terminate' && (<>
                                         <div>
-                                          <FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
+                                          <FComponentsLib.FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
                                         </div>
 
                                         <div style={{ height: 10 }} />
@@ -1022,7 +1020,7 @@ function FPolicyBuilder({
                                     {
                                       et.type === 'payment' && (<>
                                         <div>
-                                          <FContentText text={'支付'} type='normal' />
+                                          <FComponentsLib.FContentText text={'支付'} type='normal' />
                                           <div style={{ width: 10 }} />
                                           <FInput
                                             // min={1}
@@ -1049,7 +1047,7 @@ function FPolicyBuilder({
                                             dataSource={currencies}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText text={'至'} type='normal' />
+                                          <FComponentsLib.FContentText text={'至'} type='normal' />
                                           <div style={{ width: 10 }} />
                                           <FSelect
                                             value={'my'}
@@ -1058,7 +1056,7 @@ function FPolicyBuilder({
                                             dataSource={accounts}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText
+                                          <FComponentsLib.FContentText
                                             type='normal'
                                             text={'之后'}
                                           />
@@ -1103,7 +1101,7 @@ function FPolicyBuilder({
                                             }}
                                           />
                                           <div style={{ width: 10 }} />
-                                          <FContentText
+                                          <FComponentsLib.FContentText
                                             type='normal'
                                             text={'之后'}
                                           />
@@ -1118,7 +1116,7 @@ function FPolicyBuilder({
 
                                     {
                                       et.type === 'absoluteTime' && (<div>
-                                        <FContentText
+                                        <FComponentsLib.FContentText
                                           type='normal'
                                           text={'于'}
                                         />
@@ -1141,7 +1139,7 @@ function FPolicyBuilder({
                                           }}
                                         />
                                         <div style={{ width: 10 }} />
-                                        <FContentText
+                                        <FComponentsLib.FContentText
                                           type='normal'
                                           text={'之后'}
                                         />
@@ -1150,7 +1148,7 @@ function FPolicyBuilder({
 
                                     {
                                       et.type === 'terminate' && (<div>
-                                        <FContentText type='normal' text={'状态机终止，不再接受事件'} />
+                                        <FComponentsLib.FContentText type='normal' text={'状态机终止，不再接受事件'} />
                                       </div>)
                                     }
 
@@ -1159,14 +1157,14 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                                          </FTitleText>
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                          </FComponentsLib.FTitleText>
                                         </Divider>
 
                                         <div style={{ height: 10 }} />
 
                                         <div>
-                                          <FTitleText type='h4' text={'目标状态'} />
+                                          <FComponentsLib.FTitleText type='h4' text={'目标状态'} />
                                         </div>
 
                                         <div style={{ height: 10 }} />
@@ -1186,7 +1184,7 @@ function FPolicyBuilder({
 
                                   </div>
 
-                                  <FCircleBtn
+                                  <FComponentsLib.FCircleBtn
                                     type='danger'
                                     onClick={() => {
                                       onClickDeleteEventBtn(cd.randomID, et.randomID);
@@ -1204,19 +1202,19 @@ function FPolicyBuilder({
                               return et.type === 'terminate';
                             }) && (<>
                               <div className={styles.compositionStateFooter}>
-                                <FCircleBtn
+                                <FComponentsLib.FCircleBtn
                                   type='minor'
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                                ><FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} /></FComponentsLib.FCircleBtn>
                                 <div style={{ width: 5 }} />
-                                <FTextBtn
+                                <FComponentsLib.FTextBtn
                                   type='primary'
                                   onClick={() => {
                                     set_Combination_AddingEventStateID(cd.randomID);
                                   }}
-                                >添加事件或指令</FTextBtn>
+                                >添加事件或指令</FComponentsLib.FTextBtn>
                               </div>
 
                               <div style={{ height: 15 }} />
@@ -1231,11 +1229,11 @@ function FPolicyBuilder({
 
                   <div style={{ height: 15 }} />
 
-                  <FRectBtn
+                  <FComponentsLib.FRectBtn
                     type='default'
                     onClick={onClickAddStateBtn}
 
-                  >新建状态</FRectBtn>
+                  >新建状态</FComponentsLib.FRectBtn>
                   <div ref={refBottomDiv} />
                 </div>)
                 : (<>
@@ -1345,7 +1343,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：1 周之后'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1364,7 +1362,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：于 2021/05/03'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1383,7 +1381,7 @@ function FPolicyBuilder({
       {/*        <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />*/}
       {/*      </div>*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      onClick={() => {*/}
@@ -1402,7 +1400,7 @@ function FPolicyBuilder({
       {/*    <div>*/}
       {/*      <FContentText type='normal' text={'状态机终止，停止接收事件'} />*/}
       {/*    </div>*/}
-      {/*    <FRectBtn*/}
+      {/*    <FComponentsLib.FRectBtn*/}
       {/*      type='secondary'*/}
       {/*      size='small'*/}
       {/*      disabled={!!(combination_Data.find((cd) => {*/}
@@ -1720,7 +1718,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             onClickAddStateBtn && onClickAddStateBtn();
           }}
         >
-          <FCircleBtn
+          <FComponentsLib.FCircleBtn
             size='small'
             type='minor'
             onClick={() => {
@@ -1729,16 +1727,16 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
             }}
           >
             <FComponentsLib.FIcons.FPlus style={{ fontSize: 12 }} />
-          </FCircleBtn>
+          </FComponentsLib.FCircleBtn>
           <div style={{ width: 5 }} />
-          <FTextBtn
+          <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
               // console.log('###23948230948230480_))))))');
               // setOpen(false);
               // onClickAddStateBtn && onClickAddStateBtn();
             }}
-          >新建状态</FTextBtn>
+          >新建状态</FComponentsLib.FTextBtn>
         </div>
       </>)}
     />

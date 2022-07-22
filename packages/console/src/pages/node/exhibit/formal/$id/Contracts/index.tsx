@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
@@ -8,8 +7,8 @@ import { ChangeAction } from '@/models/exhibitInfoPage';
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -30,7 +29,7 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
   }
 
   return (<div>
-    <FTitleText text={FI18n.i18nNext.t('title_relevant_contracts')} type='h3' />
+    <FComponentsLib.FTitleText text={FI18n.i18nNext.t('title_relevant_contracts')} type='h3' />
 
     <div style={{ height: 20 }} />
 

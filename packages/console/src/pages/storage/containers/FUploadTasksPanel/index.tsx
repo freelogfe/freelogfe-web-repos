@@ -1,8 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
-import {FTextBtn} from '@/components/FButton';
-// import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
@@ -15,10 +12,10 @@ import {
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
 import fConfirmModal from "@/components/fConfirmModal";
-// import FUtil1 from "@/utils";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FClose, FDown, FUp} from "@/components/FIcons";
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -102,9 +99,9 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     // style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
   >
     <div className={styles.title}>
-      <FContentText text={'任务列表'}/>
+      <FComponentsLib.FContentText text={'任务列表'}/>
       <Space size={20}>
-        <FTextBtn
+        <FComponentsLib.FTextBtn
           onClick={() => {
             dispatch<ChangeAction>({
               type: 'storageHomePage/change',
@@ -120,8 +117,8 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
               ? (<FDown style={{fontSize: 12}}/>)
               : (<FUp style={{fontSize: 12}}/>)
           }
-        </FTextBtn>
-        <FTextBtn
+        </FComponentsLib.FTextBtn>
+        <FComponentsLib.FTextBtn
           onClick={() => {
             const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
             if (exits) {
@@ -136,7 +133,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             closeAll();
           }}
           type="default"
-        ><FClose style={{fontSize: 12}}/></FTextBtn>
+        ><FClose style={{fontSize: 12}}/></FComponentsLib.FTextBtn>
       </Space>
     </div>
 

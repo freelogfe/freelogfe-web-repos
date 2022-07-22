@@ -7,14 +7,12 @@ import {
   SettingPageModelState,
   UserModelState,
 } from '@/models/connect';
-import { FContentText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, message, Upload } from 'antd';
-import { FRectBtn } from '@/components/FButton';
 import type { UploadChangeParam } from 'antd/es/upload';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import {
   OnChange_Birthday_Action,
@@ -29,6 +27,7 @@ import { FetchInfoAction, ChangeAction as UserChangeAction } from '@/models/user
 import { Moment } from 'moment';
 import { FServiceAPI } from '@freelog/tools-lib';
 const DatePickerAsAnyType: any = DatePicker;
+import FComponentsLib from '@freelog/components-lib';
 
 interface ProfileProps {
   dispatch: Dispatch;
@@ -157,7 +156,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           <Space size={10} direction='vertical' className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'性别'} type='normal' />
+                <FComponentsLib.FContentText text={'性别'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FRadio
@@ -192,7 +191,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'个人简介'} type='normal' />
+                <FComponentsLib.FContentText text={'个人简介'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput
@@ -216,7 +215,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'出生年月'} type='normal' />
+                <FComponentsLib.FContentText text={'出生年月'} type='normal' />
               </div>
               <div className={styles.right}>
                 <DatePickerAsAnyType
@@ -238,7 +237,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'居住地'} type='normal' />
+                <FComponentsLib.FContentText text={'居住地'} type='normal' />
               </div>
               <div className={styles.right}>
                 <Cascader
@@ -261,7 +260,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FContentText text={'职业'} type='normal' />
+                <FComponentsLib.FContentText text={'职业'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FInput
@@ -283,7 +282,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           </Space>
           <div style={{ height: 40 }} />
           <div className={styles.submit}>
-            <FRectBtn
+            <FComponentsLib.FRectBtn
               type='primary'
               onClick={() => {
                 dispatch<OnClick_SubmitUserInfoBtn_Action>({
@@ -292,7 +291,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
               }}
             >
               提交修改
-            </FRectBtn>
+            </FComponentsLib.FRectBtn>
           </div>
         </FFormLayout.FBlock>
       </FFormLayout>

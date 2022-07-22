@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Button, Checkbox, Popover} from 'antd';
-import {FRectBtn} from '../FButton';
 import FAutoComplete from "../FAutoComplete";
 import * as AHooks from 'ahooks';
 import * as semver from 'semver';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FVersionHandlerPopoverProps {
   value: string;
@@ -74,7 +74,7 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
           size="small"
           className={styles.FAutoComplete}
           value={input}
-          options={versionOptions.map<{ value: string }>((vo) => ({value: vo}))}
+          options={versionOptions.map<{ value: string, label: string }>((vo) => ({value: vo, label: vo}))}
           onSelect={(value: string) => run(value, true)}
           onChange={(value) => run(value)}
         />
@@ -110,12 +110,12 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
           onClick={() => setVisible(false)}
         >取消</Button>
         <div style={{width: 10}}/>
-        <FRectBtn
+        <FComponentsLib.FRectBtn
           size="small"
           disabled={!!inputError}
           onClick={onConfirm}
           type="primary"
-        >确定</FRectBtn>
+        >确定</FComponentsLib.FRectBtn>
       </div>
     </div>}
     title={null}
