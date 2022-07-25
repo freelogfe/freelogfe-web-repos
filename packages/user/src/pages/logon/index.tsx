@@ -43,6 +43,9 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'logonPage/onMountPage',
+      payload: {
+        url: urlParams.goTo ? decodeURIComponent(urlParams.goTo) : '',
+      },
     });
   });
 
