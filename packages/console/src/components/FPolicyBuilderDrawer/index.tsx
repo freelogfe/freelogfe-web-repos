@@ -820,9 +820,10 @@ function FPolicyBuilder({
           }
           <div className={styles.maskingContainer} ref={refMaskingContainer}>
             <div className={styles.policyHeader}>
-              <input
+              <FInput
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
+                wrapClassName={styles.policyTitle}
                 value={titleInput}
                 onChange={(e) => {
                   onChange_TitleInput(e.target.value.trim());
