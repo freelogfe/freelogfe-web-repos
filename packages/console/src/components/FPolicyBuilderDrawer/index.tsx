@@ -1302,7 +1302,7 @@ function FPolicyBuilder({
               return onClick_SelectTemplateBtn(num);
             }
             Modal.confirm({
-              title: FI18n.i18nNext.t('alert_plan_cover '),
+              title: FI18n.i18nNext.t('alert_plan_cover'),
               okText: FI18n.i18nNext.t('btn_import'),
               cancelText: FI18n.i18nNext.t('btn_cancel'),
               onOk() {
