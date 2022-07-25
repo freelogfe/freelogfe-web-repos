@@ -39,7 +39,7 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
+      <FComponentsLib.FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
       <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
