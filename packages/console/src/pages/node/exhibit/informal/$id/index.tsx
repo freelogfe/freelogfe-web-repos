@@ -176,23 +176,6 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                   checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
                   loading={loading}
                   onClick={(checked) => changeStatus(checked)}
-                  // onChange={(value) => {
-                  //   if (informExhibitInfoPage.exhibit_Info?.originInfo.resourceType === 'theme') {
-                  //     dispatch<OnChange_Theme_OnlineSwitch_Action>({
-                  //       type: 'informExhibitInfoPage/onChange_Theme_OnlineSwitch',
-                  //       payload: {
-                  //         checked: true,
-                  //       },
-                  //     });
-                  //   } else {
-                  //     dispatch<OnChange_Exhibit_OnlineSwitch_Action>({
-                  //       type: 'informExhibitInfoPage/onChange_Exhibit_OnlineSwitch',
-                  //       payload: {
-                  //         checked: value,
-                  //       },
-                  //     });
-                  //   }
-                  // }}
                 />
               </>
             )}
