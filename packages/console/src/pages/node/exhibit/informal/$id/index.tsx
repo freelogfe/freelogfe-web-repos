@@ -131,13 +131,13 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
               }}
             >
               <FComponentsLib.FContentText
-                type="negative"
+                type='negative'
                 // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
                 text={informExhibitInfoPage.node_Name}
               />
             </FComponentsLib.FTextBtn>
             <div style={{ width: 2 }} />
-            <FComponentsLib.FContentText type="negative" text={'>'} />
+            <FComponentsLib.FContentText type='negative' text={'>'} />
             <div style={{ width: 10 }} />
             <FIdentityTypeBadge status={informExhibitInfoPage.exhibit_Identity} />
             <div style={{ width: 10 }} />
@@ -154,7 +154,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                   operationAndActionRecords={
                     informExhibitInfoPage.exhibit_Info.operationAndActionRecords
                   }
-                  placement="bottom"
+                  placement='bottom'
                 />
               </div>
             )}
@@ -162,21 +162,45 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
           <Space size={20}>
             {informExhibitInfoPage.exhibit_OnlineSwitchObj && (
               <>
-                <span
-                  style={{
-                    color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked
-                      ? '#44C28C'
-                      : '#666',
-                  }}
-                >
-                  {informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}
-                </span>
-                <FSwitch
-                  disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
-                  checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
-                  loading={loading}
-                  onClick={(checked) => changeStatus(checked)}
-                />
+                {
+                  informExhibitInfoPage.exhibit_ResourceType.includes('主题') && (<>
+                    {
+                      informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked
+                        ? (<div style={{
+                          backgroundColor: '#42C28C',
+                          borderRadius: 12,
+                          lineHeight: '18px',
+                          color: 'white',
+                          fontSize: 12,
+                          padding: '3px 10px',
+                        }}>已激活</div>)
+                        : (<>
+                        <span
+                          style={{ color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked ? '#44C28C' : '#666' }}>{informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}</span>
+                          <FSwitch
+                            disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
+                            checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
+                            loading={loading}
+                            onClick={(checked) => changeStatus(checked)}
+                          />
+                        </>)
+                    }
+                  </>)
+                }
+
+                {
+                  !informExhibitInfoPage.exhibit_ResourceType.includes('主题') && (<>
+                    <span
+                      style={{ color: informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked ? '#44C28C' : '#666' }}>{informExhibitInfoPage.exhibit_OnlineSwitchObj?.text}</span>
+                    <FSwitch
+                      disabled={informExhibitInfoPage.exhibit_OnlineSwitchObj?.disabled}
+                      checked={informExhibitInfoPage.exhibit_OnlineSwitchObj?.checked}
+                      loading={loading}
+                      onClick={(checked) => changeStatus(checked)}
+                    />
+                  </>)
+                }
+
               </>
             )}
 
@@ -192,7 +216,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
         </div>
         <div className={styles.body}>
           <div className={styles.content}>
-            <Space direction="vertical" size={50}>
+            <Space direction='vertical' size={50}>
               <Contracts />
               <Viewports />
             </Space>
@@ -205,9 +229,9 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
 
       <FDialog
         show={inactiveDialogShow}
-        title="提醒"
-        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-        sureText="下架资源"
+        title='提醒'
+        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+        sureText='下架资源'
         cancel={() => {
           setInactiveDialogShow(false);
         }}
