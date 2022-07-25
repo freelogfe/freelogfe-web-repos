@@ -225,17 +225,17 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 );
               }}
               style={{ fontWeight: 600 }}
-              type="default"
+              type='default'
             >
               <FComponentsLib.FContentText
-                type="negative"
+                type='negative'
                 text={exhibitInfoPage.exhibit_BelongNode_Name}
                 className={styles.nodeName}
               />
             </FComponentsLib.FTextBtn>
             {/*</FLink>*/}
             <div style={{ width: 2 }} />
-            <FComponentsLib.FContentText type="negative" text={'>'} />
+            <FComponentsLib.FContentText type='negative' text={'>'} />
             <div style={{ width: 2 }} />
             <FComponentsLib.FTitleText
               text={exhibitInfoPage.exhibit_Name}
@@ -246,64 +246,45 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             />
           </div>
           <Space size={20}>
-            {exhibitInfoPage.side_ResourceType.includes('主题') ? (
-              <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>
-                {FI18n.i18nNext.t('toggle_activate_theme')}
-              </span>
-            ) : (
-              <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>
-                {/* {FI18n.i18nNext.t('btn_show_exhibit')} */}
-                {'上架'}
-              </span>
-            )}
+            {exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+              {
+                exhibitInfoPage.exhibit_Online
+                  ? (<div style={{
+                    backgroundColor: '#42C28C',
+                    borderRadius: 12,
+                    lineHeight: '18px',
+                    color: 'white',
+                    fontSize: 12,
+                    padding: '3px 10px',
+                  }}>已激活</div>)
+                  : (<>
+                    <span
+                      style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>
 
-            <FSwitch
-              disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-              checked={exhibitInfoPage.exhibit_Online}
-              loading={loading}
-              onClick={(checked) => changeStatus(checked)}
-              // onChange={(value) => {
-              //   if (
-              //     value &&
-              //     exhibitInfoPage.policy_List.filter((p) => p.status === 1).length === 0
-              //   ) {
-              //     if (exhibitInfoPage.policy_List.length === 0) {
-              //       fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
-              //     } else {
-              //       fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
-              //     }
-              //     return;
-              //     // return;
-              //   }
+                    <FSwitch
+                      disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                      checked={exhibitInfoPage.exhibit_Online}
+                      loading={loading}
+                      onClick={(checked) => changeStatus(checked)}
+                    />
+                  </>)
+              }
 
-              //   if (
-              //     exhibitInfoPage.side_ResourceType !== 'theme' ||
-              //     !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId ||
-              //     !value
-              //   ) {
-              //     dispatch<UpdateStatusAction>({
-              //       type: 'exhibitInfoPage/updateStatus',
-              //       payload: value ? 1 : 0,
-              //     });
-              //     return;
-              //   }
+            </>)}
 
-              //   fConfirmModal({
-              //     // message: FUtil.I18n.message('msg_change_theme_confirm'),
-              //     message: '激活该主题，将下线其它主题',
-              //     // okText: FUtil.I18n.message('active_new_theme'),
-              //     okText: '激活',
-              //     // cancelText: FUtil.I18n.message('keep_current_theme'),
-              //     cancelText: '保持当前主题',
-              //     onOk() {
-              //       dispatch<UpdateStatusAction>({
-              //         type: 'exhibitInfoPage/updateStatus',
-              //         payload: value ? 1 : 0,
-              //       });
-              //     },
-              //   });
-              // }}
-            />
+            {
+              !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+                <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>上架</span>
+
+                <FSwitch
+                  disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                  checked={exhibitInfoPage.exhibit_Online}
+                  loading={loading}
+                  onClick={(checked) => changeStatus(checked)}
+                />
+              </>)
+            }
+
             {!exhibitInfoPage.exhibit_IsAuth && (
               <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
                 <FWarning />
@@ -329,9 +310,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FDialog
         show={activeDialogShow}
-        title="提醒"
-        desc="请先为资源添加一个授权策略，再进行上架操作"
-        sureText="添加策略"
+        title='提醒'
+        desc='请先为资源添加一个授权策略，再进行上架操作'
+        sureText='添加策略'
         cancel={() => {
           setActiveDialogShow(false);
         }}
@@ -341,9 +322,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FDialog
         show={inactiveDialogShow}
-        title="提醒"
-        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-        sureText="下架资源"
+        title='提醒'
+        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+        sureText='下架资源'
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -368,7 +349,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         alreadyUsedTitles={exhibitInfoPage?.policy_List.map((ip: any) => {
           return ip.policyName;
         })}
-        targetType="resource"
+        targetType='resource'
         onCancel={() => {
           dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
@@ -382,7 +363,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FPolicyOperaterDrawer
         visible={exhibitInfoPage.policyOperaterVisible}
-        type="resource"
+        type='resource'
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
           dispatch<ChangeAction>({
