@@ -15,6 +15,7 @@ import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPa
 import { FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
+import FPopover from '@/components/FPopover';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -43,10 +44,67 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       <div style={{ height: 50 }} />
       <div className={styles.title1}>
         <span>萌新任务，完成即领20元现金奖励！</span>
-        <FComponentsLib.FTextBtn>
-          <FInfo />
-          <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
-        </FComponentsLib.FTextBtn>
+        <FPopover
+          placement='bottomRight'
+          content={<div>
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'内测活动时间：*****'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'「基础任务」中的邀请1位好友奖励和「邀请好友」活动中的奖励可重复领取。'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'（奖励发放|提现说明），活动的最终解释权归Freelog所有。'}
+                type='normal'
+              />
+            </div>
+          </div>}
+        ><span>
+          <FComponentsLib.FTextBtn>
+            <FInfo />
+            <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
+          </FComponentsLib.FTextBtn>
+        </span></FPopover>
+
       </div>
       <div style={{ height: 20 }} />
       <div className={styles.title2}>

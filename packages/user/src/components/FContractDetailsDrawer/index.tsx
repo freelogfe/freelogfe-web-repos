@@ -158,7 +158,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
         baseInfoData.subjectCover = data1.coverImages[0];
       }
     }
-
+const signup = '';
     if (baseInfoData.licenseeIdentityType === 'resource' && baseInfoData.licenseeOwnerIsCurrentUser) {
       const params9: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
         resourceId: baseInfoData.licenseeId,
