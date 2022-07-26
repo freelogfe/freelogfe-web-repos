@@ -30,7 +30,7 @@ function Ads({}: AdsProps) {
       place: 2,
     });
 
-    console.log(dataList, 'data093iorjfsdlkfj');
+    // console.log(dataList, 'data093iorjfsdlkfj');
 
     if (dataList && dataList.length > 0) {
       set_info({
