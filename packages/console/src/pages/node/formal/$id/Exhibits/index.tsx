@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FDown, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
-import { Radio, Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
@@ -49,7 +49,6 @@ interface ExhibitsProps {
 }
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
-
   const [category, setCategory] = React.useState<any>({
     first: '-1',
     second: '',
@@ -105,6 +104,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -177,7 +177,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         });
         nodeManagerPage.exhibit_List[index].policies = nodeManagerPage.exhibit_List[
           index
-          ].policiesList
+        ].policiesList
           .filter((item) => item.status === 1)
           .map((item: { policyName: any }) => item.policyName);
       }
@@ -213,18 +213,22 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       return;
     }
 
+    const info = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/presentables/${operateExhibit.id}`,
+      params: { isLoadPolicyInfo: 1, isTranslate: 1 },
+    });
+    const { policies } = info.data;
     const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
-    nodeManagerPage.exhibit_List[index].policies.push(title);
-    nodeManagerPage.exhibit_List[index].policiesList = result.data.policies;
+    nodeManagerPage.exhibit_List[index].policies = policies
+      .filter((item: any) => item.status === 1)
+      .map((item: any) => item.policyName);
+    nodeManagerPage.exhibit_List[index].policiesList = policies.reverse();
+    setOperateExhibit(nodeManagerPage.exhibit_List[index]);
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
       payload: {
         exhibit_List: nodeManagerPage.exhibit_List,
-      },
-    });
-    dispatch<ChangeAction>({
-      type: 'nodeManagerPage/change',
-      payload: {
         policyEditorVisible: false,
       },
     });
@@ -420,7 +424,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
                 {category.first > 1 ? (
                   <>
-                    <span className='ml-30'>子类型：</span>
+                    <span className="ml-30">子类型：</span>
                     <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
@@ -485,7 +489,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               <div>
                 <FInput
                   className={styles.input}
-                  theme='dark'
+                  theme="dark"
                   value={nodeManagerPage.exhibit_InputFilter}
                   debounce={300}
                   onDebounceChange={(value) => {
@@ -523,11 +527,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           <FLoadingTip height={'calc(100vh - 270px)'} />
         )}
 
-
         {nodeManagerPage.exhibit_ListState === 'noSearchResult' && (
           <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
         )}
-
 
         {nodeManagerPage.exhibit_ListState === 'loaded' && (
           <div className={styles.body}>
@@ -551,9 +553,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={activeDialogShow}
-          title='提醒'
-          desc='请先为资源添加一个授权策略，再进行上架操作'
-          sureText='添加策略'
+          title="提醒"
+          desc="请先为资源添加一个授权策略，再进行上架操作"
+          sureText="添加策略"
           cancel={() => {
             setActiveDialogShow(false);
           }}
@@ -563,22 +565,22 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={inactiveDialogShow}
-          title='提醒'
-          desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-          sureText='下架资源'
+          title="提醒"
+          desc="下架后其它用户将无法签约该资源，确认要下架吗？"
+          sureText="下架资源"
           cancel={() => {
             setInactiveDialogShow(false);
           }}
           sure={inactiveResource}
           loading={loading}
           footer={
-            <Radio
+            <Checkbox
               className={styles['no-longer']}
               checked={noLonger}
-              onClick={() => setNoLonger(!noLonger)}
+              onChange={(e) => setNoLonger(e.target.checked)}
             >
               不再提醒
-            </Radio>
+            </Checkbox>
           }
         />
 
@@ -590,7 +592,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           alreadyUsedTitles={operateExhibit?.policiesList.map((ip: any) => {
             return ip.policyName;
           })}
-          targetType='resource'
+          targetType="resource"
           onCancel={() => {
             dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
@@ -604,7 +606,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FPolicyOperaterDrawer
           visible={nodeManagerPage.policyOperaterVisible}
-          type='resource'
+          type="resource"
           policiesList={operateExhibit?.policiesList || []}
           onCancel={() => {
             dispatch<ChangeAction>({
@@ -615,6 +617,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             });
           }}
           onConfirm={activeResource}
+          onNewPolicy={openPolicyBuilder}
         />
 
         {resultPopupType !== null && (

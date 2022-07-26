@@ -11,7 +11,7 @@ import FLink from '@/components/FLink';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
-import { Popconfirm, Radio, Space } from 'antd';
+import { Checkbox, Popconfirm, Space } from 'antd';
 import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
@@ -125,7 +125,6 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
     return null;
   }
 
-
   /** 上下架 */
   const changeStatus = (value: boolean) => {
     if (value) {
@@ -155,6 +154,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -213,11 +213,11 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         type: 'resourceInfo/fetchDataSource',
         payload: match.params.id,
       });
+      dispatch<FetchResourceInfoAction>({
+        type: 'resourceAuthPage/fetchResourceInfo',
+      });
 
       if (data.updatePolicies) {
-        dispatch<FetchResourceInfoAction>({
-          type: 'resourceAuthPage/fetchResourceInfo',
-        });
         dispatch<ChangeAction>({
           type: 'resourceInfo/change',
           payload: {
@@ -237,23 +237,21 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
       <div style={{ height: 30 }} />
       <div className={styles.switcher}>
         <div className={styles['switcher-label']}>上架</div>
-        <FSwitch
-          onClick={changeStatus}
-          checked={active}
-          loading={loading}
-        />
+        <FSwitch onClick={changeStatus} checked={active} loading={loading} />
       </div>
       <div style={{ height: 30 }} />
       <div className={styles.header}>
         <FResourceCover
           src={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
-          status={(resourceInfo.info?.status & 2) === 2
-            ? 'freeze'
-            : resourceInfo.info?.status === 1
+          status={
+            (resourceInfo.info?.status & 2) === 2
+              ? 'freeze'
+              : resourceInfo.info?.status === 1
               ? 'online'
               : !!resourceInfo.info?.latestVersion
-                ? 'offline'
-                : 'unreleased'}
+              ? 'offline'
+              : 'unreleased'
+          }
         />
         <div style={{ height: 15 }} />
         <FLink
@@ -270,7 +268,9 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
       <div style={{ height: 35 }} />
       <div className={styles.radios}>
         <FLink
-          className={[resourceInfo.showPage.info ? styles.activatedRadio : '', styles.radio].join(' ')}
+          className={[resourceInfo.showPage.info ? styles.activatedRadio : '', styles.radio].join(
+            ' ',
+          )}
           to={FUtil.LinkTo.resourceInfo({
             resourceID: match.params.id,
           })}
@@ -278,7 +278,9 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
           {FI18n.i18nNext.t('resource_information')}
         </FLink>
         <FLink
-          className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(' ')}
+          className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(
+            ' ',
+          )}
           to={FUtil.LinkTo.resourceAuth({
             resourceID: match.params.id,
           })}
@@ -400,13 +402,13 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
         sure={inactiveResource}
         loading={loading}
         footer={
-          <Radio
+          <Checkbox
             className={styles['no-longer']}
             checked={noLonger}
-            onClick={() => setNoLonger(!noLonger)}
+            onChange={(e) => setNoLonger(e.target.checked)}
           >
             不再提醒
-          </Radio>
+          </Checkbox>
         }
       ></FDialog>
 
@@ -461,6 +463,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
           });
         }}
         onConfirm={activeResource}
+        onNewPolicy={openPolicyBuilder}
       />
 
       {resultPopupType !== null && (

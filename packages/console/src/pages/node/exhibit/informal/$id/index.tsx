@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FSwitch from '@/components/FSwitch';
-import { Radio, Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
@@ -69,6 +69,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
       if (resourceNoTip) {
         inactiveResource();
       } else {
+        setNoLonger(false);
         setInactiveDialogShow(true);
       }
     }
@@ -238,13 +239,13 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
         sure={inactiveResource}
         loading={loading}
         footer={
-          <Radio
+          <Checkbox
             className={styles['no-longer']}
             checked={noLonger}
-            onClick={() => setNoLonger(!noLonger)}
+            onChange={(e) => setNoLonger(e.target.checked)}
           >
             不再提醒
-          </Radio>
+          </Checkbox>
         }
       ></FDialog>
 
