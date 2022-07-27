@@ -220,7 +220,7 @@ function FLayout({
               onSearch={(value: string) => {
                 window.location.href = window.location.origin + `/search?search=${value}`;
               }}
-              style={{ width: 200 }}
+              style={{ width: 240 }}
             />
 
             // <FInput

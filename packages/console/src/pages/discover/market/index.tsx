@@ -31,11 +31,11 @@ interface MarketProps {
 function Market({ dispatch, discoverPage }: MarketProps) {
   const [urlState] = useUrlState<any>();
   const [category, setCategory] = React.useState<any>({
-    first: -2,
+    first: -4,
     second: '',
   });
   React.useEffect(() => {
-    if (category.first === -2) {
+    if (category.first === -4) {
       return;
     }
     let str = '';
@@ -138,6 +138,32 @@ function Market({ dispatch, discoverPage }: MarketProps) {
               </a>
             );
           })}
+          <a
+            onClick={() => {
+              setCategory({
+                second: '',
+                first: -2,
+              });
+            }}
+            className={(category.first === -2 ? styles.allSelected : '') + ' ' + styles.first}
+          >
+            <span className={styles.left}></span>
+            <span className={styles.text}>#漫画大赛</span>
+            <span className={styles.right}></span>
+          </a>
+          <a
+            onClick={() => {
+              setCategory({
+                second: '',
+                first: -3,
+              });
+            }}
+            className={(category.first === -3 ? styles.allSelected : '') + ' ' + styles.first}
+          >
+            <span className={styles.left}></span>
+            <span className={styles.text}>#小说大赛</span>
+            <span className={styles.right}></span>
+          </a>
         </div>
         {category.first > 1 ? (
           <div className={'flex-row-center py-15 ' + styles.secondContainer}>
