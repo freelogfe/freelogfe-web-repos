@@ -39,13 +39,21 @@ function Bind() {
     }
 
     if (!loginNameError) {
-      const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+      const params: Parameters<typeof FServiceAPI.User.thirdPartyIsBind>[0] = {
         username: val,
+        thirdPartyType: 'weChat',
       };
-      // const { data } = await FServiceAPI.User.userDetails(params);
-      // if (data) {
+      // const { data } = await FServiceAPI.User.thirdPartyIsBind(params);
+      // console.log(data);
+      // if (data.data) {
       //   loginNameError = '用户名已被占用';
       // }
+      const { data } = await FServiceAPI.User.userDetails({
+        username: val,
+      });
+      if (data) {
+        loginNameError = '用户名已被占用';
+      }
     }
     setBindData({
       ...bindData,
@@ -144,14 +152,16 @@ function Bind() {
                 wrapClassName={styles.Input}
                 type="password"
                 onChange={(e) => {
-                  passwordChange(e.target.value)
+                  passwordChange(e.target.value);
                 }}
                 onPressEnter={(e) => {
                   // @ts-ignore
                   e.target.blur();
                 }}
               />
-              {bindData.passwordError && <div className={styles.errorTip}>{bindData.passwordError}</div>}
+              {bindData.passwordError && (
+                <div className={styles.errorTip}>{bindData.passwordError}</div>
+              )}
 
               <div style={{ height: 40 }} />
               <FComponentsLib.FRectBtn
