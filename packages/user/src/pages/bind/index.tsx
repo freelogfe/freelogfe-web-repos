@@ -60,7 +60,7 @@ function Login() {
             <div className={styles.box} ref={boxRef}>
               <div className="flex-row align-center">
                 <span className={styles.dot + ' mr-4'}></span>
-                <FComponentsLib.FTitleText type="h4" text={'用户名/手机号/邮箱'} />
+                <FComponentsLib.FTitleText type="h4" text={'用户名'} />
               </div>
               <div style={{ height: 5 }} />
               <FInput
