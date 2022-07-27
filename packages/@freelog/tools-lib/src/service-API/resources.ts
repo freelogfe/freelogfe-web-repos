@@ -81,14 +81,17 @@ interface ListParamsType {
   resourceType?: string;
   omitResourceType?: string;
   isSelf?: 0 | 1;
+  userId?: number;
   status?: 0 | 1 | 2;
-  startResourceId?: string;
   isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
-  projection?: string;
-  sort?: string;
-  userId?: number;
   isLoadFreezeReason?: 0 | 1;
+  projection?: string;
+  startCreateDate?: string;
+  endCreateDate?: string;
+  tags?: string;
+  sort?: string;
+  // startResourceId?: string;
 }
 
 interface ListReturnType extends CommonReturn {
