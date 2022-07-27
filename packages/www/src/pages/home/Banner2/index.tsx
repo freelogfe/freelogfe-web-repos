@@ -13,6 +13,7 @@ import img_Case6 from '@/assets/home/case6.jpg';
 import img_Case7 from '@/assets/home/case7.jpg';
 import img_Case8 from '@/assets/home/case8.jpg';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 import 'animate.css';
 
@@ -62,12 +63,12 @@ function Banner2({}: Banner2Props) {
   return (<div className={styles.banner2}>
     <div className={styles.banner2Content}>
       <div style={{ height: 30 }} />
-      <h1 className={styles.banner2H1}>丰富的应用场景</h1>
+      <h1 className={styles.banner2H1}>{FI18n.i18nNext.t('home_scene')}</h1>
       <div style={{ height: 20 }} />
-      <h2 className={styles.banner2H2}>Freelog，基于「智能合约」的虚拟资源交易平台，支持资源授权的自动化和定制化，</h2>
-      <h2 className={styles.banner2H2}>为资源的发行、再创作和推广提供多样化解决方案，助力资源作者和运营者快速变现。</h2>
+      <h2 className={styles.banner2H2}>{FI18n.i18nNext.t('home_scene_descr')}</h2>
+      {/*<h2 className={styles.banner2H2}>为资源的发行、再创作和推广提供多样化解决方案，助力资源作者和运营者快速变现。</h2>*/}
       <div style={{ height: 20 }} />
-      <h3 className={styles.banner2H3}>一键创建资源商店 • 收益独享 • 多渠道变现</h3>
+      <h3 className={styles.banner2H3}>{FI18n.i18nNext.t('home_scene_descr_02')}</h3>
     </div>
     <div style={{ height: 60 }} />
     <div className={styles.banner2Content2}>
@@ -83,14 +84,26 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={'小说/漫画连载'} type='h1' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_reading')} type='h1' />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={'自主版权 • 反盗版支持'} type='h4' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_reading_descr')} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>小说场景</FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn
+              size='small'
+              style={{ padding: '0 15px' }}
+              onClick={() => {
+                window.open('https://fl-reading.freelog.com');
+              }}
+            >{FI18n.i18nNext.t('btn_viewlivenode_reading')}</FComponentsLib.FRectBtn>
             <div style={{ width: 10 }} />
-            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>漫画场景</FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn
+              size='small'
+              style={{ padding: '0 15px' }}
+              onClick={() => {
+                window.open('https://fl-comics.freelog.com');
+              }}
+            >{FI18n.i18nNext.t('btn_viewlivenode_comics')}</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -104,12 +117,19 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={'摄影/设计作品集'} type='h1' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_portfolio')} type='h1' />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={'版权保护 • 再创作变现'} type='h4' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_portfolio_descr')} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>
+            {/*<FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>*/}
+            <FComponentsLib.FRectBtn
+              size='small'
+              style={{ padding: '0 15px' }}
+              onClick={() => {
+                window.open('https://fl-stock.freelog.com');
+              }}
+            >{FI18n.i18nNext.t('btn_viewlivenode')}</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -123,12 +143,18 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={'游戏中心'} type='h1' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_gamecenter')} type='h1' />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={'简易操作 • 一站式发行服务'} type='h4' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_gamecenter_descr')} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn
+              size='small'
+              style={{ padding: '0 15px' }}
+              onClick={() => {
+                window.open();
+              }}
+            >{FI18n.i18nNext.t('btn_viewlivenode')}</FComponentsLib.FRectBtn>
           </div>
         </div>
         {/*<div style={{ height: 10 }} />*/}
@@ -142,12 +168,18 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={'更多可能，等你探索'} type='h1' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_more')} type='h1' />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={'编写个人博客、搭建素材库等'} type='h4' />
+          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_more_descr')} type='h4' />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
-            <FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>马上注册</FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn
+              size='small'
+              style={{ padding: '0 15px' }}
+              onClick={() => {
+                window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon());
+              }}
+            >{FI18n.i18nNext.t('btn_signupnow')}</FComponentsLib.FRectBtn>
           </div>
         </div>
 

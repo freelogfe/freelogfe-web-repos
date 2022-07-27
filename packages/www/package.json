@@ -22,7 +22,7 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "antd": "^4.21.7",
-    "umi": "^4.0.8"
+    "umi": "^3.4.21"
   },
   "devDependencies": {
     "@umijs/preset-react": "^2.1.4",
