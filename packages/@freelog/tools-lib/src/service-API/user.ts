@@ -251,7 +251,20 @@ export function thirdPartyList(params: ThirdPartyListParamsType = {}) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/thirdParty/list`,
-    data: params,
+    params: params,
   });
 }
 
+// 查询用户名称是否绑定了微信号
+interface ThirdPartyIsBindParamsType {
+  username: string;
+  thirdPartyType: string;
+}
+
+export function thirdPartyIsBind(params: ThirdPartyIsBindParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/thirdParty/isBind`,
+    params: params,
+  });
+}

@@ -1,15 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import FPentagram from '@/components/FIcons/FPentagram';
-
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';
-
 import Banner2 from '@/pages/home/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface HomePageProps {
 
@@ -26,13 +25,18 @@ function HomePage({}: HomePageProps) {
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>
         <div style={{ height: 110 }} />
-        <h1 className={styles.banner1H1}>创作盛放之地</h1>
+        <h1 className={styles.banner1H1}>{FI18n.i18nNext.t('home_slogan')}</h1>
         <div style={{ height: 40 }} />
-        <h2 className={styles.banner1H2}>免费专业的资源发行和运营平台</h2>
+        <h2 className={styles.banner1H2}>{FI18n.i18nNext.t('home_slogan_subtitle')}</h2>
         <div style={{ height: 20 }} />
-        <h3 className={styles.banner1H3}>支持漫画、小说、图片、游戏、视频、音乐、插件、主题等各类型资源</h3>
+        <h3 className={styles.banner1H3}>{FI18n.i18nNext.t('home_slogan_descr')}</h3>
         <div style={{ height: 40 }} />
-        <FComponentsLib.FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FComponentsLib.FRectBtn>
+        <FComponentsLib.FRectBtn
+          onClick={() => {
+            window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon();
+          }}
+          style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}
+        >{FI18n.i18nNext.t('btn_getitforfree')}</FComponentsLib.FRectBtn>
       </div>
     </div>
 
@@ -40,20 +44,21 @@ function HomePage({}: HomePageProps) {
 
     <div className={styles.banner3}>
       <div style={{ height: 150 }} />
-      <h1 className={styles.banner3H1}>助力虚拟资源发行和运营</h1>
+      <h1 className={styles.banner3H1}>{FI18n.i18nNext.t('home_features')}</h1>
       <div style={{ height: 20 }} />
-      <h3 className={styles.banner3H2}>实现资源授权与交易自动化、定制化，开创资源再创作的变现新模式，节点商整合运营资源助力变现</h3>
+      <h3 className={styles.banner3H2}>{FI18n.i18nNext.t('home_features_descr')}</h3>
       <div style={{ height: 150 }} />
 
       <div className={styles.banner3_Content}>
         <img src={img_Banner3_1} alt={''} className={styles.banner3_Content_LeftImg} />
         <div />
         <div className={styles.banner3_Content_Display}>
-          <div className={styles.banner3_Content_DisplayH1}>「 智能合约 」，高效变现</div>
+          <div className={styles.banner3_Content_DisplayH1}>{FI18n.i18nNext.t('home_features_01')}</div>
           <div style={{ height: 30 }} />
-          <div className={styles.banner3_Content_DisplayH2}>根据不同人群创建不同授权策略，实现交易定制化、自动化，满足你的多样变现需求。</div>
+          <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_01_descr')}</div>
           <div style={{ height: 30 }} />
-          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
+          <FComponentsLib.FRectBtn
+            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
       </div>
 
@@ -62,11 +67,12 @@ function HomePage({}: HomePageProps) {
       <div className={styles.banner3_Content}>
         <img src={img_Banner3_2} alt={''} className={styles.banner3_Content_RightImg} />
         <div className={styles.banner3_Content_Display}>
-          <div className={styles.banner3_Content_DisplayH1}>「 再创作 」，助力多渠道变现</div>
+          <div className={styles.banner3_Content_DisplayH1}>{FI18n.i18nNext.t('home_features_02')}</div>
           <div style={{ height: 30 }} />
-          <div className={styles.banner3_Content_DisplayH2}>资源可被他人签约为素材进行再创作，拓宽资源变现渠道。</div>
+          <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_02_descr')}</div>
           <div style={{ height: 30 }} />
-          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
+          <FComponentsLib.FRectBtn
+            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
         <div />
       </div>
@@ -77,11 +83,12 @@ function HomePage({}: HomePageProps) {
         <img src={img_Banner3_3} alt={''} className={styles.banner3_Content_LeftImg} />
         <div />
         <div className={styles.banner3_Content_Display}>
-          <div className={styles.banner3_Content_DisplayH1}>节点商运营，轻松获益</div>
+          <div className={styles.banner3_Content_DisplayH1}>{FI18n.i18nNext.t('home_features_03')}</div>
           <div style={{ height: 30 }} />
-          <div className={styles.banner3_Content_DisplayH2}>新增节点商角色，专注资源运营，提高变现效率， 你可以专注生产优质资源，轻松获益。</div>
+          <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_03_descr')}</div>
           <div style={{ height: 30 }} />
-          <FComponentsLib.FRectBtn style={{ height: 42, fontSize: 16 }}>进一步了解</FComponentsLib.FRectBtn>
+          <FComponentsLib.FRectBtn
+            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
       </div>
 
@@ -89,11 +96,17 @@ function HomePage({}: HomePageProps) {
 
     </div>
     <div className={styles.banner4}>
-      <h1 className={styles.banner4H1}>Freelog，专业免费的资源发行和运营平台</h1>
+      <h1 className={styles.banner4H1}>{FI18n.i18nNext.t('home_cta')}</h1>
       <div style={{ height: 40 }} />
-      <h3 className={styles.banner4H2}>支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现</h3>
+      <h3 className={styles.banner4H2}>{FI18n.i18nNext.t('home_cta_descr')}</h3>
       <div style={{ height: 40 }} />
-      <FComponentsLib.FRectBtn style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}>免费使用</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
+        style={{
+          height: 60,
+          fontSize: 22,
+          padding: '0 50px',
+          fontWeight: 400,
+        }}>{FI18n.i18nNext.t('btn_getitforfree')}</FComponentsLib.FRectBtn>
     </div>
 
     <FComponentsLib.FPageFooter PopoverPatch={Popover} />
