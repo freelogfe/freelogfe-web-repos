@@ -63,6 +63,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             onClick={openNewVisible}>{'添加授权策略'}</FComponentsLib.FRectBtn>
         </div>)
         : (<FPolicyList
+          atLeastOneUsing={resourceAuthPage.status === 1}
           dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
             const usedCount: number = resourceAuthPage.policies.filter((p) => {

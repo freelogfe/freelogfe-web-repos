@@ -11,6 +11,7 @@ interface FPolicyOperaterDrawerProps {
   policiesList: any[];
   onCancel(): void;
   onConfirm(): void;
+  onNewPolicy(): void;
 }
 
 export const FPolicyOperaterDrawer = ({
@@ -19,6 +20,7 @@ export const FPolicyOperaterDrawer = ({
   type,
   onCancel,
   onConfirm,
+  onNewPolicy,
 }: FPolicyOperaterDrawerProps) => {
   const typeMapping = { resource: '资源', exhibit: '展品' };
   const [activeList, setActiveList] = React.useState<string[]>([]);
@@ -29,7 +31,7 @@ export const FPolicyOperaterDrawer = ({
 
   React.useEffect(() => {
     if (visible) updateActiveList();
-  }, [visible])
+  }, [visible]);
 
   return (
     <>
@@ -72,6 +74,9 @@ export const FPolicyOperaterDrawer = ({
             </div>
           );
         })}
+        <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type="primary">
+          创建新授权策略
+        </FComponentsLib.FRectBtn>
       </FDrawer>
     </>
   );

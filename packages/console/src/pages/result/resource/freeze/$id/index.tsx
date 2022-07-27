@@ -54,14 +54,15 @@ function Freeze({ match }: FreezeProps) {
   return (<div className={styles.container}>
     <FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    <FComponentsLib.FTitleText text={'该资源已经被封停'} type='h1' />
+    <FComponentsLib.FTitleText text={'此资源因违规已被封禁'} type='h1' />
+    {/*<FComponentsLib.FTitleText text={FI18n.i18nNext.t('alert_resourceblocked01')} type='h1' />*/}
     <div style={{ height: 80 }} />
     <div className={styles.content}>
-      <FComponentsLib.FContentText text={`经核实，资源 ${resourceName} ，严重违`} />
+      <FComponentsLib.FContentText text={`经核实，资源 ${resourceName} ，违反平台规范`} />
       <FComponentsLib.FTextBtn onClick={() => {
 
       }}>&nbsp;查看服务协议&nbsp;</FComponentsLib.FTextBtn>
-      <FComponentsLib.FContentText text={` ，涉嫌 ${freezeReason} ，已经被封停。`} />
+      <FComponentsLib.FContentText text={` ，涉嫌 ${freezeReason} ，已经被封禁。`} />
     </div>
     {
       isOwner && (<>

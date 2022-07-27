@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Input } from 'antd';
+import { Input, InputRef } from 'antd';
 import { InputProps } from 'antd/lib/input';
 import styles from './index.less';
 import { ChangeEvent } from 'react';
 import * as AHooks from 'ahooks';
+import { RefSelectProps } from 'antd/lib/select';
 
 interface FInputProps extends InputProps {
   theme?: 'dark' | 'light';
@@ -29,7 +30,7 @@ function FInput({
                   lengthLimit = 0,
                   size = 'middle',
                   ...props
-                }: FInputProps) {
+                }: FInputProps,  ref: React.Ref<InputRef> | undefined) {
 
   const [inputText, setInputText] = React.useState<string>(value || '');
   const { run } = AHooks.useDebounceFn(
@@ -64,6 +65,7 @@ function FInput({
       theme === 'dark'
         ? (
           <Input
+            ref={ref}
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
             prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
             className={[...commentClass, styles.dark].join(' ')}
@@ -73,6 +75,7 @@ function FInput({
           />
         )
         : (<Input
+          ref={ref}
           className={[...commentClass, styles.light].join(' ')}
           style={{ height: size === 'middle' ? 38 : 32 }}
           suffix={lengthLimit > 0
@@ -91,4 +94,4 @@ function FInput({
   </div>);
 }
 
-export default FInput;
+export default React.forwardRef(FInput);

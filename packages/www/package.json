@@ -21,11 +21,12 @@
   },
   "dependencies": {
     "animate.css": "^4.1.1",
-    "umi": "^3.5.23"
+    "antd": "^4.21.7",
+    "umi": "^4.0.8"
   },
   "devDependencies": {
-    "@umijs/preset-react": "1.x",
-    "@umijs/test": "^3.5.23",
+    "@umijs/preset-react": "^2.1.4",
+    "@umijs/test": "^4.0.8",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "yorkie": "^2.0.0"

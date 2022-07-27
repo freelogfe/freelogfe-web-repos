@@ -467,17 +467,36 @@ const Model: ContractPageModelType = {
         });
       }
 
+      // const status: { [k: string]: 0 | 1 | 2 } = {
+      //   'authorization': 0,
+      //   'pending': 0,
+      //   'exception': 2,
+      //   'terminated': 1,
+      // };
+      //
+      // const authStatus: { [key: string]: 1 | 128 | undefined } = {
+      //   'authorization': 1,
+      //   'pending': 128,
+      //   'exception': undefined,
+      //   'terminated': undefined,
+      // };
+
       const status: { [k: string]: 0 | 1 | 2 } = {
-        'authorization': 0,
-        'pending': 0,
-        'exception': 2,
+        // 'authorization': 0,
+        'authorized': 0,
+        'unauthorized': 0,
+        // 'pending': 0,
+        // 'exception': 2,
+        // 'unauthorized': 2,
         'terminated': 1,
       };
 
       const authStatus: { [key: string]: 1 | 128 | undefined } = {
-        'authorization': 1,
-        'pending': 128,
-        'exception': undefined,
+        // 'authorization': 1,
+        'authorized': 1,
+        // 'pending': 128,
+        'unauthorized': 128,
+        // 'exception': undefined,
         'terminated': undefined,
       };
 
@@ -592,17 +611,36 @@ const Model: ContractPageModelType = {
         });
       }
 
+      // const status: { [k: string]: 0 | 1 | 2 } = {
+      //   'authorization': 0,
+      //   'pending': 0,
+      //   'exception': 2,
+      //   'terminated': 1,
+      // };
+      //
+      // const authStatus: { [key: string]: 1 | 128 | undefined } = {
+      //   'authorization': 1,
+      //   'pending': 128,
+      //   'exception': undefined,
+      //   'terminated': undefined,
+      // };
+
       const status: { [k: string]: 0 | 1 | 2 } = {
-        'authorization': 0,
-        'pending': 0,
-        'exception': 2,
+        // 'authorization': 0,
+        'authorized': 0,
+        'unauthorized': 0,
+        // 'pending': 0,
+        // 'exception': 2,
+        // 'unauthorized': 2,
         'terminated': 1,
       };
 
       const authStatus: { [key: string]: 1 | 128 | undefined } = {
-        'authorization': 1,
-        'pending': 128,
-        'exception': undefined,
+        // 'authorization': 1,
+        'authorized': 1,
+        // 'pending': 128,
+        'unauthorized': 128,
+        // 'exception': undefined,
         'terminated': undefined,
       };
 

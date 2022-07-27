@@ -6,16 +6,14 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
 import InviteFriend from './InviteFriend';
-
 import * as AHooks from 'ahooks';
 import {
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/activityDetailsPage';
 import { IRouteComponentProps, withRouter } from 'umi';
-import FNoDataTip from '@/components/FNoDataTip';
 import FResultTip from '@/components/FResultTip';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 
 interface ActivityProps extends IRouteComponentProps {
@@ -70,8 +68,10 @@ function Activity({
           justifyContent: 'center',
         }}
       >
+        {/*msg_event_suspend */}
         <FResultTip
-          h1={'活动不存在或者已暂停'}
+          // h1={'活动不存在或者已暂停'}
+          h1={FI18n.i18nNext.t('msg_event_suspend')}
           btnText={'返回首页'}
           onClickBtn={() => {
             history.push(FUtil.LinkTo.home());

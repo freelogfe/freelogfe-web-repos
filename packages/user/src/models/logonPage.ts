@@ -35,6 +35,9 @@ export interface ChangeAction extends AnyAction {
 
 export interface OnMountPageAction extends AnyAction {
   type: 'logonPage/onMountPage';
+  payload: {
+    url: string;
+  };
 }
 
 export interface OnUnmountPageAction extends AnyAction {
@@ -186,8 +189,11 @@ const Model: LogonPageModelType = {
   namespace: 'logonPage',
   state: initStates,
   effects: {
-    * onMountPage({}: OnMountPageAction, {}: EffectsCommandMap) {
-
+    * onMountPage({payload}: OnMountPageAction, {}: EffectsCommandMap) {
+      if (FUtil.Tool.getUserIDByCookies() === -1) {
+        return;
+      }
+      window.location.replace(payload.url || FUtil.Format.completeUrlByDomain('www'));
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

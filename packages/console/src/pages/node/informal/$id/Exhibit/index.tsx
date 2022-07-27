@@ -89,7 +89,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
   return (
     <>
       <Helmet>
-        <title>{`[T]测试展品管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+        <title>{`测试展品管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
       </Helmet>
 
       {

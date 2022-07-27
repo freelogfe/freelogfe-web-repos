@@ -86,7 +86,8 @@ function Policies({ resourceVersionCreatorPage, dispatch }: PoliciesProps) {
         {/*</div>*/}
         <div style={{ height: 10 }} />
         <div style={{ padding: '0 20px' }}>
-          <FPolicyDisplay code={i.code} />
+          {/*<FPolicyDisplay code={i.code} />*/}
+          <FPolicyDisplay fullInfo={i.policyFullInfo} />
         </div>
       </div>
     ))}

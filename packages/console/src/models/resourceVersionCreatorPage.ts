@@ -9,6 +9,7 @@ import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceIn
 import * as semver from 'semver';
 import moment from 'moment';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export type DepResources = {
   id: string;
@@ -44,6 +45,7 @@ export type DepResources = {
     title: string;
     code: string;
     status: 0 | 1;
+    policyFullInfo: PolicyFullInfo_Type;
   }[];
 }[];
 
@@ -876,6 +878,7 @@ const Model: ResourceVersionCreatorModelType = {
                   title: policy.policyName,
                   code: policy.policyText,
                   status: policy.status,
+                  policyFullInfo: policy,
                 };
               }),
           };
@@ -1312,6 +1315,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
 
   // 本次要添加的一些列资源信息
   const data_batchResourceInfo: HandleResourceBatchInfoReturn = await handleResourceBatchInfo(params);
+  console.log(data_batchResourceInfo, 'data_batchResourceInfo')
 
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: allIDs.join(','),
@@ -1413,6 +1417,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
             title: policy.policyName,
             code: policy.policyText,
             status: policy.status,
+            policyFullInfo: policy,
           };
         }),
     };
@@ -1441,6 +1446,7 @@ type HandleResourceBatchInfoReturn = {
     policyName: string;
     policyText: string;
     status: 0 | 1;
+    // policyFullInfo: PolicyFullInfo_Type
   }[];
   resourceVersions: {
     createDate: string;
@@ -1460,8 +1466,9 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     resourceIds: resourceIDs.join(','),
     isLoadPolicyInfo: 1,
     isLoadLatestVersionInfo: 1,
-    projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
+    // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
     // isLoadFreezeReason: 1,
+    isTranslate: 1,
   };
 
   // 本次要添加的一些列资源信息
@@ -1494,8 +1501,8 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     });
     return {
       ...dbri,
-      // authProblem: authP ? !authP.isAuth : false,
-      authProblem: true,
+      authProblem: authP ? !authP.isAuth : false,
+      // authProblem: true,
     };
   });
 }

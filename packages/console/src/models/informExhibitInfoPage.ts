@@ -561,8 +561,8 @@ const Model: ExhibitInfoPageModelType = {
         };
       }
       // console.log(data, 'data@!!!!!!!!1111');
-      const isChecked: boolean = testResourceDetail.resourceType === 'theme' ? testResourceDetail.stateInfo.themeInfo.isActivatedTheme === 1 : testResourceDetail.stateInfo.onlineStatusInfo.onlineStatus === 1;
-      const isDisabled: boolean = testResourceDetail.resourceType === 'theme' && isChecked;
+      const isChecked: boolean = testResourceDetail.resourceType.includes('主题') ? testResourceDetail.stateInfo.themeInfo.isActivatedTheme === 1 : testResourceDetail.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      const isDisabled: boolean = testResourceDetail.resourceType.includes('主题') && isChecked;
 
       const params2: Parameters<typeof ruleMatchAndResult>[0] = {
         nodeID: testResourceDetail.nodeId,

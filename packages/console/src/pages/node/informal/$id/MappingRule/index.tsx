@@ -91,7 +91,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   return (<>
     <Helmet>
-      <title>{`[T]映射规则管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
+      <title>{`映射规则管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
     </Helmet>
 
     <Prompt

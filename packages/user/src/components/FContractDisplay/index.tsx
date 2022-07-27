@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FServiceAPI, FUtil , FI18n} from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
 import FCodeFormatter from '../FCodeFormatter';
@@ -44,6 +44,7 @@ interface IContractDisplayStates {
 
   modal_Visible: boolean;
   modal_AccountBalance: number;
+  modal_AccountState: 'inactive' | 'activate' | 'frozen';
   modal_Target: string;
   modal_ContractName: string;
   modal_Payee: string;
@@ -68,6 +69,7 @@ const initStates: IContractDisplayStates = {
 
   modal_Visible: false,
   modal_AccountBalance: -1,
+  modal_AccountState: 'activate',
   modal_Target: '',
   modal_ContractName: '',
   modal_Payee: '',
@@ -102,6 +104,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
   const [modal_Visible, set_Modal_Visible] = React.useState<IContractDisplayStates['modal_Visible']>(initStates['modal_Visible']);
   const [modal_AccountBalance, set_Modal_AccountBalance] = React.useState<IContractDisplayStates['modal_AccountBalance']>(initStates['modal_AccountBalance']);
+  const [modal_AccountState, set_Modal_AccountState] = React.useState<IContractDisplayStates['modal_AccountState']>(initStates['modal_AccountState']);
   const [modal_Target, set_Modal_Target] = React.useState<IContractDisplayStates['modal_Target']>(initStates['modal_Target']);
   const [modal_ContractName, set_Modal_ContractName] = React.useState<IContractDisplayStates['modal_ContractName']>(initStates['modal_ContractName']);
   const [modal_Payee, set_Modal_Payee] = React.useState<IContractDisplayStates['modal_ContractName']>(initStates['modal_ContractName']);
@@ -215,6 +218,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     };
     const { data } = await FServiceAPI.Transaction.individualAccounts(params);
     set_Modal_AccountBalance(data.balance);
+    set_Modal_AccountState(data.status === 0 ? 'inactive' : data.status === 1 ? 'activate' : 'frozen');
     set_Modal_AccountID(data.accountId);
     set_Modal_Visible(true);
   }
@@ -358,12 +362,6 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                               />
                             </div>);
                           } else {
-                            // return (<div key={'terminal'} className={styles.Event}>
-                            //   <FContentText
-                            //     type='highlight'
-                            //     text={(eti as any).tip}
-                            //   />
-                            // </div>);
                             return undefined;
                           }
                         })
@@ -508,37 +506,47 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
         <div style={{ height: 40 }} />
 
-        <div className={styles.paymentPassword}>
-          {
-            modal_IsPaying
-              ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
-              : (<FComponentsLib.FContentText text={'输入支付密码进行支付'} type='normal' />)
-          }
-
-
-          <div style={{ height: 20 }} />
-          <FPaymentPasswordInput
-            ref={inputEl}
-            autoFocus={true}
-            value={modal_Password}
-            onChange={async (value) => {
-              // console.log(value, '@#$@#$@#$@#$');
-              // console.log(value, 'valuevalue9032klsdflksdfl');
-              set_Modal_Password(value);
-              if (value.length === 6) {
-                inputEl.current.blur();
-                confirmPay(value);
-              }
-            }}
-          />
-          <div style={{ height: 20 }} />
-          <FComponentsLib.FTextBtn
-            type='default'
+        {
+          modal_AccountState === 'inactive' && (<FComponentsLib.FRectBtn
             onClick={() => {
-              window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.retrievePayPassword());
-            }}
-          >忘记支付密码</FComponentsLib.FTextBtn>
-        </div>
+              window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
+              set_Modal_Visible(false);
+            }}>激活账户</FComponentsLib.FRectBtn>)
+        }
+
+        {
+          modal_AccountState === 'activate' && (<div className={styles.paymentPassword}>
+            {
+              modal_IsPaying
+                ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
+                : (<FComponentsLib.FContentText text={'输入支付密码进行支付'} type='normal' />)
+            }
+
+
+            <div style={{ height: 20 }} />
+            <FPaymentPasswordInput
+              ref={inputEl}
+              autoFocus={true}
+              value={modal_Password}
+              onChange={async (value) => {
+                // console.log(value, '@#$@#$@#$@#$');
+                // console.log(value, 'valuevalue9032klsdflksdfl');
+                set_Modal_Password(value);
+                if (value.length === 6) {
+                  inputEl.current.blur();
+                  confirmPay(value);
+                }
+              }}
+            />
+            <div style={{ height: 20 }} />
+            <FComponentsLib.FTextBtn
+              type='default'
+              onClick={() => {
+                window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.retrievePayPassword());
+              }}
+            >忘记支付密码</FComponentsLib.FTextBtn>
+          </div>)
+        }
 
       </div>
 

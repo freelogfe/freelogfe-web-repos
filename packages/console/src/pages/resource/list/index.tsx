@@ -1,12 +1,9 @@
 import * as React from 'react';
-import FAffixTabs from '@/components/FAffixTabs';
-import { router, RouterTypes, withRouter } from 'umi';
+import { RouterTypes, withRouter } from 'umi';
 import Resources from './Resources';
 import Collects from './Collects';
 import { RouteComponentProps } from 'react-router';
-import { ChangeAction } from '@/models/global';
 import { Dispatch, connect } from 'dva';
-// import FUtil1 from '@/utils';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import * as AHooks from 'ahooks';
@@ -14,15 +11,6 @@ import { ConnectState } from '@/models/connect';
 import FNavTabs from '@/components/FNavTabs';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-
-// const navs = [
-//   {
-//     value: '1',
-//   },
-//   {
-//     value: '2',
-//   },
-// ];
 
 interface ListProps extends RouteComponentProps {
   dispatch: Dispatch;
@@ -40,15 +28,6 @@ function List({ match, dispatch, route }: ListProps & RouterTypes) {
 
   });
 
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  // }, [route]);
-
   React.useEffect(() => {
     if (match.path.startsWith(FUtil.LinkTo.myResources())) {
       setShowPage('myResources');
@@ -57,15 +36,6 @@ function List({ match, dispatch, route }: ListProps & RouterTypes) {
       setShowPage('myCollections');
     }
   }, [match.path]);
-
-  // function onChangeTab(value: '1' | '2') {
-  //   if (value === '1') {
-  //     return router.push(FUtil.LinkTo.myResources());
-  //   }
-  //   if (value === '2') {
-  //     return router.push(FUtil.LinkTo.myCollects());
-  //   }
-  // }
 
   return (<div>
     <div className={styles.top}>
@@ -87,11 +57,6 @@ function List({ match, dispatch, route }: ListProps & RouterTypes) {
       />
     </div>
     <FCenterLayout>
-      {/*<FAffixTabs*/}
-      {/*  value={tabValue}*/}
-      {/*  options={navs}*/}
-      {/*  onChange={onChangeTab}*/}
-      {/*/>*/}
 
       {showPage === 'myResources' ? <Resources /> : null}
       {showPage === 'myCollections' ? <Collects /> : null}

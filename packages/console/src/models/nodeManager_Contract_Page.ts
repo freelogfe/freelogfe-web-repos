@@ -234,6 +234,7 @@ const initStates: NodeManager_Contract_Page_ModelState = {
     text: '展品',
   }],
   authorize_SubjectType: 'all',
+
   authorize_Status_Options: [{
     value: 'all',
     text: '全部',
@@ -471,17 +472,23 @@ const Model: NodeManager_Contract_Page_ModelType = {
         });
       }
 
+      //'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized'
       const status: { [k: string]: 0 | 1 | 2 } = {
-        'authorization': 0,
-        'pending': 0,
-        'exception': 2,
+        // 'authorization': 0,
+        'authorized': 0,
+        'unauthorized': 0,
+        // 'pending': 0,
+        // 'exception': 2,
+        // 'unauthorized': 2,
         'terminated': 1,
       };
 
       const authStatus: { [key: string]: 1 | 128 | undefined } = {
-        'authorization': 1,
-        'pending': 128,
-        'exception': undefined,
+        // 'authorization': 1,
+        'authorized': 1,
+        // 'pending': 128,
+        'unauthorized': 128,
+        // 'exception': undefined,
         'terminated': undefined,
       };
 
@@ -497,6 +504,9 @@ const Model: NodeManager_Contract_Page_ModelType = {
           ...nodeManager_Contract_Page.authorize_List,
         ];
       }
+      // console.log(nodeManager_Contract_Page.authorize_Status, 'nodeManager_Contract_Page.authorize_Status');
+      // console.log(status[nodeManager_Contract_Page.authorize_Status], 'status[nodeManager_Contract_Page.authorize_Status]');
+      // console.log(authStatus[nodeManager_Contract_Page.authorize_Status], 'authStatus[nodeManager_Contract_Page.authorize_Status]');
 
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: beforeData.length,
@@ -601,17 +611,36 @@ const Model: NodeManager_Contract_Page_ModelType = {
         });
       }
 
+      // const status: { [k: string]: 0 | 1 | 2 } = {
+      //   'authorization': 0,
+      //   'pending': 0,
+      //   'exception': 2,
+      //   'terminated': 1,
+      // };
+      //
+      // const authStatus: { [key: string]: 1 | 128 | undefined } = {
+      //   'authorization': 1,
+      //   'pending': 128,
+      //   'exception': undefined,
+      //   'terminated': undefined,
+      // };
+
       const status: { [k: string]: 0 | 1 | 2 } = {
-        'authorization': 0,
-        'pending': 0,
-        'exception': 2,
+        // 'authorization': 0,
+        'authorized': 0,
+        'unauthorized': 0,
+        // 'pending': 0,
+        // 'exception': 2,
+        // 'unauthorized': 2,
         'terminated': 1,
       };
 
       const authStatus: { [key: string]: 1 | 128 | undefined } = {
-        'authorization': 1,
-        'pending': 128,
-        'exception': undefined,
+        // 'authorization': 1,
+        'authorized': 1,
+        // 'pending': 128,
+        'unauthorized': 128,
+        // 'exception': undefined,
         'terminated': undefined,
       };
 

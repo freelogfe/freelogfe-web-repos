@@ -10,7 +10,7 @@ import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import FCodeFormatter from '../FCodeFormatter';
-import { FUtil , FI18n} from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
@@ -820,9 +820,10 @@ function FPolicyBuilder({
           }
           <div className={styles.maskingContainer} ref={refMaskingContainer}>
             <div className={styles.policyHeader}>
-              <input
+              <FInput
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
+                wrapClassName={styles.policyTitle}
                 value={titleInput}
                 onChange={(e) => {
                   onChange_TitleInput(e.target.value.trim());
@@ -1131,7 +1132,7 @@ function FPolicyBuilder({
                                           allowClear={false}
                                           value={et.absoluteTime_DateTime}
                                           disabledTime={disabledTime}
-                                          onChange={(value:any, dateString:any) => {
+                                          onChange={(value: any, dateString: any) => {
                                             const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
                                             onChangeCombinationEvent({
                                               absoluteTime_DateTime: mo,
@@ -1157,7 +1158,8 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown
+                                            style={{ fontSize: 10 }} />
                                           </FComponentsLib.FTitleText>
                                         </Divider>
 
@@ -1301,7 +1303,7 @@ function FPolicyBuilder({
               return onClick_SelectTemplateBtn(num);
             }
             Modal.confirm({
-              title: FI18n.i18nNext.t('alert_plan_cover '),
+              title: FI18n.i18nNext.t('alert_plan_cover'),
               okText: FI18n.i18nNext.t('btn_import'),
               cancelText: FI18n.i18nNext.t('btn_cancel'),
               onOk() {

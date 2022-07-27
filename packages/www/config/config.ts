@@ -1,10 +1,10 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  // nodeModulesTransform: {
-  //   type: 'none',
-  // },
-  // antd: {},
+  nodeModulesTransform: {
+    type: 'none',
+  },
+  antd: {},
   dva: {},
   dynamicImport: {
     loading: '@/components/FGlobalLoading',
