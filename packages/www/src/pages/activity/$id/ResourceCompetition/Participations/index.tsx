@@ -14,7 +14,7 @@ import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 
 interface ParticipationsProps {
-
+  onClickRuleBtn?(): void;
 }
 
 interface ActivityStates {
@@ -125,7 +125,7 @@ const initStates: ActivityStates = {
   display_Novel_Index: 0,
 };
 
-function Participations({}: ParticipationsProps) {
+function Participations({ onClickRuleBtn }: ParticipationsProps) {
 
   const [delay, set_Delay] = React.useState<ActivityStates['delay']>(initStates['delay']);
 
@@ -188,7 +188,12 @@ function Participations({}: ParticipationsProps) {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >立即参赛</FComponentsLib.FRectBtn>
-          <FComponentsLib.FTextBtn type='primary'>如何参赛？</FComponentsLib.FTextBtn>
+          <FComponentsLib.FTextBtn
+            type='primary'
+            onClick={() => {
+              onClickRuleBtn && onClickRuleBtn();
+            }}
+          >如何参赛？</FComponentsLib.FTextBtn>
         </Space>
       </div>
       <div
@@ -271,7 +276,12 @@ function Participations({}: ParticipationsProps) {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >立即参赛</FComponentsLib.FRectBtn>
-          <FComponentsLib.FTextBtn type='primary'>如何参赛？</FComponentsLib.FTextBtn>
+          <FComponentsLib.FTextBtn
+            type='primary'
+            onClick={() => {
+              onClickRuleBtn && onClickRuleBtn();
+            }}
+          >如何参赛？</FComponentsLib.FTextBtn>
         </Space>
       </div>
     </div>
