@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import { Space } from 'antd';
 import { history } from 'umi';
@@ -9,7 +9,7 @@ import * as AHooks from 'ahooks';
 import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 
-function Login() {
+function Bind() {
   const [urlParams] = useUrlState<{
     goTo: string;
     identityId: string;
@@ -26,7 +26,56 @@ function Login() {
   AHooks.useMount(() => {});
 
   AHooks.useUnmount(() => {});
+  const loginNameChange = async (val: string) => {
+    let loginNameError: string = '';
 
+    if (val === '') {
+      loginNameError = '用户名称不能为空';
+    } else if (!FUtil.Regexp.USERNAME.test(val)) {
+      loginNameError =
+        '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+    } else if (FUtil.Regexp.MOBILE_PHONE_NUMBER.test(val)) {
+      loginNameError = '用户名不能是手机号';
+    }
+
+    if (!loginNameError) {
+      const params: Parameters<typeof FServiceAPI.User.thirdPartyIsBind>[0] = {
+        username: val,
+        thirdPartyType: 'weChat',
+      };
+      // const { data } = await FServiceAPI.User.thirdPartyIsBind(params);
+      // console.log(data);
+      // if (data.data) {
+      //   loginNameError = '用户名已被占用';
+      // }
+      const { data } = await FServiceAPI.User.userDetails({
+        username: val,
+      });
+      if (data) {
+        loginNameError = '用户名已被占用';
+      }
+    }
+    setBindData({
+      ...bindData,
+      loginName: val,
+      loginNameError,
+    });
+  };
+  const passwordChange = (val: string) => {
+    let passwordError: string = '';
+    if (!val) {
+      passwordError = '密码不能为空';
+    } else if (val.length < 6 || val.length > 24) {
+      passwordError = FI18n.i18nNext.t('password_length');
+    } else if (!FUtil.Regexp.PASSWORD.test(val)) {
+      passwordError = FI18n.i18nNext.t('password_include');
+    }
+    setBindData({
+      ...bindData,
+      password: val,
+      passwordError,
+    });
+  };
   async function submit() {
     const data = await FServiceAPI.User.registerOrBind({
       identityId: urlParams.identityId,
@@ -49,7 +98,10 @@ function Login() {
           <div className="flex-column align-center flex-1">
             <div className="flex-3"></div>
             <div className="shrink-0 flex-column-center">
-              <FComponentsLib.FTitleText type="h1" text={'当前微信账户未绑定freelog'} />
+              <FComponentsLib.FTitleText
+                type="h1"
+                text={'当前微信账户未绑定freelog'}
+              />
               <div className={styles.title2 + ' mt-30'}>
                 为了您的账户安全，请完成用户名和密码的设置
               </div>
@@ -60,7 +112,7 @@ function Login() {
             <div className={styles.box} ref={boxRef}>
               <div className="flex-row align-center">
                 <span className={styles.dot + ' mr-4'}></span>
-                <FComponentsLib.FTitleText type="h4" text={'用户名/手机号/邮箱'} />
+                <FComponentsLib.FTitleText type="h4" text={'用户名'} />
               </div>
               <div style={{ height: 5 }} />
               <FInput
@@ -70,12 +122,7 @@ function Login() {
                 className={styles.Input}
                 wrapClassName={styles.Input}
                 onChange={(e) => {
-                  const loginName: string = e.target.value;
-                  setBindData({
-                    ...bindData,
-                    loginName,
-                    loginNameError: loginName ? '' : '不能为空',
-                  });
+                  loginNameChange(e.target.value);
                 }}
               />
               {bindData.loginNameError && (
@@ -105,19 +152,16 @@ function Login() {
                 wrapClassName={styles.Input}
                 type="password"
                 onChange={(e) => {
-                  const password: string = e.target.value;
-                  setBindData({
-                    ...bindData,
-                    password,
-                    passwordError: password ? '' : '不能为空',
-                  });
+                  passwordChange(e.target.value);
                 }}
                 onPressEnter={(e) => {
                   // @ts-ignore
                   e.target.blur();
                 }}
               />
-              {bindData.passwordError && <div>{bindData.passwordError}</div>}
+              {bindData.passwordError && (
+                <div className={styles.errorTip}>{bindData.passwordError}</div>
+              )}
 
               <div style={{ height: 40 }} />
               <FComponentsLib.FRectBtn
@@ -162,4 +206,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Bind;

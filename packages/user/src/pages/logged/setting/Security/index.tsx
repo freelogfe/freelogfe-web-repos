@@ -76,6 +76,7 @@ interface SecurityProps {
   settingPage: SettingPageModelState;
 }
 function Security({ dispatch, settingPage }: SecurityProps) {
+  console.log(settingPage);
   const [verifyPassword, setVerifyPassword] = React.useState(false);
   const [bindMap, setBindMap] = React.useState<Map<string, any>>(new Map());
   // 1:绑定成功 2:绑定失败 3:此微信账号已经绑定了其他Freelog账号，请换一个账号绑定
@@ -142,7 +143,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
   }
   async function getBind() {
     const data = await FServiceAPI.User.thirdPartyList();
-    console.log(data)
+    console.log(data);
     const map = new Map();
     data.data.forEach((item: any) => {
       map.set(item.thirdPartyType, { ...item });
@@ -271,7 +272,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 <FComponentsLib.FContentText text={'用户名'} type="normal" />
               </div>
               <div className={styles.right}>
-                <FComponentsLib.FContentText text={settingPage.username} type="highlight" />
+                <FComponentsLib.FContentText
+                  text={settingPage.username}
+                  type="highlight"
+                />
               </div>
             </div>
 
@@ -297,7 +301,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FComponentsLib.FContentText text={settingPage.email} type="highlight" />
+                  <FComponentsLib.FContentText
+                    text={settingPage.email}
+                    type="highlight"
+                  />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="primary"
@@ -336,7 +343,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FComponentsLib.FContentText text={settingPage.phone} type="highlight" />
+                  <FComponentsLib.FContentText
+                    text={settingPage.phone}
+                    type="highlight"
+                  />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="primary"
@@ -406,11 +416,25 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 </div>
               ) : (
                 <div className={styles.right}>
-                  <FComponentsLib.FContentText text={bindMap.get('weChat').name} type="highlight" />
+                  <FComponentsLib.FContentText
+                    text={bindMap.get('weChat').name}
+                    type="highlight"
+                  />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     type="danger"
                     onClick={() => {
+                      if (!settingPage.email && !settingPage.phone) {
+                        setBindTip({
+                          type: 'warn',
+                          msg: '为了你的账号安全，请先绑定手机号或者邮箱再进行解绑微信操作',
+                          closable: true,
+                          className: 'h-357',
+                          icon: bindWarning,
+                          way: 'unbind',
+                        });
+                        return;
+                      }
                       setBindTip({
                         type: 'success',
                         msg: '',
@@ -465,16 +489,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           ) : null}
           <div
             className={
-              (bindTip.type === 'success' ? ' w-100' : ' w-72') + ' over-h'
+              (bindTip.type === 'success' ? ' h-100' : ' h-72') + ' '
             }
           >
-            <img src={bindTip.icon} alt="" className="w-100x" />
+            <div className="over-h h-100x">
+              <img src={bindTip.icon} alt="" className="h-100x" />
+            </div>
           </div>
           <div className={styles.tip + ' mt-30'}>{bindTip.msg}</div>
           {bindTip.type !== 'success' ? (
             <FComponentsLib.FRectBtn
               type="primary"
-              className=" mt-50"
+              className=" mt-50 py-9"
               onClick={() => {
                 setBindTip({
                   type: 'success',
