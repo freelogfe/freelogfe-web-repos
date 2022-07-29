@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Tooltip} from 'antd';
-import {TooltipPropsWithTitle} from 'antd/lib/tooltip';
+import { TooltipPropsWithTitle } from 'antd/lib/tooltip';
 
 interface FTooltipProps extends TooltipPropsWithTitle {
+  title: React.ReactNode;
   children: React.ReactNode;
 }
 
