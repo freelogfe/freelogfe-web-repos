@@ -13,17 +13,17 @@ export interface DiscoverPageModelState {
     value: string;
   }[];
 
-
   resourceType: string;
   inputText: string;
   dataSource: {
     id: string;
-    cover: string,
-    title: string,
-    version: string,
-    policy: string[],
-    type: string[],
+    cover: string;
+    title: string;
+    version: string;
+    policy: string[];
+    type: string[];
   }[];
+  tags: string;
   totalItem: number;
 }
 
@@ -88,6 +88,12 @@ export interface OnChangeKeywordsAction extends AnyAction {
     value: string;
   };
 }
+export interface OnChangeTagsAction extends AnyAction {
+  type: 'discoverPage/onChangeTags';
+  payload: {
+    value: string;
+  };
+}
 
 export interface OnClickLoadMoreBtnAction extends AnyAction {
   type: 'discoverPage/onClickLoadMoreBtn';
@@ -106,6 +112,7 @@ export interface DiscoverPageModelType {
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
+    onChangeTags: (action: OnChangeTagsAction, effects: EffectsCommandMap) => void;
     onClickLoadMoreBtn: (action: OnClickLoadMoreBtnAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -116,7 +123,10 @@ export interface DiscoverPageModelType {
   };
 }
 
-const marketInitStates: Pick<DiscoverPageModelState, 'resourceTypeOptions' | 'resourceType' | 'inputText' | 'dataSource' | 'totalItem'> = {
+const marketInitStates: Pick<
+  DiscoverPageModelState,
+  'resourceTypeOptions' | 'resourceType' | 'inputText' | 'dataSource' | 'totalItem' | 'tags'
+> = {
   resourceTypeOptions: [
     {
       value: '-1',
@@ -126,6 +136,7 @@ const marketInitStates: Pick<DiscoverPageModelState, 'resourceTypeOptions' | 're
   ],
   resourceType: '-1',
   inputText: '',
+  tags: '',
   dataSource: [],
   totalItem: -1,
 };
@@ -137,13 +148,12 @@ export const initStates: DiscoverPageModelState = {
 };
 
 const Model: DiscoverPageModelType = {
-
   namespace: 'discoverPage',
 
   state: initStates,
 
   effects: {
-    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    *onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       // console.log(payload, 'payload09io3j2lksdjflkj')
       yield put<ChangeAction>({
         type: 'change',
@@ -152,13 +162,9 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    * onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {
-
-    },
-    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
-
-    },
-    * onMountMarketPage({}: OnMountMarketPageAction, { put }: EffectsCommandMap) {
+    *onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {},
+    *onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {},
+    *onMountMarketPage({}: OnMountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -166,14 +172,16 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
+    *onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: marketInitStates,
       });
     },
-    * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select, take }: EffectsCommandMap) {
-
+    *fetchDataSource(
+      { payload }: FetchDataSourceAction,
+      { call, put, select, take }: EffectsCommandMap,
+    ) {
       const { discoverPage }: ConnectState = yield select(({ discoverPage }: ConnectState) => ({
         discoverPage,
       }));
@@ -193,6 +201,7 @@ const Model: DiscoverPageModelType = {
         limit: FUtil.Predefined.pageSize,
         // startResourceId: dataSource[0]?.id,
         keywords: discoverPage.inputText,
+        tags: discoverPage.tags,
         resourceType: discoverPage.resourceType === '-1' ? undefined : discoverPage.resourceType,
         status: 1,
       };
@@ -227,7 +236,7 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
+    *onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -242,8 +251,7 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    * onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
-
+    *onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -258,7 +266,23 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    * onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, { put }: EffectsCommandMap) {
+    *onChangeTags({ payload }: OnChangeTagsAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          tags: payload.value,
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+
+    *onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -278,11 +302,8 @@ const Model: DiscoverPageModelType = {
   },
 
   subscriptions: {
-    setup({ dispatch, history }: SubscriptionAPI) {
-
-    },
+    setup({ dispatch, history }: SubscriptionAPI) {},
   },
-
 };
 
 export default Model;

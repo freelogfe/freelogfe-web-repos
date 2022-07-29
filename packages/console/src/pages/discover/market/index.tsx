@@ -11,6 +11,7 @@ import {
   OnClickLoadMoreBtnAction,
   OnMountMarketPageAction,
   // OnMountPageAction,
+  OnChangeTagsAction,
   OnUnmountMarketPageAction,
   // OnUnmountPageAction,
 } from '@/models/discoverPage';
@@ -38,6 +39,15 @@ function Market({ dispatch, discoverPage }: MarketProps) {
   React.useEffect(() => {
     if (category.first === -4) {
       return;
+    }
+    if ([-3, -2].includes(category.first)) {
+      dispatch<OnChangeTagsAction>({
+        type: 'discoverPage/onChangeTags',
+        payload: {
+          value: category.first === -3 ? '小说大赛' : '漫画大赛',
+        },
+      });
+      return
     }
     let str = '';
     if (category.first !== -1) {

@@ -555,10 +555,10 @@
     decimal.js "^10.2.1"
     moment "^2.29.1"
 
-"@freelog/tools-lib@^0.1.125":
-  version "0.1.123"
-  resolved "https://registry.npmmirror.com/@freelog/tools-lib/-/tools-lib-0.1.123.tgz#06507d6ffa5f68ee3c2bf0b88db069eb7c7440d5"
-  integrity sha512-9Fu8/meF6mBH+jhxt14zDb6T4JGlvob8SNfY6Sz/t+7T6mAz5xJOsOsjvleSWzF4Y8m/Nn8Z8TKQm8hznXIYeA==
+"@freelog/tools-lib@^0.1.124":
+  version "0.1.124"
+  resolved "https://registry.npmmirror.com/@freelog/tools-lib/-/tools-lib-0.1.124.tgz#37e594c340d80ece54192c239b74c81dc1d4d933"
+  integrity sha512-DOhsdCPwW8/QVjosf2mDDvOwH16hy1ccLmpkDVTcB3Mjl9o1MbHmkKFkvUmICfG0xPS8AvWx/jrEGJZi1MyUAw==
   dependencies:
     "@freelog/resource-policy-lang" "1.1.26"
     axios "^0.21.1"
