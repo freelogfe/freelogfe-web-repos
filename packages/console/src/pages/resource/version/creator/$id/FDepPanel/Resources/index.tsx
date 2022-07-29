@@ -10,7 +10,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FWarning } from '@/components/FIcons';
+import { FFileSearch, FWarning } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
@@ -81,26 +81,47 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
               >
                 <div>
                   <div className={styles.title}>
-                    <FComponentsLib.FTextBtn
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // if (rrr.status === 3) {
-                        if (rrr.error === 'storageObject') {
-                          return goToObject(rrr.id);
-                        }
-                        return window.open(FUtil.LinkTo.resourceDetails({
-                          resourceID: rrr.id,
-                        }));
-                      }}
-                      type='default'
-                    >
+                    <FTooltip title={rrr.title}><span>
                       <FComponentsLib.FContentText
                         className={styles.titleText}
                         text={rrr.title}
                         singleRow
                         type='highlight'
                       />
-                    </FComponentsLib.FTextBtn>
+                    </span></FTooltip>
+
+                    <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span>
+
+                      <FComponentsLib.FTextBtn
+                        type='primary'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // if (rrr.status === 3) {
+                          if (rrr.error === 'storageObject') {
+                            return goToObject(rrr.id);
+                          }
+                          return window.open(FUtil.LinkTo.resourceDetails({
+                            resourceID: rrr.id,
+                          }));
+                        }}
+                      >
+                        <FFileSearch />
+                      </FComponentsLib.FTextBtn>
+                    </span></FTooltip>
+                    {/*<FComponentsLib.FTextBtn*/}
+                    {/*  onClick={(e) => {*/}
+                    {/*    e.stopPropagation();*/}
+                    {/*    // if (rrr.status === 3) {*/}
+                    {/*    if (rrr.error === 'storageObject') {*/}
+                    {/*      return goToObject(rrr.id);*/}
+                    {/*    }*/}
+                    {/*    return window.open(FUtil.LinkTo.resourceDetails({*/}
+                    {/*      resourceID: rrr.id,*/}
+                    {/*    }));*/}
+                    {/*  }}*/}
+                    {/*  type='default'*/}
+                    {/*>*/}
+                    {/*</FComponentsLib.FTextBtn>*/}
                     <div style={{ width: 5 }} />
                     {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
                     {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -233,26 +254,42 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
             className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
           >
             <div className={styles.title}>
-              <FComponentsLib.FTextBtn
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // if (i.status === 3) {
-                  if (i.error === 'storageObject') {
-                    return goToObject(i.id);
-                  }
-                  return window.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: i.id,
-                  }));
-                }}
-                type='default'
-              >
+              <FTooltip title={i.title}><span>
                 <FComponentsLib.FContentText
                   className={styles.titleText}
                   text={i.title}
                   singleRow
                   type='highlight'
                 />
-              </FComponentsLib.FTextBtn>
+              </span></FTooltip>
+              <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+                <span><FComponentsLib.FTextBtn
+                  type='primary'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // if (i.status === 3) {
+                    if (i.error === 'storageObject') {
+                      return goToObject(i.id);
+                    }
+                    return window.open(FUtil.LinkTo.resourceDetails({
+                      resourceID: i.id,
+                    }));
+                  }}
+                ><FFileSearch /></FComponentsLib.FTextBtn></span>
+              </FTooltip>
+              {/*<FComponentsLib.FTextBtn*/}
+              {/*  onClick={(e) => {*/}
+              {/*    e.stopPropagation();*/}
+              {/*    // if (i.status === 3) {*/}
+              {/*    if (i.error === 'storageObject') {*/}
+              {/*      return goToObject(i.id);*/}
+              {/*    }*/}
+              {/*    return window.open(FUtil.LinkTo.resourceDetails({*/}
+              {/*      resourceID: i.id,*/}
+              {/*    }));*/}
+              {/*  }}*/}
+              {/*  type='default'*/}
+              {/*></FComponentsLib.FTextBtn>*/}
               <div style={{ width: 5 }} />
               {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
               {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}

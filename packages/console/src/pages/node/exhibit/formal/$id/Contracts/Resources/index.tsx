@@ -2,10 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
+import { FFileSearch } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -32,21 +34,27 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         onChange({ contract_SelectedAssociatedID: mainResource.id });
       }}
     >
-      <FComponentsLib.FTextBtn
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FTooltip title={mainResource.name}>
+      <span><FComponentsLib.FContentText
+        type='highlight'
+        text={mainResource.name}
+        singleRow
+        className={styles.FContentText}
+      /></span>
+        </FTooltip>
+        <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+      <span><FComponentsLib.FTextBtn
+        type={'primary'}
         onClick={(e) => {
           e.stopPropagation();
           window.open(FUtil.LinkTo.resourceDetails({
             resourceID: mainResource.id,
           }));
         }}
-      >
-        <FComponentsLib.FContentText
-          type='highlight'
-          text={mainResource.name}
-          singleRow
-          className={styles.FContentText}
-        />
-      </FComponentsLib.FTextBtn>
+      ><FFileSearch /></FComponentsLib.FTextBtn></span>
+        </FTooltip>
+      </div>
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText
         type='additional2'
@@ -75,21 +83,23 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
         key={r.id}
       >
-        <FComponentsLib.FTextBtn
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(FUtil.LinkTo.resourceDetails({
-              resourceID: r.id,
-            }));
-          }}
-        >
-          <FComponentsLib.FContentText
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FTooltip title={mainResource.name}><span><FComponentsLib.FContentText
             type='highlight'
             text={r.name}
             singleRow
             className={styles.FContentText}
-          />
-        </FComponentsLib.FTextBtn>
+          /></span></FTooltip>
+
+          <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(FUtil.LinkTo.resourceDetails({
+                resourceID: r.id,
+              }));
+            }}
+          ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+        </div>
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText
           type='additional2'

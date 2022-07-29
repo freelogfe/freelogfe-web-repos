@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
-import { FInfo } from '@/components/FIcons';
+import { FFileSearch, FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
@@ -13,6 +13,7 @@ import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -160,19 +161,21 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 set_SelectedID(ac.subjectID);
               }}
             >
-              <FComponentsLib.FTextBtn
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.open(ac.detailsUrl);
-                }}
-              >
-                <FComponentsLib.FContentText
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FTooltip title={ac.subjectName}><span><FComponentsLib.FContentText
                   type='highlight'
                   text={ac.subjectName}
                   singleRow
                   className={styles.FContentText}
-                />
-              </FComponentsLib.FTextBtn>
+                /></span></FTooltip>
+                <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn
+                  type={'primary'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(ac.detailsUrl);
+                  }}
+                ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+              </div>
               <div style={{ height: 5 }} />
               <FComponentsLib.FContentText
                 type='additional2'

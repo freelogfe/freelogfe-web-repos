@@ -3,9 +3,11 @@ import styles from './index.less';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
+import { FFileSearch } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -44,26 +46,29 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
           className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
           <div>
             <div className={styles.title}>
-              <FComponentsLib.FTextBtn
+              <FTooltip title={i.title}>
+              <span><FComponentsLib.FContentText
+                text={i.title}
+                singleRow
+                style={{ maxWidth: 260 }}
+                className={styles.FContentText}
+                type='highlight'
+              /></span>
+              </FTooltip>
+              <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+                <span><FComponentsLib.FTextBtn
                 style={{
                   flexShrink: 1,
                 }}
-                type='default'
+                type="primary"
                 onClick={(event) => {
                   event.stopPropagation();
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: i.id,
                   }));
                 }}
-              >
-                <FComponentsLib.FContentText
-                  text={i.title}
-                  singleRow
-                  style={{ maxWidth: 280 }}
-                  className={styles.FContentText}
-                  type='highlight'
-                />
-              </FComponentsLib.FTextBtn>
+              ><FFileSearch /></FComponentsLib.FTextBtn></span>
+              </FTooltip>
 
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
               {/*  <FResourceStatusBadge*/}

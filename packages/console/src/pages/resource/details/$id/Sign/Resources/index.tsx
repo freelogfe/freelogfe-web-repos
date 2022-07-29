@@ -4,9 +4,9 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FUtil } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
+import { FFileSearch, FWarning } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
 import FForbid from '@/components/FIcons/FForbid';
 
@@ -42,13 +42,15 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FComponentsLib.FContentText
+              <FTooltip title={r.name}>
+              <span><FComponentsLib.FContentText
                 type='highlight'
                 text={r.name}
                 singleRow
                 className={styles.titleText}
-                style={{ maxWidth: r.status === 0 ? 170 : '100%' }}
-              />
+                style={{ maxWidth: r.status === 0 ? 170 : 220 }}
+              /></span>
+              </FTooltip>
 
               {
                 r.error === 'offline' && (<>
@@ -141,21 +143,26 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FComponentsLib.FTextBtn
+              <FTooltip title={r.name}>
+                <span><FComponentsLib.FContentText
+                  type='highlight'
+                  text={r.name}
+                  singleRow
+                  className={styles.titleText}
+                  style={{ maxWidth: r.status === 0 ? 150 : 200 }}
+                /></span>
+              </FTooltip>
+              <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+              <span><FComponentsLib.FTextBtn
+                type={'primary'}
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: r.id,
                   }));
-                }}>
-                <FComponentsLib.FContentText
-                  type='highlight'
-                  text={r.name}
-                  singleRow
-                  className={styles.titleText}
-                  style={{ maxWidth: r.status === 0 ? 170 : 225 }}
-                />
-              </FComponentsLib.FTextBtn>
+                }}><FFileSearch /></FComponentsLib.FTextBtn>
+              </span>
+              </FTooltip>
               {/*{*/}
               {/*  r.status === 0 && (<>*/}
               {/*    <FResourceStatusBadge status={'offline'} />*/}

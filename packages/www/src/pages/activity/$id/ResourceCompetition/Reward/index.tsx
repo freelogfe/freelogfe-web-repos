@@ -95,8 +95,7 @@ function Reward({}: RewardProps) {
         <div className={styles.title1} style={{ color: '#42C28C' }}>
           <FPentagram />
           <div style={{ width: 10 }} />
-          {/*<span>优秀宣发奖</span>*/}
-          <span>普照奖</span>
+          <span>优秀宣发奖</span>
           <div style={{ width: 10 }} />
           <FPentagram />
         </div>
@@ -123,7 +122,8 @@ function Reward({}: RewardProps) {
         <div className={styles.title2} style={{ color: '#2784FF' }}>
           <FPentagram />
           <div style={{ width: 10 }} />
-          <span>优秀宣发奖</span>
+          {/*<span>优秀宣发奖</span>*/}
+          <span>普照奖</span>
           <div style={{ width: 10 }} />
           <FPentagram />
         </div>
