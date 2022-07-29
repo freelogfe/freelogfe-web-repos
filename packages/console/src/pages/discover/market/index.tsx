@@ -30,6 +30,7 @@ interface MarketProps {
 
 function Market({ dispatch, discoverPage }: MarketProps) {
   const [urlState] = useUrlState<any>();
+  // -3 小说大赛   -2  漫画大赛    -1 全部
   const [category, setCategory] = React.useState<any>({
     first: -4,
     second: '',
