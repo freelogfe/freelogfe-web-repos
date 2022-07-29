@@ -194,22 +194,22 @@ function Market({ dispatch, discoverPage }: MarketProps) {
               })}
           </div>
         ) : null}
-        <FInput
-          value={discoverPage.inputText}
-          debounce={300}
-          onDebounceChange={(value) => {
-            dispatch<OnChangeKeywordsAction>({
-              type: 'discoverPage/onChangeKeywords',
-              payload: {
-                value: value,
-              },
-            });
-          }}
-          wrapClassName="self-end my-31"
-          theme="dark"
-          size="small"
-          className={styles.filterInput}
-        />
+        {/*<FInput*/}
+        {/*  value={discoverPage.inputText}*/}
+        {/*  debounce={300}*/}
+        {/*  onDebounceChange={(value) => {*/}
+        {/*    dispatch<OnChangeKeywordsAction>({*/}
+        {/*      type: 'discoverPage/onChangeKeywords',*/}
+        {/*      payload: {*/}
+        {/*        value: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  wrapClassName="self-end my-31"*/}
+        {/*  theme="dark"*/}
+        {/*  size="small"*/}
+        {/*  className={styles.filterInput}*/}
+        {/*/>*/}
       </div>
       {/* <Labels
         options={discoverPage.resourceTypeOptions}
