@@ -44,7 +44,8 @@ function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
-                    href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
+                    // href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
+                    href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d58042afc0002f1d9282'}
                     target="_blank"
                 >{FI18n.i18nNext.t('nav_ContactUs')}</a>
                 <div className={styles.Divider}/>
