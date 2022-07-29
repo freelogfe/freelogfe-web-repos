@@ -11,7 +11,7 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
   AddAPolicyAction,
   ChangeAction,
-  // FetchInfoAction,
+  FetchInfoAction,
   OnMountPageAction,
   OnUnmountPageAction,
   // UpdateStatusAction,
@@ -275,7 +275,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {
               !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
-                <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>上架</span>
+                <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
 
                 <FSwitch
                   disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}

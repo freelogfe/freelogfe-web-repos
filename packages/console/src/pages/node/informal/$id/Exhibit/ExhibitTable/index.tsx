@@ -154,7 +154,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FComponentsLib.FTitleText type="table" text={'上架'} />,
+      title: <FComponentsLib.FTitleText type="table" text={FI18n.i18nNext.t('switch_set_exhibit_avaliable')} />,
       dataIndex: 'online',
       key: 'online',
       width: 65,

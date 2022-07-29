@@ -333,7 +333,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     },
     {
       // title: <FTitleText type="table" text={FI18n.i18nNext.t('tableheader_show_exhibit')} />,
-      title: <FComponentsLib.FTitleText type='table' text={'上架'} />,
+      title: <FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('switch_set_exhibit_avaliable')} />,
       dataIndex: 'status',
       key: 'status',
       // width: 65,

@@ -236,7 +236,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
     <div className={styles.Sider}>
       <div style={{ height: 30 }} />
       <div className={styles.switcher}>
-        <div className={styles['switcher-label']}>上架</div>
+        <div className={styles['switcher-label']}>{FI18n.i18nNext.t('switch_set_resource_avaliable')}</div>
         <FSwitch onClick={changeStatus} checked={active} loading={loading} />
       </div>
       <div style={{ height: 30 }} />

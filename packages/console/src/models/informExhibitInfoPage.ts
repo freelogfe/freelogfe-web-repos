@@ -595,7 +595,7 @@ const Model: ExhibitInfoPageModelType = {
             text: testResourceDetail.resourceType.includes('主题')
               ? FI18n.i18nNext.t('toggle_activate_theme')
               // : FI18n.i18nNext.t('btn_show_exhibit'),
-              : '上架',
+              : FI18n.i18nNext.t('switch_set_exhibit_avaliable'),
             disabled: isDisabled,
           },
           exhibit_Info: {

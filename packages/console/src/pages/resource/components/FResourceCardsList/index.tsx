@@ -18,20 +18,20 @@ const resourceTypeOptions = [
 
 const resourceStatusOptions = [
   { text: '全部', value: '2' },
-  { text: '已上线', value: '1' },
-  { text: '已下线', value: '0' },
+  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: '1' },
+  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: '0' },
 ];
 
-const navs = [
-  {
-    value: '1',
-    text: '我的资源',
-  },
-  {
-    value: '2',
-    text: '我的收藏',
-  },
-];
+// const navs = [
+//   {
+//     value: '1',
+//     text: '我的资源',
+//   },
+//   {
+//     value: '2',
+//     text: '我的收藏',
+//   },
+// ];
 
 type EventFunc = (id: string | number, record: any, index: number) => void;
 
