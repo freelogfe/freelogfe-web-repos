@@ -241,6 +241,7 @@ const Model: DiscoverPageModelType = {
         type: 'change',
         payload: {
           resourceType: payload.value,
+          tags: ''
         },
       });
 
