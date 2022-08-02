@@ -27,11 +27,7 @@ interface ActivityProps extends IRouteComponentProps {
   // };
 }
 
-const Activities: any = {
-  'ResourceCompetition': (<ResourceCompetition />),
-  'play-newer': (<PlayNewer />),
-  'invite-friend': (<InviteFriend/>)
-};
+
 
 function Activity({
                     dispatch,
@@ -39,6 +35,13 @@ function Activity({
                     match,
                     history,
                   }: ActivityProps) {
+
+  const Activities: any = {
+    'ResourceCompetition': (<ResourceCompetition />),
+    'play-newer': (<PlayNewer />),
+    'invite-friend': (<InviteFriend/>)
+  };
+
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'activityDetailsPage/onMountPage',

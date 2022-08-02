@@ -3,6 +3,8 @@ import styles from './index.less';
 import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 
 interface RewardProps {
 
@@ -210,4 +212,6 @@ function Reward({}: RewardProps) {
   </div>);
 }
 
-export default Reward;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(Reward);
