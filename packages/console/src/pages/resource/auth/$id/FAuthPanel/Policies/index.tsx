@@ -6,6 +6,7 @@ import { Space } from 'antd';
 import { ConnectState } from '@/models/connect';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -25,7 +26,8 @@ function Policies({ dispatch, resourceAuthPage }: PoliciesProps) {
     style={{ width: '100%' }}
     direction='vertical'
   >
-    <FComponentsLib.FContentText type='additional2' text={'可签约的合约'} />
+    {/*<FComponentsLib.FContentText type='additional2' text={'可签约的合约'} />*/}
+    <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('getauth_title_authplanavailable')} />
 
     {activeResource?.policies.map((i) => (
       <FContract_AvailablePolicy_Card
