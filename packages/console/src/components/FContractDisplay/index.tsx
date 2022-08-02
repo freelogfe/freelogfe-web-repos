@@ -3,7 +3,6 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
-import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
@@ -436,7 +435,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
       {
         activated === 'text' && (<div className={styles.Text}>
-          <FCodeFormatter code={text} />
+          <FComponentsLib.FCodeFormatter code={text} />
         </div>)
       }
 
@@ -447,7 +446,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
       {
         activated === 'code' && (<div className={styles.Code}>
-          <FCodeFormatter code={code} />
+          <FComponentsLib.FCodeFormatter code={code} />
         </div>)
       }
     </div>

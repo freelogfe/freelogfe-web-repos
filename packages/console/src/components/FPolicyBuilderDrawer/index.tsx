@@ -9,7 +9,6 @@ import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
-import FCodeFormatter from '../FCodeFormatter';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import { DisabledTimes } from 'rc-picker/lib/interface';
@@ -1590,11 +1589,11 @@ function PolicyShowcase({ code, content, view }: PolicyShowcaseProps) {
     <div className={styles.PolicyShowcaseBody}>
       <div>
         {
-          activated === 'content' && (<FCodeFormatter code={content} />)
+          activated === 'content' && (<FComponentsLib.FCodeFormatter code={content} />)
         }
 
         {
-          activated === 'code' && (<FCodeFormatter code={code} />)
+          activated === 'code' && (<FComponentsLib.FCodeFormatter code={code} />)
         }
 
         {

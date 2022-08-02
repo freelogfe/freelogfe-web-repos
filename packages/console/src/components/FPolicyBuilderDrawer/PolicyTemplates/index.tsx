@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCodeFormatter from '../../FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { policyCodeTranslationToText } from '../index';
 import FComponentsLib from '@freelog/components-lib';
@@ -90,7 +89,7 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.translation}>
-      <FCodeFormatter code={translation} />
+      <FComponentsLib.FCodeFormatter code={translation} />
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.navs}>
@@ -129,7 +128,7 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
     {
       visible === 'code' && (<>
         <div style={{ height: 15 }} />
-        <FCodeFormatter code={text} />
+        <FComponentsLib.FCodeFormatter code={text} />
       </>)
     }
 
