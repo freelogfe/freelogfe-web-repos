@@ -330,7 +330,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                     size='small'
                                     onClick={() => {
                                       if (isSelfLicensorOwner) {
-                                        return fMessage('收款方不能是自己', 'error');
+                                        // return fMessage('收款方不能是自己', 'error');
+                                        return fMessage(FI18n.i18nNext.t('alert_cantsendmoneytoyourself '), 'error');
                                       }
                                       set_Modal_EventID(eti.eventID);
                                       // console.log(eti.origin.args.amount, '!#@$!234123412341234');

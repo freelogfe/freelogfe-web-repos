@@ -2053,7 +2053,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
       // console.log(payload, 'payload098iokfjskldfjlsdkfjlk');
-      
+
       const rightNames: string[] = yield call(checkedExhibitUsedNames, informalNodeManagerPage.node_ID, payload.names.map((n) => {
         return n.split('/')[1];
       }));
