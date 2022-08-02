@@ -7,7 +7,6 @@ import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import { ContractStatus } from '@/type/contractTypes';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FContractDisplayProps {
@@ -296,7 +295,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           {
             record_Histories.length > 0 && (<div className={styles.CurrentState}>
               <Space size={5}>
-                <FContractStatusBadge status={record_Histories[0].contractStatus} />
+                <FComponentsLib.FContractStatusBadge status={record_Histories[0].contractStatus} />
 
                 <FComponentsLib.FContentText text={record_Histories[0].datetime} type='normal' />
               </Space>
@@ -388,7 +387,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                       // console.log(hs, 'hshshshshshshs1234234');
                       return (<div key={index} className={styles.TransferringRecord}>
                         <Space size={5}>
-                          <FContractStatusBadge status={hs.contractStatus} />
+                          <FComponentsLib.FContractStatusBadge status={hs.contractStatus} />
 
                           <FComponentsLib.FContentText text={hs.datetime} type='normal' />
                         </Space>

@@ -6,6 +6,7 @@ import {FTextBtn, FRectBtn, FCircleBtn} from './FButton';
 import {FContentText, FTipText, FTitleText} from './FText';
 import FHeaderNavigation from './FHeaderNavigation';
 import FCodeFormatter from './FCodeFormatter';
+import FContractStatusBadge from './FContractStatusBadge';
 
 const FComponentsLib = {
     FIcons,
@@ -20,5 +21,6 @@ const FComponentsLib = {
     FTitleText,
     FHeaderNavigation,
     FCodeFormatter,
+    FContractStatusBadge,
 };
 export default FComponentsLib;

@@ -25,7 +25,6 @@ import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
 import FResource from '@/components/FIcons/FResource';
 import { ColumnsType } from 'antd/lib/table/interface';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
 import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
@@ -108,7 +107,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & R
               type='highlight'
               text={record.contractName}
             />
-            <FContractStatusBadge
+            <FComponentsLib.FContractStatusBadge
               status={record.status}
             />
           </Space>
