@@ -9,17 +9,36 @@ import task from '@/assets/invitefriend/task.png';
 import copy from 'copy-to-clipboard';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import { IRouteComponentProps, withRouter } from 'umi';
+
 import FComponentsLib from '@freelog/components-lib';
-
-interface InviteFriendProps {}
-
-function InviteFriend({}: InviteFriendProps) {
+interface InviteFriendProps extends IRouteComponentProps {
+  dispatch: Dispatch;
+  // match: {
+  //   params: {
+  //     id: string;
+  //   }
+  // };
+}
+function InviteFriend({ match }: InviteFriendProps) {
   const [showInvite, setShowInvite] = React.useState<boolean>(false);
+  const status: any = {
+    1: '正常',
+    2: '暂停',
+    3: '即将开始',
+    4: '进行中',
+    5: '已结束',
+  };
   const [userData, setUserData] = React.useState<any>({});
   const [records, setRecords] = React.useState<any>([]);
+  const [taskInfo, setTaskInfo] = React.useState<any>({});
   const getData = async () => {
+    const taskInfo = await FServiceAPI.Activity.find4Client({
+      _id: (match.params as { id: string }).id || '',
+    });
+    setTaskInfo(taskInfo.data);
     const task = await FServiceAPI.TestQualification.usedRecords({});
-    console.log(task);
+    setRecords(task.data.dataList);
     const res = await FServiceAPI.TestQualification.codeDetails2({});
     setUserData({
       ...res.data,
@@ -32,10 +51,6 @@ function InviteFriend({}: InviteFriendProps) {
   React.useEffect(() => {
     getData();
   }, []);
-  // React.useEffect(()=>{
-  //   console.log(FServiceAPI.User.currentUserInfo())
-  //   setUserData(FServiceAPI.User.currentUserInfo())
-  // },[])
   const scrollToAnchor = (anchorName: any) => {
     let state: any = {
       behavior: 'smooth',
@@ -165,13 +180,16 @@ function InviteFriend({}: InviteFriendProps) {
             </div>
             <FComponentsLib.FRectBtn
               className="invite-button mt-88"
-              disabled={userData.usedCount >= userData.limitCount}
+              disabled={
+                userData.usedCount >= userData.limitCount ||
+                taskInfo.status !== 4
+              }
               onClick={(e) => {
                 setShowInvite(true);
                 e.stopPropagation();
               }}
             >
-              立即邀请
+              {taskInfo.status === 4 ? '立即邀请' : status[taskInfo.status]}
             </FComponentsLib.FRectBtn>
             <div className="flex-row w-260 space-between mt-10">
               <span className="invite-left">
@@ -271,4 +289,4 @@ function InviteFriend({}: InviteFriendProps) {
   );
 }
 
-export default InviteFriend;
+export default withRouter(InviteFriend);
