@@ -29,7 +29,6 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
-import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import { FetchInfoAction } from '@/models/user';
 
 interface RetrievePayPasswordProps {
@@ -317,11 +316,9 @@ function RetrievePayPassword({
                 <div>
                   <FComponentsLib.FTipText type='third' text={'支付密码'} />
                   <div style={{ height: 5 }} />
-                  <FPaymentPasswordInput
+                  <FComponentsLib.FPaymentPasswordInput
                     autoFocus
-                    value={
-                      retrievePayPasswordPage.paymentPassword_Password1Input
-                    }
+                    value={retrievePayPasswordPage.paymentPassword_Password1Input}
                     onChange={(value) => {
                       dispatch<OnChange_PaymentPassword_Password1Input_Action>({
                         type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password1Input',
@@ -341,7 +338,7 @@ function RetrievePayPassword({
                 <div>
                   <FComponentsLib.FTipText type='third' text={'验证支付密码'} />
                   <div style={{ height: 5 }} />
-                  <FPaymentPasswordInput
+                  <FComponentsLib.FPaymentPasswordInput
                     value={
                       retrievePayPasswordPage.paymentPassword_Password2Input
                     }

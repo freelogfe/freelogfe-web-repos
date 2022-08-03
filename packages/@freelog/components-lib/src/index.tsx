@@ -7,6 +7,7 @@ import {FContentText, FTipText, FTitleText} from './FText';
 import FHeaderNavigation from './FHeaderNavigation';
 import FCodeFormatter from './FCodeFormatter';
 import FContractStatusBadge from './FContractStatusBadge';
+import FPaymentPasswordInput from './FPaymentPasswordInput';
 
 const FComponentsLib = {
     FIcons,
@@ -22,5 +23,6 @@ const FComponentsLib = {
     FHeaderNavigation,
     FCodeFormatter,
     FContractStatusBadge,
+    FPaymentPasswordInput,
 };
 export default FComponentsLib;
