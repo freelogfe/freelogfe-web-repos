@@ -5,7 +5,6 @@ import { Space } from 'antd';
 import FModal from '../FModal';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
-import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import { ContractStatus } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -523,7 +522,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
 
             <div style={{ height: 20 }} />
-            <FPaymentPasswordInput
+            <FComponentsLib.FPaymentPasswordInput
               ref={inputEl}
               autoFocus={true}
               value={modal_Password}
