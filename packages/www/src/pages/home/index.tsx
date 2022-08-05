@@ -33,7 +33,10 @@ function HomePage({}: HomePageProps) {
         <div style={{ height: 40 }} />
         <FComponentsLib.FRectBtn
           onClick={() => {
-            window.location.href = FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon();
+            window.location.href = FUtil.Tool.getUserIDByCookies() === -1
+              ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
+              : FUtil.Format.completeUrlByDomain('console');
+            // window.location.href = FI18n.i18nNext.t('home_slogan_link');
           }}
           style={{ height: 60, fontSize: 22, padding: '0 50px', fontWeight: 400 }}
         >{FI18n.i18nNext.t('btn_getitforfree')}</FComponentsLib.FRectBtn>
@@ -106,7 +109,13 @@ function HomePage({}: HomePageProps) {
           fontSize: 22,
           padding: '0 50px',
           fontWeight: 400,
-        }}>{FI18n.i18nNext.t('btn_getitforfree')}</FComponentsLib.FRectBtn>
+        }}
+        onClick={() => {
+          window.location.href = FUtil.Tool.getUserIDByCookies() === -1
+            ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
+            : FUtil.Format.completeUrlByDomain('console');
+        }}
+      >{FI18n.i18nNext.t('btn_getitforfree')}</FComponentsLib.FRectBtn>
     </div>
 
     <FComponentsLib.FPageFooter PopoverPatch={Popover} />
