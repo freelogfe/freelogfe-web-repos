@@ -6,6 +6,7 @@ import FUtil from '../utils';
 type LanguageKeyType = 'zh_CN' | 'en_US';
 
 const ossJsonUrl: string = 'https://freelog-i18n.oss-cn-shenzhen.aliyuncs.com/configs/i18n.json';
+const ossJsonUrl_Test: string = 'https://freelog-i18n.oss-cn-shenzhen.aliyuncs.com/configs-test/i18n.json';
 const localStorage_i18nextLng_key: string = 'locale';
 const localStorage_i18nextResources_key: string = 'i18nextResources';
 
@@ -111,7 +112,7 @@ class I18nNext {
   }
 
   private async _fetchData(): Promise<Resource> {
-    const res: any = await axios.get(ossJsonUrl, {
+    const res: any = await axios.get(window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test, {
       withCredentials: false,
     });
     // console.log(res, 'data09oiw3qjelsfkdfjlsdkfjl');
