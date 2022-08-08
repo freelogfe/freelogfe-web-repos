@@ -111,7 +111,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
               <FComponentsLib.FTitleText text={`展品管理 (${informalNodeManagerPage.exhibit_ListTotal})`} />
               <Space size={30}>
                 <FComponentsLib.FTextBtn
-                  type="default"
+                  type='default'
                   onClick={() => {
                     dispatch<OnClickExhibitsAddBtnAction>({
                       type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
@@ -126,7 +126,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 </FComponentsLib.FTextBtn>
 
                 <FComponentsLib.FTextBtn
-                  type="default"
+                  type='default'
                   onClick={() => {
                     // onChange({replaceModalVisible: true});
                     dispatch<OnClickExhibitsReplaceBtnAction>({
@@ -179,7 +179,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
 
                     {category.first > 1 ? (
                       <>
-                        <span className="ml-30">子类型：</span>
+                        <span className='ml-30'>子类型：</span>
                         <FComponentsLib.FDropdown
                           overlay={
                             <FMenu
@@ -326,6 +326,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         }}
         onConfirmResources={(values) => {
           // console.log(values, 'onConfirmResources@#@#$@#$@#$@@@@@@@@@@@@');
+          // console.log(values, 'values9ijsdlfksdjlk');
           dispatch<OnConfirm_AddExhibitDrawer_Action>({
             type: 'informalNodeManagerPage/onConfirm_AddExhibitDrawer',
             payload: {

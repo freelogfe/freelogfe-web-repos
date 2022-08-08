@@ -12,8 +12,12 @@ import img_Novel4 from '@/assets/activity/novel4@2x.png';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import { connect } from 'dva';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 
 interface ParticipationsProps {
+  activityDetailsPage: ActivityDetailsPageModelState;
+
   onClickRuleBtn?(): void;
 }
 
@@ -125,7 +129,7 @@ const initStates: ActivityStates = {
   display_Novel_Index: 0,
 };
 
-function Participations({ onClickRuleBtn }: ParticipationsProps) {
+function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsProps) {
 
   const [delay, set_Delay] = React.useState<ActivityStates['delay']>(initStates['delay']);
 
@@ -184,6 +188,7 @@ function Participations({ onClickRuleBtn }: ParticipationsProps) {
           <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
+            disabled={!activityDetailsPage.withinValidity}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
@@ -272,6 +277,7 @@ function Participations({ onClickRuleBtn }: ParticipationsProps) {
           <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
+            disabled={!activityDetailsPage.withinValidity}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
@@ -288,4 +294,6 @@ function Participations({ onClickRuleBtn }: ParticipationsProps) {
   </div>);
 }
 
-export default Participations;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(Participations);

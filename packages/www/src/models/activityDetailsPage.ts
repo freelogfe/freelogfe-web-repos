@@ -2,12 +2,18 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI } from '@freelog/tools-lib';
+import moment from 'moment';
+
 
 export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;
   pageTitle: string;
   showActivity: '' | 'play-newer' | 'ResourceCompetition';
+
+  startTime: string | null;
+  endTime: string | null;
+  withinValidity: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -46,6 +52,10 @@ const initStates: ActivityDetailsPageModelState = {
   activityID: '',
   pageTitle: '',
   showActivity: '',
+
+  startTime: null,
+  endTime: null,
+  withinValidity: false,
 };
 
 const Model: ActivityDetailsPageModelType = {
@@ -69,6 +79,7 @@ const Model: ActivityDetailsPageModelType = {
         });
         return;
       }
+      const nowTimestamp: number = Date.now();
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -76,6 +87,10 @@ const Model: ActivityDetailsPageModelType = {
           activityID: payload.activityID,
           showActivity: data?.link || '',
           pageTitle: data?.title || '活动不存在或者已暂停',
+
+          startTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
+          endTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
+          withinValidity: data.persist || (new Date(data.startTime).getTime() <= nowTimestamp && new Date(data.limitTime).getTime() >= nowTimestamp),
         },
       });
     },

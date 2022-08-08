@@ -6,6 +6,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -59,8 +60,7 @@ function Policies({ resourceVersionCreatorPage, dispatch }: PoliciesProps) {
     style={{ width: '100%' }}
     direction='vertical'
   >
-    {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
-    <FComponentsLib.FContentText type='additional2' text={'可签约的策略'} />
+    <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('getauth_title_authplanavailable')} />
     {enabledPolicies.map((i) => (
       <div key={i.id} className={styles.Policy}>
         <div style={{ height: 15 }} />

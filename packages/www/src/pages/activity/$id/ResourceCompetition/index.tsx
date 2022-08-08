@@ -5,34 +5,58 @@ import Participations from '@/pages/activity/$id/ResourceCompetition/Participati
 import Reward from '@/pages/activity/$id/ResourceCompetition/Reward';
 import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
 import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
-// import FPageFooter from '@/components/FPageFooter';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
+import * as AHooks from 'ahooks';
+import { FServiceAPI } from '@freelog/tools-lib';
 
 interface ResourceCompetitionProps {
-
+  // activeID: string;
 }
 
-function ResourceCompetition({}: ResourceCompetitionProps): React.ReactElement {
+function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement {
 
+  // const [isExpiryDate, set_isExpiryDate] = React.useState<any>(null);
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
+
+  // AHooks.useMount(async () => {
+  //   const params: Parameters<typeof FServiceAPI.Activity.find4Client>[0] = {
+  //     _id: activeID,
+  //   };
+  //   const { ret, errCode, data } = await FServiceAPI.Activity.find4Client(params);
+  //   // console.log(data, 'data90opijklm23rqwf089IOSA;KLFSADZFDJLKL');
+  //   if (data.persist) {
+  //     set_isExpiryDate(true);
+  //     return;
+  //   }
+  //   const nowTimestamp: number = Date.now();
+  //   if (new Date(data.startTime).getTime() <= nowTimestamp && new Date(data.limitTime).getTime() >= nowTimestamp) {
+  //     set_isExpiryDate(true);
+  //     return;
+  //   }
+  //   set_isExpiryDate(false);
+  // });
 
   return (<div className={styles.style}>
     {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <Banner1 />
     <div style={{ height: 266 }} />
-    <Participations onClickRuleBtn={() => {
-      set_ModalVisible(true);
-    }} />
+    <Participations
+      onClickRuleBtn={() => {
+        set_ModalVisible(true);
+      }}
+    />
     <div style={{ height: 100 }} />
     <Reward />
     <div style={{ height: 100 }} />
     <Strategy />
     <div style={{ height: 100 }} />
-    <Banner2 onClickRuleBtn={() => {
-      set_ModalVisible(true);
-    }} />
+    <Banner2
+      onClickRuleBtn={() => {
+        set_ModalVisible(true);
+      }}
+    />
     <div style={{ height: 100 }} />
 
     <FModal

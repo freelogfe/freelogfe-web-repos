@@ -8,6 +8,7 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface PolicyProps {
   dispatch: Dispatch;
@@ -29,7 +30,8 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
 
   return (<div>
     <div style={{ height: 10 }} />
-    <FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>
+    {/*<FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>*/}
+    <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
     <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>
       {

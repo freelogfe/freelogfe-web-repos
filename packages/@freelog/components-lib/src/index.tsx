@@ -5,6 +5,8 @@ import FDropdown from './FDropdown';
 import {FTextBtn, FRectBtn, FCircleBtn} from './FButton';
 import {FContentText, FTipText, FTitleText} from './FText';
 import FHeaderNavigation from './FHeaderNavigation';
+import FCodeFormatter from './FCodeFormatter';
+import FContractStatusBadge from './FContractStatusBadge';
 
 const FComponentsLib = {
     FIcons,
@@ -18,5 +20,7 @@ const FComponentsLib = {
     FTipText,
     FTitleText,
     FHeaderNavigation,
+    FCodeFormatter,
+    FContractStatusBadge,
 };
 export default FComponentsLib;

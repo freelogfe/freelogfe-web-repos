@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-// import img_RewardSuspension from '@/assets/home/reward-suspension.png';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import AOrLink from '@/components/FHeaderNavigation/AOrLink';
+// import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 
 interface AdsProps {
 
@@ -52,13 +51,13 @@ function Ads({}: AdsProps) {
     return null;
   }
 
-  return (<AOrLink
+  return (<a
     href={info.href}
     target='_blank'
     className={styles.rewardSuspension}
   >
     <img src={info.cover} alt={''} />
-  </AOrLink>);
+  </a>);
 }
 
 export default Ads;

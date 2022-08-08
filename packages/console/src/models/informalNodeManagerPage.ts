@@ -2052,12 +2052,13 @@ const Model: InformalNodeManagerPageModelType = {
           addExhibitDrawer_Visible: false,
         },
       });
+      // console.log(payload, 'payload098iokfjskldfjlsdkfjlk');
 
       const rightNames: string[] = yield call(checkedExhibitUsedNames, informalNodeManagerPage.node_ID, payload.names.map((n) => {
         return n.split('/')[1];
       }));
 
-      // console.log(rightNames, 'used093i2osdlfksdjl');
+      // console.log(rightNames, 'rightNames used093i2osdlfksdjl');
 
       const ruleObj: Array<IRules['add']> = payload.names.map((n, index) => {
         return {
@@ -2072,9 +2073,8 @@ const Model: InformalNodeManagerPageModelType = {
           text: '',
         };
       });
-
+      // console.log(ruleObj, 'ruleObj908iowejf;lskdfjsldk');
       const text: string = decompile(ruleObj);
-      // console.log(text, 'text1234fklsadj');
       const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
         nodeId: informalNodeManagerPage.node_ID,
         additionalTestRule: text,
@@ -2995,9 +2995,19 @@ async function isExhibitsUsed(nodeID: number, names: string[]): Promise<boolean[
 
 
 async function checkedExhibitUsedNames(nodeID: number, names: string[]): Promise<string[]> {
+
+  const nameMap: Map<string, number> = new Map<string, number>();
+  for (const name of names) {
+    nameMap.set(name, nameMap.get(name) || 0);
+  }
+
+  const parmaNames: string[] = names.map((n) => {
+    return (nameMap.get(n) || 0) > 1 ? (n + FUtil.Tool.generateRandomCode()) : n;
+  });
+
   const params: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
     nodeId: nodeID,
-    testResourceNames: names.map((n) => {
+    testResourceNames: parmaNames.map((n) => {
       return encodeURIComponent(n);
     }).join(','),
   };
@@ -3005,7 +3015,7 @@ async function checkedExhibitUsedNames(nodeID: number, names: string[]): Promise
   const { data }: any = await FServiceAPI.InformalNode.batchTestResources(params);
   // console.log(data);
 
-  const newNames: string[] = names.map<string>((n) => {
+  const newNames: string[] = parmaNames.map<string>((n) => {
     if (data.some((d: any) => {
       return d.testResourceName === n;
     })) {
@@ -3014,11 +3024,11 @@ async function checkedExhibitUsedNames(nodeID: number, names: string[]): Promise
       return n;
     }
   });
-  newNames.sort();
-  for (let i: number = 1; i < newNames.length; i++) {
-    if (newNames[i] === newNames[i - 1]) {
-      newNames[i] += FUtil.Tool.generateRandomCode();
-    }
-  }
+  // newNames.sort();
+  // for (let i: number = 1; i < newNames.length; i++) {
+  //   if (newNames[i] === newNames[i - 1]) {
+  //     newNames[i] += FUtil.Tool.generateRandomCode();
+  //   }
+  // }
   return newNames;
 }

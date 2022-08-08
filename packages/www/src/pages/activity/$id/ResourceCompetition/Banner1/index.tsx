@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
+import { connect } from 'dva';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 
 interface Banner1Props {
-
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function Banner1({}: Banner1Props) {
+function Banner1({ activityDetailsPage }: Banner1Props) {
   return (<div className={styles.banner1}>
     <div className={styles.banner1Content}>
       <div style={{ height: 45 }} />
@@ -19,21 +21,24 @@ function Banner1({}: Banner1Props) {
         <div className={styles.banner1Content_Time1}>
           <div className={styles.title}>活动开始</div>
           <div style={{ height: 4 }} />
-          <div className={styles.time}>2022·02·10</div>
+          <div className={styles.time}>{activityDetailsPage.startTime || 'YYYY·MM·DD'}</div>
         </div>
         <div className={styles.banner1Content_Time2}>
           <div className={styles.title}>活动结束</div>
           <div style={{ height: 4 }} />
-          <div className={styles.time}>2022·02·10</div>
+          {/*<div className={styles.time}>2022·02·10</div>*/}
+          <div className={styles.time}>{activityDetailsPage.endTime || 'YYYY·MM·DD'}</div>
         </div>
         <div className={styles.banner1Content_Time3}>
           <div className={styles.title}>获奖公示</div>
           <div style={{ height: 4 }} />
-          <div className={styles.time}>2022·02·10</div>
+          <div className={styles.time}>{'YYYY·MM·DD'}</div>
         </div>
       </div>
     </div>
   </div>);
 }
 
-export default Banner1;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(Banner1);

@@ -8,8 +8,9 @@ import * as AHooks from 'ahooks';
 import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage';
 import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
-import AOrLink from '@/components/FHeaderNavigation/AOrLink';
+// import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 import FComponentsLib from '@freelog/components-lib';
+import {Link} from 'umi';
 
 interface ActivityProps {
   dispatch: Dispatch;
@@ -52,10 +53,10 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
           <div className={styles.content}>
             {
               activitiesPage.list && activitiesPage.list.map((m) => {
-                return (<AOrLink
+                return (<Link
                   key={m.activityID}
                   className={styles.contentCard}
-                  href={FUtil.LinkTo.activity({ activityID: m.activityID })}
+                  to={FUtil.LinkTo.activity({ activityID: m.activityID })}
                   target='_blank'
                 >
                   <img
@@ -87,7 +88,7 @@ function Activity({ dispatch, activitiesPage }: ActivityProps) {
                     text={'活动时限：' + (m.persis ? '持续进行' : `${m.startTime}-${m.limitTime}`)}
                     type='additional2'
                   />
-                </AOrLink>);
+                </Link>);
               })
             }
             <div style={{ width: 560 }} />

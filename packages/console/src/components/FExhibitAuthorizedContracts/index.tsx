@@ -337,7 +337,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           {
             selectedAuthorizedContract && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 25 }} />
-              <FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>
+              <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
               {
                 selectedAuthorizedContract.policies.map((sacp, ind) => {
                   return (<React.Fragment key={sacp.policyId}>

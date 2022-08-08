@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Checkbox, Space } from 'antd';
+import { Checkbox } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
@@ -8,6 +8,7 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -58,7 +59,8 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
   }
 
   return (<div>
-    <div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>
+    {/*<div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>*/}
+    <div className={styles.smallTitle}>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</div>
     <div style={{ height: 5 }} />
     {
       policies.filter((p) => p.fullInfo.status !== 0).map((p) => {

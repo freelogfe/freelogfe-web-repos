@@ -3,12 +3,10 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
-import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FLoading, FUp } from '../FIcons';
 import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 import { ContractStatus } from '@/type/contractTypes';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FContractDisplayProps {
@@ -297,7 +295,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           {
             record_Histories.length > 0 && (<div className={styles.CurrentState}>
               <Space size={5}>
-                <FContractStatusBadge status={record_Histories[0].contractStatus} />
+                <FComponentsLib.FContractStatusBadge status={record_Histories[0].contractStatus} />
 
                 <FComponentsLib.FContentText text={record_Histories[0].datetime} type='normal' />
               </Space>
@@ -332,7 +330,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                     size='small'
                                     onClick={() => {
                                       if (isSelfLicensorOwner) {
-                                        return fMessage('收款方不能是自己', 'error');
+                                        // return fMessage('收款方不能是自己', 'error');
+                                        return fMessage(FI18n.i18nNext.t('alert_cantsendmoneytoyourself '), 'error');
                                       }
                                       set_Modal_EventID(eti.eventID);
                                       // console.log(eti.origin.args.amount, '!#@$!234123412341234');
@@ -389,7 +388,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                       // console.log(hs, 'hshshshshshshs1234234');
                       return (<div key={index} className={styles.TransferringRecord}>
                         <Space size={5}>
-                          <FContractStatusBadge status={hs.contractStatus} />
+                          <FComponentsLib.FContractStatusBadge status={hs.contractStatus} />
 
                           <FComponentsLib.FContentText text={hs.datetime} type='normal' />
                         </Space>
@@ -436,7 +435,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
       {
         activated === 'text' && (<div className={styles.Text}>
-          <FCodeFormatter code={text} />
+          <FComponentsLib.FCodeFormatter code={text} />
         </div>)
       }
 
@@ -447,7 +446,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
       {
         activated === 'code' && (<div className={styles.Code}>
-          <FCodeFormatter code={code} />
+          <FComponentsLib.FCodeFormatter code={code} />
         </div>)
       }
     </div>
