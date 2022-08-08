@@ -60,7 +60,7 @@ function Freeze({ match }: FreezeProps) {
     <div className={styles.content}>
       <FComponentsLib.FContentText text={`经核实，资源 ${resourceName} ，违反平台规范`} />
       <FComponentsLib.FTextBtn onClick={() => {
-
+        window.open('https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2');
       }}>&nbsp;查看服务协议&nbsp;</FComponentsLib.FTextBtn>
       <FComponentsLib.FContentText text={` ，涉嫌 ${freezeReason} ，已经被封禁。`} />
     </div>

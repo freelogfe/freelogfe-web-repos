@@ -65,7 +65,7 @@ function Freeze({}: FreezeProps) {
     <div className={styles.content}>
       <FComponentsLib.FContentText text={'联系邮箱：service@freelog.com'} />
       <FComponentsLib.FTextBtn onClick={() => {
-
+        window.open('https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2');
       }}>&nbsp;复制&nbsp;</FComponentsLib.FTextBtn>
     </div>
     <div style={{ height: 80 }} />
