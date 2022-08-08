@@ -60,7 +60,7 @@ const nodeData: {
 ];
 
 function Examples({}) {
-  return (<div>
+  return (<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
     <div style={{ height: 50 }} />
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <FComponentsLib.FContentText

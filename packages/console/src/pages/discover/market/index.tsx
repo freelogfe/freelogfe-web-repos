@@ -47,7 +47,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
           value: category.first === -3 ? '小说大赛' : '漫画大赛',
         },
       });
-      return
+      return;
     }
     let str = '';
     if (category.first !== -1) {
@@ -77,13 +77,13 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       });
       // @ts-ignore
       first > 1 &&
-        // @ts-ignore
-        categoryData.second[first].some((item: string, index: number) => {
-          if (item === data[1]) {
-            second = item;
-            return true;
-          }
-        });
+      // @ts-ignore
+      categoryData.second[first].some((item: string, index: number) => {
+        if (item === data[1]) {
+          second = item;
+          return true;
+        }
+      });
       setCategory({
         first,
         second,
@@ -108,7 +108,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
   return (
     <>
       <div className={'flex-column ' + styles.filter}>
-        <div className="flex-row-center mt-30">
+        <div className='flex-row-center mt-30'>
           <a
             onClick={() => {
               setCategory({
@@ -179,30 +179,30 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         {category.first > 1 ? (
           <div className={'flex-row-center py-15 ' + styles.secondContainer}>
             {category.first > 1 &&
-              // @ts-ignore
-              categoryData.second[category.first].map((item: string, index: number) => {
-                return (
-                  <a
-                    onClick={() => {
-                      console.log(item);
-                      setCategory({
-                        ...category,
-                        second: item === category.second ? '' : item,
-                      });
-                    }}
-                    key={item}
-                    className={
-                      (category.second === item ? styles.secondSelected : '') +
-                      ' ' +
-                      styles.second +
-                      // @ts-ignore
-                      (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')
-                    }
-                  >
-                    {item}
-                  </a>
-                );
-              })}
+            // @ts-ignore
+            categoryData.second[category.first].map((item: string, index: number) => {
+              return (
+                <a
+                  onClick={() => {
+                    console.log(item);
+                    setCategory({
+                      ...category,
+                      second: item === category.second ? '' : item,
+                    });
+                  }}
+                  key={item}
+                  className={
+                    (category.second === item ? styles.secondSelected : '') +
+                    ' ' +
+                    styles.second +
+                    // @ts-ignore
+                    (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')
+                  }
+                >
+                  {item}
+                </a>
+              );
+            })}
           </div>
         ) : null}
         {/*<FInput*/}
@@ -239,6 +239,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
       {discoverPage.dataSource.length > 0 ? (
         <>
+          <div style={{ height: 30 }} />
           <div className={styles.Content}>
             {discoverPage.dataSource.map((resource: any) => (
               <FResourceCard
