@@ -39,7 +39,7 @@ interface FAddInformExhibitDrawerStates {
     checked: boolean;
     name: string;
     identity: 'resource' | 'object';
-    type: string;
+    type: string[];
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
   }[];
@@ -354,7 +354,7 @@ function FAddInformExhibitDrawer({
                           </div>
                           <div style={{ height: 2 }} />
                           <FComponentsLib.FContentText
-                            text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
+                            text={(l.type.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(l.type)}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
                             type='additional2'
                           />
                         </div>
@@ -400,8 +400,8 @@ async function handleList(payload: HandleListParams): Promise<{
     const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
       skip: payload.skip,
       limit: FUtil.Predefined.pageSize,
-      omitResourceType: payload.isTheme ? undefined : 'theme',
-      resourceType: payload.isTheme ? 'theme' : undefined,
+      omitResourceType: payload.isTheme ? undefined : '主题',
+      resourceType: payload.isTheme ? '主题' : undefined,
       keywords: payload.keywords,
       status: 1,
     };
@@ -456,8 +456,8 @@ async function handleList(payload: HandleListParams): Promise<{
       skip: payload.skip,
       limit: FUtil.Predefined.pageSize,
       isSelf: 1,
-      omitResourceType: payload.isTheme ? undefined : 'theme',
-      resourceType: payload.isTheme ? 'theme' : undefined,
+      omitResourceType: payload.isTheme ? undefined : '主题',
+      resourceType: payload.isTheme ? '主题' : undefined,
       keywords: payload.keywords,
     };
     // console.log(params, 'paramsparams1234');
@@ -509,8 +509,8 @@ async function handleList(payload: HandleListParams): Promise<{
       skip: payload.skip,
       limit: FUtil.Predefined.pageSize,
       keywords: payload.keywords,
-      omitResourceType: payload.isTheme ? undefined : 'theme',
-      resourceType: payload.isTheme ? 'theme' : undefined,
+      omitResourceType: payload.isTheme ? undefined : '主题',
+      resourceType: payload.isTheme ? '主题' : undefined,
     };
 
     const { data } = await FServiceAPI.Collection.collectionResources(params);
@@ -565,8 +565,8 @@ async function handleList(payload: HandleListParams): Promise<{
       bucketName: payload.bucket,
       keywords: payload.keywords,
       isLoadingTypeless: 0,
-      omitResourceType: payload.isTheme ? undefined : 'theme',
-      resourceType: payload.isTheme ? 'theme' : undefined,
+      omitResourceType: payload.isTheme ? undefined : '主题',
+      resourceType: payload.isTheme ? '主题' : undefined,
     };
 
     const { data } = await FServiceAPI.Storage.objectList(params);
