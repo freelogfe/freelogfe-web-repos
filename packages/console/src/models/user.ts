@@ -75,7 +75,7 @@ const Model: MarketModelType = {
       // userPermission.getUserInfo();
       // const promise = () => userPermission.getUserInfo();
       const data = yield call(userPermission.getUserInfo);
-      // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
+      // console.log(data, '#######@@@@@data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

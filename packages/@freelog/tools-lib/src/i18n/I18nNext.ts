@@ -15,8 +15,6 @@ const allLanguage = [
   {value: 'zh_CN', label: '简体中文'},
 ];
 
-let self: I18nNext;
-
 class I18nNext {
 
   private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
@@ -25,45 +23,50 @@ class I18nNext {
   private _currentLanguage: LanguageKeyType = Cookies.get(localStorage_i18nextLng_key) as undefined || 'zh_CN';
 
   constructor() {
-    self = this;
-    self.ready();
+    this.ready();
+
+    this.ready = this.ready.bind(this);
+    this.t = this.t.bind(this);
+    this.changeLanguage = this.changeLanguage.bind(this);
+    this.getAllLanguage = this.getAllLanguage.bind(this);
+    this.getCurrentLanguage = this.getCurrentLanguage.bind(this);
   }
 
-  async ready() {
+  async ready(this: I18nNext) {
     const exc = () => {
-      while (self._taskQueue.length > 0) {
-        const task = self._taskQueue.shift();
+      while (this._taskQueue.length > 0) {
+        const task = this._taskQueue.shift();
         task && task();
       }
     };
     const handleTasks = async () => {
-      if (self._loadingData === 'End') {
+      if (this._loadingData === 'End') {
         exc();
         return;
       }
-      if (self._loadingData === 'Start') {
+      if (this._loadingData === 'Start') {
         return;
       }
 
       // NO_START
-      self._loadingData = 'Start';
+      this._loadingData = 'Start';
 
-      await self._handleData();
+      await this._handleData();
       // console.log('######');
       exc();
     };
     const promise = new Promise((resolve) => {
-      self._taskQueue.push(resolve);
+      this._taskQueue.push(resolve);
     });
     handleTasks();
     return promise;
   }
 
-  t(key: string, options?: { [key: string]: any }) {
+  t(this: I18nNext, key: string, options?: { [key: string]: any }) {
     return i18next.t(key, options);
   }
 
-  changeLanguage(lng: LanguageKeyType) {
+  changeLanguage(this: I18nNext, lng: LanguageKeyType) {
     // return i18next.changeLanguage(lng);
     // window.localStorage.setItem(localStorage_i18nextLng_key, lng)
     Cookies.set(localStorage_i18nextLng_key, lng, {
@@ -72,26 +75,26 @@ class I18nNext {
     });
   }
 
-  getAllLanguage(): typeof allLanguage {
+  getAllLanguage(this: I18nNext): typeof allLanguage {
     return allLanguage;
   }
 
-  getCurrentLanguage(): LanguageKeyType {
-    return self._currentLanguage;
+  getCurrentLanguage(this: I18nNext): LanguageKeyType {
+    return this._currentLanguage;
   }
 
-  private async _handleData() {
+  private async _handleData(this: I18nNext) {
 
-    const lng: string = self._currentLanguage;
+    const lng: string = this._currentLanguage;
     const resource: string | null = window.localStorage.getItem(localStorage_i18nextResources_key);
     // const resource: string | undefined = Cookies.get(decodeURIComponent(localStorage_i18nextResources_key));
     let i18nextResources: Resource | null = resource ? JSON.parse(resource) : null;
 
     if (!i18nextResources) {
       // console.log('######892io3jlkl')
-      i18nextResources = await self._fetchData();
+      i18nextResources = await this._fetchData();
     } else {
-      self._fetchData();
+      this._fetchData();
     }
 
     await i18next
@@ -111,7 +114,7 @@ class I18nNext {
       });
   }
 
-  private async _fetchData(): Promise<Resource> {
+  private async _fetchData(this: I18nNext): Promise<Resource> {
     const res: any = await axios.get(window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test, {
       withCredentials: false,
     });
