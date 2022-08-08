@@ -16,6 +16,7 @@ import FResultTip from '@/components/FResultTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 
+// interface ActivityProps extends IRouteComponentProps {
 interface ActivityProps extends IRouteComponentProps {
   dispatch: Dispatch;
   activityDetailsPage: ActivityDetailsPageModelState;

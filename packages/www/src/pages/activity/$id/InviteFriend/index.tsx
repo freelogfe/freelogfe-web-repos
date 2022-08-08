@@ -10,10 +10,13 @@ import copy from 'copy-to-clipboard';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { IRouteComponentProps, withRouter } from 'umi';
+import { RouteComponentProps } from 'react-router';
 
 import FComponentsLib from '@freelog/components-lib';
-interface InviteFriendProps extends IRouteComponentProps {
-  dispatch: Dispatch;
+import { Dispatch } from 'dva';
+
+interface InviteFriendProps extends RouteComponentProps<{id: string}> {
+  // dispatch: Dispatch;
   // match: {
   //   params: {
   //     id: string;
