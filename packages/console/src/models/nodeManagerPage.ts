@@ -780,6 +780,7 @@ const Model: NodeManagerModelType = {
     },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
+      console.log(payload, 'PPPPP98iwosdfjlsdkj');
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -874,6 +875,7 @@ const Model: NodeManagerModelType = {
         ...(data_Exhibits.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>(
           (i: any) => {
             const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
+            // console.log(authInfo, 'authInfo908io3jfskdfjlsdk');
             return {
               id: i.presentableId,
               cover: i.coverImages[0],
@@ -894,7 +896,7 @@ const Model: NodeManagerModelType = {
                   ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
                   : authInfo.defaulterIdentityType === 2
                     ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                    : '',
+                    : authInfo.error,
             };
           },
         ),
