@@ -891,13 +891,13 @@ const Model: NodeManagerModelType = {
               hasPolicy: i.policies.length > 0,
               resourceId: i.resourceInfo.resourceId,
               isAuth: authInfo.isAuth,
-              // authErrorText: authInfo.error,
-              authErrorText:
-                authInfo.defaulterIdentityType === 1
-                  ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-                  : authInfo.defaulterIdentityType === 2
-                    ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                    : authInfo.error,
+              authErrorText: authInfo.error,
+              // authErrorText:
+              //   authInfo.defaulterIdentityType === 1
+              //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
+              //     : authInfo.defaulterIdentityType === 2
+              //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+              //       : authInfo.error,
             };
           },
         ),
@@ -989,12 +989,13 @@ const Model: NodeManagerModelType = {
               .map<string>((p) => p.policyName),
             hasPolicy: i.policies.length > 0,
             isAuth: authInfo.isAuth,
-            authErrorText:
-              authInfo.defaulterIdentityType === 1
-                ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-                : authInfo.defaulterIdentityType === 2
-                  ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-                  : '',
+            authErrorText: authInfo.error,
+            // authErrorText:
+            //   authInfo.defaulterIdentityType === 1
+            //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
+            //     : authInfo.defaulterIdentityType === 2
+            //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+            //       : authInfo.error,
             resourceId: i.resourceInfo.resourceId,
           };
         })
