@@ -31,6 +31,8 @@ function Bind() {
 
     if (val === '') {
       loginNameError = '用户名称不能为空';
+    } else if (val.length > 30) {
+      loginNameError = '不能超过30字符';
     } else if (!FUtil.Regexp.USERNAME.test(val)) {
       loginNameError =
         '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
@@ -166,7 +168,13 @@ function Bind() {
               <div style={{ height: 40 }} />
               <FComponentsLib.FRectBtn
                 className={styles.btn}
-                disabled={bindData.loading}
+                disabled={
+                  !bindData.password ||
+                  !bindData.loginName ||
+                  bindData.loading ||
+                  !!bindData.passwordError ||
+                  !!bindData.loginNameError
+                }
                 onClick={submit}
               >
                 {bindData.loading ? '完成设置并登录' : '完成设置并登录'}
