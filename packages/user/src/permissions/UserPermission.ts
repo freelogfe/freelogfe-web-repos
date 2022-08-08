@@ -2,46 +2,44 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 type T_StateCode = 'SUCCESS' | 'ERR_NOT_LOGIN' | 'ERR_FREEZE' | 'ERR_NOT_ALPHA_TEST' | 'ERR_SWITCHED_USER';
 
-let self: UserPermission;
-
 class UserPermission {
-  // private self: UserPermission = this;
-  private _userId: number = -1;
-  private _userType: 0 | 1 = 0; // 用户类型 0:初始账户 1:内测账户
-  private _userInfo: null | any = null;
-  private _taskQueue: Function[] = [];
 
-  private _loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
+  #userId: number = -1;
+  #userType: 0 | 1 = 0; // 用户类型 0:初始账户 1:内测账户
+  #userInfo: null | any = null;
+  #taskQueue: Function[] = [];
+
+  #loadingData: 'NotStart' | 'Start' | 'End' = 'NotStart';
 
   constructor() {
-    self = this;
-    self._ready();
+    // self = this;
+    this.#ready();
   }
 
-  async check(): Promise<T_StateCode> {
-    await self._ready();
-    if (!self._userInfo || FUtil.Tool.getUserIDByCookies() === -1) {
+  async check(this: UserPermission): Promise<T_StateCode> {
+    await this.#ready();
+    if (!this.#userInfo || FUtil.Tool.getUserIDByCookies() === -1) {
       return 'ERR_NOT_LOGIN';
     }
 
-    if (self._userInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
+    if (this.#userInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
       return 'ERR_SWITCHED_USER';
     }
 
-    if (self._userInfo.status === 1) {
+    if (this.#userInfo.status === 1) {
       return 'ERR_FREEZE';
     }
 
 
-    if (self._userInfo.status === 2 || self._userInfo.status === 3) {
+    if (this.#userInfo.status === 2 || this.#userInfo.status === 3) {
       return 'ERR_NOT_ALPHA_TEST';
     }
 
     return 'SUCCESS';
   }
 
-  async checkUrl(url: string): Promise<{ code: T_StateCode; goToUrl?: string; }> {
-    const stateCode = await self.check();
+  async checkUrl(this: UserPermission, url: string): Promise<{ code: T_StateCode; goToUrl?: string; }> {
+    const stateCode = await this.check();
     if (stateCode === 'SUCCESS') {
       return {
         code: stateCode,
@@ -79,47 +77,47 @@ class UserPermission {
     };
   }
 
-  async getUserInfo() {
+  async getUserInfo(this: UserPermission) {
     // console.log('((((((((((((((((((((((((((9023ipofsd');
-    await self._ready();
+    await this.#ready();
     // console.log('))))))))))))))))))))))))))9023ipofsd');
 
-    return self._userInfo;
+    return this.#userInfo;
   }
 
-  private _ready(): Promise<any> {
+  #ready(this: UserPermission): Promise<any> {
     // console.log('_ready_ready_ready32rfedwsafd');
     const exc = () => {
-      while (self._taskQueue.length > 0) {
-        const task = self._taskQueue.shift();
+      while (this.#taskQueue.length > 0) {
+        const task = this.#taskQueue.shift();
         task && task();
       }
     };
     const handleTasks = async () => {
-      if (self._loadingData === 'End' || FUtil.Tool.getUserIDByCookies() === -1) {
+      if (this.#loadingData === 'End' || FUtil.Tool.getUserIDByCookies() === -1) {
         exc();
         return;
       }
-      if (self._loadingData === 'Start') {
+      if (this.#loadingData === 'Start') {
         return;
       }
 
       // NO_START
-      self._loadingData = 'Start';
+      this.#loadingData = 'Start';
 
       const { data } = await FServiceAPI.User.currentUserInfo();
 
-      self._loadingData = 'End';
+      this.#loadingData = 'End';
 
-      self._userInfo = data;
-      self._userId = data.userId;
-      self._userType = data.userType; // 用户类型 0:初始账户 1:内测账户
+      this.#userInfo = data;
+      this.#userId = data.userId;
+      this.#userType = data.userType; // 用户类型 0:初始账户 1:内测账户
 
       exc();
     };
     // console.log('#####PPPPPPP23ewfds');
     const promise = new Promise((resolve) => {
-      self._taskQueue.push(resolve);
+      this.#taskQueue.push(resolve);
     });
     handleTasks();
     // console.log('*****PPPPPPPsdf32rsedf');
