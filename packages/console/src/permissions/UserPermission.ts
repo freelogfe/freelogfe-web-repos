@@ -3,7 +3,6 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 type T_StateCode = 'SUCCESS' | 'ERR_NOT_LOGIN' | 'ERR_FREEZE' | 'ERR_NOT_ALPHA_TEST' | 'ERR_SWITCHED_USER';
 
 class UserPermission {
-  // private self: UserPermission = this;
   private _userId: number = -1;
   private _userType: 0 | 1 = 0; // 用户类型 0:初始账户 1:内测账户
   private _userInfo: null | any = null;
