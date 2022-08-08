@@ -891,6 +891,7 @@ const Model: NodeManagerModelType = {
               hasPolicy: i.policies.length > 0,
               resourceId: i.resourceInfo.resourceId,
               isAuth: authInfo.isAuth,
+              // authErrorText: authInfo.error,
               authErrorText:
                 authInfo.defaulterIdentityType === 1
                   ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
