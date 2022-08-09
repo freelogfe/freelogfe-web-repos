@@ -36,12 +36,12 @@ function Banner2({ activityDetailsPage, onClickRuleBtn }: Banner2Props) {
             // set_ModalVisible(true);
             onClickRuleBtn && onClickRuleBtn();
           }}
-        >如何参赛？</FComponentsLib.FTextBtn>
+        >规则详情</FComponentsLib.FTextBtn>
         {/*<FComponentsLib.FTextBtn*/}
         {/*  type='primary'*/}
         {/*  style={{ bottom: 0, left: 80, position: 'absolute' }}*/}
         {/*  onClick={() => {*/}
-        {/*    set_ModalVisible(true);*/}
+        {/*    onClickRuleBtn && onClickRuleBtn();*/}
         {/*  }}*/}
         {/*>规则详情</FComponentsLib.FTextBtn>*/}
       </div>
