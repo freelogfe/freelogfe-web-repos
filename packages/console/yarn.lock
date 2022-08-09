@@ -312,19 +312,18 @@
     "@antv/util" "^2.0.9"
     insert-css "^2.0.0"
 
-"@antv/g6-react-node@^1.4.4":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@antv/g6-react-node/-/g6-react-node-1.4.4.tgz#5c50dd1d7cb3dae38eebf9b85c39eef9844e5415"
-  integrity sha512-UXCV6iSz0GUQljWd8EH/kq7VfWHE/Rpip7wUIRVxviyvCbG6+9Ix+092+r7lBeBOpc932mfxr4REl/Mdf/GVoA==
+"@antv/g6-react-node@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@antv/g6-react-node/-/g6-react-node-1.4.5.tgz#ea07c399fb597aea554fd037a34a42950c044f2c"
+  integrity sha512-sYIUmYcZdqKhlGhjJAeNEJpnoJ+3zGajZjtatXBiIttsTHxFQVK3730k8048flYEaG1AweZhIydwmkqMlFf4iQ==
   dependencies:
     "@antv/g-base" "^0.5.1"
-    "@antv/g6" "^4.0.0"
     "@antv/g6-core" "^0.0.7"
     "@types/yoga-layout" "^1.9.3"
     react "^16.12.0"
     yoga-layout-prebuilt "^1.10.0"
 
-"@antv/g6@^4.0.0", "@antv/g6@^4.2.4", "@antv/g6@^4.6.3":
+"@antv/g6@^4.2.4", "@antv/g6@^4.6.3":
   version "4.6.4"
   resolved "https://registry.yarnpkg.com/@antv/g6/-/g6-4.6.4.tgz#41297f577026697118ab87e365cc8a500c09fc7c"
   integrity sha512-8xU96NISJ7G3Gwo6m1BTtqzfBeRd23BWcLDIpwX4v1KoE3NMHZlJkUaNvnKsoeoEoLNCDYBvTfBfEwV4C5gWfw==

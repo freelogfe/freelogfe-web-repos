@@ -1,7 +1,7 @@
+import * as React from 'react';
 import { createNodeFromReact, Group, Rect, Text } from '@antv/g6-react-node';
 import { textOverflowEllipsis } from '@/components/FAntvG6/tools';
 import G6 from '@antv/g6';
-import React from 'react';
 import { FUtil } from '@freelog/tools-lib';
 
 export interface FNode_Dependency_Resource_Values {
