@@ -82,9 +82,7 @@ class UserPermission {
   }
 
   async getUserInfo(this: UserPermission) {
-    // console.log('((((((((((((((((((((((((((9023ipofsd');
     await this.#ready();
-    // console.log('))))))))))))))))))))))))))9023ipofsd');
 
     return this.#userInfo;
   }
@@ -118,12 +116,10 @@ class UserPermission {
 
       exc();
     };
-    // console.log('_####PPPPPPP23ewfds');
     const promise = new Promise((resolve) => {
       this.#taskQueue.push(resolve);
     });
     handleTasks();
-    // console.log('*****PPPPPPPsdf32rsedf');
     return promise;
   }
 }

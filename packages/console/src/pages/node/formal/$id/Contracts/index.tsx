@@ -36,7 +36,7 @@ import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 
-const RangePicker: any = DatePicker.RangePicker;
+// const RangePicker: any = DatePicker.RangePicker;
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -355,7 +355,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                         <FComponentsLib.FContentText
                           text={'签约时间：'}
                         />
-                        <RangePicker
+                        <DatePicker.RangePicker
                           value={nodeManager_Contract_Page.authorize_Date}
                           onChange={(value: any) => {
                             // console.log(value, '@Asdfai89jhkljrlk');
@@ -483,7 +483,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                       </Space>
                       <Space size={2}>
                         <FComponentsLib.FContentText text={'签约时间：'} />
-                        <RangePicker
+                        <DatePicker.RangePicker
                           value={nodeManager_Contract_Page.authorized_Date}
                           onChange={(value: any) => {
                             // console.log(value, '@Asdfai89jhkljrlk');
