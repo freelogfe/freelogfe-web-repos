@@ -23,9 +23,13 @@
     "@ahooksjs/use-url-state": "^3.5.0",
     "animate.css": "^4.1.1",
     "antd": "^4.21.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "umi": "^3.4.21"
   },
   "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "@umijs/preset-react": "^2.1.4",
     "@umijs/test": "^4.0.8",
     "lint-staged": "^10.0.7",
