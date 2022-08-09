@@ -5,7 +5,6 @@ import { Tooltip } from 'antd';
 import { FCopy } from '../FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
-
 interface FCopyToClipboardProps {
   text: string;
   title: string;
