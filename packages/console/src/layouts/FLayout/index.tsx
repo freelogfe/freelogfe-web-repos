@@ -14,6 +14,7 @@ import { RouteComponentProps } from 'react-router';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Input } from 'antd';
+import  FInput  from "@/components/FInput"
 import FComponentsLib from '@freelog/components-lib';
 const { Search } = Input;
 
@@ -30,14 +31,14 @@ interface FLayoutProps extends RouteComponentProps {
 }
 
 function FLayout({
-                   router: routerObj,
-                   dispatch,
-                   children,
-                   global,
-                   storageHomePage,
-                   nodes,
-                   user,
-                 }: FLayoutProps) {
+  router: routerObj,
+  dispatch,
+  children,
+  global,
+  storageHomePage,
+  nodes,
+  user,
+}: FLayoutProps) {
   // console.log(global, 'global09234jl23kl');
   const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
 
@@ -65,99 +66,99 @@ function FLayout({
   // console.log(storageHomePage.bucketList, '’storageHomePage.bucketList390osd');
   const navs = user.info
     ? [
-      {
-        id: 'dashboard',
-        text: FI18n.i18nNext.t('nav_dashboard'),
-        href: FUtil.LinkTo.dashboard(),
-        emptyItemsTip: undefined,
-        items: [],
-      },
-      {
-        id: 'resource',
-        text: FI18n.i18nNext.t('nav_ManageResources'),
-        href: FUtil.LinkTo.myResources(),
-        items: [
-          {
-            id: 'myResource',
-            text: '我的资源',
-            href: FUtil.LinkTo.myResources(),
-          },
-          {
-            id: 'myCollection',
-            text: '我的收藏',
-            href: FUtil.LinkTo.myCollects(),
-          },
-        ],
-      },
-      {
-        id: 'node',
-        text: FI18n.i18nNext.t('nav_ManageNodes'),
-        href:
-          nodes.list.length === 0
-            ? FUtil.LinkTo.nodeCreator()
-            : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
-        items: nodes.list.map((n) => ({
-          id: n.nodeId.toString(),
-          text: n.nodeName,
-          href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
-        })),
-        createBtn: {
-          href: FUtil.LinkTo.nodeCreator(),
+        {
+          id: 'dashboard',
+          text: FI18n.i18nNext.t('nav_dashboard'),
+          href: FUtil.LinkTo.dashboard(),
+          emptyItemsTip: undefined,
+          items: [],
         },
-        emptyItemsTip: {
-          tipText: '自由创作从Freelog开始',
-          btnText: '创建节点',
-          btnHref: FUtil.LinkTo.nodeCreator(),
-        },
-      },
-      {
-        id: 'storage',
-        text: FI18n.i18nNext.t('nav_storage'),
-        href: FUtil.LinkTo.storageSpace({
-          bucketName:
-            storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-              ? storageHomePage.bucketList[0].bucketName
-              : '',
-        }),
-        items: (storageHomePage.bucketList || []).map((b) => {
-          return {
-            id: b.bucketName,
-            text: b.bucketName,
-            href: FUtil.LinkTo.storageSpace({
-              bucketName: b.bucketName,
-            }),
-          };
-        }),
-        emptyItemsTip: {
-          tipText: '自由创作从Freelog开始',
-          btnText: '创建Bucket',
-          btnHref: FUtil.LinkTo.storageSpace({
-            createBucket: true,
-          }),
-        },
-        createBtn:
-          storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
-            ? undefined
-            : {
-              href: FUtil.LinkTo.storageSpace({
-                bucketName:
-                  storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-                    ? storageHomePage.bucketList[0].bucketName
-                    : '',
-                createBucket: true,
-              }),
+        {
+          id: 'resource',
+          text: FI18n.i18nNext.t('nav_ManageResources'),
+          href: FUtil.LinkTo.myResources(),
+          items: [
+            {
+              id: 'myResource',
+              text: '我的资源',
+              href: FUtil.LinkTo.myResources(),
             },
-      },
-    ]
+            {
+              id: 'myCollection',
+              text: '我的收藏',
+              href: FUtil.LinkTo.myCollects(),
+            },
+          ],
+        },
+        {
+          id: 'node',
+          text: FI18n.i18nNext.t('nav_ManageNodes'),
+          href:
+            nodes.list.length === 0
+              ? FUtil.LinkTo.nodeCreator()
+              : FUtil.LinkTo.nodeManagement({ nodeID: nodes.list[0].nodeId }),
+          items: nodes.list.map((n) => ({
+            id: n.nodeId.toString(),
+            text: n.nodeName,
+            href: FUtil.LinkTo.nodeManagement({ nodeID: n.nodeId }),
+          })),
+          createBtn: {
+            href: FUtil.LinkTo.nodeCreator(),
+          },
+          emptyItemsTip: {
+            tipText: '自由创作从Freelog开始',
+            btnText: '创建节点',
+            btnHref: FUtil.LinkTo.nodeCreator(),
+          },
+        },
+        {
+          id: 'storage',
+          text: FI18n.i18nNext.t('nav_storage'),
+          href: FUtil.LinkTo.storageSpace({
+            bucketName:
+              storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+                ? storageHomePage.bucketList[0].bucketName
+                : '',
+          }),
+          items: (storageHomePage.bucketList || []).map((b) => {
+            return {
+              id: b.bucketName,
+              text: b.bucketName,
+              href: FUtil.LinkTo.storageSpace({
+                bucketName: b.bucketName,
+              }),
+            };
+          }),
+          emptyItemsTip: {
+            tipText: '自由创作从Freelog开始',
+            btnText: '创建Bucket',
+            btnHref: FUtil.LinkTo.storageSpace({
+              createBucket: true,
+            }),
+          },
+          createBtn:
+            storageHomePage.bucketList && storageHomePage.bucketList.length >= 5
+              ? undefined
+              : {
+                  href: FUtil.LinkTo.storageSpace({
+                    bucketName:
+                      storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+                        ? storageHomePage.bucketList[0].bucketName
+                        : '',
+                    createBucket: true,
+                  }),
+                },
+        },
+      ]
     : [
-      {
-        id: 'product',
-        // text: '产品',
-        text: FI18n.i18nNext.t('nav_product'),
-        href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
-        items: [],
-      },
-    ];
+        {
+          id: 'product',
+          // text: '产品',
+          text: FI18n.i18nNext.t('nav_product'),
+          href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
+          items: [],
+        },
+      ];
 
   if (global.globalLoading) {
     return <FLoadingTip height={window.innerHeight} />;
@@ -215,27 +216,25 @@ function FLayout({
           // showGlobalSearch={true}
           // showGotoConsole={true}
           extra={
-            <Search
-              placeholder='输入用户名或资源名称'
-              onSearch={(value: string) => {
-                window.location.href = window.location.origin + `/search?search=${value}`;
-              }}
-              style={{ width: 240 }}
-            />
-
-            // <FInput
-            //   size="small"
-            //   theme="dark"
-            //   style={{ width: 200 }}
-            //   onDebounceChange={(value) => {
-            //     setPageData({
-            //       ...pageData,
-            //       skip: 0,
-            //     });
-            //     setKeywords(value);
+            // <Search
+            //   placeholder='输入用户名或资源名称'
+            //   onSearch={(value: string) => {
+            //     window.location.href = window.location.origin + `/search?search=${value}`;
             //   }}
-            //   // value={''}
+            //   style={{ width: 240 }}
             // />
+
+            <FInput
+              size="small"
+              theme="dark"
+              placeholder="输入用户名或资源名称"
+              style={{ width: 200 }}
+              onPressEnter={(e) => {
+                console.log(e)
+                window.location.href = window.location.origin + `/search?search=${e.target.value}`;
+              }}
+              // value={''}
+            />
           }
           createBtnMenu={[
             {
@@ -252,32 +251,32 @@ function FLayout({
           userPanel={
             user.info
               ? {
-                info: {
-                  avatar: user.info.headImage,
-                  userName: user.info.username,
-                  email: user.info.email,
-                  phone: user.info.mobile,
-                },
-                menu: [
-                  {
-                    text: '个人中心',
-                    onClick() {
-                      window.open(
-                        FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet(),
-                      );
-                    },
+                  info: {
+                    avatar: user.info.headImage,
+                    userName: user.info.username,
+                    email: user.info.email,
+                    phone: user.info.mobile,
                   },
-                  {
-                    text: '登出',
-                    async onClick() {
-                      await FServiceAPI.User.logout();
-                      return window.location.replace(
-                        FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login(),
-                      );
+                  menu: [
+                    {
+                      text: '个人中心',
+                      onClick() {
+                        window.open(
+                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet(),
+                        );
+                      },
                     },
-                  },
-                ],
-              }
+                    {
+                      text: '登出',
+                      async onClick() {
+                        await FServiceAPI.User.logout();
+                        return window.location.replace(
+                          FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login(),
+                        );
+                      },
+                    },
+                  ],
+                }
               : null
           }
         />

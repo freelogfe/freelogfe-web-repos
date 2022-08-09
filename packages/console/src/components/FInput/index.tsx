@@ -7,6 +7,7 @@ import * as AHooks from 'ahooks';
 import { RefSelectProps } from 'antd/lib/select';
 
 interface FInputProps extends InputProps {
+  onPressEnter? (value: any): void;
   theme?: 'dark' | 'light';
   value?: string;
   debounce?: number;
@@ -25,6 +26,7 @@ function FInput({
                   value,
                   onChange,
                   onDebounceChange,
+                  onPressEnter,
                   errorText,
                   wrapClassName,
                   lengthLimit = 0,
@@ -69,6 +71,9 @@ function FInput({
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
             prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
             className={[...commentClass, styles.dark].join(' ')}
+            onPressEnter={(e)=>{
+              onPressEnter && onPressEnter(e)
+            }}
             allowClear={true}
             style={{ height: size === 'middle' ? 38 : 32 }}
             {...inputProps}
@@ -78,6 +83,9 @@ function FInput({
           ref={ref}
           className={[...commentClass, styles.light].join(' ')}
           style={{ height: size === 'middle' ? 38 : 32 }}
+          onPressEnter={(e)=>{
+            onPressEnter && onPressEnter(e)
+          }}
           suffix={lengthLimit > 0
             ? (<span
               className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
