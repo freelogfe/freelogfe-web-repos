@@ -14,6 +14,10 @@ class UserPermission {
   constructor() {
     // self = this;
     this.#ready();
+
+    this.check = this.check.bind(this);
+    this.checkUrl = this.checkUrl.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
 
   async check(this: UserPermission): Promise<T_StateCode> {
@@ -86,7 +90,6 @@ class UserPermission {
   }
 
   #ready(this: UserPermission): Promise<any> {
-    // console.log('_ready_ready_ready32rfedwsafd');
     const exc = () => {
       while (this.#taskQueue.length > 0) {
         const task = this.#taskQueue.shift();
@@ -115,7 +118,7 @@ class UserPermission {
 
       exc();
     };
-    // console.log('#####PPPPPPP23ewfds');
+    // console.log('_####PPPPPPP23ewfds');
     const promise = new Promise((resolve) => {
       this.#taskQueue.push(resolve);
     });
