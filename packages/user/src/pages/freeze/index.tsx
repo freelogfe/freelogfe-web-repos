@@ -6,7 +6,6 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
 import userPermission from '@/permissions/UserPermission';
 import FComponentsLib from '@freelog/components-lib';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 
 interface FreezeProps {
 
@@ -67,12 +66,12 @@ function Freeze({}: FreezeProps) {
     <div style={{ height: 20 }} />
     <div className={styles.content}>
       <FComponentsLib.FContentText text={'联系邮箱：service@freelog.com'} />
-      <FCopyToClipboard
+      <FComponentsLib.FCopyToClipboard
         text={'service@freelog.com'}
         title={'复制'}
       >
       <FComponentsLib.FTextBtn>&nbsp;复制&nbsp;</FComponentsLib.FTextBtn>
-      </FCopyToClipboard>
+      </FComponentsLib.FCopyToClipboard>
     </div>
     <div style={{ height: 80 }} />
     <FComponentsLib.FTextBtn onClick={async () => {

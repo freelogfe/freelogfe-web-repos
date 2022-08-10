@@ -8,6 +8,7 @@ import FHeaderNavigation from './FHeaderNavigation';
 import FCodeFormatter from './FCodeFormatter';
 import FContractStatusBadge from './FContractStatusBadge';
 import FPaymentPasswordInput from './FPaymentPasswordInput';
+import FCopyToClipboard from './FCopyToClipboard';
 
 const FComponentsLib = {
     FIcons,
@@ -24,5 +25,6 @@ const FComponentsLib = {
     FCodeFormatter,
     FContractStatusBadge,
     FPaymentPasswordInput,
+    FCopyToClipboard,
 };
 export default FComponentsLib;

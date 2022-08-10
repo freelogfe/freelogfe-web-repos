@@ -4,7 +4,6 @@ import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
   ChangeAction,
   OnChangeTypeAction, OnClick_SaveBtn_Action,
@@ -112,7 +111,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               />
             </Space>
             <Space size={15}>
-              <FCopyToClipboard
+              <FComponentsLib.FCopyToClipboard
                 iconStyle={{ fontSize: 14 }}
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
                 title={FI18n.i18nNext.t('copy_object_name')}

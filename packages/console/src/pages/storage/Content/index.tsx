@@ -9,10 +9,7 @@ import {
   UploadFilesAction,
   FetchObjectsAction,
 } from '@/models/storageHomePage';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
-import {
-  FDelete,
-} from '@/components/FIcons';
+import { FDelete } from '@/components/FIcons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
 import FUpload from '@/components/FUpload';
@@ -46,7 +43,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
         return (<Space size={10}>
           <FComponentsLib.FContentText type='normal' text={text} />
           <div className={styles.hoverVisible}>
-            <FCopyToClipboard
+            <FComponentsLib.FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
               title={FI18n.i18nNext.t('copy_object_name')}
             />

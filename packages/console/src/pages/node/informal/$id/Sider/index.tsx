@@ -1,15 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import { router, withRouter } from 'umi';
 import { OnMountPageSiderAction } from '@/models/informalNodeManagerPage';
 import { RouteComponentProps } from 'react-router';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FUtil1 from '@/utils';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -44,7 +43,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <a onClick={() => {
         window.open(informalNodeManagerPage.node_TestUrl);
       }}>{informalNodeManagerPage.node_TestUrl.replace(new RegExp(/http(s)?:\/\//), '')}</a>
-      <FCopyToClipboard
+      <FComponentsLib.FCopyToClipboard
         text={informalNodeManagerPage.node_TestUrl}
         iconStyle={{ fontSize: 14 }}
         title={FI18n.i18nNext.t('tip_copy_node_domain')}

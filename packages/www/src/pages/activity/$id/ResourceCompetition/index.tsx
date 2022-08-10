@@ -8,8 +8,8 @@ import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
-import * as AHooks from 'ahooks';
-import { FServiceAPI } from '@freelog/tools-lib';
+// import * as AHooks from 'ahooks';
+// import { FServiceAPI } from '@freelog/tools-lib';
 
 interface ResourceCompetitionProps {
   // activeID: string;

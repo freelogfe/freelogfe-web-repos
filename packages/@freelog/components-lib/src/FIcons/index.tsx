@@ -7,6 +7,7 @@ import FEdit from './FEdit';
 import FLine from './FLine';
 import FPlus from './FPlus';
 import FUser from './FUser';
+import FCopy from './FCopy';
 
 const FIcons = {
     FLinkedin,
@@ -17,5 +18,6 @@ const FIcons = {
     FLine,
     FPlus,
     FUser,
+    FCopy,
 };
 export default FIcons;

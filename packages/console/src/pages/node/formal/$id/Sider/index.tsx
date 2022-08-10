@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
@@ -39,7 +38,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             >
               {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
             </a>
-            <FCopyToClipboard
+            <FComponentsLib.FCopyToClipboard
               text={nodeManagerPage.nodeUrl}
               title={'复制节点地址'}
               iconStyle={{ fontSize: 14 }}
