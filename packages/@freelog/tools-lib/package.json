@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@freelog/resource-policy-lang": "1.1.26",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "crypto-js": "^4.0.0",
     "i18next": "^21.8.10",
     "js-cookie": "^3.0.1",
