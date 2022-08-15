@@ -1766,7 +1766,7 @@ export async function policyCodeTranslationToText(code: string, targetType: stri
       error: null,
       text: rrr.content,
     };
-  } catch (err) {
+  } catch (err: any) {
     return {
       error: [err.message],
     };

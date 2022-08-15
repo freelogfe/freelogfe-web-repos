@@ -271,12 +271,12 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         }}
       >策略内容</a>
       <div style={{ width: 15 }} />
-      <a
-        className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-        onClick={() => {
-          setActivated('view');
-        }}
-      >状态机视图</a>
+      {/*<a*/}
+      {/*  className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}*/}
+      {/*  onClick={() => {*/}
+      {/*    setActivated('view');*/}
+      {/*  }}*/}
+      {/*>状态机视图</a>*/}
       <div style={{ width: 15 }} />
       <a
         className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
