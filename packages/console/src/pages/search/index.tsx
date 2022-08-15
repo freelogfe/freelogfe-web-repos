@@ -106,10 +106,10 @@ function Search({}: SearchProps) {
     }
   }, [userResourcePageData.skip]);
   useEffect(() => {
-    if (tab === 'resource' && !resourcesListPure.length && keywords) {
+    if (tab === 'resource' && keywords) {
       run();
     }
-    if (tab === 'user' && !userList.length && keywords) {
+    if (tab === 'user'  && keywords) {
       run();
     }
   }, [tab]);
@@ -352,7 +352,7 @@ function Search({}: SearchProps) {
                   <div className="flex-3"></div>
                 </div>
               ) : (
-                <div className={styles.tip + ' mb-20 w-100x'}>
+                <div className={styles.tip + ' mb-20 w-100x ml-18'}>
                   以下是{' ' + keywords + ' '}相关的结果（{pageData.totalItem}）
                 </div>
               )}
