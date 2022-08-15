@@ -168,7 +168,7 @@ function Search({}: SearchProps) {
     let dataList: any = res.dataList;
     let supplyArray: any = [];
     if (userResourceContainer) {
-      const maxCount = Math.floor((userResourceContainer.current.clientWidth - 230) / 300);
+      const maxCount = Math.floor(userResourceContainer.current.clientWidth / 300);
       let supply = 0;
       if (userResourcePageData.skip > 0) {
         dataList = [...userResourcesListPure, ...dataList];
@@ -196,6 +196,8 @@ function Search({}: SearchProps) {
   };
   useEffect(() => {
     if (!data) return;
+    console.log(data);
+
     if (data.errCode) {
       fMessage(data.msg, 'error');
       return;
@@ -203,12 +205,32 @@ function Search({}: SearchProps) {
     // @ts-ignore
     const res: any = data.data;
     if (tab === 'resource') {
+      setPageData({
+        skip: 0,
+        limit: 40,
+        totalItem: -1,
+      });
+      setResourcesListPure([]);
+      setResourcesList([]);
       resolveResources(res);
     }
     if (tab === 'user') {
       if (showUserResource) {
+        setUserResourcePageData({
+          skip: 0,
+          limit: 40,
+          totalItem: -1,
+        });
+        setUserResourcesListPure([]);
+        setUserResourcesList([]);
         resolveUserResources(res);
       } else {
+        setUserPageData({
+          skip: 0,
+          limit: 40,
+          totalItem: -1,
+        });
+        setUserList([]);
         resolveUsers(res);
       }
     }
@@ -265,7 +287,6 @@ function Search({}: SearchProps) {
                   }
                 >
                   <Drawer
-                    className={styles.drawer}
                     close={() => {
                       setShowUserResource(false);
                     }}
@@ -277,7 +298,7 @@ function Search({}: SearchProps) {
                       <i className={styles.close + ' freelog fl-icon-guanbi'} />
                     </div>
                     <div className={'h-100x ' + styles.cContainer}>
-                      <div className="flex-row align-center mb-20 mt-6 ">
+                      <div className="flex-row align-center mb-20 mt-6 ml-10">
                         <div className={styles.userimg + ' over-h shrink-0'}>
                           <img src={selectedUser.headImage} className="w-100x" />
                         </div>
@@ -288,7 +309,7 @@ function Search({}: SearchProps) {
                       </div>
                       <div
                         className={
-                          'flex-row flex-wrap h-100x   w-100x ' + 
+                          'flex-row flex-wrap h-100x   w-100x ' +
                           (userResourcesListPure.length > 3 ? ' space-between' : '')
                         }
                         ref={userResourceContainer}
