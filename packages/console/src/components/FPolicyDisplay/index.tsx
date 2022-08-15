@@ -39,7 +39,7 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
           setActivated('text');
         }}
       >策略内容</a>
-      <div style={{ width: 15 }} />
+      {/*<div style={{ width: 15 }} />*/}
       {/*<a*/}
       {/*  className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}*/}
       {/*  onClick={() => {*/}
