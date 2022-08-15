@@ -81,7 +81,7 @@ function ResourceCompetition({ activityDetailsPage }: ResourceCompetitionProps):
             <div className={styles.circle} />
             <div style={{ width: 15 }} />
             <div className={styles.text}>
-              <span>同一用户限领3次资源创建奖励，同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。</span>
+              <span>同一用户限领3次资源发布奖励，同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。</span>
             </div>
           </div>
           <div style={{ height: 20 }} />
@@ -118,7 +118,7 @@ function ResourceCompetition({ activityDetailsPage }: ResourceCompetitionProps):
             <div className={styles.circle} />
             <div style={{ width: 15 }} />
             <div className={styles.text}>
-              <span>参赛漫画资源需选择添加 <b>#内测集结！漫画家召集令#</b> 活动标签，且需大于8张图片内容，以JPG、PNG长图格式创建发行；小说资源需选择添加 <b>#内测集结！小说家召集令#</b> 活动标签，内容需大于1500个字，以TXT格式创建发行。官方将根据资源所添加的活动标签进行对应奖项评选，如未添加活动标签将不计入活动之中。</span>
+              <span>参赛漫画资源需选择资源类型“图片-插画”，同时添加 <b>#内测集结！漫画家召集令#</b> 活动标签，且需大于8张图片内容，以JPG、PNG长图格式创建发行；小说资源需选择资源类型“阅读-文章”，同时添加 <b>#内测集结！小说家召集令#</b> 活动标签，内容需大于1500个字，以TXT格式创建发行。官方将根据资源所添加的活动标签进行对应奖项评选，如未添加活动标签将不计入活动之中。</span>
             </div>
           </div>
           <div style={{ height: 20 }} />
