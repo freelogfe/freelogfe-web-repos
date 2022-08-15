@@ -39,7 +39,7 @@ function Invite({ jump }: InviteProps) {
             fMessage('验证成功！', 'success');
             setTimeout(() => {
               if (urlState.returnUrl) {
-                window.location.href = urlState.returnUrl;
+                window.location.href = decodeURIComponent(urlState.returnUrl);
               } else {
                 router.push('/dashboard');
               }
