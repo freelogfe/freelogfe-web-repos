@@ -8,38 +8,18 @@ import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
-// import * as AHooks from 'ahooks';
-// import { FServiceAPI } from '@freelog/tools-lib';
+import { connect } from 'dva';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 
 interface ResourceCompetitionProps {
-  // activeID: string;
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement {
+function ResourceCompetition({ activityDetailsPage }: ResourceCompetitionProps): React.ReactElement {
 
-  // const [isExpiryDate, set_isExpiryDate] = React.useState<any>(null);
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
 
-  // AHooks.useMount(async () => {
-  //   const params: Parameters<typeof FServiceAPI.Activity.find4Client>[0] = {
-  //     _id: activeID,
-  //   };
-  //   const { ret, errCode, data } = await FServiceAPI.Activity.find4Client(params);
-  //   // console.log(data, 'data90opijklm23rqwf089IOSA;KLFSADZFDJLKL');
-  //   if (data.persist) {
-  //     set_isExpiryDate(true);
-  //     return;
-  //   }
-  //   const nowTimestamp: number = Date.now();
-  //   if (new Date(data.startTime).getTime() <= nowTimestamp && new Date(data.limitTime).getTime() >= nowTimestamp) {
-  //     set_isExpiryDate(true);
-  //     return;
-  //   }
-  //   set_isExpiryDate(false);
-  // });
-
   return (<div className={styles.style}>
-    {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <Banner1 />
     <div style={{ height: 266 }} />
     <Participations
@@ -180,4 +160,6 @@ function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement 
   </div>);
 }
 
-export default ResourceCompetition;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(ResourceCompetition);

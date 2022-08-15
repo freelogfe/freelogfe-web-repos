@@ -20,12 +20,6 @@ import { Helmet } from 'react-helmet';
 interface ActivityProps extends IRouteComponentProps {
   dispatch: Dispatch;
   activityDetailsPage: ActivityDetailsPageModelState;
-
-  // match: {
-  //   params: {
-  //     id: string;
-  //   }
-  // };
 }
 
 
