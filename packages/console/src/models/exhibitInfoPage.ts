@@ -96,7 +96,7 @@ export interface ExhibitInfoPageModelState {
   } | null;
   side_ResourceID: string;
   side_ResourceName: string;
-  side_ResourceType: string;
+  side_ResourceType: string[];
   side_ResourceCover: string;
 
   policyEditorVisible: boolean;

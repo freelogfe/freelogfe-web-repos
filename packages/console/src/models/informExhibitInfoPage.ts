@@ -163,7 +163,7 @@ export interface InformExhibitInfoPageModelState {
     identity: 'resource' | 'object';
     id: string;
     name: string;
-    type: string;
+    type: string[];
     cover: string;
     linkToDetails: string;
   } | null;

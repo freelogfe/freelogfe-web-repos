@@ -255,7 +255,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <div className={styles.infos}>
               <FComponentsLib.FContentText singleRow text={record.resourceName} />
               <div className={styles.sub}>
-                <label>{record.type}</label>
+                <label>{FUtil.Format.resourceTypeKeyArrToResourceType(record.type)}</label>
                 <div style={{ width: 5 }} />
                 <FComponentsLib.FContentText type='additional2' text={record.title} singleRow />
               </div>
