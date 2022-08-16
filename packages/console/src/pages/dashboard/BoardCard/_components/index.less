@@ -95,6 +95,11 @@
       font-weight: 600;
       color: #fff;
       line-height: 20px;
+      display: inline-block;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .taskState {
@@ -103,6 +108,7 @@
       color: rgba(255, 255, 255, 0.5);
       line-height: 20px;
     }
+
     .taskFinished {
       font-size: 14px;
       font-weight: 600;
@@ -110,9 +116,11 @@
       margin-left: 10px;
       line-height: 20px;
     }
+
     .taskIcon {
       color: #ffffff;
     }
+
     &.finish {
       .taskTitle {
         color: rgba(255, 255, 255, 0.5);
