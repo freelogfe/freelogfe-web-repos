@@ -335,7 +335,7 @@ const initStates: ExhibitInfoPageModelState = {
   side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',
   side_ResourceName: '',
-  side_ResourceType: '',
+  side_ResourceType: [],
   side_ResourceCover: '',
 
   policyEditorVisible: false,
@@ -650,7 +650,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
-        fMessage(exhibitInfoPage.side_ResourceType === 'theme' ? '激活失败' : '上线失败', 'error');
+        fMessage(exhibitInfoPage.side_ResourceType.includes('主题') ? '激活失败' : '上线失败', 'error');
         return;
       }
       yield put<FetchInfoAction>({
