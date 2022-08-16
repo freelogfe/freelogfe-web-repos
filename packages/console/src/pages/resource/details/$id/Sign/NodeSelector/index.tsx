@@ -5,7 +5,6 @@ import { FDown } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import { OnChangeNodeSelectorAction } from '@/models/resourceDetailPage';
-import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -76,7 +75,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
                 <FComponentsLib.FTextBtn
                   type='primary'
                   onClick={() => {
-                    router.push(FUtil.LinkTo.nodeCreator());
+                    self.open(FUtil.LinkTo.nodeCreator());
                   }}>创建节点</FComponentsLib.FTextBtn>
               </>)
               : (<>
