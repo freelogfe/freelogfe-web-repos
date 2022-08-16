@@ -6757,7 +6757,7 @@ eslint-config-react-app@5.0.2:
   dependencies:
     confusing-browser-globals "^1.0.9"
 
-eslint-config-umi@1.6.0, eslint-config-umi@^1.4.0:
+eslint-config-umi@1.6.0, eslint-config-umi@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/eslint-config-umi/-/eslint-config-umi-1.6.0.tgz#a2bf913d5656a8da65ef095db60e0b11c4e72fe0"
   integrity sha512-I9FYGVQbjxsxO7B3ielt4f9+uZZ3vvc851hbRgHy45lZ2prsgtkf4MVUnUvYk39VxukdvGBXm0+ZU/kGEj5F5A==

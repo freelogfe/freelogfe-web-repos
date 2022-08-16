@@ -53,7 +53,7 @@
     "@types/semver": "^7.3.1",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.4.0",
-    "eslint-config-umi": "^1.4.0",
+    "eslint-config-umi": "^1.6.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
