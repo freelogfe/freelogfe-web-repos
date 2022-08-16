@@ -146,6 +146,7 @@ const Model: NodesModelType = {
         payload: {
           nodeDomain: payload.value.trim().toLocaleLowerCase(),
           domainVerify: 'verified',
+          domainError: '',
         },
       });
     },
@@ -193,6 +194,7 @@ const Model: NodesModelType = {
         payload: {
           nodeName: payload.value.trim().toLowerCase(),
           // nameVerify: 1,
+          nameError: '',
         },
       });
 
