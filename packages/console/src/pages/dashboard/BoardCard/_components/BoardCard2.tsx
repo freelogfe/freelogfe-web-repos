@@ -111,9 +111,12 @@ const tasks = {
     </div>),
     async onClick() {
       const { data } = await FServiceAPI.Resource.list({
+        limit: 1,
         isSelf: 1,
       });
-
+      self.open(FUtil.LinkTo.resourceDetails({
+        resourceID: data.dataList[0].resourceId,
+      }));
       console.log(data, 'DDDDDD89iok3ljw2sdjfsd');
     },
   },
@@ -167,6 +170,7 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
                 <a
                   className={styles.taskTitle}
                   onClick={onClick || taskInfo && taskInfo.onClick}
+                  // onClick={taskInfo && taskInfo.onClick}
                 >{index + 1 + '.' + item.taskConfigTitle}</a>
               </FPopover>
 

@@ -99,8 +99,12 @@ const tasks = {
       <FComponentsLib.FContentText text={'分享节点可以获得更多签约消费，快去节点管理页和好友分享已发行的节点吧。'} type='highlight' />
     </div>),
     async onClick() {
-      const { data } = await FServiceAPI.Node.nodes({});
-      console.log(data, 'NNNNNN09wioejsdkjflsdkj');
+      const { data } = await FServiceAPI.Node.nodes({
+        limit: 1,
+      });
+      self.open(FUtil.LinkTo.nodeManagement({
+        nodeID: data.dataList[0].nodeId,
+      }));
     },
   },
   TS000035: {
@@ -163,6 +167,7 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
                 <a
                   className={styles.taskTitle}
                   onClick={onClick || taskInfo && taskInfo.onClick}
+                  // onClick={taskInfo && taskInfo.onClick}
                 >{index + 1 + '.' + item.taskConfigTitle}</a>
               </FPopover>
 
@@ -180,51 +185,51 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
           })
         }
 
-        <div className={styles.task}>
-          <FPopover
-            placement='right'
-            content={
-              <div className={styles.tooltipDisplay}>
-                <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type='highlight' />
-                <div style={{ height: 15 }} />
-                <Space size={5}>
-                  <FComponentsLib.FContentText text={'可查阅'} />
-                  <a
-                    href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-                    target={'_blank'}
-                    type='primary'
-                  >主题激活教程</a>
-                  <FComponentsLib.FContentText text={'（图文）或'} />
-                  <a
-                    href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-                    target={'_blank'}
-                    type='primary'
-                  >节点商使用教程</a>
-                  <FComponentsLib.FContentText text={'（视频）激活主题。'} />
-                </Space>
-              </div>
-            }
-          >
-            <div className={styles.taskTitle}>3.激活1个主题</div>
-          </FPopover>
-          <div className={styles.taskState}>未完成</div>
-        </div>
-        <div className={styles.task}>
-          <FPopover
-            placement='right'
-            content={
-              <div className={styles.tooltipDisplay}>
-                <FComponentsLib.FContentText
-                  text={'分享节点可以获得更多签约消费，快去复制链接和好友分享你的节点吧。'}
-                  type='highlight'
-                />
-              </div>
-            }
-          >
-            <div className={styles.taskTitle}>4.分享我的节点</div>
-          </FPopover>
-          <div className={styles.taskState}>未完成</div>
-        </div>
+        {/*<div className={styles.task}>*/}
+        {/*  <FPopover*/}
+        {/*    placement='right'*/}
+        {/*    content={*/}
+        {/*      <div className={styles.tooltipDisplay}>*/}
+        {/*        <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type='highlight' />*/}
+        {/*        <div style={{ height: 15 }} />*/}
+        {/*        <Space size={5}>*/}
+        {/*          <FComponentsLib.FContentText text={'可查阅'} />*/}
+        {/*          <a*/}
+        {/*            href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*            target={'_blank'}*/}
+        {/*            type='primary'*/}
+        {/*          >主题激活教程</a>*/}
+        {/*          <FComponentsLib.FContentText text={'（图文）或'} />*/}
+        {/*          <a*/}
+        {/*            href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*            target={'_blank'}*/}
+        {/*            type='primary'*/}
+        {/*          >节点商使用教程</a>*/}
+        {/*          <FComponentsLib.FContentText text={'（视频）激活主题。'} />*/}
+        {/*        </Space>*/}
+        {/*      </div>*/}
+        {/*    }*/}
+        {/*  >*/}
+        {/*    <div className={styles.taskTitle}>3.激活1个主题</div>*/}
+        {/*  </FPopover>*/}
+        {/*  <div className={styles.taskState}>未完成</div>*/}
+        {/*</div>*/}
+        {/*<div className={styles.task}>*/}
+        {/*  <FPopover*/}
+        {/*    placement='right'*/}
+        {/*    content={*/}
+        {/*      <div className={styles.tooltipDisplay}>*/}
+        {/*        <FComponentsLib.FContentText*/}
+        {/*          text={'分享节点可以获得更多签约消费，快去复制链接和好友分享你的节点吧。'}*/}
+        {/*          type='highlight'*/}
+        {/*        />*/}
+        {/*      </div>*/}
+        {/*    }*/}
+        {/*  >*/}
+        {/*    <div className={styles.taskTitle}>4.分享我的节点</div>*/}
+        {/*  </FPopover>*/}
+        {/*  <div className={styles.taskState}>未完成</div>*/}
+        {/*</div>*/}
       </div>
     </div>
   );
