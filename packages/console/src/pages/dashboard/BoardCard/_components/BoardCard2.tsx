@@ -158,7 +158,7 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
               const preTasks = arr.slice(0, index);
               if (preTasks.some((pre) => pre.status === 1)) {
                 onClick = () => {
-                  fMessage('请先完成前置任务', 'error');
+                  fMessage('您需要成功发布一个资源，才能继续分享操作', 'error');
                 };
               }
             }
