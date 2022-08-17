@@ -119,4 +119,5 @@ export default defineConfig({
     },
   },
   hash: true,
+  favicon: '//static.freelog.com/static/favicon.ico',
 });

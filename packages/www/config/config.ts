@@ -56,4 +56,5 @@ export default defineConfig({
   },
   hash: true,
   locale: {},
+  favicon: '//static.freelog.com/static/favicon.ico',
 });
