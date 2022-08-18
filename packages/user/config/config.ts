@@ -51,28 +51,6 @@ export default defineConfig({
       component: '@/pages/freeze/index',
       title: '用户封禁 - Freelog',
     },
-    // {
-    //   exact: true,
-    //   path: '/result/resetPassword/success',
-    //   title: '重置密码成功',
-    //   component: '@/pages/result/resetPassword/success/index',
-    // },
-    // {
-    //   path: '/result',
-    //   routes: [
-    //     {
-    //       path: 'resetPassword',
-    //       route: [
-    //         {
-    //           exact: true,
-    //           path: 'success',
-    //           title: '重置密码成功',
-    //           component: '@/pages/result/resetPassword/success/index',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
     {
       path: '/logged',
       component: '@/pages/logged/index',
@@ -96,8 +74,10 @@ export default defineConfig({
           component: '@/pages/logged/setting/index',
           title: '设置 - Freelog',
         },
+        { component: '@/pages/exception/404/index' },
       ],
     },
+    { component: '@/pages/exception/404/index' },
   ],
   // dynamicImport: {
   //   loading: '@/components/Loading',

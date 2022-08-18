@@ -56,7 +56,7 @@ class UserPermission {
     if (stateCode === 'ERR_NOT_LOGIN') {
       return {
         code: stateCode,
-        goToUrl: FUtil.LinkTo.login({ goTo: url }),
+        goToUrl: FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({ goTo: url }),
       };
     }
 

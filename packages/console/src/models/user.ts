@@ -3,10 +3,8 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import userPermission from '@/permissions/UserPermission';
 import { router } from 'umi';
-import { FUtil } from '@freelog/tools-lib';
 
 export interface UserModelState {
   info: null | {
@@ -145,6 +143,9 @@ const Model: MarketModelType = {
               router.replace(goToUrl);
             }
             if (code === 'ERR_FREEZE' && !!goToUrl) {
+              window.location.replace(goToUrl);
+            }
+            if (code === 'ERR_NOT_LOGIN' && !!goToUrl) {
               window.location.replace(goToUrl);
             }
           });
