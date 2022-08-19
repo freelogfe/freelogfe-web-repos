@@ -1,18 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import {
-  OnCancel_Activate_CaptchaModal_Action, OnClick_Activate_NextBtn_Action,
-  OnClick_ChangingPasswordBtn_Action,
-  OnClick_Table_LoadMoreBtn_Action,
-  WalletPageModelState,
-} from '@/models/walletPage';
-import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import { ColumnsType } from 'antd/lib/table';
 import FTable from '@/components/FTable';
-import FListFooter from '@/components/FListFooter';
+// import FListFooter from '@/components/FListFooter';
 import { Modal, Space } from 'antd';
 import FInput from '@/components/FInput';
+import { FWarning } from '@/components/FIcons';
 
 interface RewardProps {
 
@@ -84,7 +78,14 @@ function Reward({}: RewardProps) {
           <div style={{ height: 15 }} />
           <div className={styles.Gold}>{1234234}</div>
         </div>
-        <FComponentsLib.FRectBtn type={'primary'}>提现至微信</FComponentsLib.FRectBtn>
+        <Space size={20}>
+          <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+            <FWarning />
+            <div style={{ width: 5 }} />
+            <span>可提现金额少于20元，不可提现</span>
+          </div>
+          <FComponentsLib.FRectBtn type={'primary'}>提现至微信</FComponentsLib.FRectBtn>
+        </Space>
       </div>
 
       <div style={{ height: 40 }} />
@@ -113,7 +114,7 @@ function Reward({}: RewardProps) {
           text={'奖励提现'}
           type='popup'
         />}
-        visible={true}
+        visible={false}
         onCancel={() => {
           // dispatch<OnCancel_Activate_CaptchaModal_Action>({
           //   type: 'walletPage/onCancel_Activate_CaptchaModal',
