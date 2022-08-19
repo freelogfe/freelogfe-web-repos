@@ -52,7 +52,7 @@ import {
 } from '@/models/walletPage';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FUtil,FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -167,7 +167,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           />
         </div>);
       },
-    }, {
+    },
+    {
       title: (<FComponentsLib.FTitleText text={'交易状态'} type='table' />),
       dataIndex: 'status',
       key: 'status',
