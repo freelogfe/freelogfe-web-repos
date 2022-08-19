@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FBaseLayout from '@/layouts/FBaseLayout';
 import FLink from '@/components/FLink';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
@@ -31,7 +30,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
     setShowPage(location.pathname.replace('/logged/', '') as 'wallet');
   }, [location]);
 
-  return (<FBaseLayout>
+  return (<>
     <div className={styles.container}>
       <div className={styles.padding} />
       <div className={styles.sider}>
@@ -79,7 +78,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
         {/*<FFooter style={{position: 'relative !important',shrink: 0}}/>*/}
       </div>
     </div>
-  </FBaseLayout>);
+  </>);
 }
 
 export default connect(({ user }: ConnectState) => ({

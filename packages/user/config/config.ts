@@ -53,6 +53,7 @@ export default defineConfig({
     },
     {
       path: '/logged',
+      wrappers: ['@/layouts/FBaseLayout/index'],
       component: '@/pages/logged/index',
       routes: [
         { exact: true, path: '.', redirect: '/logged/wallet' },
