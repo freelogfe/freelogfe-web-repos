@@ -19,7 +19,7 @@ interface LoggedProps extends IRouteComponentProps {
 function FLogged({ dispatch, user, children, location }: LoggedProps) {
 
   // console.log(location, route, 'matchmatchmatch12341234');
-  const [showPage, setShowPage] = React.useState<'wallet' | 'contract' | 'setting'>('wallet');
+  const [showPage, setShowPage] = React.useState<'wallet' | 'reward' | 'contract' | 'setting'>('wallet');
 
   AHooks.useMount(() => {
     dispatch<FetchInfoAction>({
@@ -61,17 +61,16 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
           <div style={{ height: 35 }} />
           <FLink
             to={FUtil.LinkTo.wallet()}
-            className={[styles.FLink, showPage === 'wallet' ? styles.FLinkActive : ''].join(' ')}>
-            {FI18n.i18nNext.t('tab_my_wallet')}
-          </FLink>
-          <FLink to={FUtil.LinkTo.contract()}
-                 className={[styles.FLink, showPage === 'contract' ? styles.FLinkActive : ''].join(' ')}>
-            {FI18n.i18nNext.t('tab_my_contracts')}
-          </FLink>
-          <FLink to={FUtil.LinkTo.setting()}
-                 className={[styles.FLink, showPage === 'setting' ? styles.FLinkActive : ''].join(' ')}>
-            {FI18n.i18nNext.t('tab_settings')}
-          </FLink>
+            className={[styles.FLink, showPage === 'wallet' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_my_wallet')}</FLink>
+          <FLink
+            to={FUtil.LinkTo.reward()}
+            className={[styles.FLink, showPage === 'reward' ? styles.FLinkActive : ''].join(' ')}>活动奖励</FLink>
+          <FLink
+            to={FUtil.LinkTo.contract()}
+            className={[styles.FLink, showPage === 'contract' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_my_contracts')}</FLink>
+          <FLink
+            to={FUtil.LinkTo.setting()}
+            className={[styles.FLink, showPage === 'setting' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_settings')}</FLink>
         </div>
       </div>
 

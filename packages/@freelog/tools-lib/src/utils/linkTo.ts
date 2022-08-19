@@ -341,6 +341,14 @@ export function wallet({}: WalletParamsType = {}) {
   return `/logged/wallet`;
 }
 
+// 活动奖励
+interface RewardParamsType {
+}
+
+export function reward({}: RewardParamsType = {}) {
+  return `/logged/reward`;
+}
+
 // 我的合约
 interface ContractParamsType {
 }
@@ -356,7 +364,6 @@ interface SettingParamsType {
 export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
-
 
 
 /************** user End ******************************************************/

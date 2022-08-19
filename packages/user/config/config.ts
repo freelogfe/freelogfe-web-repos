@@ -64,6 +64,12 @@ export default defineConfig({
         },
         {
           exact: true,
+          path: 'reward',
+          component: '@/pages/logged/reward/index',
+          title: '钱包 - Freelog',
+        },
+        {
+          exact: true,
           path: 'contract',
           component: '@/pages/logged/contract/index',
           title: '合约 - Freelog',
