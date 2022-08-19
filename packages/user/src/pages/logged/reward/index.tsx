@@ -109,7 +109,74 @@ function Reward({}: RewardProps) {
       </div>
 
       <Modal
-        destroyOnClose
+        title={<FComponentsLib.FTitleText
+          text={'提示'}
+          type='popup'
+        />}
+        visible={true}
+        onCancel={() => {
+          // dispatch<OnCancel_Activate_CaptchaModal_Action>({
+          //   type: 'walletPage/onCancel_Activate_CaptchaModal',
+          // });
+        }}
+        footer={null}
+        width={580}
+      >
+        <div className={styles.unableWithdrawCash}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 30,
+              alignItems: 'center',
+              minHeight: 100,
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+              <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+                <FWarning />
+                <div style={{ width: 5 }} />
+                <span>未绑定微信</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <FComponentsLib.FContentText text={'需绑定微信才可提现'} type={'additional2'} />
+                <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>绑定微信</FComponentsLib.FTextBtn>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+              <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+                <FWarning />
+                <div style={{ width: 5 }} />
+                <span>未关注微信公众号</span>
+              </div>
+
+              <FComponentsLib.FContentText text={'因微信企业支付平台目前不提供网页提现的功能，请关注公众号后进行提现操作'} type={'additional2'} />
+
+              <img src={'//static.freelog.com/static/WeChatQR.jpg'} style={{ width: 160, height: 160 }} />
+            </div>
+          </div>
+
+          <div style={{ height: 30 }} />
+
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FComponentsLib.FContentText text={'已完成上述操作，'} type={'negative'} />
+            <FComponentsLib.FTextBtn type={'primary'}>立即刷新</FComponentsLib.FTextBtn>
+            &nbsp;
+            <FComponentsLib.FContentText text={'开始提现'} type={'negative'} />
+
+          </div>
+          {/*<Space size={30} style={{ width: 440, alignItems: 'center' }}>*/}
+          {/*  <Space size={10} direction='vertical'>*/}
+          {/*    */}
+          {/*  </Space>*/}
+          {/*</Space>*/}
+        </div>
+      </Modal>
+
+      <Modal
         title={<FComponentsLib.FTitleText
           text={'奖励提现'}
           type='popup'
