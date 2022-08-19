@@ -1764,7 +1764,7 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
-      console.log(payload, '@#$@#$@#422222222');
+      // console.log(payload, '@#$@#$@#422222222');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
