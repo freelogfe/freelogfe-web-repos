@@ -113,7 +113,7 @@ function Reward({}: RewardProps) {
           text={'提示'}
           type='popup'
         />}
-        visible={true}
+        visible={false}
         onCancel={() => {
           // dispatch<OnCancel_Activate_CaptchaModal_Action>({
           //   type: 'walletPage/onCancel_Activate_CaptchaModal',
@@ -137,7 +137,7 @@ function Reward({}: RewardProps) {
               <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
                 <FWarning />
                 <div style={{ width: 5 }} />
-                <span>未绑定微信</span>
+                <span>提现需绑定微信</span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -150,7 +150,7 @@ function Reward({}: RewardProps) {
               <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
                 <FWarning />
                 <div style={{ width: 5 }} />
-                <span>未关注微信公众号</span>
+                <span>提现需关注微信公众号</span>
               </div>
 
               <FComponentsLib.FContentText text={'因微信企业支付平台目前不提供网页提现的功能，请关注公众号后进行提现操作'} type={'additional2'} />
