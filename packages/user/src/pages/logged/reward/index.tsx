@@ -135,7 +135,7 @@ function Reward({}: RewardProps) {
             </Space>
 
             <Space size={10} direction='vertical' style={{ width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-end'}}>
+              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                 <FComponentsLib.FTipText type='third' text={'实名认证'} />
                 <div style={{ width: 10 }} />
                 <FComponentsLib.FContentText type={'additional2'} text={'为了保障资金安全，微信平台要求验证提现微信账号真实姓名'} />
@@ -158,6 +158,8 @@ function Reward({}: RewardProps) {
                   <div style={{ width: 10 }} />
                   <FComponentsLib.FContentText type={'additional2'} text={'可提现金额少于20元时将不能提现'} />
                 </div>
+
+                <FComponentsLib.FTextBtn type={'primary'}>全部提现</FComponentsLib.FTextBtn>
               </div>
               <FInput
                 value={''}
