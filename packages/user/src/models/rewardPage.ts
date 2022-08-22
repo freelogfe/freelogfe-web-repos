@@ -12,6 +12,8 @@ export interface RewardPageModelState {
     transactionAmount: number;
     afterBalance: number;
   }[];
+
+  showModal: '' | 'wechat' | 'verify' | 'withdraw';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -27,12 +29,17 @@ export interface OnUnmountPageAction extends AnyAction {
   type: 'rewardPage/onUnmountPage';
 }
 
+export interface OnClick_WithdrawBtn_Action extends AnyAction {
+  type: 'rewardPage/onClick_WithdrawBtn';
+}
+
 interface RewardPageModelType {
   namespace: 'rewardPage';
   state: RewardPageModelState;
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onClick_WithdrawBtn: (action: OnClick_WithdrawBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<RewardPageModelState, ChangeAction>;
@@ -45,6 +52,8 @@ interface RewardPageModelType {
 const initStates: RewardPageModelState = {
   cashAmount: 0,
   records: [],
+
+  showModal: '',
 };
 
 const Model: RewardPageModelType = {
@@ -56,7 +65,7 @@ const Model: RewardPageModelType = {
         type: 1,
       };
       const { data: data_account } = yield call(FServiceAPI.Activity.getCoinAccount, params);
-      console.log(data_account, 'data_account09iojewflksdjlk');
+      // console.log(data_account, 'data_account09iojewflksdjlk');
 
       const params1: Parameters<typeof FServiceAPI.Activity.getCoinAccountRecords>[0] = {
         limit: 100,
@@ -64,14 +73,14 @@ const Model: RewardPageModelType = {
       };
 
       const { data: data_records } = yield call(FServiceAPI.Activity.getCoinAccountRecords, params1);
-      console.log(data_records, 'data_records3209osjdflksdjfl');
+      // console.log(data_records, 'data_records3209osjdflksdjfl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           cashAmount: data_account.balance,
           records: data_records.dataList.map((dr: any) => {
             const dataAndTime: string[] = FUtil.Format.formatDateTime(dr.createTime, true).split(' ');
-            console.log(dataAndTime, '9i8ojklwefsdjlfkjldataAndTime');
+            // console.log(dataAndTime, '9i8ojklwefsdjlfkjldataAndTime');
             return {
               key: dr.id,
               date: dataAndTime[0],
@@ -88,6 +97,17 @@ const Model: RewardPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+      });
+    },
+    * onClick_WithdrawBtn({}: OnClick_WithdrawBtn_Action, { put }: EffectsCommandMap) {
+
+
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showModal: 'wechat',
+        },
       });
     },
   },

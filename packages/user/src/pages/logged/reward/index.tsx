@@ -10,9 +10,10 @@ import { FWarning } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, RewardPageModelState } from '@/models/connect';
-import { OnMountPageAction, OnUnmountPageAction } from '@/models/rewardPage';
+import { OnClick_WithdrawBtn_Action, OnMountPageAction, OnUnmountPageAction } from '@/models/rewardPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FListFooter from '@/components/FListFooter';
+import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
 
 interface RewardProps {
   dispatch: Dispatch;
@@ -111,6 +112,11 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           <FComponentsLib.FRectBtn
             type={'primary'}
             disabled={rewardPage.cashAmount < 20}
+            onClick={() => {
+              dispatch<OnClick_WithdrawBtn_Action>({
+                type: 'rewardPage/onClick_WithdrawBtn',
+              });
+            }}
           >提现至微信</FComponentsLib.FRectBtn>
         </Space>
       </div>
@@ -153,7 +159,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           text={'提示'}
           type='popup'
         />}
-        visible={false}
+        visible={rewardPage.showModal === 'wechat'}
         onCancel={() => {
           // dispatch<OnCancel_Activate_CaptchaModal_Action>({
           //   type: 'walletPage/onCancel_Activate_CaptchaModal',
@@ -221,7 +227,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           text={'奖励提现'}
           type='popup'
         />}
-        visible={false}
+        visible={rewardPage.showModal === 'withdraw'}
         onCancel={() => {
           // dispatch<OnCancel_Activate_CaptchaModal_Action>({
           //   type: 'walletPage/onCancel_Activate_CaptchaModal',
@@ -294,6 +300,17 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           </Space>
         </div>
       </Modal>
+
+      <FVerifyUserPasswordModal
+        visible={rewardPage.showModal === 'verify'}
+        // actionReturn={bindTip.way === 'unbind' ? unBind : undefined}
+        onCancel={() => {
+          // setVerifyPassword(false);
+        }}
+        onSuccess={(data) => {
+          console.log(data, 'dataiwoefjsdlkfjsdlkj');
+        }}
+      />
     </div>
   );
 }
