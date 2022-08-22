@@ -14,6 +14,7 @@ export interface RewardPageModelState {
   }[];
 
   showModal: '' | 'wechat' | 'verify' | 'withdraw';
+  wechatModal_task: '' | 'binding' | 'follow';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -31,6 +32,14 @@ export interface OnUnmountPageAction extends AnyAction {
 
 export interface OnClick_WithdrawBtn_Action extends AnyAction {
   type: 'rewardPage/onClick_WithdrawBtn';
+}
+
+export interface OnClose_WechatModal_Action extends AnyAction {
+  type: 'rewardPage/onClose_WechatModal';
+}
+
+export interface OnClick_WechatModal_RefreshBtn_Action extends AnyAction {
+  type: 'rewardPage/onClick_WechatModal_RefreshBtn';
 }
 
 interface RewardPageModelType {
@@ -54,6 +63,7 @@ const initStates: RewardPageModelState = {
   records: [],
 
   showModal: '',
+  wechatModal_task: '',
 };
 
 const Model: RewardPageModelType = {
@@ -99,14 +109,47 @@ const Model: RewardPageModelType = {
         payload: initStates,
       });
     },
-    * onClick_WithdrawBtn({}: OnClick_WithdrawBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_WithdrawBtn({}: OnClick_WithdrawBtn_Action, { call, put }: EffectsCommandMap) {
 
+      const params: Parameters<typeof FServiceAPI.User.thirdPartyList>[0] = {};
+      const { data: data_thirdList } = yield call(FServiceAPI.User.thirdPartyList, params);
 
+      let task: '' | 'binding' | 'follow' = '';
+
+      if (!data_thirdList.some((dt: any) => {
+        return dt.thirdPartyType === 'weChat';
+      })) {
+        task = 'binding';
+      }
+
+      if (task === '') {
+        const params1: Parameters<typeof FServiceAPI.Activity.getWechatOfficialAccountInfo>[0] = {};
+        const {
+          ret,
+          errCode,
+          data: data_wechatInfo,
+        } = yield call(FServiceAPI.Activity.getWechatOfficialAccountInfo, params);
+
+        if (ret !== 0 || errCode !== 0 || !data_wechatInfo) {
+          task = 'follow';
+        }
+      }
+
+      if (task !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showModal: 'wechat',
+            wechatModal_task: task,
+          },
+        });
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          showModal: 'wechat',
+          showModal: 'withdraw',
         },
       });
     },
