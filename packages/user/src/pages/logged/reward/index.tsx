@@ -7,14 +7,34 @@ import FTable from '@/components/FTable';
 import { Modal, Space } from 'antd';
 import FInput from '@/components/FInput';
 import { FWarning } from '@/components/FIcons';
+import * as AHooks from 'ahooks';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, RewardPageModelState } from '@/models/connect';
+import { OnMountPageAction, OnUnmountPageAction } from '@/models/rewardPage';
+import FNoDataTip from '@/components/FNoDataTip';
+import FListFooter from '@/components/FListFooter';
 
 interface RewardProps {
+  dispatch: Dispatch;
 
+  rewardPage: RewardPageModelState;
 }
 
-function Reward({}: RewardProps) {
+function Reward({ dispatch, rewardPage }: RewardProps) {
 
-  const columns: ColumnsType<any> = [
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'rewardPage/onMountPage',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'rewardPage/onUnmountPage',
+    });
+  });
+
+  const columns: ColumnsType<RewardPageModelState['records'][number]> = [
     {
       title: (<FComponentsLib.FTitleText text={'时间'} type='table' />),
       dataIndex: 'dataTime',
@@ -50,7 +70,7 @@ function Reward({}: RewardProps) {
       render(_, record) {
         return (<div>
           <FComponentsLib.FTitleText
-            text={record.transactionAmount.startsWith('-') ? record.transactionAmount : ('+' + record.transactionAmount)}
+            text={record.transactionAmount < 0 ? ('-' + record.transactionAmount) : ('+' + record.transactionAmount)}
             type='h1'
           />
           <FComponentsLib.FContentText
@@ -76,15 +96,22 @@ function Reward({}: RewardProps) {
             text={'可提现金额（元）'}
           />
           <div style={{ height: 15 }} />
-          <div className={styles.Gold}>{1234234}</div>
+          <div className={styles.Gold}>{rewardPage.cashAmount}</div>
         </div>
         <Space size={20}>
-          <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-            <FWarning />
-            <div style={{ width: 5 }} />
-            <span>可提现金额少于20元，不可提现</span>
-          </div>
-          <FComponentsLib.FRectBtn type={'primary'}>提现至微信</FComponentsLib.FRectBtn>
+          {
+            rewardPage.cashAmount < 20 && (
+              <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+                <FWarning />
+                <div style={{ width: 5 }} />
+                <span>可提现金额少于20元，不可提现</span>
+              </div>)
+          }
+
+          <FComponentsLib.FRectBtn
+            type={'primary'}
+            disabled={rewardPage.cashAmount < 20}
+          >提现至微信</FComponentsLib.FRectBtn>
         </Space>
       </div>
 
@@ -93,20 +120,33 @@ function Reward({}: RewardProps) {
       <div style={{ height: 20 }} />
 
       <div className={styles.TableBody}>
-        <FTable
-          columns={columns}
-          dataSource={[]}
-        />
 
-        {/*<FListFooter*/}
-        {/*  state={walletPage.table_More}*/}
-        {/*  onClickLoadMore={() => {*/}
-        {/*    dispatch<OnClick_Table_LoadMoreBtn_Action>({*/}
-        {/*      type: 'walletPage/onClick_Table_LoadMoreBtn',*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*/>*/}
+        {
+          rewardPage.records.length === 0
+            ? (<FNoDataTip
+              height={600}
+              tipText={'无奖励明细'}
+            />)
+            : (<>
+              <FTable
+                columns={columns}
+                dataSource={rewardPage.records}
+              />
+              <FListFooter
+                state={'noMore'}
+                // onClickLoadMore={() => {
+                //   dispatch<OnClick_Table_LoadMoreBtn_Action>({
+                //     type: 'walletPage/onClick_Table_LoadMoreBtn',
+                //   });
+                // }}
+              />
+            </>)
+        }
+
+
       </div>
+
+      <div style={{ height: 100 }} />
 
       <Modal
         title={<FComponentsLib.FTitleText
@@ -258,4 +298,6 @@ function Reward({}: RewardProps) {
   );
 }
 
-export default Reward;
+export default connect(({ rewardPage }: ConnectState) => ({
+  rewardPage,
+}))(Reward);

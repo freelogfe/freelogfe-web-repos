@@ -32,5 +32,5 @@ export interface ConnectState {
   retrievePayPasswordPage: RetrievePayPasswordPageModelState;
   settingPage: SettingPageModelState;
   contractPage: ContractPageModelState;
-  rewardPage: GlobalModelState;
+  rewardPage: RewardPageModelState;
 }

@@ -93,3 +93,83 @@ export function getNodeTaskInfo(params: GetNodeTaskInfoParamsType = {}) {
     params: params,
   });
 }
+
+// 获取奖励记录详情
+interface GetRewardRecordInfoParamsType {
+  rewardConfigCode: string;
+}
+
+export function getRewardRecordInfo(params: GetRewardRecordInfoParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/facade/getRewardRecordInfo`,
+    params: params,
+  });
+}
+
+// 推送任务消息埋点
+interface PushMessageTaskParamsType {
+  rewardConfigCode: string;
+}
+
+export function pushMessageTask(params: PushMessageTaskParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/pushMessage4Task`,
+    data: params,
+  });
+}
+
+// 运营钱包详情
+interface GetCoinAccountParamsType {
+  type: 1;
+}
+
+export function getCoinAccount(params: GetCoinAccountParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/coin/account/find4Client`,
+    params: params,
+  });
+}
+
+// 运营钱包提现
+interface WithdrawCoinAccountParamsType {
+  reUserName: string;
+  amount: number;
+}
+
+export function withdrawCoinAccount(params: WithdrawCoinAccountParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/coin/account/cash4Client`,
+    data: params,
+  });
+}
+
+// 运营钱包流水
+interface GetCoinAccountRecordsParamsType {
+  skip?: number;
+  limit?: number;
+  coinAccountType: 1;
+}
+
+export function getCoinAccountRecords(params: GetCoinAccountRecordsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/coin/record/list4Client`,
+    params: params,
+  });
+}
+
+// 获取公众号绑定信息
+interface GetWechatOfficialAccountInfoParamsType {
+}
+
+export function getWechatOfficialAccountInfo(params: GetWechatOfficialAccountInfoParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/extensions/wechat/getRelationship4Client`,
+    params: params,
+  });
+}
