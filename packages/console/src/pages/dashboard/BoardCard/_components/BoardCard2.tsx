@@ -130,6 +130,8 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
     set_dataSource(data);
   });
 
+  const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
+
   return (
     <div
       className={styles.board2}
@@ -144,9 +146,16 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
         <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>
           完成“资源任务”可成为Freelog资源创作者，可通过创建发行资源获取创作收益
         </div>
-        <div className={styles.title3}>
-          还差{dataSource.filter((item: any) => item.status === 1).length}步领取 <span>7元</span> 奖励
-        </div>
+        {
+          needSteps === 0
+            ? (<div className={styles.title3} style={{ opacity: .5 }}>
+              奖励已领取
+            </div>)
+            : (<div className={styles.title3}>
+              还差{needSteps}步领取 <span>7元</span> 奖励
+            </div>)
+        }
+
         <div />
       </div>
       <div className={styles.tasks}>

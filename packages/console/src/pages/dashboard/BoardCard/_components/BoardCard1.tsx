@@ -125,6 +125,8 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
     set_dataSource(data);
   });
 
+  const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
+
   return (
     <div
       className={styles.board1}
@@ -139,9 +141,15 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
         <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>
           完成下列基础任务可以了解Freelog的基本功能，以便更顺畅的使用Freelog完成资源、节点创建和推广
         </div>
-        <div className={styles.title3}>
-          还差{dataSource.filter((item: any) => item.status === 1).length}步领取 <span>6元</span> 奖励
-        </div>
+        {
+          needSteps === 0
+            ? (<div className={styles.title3} style={{ opacity: .5 }}>
+              奖励已领取
+            </div>)
+            : (<div className={styles.title3}>
+              还差{needSteps}步领取 <span>6元</span> 奖励
+            </div>)
+        }
         <div />
       </div>
       <div className={styles.tasks}>

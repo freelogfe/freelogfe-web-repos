@@ -127,6 +127,8 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
     set_dataSource(data);
   });
 
+  const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
+
   return (
     <div
       className={styles.board3}
@@ -141,9 +143,15 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
         <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>
           完成“节点任务”即可成为Freelog节点商，节点商是平台资源的整合方，通过在节点上展示资源和制定授权策略获取资运营收益
         </div>
-        <div className={styles.title3}>
-          还差{dataSource.filter((item: any) => item.status === 1).length}步领取 <span>7元</span> 奖励
-        </div>
+        {
+          needSteps === 0
+            ? (<div className={styles.title3} style={{ opacity: .5 }}>
+              奖励已领取
+            </div>)
+            : (<div className={styles.title3}>
+              还差{needSteps}步领取 <span>7元</span> 奖励
+            </div>)
+        }
         <div />
       </div>
       <div className={styles.tasks}>
