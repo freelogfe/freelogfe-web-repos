@@ -5,7 +5,7 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
 import { withRouter } from 'umi';
 import FLink from '@/components/FLink';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FShare } from '@/components/FShare';
 import FTooltip from '@/components/FTooltip';
@@ -48,7 +48,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               iconStyle={{ fontSize: 14 }}
             />
             <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
-              <FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn onClick={async () => {
+                await FServiceAPI.Activity.pushMessageTask({
+                  taskConfigCode: 'TS000034',
+                });
+              }}>
                 <FTooltip title='分享节点'>
                   <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 </FTooltip>

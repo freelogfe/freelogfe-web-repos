@@ -109,7 +109,7 @@ export function getRewardRecordInfo(params: GetRewardRecordInfoParamsType) {
 
 // 推送任务消息埋点
 interface PushMessageTaskParamsType {
-  rewardConfigCode: string;
+  taskConfigCode: string;
 }
 
 export function pushMessageTask(params: PushMessageTaskParamsType) {

@@ -25,7 +25,7 @@ import { FUtil } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import { FShare } from '@/components/FShare';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -108,18 +108,26 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
           </Space>
           <div className={styles.btns}>
             <FShare
-              type="resource"
+              type='resource'
               title={resourceDetailPage.resource_Info?.name || ''}
               url={window.location.href}
             >
-              <FComponentsLib.FTextBtn type="default" className={styles.btn}>
+              <FComponentsLib.FTextBtn
+                type='default'
+                className={styles.btn}
+                onClick={async () => {
+                  await FServiceAPI.Activity.pushMessageTask({
+                    taskConfigCode: 'TS000024',
+                  });
+                }}
+              >
                 <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 <div style={{ width: 5 }} />
                 <span>分享</span>
               </FComponentsLib.FTextBtn>
             </FShare>
             <FComponentsLib.FTextBtn
-              type="default"
+              type='default'
               className={styles.favoriteBtn}
               onClick={() =>
                 dispatch<OnClickCollectionAction>({
@@ -171,7 +179,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
 
               <FComponentsLib.FContentText
                 text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
-                type="negative"
+                type='negative'
               />
             </div>
 
