@@ -38,6 +38,10 @@ export interface OnClose_WechatModal_Action extends AnyAction {
   type: 'rewardPage/onClose_WechatModal';
 }
 
+export interface OnClick_WechatModal_BindingBtn_Action extends AnyAction {
+  type: 'rewardPage/onClick_WechatModal_BindingBtn';
+}
+
 export interface OnClick_WechatModal_RefreshBtn_Action extends AnyAction {
   type: 'rewardPage/onClick_WechatModal_RefreshBtn';
 }
@@ -49,6 +53,9 @@ interface RewardPageModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onClick_WithdrawBtn: (action: OnClick_WithdrawBtn_Action, effects: EffectsCommandMap) => void;
+    onClose_WechatModal: (action: OnClose_WechatModal_Action, effects: EffectsCommandMap) => void;
+    onClick_WechatModal_BindingBtn: (action: OnClick_WechatModal_BindingBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_WechatModal_RefreshBtn: (action: OnClick_WechatModal_RefreshBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<RewardPageModelState, ChangeAction>;
@@ -152,6 +159,15 @@ const Model: RewardPageModelType = {
           showModal: 'withdraw',
         },
       });
+    },
+    * onClose_WechatModal(action: OnClose_WechatModal_Action, effects: EffectsCommandMap) {
+
+    },
+    * onClick_WechatModal_BindingBtn(action: OnClick_WechatModal_BindingBtn_Action, effects: EffectsCommandMap) {
+
+    },
+    * onClick_WechatModal_RefreshBtn(action: OnClick_WechatModal_RefreshBtn_Action, effects: EffectsCommandMap) {
+
     },
   },
   reducers: {

@@ -179,18 +179,20 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
               justifyContent: 'center',
             }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-              <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-                <FWarning />
-                <div style={{ width: 5 }} />
-                <span>提现需绑定微信</span>
-              </div>
+            {
+              rewardPage.wechatModal_task === 'binding' && (<div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+                  <FWarning />
+                  <div style={{ width: 5 }} />
+                  <span>提现需绑定微信</span>
+                </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <FComponentsLib.FContentText text={'需绑定微信才可提现'} type={'additional2'} />
-                <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>绑定微信</FComponentsLib.FTextBtn>
-              </div>
-            </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <FComponentsLib.FContentText text={'需绑定微信才可提现'} type={'additional2'} />
+                  <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>绑定微信</FComponentsLib.FTextBtn>
+                </div>
+              </div>)
+            }
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
