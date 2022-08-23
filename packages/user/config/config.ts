@@ -76,7 +76,7 @@ export default defineConfig({
           path: 'reward',
           wrappers: ['@/pages/logged/index'],
           component: '@/pages/logged/reward/index',
-          title: '钱包 - Freelog',
+          title: '活动奖励 - Freelog',
         },
         {
           exact: true,
@@ -95,6 +95,8 @@ export default defineConfig({
         {
           exact: true,
           path: 'binding',
+          component: '@/pages/logged/binding/index',
+          title: '绑定 - Freelog',
         },
         { component: '@/pages/exception/404/index' },
       ],

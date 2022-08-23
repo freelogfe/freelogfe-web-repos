@@ -365,6 +365,15 @@ export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
 
+
+// 绑定成功
+interface BindingParamsType {
+}
+
+export function binding({}: BindingParamsType = {}) {
+  return `/logged/binding`;
+}
+
 // 绑定成功
 interface ResultBindingSuccessParamsType {
 }

@@ -160,14 +160,21 @@ const Model: RewardPageModelType = {
         },
       });
     },
-    * onClose_WechatModal(action: OnClose_WechatModal_Action, effects: EffectsCommandMap) {
-
+    * onClose_WechatModal({}: OnClose_WechatModal_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showModal: '',
+        },
+      });
     },
-    * onClick_WechatModal_BindingBtn(action: OnClick_WechatModal_BindingBtn_Action, effects: EffectsCommandMap) {
-
+    * onClick_WechatModal_BindingBtn({}: OnClick_WechatModal_BindingBtn_Action, {}: EffectsCommandMap) {
+      self.open(FUtil.LinkTo.binding());
     },
-    * onClick_WechatModal_RefreshBtn(action: OnClick_WechatModal_RefreshBtn_Action, effects: EffectsCommandMap) {
-
+    * onClick_WechatModal_RefreshBtn({}: OnClick_WechatModal_RefreshBtn_Action, { put }: EffectsCommandMap) {
+      yield put<OnClick_WithdrawBtn_Action>({
+        type: 'rewardPage/onClick_WithdrawBtn',
+      });
     },
   },
   reducers: {

@@ -10,10 +10,17 @@ import { FWarning } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, RewardPageModelState } from '@/models/connect';
-import { OnClick_WithdrawBtn_Action, OnMountPageAction, OnUnmountPageAction } from '@/models/rewardPage';
+import {
+  OnClick_WechatModal_BindingBtn_Action, OnClick_WechatModal_RefreshBtn_Action,
+  OnClick_WithdrawBtn_Action,
+  OnClose_WechatModal_Action,
+  OnMountPageAction,
+  OnUnmountPageAction,
+} from '@/models/rewardPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FListFooter from '@/components/FListFooter';
 import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface RewardProps {
   dispatch: Dispatch;
@@ -161,9 +168,9 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
         />}
         visible={rewardPage.showModal === 'wechat'}
         onCancel={() => {
-          // dispatch<OnCancel_Activate_CaptchaModal_Action>({
-          //   type: 'walletPage/onCancel_Activate_CaptchaModal',
-          // });
+          dispatch<OnClose_WechatModal_Action>({
+            type: 'rewardPage/onClose_WechatModal',
+          });
         }}
         footer={null}
         width={580}
@@ -180,18 +187,27 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
             }}
           >
             {
-              rewardPage.wechatModal_task === 'binding' && (<div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-                <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-                  <FWarning />
-                  <div style={{ width: 5 }} />
-                  <span>提现需绑定微信</span>
-                </div>
+              rewardPage.wechatModal_task === 'binding' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
+                    <FWarning />
+                    <div style={{ width: 5 }} />
+                    <span>提现需绑定微信</span>
+                  </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <FComponentsLib.FContentText text={'需绑定微信才可提现'} type={'additional2'} />
-                  <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>绑定微信</FComponentsLib.FTextBtn>
-                </div>
-              </div>)
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <FComponentsLib.FContentText text={'需绑定微信才可提现'} type={'additional2'} />
+                    <FComponentsLib.FTextBtn
+                      type={'primary'}
+                      style={{ fontSize: 12 }}
+                      onClick={() => {
+                        dispatch<OnClick_WechatModal_BindingBtn_Action>({
+                          type: 'rewardPage/onClick_WechatModal_BindingBtn',
+                        });
+                      }}
+                    >绑定微信</FComponentsLib.FTextBtn>
+                  </div>
+                </div>)
             }
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
@@ -211,7 +227,14 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FComponentsLib.FContentText text={'已完成上述操作，'} type={'negative'} />
-            <FComponentsLib.FTextBtn type={'primary'}>立即刷新</FComponentsLib.FTextBtn>
+            <FComponentsLib.FTextBtn
+              type={'primary'}
+              onClick={() => {
+                dispatch<OnClick_WechatModal_RefreshBtn_Action>({
+                  type: 'rewardPage/onClick_WechatModal_RefreshBtn',
+                });
+              }}
+            >立即刷新</FComponentsLib.FTextBtn>
             &nbsp;
             <FComponentsLib.FContentText text={'开始提现'} type={'negative'} />
 
