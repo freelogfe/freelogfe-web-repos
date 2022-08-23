@@ -11,16 +11,20 @@ import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, RewardPageModelState } from '@/models/connect';
 import {
+  OnBlur_WithdrawModal_AmountInput_Action,
+  OnBlur_WithdrawModal_RealNameInput_Action, OnChange_WithdrawModal_AmountInput_Action,
+  OnChange_WithdrawModal_RealNameInput_Action,
   OnClick_WechatModal_BindingBtn_Action, OnClick_WechatModal_RefreshBtn_Action,
-  OnClick_WithdrawBtn_Action,
-  OnClose_WechatModal_Action,
+  OnClick_WithdrawBtn_Action, OnClick_WithdrawModal_ConfirmBtn_Action, OnClick_WithdrawModal_TotalBtn_Action,
+  OnClose_WechatModal_Action, OnClose_WithdrawModal_Action,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/rewardPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FListFooter from '@/components/FListFooter';
 import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+
+// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface RewardProps {
   dispatch: Dispatch;
@@ -78,7 +82,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
       render(_, record) {
         return (<div>
           <FComponentsLib.FTitleText
-            text={record.transactionAmount < 0 ? ('-' + record.transactionAmount) : ('+' + record.transactionAmount)}
+            text={record.transactionAmount < 0 ? ('' + record.transactionAmount) : ('+' + record.transactionAmount)}
             type='h1'
           />
           <FComponentsLib.FContentText
@@ -254,9 +258,9 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
         />}
         visible={rewardPage.showModal === 'withdraw'}
         onCancel={() => {
-          // dispatch<OnCancel_Activate_CaptchaModal_Action>({
-          //   type: 'walletPage/onCancel_Activate_CaptchaModal',
-          // });
+          dispatch<OnClose_WithdrawModal_Action>({
+            type: 'rewardPage/onClose_WithdrawModal',
+          });
         }}
         footer={null}
         width={580}
@@ -265,25 +269,39 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           <Space size={30} direction='vertical' style={{ width: 440 }}>
             <Space size={10} direction='vertical'>
               <FComponentsLib.FTipText type='third' text={'可提现金额'} />
-              <div className={styles.Gold}>{1234234}</div>
+              <div className={styles.Gold}>{rewardPage.cashAmount}</div>
             </Space>
 
             <Space size={10} direction='vertical'>
               <FComponentsLib.FTipText type='third' text={'微信账号'} />
-              <FComponentsLib.FContentText text={'yanghongtian'} type={'highlight'} />
+              <FComponentsLib.FContentText text={rewardPage.withdrawModal_WechatName} type={'highlight'} />
             </Space>
 
             <Space size={10} direction='vertical' style={{ width: '100%' }}>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                 <FComponentsLib.FTipText type='third' text={'实名认证'} />
                 <div style={{ width: 10 }} />
-                <FComponentsLib.FContentText type={'additional2'} text={'为了保障资金安全，微信平台要求验证提现微信账号真实姓名'} />
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  text={'为了保障资金安全，微信平台要求验证提现微信账号真实姓名'}
+                />
               </div>
               <FInput
-                value={''}
+                value={rewardPage.withdrawModal_RealName}
                 onChange={(e) => {
-                  // set_password(e.target.value);
+                  dispatch<OnChange_WithdrawModal_RealNameInput_Action>({
+                    type: 'rewardPage/onChange_WithdrawModal_RealNameInput',
+                    payload: {
+                      value: e.target.value,
+                    },
+                  });
                 }}
+                onBlur={() => {
+                  dispatch<OnBlur_WithdrawModal_RealNameInput_Action>({
+                    type: 'rewardPage/onBlur_WithdrawModal_RealNameInput',
+                  });
+                }}
+                errorText={rewardPage.withdrawModal_RealNameError}
                 placeholder='输入已绑定微信的认证实名'
                 className={styles.modalBlockInput}
                 wrapClassName={styles.modalBlockInput}
@@ -298,13 +316,31 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
                   <FComponentsLib.FContentText type={'additional2'} text={'可提现金额少于20元时将不能提现'} />
                 </div>
 
-                <FComponentsLib.FTextBtn type={'primary'}>全部提现</FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn
+                  type={'primary'}
+                  onClick={() => {
+                    dispatch<OnClick_WithdrawModal_TotalBtn_Action>({
+                      type: 'rewardPage/onClick_WithdrawModal_TotalBtn',
+                    });
+                  }}
+                >全部提现</FComponentsLib.FTextBtn>
               </div>
               <FInput
-                value={''}
+                value={rewardPage.withdrawModal_Amount}
                 onChange={(e) => {
-                  // set_password(e.target.value);
+                  dispatch<OnChange_WithdrawModal_AmountInput_Action>({
+                    type: 'rewardPage/onChange_WithdrawModal_AmountInput',
+                    payload: {
+                      value: e.target.value,
+                    },
+                  });
                 }}
+                onBlur={() => {
+                  dispatch<OnBlur_WithdrawModal_AmountInput_Action>({
+                    type: 'rewardPage/onBlur_WithdrawModal_AmountInput',
+                  });
+                }}
+                errorText={rewardPage.withdrawModal_AmountError}
                 placeholder='输入提现金额'
                 className={styles.modalBlockInput}
                 wrapClassName={styles.modalBlockInput}
@@ -314,11 +350,11 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
               <FComponentsLib.FRectBtn
                 type='primary'
-                // disabled={!walletPage.activating_Captcha}
+                disabled={rewardPage.withdrawModal_RealName === '' || rewardPage.withdrawModal_RealNameError !== '' || rewardPage.withdrawModal_Amount === '' || rewardPage.withdrawModal_AmountError !== ''}
                 onClick={() => {
-                  // dispatch<OnClick_Activate_NextBtn_Action>({
-                  //   type: 'walletPage/onClick_Activate_NextBtn',
-                  // });
+                  dispatch<OnClick_WithdrawModal_ConfirmBtn_Action>({
+                    type: 'rewardPage/onClick_WithdrawModal_ConfirmBtn',
+                  });
                 }}
               >提现</FComponentsLib.FRectBtn>
             </div>
