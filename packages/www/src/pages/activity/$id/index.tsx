@@ -6,6 +6,7 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
 import InviteFriend from './InviteFriend';
+import Questionnaire from './Questionnaire';
 import * as AHooks from 'ahooks';
 import {
   OnMountPageAction,
@@ -22,8 +23,6 @@ interface ActivityProps extends IRouteComponentProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-
-
 function Activity({
                     dispatch,
                     activityDetailsPage,
@@ -34,7 +33,8 @@ function Activity({
   const Activities: any = {
     'ResourceCompetition': (<ResourceCompetition />),
     'play-newer': (<PlayNewer />),
-    'invite-friend': (<InviteFriend/>)
+    'invite-friend': (<InviteFriend/>),
+    'Questionnaire': (<Questionnaire/>)
   };
 
   AHooks.useMount(() => {
