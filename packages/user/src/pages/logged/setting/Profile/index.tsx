@@ -26,8 +26,11 @@ import {
 import { FetchInfoAction, ChangeAction as UserChangeAction } from '@/models/user';
 import { Moment } from 'moment';
 import { FServiceAPI } from '@freelog/tools-lib';
+
 const DatePickerAsAnyType: any = DatePicker;
 import FComponentsLib from '@freelog/components-lib';
+import FUploadAvatar from '@/components/FUploadAvatar';
+import fMessage from '@/components/fMessage';
 
 interface ProfileProps {
   dispatch: Dispatch;
@@ -42,93 +45,119 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
   // })
   const [loading, setLoading] = React.useState(false);
 
-  const handleChange: UploadProps['onChange'] = async (
-    info: UploadChangeParam<UploadFile>,
-  ) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // console.log(info.file.originFileObj);
-      await FServiceAPI.User.uploadHeadImg({
-        // @ts-ignore
-        file: info.file.originFileObj,
-      });
-      dispatch<FetchInfoAction>({
-        type: 'user/fetchInfo',
-      });
+  // const handleChange: UploadProps['onChange'] = async (
+  //   info: UploadChangeParam<UploadFile>,
+  // ) => {
+  //   if (info.file.status === 'uploading') {
+  //     setLoading(true);
+  //     return;
+  //   }
+  //   if (info.file.status === 'done') {
+  //     // console.log(info.file.originFileObj);
+  //     await FServiceAPI.User.uploadHeadImg({
+  //       // @ts-ignore
+  //       file: info.file.originFileObj,
+  //     });
+  //     dispatch<FetchInfoAction>({
+  //       type: 'user/fetchInfo',
+  //     });
+  //
+  //     setLoading(false);
+  //     // Get this url from response in real world.
+  //     // getBase64(info.file.originFileObj as RcFile, (url) => {
+  //     //   setLoading(false);
+  //     //   setImageUrl(url);
+  //     // });
+  //   }
+  // };
 
-      setLoading(false);
-      // Get this url from response in real world.
-      // getBase64(info.file.originFileObj as RcFile, (url) => {
-      //   setLoading(false);
-      //   setImageUrl(url);
-      // });
-    }
-  };
-
-  async function beforeUpload(file: RcFile) {
-    const isJpgOrPng =
-      file.type === 'image/jpeg' ||
-      file.type === 'image/png' ||
-      file.type === 'image/gif';
-    if (!isJpgOrPng) {
-      return message.error('You can only upload JPG/PNG/gif file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      return message.error('Image must smaller than 2MB!');
-    }
-
-    // return isJpgOrPng && isLt2M;
-    const { data } = await FServiceAPI.User.uploadHeadImg({
-      file: file,
-    });
-
-    const nowTime: number = Date.now();
-
-    dispatch<SettingPageChangeAction>({
-      type: 'settingPage/change',
-      payload: {
-        avatar: data + '&' + nowTime,
-      },
-    });
-    // console.log(data, '0983ioslkdfsldkjflsdkj');
-
-    dispatch<UserChangeAction>({
-      type: 'user/change',
-      payload: {
-        // @ts-ignore
-        userInfo: {
-          ...(user?.userInfo || {}),
-          headImage: data + '&' + nowTime,
-        }
-      }
-    });
-    // setTimeout(() => {
-    //   dispatch<FetchInfoAction>({
-    //     type: 'user/fetchInfo',
-    //   });
-    // }, 1000);
-
-
-    return false;
-  }
+  // async function beforeUpload(file: RcFile) {
+  //   const isJpgOrPng =
+  //     file.type === 'image/jpeg' ||
+  //     file.type === 'image/png' ||
+  //     file.type === 'image/gif';
+  //   if (!isJpgOrPng) {
+  //     return message.error('You can only upload JPG/PNG/gif file!');
+  //   }
+  //   const isLt2M = file.size / 1024 / 1024 < 2;
+  //   if (!isLt2M) {
+  //     return message.error('Image must smaller than 2MB!');
+  //   }
+  //
+  //   // return isJpgOrPng && isLt2M;
+  //   const { data } = await FServiceAPI.User.uploadHeadImg({
+  //     file: file,
+  //   });
+  //
+  //   const nowTime: number = Date.now();
+  //
+  //   dispatch<SettingPageChangeAction>({
+  //     type: 'settingPage/change',
+  //     payload: {
+  //       avatar: data + '&' + nowTime,
+  //     },
+  //   });
+  //   // console.log(data, '0983ioslkdfsldkjflsdkj');
+  //
+  //   dispatch<UserChangeAction>({
+  //     type: 'user/change',
+  //     payload: {
+  //       // @ts-ignore
+  //       userInfo: {
+  //         ...(user?.userInfo || {}),
+  //         headImage: data + '&' + nowTime,
+  //       },
+  //     },
+  //   });
+  //   // setTimeout(() => {
+  //   //   dispatch<FetchInfoAction>({
+  //   //     type: 'user/fetchInfo',
+  //   //   });
+  //   // }, 1000);
+  //
+  //
+  //   return false;
+  // }
 
   return (
     <>
-      <div className={styles.avatar + ' flex-row-center'}>
-        <div
-          className={'container over-h flex-column-center ' + styles.container}
+      <div className={styles.avatar}>
+        <FUploadAvatar
+          onError={(error) => {
+            fMessage(error, 'error');
+          }}
+          onUploadSuccess={(data) => {
+            const nowTime: number = Date.now();
+
+            dispatch<SettingPageChangeAction>({
+              type: 'settingPage/change',
+              payload: {
+                avatar: data + '&' + nowTime,
+              },
+            });
+
+            dispatch<UserChangeAction>({
+              type: 'user/change',
+              payload: {
+                // @ts-ignore
+                userInfo: {
+                  ...(user?.userInfo || {}),
+                  headImage: data + '&' + nowTime,
+                },
+              },
+            });
+          }}
         >
-          <Upload
-            name='avatar'
-            className='avatar-uploader'
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-            // onChange={handleChange}
+          <div
+            className={styles.container}
           >
+            {/*<Upload*/}
+            {/*  name='avatar'*/}
+            {/*  className='avatar-uploader'*/}
+            {/*  showUploadList={false}*/}
+            {/*  beforeUpload={beforeUpload}*/}
+            {/*  // onChange={handleChange}*/}
+            {/*>*/}
             <div
               // src={settingPage.avatar}
               // alt="avatar"
@@ -147,8 +176,9 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             >
               {loading ? <LoadingOutlined /> : '修改头像'}
             </div>
-          </Upload>
-        </div>
+            {/*</Upload>*/}
+          </div>
+        </FUploadAvatar>
       </div>
       <div style={{ height: 30 }} />
       <FFormLayout>

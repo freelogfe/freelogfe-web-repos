@@ -1,16 +1,22 @@
 //@import '../../config.less';
 
 .avatar {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
   .container {
     width: 130px;
     height: 130px;
     border-radius: 50%;
     position: relative;
+
     &:hover {
       .hoverDiv {
         display: flex;
       }
     }
+
     .hoverDiv {
       flex-flow: column;
       align-items: center;
@@ -28,6 +34,7 @@
       color: #ffffff;
       line-height: 20px;
       background: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
     }
   }
 }
