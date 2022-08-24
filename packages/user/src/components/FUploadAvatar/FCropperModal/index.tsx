@@ -46,6 +46,8 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
     onCancel={() => {
       onCancel && onCancel();
     }}
+    okText={'确认'}
+    cancelText={'取消'}
   >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
