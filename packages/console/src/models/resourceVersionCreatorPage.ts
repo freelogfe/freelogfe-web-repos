@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
-import { router } from 'umi';
+import { history } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
@@ -408,7 +408,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      router.push(resourceVersionCreatorPage.promptLeavePath);
+      history.push(resourceVersionCreatorPage.promptLeavePath);
     },
     * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -498,7 +498,7 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '97293874823yu4oi234io23hjkfdsasdf',
       });
       // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
-      router.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
+      history.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
         resourceID: data.resourceId,
         version: data.version,
       }));
@@ -698,7 +698,7 @@ const Model: ResourceVersionCreatorModelType = {
         sha1: [resourceVersionCreatorPage.selectedFileSha1],
       };
       // console.log('*(*********');
-      const result = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
+      const result: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
       // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
 
       //
@@ -753,7 +753,7 @@ const Model: ResourceVersionCreatorModelType = {
       ].filter((id) => !existIDs.includes(id));
 
       if (allIDs.length === 0) {
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             depRelationship: [
@@ -763,6 +763,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           caller: '$97&*&&293874823yu4oi234io23hjkfdsasdf',
         });
+        return;
       }
 
       // handleResourceBatchInfo({ resourceIDs: allIDs });
@@ -974,7 +975,7 @@ const Model: ResourceVersionCreatorModelType = {
       const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
         sha1: data.sha1,
       };
-      const data4 = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
+      const data4: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
       // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
 
       yield put<ChangeAction>({
@@ -1141,7 +1142,7 @@ const Model: ResourceVersionCreatorModelType = {
             return pp.key;
           }),
         ];
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             basePropertiesEditorVisible: true,
@@ -1159,6 +1160,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
         });
+        return;
       }
 
       if (payload === 'optionProps') {
@@ -1173,7 +1175,7 @@ const Model: ResourceVersionCreatorModelType = {
             return pp.key;
           }),
         ];
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             customOptionsEditorDataSource: resourceVersionCreatorPage.preVersionOptionProperties
@@ -1194,6 +1196,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           caller: '97293874823yu4oi234io23hjkfdsasd98890698678&*^&^&f',
         });
+        return;
       }
 
       if (payload === 'deps') {
@@ -1315,7 +1318,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
 
   // 本次要添加的一些列资源信息
   const data_batchResourceInfo: HandleResourceBatchInfoReturn = await handleResourceBatchInfo(params);
-  console.log(data_batchResourceInfo, 'data_batchResourceInfo')
+  console.log(data_batchResourceInfo, 'data_batchResourceInfo');
 
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: allIDs.join(','),
@@ -1346,7 +1349,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
     userIds: allUserID.join(','),
   };
 
-  const { data: data_batchUserList } = await FServiceAPI.User.batchUserList(params4)
+  const { data: data_batchUserList } = await FServiceAPI.User.batchUserList(params4);
   // 组织添加的依赖数据
   const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
     const ownerUserInfo = data_batchUserList.find((dbu: any) => {
@@ -1378,7 +1381,7 @@ async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<Res
             : '',
       warning: ownerUserInfo.status === 1
         ? 'ownerFreeze'
-        :dr.authProblem
+        : dr.authProblem
           ? 'authException'
           : '',
 

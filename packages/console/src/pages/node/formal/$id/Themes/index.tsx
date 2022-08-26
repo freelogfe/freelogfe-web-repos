@@ -12,7 +12,7 @@ import {
   OnMount_ThemePage_Action,
   OnUnmount_ThemePage_Action,
 } from '@/models/nodeManagerPage';
-import { router, RouterTypes, withRouter } from 'umi';
+import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -34,7 +34,7 @@ interface ThemesProps {
   nodeManagerPage: NodeManagerModelState;
 }
 
-function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps) {
+function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
   const [themeList, setThemeList] = React.useState<any[]>([]);
   const [emptyTheme, setEmptyTheme] = React.useState<any>(null);
   const [activeId, setActiveId] = React.useState<null | string>(null);
@@ -66,7 +66,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
 
   /** 浏览更多主题 */
   const viewMoreTheme = () => {
-    router.push(FUtil.LinkTo.market({ query: '主题' }));
+    history.push(FUtil.LinkTo.market({ query: '主题' }));
   };
 
   /** 激活主题 */

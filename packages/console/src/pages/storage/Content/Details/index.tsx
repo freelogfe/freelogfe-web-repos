@@ -16,7 +16,7 @@ import { FDown, FInfo, FUp, FDownload } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
-import { router } from 'umi';
+import { history } from 'umi';
 import FTooltip from '@/components/FTooltip';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
@@ -64,7 +64,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           onChange({
             customOptionsDataVisible: false,
           });
-          router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
+          history.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
         type='default'
       >取消</FComponentsLib.FTextBtn>
@@ -92,7 +92,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
       onChange({
         customOptionsDataVisible: false,
       });
-      router.replace(FUtil.LinkTo.storageSpace({
+      history.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
     }}

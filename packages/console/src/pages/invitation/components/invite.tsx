@@ -3,7 +3,7 @@ import styles from './invite.less';
 import * as AHooks from 'ahooks';
 import FInput from '@/components/FInput';
 import { FServiceAPI } from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
 import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
@@ -41,7 +41,7 @@ function Invite({ jump }: InviteProps) {
               if (urlState.returnUrl) {
                 window.location.href = decodeURIComponent(urlState.returnUrl);
               } else {
-                router.push('/dashboard');
+                history.push('/dashboard');
               }
             }, 1500);
           }
@@ -90,7 +90,7 @@ function Invite({ jump }: InviteProps) {
           <span
             className={styles.link}
             onClick={() => {
-              router.push(
+              history.push(
                 '/invitation?type=apply' +
                   (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
               );

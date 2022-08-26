@@ -19,11 +19,11 @@ import {
   OnChange_Resource_Type_Action,
   initStates, OnClick_CreateBtn_Action,
 } from '@/models/resourceCreatorPage';
-import { router, RouterTypes } from 'umi';
+import { history } from 'umi';
 import { FCheck, FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
-import Prompt from 'umi/prompt';
+import { Prompt } from 'umi';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
@@ -40,7 +40,7 @@ function ResourceCreator({
                            dispatch,
                            resourceCreatorPage,
                            user,
-                         }: ResourceCreatorProps & RouterTypes) {
+                         }: ResourceCreatorProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
@@ -124,7 +124,7 @@ function ResourceCreator({
             message: '还没有创建资源，现在离开会导致信息丢失',
             onOk() {
               // console.log('OK');
-              router.push(location.pathname + location.search);
+              history.push(location.pathname + location.search);
             },
             onCancel() {
               // console.log('Cancel');

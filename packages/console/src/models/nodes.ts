@@ -2,10 +2,10 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { router } from 'umi';
+import { history } from 'umi';
 // import FUtil1 from '@/utils';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { nodeCreateSuccess } from '@freelog/tools-lib/dist/utils/linkTo';
+// import { nodeCreateSuccess } from '@freelog/tools-lib/dist/utils/linkTo';
 import fMessage from '@/components/fMessage';
 import { FI18n } from '@freelog/tools-lib';
 
@@ -283,7 +283,7 @@ const Model: NodesModelType = {
       });
 
       // router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
-      router.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
+      history.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
     },
   },
   reducers: {

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {withRouter, router} from "umi";
-import FCenterLayout from "@/layouts/FCenterLayout";
+import { withRouter, history } from 'umi';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import * as AHooks from 'ahooks';
-import {connect, Dispatch} from 'dva';
-import {FUtil, FServiceAPI, FI18n} from '@freelog/tools-lib';
-import {RouteComponentProps} from 'react-router';
+import { connect, Dispatch } from 'dva';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
+import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
 
 interface SuccessProps extends RouteComponentProps<{
@@ -15,7 +15,7 @@ interface SuccessProps extends RouteComponentProps<{
   dispatch: Dispatch;
 }
 
-function Success({match, dispatch}: SuccessProps) {
+function Success({ match, dispatch }: SuccessProps) {
 
   const [count, setCount] = React.useState<number>(3);
   // 0：初始 1：第一个版本且无策略 2：非第一个版本或有策略
@@ -34,7 +34,7 @@ function Success({match, dispatch}: SuccessProps) {
       resourceIdOrName: match.params.id,
     };
 
-    const {data} = await FServiceAPI.Resource.info(params);
+    const { data } = await FServiceAPI.Resource.info(params);
     // console.log(data, 'DDDDTTTTAAAAA');
 
     if (data.resourceVersions.length === 1 && data.policies.length === 0) {
@@ -45,45 +45,45 @@ function Success({match, dispatch}: SuccessProps) {
   });
 
   function gotoVersionInfo() {
-    return router.replace(FUtil.LinkTo.resourceVersion({
+    return history.replace(FUtil.LinkTo.resourceVersion({
       resourceID: match.params.id,
       version: match.params.version,
     }));
   }
 
   function gotoAuth() {
-    return router.replace(FUtil.LinkTo.resourceAuth({
+    return history.replace(FUtil.LinkTo.resourceAuth({
       resourceID: match.params.id,
     }));
   }
 
   return (<FCenterLayout>
-    <div style={{height: 100}}/>
+    <div style={{ height: 100 }} />
     <div className={styles.modal}>
       {
         gotoState !== 0 && (<>
-          <i className={'freelog fl-icon-shenqingchenggong'}/>
-          <div style={{height: 20}}/>
+          <i className={'freelog fl-icon-shenqingchenggong'} />
+          <div style={{ height: 20 }} />
           <FComponentsLib.FTipText
-            type="second"
-            text={FI18n.i18nNext.t('version_created_successfully', {VersionNumber: match.params.version})}
+            type='second'
+            text={FI18n.i18nNext.t('version_created_successfully', { VersionNumber: match.params.version })}
           />
         </>)
       }
 
-      <div style={{height: 40}}/>
+      <div style={{ height: 40 }} />
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText type="third" text={'未添加策略的资源不会出现在资源市场中'}/>
-          <div style={{height: 30}}/>
+          <FComponentsLib.FTipText type='third' text={'未添加策略的资源不会出现在资源市场中'} />
+          <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
             onClick={() => {
               gotoAuth();
             }}
-            style={{padding: '0 20px'}}
+            style={{ padding: '0 20px' }}
           >立即添加授权策略</FComponentsLib.FRectBtn>
-          <div style={{height: 15}}/>
+          <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
               gotoVersionInfo();
@@ -93,8 +93,8 @@ function Success({match, dispatch}: SuccessProps) {
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FComponentsLib.FTipText type="third" text={FI18n.i18nNext.t('jump_to_version_edit', {timer: count})}/>
-          <div style={{width: 10}}/>
+          <FComponentsLib.FTipText type='third' text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })} />
+          <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}
             onClick={gotoVersionInfo}
@@ -102,7 +102,7 @@ function Success({match, dispatch}: SuccessProps) {
         </div>)
       }
     </div>
-  </FCenterLayout>)
+  </FCenterLayout>);
 }
 
 

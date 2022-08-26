@@ -13,7 +13,7 @@ import {
   OnChange_Theme_OnlineSwitch_Action,
   OnPageUnmountAction,
 } from '@/models/informExhibitInfoPage';
-import { router } from 'umi';
+import { history } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { FUtil } from '@freelog/tools-lib';
@@ -123,7 +123,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
             <div style={{ width: 5 }} />
             <FComponentsLib.FTextBtn
               onClick={() => {
-                router.push(
+                history.push(
                   FUtil.LinkTo.informNodeManagement({
                     nodeID: informExhibitInfoPage.node_ID,
                     showPage: 'exhibit',

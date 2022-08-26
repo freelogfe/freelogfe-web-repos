@@ -7,7 +7,7 @@ import Header from './Header';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, StorageHomePageModelState, StorageObjectEditorModelState } from '@/models/connect';
 import { CreateBucketAction, OnChangeActivatedBucketAction, OnChangeNewBucketAction } from '@/models/storageHomePage';
-import { router, withRouter } from 'umi';
+import { history, withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import { ChangeAction, FetchInfoAction, storageObjectEditorInitData } from '@/models/storageObjectEditor';
 import Details from '@/pages/storage/Content/Details';
@@ -122,7 +122,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         // setModalVisible(false);
       }}
       onCancel={() => {
-        router.replace(FUtil.LinkTo.storageSpace({
+        history.replace(FUtil.LinkTo.storageSpace({
           bucketName: storageHomePage.activatedBucket,
         }));
       }}

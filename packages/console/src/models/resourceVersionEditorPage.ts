@@ -1,14 +1,10 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
 import moment from 'moment';
-import {ConnectState} from "@/models/connect";
-// import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
-// import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
-// import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {router} from "umi";
-import { resourceVersionInfo1 } from '@freelog/tools-lib/dist/service-API/resources';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { history } from 'umi';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -178,19 +174,19 @@ const Model: ResourceVersionEditorModelType = {
   },
 
   effects: {
-    * fetchDataSource(action: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+    * fetchDataSource(action: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // const params: ResourceVersionInfoParamsType1 = action.payload;
-      const {resourceVersionEditorPage}: ConnectState = yield select(({resourceVersionEditorPage}: ConnectState) => ({
+      const { resourceVersionEditorPage }: ConnectState = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
         resourceVersionEditorPage,
       }));
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
-      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
+      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
       if (!data) {
-        router.replace(FUtil.LinkTo.exception403({}));
+        history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 
@@ -252,7 +248,7 @@ const Model: ResourceVersionEditorModelType = {
             return {
               key: b.key,
               value: b.defaultValue,
-              description: b.remark
+              description: b.remark,
             };
           }),
           customOptions: opt.map((i: any) => ({
@@ -277,8 +273,8 @@ const Model: ResourceVersionEditorModelType = {
         },
       });
     },
-    * updateDataSource(action: UpdateDataSourceAction, {call, put, select}: EffectsCommandMap) {
-      const baseInfo = yield select(({resourceVersionEditorPage}: ConnectState) => ({
+    * updateDataSource(action: UpdateDataSourceAction, { call, put, select }: EffectsCommandMap) {
+      const baseInfo: { version: string; resourceId: string; } = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
       }));
@@ -292,8 +288,8 @@ const Model: ResourceVersionEditorModelType = {
         payload: baseInfo,
       });
     },
-    * syncAllProperties({}: SyncAllPropertiesAction, {select, call}: EffectsCommandMap) {
-      const {resourceVersionEditorPage}: ConnectState = yield select(({resourceVersionEditorPage}: ConnectState) => ({
+    * syncAllProperties({}: SyncAllPropertiesAction, { select, call }: EffectsCommandMap) {
+      const { resourceVersionEditorPage }: ConnectState = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
         resourceVersionEditorPage,
       }));
 
@@ -331,16 +327,16 @@ const Model: ResourceVersionEditorModelType = {
     // changeDataSource(state: ResourceVersionEditorPageModelState, action: ChangeDataSourceAction): ResourceVersionEditorPageModelState {
     //   return {...state, ...action.payload};
     // },
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
 
       // history.listen((listener) => {
       //   const regexp = pathToRegexp('/resource/:id/$version/:$version');

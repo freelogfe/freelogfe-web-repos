@@ -4,7 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 import { UpdateAObjectAction } from '@/models/storageHomePage';
 
 interface DepR {
@@ -239,7 +239,8 @@ const Model: StorageObjectEditorModelType = {
       // console.log(data, 'data@#Rwe90ifjsdlkfa');
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
-        return router.replace(FUtil.LinkTo.exception403());
+        history.replace(FUtil.LinkTo.exception403());
+        return;
       }
       const resources: any[] = data.dependencies
         .filter((ro: any) => ro.type === 'resource');
@@ -404,7 +405,7 @@ const Model: StorageObjectEditorModelType = {
         },
       });
 
-      router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
+      history.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
     },
     * onChangeType({ payload }: OnChangeTypeAction, { put, select, call }: EffectsCommandMap) {
       yield put<ChangeAction>({

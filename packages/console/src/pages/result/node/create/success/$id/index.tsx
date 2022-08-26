@@ -1,51 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCenterLayout from '@/layouts/FCenterLayout';
-import { withRouter, router } from 'umi';
-import RouterTypes from 'umi/routerTypes';
+import { withRouter, history } from 'umi';
 import { ChangeAction } from '@/models/global';
 import { Dispatch, connect } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
-import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
-import FResultTip from '@/components/FResultTip';
-// import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
-// import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
-// import FGraph_State_Machine from '@/components/FAntvG6/FGraph_State_Machine';
-import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FTooltip from '@/components/FTooltip';
 import { LoadingOutlined } from '@ant-design/icons';
-// import FHeaderNavigation from '@/components/FHeaderNavigation';
 import * as AHooks from 'ahooks';
-import { OnActiveAction } from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
-
-// const fsmDescriptionInfo: PolicyFullInfo_Type['fsmDescriptionInfo'] = {
-//   initial: {
-//     transitions: [
-//       {
-//         toState: 'finish',
-//         service: 'freelog',
-//         name: 'RelativeTimeEvent',
-//         args: { elapsed: 1, timeUnit: 'month' },
-//         code: 'A103',
-//         isSingleton: false,
-//         eventId: '1b0662145c874a7fa9fba4a8a3479550',
-//       },
-//     ],
-//     serviceStates: ['active'],
-//     isInitial: true,
-//     isAuth: true,
-//     isTestAuth: false,
-//   },
-//   finish: {
-//     transitions: [],
-//     serviceStates: [],
-//     isAuth: false,
-//     isTestAuth: false,
-//     isTerminate: true,
-//   },
-// };
 
 let myInterval: NodeJS.Timeout | null = null;
 
@@ -53,7 +16,7 @@ interface SuccessProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
 }
 
-function Success({ match, route, dispatch }: RouterTypes & SuccessProps) {
+function Success({ match, dispatch }: SuccessProps) {
   const [themeList, setThemeList] = React.useState<any[]>([]);
   const [emptyTheme, setEmptyTheme] = React.useState<any>(null);
   const [activeId, setActiveId] = React.useState<null | string>(null);
@@ -70,14 +33,14 @@ function Success({ match, route, dispatch }: RouterTypes & SuccessProps) {
     setEmptyTheme(emptyThemeList.data[0]);
   });
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-  }, [route]);
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
 
   // function goto() {
   //   dispatch<DiscoverChangeAction>({
@@ -96,13 +59,13 @@ function Success({ match, route, dispatch }: RouterTypes & SuccessProps) {
 
   /** 跳转节点管理页 */
   const toNodeManagement = () => {
-    router.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));
+    history.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));
   };
 
   /** 跳转节点-主题管理页 */
   const toNodeThemeManagement = () => {
     myInterval && clearInterval(myInterval);
-    router.push(
+    history.push(
       FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'theme' }),
     );
   };
@@ -167,7 +130,7 @@ function Success({ match, route, dispatch }: RouterTypes & SuccessProps) {
       setCountdown(--time);
       if (time === 0) {
         myInterval && clearInterval(myInterval);
-        router.push(
+        history.push(
           FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'theme' }),
         );
       }
@@ -211,7 +174,7 @@ function Success({ match, route, dispatch }: RouterTypes & SuccessProps) {
                 <div className={styles['right-area']}>
                   <div className={styles['title-area']}>
                     <div className={styles.title}>{item.resourceName.split('/')[1]}</div>
-                    <FTooltip title="查看资源详情">
+                    <FTooltip title='查看资源详情'>
                       <i
                         className={`freelog fl-icon-chakanziyuan ${styles['view-detail']}`}
                         onClick={() => toResourceDetail(item.resourceId)}

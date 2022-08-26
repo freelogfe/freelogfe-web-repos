@@ -2,7 +2,7 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
@@ -514,7 +514,7 @@ const Model: ResourceDetailPageModelType = {
         fMessage(msg, 'error');
         return;
       }
-      router.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
+      history.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
     },
     * onChangeAndVerifySignExhibitName({ payload }: OnChangeAndVerifySignExhibitNameAction, {
       put,
@@ -574,7 +574,7 @@ const Model: ResourceDetailPageModelType = {
       // console.log(data, ' data2309');
 
       if ((data_ResourceDetail.status & 2) === 2) {
-        router.replace(FUtil.LinkTo.resourceFreeze({ resourceID: resourceDetailPage.resource_ID }));
+        history.replace(FUtil.LinkTo.resourceFreeze({ resourceID: resourceDetailPage.resource_ID }));
         return;
       }
 

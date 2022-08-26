@@ -3,8 +3,8 @@ import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState } from '@/models/connect';
-import { withRouter, router } from 'umi';
-import RouterTypes from 'umi/routerTypes';
+import { withRouter, history } from 'umi';
+// import RouterTypes from 'umi/routerTypes';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
@@ -32,7 +32,7 @@ interface SilderProps
   resourceInfo: ResourceInfoModelState;
 }
 
-function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderProps) {
+function Sider({ resourceInfo, match, dispatch }:SilderProps) {
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -114,7 +114,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
 
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/$version/creator`);
-    router.push(
+    history.push(
       FUtil.LinkTo.resourceCreateVersion({
         resourceID: match.params.id,
       }),

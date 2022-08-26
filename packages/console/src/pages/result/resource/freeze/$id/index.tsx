@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FForbid from '@/components/FIcons/FForbid';
 import { RouteComponentProps } from 'react-router';
-import { router, withRouter } from 'umi';
+import { history, withRouter } from 'umi';
 import { connect } from 'dva';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
@@ -41,7 +41,7 @@ function Freeze({ match }: FreezeProps) {
     // console.log(data, 'DDDDDDDDDfo9iwekjlskdfjsdlkj');
 
     if ((data.status & 2) !== 2) {
-      router.replace(FUtil.LinkTo.resourceDetails({ resourceID: match.params.id }));
+      history.replace(FUtil.LinkTo.resourceDetails({ resourceID: match.params.id }));
       return;
     }
 

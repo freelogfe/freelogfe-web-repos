@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCreatorPageModelState {
@@ -216,7 +216,7 @@ const Model: ResourceCreatorPageModelType = {
         payload: initStates,
       });
 
-      router.replace(FUtil.LinkTo.resourceCreateSuccess({
+      history.replace(FUtil.LinkTo.resourceCreateSuccess({
         resourceID: data.resourceId,
       }));
     },

@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 import moment from 'moment';
 import FileSaver from 'file-saver';
 import { listStateAndListMore } from '@/components/FListFooter';
@@ -1048,7 +1048,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
-      router.push(informalNodeManagerPage.rule_PromptLeavePath);
+      history.push(informalNodeManagerPage.rule_PromptLeavePath);
     },
     * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1070,7 +1070,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { data } = yield call(FServiceAPI.Node.details, params);
 
       if (FUtil.Tool.getUserIDByCookies() !== data.ownerUserId) {
-        router.replace(FUtil.LinkTo.exception403({}));
+        history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
-import {withRouter, router} from 'umi';
-import RouterTypes from "umi/routerTypes";
-import {ChangeAction} from "@/models/global";
+import {withRouter, history} from 'umi';
+// import RouterTypes from "umi/routerTypes";
+// import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
 import {FUtil,FI18n} from '@freelog/tools-lib';
 import {RouteComponentProps} from "react-router";
@@ -13,21 +13,21 @@ interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
 }
 
-function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
+function Success({match, dispatch}:  SuccessProps) {
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-  }, [route]);
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
 
   function goto() {
     // /resource/:id/$version/creator
     // router.replace(`/resource/${match.params.id}/$version/creator`)
-    router.replace(FUtil.LinkTo.resourceCreateVersion({
+    history.replace(FUtil.LinkTo.resourceCreateVersion({
       resourceID: match.params.id,
     }));
   }

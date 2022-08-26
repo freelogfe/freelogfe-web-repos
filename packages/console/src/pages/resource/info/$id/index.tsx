@@ -8,7 +8,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState } from '@/models/connect';
 import { OnChangeInfoAction, ChangeAction, InitModelStatesAction } from '@/models/resourceInfoPage';
 import { ChangeAction as GlobalChangeAction } from '@/models/global';
-import { RouterTypes } from 'umi';
+// import { RouterTypes } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
@@ -24,15 +24,15 @@ interface InfoProps extends RouteComponentProps<{ id: string; }> {
   user: UserModelState;
 }
 
-function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: InfoProps & RouterTypes) {
+function Info({ dispatch, resourceInfoPage, resourceInfo, user, match }: InfoProps) {
 
   React.useEffect(() => {
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
+    // dispatch<GlobalChangeAction>({
+    //   type: 'global/change',
+    //   payload: {
+    //     route: route,
+    //   },
+    // });
 
     dispatch<ChangeAction>({
       type: 'resourceInfoPage/change',
@@ -46,7 +46,7 @@ function Info({ dispatch, route, resourceInfoPage, resourceInfo, user, match }: 
         type: 'resourceInfoPage/initModelStates',
       });
     };
-  }, [route]);
+  }, []);
 
   function onChangeIsEditing(bool: boolean) {
     // console.log(bool, '0293jdsfl;kjf;lasd');

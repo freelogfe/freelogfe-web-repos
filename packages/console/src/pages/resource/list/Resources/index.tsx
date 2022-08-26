@@ -8,7 +8,7 @@ import {
   OnUnmountAction,
   ResourceListPageModelState,
 } from '@/models/resourceListPage';
-import { router } from 'umi';
+import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import { connect, Dispatch } from 'dva';
 import { ConnectState } from '@/models/connect';
@@ -50,7 +50,7 @@ function Resources({ dispatch, resource }: ResourceProps) {
         height={'calc(100vh - 140px)'}
         tipText={'未创建任何资源'}
         btnText={'创建资源'}
-        onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
+        onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
       />
     );
   }

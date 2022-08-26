@@ -18,7 +18,7 @@ import {
 } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
-import { router } from 'umi';
+import { history } from 'umi';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
 const { decompile } = require('@freelog/nmr_translator');
@@ -504,7 +504,7 @@ const Model: ExhibitInfoPageModelType = {
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
       // console.log(testResourceDetail, 'data288282822828282822888888888888');
       if (!testResourceDetail || testResourceDetail.userId !== FUtil.Tool.getUserIDByCookies()) {
-        router.replace(FUtil.LinkTo.exception403({}));
+        history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 

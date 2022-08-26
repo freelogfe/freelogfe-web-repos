@@ -22,12 +22,11 @@ import {
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import { withRouter } from 'umi';
-import RouterTypes from 'umi/routerTypes';
+import { withRouter,Prompt } from 'umi';
+// import RouterTypes from 'umi/routerTypes';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import Prompt from 'umi/prompt';
 import * as H from 'history';
 import fConfirmModal from '@/components/fConfirmModal';
 import { RouteComponentProps } from 'react-router';
@@ -49,7 +48,7 @@ function VersionCreator({
                           resourceInfo,
                           resourceVersionCreatorPage,
                           match,
-                        }: VersionCreatorProps & RouterTypes) {
+                        }: VersionCreatorProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({

@@ -20,7 +20,7 @@ import SignPage from './SignPage';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
@@ -79,7 +79,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             // h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}
             btnText={'返回首页'}
             onClickBtn={() => {
-              router.push(FUtil.LinkTo.dashboard());
+              history.push(FUtil.LinkTo.dashboard());
             }}
           />
         </div>
@@ -165,7 +165,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                     .reverse()
                     .map((v) => ({ value: v }))}
                   onChange={(value) => {
-                    router.push(
+                    history.push(
                       FUtil.LinkTo.resourceDetails({
                         resourceID: resourceDetailPage.resource_ID,
                         version: value,

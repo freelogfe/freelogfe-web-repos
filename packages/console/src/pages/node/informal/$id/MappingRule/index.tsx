@@ -40,7 +40,7 @@ import {
   // IRules,
 } from '@/models/informalNodeManagerPage';
 import FUpload from '@/components/FUpload';
-import Prompt from 'umi/prompt';
+import { Prompt } from 'umi';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';

@@ -7,7 +7,7 @@ import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
-import { router } from 'umi';
+import { history } from 'umi';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
 import categoryData from '@/utils/category';
@@ -518,7 +518,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   resourceType: '-1',
                 },
               });
-              router.push(FUtil.LinkTo.market());
+              history.push(FUtil.LinkTo.market());
             }}
           />
         )}
