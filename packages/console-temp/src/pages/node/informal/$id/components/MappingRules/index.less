@@ -1,0 +1,48 @@
+@import '../../../../../../config.less';
+
+.rule {
+  display: flex;
+  align-items: start;
+
+  .ruleIcon {
+    width: 25px;
+  }
+
+  .ruleContent {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    //width: calc(600px - 25px);
+    padding: 2px 0;
+    margin: 0 -5px -5px 0;
+
+    & > div {
+      margin: 0 5px 5px 0;
+    }
+
+    .resourceLabel, .objectLabel, .exhibitLabel {
+      padding: 0 5px;
+      line-height: 20px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .resourceLabel {
+      color: @f-success-color1;
+      background-color: @f-success-color2;
+    }
+
+    .objectLabel {
+      color: @f-warning-color1;
+      background-color: @f-warning-color2;
+    }
+
+    .exhibitLabel {
+      color: #666;
+      background-color: #E0E0E0;
+    }
+
+    .addRule {
+    }
+  }
+}

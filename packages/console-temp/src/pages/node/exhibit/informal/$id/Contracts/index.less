@@ -1,0 +1,195 @@
+.sign {
+  display: flex;
+  height: 500px;
+  align-items: stretch;
+}
+
+.signLeft {
+  width: 330px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
+.signRight {
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  width: 530px;
+  background-color: #FAFBFC;
+  border-radius: 0 20px 20px 0;
+  padding: 20px;
+
+  & > div {
+    margin-bottom: -20px;
+  }
+}
+
+.signLeftNav {
+  font-size: 12px;
+  color: #7A869A;
+  padding: 5px 0;
+}
+
+.signResource {
+  padding: 20px 15px;
+  display: block;
+  border-radius: 20px 0 0 20px;
+
+  .FContentText {
+    max-width: 270px;
+
+    &:hover {
+      color: inherit;
+    }
+  }
+}
+
+.activatedSignResource {
+  background-color: #FAFBFC;
+}
+
+.withoutValidContract {
+  height: 28px;
+  background-color: #FBF5EA;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #E9A923;
+}
+
+.policeTags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-bottom: -2px;
+
+  & > div {
+    padding: 2px 5px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    border: 1px solid #AED0FF;
+    background-color: #E9F2FF;
+    border-radius: 2px;
+    color: #2784FF;
+    display: flex;
+    align-items: center;
+
+    & > label {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.noPoliceTag {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #E9A923;
+}
+
+.Contracts {
+  background-color: white;
+  //margin-bottom: 20px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+//.content {
+//  //padding: 15px 20px 15px;
+//
+//  & > pre {
+//    margin: 0;
+//    padding: 10px 15px;
+//    background-color: #EEF6FF;
+//    border: 1px solid #C2D8F6;
+//    border-radius: 10px;
+//  }
+//}
+
+//.smallTitle {
+//  font-size: 12px;
+//  color: #7A869A;
+//}
+
+.singPolicy {
+  background-color: white;
+  //padding: 20px;
+  //margin-bottom: 20px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  position: relative;
+
+  .PolicyFullScreenBtn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .PolicyFullScreenBtn {
+      visibility: visible;
+    }
+  }
+}
+
+.singPolicyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 0;
+}
+
+//.singPolicyHeaderBtn {
+//  line-height: 26px;
+//  background: #2784FF;
+//  border-radius: 4px;
+//  color: white;
+//  display: inline-block;
+//  padding: 0 15px;
+//  font-size: 12px;
+//
+//  &:hover {
+//    color: white;
+//  }
+//}
+
+.executing {
+  background-color: #42C28C;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+//.footer {
+//  font-size: 12px;
+//  color: #666;
+//  display: flex;
+//  align-items: center;
+//  justify-content: space-between;
+//  border-top: 1px solid #E4E7EB;
+//  padding: 15px 20px;
+//}
+
+.ModalTile {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+}

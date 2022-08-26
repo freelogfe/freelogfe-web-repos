@@ -1,0 +1,50 @@
+@import '../../../../../config.less';
+
+.title {
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+
+  & > label {
+    border: 1px solid @f-warning-color1;
+    color: @f-warning-color1;
+    background-color: @f-warning-color2;
+    padding: 0 5px;
+    line-height: 18px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  & > span {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+}
+
+.url {
+  padding: 0 40px;
+
+  a {
+    text-decoration: underline;
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.navs {
+  & > div {
+    padding: 15px 40px;
+    color: #222;
+    font-size: 14px;
+    cursor: pointer;
+
+    &.activated {
+      background: #F4F5F7;
+      color: #2784FF;
+    }
+  }
+}

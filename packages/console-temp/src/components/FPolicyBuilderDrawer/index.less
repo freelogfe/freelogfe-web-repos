@@ -1,0 +1,264 @@
+@import '../../config.less';
+
+.container {
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.PolicyVerifySuccess {
+  height: 36px;
+  background-color: @f-success-color2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: @f-success-color1;
+  padding: 0 10px;
+
+  & > span {
+    color: #999;
+    font-size: 14px;
+  }
+}
+
+.PolicyVerifyFail {
+  height: 36px;
+  background-color: @f-error-color2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: @f-error-color1;
+  padding: 0 10px;
+
+  & > span {
+    color: #999;
+    font-size: 14px;
+  }
+}
+
+.compositionView {
+  position: relative;
+}
+
+.isCheckingTip {
+  height: 36px;
+  background-color: #EDF6FF;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #2784FF;
+  padding: 0 10px;
+}
+
+.combinationDataError {
+  height: 36px;
+  background-color: #FDEBEC;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #EE4040;
+  padding: 0 10px;
+}
+
+.maskingContainer {
+  position: relative;
+
+  .maskingBox {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: @f-zIndex-drawer;
+  }
+}
+
+.policyHeader {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.policyTitle {
+  width: 340px;
+  //border: none;
+  //font-size: 30px;
+  //line-height: 30px;
+  //width: 320px;
+  //padding: 0;
+  //outline: none;
+
+  //&:focus-visible {
+  //  border: none;
+  //}
+}
+
+.textError {
+  color: @f-error-color1;
+}
+
+.compositionSelect {
+  width: 100%;
+  display: flex;
+  background-color: #F7F7F7;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  height: 38px;
+  color: #BEBEBE;
+  cursor: not-allowed;
+}
+
+.compositionState {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 6px;
+  background-color: #FAFBFC;
+
+  .compositionStateHeader {
+    width: 100%;
+
+    .compositionStateHeader1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        height: 38px;
+      }
+
+      .compositionStateIndex {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: #E5E7EB;
+        font-size: 14px;
+        font-weight: 600;
+        color: #79828D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .compositionStateHeader2 {
+      display: flex;
+      align-items: center;
+    }
+
+
+  }
+
+  .compositionStateBody {
+    padding: 15px;
+    width: 100%;
+    border-top: 1px solid #E5E7EB;
+
+    .compositionStateBodyItem {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .compositionStateBodyEventIndex {
+        width: 80px;
+        flex-shrink: 0;
+      }
+
+      .compositionStateBodyEvent {
+        padding: 15px;
+        width: 580px;
+        background-color: white;
+
+        & > div {
+          display: flex;
+          align-items: center;
+        }
+
+        .compositionStateBodyEventError {
+          color: @f-error-color1;
+          font-size: 12px;
+          padding-top: 5px;
+        }
+      }
+    }
+
+  }
+
+  .compositionStateFooter {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+
+.PolicyShowcase {
+
+  background-color: #FAFBFC;
+  border-radius: 4px;
+
+  .PolicyShowcaseHeader {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E5E7EB;
+
+    & > a {
+      color: #222;
+      font-size: 14px;
+      border-bottom: 2px solid transparent;
+      border-top: 2px solid transparent;
+      height: 45px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+
+      &.AActivated {
+        color: #2784FF;
+        border-bottom-color: #2784FF;
+      }
+    }
+  }
+
+  .PolicyShowcaseBody {
+    height: 355px;
+    overflow: auto;
+
+    & > div {
+      padding: 15px;
+    }
+  }
+}
+
+.SelectTemplateTip {
+  height: 36px;
+  background-color: #FAFBFC;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
+  padding: 0 10px;
+}
+
+
+
+.dropdownRenderAdd {
+  display: flex;
+  height: 32px;
+  border-top: 1px solid #E5E7EB;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

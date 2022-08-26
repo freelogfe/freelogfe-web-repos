@@ -1,0 +1,23 @@
+@import '../../../config.less';
+
+.poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+
+  a {
+    display: block;
+
+    img {
+      display: block;
+      width: 760px;
+      height: 120px;
+
+      @media (max-width: 1600px) {
+        width: 610px;
+        height: 94px;
+      }
+    }
+  }
+}
