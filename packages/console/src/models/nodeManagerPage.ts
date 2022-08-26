@@ -780,7 +780,7 @@ const Model: NodeManagerModelType = {
     },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
-      console.log(payload, 'PPPPP98iwosdfjlsdkj');
+      // console.log(payload, 'PPPPP98iwosdfjlsdkj');
       const { nodeManagerPage }: ConnectState = yield select(
         ({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,

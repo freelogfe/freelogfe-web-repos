@@ -140,9 +140,9 @@ const Model: GlobalModelType = {
       }, false);
     },
     readyI18n({ dispatch }) {
-      console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf##############');
+      // console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf##############');
       FI18n.i18nNext.ready().then(() => {
-        console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf');
+        // console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf');
         dispatch<ChangeAction>({
           type: 'change',
           payload: {

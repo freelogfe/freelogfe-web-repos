@@ -40,7 +40,7 @@ class I18nNext {
       }
     };
     const handleTasks = async () => {
-      console.log(this._loadingData, 'this._loadingData90iowejflksdfjlsdk');
+      // console.log(this._loadingData, 'this._loadingData90iowejflksdfjlsdk');
       if (this._loadingData === 'End') {
         exc();
         return;
