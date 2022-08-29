@@ -107,8 +107,10 @@ const tasks = {
   TS000015: {
     name: '邀请一位好友',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'参与【邀请好友活动】邀请更多好友参与Freelog内测，可重复领取邀请好友活动奖励， 且被邀请好友可领取3元现金奖励。'}
-                                   type='highlight' />
+      <FComponentsLib.FContentText
+        text={'参与【邀请好友活动】邀请更多好友参与Freelog内测，可重复领取邀请好友活动奖励， 且被邀请好友可领取3元现金奖励。'}
+        type='highlight'
+      />
     </div>),
     url: FI18n.i18nNext.t('event_newbie_invitefriend_link'),
     onClick() {
