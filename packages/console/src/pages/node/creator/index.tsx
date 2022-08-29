@@ -80,11 +80,11 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           />
         </div>
         <div style={{ width: 18 }}>
-          {nodeCreatorPage.domainVerify === 'verifying' && <FLoading />}
-          {nodeCreatorPage.domainVerify === 'verified' && !nodeCreatorPage.domainError && <FCheck />}
+          {nodeCreatorPage.nodeDomainState === 'verifying' && <FLoading />}
+          {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError && <FCheck />}
         </div>
       </Space>
-      <pre className={styles.errorTip}>{nodeCreatorPage.domainError}</pre>
+      <pre className={styles.errorTip}>{nodeCreatorPage.nodeDomainError}</pre>
       <Space size={10}>
         <div className={styles.name}>
           <FComponentsLib.FContentText type='negative' text={'节点名称'} />
@@ -109,15 +109,15 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           </div>
         </div>
         <div style={{ width: 18 }}>
-          {nodeCreatorPage.nameVerify === 'verifying' && <FLoading />}
-          {nodeCreatorPage.nameVerify === 'verified' && !nodeCreatorPage.nameError && <FCheck />}
+          {nodeCreatorPage.nodeNameState === 'verifying' && <FLoading />}
+          {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError && <FCheck />}
         </div>
       </Space>
-      <pre className={styles.errorTip}>{nodeCreatorPage.nameError}</pre>
+      <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
       <FComponentsLib.FRectBtn
         className={styles.button}
-        disabled={nodeCreatorPage.domainVerify !== 'verified' || !!nodeCreatorPage.domainError
-        || nodeCreatorPage.nameVerify !== 'verified' || !!nodeCreatorPage.nameError}
+        disabled={nodeCreatorPage.nodeDomainState !== 'verified' || !!nodeCreatorPage.nodeDomainError
+        || nodeCreatorPage.nodeNameState !== 'verified' || !!nodeCreatorPage.nodeNameError}
         onClick={() => {
           dispatch<OnClick_CreateBtn_Action>({
             type: 'nodeCreatorPage/onClick_CreateBtn',

@@ -7,13 +7,13 @@ import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
 
 export interface NodeCreatorPageModelState {
-  nodeName: string;
-  nameVerify: 'init' | 'verifying' | 'verified';
-  nameError: string;
-
   nodeDomain: string;
-  domainVerify: 'init' | 'verifying' | 'verified';
-  domainError: string;
+  nodeDomainState: 'init' | 'input' | 'verifying' | 'verified';
+  nodeDomainError: string;
+
+  nodeName: string;
+  nodeNameState: 'init' | 'input' | 'verifying' | 'verified';
+  nodeNameError: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -77,12 +77,12 @@ interface NodeCreatorPageModelType {
 
 const initStates: NodeCreatorPageModelState = {
   nodeDomain: '',
-  domainVerify: 'init',
-  domainError: '',
+  nodeDomainState: 'init',
+  nodeDomainError: '',
 
   nodeName: '',
-  nameVerify: 'init',
-  nameError: '',
+  nodeNameState: 'init',
+  nodeNameError: '',
 };
 
 const Model: NodeCreatorPageModelType = {
@@ -103,8 +103,8 @@ const Model: NodeCreatorPageModelType = {
         type: 'change',
         payload: {
           nodeDomain: payload.value.trim().toLocaleLowerCase(),
-          domainVerify: 'verified',
-          domainError: '',
+          nodeDomainState: 'input',
+          nodeDomainError: '',
         },
       });
     },
@@ -113,10 +113,10 @@ const Model: NodeCreatorPageModelType = {
         nodeCreatorPage,
       }));
 
-      let domainError: string = '';
+      let nodeDomainError: string = '';
 
       if (!FUtil.Regexp.NODE_DOMAIN.test(nodeCreatorPage.nodeDomain)) {
-        domainError = '只能包括小写字母、数字和短横线（-）。\n' +
+        nodeDomainError = '只能包括小写字母、数字和短横线（-）。\n' +
           '必须以小写字母或者数字开头和结尾。\n' +
           '长度必须在 4-24 字符之间。';
       }
@@ -124,25 +124,25 @@ const Model: NodeCreatorPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          domainVerify: 'verifying',
+          nodeDomainState: 'verifying',
         },
       });
 
-      if (!domainError) {
+      if (!nodeDomainError) {
         const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeDomain: nodeCreatorPage.nodeDomain,
         };
         const { data: data1 } = yield call(FServiceAPI.Node.details, params1);
         if (data1) {
-          domainError = '该节点地址已经存在或已经被其它用户使用';
+          nodeDomainError = '该节点地址已经存在或已经被其它用户使用';
         }
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          domainVerify: 'verified',
-          domainError,
+          nodeDomainState: 'verified',
+          nodeDomainError,
         },
       });
     },
@@ -151,11 +151,10 @@ const Model: NodeCreatorPageModelType = {
         type: 'change',
         payload: {
           nodeName: payload.value.trim().toLowerCase(),
-          // nameVerify: 1,
-          nameError: '',
+          nodeNameState: 'input',
+          nodeNameError: '',
         },
       });
-
 
     },
     * onBlur_NameInput(action: OnBlur_NameInput_Action, { select, call, put }: EffectsCommandMap) {
@@ -163,37 +162,37 @@ const Model: NodeCreatorPageModelType = {
         nodeCreatorPage,
       }));
 
-      let nameError: string = '';
+      let nodeNameError: string = '';
 
       if (!FUtil.Regexp.NODE_NAME.test(nodeCreatorPage.nodeName)) {
         // nameError = '长度必须在 1-100 字符之间。\n' +
         //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
         //   '开头和结尾的空格会自动删除。';
-        nameError = FI18n.i18nNext.t('naming_convention_node_name');
+        nodeNameError = FI18n.i18nNext.t('naming_convention_node_name');
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nameVerify: 'verifying',
+          nodeNameState: 'verifying',
         },
       });
 
-      if (!nameError) {
+      if (!nodeNameError) {
         const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeName: nodeCreatorPage.nodeName,
         };
         const { data: data2 } = yield call(FServiceAPI.Node.details, params2);
         if (data2) {
-          nameError = '该节点名称已经存在或已经被其它用户使用';
+          nodeNameError = '该节点名称已经存在或已经被其它用户使用';
         }
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nameVerify: 'verified',
-          nameError,
+          nodeNameState: 'verified',
+          nodeNameError,
         },
       });
     },
@@ -202,7 +201,7 @@ const Model: NodeCreatorPageModelType = {
         nodeCreatorPage,
       }));
 
-      if (nodeCreatorPage.domainError || nodeCreatorPage.nameError) {
+      if (nodeCreatorPage.nodeDomainError || nodeCreatorPage.nodeNameError) {
         return;
       }
 
