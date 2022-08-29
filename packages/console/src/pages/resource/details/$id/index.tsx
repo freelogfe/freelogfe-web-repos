@@ -98,7 +98,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
         <div className={styles.header}>
           <Space size={10}>
             <label className={styles.resourceType}>
-              {resourceDetailPage.resource_Info?.type || ''}
+              {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
             </label>
             <FComponentsLib.FTitleText
               style={{ width: 650 }}
