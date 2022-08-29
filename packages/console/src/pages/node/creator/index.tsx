@@ -4,14 +4,11 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodesModelState } from '@/models/connect';
 import {
-  // CreateNodeAction,
   InitModelStatesAction,
   OnBlur_DomainInput_Action,
   OnBlur_NameInput_Action,
   OnChange_DomainInput_Action,
   OnChange_NameInput_Action, OnClick_CreateBtn_Action,
-  // OnChangeDomainAction,
-  // OnChangeNameAction,
 } from '@/models/nodes';
 import { FCheck, FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
@@ -19,6 +16,7 @@ import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 import FComponentsLib from '@freelog/components-lib';
+import { FUtil } from '@freelog/tools-lib';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -38,11 +36,11 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
       type: 'nodeCreatorPage/onUnmount_Page',
     });
   });
-  React.useEffect(() => {
-    dispatch<InitModelStatesAction>({
-      type: 'nodes/initModelStates',
-    });
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch<InitModelStatesAction>({
+  //     type: 'nodes/initModelStates',
+  //   });
+  // }, []);
 
   return (<FContentLayout header={<FComponentsLib.FTitleText
     type='h1'
@@ -78,7 +76,10 @@ function NodeCreator({ nodes, dispatch }: NodeCreatorProps) {
               // })}
             />
           </div>
-          <FComponentsLib.FContentText type='negative' text={'.freelog.com'} />
+          <FComponentsLib.FContentText
+            type='negative'
+            text={FUtil.Format.completeUrlByDomain('').replace(/(http|https):\/\//, '')}
+          />
         </div>
         <div style={{ width: 18 }}>
           {nodes.domainVerify === 'verifying' && <FLoading />}
