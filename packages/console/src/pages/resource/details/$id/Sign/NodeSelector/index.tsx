@@ -47,6 +47,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
       <a
         href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}
+        target={'_blank'}
       >
         <Space size={10}>
           <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
