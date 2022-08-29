@@ -68,7 +68,7 @@ const tasks = {
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
           type='primary'
-        >节点商使用教</a>
+        >节点商使用教程</a>
       </Space>
     </div>),
     onClick() {

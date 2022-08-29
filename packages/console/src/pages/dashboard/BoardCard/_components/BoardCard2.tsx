@@ -54,7 +54,7 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5}>
+      <Space size={5} style={{ flexWrap: 'wrap' }}>
         <FComponentsLib.FContentText text={'可查阅'} />
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
@@ -84,7 +84,7 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5}>
+      <Space size={5} style={{ flexWrap: 'wrap' }}>
         <FComponentsLib.FContentText text={'可查阅'} />
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
