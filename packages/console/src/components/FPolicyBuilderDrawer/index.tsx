@@ -1577,13 +1577,13 @@ function PolicyShowcase({ code, content, view }: PolicyShowcaseProps) {
         }}
         className={[activated === 'code' ? styles.AActivated : ''].join(' ')}
       >策略代码</a>
-      <div style={{ width: 20 }} />
-      <a
-        onClick={() => {
-          setActivated('view');
-        }}
-        className={[activated === 'view' ? styles.AActivated : ''].join(' ')}
-      >状态机视图</a>
+      {/*<div style={{ width: 20 }} />*/}
+      {/*<a*/}
+      {/*  onClick={() => {*/}
+      {/*    setActivated('view');*/}
+      {/*  }}*/}
+      {/*  className={[activated === 'view' ? styles.AActivated : ''].join(' ')}*/}
+      {/*>状态机视图</a>*/}
     </div>
 
     <div className={styles.PolicyShowcaseBody}>

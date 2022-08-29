@@ -62,14 +62,14 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
             to={FUtil.LinkTo.wallet()}
             className={[styles.FLink, showPage === 'wallet' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_my_wallet')}</FLink>
           <FLink
-            to={FUtil.LinkTo.reward()}
-            className={[styles.FLink, showPage === 'reward' ? styles.FLinkActive : ''].join(' ')}>活动奖励</FLink>
-          <FLink
             to={FUtil.LinkTo.contract()}
             className={[styles.FLink, showPage === 'contract' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_my_contracts')}</FLink>
           <FLink
             to={FUtil.LinkTo.setting()}
             className={[styles.FLink, showPage === 'setting' ? styles.FLinkActive : ''].join(' ')}>{FI18n.i18nNext.t('tab_settings')}</FLink>
+          <FLink
+            to={FUtil.LinkTo.reward()}
+            className={[styles.FLink, showPage === 'reward' ? styles.FLinkActive : ''].join(' ')}>活动奖励</FLink>
         </div>
       </div>
 

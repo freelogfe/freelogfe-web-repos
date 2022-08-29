@@ -153,11 +153,13 @@ const Model: RewardPageModelType = {
           records: data_records.dataList.map((dr: any) => {
             const dataAndTime: string[] = FUtil.Format.formatDateTime(dr.createTime, true).split(' ');
             // console.log(dataAndTime, '9i8ojklwefsdjlfkjldataAndTime');
+            const extra = JSON.parse(dr.extra);
             return {
               key: dr.id,
               date: dataAndTime[0],
               time: dataAndTime[1],
-              digest: dr.extra,
+              digest: extra,
+              digest: extra?.mark || extra?.remark || '---',
               transactionAmount: dr.changedAmount,
               afterBalance: dr.afterBalance,
             };
