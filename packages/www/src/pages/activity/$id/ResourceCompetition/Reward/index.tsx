@@ -5,12 +5,18 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
+import * as AHooks from 'ahooks';
 
 interface RewardProps {
 
 }
 
 function Reward({}: RewardProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
   return (<div className={styles.reward}>
     <div className={styles.rewardTitle}>活动奖励</div>
     <div style={{ height: 40 }} />
@@ -129,7 +135,7 @@ function Reward({}: RewardProps) {
           <div style={{ width: 10 }} />
           <FPentagram />
         </div>
-        <div style={{ height: 20 }} />
+        <div style={{ height: 60 }} />
         <div className={styles.title3}>
           <span>每创建并发行1个资源可领取 5～20元 现金奖励</span>
         </div>
@@ -137,20 +143,20 @@ function Reward({}: RewardProps) {
         <div className={styles.title3}>
           <span>游戏类资源可获得20元，漫画/小说/图片等类型资源可获得5元</span>
         </div>
-        <div style={{ height: 20 }} />
+        <div style={{ height: 70 }} />
         <div className={styles.title4}>* 同一用户限领3次资源发行奖励</div>
-        <div style={{ height: 20 }} />
-        <Space
-          size={10}
-          style={{
-            padding: '0 20px',
-            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            height: 68,
-            borderRadius: 10,
-          }}>
-          <span>15元现金奖励待领取</span>
-          <FComponentsLib.FRectBtn type='primary'>立即领取</FComponentsLib.FRectBtn>
-        </Space>
+        {/*<div style={{ height: 20 }} />*/}
+        {/*<Space*/}
+        {/*  size={10}*/}
+        {/*  style={{*/}
+        {/*    padding: '0 20px',*/}
+        {/*    backgroundColor: 'rgba(0, 0, 0, 0.04)',*/}
+        {/*    height: 68,*/}
+        {/*    borderRadius: 10,*/}
+        {/*  }}>*/}
+        {/*  <span>15元现金奖励待领取</span>*/}
+        {/*  <FComponentsLib.FRectBtn type='primary'>立即领取</FComponentsLib.FRectBtn>*/}
+        {/*</Space>*/}
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
         <div className={styles.title2} style={{ color: '#BD10E0' }}>

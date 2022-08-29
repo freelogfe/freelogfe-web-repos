@@ -91,6 +91,19 @@ export function getBetaApply2({recordId, ...params}: GetBetaApply2ParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testQualifications/beta/apply/${recordId}`,
-    data: params,
+    params: params,
+  });
+}
+
+// 被邀请列表
+interface InviteesParamsType {
+  userId: number;
+}
+
+export function invitees({...params}: InviteesParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testQualifications/beta/codes/invitees`,
+    params: params,
   });
 }

@@ -173,3 +173,15 @@ export function getWechatOfficialAccountInfo(params: GetWechatOfficialAccountInf
     params: params,
   });
 }
+
+// 列出抽奖结果
+interface LotteryListParamsType {
+}
+
+export function lotteryList(params: LotteryListParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/lottery/resource/list`,
+    params: params,
+  });
+}
