@@ -7,13 +7,10 @@ export default defineConfig({
   },
   antd: {},
   dva: {},
-  // dynamicImport: {
-  //   loading: '@/components/FGlobalLoading',
-  // },
+  dynamicImport: {
+    loading: '@/components/FGlobalLoading',
+  },
   routes: routes,
-  // routes: [
-  //   { path: '/', component: '@/pages/index' },
-  // ],
   fastRefresh: {},
   devServer: {},
   proxy: {
