@@ -185,3 +185,17 @@ export function lotteryList(params: LotteryListParamsType = {}) {
     params: params,
   });
 }
+
+// 显示抽奖结果
+interface LotteryShowParamsType {
+  startDate: string;
+  limitDate: string;
+}
+
+export function lotteryShow(params: LotteryShowParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/lottery/resource/show`,
+    params: params,
+  });
+}

@@ -4,17 +4,42 @@ import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
-import { ConnectState } from '@/models/connect';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
+import { FServiceAPI } from '@freelog/tools-lib';
+import moment from 'moment';
+
 
 interface RewardProps {
-
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function Reward({}: RewardProps) {
+function Reward({ activityDetailsPage }: RewardProps) {
 
-  AHooks.useMount(() => {
+  const [luckyPrizes, set_luckyPrizes] = React.useState<{
+    name: string;
+    startDate: string;
+    endDate: string;
+  }[]>([]);
 
+  AHooks.useMount(async () => {
+    const today: string = moment().format('YYYY-MM-DD');
+    const { data }: { data: { resourceUsername: string }[] } = await FServiceAPI.Activity.lotteryShow({
+      startDate: activityDetailsPage.startTime ? activityDetailsPage.startTime.replace(/·/g, '-') : '2022-01-01',
+      limitDate: today,
+      // startDate: '2022-01-01',
+      // limitDate: '2022-12-31',
+    });
+    // console.log(data, '#@Fsd809fioasdjfisdajf;lsdjflsdajflkj');
+    set_luckyPrizes(data.slice(0, 3).map((d, index) => {
+      const startDate = moment().week(moment().week() - index - 1).startOf('isoWeek').format('YYYY·MM·DD');
+      const endDate = moment().week(moment().week() - index - 1).endOf('isoWeek').format('YYYY·MM·DD');
+      return {
+        name: d.resourceUsername,
+        startDate: startDate,
+        endDate: endDate,
+      };
+    }));
   });
 
   return (<div className={styles.reward}>
@@ -176,42 +201,36 @@ function Reward({}: RewardProps) {
         <Space
           size={12}
           direction='vertical'>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+          {
+            luckyPrizes.length === 0 && (<div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+              {/*<span style={{*/}
+              {/*  color: '#222',*/}
+              {/*  lineHeight: '22px',*/}
+              {/*  fontSize: 16,*/}
+              {/*}}>{lp.name}</span>*/}
+              <span style={{
+                color: '#999',
+                lineHeight: '20px',
+                fontSize: 14,
+              }}>未开奖</span>
+            </div>)
+          }
+          {
+            luckyPrizes.length > 0 && luckyPrizes.map((lp) => {
+              return (<div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
             <span style={{
               color: '#222',
               lineHeight: '22px',
               fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
-            <span style={{
-              color: '#222',
-              lineHeight: '22px',
-              fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
-            <span style={{
-              color: '#222',
-              lineHeight: '22px',
-              fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
+            }}>{lp.name}</span>
+                <span style={{
+                  color: '#999',
+                  lineHeight: '20px',
+                  fontSize: 14,
+                }}>({lp.startDate}~{lp.endDate})</span>
+              </div>);
+            })
+          }
         </Space>
       </div>
     </div>
