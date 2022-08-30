@@ -160,9 +160,9 @@ function FLayout({
         },
       ];
 
-  if (global.globalLoading) {
-    return <FLoadingTip height={window.innerHeight} />;
-  }
+  // if (global.globalLoading) {
+  //   return <FLoadingTip height={window.innerHeight} />;
+  // }
 
   return (
     <Layout className={styles.Layout}>
