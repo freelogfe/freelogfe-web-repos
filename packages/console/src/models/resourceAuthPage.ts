@@ -185,7 +185,7 @@ const Model: ResourceAuthPageModelType = {
         payload: {
           policies: policies,
           baseUastResources: data_ResourceDetails.baseUpcastResources || [],
-          status: data_ResourceDetails.status
+          status: data_ResourceDetails.status,
         },
       });
     },
@@ -222,12 +222,13 @@ const Model: ResourceAuthPageModelType = {
 
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             contractsAuthorized: [],
           },
         });
+        return;
       }
 
       const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
@@ -308,13 +309,13 @@ const Model: ResourceAuthPageModelType = {
             .map((c: any) => {
               return c.contractId;
             }),
-          policies: allEnabledPolicies.map((policy: any) => ({
+          policies: currentResource.status === 1 ? allEnabledPolicies.map((policy: any) => ({
             // id: policy.policyId,
             // title: policy.policyName,
             // code: policy.policyText,
             fullInfo: policy,
             allEnabledVersions: allEnabledVersions,
-          })),
+          })) : [],
         };
       });
       // console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
