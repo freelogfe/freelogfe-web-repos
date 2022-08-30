@@ -37,10 +37,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <label>test</label>
       &nbsp;&nbsp;
       <span style={{
-        display: 'inline-block',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
+        display: 'inline',
         width: 155
       }}>{informalNodeManagerPage.node_Name}</span>
     </div>

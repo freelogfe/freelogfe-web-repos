@@ -31,7 +31,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <FComponentsLib.FTitleText
             type='h2'
             text={nodeManagerPage.nodeName}
-            singleRow
+            // singleRow
           />
           <div style={{ height: 15 }} />
           <Space size={10} className={styles.url}>
