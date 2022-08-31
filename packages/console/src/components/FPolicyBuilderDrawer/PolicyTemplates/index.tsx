@@ -36,7 +36,7 @@ interface PolicyTemplatesProps {
 //   'finish:\n' +
 //   '  terminate';
 
-function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
+function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
   // const [translation1, setTranslation1] = React.useState<string>('');
   // const [translation2, setTranslation2] = React.useState<string>('');
 
