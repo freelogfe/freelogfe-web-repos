@@ -7,9 +7,9 @@ export default defineConfig({
   },
   antd: {},
   dva: {},
-  dynamicImport: {
-    loading: '@/components/FGlobalLoading',
-  },
+  // dynamicImport: {
+  //   loading: '@/components/FGlobalLoading',
+  // },
   routes: routes,
   fastRefresh: {},
   devServer: {},
