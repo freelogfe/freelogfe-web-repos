@@ -801,10 +801,10 @@
   dependencies:
     antlr4 "4.8.0"
 
-"@freelog/resource-policy-lang@^1.4.8":
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.4.8.tgz#65ee4930c49b2075d38f0f53421adc3930359ecf"
-  integrity sha512-LouK7Q3PWoTYuW1ekztafm06AqwtsmRI9NhVQZEsBrfSvmlSNHo/NG6OsAY8cmhrxb9nklaCnfEWfzI2S4bR2w==
+"@freelog/resource-policy-lang@^1.4.9":
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/@freelog/resource-policy-lang/-/resource-policy-lang-1.4.9.tgz#7af468770ddbec851c70a038516d0775e80dfa3f"
+  integrity sha512-4gBRkvZ8e2lUjYtnCokqVdl0GHfm09j1JCQEgsjmzm5AS5DrCHKnWasWHL2HR3ktKqLRxA32F6AQAyZGbp2Gkg==
   dependencies:
     "@types/node" "^15.3.1"
     antlr4 "4.8.0"
