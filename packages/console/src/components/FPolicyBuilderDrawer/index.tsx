@@ -1749,7 +1749,7 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
  * @param code 策略代码
  * @param targetType 标的物类型
  */
-export async function policyCodeTranslationToText(code: string, targetType: string): Promise<{
+export async function policyCodeTranslationToText(code: string, targetType: 'resource' | 'presentable'): Promise<{
   error: string[] | null;
   text?: string;
 }> {
