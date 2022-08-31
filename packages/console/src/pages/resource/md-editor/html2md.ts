@@ -31,7 +31,7 @@ export const html2md = (htmlText: string) => {
       markdownText = markdownText.replace(/`#preContent#`/i, language + content);
     }
     // 清除 <pre>、</pre> 标签
-    markdownText = markdownText.replace(/<pre>/gi, "```").replace(/<\/pre>/gi, "[~wrap]```[~wrap][~wrap]");
+    markdownText = markdownText.replace(/<pre\s*[^>]*?>/gi, "```").replace(/<\/pre>/gi, "[~wrap]```[~wrap][~wrap]");
   }
 
   // 储存 <code> 内容

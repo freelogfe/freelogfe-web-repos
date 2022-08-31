@@ -2,7 +2,6 @@ import {
   IToolbarConfig,
   IEditorConfig,
   IButtonMenu,
-  IDomEditor,
   Boot,
 } from '@wangeditor/editor';
 
@@ -44,7 +43,7 @@ export const toolbarConfig: Partial<IToolbarConfig> = {
     'undo',
     'redo',
     'fullScreen',
-    'myMenu',
+    'pictureMenu',
   ],
 };
 
@@ -59,21 +58,21 @@ export const editorConfig: Partial<IEditorConfig> = {
   },
 };
 
-/** TEST */
-class MyMenu implements IButtonMenu {
+/** 插入图片资源 */
+class PictureMenu implements IButtonMenu {
   title: string;
   tag: string;
   iconSvg: string;
 
   constructor() {
-    this.title = 'My menu title'; // 自定义菜单标题
+    this.title = '插入图片资源';
     this.iconSvg =
-      '<svg t="1661327645128" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4353" width="200" height="200"><path d="M682.666667 85.333333H341.333333A85.333333 85.333333 0 0 0 256 170.666667v85.333333h512V170.666667A85.333333 85.333333 0 0 0 682.666667 85.333333z m0 56.888889l5.12 0.455111A28.444444 28.444444 0 0 1 711.111111 170.666667v28.444444h-398.222222V170.666667a28.444444 28.444444 0 0 1 28.444444-28.444445h341.333334z" p-id="4354"></path><path d="M796.444444 199.111111H227.555556A85.333333 85.333333 0 0 0 142.222222 284.444444v85.333334h739.555556V284.444444A85.333333 85.333333 0 0 0 796.444444 199.111111z m0 56.888889l5.12 0.455111A28.444444 28.444444 0 0 1 824.888889 284.444444v28.444445h-625.777778V284.444444a28.444444 28.444444 0 0 1 28.444445-28.444444h568.888888z" p-id="4355"></path><path d="M910.222222 312.888889H113.777778A85.333333 85.333333 0 0 0 28.444444 398.222222v455.111111A85.333333 85.333333 0 0 0 113.777778 938.666667h796.444444a85.333333 85.333333 0 0 0 85.333334-85.333334V398.222222A85.333333 85.333333 0 0 0 910.222222 312.888889z m-796.444444 56.888889h796.444444a28.444444 28.444444 0 0 1 28.444445 28.444444v455.111111a28.444444 28.444444 0 0 1-28.444445 28.444445H113.777778a28.444444 28.444444 0 0 1-28.444445-28.444445V398.222222a28.444444 28.444444 0 0 1 28.444445-28.444444z" p-id="4356"></path><path d="M398.222222 512v227.555556l284.444445-113.777778z" p-id="4357"></path></svg>'; // 可选
+      '<div class=""><svg t="1661926260314" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4207" width="200" height="200"><path d="M910.222222 113.777778a113.777778 113.777778 0 0 1 113.777778 113.777778v568.888888a113.777778 113.777778 0 0 1-113.777778 113.777778H113.777778a113.777778 113.777778 0 0 1-113.777778-113.777778V227.555556a113.777778 113.777778 0 0 1 113.777778-113.777778h796.444444z m0 56.888889H113.777778a56.888889 56.888889 0 0 0-56.490667 50.232889L56.888889 227.555556v568.888888a56.888889 56.888889 0 0 0 50.232889 56.490667L113.777778 853.333333h796.444444a56.888889 56.888889 0 0 0 56.490667-50.232889L967.111111 796.444444V227.555556a56.888889 56.888889 0 0 0-50.232889-56.490667L910.222222 170.666667zM342.243556 323.925333l126.236444 315.562667 160.938667-107.178667 244.053333 244.053334-40.277333 40.220444-211.057778-211.114667-180.394667 120.32-101.376-253.269333-143.530666 335.132445-52.337778-22.414223 197.745778-461.368889zM682.666667 227.555556a113.777778 113.777778 0 1 1 0 227.555555 113.777778 113.777778 0 0 1 0-227.555555z m0 56.888888a56.888889 56.888889 0 1 0 0 113.777778 56.888889 56.888889 0 0 0 0-113.777778z" fill="#222222" p-id="4208"></path></svg></div>';
     this.tag = 'button';
   }
 
   getValue(): string | boolean {
-    return ' helloasdfasdf ';
+    return false;
   }
   isActive(): boolean {
     return false;
@@ -81,15 +80,17 @@ class MyMenu implements IButtonMenu {
   isDisabled(): boolean {
     return false;
   }
-  exec(editor: any, value: string | boolean) {
-    editor.test();
-    editor.insertText(value as string);
+  exec(editor: any) {
+    console.error(1)
+    editor.dangerouslyInsertHtml('<div data-w-e-type="audio" data-w-e-is-void><audio controls="true" ><source src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a"/></div>');
+    console.error(2)
+    // editor.openDrawer('图片');
   }
 }
-const myMenuConf = {
-  key: 'myMenu',
+const pictureMenuBtnConf = {
+  key: 'pictureMenu',
   factory() {
-    return new MyMenu();
+    return new PictureMenu();
   },
 };
-Boot.registerMenu(myMenuConf);
+Boot.registerMenu(pictureMenuBtnConf);
