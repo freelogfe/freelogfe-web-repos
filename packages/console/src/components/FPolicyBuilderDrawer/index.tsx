@@ -3,7 +3,9 @@ import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
-import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
+import PolicyTemplates from './PolicyTemplates';
+// , { title1, text1, title2, text2 }
+
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
@@ -433,127 +435,132 @@ function FPolicyBuilder({
     set_Combination_Data(result);
   }
 
-  function onClick_SelectTemplateBtn(num: 1 | 2) {
+  async function onClick_SelectTemplateBtn(title: string, text: string) {
     // console.log(num, 'handleTemplatehandleTemplate23423423');
     setTemplateVisible(false);
-    if (num === 1) {
+    // if (num === 1) {
 
-      setTitleInput(title1);
-      setTitleInputError(verifyTitle(title1, alreadyUsedTitles));
+      setTitleInput(title);
+      setTitleInputError(verifyTitle(title, alreadyUsedTitles));
 
       if (editMode === 'code') {
         set_Code_IsDirty(true);
-        set_Code_Input(text1);
+        set_Code_Input(text);
         set_Code_InputErrors([]);
       } else {
-        const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-        const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-        const result: CombinationStructureType = [
-          {
-            randomID: initialRandomID,
-            type: 'initial',
-            name: 'initial',
-            nameError: '',
-            isNameDuplicate: false,
-            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-            authorizationChecked: ['active'],
-            events: [
-              {
-                randomID: FUtil.Tool.generateRandomCode(10),
-                type: 'relativeTime',
-                target: finishRandomID,
-                relativeTime_Num: '1',
-                relativeTime_NumError: '',
-                relativeTime_Unit: 'month',
-              },
-            ],
-          },
-          {
-            randomID: finishRandomID,
-            type: 'other',
-            name: 'finish',
-            nameError: '',
-            isNameDuplicate: false,
-            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-            authorizationChecked: [],
-            events: [
-              {
-                randomID: FUtil.Tool.generateRandomCode(10),
-                type: 'terminate',
-              },
-            ],
-          },
-        ];
-        set_Combination_Data(result);
+        // const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+        // const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
+        // const result: CombinationStructureType = codeToData()
+        const { errors, results } = await codeToData({
+          text: text,
+          targetType: targetType,
+        });
+        //   [
+        //   {
+        //     randomID: initialRandomID,
+        //     type: 'initial',
+        //     name: 'initial',
+        //     nameError: '',
+        //     isNameDuplicate: false,
+        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+        //     authorizationChecked: ['active'],
+        //     events: [
+        //       {
+        //         randomID: FUtil.Tool.generateRandomCode(10),
+        //         type: 'relativeTime',
+        //         target: finishRandomID,
+        //         relativeTime_Num: '1',
+        //         relativeTime_NumError: '',
+        //         relativeTime_Unit: 'month',
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     randomID: finishRandomID,
+        //     type: 'other',
+        //     name: 'finish',
+        //     nameError: '',
+        //     isNameDuplicate: false,
+        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+        //     authorizationChecked: [],
+        //     events: [
+        //       {
+        //         randomID: FUtil.Tool.generateRandomCode(10),
+        //         type: 'terminate',
+        //       },
+        //     ],
+        //   },
+        // ];
+        results && set_Combination_Data(results);
       }
-    } else {
-      setTitleInput(title2);
-      setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
-      if (editMode === 'code') {
-        set_Code_IsDirty(true);
-        set_Code_Input(text2);
-        set_Code_InputErrors([]);
-      } else {
-        const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-        const authRandomID: string = FUtil.Tool.generateRandomCode(10);
-        const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-        const result: CombinationStructureType = [
-          {
-            randomID: initialRandomID,
-            type: 'initial',
-            name: 'initial',
-            nameError: '',
-            isNameDuplicate: false,
-            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-            authorizationChecked: [],
-            events: [
-              {
-                randomID: FUtil.Tool.generateRandomCode(10),
-                type: 'payment',
-                target: authRandomID,
-                payment_Amount: '10',
-                payment_AmountError: '',
-              },
-            ],
-          },
-          {
-            randomID: authRandomID,
-            type: 'other',
-            name: 'auth',
-            nameError: '',
-            isNameDuplicate: false,
-            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-            authorizationChecked: ['active'],
-            events: [
-              {
-                randomID: FUtil.Tool.generateRandomCode(10),
-                type: 'relativeTime',
-                target: finishRandomID,
-                relativeTime_Num: '1',
-                relativeTime_NumError: '',
-                relativeTime_Unit: 'month',
-              },
-            ],
-          },
-          {
-            randomID: finishRandomID,
-            type: 'other',
-            name: 'finish',
-            nameError: '',
-            isNameDuplicate: false,
-            // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-            authorizationChecked: [],
-            events: [
-              {
-                randomID: FUtil.Tool.generateRandomCode(10),
-                type: 'terminate',
-              },
-            ],
-          },
-        ];
-        set_Combination_Data(result);
-      }
-    }
+    // } else {
+    //   setTitleInput(title2);
+    //   setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
+    //   if (editMode === 'code') {
+    //     set_Code_IsDirty(true);
+    //     set_Code_Input(text2);
+    //     set_Code_InputErrors([]);
+    //   } else {
+    //     const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+    //     const authRandomID: string = FUtil.Tool.generateRandomCode(10);
+    //     const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
+    //     const result: CombinationStructureType = [
+    //       {
+    //         randomID: initialRandomID,
+    //         type: 'initial',
+    //         name: 'initial',
+    //         nameError: '',
+    //         isNameDuplicate: false,
+    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+    //         authorizationChecked: [],
+    //         events: [
+    //           {
+    //             randomID: FUtil.Tool.generateRandomCode(10),
+    //             type: 'payment',
+    //             target: authRandomID,
+    //             payment_Amount: '10',
+    //             payment_AmountError: '',
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         randomID: authRandomID,
+    //         type: 'other',
+    //         name: 'auth',
+    //         nameError: '',
+    //         isNameDuplicate: false,
+    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+    //         authorizationChecked: ['active'],
+    //         events: [
+    //           {
+    //             randomID: FUtil.Tool.generateRandomCode(10),
+    //             type: 'relativeTime',
+    //             target: finishRandomID,
+    //             relativeTime_Num: '1',
+    //             relativeTime_NumError: '',
+    //             relativeTime_Unit: 'month',
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         randomID: finishRandomID,
+    //         type: 'other',
+    //         name: 'finish',
+    //         nameError: '',
+    //         isNameDuplicate: false,
+    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+    //         authorizationChecked: [],
+    //         events: [
+    //           {
+    //             randomID: FUtil.Tool.generateRandomCode(10),
+    //             type: 'terminate',
+    //           },
+    //         ],
+    //       },
+    //     ];
+    //     set_Combination_Data(result);
+    //   }
+    // }
   }
 
   async function onClick_VerifyBtn() {
@@ -1294,19 +1301,35 @@ function FPolicyBuilder({
         </div>
         <div style={{ height: 30 }} />
         <PolicyTemplates
-          onClickSelect={(num) => {
+          // onClickSelect={(num) => {
+            // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
+            //   return onClick_SelectTemplateBtn(num);
+            // }
+            // if (editMode === 'code' && code_Input === initStates.code_Input) {
+            //   return onClick_SelectTemplateBtn(num);
+            // }
+            // Modal.confirm({
+            //   title: FI18n.i18nNext.t('alert_plan_cover'),
+            //   okText: FI18n.i18nNext.t('btn_import'),
+            //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+            //   onOk() {
+            //     // onClick_SelectTemplateBtn(num);
+            //   },
+            // });
+            // }}
+          onSelect={({ title, text }) => {
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
-              return onClick_SelectTemplateBtn(num);
+              return onClick_SelectTemplateBtn(title, text);
             }
             if (editMode === 'code' && code_Input === initStates.code_Input) {
-              return onClick_SelectTemplateBtn(num);
+              return onClick_SelectTemplateBtn(title, text);
             }
             Modal.confirm({
               title: FI18n.i18nNext.t('alert_plan_cover'),
               okText: FI18n.i18nNext.t('btn_import'),
               cancelText: FI18n.i18nNext.t('btn_cancel'),
               onOk() {
-                onClick_SelectTemplateBtn(num);
+                onClick_SelectTemplateBtn(title, text);
               },
             });
           }}

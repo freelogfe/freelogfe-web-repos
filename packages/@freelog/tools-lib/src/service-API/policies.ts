@@ -9,9 +9,6 @@ interface PoliciesParamsType {
 }
 
 export function policies(params: PoliciesParamsType) {
-  // return FUtil.Axios.get('/v2/policies', {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/policies`,
@@ -28,12 +25,21 @@ interface PoliciesListParamsType {
 }
 
 export function policiesList(params: PoliciesListParamsType) {
-  // return FUtil.Axios.get('/v2/policies/list', {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/policies/list`,
+    params: params,
+  });
+}
+
+// 策略模板
+interface PolicyTemplatesParamsType {
+}
+
+export function policyTemplates(params: PolicyTemplatesParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/translate/translate-config/list4Client`,
     params: params,
   });
 }

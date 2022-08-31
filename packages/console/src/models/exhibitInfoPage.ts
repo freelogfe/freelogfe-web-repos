@@ -507,7 +507,7 @@ const Model: ExhibitInfoPageModelType = {
                   status: d5.onlineStatus,
                 };
               });
-              console.log(r, 'r90ieeojflksdjflskdjflsdkjflsdkj');
+              // console.log(r, 'r90ieeojflksdjflskdjflsdkjflsdkj');
               // console.log(r, 'rrrrr09234j5rlkjsdflkfjsldfjl');
               return {
                 id: r.resourceId,
