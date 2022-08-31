@@ -9,6 +9,7 @@ import New from '@/assets/testplay/new.png';
 import profiletitle from '@/assets/testplay/profiletitle.png';
 import quest from '@/assets/testplay/quest.png';
 import redpacket from '@/assets/testplay/redpacket.png';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 
 interface PlayNewerProps {
 }
@@ -77,12 +78,13 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='flex-row '>
                 <div className='titleLabel2 op-0' />
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  href={FI18n.i18nNext.t('beta_event_guideline_resouce_quickstart_link')}
                   target={'_blank'}
                   className='link mr-40'
                 >查看图文教程</a>
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  href={FI18n.i18nNext.t('beta_event_guideline_resouce_demo_link')}
                   target={'_blank'}
                   className='link'
                 >查看视频教程</a>
@@ -120,12 +122,14 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='flex-row '>
                 <div className='titleLabel2 op-0' />
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  href={FI18n.i18nNext.t('beta_event_guideline_node_quickstart_link')}
                   target={'_blank'}
                   className='link mr-40'
                 >查看图文教程</a>
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+                  href={FI18n.i18nNext.t('beta_event_guideline_node_demo_link')}
                   target={'_blank'}
                   className='link'
                 >查看视频教程</a>
@@ -184,7 +188,11 @@ function PlayNewer({}: PlayNewerProps) {
                 <img src={cartoon} alt='' className='h-100x' />
               </div>
               <div className='text-align-center mt-60 mb-70'>
-                <a href='' className='link '>
+                <a
+                  href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}
+                  target={'_blank'}
+                  className='link '
+                >
                   快快戳我了解详情参与活动吧！
                 </a>
               </div>
@@ -209,7 +217,11 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='content text-break text-align-center'>
                 还能领取20元现金奖励！
               </div>
-              <a href='' className='link mt-30'>
+              <a
+                target={'_blank'}
+                href={FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard()}
+                className='link mt-30'
+              >
                 完成全部任务仅需**分钟，快戳我领现金奖励吧！
               </a>
             </div>
@@ -223,7 +235,11 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='content text-break text-align-center'>
                 还能领取20元现金奖励！
               </div>
-              <a href='' className='link mt-30'>
+              <a
+                href={FI18n.i18nNext.t('beta_event_guideline_referral_link')}
+                target={'_blank'}
+                className='link mt-30'
+              >
                 内测活动仅限800人，快快戳我邀请好友参加吧！
               </a>
             </div>
@@ -243,7 +259,11 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='content text-break text-align-center'>
                 还能领取20元现金奖励！
               </div>
-              <a href='' className='link mt-30'>
+              <a
+                href={FI18n.i18nNext.t('beta_event_guideline_survey_link')}
+                target={'_blank'}
+                className='link mt-30'
+              >
                 快快戳我参与问卷领取现金奖吧！
               </a>
             </div>
