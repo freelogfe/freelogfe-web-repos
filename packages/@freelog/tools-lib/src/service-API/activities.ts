@@ -199,3 +199,18 @@ export function lotteryShow(params: LotteryShowParamsType) {
     params: params,
   });
 }
+
+// 列出邀请好友详情
+type ListInviteFriendInfosParamsType = {
+  userId: number;
+  username: string;
+  createDate: string;
+}[];
+
+export function listInviteFriendInfos(params: ListInviteFriendInfosParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/listInviteFriendInfos`,
+    data: params,
+  });
+}

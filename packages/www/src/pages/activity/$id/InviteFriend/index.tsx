@@ -7,7 +7,7 @@ import friend from '@/assets/invitefriend/friend.png';
 import invite from '@/assets/invitefriend/invite.png';
 import task from '@/assets/invitefriend/task.png';
 import copy from 'copy-to-clipboard';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
@@ -40,21 +40,32 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
   async function getData() {
     const userID: number = FUtil.Tool.getUserIDByCookies();
     if (userID !== -1) {
-      const { data }: {
+      const { data: data_invitees }: {
         data: {
           userId: number;
           username: string;
-          createDate: string;
+          invitedDate: string;
           email: string;
           mobile: string;
         }[];
       } = await FServiceAPI.TestQualification.invitees({ userId: userID });
-      console.log(data, 'task093iolksdfjlsdkfjlsdfjk');
+      // console.log(data, 'task093iolksdfjlsdkfjlsdfjk');
       // setRecords(task.data.dataList);
-      setRecords(data.map((d) => {
+
+      const { data: data_friendInfos } = await FServiceAPI.Activity.listInviteFriendInfos(data_invitees.map((di) => {
+        return {
+          userId: di.userId,
+          username: di.username,
+          createDate: di.invitedDate,
+        };
+      }));
+
+      console.log(data_friendInfos, 'data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj');
+
+      setRecords(data_invitees.map((d) => {
         return {
           ...d,
-          createDate: FUtil.Format.formatDateTime(d.createDate),
+          createDate: FUtil.Format.formatDateTime(d.invitedDate),
         };
       }));
     }
@@ -67,6 +78,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
         ' ' + res.data.code + ' '
       }\n\n 前往Freelog注册：https://www.freelog.com/`,
     });
+
   }
 
 
@@ -117,7 +129,11 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
               <div className='flex-row align-end'>
                 <span />
                 <span className='title'>更多现金奖励领取方式尽在</span>
-                <span className='way px-10'>Freelog内测玩法指南</span>
+                <a
+                  className='way px-10'
+                  href={FI18n.i18nNext.t('beta_event_referralprogram_guideline_link')}
+                  target={'_blank'}
+                >Freelog内测玩法指南</a>
                 <span className='tip'>(至少可领58元现金奖励哦!)</span>
               </div>
             </div>
@@ -271,7 +287,10 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
             </span>
             <span className=''>
               3.&nbsp;
-              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
+              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定<a
+              href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}
+              target={'_blank'}
+            >新手任务</a>解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             <span className=''>
               4.&nbsp;
