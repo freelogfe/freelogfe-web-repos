@@ -17,6 +17,12 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 
+const states = {
+  expire: '已过期',
+  onRoad: '在路上',
+  received: '已到账',
+} as const;
+
 interface InviteFriendProps extends RouteComponentProps<{ id: string }> {
   // dispatch: Dispatch;
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -31,6 +37,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
     createDate: string;
     email: string;
     mobile: string;
+    state: 'expire' | 'onRoad' | 'received';
   }[]>([]);
 
   AHooks.useMount(() => {
@@ -63,9 +70,27 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
       console.log(data_friendInfos, 'data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj');
 
       setRecords(data_invitees.map((d) => {
+        const status: 0 | 1 | 2 = data_friendInfos.find((df: any) => {
+          return df.friendId === d.userId;
+        })?.status || 0;
+
+        let state: 'expire' | 'onRoad' | 'received';
+
+        switch (status) {
+          case 0:
+            state = 'expire';
+            break;
+          case 1:
+            state = 'onRoad';
+            break;
+          case 2:
+            state = 'received';
+            break;
+        }
         return {
           ...d,
           createDate: FUtil.Format.formatDateTime(d.invitedDate),
+          state,
         };
       }));
     }
@@ -253,7 +278,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
                   return (<div className='flex-row row' key={r.userId}>
                     <span className='item c1'>{r.username}（{r.mobile || r.email || '****'}）</span>
                     <span className='item c2'>{r.createDate}</span>
-                    <span className='item c3'>已到账</span>
+                    <span className='item c3'>{states[r.state]}</span>
                   </div>);
                 })
               }
