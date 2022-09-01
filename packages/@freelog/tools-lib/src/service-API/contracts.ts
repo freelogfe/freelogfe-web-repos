@@ -82,3 +82,20 @@ export function transitionRecords({contractId, ...params}: TransitionRecordsPara
     params: params,
   });
 }
+
+// 统计合约签约量
+interface ContractsSignCountParamsType {
+  objectIds: string | number;
+  objectType: 1 | 2 | 3 | 4 | 5;  // 统计对象类型(1:甲方ID 2:甲方所属ID 3:乙方ID 4:乙方所属ID 5:标的物ID)
+  subjectType: 1 | 2 | 3;  // 标的物类型(1:资源 2:展品 3:用户组)
+  startDate?: string;
+  endDate?: string;
+}
+
+export function contractsSignCount(params: ContractsSignCountParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts/signCount`,
+    params: params,
+  });
+}
