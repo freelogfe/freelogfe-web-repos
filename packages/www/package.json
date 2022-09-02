@@ -33,7 +33,6 @@
     "@umijs/preset-react": "^2.1.4",
     "@umijs/test": "^4.0.8",
     "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
-    "yorkie": "^2.0.0"
+    "prettier": "^2.2.0"
   }
 }
