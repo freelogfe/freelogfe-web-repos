@@ -101,7 +101,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
             </label>
             <FComponentsLib.FTitleText
-              style={{ width: 650 }}
+              style={{ width: 500 }}
               singleRow
               text={resourceDetailPage.resource_Info?.name || ''}
             />
