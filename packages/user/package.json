@@ -23,26 +23,19 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.7",
     "ahooks": "^3.4.1",
-    "axios": "^0.21.1",
-    "js-cookie": "^2.2.1",
-    "nprogress": "^0.2.0",
+    "cropperjs": "^1.5.12",
     "react": "^18.2.0",
     "react-cropper": "^2.1.8",
-    "react-dom": "^18.2.0",
-    "react-monaco-editor": "^0.46.0",
-    "semver": "^7.3.5"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/nprogress": "^0.2.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@types/semver": "^7.3.9",
     "@umijs/preset-react": "^1.8.8",
     "@umijs/test": "^3.4.21",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "typescript": "^4.7.4",
-    "umi": "^3.4.21",
-    "yorkie": "^2.0.0"
+    "umi": "^3.4.21"
   }
 }
