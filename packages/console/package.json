@@ -29,6 +29,7 @@
     "@freelog/nmr_translator": "^5.1.4",
     "@freelog/resource-policy-lang": "^1.4.8",
     "@types/react-copy-to-clipboard": "^4.3.0",
+    "@wangeditor/editor": "^5.1.15",
     "@wangeditor/editor-for-react": "^1.0.4",
     "antd": "^4.21.7",
     "axios": "^0.19.2",

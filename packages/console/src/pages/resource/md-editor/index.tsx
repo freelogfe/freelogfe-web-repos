@@ -6,15 +6,13 @@ import '@wangeditor/editor/dist/css/style.css';
 import { html2md } from './html2md';
 import { toolbarConfig, editorConfig } from './editorConfig';
 import { Drawer, Tabs } from 'antd';
+import { FServiceAPI } from '@freelog/tools-lib';
 
 const { TabPane } = Tabs;
 
 const HomeScreen = () => {
   return (
     <div>
-      <iframe frameBorder="0">
-        <video src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a" />
-      </iframe>
       <MarkdownEditor />
     </div>
   );
@@ -29,46 +27,40 @@ const MarkdownEditor = () => {
 
   /** 输出 markdown */
   const outputMarkdown = () => {
-    editor.setHtml(
-      `123
-      <video src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a" />
-      <audio src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61d56c677841ed002e5d3302" />
-      123
-      `,
-    );
-
-    // const video: any = {
-    //   type: 'video',
-    //   src: 'http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a',
-    //   poster: '1',
-    //   children: [{ text: '1' }], // 【注意】void node 需要一个空 text 作为 children
-    // };
-    // editor.insertHTML(
-    //   '<video controls><source src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a"></video>',
-    // );
-
     console.log('原HTML文本===>\n', html);
     console.log('markdown文本===>\n', markdown);
   };
 
   /** 切换 tab */
-  const changeTab = (key: string) => {
+  const changeTab = async (key: string = 'market') => {
     console.error(key);
+    switch (key) {
+      case 'market':
+        const params = {
+          skip: 0,
+          limit: 20,
+          keywords: '',
+          resourceType: drawerType,
+        };
+        const res = await FServiceAPI.Resource.list(params);
+        console.error(res);
+        break;
+      case 'object':
+        break;
+      case 'url':
+        break;
+
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
     if (editor) {
-      editor.openDrawer = (type: string) => {
+      editor.openDrawer = async (type: string) => {
         setDrawerType(type);
+        changeTab();
       };
-
-      // setHtml(
-      //   '<video controls src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a" />',
-      // );
-
-      // editor.insertHTML(
-      //   `<video poster="" controls=""><source src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a" type="video/mp4"></video>`,
-      // );
     }
 
     return () => {
@@ -108,13 +100,13 @@ const MarkdownEditor = () => {
         }}
       >
         <Tabs defaultActiveKey="1" onChange={changeTab}>
-          <TabPane tab="资源市场" key="1">
+          <TabPane tab="资源市场" key="market">
             资源市场
           </TabPane>
-          <TabPane tab="存储空间" key="2">
+          <TabPane tab="存储空间" key="object">
             存储空间
           </TabPane>
-          <TabPane tab="URL" key="3">
+          <TabPane tab="URL" key="url">
             URL
           </TabPane>
         </Tabs>

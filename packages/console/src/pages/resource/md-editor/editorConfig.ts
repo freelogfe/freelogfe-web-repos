@@ -81,10 +81,7 @@ class PictureMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    console.error(1)
-    editor.dangerouslyInsertHtml('<div data-w-e-type="audio" data-w-e-is-void><audio controls="true" ><source src="http://qi.testfreelog.com/v2/auths/exhibits/80000069/62270eb5f670b2002e80021d/fileStream?parentNid=62270eb5f670&amp;subArticleIdOrName=61b9a82f2ae3ac002eb7993a"/></div>');
-    console.error(2)
-    // editor.openDrawer('图片');
+    editor.openDrawer('图片');
   }
 }
 const pictureMenuBtnConf = {
