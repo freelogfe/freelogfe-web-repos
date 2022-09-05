@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Input, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeCreatorPageModelState, NodesModelState } from '@/models/connect';
 import {
   // InitModelStatesAction,
