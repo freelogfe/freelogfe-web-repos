@@ -146,7 +146,7 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
         {
           needSteps === 0
             ? (<div className={styles.title3} style={{ opacity: .5 }}>
-              奖励已领取
+              7元奖励已领取
             </div>)
             : (<div className={styles.title3}>
               还差{needSteps}步领取 <span>7元</span> 奖励
