@@ -4,16 +4,18 @@ specifiers:
   '@ahooksjs/use-url-state': ^2.5.7
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
+  '@types/redux': ^3.6.0
   '@umijs/preset-react': ^1.8.8
   '@umijs/test': ^3.4.21
   ahooks: ^3.4.1
   cropperjs: ^1.5.12
-  dva: ^2
+  dva: '2.1'
   lint-staged: ^10.0.7
   prettier: ^2.2.0
   react: ^18.2.0
   react-cropper: ^2.1.8
   react-dom: ^18.2.0
+  redux: ^4.2.0
   typescript: ^4.7.4
   umi: ^3.4.21
 
@@ -21,15 +23,17 @@ dependencies:
   '@ahooksjs/use-url-state': 2.5.12_react@18.2.0
   ahooks: 3.7.0_react@18.2.0
   cropperjs: 1.5.12
-  dva: 2.4.1_react-dom@18.2.0+react@18.2.0
+  dva: 2.1.0_react-dom@18.2.0+react@18.2.0
   react: 18.2.0
   react-cropper: 2.1.8_react@18.2.0
   react-dom: 18.2.0_react@18.2.0
+  redux: 4.2.0
   umi: 3.5.34
 
 devDependencies:
   '@types/react': 18.0.18
   '@types/react-dom': 18.0.6
+  '@types/redux': 3.6.0
   '@umijs/preset-react': 1.8.31_ed1321bbc18816d6abf28a1e03e67a55
   '@umijs/test': 3.5.34
   lint-staged: 10.5.4
@@ -812,10 +816,6 @@ packages:
     resolution: {integrity: sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==}
     dev: true
 
-  /@types/isomorphic-fetch/0.0.34:
-    resolution: {integrity: sha512-BmJKuPCZCR6pbYYgi5nKFJrPC4pLoBgsi/B1nFN64Ba+hLLGUcKPIh7eVlR2xG763Ap08hgQafq/Wx4RFb0omQ==}
-    dev: false
-
   /@types/isomorphic-fetch/0.0.35:
     resolution: {integrity: sha512-DaZNUvLDCAnCTjgwxgiL1eQdxIKEpNLOlTNtAgnZc50bG2copGhRrFN9/PxPBuJe+tZVLCbQ7ls0xveXVRPkvw==}
     dev: true
@@ -904,14 +904,6 @@ packages:
       '@types/react-router': 5.1.18
     dev: false
 
-  /@types/react-router-dom/4.3.5:
-    resolution: {integrity: sha512-eFajSUASYbPHg2BDM1G8Btx+YqGgvROPIg6sBhl3O4kbDdYXdFdfrgQFf/pcBuQVObjfT9AL/dd15jilR5DIEA==}
-    dependencies:
-      '@types/history': 5.0.0
-      '@types/react': 18.0.18
-      '@types/react-router': 5.1.18
-    dev: false
-
   /@types/react-router-dom/5.1.7:
     resolution: {integrity: sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==}
     dependencies:
@@ -927,15 +919,6 @@ packages:
       '@types/react': 18.0.18
       '@types/react-router': 5.1.18
     dev: true
-
-  /@types/react-router-redux/5.0.21:
-    resolution: {integrity: sha512-BF2OrI3bW5gJhjqKElu/YK7lnUySFV9BMm5ryJbm47rARLLdCr72dC6cXBzcFORqsDTCrFbhsFsq2ogJRY4fvg==}
-    dependencies:
-      '@types/history': 4.7.11
-      '@types/react': 18.0.18
-      '@types/react-router': 5.1.18
-      redux: 4.2.0
-    dev: false
 
   /@types/react-router/5.1.12:
     resolution: {integrity: sha512-0bhXQwHYfMeJlCh7mGhc0VJTRm0Gk+Z8T00aiP4702mDUuLs9SMhnd2DitpjWFjdOecx2UXtICK14H9iMnziGA==}
@@ -964,6 +947,13 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.0
+
+  /@types/redux/3.6.0:
+    resolution: {integrity: sha512-ic+60DXHW5seNyqFvfr7Sk5cnXs+HsF9tIeIaxjOuSP5kzgDXC+AzKTYmjAfuLx4Sccm/0vjwBQj3OOkUkwOqg==}
+    deprecated: This is a stub types definition for Redux (https://github.com/reactjs/redux). Redux provides its own type definitions, so you don't need @types/redux installed!
+    dependencies:
+      redux: 4.2.0
+    dev: true
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
@@ -1885,7 +1875,6 @@ packages:
     dependencies:
       core-js: 2.6.12
       regenerator-runtime: 0.11.1
-    dev: true
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -2711,27 +2700,27 @@ packages:
       '@babel/runtime': 7.18.9
     dev: true
 
-  /dva/2.4.1_react-dom@18.2.0+react@18.2.0:
-    resolution: {integrity: sha512-ggj/P4lYa+7GBZuNua2Sn8rDjhbb2Mjt9THUKlunSYSBwIVU5xFIBkCB87JBPc274ojL9h/hKOmVFVFlWzlRpg==}
+  /dva/2.1.0_react-dom@18.2.0+react@18.2.0:
+    resolution: {integrity: sha512-aMd15b/OzRjyCW17xViHAF/aZwtXTkkn4x9P5+0LIc1ViqKj6yXNgCxSo4tW0WFjB43XptPdfkCPqALM62lAKw==}
     peerDependencies:
       react: 15.x || ^16.0.0-0
       react-dom: 15.x || ^16.0.0-0
     dependencies:
-      '@babel/runtime': 7.0.0-beta.46
-      '@types/isomorphic-fetch': 0.0.34
-      '@types/react-router-dom': 4.3.5
-      '@types/react-router-redux': 5.0.21
+      babel-runtime: 6.26.0
       dva-core: 1.4.0
       global: 4.4.0
       history: 4.10.1
       invariant: 2.2.4
       isomorphic-fetch: 2.2.1
       react: 18.2.0
+      react-async-component: 1.0.2_react-dom@18.2.0+react@18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-redux: 5.0.7_react@18.2.0+redux@3.7.2
       react-router-dom: 4.3.1_react@18.2.0
-      react-router-redux: 5.0.0-alpha.9_react@18.2.0
+      react-router-redux: 5.0.0-alpha.6_react@18.2.0
       redux: 3.7.2
+    transitivePeerDependencies:
+      - prop-types
     dev: false
 
   /dva/2.6.0-beta.22_react-dom@18.2.0+react@18.2.0:
@@ -6043,6 +6032,17 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: true
 
+  /react-async-component/1.0.2_react-dom@18.2.0+react@18.2.0:
+    resolution: {integrity: sha512-H0nT+KHADICdFgflNZ0A6+EBcExajxY8XM100tKOT5Oidhdo/0bAi26ffBhraEls4FIi8Lm4917tMq8LIWN7Qg==}
+    peerDependencies:
+      prop-types: ^15.0.0
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0
+      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /react-cropper/2.1.8_react@18.2.0:
     resolution: {integrity: sha512-QEj6CE9et/gMRqpaKMgZQdBgtzLjjq+zj1pmHwtoWG6GqscDl4QpTwoEElWN2pieYxkwFaZa0lPiD2b9nwqLKQ==}
     peerDependencies:
@@ -6238,11 +6238,10 @@ packages:
       tiny-warning: 1.0.3
     dev: true
 
-  /react-router-redux/5.0.0-alpha.9_react@18.2.0:
-    resolution: {integrity: sha512-euSgNIANnRXr4GydIuwA7RZCefrLQzIw5WdXspS8NPYbV+FxrKSS9MKG7U9vb6vsKHONnA4VxrVNWfnMUnUQAw==}
-    deprecated: This project is no longer maintained.
+  /react-router-redux/5.0.0-alpha.6_react@18.2.0:
+    resolution: {integrity: sha512-zwP9qtS982o0qYiQPow8gAa6jkcisl9dsgHv1RNBE4reGVk1uuBT9Ha7D2DHAuWMZrzd1z76dg7OF3m0Nic5Sg==}
     peerDependencies:
-      react: '>=15'
+      react: ^15
     dependencies:
       history: 4.10.1
       prop-types: 15.8.1
