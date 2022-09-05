@@ -24,6 +24,7 @@
     "@ahooksjs/use-url-state": "^2.5.7",
     "ahooks": "^3.4.1",
     "cropperjs": "^1.5.12",
+    "dva": "^2",
     "react": "^18.2.0",
     "react-cropper": "^2.1.8",
     "react-dom": "^18.2.0",
