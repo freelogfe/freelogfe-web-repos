@@ -33,6 +33,7 @@
     "braft-editor": "^2.3.9",
     "cropperjs": "^1.5.12",
     "file-saver": "^2.0.2",
+    "monaco-editor": "^0.34.0",
     "qrcode.react": "^1.0.1",
     "react": "^18.2.0",
     "react-cropper": "^2.1.8",
