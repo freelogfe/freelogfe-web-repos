@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FLoadingTip from '@/components/FLoadingTip';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import {Dispatch} from 'redux';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
