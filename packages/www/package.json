@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^3.5.0",
+    "@ant-design/icons": "^4.7.0",
     "animate.css": "^4.1.1",
     "antd": "^4.21.7",
     "dva": "^2",
