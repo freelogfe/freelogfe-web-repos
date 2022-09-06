@@ -5,7 +5,6 @@ specifiers:
   '@ant-design/icons': ^4.7.0
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
-  '@types/redux': ^3.6.0
   '@umijs/preset-react': ^1.8.8
   '@umijs/test': ^3.4.21
   ahooks: ^3.4.1
@@ -35,7 +34,6 @@ dependencies:
 devDependencies:
   '@types/react': 18.0.18
   '@types/react-dom': 18.0.6
-  '@types/redux': 3.6.0
   '@umijs/preset-react': 1.8.31_a101407dba6cbf39ab723b6aef23d119
   '@umijs/test': 3.5.34
   lint-staged: 10.5.4
@@ -966,13 +964,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.0
-
-  /@types/redux/3.6.0:
-    resolution: {integrity: sha512-ic+60DXHW5seNyqFvfr7Sk5cnXs+HsF9tIeIaxjOuSP5kzgDXC+AzKTYmjAfuLx4Sccm/0vjwBQj3OOkUkwOqg==}
-    deprecated: This is a stub types definition for Redux (https://github.com/reactjs/redux). Redux provides its own type definitions, so you don't need @types/redux installed!
-    dependencies:
-      redux: 4.2.0
-    dev: true
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
@@ -7654,4 +7645,3 @@ packages:
     dependencies:
       babel-runtime: 6.26.0
     dev: true
-
