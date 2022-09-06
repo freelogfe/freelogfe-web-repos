@@ -22,6 +22,8 @@ function Reward({ activityDetailsPage }: RewardProps) {
     endDate: string;
   }[]>([]);
 
+  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(-1);
+
   AHooks.useMount(async () => {
     const today: string = moment().format('YYYY-MM-DD');
     const { data }: { data: { resourceUsername: string }[] } = await FServiceAPI.Activity.lotteryShow({
@@ -40,6 +42,15 @@ function Reward({ activityDetailsPage }: RewardProps) {
         endDate: endDate,
       };
     }));
+  });
+
+  AHooks.useMount(async () => {
+    const { data } = await FServiceAPI.Activity.getRewardRecordInfos({
+      rewardGroupCode: 'RG00007',
+      status: 3,
+    });
+
+    console.log(data, 'data890ioewjfsdlkfjlsdkfjlkj');
   });
 
   return (<div className={styles.reward}>
