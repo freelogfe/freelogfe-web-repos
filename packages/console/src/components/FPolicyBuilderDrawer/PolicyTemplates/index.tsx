@@ -148,19 +148,19 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
 
       <div style={{ width: 20 }} />
 
-      {
-        visible === 'view'
-          ? (<FComponentsLib.FTextBtn
-            type='primary'
-            onClick={() => {
-              setVisible('none');
-            }}>隐藏状态机视图</FComponentsLib.FTextBtn>)
-          : (<FComponentsLib.FTextBtn
-            type='primary'
-            onClick={() => {
-              setVisible('view');
-            }}>显示状态机视图</FComponentsLib.FTextBtn>)
-      }
+      {/*{*/}
+      {/*  visible === 'view'*/}
+      {/*    ? (<FComponentsLib.FTextBtn*/}
+      {/*      type='primary'*/}
+      {/*      onClick={() => {*/}
+      {/*        setVisible('none');*/}
+      {/*      }}>隐藏状态机视图</FComponentsLib.FTextBtn>)*/}
+      {/*    : (<FComponentsLib.FTextBtn*/}
+      {/*      type='primary'*/}
+      {/*      onClick={() => {*/}
+      {/*        setVisible('view');*/}
+      {/*      }}>显示状态机视图</FComponentsLib.FTextBtn>)*/}
+      {/*}*/}
 
     </div>
 
