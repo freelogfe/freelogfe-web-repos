@@ -70,7 +70,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
       console.log(data_friendInfos, 'data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj');
 
       setRecords(data_invitees.map((d) => {
-        const status: 0 | 1 | 2 = data_friendInfos.find((df: any) => {
+        const status: 0 | 1 | 3 = data_friendInfos.find((df: any) => {
           return df.friendId === d.userId;
         })?.status || 0;
 
@@ -83,7 +83,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
           case 1:
             state = 'onRoad';
             break;
-          case 2:
+          case 3:
             state = 'received';
             break;
         }
@@ -278,7 +278,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
                   return (<div className='flex-row row' key={r.userId}>
                     <span className='item c1'>{r.username}（{r.mobile || r.email || '****'}）</span>
                     <span className='item c2'>{r.createDate}</span>
-                    <span className='item c3'>{states[r.state]}</span>
+                    <span className='item c3'>{states[r.state] || '未知'}</span>
                   </div>);
                 })
               }
