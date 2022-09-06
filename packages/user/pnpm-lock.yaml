@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@ahooksjs/use-url-state': ^2.5.7
+  '@ant-design/icons': ^4.7.0
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@types/redux': ^3.6.0
@@ -9,7 +10,7 @@ specifiers:
   '@umijs/test': ^3.4.21
   ahooks: ^3.4.1
   cropperjs: ^1.5.12
-  dva: '2.1'
+  dva: ^2.4.1
   lint-staged: ^10.0.7
   prettier: ^2.2.0
   react: ^18.2.0
@@ -21,9 +22,10 @@ specifiers:
 
 dependencies:
   '@ahooksjs/use-url-state': 2.5.12_react@18.2.0
+  '@ant-design/icons': 4.7.0_react-dom@18.2.0+react@18.2.0
   ahooks: 3.7.0_react@18.2.0
   cropperjs: 1.5.12
-  dva: 2.1.0_react-dom@18.2.0+react@18.2.0
+  dva: 2.4.1_react-dom@18.2.0+react@18.2.0
   react: 18.2.0
   react-cropper: 2.1.8_react@18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -34,7 +36,7 @@ devDependencies:
   '@types/react': 18.0.18
   '@types/react-dom': 18.0.6
   '@types/redux': 3.6.0
-  '@umijs/preset-react': 1.8.31_ed1321bbc18816d6abf28a1e03e67a55
+  '@umijs/preset-react': 1.8.31_a101407dba6cbf39ab723b6aef23d119
   '@umijs/test': 3.5.34
   lint-staged: 10.5.4
   prettier: 2.7.1
@@ -75,11 +77,9 @@ packages:
     resolution: {integrity: sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==}
     dependencies:
       '@ctrl/tinycolor': 3.4.1
-    dev: true
 
   /@ant-design/icons-svg/4.2.1:
     resolution: {integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==}
-    dev: true
 
   /@ant-design/icons/4.7.0_react-dom@18.2.0+react@18.2.0:
     resolution: {integrity: sha512-aoB4Z7JA431rt6d4u+8xcNPPCrdufSRMUOpxa1ab6mz1JCQZOEVolj2WVs/tDFmN62zzK30mNelEsprLYsSF3g==}
@@ -95,7 +95,6 @@ packages:
       rc-util: 5.23.0_react-dom@18.2.0+react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: true
 
   /@ant-design/react-slick/0.29.2_react@18.2.0:
     resolution: {integrity: sha512-kgjtKmkGHa19FW21lHnAfyyH9AAoh35pBdcJ53rHmQ3O+cfFHGHnUbj/HFrRNJ5vIts09FKJVAD8RpaC+RaWfA==}
@@ -460,7 +459,6 @@ packages:
   /@ctrl/tinycolor/3.4.1:
     resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==}
     engines: {node: '>=10'}
-    dev: true
 
   /@formatjs/intl-displaynames/1.2.10:
     resolution: {integrity: sha512-GROA2RP6+7Ouu0WnHFF78O5XIU7pBfI19WM1qm93l6MFWibUk67nCfVCK3VAYJkLy8L8ZxjkYT11VIAfvSz8wg==}
@@ -816,6 +814,10 @@ packages:
     resolution: {integrity: sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==}
     dev: true
 
+  /@types/isomorphic-fetch/0.0.34:
+    resolution: {integrity: sha512-BmJKuPCZCR6pbYYgi5nKFJrPC4pLoBgsi/B1nFN64Ba+hLLGUcKPIh7eVlR2xG763Ap08hgQafq/Wx4RFb0omQ==}
+    dev: false
+
   /@types/isomorphic-fetch/0.0.35:
     resolution: {integrity: sha512-DaZNUvLDCAnCTjgwxgiL1eQdxIKEpNLOlTNtAgnZc50bG2copGhRrFN9/PxPBuJe+tZVLCbQ7ls0xveXVRPkvw==}
     dev: true
@@ -904,6 +906,14 @@ packages:
       '@types/react-router': 5.1.18
     dev: false
 
+  /@types/react-router-dom/4.3.5:
+    resolution: {integrity: sha512-eFajSUASYbPHg2BDM1G8Btx+YqGgvROPIg6sBhl3O4kbDdYXdFdfrgQFf/pcBuQVObjfT9AL/dd15jilR5DIEA==}
+    dependencies:
+      '@types/history': 5.0.0
+      '@types/react': 18.0.18
+      '@types/react-router': 5.1.18
+    dev: false
+
   /@types/react-router-dom/5.1.7:
     resolution: {integrity: sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==}
     dependencies:
@@ -919,6 +929,15 @@ packages:
       '@types/react': 18.0.18
       '@types/react-router': 5.1.18
     dev: true
+
+  /@types/react-router-redux/5.0.21:
+    resolution: {integrity: sha512-BF2OrI3bW5gJhjqKElu/YK7lnUySFV9BMm5ryJbm47rARLLdCr72dC6cXBzcFORqsDTCrFbhsFsq2ogJRY4fvg==}
+    dependencies:
+      '@types/history': 4.7.11
+      '@types/react': 18.0.18
+      '@types/react-router': 5.1.18
+      redux: 4.2.0
+    dev: false
 
   /@types/react-router/5.1.12:
     resolution: {integrity: sha512-0bhXQwHYfMeJlCh7mGhc0VJTRm0Gk+Z8T00aiP4702mDUuLs9SMhnd2DitpjWFjdOecx2UXtICK14H9iMnziGA==}
@@ -1189,7 +1208,7 @@ packages:
       umi: 3.5.34
     dev: true
 
-  /@umijs/plugin-layout/0.18.1_b2f980df0e33def75ab3e96621ca53f5:
+  /@umijs/plugin-layout/0.18.1_3ae72827341c7bc039b8ef101c938116:
     resolution: {integrity: sha512-15YTcFpic0v15nFzlg6G8nvMCveBtcBL77Wr9wXYJdgR0iU7dnO7T4OqbLwgEc1uHxtGhTVibi6nSGelX56zCg==}
     peerDependencies:
       '@ant-design/icons': ^4.0.0
@@ -1199,6 +1218,7 @@ packages:
       '@umijs/plugin-model': 2.x
       umi: 3.x
     dependencies:
+      '@ant-design/icons': 4.7.0_react-dom@18.2.0+react@18.2.0
       '@umijs/plugin-initial-state': 2.4.0_umi@3.5.34
       '@umijs/plugin-locale': 0.15.1_ed1321bbc18816d6abf28a1e03e67a55
       '@umijs/plugin-model': 2.6.2_umi@3.5.34
@@ -1302,7 +1322,7 @@ packages:
       - react-dom
     dev: false
 
-  /@umijs/preset-react/1.8.31_ed1321bbc18816d6abf28a1e03e67a55:
+  /@umijs/preset-react/1.8.31_a101407dba6cbf39ab723b6aef23d119:
     resolution: {integrity: sha512-zQRYJw68mgG6pPcy6GwAXFRC/XxATIGmiaFAZHt7aYDy3VCccmjNKjs1pXqrcHYmGhoa7TyjCHUYEuJSv0n8uw==}
     peerDependencies:
       umi: 3.x
@@ -1314,7 +1334,7 @@ packages:
       '@umijs/plugin-dva': 0.13.0_ed1321bbc18816d6abf28a1e03e67a55
       '@umijs/plugin-helmet': 1.1.3_react@18.2.0+umi@3.5.34
       '@umijs/plugin-initial-state': 2.4.0_umi@3.5.34
-      '@umijs/plugin-layout': 0.18.1_b2f980df0e33def75ab3e96621ca53f5
+      '@umijs/plugin-layout': 0.18.1_3ae72827341c7bc039b8ef101c938116
       '@umijs/plugin-locale': 0.15.1_ed1321bbc18816d6abf28a1e03e67a55
       '@umijs/plugin-model': 2.6.2_umi@3.5.34
       '@umijs/plugin-request': 2.8.0_react@18.2.0+umi@3.5.34
@@ -1875,6 +1895,7 @@ packages:
     dependencies:
       core-js: 2.6.12
       regenerator-runtime: 0.11.1
+    dev: true
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -2167,7 +2188,6 @@ packages:
 
   /classnames/2.3.1:
     resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-    dev: true
 
   /clean-stack/2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -2700,27 +2720,27 @@ packages:
       '@babel/runtime': 7.18.9
     dev: true
 
-  /dva/2.1.0_react-dom@18.2.0+react@18.2.0:
-    resolution: {integrity: sha512-aMd15b/OzRjyCW17xViHAF/aZwtXTkkn4x9P5+0LIc1ViqKj6yXNgCxSo4tW0WFjB43XptPdfkCPqALM62lAKw==}
+  /dva/2.4.1_react-dom@18.2.0+react@18.2.0:
+    resolution: {integrity: sha512-ggj/P4lYa+7GBZuNua2Sn8rDjhbb2Mjt9THUKlunSYSBwIVU5xFIBkCB87JBPc274ojL9h/hKOmVFVFlWzlRpg==}
     peerDependencies:
       react: 15.x || ^16.0.0-0
       react-dom: 15.x || ^16.0.0-0
     dependencies:
-      babel-runtime: 6.26.0
+      '@babel/runtime': 7.0.0-beta.46
+      '@types/isomorphic-fetch': 0.0.34
+      '@types/react-router-dom': 4.3.5
+      '@types/react-router-redux': 5.0.21
       dva-core: 1.4.0
       global: 4.4.0
       history: 4.10.1
       invariant: 2.2.4
       isomorphic-fetch: 2.2.1
       react: 18.2.0
-      react-async-component: 1.0.2_react-dom@18.2.0+react@18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-redux: 5.0.7_react@18.2.0+redux@3.7.2
       react-router-dom: 4.3.1_react@18.2.0
-      react-router-redux: 5.0.0-alpha.6_react@18.2.0
+      react-router-redux: 5.0.0-alpha.9_react@18.2.0
       redux: 3.7.2
-    transitivePeerDependencies:
-      - prop-types
     dev: false
 
   /dva/2.6.0-beta.22_react-dom@18.2.0+react@18.2.0:
@@ -6016,7 +6036,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       react-is: 16.13.1
       shallowequal: 1.1.0
-    dev: true
 
   /rc-virtual-list/3.4.8_react-dom@18.2.0+react@18.2.0:
     resolution: {integrity: sha512-qSN+Rv4i/E7RCTvTMr1uZo7f3crJJg/5DekoCagydo9zsXrxj07zsFSxqizqW+ldGA16lwa8So/bIbV9Ofjddg==}
@@ -6031,17 +6050,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
-
-  /react-async-component/1.0.2_react-dom@18.2.0+react@18.2.0:
-    resolution: {integrity: sha512-H0nT+KHADICdFgflNZ0A6+EBcExajxY8XM100tKOT5Oidhdo/0bAi26ffBhraEls4FIi8Lm4917tMq8LIWN7Qg==}
-    peerDependencies:
-      prop-types: ^15.0.0
-      react: ^0.14.0 || ^15.0.0 || ^16.0.0
-      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
 
   /react-cropper/2.1.8_react@18.2.0:
     resolution: {integrity: sha512-QEj6CE9et/gMRqpaKMgZQdBgtzLjjq+zj1pmHwtoWG6GqscDl4QpTwoEElWN2pieYxkwFaZa0lPiD2b9nwqLKQ==}
@@ -6238,10 +6246,11 @@ packages:
       tiny-warning: 1.0.3
     dev: true
 
-  /react-router-redux/5.0.0-alpha.6_react@18.2.0:
-    resolution: {integrity: sha512-zwP9qtS982o0qYiQPow8gAa6jkcisl9dsgHv1RNBE4reGVk1uuBT9Ha7D2DHAuWMZrzd1z76dg7OF3m0Nic5Sg==}
+  /react-router-redux/5.0.0-alpha.9_react@18.2.0:
+    resolution: {integrity: sha512-euSgNIANnRXr4GydIuwA7RZCefrLQzIw5WdXspS8NPYbV+FxrKSS9MKG7U9vb6vsKHONnA4VxrVNWfnMUnUQAw==}
+    deprecated: This project is no longer maintained.
     peerDependencies:
-      react: ^15
+      react: '>=15'
     dependencies:
       history: 4.10.1
       prop-types: 15.8.1
@@ -6806,7 +6815,6 @@ packages:
 
   /shallowequal/1.1.0:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
-    dev: true
 
   /shebang-command/1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
