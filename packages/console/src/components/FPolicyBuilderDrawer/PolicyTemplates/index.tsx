@@ -5,36 +5,11 @@ import { policyCodeTranslationToText } from '../index';
 import FComponentsLib from '@freelog/components-lib';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
+import { Base64 } from 'js-base64';
 
 interface PolicyTemplatesProps {
   onSelect?({ title, text }: { title: string, text: string }): void;
-
-  // onClickSelect?(num: number): void;
 }
-
-// export const title1: string = '免费订阅（包月）';
-// export const text1: string = `for public
-//
-// initial:
-// ~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration\t\t//设置等待周期
-// ~freelog.TransactionEvent("0.19","self.account") => auth_permanent\t\t//设置价格
-//
-// auth_expiration [active]:
-// ~freelog.RelativeTimeEvent("72","hour")  =>  initial\t\t// 设置免费周期
-//
-// auth_permanent [active]:
-// \tterminate
-// `;
-//
-// export const title2: string = '付费订阅（包月）';
-// export const text2: string = 'for public\n' +
-//   '\n' +
-//   'initial:\n' +
-//   '  ~freelog.TransactionEvent("10","self.account") => auth\n' +
-//   'auth[active]:\n' +
-//   '  ~freelog.RelativeTimeEvent("1","month") => finish\n' +
-//   'finish:\n' +
-//   '  terminate';
 
 function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
   // const [translation1, setTranslation1] = React.useState<string>('');
@@ -48,20 +23,46 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
   }[]>([]);
   AHooks.useMount(async () => {
 
-    // const promise1 = policyCodeTranslationToText(text1, 'resource');
-    // const promise2 = policyCodeTranslationToText(text2, 'resource');
-    // setTranslation1((await promise1)?.text || '');
-    // setTranslation2((await promise2)?.text || '');
+    console.log(Base64.encode(`for public
+
+initial:
+~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration//设置等待周期
+~freelog.TransactionEvent("0.19","self.account") => auth_permanent//设置价格
+
+auth_expiration [active]:
+~freelog.RelativeTimeEvent("72","hour")  =>  initial// 设置免费周期
+
+auth_permanent [active]:
+terminate`), '*(*********')
 
     const { data }: { data: any[] } = await FServiceAPI.Policy.policyTemplates();
     // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
-    const allP: Array<Promise<any>> = data.map((d: any) => {
-      return policyCodeTranslationToText(d.template, 'resource');
+    const allP: Array<Promise<any>> = data.map((d: any, i) => {
+      // return policyCodeTranslationToText(d.template, 'resource');
+
+
+      const t: string = d.template.replace(/(\t|\r)/g, ' ');
+      const e: string = Base64.encode(t);
+      if (i === 0) {
+        console.log('-------');
+
+        console.log(JSON.stringify(d.template));
+        console.log('');
+        console.log(t);
+        console.log('');
+        console.log(e);
+        console.log('-------');
+      }
+      return FServiceAPI.Policy.policyTranslation({ contract: e });
     });
+
+    // console.log(Base64.encode('for public initial: n~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration\\t\\t//设置等待周期\\r\\n~freelog.TransactionEvent(\\"0.19\\",\\"self.account\\") => auth_permanent\\t\\t//设置价格\\r\\n\\r\\nauth_expiration [active]:\\r\\n~freelog.RelativeTimeEvent(\\"72\\",\\"hour\\")  =>  initial\\t\\t// 设置免费周期\\r\\n\\r\\nauth_permanent [active]:\\r\\n\\tterminate\\r\\n'), '***********888');
+
     const results: string[] = (await Promise.all(allP)).map((r) => {
-      return r.text;
+      // console.log(r, 'riokfsdjflksdjflksdjflksdjlfkjsdlkfjl');
+      return r.data;
     });
-    // console.log(results, '90ujsiodjflksaf09we3ujoiflsdjflksdjflksdjflksj');
+    console.log(results, '90ujsiodjflksaf09we3ujoiflsdjflksdjflksdjflksj');
     set_templates(data.map((d, i: number) => {
       return {
         id: d._id,

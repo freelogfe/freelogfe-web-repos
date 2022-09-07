@@ -22,6 +22,7 @@ specifiers:
   cropperjs: ^1.5.12
   dva: ^2
   file-saver: ^2.0.2
+  js-base64: ^3.7.2
   lint-staged: ^10.0.7
   monaco-editor: ^0.34.0
   prettier: ^2.2.0
@@ -50,6 +51,7 @@ dependencies:
   cropperjs: 1.5.12
   dva: 2.4.1_react-dom@18.2.0+react@18.2.0
   file-saver: 2.0.5
+  js-base64: 3.7.2
   monaco-editor: 0.34.0
   qrcode.react: 1.0.1_react@18.2.0
   react: 18.2.0
@@ -4809,6 +4811,10 @@ packages:
       - ts-node
       - utf-8-validate
     dev: true
+
+  /js-base64/3.7.2:
+    resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
+    dev: false
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}

@@ -43,3 +43,30 @@ export function policyTemplates(params: PolicyTemplatesParamsType = {}) {
     params: params,
   });
 }
+
+// 模板策略翻译
+interface PolicyTranslationParamsType {
+  contract: string;
+}
+
+export function policyTranslation(params: PolicyTranslationParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/translate/translate`,
+    data: params,
+  });
+}
+
+// 模板策略翻译
+interface PolicyTransferTranslationParamsType {
+  contract: string;
+  fsmTransfers: any;
+}
+
+export function policyTransferTranslation(params: PolicyTransferTranslationParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/translate/transfer`,
+    data: params,
+  });
+}
