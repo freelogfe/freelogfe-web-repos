@@ -6,7 +6,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import moment from 'moment';
 
 
@@ -49,8 +49,13 @@ function Reward({ activityDetailsPage }: RewardProps) {
       rewardGroupCode: 'RG00007',
       status: 3,
     });
+    let amount: number = 0;
 
-    console.log(data, 'data890ioewjfsdlkfjlsdkfjlkj');
+    for (const d of data) {
+      amount += (d.rewardConfigCode === 'RS000072' ? 20 : 5);
+    }
+    set_sunlightAmount(amount);
+    // console.log(data, 'data890i/oewjfsdlkfjlsdkfjlkj');
   });
 
   return (<div className={styles.reward}>
@@ -190,8 +195,13 @@ function Reward({ activityDetailsPage }: RewardProps) {
             height: 68,
             borderRadius: 10,
           }}>
-          <span>15元现金奖励已发放</span>
-          <FComponentsLib.FRectBtn type='primary'>提现</FComponentsLib.FRectBtn>
+          <span>{sunlightAmount}元现金奖励已发放</span>
+          <FComponentsLib.FRectBtn
+            type='primary'
+            onClick={() => {
+              self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
+            }}
+          >提现</FComponentsLib.FRectBtn>
         </Space>
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
