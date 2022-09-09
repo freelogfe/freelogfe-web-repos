@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@ant-design/pro-layout': ^6.5.0
   '@freelog/components-lib': ^0.1.18
-  '@freelog/tools-lib': ^0.1.130
+  '@freelog/tools-lib': ^0.1.132
   '@types/react': ^18.0.17
   '@types/react-copy-to-clipboard': ^5.0.4
   '@types/react-dom': ^18.0.6
@@ -28,7 +28,7 @@ specifiers:
 dependencies:
   '@ant-design/pro-layout': 6.38.22_biqbaboplfbrettd7655fr4n2y
   '@freelog/components-lib': 0.1.18
-  '@freelog/tools-lib': 0.1.130
+  '@freelog/tools-lib': 0.1.132
   ahooks: 3.7.0_react@18.2.0
   antd: 4.23.0_biqbaboplfbrettd7655fr4n2y
   copy-to-clipboard: 3.3.2
@@ -644,8 +644,8 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.130:
-    resolution: {integrity: sha512-95Wh0pVlHy7Sruz5L9vKzvb6DwX0MYp1dal81bAPY0GUQdiqBlTJeW+tBmHmNfum+jlKKzH/akiku8pfcMrKsg==}
+  /@freelog/tools-lib/0.1.132:
+    resolution: {integrity: sha512-GQc+ABjgf7W7mlzifsqcRP9y4igKnMNsGqLj6+7N+AZiWMpAPhcUyHzX4o9fVYptPoqwd0rNHvOFOSRMzQAufA==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
@@ -2703,7 +2703,7 @@ packages:
   /axios/0.21.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@2.6.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3827,7 +3827,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.0.0
-    dev: true
 
   /debug/3.1.0:
     resolution: {integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==}
@@ -4643,7 +4642,7 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /follow-redirects/1.15.1:
+  /follow-redirects/1.15.1_debug@2.6.9:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -4651,6 +4650,8 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dependencies:
+      debug: 2.6.9
 
   /for-in/1.0.2:
     resolution: {integrity: sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ==}
@@ -5248,7 +5249,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@2.6.9
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -7374,7 +7375,6 @@ packages:
 
   /ms/2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
-    dev: true
 
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
