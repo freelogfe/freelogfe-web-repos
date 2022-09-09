@@ -1,3 +1,5 @@
+/** 编辑器自定义菜单按钮 */
+
 import { IButtonMenu } from '@wangeditor/editor';
 
 /** 插入图片资源 */
@@ -23,11 +25,11 @@ class PictureMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openDrawer('图片');
+    editor.openDrawer('image');
   }
 }
 export const pictureMenuConfig = {
-  key: 'pictureMenu',
+  key: 'picture',
   factory() {
     return new PictureMenu();
   },
@@ -56,11 +58,11 @@ class ImportMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openImportDrawer();
+    editor.openUploadDrawer();
   }
 }
 export const importMenuConfig = {
-  key: 'importMenu',
+  key: 'import',
   factory() {
     return new ImportMenu();
   },
