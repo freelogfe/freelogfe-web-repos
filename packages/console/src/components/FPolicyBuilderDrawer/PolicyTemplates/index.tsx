@@ -38,28 +38,12 @@ terminate`), '*(*********')
     const { data }: { data: any[] } = await FServiceAPI.Policy.policyTemplates();
     // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
     const allP: Array<Promise<any>> = data.map((d: any, i) => {
-      // return policyCodeTranslationToText(d.template, 'resource');
-
-
       const t: string = d.template.replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
-      if (i === 0) {
-        console.log('-------');
-
-        console.log(JSON.stringify(d.template));
-        console.log('');
-        console.log(t);
-        console.log('');
-        console.log(e);
-        console.log('-------');
-      }
       return FServiceAPI.Policy.policyTranslation({ contract: e });
     });
 
-    // console.log(Base64.encode('for public initial: n~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration\\t\\t//设置等待周期\\r\\n~freelog.TransactionEvent(\\"0.19\\",\\"self.account\\") => auth_permanent\\t\\t//设置价格\\r\\n\\r\\nauth_expiration [active]:\\r\\n~freelog.RelativeTimeEvent(\\"72\\",\\"hour\\")  =>  initial\\t\\t// 设置免费周期\\r\\n\\r\\nauth_permanent [active]:\\r\\n\\tterminate\\r\\n'), '***********888');
-
     const results: string[] = (await Promise.all(allP)).map((r) => {
-      // console.log(r, 'riokfsdjflksdjflksdjflksdjlfkjsdlkfjl');
       return r.data;
     });
     console.log(results, '90ujsiodjflksaf09we3ujoiflsdjflksdjflksdjflksj');
