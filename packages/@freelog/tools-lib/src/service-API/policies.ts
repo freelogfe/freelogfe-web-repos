@@ -1,4 +1,4 @@
-import {Base64} from 'js-base64';
+// import {Base64} from 'js-base64';
 import FUtil from '../utils';
 
 // 批量获取授权策略列表
@@ -51,13 +51,11 @@ interface PolicyTranslationParamsType {
 }
 
 export function policyTranslation({contract}: PolicyTranslationParamsType) {
-  const t: string = contract.replace(/(\t|\r)/g, ' ');
-  const e: string = Base64.encode(t);
   return FUtil.Request({
     method: 'POST',
     url: `/v2/translate/translate`,
     data: {
-      contract: e
+      contract: contract,
     },
   });
 }
