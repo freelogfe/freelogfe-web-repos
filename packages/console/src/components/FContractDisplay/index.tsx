@@ -141,7 +141,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         status: 0 | 1 | 2;
       };
     } = await FServiceAPI.Contract.contractDetails(params);
-    // console.log(data, 'data111122222333333333');
+    console.log(data_ContractDetails, 'data_ContractDetails111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       skip: 0,
       limit: 100,

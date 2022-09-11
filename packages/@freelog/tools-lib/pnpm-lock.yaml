@@ -11,6 +11,7 @@ specifiers:
   crypto-js: ^4.0.0
   husky: ^6.0.0
   i18next: ^21.8.10
+  js-base64: ^3.7.2
   js-cookie: ^3.0.1
   moment: ^2.29.1
   nprogress: ^0.2.0
@@ -24,6 +25,7 @@ dependencies:
   axios: 0.21.4
   crypto-js: 4.1.1
   i18next: 21.9.1
+  js-base64: 3.7.2
   js-cookie: 3.0.1
   moment: 2.29.4
   nprogress: 0.2.0
@@ -5594,6 +5596,10 @@ packages:
   /jpjs/1.2.1:
     resolution: {integrity: sha512-GxJWybWU4NV0RNKi6EIqk6IRPOTqd/h+U7sbtyuD7yUISUzV78LdHnq2xkevJsTlz/EImux4sWj+wfMiwKLkiw==}
     dev: true
+
+  /js-base64/3.7.2:
+    resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
+    dev: false
 
   /js-cookie/3.0.1:
     resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}

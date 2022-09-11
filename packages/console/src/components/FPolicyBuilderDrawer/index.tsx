@@ -11,15 +11,17 @@ import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n ,FServiceAPI} from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
-import { DisabledTimes } from 'rc-picker/lib/interface';
+// import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
 import FMonacoEditor from '../FMonacoEditor';
 import fConfirmModal from '../fConfirmModal';
 import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import { Base64 } from 'js-base64';
+// import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 
 const FDatePicker: any = DatePicker;
 
@@ -577,14 +579,19 @@ function FPolicyBuilder({
         return;
       }
 
-      const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
+      const t: string = (code_Input || '').replace(/(\t|\r)/g, ' ');
+      const e: string = Base64.encode(t);
+      const { data:text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+
+
+      // const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
 
-      if (error) {
-        setShowView('fail');
-        setFailResult({ errorText: error.join(',') });
-        return;
-      }
+      // if (error) {
+      //   setShowView('fail');
+      //   setFailResult({ errorText: error.join(',') });
+      //   return;
+      // }
 
       if (alreadyUsedTexts?.includes(code_Input)) {
         setShowView('fail');
@@ -602,16 +609,21 @@ function FPolicyBuilder({
       });
     } else {
       const combinationCode: string = dataToCode(combination_Data);
-      const {
-        error,
-        text: translationText,
-      } = await policyCodeTranslationToText(combinationCode, targetType);
+      // const {
+      //   error,
+      //   text: translationText,
+      // } = await policyCodeTranslationToText(combinationCode, targetType);
+
+      const t: string = (combinationCode || '').replace(/(\t|\r)/g, ' ');
+      const e: string = Base64.encode(t);
+      const { data:translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+
       setIsVerifying(false);
-      if (error) {
-        setShowView('fail');
-        setFailResult({ errorText: error.join(',') });
-        return;
-      }
+      // if (error) {
+      //   setShowView('fail');
+      //   setFailResult({ errorText: error.join(',') });
+      //   return;
+      // }
       if (alreadyUsedTexts?.includes(combinationCode)) {
         setShowView('fail');
         setFailResult({ errorText: '当前策略已存在' });
@@ -1666,7 +1678,8 @@ function disabledDate(date: Moment): boolean {
   return date.valueOf() < moment().subtract(1, 'days').valueOf();
 }
 
-function disabledTime(date: Moment | null): DisabledTimes {
+// function disabledTime(date: Moment | null): DisabledTimes {
+function disabledTime(date: Moment | null): any {
   const isToday: boolean = date?.format(FUtil.Predefined.momentDateFormat) === moment().format(FUtil.Predefined.momentDateFormat);
   return {
     disabledHours(): number[] {
@@ -1772,29 +1785,29 @@ function TargetSelect({ value, dataSource, onChange, onClickAddStateBtn }: Targe
  * @param code 策略代码
  * @param targetType 标的物类型
  */
-export async function policyCodeTranslationToText(code: string, targetType: 'resource' | 'presentable'): Promise<{
-  error: string[] | null;
-  text?: string;
-}> {
-  try {
-    const result = await compile(
-      code,
-      targetType,
-      FUtil.Format.completeUrlByDomain('qi'),
-      window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev',
-    );
-    const rrr = report(result.state_machine);
-    // console.log(rrr, 'rrr@#$@#$@#$44444$$$$$$$$');
-    return {
-      error: null,
-      text: rrr.content,
-    };
-  } catch (err: any) {
-    return {
-      error: [err.message],
-    };
-  }
-}
+// export async function policyCodeTranslationToText(code: string, targetType: 'resource' | 'presentable'): Promise<{
+//   error: string[] | null;
+//   text?: string;
+// }> {
+//   try {
+//     const result = await compile(
+//       code,
+//       targetType,
+//       FUtil.Format.completeUrlByDomain('qi'),
+//       window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev',
+//     );
+//     const rrr = report(result.state_machine);
+//     // console.log(rrr, 'rrr@#$@#$@#$44444$$$$$$$$');
+//     return {
+//       error: null,
+//       text: rrr.content,
+//     };
+//   } catch (err: any) {
+//     return {
+//       error: [err.message],
+//     };
+//   }
+// }
 
 // 正整数
 // const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);

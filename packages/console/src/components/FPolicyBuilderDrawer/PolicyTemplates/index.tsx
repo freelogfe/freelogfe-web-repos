@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-import { policyCodeTranslationToText } from '../index';
+// import { policyCodeTranslationToText } from '../index';
 import FComponentsLib from '@freelog/components-lib';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
@@ -23,17 +23,17 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
   }[]>([]);
   AHooks.useMount(async () => {
 
-    console.log(Base64.encode(`for public
-
-initial:
-~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration//设置等待周期
-~freelog.TransactionEvent("0.19","self.account") => auth_permanent//设置价格
-
-auth_expiration [active]:
-~freelog.RelativeTimeEvent("72","hour")  =>  initial// 设置免费周期
-
-auth_permanent [active]:
-terminate`), '*(*********')
+//     console.log(Base64.encode(`for public
+//
+// initial:
+// ~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration//设置等待周期
+// ~freelog.TransactionEvent("0.19","self.account") => auth_permanent//设置价格
+//
+// auth_expiration [active]:
+// ~freelog.RelativeTimeEvent("72","hour")  =>  initial// 设置免费周期
+//
+// auth_permanent [active]:
+// terminate`), '*(*********')
 
     const { data }: { data: any[] } = await FServiceAPI.Policy.policyTemplates();
     // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
@@ -46,7 +46,7 @@ terminate`), '*(*********')
     const results: string[] = (await Promise.all(allP)).map((r) => {
       return r.data;
     });
-    console.log(results, '90ujsiodjflksaf09we3ujoiflsdjflksdjflksdjflksj');
+    // console.log(results, '90ujsiodjflksaf09we3ujoiflsdjflksdjflksdjflksj');
     set_templates(data.map((d, i: number) => {
       return {
         id: d._id,
