@@ -182,8 +182,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       return;
     }
 
-    console.log(data_transitionRecords, 'data_transitionRecords098iweojflskdfjsdlkj');
-    
+    // console.log(data_transitionRecords, 'data_transitionRecords098iweojflskdfjsdlkj');
+
     // const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
     //   return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
     // });
