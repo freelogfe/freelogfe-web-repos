@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import Sign from './Sign';
 import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
