@@ -141,7 +141,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         status: 0 | 1 | 2;
       };
     } = await FServiceAPI.Contract.contractDetails(params);
-    console.log(data_ContractDetails, 'data_ContractDetails111122222333333333');
+    // console.log(data_ContractDetails, 'data_ContractDetails111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       skip: 0,
       limit: 100,
@@ -163,6 +163,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       }
     } = await FServiceAPI.Contract.transitionRecords(params1);
 
+    console.log(data_transitionRecords, 'data_transitionRecords098iweojflskdfjsdlkj');
+
     setIsSelfLicensorOwner(data_ContractDetails.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
     setIsSelfLicenseeOwner(data_ContractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
     set_Modal_Target(data_ContractDetails.subjectName);
@@ -172,15 +174,16 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setText(data_ContractDetails.policyInfo.translateInfo.content);
 
 
-    const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
-      return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
-    });
+    // const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
+    //   return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
+    // });
 
-    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = (currentState.eventTranslateInfos as any[])
-      .filter((eti) => {
+    // const record_CurrentEvents: IContractDisplayStates['record_Cu/**/rrentEvents'] = (currentState.eventTranslateInfos as any[])
+    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = []
+      .filter((eti:any) => {
         return eti.origin.name === 'TransactionEvent' || eti.origin.name === 'RelativeTimeEvent' || eti.origin.name === 'TimeEvent';
       })
-      .map((eti, etiIndex) => {
+      .map((eti:any, etiIndex) => {
         const obj = {
           eventID: eti.origin.eventId,
           tip: eti.content,

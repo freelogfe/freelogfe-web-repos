@@ -105,7 +105,7 @@ const Model: DashboardPageModelType = {
 
       const params2: Parameters<typeof FServiceAPI.Statistic.transactionsCommon>[0] = {
         ownerId: FUtil.Tool.getUserIDByCookies(),
-        ownerType: 2,
+        ownerType: 1,
         objectType: 3,
       };
       const { data: data_Node_Total_Amount } = yield call(FServiceAPI.Statistic.transactionsCommon, params2);
@@ -125,7 +125,7 @@ const Model: DashboardPageModelType = {
 
       const params4: Parameters<typeof FServiceAPI.Statistic.transactionsCommon>[0] = {
         ownerId: FUtil.Tool.getUserIDByCookies(),
-        ownerType: 2,
+        ownerType: 1,
         objectType: 3,
         beginDate: startTime,
         endDate: endTime,
@@ -152,7 +152,7 @@ const Model: DashboardPageModelType = {
 
       const params7: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
         objectIds: FUtil.Tool.getUserIDByCookies(),
-        objectType: 1,
+        objectType: 2,
         subjectType: 1,
         startDate: startTime,
         endDate: endTime,
@@ -164,8 +164,8 @@ const Model: DashboardPageModelType = {
 
       const params8: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
         objectIds: FUtil.Tool.getUserIDByCookies(),
-        objectType: 1,
-        subjectType: 1,
+        objectType: 2,
+        subjectType: 2,
         startDate: startTime,
         endDate: endTime,
       };
