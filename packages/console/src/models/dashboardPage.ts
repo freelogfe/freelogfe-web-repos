@@ -160,7 +160,7 @@ const Model: DashboardPageModelType = {
 
       const { data: data_Resource_LastWeek_SingCount } = yield call(FServiceAPI.Contract.contractsSignCount, params7);
 
-      console.log(data_Resource_LastWeek_SingCount, 'data_Resource_LastWeek_SingCountoislkdfjlk');
+      // console.log(data_Resource_LastWeek_SingCount, 'data_Resource_LastWeek_SingCountoislkdfjlk');
 
       const params8: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
         objectIds: FUtil.Tool.getUserIDByCookies(),
@@ -172,7 +172,7 @@ const Model: DashboardPageModelType = {
 
       const { data: data_Node_LastWeek_SingCount } = yield call(FServiceAPI.Contract.contractsSignCount, params8);
 
-      console.log(data_Node_LastWeek_SingCount, 'data_Node_LastWeek_SingCountingCountoislkdfjlk');
+      // console.log(data_Node_LastWeek_SingCount, 'data_Node_LastWeek_SingCountingCountoislkdfjlk');
 
       yield put<ChangeAction>({
         type: 'change',
