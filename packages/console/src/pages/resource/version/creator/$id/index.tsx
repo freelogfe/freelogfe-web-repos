@@ -5,7 +5,8 @@ import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState,
   ResourceInfoModelState,
@@ -22,7 +23,7 @@ import {
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import { withRouter,Prompt } from 'umi';
+import { withRouter, Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
