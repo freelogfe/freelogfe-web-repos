@@ -7,7 +7,7 @@ import friend from '@/assets/invitefriend/friend.png';
 import invite from '@/assets/invitefriend/invite.png';
 import task from '@/assets/invitefriend/task.png';
 import copy from 'copy-to-clipboard';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
@@ -16,6 +16,12 @@ import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
+
+const states = {
+  expire: '已过期',
+  onRoad: '在路上',
+  received: '已到账',
+} as const;
 
 interface InviteFriendProps extends RouteComponentProps<{ id: string }> {
   // dispatch: Dispatch;
@@ -31,6 +37,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
     createDate: string;
     email: string;
     mobile: string;
+    state: 'expire' | 'onRoad' | 'received';
   }[]>([]);
 
   AHooks.useMount(() => {
@@ -40,21 +47,50 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
   async function getData() {
     const userID: number = FUtil.Tool.getUserIDByCookies();
     if (userID !== -1) {
-      const { data }: {
+      const { data: data_invitees }: {
         data: {
           userId: number;
           username: string;
-          createDate: string;
+          invitedDate: string;
           email: string;
           mobile: string;
         }[];
       } = await FServiceAPI.TestQualification.invitees({ userId: userID });
-      console.log(data, 'task093iolksdfjlsdkfjlsdfjk');
+      // console.log(data, 'task093iolksdfjlsdkfjlsdfjk');
       // setRecords(task.data.dataList);
-      setRecords(data.map((d) => {
+
+      const { data: data_friendInfos } = await FServiceAPI.Activity.listInviteFriendInfos(data_invitees.map((di) => {
+        return {
+          userId: di.userId,
+          username: di.username,
+          createDate: di.invitedDate,
+        };
+      }));
+
+      console.log(data_friendInfos, '111data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj');
+
+      setRecords(data_invitees.map((d) => {
+        const status: 0 | 1 | 3 = data_friendInfos.find((df: any) => {
+          return df.friendId === d.userId;
+        })?.status || 0;
+
+        let state: 'expire' | 'onRoad' | 'received';
+
+        switch (status) {
+          case 0:
+            state = 'expire';
+            break;
+          case 1:
+            state = 'onRoad';
+            break;
+          case 3:
+            state = 'received';
+            break;
+        }
         return {
           ...d,
-          createDate: FUtil.Format.formatDateTime(d.createDate),
+          createDate: FUtil.Format.formatDateTime(d.invitedDate),
+          state,
         };
       }));
     }
@@ -67,6 +103,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
         ' ' + res.data.code + ' '
       }\n\n 前往Freelog注册：https://www.freelog.com/`,
     });
+
   }
 
 
@@ -117,7 +154,11 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
               <div className='flex-row align-end'>
                 <span />
                 <span className='title'>更多现金奖励领取方式尽在</span>
-                <span className='way px-10'>Freelog内测玩法指南</span>
+                <a
+                  className='way px-10'
+                  href={FI18n.i18nNext.t('beta_event_referralprogram_guideline_link')}
+                  target={'_blank'}
+                >Freelog内测玩法指南</a>
                 <span className='tip'>(至少可领58元现金奖励哦!)</span>
               </div>
             </div>
@@ -237,7 +278,7 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
                   return (<div className='flex-row row' key={r.userId}>
                     <span className='item c1'>{r.username}（{r.mobile || r.email || '****'}）</span>
                     <span className='item c2'>{r.createDate}</span>
-                    <span className='item c3'>已到账</span>
+                    <span className='item c3'>{states[r.state] || '未知'}</span>
                   </div>);
                 })
               }
@@ -271,7 +312,10 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
             </span>
             <span className=''>
               3.&nbsp;
-              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
+              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定<a
+              href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}
+              target={'_blank'}
+            >新手任务</a>解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             <span className=''>
               4.&nbsp;

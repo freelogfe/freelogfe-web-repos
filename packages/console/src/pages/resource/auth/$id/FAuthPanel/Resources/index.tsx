@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceAuthPage';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -57,17 +58,17 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
               </FTooltip>
               <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                 <span><FComponentsLib.FTextBtn
-                style={{
-                  flexShrink: 1,
-                }}
-                type="primary"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  window.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: i.id,
-                  }));
-                }}
-              ><FFileSearch /></FComponentsLib.FTextBtn></span>
+                  style={{
+                    flexShrink: 1,
+                  }}
+                  type='primary'
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    window.open(FUtil.LinkTo.resourceDetails({
+                      resourceID: i.id,
+                    }));
+                  }}
+                ><FFileSearch /></FComponentsLib.FTextBtn></span>
               </FTooltip>
 
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}

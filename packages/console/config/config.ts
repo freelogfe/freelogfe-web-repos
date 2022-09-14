@@ -11,9 +11,6 @@ export default defineConfig({
   //   loading: '@/components/FGlobalLoading',
   // },
   routes: routes,
-  // routes: [
-  //   { path: '/', component: '@/pages/index' },
-  // ],
   fastRefresh: {},
   devServer: {},
   proxy: {

@@ -3,7 +3,8 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import FInput from '@/components/FInput';
 import { Modal, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import {
   OnBlur_BindEmail_EmailInput_Action,
@@ -406,6 +407,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
+                      // self.open(FUtil.LinkTo.binding());
                       setBindTip({
                         type: 'success',
                         msg: '',

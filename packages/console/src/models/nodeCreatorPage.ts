@@ -150,7 +150,7 @@ const Model: NodeCreatorPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeName: payload.value.trim().toLowerCase(),
+          nodeName: payload.value.trim(),
           nodeNameState: 'input',
           nodeNameError: '',
         },

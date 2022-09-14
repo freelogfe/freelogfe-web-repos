@@ -3,7 +3,8 @@ import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import FAuthPanel from './FAuthPanel';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState,
   ResourceAuthPageModelState,

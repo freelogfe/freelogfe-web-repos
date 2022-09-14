@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Input, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeCreatorPageModelState, NodesModelState } from '@/models/connect';
 import {
   // InitModelStatesAction,
@@ -116,8 +117,11 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
       <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
       <FComponentsLib.FRectBtn
         className={styles.button}
-        disabled={nodeCreatorPage.nodeDomainState !== 'verified' || !!nodeCreatorPage.nodeDomainError
-        || nodeCreatorPage.nodeNameState !== 'verified' || !!nodeCreatorPage.nodeNameError}
+        disabled={nodeCreatorPage.nodeDomainState === 'verifying'
+        || nodeCreatorPage.nodeDomainError !== ''
+        || nodeCreatorPage.nodeNameState === 'verifying'
+        || nodeCreatorPage.nodeNameError !== ''
+        }
         onClick={() => {
           dispatch<OnClick_CreateBtn_Action>({
             type: 'nodeCreatorPage/onClick_CreateBtn',

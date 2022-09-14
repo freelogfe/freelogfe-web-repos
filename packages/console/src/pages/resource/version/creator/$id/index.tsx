@@ -23,7 +23,6 @@ import {
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
 import { withRouter,Prompt } from 'umi';
-// import RouterTypes from 'umi/routerTypes';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';

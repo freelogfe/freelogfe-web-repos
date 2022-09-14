@@ -199,3 +199,33 @@ export function lotteryShow(params: LotteryShowParamsType) {
     params: params,
   });
 }
+
+// 列出邀请好友详情
+type ListInviteFriendInfosParamsType = {
+  userId: number;
+  username: string;
+  createDate: string;
+}[];
+
+export function listInviteFriendInfos(params: ListInviteFriendInfosParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/listInviteFriendInfos`,
+    data: params,
+  });
+}
+
+// 获取奖励记录详情列表
+interface GetRewardRecordInfosParamsType {
+  rewardGroupCode?: string;
+  rewardConfigCode?: string;
+  status?: 1 | 2 | 3; //奖励记录状态 1：未领取 2：可领取 3：已领取;
+}
+
+export function getRewardRecordInfos(params: GetRewardRecordInfosParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/getRewardRecordInfos`,
+    data: params,
+  });
+}

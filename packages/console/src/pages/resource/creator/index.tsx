@@ -11,13 +11,17 @@ import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/m
 import {
   // OnCreateAction,
   ChangeAction,
-  OnChangeNameAction,
+  OnChange_NameInput_Action,
   // OnChangeResourceTypeAction,
-  ClearDataAction,
+  // ClearDataAction,
   OnMount_Page_Action,
   OnUnmount_Page_Action,
   OnChange_Resource_Type_Action,
-  initStates, OnClick_CreateBtn_Action,
+  initStates,
+  OnClick_CreateBtn_Action,
+  OnChange_IntroductionInput_Action,
+  OnChange_Cover_Action,
+  OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
 import { history } from 'umi';
 import { FCheck, FLoading } from '@/components/FIcons';
@@ -53,35 +57,35 @@ function ResourceCreator({
       type: 'resourceCreatorPage/onUnmount_Page',
     });
   });
-  React.useEffect(() => {
-    return () => {
-      dispatch<ClearDataAction>({
-        type: 'resourceCreatorPage/clearData',
-      });
-      window.onbeforeunload = null;
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   return () => {
+  //     dispatch<ClearDataAction>({
+  //       type: 'resourceCreatorPage/clearData',
+  //     });
+  //     window.onbeforeunload = null;
+  //   };
+  // }, []);
 
-  React.useEffect(() => {
-    // const func = () => 1234;
-    if (
-      resourceCreatorPage.name !== initStates['name'] ||
-      resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
-      resourceCreatorPage.introduction !== initStates['introduction'] ||
-      resourceCreatorPage.cover !== initStates['cover'] ||
-      resourceCreatorPage.labels !== initStates['labels']
-    ) {
-      window.onbeforeunload = () => true;
-    } else {
-      window.onbeforeunload = null;
-    }
-  }, [
-    resourceCreatorPage.name,
-    resourceCreatorPage.resource_Type,
-    resourceCreatorPage.introduction,
-    resourceCreatorPage.cover,
-    resourceCreatorPage.labels,
-  ]);
+  // React.useEffect(() => {
+  //   // const func = () => 1234;
+  //   if (
+  //     resourceCreatorPage.name !== initStates['name'] ||
+  //     resourceCreatorPage.resource_Type.length !== 0 ||
+  //     resourceCreatorPage.introduction !== initStates['introduction'] ||
+  //     resourceCreatorPage.cover !== initStates['cover'] ||
+  //     resourceCreatorPage.labels !== initStates['labels']
+  //   ) {
+  //     window.onbeforeunload = () => true;
+  //   } else {
+  //     window.onbeforeunload = null;
+  //   }
+  // }, [
+  //   resourceCreatorPage.name,
+  //   resourceCreatorPage.resource_Type,
+  //   resourceCreatorPage.introduction,
+  //   resourceCreatorPage.cover,
+  //   resourceCreatorPage.labels,
+  // ]);
 
   // function onClickCreate() {
   //   // console.log('onClickCreate', '0932jdlfsf');
@@ -97,16 +101,13 @@ function ResourceCreator({
     });
   }
 
+  // console.log(resourceCreatorPage.promptLeavePath, 'resourceCreatorPage.promptLeavePath09wsdkfjlsdkfjlk');
+  // console.log(resourceCreatorPage, 'sdfoiksdo9i8ekwdlslksdfjlsdkjflkjl');
   return (
     <>
       <Prompt
         when={
-          resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] &&
-          (resourceCreatorPage.name !== initStates['name'] ||
-            resourceCreatorPage.resource_Type !== initStates['resource_Type'] ||
-            resourceCreatorPage.introduction !== initStates['introduction'] ||
-            resourceCreatorPage.cover !== initStates['cover'] ||
-            resourceCreatorPage.labels !== initStates['labels'])
+          resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] && resourceCreatorPage.dataIsDirty
         }
         message={(location: H.Location, action: H.Action) => {
           // console.log(location, action, 'LAAAAL');
@@ -153,7 +154,7 @@ function ResourceCreator({
               !!resourceCreatorPage.introductionErrorText
             }
             onClickCreate={() => {
-              window.onbeforeunload = null;
+
               dispatch<OnClick_CreateBtn_Action>({
                 type: 'resourceCreatorPage/onClick_CreateBtn',
               });
@@ -177,8 +178,8 @@ function ResourceCreator({
                     name: value,
                   });
                   // console.log(value, value.length, '!@#$!@#$!!!!!!');
-                  dispatch<OnChangeNameAction>({
-                    type: 'resourceCreatorPage/onChangeName',
+                  dispatch<OnChange_NameInput_Action>({
+                    type: 'resourceCreatorPage/onChange_NameInput',
                     payload: value,
                   });
                 }}
@@ -211,12 +212,18 @@ function ResourceCreator({
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>
             <FIntroductionEditor
               value={resourceCreatorPage.introduction}
-              onChange={(e) =>
-                onChange({
-                  introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
-                  introduction: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                // onChange({
+                //   introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
+                //   introduction: e.target.value,
+                // })
+                dispatch<OnChange_IntroductionInput_Action>({
+                  type: 'resourceCreatorPage/onChange_IntroductionInput',
+                  payload: {
+                    value: e.target.value,
+                  },
+                });
+              }}
               placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}
             />
           </FFormLayout.FBlock>
@@ -224,22 +231,34 @@ function ResourceCreator({
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>
             <FUploadResourceCover
               value={resourceCreatorPage.cover}
-              onChange={(value) =>
-                onChange({
-                  cover: value,
-                })
-              }
+              onChange={(value) => {
+                // onChange({
+                //   cover: value,
+                // })
+                dispatch<OnChange_Cover_Action>({
+                  type: 'resourceCreatorPage/onChange_Cover',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
             />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
             <FLabelEditor
               values={resourceCreatorPage.labels}
-              onChange={(value) =>
-                onChange({
-                  labels: value,
-                })
-              }
+              onChange={(value) => {
+                // onChange({
+                //   labels: value,
+                // })
+                dispatch<OnChange_Labels_Action>({
+                  type: 'resourceCreatorPage/onChange_Labels',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
             />
           </FFormLayout.FBlock>
         </FFormLayout>

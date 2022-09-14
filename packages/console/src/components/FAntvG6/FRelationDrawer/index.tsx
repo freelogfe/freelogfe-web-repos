@@ -118,7 +118,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       resourceIds: [licensor.licensorID, licensee.licenseeID].join(','),
       isLoadPolicyInfo: 1,
       isTranslate: 1,
-      projection: 'resourceId,resourceName,userId,policies',
+      projection: 'resourceId,resourceName,userId,policies,status',
     };
 
     const { data: data_ResourceInfos }: {
@@ -180,6 +180,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       return ri.resourceId === licensee.licenseeID;
     });
 
+    // console.log(lor, 'lor90oeijwfslkdfjsdlkfjdslkj');
     if (!lor || !lee) {
       return;
     }
@@ -212,11 +213,13 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       invalidContracts: data_Contracts.filter((dc) => {
         return dc.status === 1;
       }),
-      validPolicies: lor.policies.filter((p: any) => {
-        return p.status === 1 && !validContracts.some((vcp) => {
-          return vcp.policyID === p.policyId;
-        });
-      }),
+      validPolicies: lor.status === 1
+        ? lor.policies.filter((p: any) => {
+          return p.status === 1 && !validContracts.some((vcp) => {
+            return vcp.policyID === p.policyId;
+          });
+        })
+        : [],
     };
     // console.log(data_resolveResource, 'data_resolveResource3209iojsdlfksdjflk');
     const currentResource = data_resolveResource.find((rr) => {
@@ -574,7 +577,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
                   // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
                   set_terminatedContractIDs(dataSource.invalidContracts.map((ic) => {
                     return ic.contractId;
-                  }))
+                  }));
                 }}>查看已终止合约</FComponentsLib.FTextBtn>
               </div>)
             }

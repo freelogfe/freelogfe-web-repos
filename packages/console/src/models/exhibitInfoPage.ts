@@ -507,6 +507,7 @@ const Model: ExhibitInfoPageModelType = {
                   status: d5.onlineStatus,
                 };
               });
+              // console.log(r, 'r90ieeojflksdjflskdjflsdkjflsdkj');
               // console.log(r, 'rrrrr09234j5rlkjsdflkfjsldfjl');
               return {
                 id: r.resourceId,
@@ -527,11 +528,11 @@ const Model: ExhibitInfoPageModelType = {
                     exhibitOpen: false,
                   })),
                 terminatedContractIDs: r.terminatedContractIDs,
-                policies: r.policies
+                policies: r.status === 1 ? r.policies
                   .filter((p) => {
                     // console.log(p, 'p90234');
                     return p.status === 1;
-                  }),
+                  }) : [],
               };
             }),
 

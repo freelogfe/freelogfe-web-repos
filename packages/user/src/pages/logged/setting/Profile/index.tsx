@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState,
   SettingPageModelState,
@@ -11,9 +12,9 @@ import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, message, Upload } from 'antd';
-import type { UploadChangeParam } from 'antd/es/upload';
+// import type { UploadChangeParam } from 'antd/es/upload';
 import { LoadingOutlined } from '@ant-design/icons';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+// import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import {
   OnChange_Birthday_Action,
   OnChange_Career_Action,
@@ -23,9 +24,11 @@ import {
   OnClick_SubmitUserInfoBtn_Action,
   ChangeAction as SettingPageChangeAction,
 } from '@/models/settingPage';
-import { FetchInfoAction, ChangeAction as UserChangeAction } from '@/models/user';
+import { ChangeAction as UserChangeAction } from '@/models/user';
 import { Moment } from 'moment';
-import { FServiceAPI } from '@freelog/tools-lib';
+// import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
+
 
 const DatePickerAsAnyType: any = DatePicker;
 import FComponentsLib from '@freelog/components-lib';
@@ -127,6 +130,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             fMessage(error, 'error');
           }}
           onUploadSuccess={(data) => {
+            fMessage(FI18n.i18nNext.t('saved_successfully'), 'success');
             const nowTime: number = Date.now();
 
             dispatch<SettingPageChangeAction>({
@@ -248,7 +252,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'出生年月'} type='normal' />
               </div>
               <div className={styles.right}>
-                <DatePickerAsAnyType
+                <DatePicker
                   allowClear={false}
                   value={settingPage.birthday}
                   style={{ width: 220, height: 38 }}

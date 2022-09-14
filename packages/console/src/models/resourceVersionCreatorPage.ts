@@ -676,16 +676,10 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
+      // console.log(resourceVersionCreatorPage.selectedFileSha1, 'resourceVersionCreatorPage.selectedFileSha109ewoijsdikfjls');
       if (!resourceVersionCreatorPage.selectedFileSha1) {
         return;
       }
-      //
-      // const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-      //   sha1: resourceVersionCreatorPage.selectedFileSha1,
-      //   resourceType: resourceVersionCreatorPage.resourceType,
-      // };
-      //
-      // const { data } = yield call(FServiceAPI.Storage.fileProperty, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -701,18 +695,6 @@ const Model: ResourceVersionCreatorModelType = {
       const result: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
       // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
 
-      //
-      // if (!data) {
-      //   return yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       rawProperties: [],
-      //       selectedFileStatus: 2,
-      //     },
-      //     caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
-      //   });
-      // }
-      //
       if (result[0].state === 'success') {
         yield put<ChangeAction>({
           type: 'change',
