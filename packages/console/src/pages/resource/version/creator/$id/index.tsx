@@ -36,6 +36,7 @@ import { Helmet } from 'react-helmet';
 import FPaperPlane from '@/components/FIcons/FPaperPlane';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import { EditorState } from 'braft-editor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -188,7 +189,7 @@ function VersionCreator({
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
-              onChange={(value) => {
+              onChange={(value: EditorState) => {
                 // console.log('######!!~@#@!#!@');
                 onChange({
                   description: value,
