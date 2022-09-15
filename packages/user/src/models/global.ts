@@ -92,9 +92,9 @@ const Model: GlobalModelType = {
       //     payload: listener as any,
       //   });
       // });
-      console.log('ppppppprrrrrrr09iojsfksdlfjlk');
+      // console.log('ppppppprrrrrrr09iojsfksdlfjlk');
       FI18n.i18nNext.ready().then(() => {
-        console.log('RRRRRDDDDDDD09uoijsdklf');
+        // console.log('RRRRRDDDDDDD09uoijsdklf');
       });
     },
     historyListen({ dispatch, history }) {
