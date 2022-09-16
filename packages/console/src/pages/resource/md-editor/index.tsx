@@ -1,7 +1,7 @@
 /** markdown 编辑器 */
 
 import './index.less';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connect } from 'dva';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import '@wangeditor/editor/dist/css/style.css';
@@ -9,16 +9,25 @@ import { html2md } from './core/html2md';
 import { toolbarConfig, editorConfig } from './core/editor-config';
 import { ImportDocDrawer } from './components/import-doc-drawer';
 import { InsertResourceDrawer } from './components/insert-resource-drawer';
+import { Timeout } from 'ahooks/lib/useRequest/src/types';
+import { Prompt, history } from 'umi';
+import fConfirmModal from '@/components/fConfirmModal';
+import { FI18n } from '@freelog/tools-lib';
 
 /** 编辑器 */
 const MarkdownEditor = () => {
-  let markdown = '';
+  const inputTimer = useRef<Timeout | null>(null);
+  const stopTimer = useRef<Timeout | null>(null);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
+  const [markdown, setMarkdown] = useState('');
   const [drawerType, setDrawerType] = useState('');
   const [importDrawer, setImportDrawer] = useState(false);
   const [edited, setEdited] = useState(false);
+  const [saveType, setSaveType] = useState(0);
+  const [lastSaveTime, setLastSaveTime] = useState(0);
+  const [promptShow, setPromptShow] = useState(false);
 
   /** 输出 markdown */
   const outputMarkdown = () => {
@@ -33,16 +42,49 @@ const MarkdownEditor = () => {
 
   /** 保存 */
   const save = () => {
-    console.error('保存');
+    setSaveType(1);
+    setTimeout(() => {
+      const saveTime = new Date().getTime();
+      setSaveType(2);
+      setLastSaveTime(saveTime);
+    }, 500);
+    setEdited(false);
+  };
+
+  /**
+   * 格式化日期
+   * @param time 时间戳、字符串日期等等
+   * @param format 自定义输出结果格式（YYYY:年，MM:月，DD:日，hh:时，mm:分，ss:秒）
+   */
+  const formatDate = (time: number, format = 'YYYY-MM-DD hh:mm:ss') => {
+    if (!time) return '';
+
+    const date = new Date(time);
+
+    const year = String(date.getFullYear());
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    const result = format
+      .replace('YYYY', year)
+      .replace('MM', month)
+      .replace('DD', day)
+      .replace('hh', hour)
+      .replace('mm', minutes)
+      .replace('ss', seconds);
+    return result;
   };
 
   useEffect(() => {
     if (editor) {
-      editor.openUploadDrawer = async () => {
-        setImportDrawer(true);
-      };
       editor.openDrawer = async (type: string) => {
         setDrawerType(type);
+      };
+      editor.openUploadDrawer = async () => {
+        setImportDrawer(true);
       };
     }
 
@@ -55,29 +97,83 @@ const MarkdownEditor = () => {
   }, [editor]);
 
   useEffect(() => {
-    markdown = html2md(html);
-    setEdited(!!markdown);
+    const newMarkdown = html2md(html);
+    const edited = markdown !== newMarkdown;
+    setEdited(edited);
+    setMarkdown(newMarkdown);
+
+    if (edited) {
+      if (!inputTimer.current) {
+        inputTimer.current = setTimeout(() => {
+          save();
+          inputTimer.current = null;
+        }, 15000);
+      }
+
+      if (stopTimer.current) {
+        clearTimeout(stopTimer.current);
+        stopTimer.current = null;
+      }
+      stopTimer.current = setTimeout(() => {
+        save();
+        stopTimer.current = null;
+        if (inputTimer.current) {
+          clearTimeout(inputTimer.current);
+          inputTimer.current = null;
+        }
+      }, 3000);
+    }
   }, [html]);
+
+  useEffect(() => {
+    if (edited) {
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+  }, [edited]);
 
   return (
     <div className="markdown-editor-wrapper">
+      <Prompt
+        when={!promptShow && edited}
+        message={(location: any) => {
+          setPromptShow(true);
+          fConfirmModal({
+            message: FI18n.i18nNext.t('alarm_leave_page'),
+            onOk() {
+              history.push(location);
+            },
+            onCancel() {
+              setPromptShow(false);
+            },
+          });
+          return false;
+        }}
+      />
+
       <div className="header">
         <div className="title" onClick={outputMarkdown}>
           编辑文章
         </div>
         <div className="article-info">
-          <span>总字数 {'111'}</span>
-          <span>{'12:32:03'} 自动保存</span>
+          <span>总字数 {markdown.length}</span>
+          {saveType === 1 && <span>保存中...</span>}
+          {saveType === 2 && (
+            <span>{`已保存 ${formatDate(lastSaveTime)}`}</span>
+          )}
+          {saveType === 3 && (
+            <span>{`最近保存 ${formatDate(
+              lastSaveTime,
+            )}，网络异常，尝试重连…`}</span>
+          )}
         </div>
         <div className="btns">
+          <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
+            保存
+          </div>
           <div className="exit-btn" onClick={exit}>
             退出编辑器
-          </div>
-          <div
-            className={`save-btn ${(!html || !edited) && 'disabled'}`}
-            onClick={save}
-          >
-            保存
           </div>
         </div>
       </div>

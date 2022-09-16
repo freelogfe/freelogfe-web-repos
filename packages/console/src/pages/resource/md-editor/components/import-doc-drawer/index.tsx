@@ -1,11 +1,12 @@
 /** 导入文档弹窗组件 */
 
 import './index.less';
+import ObjectIcon from '../../images/object.png';
 import { Drawer, Popconfirm, Select, Tabs, Upload } from 'antd';
-import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import FInput from '@/components/FInput';
 
 const { Option } = Select;
 
@@ -16,35 +17,80 @@ interface Props {
 
 export const ImportDocDrawer = (props: Props) => {
   const { show, close } = props;
+  let body: Element | null = null;
 
-  const [bucket, setBucket] = useState('全部Bucket');
+  const refs = useRef({
+    uploadFileData: null as any,
+    pageIndex: 0,
+    noMore: false,
+    objectKey: '',
+    bucket: '全部Bucket',
+    historyKey: '',
+    historyList: [],
+  });
+  const [uploadStatus, setUploadStatus] = useState(1);
+  let [uploadFileData, setUploadFileData] = useState<any>(null);
   const [bucketList, setBucketList] = useState<string[]>([]);
   const [objectList, setObjectList] = useState<any[]>([]);
-  const [objectKey, setObjectKey] = useState('');
-  const [historyKey, setHistoryKey] = useState('');
   const [historyList, setHistoryList] = useState<any[]>([]);
 
   useEffect(() => {
     if (!show) return;
 
+    const drawer = document.getElementsByClassName(
+      'import-doc-drawer-wrapper',
+    )[0];
+    body = drawer.getElementsByClassName('ant-drawer-body')[0];
+    body.addEventListener('scroll', listScroll);
     getBuckets();
     getHistoryVersion();
+
+    return () => {
+      body?.removeEventListener('scroll', listScroll);
+    };
   }, [show]);
 
-  useEffect(() => {
-    getBuckets();
-  }, [bucket, objectKey]);
+  /** 监听列表滚动 */
+  const listScroll = () => {
+    if (!body || refs.current.noMore) return;
+
+    const { scrollHeight, scrollTop, clientHeight } = body;
+    if (scrollHeight - clientHeight - scrollTop === 0) getObjects();
+  };
+
+  /** 取消导入 */
+  const cancelImport = () => {
+    setUploadStatus(1);
+    refs.current.uploadFileData = null;
+    setUploadFileData(null);
+  };
+
+  /** 确认导入 */
+  const sureImport = () => {
+    console.error('确认导入===>', refs.current.uploadFileData);
+  };
 
   /** 上传文件 */
   const uploadFile = (info: any) => {
-    const { status } = info.file;
-    if (status === 'done') {
+    const { status, name } = info.file;
+    if (status === 'uploading') {
+      if (uploadStatus === 1) setUploadStatus(2);
+    } else if (status === 'done') {
+      setTimeout(() => {
+        setUploadStatus(3);
+        setTimeout(() => {
+          setUploadStatus(4);
+        }, 400);
+      }, 500);
       const fileReader = new FileReader();
       fileReader.readAsText(info.file.originFileObj);
       fileReader.onload = (e: any) => {
-        console.error(e.target.result);
+        const { result } = e.target;
+        refs.current.uploadFileData = { name, content: result };
+        setUploadFileData(refs.current.uploadFileData);
       };
     } else if (status === 'error') {
+      setUploadStatus(1);
       fMessage('上传失败', 'error');
     }
   };
@@ -57,25 +103,25 @@ export const ImportDocDrawer = (props: Props) => {
     );
     bucketList.unshift('全部Bucket');
     setBucketList(bucketList);
-    getObjects();
+    getObjects(true);
   };
 
   /** 获取存储空间对应桶的阅读类型资源 */
-  const getObjects = async () => {
+  const getObjects = async (init = false) => {
+    refs.current.pageIndex = init ? 0 : refs.current.pageIndex + 1;
+
     const params = {
-      skip: 0,
-      limit: 100,
-      bucketName: bucket === '全部Bucket' ? '_all' : bucket,
+      skip: refs.current.pageIndex * 20,
+      limit: 20,
+      bucketName:
+        refs.current.bucket === '全部Bucket' ? '_all' : refs.current.bucket,
       resourceType: '阅读',
-      keywords: objectKey,
+      keywords: refs.current.objectKey,
     };
     const res = await FServiceAPI.Storage.objectList(params);
-    setObjectList(res.data.dataList);
-  };
-
-  /** 导入文档 */
-  const importDoc = () => {
-    console.error('导入文档');
+    const { dataList } = res.data;
+    refs.current.noMore = dataList.length === 0;
+    setObjectList((pre) => (init ? dataList : [...pre, ...dataList]));
   };
 
   /** 获取历史版本 */
@@ -85,7 +131,49 @@ export const ImportDocDrawer = (props: Props) => {
       url: `/v2/resources/${'629f195b2fbdf6002fa290ac'}/versions`,
       params: { projection: 'versionId,version,updateDate,filename' },
     });
-    setHistoryList(res.data.reverse());
+    refs.current.historyList = res.data.reverse();
+    searchHistoryList();
+  };
+
+  /** 搜索历史版本 */
+  const searchHistoryList = () => {
+    const list = refs.current.historyList.filter((item: any) => {
+      return (
+        item.version.includes(refs.current.historyKey) ||
+        item.filename.includes(refs.current.historyKey)
+      );
+    });
+    setHistoryList(list);
+  };
+
+  /** 从存储对象导入文档 */
+  const importFromObject = async (item: {
+    objectId: string;
+    objectName: string;
+  }) => {
+    const { objectId, objectName } = item;
+    const res = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/storages/objects/${objectId}/file`,
+    });
+    refs.current.uploadFileData = { name: objectName, content: res };
+    setUploadFileData(refs.current.uploadFileData);
+    sureImport();
+  };
+
+  /** 从版本导入文档 */
+  const importFromHistory = async (item: {
+    version: string;
+    filename: string;
+  }) => {
+    const { version, filename } = item;
+    const res = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/resources/${'629f195b2fbdf6002fa290ac'}/versions/${version}/download`,
+    });
+    refs.current.uploadFileData = { name: filename, content: res };
+    setUploadFileData(refs.current.uploadFileData);
+    sureImport();
   };
 
   /** tab 选项卡区域列表 */
@@ -95,17 +183,74 @@ export const ImportDocDrawer = (props: Props) => {
       key: 'upload',
       children: (
         <div className="upload-area">
-          <div className="tip">
-            点击下方按钮导入文档，支持markdown、txt格式文本
+          <div className={`upload-box ${uploadStatus === 1 && 'normal'}`}>
+            <div className="tip">
+              点击下方按钮导入文档，支持markdown、txt格式文本
+            </div>
+            <div className="warning">
+              导入文档会覆盖原有内容，不支持的样式可能无法展示
+            </div>
+            <Upload
+              showUploadList={false}
+              onChange={uploadFile}
+              beforeUpload={(file) => {
+                // 文件名后缀（不取 type 是因为 md 文件的 type 为空字符串）
+                const suffix = file.name.split('.')[1];
+                const isMdOrTxt = ['md', 'txt'].includes(suffix);
+                if (!isMdOrTxt) fMessage('仅支持导入md和txt格式的文件');
+                return isMdOrTxt;
+              }}
+            >
+              <div className="upload-btn">上传本地文件</div>
+            </Upload>
           </div>
-          <div className="warning">
-            导入的内容将覆盖原有内容，不支持的样式将转为图片或无法展示，发布前请先确认
-          </div>
-          <Upload showUploadList={false} onChange={uploadFile}>
-            <FComponentsLib.FRectBtn className="upload-btn">
-              上传本地文件
-            </FComponentsLib.FRectBtn>
-          </Upload>
+          {uploadStatus > 1 && (
+            <>
+              <div
+                className={`upload-icon  ${
+                  [3, 4].includes(uploadStatus) && 'uploaded'
+                }`}
+              >
+                <div className="sector-box">
+                  <div className="sector"></div>
+                </div>
+                <div className="modal"></div>
+                <div className="icon-box">
+                  <img className="icon-png" src={ObjectIcon} />
+                </div>
+              </div>
+              {uploadStatus === 2 && (
+                <div className="uploading-tip">上传中...</div>
+              )}
+              {[3, 4].includes(uploadStatus) && (
+                <div
+                  className={`uploaded-box ${
+                    uploadStatus === 3 && 'animation'
+                  }`}
+                >
+                  <div className="uploaded-tip">
+                    <i className="freelog fl-icon-a-chenggongzhengqueduigou1"></i>
+                    <div className="tip-text">已上传</div>
+                    <div className="file-name">{uploadFileData.name}</div>
+                  </div>
+                  <div className="warning">
+                    <i className="freelog fl-icon-warningxiaochicun"></i>
+                    <div className="warning-text">
+                      导入文档会覆盖原有内容，不支持的样式可能无法展示
+                    </div>
+                  </div>
+                  <div className="btns">
+                    <div className="cancel-btn" onClick={cancelImport}>
+                      取消
+                    </div>
+                    <div className="import-btn" onClick={sureImport}>
+                      导入
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       ),
     },
@@ -118,7 +263,10 @@ export const ImportDocDrawer = (props: Props) => {
             <Select
               className="bucket-select"
               defaultValue="全部Bucket"
-              onChange={(e) => setBucket(e)}
+              onChange={(e) => {
+                refs.current.bucket = e;
+                getObjects(true);
+              }}
             >
               {bucketList.map((item) => (
                 <Option value={item} key={item}>
@@ -126,41 +274,45 @@ export const ImportDocDrawer = (props: Props) => {
                 </Option>
               ))}
             </Select>
-            <div className="search-input-box">
-              <i className="freelog fl-icon-content"></i>
-              <input
-                className="search-input"
-                type="text"
-                value={objectKey}
-                onChange={(e) => setObjectKey((e.target.value || '').trim())}
-              />
-              {objectKey && (
-                <i
-                  className="freelog fl-icon-shibai"
-                  onClick={() => setObjectKey('')}
-                ></i>
-              )}
-            </div>
+            <FInput
+              value={refs.current.objectKey}
+              debounce={300}
+              allowClear={true}
+              onDebounceChange={(e) => {
+                refs.current.objectKey = (e || '').trim();
+                getObjects(true);
+              }}
+              theme="dark"
+            />
           </div>
+          {objectList.length === 0 && refs.current.noMore && (
+            <div className="no-data-box">
+              <div className="no-data-tip">
+                <i className="freelog fl-icon-liebiaoweikong"></i>
+                <div className="tip">当前列表暂无内容</div>
+              </div>
+            </div>
+          )}
           {objectList.map((item) => (
             <div className="object-item" key={item.objectId}>
               <div className="info-area">
                 <div className="object-name">{`${item.bucketName}/${item.objectName}`}</div>
-                <div className="other-info">{`${item.resourceType.join(
-                  ' / ',
-                )} | 更新时间 ${FUtil.Format.formatDateTime(
+                <div className="other-info">{`${
+                  item.resourceType.join(' / ') || '未设置类型'
+                } | 更新时间 ${FUtil.Format.formatDateTime(
                   item.updateDate,
                   true,
                 )}`}</div>
               </div>
 
               <Popconfirm
+                className="my-popconfirm"
                 placement="bottomRight"
                 icon={
                   <i className="freelog fl-icon-warningxiaochicun confirm-icon"></i>
                 }
                 title="导入文档会覆盖原有内容，不支持的样式可能无法展示"
-                onConfirm={importDoc}
+                onConfirm={() => importFromObject(item)}
                 okText="导入"
                 cancelText="取消"
               >
@@ -176,56 +328,47 @@ export const ImportDocDrawer = (props: Props) => {
       key: 'history',
       children: (
         <div className="history-area">
-          <div className="search-input-box">
-            <i className="freelog fl-icon-content"></i>
-            <input
-              className="search-input"
-              type="text"
-              value={historyKey}
-              onChange={(e) => setHistoryKey((e.target.value || '').trim())}
-            />
-            {objectKey && (
-              <i
-                className="freelog fl-icon-shibai"
-                onClick={() => setHistoryKey('')}
-              ></i>
-            )}
-          </div>
-          {historyList
-            .filter(
-              (item) =>
-                item.version.includes(historyKey) ||
-                item.filename.includes(historyKey),
-            )
-            .map((item) => (
-              <div className="history-item" key={item.versionId}>
-                <div className="info-area">
-                  <div className="version">{item.version}</div>
-                  <div className="other-info">
-                    <span>
-                      {`更新时间 ${FUtil.Format.formatDateTime(
-                        item.updateDate,
-                        true,
-                      )}`}
-                    </span>
-                    <span>{item.filename}</span>
-                  </div>
+          <FInput
+            wrapClassName="search-input"
+            value={refs.current.historyKey}
+            debounce={300}
+            allowClear={true}
+            onDebounceChange={(e) => {
+              refs.current.historyKey = (e || '').trim();
+              searchHistoryList();
+            }}
+            theme="dark"
+          />
+          {historyList.map((item) => (
+            <div className="history-item" key={item.versionId}>
+              <div className="info-area">
+                <div className="version">{item.version}</div>
+                <div className="other-info">
+                  <span>
+                    {`更新时间 ${FUtil.Format.formatDateTime(
+                      item.updateDate,
+                      true,
+                    )}`}
+                  </span>
+                  <span>{item.filename}</span>
                 </div>
-
-                <Popconfirm
-                  placement="bottomRight"
-                  icon={
-                    <i className="freelog fl-icon-warningxiaochicun confirm-icon"></i>
-                  }
-                  title="导入文档会覆盖原有内容，不支持的样式可能无法展示"
-                  onConfirm={importDoc}
-                  okText="导入"
-                  cancelText="取消"
-                >
-                  <div className="choose-btn">选择</div>
-                </Popconfirm>
               </div>
-            ))}
+
+              <Popconfirm
+                className="my-popconfirm"
+                placement="bottomRight"
+                icon={
+                  <i className="freelog fl-icon-warningxiaochicun confirm-icon"></i>
+                }
+                title="导入文档会覆盖原有内容，不支持的样式可能无法展示"
+                onConfirm={() => importFromHistory(item)}
+                okText="导入"
+                cancelText="取消"
+              >
+                <div className="choose-btn">选择</div>
+              </Popconfirm>
+            </div>
+          ))}
         </div>
       ),
     },
@@ -238,9 +381,8 @@ export const ImportDocDrawer = (props: Props) => {
       title="导入文档"
       closable={false}
       open={show}
-      onClose={() => {
-        close();
-      }}
+      onClose={close}
+      extra={<i className="freelog fl-icon-guanbi close-btn" onClick={close} />}
     >
       <Tabs items={tabItems} />
     </Drawer>
