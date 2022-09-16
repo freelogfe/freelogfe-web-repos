@@ -21,10 +21,13 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^3.5.0",
+    "@ant-design/icons": "^4.7.0",
     "animate.css": "^4.1.1",
     "antd": "^4.21.7",
+    "dva": "^2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "redux": "^4.2.0",
     "umi": "^3.4.21"
   },
   "devDependencies": {
@@ -33,7 +36,6 @@
     "@umijs/preset-react": "^2.1.4",
     "@umijs/test": "^4.0.8",
     "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
-    "yorkie": "^2.0.0"
+    "prettier": "^2.2.0"
   }
 }

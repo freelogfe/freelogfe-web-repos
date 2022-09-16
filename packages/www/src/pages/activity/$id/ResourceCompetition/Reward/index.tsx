@@ -6,7 +6,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import moment from 'moment';
 
 
@@ -21,6 +21,8 @@ function Reward({ activityDetailsPage }: RewardProps) {
     startDate: string;
     endDate: string;
   }[]>([]);
+
+  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(-1);
 
   AHooks.useMount(async () => {
     const today: string = moment().format('YYYY-MM-DD');
@@ -40,6 +42,20 @@ function Reward({ activityDetailsPage }: RewardProps) {
         endDate: endDate,
       };
     }));
+  });
+
+  AHooks.useMount(async () => {
+    const { data } = await FServiceAPI.Activity.getRewardRecordInfos({
+      rewardGroupCode: 'RG00007',
+      status: 3,
+    });
+    let amount: number = 0;
+
+    for (const d of data) {
+      amount += (d.rewardConfigCode === 'RS000072' ? 20 : 5);
+    }
+    set_sunlightAmount(amount);
+    // console.log(data, 'data890i/oewjfsdlkfjlsdkfjlkj');
   });
 
   return (<div className={styles.reward}>
@@ -168,20 +184,25 @@ function Reward({ activityDetailsPage }: RewardProps) {
         <div className={styles.title3}>
           <span>游戏类资源可获得20元，漫画/小说/图片等类型资源可获得5元</span>
         </div>
-        <div style={{ height: 70 }} />
+        <div style={{ height: 20 }} />
         <div className={styles.title4}>* 同一用户限领3次资源发行奖励</div>
-        {/*<div style={{ height: 20 }} />*/}
-        {/*<Space*/}
-        {/*  size={10}*/}
-        {/*  style={{*/}
-        {/*    padding: '0 20px',*/}
-        {/*    backgroundColor: 'rgba(0, 0, 0, 0.04)',*/}
-        {/*    height: 68,*/}
-        {/*    borderRadius: 10,*/}
-        {/*  }}>*/}
-        {/*  <span>15元现金奖励待领取</span>*/}
-        {/*  <FComponentsLib.FRectBtn type='primary'>立即领取</FComponentsLib.FRectBtn>*/}
-        {/*</Space>*/}
+        <div style={{ height: 10 }} />
+        <Space
+          size={10}
+          style={{
+            padding: '0 20px',
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            height: 68,
+            borderRadius: 10,
+          }}>
+          <span>{sunlightAmount}元现金奖励已发放</span>
+          <FComponentsLib.FRectBtn
+            type='primary'
+            onClick={() => {
+              self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
+            }}
+          >提现</FComponentsLib.FRectBtn>
+        </Space>
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
         <div className={styles.title2} style={{ color: '#BD10E0' }}>

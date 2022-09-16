@@ -2,9 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
+// import { policyCodeTranslationToText } from '../FPolicyBuilderDrawer';
 import FGraph_State_Machine3 from '@/components/FAntvG6/FGraph_State_Machine3';
 import FComponentsLib from '@freelog/components-lib';
+import { Base64 } from 'js-base64';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 
 interface FPolicyDisplayProps {
   code?: string;
@@ -21,14 +23,17 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
 
   AHooks.useMount(async () => {
 
-    const { error, text } = await policyCodeTranslationToText(code || '', 'resource');
+    // const { error, text } = await policyCodeTranslationToText(code || '', 'resource');
     // const { error, text } = await policyCodeTranslationToText(code, 'resource');
     // console.log(text, code, '@@@@@@########$#$#$#$');
-    if (error) {
-      setText('!!!解析错误\n' + '    ' + error[0]);
-      return;
-    }
-    setText(text || '');
+    // if (error) {
+    //   setText('!!!解析错误\n' + '    ' + error[0]);
+    //   return;
+    // }
+    const t: string = (code || '').replace(/(\t|\r)/g, ' ');
+    const e: string = Base64.encode(t);
+    const { data }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+    setText(data);
   });
 
   return (<div className={styles.PolicyBody}>
@@ -76,7 +81,7 @@ function FPolicyDisplay({ code, fullInfo, containerHeight = 'auto' }: FPolicyDis
 
       {
         activated === 'code' && (<div style={{ width: '100%' }}>
-          <FComponentsLib.FCodeFormatter code= {code ? text : fullInfo ? fullInfo.policyText : ''} />
+          <FComponentsLib.FCodeFormatter code={code ? text : fullInfo ? fullInfo.policyText : ''} />
         </div>)
       }
     </div>

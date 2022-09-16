@@ -100,15 +100,15 @@ const Model: DashboardPageModelType = {
         ownerType: 1,
         objectType: 2,
       };
-      const { data: data_RT } = yield call(FServiceAPI.Statistic.transactionsCommon, params1);
+      const { data: data_Resource_Total_Amount } = yield call(FServiceAPI.Statistic.transactionsCommon, params1);
       // console.log(data_RT, 'DDDsoiwsdflsadk');
 
       const params2: Parameters<typeof FServiceAPI.Statistic.transactionsCommon>[0] = {
         ownerId: FUtil.Tool.getUserIDByCookies(),
         ownerType: 1,
-        objectType: 2,
+        objectType: 3,
       };
-      const { data: data_NT } = yield call(FServiceAPI.Statistic.transactionsCommon, params2);
+      const { data: data_Node_Total_Amount } = yield call(FServiceAPI.Statistic.transactionsCommon, params2);
       // console.log(data_NT, 'DDDsoiwsdflsadk222222');
 
       const startTime: string = moment().subtract(1, 'weeks').format(FUtil.Predefined.momentDateFormat);
@@ -120,17 +120,17 @@ const Model: DashboardPageModelType = {
         beginDate: startTime,
         endDate: endTime,
       };
-      const { data: data_RL } = yield call(FServiceAPI.Statistic.transactionsCommon, params3);
+      const { data: data_Resource_LastWeek_Amount } = yield call(FServiceAPI.Statistic.transactionsCommon, params3);
       // console.log(data_RL, 'DDDsoiwsdflsadk');
 
       const params4: Parameters<typeof FServiceAPI.Statistic.transactionsCommon>[0] = {
         ownerId: FUtil.Tool.getUserIDByCookies(),
         ownerType: 1,
-        objectType: 2,
+        objectType: 3,
         beginDate: startTime,
         endDate: endTime,
       };
-      const { data: data_NL } = yield call(FServiceAPI.Statistic.transactionsCommon, params4);
+      const { data: data_Node_LastWeek_Amount } = yield call(FServiceAPI.Statistic.transactionsCommon, params4);
       // console.log(data_NL, 'DDDsoiwsdflsadk222222');
 
       const params5: Parameters<typeof FServiceAPI.Resource.list>[0] = {
@@ -150,13 +150,37 @@ const Model: DashboardPageModelType = {
 
       // console.log(data_AllNodes, 'data_AllNodes09ioj;lksdf');
 
+      const params7: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
+        objectIds: FUtil.Tool.getUserIDByCookies(),
+        objectType: 2,
+        subjectType: 1,
+        startDate: startTime,
+        endDate: endTime,
+      };
+
+      const { data: data_Resource_LastWeek_SingCount } = yield call(FServiceAPI.Contract.contractsSignCount, params7);
+
+      // console.log(data_Resource_LastWeek_SingCount, 'data_Resource_LastWeek_SingCountoislkdfjlk');
+
+      const params8: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
+        objectIds: FUtil.Tool.getUserIDByCookies(),
+        objectType: 2,
+        subjectType: 2,
+        startDate: startTime,
+        endDate: endTime,
+      };
+
+      const { data: data_Node_LastWeek_SingCount } = yield call(FServiceAPI.Contract.contractsSignCount, params8);
+
+      // console.log(data_Node_LastWeek_SingCount, 'data_Node_LastWeek_SingCountingCountoislkdfjlk');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           resourceStatistic: {
-            totalProfit: data_RT,
-            lastWeekProfit: data_RL,
-            lastWeekContract: '0',
+            totalProfit: data_Resource_Total_Amount,
+            lastWeekProfit: data_Resource_LastWeek_Amount,
+            lastWeekContract: data_Resource_LastWeek_SingCount[0].count,
           },
           latestResources: (data_ResourceList.dataList as any[]).map<DashboardPageModelState['latestResources'][number]>((r) => {
             return {
@@ -179,9 +203,9 @@ const Model: DashboardPageModelType = {
           }),
 
           nodeStatistic: {
-            totalProfit: data_NT,
-            lastWeekProfit: data_NL,
-            lastWeekContract: '0',
+            totalProfit: data_Node_Total_Amount,
+            lastWeekProfit: data_Node_LastWeek_Amount,
+            lastWeekContract: data_Node_LastWeek_SingCount[0].count,
           },
 
           allNode: (data_AllNodes.dataList as any[]).map<DashboardPageModelState['allNode'][number]>((dl: any, i: number) => {

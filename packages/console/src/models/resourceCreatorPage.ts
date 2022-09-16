@@ -32,7 +32,8 @@ export interface ResourceCreatorPageModelState {
   cover: string;
   labels: string[];
 
-  promptLeavePath: string,
+  promptLeavePath: string;
+  dataIsDirty: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -48,37 +49,41 @@ export interface OnUnmount_Page_Action extends AnyAction {
   type: 'resourceCreatorPage/onUnmount_Page';
 }
 
-// export interface OnCreateAction extends AnyAction {
-//   type: 'resourceCreatorPage/create';
-// }
-
 export interface OnClick_CreateBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_CreateBtn';
 }
 
-export interface OnChangeNameAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeName';
-  payload: string;
+export interface OnChange_NameInput_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_NameInput';
+  payload: ResourceCreatorPageModelState['name'];
 }
-
-// export interface OnChangeResourceTypeAction extends AnyAction {
-//   type: 'resourceCreatorPage/onChangeResourceType';
-//   payload: string;
-// }
 
 export interface OnChange_Resource_Type_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_Resource_Type';
-  // payload: {
-  //   index: number;
-  //   value: string;
-  // };
   payload: {
     value: ResourceCreatorPageModelState['resource_Type'],
   };
 }
 
-export interface ClearDataAction extends AnyAction {
-  type: 'resourceCreatorPage/clearData';
+export interface OnChange_IntroductionInput_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_IntroductionInput';
+  payload: {
+    value: ResourceCreatorPageModelState['introduction'],
+  };
+}
+
+export interface OnChange_Cover_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_Cover';
+  payload: {
+    value: ResourceCreatorPageModelState['cover'],
+  };
+}
+
+export interface OnChange_Labels_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_Labels';
+  payload: {
+    value: ResourceCreatorPageModelState['labels'],
+  };
 }
 
 export interface ResourceCreatorPageModelType {
@@ -87,13 +92,14 @@ export interface ResourceCreatorPageModelType {
   effects: {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
-    clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
-    // create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
+
     onClick_CreateBtn: (action: OnClick_CreateBtn_Action, effects: EffectsCommandMap) => void;
 
-    onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
-    // onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
+    onChange_NameInput: (action: OnChange_NameInput_Action, effects: EffectsCommandMap) => void;
     onChange_Resource_Type: (action: OnChange_Resource_Type_Action, effects: EffectsCommandMap) => void;
+    onChange_IntroductionInput: (action: OnChange_IntroductionInput_Action, effects: EffectsCommandMap) => void;
+    onChange_Cover: (action: OnChange_Cover_Action, effects: EffectsCommandMap) => void;
+    onChange_Labels: (action: OnChange_Labels_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
@@ -108,13 +114,6 @@ export const initStates: ResourceCreatorPageModelState = {
   nameVerify: 0,
   nameErrorText: '',
 
-  // resourceType: '',
-  // resourceTypeVerify: 0,
-  // resourceTypeErrorText: '',
-  // category: {
-  //   first: -1,
-  //   second: '',
-  // },
   resource_Type: [
     {
       value: '',
@@ -130,6 +129,7 @@ export const initStates: ResourceCreatorPageModelState = {
   labels: [],
 
   promptLeavePath: '',
+  dataIsDirty: false,
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -147,17 +147,18 @@ const Model: ResourceCreatorPageModelType = {
       });
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+      self.onbeforeunload = null;
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * clearData({}: ClearDataAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-      });
-    },
+    // * clearData({}: ClearDataAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: initStates,
+    //   });
+    // },
     // * create({}: OnCreateAction, { call, put, select }: EffectsCommandMap) {
     //   const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
     //     resourceCreatorPage,
@@ -193,12 +194,10 @@ const Model: ResourceCreatorPageModelType = {
     //   }));
     // },
     * onClick_CreateBtn({}: OnClick_CreateBtn_Action, { select, call, put }: EffectsCommandMap) {
+      self.onbeforeunload = null;
       const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
       }));
-      // if (resourceCreatorPage.nameErrorText || !!resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError) {
-      //   return;
-      // }
       const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resource_Type.map((rt: any) => {
@@ -213,14 +212,20 @@ const Model: ResourceCreatorPageModelType = {
 
       yield put<ChangeAction>({
         type: 'change',
-        payload: initStates,
+        payload: {
+          dataIsDirty: false,
+        },
+      });
+      self.onbeforeunload = null;
+
+      setTimeout(() => {
+        history.replace(FUtil.LinkTo.resourceCreateSuccess({
+          resourceID: data.resourceId,
+        }));
       });
 
-      history.replace(FUtil.LinkTo.resourceCreateSuccess({
-        resourceID: data.resourceId,
-      }));
     },
-    * onChangeName({ payload }: OnChangeNameAction, { put, call, select }: EffectsCommandMap) {
+    * onChange_NameInput({ payload }: OnChange_NameInput_Action, { put, call, select }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -255,8 +260,10 @@ const Model: ResourceCreatorPageModelType = {
           // name: payload,
           nameErrorText,
           nameVerify: 2,
+          dataIsDirty: true,
         },
       });
+      self.onbeforeunload = () => true;
     },
     // * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
     //   let resourceTypeErrorText = '';
@@ -334,8 +341,41 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           resource_Type: payload.value,
+          dataIsDirty: true,
         },
       });
+      self.onbeforeunload = () => true;
+    },
+    * onChange_IntroductionInput({ payload }: OnChange_IntroductionInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          introduction: payload.value,
+          introductionErrorText: payload.value.length > 1000 ? '不多于1000个字符' : '',
+          dataIsDirty: true,
+        },
+      });
+      self.onbeforeunload = () => true;
+    },
+    * onChange_Cover({ payload }: OnChange_Cover_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          cover: payload.value,
+          dataIsDirty: true,
+        },
+      });
+      self.onbeforeunload = () => true;
+    },
+    * onChange_Labels({ payload }: OnChange_Labels_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          labels: payload.value,
+          dataIsDirty: true,
+        },
+      });
+      self.onbeforeunload = () => true;
     },
   },
 

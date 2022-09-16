@@ -28,11 +28,18 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 30 }} />
 
         <div className={styles.title}>
-          <FComponentsLib.FTitleText
-            type='h2'
-            text={nodeManagerPage.nodeName}
-            singleRow
-          />
+          <FTooltip title={nodeManagerPage.nodeName} placement={'top'}>
+            <div style={{ display: 'inline-block' }}>
+              <FComponentsLib.FTitleText
+                type='h2'
+                text={nodeManagerPage.nodeName}
+                singleRow
+                style={{
+                  maxWidth: 200
+                }}
+              />
+            </div>
+          </FTooltip>
           <div style={{ height: 15 }} />
           <Space size={10} className={styles.url}>
             <a

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import Sign from './Sign';
 import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
@@ -101,7 +102,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
             </label>
             <FComponentsLib.FTitleText
-              style={{ width: 650 }}
+              style={{ width: 500 }}
               singleRow
               text={resourceDetailPage.resource_Info?.name || ''}
             />

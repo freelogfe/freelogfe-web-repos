@@ -158,7 +158,7 @@ const Model: RewardPageModelType = {
               key: dr.id,
               date: dataAndTime[0],
               time: dataAndTime[1],
-              digest: extra,
+              // digest: extra,
               digest: extra?.mark || extra?.remark || '---',
               transactionAmount: dr.changedAmount,
               afterBalance: dr.afterBalance,

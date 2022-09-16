@@ -9,6 +9,7 @@ import { RouteComponentProps } from 'react-router';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -36,13 +37,15 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
     <div className={styles.title}>
       <label>test</label>
       &nbsp;&nbsp;
+      <FTooltip title={informalNodeManagerPage.node_Name} placement={'top'}>
       <span style={{
         display: 'inline-block',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        width: 155
+        maxWidth: 155,
       }}>{informalNodeManagerPage.node_Name}</span>
+      </FTooltip>
     </div>
     <div style={{ height: 15 }} />
     <Space size={5} className={styles.url}>
