@@ -6,6 +6,7 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import fMessage from '@/components/fMessage';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -365,7 +366,11 @@ const Model: ResourceAuthPageModelType = {
           versions: payload,
         }],
       };
-      const { data } = yield call(FServiceAPI.Resource.batchSetContracts, params);
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.batchSetContracts, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
