@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
+import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 
 interface BindingProps {
 
@@ -15,7 +16,7 @@ const types = {
 const states = {
   1: '绑定成功',
   2: '绑定失败',
-  3: '已被其他账号绑定',
+  3: FI18n.i18nNext.t('msg_wechataccountconnected'),
 };
 
 function Binding({}: BindingProps) {
