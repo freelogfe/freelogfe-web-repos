@@ -13,9 +13,15 @@ interface GetFileInfosBySha1Params {
   sha1: string[];
 }
 
-export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<FileInfo[]> {
+export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<{
+  error: string;
+  result: FileInfo[],
+}> {
   if (sha1.length === 0) {
-    return [];
+    return {
+      error: '',
+      result: [],
+    };
   }
 
   let delay: number = 500;
@@ -26,9 +32,17 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
 
   while (true) {
     // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
-    const {data} = await Storage.filesListInfo({
+    const {ret, errCode, data, msg}: any = await Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
     });
+
+    if (ret !== 0 || errCode !== 0) {
+      return {
+        error: msg,
+        result: allData,
+      };
+    }
+
     needHandleSha1 = data
       .filter((d: any) => {
         return d.metaAnalyzeStatus && d.metaAnalyzeStatus === 1;
@@ -46,6 +60,8 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
           state = 'nonentity';
         } else if (d.metaAnalyzeStatus === 2) {
           state = 'success';
+        } else if (d.metaAnalyzeStatus === 3) {
+          state = 'fail';
         }
         return {
           sha1: d.sha1,
@@ -65,5 +81,8 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     await Tool.promiseSleep(delay);
     // delay += 500;
   }
-  return allData;
+  return {
+    error: '',
+    result: allData,
+  };
 }
