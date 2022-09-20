@@ -42,7 +42,7 @@ function Notice({}: NoticeProps) {
         href: d.linkActivityId
           ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
           : d.link,
-        date: '2022-00-00'
+        date: '0000-00-00'
       };
     }));
   });
