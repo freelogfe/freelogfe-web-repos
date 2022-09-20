@@ -486,7 +486,8 @@ const Model: LogonPageModelType = {
         if (payload.goToUrl !== '') {
           window.location.replace(decodeURIComponent(payload.goToUrl));
         } else {
-          history.replace(FUtil.LinkTo.wallet());
+          // history.replace(FUtil.LinkTo.wallet());
+          self.location.replace(FUtil.Format.completeUrlByDomain('www'));
         }
       } else {
         fMessage('账户或密码错误', 'error');

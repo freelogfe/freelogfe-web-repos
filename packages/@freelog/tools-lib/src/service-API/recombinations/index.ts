@@ -37,6 +37,9 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     });
 
     if (ret !== 0 || errCode !== 0) {
+      console.log({
+        ret, errCode, data, msg
+      }, '09iowksdjaklfjs;oalijflskdjflsdkjflkj');
       return {
         error: msg,
         result: allData,
@@ -63,6 +66,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
         } else if (d.metaAnalyzeStatus === 3) {
           state = 'fail';
         }
+        console.log(d, '90wieojiksdjf;lkasdjf;lksdjflksjdflkjsdlfkjsdlkj');
         return {
           sha1: d.sha1,
           state,
