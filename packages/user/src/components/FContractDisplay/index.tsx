@@ -196,7 +196,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       })
       .map((eti: any, etiIndex) => {
         const obj = {
-          eventID: eti.origin.eventId,
+          eventID: eti.origin.id,
           tip: eti.content,
           type: eti.origin.name,
         };
@@ -236,6 +236,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
   async function confirmPay(password: string) {
     set_Modal_IsPaying(true);
+    console.log(contractID, 'contractID09iowesjflksdfjlsdkj');
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
       eventId: modal_EventID,

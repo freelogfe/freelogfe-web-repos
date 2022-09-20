@@ -417,6 +417,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                         way: 'bind',
                       });
                       setVerifyPassword(true);
+                      // self.open(FUtil.LinkTo.binding());
                     }}
                     type='primary'
                   >

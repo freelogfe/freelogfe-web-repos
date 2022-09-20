@@ -102,6 +102,8 @@ const timeUnits = [
   { value: 'week', title: '周' },
   { value: 'day', title: '天' },
   { value: 'cycle', title: '周期' },
+  { value: 'hour', title: '时' },
+  { value: 'minute', title: '分' },
 ];
 
 const accounts = [
@@ -863,7 +865,7 @@ function FPolicyBuilder({
                       onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
                         <FComposition />
-                        <span>组合模式</span>
+                        <span>{FI18n.i18nNext.t('toggle_authplan_visual_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
                     : (<FComponentsLib.FTextBtn
@@ -872,7 +874,7 @@ function FPolicyBuilder({
                       onClick={onClick_SwitchMode_Code}>
                       <Space size={4}>
                         <FCode />
-                        <span>代码模式</span>
+                        <span>{FI18n.i18nNext.t('toggle_authplan_code_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
                 }

@@ -3,16 +3,18 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FResourceList, { FResourceListProps } from '@/components/FResourceList';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState } from '@/models/connect';
 import { DownOutlined } from '@ant-design/icons';
 import {
   ChangeAction,
   FetchObjectsAction,
-  OnChangeOConditionsAction, storageObjectDepSelectorInitData,
+  OnChangeOConditionsAction,
+  // storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
+// import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];

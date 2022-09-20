@@ -681,7 +681,11 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       // console.log(params, 'params2093uiksdjflsdkjl');
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      const { data, ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });

@@ -692,8 +692,32 @@ const Model: ResourceVersionCreatorModelType = {
         sha1: [resourceVersionCreatorPage.selectedFileSha1],
       };
       // console.log('*(*********');
-      const result: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
+      const {
+        result,
+        error,
+      }: { result: any[]; error: string; } = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
       // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
+      if (error !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+        return fMessage(error, 'error');
+      }
+
+      if (result[0].state === 'fail') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+        return fMessage('文件解析失败', 'error');
+      }
 
       if (result[0].state === 'success') {
         yield put<ChangeAction>({
@@ -707,7 +731,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             rawPropertiesState: 'success',
           },
-          caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
         });
       }
 

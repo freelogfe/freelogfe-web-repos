@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { Space } from 'antd';
 import { UpdateRelationAction } from '@/models/exhibitInfoPage';
@@ -31,7 +32,8 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
   return (<div>
     <div style={{ height: 10 }} />
     {/*<FComponentsLib.FTitleText type='h4'>未签约策略</FComponentsLib.FTitleText>*/}
-    <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
+    <FComponentsLib.FTitleText
+      type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
     <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>
       {

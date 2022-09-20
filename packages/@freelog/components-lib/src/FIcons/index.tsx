@@ -8,6 +8,9 @@ import FLine from './FLine';
 import FPlus from './FPlus';
 import FUser from './FUser';
 import FCopy from './FCopy';
+import FWarning from './FWarning';
+import FFail from './FFail';
+import FBinding from './FBinding';
 
 const FIcons = {
     FLinkedin,
@@ -19,5 +22,8 @@ const FIcons = {
     FPlus,
     FUser,
     FCopy,
+    FWarning,
+    FFail,
+    FBinding,
 };
 export default FIcons;
