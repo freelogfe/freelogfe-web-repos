@@ -33,7 +33,7 @@ function Notice({}: NoticeProps) {
       limit: 1,
       place: 1,
     });
-    console.log(data, '#2309i3oj3####');
+    // console.log(data, '#2309i3oj3####');
     set_notices(data.dataList.map((d: any) => {
       // console.log(d, 'd0932iojsdifjsdalkf');
       return {
@@ -64,7 +64,7 @@ function Notice({}: NoticeProps) {
             <span>{n.title}</span>
           </Space>
           <Space size={15}>
-            <span>{n.date}</span>
+            {/*<span>{n.date}</span>*/}
             <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {

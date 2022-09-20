@@ -408,15 +408,16 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   <FComponentsLib.FTextBtn
                     onClick={() => {
                       // self.open(FUtil.LinkTo.binding());
-                      setBindTip({
-                        type: 'success',
-                        msg: '',
-                        closable: false,
-                        className: 'h-238',
-                        icon: bindSuccess,
-                        way: 'bind',
-                      });
-                      setVerifyPassword(true);
+                      // setBindTip({
+                      //   type: 'success',
+                      //   msg: '',
+                      //   closable: false,
+                      //   className: 'h-238',
+                      //   icon: bindSuccess,
+                      //   way: 'bind',
+                      // });
+                      // setVerifyPassword(true);
+                      self.open(FUtil.LinkTo.binding());
                     }}
                     type='primary'
                   >
