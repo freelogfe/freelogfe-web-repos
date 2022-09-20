@@ -28,7 +28,7 @@
     "@freelog/nmr_translator": "^5.1.4",
     "@freelog/resource-policy-lang": "^1.4.9",
     "@types/react-copy-to-clipboard": "^4.3.0",
-    "antd": "^4.21.7",
+    "antd": "^4.23.2",
     "axios": "^0.19.2",
     "braft-editor": "^2.3.9",
     "cropperjs": "^1.5.12",
