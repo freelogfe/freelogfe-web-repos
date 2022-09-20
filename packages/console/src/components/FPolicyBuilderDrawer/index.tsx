@@ -102,6 +102,8 @@ const timeUnits = [
   { value: 'week', title: '周' },
   { value: 'day', title: '天' },
   { value: 'cycle', title: '周期' },
+  { value: 'hour', title: '时' },
+  { value: 'minute', title: '分' },
 ];
 
 const accounts = [
