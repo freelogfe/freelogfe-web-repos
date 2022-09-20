@@ -5,7 +5,8 @@ import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState,
   ResourceInfoModelState,
@@ -22,7 +23,7 @@ import {
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import { withRouter,Prompt } from 'umi';
+import { withRouter, Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
@@ -35,6 +36,7 @@ import { Helmet } from 'react-helmet';
 import FPaperPlane from '@/components/FIcons/FPaperPlane';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import { EditorState } from 'braft-editor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -187,7 +189,7 @@ function VersionCreator({
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
-              onChange={(value) => {
+              onChange={(value: EditorState) => {
                 // console.log('######!!~@#@!#!@');
                 onChange({
                   description: value,

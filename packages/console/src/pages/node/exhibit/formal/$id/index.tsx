@@ -6,7 +6,8 @@ import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
   AddAPolicyAction,
@@ -275,7 +276,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {
               !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
-                <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
+                <span
+                  style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
 
                 <FSwitch
                   disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}

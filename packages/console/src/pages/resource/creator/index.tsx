@@ -6,7 +6,8 @@ import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCov
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/layouts/FContentLayout';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
   // OnCreateAction,
