@@ -865,7 +865,7 @@ function FPolicyBuilder({
                       onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
                         <FComposition />
-                        <span>组合模式</span>
+                        <span>{FI18n.i18nNext.t('toggle_authplan_visual_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
                     : (<FComponentsLib.FTextBtn
@@ -874,7 +874,7 @@ function FPolicyBuilder({
                       onClick={onClick_SwitchMode_Code}>
                       <Space size={4}>
                         <FCode />
-                        <span>代码模式</span>
+                        <span>{FI18n.i18nNext.t('toggle_authplan_code_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
                 }
