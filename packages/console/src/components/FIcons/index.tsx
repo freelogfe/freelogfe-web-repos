@@ -4,7 +4,7 @@ import FAdd from './FAdd';
 import FCheck from './FCheck';
 import FClose from './FClose';
 import FCloudUpload from './FCloudUpload';
-import FCopy from './FCopy';
+// import FCopy from './FCopy';
 import FDelete from './FDelete';
 import FDoubleDown from './FDoubleDown';
 import FDoubleUp from './FDoubleUp';
@@ -39,7 +39,7 @@ import FImport from './FImport';
 import FCode from './FCode';
 import FNodes from './FNodes';
 import FUp from './FUp';
-import FUser from './FUser';
+// import FUser from './FUser';
 
 export {
   FAdd,
@@ -60,7 +60,7 @@ export {
   FDoubleDown,
   // FPlus,
   // FWarning,
-  FCopy,
+  // FCopy,
   FCloudUpload,
   FCheck,
   FLoading,
@@ -81,5 +81,5 @@ export {
   FCode,
   FNodes,
   FUp,
-  FUser,
+  // FUser,
 };
