@@ -6,9 +6,10 @@ import FTable from '@/components/FTable';
 // import FListFooter from '@/components/FListFooter';
 import { Modal, Space } from 'antd';
 import FInput from '@/components/FInput';
-import { FWarning } from '@/components/FIcons';
+// import { FWarning } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, RewardPageModelState } from '@/models/connect';
 import {
   OnBlur_WithdrawModal_AmountInput_Action,
@@ -114,7 +115,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
           {
             rewardPage.cashAmount < 20 && (
               <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
                 <div style={{ width: 5 }} />
                 <span>可提现金额少于20元，不可提现</span>
               </div>)
@@ -194,7 +195,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
               rewardPage.wechatModal_task === 'binding' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
                   <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-                    <FWarning />
+                    <FComponentsLib.FIcons.FWarning />
                     <div style={{ width: 5 }} />
                     <span>提现需绑定微信</span>
                   </div>
@@ -216,7 +217,7 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <div style={{ fontSize: 14, color: '#E9A923', display: 'flex', alignItems: 'center' }}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
                 <div style={{ width: 5 }} />
                 <span>提现需关注微信公众号</span>
               </div>
