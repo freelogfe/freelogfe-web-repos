@@ -160,7 +160,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       window.open(FUtil.LinkTo.resourceCreator());
                     }}
                     type='default'>
-                    <FAdd style={{ fontSize: 16 }} />
+                    <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>新资源</span>
                   </FComponentsLib.FTextBtn>
 

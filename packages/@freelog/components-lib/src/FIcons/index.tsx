@@ -1,4 +1,16 @@
 import './index.less';
+
+import FAdd from './FAdd';
+import FBinding from './FBinding';
+import FCancelCollect from './FCancelCollect';
+import FCheck from './FCheck';
+import FClose from './FClose';
+import FCloudUpload from './FCloudUpload';
+import FCode from './FCode';
+import FCollect from './FCollect';
+import FComposition from './FComposition';
+import FContent from './FContent';
+
 import FLinkedin from './FLinkedin';
 import FSina from './FSina';
 import FWeChat from './FWeChat';
@@ -10,12 +22,20 @@ import FUser from './FUser';
 import FCopy from './FCopy';
 import FWarning from './FWarning';
 import FFail from './FFail';
-import FBinding from './FBinding';
-import FAdd from './FAdd';
-import FCancelCollect from './FCancelCollect';
-import FCheck from './FCheck';
 
 const FIcons = {
+    FAdd,
+    FBinding,
+    FCancelCollect,
+    FCheck,
+    FClose,
+    FCloudUpload,
+    FCode,
+    FCollect,
+    FComposition,
+    FContent,
+    FCopy,
+
     FLinkedin,
     FSina,
     FWeChat,
@@ -24,12 +44,7 @@ const FIcons = {
     FLine,
     FPlus,
     FUser,
-    FCopy,
     FWarning,
     FFail,
-    FBinding,
-    FAdd,
-    FCancelCollect,
-    FCheck,
 };
 export default FIcons;
