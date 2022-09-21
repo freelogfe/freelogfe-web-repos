@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
-import { FWarning } from '@/components/FIcons';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';

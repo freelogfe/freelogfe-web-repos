@@ -12,7 +12,6 @@ import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
 import { Checkbox, Popconfirm, Space } from 'antd';
-import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
