@@ -14,7 +14,8 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
   OnCancelRulePageLeaveAction,
@@ -475,7 +476,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           title={rule.ruleInfo.errorMsg}
                           placement='left'
                         >
-                          <div><FFail style={{ color: '#EE4040' }} /></div>
+                          <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
                         </FTooltip>)
                       }
                       {
@@ -543,7 +544,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                     title={ruleAction.errorMsg}
                                     placement='left'
                                   >
-                                    <div><FFail style={{ color: '#EE4040' }} /></div>
+                                    <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
                                   </FTooltip>)
                                 }
 

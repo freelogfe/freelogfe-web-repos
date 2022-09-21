@@ -4,8 +4,6 @@ import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
 import PolicyTemplates from './PolicyTemplates';
-// , { title1, text1, title2, text2 }
-
 import FDrawer from '../FDrawer';
 import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
@@ -13,7 +11,6 @@ import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
 import { FUtil, FI18n ,FServiceAPI} from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
-// import { DisabledTimes } from 'rc-picker/lib/interface';
 import FTooltip from '../FTooltip';
 import FMonacoEditor from '../FMonacoEditor';
 import fConfirmModal from '../fConfirmModal';
@@ -21,7 +18,6 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
-// import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 
 const FDatePicker: any = DatePicker;
 
