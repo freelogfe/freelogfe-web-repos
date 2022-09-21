@@ -11,6 +11,9 @@ import FCopy from './FCopy';
 import FWarning from './FWarning';
 import FFail from './FFail';
 import FBinding from './FBinding';
+import FAdd from './FAdd';
+import FCancelCollect from './FCancelCollect';
+import FCheck from './FCheck';
 
 const FIcons = {
     FLinkedin,
@@ -25,5 +28,8 @@ const FIcons = {
     FWarning,
     FFail,
     FBinding,
+    FAdd,
+    FCancelCollect,
+    FCheck,
 };
 export default FIcons;

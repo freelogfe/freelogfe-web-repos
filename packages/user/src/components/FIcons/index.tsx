@@ -4,7 +4,7 @@ import FAdd from './FAdd';
 import FCheck from './FCheck';
 import FClose from './FClose';
 import FCloudUpload from './FCloudUpload';
-import FCopy from './FCopy';
+// import FCopy from './FCopy';
 import FDelete from './FDelete';
 import FDoubleDown from './FDoubleDown';
 import FDoubleUp from './FDoubleUp';
@@ -58,7 +58,7 @@ export {
   FDoubleUp,
   FDoubleDown,
   FPlus,
-  FCopy,
+  // FCopy,
   FCloudUpload,
   FCheck,
   FLoading,
