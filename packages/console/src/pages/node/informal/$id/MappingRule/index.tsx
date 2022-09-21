@@ -484,7 +484,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           title={rule.ruleInfo.warningMsg}
                           placement='left'
                         >
-                          <div><FWarning /></div>
+                          <div><FComponentsLib.FIcons.FWarning /></div>
                         </FTooltip>)
                       }
 
@@ -553,7 +553,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                     title={ruleAction.warningMsg}
                                     placement='left'
                                   >
-                                    <div><FWarning /></div>
+                                    <div><FComponentsLib.FIcons.FWarning /></div>
                                   </FTooltip>)
                                 }
 

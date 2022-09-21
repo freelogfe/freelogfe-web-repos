@@ -130,7 +130,7 @@ function MappingRule({
                 title={oaar.warningMsg}
                 placement="left"
               >
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>)
             }
 

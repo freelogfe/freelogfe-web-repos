@@ -274,7 +274,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                           {!i.isAuth && (
                             <FTooltip title={i.authErrorText}>
-                              <FWarning />
+                              <FComponentsLib.FIcons.FWarning />
                             </FTooltip>
                           )}
                         </Space>

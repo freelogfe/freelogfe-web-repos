@@ -14,7 +14,7 @@ import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/model
 import FDrawer from '@/components/FDrawer';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
-import { FWarning } from '@/components/FIcons';
+import { FCode, FWarning } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -128,7 +128,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 {
                   // resource.authProblem && (<Space size={10}>
                   resource.warning === 'authException' && (<Space size={10}>
-                    <FWarning style={{ fontSize: 20 }} />
+                    <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
                   </Space>)
                 }
@@ -136,7 +136,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 {
                   // resource.authProblem && (<Space size={10}>
                   resource.warning === 'ownerFreeze' && (<Space size={10}>
-                    <FWarning style={{ fontSize: 20 }} />
+                    <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
                   </Space>)
                 }
