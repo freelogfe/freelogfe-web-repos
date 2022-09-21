@@ -3,10 +3,8 @@ import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import { ColumnsType } from 'antd/lib/table';
 import FTable from '@/components/FTable';
-// import FListFooter from '@/components/FListFooter';
 import { Modal, Space } from 'antd';
 import FInput from '@/components/FInput';
-// import { FWarning } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -24,8 +22,6 @@ import {
 import FNoDataTip from '@/components/FNoDataTip';
 import FListFooter from '@/components/FListFooter';
 import FVerifyUserPasswordModal from '@/components/FVerifyUserPasswordModal';
-
-// import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 interface RewardProps {
   dispatch: Dispatch;

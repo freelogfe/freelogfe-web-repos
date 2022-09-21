@@ -32,7 +32,6 @@ import FObject from './FObject';
 import FPlus from './FPlus';
 import FRedo from './FRedo';
 import FSwap from './FSwap';
-import FWarning from './FWarning';
 import FExit from './FExit';
 import FExport from './FExport';
 import FImport from './FImport';
@@ -59,7 +58,6 @@ export {
   FDoubleUp,
   FDoubleDown,
   FPlus,
-  FWarning,
   FCopy,
   FCloudUpload,
   FCheck,
