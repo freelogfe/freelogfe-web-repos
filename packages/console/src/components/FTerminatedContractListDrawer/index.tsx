@@ -8,7 +8,7 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import FResource from '@/components/FIcons/FResource';
-import { FNodes, FUser } from '@/components/FIcons';
+import { FNodes } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 
@@ -173,7 +173,7 @@ function FTerminatedContractListDrawer({
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />

@@ -5,9 +5,10 @@ import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
-import { FLoading, FNodes, FUser } from '@/components/FIcons';
+import { FLoading, FNodes } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManager_Contract_Page_ModelState } from '@/models/connect';
 import {
   OnChange_Authorize_Date_Action,
@@ -112,7 +113,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
@@ -224,7 +225,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
