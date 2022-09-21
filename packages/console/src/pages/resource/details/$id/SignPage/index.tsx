@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import { history } from 'umi';
@@ -27,7 +28,7 @@ interface SignProps {
 function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
   AHooks.useUnmount(() => {
-      window.history.forward();
+    window.history.forward();
   });
 
   const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
@@ -109,7 +110,8 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
           {
             resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
               <div style={{ height: 5 }} />
-              <div className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
+              <div
+                className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
             </>)
           }
 

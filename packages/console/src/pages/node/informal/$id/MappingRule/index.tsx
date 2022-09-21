@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/FIcons';
+import { FImport, FExport, FExit, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
@@ -205,7 +205,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FCode />
+            <FComponentsLib.FIcons.FCode />
             <span>进入代码模式</span>
           </Space>
         </FComponentsLib.FTextBtn>)

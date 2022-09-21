@@ -23,7 +23,7 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
         }}
       >
         <a className={styles.FUploadImageChildren}>
-          <FCloudUpload />
+          <FComponentsLib.FIcons.FCloudUpload />
           <span>{FI18n.i18nNext.t('upload_image')}</span>
         </a>
       </FUploadCover>)

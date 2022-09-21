@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Input, Form } from 'antd';
-// import FUtil1 from '@/utils';
-import { FClose } from '@/components/FIcons';
+import { Input } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FLabelEditor {
   values?: string[];
@@ -90,7 +89,7 @@ export default function({ values = [], onChange }: FLabelEditor) {
           {
             values.map((i: string, j: number) => (<label key={i} className={styles.label}>
               <span>{i}</span>
-              <a onClick={() => onRemove(j)}><FClose style={{ fontSize: 12 }} /></a>
+              <a onClick={() => onRemove(j)}><FComponentsLib.FIcons.FClose style={{ fontSize: 12 }} /></a>
             </label>))
           }
         </div>

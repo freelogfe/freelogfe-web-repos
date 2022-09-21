@@ -20,7 +20,7 @@ import { withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import { FNodes, FUser } from '@/components/FIcons';
+import { FNodes } from '@/components/FIcons';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
@@ -81,7 +81,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
             record.licenseeIdentityType === 'node' && (<FNodes />)
           }
           {
-            record.licenseeIdentityType === 'user' && (<FUser />)
+            record.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
           }
           <FComponentsLib.FContentText
             type='highlight'

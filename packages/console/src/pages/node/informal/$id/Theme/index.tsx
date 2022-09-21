@@ -14,7 +14,6 @@ import {
   OnMountThemePageAction,
   OnUnmountThemePageAction,
 } from '@/models/informalNodeManagerPage';
-import FAdd from '@/components/FIcons/FAdd';
 import FInput from '@/components/FInput';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -89,7 +88,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   });
                 }}>
                 <Space size={5}>
-                  <FAdd />
+                  <FComponentsLib.FIcons.FAdd />
                   <span>{FI18n.i18nNext.t('btn_add_test_theme')}</span>
                 </Space>
               </FComponentsLib.FTextBtn>

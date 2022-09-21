@@ -1,8 +1,5 @@
 import * as React from 'react';
 
-import FCheck from './FCheck';
-import FClose from './FClose';
-import FCloudUpload from './FCloudUpload';
 import FDelete from './FDelete';
 import FDoubleDown from './FDoubleDown';
 import FDoubleUp from './FDoubleUp';
@@ -30,32 +27,22 @@ import FSwap from './FSwap';
 import FExit from './FExit';
 import FExport from './FExport';
 import FImport from './FImport';
-import FCode from './FCode';
 import FNodes from './FNodes';
 import FUp from './FUp';
 
 export {
-  FAdd,
   FDownload,
   FLeft,
   FDelete,
-  // FLine,
   FFavorite,
   FDown,
   FSwap,
   FInfo,
   FFileText,
   FFileSearch,
-  // FEdit,
   FExclamation,
-  FClose,
   FDoubleUp,
   FDoubleDown,
-  // FPlus,
-  // FWarning,
-  // FCopy,
-  FCloudUpload,
-  FCheck,
   FLoading,
   FMappingRuleAdd,
   FMappingRuleAttr,
@@ -71,8 +58,6 @@ export {
   FExit,
   FExport,
   FImport,
-  FCode,
   FNodes,
   FUp,
-  // FUser,
 };

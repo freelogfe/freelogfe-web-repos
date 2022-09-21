@@ -4,7 +4,6 @@ import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { FDelete } from '@/components/FIcons';
 import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
-import FCancelCollect from '@/components/FIcons/FCancelCollect';
 import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -42,7 +41,7 @@ const btnMap: any = {
   },
   cancelCollect: {
     text: '取消收藏',
-    icon: (<FCancelCollect />),
+    icon: (<FComponentsLib.FIcons.FCancelCollect />),
   },
 };
 

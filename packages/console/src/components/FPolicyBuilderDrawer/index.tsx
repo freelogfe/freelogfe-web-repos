@@ -2,14 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
-import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
+import { FDown, FFileText, FInfo, FLoading } from '../FIcons';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
-import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
 import FGuideDown from '../FIcons/FGuideDown';
-import { FUtil, FI18n ,FServiceAPI} from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import FTooltip from '../FTooltip';
 import FMonacoEditor from '../FMonacoEditor';
@@ -440,59 +439,59 @@ function FPolicyBuilder({
     setTemplateVisible(false);
     // if (num === 1) {
 
-      setTitleInput(title);
-      setTitleInputError(verifyTitle(title, alreadyUsedTitles));
+    setTitleInput(title);
+    setTitleInputError(verifyTitle(title, alreadyUsedTitles));
 
-      if (editMode === 'code') {
-        set_Code_IsDirty(true);
-        set_Code_Input(text);
-        set_Code_InputErrors([]);
-      } else {
-        // const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-        // const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-        // const result: CombinationStructureType = codeToData()
-        const { errors, results } = await codeToData({
-          text: text,
-          targetType: targetType,
-        });
-        //   [
-        //   {
-        //     randomID: initialRandomID,
-        //     type: 'initial',
-        //     name: 'initial',
-        //     nameError: '',
-        //     isNameDuplicate: false,
-        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-        //     authorizationChecked: ['active'],
-        //     events: [
-        //       {
-        //         randomID: FUtil.Tool.generateRandomCode(10),
-        //         type: 'relativeTime',
-        //         target: finishRandomID,
-        //         relativeTime_Num: '1',
-        //         relativeTime_NumError: '',
-        //         relativeTime_Unit: 'month',
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     randomID: finishRandomID,
-        //     type: 'other',
-        //     name: 'finish',
-        //     nameError: '',
-        //     isNameDuplicate: false,
-        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-        //     authorizationChecked: [],
-        //     events: [
-        //       {
-        //         randomID: FUtil.Tool.generateRandomCode(10),
-        //         type: 'terminate',
-        //       },
-        //     ],
-        //   },
-        // ];
-        results && set_Combination_Data(results);
-      }
+    if (editMode === 'code') {
+      set_Code_IsDirty(true);
+      set_Code_Input(text);
+      set_Code_InputErrors([]);
+    } else {
+      // const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+      // const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
+      // const result: CombinationStructureType = codeToData()
+      const { errors, results } = await codeToData({
+        text: text,
+        targetType: targetType,
+      });
+      //   [
+      //   {
+      //     randomID: initialRandomID,
+      //     type: 'initial',
+      //     name: 'initial',
+      //     nameError: '',
+      //     isNameDuplicate: false,
+      //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      //     authorizationChecked: ['active'],
+      //     events: [
+      //       {
+      //         randomID: FUtil.Tool.generateRandomCode(10),
+      //         type: 'relativeTime',
+      //         target: finishRandomID,
+      //         relativeTime_Num: '1',
+      //         relativeTime_NumError: '',
+      //         relativeTime_Unit: 'month',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     randomID: finishRandomID,
+      //     type: 'other',
+      //     name: 'finish',
+      //     nameError: '',
+      //     isNameDuplicate: false,
+      //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
+      //     authorizationChecked: [],
+      //     events: [
+      //       {
+      //         randomID: FUtil.Tool.generateRandomCode(10),
+      //         type: 'terminate',
+      //       },
+      //     ],
+      //   },
+      // ];
+      results && set_Combination_Data(results);
+    }
     // } else {
     //   setTitleInput(title2);
     //   setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
@@ -579,7 +578,7 @@ function FPolicyBuilder({
 
       const t: string = (code_Input || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
-      const { data:text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+      const { data: text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
 
       // const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
@@ -614,7 +613,7 @@ function FPolicyBuilder({
 
       const t: string = (combinationCode || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
-      const { data:translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+      const { data: translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
       setIsVerifying(false);
       // if (error) {
@@ -755,7 +754,7 @@ function FPolicyBuilder({
       {
         showView === 'success' && (<div>
           <div className={styles.PolicyVerifySuccess}>
-            <FCheck />
+            <FComponentsLib.FIcons.FCheck />
             <div style={{ width: 5 }} />
             <div>校验成功</div>
             <div style={{ width: 20 }} />
@@ -860,7 +859,7 @@ function FPolicyBuilder({
                       // disabled={codeMirrorInputHasError || isVerifying}
                       onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
-                        <FComposition />
+                        <FComponentsLib.FIcons.FComposition />
                         <span>{FI18n.i18nNext.t('toggle_authplan_visual_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
@@ -869,7 +868,7 @@ function FPolicyBuilder({
                       // disabled={combinationDataHasError}
                       onClick={onClick_SwitchMode_Code}>
                       <Space size={4}>
-                        <FCode />
+                        <FComponentsLib.FIcons.FCode />
                         <span>{FI18n.i18nNext.t('toggle_authplan_code_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
@@ -1312,21 +1311,21 @@ function FPolicyBuilder({
         <div style={{ height: 30 }} />
         <PolicyTemplates
           // onClickSelect={(num) => {
-            // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
-            //   return onClick_SelectTemplateBtn(num);
-            // }
-            // if (editMode === 'code' && code_Input === initStates.code_Input) {
-            //   return onClick_SelectTemplateBtn(num);
-            // }
-            // Modal.confirm({
-            //   title: FI18n.i18nNext.t('alert_plan_cover'),
-            //   okText: FI18n.i18nNext.t('btn_import'),
-            //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-            //   onOk() {
-            //     // onClick_SelectTemplateBtn(num);
-            //   },
-            // });
-            // }}
+          // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
+          //   return onClick_SelectTemplateBtn(num);
+          // }
+          // if (editMode === 'code' && code_Input === initStates.code_Input) {
+          //   return onClick_SelectTemplateBtn(num);
+          // }
+          // Modal.confirm({
+          //   title: FI18n.i18nNext.t('alert_plan_cover'),
+          //   okText: FI18n.i18nNext.t('btn_import'),
+          //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+          //   onOk() {
+          //     // onClick_SelectTemplateBtn(num);
+          //   },
+          // });
+          // }}
           onSelect={({ title, text }) => {
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
               return onClick_SelectTemplateBtn(title, text);

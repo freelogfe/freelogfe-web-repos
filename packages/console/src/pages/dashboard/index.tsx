@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FAdd, FInfo } from '@/components/FIcons';
+import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FFormLayout from '@/components/FFormLayout';
-import FContent from '@/components/FIcons/FContent';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
@@ -169,7 +168,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       window.open(FUtil.LinkTo.myResources());
                     }}
                     type='default'>
-                    <FContent style={{ fontSize: 16 }} />
+                    <FComponentsLib.FIcons.FContent style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>查看全部</span>
                   </FComponentsLib.FTextBtn>
                 </Space>}
@@ -278,7 +277,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                     window.open(FUtil.LinkTo.nodeCreator());
                   }}
                 >
-                  <FAdd style={{ fontSize: 16 }} />
+                  <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
                   <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
                 </FComponentsLib.FTextBtn>}
               >

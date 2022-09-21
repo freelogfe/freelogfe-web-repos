@@ -25,7 +25,7 @@ import {
   OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
 import { history } from 'umi';
-import { FCheck, FLoading } from '@/components/FIcons';
+import { FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import { Prompt } from 'umi';
@@ -191,7 +191,7 @@ function ResourceCreator({
               <div style={{ width: 10 }} />
               {resourceCreatorPage.nameVerify === 1 && <FLoading />}
               {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && (
-                <FCheck />
+                <FComponentsLib.FIcons.FCheck />
               )}
             </div>
           </FFormLayout.FBlock>

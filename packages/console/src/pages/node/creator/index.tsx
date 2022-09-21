@@ -12,7 +12,7 @@ import {
   OnChange_NameInput_Action,
   OnClick_CreateBtn_Action,
 } from '@/models/nodeCreatorPage';
-import { FCheck, FLoading } from '@/components/FIcons';
+import { FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
@@ -82,7 +82,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </div>
         <div style={{ width: 18 }}>
           {nodeCreatorPage.nodeDomainState === 'verifying' && <FLoading />}
-          {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError && <FCheck />}
+          {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError && <FComponentsLib.FIcons.FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodeCreatorPage.nodeDomainError}</pre>
@@ -111,7 +111,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </div>
         <div style={{ width: 18 }}>
           {nodeCreatorPage.nodeNameState === 'verifying' && <FLoading />}
-          {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError && <FCheck />}
+          {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError && <FComponentsLib.FIcons.FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>

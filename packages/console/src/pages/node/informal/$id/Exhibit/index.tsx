@@ -4,9 +4,9 @@ import FNoDataTip from '@/components/FNoDataTip';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
-import FAdd from '@/components/FIcons/FAdd';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
@@ -119,7 +119,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FAdd />
+                    <FComponentsLib.FIcons.FAdd />
                     {/*<FContentText text={}/>*/}
                     <span>{FI18n.i18nNext.t('title_add_test_exhibit')}</span>
                   </Space>
