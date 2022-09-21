@@ -6,7 +6,8 @@ import { ColumnsType } from 'antd/lib/table';
 import { Modal, Space, Radio, message, DatePicker } from 'antd';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, UserModelState, WalletPageModelState } from '@/models/connect';
 import {
   OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action,
@@ -50,7 +51,7 @@ import {
   OnClick_Activate_NextBtn_Action,
   OnClick_Table_Filter_SearchBtn_Action, OnClick_Table_Filter_ResetBtn_Action,
 } from '@/models/walletPage';
-import { FCheck } from '@/components/FIcons';
+// import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
@@ -911,7 +912,7 @@ export default connect(({ walletPage, user }: ConnectState) => ({
 export function successMessage() {
   message.success({
     content: (<div className={styles.success}>
-      <FCheck style={{ fontSize: 76 }} />
+      <FComponentsLib.FIcons.FCheck style={{ fontSize: 76 }} />
       <div style={{ height: 20 }} />
       <FComponentsLib.FTitleText type='popup' text={'支付密码修改成功!'} />
     </div>),

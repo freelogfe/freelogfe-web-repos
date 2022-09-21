@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import FComponentsLib from '@freelog/components-lib';
 import {
   ConnectState,
@@ -10,7 +11,7 @@ import {
 } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { FCheck } from '@/components/FIcons';
+// import { FCheck } from '@/components/FIcons';
 import {
   OnBlur_PaymentPassword_Password1Input_Action,
   OnBlur_PaymentPassword_Password2Input_Action,
@@ -394,7 +395,7 @@ function RetrievePayPassword({
       {retrievePayPasswordPage.showView === 'success' && (
         <div className={styles.resetPasswordSuccess}>
           <div className={styles.box}>
-            <FCheck style={{ fontSize: 96 }} />
+            <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
             <div style={{ height: 30 }} />
             <FComponentsLib.FTitleText text={'支付密码重置成功'} />
             <div style={{ height: 40 }} />

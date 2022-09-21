@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -30,7 +31,7 @@ import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
-import { FCheck } from '@/components/FIcons';
+// import { FCheck } from '@/components/FIcons';
 
 interface LogonProps {
   dispatch: Dispatch;
@@ -113,7 +114,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
     return (
       <div className={styles.resetPasswordSuccess}>
         <div className={styles.box}>
-          <FCheck style={{ fontSize: 96 }} />
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
           <FComponentsLib.FTitleText text={'注册成功'} />
           <div style={{ height: 40 }} />
