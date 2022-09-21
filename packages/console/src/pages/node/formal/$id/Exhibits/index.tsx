@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FFileSearch, FWarning } from '@/components/FIcons';
+import { FDown, FFileSearch } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
 import categoryData from '@/utils/category';
-// import FDropdown from '@/components/FDropdown';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
@@ -366,7 +366,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             />
             {!record.isAuth && (
               <FTooltip title={record.authErrorText}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>
             )}
           </Space>

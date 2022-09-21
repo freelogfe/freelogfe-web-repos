@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import Contracts from './Contracts';
 import Policies from './Policies';
@@ -9,7 +10,6 @@ import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
-import { FWarning } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
 interface SignProps {
@@ -86,7 +86,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                           resource.warning === 'authException' && (<>
                             <div style={{ height: 15 }} />
                             <Space size={10}>
-                              <FWarning style={{ fontSize: 20 }} />
+                              <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                               <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
                             </Space>
                           </>)
@@ -96,7 +96,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                           resource.warning === 'ownerFreeze' && (<>
                             <div style={{ height: 15 }} />
                             <Space size={10}>
-                              <FWarning style={{ fontSize: 20 }} />
+                              <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                               <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
                             </Space>
                           </>)

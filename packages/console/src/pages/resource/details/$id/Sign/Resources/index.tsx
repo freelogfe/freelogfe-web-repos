@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
@@ -69,14 +70,14 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               {
                 r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
               {
                 r.error === '' && r.warning === 'ownerFreeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
@@ -193,14 +194,14 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               {
                 r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
               {
                 r.error === '' && r.warning === 'ownerFreeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 

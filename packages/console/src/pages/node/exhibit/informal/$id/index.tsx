@@ -5,7 +5,8 @@ import { Checkbox, Space } from 'antd';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState, NodesModelState } from '@/models/connect';
 import {
   OnPageMountAction,
@@ -22,7 +23,6 @@ import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
 import { FDialog } from '@/components/FDialog';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
@@ -210,7 +210,7 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                 // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
                 title={'存在授权问题'}
               >
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>
             )}
           </Space>

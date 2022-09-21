@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState } from '@/models/connect';
 import { withRouter, history } from 'umi';
-// import RouterTypes from 'umi/routerTypes';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
@@ -289,7 +289,7 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
             <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
             {resourceInfo.authProblem && (
               <FTooltip title={'存在授权问题'}>
-                <FWarning style={{ fontSize: 16 }} />
+                <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
               </FTooltip>
             )}
           </Space>

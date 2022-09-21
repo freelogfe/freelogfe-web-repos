@@ -1,13 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import { ColumnsType } from 'antd/lib/table/interface';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FFileSearch, FWarning } from '@/components/FIcons';
+import { FDelete, FFileSearch } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
@@ -183,7 +184,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                   // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
                   title={'存在授权问题'}
                 >
-                  <FWarning />
+                  <FComponentsLib.FIcons.FWarning />
                 </FTooltip>
               )}
             </Space>

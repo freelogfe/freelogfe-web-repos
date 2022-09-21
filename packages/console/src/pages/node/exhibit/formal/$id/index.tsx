@@ -290,7 +290,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {!exhibitInfoPage.exhibit_IsAuth && (
               <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>
             )}
           </Space>
