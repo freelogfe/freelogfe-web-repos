@@ -51,7 +51,6 @@ import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
-import FFail from '@/components/FIcons/FFail';
 import FComponentsLib from '@freelog/components-lib';
 
 interface MappingRuleProps {
