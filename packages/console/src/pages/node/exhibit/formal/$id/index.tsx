@@ -18,7 +18,6 @@ import {
   // UpdateStatusAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';

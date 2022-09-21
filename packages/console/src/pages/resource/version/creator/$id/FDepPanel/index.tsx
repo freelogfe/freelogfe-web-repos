@@ -14,7 +14,6 @@ import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/model
 import FDrawer from '@/components/FDrawer';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
-import { FCode, FWarning } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 

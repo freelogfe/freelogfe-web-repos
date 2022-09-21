@@ -7,7 +7,7 @@ import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch, FWarning } from '@/components/FIcons';
+import { FFileSearch } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
 import FForbid from '@/components/FIcons/FForbid';
 

@@ -10,8 +10,7 @@ import {
   FMappingRuleOffline,
   FMappingRuleOnline,
   FMappingRuleReplace,
-  FMappingRuleTitle, FWarning,
-  // FMappingRuleVersion,
+  FMappingRuleTitle,
 } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
 import TypesCaption from '../../components/TypesCaption';
