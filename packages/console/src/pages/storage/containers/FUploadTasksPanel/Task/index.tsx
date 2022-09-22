@@ -92,7 +92,7 @@ function Task({
       }
     }
 
-    const result = await FServiceAPI.recombination.getFilesSha1Info({
+    const {result} = await FServiceAPI.recombination.getFilesSha1Info({
       sha1: [file.sha1],
     });
 
