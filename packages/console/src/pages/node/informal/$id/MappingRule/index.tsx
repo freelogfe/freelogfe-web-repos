@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FImport, FExport, FExit, FDelete } from '@/components/FIcons';
+import { FImport } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
@@ -172,7 +172,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FExport />
+                    <FComponentsLib.FIcons.FExport />
                     <span>导出</span>
                   </Space>
                 </FComponentsLib.FTextBtn>

@@ -14,7 +14,6 @@ import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-import FForbid from '@/components/FIcons/FForbid';
 
 interface BaseInfo {
   subjectId: string;
@@ -333,7 +332,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
         : (<FFormLayout>
           {
             baseInfo.licensorError === 'freeze' && (<div className={styles.errorBox}>
-              <FForbid className={styles.errorIcon} />
+              <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
               <FComponentsLib.FTipText text={'此标的物违规，相关授权操作已被禁用'} type='second' />
             </div>)
           }

@@ -12,7 +12,6 @@ import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -75,7 +74,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               // resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
               resource?.error === 'offline' && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
-                  <FForbid className={styles.errorIcon} />
+                  <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                   <FComponentsLib.FTipText
                     text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
                     type='second'
@@ -85,7 +84,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             {
               // resource?.status === 2 && (<div className={styles.errorBox}>
               resource?.error === 'cyclicDependency' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText
                   text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
                   type='second'
@@ -95,7 +94,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             {
               // resource?.status === 3 && (<div className={styles.errorBox}>
               resource?.error === 'storageObject' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'该依赖是存储空间对象，无法获取授权。'} type='second' />
               </div>)
             }
@@ -108,7 +107,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             }
             {
               resource?.error === 'freeze' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'此资源因违规无法授权'} type='second' />
               </div>)
             }

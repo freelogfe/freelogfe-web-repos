@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
@@ -97,7 +96,7 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
         onClick={() => {
           setFullScreenVisible(true);
         }}
-      ><FFullScreen style={{ fontSize: 12 }} /></a>
+      ><FComponentsLib.FIcons.FFullScreen style={{ fontSize: 12 }} /></a>
     </div>
 
     <FModal

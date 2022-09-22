@@ -1,15 +1,15 @@
 import * as React from 'react';
 // import styles from './index.less';
 
-interface FLineProps {
+interface FExportProps {
   className?: string;
   style?: React.CSSProperties;
 
   onClick?(): void;
 }
 
-function FLine({className, ...props}: FLineProps) {
+function FExport({className, ...props}: FExportProps) {
   return (<i className={['freelog', 'fl-icon-daochu', className].join(' ')} {...props} />);
 }
 
-export default FLine;
+export default FExport;

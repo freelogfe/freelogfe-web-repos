@@ -2,12 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
-import { FDown, FFileText, FInfo, FLoading } from '../FIcons';
+import { FInfo, FLoading } from '../FIcons';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
 import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
-import FGuideDown from '../FIcons/FGuideDown';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import FTooltip from '../FTooltip';
@@ -878,7 +877,7 @@ function FPolicyBuilder({
                   type='default'
                   onClick={() => setTemplateVisible(true)}>
                   <Space size={4}>
-                    <FFileText />
+                    <FComponentsLib.FIcons.FFileText />
                     <span>策略模板</span>
                   </Space>
                 </FComponentsLib.FTextBtn>
@@ -1173,7 +1172,7 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FComponentsLib.FIcons.FGuideDown
                                             style={{ fontSize: 10 }} />
                                           </FComponentsLib.FTitleText>
                                         </Divider>

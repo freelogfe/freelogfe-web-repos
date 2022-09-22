@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
-import { FDelete } from '@/components/FIcons';
-import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
 import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
@@ -25,11 +23,11 @@ const btnMap: any = {
   },
   resourceDetails: {
     text: '资源详情',
-    icon: (<FFileSearch />),
+    icon: (<FComponentsLib.FIcons.FFileSearch />),
   },
   objectDetails: {
     text: '对象详情',
-    icon: (<FFileSearch />),
+    icon: (<FComponentsLib.FIcons.FFileSearch />),
   },
   delete: {
     text: '删除',

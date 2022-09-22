@@ -53,7 +53,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             resourceID: mainResource.id,
           }));
         }}
-      ><FFileSearch /></FComponentsLib.FTextBtn></span>
+      ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
         </FTooltip>
       </div>
       <div style={{ height: 5 }} />
@@ -99,7 +99,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
                 resourceID: r.id,
               }));
             }}
-          ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+          ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
         </div>
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText

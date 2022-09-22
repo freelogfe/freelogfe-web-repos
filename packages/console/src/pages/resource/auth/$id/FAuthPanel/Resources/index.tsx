@@ -8,7 +8,6 @@ import { FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -68,7 +67,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                       resourceID: i.id,
                     }));
                   }}
-                ><FFileSearch /></FComponentsLib.FTextBtn></span>
+                ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
               </FTooltip>
 
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}

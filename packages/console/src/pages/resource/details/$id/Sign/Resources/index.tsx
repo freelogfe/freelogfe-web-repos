@@ -7,9 +7,7 @@ import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
-import FForbid from '@/components/FIcons/FForbid';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -62,7 +60,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
               {
                 r.error === 'freeze' && (<>
-                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
                   <div style={{ width: 5 }} />
                 </>)
               }
@@ -161,7 +159,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: r.id,
                   }));
-                }}><FFileSearch /></FComponentsLib.FTextBtn>
+                }}><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn>
               </span>
               </FTooltip>
               {/*{*/}
@@ -187,7 +185,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               {
                 r.error === 'freeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
                 </>)
               }
 

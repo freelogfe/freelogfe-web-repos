@@ -339,7 +339,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
           <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
             <span>
               <FComponentsLib.FTextBtn type="primary" onClick={() => onSearch()}>
-                <FFileSearch />
+                <FComponentsLib.FIcons.FFileSearch />
               </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>

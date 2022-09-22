@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FFileSearch } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
@@ -314,7 +313,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   );
                 }}
               >
-                <FFileSearch />
+                <FComponentsLib.FIcons.FFileSearch />
               </FComponentsLib.FTextBtn>
             </FTooltip>
           </Space>

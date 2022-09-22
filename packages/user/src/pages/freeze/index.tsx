@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FForbid from '@/components/FIcons/FForbid';
 import * as AHooks from 'ahooks';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
@@ -46,7 +45,7 @@ function Freeze({}: FreezeProps) {
   }
 
   return (<div className={styles.container}>
-    <FForbid className={styles.FForbid} />
+    <FComponentsLib.FIcons.FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
     <FComponentsLib.FTitleText text={'你的账号已经被冻结'} type='h1' />
     <div style={{ height: 80 }} />

@@ -3,7 +3,7 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import Sign from './Sign';
-import { FFavorite, FSwap } from '@/components/FIcons';
+import { FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
@@ -137,7 +137,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               }
             >
               {/*{marketResourcePage.hasCollect ? <FC}*/}
-              <FFavorite filled={resourceDetailPage.resource_IsCollected} />
+              <FComponentsLib.FIcons.FFavorite filled={resourceDetailPage.resource_IsCollected} />
               <div style={{ width: 2 }} />
               <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
               <div style={{ width: 5 }} />
