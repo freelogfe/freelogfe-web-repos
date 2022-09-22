@@ -16,17 +16,29 @@ import FDoubleDown from './FDoubleDown';
 import FDoubleUp from './FDoubleUp';
 import FDown from './FDown';
 import FDownload from './FDownload';
+
+import FEdit from './FEdit';
+import FExit from './FExit';
+import FExport from './FExport';
+import FFail from './FFail';
+import FFavorite from './FFavorite';
+import FFileSearch from './FFileSearch';
+import FFileText from './FFileText';
+import FForbid from './FForbid';
+import FFreelog from './FFreelog';
+import FFullScreen from './FFullScreen';
+import FGuideDown from './FGuideDown';
+
 import FLinkedin from './FLinkedin';
 import FSina from './FSina';
 import FWeChat from './FWeChat';
-import FFreelog from './FFreelog';
-import FEdit from './FEdit';
+
 import FLine from './FLine';
 import FPlus from './FPlus';
 import FUser from './FUser';
 import FCopy from './FCopy';
 import FWarning from './FWarning';
-import FFail from './FFail';
+
 
 const FIcons = {
     FAdd,
@@ -46,15 +58,24 @@ const FIcons = {
     FDoubleUp,
     FDown,
     FDownload,
+    FEdit,
+    FExit,
+    FExport,
+    FFail,
+    FFavorite,
+    FFileSearch,
+    FFileText,
+    FForbid,
+    FFreelog,
+    FFullScreen,
+    FGuideDown,
+
     FLinkedin,
     FSina,
     FWeChat,
-    FFreelog,
-    FEdit,
     FLine,
     FPlus,
     FUser,
     FWarning,
-    FFail,
 };
 export default FIcons;

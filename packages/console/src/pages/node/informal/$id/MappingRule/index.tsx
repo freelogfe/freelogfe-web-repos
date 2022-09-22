@@ -236,7 +236,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FExit />
+            <FComponentsLib.FIcons.FExit />
             <span>退出代码模式</span>
           </Space>
         </FComponentsLib.FTextBtn>)

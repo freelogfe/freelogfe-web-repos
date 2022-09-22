@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 import FIcons from './FIcons';
 import F_Contract_And_Policy_Labels from './F_Contract_And_Policy_Labels';
 import FPageFooter from './FPageFooter';
@@ -11,7 +11,6 @@ import FContractStatusBadge from './FContractStatusBadge';
 import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
 
-React;
 const FComponentsLib = {
     FIcons,
     F_Contract_And_Policy_Labels,
