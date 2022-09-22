@@ -125,7 +125,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
                       });
                     }}
-                  ><FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
+                  ><FComponentsLib.FIcons.FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
                 </div>
               </FTooltip>
             </Space>
@@ -185,7 +185,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               style={{ fontSize: 12, fontWeight: 600 }}
             >
               <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
+              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FComponentsLib.FIcons.FDown />)}
             </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>

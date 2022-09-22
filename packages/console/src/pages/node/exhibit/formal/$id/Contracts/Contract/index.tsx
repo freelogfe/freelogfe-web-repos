@@ -135,7 +135,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                               {
                                 c.exhibitOpen
                                   ? (<FUp />)
-                                  : (<FDown />)
+                                  : (<FComponentsLib.FIcons.FDown />)
                               }
                             </FComponentsLib.FTitleText>
                           </FComponentsLib.FTextBtn>

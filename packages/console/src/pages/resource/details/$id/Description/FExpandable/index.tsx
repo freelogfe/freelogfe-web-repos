@@ -58,7 +58,7 @@ function FExpandable({children}: FExpandableProps) {
           onClick={() => {
             setExpandable(true);
           }}
-        ><span>展开查看全部 <FDown/></span></FComponentsLib.FTextBtn>)
+        ><span>展开查看全部 <FComponentsLib.FIcons.FDown/></span></FComponentsLib.FTextBtn>)
       }
     </div>)}
   </div>);

@@ -12,7 +12,6 @@ import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
 
 React;
-
 const FComponentsLib = {
     FIcons,
     F_Contract_And_Policy_Labels,

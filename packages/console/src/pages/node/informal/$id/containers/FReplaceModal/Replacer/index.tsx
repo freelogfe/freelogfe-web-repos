@@ -218,7 +218,7 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
                           >
                             {rl.versionRange || '最新版本'}
                             &nbsp;
-                            <FDown />
+                            <FComponentsLib.FIcons.FDown />
                           </FComponentsLib.FTextBtn>
 
                         </FVersionHandlerPopover>)

@@ -91,7 +91,7 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                       // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
-                      <FDelete
+                      <FComponentsLib.FIcons.FDelete
                         onClick={(e) => {
                           e.stopPropagation();
                           e.preventDefault();

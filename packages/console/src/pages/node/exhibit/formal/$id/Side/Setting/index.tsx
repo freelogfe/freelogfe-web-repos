@@ -214,7 +214,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                     </FTooltip>
                     <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
                       <div>
-                        <FDelete
+                        <FComponentsLib.FIcons.FDelete
                           style={{ color: '#EE4040', cursor: 'pointer' }}
                           onClick={() => {
                             fConfirmModal({
@@ -302,7 +302,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           });
         }}
       >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
-        <FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FComponentsLib.FTextBtn>
+        <FComponentsLib.FIcons.FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FComponentsLib.FTextBtn>
     </div>
 
     <FCustomOptionsEditorDrawer

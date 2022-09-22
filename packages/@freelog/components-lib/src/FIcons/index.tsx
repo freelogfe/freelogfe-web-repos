@@ -10,6 +10,12 @@ import FCode from './FCode';
 import FCollect from './FCollect';
 import FComposition from './FComposition';
 import FContent from './FContent';
+import FDecrease from './FDecrease';
+import FDelete from './FDelete';
+import FDoubleDown from './FDoubleDown';
+import FDoubleUp from './FDoubleUp';
+import FDown from './FDown';
+import FDownload from './FDownload';
 import FLinkedin from './FLinkedin';
 import FSina from './FSina';
 import FWeChat from './FWeChat';
@@ -34,6 +40,12 @@ const FIcons = {
     FComposition,
     FContent,
     FCopy,
+    FDecrease,
+    FDelete,
+    FDoubleDown,
+    FDoubleUp,
+    FDown,
+    FDownload,
     FLinkedin,
     FSina,
     FWeChat,

@@ -259,7 +259,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                           );
                         })?.text
                       }
-                      <FDown style={{ marginLeft: 10 }} />
+                      <FComponentsLib.FIcons.FDown style={{ marginLeft: 10 }} />
                     </span>
                   </FDropdownMenu>
                 </div>

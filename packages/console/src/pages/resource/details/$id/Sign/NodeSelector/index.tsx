@@ -96,7 +96,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
               </>)
         }
       </Space>
-      <FDown />
+      <FComponentsLib.FIcons.FDown />
     </div>
   </FComponentsLib.FDropdown>);
 }

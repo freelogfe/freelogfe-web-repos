@@ -3,7 +3,7 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { FDown, FNodes, FUp } from '@/components/FIcons';
+import { FNodes, FUp } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -522,7 +522,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                           </Space>
                         </div>
                         {
-                          ac.expansion ? (<FUp />) : (<FDown />)
+                          ac.expansion ? (<FUp />) : (<FComponentsLib.FIcons.FDown />)
                         }
 
                       </div>

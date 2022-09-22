@@ -115,7 +115,7 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
         >
           {
             storageHomePage.uploadPanelOpen
-              ? (<FDown style={{ fontSize: 12 }} />)
+              ? (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
               : (<FUp style={{ fontSize: 12 }} />)
           }
         </FComponentsLib.FTextBtn>

@@ -16,7 +16,6 @@ import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FLoadingTip from '@/components/FLoadingTip';
-import FDownload from '@/components/FIcons/FDownload';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';
 import FLink from '@/components/FLink';
@@ -229,7 +228,7 @@ function ToolsBar({
           <FComponentsLib.FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
             type='primary'
-          ><FDownload /></FComponentsLib.FTextBtn>
+          ><FComponentsLib.FIcons.FDownload /></FComponentsLib.FTextBtn>
         </span>
       </FTooltip>)
     }
@@ -240,7 +239,7 @@ function ToolsBar({
             <FComponentsLib.FTextBtn
               onClick={() => onClickDelete && onClickDelete()}
               className={styles.Delete}
-            ><FDelete /></FComponentsLib.FTextBtn>
+            ><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>
           </span>
         </FTooltip>
       )

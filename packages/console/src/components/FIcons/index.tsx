@@ -1,10 +1,5 @@
 import * as React from 'react';
 
-import FDelete from './FDelete';
-import FDoubleDown from './FDoubleDown';
-import FDoubleUp from './FDoubleUp';
-import FDown from './FDown';
-import FDownload from './FDownload';
 import FExclamation from './FExclamation';
 import FFavorite from './FFavorite';
 import FFileSearch from './FFileSearch';
@@ -31,18 +26,13 @@ import FNodes from './FNodes';
 import FUp from './FUp';
 
 export {
-  FDownload,
   FLeft,
-  FDelete,
   FFavorite,
-  FDown,
   FSwap,
   FInfo,
   FFileText,
   FFileSearch,
   FExclamation,
-  FDoubleUp,
-  FDoubleDown,
   FLoading,
   FMappingRuleAdd,
   FMappingRuleAttr,

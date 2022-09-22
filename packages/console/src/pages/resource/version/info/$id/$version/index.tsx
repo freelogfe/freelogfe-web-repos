@@ -19,7 +19,6 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import FDownload from '@/components/FIcons/FDownload';
 import {
   // FAntvG6AuthorizationGraph,
   // FAntvG6DependencyGraph,
@@ -741,7 +740,7 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
               type='primary'
               onClick={() => onClickDownload && onClickDownload()}
             >
-              <FDownload
+              <FComponentsLib.FIcons.FDownload
                 style={{ fontSize: 16, fontWeight: 600 }}
               />
             </FComponentsLib.FTextBtn>

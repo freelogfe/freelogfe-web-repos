@@ -193,7 +193,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                   });
                 }}
               ><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
-              <FDelete
+              <FComponentsLib.FIcons.FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
                   fConfirmModal({

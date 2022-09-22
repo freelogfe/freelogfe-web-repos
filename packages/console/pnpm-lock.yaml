@@ -6,8 +6,10 @@ specifiers:
   '@ant-design/icons': ^4.2.1
   '@antv/g6': ^4.6.3
   '@antv/g6-react-node': ^1.4.5
+  '@freelog/components-lib': ^0.1.20
   '@freelog/nmr_translator': ^5.1.4
   '@freelog/resource-policy-lang': ^1.4.9
+  '@freelog/tools-lib': ^0.1.135
   '@types/file-saver': ^2.0.1
   '@types/react': ^18.0.17
   '@types/react-copy-to-clipboard': ^4.3.0
@@ -42,8 +44,10 @@ dependencies:
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@antv/g6': 4.7.0
   '@antv/g6-react-node': 1.4.5
+  '@freelog/components-lib': 0.1.20
   '@freelog/nmr_translator': 5.1.4
   '@freelog/resource-policy-lang': 1.4.9_typescript@4.8.2
+  '@freelog/tools-lib': 0.1.135
   '@types/react-copy-to-clipboard': 4.3.0
   antd: 4.23.2_biqbaboplfbrettd7655fr4n2y
   axios: 0.19.2
@@ -887,10 +891,29 @@ packages:
     deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
     dev: true
 
+  /@freelog/components-lib/0.1.20:
+    resolution: {integrity: sha512-oqVnwRyY9QxNBVVcNbqsxTq9x5ijfPw5LmEce4Vx+YjlKuUip6qEq4Akq80ApCVDteMN17m5OldK3yxG7ub4EQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      antd: 4.23.2_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-copy-to-clipboard: 5.1.0_react@18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@freelog/nmr_translator/5.1.4:
     resolution: {integrity: sha512-vsaTNFU2Qj7qMZ+GpY6R32U2UCC3rHtzHdKvi+FxTd1suAhJ2xSH2Ftvxnb3RQmtxyJj4fds+BmYN3WZK9GMmA==}
     dependencies:
       antlr4: 4.8.0
+    dev: false
+
+  /@freelog/resource-policy-lang/1.1.26:
+    resolution: {integrity: sha512-fUhIaeDV167hJJw4wEWUxuC9VDQycxaGnEU1EA2waHsW0s17gySZzPwZn6wFOA4HR4Z6YiC0lfr3se4WS+El2g==}
+    dependencies:
+      '@types/node': 15.14.9
+      antlr4: 4.8.0
+      decimal.js: 10.4.0
+      moment: 2.29.4
     dev: false
 
   /@freelog/resource-policy-lang/1.4.9_typescript@4.8.2:
@@ -905,6 +928,21 @@ packages:
       - '@swc/core'
       - '@swc/wasm'
       - typescript
+    dev: false
+
+  /@freelog/tools-lib/0.1.135:
+    resolution: {integrity: sha512-/is++yQRzDQc6WkPuC0aOeeEMyj2mXOXhkwQNhR818hi3mwA56yVYpunMn9eSyYWmBMU+MtzkR7YbRGb9B7JPg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@freelog/resource-policy-lang': 1.1.26
+      axios: 0.21.4
+      crypto-js: 4.1.1
+      i18next: 21.9.2
+      js-cookie: 3.0.1
+      moment: 2.29.4
+      nprogress: 0.2.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /@istanbuljs/load-nyc-config/1.1.0:
@@ -2275,6 +2313,14 @@ packages:
       - supports-color
     dev: false
 
+  /axios/0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+    dependencies:
+      follow-redirects: 1.15.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /babel-jest/26.6.3_@babel+core@7.18.6:
     resolution: {integrity: sha512-pl4Q+GAVOHwvjrck6jKjvmGhnO3jHX/xuB9d27f+EJZ/6k+6nMuPjorrYp7s++bKKdANwzElBWnLWaObvTnaZA==}
     engines: {node: '>= 10.14.2'}
@@ -2985,6 +3031,10 @@ packages:
       randombytes: 2.1.0
       randomfill: 1.0.4
 
+  /crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
+
   /css-animation/1.6.1:
     resolution: {integrity: sha512-/48+/BaEaHRY6kNQ2OIPzKf9A6g8WjZYjhiNDNuIVbsm5tXCGIAsHDjB4Xu1C4vXJtUWZo26O68OQkDpNBaPog==}
     dependencies:
@@ -3316,7 +3366,7 @@ packages:
     peerDependencies:
       redux: 4.x
     dependencies:
-      '@babel/runtime': 7.18.9
+      '@babel/runtime': 7.19.0
       flatten: 1.0.3
       global: 4.4.0
       invariant: 2.2.4
@@ -3688,6 +3738,16 @@ packages:
     resolution: {integrity: sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==}
     deprecated: flatten is deprecated in favor of utility frameworks such as lodash.
 
+  /follow-redirects/1.15.2:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
   /follow-redirects/1.5.10:
     resolution: {integrity: sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==}
     engines: {node: '>=4.0'}
@@ -3927,7 +3987,7 @@ packages:
   /history/5.3.0:
     resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
     dependencies:
-      '@babel/runtime': 7.18.9
+      '@babel/runtime': 7.19.0
 
   /hmac-drbg/1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
@@ -3991,6 +4051,12 @@ packages:
     resolution: {integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==}
     engines: {node: '>=8.12.0'}
     dev: true
+
+  /i18next/21.9.2:
+    resolution: {integrity: sha512-00fVrLQOwy45nm3OtC9l1WiLK3nJlIYSljgCt0qzTaAy65aciMdRy9GsuW+a2AtKtdg9/njUGfRH30LRupV7ZQ==}
+    dependencies:
+      '@babel/runtime': 7.19.0
+    dev: false
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -4849,6 +4915,11 @@ packages:
     resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
     dev: false
 
+  /js-cookie/3.0.1:
+    resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}
+    engines: {node: '>=12'}
+    dev: false
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -5413,6 +5484,10 @@ packages:
     dependencies:
       path-key: 3.1.1
     dev: true
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
+    dev: false
 
   /num2fraction/1.2.2:
     resolution: {integrity: sha512-Y1wZESM7VUThYY+4W+X4ySH2maqcA+p7UR+w8VWNWVAd6lwuXXWz/w/Cz43J/dI2I+PS6wD5N+bJUF+gjWvIqg==}
@@ -6740,6 +6815,16 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-copy-to-clipboard/5.1.0_react@18.2.0:
+    resolution: {integrity: sha512-k61RsNgAayIJNoy9yDsYzDe/yAZAzEbEgcz3DZMhF686LEyukcE1hzurxe85JandPUG+yTfGVFzuEw3xt8WP/A==}
+    peerDependencies:
+      react: ^15.3.0 || 16 || 17 || 18
+    dependencies:
+      copy-to-clipboard: 3.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /react-cropper/2.1.8_react@18.2.0:
     resolution: {integrity: sha512-QEj6CE9et/gMRqpaKMgZQdBgtzLjjq+zj1pmHwtoWG6GqscDl4QpTwoEElWN2pieYxkwFaZa0lPiD2b9nwqLKQ==}
     peerDependencies:
@@ -6864,7 +6949,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@babel/runtime': 7.18.9
+      '@babel/runtime': 7.19.0
       '@types/react-redux': 7.1.24
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -6931,7 +7016,7 @@ packages:
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.18.9
+      '@babel/runtime': 7.19.0
       history: 4.10.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
@@ -6990,7 +7075,7 @@ packages:
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.18.9
+      '@babel/runtime': 7.19.0
       history: 4.10.1
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0

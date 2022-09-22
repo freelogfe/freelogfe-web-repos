@@ -899,7 +899,7 @@ function FPolicyBuilder({
                       <span>所有人</span>
                     </Space>
 
-                    <FDown />
+                    <FComponentsLib.FIcons.FDown />
                   </div>
 
                   <div style={{ height: 20 }} />

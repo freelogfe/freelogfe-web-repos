@@ -33,7 +33,7 @@ const btnMap: any = {
   },
   delete: {
     text: '删除',
-    icon: (<FDelete />),
+    icon: (<FComponentsLib.FIcons.FDelete />),
   },
   update: {
     text: '更新',

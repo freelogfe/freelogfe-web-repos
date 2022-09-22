@@ -355,7 +355,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
               },
             });
           }}
-          className={styles.Delete}><FDelete /></FComponentsLib.FTextBtn>)
+          className={styles.Delete}><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>)
       }
 
     </Space>

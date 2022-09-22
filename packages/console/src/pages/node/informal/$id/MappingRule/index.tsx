@@ -185,7 +185,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FDelete />
+                    <FComponentsLib.FIcons.FDelete />
                     <span>删除</span>
                   </Space>
                 </FComponentsLib.FTextBtn>
