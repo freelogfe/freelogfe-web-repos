@@ -10,7 +10,6 @@ import {
   UploadFilesAction,
   FetchObjectsAction,
 } from '@/models/storageHomePage';
-import { FDelete } from '@/components/FIcons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
 import FUpload from '@/components/FUpload';
