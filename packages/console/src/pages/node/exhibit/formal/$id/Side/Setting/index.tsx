@@ -21,7 +21,8 @@ import {
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
 import FInput from '@/components/FInput';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';

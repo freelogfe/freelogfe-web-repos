@@ -18,7 +18,8 @@ import {
   OnHandleAttrModalAction,
 } from '@/models/informExhibitInfoPage';
 import FInput from '@/components/FInput';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';

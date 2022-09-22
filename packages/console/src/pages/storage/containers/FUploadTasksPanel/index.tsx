@@ -1,19 +1,20 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Space} from 'antd';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import { Space } from 'antd';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
 import {
   ChangeAction,
   CreateObjectAction, FetchBucketsAction,
   FetchObjectsAction,
-  FetchSpaceStatisticAction
+  FetchSpaceStatisticAction,
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
-import fConfirmModal from "@/components/fConfirmModal";
-import FLoadingTip from "@/components/FLoadingTip";
-import {FDown, FUp} from "@/components/FIcons";
+import fConfirmModal from '@/components/fConfirmModal';
+import FLoadingTip from '@/components/FLoadingTip';
+import { FDown, FUp } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -25,9 +26,9 @@ export interface FUploadTasksPanelProps {
 let successUids: string[] = [];
 let failedUids: string[] = [];
 
-function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) {
+function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps) {
 
-  const {run} = AHooks.useDebounceFn(() => {
+  const { run } = AHooks.useDebounceFn(() => {
       dispatch<FetchObjectsAction>({
         type: 'storageHomePage/fetchObjects',
         payload: 'insert',
@@ -43,7 +44,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     },
   );
 
-  const {run: run1} = AHooks.useDebounceFn(async () => {
+  const { run: run1 } = AHooks.useDebounceFn(async () => {
     // console.log(successUids, failedUids, 'successUids!Q@#$@#$@!#$@#$#$');
     await dispatch<ChangeAction>({
       type: 'storageHomePage/change',
@@ -64,13 +65,13 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
           }
           return utq;
         }),
-      }
+      },
     });
     successUids = [];
     failedUids = [];
   }, {
     wait: 300,
-  },);
+  });
 
   function closeAll() {
     dispatch<ChangeAction>({
@@ -99,7 +100,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     // style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
   >
     <div className={styles.title}>
-      <FComponentsLib.FContentText text={'任务列表'}/>
+      <FComponentsLib.FContentText text={'任务列表'} />
       <Space size={20}>
         <FComponentsLib.FTextBtn
           onClick={() => {
@@ -107,15 +108,15 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
               type: 'storageHomePage/change',
               payload: {
                 uploadPanelOpen: !storageHomePage.uploadPanelOpen,
-              }
+              },
             });
           }}
-          type="default"
+          type='default'
         >
           {
             storageHomePage.uploadPanelOpen
-              ? (<FDown style={{fontSize: 12}}/>)
-              : (<FUp style={{fontSize: 12}}/>)
+              ? (<FDown style={{ fontSize: 12 }} />)
+              : (<FUp style={{ fontSize: 12 }} />)
           }
         </FComponentsLib.FTextBtn>
         <FComponentsLib.FTextBtn
@@ -132,16 +133,16 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             }
             closeAll();
           }}
-          type="default"
-        ><FComponentsLib.FIcons.FClose style={{fontSize: 12}}/></FComponentsLib.FTextBtn>
+          type='default'
+        ><FComponentsLib.FIcons.FClose style={{ fontSize: 12 }} /></FComponentsLib.FTextBtn>
       </Space>
     </div>
 
 
     {
       storageHomePage.uploadTaskQueue.length === 0
-        ? (<FLoadingTip height={370}/>)
-        : (<div className={styles.body} style={{display: storageHomePage.uploadPanelOpen ? 'block' : 'none'}}>
+        ? (<FLoadingTip height={370} />)
+        : (<div className={styles.body} style={{ display: storageHomePage.uploadPanelOpen ? 'block' : 'none' }}>
           {
             storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
               className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
@@ -155,7 +156,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
                 key={f.uid}
                 file={f}
                 bucketName={storageHomePage.activatedBucket}
-                onSucceed={async ({objectName, sha1, uid}) => {
+                onSucceed={async ({ objectName, sha1, uid }) => {
                   // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
                   successUids = [
                     ...successUids,
@@ -172,7 +173,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
                   run();
                   run1();
                 }}
-                onFail={({objectName, uid}) => {
+                onFail={({ objectName, uid }) => {
                   failedUids = [
                     ...failedUids,
                     uid,
@@ -188,6 +189,6 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
   </div>);
 }
 
-export default connect(({storageHomePage}: ConnectState) => ({
+export default connect(({ storageHomePage }: ConnectState) => ({
   storageHomePage: storageHomePage,
 }))(FUploadTasksPanel);

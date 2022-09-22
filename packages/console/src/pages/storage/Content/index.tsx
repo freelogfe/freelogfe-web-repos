@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FTable from '@/components/FTable';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
