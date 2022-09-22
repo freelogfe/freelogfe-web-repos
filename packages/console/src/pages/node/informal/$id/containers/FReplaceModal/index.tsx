@@ -3,7 +3,8 @@ import styles from './index.less';
 import Replacer from './Replacer';
 import Replaced from './Replaced';
 import FModal from '@/components/FModal';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   OnClose_ReplaceModal_Action,
   OnReplaceModalCancelAction,
