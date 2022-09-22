@@ -3,7 +3,7 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
+import { FDown, FNodes, FUp } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -369,7 +369,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                       baseInfo?.licensorIdentityType === 'node' && (<FNodes />)
                     }
                     {
-                      baseInfo?.licensorIdentityType === 'user' && (<FUser />)
+                      baseInfo?.licensorIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
                     }
                     <FComponentsLib.FContentText
                       type='highlight'
@@ -393,7 +393,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                       baseInfo?.licenseeIdentityType === 'node' && (<FNodes />)
                     }
                     {
-                      baseInfo?.licenseeIdentityType === 'user' && (<FUser />)
+                      baseInfo?.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
                     }
                     <FComponentsLib.FContentText
                       type='highlight'
