@@ -4,7 +4,7 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
 import fMessage from '../fMessage';
-import { FDown, FLoading, FUp } from '../FIcons';
+import { FLoading, FUp } from '../FIcons';
 import { ContractStatus } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -430,7 +430,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         setRecodeFold(false);
                       }}
                       style={{ fontSize: 12, color: '#7A869A' }}
-                    >展开流转记录 <FDown /></FComponentsLib.FTextBtn>)
+                    >展开流转记录 <FComponentsLib.FIcons.FDown /></FComponentsLib.FTextBtn>)
                     : (<FComponentsLib.FTextBtn
                       type='default'
                       onClick={() => {
