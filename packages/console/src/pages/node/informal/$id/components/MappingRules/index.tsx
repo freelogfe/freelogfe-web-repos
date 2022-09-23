@@ -8,7 +8,6 @@ import {
   FMappingRuleTitle,
   FMappingRuleVersion,
 } from '@/components/FIcons';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import FComponentsLib from '@freelog/components-lib';
 
 interface AddRuleProps {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import FDivider from '@/components/FDivider';
 import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
@@ -15,7 +14,7 @@ interface FCoverFooterButtonsProps {
 const btnMap: any = {
   active: {
     text: '激活',
-    icon: (<FComponentsLib.FIcons.FFMappingRuleActive />),
+    icon: (<FComponentsLib.FIcons.FMappingRuleActive />),
   },
   edit: {
     text: '编辑',

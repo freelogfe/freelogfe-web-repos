@@ -23,7 +23,6 @@ import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';

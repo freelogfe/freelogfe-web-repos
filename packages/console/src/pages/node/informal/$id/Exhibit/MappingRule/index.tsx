@@ -27,7 +27,6 @@ import {
   TitleRule,
   // VersionRule,
 } from '../../components/MappingRules';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 import FTooltip from '@/components/FTooltip';

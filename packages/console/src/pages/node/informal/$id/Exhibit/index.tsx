@@ -3,7 +3,6 @@ import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
