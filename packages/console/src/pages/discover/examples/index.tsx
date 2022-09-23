@@ -8,6 +8,7 @@ import img_comics from '@/assets/flnode_comics.jpg';
 import img_docs from '@/assets/flnode_docs.jpg';
 import img_reading from '@/assets/flnode_reading.jpg';
 import img_stock from '@/assets/flnode_stock.jpg';
+import img_podcast from '@/assets/flnode_podcast.jpg';
 
 const nodeData: {
   id: string;
@@ -59,7 +60,7 @@ const nodeData: {
   },
   {
     id: '6',
-    cover: img_docs,
+    cover: img_podcast,
     title: FI18n.i18nNext.t('flnode_podcast'),
     tags: [],
     text: FI18n.i18nNext.t('flnode_podcast_descr'),
