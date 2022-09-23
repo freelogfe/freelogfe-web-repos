@@ -8,7 +8,6 @@ import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;

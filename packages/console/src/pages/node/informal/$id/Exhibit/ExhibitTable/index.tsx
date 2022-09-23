@@ -8,7 +8,6 @@ import { ColumnsType } from 'antd/lib/table/interface';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FFileSearch } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
