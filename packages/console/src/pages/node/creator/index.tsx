@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Input, Space } from 'antd';
+import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, NodeCreatorPageModelState, NodesModelState } from '@/models/connect';
+import { ConnectState, NodeCreatorPageModelState } from '@/models/connect';
 import {
-  // InitModelStatesAction,
   OnBlur_DomainInput_Action,
   OnBlur_NameInput_Action,
   OnChange_DomainInput_Action,
@@ -38,17 +37,13 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
       type: 'nodeCreatorPage/onUnmount_Page',
     });
   });
-  // React.useEffect(() => {
-  //   dispatch<InitModelStatesAction>({
-  //     type: 'nodes/initModelStates',
-  //   });
-  // }, []);
 
   return (<FContentLayout header={<FComponentsLib.FTitleText
     type='h1'
     text={'创建节点'} />}
   >
     <div className={styles.body}>
+      <div style={{ height: 80 }} />
       <Space size={10}>
         <div className={styles.domain}>
           <FComponentsLib.FContentText type='negative' text={'节点地址'} />
@@ -69,10 +64,6 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
                   type: 'nodeCreatorPage/onBlur_DomainInput',
                 });
               }}
-              // onDebounceChange={(value) => dispatch<OnChangeDomainAction>({
-              //   type: 'nodes/onChangeDomain',
-              //   payload: value,
-              // })}
             />
           </div>
           <FComponentsLib.FContentText
@@ -82,7 +73,8 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </div>
         <div style={{ width: 18 }}>
           {nodeCreatorPage.nodeDomainState === 'verifying' && <FLoading />}
-          {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError && <FComponentsLib.FIcons.FCheck />}
+          {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError &&
+          <FComponentsLib.FIcons.FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodeCreatorPage.nodeDomainError}</pre>
@@ -111,7 +103,8 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </div>
         <div style={{ width: 18 }}>
           {nodeCreatorPage.nodeNameState === 'verifying' && <FLoading />}
-          {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError && <FComponentsLib.FIcons.FCheck />}
+          {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError &&
+          <FComponentsLib.FIcons.FCheck />}
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
@@ -129,6 +122,8 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         }}
         type='primary'
       >创建节点</FComponentsLib.FRectBtn>
+      <div style={{ height: 60 }} />
+      <FComponentsLib.FContentText text={'每个用户最多可创建3个节点，节点创建之后无法删除，请谨慎操作。'} type={'additional2'} />
     </div>
   </FContentLayout>);
 }
