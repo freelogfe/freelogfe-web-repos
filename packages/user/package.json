@@ -23,7 +23,7 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.7",
     "@ant-design/icons": "^4.7.0",
-    "@freelog/components-lib": "^0.1.20",
+    "@freelog/components-lib": "^0.1.21",
     "@freelog/tools-lib": "^0.1.135",
     "ahooks": "^3.4.1",
     "cropperjs": "^1.5.12",
