@@ -35,6 +35,16 @@ import FLine from './FLine';
 import FLinkedin from './FLinkedin';
 import FLoading from './FLoading';
 import FLoudspeaker from './FLoudspeaker';
+import FMappingRuleActive from './FMappingRuleActive';
+import FMappingRuleAdd from './FMappingRuleAdd';
+import FMappingRuleAttr from './FMappingRuleAttr';
+import FMappingRuleCover from './FMappingRuleCover';
+import FMappingRuleLabel from './FMappingRuleLabel';
+import FMappingRuleOffline from './FMappingRuleOffline';
+import FMappingRuleOnline from './FMappingRuleOnline';
+import FMappingRuleReplace from './FMappingRuleReplace';
+import FMappingRuleTitle from './FMappingRuleTitle';
+import FMappingRuleVersion from './FMappingRuleVersion';
 
 import FPlus from './FPlus';
 import FSina from './FSina';
@@ -81,6 +91,16 @@ const FIcons = {
     FLinkedin,
     FLoading,
     FLoudspeaker,
+    FMappingRuleActive,
+    FMappingRuleAdd,
+    FMappingRuleAttr,
+    FMappingRuleCover,
+    FMappingRuleLabel,
+    FMappingRuleOffline,
+    FMappingRuleOnline,
+    FMappingRuleReplace,
+    FMappingRuleTitle,
+    FMappingRuleVersion,
 
     FSina,
     FWeChat,

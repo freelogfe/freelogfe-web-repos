@@ -1,8 +1,5 @@
 import * as React from 'react';
 
-import FInfo from './FInfo';
-import FLeft from './FLeft';
-import FLoading from './FLoading';
 import FMappingRuleAdd from './FMappingRuleAdd';
 import FMappingRuleAttr from './FMappingRuleAttr';
 import FMappingRuleCover from './FMappingRuleCover';
@@ -16,16 +13,12 @@ import FObject from './FObject';
 import FPlus from './FPlus';
 import FRedo from './FRedo';
 import FSwap from './FSwap';
-import FImport from './FImport';
 import FNodes from './FNodes';
 import FUp from './FUp';
 
 export {
-  FLeft,
   FSwap,
-  FInfo,
   FPlus,
-  FLoading,
   FMappingRuleAdd,
   FMappingRuleAttr,
   FMappingRuleCover,
@@ -37,7 +30,6 @@ export {
   FObject,
   FRedo,
   FMappingRuleOnline,
-  FImport,
   FNodes,
   FUp,
 };
