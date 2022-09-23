@@ -156,7 +156,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             >
               <FComponentsLib.FTextBtn type='primary'>
                 <Space size={5}>
-                  <FImport />
+                  <FComponentsLib.FIcons.FImport />
                   <span>导入</span>
                 </Space>
               </FComponentsLib.FTextBtn>

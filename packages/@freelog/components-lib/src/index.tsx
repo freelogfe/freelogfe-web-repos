@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import FIcons from './FIcons';
 import F_Contract_And_Policy_Labels from './F_Contract_And_Policy_Labels';
 import FPageFooter from './FPageFooter';

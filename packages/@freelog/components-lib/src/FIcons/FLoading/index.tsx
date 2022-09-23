@@ -10,7 +10,7 @@ interface FLoadingProps {
 }
 
 function FLoading({className, ...props}: FLoadingProps) {
-  return (<i className={['freelog', 'fl-icon-zhongzhi', className].join(' ')} {...props} />);
+  return (<i className={['freelog', 'fl-icon-zhongzhi', styles.icon, className].join(' ')} {...props} />);
 }
 
 export default FLoading;

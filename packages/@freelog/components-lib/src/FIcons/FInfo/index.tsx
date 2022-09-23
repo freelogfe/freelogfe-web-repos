@@ -10,7 +10,7 @@ interface FInfoProps {
 
 function FInfo({className, style, ...props}: FInfoProps) {
   return (<i
-    className={[styles.styles, sharedStyles, 'freelog', 'fl-icon-tishixinxi', className].join(' ')}
+    className={[styles.styles, 'freelog', 'fl-icon-tishixinxi', className].join(' ')}
     style={style}
     {...props}
   />);

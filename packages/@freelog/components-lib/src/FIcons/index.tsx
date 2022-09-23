@@ -16,7 +16,6 @@ import FDoubleDown from './FDoubleDown';
 import FDoubleUp from './FDoubleUp';
 import FDown from './FDown';
 import FDownload from './FDownload';
-
 import FEdit from './FEdit';
 import FExit from './FExit';
 import FExport from './FExport';
@@ -28,13 +27,18 @@ import FForbid from './FForbid';
 import FFreelog from './FFreelog';
 import FFullScreen from './FFullScreen';
 import FGuideDown from './FGuideDown';
-
+import FImport from './FImport';
+import FIncrease from './FIncrease';
+import FInfo from './FInfo';
+import FLeft from './FLeft';
+import FLine from './FLine';
 import FLinkedin from './FLinkedin';
+import FLoading from './FLoading';
+import FLoudspeaker from './FLoudspeaker';
+
+import FPlus from './FPlus';
 import FSina from './FSina';
 import FWeChat from './FWeChat';
-
-import FLine from './FLine';
-import FPlus from './FPlus';
 import FUser from './FUser';
 import FCopy from './FCopy';
 import FWarning from './FWarning';
@@ -69,11 +73,17 @@ const FIcons = {
     FFreelog,
     FFullScreen,
     FGuideDown,
-
+    FImport,
+    FIncrease,
+    FInfo,
+    FLeft,
+    FLine,
     FLinkedin,
+    FLoading,
+    FLoudspeaker,
+
     FSina,
     FWeChat,
-    FLine,
     FPlus,
     FUser,
     FWarning,
