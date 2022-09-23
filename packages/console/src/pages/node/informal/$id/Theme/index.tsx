@@ -101,7 +101,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   });
                 }}>
                 <Space size={5}>
-                  <FMappingRuleReplace />
+                  <FComponentsLib.FIcons.FMappingRuleReplace />
                   <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                 </Space>
               </FComponentsLib.FTextBtn>

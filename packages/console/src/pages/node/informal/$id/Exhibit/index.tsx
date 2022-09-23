@@ -134,7 +134,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FMappingRuleReplace />
+                    <FComponentsLib.FIcons.FMappingRuleReplace />
                     {/*<FContentText text={FI18n.i18nNext.t('btn_replace_resource')}/>*/}
                     <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                   </Space>

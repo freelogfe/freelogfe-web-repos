@@ -15,7 +15,7 @@ interface FCoverFooterButtonsProps {
 const btnMap: any = {
   active: {
     text: '激活',
-    icon: (<FMappingRuleActive />),
+    icon: (<FComponentsLib.FIcons.FFMappingRuleActive />),
   },
   edit: {
     text: '编辑',
