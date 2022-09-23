@@ -5,9 +5,10 @@ import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
-import { FLoading, FNodes, FUser } from '@/components/FIcons';
+import { FNodes } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ContractPageModelState } from '@/models/connect';
 import {
   OnChange_Authorize_Date_Action,
@@ -110,7 +111,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
@@ -222,7 +223,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
@@ -417,11 +418,13 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       }
 
                       {
-                        contractPage.authorize_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+                        contractPage.authorize_ListMore === 'loading' && (
+                          <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                       }
 
                       {
-                        contractPage.authorize_ListMore === 'noMore' && (<FComponentsLib.FTipText text={'没有更多~'} type='third' />)
+                        contractPage.authorize_ListMore === 'noMore' && (
+                          <FComponentsLib.FTipText text={'没有更多~'} type='third' />)
                       }
 
                     </div>
@@ -543,11 +546,13 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       }
 
                       {
-                        contractPage.authorized_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+                        contractPage.authorized_ListMore === 'loading' && (
+                          <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                       }
 
                       {
-                        contractPage.authorized_ListMore === 'noMore' && (<FComponentsLib.FTipText text={'没有更多~'} type='third' />)
+                        contractPage.authorized_ListMore === 'noMore' && (
+                          <FComponentsLib.FTipText text={'没有更多~'} type='third' />)
                       }
 
                     </div>
