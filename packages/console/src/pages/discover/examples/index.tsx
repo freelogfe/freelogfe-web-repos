@@ -57,6 +57,14 @@ const nodeData: {
     text: FI18n.i18nNext.t('flnode_docs_descr'),
     href: FI18n.i18nNext.t('flnode_docs_addr'),
   },
+  {
+    id: '6',
+    cover: img_docs,
+    title: FI18n.i18nNext.t('flnode_podcast'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_podcast_descr'),
+    href: FI18n.i18nNext.t('flnode_podcast_addr'),
+  },
 ];
 
 function Examples({}) {

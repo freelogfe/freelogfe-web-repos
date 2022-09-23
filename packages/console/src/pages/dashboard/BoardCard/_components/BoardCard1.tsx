@@ -56,7 +56,7 @@ const tasks = {
         />
       </div>
       <div style={{ height: 15 }} />
-      <Space size={5}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         <FComponentsLib.FContentText text={'查看'} />
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
@@ -69,7 +69,11 @@ const tasks = {
           target={'_blank'}
           type='primary'
         >节点商使用教程</a>
-      </Space>
+        <FComponentsLib.FContentText
+          text={'，完整观看任一视频教程即可领取现金奖励！'}
+          type='highlight'
+        />
+      </div>
     </div>),
     onClick() {
       self.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f');
@@ -78,7 +82,7 @@ const tasks = {
   TS000012: {
     name: '完善个人信息',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'完善【个人中心】里的标星内容即可，更了解你一点，才能为你提供更精准的高质量内容哦。'} type='highlight' />
+      <FComponentsLib.FContentText text={'完善【个人资料】中的基本信息即可，更了解你一点，才能为你提供更高质量的服务哦。'} type='highlight' />
     </div>),
     onClick() {
       self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting());

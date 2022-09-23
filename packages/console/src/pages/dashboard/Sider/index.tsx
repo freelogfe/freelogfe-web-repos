@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import img_Invite from '@/assets/invite.png';
-// import img_Questionnaire from '@/assets/questionnaire.png';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
@@ -31,7 +29,7 @@ function Sider({}: SiderProps) {
   AHooks.useMount(async () => {
     const { data } = await FServiceAPI.Activity.adsList({
       skip: 0,
-      limit: 2,
+      limit: 3,
       place: 3,
     });
     // console.log(data, '#2309i3oj3####');
