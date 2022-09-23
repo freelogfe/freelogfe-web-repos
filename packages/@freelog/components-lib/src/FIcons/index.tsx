@@ -10,6 +10,7 @@ import FCode from './FCode';
 import FCollect from './FCollect';
 import FComposition from './FComposition';
 import FContent from './FContent';
+import FCopy from './FCopy';
 import FDecrease from './FDecrease';
 import FDelete from './FDelete';
 import FDoubleDown from './FDoubleDown';
@@ -45,13 +46,26 @@ import FMappingRuleOnline from './FMappingRuleOnline';
 import FMappingRuleReplace from './FMappingRuleReplace';
 import FMappingRuleTitle from './FMappingRuleTitle';
 import FMappingRuleVersion from './FMappingRuleVersion';
-
+import FNodes from './FNodes';
+import FObject from './FObject';
+import FPaperPlane from './FPaperPlane';
+import FPentagram from './FPentagram';
+import FPlayer from './FPlayer';
 import FPlus from './FPlus';
+import FRedo from './FRedo';
+import FResource from './FResource';
+import FRotate from './FRotate';
+import FSafetyLock from './FSafetyLock';
 import FSina from './FSina';
-import FWeChat from './FWeChat';
+import FSwap from './FSwap';
+import FThickArrowRight from './FThickArrowRight';
+import FUnbinding from './FUnbinding';
+import FUp from './FUp';
+import FUpcast from './FUpcast';
+import FUpdate from './FUpdate';
 import FUser from './FUser';
-import FCopy from './FCopy';
 import FWarning from './FWarning';
+import FWeChat from './FWeChat';
 
 
 const FIcons = {
@@ -101,11 +115,25 @@ const FIcons = {
     FMappingRuleReplace,
     FMappingRuleTitle,
     FMappingRuleVersion,
-
-    FSina,
-    FWeChat,
+    FNodes,
+    FObject,
+    FPaperPlane,
+    FPentagram,
+    FPlayer,
     FPlus,
+    FRedo,
+    FResource,
+    FRotate,
+    FSafetyLock,
+    FSina,
+    FSwap,
+    FThickArrowRight,
+    FUnbinding,
+    FUp,
+    FUpcast,
+    FUpdate,
     FUser,
     FWarning,
+    FWeChat,
 };
 export default FIcons;
