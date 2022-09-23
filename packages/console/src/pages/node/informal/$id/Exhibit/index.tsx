@@ -25,7 +25,6 @@ import {
 } from '@/models/informalNodeManagerPage';
 import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';

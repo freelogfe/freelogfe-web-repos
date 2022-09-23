@@ -100,7 +100,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
           </div>}
         ><span>
           <FComponentsLib.FTextBtn>
-            <FInfo />
+            <FComponentsLib.FIcons.FInfo />
             <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
           </FComponentsLib.FTextBtn>
         </span></FPopover>

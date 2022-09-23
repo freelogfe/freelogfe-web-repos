@@ -13,7 +13,7 @@ import {
 import DepsCards from './DepsCards';
 import FBaseProperties from '@/components/FBaseProperties';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-import { FDown, FInfo, FUp, FDownload } from '@/components/FIcons';
+import { FUp } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -190,7 +190,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
             </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
-                <FInfo />
+                <FComponentsLib.FIcons.FInfo />
               </div>
             </FTooltip>
           </Space>

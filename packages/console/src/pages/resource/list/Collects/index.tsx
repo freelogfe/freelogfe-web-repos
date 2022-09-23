@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
-import {history} from 'umi';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, ResourceCollectPageModelState } from '@/models/connect';
+import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
   // ChangeStatesAction,
@@ -9,19 +10,19 @@ import {
   OnUnmountAction,
   OnChangeResourceTypeAction,
   OnChangeStatusAction,
-  OnChangeKeywordsAction, OnBoomJuiceAction, OnClickLoadingMordAction
+  OnChangeKeywordsAction, OnBoomJuiceAction, OnClickLoadingMordAction,
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
-import FLoadingTip from "@/components/FLoadingTip";
-import {FUtil} from '@freelog/tools-lib';
-import * as AHooks from "ahooks";
+import FLoadingTip from '@/components/FLoadingTip';
+import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
   resource: ResourceCollectPageModelState;
 }
 
-function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
+function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountAction>({
@@ -36,7 +37,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
   });
 
   if (resource.totalNum === -1) {
-    return (<FLoadingTip height={'calc(100vh - 140px)'}/>)
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }
 
   // console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
@@ -84,7 +85,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       dispatch<OnBoomJuiceAction>({
         type: 'resourceCollectPage/onBoomJuice',
         payload: id.toString(),
-      })
+      });
     }}
     onClickDetails={(id) => {
       window.open(FUtil.LinkTo.resourceDetails({
@@ -99,6 +100,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
   />);
 }
 
-export default connect(({resourceCollectPage}: ConnectState) => ({
+export default connect(({ resourceCollectPage }: ConnectState) => ({
   resource: resourceCollectPage,
 }))(ResourceCollect);

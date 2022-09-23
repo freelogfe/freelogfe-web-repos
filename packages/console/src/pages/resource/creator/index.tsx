@@ -189,7 +189,7 @@ function ResourceCreator({
                 lengthLimit={60}
               />
               <div style={{ width: 10 }} />
-              {resourceCreatorPage.nameVerify === 1 && <FLoading />}
+              {resourceCreatorPage.nameVerify === 1 && <FComponentsLib.FIcons.FLoading />}
               {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && (
                 <FComponentsLib.FIcons.FCheck />
               )}

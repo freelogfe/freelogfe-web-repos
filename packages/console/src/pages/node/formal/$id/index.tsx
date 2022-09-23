@@ -4,7 +4,8 @@ import Exhibits from './Exhibits';
 import Themes from './Themes';
 import Contracts from './Contracts';
 import { withRouter } from 'umi';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   OnChange_ShowPage_Action,
   OnMount_Page_Action,

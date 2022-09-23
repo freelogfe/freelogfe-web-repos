@@ -52,7 +52,7 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
                   }}
                 />
                 {bp.description && (
-                  <FTooltip title={bp.description}><FInfo style={{cursor: 'pointer', fontSize: 14}}/></FTooltip>)}
+                  <FTooltip title={bp.description}><FComponentsLib.FIcons.FInfo style={{cursor: 'pointer', fontSize: 14}}/></FTooltip>)}
               </Space>
               <div style={{height: 10}}/>
               <FComponentsLib.FContentText

@@ -426,7 +426,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
                         {
                           nodeManager_Contract_Page.authorize_ListMore === 'loading' && (
-                            <FLoading style={{ fontSize: 24 }} />)
+                            <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                         }
 
                         {
@@ -555,7 +555,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
                         {
                           nodeManager_Contract_Page.authorized_ListMore === 'loading' && (
-                            <FLoading style={{ fontSize: 24 }} />)
+                            <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                         }
 
                         {

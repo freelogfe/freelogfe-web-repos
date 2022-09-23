@@ -789,7 +789,7 @@ function FPolicyBuilder({
       {
         showView === 'fail' && (<div>
           <div className={styles.PolicyVerifyFail}>
-            <FInfo />
+            <FComponentsLib.FIcons.FInfo />
             <div style={{ width: 5 }} />
             <div>校验失败</div>
             <div style={{ width: 20 }} />
@@ -825,7 +825,7 @@ function FPolicyBuilder({
           {
             isVerifying && (<>
               <div className={styles.isCheckingTip}>
-                <FLoading />
+                <FComponentsLib.FIcons.FLoading />
                 <div style={{ width: 5 }} />
                 <span>校验中，请勿离开</span>
               </div>
@@ -1303,7 +1303,7 @@ function FPolicyBuilder({
         onClose={() => setTemplateVisible(false)}
       >
         <div className={styles.SelectTemplateTip}>
-          <FInfo style={{ fontSize: 16 }} />
+          <FComponentsLib.FIcons.FInfo style={{ fontSize: 16 }} />
           <div style={{ width: 5 }} />
           <span>选择模版后可对其进行编辑</span>
         </div>

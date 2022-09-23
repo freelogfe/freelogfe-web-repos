@@ -231,7 +231,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 15 }} />
               <div className={styles.hasPolicyTip}>
-                <FInfo style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
                 <div style={{ width: 5 }} />
                 <span>最下方有可签约的策略</span>
               </div>

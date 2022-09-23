@@ -62,7 +62,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         }}
         type='default'
       >
-        <FLeft />
+        <FComponentsLib.FIcons.FLeft />
         <>返回上一步</>
       </FComponentsLib.FTextBtn>
       <div style={{ width: 30 }} />

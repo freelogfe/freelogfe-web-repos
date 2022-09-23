@@ -72,7 +72,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           />
         </div>
         <div style={{ width: 18 }}>
-          {nodeCreatorPage.nodeDomainState === 'verifying' && <FLoading />}
+          {nodeCreatorPage.nodeDomainState === 'verifying' && <FComponentsLib.FIcons.FLoading />}
           {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError &&
           <FComponentsLib.FIcons.FCheck />}
         </div>
@@ -102,7 +102,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           </div>
         </div>
         <div style={{ width: 18 }}>
-          {nodeCreatorPage.nodeNameState === 'verifying' && <FLoading />}
+          {nodeCreatorPage.nodeNameState === 'verifying' && <FComponentsLib.FIcons.FLoading />}
           {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError &&
           <FComponentsLib.FIcons.FCheck />}
         </div>

@@ -23,7 +23,7 @@ function FListFooter({ state, onClickLoadMore }: FListFooterProps) {
     }
 
     {
-      state === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+      state === 'loading' && (<FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
     }
 
     {

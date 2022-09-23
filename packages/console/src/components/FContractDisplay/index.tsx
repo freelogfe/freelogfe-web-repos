@@ -4,7 +4,7 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
 import fMessage from '../fMessage';
-import { FDown, FLoading, FUp } from '../FIcons';
+import { FUp } from '../FIcons';
 import { ContractStatus } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -531,7 +531,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           modal_AccountState === 'activate' && (<div className={styles.paymentPassword}>
             {
               modal_IsPaying
-                ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FLoading /> <span>正在支付…</span></div>)
+                ? (<div style={{ color: '#2784FF', lineHeight: '20px' }}><FComponentsLib.FIcons.FLoading /> <span>正在支付…</span></div>)
                 : (<FComponentsLib.FContentText text={'输入支付密码进行支付'} type='normal' />)
             }
 
@@ -541,7 +541,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
               ref={inputEl}
               autoFocus={true}
               value={modal_Password}
-              onChange={async (value) => {
+              onChange={async (value: string) => {
                 // console.log(value, '@#$@#$@#$@#$');
                 // console.log(value, 'valuevalue9032klsdflksdfl');
                 set_Modal_Password(value);

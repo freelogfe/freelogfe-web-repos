@@ -31,7 +31,7 @@ function FCustomOptionsCards({ dataSource, onEdit, onDelete }: FCustomOptionsCar
               <FComponentsLib.FContentText text={ds.theKey} type='additional2' />
               {
                 ds.description
-                  ? (<FTooltip title={ds.description}><FInfo style={{ cursor: 'pointer', fontSize: 14 }} /></FTooltip>)
+                  ? (<FTooltip title={ds.description}><FComponentsLib.FIcons.FInfo style={{ cursor: 'pointer', fontSize: 14 }} /></FTooltip>)
                   : null
               }
 
