@@ -10,7 +10,6 @@ interface FDownProps {
 
 function FDown({className, ...props}: FDownProps) {
     return (<i className={['freelog', 'fl-icon-zhankaigengduo', styles.icon, className].join(' ')} {...props} />);
-
 }
 
 export default FDown;
