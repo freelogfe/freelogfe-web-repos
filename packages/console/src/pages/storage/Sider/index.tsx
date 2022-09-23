@@ -98,7 +98,9 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                           // console.log('@#@#$dsiofud890saufoisdajfl;sd');
                           if (b.totalFileQuantity === 0) {
                             fConfirmModal({
-                              message: '存储空间一旦删除则无法恢复，确认删除吗？',
+                              message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                              okText: FI18n.i18nNext.t('btn_delete_object'),
+                              cancelText: FI18n.i18nNext.t('btn_cancel'),
                               onOk() {
                                 dispatch<DeleteBucketByNameAction>({
                                   type: 'storageHomePage/deleteBucketByName',

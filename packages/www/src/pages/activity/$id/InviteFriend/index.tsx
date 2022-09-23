@@ -273,6 +273,12 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
                 <span className='tip c2'>最近更新</span>
                 <span className='tip c3'>奖励进度</span>
               </div>
+
+              {
+                records.length === 0 && (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 100 }}>
+                  <FComponentsLib.FContentText text={'暂无'} type={'additional2'} />
+                </div>)
+              }
               {
                 records.map((r) => {
                   return (<div className='flex-row row' key={r.userId}>
