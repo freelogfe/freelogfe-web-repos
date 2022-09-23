@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Checkbox } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
