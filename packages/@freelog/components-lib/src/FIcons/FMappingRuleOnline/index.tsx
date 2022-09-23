@@ -1,10 +1,9 @@
 import * as React from 'react';
-import styles from './index.less';
-import {CSSProperties} from "react";
+// import styles from './index.less';
 
 interface FMappingRuleOnlineProps {
   className?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
 
   onClick?(): void;
 }
