@@ -1,8 +1,8 @@
 /** 插入资源弹窗组件 */
 
 import './index.less';
-import { Drawer, Select, Tabs } from 'antd';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { Drawer, Popover, Select, Tabs, Upload } from 'antd';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useEffect, useRef, useState } from 'react';
 import FCoverImage from '@/components/FCoverImage';
 import FInput from '@/components/FInput';
@@ -15,19 +15,38 @@ interface Props {
   drawerType: string;
 }
 
-interface UrlItem {
-  value: string;
-  alt?: string;
-}
-
 export const InsertResourceDrawer = (props: Props) => {
   const { show, close, drawerType } = props;
   let body: Element | null = null;
   const resourceMapping: any = {
-    image: { resourceType: '图片', key: '插入图片' },
-    audio: { resourceType: '音频', key: '插入音频' },
-    video: { resourceType: '视频', key: '插入视频' },
-    text: { resourceType: '阅读', key: '插入文档' },
+    image: {
+      resourceType: '图片',
+      accept: 'image/*',
+      key: FI18n.i18nNext.t('insert_title_image'),
+      bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_image'),
+      uploadText: FI18n.i18nNext.t('btn_upload_new_image'),
+    },
+    audio: {
+      resourceType: '音频',
+      accept: 'audio/*',
+      key: FI18n.i18nNext.t('insert_title_audio'),
+      bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_audio'),
+      uploadText: FI18n.i18nNext.t('btn_upload_new_audio'),
+    },
+    video: {
+      resourceType: '视频',
+      accept: 'video/*',
+      key: FI18n.i18nNext.t('insert_title_video'),
+      bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_video'),
+      uploadText: FI18n.i18nNext.t('btn_upload_new_video'),
+    },
+    text: {
+      resourceType: '阅读',
+      accept: '.md,.txt',
+      key: FI18n.i18nNext.t('insert_title_post'),
+      bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_post'),
+      uploadText: FI18n.i18nNext.t('btn_upload_new_post'),
+    },
   };
   const defaultCover = '//static.freelog.com/static/default_cover.png';
 
@@ -45,6 +64,7 @@ export const InsertResourceDrawer = (props: Props) => {
     bucketPageIndex: 0,
     bucketNoMore: false,
     bucket: '全部Bucket',
+    uploadBucket: null as string | null,
     objectKey: '',
   });
   const [activeTab, setActiveTab] = useState('market');
@@ -52,8 +72,10 @@ export const InsertResourceDrawer = (props: Props) => {
   const [mineList, setMineList] = useState<any[]>([]);
   const [collectionList, setCollectionList] = useState<any[]>([]);
   const [bucketList, setBucketList] = useState<string[]>([]);
+  const [uploadBucket, setUploadBucket] = useState<string | null>(null);
+  const [uploadPopShow, setUploadPopShow] = useState(false);
   const [objectList, setObjectList] = useState<any[]>([]);
-  const [urlList, setUrlList] = useState<UrlItem[]>([]);
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (!show) return;
@@ -68,9 +90,28 @@ export const InsertResourceDrawer = (props: Props) => {
     getMineList(true);
     getCollectionList(true);
     getBuckets();
-    setUrlList([{ value: '', alt: '' }]);
+    setUrl('');
 
     return () => {
+      refs.current = {
+        activeTab: 'market',
+        resourcePageIndex: 0,
+        resourceNoMore: false,
+        resourceKey: '',
+        minePageIndex: 0,
+        mineNoMore: false,
+        mineKey: '',
+        collectionPageIndex: 0,
+        collectionNoMore: false,
+        collectionKey: '',
+        bucketPageIndex: 0,
+        bucketNoMore: false,
+        bucket: '全部Bucket',
+        uploadBucket: null,
+        objectKey: '',
+      };
+      setActiveTab('market');
+      setUrl('');
       body?.removeEventListener('scroll', listScroll);
     };
   }, [show]);
@@ -176,7 +217,7 @@ export const InsertResourceDrawer = (props: Props) => {
     const bucketList = res.data.map(
       (item: { bucketName: string }) => item.bucketName,
     );
-    bucketList.unshift('全部Bucket');
+    // bucketList.unshift('全部Bucket');
     setBucketList(bucketList);
     getObjects(true);
   };
@@ -199,10 +240,38 @@ export const InsertResourceDrawer = (props: Props) => {
     setObjectList((pre) => (init ? dataList : [...pre, ...dataList]));
   };
 
+  /** 上传文件 */
+  const uploadFile = (info: any) => {
+    setUploadPopShow(false);
+    console.error(refs.current.uploadBucket);
+    console.error(info);
+    // const { status, name } = info.file;
+    // if (status === 'uploading') {
+    //   if (uploadStatus === 1) setUploadStatus(2);
+    // } else if (status === 'done') {
+    //   setTimeout(() => {
+    //     setUploadStatus(3);
+    //     setTimeout(() => {
+    //       setUploadStatus(4);
+    //     }, 400);
+    //   }, 500);
+    //   const fileReader = new FileReader();
+    //   fileReader.readAsText(info.file.originFileObj);
+    //   fileReader.onload = (e: any) => {
+    //     const { result } = e.target;
+    //     refs.current.uploadFileData = { name, content: result };
+    //     setUploadFileData(refs.current.uploadFileData);
+    //   };
+    // } else if (status === 'error') {
+    //   setUploadStatus(1);
+    //   fMessage('上传失败', 'error');
+    // }
+  };
+
   /** tab 选项卡区域列表 */
   const tabItems = [
     {
-      label: '资源市场',
+      label: FI18n.i18nNext.t('insert_tab_resourcemarket'),
       key: 'market',
       children: (
         <div className="market-area">
@@ -216,12 +285,15 @@ export const InsertResourceDrawer = (props: Props) => {
               getResourceList(true);
             }}
             theme="dark"
+            placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {resourceList.length === 0 && refs.current.resourceNoMore && (
             <div className="no-data-box">
               <div className="no-data-tip">
                 <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">当前列表暂无内容</div>
+                <div className="tip">
+                  {FI18n.i18nNext.t('msg_empty_general')}
+                </div>
               </div>
             </div>
           )}
@@ -258,7 +330,7 @@ export const InsertResourceDrawer = (props: Props) => {
       ),
     },
     {
-      label: '我的资源',
+      label: FI18n.i18nNext.t('insert_tab_myresources'),
       key: 'mine',
       children: (
         <div className="mine-area">
@@ -272,12 +344,15 @@ export const InsertResourceDrawer = (props: Props) => {
               getMineList(true);
             }}
             theme="dark"
+            placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {mineList.length === 0 && refs.current.mineNoMore && (
             <div className="no-data-box">
               <div className="no-data-tip">
                 <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">当前列表暂无内容</div>
+                <div className="tip">
+                  {FI18n.i18nNext.t('msg_empty_general')}
+                </div>
               </div>
             </div>
           )}
@@ -314,7 +389,7 @@ export const InsertResourceDrawer = (props: Props) => {
       ),
     },
     {
-      label: '我的收藏',
+      label: FI18n.i18nNext.t('insert_tab_mycollections'),
       key: 'collection',
       children: (
         <div className="collection-area">
@@ -328,12 +403,15 @@ export const InsertResourceDrawer = (props: Props) => {
               getCollectionList(true);
             }}
             theme="dark"
+            placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {collectionList.length === 0 && refs.current.collectionNoMore && (
             <div className="no-data-box">
               <div className="no-data-tip">
                 <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">当前列表暂无内容</div>
+                <div className="tip">
+                  {FI18n.i18nNext.t('msg_empty_general')}
+                </div>
               </div>
             </div>
           )}
@@ -370,25 +448,102 @@ export const InsertResourceDrawer = (props: Props) => {
       ),
     },
     {
-      label: '存储空间',
+      label: FI18n.i18nNext.t('insert_tab_storage'),
       key: 'bucket',
       children: (
         <div className="buckets-area">
           <div className="header">
-            <Select
-              className="bucket-select"
-              defaultValue="全部Bucket"
-              onChange={(e) => {
-                refs.current.bucket = e;
-                getObjects(true);
-              }}
-            >
-              {bucketList.map((item) => (
-                <Option value={item} key={item}>
-                  {item}
-                </Option>
-              ))}
-            </Select>
+            <div className="left-header">
+              <Select
+                className="bucket-select"
+                value={refs.current.bucket}
+                onChange={(e) => {
+                  refs.current.bucket = e;
+                  refs.current.uploadBucket = e === '全部Bucket' ? null : e;
+                  setUploadBucket(e === '全部Bucket' ? null : e);
+                  getObjects(true);
+                }}
+              >
+                {['全部Bucket', ...bucketList].map((item) => (
+                  <Option value={item} key={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+
+              <Popover
+                open={uploadPopShow}
+                onOpenChange={(e) => setUploadPopShow(e)}
+                placement="bottomLeft"
+                trigger="click"
+                title={null}
+                content={
+                  <div className="md-upload-bucket-selector">
+                    {bucketList.length ? (
+                      <>
+                        <div className="tip">
+                          {FI18n.i18nNext.t('msg_posteditor_upload_object')}
+                        </div>
+                        <Select
+                          className="selector"
+                          placeholder={FI18n.i18nNext.t(
+                            'insert_fromstorage_select_bucket_hint',
+                          )}
+                          value={uploadBucket}
+                          onChange={(e) => {
+                            refs.current.uploadBucket = e;
+                            setUploadBucket(e);
+                          }}
+                        >
+                          {bucketList.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                        <div className="btn-box">
+                          <Upload
+                            id="uploadBtn"
+                            showUploadList={false}
+                            onChange={uploadFile}
+                            accept={
+                              show ? resourceMapping[drawerType].accept : ''
+                            }
+                            disabled={!refs.current.uploadBucket}
+                          >
+                            <div
+                              className={`btn ${
+                                !refs.current.uploadBucket && 'disabled'
+                              }`}
+                            >
+                              {FI18n.i18nNext.t('btn_done')}
+                            </div>
+                          </Upload>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="no-bucket-box">
+                        <div className="tip">
+                          {FI18n.i18nNext.t('posteditor_insert_no_bucket')}
+                        </div>
+                        <div className="btn">
+                          {FI18n.i18nNext.t(
+                            'posteditor_insert_btn_createbucket02',
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                }
+              >
+                <div className="upload-btn">
+                  <i className="freelog fl-icon-shangchuanfengmian"></i>
+                  <div className="btn-text">
+                    {show ? resourceMapping[drawerType].uploadText : ''}
+                  </div>
+                </div>
+              </Popover>
+            </div>
             <FInput
               value={refs.current.objectKey}
               debounce={300}
@@ -400,11 +555,16 @@ export const InsertResourceDrawer = (props: Props) => {
               theme="dark"
             />
           </div>
+          <div className="title">
+            {show ? resourceMapping[drawerType].bucketTitle : ''}
+          </div>
           {objectList.length === 0 && refs.current.bucketNoMore && (
             <div className="no-data-box">
               <div className="no-data-tip">
                 <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">当前列表暂无内容</div>
+                <div className="tip">
+                  {FI18n.i18nNext.t('msg_empty_general')}
+                </div>
               </div>
             </div>
           )}
@@ -412,69 +572,40 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="object-item" key={item.objectId}>
               <div className="info-area">
                 <div className="object-name">{`${item.bucketName}/${item.objectName}`}</div>
-                <div className="other-info">{`${
-                  item.resourceType.join(' / ') || '未设置类型'
-                } | 更新时间 ${FUtil.Format.formatDateTime(
-                  item.updateDate,
-                  true,
-                )}`}</div>
+                <div className="other-info">{`${FI18n.i18nNext.t(
+                  'label_last_updated',
+                )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}</div>
               </div>
 
-              <div className="choose-btn">选择</div>
+              <div className="choose-btn">
+                {FI18n.i18nNext.t('btn_import_post')}
+              </div>
             </div>
           ))}
         </div>
       ),
     },
     {
-      label: 'URL',
+      label: FI18n.i18nNext.t('insert_tab_url'),
       key: 'url',
       disabled: drawerType === 'text',
       children: (
         <div className="url-area">
-          {urlList.map((item, index) => (
-            <div className="url-item" key={index}>
-              <div className="title">URL</div>
-              <textarea
-                value={item.value}
-                onChange={(e) => {
-                  setUrlList((pre) => {
-                    const list = [...pre];
-                    list[index].value = e.target.value;
-                    return list;
-                  });
-                }}
-              ></textarea>
-              <div className="title">描述</div>
-              <textarea
-                value={item.alt}
-                onChange={(e) => {
-                  setUrlList((pre) => {
-                    const list = [...pre];
-                    list[index].alt = e.target.value;
-                    return list;
-                  });
-                }}
-              ></textarea>
-            </div>
-          ))}
-          <div className="btns">
-            <div
-              className="add-btn"
-              onClick={() => {
-                setUrlList((pre) => [...pre, { value: '', alt: '' }]);
-              }}
-            >
-              <i className="freelog fl-icon-tianjia"></i>
-              <span>新增url</span>
-            </div>
+          <textarea
+            className="url-input"
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value);
+            }}
+          ></textarea>
+          <div className="btn-box">
             <div
               className="insert-btn"
               onClick={() => {
-                console.error(urlList);
+                console.error(url);
               }}
             >
-              插入到文章
+              {FI18n.i18nNext.t('btn_insert_from_url')}
             </div>
           </div>
         </div>
@@ -486,11 +617,12 @@ export const InsertResourceDrawer = (props: Props) => {
     <Drawer
       className="insert-resource-drawer-wrapper"
       width={700}
-      title={show && resourceMapping[drawerType].key}
+      title={show ? resourceMapping[drawerType].key : ''}
       closable={false}
       open={!!drawerType}
       onClose={close}
       extra={<i className="freelog fl-icon-guanbi close-btn" onClick={close} />}
+      destroyOnClose
     >
       <Tabs
         items={tabItems}

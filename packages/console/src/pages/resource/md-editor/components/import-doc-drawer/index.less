@@ -254,19 +254,31 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 17px;
 
       .bucket-select {
         .ant-select-selector {
           color: #2784ff;
           border: 1px solid #2784ff;
           border-radius: 4px;
+          height: 38px;
+          display: flex;
+          align-items: center;
         }
 
         .ant-select-arrow {
           color: #2784ff;
         }
       }
+    }
+
+    .title {
+      width: 100%;
+      font-size: 12px;
+      font-weight: 600;
+      color: #7a869a;
+      line-height: 18px;
+      padding: 30px 0 5px;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .no-data-box {
@@ -456,86 +468,6 @@
     width: 3px;
     border-radius: 3px;
     background-color: rgba(0, 0, 0, 0.2);
-  }
-}
-
-.ant-popover-arrow-content {
-  --antd-arrow-background-color: rgba(0, 0, 0, 0.6);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2) !important;
-  backdrop-filter: blur(3px);
-}
-
-.ant-popover-inner {
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(3px);
-  border-radius: 4px;
-}
-
-.ant-popover-inner-content {
-  padding: 20px;
-}
-
-.ant-popover-message {
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-  line-height: 20px;
-  padding: 0 0 20px 0;
-  display: flex;
-  align-items: center;
-}
-
-.ant-popover-message-title {
-  padding-left: 5px;
-}
-
-.ant-popover-buttons {
-  margin-bottom: 0;
-}
-
-.ant-btn-sm {
-  height: 32px;
-  padding: 6px 15px;
-  box-sizing: border-box;
-  background: #ededed;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #666666 !important;
-  line-height: 20px;
-  border: none;
-  transition: none;
-
-  &:hover {
-    background: #f5f5f5;
-  }
-
-  &:active {
-    background: #e6e6e6;
-  }
-}
-
-.ant-btn-primary {
-  height: 32px;
-  padding: 6px 15px;
-  box-sizing: border-box;
-  background: #2784ff;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff !important;
-  line-height: 20px;
-  margin-left: 10px;
-  border: none;
-  transition: none;
-
-  &:hover {
-    background: #529dff;
-  }
-
-  &:active {
-    background: #2376e5;
   }
 }
 

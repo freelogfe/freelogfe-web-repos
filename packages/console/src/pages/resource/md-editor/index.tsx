@@ -154,26 +154,36 @@ const MarkdownEditor = () => {
 
       <div className="header">
         <div className="title" onClick={outputMarkdown}>
-          编辑文章
+          {FI18n.i18nNext.t('title_edit_post')}
         </div>
         <div className="article-info">
-          <span>总字数 {markdown.length}</span>
-          {saveType === 1 && <span>保存中...</span>}
+          <span>
+            {`${FI18n.i18nNext.t('title_edit_post')} ${markdown.length}`}
+          </span>
+          {saveType === 1 && (
+            <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
+          )}
           {saveType === 2 && (
-            <span>{`已保存 ${formatDate(lastSaveTime)}`}</span>
+            <span>
+              {FI18n.i18nNext.t('posteditor_state_saved', {
+                LastEditTime: formatDate(lastSaveTime),
+              })}
+            </span>
           )}
           {saveType === 3 && (
-            <span>{`最近保存 ${formatDate(
-              lastSaveTime,
-            )}，网络异常，尝试重连…`}</span>
+            <span>
+              {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
+                LastEditTime: formatDate(lastSaveTime),
+              })}
+            </span>
           )}
         </div>
         <div className="btns">
           <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
-            保存
+            {FI18n.i18nNext.t('btn_save_post')}
           </div>
           <div className="exit-btn" onClick={exit}>
-            退出编辑器
+            {FI18n.i18nNext.t('btn_quit_editor')}
           </div>
         </div>
       </div>
@@ -195,6 +205,7 @@ const MarkdownEditor = () => {
       <ImportDocDrawer
         show={importDrawer}
         close={() => setImportDrawer(false)}
+        setHtml={setHtml}
       />
 
       <InsertResourceDrawer

@@ -1,5 +1,6 @@
 /** 编辑器配置 */
 
+import { FI18n } from '@freelog/tools-lib';
 import { IToolbarConfig, IEditorConfig, Boot } from '@wangeditor/editor';
 import {
   audioMenuConfig,
@@ -40,7 +41,7 @@ export const toolbarConfig: Partial<IToolbarConfig> = {
 
 /** 编辑器配置 */
 export const editorConfig: Partial<IEditorConfig> = {
-  placeholder: '输入内容...',
+  placeholder: FI18n.i18nNext.t('hint_posteditor_contentfiled'),
   hoverbarKeys: {
     link: {
       // 重写 link 元素的 hoverbar
