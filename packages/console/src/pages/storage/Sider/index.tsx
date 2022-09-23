@@ -7,7 +7,6 @@ import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteBucketByNameAction,
 } from '@/models/storageHomePage';
-import { FDelete } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import fMessage from '@/components/fMessage';
 import fConfirmModal from '@/components/fConfirmModal';
