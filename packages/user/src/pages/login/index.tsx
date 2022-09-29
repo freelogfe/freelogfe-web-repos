@@ -76,7 +76,10 @@ function Login({ dispatch, loginPage }: LoginProps) {
           </div>
           <div className=" flex-column-center shrink-0">
             <div className={styles.box} ref={boxRef}>
-              <FComponentsLib.FTitleText type="h4" text={'用户名/手机号/邮箱'} />
+              <FComponentsLib.FTitleText
+                type="h4"
+                text={'用户名/手机号/邮箱'}
+              />
               <div style={{ height: 5 }} />
               <FInput
                 name="username"
@@ -196,16 +199,16 @@ function Login({ dispatch, loginPage }: LoginProps) {
             <div
               className={styles.wechat + ' flex-column-center'}
               onClick={() => {
+
                 location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=wx25a849d14dd44177&redirect_uri=${encodeURIComponent(
                   `https://api.freelog.com/${
                     location.host.includes('user.testfreelog.com')
                       ? 'test/'
                       : ''
                   }v2/thirdParty/weChat/codeHandle?returnUrl=` +
-                    (urlParams.goTo ||
-                    location.host.includes('user.testfreelog.com')
+                    (location.host.includes('user.testfreelog.com')
                       ? 'http://user.testfreelog.com/'
-                      : 'https:user.freelog.com'),
+                      : 'https://user.freelog.com/'),
                 )}&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect`;
               }}
             >

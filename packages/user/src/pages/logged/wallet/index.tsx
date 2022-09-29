@@ -303,6 +303,11 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </div>
           <Activity
             inActive={false}
+            signSuccess={()=>{
+              dispatch<OnMountPageAction>({
+                type: 'walletPage/onMountPage',
+              });
+            }}
             goActive={() => {
               dispatch<OnClick_Activate_AccountBtn_Action>({
                 type: 'walletPage/onClick_Activate_AccountBtn',

@@ -331,7 +331,7 @@ const Model: RewardPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         fMessage(msg, 'error');
       } else {
-        fMessage(msg, 'success');
+        fMessage('提现成功', 'success');
       }
     },
   },

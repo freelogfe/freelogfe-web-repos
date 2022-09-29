@@ -22,7 +22,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
     endDate: string;
   }[]>([]);
 
-  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(-1);
+  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(0);
 
   AHooks.useMount(async () => {
     const today: string = moment().format('YYYY-MM-DD');

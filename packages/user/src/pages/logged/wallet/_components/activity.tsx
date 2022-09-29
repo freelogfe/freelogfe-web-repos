@@ -17,6 +17,7 @@ import { Loading } from '../../../../.umi/plugin-dva/connect';
 
 interface CoinActivity {
   goActive: any;
+  signSuccess?: any;
   inActive: boolean;
 }
 
@@ -60,6 +61,7 @@ function CoinActivity(props: CoinActivity) {
           setAmountSum((pre) => {
             if (pre >= data.data.amountSum) {
               clearInterval(timer);
+              props.signSuccess()
               return data.data.amountSum;
             }
             return pre + 1;
