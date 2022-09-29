@@ -24,7 +24,7 @@ function CoinActivity(props: CoinActivity) {
   const [datas, setDatas] = React.useState({
     amount: 0,
     amountSum: '0',
-    isSign: false,
+    isSign: true,
   });
   const [showTip, setShowTip] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -44,12 +44,13 @@ function CoinActivity(props: CoinActivity) {
         getData(true);
         setLoading(false);
       }, 1000);
+    }else{
+      setLoading(false);
     }
   };
   const getData = async (sec?: boolean) => {
     const data = await FServiceAPI.User.getSignInfo();
     data.data.amountSum = parseFloat(data.data.amountSum);
-    data.data.isSign = false;
     if (sec) {
       setSuccess(true);
       setDatas(data.data);
