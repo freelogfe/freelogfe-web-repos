@@ -6,6 +6,11 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useEffect, useRef, useState } from 'react';
 import FCoverImage from '@/components/FCoverImage';
 import FInput from '@/components/FInput';
+import FUpload from '@/components/FUpload';
+import { RcFile } from 'antd/lib/upload/interface';
+import fMessage from '@/components/fMessage';
+import FModal from '@/components/FModal';
+import FComponentsLib from '@freelog/components-lib';
 
 const { Option } = Select;
 
@@ -73,7 +78,11 @@ export const InsertResourceDrawer = (props: Props) => {
   const [collectionList, setCollectionList] = useState<any[]>([]);
   const [bucketList, setBucketList] = useState<string[]>([]);
   const [uploadBucket, setUploadBucket] = useState<string | null>(null);
+  const [createBucketShow, setCreateBucketShow] = useState(false);
+  const [newBucketName, setNewBucketName] = useState('');
+  const [newBucketError, setNewBucketError] = useState(0);
   const [uploadPopShow, setUploadPopShow] = useState(false);
+  const [uploadQueue, setUploadQueue] = useState<any[]>([]);
   const [objectList, setObjectList] = useState<any[]>([]);
   const [url, setUrl] = useState('');
 
@@ -217,7 +226,6 @@ export const InsertResourceDrawer = (props: Props) => {
     const bucketList = res.data.map(
       (item: { bucketName: string }) => item.bucketName,
     );
-    // bucketList.unshift('全部Bucket');
     setBucketList(bucketList);
     getObjects(true);
   };
@@ -240,32 +248,167 @@ export const InsertResourceDrawer = (props: Props) => {
     setObjectList((pre) => (init ? dataList : [...pre, ...dataList]));
   };
 
-  /** 上传文件 */
-  const uploadFile = (info: any) => {
+  /** 修改新的存储空间名称 */
+  const changeNewBucketName = async (name: string) => {
+    setNewBucketName(name);
+
+    if (!FUtil.Regexp.BUCKET_NAME.test(name)) {
+      setNewBucketError(1);
+      return;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
+      bucketName: name,
+    };
+    const result = await FServiceAPI.Storage.bucketIsExist(params);
+    console.error('bucketIsExist===>', result);
+    if (result.data) {
+      setNewBucketError(2);
+      return;
+    }
+
+    setNewBucketError(0);
+  };
+
+  /** 创建存储空间 */
+  const createBucket = async () => {
+    const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
+      bucketName: newBucketName,
+    };
+    const result = await FServiceAPI.Storage.createBucket(params);
+    setCreateBucketShow(false);
+    getBuckets();
+  };
+
+  /** 上传文件到存储空间 */
+  const beforeUpload = async (fileList: RcFile[]) => {
+    // 是否有超过大小限制的文件
+    const IS_EXSIT_BIG_FILE =
+      fileList.filter((item) => item.size > 200 * 1024 * 1024).length > 0;
+    if (IS_EXSIT_BIG_FILE) {
+      fMessage('单个文件不能大于 200 M', 'warning');
+      return;
+    }
+
+    // 获取当前存储空间内存情况
+    const spaceResult = await FServiceAPI.Storage.spaceStatistics();
+    const { storageLimit, totalFileSize } = spaceResult.data;
+    const totalSize: number = fileList
+      .map((item) => item.size)
+      .reduce((pre, cur) => pre + cur, 0);
+    if (storageLimit - totalFileSize < totalSize) {
+      fMessage('超出储存', 'warning');
+      return;
+    }
+
     setUploadPopShow(false);
-    console.error(refs.current.uploadBucket);
-    console.error(info);
-    // const { status, name } = info.file;
-    // if (status === 'uploading') {
-    //   if (uploadStatus === 1) setUploadStatus(2);
-    // } else if (status === 'done') {
-    //   setTimeout(() => {
-    //     setUploadStatus(3);
-    //     setTimeout(() => {
-    //       setUploadStatus(4);
-    //     }, 400);
-    //   }, 500);
-    //   const fileReader = new FileReader();
-    //   fileReader.readAsText(info.file.originFileObj);
-    //   fileReader.onload = (e: any) => {
-    //     const { result } = e.target;
-    //     refs.current.uploadFileData = { name, content: result };
-    //     setUploadFileData(refs.current.uploadFileData);
-    //   };
-    // } else if (status === 'error') {
-    //   setUploadStatus(1);
-    //   fMessage('上传失败', 'error');
-    // }
+
+    // 整理上传任务队列
+    const uploadTaskQueue = await Promise.all(
+      fileList.map(async (file) => ({
+        uid: file.uid,
+        sha1: await FUtil.Tool.getSHA1Hash(file),
+        name: file.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
+        file: file,
+        state: 0,
+        exist: false,
+        sameName: false,
+      })),
+    );
+
+    // 确认上传文件是否存在
+    const params: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
+      sha1: uploadTaskQueue.map((file) => file.sha1).join(','),
+    };
+    const fileExistResult = await FServiceAPI.Storage.fileIsExist(params);
+    const allExistSha1: string[] = fileExistResult.data
+      .filter((d: any) => d.isExisting)
+      .map((d: any) => d.sha1);
+
+    const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
+      fullObjectNames: fileList
+        .map((p) => uploadBucket + '/' + p.name)
+        .join(','),
+      projection: 'objectId,objectName',
+    };
+
+    const objectResult = await FServiceAPI.Storage.batchObjectList(params1);
+
+    const allExistObjectNames: string[] = objectResult.data.map(
+      (d: any) => d.objectName,
+    );
+    const queue = [
+      ...uploadTaskQueue.map((file) => ({
+        ...file,
+        exist: allExistSha1.includes(file.sha1),
+        sameName: allExistObjectNames.includes(file.name),
+      })),
+    ];
+    uploadFile(queue);
+  };
+
+  /** 上传文件 */
+  const uploadFile = async (queue: any[]) => {
+    console.error('queue===>', queue);
+    queue.forEach(async (task) => {
+      if (!task.exist) {
+        // setStatus('uploading');
+        // setProgress(0);
+
+        const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
+          file: task.file,
+        };
+        const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(
+          params,
+          {
+            onUploadProgress(progressEvent) {
+              console.error(
+                Math.floor((progressEvent.loaded / progressEvent.total) * 100),
+              );
+              // setProgress(
+              //   Math.floor((progressEvent.loaded / progressEvent.total) * 100),
+              // );
+            },
+          },
+          true,
+        );
+
+        // cancels.set(file.uid, cancel);
+        try {
+          const { data } = await promise;
+          // setStatus('success');
+          // onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
+        } catch (e) {
+          if (status !== 'uploading') {
+            // setStatus('failed');
+            // onFail && onFail({ uid: file.uid, objectName: file.name });
+            return;
+          }
+        }
+      }
+
+      const result = await FServiceAPI.recombination.getFilesSha1Info({
+        sha1: [task.sha1],
+      });
+      console.error(result);
+
+      // if (result.data[0].state === 'success') {
+      // setStatus('success');
+      // onSucceed &&
+      // onSucceed({ uid: task.uid, objectName: task.name, sha1: task.sha1 });
+      // return;
+      // }
+      // setStatus('failed');
+      // onFail && onFail({ uid: task.uid, objectName: task.name });
+
+      const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
+        bucketName: uploadBucket as string,
+        objectName: task.name,
+        sha1: task.sha1,
+      };
+      const createResult = await FServiceAPI.Storage.createObject(params);
+      console.error(createResult)
+    });
   };
 
   /** tab 选项卡区域列表 */
@@ -494,6 +637,27 @@ export const InsertResourceDrawer = (props: Props) => {
                             refs.current.uploadBucket = e;
                             setUploadBucket(e);
                           }}
+                          dropdownRender={(menu) => (
+                            <>
+                              {menu}
+                              {bucketList.length < 5 && (
+                                <div
+                                  className="create-bucket-btn"
+                                  onClick={() => {
+                                    setUploadPopShow(false);
+                                    setCreateBucketShow(true);
+                                  }}
+                                >
+                                  <i className="freelog fl-icon-tianjia"></i>
+                                  <div>
+                                    {FI18n.i18nNext.t(
+                                      'posteditor_insert_btn_createbucket',
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          )}
                         >
                           {bucketList.map((item) => (
                             <Option value={item} key={item}>
@@ -502,10 +666,18 @@ export const InsertResourceDrawer = (props: Props) => {
                           ))}
                         </Select>
                         <div className="btn-box">
-                          <Upload
-                            id="uploadBtn"
+                          <FUpload
                             showUploadList={false}
-                            onChange={uploadFile}
+                            multiple={true}
+                            beforeUpload={(
+                              file: RcFile,
+                              fileList: RcFile[],
+                            ) => {
+                              if (file === fileList[fileList.length - 1]) {
+                                beforeUpload(fileList);
+                              }
+                              return false;
+                            }}
                             accept={
                               show ? resourceMapping[drawerType].accept : ''
                             }
@@ -518,7 +690,7 @@ export const InsertResourceDrawer = (props: Props) => {
                             >
                               {FI18n.i18nNext.t('btn_done')}
                             </div>
-                          </Upload>
+                          </FUpload>
                         </div>
                       </>
                     ) : (
@@ -526,7 +698,13 @@ export const InsertResourceDrawer = (props: Props) => {
                         <div className="tip">
                           {FI18n.i18nNext.t('posteditor_insert_no_bucket')}
                         </div>
-                        <div className="btn">
+                        <div
+                          className="btn"
+                          onClick={() => {
+                            setUploadPopShow(false);
+                            setCreateBucketShow(true);
+                          }}
+                        >
                           {FI18n.i18nNext.t(
                             'posteditor_insert_btn_createbucket02',
                           )}
@@ -582,6 +760,67 @@ export const InsertResourceDrawer = (props: Props) => {
               </div>
             </div>
           ))}
+
+          <FModal
+            title={null}
+            visible={createBucketShow}
+            width={640}
+            zIndex={1060}
+            okButtonProps={{
+              disabled: !newBucketName || !!newBucketError,
+            }}
+            cancelText={FI18n.i18nNext.t('btn_cancel')}
+            onOk={createBucket}
+            onCancel={() => {
+              setCreateBucketShow(false);
+            }}
+          >
+            <div style={{ padding: 20 }}>
+              <FComponentsLib.FTitleText
+                text={FI18n.i18nNext.t('create_bucket_popup_title')}
+                type="h2"
+              />
+            </div>
+
+            <div className="create-bucket-popup">
+              <div style={{ height: 50 }} />
+              <div className="tip">
+                {FI18n.i18nNext
+                  .t('create_bucket_popup_msg')
+                  .split('\n')
+                  .map((s, i) => {
+                    return <div key={i}>{s}</div>;
+                  })}
+              </div>
+              <div style={{ height: 10 }} />
+              <FInput
+                value={newBucketName}
+                placeholder={FI18n.i18nNext.t('enter_bucket_name')}
+                debounce={300}
+                onDebounceChange={(value) => {
+                  changeNewBucketName(value);
+                }}
+                wrapClassName="input"
+                errorText={
+                  newBucketError === 1 ? (
+                    <div>
+                      {FI18n.i18nNext
+                        .t('naming_convention_bucket_name')
+                        .split('\n')
+                        .map((s, i) => {
+                          return <div key={i}>{s}</div>;
+                        })}
+                    </div>
+                  ) : newBucketError === 2 ? (
+                    '存储空间名称重复'
+                  ) : (
+                    ''
+                  )
+                }
+              />
+              <div style={{ height: 100 }} />
+            </div>
+          </FModal>
         </div>
       ),
     },
