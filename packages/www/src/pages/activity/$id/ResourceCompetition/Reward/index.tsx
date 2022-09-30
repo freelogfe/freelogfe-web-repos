@@ -185,7 +185,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <span>游戏类资源可获得20元，漫画/小说/图片等类型资源可获得5元</span>
         </div>
         <div style={{ height: 20 }} />
-        <div className={styles.title4}>* 同一用户限领3次资源发行奖励</div>
+        <div className={styles.title4}>* 同一用户限领3次，奖励将在资源通过审核后发放</div>
         <div style={{ height: 10 }} />
         <Space
           size={10}
