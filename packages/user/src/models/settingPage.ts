@@ -801,7 +801,7 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage(FI18n.i18nNext.t('saved_successfully'));
+      fMessage(FI18n.i18nNext.t('msg_updated_successfully'));
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
