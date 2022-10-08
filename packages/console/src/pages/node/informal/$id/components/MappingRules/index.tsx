@@ -1,13 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {
-  // FEdit,
-  FMappingRuleAdd, FMappingRuleAttr,
-  FMappingRuleCover,
-  FMappingRuleLabel, FMappingRuleOffline, FMappingRuleOnline, FMappingRuleReplace,
-  FMappingRuleTitle,
-  FMappingRuleVersion,
-} from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
 interface AddRuleProps {
