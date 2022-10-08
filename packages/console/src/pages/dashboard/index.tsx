@@ -98,7 +98,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               />
             </div>
             <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
               <i
                 style={{
                   width: 3,
@@ -110,7 +110,14 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 }}
               />
               <FComponentsLib.FContentText
-                text={'可通过【个人中心】—【活动奖励】，将内测期间领取的现金奖励申请提现至微信钱宝。'}
+                text={'可通过'}
+                type='normal'
+              />
+              <FComponentsLib.FTextBtn onClick={() => {
+                self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
+              }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>
+              <FComponentsLib.FContentText
+                text={'，将内测期间领取的现金奖励申请提现至微信钱宝。'}
                 type='normal'
               />
             </div>
