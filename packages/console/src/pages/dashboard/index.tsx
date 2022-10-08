@@ -9,7 +9,7 @@ import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 import { ConnectState, DashboardPageModelState } from '@/models/connect';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPage';
 import { FUtil } from '@freelog/tools-lib';
@@ -93,7 +93,41 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 }}
               />
               <FComponentsLib.FContentText
-                text={'（奖励发放|提现说明），活动的最终解释权归Freelog所有。'}
+                text={'分别完成下方的基础任务、资源任务和节点任务，即可领取对应的现金奖励。'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'可通过【个人中心】—【活动奖励】，将内测期间领取的现金奖励申请提现至微信钱宝。'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'活动的最终解释权归Freelog所有。'}
                 type='normal'
               />
             </div>
