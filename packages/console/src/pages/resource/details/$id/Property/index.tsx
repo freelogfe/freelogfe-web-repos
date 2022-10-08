@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
-import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -39,7 +38,7 @@ function Property({ dispatch, resourceDetailPage }: PropertyProps) {
                   p.description && (<FTooltip
                     title={p.description}
                   >
-                    <FInfo
+                    <FComponentsLib.FIcons.FInfo
                       style={{ cursor: 'pointer', fontSize: 14 }}
                     />
                   </FTooltip>)
