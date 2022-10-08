@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FInfo } from '@/components/FIcons';
+// import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FFormLayout from '@/components/FFormLayout';
 import FComponentsLib from '@freelog/components-lib';
