@@ -121,12 +121,12 @@ export const InsertResourceDrawer = (props: Props) => {
         bucket: '全部Bucket',
         uploadBucket: null,
         objectKey: '',
-        uploadQueue: [],
+        uploadQueue: refs.current.uploadQueue,
         successList: [],
       };
       setActiveTab('market');
       setUrl('');
-      setUploadQueue([]);
+      setUploadBucket(null);
       body?.removeEventListener('scroll', listScroll);
     };
   }, [show]);
@@ -238,6 +238,7 @@ export const InsertResourceDrawer = (props: Props) => {
 
   /** 获取存储空间对应桶的对应类型资源 */
   const getObjects = async (init = false) => {
+    if (init) setObjectList([]);
     refs.current.bucketPageIndex = init ? 0 : refs.current.bucketPageIndex + 1;
 
     const params = {
@@ -338,8 +339,8 @@ export const InsertResourceDrawer = (props: Props) => {
 
     // 确认文件名称是否存在
     const objectResult = await FServiceAPI.Storage.batchObjectList({
-      fullObjectNames: fileList
-        .map((p) => refs.current.uploadBucket + '/' + p.name)
+      fullObjectNames: uploadTaskQueue
+        .map((p) => p.bucketName + '/' + p.name)
         .join(),
       projection: 'objectId,objectName',
     });
@@ -365,14 +366,18 @@ export const InsertResourceDrawer = (props: Props) => {
   };
 
   /** 上传并创建存储对象 */
-  const uploadCreate = async (task: any) => {
-    if (task.uploadStatus !== 'uploading') return;
-
+  const uploadCreate = async (task: any, reUpload = false) => {
     const index = refs.current.uploadQueue.findIndex(
       (item) => item.uid === task.uid,
     );
+    if (reUpload) {
+      refs.current.uploadQueue[index].uploadStatus = 'uploading';
+      setUploadQueue([...refs.current.uploadQueue]);
+    }
 
-    if (task.sameName) {
+    if (refs.current.uploadQueue[index].uploadStatus !== 'uploading') return;
+
+    if (task.sameName && !reUpload) {
       // 重名
       refs.current.uploadQueue[index].uploadStatus = 'repeatName';
       setUploadQueue([...refs.current.uploadQueue]);
@@ -423,7 +428,7 @@ export const InsertResourceDrawer = (props: Props) => {
     }
 
     const createResult = await FServiceAPI.Storage.createObject({
-      bucketName: refs.current.uploadBucket as string,
+      bucketName: refs.current.uploadQueue[index].bucketName,
       objectName: task.name,
       sha1: task.sha1,
     });
@@ -437,6 +442,25 @@ export const InsertResourceDrawer = (props: Props) => {
       refs.current.uploadQueue[index].uploadStatus = 'fail';
       refs.current.uploadQueue[index].progress = 0;
       setUploadQueue([...refs.current.uploadQueue]);
+    }
+  };
+
+  /** 重新上传 */
+  const againUpload = async (task: any) => {
+    const index = refs.current.uploadQueue.findIndex(
+      (item) => item.uid === task.uid,
+    );
+
+    // 确认文件名称是否存在
+    const result = await FServiceAPI.Storage.batchObjectList({
+      fullObjectNames: task.bucketName + '/' + task.name,
+      projection: 'objectId,objectName',
+    });
+    if (result.data.length) {
+      refs.current.uploadQueue[index].uploadStatus = 'repeatName';
+      setUploadQueue([...refs.current.uploadQueue]);
+    } else {
+      uploadCreate(task, true);
     }
   };
 
@@ -797,7 +821,8 @@ export const InsertResourceDrawer = (props: Props) => {
                 key={item.uid}
                 data={item}
                 cancel={(uid: string) => cancelUpload(uid)}
-                upload={(task: any) => uploadCreate(task)}
+                upload={(task: any) => againUpload(task)}
+                update={(task: any) => uploadCreate(task, true)}
               ></ObjectItem>
             ))}
           {objectList.map((item) => (

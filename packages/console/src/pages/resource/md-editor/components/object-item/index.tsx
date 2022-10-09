@@ -8,10 +8,11 @@ interface Props {
   data: any;
   cancel?: (uid: string) => void;
   upload?: (task: any) => void;
+  update?: (task: any) => void;
 }
 
 export const ObjectItem = (props: Props) => {
-  const { data, cancel, upload } = props;
+  const { data, cancel, upload, update } = props;
 
   const statusMapping: any = {
     uploading: {
@@ -75,6 +76,7 @@ export const ObjectItem = (props: Props) => {
       upload && upload(data);
     } else if (uploadStatus === 'repeatName') {
       // 存在同名对象，进行更新操作
+      update && update(data);
     }
   };
 

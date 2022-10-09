@@ -255,18 +255,51 @@
       align-items: center;
       justify-content: space-between;
 
-      .bucket-select {
-        .ant-select-selector {
-          color: #2784ff;
-          border: 1px solid #2784ff;
-          border-radius: 4px;
-          height: 38px;
-          display: flex;
-          align-items: center;
+      .left-header {
+        display: flex;
+        align-items: center;
+
+        .bucket-select {
+          .ant-select-selector {
+            min-width: 120px;
+            color: #2784ff;
+            border: 1px solid #2784ff;
+            border-radius: 4px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+          }
+
+          .ant-select-arrow {
+            color: #2784ff;
+          }
         }
 
-        .ant-select-arrow {
+        .upload-btn {
+          display: flex;
+          align-items: center;
           color: #2784ff;
+          cursor: pointer;
+          margin-left: 30px;
+
+          &:hover {
+            color: #529dff;
+          }
+
+          &:active {
+            color: #2376e5;
+          }
+
+          .freelog {
+            font-size: 14px;
+          }
+
+          .btn-text {
+            font-size: 12px;
+            color: #2784ff;
+            line-height: 18px;
+            margin-left: 5px;
+          }
         }
       }
     }
