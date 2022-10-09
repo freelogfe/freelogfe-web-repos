@@ -11,6 +11,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
+import { ObjectItem } from '../object-item';
 
 const { Option } = Select;
 
@@ -71,6 +72,8 @@ export const InsertResourceDrawer = (props: Props) => {
     bucket: '全部Bucket',
     uploadBucket: null as string | null,
     objectKey: '',
+    uploadQueue: [] as any[],
+    successList: [] as string[],
   });
   const [activeTab, setActiveTab] = useState('market');
   const [resourceList, setResourceList] = useState<any[]>([]);
@@ -118,9 +121,12 @@ export const InsertResourceDrawer = (props: Props) => {
         bucket: '全部Bucket',
         uploadBucket: null,
         objectKey: '',
+        uploadQueue: [],
+        successList: [],
       };
       setActiveTab('market');
       setUrl('');
+      setUploadQueue([]);
       body?.removeEventListener('scroll', listScroll);
     };
   }, [show]);
@@ -230,7 +236,7 @@ export const InsertResourceDrawer = (props: Props) => {
     getObjects(true);
   };
 
-  /** 获取存储空间对应桶的阅读类型资源 */
+  /** 获取存储空间对应桶的对应类型资源 */
   const getObjects = async (init = false) => {
     refs.current.bucketPageIndex = init ? 0 : refs.current.bucketPageIndex + 1;
 
@@ -245,6 +251,11 @@ export const InsertResourceDrawer = (props: Props) => {
     const res = await FServiceAPI.Storage.objectList(params);
     const { dataList } = res.data;
     refs.current.bucketNoMore = dataList.length === 0;
+    dataList.forEach((item: any) => {
+      item.uploadStatus = refs.current.successList.includes(item.sha1)
+        ? 'success'
+        : '';
+    });
     setObjectList((pre) => (init ? dataList : [...pre, ...dataList]));
   };
 
@@ -261,7 +272,6 @@ export const InsertResourceDrawer = (props: Props) => {
       bucketName: name,
     };
     const result = await FServiceAPI.Storage.bucketIsExist(params);
-    console.error('bucketIsExist===>', result);
     if (result.data) {
       setNewBucketError(2);
       return;
@@ -280,7 +290,7 @@ export const InsertResourceDrawer = (props: Props) => {
     getBuckets();
   };
 
-  /** 上传文件到存储空间 */
+  /** 上传文件前整理队列 */
   const beforeUpload = async (fileList: RcFile[]) => {
     // 是否有超过大小限制的文件
     const IS_EXSIT_BIG_FILE =
@@ -308,40 +318,40 @@ export const InsertResourceDrawer = (props: Props) => {
       fileList.map(async (file) => ({
         uid: file.uid,
         sha1: await FUtil.Tool.getSHA1Hash(file),
+        bucketName: refs.current.uploadBucket,
         name: file.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
         file: file,
-        state: 0,
+        uploadStatus: 'uploading',
+        progress: 0,
         exist: false,
         sameName: false,
       })),
     );
 
     // 确认上传文件是否存在
-    const params: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
-      sha1: uploadTaskQueue.map((file) => file.sha1).join(','),
-    };
-    const fileExistResult = await FServiceAPI.Storage.fileIsExist(params);
-    const allExistSha1: string[] = fileExistResult.data
+    const fileExistResult = await FServiceAPI.Storage.fileIsExist({
+      sha1: uploadTaskQueue.map((file) => file.sha1).join(),
+    });
+    const existFileList: string[] = fileExistResult.data
       .filter((d: any) => d.isExisting)
       .map((d: any) => d.sha1);
 
-    const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
+    // 确认文件名称是否存在
+    const objectResult = await FServiceAPI.Storage.batchObjectList({
       fullObjectNames: fileList
-        .map((p) => uploadBucket + '/' + p.name)
-        .join(','),
+        .map((p) => refs.current.uploadBucket + '/' + p.name)
+        .join(),
       projection: 'objectId,objectName',
-    };
-
-    const objectResult = await FServiceAPI.Storage.batchObjectList(params1);
-
-    const allExistObjectNames: string[] = objectResult.data.map(
+    });
+    const existNameList: string[] = objectResult.data.map(
       (d: any) => d.objectName,
     );
+
     const queue = [
       ...uploadTaskQueue.map((file) => ({
         ...file,
-        exist: allExistSha1.includes(file.sha1),
-        sameName: allExistObjectNames.includes(file.name),
+        exist: existFileList.includes(file.sha1),
+        sameName: existNameList.includes(file.name),
       })),
     ];
     uploadFile(queue);
@@ -349,66 +359,96 @@ export const InsertResourceDrawer = (props: Props) => {
 
   /** 上传文件 */
   const uploadFile = async (queue: any[]) => {
-    console.error('queue===>', queue);
-    queue.forEach(async (task) => {
-      if (!task.exist) {
-        // setStatus('uploading');
-        // setProgress(0);
+    refs.current.uploadQueue = [...queue, ...refs.current.uploadQueue];
+    setUploadQueue([...refs.current.uploadQueue]);
+    refs.current.uploadQueue.forEach((task) => uploadCreate(task));
+  };
 
-        const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
-          file: task.file,
-        };
-        const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(
-          params,
-          {
-            onUploadProgress(progressEvent) {
-              console.error(
-                Math.floor((progressEvent.loaded / progressEvent.total) * 100),
-              );
-              // setProgress(
-              //   Math.floor((progressEvent.loaded / progressEvent.total) * 100),
-              // );
-            },
+  /** 上传并创建存储对象 */
+  const uploadCreate = async (task: any) => {
+    if (task.uploadStatus !== 'uploading') return;
+
+    const index = refs.current.uploadQueue.findIndex(
+      (item) => item.uid === task.uid,
+    );
+
+    if (task.sameName) {
+      // 重名
+      refs.current.uploadQueue[index].uploadStatus = 'repeatName';
+      setUploadQueue([...refs.current.uploadQueue]);
+      return;
+    }
+
+    if (!task.exist) {
+      // 文件不存在，先上传文件
+      const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(
+        { file: task.file },
+        {
+          onUploadProgress(progressEvent) {
+            const progress = Math.floor(
+              (progressEvent.loaded / progressEvent.total) * 100,
+            );
+            refs.current.uploadQueue[index].progress = progress;
+            setUploadQueue([...refs.current.uploadQueue]);
           },
-          true,
-        );
-
-        // cancels.set(file.uid, cancel);
-        try {
-          const { data } = await promise;
-          // setStatus('success');
-          // onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
-        } catch (e) {
-          if (status !== 'uploading') {
-            // setStatus('failed');
-            // onFail && onFail({ uid: file.uid, objectName: file.name });
-            return;
-          }
+        },
+        true,
+      );
+      refs.current.uploadQueue[index].cancel = cancel;
+      try {
+        await promise;
+      } catch (e) {
+        if (refs.current.uploadQueue[index].uploadStatus !== 'cancel') {
+          refs.current.uploadQueue[index].uploadStatus = 'fail';
+          refs.current.uploadQueue[index].progress = 0;
+          setUploadQueue([...refs.current.uploadQueue]);
         }
       }
+    }
 
-      const result = await FServiceAPI.recombination.getFilesSha1Info({
-        sha1: [task.sha1],
-      });
-      console.error(result);
+    if (refs.current.uploadQueue[index].uploadStatus !== 'uploading') return;
 
-      // if (result.data[0].state === 'success') {
-      // setStatus('success');
-      // onSucceed &&
-      // onSucceed({ uid: task.uid, objectName: task.name, sha1: task.sha1 });
-      // return;
-      // }
-      // setStatus('failed');
-      // onFail && onFail({ uid: task.uid, objectName: task.name });
-
-      const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
-        bucketName: uploadBucket as string,
-        objectName: task.name,
-        sha1: task.sha1,
-      };
-      const createResult = await FServiceAPI.Storage.createObject(params);
-      console.error(createResult)
+    const result = await FServiceAPI.recombination.getFilesSha1Info({
+      sha1: [task.sha1],
     });
+
+    if (
+      result.result[0].state !== 'success' &&
+      refs.current.uploadQueue[index].uploadStatus !== 'cancel'
+    ) {
+      refs.current.uploadQueue[index].uploadStatus = 'fail';
+      refs.current.uploadQueue[index].progress = 0;
+      setUploadQueue([...refs.current.uploadQueue]);
+      return;
+    }
+
+    const createResult = await FServiceAPI.Storage.createObject({
+      bucketName: refs.current.uploadBucket as string,
+      objectName: task.name,
+      sha1: task.sha1,
+    });
+
+    if (createResult.errCode === 0) {
+      refs.current.uploadQueue.splice(index, 1);
+      setUploadQueue([...refs.current.uploadQueue]);
+      refs.current.successList.push(task.sha1);
+      getObjects(true);
+    } else {
+      refs.current.uploadQueue[index].uploadStatus = 'fail';
+      refs.current.uploadQueue[index].progress = 0;
+      setUploadQueue([...refs.current.uploadQueue]);
+    }
+  };
+
+  /** 取消上传 */
+  const cancelUpload = (uid: string) => {
+    const index = refs.current.uploadQueue.findIndex(
+      (item) => item.uid === uid,
+    );
+    refs.current.uploadQueue[index].cancel();
+    refs.current.uploadQueue[index].uploadStatus = 'cancel';
+    refs.current.uploadQueue[index].progress = 0;
+    setUploadQueue([...refs.current.uploadQueue]);
   };
 
   /** tab 选项卡区域列表 */
@@ -746,19 +786,22 @@ export const InsertResourceDrawer = (props: Props) => {
               </div>
             </div>
           )}
+          {uploadQueue
+            .filter(
+              (item) =>
+                refs.current.bucket === '全部Bucket' ||
+                item.bucketName === refs.current.bucket,
+            )
+            .map((item) => (
+              <ObjectItem
+                key={item.uid}
+                data={item}
+                cancel={(uid: string) => cancelUpload(uid)}
+                upload={(task: any) => uploadCreate(task)}
+              ></ObjectItem>
+            ))}
           {objectList.map((item) => (
-            <div className="object-item" key={item.objectId}>
-              <div className="info-area">
-                <div className="object-name">{`${item.bucketName}/${item.objectName}`}</div>
-                <div className="other-info">{`${FI18n.i18nNext.t(
-                  'label_last_updated',
-                )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}</div>
-              </div>
-
-              <div className="choose-btn">
-                {FI18n.i18nNext.t('btn_import_post')}
-              </div>
-            </div>
+            <ObjectItem key={item.objectId} data={item}></ObjectItem>
           ))}
 
           <FModal
