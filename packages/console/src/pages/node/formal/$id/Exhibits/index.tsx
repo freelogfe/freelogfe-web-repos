@@ -17,7 +17,7 @@ import {
   // FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
-  // OnChange_Exhibit_SelectedType_Action,
+  OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
   OnMount_ExhibitPage_Action,
   // OnOnlineOrOfflineAction,
@@ -391,24 +391,33 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
-                      options={[
-                        {
-                          value: '-1',
-                          text: '全部',
-                        },
-                        ...categoryData.first.map((i, index) => {
-                          return {
-                            value: index + '',
-                            text: i,
-                          };
-                        }),
-                      ]}
-                      value={category.first}
+                      // options={[
+                      //   {
+                      //     value: '-1',
+                      //     text: '全部',
+                      //   },
+                      //   ...categoryData.first.map((i, index) => {
+                      //     return {
+                      //       value: index + '',
+                      //       text: i,
+                      //     };
+                      //   }),
+                      // ]}
+                      options={nodeManagerPage.exhibit_ResourceTypeOptions1}
+                      // value={category.first}
+                      value={nodeManagerPage.exhibit_SelectedType1}
                       onClick={(value) => {
-                        setCategory({
-                          ...category,
-                          first: value,
-                          second: category.first === value ? category.second : '-1',
+                        // setCategory({
+                        //   ...category,
+                        //   first: value,
+                        //   second: category.first === value ? category.second : '-1',
+                        // });
+                        dispatch<OnChange_Exhibit_SelectedType_Action>({
+                          type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                          payload: {
+                            value: value,
+                            level: 1,
+                          },
                         });
                         //onChangeResourceType && onChangeResourceType(value)
                       }}
@@ -416,35 +425,47 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   }
                 >
                   <span style={{ cursor: 'pointer' }}>
-                    {categoryData.first[category.first] || '全部'}
+                    {/*{categoryData.first[category.first] || '全部'}*/}
+                    {nodeManagerPage.exhibit_ResourceTypeOptions1.find((rt) => {
+                      return rt.value === nodeManagerPage.exhibit_SelectedType1;
+                    })?.text || '全部'}
                     <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                   </span>
                 </FComponentsLib.FDropdown>
 
-                {category.first > 1 ? (
+                {nodeManagerPage.exhibit_ResourceTypeOptions2.length > 0 ? (
                   <>
                     <span className='ml-30'>子类型：</span>
                     <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
+                          value={nodeManagerPage.exhibit_SelectedType2}
                           // @ts-ignore
-                          options={[
-                            {
-                              value: '-1',
-                              text: '全部',
-                            },
-                            // @ts-ignore
-                            ...categoryData.second[category.first].map((i, index) => {
-                              return {
-                                value: index + '',
-                                text: i,
-                              };
-                            }),
-                          ]}
+                          // options={[
+                          //   {
+                          //     value: '-1',
+                          //     text: '全部',
+                          //   },
+                          //   // @ts-ignore
+                          //   ...categoryData.second[category.first].map((i, index) => {
+                          //     return {
+                          //       value: index + '',
+                          //       text: i,
+                          //     };
+                          //   }),
+                          // ]}
+                          options={nodeManagerPage.exhibit_ResourceTypeOptions2}
                           onClick={(value) => {
-                            setCategory({
-                              ...category,
-                              second: value,
+                            // setCategory({
+                            //   ...category,
+                            //   second: value,
+                            // });
+                            dispatch<OnChange_Exhibit_SelectedType_Action>({
+                              type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                              payload: {
+                                value: value,
+                                level: 2,
+                              },
                             });
                             // onChangeResourceType && onChangeResourceType(value)
                           }}
@@ -452,10 +473,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       }
                     >
                       <span style={{ cursor: 'pointer' }}>
-                        {
-                          // @ts-ignore
-                          categoryData.second[category.first][category.second] || '全部'
-                        }
+                        {/*{*/}
+                        {/*  // @ts-ignore*/}
+                        {/*  categoryData.second[category.first][category.second] || '全部'*/}
+                        {/*}*/}
+                        {nodeManagerPage.exhibit_ResourceTypeOptions2.find((rt) => {
+                          return rt.value === nodeManagerPage.exhibit_SelectedType2;
+                        })?.text || '全部'}
                         <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                       </span>
                     </FComponentsLib.FDropdown>

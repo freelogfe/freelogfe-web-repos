@@ -7,6 +7,27 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import moment, { Moment } from 'moment';
 
+const resource_TypeData = [
+  { value: '插件', parentValue: '#' },
+  { value: '阅读', parentValue: '#' },
+  { value: '音频', parentValue: '#' },
+  { value: '图片', parentValue: '#' },
+  { value: '视频', parentValue: '#' },
+  { value: '游戏', parentValue: '#' },
+  { value: '文章', parentValue: '阅读' },
+  { value: '演示文稿', parentValue: '阅读' },
+  { value: '音效', parentValue: '音频' },
+  { value: '音乐', parentValue: '音频' },
+  { value: '播客节目', parentValue: '音频' },
+  { value: '照片', parentValue: '图片' },
+  { value: '插画', parentValue: '图片' },
+  { value: '动态影像', parentValue: '视频' },
+  { value: '实拍片段', parentValue: '视频' },
+  { value: '短视频', parentValue: '视频' },
+  { value: '长视频', parentValue: '视频' },
+  { value: '红白机', parentValue: '游戏' },
+] as const;
+
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
 type Authorized_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
@@ -23,9 +44,11 @@ export interface NodeManagerModelState {
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  exhibit_ResourceTypeOptions: { text: string; value: string }[];
+  exhibit_ResourceTypeOptions1: { text: string; value: string }[];
+  exhibit_ResourceTypeOptions2: { text: string; value: string }[];
+  exhibit_SelectedType1: string;
+  exhibit_SelectedType2: string;
   exhibit_ResourceStateOptions: { text: string; value: string }[];
-  exhibit_SelectedType: string;
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
   exhibit_List: {
@@ -168,6 +191,7 @@ export interface OnChange_Exhibit_SelectedType_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_Exhibit_SelectedType';
   payload: {
     value: string;
+    level: number;
   };
 }
 
@@ -373,25 +397,39 @@ export interface NodeManagerModelType {
   };
 }
 
-const exhibitInitStates: Pick<NodeManagerModelState, 'exhibit_ResourceTypeOptions'
+const exhibitInitStates: Pick<NodeManagerModelState,
+  'exhibit_ResourceTypeOptions1'
+  | 'exhibit_ResourceTypeOptions2'
+  | 'exhibit_SelectedType1'
+  | 'exhibit_SelectedType2'
   | 'exhibit_ResourceStateOptions'
-  | 'exhibit_SelectedType'
   | 'exhibit_SelectedStatus'
   | 'exhibit_InputFilter'
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'> = {
-  exhibit_ResourceTypeOptions: [
+  exhibit_ResourceTypeOptions1: [
     { text: '全部', value: '-1' },
-    ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
+    ...resource_TypeData
+      .filter((rt) => {
+        return rt.parentValue === '#';
+      })
+      .map((i) => {
+        return {
+          value: i.value,
+          text: i.value,
+        };
+      }),
   ],
+  exhibit_ResourceTypeOptions2: [],
   exhibit_ResourceStateOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_pendingauth'), value: '0' },
   ],
-  exhibit_SelectedType: '-1',
+  exhibit_SelectedType1: '-1',
+  exhibit_SelectedType2: '-1',
   exhibit_SelectedStatus: '2',
   exhibit_InputFilter: '',
   exhibit_List: [],
@@ -624,16 +662,38 @@ const Model: NodeManagerModelType = {
 
     },
 
-    * onChange_Exhibit_SelectedType(
-      { payload }: OnChange_Exhibit_SelectedType_Action,
-      { put }: EffectsCommandMap,
-    ) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          exhibit_SelectedType: payload.value,
-        },
-      });
+    * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
+
+      if (payload.level === 1) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_SelectedType1: payload.value,
+            exhibit_SelectedType2: '-1',
+            exhibit_ResourceTypeOptions2: [
+              { text: '全部', value: '-1' },
+              ...resource_TypeData
+                .filter((rt) => {
+                  return rt.parentValue === payload.value;
+                })
+                .map((i) => {
+                  return {
+                    value: i.value,
+                    text: i.value,
+                  };
+                }),
+            ],
+          },
+        });
+      } else if (payload.level === 2) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_SelectedType2: payload.value,
+          },
+        });
+      }
+
 
       yield put<FetchExhibitsAction>({
         type: 'fetchExhibits',
@@ -813,10 +873,14 @@ const Model: NodeManagerModelType = {
         skip: list.length,
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
-        resourceType:
-          nodeManagerPage.exhibit_SelectedType === '-1'
-            ? undefined
-            : nodeManagerPage.exhibit_SelectedType,
+        resourceType: nodeManagerPage.exhibit_SelectedType2 !== '-1'
+          ? nodeManagerPage.exhibit_SelectedType2
+          : nodeManagerPage.exhibit_SelectedType1 !== '-1'
+            ? nodeManagerPage.exhibit_SelectedType1
+            : undefined,
+        // nodeManagerPage.exhibit_SelectedType === '-1'
+        //   ? undefined
+        //   : nodeManagerPage.exhibit_SelectedType,
         omitResourceType: '主题',
         isLoadPolicyInfo: 1,
         // @ts-ignore
@@ -828,7 +892,7 @@ const Model: NodeManagerModelType = {
 
       if (data_Exhibits.dataList.length === 0) {
         if (
-          nodeManagerPage.exhibit_SelectedType === '-1' &&
+          nodeManagerPage.exhibit_SelectedType1 === '-1' &&
           nodeManagerPage.exhibit_SelectedStatus === '2' &&
           nodeManagerPage.exhibit_InputFilter === ''
         ) {
