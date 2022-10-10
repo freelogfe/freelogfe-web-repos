@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FSelect from '@/components/FSelect';
-// import { OnChange_Resource_Type_Action, ResourceCreatorPageModelState } from '@/models/resourceCreatorPage';
 import FAutoComplete from '@/components/FAutoComplete';
 import { Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
@@ -10,7 +9,6 @@ const resource_TypeData: {
   value: string;
   parentValue: string;
 }[] = [
-  // { value: '请选择大类', parentValue: '' },
   { value: '主题', parentValue: '#' },
   { value: '插件', parentValue: '#' },
   { value: '阅读', parentValue: '#' },
@@ -25,7 +23,6 @@ const resource_TypeData: {
   { value: '播客节目', parentValue: '音频' },
   { value: '照片', parentValue: '图片' },
   { value: '插画', parentValue: '图片' },
-  // { value: '播客节目', parentValue: '图片' },
   { value: '动态影像', parentValue: '视频' },
   { value: '实拍片段', parentValue: '视频' },
   { value: '短视频', parentValue: '视频' },
