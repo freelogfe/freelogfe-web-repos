@@ -14,6 +14,27 @@ import fMessage from '@/components/fMessage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
+const resource_TypeData = [
+  { value: '插件', parentValue: '#' },
+  { value: '阅读', parentValue: '#' },
+  { value: '音频', parentValue: '#' },
+  { value: '图片', parentValue: '#' },
+  { value: '视频', parentValue: '#' },
+  { value: '游戏', parentValue: '#' },
+  { value: '文章', parentValue: '阅读' },
+  { value: '演示文稿', parentValue: '阅读' },
+  { value: '音效', parentValue: '音频' },
+  { value: '音乐', parentValue: '音频' },
+  { value: '播客节目', parentValue: '音频' },
+  { value: '照片', parentValue: '图片' },
+  { value: '插画', parentValue: '图片' },
+  { value: '动态影像', parentValue: '视频' },
+  { value: '实拍片段', parentValue: '视频' },
+  { value: '短视频', parentValue: '视频' },
+  { value: '长视频', parentValue: '视频' },
+  { value: '红白机', parentValue: '游戏' },
+] as const;
+
 interface ICandidate {
   name: string;
   versionRange?: string;
@@ -286,8 +307,10 @@ export interface InformalNodeManagerPageModelState {
 
   replaceModal_Errors: string[];
 
-  exhibit_TypeOptions: { value: string; text: string; }[];
-  exhibit_SelectedType: '-1' | string;
+  exhibit_TypeOptions1: { value: string; text: string; }[];
+  exhibit_TypeOptions2: { value: string; text: string; }[];
+  exhibit_SelectedType1: '-1' | string;
+  exhibit_SelectedType2: '-1' | string;
   exhibit_StatusOptions: { value: string; text: string; }[];
   exhibit_SelectedStatus: '0' | '1' | '2';
   exhibit_FilterKeywords: string;
@@ -430,6 +453,7 @@ export interface OnChangeExhibitTypeAction extends AnyAction {
   type: 'informalNodeManagerPage/onChangeExhibitType';
   payload: {
     value: string;
+    level: number;
   };
 }
 
@@ -820,8 +844,10 @@ interface InformalNodeManagerPageModelType {
 }
 
 const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
-  'exhibit_TypeOptions' |
-  'exhibit_SelectedType' |
+  'exhibit_TypeOptions1' |
+  'exhibit_TypeOptions2' |
+  'exhibit_SelectedType1' |
+  'exhibit_SelectedType2' |
   'exhibit_StatusOptions' |
   'exhibit_SelectedStatus' |
   'exhibit_FilterKeywords' |
@@ -830,13 +856,22 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_List' |
   'exhibit_ListTotal' |
   'exhibit_PageError'> = {
-  exhibit_TypeOptions: [
+  exhibit_TypeOptions1: [
     { text: '全部', value: '-1' },
-    ...FUtil.Predefined.resourceTypes
-      .filter((i) => i !== 'theme')
-      .map((i) => ({ value: i, text: i })),
+    ...resource_TypeData
+      .filter((rt) => {
+        return rt.parentValue === '#';
+      })
+      .map((i) => {
+        return {
+          value: i.value,
+          text: i.value,
+        };
+      }),
   ],
-  exhibit_SelectedType: '-1',
+  exhibit_TypeOptions2: [],
+  exhibit_SelectedType1: '-1',
+  exhibit_SelectedType2: '-1',
   exhibit_StatusOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -1132,7 +1167,12 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: '主题',
-        resourceType: (informalNodeManagerPage.exhibit_SelectedType === '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
+        // resourceType: (informalNodeManagerPage.exhibit_SelectedType2 !== '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
+        resourceType: informalNodeManagerPage.exhibit_SelectedType2 !== '-1'
+          ? informalNodeManagerPage.exhibit_SelectedType2
+          : informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
+            ? informalNodeManagerPage.exhibit_SelectedType1
+            : undefined,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
@@ -1153,7 +1193,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
         total_Length: data_informalExhibits.totalItem,
-        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType !== '-1'
+        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
           || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
           || informalNodeManagerPage.exhibit_FilterKeywords !== '',
       });
@@ -1183,13 +1223,36 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
 
-      // console.log('onChangeExhibitType 11111');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          exhibit_SelectedType: payload.value,
-        },
-      });
+      if (payload.level === 1) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_SelectedType1: payload.value,
+            exhibit_SelectedType2: '-1',
+            exhibit_TypeOptions2: [
+              { text: '全部', value: '-1' },
+              ...resource_TypeData
+                .filter((rt) => {
+                  return rt.parentValue === payload.value;
+                })
+                .map((i) => {
+                  return {
+                    value: i.value,
+                    text: i.value,
+                  };
+                }),
+            ],
+          },
+        });
+      } else if (payload.level === 2) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            exhibit_SelectedType2: payload.value,
+          },
+        });
+      }
+
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
