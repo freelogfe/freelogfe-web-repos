@@ -11,14 +11,13 @@ export const fileAttrUnits: any = {
     return value + 'px';
   },
   duration(value: number): string {
-    const time = value / 1000;
+    const time = Math.ceil(value / 1000);
     const h = Math.floor(time / 3600);
     const minute = Math.floor(time / 60 % 60);
-    const second = Math.ceil(time % 60);
+    const second = Math.floor(time % 60);
 
     const hours = h < 10 ? '0' + h : h;
-    const formatSecond = second > 59 ? 59 : second;
-    return `${hours > 0 ? `${hours}:` : ''}${minute < 10 ? '0' + minute : minute}:${formatSecond < 10 ? '0' + formatSecond : formatSecond}`;
+    return `${hours > 0 ? `${hours}:` : ''}${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`;
   },
   frameRate(value: number): string {
     return value + 'fps';
