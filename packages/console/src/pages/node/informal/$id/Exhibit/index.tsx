@@ -95,8 +95,9 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         informalNodeManagerPage.exhibit_ListState === 'noData' ? (
           <FNoDataTip
             height={'calc(100vh - 94px)'}
-            tipText={'当前测试节点没有添加展品'}
-            btnText={'添加测试展品'}
+            // tipText={'当前测试节点没有添加展品'}
+            tipText={FI18n.i18nNext.t('testnode_exhibits_msg_empty')}
+            btnText={FI18n.i18nNext.t('testnode_exhibits_btn')}
             onClick={() => {
               dispatch<OnClickExhibitsAddBtnAction>({
                 type: 'informalNodeManagerPage/onClickExhibitsAddBtn',

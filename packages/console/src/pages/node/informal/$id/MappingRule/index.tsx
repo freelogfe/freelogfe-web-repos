@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FImport } from '@/components/FIcons';
+// import { FImport } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
@@ -435,7 +435,11 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
             {
               informalNodeManagerPage.rule_RuleList.length === 0
-                ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'} />)
+                ? (<FNoDataTip
+                  height={'calc(100vh - 70px - 24px - 200px)'}
+                  // tipText={'没有测试规则'}
+                  tipText={FI18n.i18nNext.t('testnode_reflectrules_msg_empty')}
+                />)
                 : informalNodeManagerPage.rule_RuleList.map((rule, index: number, ruleObjListArray) => {
                   return (<div
                     key={index}
