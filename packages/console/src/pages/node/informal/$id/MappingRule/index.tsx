@@ -435,11 +435,17 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
             {
               informalNodeManagerPage.rule_RuleList.length === 0
-                ? (<FNoDataTip
+                ? (<>
+                <FNoDataTip
                   height={'calc(100vh - 70px - 24px - 200px)'}
                   // tipText={'没有测试规则'}
                   tipText={FI18n.i18nNext.t('testnode_reflectrules_msg_empty')}
-                />)
+                />
+                {/*<div>*/}
+                {/*  <FComponentsLib.FRectBtn>1234</FComponentsLib.FRectBtn>*/}
+                {/*  <FComponentsLib.FRectBtn>1234</FComponentsLib.FRectBtn>*/}
+                {/*</div>*/}
+                </>)
                 : informalNodeManagerPage.rule_RuleList.map((rule, index: number, ruleObjListArray) => {
                   return (<div
                     key={index}
