@@ -11,6 +11,31 @@ import moment from 'moment';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
+const fileAttrUnits: any = {
+  fileSize(value: number): string {
+    return FUtil.Format.humanizeSize(value);
+  },
+  imageWidth(value: number): string {
+    return value + 'px';
+  },
+  imageHeight(value: number): string {
+    return value + 'px';
+  },
+  duration(value: number): string {
+    const time = value / 1000;
+    const h = parseInt(String(time / 3600));
+    const minute = parseInt(String(time / 60 % 60));
+    const second = Math.ceil(time % 60);
+
+    const hours = h < 10 ? '0' + h : h;
+    const formatSecond = second > 59 ? 59 : second;
+    return `${hours > 0 ? `${hours}:` : ''}${minute < 10 ? '0' + minute : minute}:${formatSecond < 10 ? '0' + formatSecond : formatSecond}`;
+  },
+  frameRate(value: number): string {
+    return value + 'fps';
+  },
+};
+
 export type DepResources = {
   id: string;
   title: string;
@@ -726,7 +751,8 @@ const Model: ResourceVersionCreatorModelType = {
             rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
               return {
                 key: rp[0],
-                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
               };
             }),
             rawPropertiesState: 'success',
