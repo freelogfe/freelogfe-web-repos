@@ -5,6 +5,7 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
+import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -241,7 +242,7 @@ const Model: ResourceVersionEditorModelType = {
             // console.log(sp, 'SSSSSSppppPPPPP90j');
             return {
               key: sp[0],
-              value: sp[0] === 'fileSize' ? FUtil.Format.humanizeSize(Number(sp[1])) : sp[1] as string,
+              value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
             };
           }),
           baseProperties: base.map((b: any) => {

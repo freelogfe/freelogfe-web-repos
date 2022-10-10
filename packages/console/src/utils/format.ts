@@ -23,4 +23,7 @@ export const fileAttrUnits: any = {
   frameRate(value: number): string {
     return value + 'fps';
   },
+  bitRate(value: number): string {
+    return value + 'kbps';
+  },
 };

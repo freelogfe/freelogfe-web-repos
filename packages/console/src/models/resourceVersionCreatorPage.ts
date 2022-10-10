@@ -993,7 +993,8 @@ const Model: ResourceVersionCreatorModelType = {
             // console.log(rp, 'rprprprprpyu2341234');
             return {
               key: rp[0],
-              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
             };
           }),
           baseProperties: (data.customPropertyDescriptors as any[])
