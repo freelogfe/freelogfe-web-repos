@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import categoryData from '@/utils/category';
 import styles from './index.less';
