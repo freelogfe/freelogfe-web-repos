@@ -320,7 +320,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         }}
         sure={openPolicyBuilder}
         loading={loading}
-      ></FDialog>
+      />
 
       <FDialog
         show={inactiveDialogShow}
@@ -341,7 +341,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             不再提醒
           </Checkbox>
         }
-      ></FDialog>
+      />
 
       <FPolicyBuilderDrawer
         visible={exhibitInfoPage.policyEditorVisible}
