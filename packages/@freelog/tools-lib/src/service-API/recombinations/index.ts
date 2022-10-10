@@ -48,7 +48,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
 
     needHandleSha1 = data
       .filter((d: any) => {
-        return d.metaAnalyzeStatus && d.metaAnalyzeStatus === 1;
+        return d.metaAnalyzeStatus === 0 || d.metaAnalyzeStatus === 1;
       })
       .map((d: any) => {
         return d.sha1;
