@@ -6,6 +6,7 @@ import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { UpdateAObjectAction } from '@/models/storageHomePage';
+import { fileAttrUnits } from '@/utils/format';
 
 interface DepR {
   id: string;
@@ -314,7 +315,8 @@ const Model: StorageObjectEditorModelType = {
           size: data.systemProperty.fileSize,
           rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
             key: s[0],
-            value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+            // value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+            value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
           })),
           baseProperties: (data.customPropertyDescriptors as any[])
             .filter((cpd: any) => cpd.type === 'readonlyText')

@@ -12,8 +12,8 @@ export const fileAttrUnits: any = {
   },
   duration(value: number): string {
     const time = value / 1000;
-    const h = parseInt(String(time / 3600));
-    const minute = parseInt(String(time / 60 % 60));
+    const h = Math.floor(time / 3600);
+    const minute = Math.floor(time / 60 % 60);
     const second = Math.ceil(time % 60);
 
     const hours = h < 10 ? '0' + h : h;
