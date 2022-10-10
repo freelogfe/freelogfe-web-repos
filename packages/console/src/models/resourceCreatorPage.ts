@@ -12,14 +12,6 @@ export interface ResourceCreatorPageModelState {
   nameVerify: 0 | 1 | 2;
   nameErrorText: string;
 
-  // resourceType: string;
-  // resourceTypeVerify: 0 | 2;
-  // resourceTypeErrorText: string;
-  // category: {
-  //   first: any
-  //   second: number | string;
-  // };
-
   resource_Type: {
     value: string;
     valueError: string;
