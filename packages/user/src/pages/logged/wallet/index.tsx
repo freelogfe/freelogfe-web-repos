@@ -1003,9 +1003,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
       <Modal
         destroyOnClose
-        title={
-          <FComponentsLib.FTitleText text={'设置新支付密码'} type='popup' />
-        }
+        title={(<FComponentsLib.FTitleText text={'设置新支付密码'} type='popup' />)}
         visible={walletPage.changingPassword_NewPasswordModal_Visible}
         // onOk={handleOk}
         onCancel={() => {

@@ -891,6 +891,7 @@ const Model: WalletPageModelType = {
         type: 'change',
         payload: {
           changingPassword_NewPasswordModal_Password2: payload.value,
+          changingPassword_NewPasswordModal_Password2Error: '',
         },
       });
     },
