@@ -176,7 +176,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         });
         nodeManagerPage.exhibit_List[index].policies = nodeManagerPage.exhibit_List[
           index
-        ].policiesList
+          ].policiesList
           .filter((item) => item.status === 1)
           .map((item: { policyName: any }) => item.policyName);
       }
@@ -417,13 +417,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 >
                   <span style={{ cursor: 'pointer' }}>
                     {categoryData.first[category.first] || '全部'}
-                    <DownOutlined style={{ marginLeft: 8 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                   </span>
                 </FComponentsLib.FDropdown>
 
                 {category.first > 1 ? (
                   <>
-                    <span className="ml-30">子类型：</span>
+                    <span className='ml-30'>子类型：</span>
                     <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
@@ -456,7 +456,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                           // @ts-ignore
                           categoryData.second[category.first][category.second] || '全部'
                         }
-                        <DownOutlined style={{ marginLeft: 8 }} />
+                        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                       </span>
                     </FComponentsLib.FDropdown>
                   </>
@@ -481,14 +481,14 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
                       })?.text
                     }
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 14 }} />
                   </span>
                 </FDropdownMenu>
               </div>
               <div>
                 <FInput
                   className={styles.input}
-                  theme="dark"
+                  theme='dark'
                   value={nodeManagerPage.exhibit_InputFilter}
                   debounce={300}
                   onDebounceChange={(value) => {
@@ -552,9 +552,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={activeDialogShow}
-          title="提醒"
-          desc="请先为资源添加一个授权策略，再进行上架操作"
-          sureText="添加策略"
+          title='提醒'
+          desc='请先为资源添加一个授权策略，再进行上架操作'
+          sureText='添加策略'
           cancel={() => {
             setActiveDialogShow(false);
           }}
@@ -564,9 +564,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={inactiveDialogShow}
-          title="提醒"
-          desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-          sureText="下架资源"
+          title='提醒'
+          desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+          sureText='下架资源'
           cancel={() => {
             setInactiveDialogShow(false);
           }}
@@ -591,7 +591,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           alreadyUsedTitles={operateExhibit?.policiesList.map((ip: any) => {
             return ip.policyName;
           })}
-          targetType="resource"
+          targetType='resource'
           onCancel={() => {
             dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
@@ -605,7 +605,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FPolicyOperaterDrawer
           visible={nodeManagerPage.policyOperaterVisible}
-          type="resource"
+          type='resource'
           policiesList={operateExhibit?.policiesList || []}
           onCancel={() => {
             dispatch<ChangeAction>({

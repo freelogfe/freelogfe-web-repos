@@ -131,7 +131,7 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
       <div className={styles.statistics}>
         <Progress
           strokeWidth={6}
-          percent={storageHomePage.usedStorage / storageHomePage.totalStorage}
+          percent={storageHomePage.usedStorage / storageHomePage.totalStorage * 100}
           showInfo={false}
           className={styles.progressBack}
         />
