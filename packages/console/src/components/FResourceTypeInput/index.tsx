@@ -5,10 +5,7 @@ import FAutoComplete from '@/components/FAutoComplete';
 import { Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 
-const resource_TypeData: {
-  value: string;
-  parentValue: string;
-}[] = [
+const resource_TypeData = [
   { value: '主题', parentValue: '#' },
   { value: '插件', parentValue: '#' },
   { value: '阅读', parentValue: '#' },
@@ -28,7 +25,7 @@ const resource_TypeData: {
   { value: '短视频', parentValue: '视频' },
   { value: '长视频', parentValue: '视频' },
   { value: '红白机', parentValue: '游戏' },
-];
+] as const;
 
 type Data = {
   value: string;
