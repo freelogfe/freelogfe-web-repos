@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import moment from 'moment';
 import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 
 export interface StorageHomePageModelState {
@@ -417,7 +417,7 @@ const Model: StorageHomePageModelType = {
       }
       const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
       if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
-        fMessage('超出储存', 'warning');
+        fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
         return;
       }
 

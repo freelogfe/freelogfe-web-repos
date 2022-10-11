@@ -9,8 +9,8 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FMenu from '@/components/FMenu';
-import { DownOutlined } from '@ant-design/icons';
-import categoryData from '@/utils/category';
+// import { DownOutlined } from '@ant-design/icons';
+// import categoryData from '@/utils/category';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
