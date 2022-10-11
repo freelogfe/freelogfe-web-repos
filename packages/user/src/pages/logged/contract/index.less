@@ -3,7 +3,23 @@
 .styles {
   width: 100%;
   padding: 0 20px;
-
+  .exhibitTip {
+    font-size: 12px;
+    font-weight: 400;
+    color: #999999;
+    line-height: 17px;
+    .link {
+      font-size: 12px;
+      font-weight: 400;
+      color: #2784ff;
+      &:active {
+        border-bottom: 1px solid #2784ff;
+      }
+      &:hover {
+        border-bottom: 1px solid #2784ff;
+      }
+    }
+  }
   .header {
     //height: 100px;
     display: flex;
@@ -20,14 +36,14 @@
       display: inline-block;
 
       &.active {
-        color: #2784FF;
-        border-bottom-color: #2784FF
+        color: #2784ff;
+        border-bottom-color: #2784ff;
       }
     }
   }
 
   .content {
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 
@@ -64,12 +80,12 @@
 
         .targetInfoLabels {
           label {
-            background: #E9F2FF;
+            background: #e9f2ff;
             border-radius: 2px;
-            border: 1px solid #AED0FF;
+            border: 1px solid #aed0ff;
             font-size: 12px;
             font-weight: 400;
-            color: #2784FF;
+            color: #2784ff;
             line-height: 18px;
             padding: 0 6px;
             display: inline-block;
@@ -79,33 +95,33 @@
     }
 
     .signatory {
-
     }
 
     .contract {
-      .authorized, .pending, .exception, .terminated {
+      .authorized,
+      .pending,
+      .exception,
+      .terminated {
         font-weight: 600;
         font-size: 14px;
       }
 
       .authorized {
-        color: #42C28C;
+        color: #42c28c;
       }
 
       .pending {
-        color: #E9A923;
+        color: #e9a923;
       }
 
       .exception {
-        color: #EE4040;
+        color: #ee4040;
       }
 
       .terminated {
         color: #666666;
       }
     }
-
-
   }
 
   .contentFooter {
@@ -129,4 +145,3 @@
     }
   }
 }
-
