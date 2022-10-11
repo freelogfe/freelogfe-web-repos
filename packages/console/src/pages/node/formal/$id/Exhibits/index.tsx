@@ -9,18 +9,14 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FMenu from '@/components/FMenu';
-// import { DownOutlined } from '@ant-design/icons';
-// import categoryData from '@/utils/category';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
-  // FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
   OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
   OnMount_ExhibitPage_Action,
-  // OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -48,10 +44,7 @@ interface ExhibitsProps {
 }
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
-  const [category, setCategory] = React.useState<any>({
-    first: '-1',
-    second: '',
-  });
+
   let [operateExhibit, setOperateExhibit] = React.useState<any>(null);
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);

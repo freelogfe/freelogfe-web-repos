@@ -398,7 +398,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
                     styles[resultPopupType === 1 ? 'up' : 'down']
                   }`}
-                ></i>
+                />
                 <div className={styles['result-text']}>
                   已{resultPopupType === 1 ? '上架' : '下架'}
                 </div>
