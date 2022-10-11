@@ -16,7 +16,7 @@ import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-import Sider from '@/pages/node/formal/$id/Sider';
+import Sider from '../Sider';
 import FTooltip from '@/components/FTooltip';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
@@ -179,8 +179,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                   return (
                     <div className={styles.theme} key={item.resourceId}>
                       <div className={styles.cover}>
-                        <img className={styles['cover-img']} src={item.coverImages[0]} />
-                        <div className={styles.triangle}></div>
+                        <img className={styles['cover-img']} src={item.coverImages[0]} alt={''} />
+                        <div className={styles.triangle} />
                         <div className={styles['free-text']}>免费</div>
                       </div>
                       <div className={styles['right-area']}>
@@ -267,7 +267,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                         <Space size={10}>
                           {i.isOnline && (
                             <label className={styles.label}>
-                              {FI18n.i18nNext.t('state_active')}
+                              {/*{FI18n.i18nNext.t('state_active')}*/}
+                              {FI18n.i18nNext.t('theme_state_active')}
                             </label>
                           )}
 
@@ -302,17 +303,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                       // return;
                                       if (i.policies.length === 0) {
                                         if (!i.hasPolicy) {
-                                          fMessage(
-                                            FI18n.i18nNext.t('alarm_exhibits_show_plan '),
-                                            'error',
-                                          );
+                                          fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan'), 'error');
                                         } else {
-                                          fMessage(
-                                            FI18n.i18nNext.t(
-                                              'msg_set_exhibits_avaliable_for_auth  ',
-                                            ),
-                                            'error',
-                                          );
+                                          fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'), 'error');
                                         }
                                         return;
                                       }
@@ -333,9 +326,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                     }
 
                                     fConfirmModal({
-                                      message: FI18n.i18nNext.t('msg_change_theme_confirm'),
+                                      message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
                                       // message: '激活该主题，将下线其它主题',
-                                      okText: FI18n.i18nNext.t('active_new_theme'),
+                                      okText: FI18n.i18nNext.t('btn_activate_theme'),
                                       // okText: '激活',
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
                                       // cancelText: '保持当前主题',

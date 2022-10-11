@@ -3,6 +3,7 @@ import styles from './index.less';
 import FDivider from '@/components/FDivider';
 import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -13,7 +14,7 @@ interface FCoverFooterButtonsProps {
 
 const btnMap: any = {
   active: {
-    text: '激活',
+    text: FI18n.i18nNext.t('btn_activate_theme'),
     icon: (<FComponentsLib.FIcons.FMappingRuleActive />),
   },
   edit: {

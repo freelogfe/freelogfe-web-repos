@@ -257,7 +257,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     color: 'white',
                     fontSize: 12,
                     padding: '3px 10px',
-                  }}>已激活</div>)
+                  }}>{FI18n.i18nNext.t('toggle_activate_theme')}</div>)
                   : (<>
                     <span
                       style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>
