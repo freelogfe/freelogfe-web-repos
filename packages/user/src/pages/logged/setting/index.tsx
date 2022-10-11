@@ -74,21 +74,21 @@ function Setting({ dispatch, settingPage }: SettingProps) {
         >
           账号安全
         </a>
-        <div style={{ width: 30 }} />
-        <a
-          onClick={() => {
-            // console.log('123412341234');
-            dispatch<OnChange_ShowPage_Action>({
-              type: 'settingPage/onChange_ShowPage',
-              payload: {
-                value: 'privacy',
-              },
-            });
-          }}
-          className={settingPage.showPage === 'privacy' ? styles.active : ''}
-        >
-          隐私
-        </a>
+        {/*<div style={{ width: 30 }} />*/}
+        {/*<a*/}
+        {/*  onClick={() => {*/}
+        {/*    // console.log('123412341234');*/}
+        {/*    dispatch<OnChange_ShowPage_Action>({*/}
+        {/*      type: 'settingPage/onChange_ShowPage',*/}
+        {/*      payload: {*/}
+        {/*        value: 'privacy',*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  className={settingPage.showPage === 'privacy' ? styles.active : ''}*/}
+        {/*>*/}
+        {/*  隐私*/}
+        {/*</a>*/}
       </div>
       <div className={styles.content}>
         {settingPage.showPage === 'profile' && <Profile />}
