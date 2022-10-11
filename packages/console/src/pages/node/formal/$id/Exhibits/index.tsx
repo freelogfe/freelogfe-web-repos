@@ -66,7 +66,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
   /** 上下架 */
   const changeStatus = (value: boolean, exhibit: any) => {
-    operateExhibit = exhibit;
+    // operateExhibit = exhibit;
     setOperateExhibit(exhibit);
 
     if (value) {
@@ -74,9 +74,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       const { policiesList } = exhibit;
       if (policiesList.length === 0) {
         setActiveDialogShow(true);
-      } else if (
-        policiesList.filter((item: { status: number }) => item.status === 1).length === 0
-      ) {
+      } else if (policiesList.filter((item: { status: number }) => item.status === 1).length === 0) {
         exhibit.policiesList.forEach((item: any) => {
           item.checked = false;
         });

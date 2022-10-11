@@ -30,6 +30,7 @@ import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
+import useUrlState from '@ahooksjs/use-url-state';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -37,6 +38,9 @@ interface PresentableProps extends RouteComponentProps<{ id: string }> {
 }
 
 function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
+
+  const [urlState] = useUrlState<{ openCreatePolicyDrawer: 'true', openOperatePolicyDrawer: 'true' }>();
+
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -50,6 +54,26 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         exhibitID: match.params.id,
       },
     });
+  });
+
+  AHooks.useMount(() => {
+    if (urlState.openCreatePolicyDrawer) {
+      dispatch<ChangeAction>({
+        type: 'exhibitInfoPage/change',
+        payload: {
+          policyEditorVisible: true,
+        }
+      });
+    }
+
+    if (urlState.openOperatePolicyDrawer) {
+      dispatch<ChangeAction>({
+        type: 'exhibitInfoPage/change',
+        payload: {
+          policyOperaterVisible: true,
+        }
+      });
+    }
   });
 
   AHooks.useUnmount(() => {
@@ -365,6 +389,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FPolicyOperaterDrawer
         visible={exhibitInfoPage.policyOperaterVisible}
+        // visible={true}
         type='resource'
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
