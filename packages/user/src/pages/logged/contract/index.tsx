@@ -53,7 +53,6 @@ function Contract({ dispatch, contractPage }: ContractProps) {
   }>();
 
   AHooks.useMount(() => {
-    console.log(urlParams);
     if (urlParams.exhibitId) {
       dispatch<OnChangeShowPageAction>({
         type: 'contractPage/onChangeShowPage',
@@ -635,7 +634,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
               </div>
               {contractPage.authorized_SubjectIds && (
                 <div className={styles.exhibitTip + ' ml-20 mt-20'}>
-                  <span>{`当前列表为节点「xxxxxx」中的展品「xxxxxx」的所有已终止合约`}</span>
+                  <span>{`当前列表为节点 ${urlParams.nodeName} 中的展品 ${contractPage.authorized_List[0]?.subjectName} 的所有已终止合约`}</span>
                   <span
                     className={styles.link + ' ml-10 cur-pointer'}
                     onClick={() => {
