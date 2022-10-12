@@ -831,7 +831,7 @@ export const InsertResourceDrawer = (props: Props) => {
 
           <FModal
             title={null}
-            visible={createBucketShow}
+            open={createBucketShow}
             width={640}
             zIndex={1060}
             okButtonProps={{

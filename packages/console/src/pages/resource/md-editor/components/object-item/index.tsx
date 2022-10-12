@@ -2,17 +2,18 @@
 
 import './index.less';
 import { FI18n, FUtil } from '@freelog/tools-lib';
-import { Progress, Tooltip } from 'antd';
+import { Popconfirm, Progress, Tooltip } from 'antd';
 
 interface Props {
   data: any;
   cancel?: (uid: string) => void;
   upload?: (task: any) => void;
   update?: (task: any) => void;
+  importFile?: (task: any) => void;
 }
 
 export const ObjectItem = (props: Props) => {
-  const { data, cancel, upload, update } = props;
+  const { data, cancel, upload, update, importFile } = props;
 
   const statusMapping: any = {
     uploading: {
@@ -115,7 +116,18 @@ export const ObjectItem = (props: Props) => {
       )}
 
       {!data.uploadStatus || data.uploadStatus === 'success' ? (
-        <div className="choose-btn">{FI18n.i18nNext.t('btn_import_post')}</div>
+        <Popconfirm
+          placement="bottomRight"
+          title={FI18n.i18nNext.t('confirmation_import_post')}
+          disabled={!importFile}
+          onConfirm={() => importFile && importFile(data)}
+          okText={FI18n.i18nNext.t('btn_import_post')}
+          cancelText={FI18n.i18nNext.t('btn_cancel')}
+        >
+          <div className="choose-btn">
+            {FI18n.i18nNext.t('btn_import_post')}
+          </div>
+        </Popconfirm>
       ) : (
         <div className="other-btn" onClick={operate}>
           {statusMapping[data.uploadStatus].btn}

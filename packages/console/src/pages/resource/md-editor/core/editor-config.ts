@@ -1,13 +1,18 @@
 /** 编辑器配置 */
 
 import { FI18n } from '@freelog/tools-lib';
-import { IToolbarConfig, IEditorConfig, Boot } from '@wangeditor/editor';
+import {
+  IToolbarConfig,
+  IEditorConfig,
+  Boot,
+  IModuleConf,
+} from '@wangeditor/editor';
 import {
   audioMenuConfig,
-  textMenuConfig,
   importMenuConfig,
   pictureMenuConfig,
   policyMenuConfig,
+  textMenuConfig,
   videoMenuConfig,
 } from './custom-buttons';
 
@@ -50,9 +55,15 @@ export const editorConfig: Partial<IEditorConfig> = {
   },
 };
 
-Boot.registerMenu(pictureMenuConfig);
-Boot.registerMenu(videoMenuConfig);
-Boot.registerMenu(audioMenuConfig);
-Boot.registerMenu(textMenuConfig);
-Boot.registerMenu(policyMenuConfig);
-Boot.registerMenu(importMenuConfig);
+const customModule: Partial<IModuleConf> = {
+  menus: [
+    pictureMenuConfig,
+    videoMenuConfig,
+    audioMenuConfig,
+    textMenuConfig,
+    policyMenuConfig,
+    importMenuConfig,
+  ],
+};
+
+Boot.registerModule(customModule);

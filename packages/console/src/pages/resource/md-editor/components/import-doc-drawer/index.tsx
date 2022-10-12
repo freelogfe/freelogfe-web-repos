@@ -16,6 +16,15 @@ import FComponentsLib from '@freelog/components-lib';
 
 const { Option } = Select;
 
+showdown.setOption('tables', true);
+showdown.setOption('tasklists', true);
+showdown.setOption('simplifiedAutoLink', true);
+showdown.setOption('openLinksInNewWindow', true);
+showdown.setOption('backslashEscapesHTMLTags', true);
+showdown.setOption('emoji', true);
+
+const converter = new showdown.Converter();
+
 interface Props {
   show: boolean;
   close: () => void;
@@ -99,15 +108,6 @@ export const ImportDocDrawer = (props: Props) => {
   /** 确认导入 */
   const sureImport = () => {
     console.error('确认导入===>', refs.current.uploadFileData);
-
-    showdown.setOption('tables', true);
-    showdown.setOption('tasklists', true);
-    showdown.setOption('simplifiedAutoLink', true);
-    showdown.setOption('openLinksInNewWindow', true);
-    showdown.setOption('backslashEscapesHTMLTags', true);
-    showdown.setOption('emoji', true);
-
-    const converter = new showdown.Converter();
     const html = converter.makeHtml(refs.current.uploadFileData.content);
     setHtml(html);
   };
@@ -741,12 +741,16 @@ export const ImportDocDrawer = (props: Props) => {
               ></ObjectItem>
             ))}
           {objectList.map((item) => (
-            <ObjectItem key={item.objectId} data={item}></ObjectItem>
+            <ObjectItem
+              key={item.objectId}
+              data={item}
+              importFile={importFromObject}
+            ></ObjectItem>
           ))}
 
           <FModal
             title={null}
-            visible={createBucketShow}
+            open={createBucketShow}
             width={640}
             zIndex={1060}
             okButtonProps={{
