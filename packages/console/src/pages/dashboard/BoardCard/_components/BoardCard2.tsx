@@ -24,21 +24,23 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（视频）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源创建教程</a>
-        <FComponentsLib.FContentText text={'（图文）创建资源。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）创建资源。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.resourceCreator());
@@ -54,21 +56,23 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源版本发布教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）发布资源版本。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'（视频）发布资源版本。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.myResources());
@@ -84,21 +88,25 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
           type='primary'
         >资源授权策略添加教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
           type='primary'
         >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'(视频) 为资源添加授权策略。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'(视频) 为资源添加授权策略。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.myResources());
