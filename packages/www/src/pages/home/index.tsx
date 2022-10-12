@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FPentagram from '@/components/FIcons/FPentagram';
+// import FPentagram from '@/components/FIcons/FPentagram';
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';
@@ -40,7 +40,7 @@ function HomePage({}: HomePageProps) {
         href={topLink}
       >资源创作大赛</a>
       <span className={styles.banner0White}>，最低可领15元现金奖励，参与排名更有机会赢取3000元现金奖励！</span>
-      <FPentagram style={{ color: '#F3E574' }} />
+      <FComponentsLib.FIcons.FPentagram style={{ color: '#F3E574' }} />
     </div>
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>

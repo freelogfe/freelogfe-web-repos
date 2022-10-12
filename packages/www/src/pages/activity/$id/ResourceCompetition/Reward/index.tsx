@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FPentagram from '@/components/FIcons/FPentagram';
+// import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
@@ -64,11 +64,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
     <div className={styles.rewardCards}>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FBF5EA' }}>
         <div className={styles.title1} style={{ color: '#E9A923' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>大触奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
@@ -90,11 +90,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FBF5EA' }}>
         <div className={styles.title1} style={{ color: '#E9A923' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>大触宣发奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
@@ -116,11 +116,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#E5F6EF' }}>
         <div className={styles.title1} style={{ color: '#42C28C' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>优秀奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
@@ -142,11 +142,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#E5F6EF' }}>
         <div className={styles.title1} style={{ color: '#42C28C' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>优秀宣发奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
@@ -169,12 +169,12 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#EDF6FF' }}>
         <div className={styles.title2} style={{ color: '#2784FF' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           {/*<span>优秀宣发奖</span>*/}
           <span>普照奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 60 }} />
         <div className={styles.title3}>
@@ -206,11 +206,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
         <div className={styles.title2} style={{ color: '#BD10E0' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>幸运奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 20 }} />
         <div className={styles.title3}>
