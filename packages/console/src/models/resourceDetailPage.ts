@@ -6,6 +6,7 @@ import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
@@ -754,7 +755,7 @@ const Model: ResourceDetailPageModelType = {
               ...Object.entries(data.systemProperty as object)
                 .map((s) => ({
                   key: s[0],
-                  value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+                  value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
                 })),
               ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
                 .map((p: any) => {
