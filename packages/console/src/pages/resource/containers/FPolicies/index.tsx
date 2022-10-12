@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import {Dispatch} from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyList from '@/components/FPolicyList';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
