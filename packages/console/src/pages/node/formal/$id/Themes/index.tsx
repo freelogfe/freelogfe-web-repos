@@ -287,7 +287,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                         {nodeManagerPage.theme_ActivatingThemeID === i.id ? (
                           <div className={styles.processing}>
-                            <span>处理中…</span>
+                            <span>{FI18n.i18nNext.t('activatetheme_inprocessing')}</span>
                           </div>
                         ) : (
                           <div
@@ -299,18 +299,6 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                 {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
-                                    // if (i.policies.length === 0) {
-                                    //   // return;
-                                    //   if (i.policies.length === 0) {
-                                    //     if (!i.hasPolicy) {
-                                    //       fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan'), 'error');
-                                    //     } else {
-                                    //       fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'), 'error');
-                                    //     }
-                                    //     return;
-                                    //   }
-                                    // }
-                                    // console.log(i, 'iio9jlskdjflksdjflkjl')
 
                                     if (!i.hasPolicy) {
                                       fConfirmModal({

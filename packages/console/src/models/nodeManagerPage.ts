@@ -817,7 +817,7 @@ const Model: NodeManagerModelType = {
       if (!data) {
         fMessage('激活失败', 'error');
       } else {
-        fMessage('激活成功', 'success');
+        fMessage(FI18n.i18nNext.t('msg_done'), 'success');
         yield put<FetchThemesAction>({
           type: 'fetchThemes',
         });
