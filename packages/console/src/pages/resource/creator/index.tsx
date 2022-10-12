@@ -25,7 +25,7 @@ import {
   OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
 import { history } from 'umi';
-import { FLoading } from '@/components/FIcons';
+// import { FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import { Prompt } from 'umi';
@@ -124,6 +124,8 @@ function ResourceCreator({
           });
           fConfirmModal({
             message: '还没有创建资源，现在离开会导致信息丢失',
+            cancelText: FI18n.i18nNext.t('btn_cancel'),
+            okText: FI18n.i18nNext.t('btn_leave'),
             onOk() {
               // console.log('OK');
               history.push(location.pathname + location.search);
