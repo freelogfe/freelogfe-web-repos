@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FSafetyLock from '@/components/FIcons/FSafetyLock';
+// import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Modal, Space, Radio, message, DatePicker } from 'antd';
@@ -67,7 +67,7 @@ import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
 import FComponentsLib from '@freelog/components-lib';
-import { individualAccounts } from '../../../../../@freelog/tools-lib/src/service-API/transactions';
+// import { individualAccounts } from '../../../../../@freelog/tools-lib/src/service-API/transactions';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -299,7 +299,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 });
               }}
             >
-              <FSafetyLock style={{ fontSize: 32, color: '#DA6666' }} />
+              <FComponentsLib.FIcons.FSafetyLock style={{ fontSize: 32, color: '#DA6666' }} />
               {/*<div style={{height: 10}}/>*/}
               <div style={{ color: '#333', fontSize: 13 }}>修改支付密码</div>
             </div>

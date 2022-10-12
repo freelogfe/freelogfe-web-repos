@@ -4,8 +4,8 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import FResource from '@/components/FIcons/FResource';
-import { FNodes } from '@/components/FIcons';
+// import FResource from '@/components/FIcons/FResource';
+// import { FNodes } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -128,10 +128,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div className={styles.signatory}>
             <Space size={5}>
               {record.licensorType === 'resource' && (
-                <FResource style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
               )}
               {record.licensorType === 'node' && (
-                <FNodes style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
               )}
 
               {/*{*/}
@@ -146,10 +146,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             <div style={{ height: 10 }} />
             <Space size={5}>
               {record.licenseeType === 'resource' && (
-                <FResource style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
               )}
               {record.licenseeType === 'node' && (
-                <FNodes style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
               )}
 
               {record.licenseeType === 'user' && (
@@ -275,10 +275,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
           <div className={styles.signatory}>
             <Space size={5}>
               {record.licensorType === 'resource' && (
-                <FResource style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
               )}
               {record.licensorType === 'node' && (
-                <FNodes style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
               )}
 
               {/*{*/}
@@ -293,10 +293,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             <div style={{ height: 10 }} />
             <Space size={5}>
               {record.licenseeType === 'resource' && (
-                <FResource style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
               )}
               {record.licenseeType === 'node' && (
-                <FNodes style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
               )}
 
               {record.licenseeType === 'user' && (

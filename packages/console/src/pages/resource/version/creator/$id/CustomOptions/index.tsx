@@ -9,7 +9,7 @@ import {
   ImportLastVersionDataAction,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
-import FUp from '@/components/FIcons/FUp';
+// import FUp from '@/components/FIcons/FUp';
 import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
@@ -127,7 +127,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             }}
           >
             <span>自定义选项（高级）</span>
-            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp />) : (<FComponentsLib.FIcons.FDown />)}
+            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)}
           </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
             <div><FComponentsLib.FIcons.FInfo /></div>

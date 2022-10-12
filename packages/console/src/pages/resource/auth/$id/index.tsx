@@ -20,11 +20,11 @@ import { withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import { FNodes } from '@/components/FIcons';
+// import { FNodes } from '@/components/FIcons';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FTable from '@/components/FTable';
-import FResource from '@/components/FIcons/FResource';
+// import FResource from '@/components/FIcons/FResource';
 import { ColumnsType } from 'antd/lib/table/interface';
 import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
@@ -75,10 +75,10 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
       render: (_: any, record) => {
         return (<Space size={5}>
           {
-            record.licenseeIdentityType === 'resource' && (<FResource />)
+            record.licenseeIdentityType === 'resource' && (<FComponentsLib.FIcons.FResource />)
           }
           {
-            record.licenseeIdentityType === 'node' && (<FNodes />)
+            record.licenseeIdentityType === 'node' && (<FComponentsLib.FIcons.FNodes />)
           }
           {
             record.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
