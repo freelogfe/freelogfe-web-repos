@@ -382,27 +382,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
-                      // options={[
-                      //   {
-                      //     value: '-1',
-                      //     text: '全部',
-                      //   },
-                      //   ...categoryData.first.map((i, index) => {
-                      //     return {
-                      //       value: index + '',
-                      //       text: i,
-                      //     };
-                      //   }),
-                      // ]}
                       options={nodeManagerPage.exhibit_ResourceTypeOptions1}
-                      // value={category.first}
                       value={nodeManagerPage.exhibit_SelectedType1}
                       onClick={(value) => {
-                        // setCategory({
-                        //   ...category,
-                        //   first: value,
-                        //   second: category.first === value ? category.second : '-1',
-                        // });
                         dispatch<OnChange_Exhibit_SelectedType_Action>({
                           type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
                           payload: {
@@ -410,7 +392,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                             level: 1,
                           },
                         });
-                        //onChangeResourceType && onChangeResourceType(value)
                       }}
                     />
                   }
@@ -431,26 +412,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       overlay={
                         <FMenu
                           value={nodeManagerPage.exhibit_SelectedType2}
-                          // @ts-ignore
-                          // options={[
-                          //   {
-                          //     value: '-1',
-                          //     text: '全部',
-                          //   },
-                          //   // @ts-ignore
-                          //   ...categoryData.second[category.first].map((i, index) => {
-                          //     return {
-                          //       value: index + '',
-                          //       text: i,
-                          //     };
-                          //   }),
-                          // ]}
                           options={nodeManagerPage.exhibit_ResourceTypeOptions2}
                           onClick={(value) => {
-                            // setCategory({
-                            //   ...category,
-                            //   second: value,
-                            // });
                             dispatch<OnChange_Exhibit_SelectedType_Action>({
                               type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
                               payload: {
@@ -464,10 +427,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       }
                     >
                       <span style={{ cursor: 'pointer' }}>
-                        {/*{*/}
-                        {/*  // @ts-ignore*/}
-                        {/*  categoryData.second[category.first][category.second] || '全部'*/}
-                        {/*}*/}
                         {nodeManagerPage.exhibit_ResourceTypeOptions2.find((rt) => {
                           return rt.value === nodeManagerPage.exhibit_SelectedType2;
                         })?.text || '全部'}
@@ -641,7 +600,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <div className={styles['loader']}>
                   <LoadingOutlined className={styles['loader-icon']} />
                   <div className={styles['loader-text']}>
-                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                    {resultPopupType === 1 ? FI18n.i18nNext.t('showexhibit_inprocessing') : '正在下架'}
                   </div>
                 </div>
               ) : (
@@ -652,7 +611,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     }`}
                   />
                   <div className={styles['result-text']}>
-                    已{resultPopupType === 1 ? '上架' : '下架'}
+                    {resultPopupType === 1 ? FI18n.i18nNext.t('msg_done') : '已下架'}
                   </div>
                 </div>
               )}
