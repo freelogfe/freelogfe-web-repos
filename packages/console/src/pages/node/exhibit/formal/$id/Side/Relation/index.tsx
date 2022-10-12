@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
@@ -26,15 +27,6 @@ function Relation({ exhibitInfoPage }: RelationProps) {
       }}>
         <FCoverImage src={exhibitInfoPage.side_ResourceCover || ''} width={220} style={{ borderRadius: 10 }} />
       </div>
-      {/*<img*/}
-      {/*  alt=""*/}
-      {/*  src={exhibitInfoPage.side_ResourceCover || imgSrc}*/}
-      {/*  onClick={() => {*/}
-      {/*    window.open(FUtil.LinkTo.resourceDetails({*/}
-      {/*      resourceID: exhibitInfoPage.side_ResourceID,*/}
-      {/*    }));*/}
-      {/*  }}*/}
-      {/*/>*/}
     </div>
 
     <div style={{ height: 12 }} />
@@ -51,7 +43,10 @@ function Relation({ exhibitInfoPage }: RelationProps) {
       />
     </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
-    <div style={{ fontSize: 12, color: '#666' }}>{FUtil.Format.resourceTypeKeyArrToResourceType(exhibitInfoPage.side_ResourceType)}</div>
+    <div style={{
+      fontSize: 12,
+      color: '#666',
+    }}>{FUtil.Format.resourceTypeKeyArrToResourceType(exhibitInfoPage.side_ResourceType)}</div>
   </div>);
 }
 

@@ -7,6 +7,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { fileAttrUnits } from '@/utils/format';
 
 // import FUtil1 from '@/utils';
 
@@ -546,7 +547,7 @@ const Model: ExhibitInfoPageModelType = {
           side_BaseAttrs: [
             ...Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
               key: s[0],
-              value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+              value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
             })),
             ...data_PresentableDetails.resourceCustomPropertyDescriptors
               .filter((rd: any) => rd.type === 'readonlyText')
