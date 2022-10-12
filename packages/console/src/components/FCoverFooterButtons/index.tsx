@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDivider from '@/components/FDivider';
-import FUpdate from '@/components/FIcons/FUpdate';
+// import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
-import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -35,7 +35,7 @@ const btnMap: any = {
   },
   update: {
     text: '更新',
-    icon: (<FUpdate />),
+    icon: (<FComponentsLib.FIcons.FUpdate />),
   },
   cancelCollect: {
     text: '取消收藏',

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.less';
-import FPlayer from '@/components/FIcons/FPlayer';
+// import FPlayer from '@/components/FIcons/FPlayer';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import img_blog from '@/assets/flnode_blog.jpg';
@@ -86,6 +86,7 @@ function Examples({}) {
               <img
                 className={styles.cover}
                 src={n.cover}
+                alt={''}
               />
               <div style={{ width: 20 }} />
               <div className={styles.content}>
@@ -108,7 +109,7 @@ function Examples({}) {
                   window.open(n.href);
                 }}
               >
-                <FPlayer />
+                <FComponentsLib.FIcons.FPlayer />
                 &nbsp;
                 <span>浏览节点</span>
               </FComponentsLib.FTextBtn>

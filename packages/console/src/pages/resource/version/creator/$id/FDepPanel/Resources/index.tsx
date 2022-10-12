@@ -11,7 +11,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import FUpcast from '@/components/FIcons/FUpcast';
+// import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -129,7 +129,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     {/*{rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
                     {rrr.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
                     {/*{rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
-                    {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
                     {rrr.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
                     {rrr.error === '' && rrr.warning === 'authException' && (
                       <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
@@ -298,7 +298,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               {/*{i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
               {i.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
               {/*{i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
-              {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
+              {i.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
               {i.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
               {i.error === '' && i.warning === 'authException' && (
                 <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}

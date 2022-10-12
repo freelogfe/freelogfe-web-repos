@@ -12,7 +12,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-import FUpcast from '@/components/FIcons/FUpcast';
+// import FUpcast from '@/components/FIcons/FUpcast';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -101,7 +101,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             {
               // resource?.status === 4 && (<div className={styles.errorBox}>
               resource?.error === 'upThrow' && (<div className={styles.errorBox}>
-                <FUpcast className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'此依赖为当前资源的基础上抛'} type='second' />
               </div>)
             }

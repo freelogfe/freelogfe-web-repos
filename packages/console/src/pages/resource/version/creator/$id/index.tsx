@@ -33,7 +33,7 @@ import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import FPaperPlane from '@/components/FIcons/FPaperPlane';
+// import FPaperPlane from '@/components/FIcons/FPaperPlane';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
@@ -228,7 +228,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
         onClick={onClickCreate}
         disabled={disabledCreate}
       >
-        <FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
+        <FComponentsLib.FIcons.FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
         <div style={{ width: 5 }} />
         {FI18n.i18nNext.t('release_to_market')}
       </FComponentsLib.FRectBtn>
