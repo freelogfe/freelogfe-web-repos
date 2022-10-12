@@ -842,7 +842,7 @@ const Model: WalletPageModelType = {
       const { data } = yield call(FServiceAPI.Transaction.verifyTransactionPassword, params);
 
       if (!data) {
-        return fMessage(FI18n.i18nNext.t('alert_paymentpasswordincorrect '), 'error');
+        return fMessage(FI18n.i18nNext.t('alert_paymentpasswordincorrect'), 'error');
       }
 
       yield put<ChangeAction>({
