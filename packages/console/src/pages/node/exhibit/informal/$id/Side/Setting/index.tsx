@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FDelete, FRedo, FSwap } from '@/components/FIcons';
+import { FRedo, FSwap } from '@/components/FIcons';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
@@ -66,10 +66,6 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
         <div style={{ height: 30 }} />
       </>)
     }
-
-    {/*{*/}
-    {/*  informExhibitInfoPage.settingUnfold && (<>*/}
-
 
     <FComponentsLib.FTitleText text={'基础属性'} type='h4' />
     <div style={{ height: 15 }} />
