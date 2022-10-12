@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
 import { withRouter } from 'umi';
@@ -35,7 +36,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 text={nodeManagerPage.nodeName}
                 singleRow
                 style={{
-                  maxWidth: 200
+                  maxWidth: 200,
                 }}
               />
             </div>
