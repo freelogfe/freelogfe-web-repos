@@ -51,7 +51,7 @@ function FPolicyOperatorDrawer({
         title={
           <Space size={10}>
             {/*<FComponentsLib.FTitleText type='h2' text={`启用策略并上架${typeMapping[type]}`} />*/}
-            <FComponentsLib.FTitleText type='h2' text={titleText} />
+            <FComponentsLib.FTitleText type='h2' text={titleText} singleRow style={{width: 290}} />
           </Space>
         }
         width={700}
