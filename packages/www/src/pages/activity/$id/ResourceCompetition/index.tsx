@@ -10,14 +10,15 @@ import { Popover } from 'antd';
 import FModal from '@/components/FModal';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ResourceCompetitionProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
 function ResourceCompetition({
-  activityDetailsPage,
-}: ResourceCompetitionProps): React.ReactElement {
+                               activityDetailsPage,
+                             }: ResourceCompetitionProps): React.ReactElement {
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
 
   return (
@@ -108,8 +109,10 @@ function ResourceCompetition({
               <div style={{ width: 15 }} />
               <div className={styles.text}>
                 <span>
-                  活动期间，Freelog会向每位用户提供最高1000个羽币领取额度，羽币仅用于资源或展品授权合约交易，不可提现。活动结束后，累计的羽币可根据相应的规则进行奖品兑换。领取途径：【个人中心】-【钱包】-
-                  【每日登录】。
+                  活动期间，Freelog会向每位用户提供最高1000个羽币领取额度，羽币仅用于资源或展品授权合约交易，不可提现。活动结束后，累计的羽币可根据相应的规则进行奖品兑换。领取途径：<FComponentsLib.FTextBtn
+                  style={{ display: 'contents' }} onClick={() => {
+                  self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
+                }}>【个人中心】-【钱包】-【每日登录】</FComponentsLib.FTextBtn>。
                 </span>
               </div>
             </div>
@@ -150,7 +153,7 @@ function ResourceCompetition({
                   href={
                     'https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2'
                   }
-                  target="_blank"
+                  target='_blank'
                 >
                   《Freelog平台管理规范》
                 </a>
