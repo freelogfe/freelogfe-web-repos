@@ -13,7 +13,7 @@ import {
 import DepsCards from './DepsCards';
 import FBaseProperties from '@/components/FBaseProperties';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-import { FUp } from '@/components/FIcons';
+// import { FUp } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -186,7 +186,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               style={{ fontSize: 12, fontWeight: 600 }}
             >
               <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FComponentsLib.FIcons.FDown />)}
+              {storageObjectEditor.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)}
             </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>

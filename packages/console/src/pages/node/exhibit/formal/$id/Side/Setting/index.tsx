@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
-import { FSwap, FRedo} from '@/components/FIcons';
+// import { FSwap, FRedo} from '@/components/FIcons';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -54,7 +54,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       }}
     >
       <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
-        text={exhibitInfoPage.side_Version} /><FSwap /></Space>
+        text={exhibitInfoPage.side_Version} /><FComponentsLib.FIcons.FSwap /></Space>
     </FDropdownMenu>
 
     {
@@ -115,7 +115,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                             },
                           });
                         }}
-                      ><FRedo /></FComponentsLib.FTextBtn>
+                      ><FComponentsLib.FIcons.FRedo /></FComponentsLib.FTextBtn>
                     </div>
                   </FTooltip>
                 </div>

@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
-import { FInfo } from '@/components/FIcons';
+// import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';

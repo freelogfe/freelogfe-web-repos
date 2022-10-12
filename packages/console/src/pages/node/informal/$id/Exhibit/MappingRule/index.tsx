@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import {
-  // FEdit, FLine,
-  FMappingRuleAdd,
-  FMappingRuleAttr,
-  FMappingRuleCover,
-  FMappingRuleLabel,
-  FMappingRuleOffline,
-  FMappingRuleOnline,
-  FMappingRuleReplace,
-  FMappingRuleTitle,
-} from '@/components/FIcons';
+// import {
+//   // FEdit, FLine,
+//   FMappingRuleAdd,
+//   FMappingRuleAttr,
+//   FMappingRuleCover,
+//   FMappingRuleLabel,
+//   FMappingRuleOffline,
+//   FMappingRuleOnline,
+//   FMappingRuleReplace,
+//   FMappingRuleTitle,
+// } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
 import TypesCaption from '../../components/TypesCaption';
 import {

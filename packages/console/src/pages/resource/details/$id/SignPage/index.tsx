@@ -14,7 +14,7 @@ import {
 } from '@/models/resourceDetailPage';
 import FContentLayout from '@/layouts/FContentLayout';
 import FFormLayout from '@/components/FFormLayout';
-import { FLeft, FNodes } from '@/components/FIcons';
+// import { FLeft, FNodes } from '@/components/FIcons';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
@@ -80,7 +80,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
       <FFormLayout>
         <FFormLayout.FBlock title={'确认签约节点'}>
           <Space size={5}>
-            <FNodes className={styles.yellow} />
+            <FComponentsLib.FIcons.FNodes className={styles.yellow} />
             <FComponentsLib.FContentText
               type='highlight'
               text={selectedNode?.nodeName}

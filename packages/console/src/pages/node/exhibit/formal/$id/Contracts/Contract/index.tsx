@@ -7,7 +7,7 @@ import { Space } from 'antd';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
-import { FDown, FUp } from '@/components/FIcons';
+// import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
@@ -134,7 +134,7 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                               &nbsp;
                               {
                                 c.exhibitOpen
-                                  ? (<FUp />)
+                                  ? (<FComponentsLib.FIcons.FUp />)
                                   : (<FComponentsLib.FIcons.FDown />)
                               }
                             </FComponentsLib.FTitleText>

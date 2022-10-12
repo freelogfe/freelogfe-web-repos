@@ -3,7 +3,7 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import Sign from './Sign';
-import { FSwap } from '@/components/FIcons';
+// import { FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
@@ -174,7 +174,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                     );
                   }}
                 >
-                  <FSwap style={{ cursor: 'pointer' }} />
+                  <FComponentsLib.FIcons.FSwap style={{ cursor: 'pointer' }} />
                 </FDropdownMenu>
               </Space>
 

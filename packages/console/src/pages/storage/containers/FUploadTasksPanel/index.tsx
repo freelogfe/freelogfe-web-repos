@@ -14,7 +14,7 @@ import {
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
 import FLoadingTip from '@/components/FLoadingTip';
-import {  FUp } from '@/components/FIcons';
+// import {  FUp } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -116,7 +116,7 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
           {
             storageHomePage.uploadPanelOpen
               ? (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
-              : (<FUp style={{ fontSize: 12 }} />)
+              : (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
           }
         </FComponentsLib.FTextBtn>
         <FComponentsLib.FTextBtn

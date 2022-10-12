@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FRedo, FSwap } from '@/components/FIcons';
+// import { FRedo, FSwap } from '@/components/FIcons';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
@@ -61,7 +61,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
           }}
         >
           <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
-            text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
+            text={informExhibitInfoPage.side_Exhibit_Version} /><FComponentsLib.FIcons.FSwap /></Space>
         </FDropdownMenu>
         <div style={{ height: 30 }} />
       </>)
@@ -108,7 +108,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                   });
 
                 }}
-              ><FRedo /></FComponentsLib.FTextBtn>
+              ><FComponentsLib.FIcons.FRedo /></FComponentsLib.FTextBtn>
 
             </Space>
 

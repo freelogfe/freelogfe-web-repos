@@ -17,7 +17,7 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
-import { FLoading } from '@/components/FIcons';
+// import { FLoading } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
 const errorTexts = {
