@@ -66,22 +66,22 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
           atLeastOneUsing={resourceAuthPage.status === 1}
           dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
-            const usedCount: number = resourceAuthPage.policies.filter((p) => {
-              return p.status === 1;
-            }).length;
-            if (usedCount === 1 && !data.using) {
-              fConfirmModal({
-                // message: '一旦删除则无法恢复，确认删除吗？',
-                message: FI18n.i18nNext.t('alert_disable_auth_plan_confirm'),
-                onOk() {
-                  onPolicyStatusChange(data.id, data.using);
-                },
-                okText: FI18n.i18nNext.t('btn_disable_auth_plan'),
-                cancelText: FI18n.i18nNext.t('btn_cancel'),
-              });
-            } else {
+            // const usedCount: number = resourceAuthPage.policies.filter((p) => {
+            //   return p.status === 1;
+            // }).length;
+            // if (usedCount === 1 && !data.using) {
+            //   fConfirmModal({
+            //     // message: '一旦删除则无法恢复，确认删除吗？',
+            //     message: FI18n.i18nNext.t('alert_disable_auth_plan_confirm'),
+            //     onOk() {
+            //       onPolicyStatusChange(data.id, data.using);
+            //     },
+            //     okText: FI18n.i18nNext.t('btn_disable_auth_plan'),
+            //     cancelText: FI18n.i18nNext.t('btn_cancel'),
+            //   });
+            // } else {
               onPolicyStatusChange(data.id, data.using);
-            }
+            // }
           }}
         />)
       // : null
