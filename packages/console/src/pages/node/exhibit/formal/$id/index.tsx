@@ -27,7 +27,7 @@ import { Helmet } from 'react-helmet';
 import fMessage from '@/components/fMessage';
 import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
+import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
@@ -62,7 +62,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         type: 'exhibitInfoPage/change',
         payload: {
           policyEditorVisible: true,
-        }
+        },
       });
     }
 
@@ -71,7 +71,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         type: 'exhibitInfoPage/change',
         payload: {
           policyOperaterVisible: true,
-        }
+        },
       });
     }
   });
@@ -387,10 +387,19 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         onConfirm={({ title, text }) => addPolicy(title, text)}
       />
 
-      <FPolicyOperaterDrawer
+      <FPolicyOperatorDrawer
         visible={exhibitInfoPage.policyOperaterVisible}
         // visible={true}
-        type='resource'
+        // type='resource'
+        titleText={exhibitInfoPage.side_ResourceType.includes('主题')
+          ? FI18n.i18nNext.t('activatetheme_activate_authplan_title')
+          : FI18n.i18nNext.t('showexhibit_activate_authplan_title')}
+        confirmText={exhibitInfoPage.side_ResourceType.includes('主题')
+          ? FI18n.i18nNext.t('activatetheme_activate_authplan_btn')
+          : FI18n.i18nNext.t('showexhibit_activate_authplan_btn')}
+        tipText={exhibitInfoPage.side_ResourceType.includes('主题')
+          ? '主题激活需要启用至少一个授权策略，请选择你想要启用的授权策略'
+          : '展品上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
           dispatch<FetchInfoAction>({

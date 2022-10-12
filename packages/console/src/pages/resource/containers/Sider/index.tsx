@@ -16,7 +16,7 @@ import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
+import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
@@ -31,7 +31,7 @@ interface SilderProps
   resourceInfo: ResourceInfoModelState;
 }
 
-function Sider({ resourceInfo, match, dispatch }:SilderProps) {
+function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -246,10 +246,10 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
             (resourceInfo.info?.status & 2) === 2
               ? 'freeze'
               : resourceInfo.info?.status === 1
-              ? 'online'
-              : !!resourceInfo.info?.latestVersion
-              ? 'offline'
-              : 'unreleased'
+                ? 'online'
+                : !!resourceInfo.info?.latestVersion
+                  ? 'offline'
+                  : 'unreleased'
           }
         />
         <div style={{ height: 15 }} />
@@ -302,7 +302,7 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
               // match.path === '/resource/:id/$version/creator'
               resourceInfo.showPage.creator ? (
                 <FComponentsLib.FCircleBtn
-                  type="transparent"
+                  type='transparent'
                   onClick={() => {
                     fMessage('正在创建版本', 'warning');
                   }}
@@ -321,10 +321,10 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
                   }}
                   okText={FI18n.i18nNext.t('btn_check')}
                 >
-                  <FComponentsLib.FCircleBtn type="transparent" />
+                  <FComponentsLib.FCircleBtn type='transparent' />
                 </Popconfirm>
               ) : (
-                <FComponentsLib.FCircleBtn onClick={gotoCreator} type="transparent" />
+                <FComponentsLib.FCircleBtn onClick={gotoCreator} type='transparent' />
               )
             }
           </div>
@@ -380,9 +380,9 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
 
       <FDialog
         show={activeDialogShow}
-        title="提醒"
-        desc="请先为资源添加一个授权策略，再进行上架操作"
-        sureText="添加策略"
+        title='提醒'
+        desc='请先为资源添加一个授权策略，再进行上架操作'
+        sureText='添加策略'
         cancel={() => {
           setActiveDialogShow(false);
         }}
@@ -392,9 +392,9 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
 
       <FDialog
         show={inactiveDialogShow}
-        title="提醒"
-        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-        sureText="下架资源"
+        title='提醒'
+        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+        sureText='下架资源'
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -419,7 +419,7 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
         alreadyUsedTitles={resourceInfo.policies.map((ip) => {
           return ip.policyName;
         })}
-        targetType="resource"
+        targetType='resource'
         onCancel={() => {
           dispatch<ChangeAction>({
             type: 'resourceInfo/change',
@@ -449,9 +449,12 @@ function Sider({ resourceInfo, match, dispatch }:SilderProps) {
         }}
       />
 
-      <FPolicyOperaterDrawer
+      <FPolicyOperatorDrawer
         visible={resourceInfo.policyOperaterVisible}
-        type="resource"
+        titleText={'启用策略并上架资源'}
+        confirmText={'上架资源'}
+        tipText={'资源上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
+        // type='resource'
         policiesList={resourceInfo.policies}
         onCancel={() => {
           dispatch<ChangeAction>({

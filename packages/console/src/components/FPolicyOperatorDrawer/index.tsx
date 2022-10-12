@@ -6,23 +6,34 @@ import { PolicyCard } from '../FPolicyList';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FPolicyOperaterDrawerProps {
+  titleText: string;
+  confirmText: string;
+  tipText: string;
   visible: boolean;
-  type: 'resource' | 'exhibit';
+  // type: 'resource' | 'exhibit';
   policiesList: any[];
+
   onCancel(): void;
+
   onConfirm(): void;
+
   onNewPolicy(): void;
 }
 
-export const FPolicyOperaterDrawer = ({
-  visible = false,
-  policiesList,
-  type,
-  onCancel,
-  onConfirm,
-  onNewPolicy,
-}: FPolicyOperaterDrawerProps) => {
-  const typeMapping = { resource: '资源', exhibit: '展品' };
+// const typeMapping = { resource: '资源', exhibit: '展品' };
+
+function FPolicyOperatorDrawer({
+                                        titleText,
+                                        confirmText,
+                                        tipText,
+                                        visible = false,
+                                        policiesList,
+                                        // type,
+                                        onCancel,
+                                        onConfirm,
+                                        onNewPolicy,
+                                      }: FPolicyOperaterDrawerProps) {
+
   const [activeList, setActiveList] = React.useState<string[]>([]);
   const updateActiveList = () => {
     const list = policiesList.filter((item) => item.checked).map((item) => item.policyId);
@@ -39,7 +50,8 @@ export const FPolicyOperaterDrawer = ({
         visible={visible}
         title={
           <Space size={10}>
-            <FComponentsLib.FTitleText type="h2" text={`启用策略并上架${typeMapping[type]}`} />
+            {/*<FComponentsLib.FTitleText type='h2' text={`启用策略并上架${typeMapping[type]}`} />*/}
+            <FComponentsLib.FTitleText type='h2' text={titleText} />
           </Space>
         }
         width={700}
@@ -47,16 +59,17 @@ export const FPolicyOperaterDrawer = ({
         topRight={
           <Space size={30}>
             <FComponentsLib.FTextBtn onClick={() => onCancel()}>取消</FComponentsLib.FTextBtn>
-            <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type="primary">
-              上架{typeMapping[type]}
+            <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type='primary'>
+              {confirmText}
             </FComponentsLib.FRectBtn>
           </Space>
         }
       >
         <div className={styles.tip}>
-          <i className={`freelog fl-icon-warningxiaochicun ${styles.icon}`}></i>
+          <i className={`freelog fl-icon-warningxiaochicun ${styles.icon}`} />
           <div className={styles.text}>
-            {typeMapping[type]}上架需要启用至少一个授权策略，请选择你想要启用的授权策略
+            {/*{typeMapping[type]}上架需要启用至少一个授权策略，请选择你想要启用的授权策略*/}
+            {tipText}
           </div>
         </div>
         {policiesList.map((item) => {
@@ -69,15 +82,17 @@ export const FPolicyOperaterDrawer = ({
                   item.checked = e.target.checked;
                   updateActiveList();
                 }}
-              ></Checkbox>
+              />
               <PolicyCard fullInfo={item} activeBtnShow={false} />
             </div>
           );
         })}
-        <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type="primary">
+        <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type='primary'>
           创建新授权策略
         </FComponentsLib.FRectBtn>
       </FDrawer>
     </>
   );
-};
+}
+
+export default FPolicyOperatorDrawer;

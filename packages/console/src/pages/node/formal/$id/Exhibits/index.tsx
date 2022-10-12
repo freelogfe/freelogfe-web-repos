@@ -35,7 +35,7 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
+import FPolicyOperatorDrawer  from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 
 interface ExhibitsProps {
@@ -577,9 +577,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           onConfirm={({ title, text }) => addPolicy(title, text)}
         />
 
-        <FPolicyOperaterDrawer
+        <FPolicyOperatorDrawer
           visible={nodeManagerPage.policyOperaterVisible}
-          type='resource'
+          // type='resource'
+          titleText={FI18n.i18nNext.t('showexhibit_activate_authplan_title')}
+          confirmText={FI18n.i18nNext.t('showexhibit_activate_authplan_btn')}
+          tipText={'展品上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
           policiesList={operateExhibit?.policiesList || []}
           onCancel={() => {
             dispatch<ChangeAction>({
