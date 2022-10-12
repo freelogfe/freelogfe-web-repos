@@ -56,22 +56,25 @@ const tasks = {
         />
       </div>
       <div style={{ height: 15 }} />
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-        <FComponentsLib.FContentText text={'查看'} />
+      <div>
+        <FComponentsLib.FContentText text={'查看'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >节点商使用教程</a>
+        &nbsp;
         <FComponentsLib.FContentText
           text={'，完整观看任一视频教程即可领取现金奖励！'}
           type='highlight'
+          style={{ display: 'contents' }}
         />
       </div>
     </div>),
