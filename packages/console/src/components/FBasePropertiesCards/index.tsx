@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
 import FTooltip from "../FTooltip";
-import {FInfo} from "../FIcons";
 import fConfirmModal from '@/components/fConfirmModal';
 import FComponentsLib from '@freelog/components-lib';
 
