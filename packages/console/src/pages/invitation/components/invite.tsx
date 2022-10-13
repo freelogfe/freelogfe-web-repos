@@ -69,6 +69,8 @@ function Invite({ jump }: InviteProps) {
           placeholder="请输入内测邀请码"
           wrapClassName={styles.input}
           onChange={(e) => {
+            console.log(e.currentTarget.value)
+            console.log(e)
             setError('');
             setCode(e.currentTarget.value);
           }}
@@ -79,7 +81,7 @@ function Invite({ jump }: InviteProps) {
             run();
             setLoading(true);
           }}
-          disabled={!code || !errorMessege}
+          disabled={!code || !!errorMessege}
         >
           验证邀请码
         </FComponentsLib.FRectBtn>
