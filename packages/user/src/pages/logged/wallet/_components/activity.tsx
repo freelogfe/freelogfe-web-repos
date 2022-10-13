@@ -13,7 +13,7 @@ import * as AHooks from 'ahooks';
 import { Modal } from 'antd';
 import star from '@/assets/star.svg';
 import 'animate.css';
-import { Loading } from '../../../../.umi/plugin-dva/connect';
+// import { Loading } from '../../../../.umi/plugin-dva/connect';
 
 interface CoinActivity {
   goActive: any;
