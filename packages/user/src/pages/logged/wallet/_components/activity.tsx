@@ -84,7 +84,7 @@ function CoinActivity(props: CoinActivity) {
           {datas.isSign ? (
             <span
               className={
-                styles.title2 + ' ' + (success ? styles.titleMove : '')
+                styles.title2 + ' mt-7 ' + (success ? styles.titleMove : '')
               }
             >
               今日已领取，明天再来吧～
@@ -128,7 +128,7 @@ function CoinActivity(props: CoinActivity) {
               (datas.isSign && success ? styles.lightMove : '')
             }
           ></div>
-          <div className={styles.total}>累计领取数量：{amountSum}枚</div>
+          <div className={styles.total + " " + (datas.isSign? "mt-20" : "mt-13")}>累计领取数量：{amountSum}枚</div>
           {datas.isSign && success ? (
             <div className={'w-18 ml-8 mb-10 ' + styles.starMove}>
               <img src={star} alt="" className="w-100x" />
@@ -190,9 +190,10 @@ function CoinActivity(props: CoinActivity) {
         visible={showTip}
         footer={null}
         centered
+        wrapClassName='login-reward'
         width={740}
       >
-        <div className="w-692 h-509 ">
+        <div className="w-692 h-509 px-46 py-10">
           <div className="flex-row-center ">
             <span className={styles.tiptile}>每日登陆领取羽币</span>
           </div>
