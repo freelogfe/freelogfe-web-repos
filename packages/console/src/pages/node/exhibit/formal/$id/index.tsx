@@ -112,12 +112,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           upOrDownExhibit(data);
         } else {
           fConfirmModal({
-            // message: FUtil.I18n.message('msg_change_theme_confirm'),
-            message: '激活该主题，将下线其它主题',
-            // okText: FUtil.I18n.message('active_new_theme'),
-            okText: '激活',
-            // cancelText: FUtil.I18n.message('keep_current_theme'),
-            cancelText: '保持当前主题',
+            message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+            okText: FI18n.i18nNext.t('btn_activate_theme'),
+            cancelText: FI18n.i18nNext.t('keep_current_theme'),
             onOk() {
               const data = { onlineStatus: 1 };
               upOrDownExhibit(data);
@@ -281,7 +278,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     color: 'white',
                     fontSize: 12,
                     padding: '3px 10px',
-                  }}>{FI18n.i18nNext.t('toggle_activate_theme')}</div>)
+                  }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
                   : (<>
                     <span
                       style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>

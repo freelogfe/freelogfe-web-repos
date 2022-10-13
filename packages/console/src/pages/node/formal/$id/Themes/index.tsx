@@ -344,11 +344,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                                     fConfirmModal({
                                       message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
-                                      // message: '激活该主题，将下线其它主题',
                                       okText: FI18n.i18nNext.t('btn_activate_theme'),
-                                      // okText: '激活',
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
-                                      // cancelText: '保持当前主题',
                                       onOk() {
                                         dispatch<OnActiveAction>({
                                           type: 'nodeManagerPage/onActive',
