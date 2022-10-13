@@ -302,7 +302,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                                     if (!i.hasPolicy) {
                                       fConfirmModal({
-                                        message: '请先为资源添加一个授权策略，再进行上架操作',
+                                        message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+                                        okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+                                        cancelText: FI18n.i18nNext.t('btn_cancel'),
                                         onOk() {
                                           // onDelete(bp.theKey);
                                           self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
@@ -314,7 +316,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                     if (i.policies.length === 0) {
                                       fConfirmModal({
                                         // message: '需要先启用策略',
-                                        message: FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'),
+                                        message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+                                        okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+                                        cancelText: FI18n.i18nNext.t('btn_cancel'),
                                         onOk() {
                                           // onDelete(bp.theKey);
                                           self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
@@ -340,11 +344,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                                     fConfirmModal({
                                       message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
-                                      // message: '激活该主题，将下线其它主题',
                                       okText: FI18n.i18nNext.t('btn_activate_theme'),
-                                      // okText: '激活',
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
-                                      // cancelText: '保持当前主题',
                                       onOk() {
                                         dispatch<OnActiveAction>({
                                           type: 'nodeManagerPage/onActive',
