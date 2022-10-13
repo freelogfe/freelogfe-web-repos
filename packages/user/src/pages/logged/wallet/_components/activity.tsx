@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import FNoDataTip from '@/components/FNoDataTip';
+// import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { history } from 'umi';
+// import { history } from 'umi';
 import reward from '@/assets/reward.jpg';
 import bindWarning from '@/assets/bind-warning.png';
 import { Spin } from 'antd';
