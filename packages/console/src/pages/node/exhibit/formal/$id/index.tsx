@@ -82,17 +82,68 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     });
   });
 
-  /** 上下架 */
-  function changeStatus(value: boolean) {
+  /** 展品上下架 */
+  function changeExhibitStatus(value: boolean) {
+    if (exhibitInfoPage.side_ResourceType.includes('主题')) {
+      fConfirmModal({
+        message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+        okText: FI18n.i18nNext.t('btn_activate_theme'),
+        cancelText: FI18n.i18nNext.t('keep_current_theme'),
+        onOk() {
+
+          if (exhibitInfoPage.policy_List.length === 0) {
+            fConfirmModal({
+              message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+              okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+              cancelText: FI18n.i18nNext.t('btn_cancel'),
+              onOk() {
+                // onDelete(bp.theKey);
+                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
+                // setActiveDialogShow(true);
+                dispatch<ChangeAction>({
+                  type: 'exhibitInfoPage/change',
+                  payload: {
+                    policyEditorVisible: true,
+                  },
+                });
+              },
+            });
+            return;
+          }
+
+          if (!exhibitInfoPage.policy_List.some((item: { status: number }) => item.status === 1)) {
+            fConfirmModal({
+              // message: '需要先启用策略',
+              message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+              okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+              cancelText: FI18n.i18nNext.t('btn_cancel'),
+              onOk() {
+                // onDelete(bp.theKey);
+                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
+                dispatch<ChangeAction>({
+                  type: 'exhibitInfoPage/change',
+                  payload: {
+                    policyOperaterVisible: true,
+                  },
+                });
+              },
+            });
+            return;
+          }
+
+          const data = { onlineStatus: 1 };
+          upOrDownExhibit(data);
+        },
+      });
+      return;
+    }
     if (value) {
-      // 上架
-      const { policy_List } = exhibitInfoPage;
-      if (policy_List.length === 0) {
+      if (exhibitInfoPage.policy_List.length === 0) {
         setActiveDialogShow(true);
-      } else if (policy_List.filter((item: { status: number }) => item.status === 1).length === 0) {
-        exhibitInfoPage.policy_List.forEach((item: any) => {
-          item.checked = false;
-        });
+      } else if (!exhibitInfoPage.policy_List.some((item: { status: number }) => item.status === 1)) {
+        // exhibitInfoPage.policy_List.forEach((item: any) => {
+        //   item.checked = false;
+        // });
         dispatch<ChangeAction>({
           type: 'exhibitInfoPage/change',
           payload: {
@@ -100,20 +151,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           },
         });
       } else {
-        if (!exhibitInfoPage.side_ResourceType.includes('主题') || !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId) {
-          const data = { onlineStatus: 1 };
-          upOrDownExhibit(data);
-        } else {
-          fConfirmModal({
-            message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
-            okText: FI18n.i18nNext.t('btn_activate_theme'),
-            cancelText: FI18n.i18nNext.t('keep_current_theme'),
-            onOk() {
-              const data = { onlineStatus: 1 };
-              upOrDownExhibit(data);
-            },
-          });
-        }
+        const data = { onlineStatus: 1 };
+        upOrDownExhibit(data);
       }
     } else {
       // 下架
@@ -125,6 +164,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         setInactiveDialogShow(true);
       }
     }
+  }
+
+  function activateTheme() {
+
   }
 
   /** 打开添加策略弹窗 */
@@ -287,7 +330,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                         checked={exhibitInfoPage.exhibit_Online}
                         loading={loading}
-                        onClick={(checked) => changeStatus(checked)}
+                        onClick={(checked) => changeExhibitStatus(checked)}
                       />
                     </>)
                 }
@@ -304,7 +347,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                   checked={exhibitInfoPage.exhibit_Online}
                   loading={loading}
-                  onClick={(checked) => changeStatus(checked)}
+                  onClick={(checked) => changeExhibitStatus(checked)}
                 />
               </>)
             }
