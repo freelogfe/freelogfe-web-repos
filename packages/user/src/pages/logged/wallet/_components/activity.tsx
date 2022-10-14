@@ -67,6 +67,7 @@ function CoinActivity(props: CoinActivity) {
             return pre + 1;
           });
         }, inter);
+
       }, 1000);
     } else {
       setDatas(data.data);

@@ -103,6 +103,10 @@
       opacity: 0;
       transform: translateY(20px);
     }
+    50% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
     100% {
       opacity: 1;
       transform: translateY(0);
@@ -166,17 +170,19 @@
 
 .starMove{
   opacity: 0;
-  .animation(star,6s,linear,1s,1,normal );
+  .animation(star,2s,linear,1s,1,normal );
   animation-fill-mode:forwards;
 }
 
 .titleMove{
-  .animation(slideInUp,1s,linear,0s,1,normal );
+  opacity: 0;
+  .animation(slideInUp,1s,linear,1s,1,normal );
+  animation-fill-mode:forwards;
 }
 
 .lightMove {
   display: block !important;
-  .animation(cash,1s,linear,0s,1,normal );
+  .animation(cash,0.5s,linear,0s,1,normal );
   animation-fill-mode:forwards;
 }
 

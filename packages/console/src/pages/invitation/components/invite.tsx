@@ -69,8 +69,6 @@ function Invite({ jump }: InviteProps) {
           placeholder="请输入内测邀请码"
           wrapClassName={styles.input}
           onChange={(e) => {
-            console.log(e.currentTarget.value)
-            console.log(e)
             setError('');
             setCode(e.currentTarget.value);
           }}
