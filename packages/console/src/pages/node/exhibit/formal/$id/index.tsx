@@ -82,21 +82,68 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     });
   });
 
-  if (exhibitInfoPage.pageLoading) {
-    return <FLoadingTip height={'calc(100vh - 140px)'} />;
-  }
+  /** 展品上下架 */
+  function changeExhibitStatus(value: boolean) {
+    if (exhibitInfoPage.side_ResourceType.includes('主题')) {
+      fConfirmModal({
+        message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+        okText: FI18n.i18nNext.t('btn_activate_theme'),
+        cancelText: FI18n.i18nNext.t('keep_current_theme'),
+        onOk() {
 
-  /** 上下架 */
-  const changeStatus = (value: boolean) => {
+          if (exhibitInfoPage.policy_List.length === 0) {
+            fConfirmModal({
+              message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+              okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+              cancelText: FI18n.i18nNext.t('btn_cancel'),
+              onOk() {
+                // onDelete(bp.theKey);
+                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
+                // setActiveDialogShow(true);
+                dispatch<ChangeAction>({
+                  type: 'exhibitInfoPage/change',
+                  payload: {
+                    policyEditorVisible: true,
+                  },
+                });
+              },
+            });
+            return;
+          }
+
+          if (!exhibitInfoPage.policy_List.some((item: { status: number }) => item.status === 1)) {
+            fConfirmModal({
+              // message: '需要先启用策略',
+              message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+              okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+              cancelText: FI18n.i18nNext.t('btn_cancel'),
+              onOk() {
+                // onDelete(bp.theKey);
+                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
+                dispatch<ChangeAction>({
+                  type: 'exhibitInfoPage/change',
+                  payload: {
+                    policyOperaterVisible: true,
+                  },
+                });
+              },
+            });
+            return;
+          }
+
+          const data = { onlineStatus: 1 };
+          upOrDownExhibit(data);
+        },
+      });
+      return;
+    }
     if (value) {
-      // 上架
-      const { policy_List } = exhibitInfoPage;
-      if (policy_List.length === 0) {
+      if (exhibitInfoPage.policy_List.length === 0) {
         setActiveDialogShow(true);
-      } else if (policy_List.filter((item: { status: number }) => item.status === 1).length === 0) {
-        exhibitInfoPage.policy_List.forEach((item: any) => {
-          item.checked = false;
-        });
+      } else if (!exhibitInfoPage.policy_List.some((item: { status: number }) => item.status === 1)) {
+        // exhibitInfoPage.policy_List.forEach((item: any) => {
+        //   item.checked = false;
+        // });
         dispatch<ChangeAction>({
           type: 'exhibitInfoPage/change',
           payload: {
@@ -104,23 +151,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           },
         });
       } else {
-        if (
-          !exhibitInfoPage.side_ResourceType.includes('主题') ||
-          !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId
-        ) {
-          const data = { onlineStatus: 1 };
-          upOrDownExhibit(data);
-        } else {
-          fConfirmModal({
-            message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
-            okText: FI18n.i18nNext.t('btn_activate_theme'),
-            cancelText: FI18n.i18nNext.t('keep_current_theme'),
-            onOk() {
-              const data = { onlineStatus: 1 };
-              upOrDownExhibit(data);
-            },
-          });
-        }
+        const data = { onlineStatus: 1 };
+        upOrDownExhibit(data);
       }
     } else {
       // 下架
@@ -132,10 +164,14 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         setInactiveDialogShow(true);
       }
     }
-  };
+  }
+
+  function activateTheme() {
+
+  }
 
   /** 打开添加策略弹窗 */
-  const openPolicyBuilder = () => {
+  function openPolicyBuilder() {
     dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
       payload: {
@@ -143,10 +179,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       },
     });
     setActiveDialogShow(false);
-  };
+  }
 
   /** 上架 */
-  const activeResource = () => {
+  function activeResource() {
     const updatePolicies = exhibitInfoPage.policy_List
       .filter((item: any) => item.checked)
       .map((item: { policyId: string }) => {
@@ -154,18 +190,20 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       });
     const data = { onlineStatus: 1, updatePolicies };
     upOrDownExhibit(data);
-  };
+  }
 
   /** 下架 */
-  const inactiveResource = () => {
-    if (inactiveDialogShow && noLonger) localStorage.setItem('exhibitNoTip', 'true');
+  function inactiveResource() {
+    if (inactiveDialogShow && noLonger) {
+      localStorage.setItem('exhibitNoTip', 'true');
+    }
 
     const data = { onlineStatus: 0 };
     upOrDownExhibit(data);
-  };
+  }
 
   /** 资源上下架 */
-  const upOrDownExhibit = async (data: any) => {
+  async function upOrDownExhibit(data: any) {
     setActiveDialogShow(false);
     setInactiveDialogShow(false);
     setLoading(true);
@@ -211,10 +249,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       setLoading(false);
       setResultPopupType(null);
     }
-  };
+  }
 
   /** 添加授权策略 */
-  const addPolicy = async (title: string, text: string) => {
+  async function addPolicy(title: string, text: string) {
     dispatch<AddAPolicyAction>({
       type: 'exhibitInfoPage/addAPolicy',
       payload: {
@@ -229,7 +267,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         policyEditorVisible: false,
       },
     });
-  };
+  }
+
+  if (exhibitInfoPage.pageLoading) {
+    return <FLoadingTip height={'calc(100vh - 140px)'} />;
+  }
 
   return (
     <div className={styles.styles}>
@@ -268,31 +310,33 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             />
           </div>
           <Space size={20}>
-            {exhibitInfoPage.side_ResourceType.includes('主题') && (<>
-              {
-                exhibitInfoPage.exhibit_Online
-                  ? (<div style={{
-                    backgroundColor: '#42C28C',
-                    borderRadius: 12,
-                    lineHeight: '18px',
-                    color: 'white',
-                    fontSize: 12,
-                    padding: '3px 10px',
-                  }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
-                  : (<>
+            {
+              exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+                {
+                  exhibitInfoPage.exhibit_Online
+                    ? (<div style={{
+                      backgroundColor: '#42C28C',
+                      borderRadius: 12,
+                      lineHeight: '18px',
+                      color: 'white',
+                      fontSize: 12,
+                      padding: '3px 10px',
+                    }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
+                    : (<>
                     <span
                       style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>
 
-                    <FSwitch
-                      disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-                      checked={exhibitInfoPage.exhibit_Online}
-                      loading={loading}
-                      onClick={(checked) => changeStatus(checked)}
-                    />
-                  </>)
-              }
+                      <FSwitch
+                        disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                        checked={exhibitInfoPage.exhibit_Online}
+                        loading={loading}
+                        onClick={(checked) => changeExhibitStatus(checked)}
+                      />
+                    </>)
+                }
 
-            </>)}
+              </>)
+            }
 
             {
               !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
@@ -303,7 +347,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                   checked={exhibitInfoPage.exhibit_Online}
                   loading={loading}
-                  onClick={(checked) => changeStatus(checked)}
+                  onClick={(checked) => changeExhibitStatus(checked)}
                 />
               </>)
             }
@@ -381,7 +425,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             },
           });
         }}
-        onConfirm={({ title, text }) => addPolicy(title, text)}
+        onConfirm={({ title, text }) => {
+          addPolicy(title, text);
+        }}
       />
 
       <FPolicyOperatorDrawer
@@ -413,31 +459,32 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         onNewPolicy={openPolicyBuilder}
       />
 
-      {resultPopupType !== null && (
-        <div className={styles['result-modal']}>
-          <div className={styles['result-popup']}>
-            {loading ? (
-              <div className={styles['loader']}>
-                <LoadingOutlined className={styles['loader-icon']} />
-                <div className={styles['loader-text']}>
-                  正在{resultPopupType === 1 ? '上架' : '下架'}
+      {
+        resultPopupType !== null && (
+          <div className={styles['result-modal']}>
+            <div className={styles['result-popup']}>
+              {loading ? (
+                <div className={styles['loader']}>
+                  <LoadingOutlined className={styles['loader-icon']} />
+                  <div className={styles['loader-text']}>
+                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className={styles['result']}>
-                <i
-                  className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
-                    styles[resultPopupType === 1 ? 'up' : 'down']
-                  }`}
-                />
-                <div className={styles['result-text']}>
-                  已{resultPopupType === 1 ? '上架' : '下架'}
+              ) : (
+                <div className={styles['result']}>
+                  <i
+                    className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
+                      styles[resultPopupType === 1 ? 'up' : 'down']
+                    }`}
+                  />
+                  <div className={styles['result-text']}>
+                    已{resultPopupType === 1 ? '上架' : '下架'}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }
