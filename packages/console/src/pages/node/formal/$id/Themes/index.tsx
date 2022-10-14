@@ -300,33 +300,6 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
 
-                                    if (!i.hasPolicy) {
-                                      fConfirmModal({
-                                        message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
-                                        okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
-                                        cancelText: FI18n.i18nNext.t('btn_cancel'),
-                                        onOk() {
-                                          // onDelete(bp.theKey);
-                                          self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
-                                        },
-                                      });
-                                      return;
-                                    }
-
-                                    if (i.policies.length === 0) {
-                                      fConfirmModal({
-                                        // message: '需要先启用策略',
-                                        message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
-                                        okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
-                                        cancelText: FI18n.i18nNext.t('btn_cancel'),
-                                        onOk() {
-                                          // onDelete(bp.theKey);
-                                          self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
-                                        },
-                                      });
-                                      return;
-                                    }
-
                                     if (!i.isAuth) {
                                       // fMessage(F)
                                       fMessage(i.authErrorText, 'error');
@@ -347,6 +320,34 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                       okText: FI18n.i18nNext.t('btn_activate_theme'),
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
                                       onOk() {
+
+                                        if (!i.hasPolicy) {
+                                          fConfirmModal({
+                                            message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+                                            okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
+                                            onOk() {
+                                              // onDelete(bp.theKey);
+                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
+                                            },
+                                          });
+                                          return;
+                                        }
+
+                                        if (i.policies.length === 0) {
+                                          fConfirmModal({
+                                            // message: '需要先启用策略',
+                                            message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+                                            okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
+                                            onOk() {
+                                              // onDelete(bp.theKey);
+                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
+                                            },
+                                          });
+                                          return;
+                                        }
+
                                         dispatch<OnActiveAction>({
                                           type: 'nodeManagerPage/onActive',
                                           payload: {
