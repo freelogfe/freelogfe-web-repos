@@ -6,15 +6,18 @@ import {
   IEditorConfig,
   Boot,
   IModuleConf,
+  IDomEditor,
+  DomEditor,
 } from '@wangeditor/editor';
-import {
-  audioMenuConfig,
-  importMenuConfig,
-  pictureMenuConfig,
-  policyMenuConfig,
-  textMenuConfig,
-  videoMenuConfig,
-} from './custom-buttons';
+import { audioMenuBtnConfig } from '../custom/menu-button/audio';
+import { imageMenuBtnConfig } from '../custom/menu-button/image';
+import { importDocumentMenuBtnConfig } from '../custom/menu-button/import-document';
+import { policyMenuBtnConfig } from '../custom/menu-button/policy';
+import { documentMenuBtnConfig } from '../custom/menu-button/document';
+import { videoMenuBtnConfig } from '../custom/menu-button/video';
+import { videoDomConfig } from '../custom/dom/video';
+import { audioDomConfig } from '../custom/dom/audio';
+import { resourceDomConfig } from '../custom/dom/resource';
 
 /** 工具栏配置 */
 export const toolbarConfig: Partial<IToolbarConfig> = {
@@ -29,18 +32,19 @@ export const toolbarConfig: Partial<IToolbarConfig> = {
     'bulletedList',
     'numberedList',
     '|',
+    'insertVideo',
     'insertLink',
     'insertTable',
     'code',
     'codeBlock',
     'divider',
-    'picture',
+    'image',
     'video',
     'audio',
-    'text',
+    'document',
     '|',
     'policy',
-    'import',
+    'importDocument',
   ],
 };
 
@@ -55,15 +59,32 @@ export const editorConfig: Partial<IEditorConfig> = {
   },
 };
 
+const plugin = <T extends IDomEditor>(editor: T) => {
+  const { isVoid } = editor;
+  const newEditor = editor;
+
+  newEditor.isVoid = (elem) => {
+    const type = DomEditor.getNodeType(elem);
+    if (['video', 'audio', 'resource'].includes(type)) return true;
+    return isVoid(elem);
+  };
+
+  return newEditor;
+};
+
 const customModule: Partial<IModuleConf> = {
   menus: [
-    pictureMenuConfig,
-    videoMenuConfig,
-    audioMenuConfig,
-    textMenuConfig,
-    policyMenuConfig,
-    importMenuConfig,
+    imageMenuBtnConfig,
+    videoMenuBtnConfig,
+    audioMenuBtnConfig,
+    documentMenuBtnConfig,
+    policyMenuBtnConfig,
+    importDocumentMenuBtnConfig,
   ],
+
+  editorPlugin: plugin,
+
+  renderElems: [videoDomConfig, audioDomConfig, resourceDomConfig],
 };
 
 Boot.registerModule(customModule);
