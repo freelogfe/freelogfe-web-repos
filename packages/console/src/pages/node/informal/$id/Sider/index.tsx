@@ -3,12 +3,13 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
-import { router, withRouter } from 'umi';
+import { history, withRouter } from 'umi';
 import { OnMountPageSiderAction } from '@/models/informalNodeManagerPage';
 import { RouteComponentProps } from 'react-router';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -36,7 +37,15 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
     <div className={styles.title}>
       <label>test</label>
       &nbsp;&nbsp;
-      <span>{informalNodeManagerPage.node_Name}</span>
+      <FTooltip title={informalNodeManagerPage.node_Name} placement={'top'}>
+      <span style={{
+        display: 'inline-block',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        maxWidth: 155,
+      }}>{informalNodeManagerPage.node_Name}</span>
+      </FTooltip>
     </div>
     <div style={{ height: 15 }} />
     <Space size={5} className={styles.url}>
@@ -54,7 +63,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
         onClick={() => {
-          router.push(FUtil.LinkTo.informNodeManagement({
+          history.push(FUtil.LinkTo.informNodeManagement({
             nodeID: informalNodeManagerPage.node_ID,
             showPage: 'exhibit',
           }));
@@ -64,7 +73,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'theme' ? styles.activated : ''}
         onClick={() => {
-          router.push(FUtil.LinkTo.informNodeManagement({
+          history.push(FUtil.LinkTo.informNodeManagement({
             nodeID: informalNodeManagerPage.node_ID,
             showPage: 'theme',
           }));
@@ -74,7 +83,7 @@ function Sider({ match, dispatch, informalNodeManagerPage }: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'mappingRule' ? styles.activated : ''}
         onClick={() => {
-          router.push(FUtil.LinkTo.informNodeManagement({
+          history.push(FUtil.LinkTo.informNodeManagement({
             nodeID: informalNodeManagerPage.node_ID,
             showPage: 'mappingRule',
           }));

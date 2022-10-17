@@ -1,23 +1,10 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-// import {
-//   formatDate,
-//   formatTime,
-//   formatRelative,
-//   formatNumber,
-//   formatPlural,
-//   formatMessage,
-//   formatHTMLMessage,
-//   setLocale,
-//   getLocale,
-// } from 'umi-plugin-react/locale';
-// import { History } from 'history';
 import { ConnectState } from '@/models/connect';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface GlobalModelState {
-  // locale: 'zh-CN' | 'en-US' | 'pt-BR';
-  // route: any;
   routerHistories: {
     hash: string;
     key: string;
@@ -34,11 +21,6 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<GlobalModelState>;
 }
 
-// export interface SetLocaleAction extends AnyAction {
-//   type: 'global/setLocale';
-//   payload: GlobalModelState['locale'];
-// }
-
 export interface PushRouterAction extends AnyAction {
   type: 'pushRouter';
   payload: GlobalModelState['routerHistories'][number];
@@ -48,7 +30,6 @@ export interface GlobalModelType {
   namespace: 'global';
   state: GlobalModelState;
   effects: {
-    // setLocale: (action: SetLocaleAction, effects: EffectsCommandMap) => void;
     pushRouter: (action: PushRouterAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -70,14 +51,14 @@ const Model: GlobalModelType = {
   },
   effects: {
     // * setLocale({ payload }: SetLocaleAction, { call, put }: EffectsCommandMap) {
-      // yield call(setLocale, payload);
-      // // yield call(window.localStorage.setItem, 'local', payload);
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     locale: payload,
-      //   },
-      // });
+    // yield call(setLocale, payload);
+    // // yield call(window.localStorage.setItem, 'local', payload);
+    // yield put<ChangeAction>({
+    //   type: 'change',
+    //   payload: {
+    //     locale: payload,
+    //   },
+    // });
     // },
     * pushRouter({ payload }: PushRouterAction, { put, select }: EffectsCommandMap) {
       const { routerHistories } = yield select(({ global }: ConnectState) => ({
@@ -111,6 +92,10 @@ const Model: GlobalModelType = {
       //     payload: listener as any,
       //   });
       // });
+      // console.log('ppppppprrrrrrr09iojsfksdlfjlk');
+      FI18n.i18nNext.ready().then(() => {
+        // console.log('RRRRRDDDDDDD09uoijsdklf');
+      });
     },
     historyListen({ dispatch, history }) {
       history.listen((listener) => {

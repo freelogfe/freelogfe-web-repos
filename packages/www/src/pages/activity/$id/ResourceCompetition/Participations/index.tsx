@@ -188,11 +188,15 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
-            disabled={!activityDetailsPage.withinValidity}
+            disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
-          >立即参赛</FComponentsLib.FRectBtn>
+          >{activityDetailsPage.timeValidity === 'NotStart'
+            ? '即将开始'
+            : activityDetailsPage.timeValidity === 'Finished'
+              ? ' 已经结束'
+              : '立即参赛'}</FComponentsLib.FRectBtn>
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
@@ -277,11 +281,15 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FRectBtn
             type='primary'
             style={{ height: 50, padding: '0 50px' }}
-            disabled={!activityDetailsPage.withinValidity}
+            disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
-          >立即参赛</FComponentsLib.FRectBtn>
+          >{activityDetailsPage.timeValidity === 'NotStart'
+            ? '即将开始'
+            : activityDetailsPage.timeValidity === 'Finished'
+              ? ' 已经结束'
+              : '立即参赛'}</FComponentsLib.FRectBtn>
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {

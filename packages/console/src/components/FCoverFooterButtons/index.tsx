@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
-import { FDelete, FEdit } from '@/components/FIcons';
+import { FDelete } from '@/components/FIcons';
 import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
 import FCancelCollect from '@/components/FIcons/FCancelCollect';

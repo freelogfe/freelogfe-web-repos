@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import Sign from './Sign';
 import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
@@ -20,12 +21,12 @@ import SignPage from './SignPage';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 import FResultTip from '@/components/FResultTip';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import { FShare } from '@/components/FShare';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -79,7 +80,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             // h2={'主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。'}
             btnText={'返回首页'}
             onClickBtn={() => {
-              router.push(FUtil.LinkTo.dashboard());
+              history.push(FUtil.LinkTo.dashboard());
             }}
           />
         </div>
@@ -98,28 +99,36 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
         <div className={styles.header}>
           <Space size={10}>
             <label className={styles.resourceType}>
-              {resourceDetailPage.resource_Info?.type || ''}
+              {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
             </label>
             <FComponentsLib.FTitleText
-              style={{ width: 650 }}
+              style={{ width: 500 }}
               singleRow
               text={resourceDetailPage.resource_Info?.name || ''}
             />
           </Space>
           <div className={styles.btns}>
             <FShare
-              type="resource"
+              type='resource'
               title={resourceDetailPage.resource_Info?.name || ''}
               url={window.location.href}
             >
-              <FComponentsLib.FTextBtn type="default" className={styles.btn}>
+              <FComponentsLib.FTextBtn
+                type='default'
+                className={styles.btn}
+                onClick={async () => {
+                  await FServiceAPI.Activity.pushMessageTask({
+                    taskConfigCode: 'TS000024',
+                  });
+                }}
+              >
                 <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 <div style={{ width: 5 }} />
                 <span>分享</span>
               </FComponentsLib.FTextBtn>
             </FShare>
             <FComponentsLib.FTextBtn
-              type="default"
+              type='default'
               className={styles.favoriteBtn}
               onClick={() =>
                 dispatch<OnClickCollectionAction>({
@@ -157,7 +166,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                     .reverse()
                     .map((v) => ({ value: v }))}
                   onChange={(value) => {
-                    router.push(
+                    history.push(
                       FUtil.LinkTo.resourceDetails({
                         resourceID: resourceDetailPage.resource_ID,
                         version: value,
@@ -171,7 +180,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
 
               <FComponentsLib.FContentText
                 text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
-                type="negative"
+                type='negative'
               />
             </div>
 

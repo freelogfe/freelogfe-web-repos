@@ -15,6 +15,7 @@ interface NoticeStates {
     id: string;
     title: string;
     href: string;
+    date: string;
   }[];
 }
 
@@ -41,6 +42,7 @@ function Notice({}: NoticeProps) {
         href: d.linkActivityId
           ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
           : d.link,
+        date: '0000-00-00'
       };
     }));
   });
@@ -62,7 +64,7 @@ function Notice({}: NoticeProps) {
             <span>{n.title}</span>
           </Space>
           <Space size={15}>
-            <span>2020/12/23</span>
+            {/*<span>{n.date}</span>*/}
             <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {

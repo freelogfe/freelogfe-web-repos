@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
-import { FWarning } from '@/components/FIcons';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
@@ -12,7 +12,7 @@ import {
   OnMount_ThemePage_Action,
   OnUnmount_ThemePage_Action,
 } from '@/models/nodeManagerPage';
-import { router, RouterTypes, withRouter } from 'umi';
+import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -34,7 +34,7 @@ interface ThemesProps {
   nodeManagerPage: NodeManagerModelState;
 }
 
-function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps) {
+function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
   const [themeList, setThemeList] = React.useState<any[]>([]);
   const [emptyTheme, setEmptyTheme] = React.useState<any>(null);
   const [activeId, setActiveId] = React.useState<null | string>(null);
@@ -66,7 +66,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
 
   /** 浏览更多主题 */
   const viewMoreTheme = () => {
-    router.push(FUtil.LinkTo.market({ query: '主题' }));
+    history.push(FUtil.LinkTo.market({ query: '主题' }));
   };
 
   /** 激活主题 */
@@ -143,7 +143,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
       <FLeftSiderLayout
         // header={''}
         sider={<Sider />}
-        type="empty"
+        type='empty'
       >
         {nodeManagerPage.theme_ListState === 'noData' ? (
           // (<FNoDataTip
@@ -186,7 +186,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
                       <div className={styles['right-area']}>
                         <div className={styles['title-area']}>
                           <div className={styles.title}>{item.resourceName.split('/')[1]}</div>
-                          <FTooltip title="查看资源详情">
+                          <FTooltip title='查看资源详情'>
                             <i
                               className={`freelog fl-icon-chakanziyuan ${styles['view-detail']}`}
                               onClick={() => toResourceDetail(item.resourceId)}
@@ -235,10 +235,10 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
         ) : (
           <>
             <div className={styles.header}>
-              <FComponentsLib.FTitleText type="h1" text={'主题管理'} />
+              <FComponentsLib.FTitleText type='h1' text={'主题管理'} />
               <FInput
                 className={styles.input}
-                theme="dark"
+                theme='dark'
                 debounce={300}
                 onDebounceChange={(value) => {
                   dispatch<OnChangeThemeAction>({
@@ -273,7 +273,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
 
                           {!i.isAuth && (
                             <FTooltip title={i.authErrorText}>
-                              <FWarning />
+                              <FComponentsLib.FIcons.FWarning />
                             </FTooltip>
                           )}
                         </Space>
@@ -372,9 +372,9 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
                         )}
                       </div>
                       <div style={{ height: 12 }} />
-                      <FComponentsLib.FContentText text={i.title} singleRow type="highlight" />
+                      <FComponentsLib.FContentText text={i.title} singleRow type='highlight' />
                       <div style={{ height: 6 }} />
-                      <FComponentsLib.FContentText type="additional1" text={'展示版本 ' + i.version} />
+                      <FComponentsLib.FContentText type='additional1' text={'展示版本 ' + i.version} />
                       <div style={{ height: 15 }} />
                       <div className={styles.bottom}>
                         <div className={styles.polices}>
@@ -388,7 +388,7 @@ function Themes({ match, dispatch, nodeManagerPage }: RouterTypes & ThemesProps)
                               })}
                             />
                           ) : (
-                            <FComponentsLib.FContentText text={'暂无策略…'} type="additional2" />
+                            <FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />
                           )}
                         </div>
                       </div>

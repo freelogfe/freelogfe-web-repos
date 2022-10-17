@@ -8,38 +8,18 @@ import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
-// import * as AHooks from 'ahooks';
-// import { FServiceAPI } from '@freelog/tools-lib';
+import { connect } from 'dva';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 
 interface ResourceCompetitionProps {
-  // activeID: string;
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement {
+function ResourceCompetition({ activityDetailsPage }: ResourceCompetitionProps): React.ReactElement {
 
-  // const [isExpiryDate, set_isExpiryDate] = React.useState<any>(null);
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
 
-  // AHooks.useMount(async () => {
-  //   const params: Parameters<typeof FServiceAPI.Activity.find4Client>[0] = {
-  //     _id: activeID,
-  //   };
-  //   const { ret, errCode, data } = await FServiceAPI.Activity.find4Client(params);
-  //   // console.log(data, 'data90opijklm23rqwf089IOSA;KLFSADZFDJLKL');
-  //   if (data.persist) {
-  //     set_isExpiryDate(true);
-  //     return;
-  //   }
-  //   const nowTimestamp: number = Date.now();
-  //   if (new Date(data.startTime).getTime() <= nowTimestamp && new Date(data.limitTime).getTime() >= nowTimestamp) {
-  //     set_isExpiryDate(true);
-  //     return;
-  //   }
-  //   set_isExpiryDate(false);
-  // });
-
   return (<div className={styles.style}>
-    {/*<FLoadingTip height={window.innerHeight - 170} />*/}
     <Banner1 />
     <div style={{ height: 266 }} />
     <Participations
@@ -101,7 +81,7 @@ function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement 
             <div className={styles.circle} />
             <div style={{ width: 15 }} />
             <div className={styles.text}>
-              <span>同一用户限领3次资源创建奖励，同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。</span>
+              <span>同一用户限领3次资源发布奖励，同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。</span>
             </div>
           </div>
           <div style={{ height: 20 }} />
@@ -138,7 +118,7 @@ function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement 
             <div className={styles.circle} />
             <div style={{ width: 15 }} />
             <div className={styles.text}>
-              <span>参赛漫画资源需选择添加 <b>#内测集结！漫画家召集令#</b> 活动标签，且需大于8张图片内容，以JPG、PNG长图格式创建发行；小说资源需选择添加 <b>#内测集结！小说家召集令#</b> 活动标签，内容需大于1500个字，以TXT格式创建发行。官方将根据资源所添加的活动标签进行对应奖项评选，如未添加活动标签将不计入活动之中。</span>
+              <span>参赛漫画资源需选择资源类型“图片-插画”，同时添加 <b>#内测集结！漫画家召集令#</b> 活动标签，且需大于8张图片内容，以JPG、PNG长图格式创建发行；小说资源需选择资源类型“阅读-文章”，同时添加 <b>#内测集结！小说家召集令#</b> 活动标签，内容需大于1500个字，以TXT格式创建发行。官方将根据资源所添加的活动标签进行对应奖项评选，如未添加活动标签将不计入活动之中。</span>
             </div>
           </div>
           <div style={{ height: 20 }} />
@@ -180,4 +160,6 @@ function ResourceCompetition({ }: ResourceCompetitionProps): React.ReactElement 
   </div>);
 }
 
-export default ResourceCompetition;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(ResourceCompetition);

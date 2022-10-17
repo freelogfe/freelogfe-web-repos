@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
-import {router} from 'umi';
+import {history} from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
   // ChangeStatesAction,
@@ -45,7 +45,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       height={'calc(100vh - 140px)'}
       tipText={'未收藏任何资源'}
       btnText={'前往资源市场'}
-      onClick={() => router.push(FUtil.LinkTo.market())}
+      onClick={() => history.push(FUtil.LinkTo.market())}
     />);
   }
 

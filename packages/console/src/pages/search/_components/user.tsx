@@ -1,9 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import CardContainer from './resource/cardContainer';
-import ResourceImage from './resource/image';
-import ResourceInfo from './resource/info';
-import PolicyTag from './resource/policyTag';
 interface ResourceListProps {
   onClick?: any;
   diabled?: boolean;

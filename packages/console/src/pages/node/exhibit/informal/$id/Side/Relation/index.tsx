@@ -4,6 +4,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
+import { FUtil } from '@freelog/tools-lib';
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -48,7 +49,7 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
       />
     </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
-    <div style={{ fontSize: 12, color: '#666' }}>{informExhibitInfoPage.side_Resource_Relation?.type}</div>
+    <div style={{ fontSize: 12, color: '#666' }}>{FUtil.Format.resourceTypeKeyArrToResourceType(informExhibitInfoPage.side_Resource_Relation?.type || [])}</div>
   </div>);
 }
 

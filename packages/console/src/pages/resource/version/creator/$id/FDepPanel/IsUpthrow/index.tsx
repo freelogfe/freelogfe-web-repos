@@ -1,11 +1,12 @@
 import * as React from 'react';
-import styles from "./index.less";
-import {Radio, Space} from "antd";
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/resourceVersionCreatorPage";
-import {FInfo} from "@/components/FIcons";
-import FTooltip from "@/components/FTooltip";
+import styles from './index.less';
+import { Radio, Space } from 'antd';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/resourceVersionCreatorPage';
+import { FInfo } from '@/components/FIcons';
+import FTooltip from '@/components/FTooltip';
 // import FUtil1 from "@/utils";
 import { FI18n } from '@freelog/tools-lib';
 
@@ -14,7 +15,7 @@ interface IsUpthrowProps {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
+function IsUpthrow({ resourceVersionCreatorPage, dispatch }: IsUpthrowProps) {
   const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
   if (!resource) {
@@ -33,7 +34,7 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
           return {
             ...dds,
             upthrow: bool,
-          }
+          };
         }),
         dataIsDirty: true,
       },
@@ -46,39 +47,39 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
     <Space size={20}>
       <Space size={2}>
         <Radio
-          style={{lineHeight: '16px', color: 'red'}}
+          style={{ lineHeight: '16px', color: 'red' }}
           checked={resource.upthrow}
           disabled={resource.upthrowDisabled && !resource.upthrow}
           onClick={() => onChangeIsUpthrow(true)}
         />
-        <span style={{color: '#666'}}>上抛</span>
+        <span style={{ color: '#666' }}>上抛</span>
       </Space>
 
       <FTooltip title={FI18n.i18nNext.t('info_upcast')}>
-        <div><FInfo/></div>
+        <div><FInfo /></div>
       </FTooltip>
     </Space>
 
-    <div style={{height: 15}}/>
+    <div style={{ height: 15 }} />
     {/*{(!resource.upthrowDisabled || !resource.upthrow) && (*/}
     <Space size={20}>
       <Space size={2}>
         <Radio
-          style={{lineHeight: '16px'}}
+          style={{ lineHeight: '16px' }}
           checked={!resource.upthrow}
           disabled={resource.upthrowDisabled}
           onClick={() => onChangeIsUpthrow(false)}
         />
-        <span style={{color: '#666'}}>{FI18n.i18nNext.t('sign_contract')}</span>
+        <span style={{ color: '#666' }}>{FI18n.i18nNext.t('sign_contract')}</span>
       </Space>
       <FTooltip title={FI18n.i18nNext.t('info_sign_contract')}>
-        <div><FInfo/></div>
+        <div><FInfo /></div>
       </FTooltip>
 
     </Space>
   </div>);
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(IsUpthrow);

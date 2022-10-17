@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Modal} from "antd";
-import {router} from "umi";
-import FNoDataTip from "@/components/FNoDataTip";
-import {FUtil} from '@freelog/tools-lib';
+// import {Modal} from "antd";
+import { history } from 'umi';
+import FNoDataTip from '@/components/FNoDataTip';
+import { FUtil } from '@freelog/tools-lib';
 
 interface Error404Props {
 
@@ -17,7 +17,7 @@ function Error404({}: Error404Props) {
       tipText={'404,页面不见了'}
       btnText={'将前往首页'}
       onClick={() => {
-        router.replace(FUtil.LinkTo.market());
+        history.replace(FUtil.LinkTo.market());
       }}
     />
   </div>);

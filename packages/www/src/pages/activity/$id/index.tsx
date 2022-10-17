@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import FLoadingTip from '@/components/FLoadingTip';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import {Dispatch} from 'redux';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
 import InviteFriend from './InviteFriend';
+import Questionnaire from './Questionnaire';
 import * as AHooks from 'ahooks';
 import {
   OnMountPageAction,
@@ -20,15 +22,7 @@ import { Helmet } from 'react-helmet';
 interface ActivityProps extends IRouteComponentProps {
   dispatch: Dispatch;
   activityDetailsPage: ActivityDetailsPageModelState;
-
-  // match: {
-  //   params: {
-  //     id: string;
-  //   }
-  // };
 }
-
-
 
 function Activity({
                     dispatch,
@@ -40,7 +34,8 @@ function Activity({
   const Activities: any = {
     'ResourceCompetition': (<ResourceCompetition />),
     'play-newer': (<PlayNewer />),
-    'invite-friend': (<InviteFriend/>)
+    'invite-friend': (<InviteFriend/>),
+    'Questionnaire': (<Questionnaire/>)
   };
 
   AHooks.useMount(() => {

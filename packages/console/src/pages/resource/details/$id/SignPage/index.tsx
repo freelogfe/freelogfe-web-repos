@@ -5,7 +5,7 @@ import { Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
-import { router } from 'umi';
+import { history } from 'umi';
 import {
   ChangeAction,
   OnChangeAndVerifySignExhibitNameAction,
@@ -33,7 +33,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
   const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
 
   if (!selectedNode) {
-    router.goBack();
+    history.goBack();
     return null;
   }
 

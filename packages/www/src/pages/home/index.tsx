@@ -8,17 +8,37 @@ import Banner2 from '@/pages/home/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil, FServiceAPI } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface HomePageProps {
 
 }
 
 function HomePage({}: HomePageProps) {
+
+  const [topLink, set_topLink] = React.useState<string>(FI18n.i18nNext.t('beta_event_guideline_contest_link'));
+
+  // AHooks.useMount(async () => {
+  //   const { data } = await FServiceAPI.Activity.adsList({
+  //     place: 1,
+  //   });
+  //   // console.log(data, 'data09ioweskjfsldkfjsldkfjdslkjl');
+  //   if (!data || !data.dataList || data.dataList.length === 0) {
+  //     return;
+  //   }
+  //   set_topLink(data.dataList[0].link);
+  // });
+
   return (<div>
     <div className={styles.banner0}>
       <span className={styles.banner0White}>3000元现金奖励等你赢取！内测期间参与</span>
-      <a className={styles.banner0Red}>资源创作大赛</a>
+      <a
+        className={styles.banner0Red}
+        target={'_blank'}
+        // href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}
+        href={topLink}
+      >资源创作大赛</a>
       <span className={styles.banner0White}>，最低可领15元现金奖励，参与排名更有机会赢取3000元现金奖励！</span>
       <FPentagram style={{ color: '#F3E574' }} />
     </div>

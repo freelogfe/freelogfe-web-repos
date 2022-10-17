@@ -51,53 +51,57 @@ export default defineConfig({
       component: '@/pages/freeze/index',
       title: '用户封禁 - Freelog',
     },
-    // {
-    //   exact: true,
-    //   path: '/result/resetPassword/success',
-    //   title: '重置密码成功',
-    //   component: '@/pages/result/resetPassword/success/index',
-    // },
-    // {
-    //   path: '/result',
-    //   routes: [
-    //     {
-    //       path: 'resetPassword',
-    //       route: [
-    //         {
-    //           exact: true,
-    //           path: 'success',
-    //           title: '重置密码成功',
-    //           component: '@/pages/result/resetPassword/success/index',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      exact: true,
+      path: '/result/binding',
+      component: '@/pages/result/binding/index',
+      title: '绑定成功 - Freelog',
+    },
     {
       path: '/logged',
-      component: '@/pages/logged/index',
+      // wrappers: ['@/layouts/FBaseLayout/index'],
+      // component: '@/pages/logged/index',
+      component: '@/layouts/FBaseLayout/index',
       routes: [
         { exact: true, path: '.', redirect: '/logged/wallet' },
         {
           exact: true,
           path: 'wallet',
+          wrappers: ['@/pages/logged/index'],
           component: '@/pages/logged/wallet/index',
           title: '钱包 - Freelog',
         },
         {
           exact: true,
+          path: 'reward',
+          wrappers: ['@/pages/logged/index'],
+          component: '@/pages/logged/reward/index',
+          title: '活动奖励 - Freelog',
+        },
+        {
+          exact: true,
           path: 'contract',
+          wrappers: ['@/pages/logged/index'],
           component: '@/pages/logged/contract/index',
           title: '合约 - Freelog',
         },
         {
           exact: true,
           path: 'setting',
+          wrappers: ['@/pages/logged/index'],
           component: '@/pages/logged/setting/index',
           title: '设置 - Freelog',
         },
+        {
+          exact: true,
+          path: 'binding',
+          component: '@/pages/logged/binding/index',
+          title: '绑定 - Freelog',
+        },
+        { component: '@/pages/exception/404/index' },
       ],
     },
+    { component: '@/pages/exception/404/index' },
   ],
   // dynamicImport: {
   //   loading: '@/components/Loading',
@@ -119,4 +123,5 @@ export default defineConfig({
     },
   },
   hash: true,
+  favicon: '//static.freelog.com/static/favicon.ico',
 });

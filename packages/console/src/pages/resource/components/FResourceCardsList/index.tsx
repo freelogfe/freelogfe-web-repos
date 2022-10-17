@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Button, Space } from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
-import { router } from 'umi';
+import { history } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -236,7 +236,7 @@ function FResourceCardsList({
             {showGotoCreateBtn && (
               <div
                 className={'flex-column-center mb-20 m-10 ' + styles.createCard}
-                onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
+                onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
               >
                 <div className={'flex-column-center ' + styles.createButton}>
                   <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />

@@ -83,7 +83,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       key: 'type',
       width: 140,
       render(text, record) {
-        console.log(record, 'record');
+        // console.log(record, 'record890wieojfsdifjsdlkfjsd;lkfjasdlf');
         if (record.type.length === 0) {
           return (<FComponentsLib.FContentText type='negative' text={'未设置类型'} />);
         }

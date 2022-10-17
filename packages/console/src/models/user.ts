@@ -3,10 +3,8 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import userPermission from '@/permissions/UserPermission';
-import { router } from 'umi';
-import { FUtil } from '@freelog/tools-lib';
+import { history } from 'umi';
 
 export interface UserModelState {
   info: null | {
@@ -74,7 +72,7 @@ const Model: MarketModelType = {
       // console.log('!!!!!#423423423423');
       // userPermission.getUserInfo();
       // const promise = () => userPermission.getUserInfo();
-      const data = yield call(userPermission.getUserInfo);
+      const data: UserModelState['info'] = yield call(userPermission.getUserInfo);
       // console.log(data, '#######@@@@@data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
@@ -142,9 +140,12 @@ const Model: MarketModelType = {
         userPermission.checkUrl(history.location.pathname)
           .then(({ code, goToUrl }) => {
             if (code === 'ERR_NOT_ALPHA_TEST' && !!goToUrl) {
-              router.replace(goToUrl);
+              history.replace(goToUrl);
             }
             if (code === 'ERR_FREEZE' && !!goToUrl) {
+              window.location.replace(goToUrl);
+            }
+            if (code === 'ERR_NOT_LOGIN' && !!goToUrl) {
               window.location.replace(goToUrl);
             }
           });

@@ -13,7 +13,7 @@ export interface ActivityDetailsPageModelState {
 
   startTime: string | null;
   endTime: string | null;
-  withinValidity: boolean;
+  timeValidity: 'NotStart' | 'Validity' | 'Finished';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -55,7 +55,7 @@ const initStates: ActivityDetailsPageModelState = {
 
   startTime: null,
   endTime: null,
-  withinValidity: false,
+  timeValidity: 'Validity',
 };
 
 const Model: ActivityDetailsPageModelType = {
@@ -90,7 +90,13 @@ const Model: ActivityDetailsPageModelType = {
 
           startTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
           endTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
-          withinValidity: data.persist || (new Date(data.startTime).getTime() <= nowTimestamp && new Date(data.limitTime).getTime() >= nowTimestamp),
+          timeValidity: data.persist ?
+            'Validity'
+            : nowTimestamp < new Date(data.startTime).getTime()
+              ? 'NotStart'
+              : nowTimestamp > new Date(data.limitTime).getTime()
+                ? 'Finished'
+                : 'Validity',
         },
       });
     },

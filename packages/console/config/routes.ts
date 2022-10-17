@@ -155,5 +155,4 @@ export default [
     ],
   },
   { component: '../pages/exception/404' },
-
-];
+] as const;

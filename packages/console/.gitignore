@@ -4,7 +4,6 @@
 /node_modules
 /npm-debug.log*
 /yarn-error.log
-#/yarn.lock
 /package-lock.json
 
 # production
@@ -14,5 +13,8 @@
 .DS_Store
 
 # umi
-.umi
-.umi-production
+/src/.umi
+/src/.umi-production
+/src/.umi-test
+/src/pages/.umi
+/.env.local

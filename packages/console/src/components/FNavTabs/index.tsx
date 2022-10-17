@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FLink from '@/components/FLink';
+// import FLink from '@/components/FLink';
 import { Link } from 'umi';
 
 interface FNavTabsProps {

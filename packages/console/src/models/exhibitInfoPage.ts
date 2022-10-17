@@ -4,7 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -96,7 +96,7 @@ export interface ExhibitInfoPageModelState {
   } | null;
   side_ResourceID: string;
   side_ResourceName: string;
-  side_ResourceType: string;
+  side_ResourceType: string[];
   side_ResourceCover: string;
 
   policyEditorVisible: boolean;
@@ -335,7 +335,7 @@ const initStates: ExhibitInfoPageModelState = {
   side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',
   side_ResourceName: '',
-  side_ResourceType: '',
+  side_ResourceType: [],
   side_ResourceCover: '',
 
   policyEditorVisible: false,
@@ -393,7 +393,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data_PresentableDetails || data_PresentableDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
-        router.replace(FUtil.LinkTo.exception403({}));
+        history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 
@@ -405,7 +405,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data3, 'data90j23rlkfjasdfa');
 
       if ((data_NodeDetails.status & 4) === 4) {
-        router.replace(FUtil.LinkTo.nodeFreeze({ nodeID: data_PresentableDetails.nodeId }));
+        history.replace(FUtil.LinkTo.nodeFreeze({ nodeID: data_PresentableDetails.nodeId }));
         return;
       }
 
@@ -507,6 +507,7 @@ const Model: ExhibitInfoPageModelType = {
                   status: d5.onlineStatus,
                 };
               });
+              // console.log(r, 'r90ieeojflksdjflskdjflsdkjflsdkj');
               // console.log(r, 'rrrrr09234j5rlkjsdflkfjsldfjl');
               return {
                 id: r.resourceId,
@@ -527,11 +528,11 @@ const Model: ExhibitInfoPageModelType = {
                     exhibitOpen: false,
                   })),
                 terminatedContractIDs: r.terminatedContractIDs,
-                policies: r.policies
+                policies: r.status === 1 ? r.policies
                   .filter((p) => {
                     // console.log(p, 'p90234');
                     return p.status === 1;
-                  }),
+                  }) : [],
               };
             }),
 
@@ -650,7 +651,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
-        fMessage(exhibitInfoPage.side_ResourceType === 'theme' ? '激活失败' : '上线失败', 'error');
+        fMessage(exhibitInfoPage.side_ResourceType.includes('主题') ? '激活失败' : '上线失败', 'error');
         return;
       }
       yield put<FetchInfoAction>({
@@ -680,7 +681,11 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       // console.log(params, 'params2093uiksdjflsdkjl');
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      const { data, ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });

@@ -4,21 +4,14 @@ import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import categoryData from '@/utils/category';
 import styles from './index.less';
 import useUrlState from '@ahooksjs/use-url-state';
-// import { router } from 'umi';
 import {
-  OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
-  OnMountMarketPageAction,
-  // OnMountPageAction,
   OnChangeTagsAction,
   OnUnmountMarketPageAction,
-  // OnUnmountPageAction,
 } from '@/models/discoverPage';
-import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';
-// import { router } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -36,6 +29,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     first: -4,
     second: '',
   });
+
   React.useEffect(() => {
     if (category.first === -4) {
       return;
@@ -44,7 +38,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       dispatch<OnChangeTagsAction>({
         type: 'discoverPage/onChangeTags',
         payload: {
-          value: category.first === -3 ? '小说大赛' : '漫画大赛',
+          value: category.first === -3 ? '内测集结！小说家召集令' : '内测集结！漫画家召集令',
         },
       });
       return;
@@ -64,6 +58,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
       },
     });
   }, [category]);
+
   AHooks.useMount(() => {
     if (urlState.query) {
       const data: any = urlState.query.split('%');
@@ -118,9 +113,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             }}
             className={(category.first === -1 ? styles.allSelected : '') + ' ' + styles.first}
           >
-            <span className={styles.left}></span>
+            <span className={styles.left} />
             <span className={styles.text}>全部</span>
-            <span className={styles.right}></span>
+            <span className={styles.right} />
           </a>
           {categoryData.first.map((item: string, index: number) => {
             return (
@@ -143,9 +138,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
                   // + (index === categoryData.first.length - 1 ? '' : ' mr-30')
                 }
               >
-                <span className={styles.left}></span>
+                <span className={styles.left} />
                 <span className={styles.text}>{item}</span>
-                <span className={styles.right}></span>
+                <span className={styles.right} />
               </a>
             );
           })}
@@ -158,9 +153,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             }}
             className={(category.first === -2 ? styles.allSelected : '') + ' ' + styles.first}
           >
-            <span className={styles.left}></span>
-            <span className={styles.text}>#漫画大赛</span>
-            <span className={styles.right}></span>
+            <span className={styles.left} />
+            <span className={styles.text}>#内测集结！漫画家召集令</span>
+            <span className={styles.right} />
           </a>
           <a
             onClick={() => {
@@ -171,9 +166,9 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             }}
             className={(category.first === -3 ? styles.allSelected : '') + ' ' + styles.first}
           >
-            <span className={styles.left}></span>
-            <span className={styles.text}>#小说大赛</span>
-            <span className={styles.right}></span>
+            <span className={styles.left} />
+            <span className={styles.text}>#内测集结！小说家召集令</span>
+            <span className={styles.right} />
           </a>
         </div>
         {category.first > 1 ? (

@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer, WholeReadonly } from './shared';
 import { ConnectState } from '@/models/connect';
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
@@ -123,12 +123,12 @@ const Model: ResourceInfoModelType = {
       // console.log(data, 'DDDDDDDD');
 
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
-        router.replace(FUtil.LinkTo.exception403());
+        history.replace(FUtil.LinkTo.exception403());
         return;
       }
 
       if ((data.status & 2) === 2) {
-        router.replace(FUtil.LinkTo.resourceFreeze({resourceID: data.resourceId}));
+        history.replace(FUtil.LinkTo.resourceFreeze({resourceID: data.resourceId}));
         return;
       }
 
@@ -180,12 +180,13 @@ const Model: ResourceInfoModelType = {
       };
       const { data } = yield call(FServiceAPI.Resource.lookDraft, params);
       if (!data) {
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             draftData: null,
           },
         });
+        return;
       }
       yield put<ChangeAction>({
         type: 'change',

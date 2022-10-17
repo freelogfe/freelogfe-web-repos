@@ -3,7 +3,7 @@ import styles from './index.less';
 import {connect, Dispatch} from 'dva';
 import {StorageHomePageModelState} from "@/models/storageHomePage";
 import {ConnectState} from "@/models/connect";
-import { router } from 'umi';
+import { history } from 'umi';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -42,7 +42,7 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
           //     newBucketModalVisible: true,
           //   },
           // });
-          router.replace(FUtil.LinkTo.storageSpace({
+          history.replace(FUtil.LinkTo.storageSpace({
             createBucket: true,
           }));
         }}

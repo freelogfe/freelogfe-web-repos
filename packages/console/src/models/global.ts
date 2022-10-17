@@ -1,17 +1,17 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import {
-  formatDate,
-  formatTime,
-  formatRelative,
-  formatNumber,
-  formatPlural,
-  formatMessage,
-  formatHTMLMessage,
-  setLocale,
-  getLocale,
-} from 'umi-plugin-react/locale';
+// import {
+//   formatDate,
+//   formatTime,
+//   formatRelative,
+//   formatNumber,
+//   formatPlural,
+//   formatMessage,
+//   formatHTMLMessage,
+//   setLocale,
+//   getLocale,
+// } from 'umi-plugin-react/locale';
 // import { History } from 'history';
 import { ConnectState } from '@/models/connect';
 import { FI18n } from '@freelog/tools-lib';
@@ -68,7 +68,7 @@ const Model: GlobalModelType = {
   namespace: 'global',
   state: {
     globalLoading: true,
-    locale: getLocale() as GlobalModelState['locale'],
+    locale: 'zh-CN',
     route: null,
     routerHistories: [],
     // backgroundColor: '',
@@ -140,7 +140,9 @@ const Model: GlobalModelType = {
       }, false);
     },
     readyI18n({ dispatch }) {
+      // console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf##############');
       FI18n.i18nNext.ready().then(() => {
+        // console.log('RRRRRDDDDDDDDDDDw90eopijkmlsdfasdf');
         dispatch<ChangeAction>({
           type: 'change',
           payload: {

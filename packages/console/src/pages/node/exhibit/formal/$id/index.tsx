@@ -6,7 +6,8 @@ import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
   AddAPolicyAction,
@@ -17,7 +18,6 @@ import {
   // UpdateStatusAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
@@ -275,7 +275,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {
               !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
-                <span style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
+                <span
+                  style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
 
                 <FSwitch
                   disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
@@ -288,7 +289,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {!exhibitInfoPage.exhibit_IsAuth && (
               <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>
             )}
           </Space>

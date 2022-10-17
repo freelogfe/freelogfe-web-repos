@@ -337,7 +337,8 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
           {
             selectedAuthorizedContract && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 25 }} />
-              <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
+              <FComponentsLib.FTitleText
+                type='h4'>{FI18n.i18nNext.t('getauth_title_authplanavailable')}</FComponentsLib.FTitleText>
               {
                 selectedAuthorizedContract.policies.map((sacp, ind) => {
                   return (<React.Fragment key={sacp.policyId}>
@@ -439,6 +440,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     resourceName: string;
     resourceType: string;
     policies: PolicyFullInfo_Type[];
+    status: 0 | 1;
   }[] = [];
   let batchObjects: {
     objectId: string;
@@ -451,7 +453,7 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: allResourceIDs.join(','),
       isLoadPolicyInfo: 1,
-      projection: 'resourceId,resourceName,resourceType,policies',
+      projection: 'resourceId,resourceName,resourceType,policies,status',
       isTranslate: 1,
     };
     const { data }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
@@ -570,7 +572,8 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     /********* End 处理合约相关数据 *********************************************************/
 
     /************** Start 处理策略相关数据 *********************************************************/
-    const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = !theResource
+    // console.log(theResource, 'theResource90oewjlksdfjldskjl');
+    const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = (!theResource || theResource.status !== 1)
       ? []
       : theResource.policies
         .filter((thp) => {

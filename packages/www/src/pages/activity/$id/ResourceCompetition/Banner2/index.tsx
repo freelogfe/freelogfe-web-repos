@@ -27,8 +27,12 @@ function Banner2({ activityDetailsPage, onClickRuleBtn }: Banner2Props) {
             height: 50,
             padding: '0 50px',
           }}
-          disabled={!activityDetailsPage.withinValidity}
-        >立即参赛</FComponentsLib.FRectBtn>
+          disabled={activityDetailsPage.timeValidity !== 'Validity'}
+        >{activityDetailsPage.timeValidity === 'NotStart'
+          ? '即将开始'
+          : activityDetailsPage.timeValidity === 'Finished'
+          ? ' 已经结束'
+          : '立即参赛'}</FComponentsLib.FRectBtn>
         <FComponentsLib.FTextBtn
           type='primary'
           style={{ bottom: 0, left: 0, position: 'absolute' }}

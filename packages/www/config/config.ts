@@ -35,8 +35,10 @@ export default defineConfig({
           component: '@/pages/invite/index',
           title: '邀请 - Freelog',
         },
+        { component: '@/pages/exception/404/index' },
       ],
     },
+    { component: '@/pages/exception/404/index' },
   ],
   fastRefresh: {},
   devServer: {},
@@ -56,4 +58,5 @@ export default defineConfig({
   },
   hash: true,
   locale: {},
+  favicon: '//static.freelog.com/static/favicon.ico',
 });

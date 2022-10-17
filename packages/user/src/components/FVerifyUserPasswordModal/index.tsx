@@ -10,16 +10,18 @@ interface FVerifyUserPasswordModalProps {
   visible?: boolean;
 
   onCancel?(): void;
+
   actionReturn?(password: string): void;
+
   onSuccess?(data?: any): void;
 }
 
 function FVerifyUserPasswordModal({
-  visible = false,
-  onSuccess,
-  onCancel,
-  actionReturn,
-}: FVerifyUserPasswordModalProps) {
+                                    visible = false,
+                                    onSuccess,
+                                    onCancel,
+                                    actionReturn,
+                                  }: FVerifyUserPasswordModalProps) {
   const [password, set_password] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -37,16 +39,17 @@ function FVerifyUserPasswordModal({
     if (!data?.isVerifySuccessful) {
       return fMessage('密码输入错误', 'error');
     }
-    if (actionReturn) {
-      actionReturn(password);
-      return;
-    }
+    // if (actionReturn) {
+    //   actionReturn(password);
+    //   return;
+    // }
+    actionReturn && actionReturn(password);
     onSuccess && onSuccess(data);
   }
 
   return (
     <Modal
-      title="验证登陆密码"
+      title='验证登陆密码'
       visible={visible}
       onCancel={() => {
         onCancel && onCancel();
@@ -57,10 +60,10 @@ function FVerifyUserPasswordModal({
       <div className={styles.ModalContainer}>
         <div style={{ height: 15 }} />
         <div className={styles.userPassword}>
-          <FComponentsLib.FTipText type="third" text={'用户登录密码'} />
+          <FComponentsLib.FTipText type='third' text={'用户登录密码'} />
           <FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
-            type="primary"
+            type='primary'
             onClick={() => {
               const path: string = FUtil.LinkTo.retrieveUserPassword();
               window.open(path);
@@ -76,8 +79,8 @@ function FVerifyUserPasswordModal({
           onChange={(e) => {
             set_password(e.target.value);
           }}
-          type="password"
-          placeholder="请输入登录密码"
+          type='password'
+          placeholder='请输入登录密码'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
         />
@@ -85,7 +88,7 @@ function FVerifyUserPasswordModal({
         <div className={styles.modalFooter}>
           <FComponentsLib.FRectBtn
             disabled={password === ''}
-            type="primary"
+            type='primary'
             onClick={() => {
               verify();
             }}

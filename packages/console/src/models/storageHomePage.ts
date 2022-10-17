@@ -6,7 +6,7 @@ import moment from 'moment';
 import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -231,7 +231,7 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
-      router.replace(FUtil.LinkTo.storageSpace({
+      history.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageHomePage.newBucketName,
         createBucket: false,
       }));
@@ -253,7 +253,7 @@ const Model: StorageHomePageModelType = {
 
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
-        router.replace(FUtil.LinkTo.exception403());
+        history.replace(FUtil.LinkTo.exception403());
         return;
       }
 
@@ -302,11 +302,11 @@ const Model: StorageHomePageModelType = {
         return;
       }
       if (newBucket.length === 0) {
-        router.replace(FUtil.LinkTo.storageSpace({
+        history.replace(FUtil.LinkTo.storageSpace({
           bucketName: '',
         }));
       } else {
-        router.replace(FUtil.LinkTo.storageSpace({
+        history.replace(FUtil.LinkTo.storageSpace({
           bucketName: newBucket[0].bucketName,
         }));
       }

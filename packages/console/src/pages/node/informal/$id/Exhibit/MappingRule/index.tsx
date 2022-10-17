@@ -10,8 +10,7 @@ import {
   FMappingRuleOffline,
   FMappingRuleOnline,
   FMappingRuleReplace,
-  FMappingRuleTitle, FWarning,
-  // FMappingRuleVersion,
+  FMappingRuleTitle,
 } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
 import TypesCaption from '../../components/TypesCaption';
@@ -130,7 +129,7 @@ function MappingRule({
                 title={oaar.warningMsg}
                 placement="left"
               >
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>)
             }
 

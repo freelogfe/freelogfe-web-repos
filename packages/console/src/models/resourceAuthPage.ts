@@ -6,6 +6,7 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import fMessage from '@/components/fMessage';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -185,7 +186,7 @@ const Model: ResourceAuthPageModelType = {
         payload: {
           policies: policies,
           baseUastResources: data_ResourceDetails.baseUpcastResources || [],
-          status: data_ResourceDetails.status
+          status: data_ResourceDetails.status,
         },
       });
     },
@@ -222,12 +223,13 @@ const Model: ResourceAuthPageModelType = {
 
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             contractsAuthorized: [],
           },
         });
+        return;
       }
 
       const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
@@ -308,13 +310,13 @@ const Model: ResourceAuthPageModelType = {
             .map((c: any) => {
               return c.contractId;
             }),
-          policies: allEnabledPolicies.map((policy: any) => ({
+          policies: currentResource.status === 1 ? allEnabledPolicies.map((policy: any) => ({
             // id: policy.policyId,
             // title: policy.policyName,
             // code: policy.policyText,
             fullInfo: policy,
             allEnabledVersions: allEnabledVersions,
-          })),
+          })) : [],
         };
       });
       // console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
@@ -364,7 +366,11 @@ const Model: ResourceAuthPageModelType = {
           versions: payload,
         }],
       };
-      const { data } = yield call(FServiceAPI.Resource.batchSetContracts, params);
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.batchSetContracts, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {

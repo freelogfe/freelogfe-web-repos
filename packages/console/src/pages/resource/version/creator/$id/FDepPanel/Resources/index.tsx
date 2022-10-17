@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
   ChangeAction,
@@ -10,7 +11,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FFileSearch, FWarning } from '@/components/FIcons';
+import { FFileSearch } from '@/components/FIcons';
 import FForbid from '@/components/FIcons/FForbid';
 import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
@@ -133,9 +134,10 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
                     {rrr.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
                     {rrr.error === '' && rrr.warning === 'authException' && (
-                      <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                      <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                     {rrr.error === '' && rrr.warning === 'ownerFreeze' && (
-                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                        style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
                   <FComponentsLib.FContentText type='additional2'>
@@ -301,9 +303,10 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
               {i.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
               {i.error === '' && i.warning === 'authException' && (
-                <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
               {i.error === '' && i.warning === 'ownerFreeze' && (
-                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                  style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText type='additional2'>

@@ -741,6 +741,7 @@ const Model: SettingPageModelType = {
         file: payload.value,
       };
       const { data } = yield call(FServiceAPI.User.uploadHeadImg);
+
     },
     * onChange_Gender({ payload }: OnChange_Gender_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -795,10 +796,12 @@ const Model: SettingPageModelType = {
         intro: settingPage.profileText,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updateDetailInfo, params);
-      if (errCode !== 0) {
-        fMessage(msg, 'error');
+      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateDetailInfo, params);
+      if (ret !== 0 || errCode !== 0) {
+        return fMessage(msg, 'error');
       }
+
+      fMessage(FI18n.i18nNext.t('saved_successfully'));
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1764,7 +1767,7 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
-      console.log(payload, '@#$@#$@#422222222');
+      // console.log(payload, '@#$@#$@#422222222');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

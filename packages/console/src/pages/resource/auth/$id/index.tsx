@@ -3,7 +3,8 @@ import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import FAuthPanel from './FAuthPanel';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState,
   ResourceAuthPageModelState,
@@ -15,7 +16,7 @@ import {
   FetchAuthorizedAction,
   FetchResourceInfoAction,
 } from '@/models/resourceAuthPage';
-import { RouterTypes, withRouter } from 'umi';
+import { withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
@@ -36,7 +37,7 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
   resourceInfo: ResourceInfoModelState,
 }
 
-function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps & RouterTypes) {
+function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({

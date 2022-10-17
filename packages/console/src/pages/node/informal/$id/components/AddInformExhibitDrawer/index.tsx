@@ -602,7 +602,7 @@ async function handleList(payload: HandleListParams): Promise<{
             disabled = true;
             // disabledReason = '已被使用';
             disabledReason = FI18n.i18nNext.t('tag_added');
-          } else if (ob.resourceType === '') {
+          } else if (ob.resourceType.length === 0) {
             disabled = true;
             disabledReason = FI18n.i18nNext.t('msg_set_resource_type');
           }

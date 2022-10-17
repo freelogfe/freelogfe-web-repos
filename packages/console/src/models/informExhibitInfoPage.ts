@@ -3,7 +3,6 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI ,FI18n} from '@freelog/tools-lib';
-// import FUtil1 from '@/utils';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import {
   IGraph_Relationship_Edges,
@@ -19,7 +18,7 @@ import {
 } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
-import { router } from 'umi';
+import { history } from 'umi';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 
 const { decompile } = require('@freelog/nmr_translator');
@@ -163,7 +162,7 @@ export interface InformExhibitInfoPageModelState {
     identity: 'resource' | 'object';
     id: string;
     name: string;
-    type: string;
+    type: string[];
     cover: string;
     linkToDetails: string;
   } | null;
@@ -505,7 +504,7 @@ const Model: ExhibitInfoPageModelType = {
       const { data: testResourceDetail } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
       // console.log(testResourceDetail, 'data288282822828282822888888888888');
       if (!testResourceDetail || testResourceDetail.userId !== FUtil.Tool.getUserIDByCookies()) {
-        router.replace(FUtil.LinkTo.exception403({}));
+        history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 

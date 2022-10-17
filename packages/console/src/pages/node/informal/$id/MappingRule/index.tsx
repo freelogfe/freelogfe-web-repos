@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FImport, FExport, FCode, FExit, FWarning, FDelete } from '@/components/FIcons';
+import { FImport, FExport, FCode, FExit, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
@@ -14,7 +14,8 @@ import {
   AlterRule,
   AddRule, ActiveRule,
 } from '../components/MappingRules';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
   OnCancelRulePageLeaveAction,
@@ -40,7 +41,7 @@ import {
   // IRules,
 } from '@/models/informalNodeManagerPage';
 import FUpload from '@/components/FUpload';
-import Prompt from 'umi/prompt';
+import { Prompt } from 'umi';
 import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
@@ -50,7 +51,6 @@ import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
-import FFail from '@/components/FIcons/FFail';
 import FComponentsLib from '@freelog/components-lib';
 
 interface MappingRuleProps {
@@ -475,7 +475,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           title={rule.ruleInfo.errorMsg}
                           placement='left'
                         >
-                          <div><FFail style={{ color: '#EE4040' }} /></div>
+                          <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
                         </FTooltip>)
                       }
                       {
@@ -483,7 +483,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                           title={rule.ruleInfo.warningMsg}
                           placement='left'
                         >
-                          <div><FWarning /></div>
+                          <div><FComponentsLib.FIcons.FWarning /></div>
                         </FTooltip>)
                       }
 
@@ -543,7 +543,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                     title={ruleAction.errorMsg}
                                     placement='left'
                                   >
-                                    <div><FFail style={{ color: '#EE4040' }} /></div>
+                                    <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
                                   </FTooltip>)
                                 }
 
@@ -552,7 +552,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                                     title={ruleAction.warningMsg}
                                     placement='left'
                                   >
-                                    <div><FWarning /></div>
+                                    <div><FComponentsLib.FIcons.FWarning /></div>
                                   </FTooltip>)
                                 }
 

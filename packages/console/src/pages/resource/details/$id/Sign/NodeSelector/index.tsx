@@ -2,10 +2,10 @@ import * as React from 'react';
 import styles from './index.less';
 import { Menu, Space } from 'antd';
 import { FDown } from '@/components/FIcons';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import { OnChangeNodeSelectorAction } from '@/models/resourceDetailPage';
-import { router } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -48,6 +48,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
       <a
         href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}
+        target={'_blank'}
       >
         <Space size={10}>
           <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
@@ -76,7 +77,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
                 <FComponentsLib.FTextBtn
                   type='primary'
                   onClick={() => {
-                    router.push(FUtil.LinkTo.nodeCreator());
+                    self.open(FUtil.LinkTo.nodeCreator());
                   }}>创建节点</FComponentsLib.FTextBtn>
               </>)
               : (<>

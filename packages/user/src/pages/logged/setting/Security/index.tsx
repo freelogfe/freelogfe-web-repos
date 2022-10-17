@@ -3,7 +3,8 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import FInput from '@/components/FInput';
 import { Modal, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import {
   OnBlur_BindEmail_EmailInput_Action,
@@ -68,15 +69,17 @@ import bindSuccess from '@/assets/bind-success.png';
 import unbindSuccess from '@/assets/unbind-success.png';
 import bindWarning from '@/assets/bind-warning.png';
 import bindError from '@/assets/bind-error.png';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import { getUrlOfBindingWechat } from '@/utils';
 
 interface SecurityProps {
   dispatch: Dispatch;
   settingPage: SettingPageModelState;
 }
+
 function Security({ dispatch, settingPage }: SecurityProps) {
-  console.log(settingPage);
+  // console.log(settingPage, '9803ieosdkljflsdkfjsdlkfjs;ldfjj');
   const [verifyPassword, setVerifyPassword] = React.useState(false);
   const [bindMap, setBindMap] = React.useState<Map<string, any>>(new Map());
   // 1:绑定成功 2:绑定失败 3:此微信账号已经绑定了其他Freelog账号，请换一个账号绑定
@@ -97,6 +100,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     way: 'bind',
   });
   const [urlParams] = useUrlState<{ type: string; status: string | number }>();
+
   async function unBind(password: string) {
     setVerifyPassword(false);
     const data = await FServiceAPI.User.thirdPartyUnbind({
@@ -135,21 +139,25 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     }
     return;
   }
+
   function goBind(data: any) {
-    const redirectUri = encodeURIComponent(
-      'https://api.freelog.com/test/v2/thirdParty/weChat/bindHandle?returnUrl=http://user.testfreelog.com/logged/setting',
-    );
-    location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=wx25a849d14dd44177&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${data.state}#wechat_redirect`;
+    self.open(getUrlOfBindingWechat({
+      // returnUrl: 'http://user.testfreelog.com/logged/setting',
+      returnUrl: FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting(),
+      state: data.state,
+    }));
   }
+
   async function getBind() {
     const data = await FServiceAPI.User.thirdPartyList();
-    console.log(data);
+    // console.log(data);
     const map = new Map();
     data.data.forEach((item: any) => {
       map.set(item.thirdPartyType, { ...item });
     });
     setBindMap(map);
   }
+
   AHooks.useMount(() => {
     getBind();
     if (urlParams.type === 'wechat') {
@@ -266,26 +274,26 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     <>
       <FFormLayout>
         <FFormLayout.FBlock title={'账号安全'}>
-          <Space size={10} direction="vertical" className={styles.info}>
+          <Space size={10} direction='vertical' className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FComponentsLib.FContentText text={'用户名'} type="normal" />
+                <FComponentsLib.FContentText text={'用户名'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FComponentsLib.FContentText
                   text={settingPage.username}
-                  type="highlight"
+                  type='highlight'
                 />
               </div>
             </div>
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FComponentsLib.FContentText text={'邮箱'} type="normal" />
+                <FComponentsLib.FContentText text={'邮箱'} type='normal' />
               </div>
               {settingPage.email === '' ? (
                 <div className={styles.right}>
-                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type='third' />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
@@ -294,7 +302,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                         type: 'settingPage/onClick_BindEmailBtn',
                       });
                     }}
-                    type="primary"
+                    type='primary'
                   >
                     立即绑定
                   </FComponentsLib.FTextBtn>
@@ -303,11 +311,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 <div className={styles.right}>
                   <FComponentsLib.FContentText
                     text={settingPage.email}
-                    type="highlight"
+                    type='highlight'
                   />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
-                    type="primary"
+                    type='primary'
                     onClick={() => {
                       // onClick_BindEmailBtn_Action
                       dispatch<OnClick_ReplaceEmailBtn_Action>({
@@ -323,11 +331,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FComponentsLib.FContentText text={'手机号'} type="normal" />
+                <FComponentsLib.FContentText text={'手机号'} type='normal' />
               </div>
               {settingPage.phone === '' ? (
                 <div className={styles.right}>
-                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type='third' />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
@@ -336,7 +344,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                         type: 'settingPage/onClick_BindPhoneBtn',
                       });
                     }}
-                    type="primary"
+                    type='primary'
                   >
                     立即绑定
                   </FComponentsLib.FTextBtn>
@@ -345,11 +353,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 <div className={styles.right}>
                   <FComponentsLib.FContentText
                     text={settingPage.phone}
-                    type="highlight"
+                    type='highlight'
                   />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
-                    type="primary"
+                    type='primary'
                     onClick={() => {
                       // onClick_BindEmailBtn_Action
                       dispatch<OnClick_ReplacePhoneBtn_Action>({
@@ -365,12 +373,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
             <div className={styles.row}>
               <div className={styles.left}>
-                <FComponentsLib.FContentText text={'登陆密码'} type="normal" />
+                <FComponentsLib.FContentText text={'登陆密码'} type='normal' />
               </div>
               <div className={styles.right}>
                 <FComponentsLib.FContentText
                   text={'密码必须包含数字和字母，长度必须为6-24个字'}
-                  type="highlight"
+                  type='highlight'
                 />
                 <div style={{ width: 30 }} />
                 <FComponentsLib.FTextBtn
@@ -379,7 +387,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                       type: 'settingPage/onClick_ChangePasswordBtn',
                     });
                   }}
-                  type="primary"
+                  type='primary'
                 >
                   修改密码
                 </FComponentsLib.FTextBtn>
@@ -388,17 +396,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           </Space>
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'第三方账号绑定'}>
-          <Space size={10} direction="vertical" className={styles.info}>
+          <Space size={10} direction='vertical' className={styles.info}>
             <div className={styles.row}>
               <div className={styles.left}>
-                <FComponentsLib.FContentText text={'微信'} type="normal" />
+                <FComponentsLib.FContentText text={'微信'} type='normal' />
               </div>
               {!bindMap.get('weChat') ? (
                 <div className={styles.right}>
-                  <FComponentsLib.FTipText text={'未绑定'} type="third" />
+                  <FComponentsLib.FTipText text={'未绑定'} type='third' />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
                     onClick={() => {
+                      // self.open(FUtil.LinkTo.binding());
                       setBindTip({
                         type: 'success',
                         msg: '',
@@ -408,8 +417,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                         way: 'bind',
                       });
                       setVerifyPassword(true);
+                      // self.open(FUtil.LinkTo.binding());
                     }}
-                    type="primary"
+                    type='primary'
                   >
                     立即绑定
                   </FComponentsLib.FTextBtn>
@@ -418,11 +428,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 <div className={styles.right}>
                   <FComponentsLib.FContentText
                     text={bindMap.get('weChat').name}
-                    type="highlight"
+                    type='highlight'
                   />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
-                    type="danger"
+                    type='danger'
                     onClick={() => {
                       if (!settingPage.email && !settingPage.phone) {
                         setBindTip({
@@ -454,12 +464,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           </Space>
           <FVerifyUserPasswordModal
             visible={verifyPassword}
-            // @ts-ignore
-            actionReturn={bindTip.way === 'unbind' ? unBind : null}
+            actionReturn={bindTip.way === 'unbind' ? unBind : undefined}
             onCancel={() => {
               setVerifyPassword(false);
             }}
-            onSuccess={(data) => {
+            onSuccess={bindTip.way === 'unbind' ? undefined : (data) => {
+              // console.log(data, 'data09oiw4ejfslkdfjsldkj');
               setVerifyPassword(false);
               goBind(data);
             }}
@@ -492,15 +502,15 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               (bindTip.type === 'success' ? ' h-100' : ' h-72') + ' '
             }
           >
-            <div className="over-h h-100x">
-              <img src={bindTip.icon} alt="" className="h-100x" />
+            <div className='over-h h-100x'>
+              <img src={bindTip.icon} alt='' className='h-100x' />
             </div>
           </div>
           <div className={styles.tip + ' mt-30'}>{bindTip.msg}</div>
           {bindTip.type !== 'success' ? (
             <FComponentsLib.FRectBtn
-              type="primary"
-              className=" mt-50 py-9"
+              type='primary'
+              className=' mt-50 py-9'
               onClick={() => {
                 setBindTip({
                   type: 'success',
@@ -521,7 +531,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         </div>
       </Modal>
       <Modal
-        title="绑定邮箱"
+        title='绑定邮箱'
         visible={settingPage.showModal === 'bindEmail'}
         onCancel={() => {
           dispatch<OnCancel_BindEmail_Modal_Action>({
@@ -533,7 +543,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'邮箱地址'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -553,12 +563,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               });
             }}
             errorText={settingPage.bindEmail_EmailInputError}
-            placeholder="请输入邮箱"
+            placeholder='请输入邮箱'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -571,13 +581,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   },
                 });
               }}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
             <FComponentsLib.FRectBtn
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
               disabled={
                 settingPage.bindEmail_EmailInput === '' ||
                 settingPage.bindEmail_EmailInput_VerifyState !== 'verified' ||
@@ -598,7 +608,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div style={{ height: 80 }} />
           <div className={styles.modalFooter}>
             <FComponentsLib.FRectBtn
-              type="primary"
+              type='primary'
               disabled={
                 settingPage.bindEmail_EmailInput === '' ||
                 settingPage.bindEmail_EmailInput_VerifyState !== 'verified' ||
@@ -633,7 +643,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       />
 
       <Modal
-        title="更换邮箱身份验证"
+        title='更换邮箱身份验证'
         visible={settingPage.showModal === 'changeEmail_Old'}
         onCancel={() => {
           dispatch<OnCancel_ChangeEmail_Old_Modal_Action>({
@@ -645,12 +655,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'原邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'原邮箱地址'} type='third' />
 
           <div style={{ height: 5 }} />
           <div className={styles.modalOldMedium}>{settingPage.email}</div>
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -664,14 +674,14 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 });
               }}
               // errorText={settingPage.changeEmail_Old_CaptchaInput}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
             <FComponentsLib.FRectBtn
               disabled={settingPage.changeEmail_Old_CaptchaWait > 0}
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangeEmail_Old_SendCaptchaBtn_Action>({
                   type: 'settingPage/onClick_ChangeEmail_Old_SendCaptchaBtn',
@@ -687,7 +697,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div className={styles.modalFooter}>
             <FComponentsLib.FRectBtn
               disabled={settingPage.changeEmail_Old_CaptchaInput === ''}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangeEmail_Old_NextBtn_Action>({
                   type: 'settingPage/onClick_ChangeEmail_Old_NextBtn',
@@ -702,7 +712,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </Modal>
 
       <Modal
-        title="输入新邮箱地址"
+        title='输入新邮箱地址'
         visible={settingPage.showModal === 'changeEmail_New'}
         onCancel={() => {
           dispatch<OnCancel_ChangeEmail_New_Modal_Action>({
@@ -714,7 +724,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'新邮箱地址'} type="third" />
+          <FComponentsLib.FTipText text={'新邮箱地址'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -733,12 +743,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               });
             }}
             errorText={settingPage.changeEmail_New_EmailInputError}
-            placeholder="请输入邮箱"
+            placeholder='请输入邮箱'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -751,7 +761,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   },
                 });
               }}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
@@ -759,12 +769,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               disabled={
                 settingPage.changeEmail_New_EmailInput === '' ||
                 settingPage.changeEmail_New_EmailInput_VerifyState !==
-                  'verified' ||
+                'verified' ||
                 settingPage.changeEmail_New_EmailInputError !== '' ||
                 settingPage.changeEmail_New_CaptchaWait > 0
               }
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangeEmail_New_SendCaptchaBtn_Action>({
                   type: 'settingPage/onClick_ChangeEmail_New_SendCaptchaBtn',
@@ -779,11 +789,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div style={{ height: 80 }} />
           <div className={styles.modalFooter}>
             <FComponentsLib.FRectBtn
-              type="primary"
+              type='primary'
               disabled={
                 settingPage.changeEmail_New_EmailInput === '' ||
                 settingPage.changeEmail_New_EmailInput_VerifyState !==
-                  'verified' ||
+                'verified' ||
                 settingPage.changeEmail_New_EmailInputError !== '' ||
                 settingPage.changeEmail_New_CaptchaInput === ''
               }
@@ -801,7 +811,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </Modal>
 
       <Modal
-        title="绑定手机"
+        title='绑定手机'
         visible={settingPage.showModal === 'bindPhone'}
         onCancel={() => {
           dispatch<OnCancel_BindPhone_Modal_Action>({
@@ -813,7 +823,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'手机号'} type="third" />
+          <FComponentsLib.FTipText text={'手机号'} type='third' />
           <div style={{ height: 5 }} />
           <FInput
             value={settingPage.bindPhone_PhoneInput}
@@ -831,12 +841,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               });
             }}
             errorText={settingPage.bindPhone_PhoneInputError}
-            placeholder="请输入手机号"
+            placeholder='请输入手机号'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -849,7 +859,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   },
                 });
               }}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
@@ -861,7 +871,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 settingPage.bindPhone_CaptchaWait > 0
               }
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_BindPhone_SendCaptchaBtn_Action>({
                   type: 'settingPage/onClick_BindPhone_SendCaptchaBtn',
@@ -882,7 +892,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 settingPage.bindPhone_PhoneInputError !== '' ||
                 settingPage.bindPhone_CaptchaInput === ''
               }
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_BindPhone_ConfirmBtn_Action>({
                   type: 'settingPage/onClick_BindPhone_ConfirmBtn',
@@ -911,7 +921,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       />
 
       <Modal
-        title="更换手机号身份验证"
+        title='更换手机号身份验证'
         visible={settingPage.showModal === 'changePhone_Old'}
         onCancel={() => {
           dispatch<OnCancel_ChangePhone_Old_Modal_Action>({
@@ -923,12 +933,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'原手机号'} type="third" />
+          <FComponentsLib.FTipText text={'原手机号'} type='third' />
 
           <div style={{ height: 5 }} />
           <div className={styles.modalOldMedium}>{settingPage.phone}</div>
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -941,14 +951,14 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   },
                 });
               }}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
             <FComponentsLib.FRectBtn
               disabled={settingPage.changePhone_Old_CaptchaWait > 0}
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangePhone_Old_SendCaptchaBtn_Action>({
                   type: 'settingPage/onClick_ChangePhone_Old_SendCaptchaBtn',
@@ -964,7 +974,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div className={styles.modalFooter}>
             <FComponentsLib.FRectBtn
               disabled={settingPage.changePhone_Old_CaptchaInput === ''}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangePhone_Old_NextBtn_Action>({
                   type: 'settingPage/onClick_ChangePhone_Old_NextBtn',
@@ -979,7 +989,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </Modal>
 
       <Modal
-        title="输入新手机号"
+        title='输入新手机号'
         visible={settingPage.showModal === 'changePhone_New'}
         onCancel={() => {
           dispatch<OnCancel_ChangePhone_New_Modal_Action>({
@@ -991,7 +1001,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'新手机号'} type="third" />
+          <FComponentsLib.FTipText text={'新手机号'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
@@ -1011,12 +1021,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               });
             }}
             errorText={settingPage.changePhone_New_PhoneInputError}
-            placeholder="请输入手机号"
+            placeholder='请输入手机号'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
-          <FComponentsLib.FTipText text={'验证码'} type="third" />
+          <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
           <div className={styles.modalCaptcha}>
             <FInput
@@ -1029,7 +1039,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   },
                 });
               }}
-              placeholder="请输入验证码"
+              placeholder='请输入验证码'
               className={styles.modalCaptchaInput}
               wrapClassName={styles.modalCaptchaInput}
             />
@@ -1037,7 +1047,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               disabled={
                 settingPage.changePhone_New_PhoneInput === '' ||
                 settingPage.changePhone_New_PhoneInput_VerifyState !==
-                  'verified' ||
+                'verified' ||
                 settingPage.changePhone_New_PhoneInputError !== '' ||
                 settingPage.changePhone_New_CaptchaWait > 0
               }
@@ -1048,7 +1058,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 });
               }}
               style={{ width: 110 }}
-              type="primary"
+              type='primary'
             >
               {settingPage.changePhone_New_CaptchaWait > 0
                 ? `${settingPage.changePhone_New_CaptchaWait}s`
@@ -1061,11 +1071,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               disabled={
                 settingPage.changePhone_New_PhoneInput === '' ||
                 settingPage.changePhone_New_PhoneInput_VerifyState !==
-                  'verified' ||
+                'verified' ||
                 settingPage.changePhone_New_PhoneInputError !== '' ||
                 settingPage.changePhone_New_CaptchaInput === ''
               }
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangePhone_New_ConfirmBtn_Action>({
                   type: 'settingPage/onClick_ChangePhone_New_ConfirmBtn',
@@ -1080,7 +1090,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       </Modal>
 
       <Modal
-        title="修改密码"
+        title='修改密码'
         visible={settingPage.showModal === 'changePassword'}
         onCancel={() => {
           dispatch<OnCancel_ChangePassword_Modal_Action>({
@@ -1092,11 +1102,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       >
         <div className={styles.ModalContainer}>
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTipText text={'原密码'} type="third" />
+          <FComponentsLib.FTipText text={'原密码'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
-            type="password"
+            type='password'
             value={settingPage.changePassword_Old_PasswordInput}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_Old_PasswordInput_Action>({
@@ -1106,17 +1116,17 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 },
               });
             }}
-            placeholder="请输入原密码"
+            placeholder='请输入原密码'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
 
-          <FComponentsLib.FTipText text={'新密码'} type="third" />
+          <FComponentsLib.FTipText text={'新密码'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
-            type="password"
+            type='password'
             value={settingPage.changePassword_New1_PasswordInput}
             errorText={settingPage.changePassword_New1_PasswordInput_Error}
             onChange={(e) => {
@@ -1132,18 +1142,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 type: 'settingPage/onBlur_ChangePassword_New1_PasswordInput',
               });
             }}
-            placeholder="请输入新密码"
+            placeholder='请输入新密码'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
 
           <div style={{ height: 25 }} />
 
-          <FComponentsLib.FTipText text={'重新输入新密码'} type="third" />
+          <FComponentsLib.FTipText text={'重新输入新密码'} type='third' />
 
           <div style={{ height: 5 }} />
           <FInput
-            type="password"
+            type='password'
             value={settingPage.changePassword_New2_PasswordInput}
             errorText={settingPage.changePassword_New2_PasswordInput_Error}
             onChange={(e) => {
@@ -1159,7 +1169,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 type: 'settingPage/onBlur_ChangePassword_New2_PasswordInput',
               });
             }}
-            placeholder="请输入新密码"
+            placeholder='请输入新密码'
             className={styles.modalBlockInput}
             wrapClassName={styles.modalBlockInput}
           />
@@ -1174,7 +1184,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 settingPage.changePassword_New2_PasswordInput === '' ||
                 settingPage.changePassword_New2_PasswordInput_Error !== ''
               }
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClick_ChangePassword_ConfirmBtn_Action>({
                   type: 'settingPage/onClick_ChangePassword_ConfirmBtn',

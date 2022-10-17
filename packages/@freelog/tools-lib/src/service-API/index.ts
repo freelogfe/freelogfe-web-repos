@@ -13,6 +13,7 @@ import * as Activity from './activities';
 import * as TestQualification from './testQualifications';
 import * as Statistic from './statistics';
 import * as I18n from './i18n';
+import * as Policy from './policies';
 import * as recombination from './recombinations';
 
 const FServiceAPI = {
@@ -31,6 +32,7 @@ const FServiceAPI = {
   TestQualification,
   Statistic,
   I18n,
+  Policy,
   recombination,
 };
 

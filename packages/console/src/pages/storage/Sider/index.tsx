@@ -12,7 +12,7 @@ import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
 import {FUtil, FI18n} from '@freelog/tools-lib';
-import { router } from 'umi';
+import { history } from 'umi';
 import FComponentsLib from '@freelog/components-lib';
 
 interface SiderProps {
@@ -51,7 +51,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
               ? (<FComponentsLib.FCircleBtn
                 type="transparent"
                 onClick={() => {
-                  router.replace(FUtil.LinkTo.storageSpace({
+                  history.replace(FUtil.LinkTo.storageSpace({
                     bucketName: storageHomePage.activatedBucket,
                     createBucket: true,
                   }));

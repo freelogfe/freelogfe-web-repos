@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ResourceAuthPageModelState, UpdateAuthorizedAction } from '@/models/resourceAuthPage';
 import { Space } from 'antd';
 import { ConnectState } from '@/models/connect';

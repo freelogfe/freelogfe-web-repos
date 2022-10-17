@@ -141,27 +141,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
         status: 0 | 1 | 2;
       };
     } = await FServiceAPI.Contract.contractDetails(params);
-    // console.log(data, 'data111122222333333333');
-    const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
-      skip: 0,
-      limit: 100,
-      contractId: contractID,
-      isTranslate: 1,
-    };
-
-    const { data: data_transitionRecords }: {
-      data: {
-        dataList: {
-          serviceStates: 1 | 2 | 3 | 128;
-          stateInfoStr: string;
-          stateStr: string;
-          time: string;
-        }[];
-        limit: 100
-        skip: 0
-        totalItem: 1
-      }
-    } = await FServiceAPI.Contract.transitionRecords(params1);
+    // console.log(data_ContractDetails, 'data_ContractDetails111122222333333333');
 
     setIsSelfLicensorOwner(data_ContractDetails.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
     setIsSelfLicenseeOwner(data_ContractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
@@ -171,18 +151,52 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     setCode(data_ContractDetails.policyInfo.policyText);
     setText(data_ContractDetails.policyInfo.translateInfo.content);
 
+    const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
+      skip: 0,
+      limit: 100,
+      contractId: contractID,
+      isTranslate: 1,
+    };
 
-    const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
-      return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
-    });
+    const { ret, errCode, data: data_transitionRecords }: {
+      ret: number;
+      errCode: number;
+      data: {
+        dataList: {
+          serviceStates: 1 | 2 | 3 | 128;
+          stateInfoStr: string;
+          stateStr: string;
+          time: string;
+          eventSectionEntities: {
+            content: string;
+            origin: any;
+          }[];
+        }[];
+        limit: 100
+        skip: 0
+        totalItem: 1
+      }
+    } = await FServiceAPI.Contract.transitionRecords(params1);
 
-    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = (currentState.eventTranslateInfos as any[])
+    if (ret !== 0 || errCode !== 0 || !data_transitionRecords) {
+      return;
+    }
+
+    // console.log(data_transitionRecords, 'data_transitionRecords098iweojflskdfjsdlkj');
+
+    // const currentState: any = data_ContractDetails.policyInfo.translateInfo.fsmInfos.find((fi: any) => {
+    //   return fi.stateInfo.origin === data_ContractDetails.fsmCurrentState;
+    // });
+
+    // const record_CurrentEvents: IContractDisplayStates['record_Cu/**/rrentEvents'] = (currentState.eventTranslateInfos as any[])
+    // data_transitionRecords[0].eventSectionEntities
+    const record_CurrentEvents: IContractDisplayStates['record_CurrentEvents'] = data_transitionRecords.dataList[0].eventSectionEntities
       .filter((eti) => {
         return eti.origin.name === 'TransactionEvent' || eti.origin.name === 'RelativeTimeEvent' || eti.origin.name === 'TimeEvent';
       })
-      .map((eti, etiIndex) => {
+      .map((eti: any, etiIndex) => {
         const obj = {
-          eventID: eti.origin.eventId,
+          eventID: eti.origin.id,
           tip: eti.content,
           type: eti.origin.name,
         };
@@ -222,6 +236,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
   async function confirmPay(password: string) {
     set_Modal_IsPaying(true);
+    console.log(contractID, 'contractID09iowesjflksdfjlsdkj');
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
       eventId: modal_EventID,
@@ -270,13 +285,13 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           setActivated('text');
         }}
       >策略内容</a>
-      <div style={{ width: 15 }} />
-      <a
-        className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-        onClick={() => {
-          setActivated('view');
-        }}
-      >状态机视图</a>
+      {/*<div style={{ width: 15 }} />*/}
+      {/*<a*/}
+      {/*  className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}*/}
+      {/*  onClick={() => {*/}
+      {/*    setActivated('view');*/}
+      {/*  }}*/}
+      {/*>状态机视图</a>*/}
       <div style={{ width: 15 }} />
       <a
         className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
@@ -330,7 +345,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                                     onClick={() => {
                                       if (isSelfLicensorOwner) {
                                         // return fMessage('收款方不能是自己', 'error');
-                                        return fMessage(FI18n.i18nNext.t('alert_cantsendmoneytoyourself '), 'error');
+                                        return fMessage(FI18n.i18nNext.t('alert_cantsendmoneytoyourself'), 'error');
                                       }
                                       set_Modal_EventID(eti.eventID);
                                       // console.log(eti.origin.args.amount, '!#@$!234123412341234');

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouterTypes, withRouter } from 'umi';
+import { withRouter } from 'umi';
 import Resources from './Resources';
 import Collects from './Collects';
 import { RouteComponentProps } from 'react-router';
@@ -16,7 +16,7 @@ interface ListProps extends RouteComponentProps {
   dispatch: Dispatch;
 }
 
-function List({ match, dispatch, route }: ListProps & RouterTypes) {
+function List({ match }: ListProps) {
   // const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
   const [showPage, setShowPage] = React.useState<'myResources' | 'myCollections'>('myResources');
 

@@ -9,37 +9,22 @@ interface BoardCardProps {}
 
 function BoardCard({}: BoardCardProps) {
   const [unfoldIndex, setUnfoldIndex] = React.useState<0 | 1 | 2>(0);
-  const [datas, setDatas] = React.useState<any>([]);
-  const getData = async () => {
-    Promise.all([
-      FServiceAPI.Activity.getBaseTaskInfo(),
-      FServiceAPI.Activity.getResourceTaskInfo(),
-      FServiceAPI.Activity.getNodeTaskInfo(),
-    ]).then((res) => {
-      setDatas(res.map((data) => data.data));
-    });
-  };
-  React.useEffect(() => {
-    getData();
-  }, []);
+
   return (
     <div className={styles.boards}>
       <BoardCard1
         unfold={unfoldIndex === 0}
-        data={datas[0] || []}
         onMouseEnter={() => {
           setUnfoldIndex(0);
         }}
       />
       <BoardCard2
-        data={datas[1] || []}
         unfold={unfoldIndex === 1}
         onMouseEnter={() => {
           setUnfoldIndex(1);
         }}
       />
       <BoardCard3
-        data={datas[2] || []}
         unfold={unfoldIndex === 2}
         onMouseEnter={() => {
           setUnfoldIndex(2);

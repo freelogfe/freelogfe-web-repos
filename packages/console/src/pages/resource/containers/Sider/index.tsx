@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState } from '@/models/connect';
-import { withRouter, router } from 'umi';
-import RouterTypes from 'umi/routerTypes';
+import { withRouter, history } from 'umi';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
@@ -12,7 +12,6 @@ import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
 import { Checkbox, Popconfirm, Space } from 'antd';
-import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
@@ -32,7 +31,7 @@ interface SilderProps
   resourceInfo: ResourceInfoModelState;
 }
 
-function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderProps) {
+function Sider({ resourceInfo, match, dispatch }:SilderProps) {
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -114,7 +113,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
 
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/$version/creator`);
-    router.push(
+    history.push(
       FUtil.LinkTo.resourceCreateVersion({
         resourceID: match.params.id,
       }),
@@ -289,7 +288,7 @@ function Sider({ resourceInfo, match, dispatch, route }: RouterTypes & SilderPro
             <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
             {resourceInfo.authProblem && (
               <FTooltip title={'存在授权问题'}>
-                <FWarning style={{ fontSize: 16 }} />
+                <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
               </FTooltip>
             )}
           </Space>

@@ -341,6 +341,14 @@ export function wallet({}: WalletParamsType = {}) {
   return `/logged/wallet`;
 }
 
+// 活动奖励
+interface RewardParamsType {
+}
+
+export function reward({}: RewardParamsType = {}) {
+  return `/logged/reward`;
+}
+
 // 我的合约
 interface ContractParamsType {
 }
@@ -357,6 +365,22 @@ export function setting({}: SettingParamsType = {}) {
   return `/logged/setting`;
 }
 
+
+// 绑定成功
+interface BindingParamsType {
+}
+
+export function binding({}: BindingParamsType = {}) {
+  return `/logged/binding`;
+}
+
+// 绑定成功
+interface ResultBindingSuccessParamsType {
+}
+
+export function resultBindingSuccess({}: ResultBindingSuccessParamsType = {}) {
+  return `/result/binding`;
+}
 
 
 /************** user End ******************************************************/

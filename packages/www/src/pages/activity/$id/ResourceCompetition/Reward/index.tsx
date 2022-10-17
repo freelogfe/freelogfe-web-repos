@@ -4,13 +4,60 @@ import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
-import { ConnectState } from '@/models/connect';
+import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
+import * as AHooks from 'ahooks';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import moment from 'moment';
+
 
 interface RewardProps {
-
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function Reward({}: RewardProps) {
+function Reward({ activityDetailsPage }: RewardProps) {
+
+  const [luckyPrizes, set_luckyPrizes] = React.useState<{
+    name: string;
+    startDate: string;
+    endDate: string;
+  }[]>([]);
+
+  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(-1);
+
+  AHooks.useMount(async () => {
+    const today: string = moment().format('YYYY-MM-DD');
+    const { data }: { data: { resourceUsername: string }[] } = await FServiceAPI.Activity.lotteryShow({
+      startDate: activityDetailsPage.startTime ? activityDetailsPage.startTime.replace(/·/g, '-') : '2022-01-01',
+      limitDate: today,
+      // startDate: '2022-01-01',
+      // limitDate: '2022-12-31',
+    });
+    // console.log(data, '#@Fsd809fioasdjfisdajf;lsdjflsdajflkj');
+    set_luckyPrizes(data.slice(0, 3).map((d, index) => {
+      const startDate = moment().week(moment().week() - index - 1).startOf('isoWeek').format('YYYY·MM·DD');
+      const endDate = moment().week(moment().week() - index - 1).endOf('isoWeek').format('YYYY·MM·DD');
+      return {
+        name: d.resourceUsername,
+        startDate: startDate,
+        endDate: endDate,
+      };
+    }));
+  });
+
+  AHooks.useMount(async () => {
+    const { data } = await FServiceAPI.Activity.getRewardRecordInfos({
+      rewardGroupCode: 'RG00007',
+      status: 3,
+    });
+    let amount: number = 0;
+
+    for (const d of data) {
+      amount += (d.rewardConfigCode === 'RS000072' ? 20 : 5);
+    }
+    set_sunlightAmount(amount);
+    // console.log(data, 'data890i/oewjfsdlkfjlsdkfjlkj');
+  });
+
   return (<div className={styles.reward}>
     <div className={styles.rewardTitle}>活动奖励</div>
     <div style={{ height: 40 }} />
@@ -129,7 +176,7 @@ function Reward({}: RewardProps) {
           <div style={{ width: 10 }} />
           <FPentagram />
         </div>
-        <div style={{ height: 20 }} />
+        <div style={{ height: 60 }} />
         <div className={styles.title3}>
           <span>每创建并发行1个资源可领取 5～20元 现金奖励</span>
         </div>
@@ -139,7 +186,7 @@ function Reward({}: RewardProps) {
         </div>
         <div style={{ height: 20 }} />
         <div className={styles.title4}>* 同一用户限领3次资源发行奖励</div>
-        <div style={{ height: 20 }} />
+        <div style={{ height: 10 }} />
         <Space
           size={10}
           style={{
@@ -148,8 +195,13 @@ function Reward({}: RewardProps) {
             height: 68,
             borderRadius: 10,
           }}>
-          <span>15元现金奖励待领取</span>
-          <FComponentsLib.FRectBtn type='primary'>立即领取</FComponentsLib.FRectBtn>
+          <span>{sunlightAmount}元现金奖励已发放</span>
+          <FComponentsLib.FRectBtn
+            type='primary'
+            onClick={() => {
+              self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
+            }}
+          >提现</FComponentsLib.FRectBtn>
         </Space>
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
@@ -170,42 +222,36 @@ function Reward({}: RewardProps) {
         <Space
           size={12}
           direction='vertical'>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+          {
+            luckyPrizes.length === 0 && (<div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+              {/*<span style={{*/}
+              {/*  color: '#222',*/}
+              {/*  lineHeight: '22px',*/}
+              {/*  fontSize: 16,*/}
+              {/*}}>{lp.name}</span>*/}
+              <span style={{
+                color: '#999',
+                lineHeight: '20px',
+                fontSize: 14,
+              }}>未开奖</span>
+            </div>)
+          }
+          {
+            luckyPrizes.length > 0 && luckyPrizes.map((lp) => {
+              return (<div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
             <span style={{
               color: '#222',
               lineHeight: '22px',
               fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
-            <span style={{
-              color: '#222',
-              lineHeight: '22px',
-              fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
-            <span style={{
-              color: '#222',
-              lineHeight: '22px',
-              fontSize: 16,
-            }}>yanghongtian</span>
-            <span style={{
-              color: '#999',
-              lineHeight: '20px',
-              fontSize: 14,
-            }}>(2021.10.10)</span>
-          </div>
+            }}>{lp.name}</span>
+                <span style={{
+                  color: '#999',
+                  lineHeight: '20px',
+                  fontSize: 14,
+                }}>({lp.startDate}~{lp.endDate})</span>
+              </div>);
+            })
+          }
         </Space>
       </div>
     </div>

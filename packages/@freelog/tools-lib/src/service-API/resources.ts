@@ -94,11 +94,11 @@ interface ListParamsType {
   // startResourceId?: string;
 }
 
-interface ListReturnType extends CommonReturn {
-  data: IResourceInfo[];
-}
+// interface ListReturnType extends CommonReturn {
+//   data: IResourceInfo[];
+// }
 
-export function list(params: ListParamsType): Promise<ListReturnType> {
+export function list(params: ListParamsType){
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources`,

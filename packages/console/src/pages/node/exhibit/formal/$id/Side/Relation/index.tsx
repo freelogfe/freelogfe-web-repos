@@ -51,7 +51,7 @@ function Relation({ exhibitInfoPage }: RelationProps) {
       />
     </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
-    <div style={{ fontSize: 12, color: '#666' }}>{exhibitInfoPage.side_ResourceType}</div>
+    <div style={{ fontSize: 12, color: '#666' }}>{FUtil.Format.resourceTypeKeyArrToResourceType(exhibitInfoPage.side_ResourceType)}</div>
   </div>);
 }
 

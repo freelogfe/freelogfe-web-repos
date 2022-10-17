@@ -5,9 +5,9 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import InviteForm from './components/form';
 import Invite from './components/invite';
 import InviteStatus from './components/status';
-import { Form } from 'antd';
+// import { Form } from 'antd';
 import useUrlState from '@ahooksjs/use-url-state';
-import { router } from 'umi';
+import { history } from 'umi';
 
 interface InvitationProps {}
 
@@ -34,7 +34,7 @@ function Invitation({}: InvitationProps) {
       if (urlState.returnUrl) {
         window.location.href = urlState.returnUrl;
       } else {
-        router.push('/dashboard');
+        history.push('/dashboard');
       }
       return;
     }
@@ -43,7 +43,7 @@ function Invitation({}: InvitationProps) {
     if (data) {
       setStatus(data.status);
       setShowPage('Result');
-      router.push(
+      history.push(
         '/invitation?type=status' + (urlState.returnUrl ? '&returnUrl=' + decodeURIComponent(urlState.returnUrl) : ''),
       );
     } else {
@@ -64,7 +64,7 @@ function Invitation({}: InvitationProps) {
   });
   function jump(page: InvitationStates['showPage']) {
     let route = page === 'Apply' ? 'apply' : page === 'InviteCode' ? 'code' : 'status';
-    router.push(
+    history.push(
       `/invitation?type=${route}` + (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
     );
     setShowPage(page);
@@ -72,7 +72,7 @@ function Invitation({}: InvitationProps) {
   AHooks.useUnmount(() => {});
   function finished(type: 101 | 10 | 0 | 1 | 2) {
     setStatus(type);
-    router.push(
+    history.push(
       `/invitation?type=status` + (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
     );
     setShowPage('Result');

@@ -40,6 +40,7 @@ class I18nNext {
       }
     };
     const handleTasks = async () => {
+      // console.log(this._loadingData, 'this._loadingData90iowejflksdfjlsdk');
       if (this._loadingData === 'End') {
         exc();
         return;
@@ -112,6 +113,7 @@ class I18nNext {
           suffix: '}',
         },
       });
+    this._loadingData = 'End';
   }
 
   private async _fetchData(this: I18nNext): Promise<Resource> {
