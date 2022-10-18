@@ -150,7 +150,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       <div style={{ height: 20 }} />
       <div className={styles.title2}>
         完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
-        完成全部任务仅需**分钟，快开始萌新之旅吧~
+        完成全部任务仅需9分钟，快开始萌新之旅吧~
       </div>
       <div style={{ height: 30 }} />
       <BoardCard />
