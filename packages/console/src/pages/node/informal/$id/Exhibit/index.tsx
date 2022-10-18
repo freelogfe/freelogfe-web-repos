@@ -220,25 +220,6 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                       </>
                     ) : null}
                   </div>
-                  {/* <span>类型：</span>
-                  <FDropdownMenu
-                    options={informalNodeManagerPage.exhibit_TypeOptions}
-                    onChange={(value) => {
-                      dispatch<OnChangeExhibitTypeAction>({
-                        type: 'informalNodeManagerPage/onChangeExhibitType',
-                        payload: {
-                          value: value,
-                        },
-                      });
-                    }}
-                  >
-                    <span style={{ cursor: 'pointer' }}>
-                      {informalNodeManagerPage.exhibit_TypeOptions.find(
-                        (rto) => rto.value === informalNodeManagerPage.exhibit_SelectedType,
-                      )?.text || ''}
-                      <FDown style={{ marginLeft: 8 }} />
-                    </span>
-                  </FDropdownMenu> */}
                 </div>
                 <div>
                   <span>状态：</span>
@@ -278,6 +259,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                         },
                       });
                     }}
+                    placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                   />
                 </div>
               </Space>

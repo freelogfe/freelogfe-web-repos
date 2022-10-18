@@ -473,6 +473,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       },
                     });
                   }}
+                  placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                 />
               </div>
             </Space>

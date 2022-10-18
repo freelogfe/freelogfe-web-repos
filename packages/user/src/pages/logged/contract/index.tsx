@@ -35,7 +35,7 @@ import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 
 const RangePicker: any = DatePicker.RangePicker;
@@ -492,6 +492,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       },
                     });
                   }}
+                  placeholder={FI18n.i18nNext.t('mycontracts_search_contracts_hint')}
                 />
               </div>
               {contractPage.authorize_ListState === 'loading' && (

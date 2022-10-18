@@ -119,6 +119,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                       },
                     });
                   }}
+                  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
                 />
               </div>
             </Space>

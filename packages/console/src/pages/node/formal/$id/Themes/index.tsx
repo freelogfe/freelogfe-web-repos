@@ -146,20 +146,6 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
         type='empty'
       >
         {nodeManagerPage.theme_ListState === 'noData' ? (
-          // (<FNoDataTip
-          //   height={'calc(100vh - 70px)'}
-          //   tipText={FI18n.i18nNext.t('manage_themes_empty')}
-          //   btnText={FI18n.i18nNext.t('btn_add_theme')}
-          //   onClick={() => {
-          //     dispatch<DiscoverChangeAction>({
-          //       type: 'discoverPage/change',
-          //       payload: {
-          //         resourceType: 'theme',
-          //       },
-          //     });
-          //     router.push(FUtil.LinkTo.market());
-          //   }}
-          // />)
           <div className={styles.wrapper}>
             <div className={styles['recommend-area']}>
               <div className={styles.btns}>
@@ -248,6 +234,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                     },
                   });
                 }}
+                placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
               />
             </div>
             {nodeManagerPage.theme_ListState === 'loading' && (

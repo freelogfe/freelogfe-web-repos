@@ -36,6 +36,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import { FI18n } from '../../../../../../../@freelog/tools-lib';
 
 // const RangePicker: any = DatePicker.RangePicker;
 
@@ -318,23 +319,6 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                 : (<>
                   <div className={styles.filter}>
                     <Space size={50}>
-                      {/*<Space size={2}>*/}
-                      {/*  <FContentText text={'标的物类型：'} />*/}
-                      {/*  <FDropdownMenu*/}
-                      {/*    options={nodeManager_Contract_Page.authorize_SubjectType_Options}*/}
-                      {/*    text={nodeManager_Contract_Page.authorize_SubjectType_Options.find((so) => {*/}
-                      {/*      return nodeManager_Contract_Page.authorize_SubjectType === so.value;*/}
-                      {/*    })?.text || ''}*/}
-                      {/*    onChange={(value) => {*/}
-                      {/*      dispatch<OnChange_Authorize_SubjectType_Action>({*/}
-                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorize_SubjectType',*/}
-                      {/*        payload: {*/}
-                      {/*          value: value as 'all',*/}
-                      {/*        },*/}
-                      {/*      });*/}
-                      {/*    }}*/}
-                      {/*  />*/}
-                      {/*</Space>*/}
                       <Space size={2}>
                         <FComponentsLib.FContentText text={'合约状态：'} />
                         <FDropdownMenu
@@ -388,6 +372,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                           },
                         });
                       }}
+                      placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
                     />
                   </div>
                   {
