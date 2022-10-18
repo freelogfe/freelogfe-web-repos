@@ -189,7 +189,7 @@ const Model: LogonPageModelType = {
   namespace: 'logonPage',
   state: initStates,
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, {}: EffectsCommandMap) {
       if (FUtil.Tool.getUserIDByCookies() === -1) {
         return;
       }
@@ -220,6 +220,8 @@ const Model: LogonPageModelType = {
 
       if (logonPage.usernameInput === '') {
         usernameInputError = '用户名称不能为空';
+      } else if (logonPage.usernameInput.length > 30) {
+        usernameInputError = FI18n.i18nNext.t('signup_alarm_username_length');
       } else if (!FUtil.Regexp.USERNAME.test(logonPage.usernameInput)) {
         usernameInputError = '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
       } else if (FUtil.Regexp.MOBILE_PHONE_NUMBER.test(logonPage.usernameInput)) {
@@ -232,7 +234,8 @@ const Model: LogonPageModelType = {
         };
         const { data } = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
-          usernameInputError = '用户名已被占用';
+          // usernameInputError = '用户名已被占用';
+          usernameInputError = FI18n.i18nNext.t('signup_alarm_username_in_use');
         }
       }
 
@@ -283,7 +286,8 @@ const Model: LogonPageModelType = {
         if (errCode !== 0) {
           phoneInputError = msg;
         } else if (data) {
-          phoneInputError = '手机号已被占用注册';
+          // phoneInputError = '手机号已被占用注册';
+          phoneInputError = FI18n.i18nNext.t('signup_alarm_mobilephonenumber_in_use');
         }
       }
 
@@ -322,7 +326,8 @@ const Model: LogonPageModelType = {
         };
         const { data } = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
-          emailInputError = '邮箱已被占用注册';
+          // emailInputError = '邮箱已被占用注册';
+          emailInputError = FI18n.i18nNext.t('signup_alarm_email_in_use');
         }
       }
 
