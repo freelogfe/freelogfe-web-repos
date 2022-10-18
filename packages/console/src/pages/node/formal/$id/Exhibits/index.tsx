@@ -279,7 +279,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         return (
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
             <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
-              <FComponentsLib.FTextBtn
+              <span><FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -290,11 +290,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FComponentsLib.FIcons.FEdit />
-              </FComponentsLib.FTextBtn>
+              </FComponentsLib.FTextBtn></span>
             </FTooltip>
 
             <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-              <FComponentsLib.FTextBtn
+              <span><FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -305,7 +305,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FComponentsLib.FIcons.FFileSearch />
-              </FComponentsLib.FTextBtn>
+              </FComponentsLib.FTextBtn></span>
             </FTooltip>
           </Space>
         );

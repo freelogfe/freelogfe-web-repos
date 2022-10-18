@@ -18,6 +18,7 @@ import FFormLayout from '@/components/FFormLayout';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '../../../../../../../@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -93,7 +94,8 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
           subtitle={<FComponentsLib.FContentText
             type='additional2'
             className={styles.yellow}
-            text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
+            // text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
+            text={FI18n.i18nNext.t('addresourcetonode_exhibitname_info')}
           />}
         >
           <FInput
