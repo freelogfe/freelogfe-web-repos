@@ -35,7 +35,7 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import FPolicyOperatorDrawer  from '@/components/FPolicyOperatorDrawer';
+import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 
 interface ExhibitsProps {
@@ -65,9 +65,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   });
 
   /** 上下架 */
-  const changeStatus = (value: boolean, exhibit: any) => {
-    // operateExhibit = exhibit;
-    setOperateExhibit(exhibit);
+  async function changeStatus(value: boolean, exhibit: any) {
+    operateExhibit = exhibit;
+    await setOperateExhibit(exhibit);
 
     if (value) {
       // 上架
