@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-import { FServiceAPI, FI18n } from '@freelog/tools-lib';
+import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 
 interface QuestionnaireProps {
 
@@ -10,6 +10,14 @@ interface QuestionnaireProps {
 function Questionnaire({}: QuestionnaireProps) {
 
   AHooks.useMount(async () => {
+
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      self.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
+        goTo: self.location.href,
+      }));
+      return;
+    }
+
     const { data: data_resourceTask }: { data: any[] } = await FServiceAPI.Activity.getResourceTaskInfo();
     // console.log(data_resourceTask, 'data_resourceTask9ojwksdflksdjlkjl');
     if (data_resourceTask.every((rt) => rt.status === 2)) {
