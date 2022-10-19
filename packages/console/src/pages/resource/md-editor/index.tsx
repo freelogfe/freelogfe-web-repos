@@ -188,7 +188,7 @@ const MarkdownEditor = () => {
         </div>
       </div>
 
-      <div className="toolbar">
+      <div className="editor-toolbar">
         <Toolbar editor={editor} defaultConfig={toolbarConfig} />
       </div>
 
@@ -206,12 +206,14 @@ const MarkdownEditor = () => {
         show={importDrawer}
         close={() => setImportDrawer(false)}
         setHtml={setHtml}
+        editor={editor}
       />
 
       <InsertResourceDrawer
         show={!!drawerType}
         close={() => setDrawerType('')}
         drawerType={drawerType}
+        editor={editor}
       />
     </div>
   );

@@ -19,10 +19,11 @@ interface Props {
   show: boolean;
   close: () => void;
   drawerType: string;
+  editor: any;
 }
 
 export const InsertResourceDrawer = (props: Props) => {
-  const { show, close, drawerType } = props;
+  const { show, close, drawerType, editor } = props;
   let body: Element | null = null;
   const resourceMapping: any = {
     image: {
@@ -54,7 +55,8 @@ export const InsertResourceDrawer = (props: Props) => {
       uploadText: FI18n.i18nNext.t('btn_upload_new_post'),
     },
   };
-  const defaultCover = '//static.freelog.com/static/default_cover.png';
+  const defaultCover =
+    FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png';
 
   const refs = useRef({
     activeTab: 'market',
@@ -507,7 +509,19 @@ export const InsertResourceDrawer = (props: Props) => {
           {resourceList.length !== 0 && (
             <div className="resource-list">
               {resourceList.map((item) => (
-                <div className="resource-item" key={item.resourceId}>
+                <div
+                  className="resource-item"
+                  key={item.resourceId}
+                  onClick={() => {
+                    editor.insertNode({
+                      ...item,
+                      type: 'resource',
+                      children: [{ text: '' }],
+                    });
+                    editor.insertBreak();
+                    close();
+                  }}
+                >
                   <FCoverImage
                     src={item.coverImages[0] || defaultCover}
                     width={280}

@@ -15,8 +15,6 @@ import { importDocumentMenuBtnConfig } from '../custom/menu-button/import-docume
 import { policyMenuBtnConfig } from '../custom/menu-button/policy';
 import { documentMenuBtnConfig } from '../custom/menu-button/document';
 import { videoMenuBtnConfig } from '../custom/menu-button/video';
-import { videoDomConfig } from '../custom/dom/video';
-import { audioDomConfig } from '../custom/dom/audio';
 import { resourceDomConfig } from '../custom/dom/resource';
 
 /** 工具栏配置 */
@@ -32,7 +30,6 @@ export const toolbarConfig: Partial<IToolbarConfig> = {
     'bulletedList',
     'numberedList',
     '|',
-    'insertVideo',
     'insertLink',
     'insertTable',
     'code',
@@ -60,12 +57,18 @@ export const editorConfig: Partial<IEditorConfig> = {
 };
 
 const plugin = <T extends IDomEditor>(editor: T) => {
-  const { isVoid } = editor;
+  const { isInline, isVoid } = editor;
   const newEditor = editor;
+
+  newEditor.isInline = (elem) => {
+    const type = DomEditor.getNodeType(elem);
+    if (['resource'].includes(type)) return true;
+    return isInline(elem);
+  };
 
   newEditor.isVoid = (elem) => {
     const type = DomEditor.getNodeType(elem);
-    if (['video', 'audio', 'resource'].includes(type)) return true;
+    if (['resource'].includes(type)) return true;
     return isVoid(elem);
   };
 
@@ -84,7 +87,7 @@ const customModule: Partial<IModuleConf> = {
 
   editorPlugin: plugin,
 
-  renderElems: [videoDomConfig, audioDomConfig, resourceDomConfig],
+  renderElems: [resourceDomConfig],
 };
 
 Boot.registerModule(customModule);

@@ -29,10 +29,11 @@ interface Props {
   show: boolean;
   close: () => void;
   setHtml: React.Dispatch<React.SetStateAction<string>>;
+  editor: any;
 }
 
 export const ImportDocDrawer = (props: Props) => {
-  const { show, close, setHtml } = props;
+  const { show, close, setHtml, editor } = props;
   let body: Element | null = null;
 
   const refs = useRef({
