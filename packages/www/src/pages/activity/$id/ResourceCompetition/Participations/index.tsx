@@ -190,7 +190,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
-              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
+              self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
             ? '即将开始'
