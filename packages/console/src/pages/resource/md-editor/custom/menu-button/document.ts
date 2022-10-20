@@ -25,7 +25,7 @@ class DocumentBtnMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openDrawer('text');
+    editor.setDrawerType('text');
   }
 }
 

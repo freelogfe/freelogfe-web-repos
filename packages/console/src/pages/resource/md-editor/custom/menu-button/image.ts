@@ -24,7 +24,7 @@ class ImageMenuBtn implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openDrawer('image');
+    editor.setDrawerType('image');
   }
 }
 

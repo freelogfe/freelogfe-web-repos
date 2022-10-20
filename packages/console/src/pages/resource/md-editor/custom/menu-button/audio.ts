@@ -25,7 +25,7 @@ class AudioBtnMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openDrawer('audio');
+    editor.setDrawerType('audio');
   }
 }
 

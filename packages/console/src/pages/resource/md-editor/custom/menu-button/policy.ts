@@ -25,24 +25,54 @@ class PolicyBtnMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    // editor.openDrawer('policy');
-
-    const data = {
-      type: 'resource',
-      resourceId: '61b9a6947841ed002e5c995f',
-      resourceName: 'ZhuC/奥克斯的缝',
-      resourceType: ['图片'],
-      latestVersion: '1.0.3',
-      policies: ['免费', 'asdf', 'wcwccw'],
-      coverImages: [
-        // 'https://image.freelog.com/preview-image/f4f110bb9e55ec9910594ec5e8225f39a84c9375.jpg#x=266.51296912453944&y=813.2151264713248&r=0&w=389.2526206575793&h=291.9394654931845&width=720&height=1280',
-        // 'http://qi.testfreelog.com/v2/auths/exhibits/80000055/61cabc43713b8b002e739012/fileStream',
-        'https://qi.freelog.com/v2/auths/exhibits/80000009/629d6eee4164e1002edad558/fileStream'
-      ],
-      children: [{ text: '' }],
-    };
-    editor.insertNode(data);
-    editor.insertBreak();
+    // editor.setDrawerType('policy');
+    // const data = {
+    //   type: 'resource',
+    //   resourceId: '61b9a6947841ed002e5c995f',
+    //   resourceName: 'ZhuC/奥克斯的缝',
+    //   resourceType: ['图片'],
+    //   latestVersion: '1.0.3',
+    //   policies: ['免费', 'asdf', 'wcwccw'],
+    //   coverImages: [
+    //     'https://image.freelog.com/preview-image/f4f110bb9e55ec9910594ec5e8225f39a84c9375.jpg#x=266.51296912453944&y=813.2151264713248&r=0&w=389.2526206575793&h=291.9394654931845&width=720&height=1280',
+    //   ],
+    //   children: [{ text: '' }],
+    // };
+    // editor.insertNode(data);
+    // editor.insertBreak();
+    editor.setHtml(`<p>
+    <span
+      data-w-e-type="resource" 
+      data-w-e-is-void 
+      data-w-e-is-inline 
+      data-id="6348cedabb4c5d003a7cd654"
+    >
+      此资源来自于 freelog
+    </span></p><p>
+    <span
+      data-w-e-type="resource" 
+      data-w-e-is-void 
+      data-w-e-is-inline 
+      data-id="61b9a6947841ed002e5c995f"
+    >
+      此资源来自于 freelog
+    </span></p><p>
+    <span
+      data-w-e-type="resource" 
+      data-w-e-is-void 
+      data-w-e-is-inline 
+      data-id="61ea6da22480b000390e1063"
+    >
+      此资源来自于 freelog
+    </span></p><p>
+    <span
+      data-w-e-type="resource" 
+      data-w-e-is-void 
+      data-w-e-is-inline 
+      data-id="61dd2ba47841ed002e5d7c0e"
+    >
+      此资源来自于 freelog
+    </span></p><p><br></p>`);
   }
 }
 

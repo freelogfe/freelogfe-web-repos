@@ -4,7 +4,6 @@ import './index.less';
 import { Drawer, Popover, Select, Tabs, Upload } from 'antd';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useEffect, useRef, useState } from 'react';
-import FCoverImage from '@/components/FCoverImage';
 import FInput from '@/components/FInput';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
@@ -12,6 +11,7 @@ import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { ObjectItem } from '../object-item';
+import { ResourceCard } from '../resource-card';
 
 const { Option } = Select;
 
@@ -55,8 +55,6 @@ export const InsertResourceDrawer = (props: Props) => {
       uploadText: FI18n.i18nNext.t('btn_upload_new_post'),
     },
   };
-  const defaultCover =
-    FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png';
 
   const refs = useRef({
     activeTab: 'market',
@@ -509,40 +507,8 @@ export const InsertResourceDrawer = (props: Props) => {
           {resourceList.length !== 0 && (
             <div className="resource-list">
               {resourceList.map((item) => (
-                <div
-                  className="resource-item"
-                  key={item.resourceId}
-                  onClick={() => {
-                    editor.insertNode({
-                      ...item,
-                      type: 'resource',
-                      children: [{ text: '' }],
-                    });
-                    editor.insertBreak();
-                    close();
-                  }}
-                >
-                  <FCoverImage
-                    src={item.coverImages[0] || defaultCover}
-                    width={280}
-                    style={{ borderRadius: 4 }}
-                  />
-                  <div className="name">{item.resourceName}</div>
-                  <div className="info">
-                    <div>{item.resourceType.join('/')}</div>
-                    <div>最新版本 {item.latestVersion}</div>
-                  </div>
-                  <div className="policy-tags">
-                    {item.policies
-                      .filter((item: { status: number }) => item.status === 1)
-                      .map(
-                        (policy: { policyName: string; policyId: string }) => (
-                          <div className="tag" key={policy.policyId}>
-                            {policy.policyId}
-                          </div>
-                        ),
-                      )}
-                  </div>
+                <div className="resource-item" key={item.resourceId}>
+                  <ResourceCard data={item} editor={editor} />
                 </div>
               ))}
             </div>
@@ -581,27 +547,7 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="resource-list">
               {mineList.map((item) => (
                 <div className="resource-item" key={item.resourceId}>
-                  <FCoverImage
-                    src={item.coverImages[0] || defaultCover}
-                    width={280}
-                    style={{ borderRadius: 4 }}
-                  />
-                  <div className="name">{item.resourceName}</div>
-                  <div className="info">
-                    <div>{item.resourceType.join('/')}</div>
-                    <div>最新版本 {item.latestVersion}</div>
-                  </div>
-                  <div className="policy-tags">
-                    {item.policies
-                      .filter((item: { status: number }) => item.status === 1)
-                      .map(
-                        (policy: { policyName: string; policyId: string }) => (
-                          <div className="tag" key={policy.policyId}>
-                            {policy.policyId}
-                          </div>
-                        ),
-                      )}
-                  </div>
+                  <ResourceCard data={item} editor={editor} />
                 </div>
               ))}
             </div>
@@ -640,27 +586,7 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="resource-list">
               {collectionList.map((item) => (
                 <div className="resource-item" key={item.resourceId}>
-                  <FCoverImage
-                    src={item.coverImages[0] || defaultCover}
-                    width={280}
-                    style={{ borderRadius: 4 }}
-                  />
-                  <div className="name">{item.resourceName}</div>
-                  <div className="info">
-                    <div>{item.resourceType.join('/')}</div>
-                    <div>最新版本 {item.latestVersion}</div>
-                  </div>
-                  <div className="policy-tags">
-                    {item.policies
-                      .filter((item: { status: number }) => item.status === 1)
-                      .map(
-                        (policy: { policyName: string; policyId: string }) => (
-                          <div className="tag" key={policy.policyId}>
-                            {policy.policyId}
-                          </div>
-                        ),
-                      )}
-                  </div>
+                  <ResourceCard data={item} editor={editor} />
                 </div>
               ))}
             </div>

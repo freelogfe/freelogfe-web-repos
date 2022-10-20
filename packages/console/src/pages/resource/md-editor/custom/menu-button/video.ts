@@ -24,7 +24,7 @@ class VideoMenuBtn implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    editor.openDrawer('video');
+    editor.setDrawerType('video');
   }
 }
 

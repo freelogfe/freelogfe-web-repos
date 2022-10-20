@@ -15,7 +15,11 @@ import { importDocumentMenuBtnConfig } from '../custom/menu-button/import-docume
 import { policyMenuBtnConfig } from '../custom/menu-button/policy';
 import { documentMenuBtnConfig } from '../custom/menu-button/document';
 import { videoMenuBtnConfig } from '../custom/menu-button/video';
-import { resourceDomConfig } from '../custom/dom/resource';
+import {
+  htmlToResourceConfig,
+  renderResourceConfig,
+  resourceToHtmlConfig,
+} from '../custom/dom/resource';
 
 /** 工具栏配置 */
 export const toolbarConfig: Partial<IToolbarConfig> = {
@@ -56,6 +60,7 @@ export const editorConfig: Partial<IEditorConfig> = {
   },
 };
 
+/** 编辑器插件（部分方法重写） */
 const plugin = <T extends IDomEditor>(editor: T) => {
   const { isInline, isVoid } = editor;
   const newEditor = editor;
@@ -87,7 +92,9 @@ const customModule: Partial<IModuleConf> = {
 
   editorPlugin: plugin,
 
-  renderElems: [resourceDomConfig],
+  renderElems: [renderResourceConfig],
+  elemsToHtml: [resourceToHtmlConfig],
+  parseElemsHtml: [htmlToResourceConfig],
 };
 
 Boot.registerModule(customModule);

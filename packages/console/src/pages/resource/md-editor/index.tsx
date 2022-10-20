@@ -80,7 +80,7 @@ const MarkdownEditor = () => {
 
   useEffect(() => {
     if (editor) {
-      editor.openDrawer = async (type: string) => {
+      editor.setDrawerType = async (type: string) => {
         setDrawerType(type);
       };
       editor.openUploadDrawer = async () => {
