@@ -207,7 +207,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
         </div>
         <div className="flex-column steps w-100x align-center">
           <div className="category">参与步骤</div>
-          <div className="container flex-column align-center pt-50">
+          <div className={"container flex-column align-center pt-50 " + (records.length != 0? 'h-796':'h-460')}>
             <div className="flex-row  w-100x pl-43 pr-35">
               <span className="des w-180 mr-87">
                 向好友分享
@@ -277,47 +277,56 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
               </span>
-              <a className="get-more link" onClick={() => scrollToAnchor('inner-test')}>获取更多名额</a>
+              <a
+                className="get-more link"
+                onClick={() => scrollToAnchor('inner-test')}
+              >
+                获取更多名额
+              </a>
             </div>
-            <div className="record mt-60 w-100x">
-              <div className="flex-row title-row align-end">
-                <div className="flex-row align-end c1">
-                  <span className="title">我的邀请记录</span>
-                  <span className="tip">
-                    好友在注册后的7天内完成指定任务，即可领取奖励
-                  </span>
-                </div>
-                <span className="tip c2">最近更新</span>
-                <span className="tip c3">奖励进度</span>
-              </div>
-
-              {records.length === 0 && (
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 100,
-                  }}
-                >
-                  <FComponentsLib.FContentText
-                    text={'暂无'}
-                    type={'additional2'}
-                  />
-                </div>
-              )}
-              {records.map((r) => {
-                return (
-                  <div className="flex-row row" key={r.userId}>
-                    <span className="item c1">
-                      {r.username}（{r.mobile || r.email || '****'}）
+            {records.length != 0 && (
+              <div className="record mt-60 w-100x">
+                <div className="flex-row title-row align-end">
+                  <div className="flex-row align-end c1">
+                    <span className="title">我的邀请记录</span>
+                    <span className="tip">
+                      好友在注册后的7天内完成指定任务，即可领取奖励
                     </span>
-                    <span className="item c2">{r.createDate}</span>
-                    <span className="item c3">{states[r.state] || '未知'}</span>
                   </div>
-                );
-              })}
-            </div>
+                  <span className="tip c2">最近更新</span>
+                  <span className="tip c3">奖励进度</span>
+                </div>
+
+                {records.length === 0 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: 100,
+                    }}
+                  >
+                    <FComponentsLib.FContentText
+                      text={'暂无'}
+                      type={'additional2'}
+                    />
+                  </div>
+                )}
+                {records.map((r) => {
+                  return (
+                    <div className="flex-row row" key={r.userId}>
+                      <span className="item c1">
+                        {r.username}（{r.mobile || r.email || '****'}）
+                      </span>
+                      <span className="item c2">{r.createDate}</span>
+                      <span className="item c3">
+                        {states[r.state] || '未知'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-column tutorial w-100x align-center">
