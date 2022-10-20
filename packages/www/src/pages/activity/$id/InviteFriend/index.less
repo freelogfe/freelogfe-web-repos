@@ -51,7 +51,7 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background:  rgba(0,0,0,.4);
+    background: rgba(0, 0, 0, 0.4);
     .invite-text {
       opacity: 1;
       position: fixed;
@@ -117,8 +117,62 @@
     font-weight: 400;
     color: #222222;
     line-height: 46px;
-    padding-top: 116px;
-    padding-bottom: 50px;
+    margin-top: 116px;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+    .active-reward {
+      background: linear-gradient(
+        315deg,
+        rgba(233, 169, 35, 0.2),
+        rgba(233, 169, 35, 1)
+      );
+    }
+    .active-step {
+      background: linear-gradient(
+        315deg,
+        rgba(255, 255, 255, 0.2),
+        rgba(66, 194, 140, 0.8)
+      );
+    }
+    .active-policy {
+      background: linear-gradient(
+        315deg,
+        rgba(233, 169, 35, 0.2),
+        rgba(233, 169, 35, 1)
+      );
+    }
+    .active-rule {
+      background: linear-gradient(
+        315deg,
+        rgba(39, 132, 255, 0.2),
+        rgba(39, 132, 255, 1)
+      );
+    }
+    .invite-circle {
+      position: absolute;
+      left: -27px;
+      top: -27px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+
+      .circle-inside {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffffff;
+      }
+    }
+    span {
+      position: relative;
+      z-index: 2;
+    }
   }
   .praise {
     background: #ffffff;

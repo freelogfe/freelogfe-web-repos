@@ -181,7 +181,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
           </div>
         </div>
         <div className="flex-column praise w-100x align-center">
-          <div className="category">活动奖励</div>
+          <div className="category">
+            <div className="invite-circle active-reward">
+              <div className="circle-inside"></div>
+            </div>
+            <span>活动奖励</span>
+          </div>
           <div className="container flex-column align-center">
             <span className="title mt-50">奖励一</span>
             <div className="flex-row title2 align-end">
@@ -206,8 +211,18 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
           </div>
         </div>
         <div className="flex-column steps w-100x align-center">
-          <div className="category">参与步骤</div>
-          <div className={"container flex-column align-center pt-50 " + (records.length != 0? 'h-796':'h-460')}>
+          <div className="category">
+            <div className="invite-circle active-step">
+              <div className="circle-inside"></div>
+            </div>
+            <span>参与步骤</span>
+          </div>
+          <div
+            className={
+              'container flex-column align-center pt-50 ' +
+              (records.length != 0 ? 'h-796' : 'h-460')
+            }
+          >
             <div className="flex-row  w-100x pl-43 pr-35">
               <span className="des w-180 mr-87">
                 向好友分享
@@ -277,12 +292,14 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
               </span>
-              {userData.limitCount == 5 && <a
-                className="get-more link"
-                onClick={() => scrollToAnchor('inner-test')}
-              >
-                获取更多名额
-              </a>}
+              {userData.limitCount == 5 && (
+                <a
+                  className="get-more link"
+                  onClick={() => scrollToAnchor('inner-test')}
+                >
+                  获取更多名额
+                </a>
+              )}
             </div>
             {records.length != 0 && (
               <div className="record mt-60 w-100x">
@@ -330,7 +347,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
           </div>
         </div>
         <div className="flex-column tutorial w-100x align-center">
-          <div className="category">邀请攻略</div>
+          <div className="category">
+            <div className="invite-circle active-policy">
+              <div className="circle-inside"></div>
+            </div>
+            <span>邀请攻略</span>
+          </div>
           <div className="flex-row container space-between">
             <div className="h-590 over-h ">
               <img src={friend} alt="" className="h-100x" />
@@ -344,7 +366,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
           </div>
         </div>
         <div className="flex-column rule w-100x align-center" id="inner-test">
-          <div className="category">活动规则</div>
+          <div className="category">
+            <div className="invite-circle active-rule">
+              <div className="circle-inside"></div>
+            </div>
+            <span>活动规则</span>
+          </div>
           <div className="flex-column container space-between">
             <span className="">
               1.&nbsp; &nbsp;内测活动时间：2021/**/** - 2021/**/**；
