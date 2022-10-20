@@ -277,7 +277,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
               </span>
-              <a className="get-more link">获取更多名额</a>
+              <a className="get-more link" onClick={() => scrollToAnchor('inner-test')}>获取更多名额</a>
             </div>
             <div className="record mt-60 w-100x">
               <div className="flex-row title-row align-end">
@@ -346,13 +346,16 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             </span>
             <span className="">
               3.&nbsp;
-              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定
+              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为3次。
+              完成
               <a
                 href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}
                 target={'_blank'}
               >
                 新手任务
               </a>
+              中的【完善个人信息】【
+              Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；
               解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             <span className="">
@@ -393,24 +396,27 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
         <FFooter />
       </div>
       <div
-        className={
-          'invite-text flex-column align-center pt-30 pb-25 ' +
-          (showInvite ? '' : 'd-none')
-        }
+        className={'invite-text-container ' + (showInvite ? '' : 'd-none')}
+        onClick={() => setShowInvite(false)}
       >
-        <textarea
-          readOnly
-          className="input mb-20"
-          value={userData.textCopy || ''}
-        />
-        <FComponentsLib.FRectBtn
-          onClick={() => {
-            copy(userData.textCopy);
-            fMessage(<span>复制成功！</span>, 'success');
-          }}
+        <div
+          className={'invite-text flex-column align-center pt-30 pb-25 '}
+          onClick={(e) => e.stopPropagation()}
         >
-          复制内容
-        </FComponentsLib.FRectBtn>
+          <textarea
+            readOnly
+            className="input mb-20"
+            value={userData.textCopy || ''}
+          />
+          <FComponentsLib.FRectBtn
+            onClick={() => {
+              copy(userData.textCopy);
+              fMessage(<span>复制成功！</span>, 'success');
+            }}
+          >
+            复制内容
+          </FComponentsLib.FRectBtn>
+        </div>
       </div>
     </div>
   );
