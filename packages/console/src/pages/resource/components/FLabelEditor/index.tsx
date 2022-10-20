@@ -31,7 +31,7 @@ export default function({ values = [], onChange }: FLabelEditor) {
       return;
     }
     onChangeInput('');
-    return onChange && onChange([...values, e.target.value]);
+    return onChange && onChange([...values, e.target.value.replace(new RegExp(/#/, 'g'), '')]);
   }
 
   function onChangeInputText(e: any) {
