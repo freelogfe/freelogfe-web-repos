@@ -277,12 +277,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
               </span>
-              <a
+              {userData.limitCount == 5 && <a
                 className="get-more link"
                 onClick={() => scrollToAnchor('inner-test')}
               >
                 获取更多名额
-              </a>
+              </a>}
             </div>
             {records.length != 0 && (
               <div className="record mt-60 w-100x">
