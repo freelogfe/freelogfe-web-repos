@@ -70,7 +70,7 @@ function Invite({ jump }: InviteProps) {
           wrapClassName={styles.input}
           onChange={(e) => {
             setError('');
-            setCode(e.currentTarget.value);
+            setCode(e.currentTarget.value.trim());
           }}
         />
         <div className={styles.codeError}>{errorMessege}</div>
