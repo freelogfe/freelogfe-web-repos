@@ -328,7 +328,7 @@ const Model: RewardPageModelType = {
         amount: Number(rewardPage.withdrawModal_Amount),
       };
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Activity.withdrawCoinAccount, params);
-      if (ret !== 0 || errCode !== 0 || !data) {
+      if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
       } else {
         fMessage('提现成功', 'success');
