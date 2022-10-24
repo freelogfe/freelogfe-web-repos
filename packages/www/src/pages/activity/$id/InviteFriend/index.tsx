@@ -13,7 +13,6 @@ import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import FFooter from '@/components/Footer';
-
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
@@ -110,7 +109,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
     }
 
     const res = await FServiceAPI.TestQualification.codeDetails2({});
+    let userInfo = { data: {} };
+    userInfo =
+      userID > -1 ? await FServiceAPI.User.currentUserInfo() : userInfo;
+    console.log(userInfo);
     setUserData({
+      userInfo: userInfo.data,
       ...res.data,
       textCopy: `邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
     \n邀请码${
@@ -277,6 +281,11 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 activityDetailsPage.timeValidity !== 'Validity'
               }
               onClick={(e) => {
+                if (!userData.limitCount) return;
+                if (userData.userInfo.userType != 1) {
+                  fMessage(<span>此活动仅对内测用户开放!</span>, 'warning');
+                  return;
+                }
                 setShowInvite(true);
                 e.stopPropagation();
               }}
@@ -286,13 +295,17 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 ? '即将开始'
                 : activityDetailsPage.timeValidity === 'Finished'
                 ? '已经结束'
-                : '立即邀请'}
+                : userData.limitCount
+                ? '立即邀请'
+                : '登录后立即邀请'}
             </FComponentsLib.FRectBtn>
             <div className="flex-row w-260 space-between mt-10">
-              <span className="invite-left">
-                还可邀请 {userData.limitCount - userData.usedCount} 位好友
-              </span>
-              {userData.limitCount == 5 && (
+              {userData.limitCount && (
+                <span className="invite-left">
+                  还可邀请 {userData.limitCount - userData.usedCount} 位好友
+                </span>
+              )}
+              {userData.usedCount < 5 && (
                 <a
                   className="get-more link"
                   onClick={() => scrollToAnchor('inner-test')}

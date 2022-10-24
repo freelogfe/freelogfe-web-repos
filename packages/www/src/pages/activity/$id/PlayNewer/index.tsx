@@ -90,7 +90,7 @@ function PlayNewer({}: PlayNewerProps) {
                 </a>
                 <a
                   href={FI18n.i18nNext.t(
-                    'beta_event_guideline_resouce_demo_link ',
+                    'beta_event_guideline_resouce_demo_link',
                   )}
                   target={'_blank'}
                   className="link"
@@ -236,6 +236,7 @@ function PlayNewer({}: PlayNewerProps) {
               <div className="content text-break text-align-center">
                 还能领取20元现金奖励！
               </div>
+
               <a
                 target={'_blank'}
                 href={
@@ -244,7 +245,8 @@ function PlayNewer({}: PlayNewerProps) {
                 }
                 className="link mt-30"
               >
-                完成全部任务仅需**分钟，快戳我领现金奖励吧！
+                <span>完成全部任务仅需**分钟，快戳我领现金奖励吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
           </div>
@@ -262,7 +264,8 @@ function PlayNewer({}: PlayNewerProps) {
                 target={'_blank'}
                 className="link mt-30"
               >
-                内测活动仅限800人，快快戳我邀请好友参加吧！
+                <span>内测活动仅限800人，快快戳我邀请好友参加吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
             <div className="h-360 over-h">
@@ -286,7 +289,8 @@ function PlayNewer({}: PlayNewerProps) {
                 target={'_blank'}
                 className="link mt-30"
               >
-                快快戳我参与问卷领取现金奖吧！
+                <span>快快戳我参与问卷领取现金奖吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
           </div>
