@@ -292,7 +292,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <span className="invite-left">
                 还可邀请 {userData.limitCount - userData.usedCount} 位好友
               </span>
-              {userData.limitCount == 5 && (
+              {userData.limitCount < 5 && (
                 <a
                   className="get-more link"
                   onClick={() => scrollToAnchor('inner-test')}
