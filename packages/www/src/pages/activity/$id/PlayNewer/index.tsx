@@ -90,7 +90,7 @@ function PlayNewer({}: PlayNewerProps) {
                 </a>
                 <a
                   href={FI18n.i18nNext.t(
-                    'beta_event_guideline_resouce_demo_link ',
+                    'beta_event_guideline_resouce_demo_link',
                   )}
                   target={'_blank'}
                   className="link"
