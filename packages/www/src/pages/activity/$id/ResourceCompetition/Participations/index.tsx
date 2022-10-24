@@ -181,7 +181,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div className={styles.participation_Text2}>校园、热血、搞笑、恋爱等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
         <div className={styles.participation_Text3}>1.创建发布漫画资源，并添加 <FComponentsLib.FCopyToClipboard
-          text={'#内测集结！漫画家召集令#'}
+          text={'内测集结！漫画家召集令'}
           title={'点击复制标签'}
         ><span style={{ cursor: 'pointer' }}>#内测集结！漫画家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
         </div>
@@ -278,7 +278,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div className={styles.participation_Text2}>同人、言情、玄幻、耽美等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
         <div className={styles.participation_Text3}>1.创建发布小说资源，并添加 <FComponentsLib.FCopyToClipboard
-          text={'#内测集结！漫画家召集令#'}
+          text={'内测集结！小说家召集令'}
           title={'点击复制标签'}
         ><span style={{ cursor: 'pointer' }}>#内测集结！小说家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；</div>
         <div style={{ height: 20 }} />
