@@ -110,7 +110,8 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
 
     const res = await FServiceAPI.TestQualification.codeDetails2({});
     let userInfo = { data: {} };
-    userInfo =  userID > -1 ? await FServiceAPI.User.currentUserInfo() :  userInfo ;
+    userInfo =
+      userID > -1 ? await FServiceAPI.User.currentUserInfo() : userInfo;
     console.log(userInfo);
     setUserData({
       userInfo: userInfo.data,
@@ -281,9 +282,9 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               }
               onClick={(e) => {
                 if (!userData.limitCount) return;
-                if(userData.userInfo.userType != 1){
-
-                  return
+                if (userData.userInfo.userType != 1) {
+                  fMessage(<span>此活动仅对内测用户开放!</span>, 'warning');
+                  return;
                 }
                 setShowInvite(true);
                 e.stopPropagation();
