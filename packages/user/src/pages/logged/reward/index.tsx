@@ -237,7 +237,10 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
               }}
             >立即刷新</FComponentsLib.FTextBtn>
             &nbsp;
-            <FComponentsLib.FContentText text={'开始提现'} type={'negative'} />
+            <FComponentsLib.FContentText
+              text={'开始提现'}
+              type={'negative'}
+            />
 
           </div>
           {/*<Space size={30} style={{ width: 440, alignItems: 'center' }}>*/}

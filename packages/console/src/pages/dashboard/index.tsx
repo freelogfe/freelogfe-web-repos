@@ -98,6 +98,23 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               />
             </div>
             <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'完成【基础任务】中的【完善个人信息】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
               <i
                 style={{
