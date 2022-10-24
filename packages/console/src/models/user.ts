@@ -4,7 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 import userPermission from '@/permissions/UserPermission';
-import { history } from 'umi';
+// import { history } from 'umi';
 
 export interface UserModelState {
   info: null | {
