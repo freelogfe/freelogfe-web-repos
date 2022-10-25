@@ -446,119 +446,12 @@ function FPolicyBuilder({
       set_Code_Input(text);
       set_Code_InputErrors([]);
     } else {
-      // const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-      // const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-      // const result: CombinationStructureType = codeToData()
       const { errors, results } = await codeToData({
         text: text,
         targetType: targetType,
       });
-      //   [
-      //   {
-      //     randomID: initialRandomID,
-      //     type: 'initial',
-      //     name: 'initial',
-      //     nameError: '',
-      //     isNameDuplicate: false,
-      //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-      //     authorizationChecked: ['active'],
-      //     events: [
-      //       {
-      //         randomID: FUtil.Tool.generateRandomCode(10),
-      //         type: 'relativeTime',
-      //         target: finishRandomID,
-      //         relativeTime_Num: '1',
-      //         relativeTime_NumError: '',
-      //         relativeTime_Unit: 'month',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     randomID: finishRandomID,
-      //     type: 'other',
-      //     name: 'finish',
-      //     nameError: '',
-      //     isNameDuplicate: false,
-      //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-      //     authorizationChecked: [],
-      //     events: [
-      //       {
-      //         randomID: FUtil.Tool.generateRandomCode(10),
-      //         type: 'terminate',
-      //       },
-      //     ],
-      //   },
-      // ];
       results && set_Combination_Data(results);
     }
-    // } else {
-    //   setTitleInput(title2);
-    //   setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
-    //   if (editMode === 'code') {
-    //     set_Code_IsDirty(true);
-    //     set_Code_Input(text2);
-    //     set_Code_InputErrors([]);
-    //   } else {
-    //     const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const authRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const result: CombinationStructureType = [
-    //       {
-    //         randomID: initialRandomID,
-    //         type: 'initial',
-    //         name: 'initial',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: [],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'payment',
-    //             target: authRandomID,
-    //             payment_Amount: '10',
-    //             payment_AmountError: '',
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         randomID: authRandomID,
-    //         type: 'other',
-    //         name: 'auth',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: ['active'],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'relativeTime',
-    //             target: finishRandomID,
-    //             relativeTime_Num: '1',
-    //             relativeTime_NumError: '',
-    //             relativeTime_Unit: 'month',
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         randomID: finishRandomID,
-    //         type: 'other',
-    //         name: 'finish',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: [],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'terminate',
-    //           },
-    //         ],
-    //       },
-    //     ];
-    //     set_Combination_Data(result);
-    //   }
-    // }
   }
 
   async function onClick_VerifyBtn() {
@@ -575,19 +468,12 @@ function FPolicyBuilder({
         return;
       }
 
+      // new RegExp()
       const t: string = (code_Input || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
       const { data: text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
-
-      // const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
-
-      // if (error) {
-      //   setShowView('fail');
-      //   setFailResult({ errorText: error.join(',') });
-      //   return;
-      // }
 
       if (alreadyUsedTexts?.includes(code_Input)) {
         setShowView('fail');
@@ -605,21 +491,12 @@ function FPolicyBuilder({
       });
     } else {
       const combinationCode: string = dataToCode(combination_Data);
-      // const {
-      //   error,
-      //   text: translationText,
-      // } = await policyCodeTranslationToText(combinationCode, targetType);
 
       const t: string = (combinationCode || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
       const { data: translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
       setIsVerifying(false);
-      // if (error) {
-      //   setShowView('fail');
-      //   setFailResult({ errorText: error.join(',') });
-      //   return;
-      // }
       if (alreadyUsedTexts?.includes(combinationCode)) {
         setShowView('fail');
         setFailResult({ errorText: '当前策略已存在' });
@@ -650,6 +527,7 @@ function FPolicyBuilder({
   const combinationDataHasError: boolean = (combination_Data.some((cd) => {
     return cd.name.trim() === ''
       || !!cd.nameError
+      || cd.events.length === 0
       || cd.events.some((et) => {
         if (et.type === 'payment') {
           return et.payment_Amount === '' || et.payment_AmountError !== '' || !et.target;

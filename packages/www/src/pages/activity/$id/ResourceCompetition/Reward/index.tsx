@@ -176,7 +176,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ width: 10 }} />
           <FComponentsLib.FIcons.FPentagram />
         </div>
-        <div style={{ height: 60 }} />
+        <div style={{ height: 20 }} />
         <div className={styles.title3}>
           <span>每创建并发行1个资源可领取 5～20元 现金奖励</span>
         </div>
@@ -195,8 +195,10 @@ function Reward({ activityDetailsPage }: RewardProps) {
             height: 68,
             borderRadius: 10,
           }}>
+          {/*{console.log(sunlightAmount, '90ioewjlksdfjl')}*/}
           <span>{sunlightAmount}元现金奖励已发放</span>
           <FComponentsLib.FRectBtn
+            disabled={sunlightAmount === 0}
             type='primary'
             onClick={() => {
               self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());

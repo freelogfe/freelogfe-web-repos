@@ -136,9 +136,21 @@ function ResourceCompetition({
               <div className={styles.text}>
                 <span>
                   参赛漫画资源需选择资源类型“图片-插画”，同时添加{' '}
-                  <b>#内测集结！漫画家召集令#</b>{' '}
+                  <FComponentsLib.FCopyToClipboard
+                    text={'内测集结！漫画家召集令'}
+                    title={'点击复制标签'}
+                  ><b style={{
+                    cursor: 'pointer',
+                    color: '#E9A923',
+                  }}>#内测集结！漫画家召集令#</b></FComponentsLib.FCopyToClipboard>{' '}
                   活动标签，以JPG、PNG长图格式上传，单张漫画内容需不少于10格；小说资源需选择资源类型“阅读-文章”，同时添加{' '}
-                  <b>#内测集结！小说家召集令#</b>{' '}
+                  <FComponentsLib.FCopyToClipboard
+                    text={'内测集结！小说家召集令'}
+                    title={'点击复制标签'}
+                  ><b style={{
+                    cursor: 'pointer',
+                    color: '#E9A923',
+                  }}>#内测集结！小说家召集令#</b></FComponentsLib.FCopyToClipboard>{' '}
                   活动标签，以TXT格式上传，字数需不少于1500字。官方将根据资源所添加的活动标签进行对应奖项评选，如未添加活动标签将不计入活动之中。
                 </span>
               </div>

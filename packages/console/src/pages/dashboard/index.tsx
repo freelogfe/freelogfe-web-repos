@@ -98,6 +98,23 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               />
             </div>
             <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'完成【基础任务】中的【完善个人信息】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
               <i
                 style={{
@@ -150,7 +167,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       <div style={{ height: 20 }} />
       <div className={styles.title2}>
         完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
-        完成全部任务仅需**分钟，快开始萌新之旅吧~
+        完成全部任务仅需9分钟，快开始萌新之旅吧~
       </div>
       <div style={{ height: 30 }} />
       <BoardCard />

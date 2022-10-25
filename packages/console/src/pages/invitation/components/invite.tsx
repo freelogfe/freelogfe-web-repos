@@ -34,7 +34,7 @@ function Invite({ jump }: InviteProps) {
         setLoading(false);
         if (data) {
           if (data.errCode) {
-            setError(data.msg);
+            setError('无效邀请码，请重新输入');
           } else {
             fMessage('验证成功！', 'success');
             setTimeout(() => {
@@ -70,7 +70,7 @@ function Invite({ jump }: InviteProps) {
           wrapClassName={styles.input}
           onChange={(e) => {
             setError('');
-            setCode(e.currentTarget.value);
+            setCode(e.currentTarget.value.trim());
           }}
         />
         <div className={styles.codeError}>{errorMessege}</div>
