@@ -332,6 +332,12 @@ const Model: RewardPageModelType = {
         fMessage(msg, 'error');
       } else {
         fMessage('提现成功', 'success');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showModal: '',
+          },
+        });
       }
     },
   },
