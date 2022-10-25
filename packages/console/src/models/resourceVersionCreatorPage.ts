@@ -11,6 +11,7 @@ import moment from 'moment';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
+import { getFilesSha1Info } from '@/utils/service';
 
 export type DepResources = {
   id: string;
@@ -689,14 +690,14 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      const params: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+      const params: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileSha1],
       };
       // console.log('*(*********');
       const {
         result,
         error,
-      }: { result: any[]; error: string; } = yield call(FServiceAPI.recombination.getFilesSha1Info, params);
+      }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
       // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
       if (error !== '') {
         yield put<ChangeAction>({
@@ -980,10 +981,10 @@ const Model: ResourceVersionCreatorModelType = {
       //     },
       //   });
       // } else {
-      const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
+      const params4: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: data.sha1,
       };
-      const data4: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
+      const data4: any[] = yield call(getFilesSha1Info, params4);
       // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
 
       yield put<ChangeAction>({
