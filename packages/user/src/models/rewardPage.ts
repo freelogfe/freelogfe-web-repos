@@ -307,8 +307,6 @@ const Model: RewardPageModelType = {
         fMessage(msg, 'error');
       } else {
         fMessage('提现成功', 'success');
-<<<<<<< Updated upstream
-=======
 
         yield put<ChangeAction>({
           type: 'change',
@@ -320,7 +318,6 @@ const Model: RewardPageModelType = {
         yield put<FetchData_Action>({
           type: 'fetchData',
         });
->>>>>>> Stashed changes
       }
     },
     * fetchData({}: FetchData_Action, { call, put }: EffectsCommandMap) {
