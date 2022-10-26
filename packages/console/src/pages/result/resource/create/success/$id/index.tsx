@@ -2,8 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import { withRouter, history } from 'umi';
-// import RouterTypes from "umi/routerTypes";
-// import {ChangeAction} from "@/models/global";
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { FUtil, FI18n } from '@freelog/tools-lib';
