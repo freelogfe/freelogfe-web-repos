@@ -245,7 +245,7 @@ function PlayNewer({}: PlayNewerProps) {
                 }
                 className="link mt-30"
               >
-                <span>完成全部任务仅需**分钟，快戳我领现金奖励吧！</span>
+                <span>完成全部任务仅需9分钟，快戳我领现金奖励吧！</span>
                 <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
