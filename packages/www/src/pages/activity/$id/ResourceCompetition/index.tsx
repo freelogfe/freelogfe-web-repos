@@ -22,23 +22,23 @@ function ResourceCompetition({
                              }: ResourceCompetitionProps): React.ReactElement {
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
 
-  const [allDate, set_allDate] = React.useState<{
-    start: string;
-    end: string;
-    announce: string;
-  } | null>(null);
-
-  React.useEffect(() => {
-    if (!!activityDetailsPage.startTime && !!activityDetailsPage.endTime) {
-      set_allDate({
-        start: moment(activityDetailsPage.startTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
-        end: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
-        announce: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').add(7, 'd').format('YYYY年MM月DD日'),
-      });
-    } else {
-      set_allDate(null);
-    }
-  }, [activityDetailsPage.startTime, activityDetailsPage.endTime]);
+  // const [allDate, set_allDate] = React.useState<{
+  //   start: string;
+  //   end: string;
+  //   announce: string;
+  // } | null>(null);
+  //
+  // React.useEffect(() => {
+  //   if (!!activityDetailsPage.startTime && !!activityDetailsPage.endTime) {
+  //     set_allDate({
+  //       start: moment(activityDetailsPage.startTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
+  //       end: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
+  //       announce: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').add(7, 'd').format('YYYY年MM月DD日'),
+  //     });
+  //   } else {
+  //     set_allDate(null);
+  //   }
+  // }, [activityDetailsPage.startTime, activityDetailsPage.endTime]);
 
   return (
     <div className={styles.style}>
@@ -80,7 +80,15 @@ function ResourceCompetition({
               <div style={{ width: 15 }} />
               <div className={styles.text}>
                 <span>
-                  活动投稿时间：{allDate?.start || 'YYYY年MM月DD日'} 00:00至{allDate?.end || 'YYYY年MM月DD日'} 24:00，投稿时间以资源发行时间为准。
+                  活动投稿时间：
+                  {activityDetailsPage.startTime
+                    ? moment(activityDetailsPage.startTime, 'YYYY·MM·DD').format('YYYY年MM月DD日')
+                    : 'YYYY年MM月DD日'}
+                  00:00至
+                  {activityDetailsPage.startTime
+                    ? moment(activityDetailsPage.startTime, 'YYYY·MM·DD').format('YYYY年MM月DD日')
+                    : 'YYYY年MM月DD日'}
+                  24:00，投稿时间以资源发行时间为准。
                 </span>
               </div>
             </div>
@@ -90,7 +98,9 @@ function ResourceCompetition({
               <div style={{ width: 15 }} />
               <div className={styles.text}>
                 <span>
-                  结果公示时间：{allDate?.announce || 'YYYY年MM月DD日'}，获奖结果将在Freelog主站活动页中公示。每周幸运奖获奖名单将于每周一在本活动页中的置顶讨论区、个人主页的公告栏中公示，奖励将于活动结果公示后的7个工作日内发放。
+                  结果公示时间：{activityDetailsPage.announceTime
+                  ? moment(activityDetailsPage.announceTime, 'YYYY·MM·DD').format('YYYY年MM月DD日')
+                  : 'YYYY年MM月DD日'}，获奖结果将在Freelog主站活动页中公示。每周幸运奖获奖名单将于每周一在本活动页中的置顶讨论区、个人主页的公告栏中公示，奖励将于活动结果公示后的7个工作日内发放。
                 </span>
               </div>
             </div>

@@ -13,6 +13,7 @@ export interface ActivityDetailsPageModelState {
 
   startTime: string | null;
   endTime: string | null;
+  announceTime: string | null;
   timeValidity: 'NotStart' | 'Validity' | 'Finished';
 }
 
@@ -55,6 +56,7 @@ const initStates: ActivityDetailsPageModelState = {
 
   startTime: null,
   endTime: null,
+  announceTime: null,
   timeValidity: 'Validity',
 };
 
@@ -90,6 +92,7 @@ const Model: ActivityDetailsPageModelType = {
 
           startTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
           endTime: data.persist ? null : moment(data.limitTime).format('YYYY·MM·DD'),
+          announceTime: data.persist ? null : moment(data.limitTime).add(7, 'days').format('YYYY·MM·DD'),
           timeValidity: data.persist ?
             'Validity'
             : nowTimestamp < new Date(data.startTime).getTime()

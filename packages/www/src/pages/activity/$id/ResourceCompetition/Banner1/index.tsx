@@ -37,8 +37,8 @@ function Banner1({ activityDetailsPage }: Banner1Props) {
           <div className={styles.title}>获奖公示</div>
           <div style={{ height: 4 }} />
           {
-            !!activityDetailsPage.endTime
-              ? (<div className={styles.time}>{moment(activityDetailsPage.endTime, 'YYYY·MM·DD').add(7, 'days').format('YYYY·MM·DD')}</div>)
+            !!activityDetailsPage.announceTime
+              ? (<div className={styles.time}>{activityDetailsPage.announceTime}</div>)
               : (<div className={styles.time}>{'YYYY·MM·DD'}</div>)
           }
 
