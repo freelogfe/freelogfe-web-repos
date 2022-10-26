@@ -89,7 +89,7 @@ const Model: ActivityDetailsPageModelType = {
           pageTitle: data?.title || '活动不存在或者已暂停',
 
           startTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
-          endTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
+          endTime: data.persist ? null : moment(data.limitTime).format('YYYY·MM·DD'),
           timeValidity: data.persist ?
             'Validity'
             : nowTimestamp < new Date(data.startTime).getTime()
