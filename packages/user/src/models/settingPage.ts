@@ -1,11 +1,11 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
-import { AnyAction } from 'redux';
-import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-import { ConnectState } from '@/models/connect';
+import {DvaReducer, WholeReadonly} from '@/models/shared';
+import {AnyAction} from 'redux';
+import {EffectsCommandMap, Subscription} from 'dva';
+import {FServiceAPI, FUtil, FI18n} from '@freelog/tools-lib';
+import {ConnectState} from '@/models/connect';
 import fMessage from '@/components/fMessage';
-import moment, { Moment } from 'moment';
-import { FetchInfoAction } from '@/models/user';
+import moment, {Moment} from 'moment';
+import {FetchInfoAction} from '@/models/user';
 // import FUtil1 from '@/utils';
 
 type ResidenceOptions = {
@@ -675,12 +675,12 @@ const Model: SettingPageModelType = {
   namespace: 'settingPage',
   state: initStates,
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
+    * onMount_Page({}: OnMount_Page_Action, {call, put}: EffectsCommandMap) {
       // console.log('onMountPage111111');
-      const { data } = yield call(FServiceAPI.User.currentUserInfo);
+      const {data} = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(data, 'data!@#$!@#$!@#$!21111');
 
-      const { data: data1 } = yield call(FServiceAPI.User.areasProvinces);
+      const {data: data1} = yield call(FServiceAPI.User.areasProvinces);
       // console.log(data1, 'data1!@#$!@#$@#$');
       const userDetail = data.userDetail;
 
@@ -688,7 +688,7 @@ const Model: SettingPageModelType = {
         bucketName: '.UserNodeData',
       };
 
-      const { data: data2 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
+      const {data: data2} = yield call(FServiceAPI.Storage.bucketDetails, params2);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -721,13 +721,13 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+    * onUnmount_Page({}: OnUnmount_Page_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    * onChange_ShowPage({payload}: OnChange_ShowPage_Action, {put}: EffectsCommandMap) {
       // console.log(payload, 'payloadpayloadpayload12342134');
       yield put<ChangeAction>({
         type: 'change',
@@ -736,14 +736,14 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_Avatar({ payload }: OnChange_Avatar_Action, { call }: EffectsCommandMap) {
+    * onChange_Avatar({payload}: OnChange_Avatar_Action, {call}: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.User.uploadHeadImg>[0] = {
         file: payload.value,
       };
-      const { data } = yield call(FServiceAPI.User.uploadHeadImg);
+      const {data} = yield call(FServiceAPI.User.uploadHeadImg);
 
     },
-    * onChange_Gender({ payload }: OnChange_Gender_Action, { put }: EffectsCommandMap) {
+    * onChange_Gender({payload}: OnChange_Gender_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -751,7 +751,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ProfileText({ payload }: OnChange_ProfileText_Action, { put }: EffectsCommandMap) {
+    * onChange_ProfileText({payload}: OnChange_ProfileText_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -759,7 +759,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_Birthday({ payload }: OnChange_Birthday_Action, { put }: EffectsCommandMap) {
+    * onChange_Birthday({payload}: OnChange_Birthday_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -767,7 +767,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_Residence({ payload }: OnChange_Residence_Action, { put }: EffectsCommandMap) {
+    * onChange_Residence({payload}: OnChange_Residence_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -775,7 +775,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_Career({ payload }: OnChange_Career_Action, { put }: EffectsCommandMap) {
+    * onChange_Career({payload}: OnChange_Career_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -783,8 +783,8 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_SubmitUserInfoBtn({}: OnClick_SubmitUserInfoBtn_Action, { select, call, put }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    * onClick_SubmitUserInfoBtn({}: OnClick_SubmitUserInfoBtn_Action, {select, call, put}: EffectsCommandMap) {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -796,14 +796,14 @@ const Model: SettingPageModelType = {
         intro: settingPage.profileText,
       };
 
-      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateDetailInfo, params);
+      const {ret, errCode, msg} = yield call(FServiceAPI.User.updateDetailInfo, params);
       if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
       }
 
       fMessage(FI18n.i18nNext.t('msg_updated_successfully'));
     },
-    * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -812,7 +812,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ReplaceEmailBtn(action: OnClick_ReplaceEmailBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ReplaceEmailBtn(action: OnClick_ReplaceEmailBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -822,7 +822,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_BindPhoneBtn(action: OnClick_BindPhoneBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_BindPhoneBtn(action: OnClick_BindPhoneBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -831,7 +831,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ReplacePhoneBtn(action: OnClick_ReplacePhoneBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ReplacePhoneBtn(action: OnClick_ReplacePhoneBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -840,7 +840,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangePasswordBtn({}: OnClick_ChangePasswordBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ChangePasswordBtn({}: OnClick_ChangePasswordBtn_Action, {put}: EffectsCommandMap) {
       //  changePassword_ModalVisible
       yield put<ChangeAction>({
         type: 'change',
@@ -850,14 +850,14 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, { call, put }: EffectsCommandMap) {
+    * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, {call, put}: EffectsCommandMap) {
 
       const params: Parameters<typeof FServiceAPI.Storage.userNodeDataList>[0] = {
         skip: 0,
         limit: 100,
       };
 
-      const { data } = yield call(FServiceAPI.Storage.userNodeDataList, params);
+      const {data} = yield call(FServiceAPI.Storage.userNodeDataList, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -879,7 +879,7 @@ const Model: SettingPageModelType = {
 
     },
 
-    * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -888,7 +888,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_BindEmail_EmailInput({ payload }: OnChange_BindEmail_EmailInput_Action, { put }: EffectsCommandMap) {
+    * onChange_BindEmail_EmailInput({payload}: OnChange_BindEmail_EmailInput_Action, {put}: EffectsCommandMap) {
       // console.log(payload, 'payloadpayloadpayloadpayload12342134234234');
       yield put<ChangeAction>({
         type: 'change',
@@ -897,8 +897,8 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onBlur_BindEmail_EmailInput({}: OnBlur_BindEmail_EmailInput_Action, { select, call, put }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    * onBlur_BindEmail_EmailInput({}: OnBlur_BindEmail_EmailInput_Action, {select, call, put}: EffectsCommandMap) {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -919,7 +919,7 @@ const Model: SettingPageModelType = {
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           email: settingPage.bindEmail_EmailInput,
         };
-        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        const {data} = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
           bindEmail_EmailInputError = '邮箱已被占用';
         }
@@ -933,7 +933,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_BindEmail_CaptchaInput({ payload }: OnChange_BindEmail_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_BindEmail_CaptchaInput({payload}: OnChange_BindEmail_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -941,7 +941,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_BindEmail_CaptchaWait({ payload }: OnChange_BindEmail_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_BindEmail_CaptchaWait({payload}: OnChange_BindEmail_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -953,8 +953,8 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    }: EffectsCommandMap): any {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -978,8 +978,8 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onClick_BindEmail_ConfirmBtn({}: OnClick_BindEmail_ConfirmBtn_Action, { select, call, put }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    * onClick_BindEmail_ConfirmBtn({}: OnClick_BindEmail_ConfirmBtn_Action, {select, call, put}: EffectsCommandMap) {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -989,7 +989,7 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.bindEmail_EmailInput,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const {errCode, msg} = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
       if (errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1011,7 +1011,7 @@ const Model: SettingPageModelType = {
       });
 
     },
-    * onCancel_ChangeEmailVerifyPass({}: OnCancel_ChangeEmailVerifyPass_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangeEmailVerifyPass({}: OnCancel_ChangeEmailVerifyPass_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1019,7 +1019,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangeEmailVerifyPass_NextBtn({}: OnClick_ChangeEmailVerifyPass_NextBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ChangeEmailVerifyPass_NextBtn({}: OnClick_ChangeEmailVerifyPass_NextBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1027,7 +1027,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onCancel_ChangeEmail_Old_Modal(action: OnCancel_ChangeEmail_Old_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangeEmail_Old_Modal(action: OnCancel_ChangeEmail_Old_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1036,7 +1036,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangeEmail_Old_CaptchaInput({ payload }: OnChange_ChangeEmail_Old_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangeEmail_Old_CaptchaInput({payload}: OnChange_ChangeEmail_Old_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1048,8 +1048,8 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    }: EffectsCommandMap): any {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1073,7 +1073,7 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onChange_ChangeEmail_Old_CaptchaWait({ payload }: OnChange_ChangeEmail_Old_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangeEmail_Old_CaptchaWait({payload}: OnChange_ChangeEmail_Old_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1086,7 +1086,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1096,7 +1096,7 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { data, errCode, ret, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      const {data, errCode, ret, msg} = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
@@ -1110,7 +1110,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onCancel_ChangeEmail_New_Modal(action: OnCancel_ChangeEmail_New_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangeEmail_New_Modal(action: OnCancel_ChangeEmail_New_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1119,7 +1119,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangeEmail_New_EmailInput({ payload }: OnChange_ChangeEmail_New_EmailInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangeEmail_New_EmailInput({payload}: OnChange_ChangeEmail_New_EmailInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1132,7 +1132,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1153,7 +1153,7 @@ const Model: SettingPageModelType = {
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           email: settingPage.changeEmail_New_EmailInput,
         };
-        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        const {data} = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
           changeEmail_New_EmailInputError = '邮箱已被占用';
         }
@@ -1167,7 +1167,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangeEmail_New_CaptchaInput({ payload }: OnChange_ChangeEmail_New_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangeEmail_New_CaptchaInput({payload}: OnChange_ChangeEmail_New_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1179,9 +1179,9 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
 
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1205,7 +1205,7 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onChange_ChangeEmail_New_CaptchaWait({ payload }: OnChange_ChangeEmail_New_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangeEmail_New_CaptchaWait({payload}: OnChange_ChangeEmail_New_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1218,7 +1218,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1228,7 +1228,7 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.changeEmail_New_EmailInput,
       };
 
-      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const {ret, errCode, msg} = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
       if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1250,7 +1250,7 @@ const Model: SettingPageModelType = {
         type: 'user/fetchInfo',
       });
     },
-    * onCancel_BindPhone_Modal(action: OnCancel_BindPhone_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_BindPhone_Modal(action: OnCancel_BindPhone_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1260,7 +1260,7 @@ const Model: SettingPageModelType = {
       });
     },
 
-    * onChange_BindPhone_PhoneInput({ payload }: OnChange_BindPhone_PhoneInput_Action, { put }: EffectsCommandMap) {
+    * onChange_BindPhone_PhoneInput({payload}: OnChange_BindPhone_PhoneInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1268,8 +1268,8 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onBlur_BindPhone_PhoneInput({}: OnBlur_BindPhone_PhoneInput_Action, { select, call, put }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    * onBlur_BindPhone_PhoneInput({}: OnBlur_BindPhone_PhoneInput_Action, {select, call, put}: EffectsCommandMap) {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1290,7 +1290,7 @@ const Model: SettingPageModelType = {
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           mobile: settingPage.bindPhone_PhoneInput,
         };
-        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        const {data} = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
           bindPhone_PhoneInputError = '手机号已被占用';
         }
@@ -1304,7 +1304,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_BindPhone_CaptchaInput({ payload }: OnChange_BindPhone_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_BindPhone_CaptchaInput({payload}: OnChange_BindPhone_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1312,7 +1312,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_BindPhone_CaptchaWait({ payload }: OnChange_BindPhone_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_BindPhone_CaptchaWait({payload}: OnChange_BindPhone_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1324,8 +1324,8 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    }: EffectsCommandMap): any {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1349,8 +1349,8 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onClick_BindPhone_ConfirmBtn({}: OnClick_BindPhone_ConfirmBtn_Action, { select, call, put }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    * onClick_BindPhone_ConfirmBtn({}: OnClick_BindPhone_ConfirmBtn_Action, {select, call, put}: EffectsCommandMap) {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1359,7 +1359,7 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.bindPhone_PhoneInput,
       };
 
-      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const {ret, errCode, msg} = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
       if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1381,7 +1381,7 @@ const Model: SettingPageModelType = {
       });
 
     },
-    * onCancel_ChangePhoneVerifyPass({}: OnCancel_ChangePhoneVerifyPass_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangePhoneVerifyPass({}: OnCancel_ChangePhoneVerifyPass_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1389,7 +1389,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangePhoneVerifyPass_NextBtn({}: OnClick_ChangePhoneVerifyPass_NextBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ChangePhoneVerifyPass_NextBtn({}: OnClick_ChangePhoneVerifyPass_NextBtn_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1397,7 +1397,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onCancel_ChangePhone_Old_Modal(action: OnCancel_ChangePhone_Old_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangePhone_Old_Modal(action: OnCancel_ChangePhone_Old_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1406,7 +1406,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePhone_Old_CaptchaInput({ payload }: OnChange_ChangePhone_Old_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePhone_Old_CaptchaInput({payload}: OnChange_ChangePhone_Old_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1418,9 +1418,9 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
 
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1445,7 +1445,7 @@ const Model: SettingPageModelType = {
       }
 
     },
-    * onChange_ChangePhone_Old_CaptchaWait({ payload }: OnChange_ChangePhone_Old_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePhone_Old_CaptchaWait({payload}: OnChange_ChangePhone_Old_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1459,7 +1459,7 @@ const Model: SettingPageModelType = {
       put,
     }: EffectsCommandMap) {
 
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1469,7 +1469,7 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { data, errCode, ret, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      const {data, errCode, ret, msg} = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage('验证码错误', 'error');
       }
@@ -1482,7 +1482,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onCancel_ChangePhone_New_Modal({}: OnCancel_ChangePhone_New_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangePhone_New_Modal({}: OnCancel_ChangePhone_New_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1491,7 +1491,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePhone_New_PhoneInput({ payload }: OnChange_ChangePhone_New_PhoneInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePhone_New_PhoneInput({payload}: OnChange_ChangePhone_New_PhoneInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1506,7 +1506,7 @@ const Model: SettingPageModelType = {
     }: EffectsCommandMap) {
 
       // console.log('#######BGBBBBGGFG');
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1527,7 +1527,7 @@ const Model: SettingPageModelType = {
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           mobile: settingPage.changePhone_New_PhoneInput,
         };
-        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        const {data} = yield call(FServiceAPI.User.userDetails, params);
         if (data) {
           changePhone_New_PhoneInputError = '手机号已被占用';
         }
@@ -1541,7 +1541,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePhone_New_CaptchaInput({ payload }: OnChange_ChangePhone_New_CaptchaInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePhone_New_CaptchaInput({payload}: OnChange_ChangePhone_New_CaptchaInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1553,8 +1553,8 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+    }: EffectsCommandMap): any {
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1578,7 +1578,7 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onChange_ChangePhone_New_CaptchaWait({ payload }: OnChange_ChangePhone_New_CaptchaWait_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePhone_New_CaptchaWait({payload}: OnChange_ChangePhone_New_CaptchaWait_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1591,7 +1591,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1601,7 +1601,7 @@ const Model: SettingPageModelType = {
         newLoginName: settingPage.changePhone_New_PhoneInput,
       };
 
-      const { ret, errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+      const {ret, errCode, msg} = yield call(FServiceAPI.User.updateMobileOrEmail, params);
 
       if (ret !== 0 || errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1622,7 +1622,7 @@ const Model: SettingPageModelType = {
         type: 'user/fetchInfo',
       });
     },
-    * onCancel_ChangePassword_Modal(action: OnCancel_ChangePassword_Modal_Action, { put }: EffectsCommandMap) {
+    * onCancel_ChangePassword_Modal(action: OnCancel_ChangePassword_Modal_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1631,7 +1631,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePassword_Old_PasswordInput({ payload }: OnChange_ChangePassword_Old_PasswordInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePassword_Old_PasswordInput({payload}: OnChange_ChangePassword_Old_PasswordInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1640,7 +1640,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePassword_New1_PasswordInput({ payload }: OnChange_ChangePassword_New1_PasswordInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePassword_New1_PasswordInput({payload}: OnChange_ChangePassword_New1_PasswordInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1653,7 +1653,7 @@ const Model: SettingPageModelType = {
       select,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1680,7 +1680,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_ChangePassword_New2_PasswordInput({ payload }: OnChange_ChangePassword_New2_PasswordInput_Action, { put }: EffectsCommandMap) {
+    * onChange_ChangePassword_New2_PasswordInput({payload}: OnChange_ChangePassword_New2_PasswordInput_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1693,7 +1693,7 @@ const Model: SettingPageModelType = {
       select,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
       let changePassword_New2_PasswordInput_Error: string = '';
@@ -1715,7 +1715,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1724,7 +1724,7 @@ const Model: SettingPageModelType = {
         newPassword: settingPage.changePassword_New1_PasswordInput,
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.User.updatePassword, params);
+      const {errCode, msg} = yield call(FServiceAPI.User.updatePassword, params);
 
       if (errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1741,11 +1741,11 @@ const Model: SettingPageModelType = {
       });
 
     },
-    * onChange_NodeDate_CheckedAll({ payload }: OnChange_NodeDate_CheckedAll_Action, {
+    * onChange_NodeDate_CheckedAll({payload}: OnChange_NodeDate_CheckedAll_Action, {
       select,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
       yield put<ChangeAction>({
@@ -1760,11 +1760,11 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onChange_NodeDate_ItemChecked({ payload }: OnChange_NodeDate_ItemChecked_Action, {
+    * onChange_NodeDate_ItemChecked({payload}: OnChange_NodeDate_ItemChecked_Action, {
       select,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
       // console.log(payload, '@#$@#$@#422222222');
@@ -1783,7 +1783,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onCancel_NodeDate_Drawer({}: OnCancel_NodeDate_Drawer_Action, { put }: EffectsCommandMap) {
+    * onCancel_NodeDate_Drawer({}: OnCancel_NodeDate_Drawer_Action, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1796,7 +1796,7 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
-      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+      const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
 
@@ -1809,7 +1809,7 @@ const Model: SettingPageModelType = {
       };
 
       // console.log(params, ' params2343432423fsdaasdfsd');
-      const { data } = yield call(FServiceAPI.Storage.clearUserNodeData, params);
+      const {data} = yield call(FServiceAPI.Storage.clearUserNodeData, params);
 
       if (!data) {
         return;
@@ -1821,7 +1821,7 @@ const Model: SettingPageModelType = {
         bucketName: '.UserNodeData',
       };
 
-      const { data: data2 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
+      const {data: data2} = yield call(FServiceAPI.Storage.bucketDetails, params2);
       // console.log(data2, 'data2!@#$@!#$@#4');
 
       yield put<ChangeAction>({
@@ -1835,7 +1835,7 @@ const Model: SettingPageModelType = {
     },
   },
   reducers: {
-    change(state, { payload }) {
+    change(state, {payload}) {
       return {
         ...state,
         ...payload,
@@ -1855,13 +1855,13 @@ interface SentVerificationCode {
   loginName: string;
 }
 
-async function sentVerificationCode({ loginName }: SentVerificationCode): Promise<boolean> {
+async function sentVerificationCode({loginName}: SentVerificationCode): Promise<boolean> {
   // console.log(loginName, 'loginName!!!!!!!');
   const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
     loginName: loginName,
     authCodeType: 'updateMobileOrEmail',
   };
-  const { errCode, msg } = await FServiceAPI.Captcha.sendVerificationCode(params);
+  const {errCode, msg} = await FServiceAPI.Captcha.sendVerificationCode(params);
   if (errCode === 0) {
     return true;
   }

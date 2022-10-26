@@ -67,6 +67,10 @@ import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
 import moment from 'moment';
 import FComponentsLib from '@freelog/components-lib';
+import userPermission from '@/permissions/UserPermission';
+import fConfirmModal from '@/components/fConfirmModal';
+import { history } from '@@/core/history';
+import { ChangeAction } from '@/models/settingPage';
 // import { individualAccounts } from '../../../../../@freelog/tools-lib/src/service-API/transactions';
 
 const RangePicker: any = DatePicker.RangePicker;
@@ -265,7 +269,27 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div style={{ width: 30 }} />
             <FComponentsLib.FRectBtn
               type='primary'
-              onClick={() => {
+              onClick={async () => {
+
+                const { email, mobile } = await userPermission.getUserInfo();
+                if (email === '' && mobile === '') {
+                  fConfirmModal({
+                    message: FI18n.i18nNext.t('activatefethaccount_err_connectwithmobileoremail'),
+                    okText: FI18n.i18nNext.t('activatefethaccount_btn_connectnow'),
+                    cancelText: FI18n.i18nNext.t('activatefethaccount_btn_later'),
+                    onOk() {
+                      history.push(FUtil.LinkTo.setting());
+                      dispatch<ChangeAction>({
+                        type: 'settingPage/change',
+                        payload: {
+                          showPage: 'security',
+                        },
+                      });
+                    },
+                  });
+                  return;
+                }
+
                 dispatch<OnClick_Activate_AccountBtn_Action>({
                   type: 'walletPage/onClick_Activate_AccountBtn',
                 });
