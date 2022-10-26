@@ -23,14 +23,14 @@ function Banner1({ activityDetailsPage }: Banner1Props) {
         <div className={styles.banner1Content_Time1}>
           <div className={styles.title}>活动开始</div>
           <div style={{ height: 4 }} />
-          <div className={styles.time}>{activityDetailsPage.startTime || 'YYYY·MM·DD'}</div>
+          <div className={styles.time}>{activityDetailsPage.startTime?.format('YYYY·MM·DD') || 'YYYY·MM·DD'}</div>
         </div>
         <img src={img_wired} style={{ width: 38, height: 15 }} />
         <div className={styles.banner1Content_Time2}>
           <div className={styles.title}>活动结束</div>
           <div style={{ height: 4 }} />
           {/*<div className={styles.time}>2022·02·10</div>*/}
-          <div className={styles.time}>{activityDetailsPage.endTime || 'YYYY·MM·DD'}</div>
+          <div className={styles.time}>{activityDetailsPage.endTime?.format('YYYY·MM·DD') || 'YYYY·MM·DD'}</div>
         </div>
         <img src={img_wired} style={{ width: 38, height: 15 }} />
         <div className={styles.banner1Content_Time3}>
@@ -38,7 +38,7 @@ function Banner1({ activityDetailsPage }: Banner1Props) {
           <div style={{ height: 4 }} />
           {
             !!activityDetailsPage.announceTime
-              ? (<div className={styles.time}>{activityDetailsPage.announceTime}</div>)
+              ? (<div className={styles.time}>{activityDetailsPage.announceTime?.format('YYYY·MM·DD')}</div>)
               : (<div className={styles.time}>{'YYYY·MM·DD'}</div>)
           }
 
