@@ -487,16 +487,16 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                       </Space>
 
                       {
-                        rule.ruleInfo.errorMsg && (<FTooltip
-                          title={rule.ruleInfo.errorMsg}
+                        (rule as any).ruleInfo?.errorMsg && (<FTooltip
+                          title={(rule as any).ruleInfo?.errorMsg}
                           placement='left'
                         >
                           <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
                         </FTooltip>)
                       }
                       {
-                        !rule.ruleInfo.errorMsg && rule.ruleInfo.warningMsg && (<FTooltip
-                          title={rule.ruleInfo.warningMsg}
+                        !(rule as any).ruleInfo?.errorMsg && (rule as any).ruleInfo?.warningMsg && (<FTooltip
+                          title={(rule as any).ruleInfo?.warningMsg}
                           placement='left'
                         >
                           <div><FComponentsLib.FIcons.FWarning /></div>
