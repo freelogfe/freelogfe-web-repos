@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Tabs } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, StorageObjectDepSelectorModelState, StorageObjectEditorModelState } from '@/models/connect';
 import FResourceSelector from '@/containers/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';

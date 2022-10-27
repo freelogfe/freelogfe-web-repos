@@ -12,7 +12,6 @@ import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-// import FUpcast from '@/components/FIcons/FUpcast';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -25,7 +24,6 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const resource = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as DepResources[number];
-  // console.log(resource, 'resource23qeasdj98io');
 
   return (<>
     <Space size={15}>
