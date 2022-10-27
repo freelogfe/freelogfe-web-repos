@@ -2,18 +2,19 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import {
-  AddDepsByMainIDsAction, DeleteDependencyByIDAction
+  AddDepsByMainIDsAction, DeleteDependencyByIDAction,
 } from '@/models/resourceVersionCreatorPage';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import FResourceList from '@/components/FResourceList';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import {ChangeAction, FetchResourcesAction} from "@/models/resourceDepSelector";
+import { ChangeAction, FetchResourcesAction } from '@/models/resourceDepSelector';
 
 const selectOptions: { text?: string, value: string }[] = [
-  {text: '资源市场', value: '1'},
-  {text: '我的资源', value: '2'},
-  {text: '我的收藏', value: '3'},
+  { text: '资源市场', value: '1' },
+  { text: '我的资源', value: '2' },
+  { text: '我的收藏', value: '3' },
 ];
 
 interface MarketProps {
@@ -22,7 +23,7 @@ interface MarketProps {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: MarketProps) {
+function Market({ dispatch, resourceDepSelector, resourceVersionCreatorPage }: MarketProps) {
 
   React.useEffect(() => {
     // handleDataSource(0);
@@ -51,7 +52,7 @@ function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: Mar
             options={selectOptions}
             text={<>{selectOptions.find((i) => i.value === resourceDepSelector.selected)?.text}</>}
             onChange={(value) => {
-              onFilterChange({selected: value as '1' | '2' | '3'});
+              onFilterChange({ selected: value as '1' | '2' | '3' });
             }}
           />
         </div>
@@ -59,16 +60,16 @@ function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: Mar
         <FInput
           debounce={300}
           onDebounceChange={(value) => {
-            onFilterChange({input: value});
+            onFilterChange({ input: value });
           }}
           value={resourceDepSelector.input}
           className={styles.filterInput}
-          theme="dark"
-          size="small"
+          theme='dark'
+          size='small'
         />
       </div>
 
-      <div style={{height: 17}}/>
+      <div style={{ height: 17 }} />
       <FResourceList
         resourceObjects={resourceDepSelector.resourceList.map((ro) => ({
           id: ro.resourceId,
@@ -106,7 +107,7 @@ function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: Mar
   );
 }
 
-export default connect(({resourceDepSelector, resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({ resourceDepSelector, resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage,
   resourceDepSelector,
 }))(Market);
