@@ -25,7 +25,7 @@ interface InfoProps {
 
 function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
 
-  if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
+  if (informExhibitInfoPage.exhibit_ResourceType.includes('主题')) {
     return null;
   }
 
