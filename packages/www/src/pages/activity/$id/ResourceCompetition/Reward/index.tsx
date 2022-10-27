@@ -27,7 +27,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
   AHooks.useMount(async () => {
     const today: string = moment().format('YYYY-MM-DD');
     const { data }: { data: { resourceUsername: string }[] } = await FServiceAPI.Activity.lotteryShow({
-      startDate: activityDetailsPage.startTime ? activityDetailsPage.startTime.replace(/·/g, '-') : '2022-01-01',
+      startDate: activityDetailsPage.startTime?.format('YYYY-MM-DD') || 'YYYY-MM-DD',
       limitDate: today,
       // startDate: '2022-01-01',
       // limitDate: '2022-12-31',

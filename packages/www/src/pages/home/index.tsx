@@ -32,14 +32,14 @@ function HomePage({}: HomePageProps) {
 
   return (<div>
     <div className={styles.banner0}>
-      <span className={styles.banner0White}>3000元现金奖励等你赢取！内测期间参与</span>
+      <span className={styles.banner0White}>内测期间参</span>
       <a
         className={styles.banner0Red}
         target={'_blank'}
         // href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}
         href={topLink}
       >资源创作大赛</a>
-      <span className={styles.banner0White}>，最低可领15元现金奖励，参与排名更有机会赢取3000元现金奖励！</span>
+      <span className={styles.banner0White}>，最低可领15元现金奖励，更有机会赢取2000元大奖！</span>
       <FComponentsLib.FIcons.FPentagram style={{ color: '#F3E574' }} />
     </div>
     <div className={styles.banner1}>

@@ -7,6 +7,10 @@ import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { listStateAndListMore } from '@/components/FListFooter';
+import userPermission from '@/permissions/UserPermission';
+import fConfirmModal from '@/components/fConfirmModal';
+import { history } from 'umi';
+
 // import FUtil1 from '@/utils';
 
 export interface WalletPageModelState {
@@ -503,10 +507,15 @@ const Model: WalletPageModelType = {
       });
     },
 
-    * onClick_Activate_AccountBtn(action: OnClick_Activate_AccountBtn_Action, { select, put }: EffectsCommandMap) {
+    * onClick_Activate_AccountBtn(action: OnClick_Activate_AccountBtn_Action, {
+      select,
+      put,
+      call,
+    }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
 
       yield put<ChangeAction>({
         type: 'change',

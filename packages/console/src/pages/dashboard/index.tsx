@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FFormLayout from '@/components/FFormLayout';
 import FComponentsLib from '@freelog/components-lib';
@@ -12,7 +11,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, DashboardPageModelState } from '@/models/connect';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPage';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
 import FPopover from '@/components/FPopover';
@@ -59,7 +58,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 }}
               />
               <FComponentsLib.FContentText
-                text={'内测活动时间：*****'}
+                text={'内测活动时间：' + FI18n.i18nNext.t('event_newbie_eventperiod')}
                 type='normal'
               />
             </div>
