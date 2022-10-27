@@ -126,7 +126,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title: (
           <FComponentsLib.FTitleText
             text={FI18n.i18nNext.t('header_tran_time')}
-            type='table'
+            type="table"
           />
         ),
         dataIndex: 'dataTime',
@@ -136,9 +136,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           return (
             <div>
               {record.date && (
-                <FComponentsLib.FContentText text={record.date} type='normal' />
+                <FComponentsLib.FContentText text={record.date} type="normal" />
               )}
-              <FComponentsLib.FContentText text={record.time} type='normal' />
+              <FComponentsLib.FContentText text={record.time} type="normal" />
             </div>
           );
         },
@@ -147,7 +147,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title: (
           <FComponentsLib.FTitleText
             text={'交易方｜支付方式｜交易记录编号'}
-            type='table'
+            type="table"
           />
         ),
         dataIndex: 'payment',
@@ -158,18 +158,18 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FContentText
                 text={`${record.reciprocalAccountName} | 羽币支付`}
-                type='highlight'
+                type="highlight"
               />
               <FComponentsLib.FContentText
                 text={`交易记录编号 ${record.transactionRecordId}`}
-                type='additional1'
+                type="additional1"
               />
             </div>
           );
         },
       },
       {
-        title: <FComponentsLib.FTitleText text={'交易说明'} type='table' />,
+        title: <FComponentsLib.FTitleText text={'交易说明'} type="table" />,
         // title: (<FTitleText text={FI18n.i18nNext.t('header_tran_description')} type='table' />),
         dataIndex: 'money',
         key: 'money',
@@ -179,15 +179,14 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FContentText
                 text={record.digest}
-                type='highlight'
+                type="highlight"
               />
-              {
-                record.contractID && (<FComponentsLib.FContentText
+              {record.contractID && (
+                <FComponentsLib.FContentText
                   text={`合约编号 ${record.contractID}`}
-                  type='additional1'
-                />)
-              }
-
+                  type="additional1"
+                />
+              )}
             </div>
           );
         },
@@ -197,7 +196,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title: (
           <FComponentsLib.FTitleText
             text={FI18n.i18nNext.t('header_tran_amount')}
-            type='table'
+            type="table"
           />
         ),
         dataIndex: 'amount',
@@ -212,18 +211,18 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     ? record.transactionAmount
                     : '+' + record.transactionAmount
                 }
-                type='h1'
+                type="h1"
               />
               <FComponentsLib.FContentText
                 text={`余额 ${record.afterBalance}`}
-                type='additional1'
+                type="additional1"
               />
             </div>
           );
         },
       },
       {
-        title: <FComponentsLib.FTitleText text={'交易状态'} type='table' />,
+        title: <FComponentsLib.FTitleText text={'交易状态'} type="table" />,
         dataIndex: 'status',
         key: 'status',
         render(_, record) {
@@ -257,26 +256,31 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
   return (
     <div className={styles.styles}>
       <div style={{ height: 40 }} />
-      <FComponentsLib.FTitleText type='h1' text={'羽币账户'} />
+      <FComponentsLib.FTitleText type="h1" text={'羽币账户'} />
       <div style={{ height: 20 }} />
       {walletPage.accountStatus === 'inactive' ? (
         <>
           <div className={styles.Inactive}>
             <FComponentsLib.FTipText
               text={FI18n.i18nNext.t('msg_activate_feather_account')}
-              type='second'
+              type="second"
             />
             <div style={{ width: 30 }} />
             <FComponentsLib.FRectBtn
-              type='primary'
+              type="primary"
               onClick={async () => {
-
                 const { email, mobile } = await userPermission.getUserInfo();
                 if (email === '' && mobile === '') {
                   fConfirmModal({
-                    message: FI18n.i18nNext.t('activatefethaccount_err_connectwithmobileoremail'),
-                    okText: FI18n.i18nNext.t('activatefethaccount_btn_connectnow'),
-                    cancelText: FI18n.i18nNext.t('activatefethaccount_btn_later'),
+                    message: FI18n.i18nNext.t(
+                      'activatefethaccount_err_connectwithmobileoremail',
+                    ),
+                    okText: FI18n.i18nNext.t(
+                      'activatefethaccount_btn_connectnow',
+                    ),
+                    cancelText: FI18n.i18nNext.t(
+                      'activatefethaccount_btn_later',
+                    ),
                     onOk() {
                       history.push(FUtil.LinkTo.setting());
                       dispatch<ChangeAction>({
@@ -298,20 +302,24 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               {FI18n.i18nNext.t('btn_activate_feather_account_now')}
             </FComponentsLib.FRectBtn>
           </div>
-          <Activity
-            inActive={true}
-            goActive={() => {
-              dispatch<OnClick_Activate_AccountBtn_Action>({
-                type: 'walletPage/onClick_Activate_AccountBtn',
-              });
-            }}
-          />
+          {moment(
+            FI18n.i18nNext.t('event_contest_eventperiod_end'),
+          ).dayOfYear() > moment().dayOfYear() && moment().year() == 2022 && (
+            <Activity
+              inActive={true}
+              goActive={() => {
+                dispatch<OnClick_Activate_AccountBtn_Action>({
+                  type: 'walletPage/onClick_Activate_AccountBtn',
+                });
+              }}
+            />
+          )}
         </>
       ) : (
         <>
           <div className={styles.AccountInfo}>
             <div>
-              <FComponentsLib.FTitleText type='h4' text={'账户余额（枚）'} />
+              <FComponentsLib.FTitleText type="h4" text={'账户余额（枚）'} />
               <div style={{ height: 15 }} />
               <div className={styles.Gold}>{walletPage.accountBalance}</div>
             </div>
@@ -323,27 +331,33 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 });
               }}
             >
-              <FComponentsLib.FIcons.FSafetyLock style={{ fontSize: 32, color: '#DA6666' }} />
+              <FComponentsLib.FIcons.FSafetyLock
+                style={{ fontSize: 32, color: '#DA6666' }}
+              />
               {/*<div style={{height: 10}}/>*/}
               <div style={{ color: '#333', fontSize: 13 }}>修改支付密码</div>
             </div>
           </div>
-          <Activity
-            inActive={false}
-            signSuccess={() => {
-              dispatch<OnMountPageAction>({
-                type: 'walletPage/onMountPage',
-              });
-            }}
-            goActive={() => {
-              dispatch<OnClick_Activate_AccountBtn_Action>({
-                type: 'walletPage/onClick_Activate_AccountBtn',
-              });
-            }}
-          />
+          {moment(
+            FI18n.i18nNext.t('event_contest_eventperiod_end'),
+          ).dayOfYear() > moment().dayOfYear() && moment().year() == 2022 && (
+            <Activity
+              inActive={false}
+              signSuccess={() => {
+                dispatch<OnMountPageAction>({
+                  type: 'walletPage/onMountPage',
+                });
+              }}
+              goActive={() => {
+                dispatch<OnClick_ChangingPasswordBtn_Action>({
+                  type: 'walletPage/onClick_ChangingPasswordBtn',
+                });
+              }}
+            />
+          )}
           <div style={{ height: 40 }} />
           <FComponentsLib.FTitleText
-            type='h1'
+            type="h1"
             text={FI18n.i18nNext.t('title_feather_tranaction_history')}
           />
           <div style={{ height: 20 }} />
@@ -496,7 +510,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                         });
                       }}
                       // type='number'
-                      size='small'
+                      size="small"
                       placeholder={'最低金额'}
                       className={styles.filterAmount}
                       wrapClassName={styles.filterAmount}
@@ -505,7 +519,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                     <FInput
                       allowClear
                       // type='number'
-                      size='small'
+                      size="small"
                       value={walletPage.table_Filter_MaxAmount}
                       onChange={(e) => {
                         dispatch<OnChange_Table_Filter_MaxAmount_Action>({
@@ -547,7 +561,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   </div>
                   <Space size={10} className={styles.filter2Right}>
                     <FComponentsLib.FRectBtn
-                      type='default'
+                      type="default"
                       onClick={() => {
                         dispatch<OnClick_Table_Filter_ResetBtn_Action>({
                           type: 'walletPage/onClick_Table_Filter_ResetBtn',
@@ -557,7 +571,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                       {FI18n.i18nNext.t('btn_reset_filter')}
                     </FComponentsLib.FRectBtn>
                     <FComponentsLib.FRectBtn
-                      type='primary'
+                      type="primary"
                       onClick={() => {
                         dispatch<OnClick_Table_Filter_SearchBtn_Action>({
                           type: 'walletPage/onClick_Table_Filter_SearchBtn',
@@ -575,13 +589,13 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   <>
                     <div style={{ height: 30 }} />
                     <div className={styles.totalAmount}>
-                      <FComponentsLib.FTitleText text={'支出'} type='table' />
+                      <FComponentsLib.FTitleText text={'支出'} type="table" />
                       <div style={{ width: 10 }} />
                       <div className={styles.totalAmountExpenditure}>
                         {walletPage.table_TotalAmountExpenditure}
                       </div>
                       <div style={{ width: 20 }} />
-                      <FComponentsLib.FTitleText text={'收入'} type='table' />
+                      <FComponentsLib.FTitleText text={'收入'} type="table" />
                       <div style={{ width: 10 }} />
                       <div className={styles.totalAmountIncome}>
                         {walletPage.table_TotalAmountIncome}
@@ -631,7 +645,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           <FComponentsLib.FTitleText
             // text={'激活账户验证'}
             text={FI18n.i18nNext.t('title_activate_feather_account')}
-            type='popup'
+            type="popup"
           />
         }
         visible={walletPage.activating_VisibleModal === 'captcha'}
@@ -644,9 +658,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         width={500}
       >
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 320 }}>
-            <Space size={15} direction='vertical'>
-              <FComponentsLib.FTipText type='third' text={'验证方式'} />
+          <Space size={25} direction="vertical" style={{ width: 320 }}>
+            <Space size={15} direction="vertical">
+              <FComponentsLib.FTipText type="third" text={'验证方式'} />
               {walletPage.activating_AccountMobile && (
                 <Space size={2}>
                   <Radio
@@ -665,7 +679,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   />
                   <FComponentsLib.FContentText
                     text={walletPage.activating_AccountMobile}
-                    type='normal'
+                    type="normal"
                   />
                 </Space>
               )}
@@ -688,20 +702,20 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   />
                   <FComponentsLib.FContentText
                     text={walletPage.activating_AccountEmail}
-                    type='normal'
+                    type="normal"
                   />
                 </Space>
               )}
             </Space>
 
             <div>
-              <FComponentsLib.FTipText type='third' text={'验证码'} />
+              <FComponentsLib.FTipText type="third" text={'验证码'} />
               <div style={{ height: 5 }} />
               <Space size={10}>
                 <FInput
                   className={styles.verificationCodeInput}
                   wrapClassName={styles.verificationCodeInput}
-                  size='middle'
+                  size="middle"
                   value={walletPage.activating_Captcha}
                   onChange={(e) => {
                     dispatch<OnChange_Activate_CaptchaInput_Action>({
@@ -714,7 +728,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 />
                 <FComponentsLib.FRectBtn
                   style={{ width: 110 }}
-                  type='primary'
+                  type="primary"
                   disabled={walletPage.activating_SentCaptchaWait > 0}
                   onClick={() => {
                     dispatch<OnClick_Activate_SentCaptchaBtn_Action>({
@@ -731,7 +745,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </Space>
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
-            type='primary'
+            type="primary"
             disabled={!walletPage.activating_Captcha}
             onClick={() => {
               dispatch<OnClick_Activate_NextBtn_Action>({
@@ -746,7 +760,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
       <Modal
         destroyOnClose
-        title={<FComponentsLib.FTitleText text={'设置支付密码'} type='popup' />}
+        title={<FComponentsLib.FTitleText text={'设置支付密码'} type="popup" />}
         visible={walletPage.activating_VisibleModal === 'password'}
         onCancel={() => {
           dispatch<OnCancel_Activate_CaptchaModal_Action>({
@@ -757,9 +771,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         width={500}
       >
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 320 }}>
+          <Space size={25} direction="vertical" style={{ width: 320 }}>
             <div>
-              <FComponentsLib.FTipText type='third' text={'支付密码'} />
+              <FComponentsLib.FTipText type="third" text={'支付密码'} />
               <div style={{ height: 5 }} />
               <FComponentsLib.FPaymentPasswordInput
                 // autoFocus
@@ -781,7 +795,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             </div>
 
             <div>
-              <FComponentsLib.FTipText type='third' text={'验证支付密码'} />
+              <FComponentsLib.FTipText type="third" text={'验证支付密码'} />
               <div style={{ height: 5 }} />
               <FComponentsLib.FPaymentPasswordInput
                 value={walletPage.activating_PasswordTwo}
@@ -806,7 +820,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </Space>
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
-            type='primary'
+            type="primary"
             disabled={
               walletPage.activating_PasswordOne === '' ||
               walletPage.activating_PasswordTwo === '' ||
@@ -827,7 +841,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       <Modal
         destroyOnClose
         title={
-          <FComponentsLib.FTitleText text={'修改支付密码验证'} type='popup' />
+          <FComponentsLib.FTitleText text={'修改支付密码验证'} type="popup" />
         }
         visible={walletPage.changingPassword_CaptchaModal_Visible}
         // onOk={handleOk}
@@ -840,9 +854,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         width={500}
       >
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 320 }}>
-            <Space size={15} direction='vertical'>
-              <FComponentsLib.FTipText type='third' text={'验证方式'} />
+          <Space size={25} direction="vertical" style={{ width: 320 }}>
+            <Space size={15} direction="vertical">
+              <FComponentsLib.FTipText type="third" text={'验证方式'} />
               {walletPage.changingPassword_CaptchaModal_Phone && (
                 <Space size={2}>
                   <Radio
@@ -863,7 +877,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   />
                   <FComponentsLib.FContentText
                     text={walletPage.changingPassword_CaptchaModal_Phone}
-                    type='normal'
+                    type="normal"
                   />
                 </Space>
               )}
@@ -888,20 +902,20 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   />
                   <FComponentsLib.FContentText
                     text={walletPage.changingPassword_CaptchaModal_Email}
-                    type='normal'
+                    type="normal"
                   />
                 </Space>
               )}
             </Space>
 
             <div>
-              <FComponentsLib.FTipText type='third' text={'验证码'} />
+              <FComponentsLib.FTipText type="third" text={'验证码'} />
               <div style={{ height: 5 }} />
               <Space size={10}>
                 <FInput
                   className={styles.verificationCodeInput}
                   wrapClassName={styles.verificationCodeInput}
-                  size='middle'
+                  size="middle"
                   value={walletPage.changingPassword_CaptchaModal_CaptchaInput}
                   onChange={(e) => {
                     dispatch<OnChange_ChangingPassword_CaptchaModal_CaptchaInput_Action>(
@@ -919,7 +933,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                   disabled={
                     walletPage.changingPassword_CaptchaModal_SentCaptchaWait > 0
                   }
-                  type='primary'
+                  type="primary"
                   onClick={() => {
                     dispatch<OnClick_ChangingPassword_CaptchaModal_SendBtn_Action>(
                       {
@@ -938,7 +952,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           </Space>
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
-            type='primary'
+            type="primary"
             disabled={
               walletPage.changingPassword_CaptchaModal_CaptchaInput === ''
             }
@@ -956,7 +970,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       <Modal
         destroyOnClose
         title={
-          <FComponentsLib.FTitleText text={'验证原支付密码'} type='popup' />
+          <FComponentsLib.FTitleText text={'验证原支付密码'} type="popup" />
         }
         visible={walletPage.changingPassword_OldPasswordModal_Visible}
         // onOk={handleOk}
@@ -969,13 +983,13 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         width={500}
       >
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 320 }}>
+          <Space size={25} direction="vertical" style={{ width: 320 }}>
             <div>
               <div className={styles.payPassword}>
-                <FComponentsLib.FTipText type='third' text={'原支付密码'} />
+                <FComponentsLib.FTipText type="third" text={'原支付密码'} />
                 <FComponentsLib.FTextBtn
                   style={{ fontSize: 12 }}
-                  type='primary'
+                  type="primary"
                   onClick={() => {
                     const path: string = FUtil.LinkTo.retrievePayPassword();
                     // const host: string = FUtil.Format.completeUrlByDomain('user');
@@ -1007,7 +1021,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
-            type='primary'
+            type="primary"
             disabled={
               walletPage.changingPassword_OldPasswordModal_PasswordInput
                 .length !== 6
@@ -1027,7 +1041,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
       <Modal
         destroyOnClose
-        title={(<FComponentsLib.FTitleText text={'设置新支付密码'} type='popup' />)}
+        title={
+          <FComponentsLib.FTitleText text={'设置新支付密码'} type="popup" />
+        }
         visible={walletPage.changingPassword_NewPasswordModal_Visible}
         // onOk={handleOk}
         onCancel={() => {
@@ -1039,9 +1055,9 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         width={500}
       >
         <div className={styles.ActivateAccountContent}>
-          <Space size={25} direction='vertical' style={{ width: 320 }}>
+          <Space size={25} direction="vertical" style={{ width: 320 }}>
             <div>
-              <FComponentsLib.FTipText type='third' text={'新支付密码'} />
+              <FComponentsLib.FTipText type="third" text={'新支付密码'} />
               <div style={{ height: 5 }} />
               <FComponentsLib.FPaymentPasswordInput
                 autoFocus
@@ -1067,7 +1083,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             </div>
 
             <div>
-              <FComponentsLib.FTipText type='third' text={'验证新支付密码'} />
+              <FComponentsLib.FTipText type="third" text={'验证新支付密码'} />
               <div style={{ height: 5 }} />
               <FComponentsLib.FPaymentPasswordInput
                 value={walletPage.changingPassword_NewPasswordModal_Password2}
@@ -1098,11 +1114,11 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
 
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
-            type='primary'
+            type="primary"
             disabled={
               walletPage.changingPassword_NewPasswordModal_Password1 === '' ||
               walletPage.changingPassword_NewPasswordModal_Password1Error !==
-              '' ||
+                '' ||
               walletPage.changingPassword_NewPasswordModal_Password2 === '' ||
               walletPage.changingPassword_NewPasswordModal_Password2Error !== ''
             }
@@ -1133,7 +1149,7 @@ export function successMessage() {
       <div className={styles.success}>
         <FComponentsLib.FIcons.FCheck style={{ fontSize: 76 }} />
         <div style={{ height: 20 }} />
-        <FComponentsLib.FTitleText type='popup' text={'支付密码修改成功!'} />
+        <FComponentsLib.FTitleText type="popup" text={'支付密码修改成功!'} />
       </div>
     ),
     // className: 'custom-class',

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 // import FNoDataTip from '@/components/FNoDataTip';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI,FI18n } from '@freelog/tools-lib';
 // import { history } from 'umi';
 import reward from '@/assets/reward.jpg';
 import bindWarning from '@/assets/bind-warning.png';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-
+import moment from 'moment'
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
 import { Modal } from 'antd';
@@ -138,7 +138,7 @@ function CoinActivity(props: CoinActivity) {
         </div>
 
         <span className={styles.tip}>
-          每日登陆领取羽币，活动时间：2022/10/01-2022/10/31
+          每日登陆领取羽币，活动时间：{FI18n.i18nNext.t('event_contest_eventperiod') }
         </span>
         <div className="flex-row mt-5">
           <span className={styles.tip}>
@@ -200,7 +200,7 @@ function CoinActivity(props: CoinActivity) {
           </div>
           <div className={styles.text + ' mt-20'}>活动时间</div>
           <div className="flex-row mt-10 align-center">
-            <span className={styles.text1}>内测期间（具体待定）</span>
+            <span className={styles.text1}>内测期间：{FI18n.i18nNext.t('event_contest_eventperiod')}</span>
           </div>
           <div className={styles.text + ' mt-20'}>羽币领取规则</div>
           <div className="flex-row mt-10 align-center">
