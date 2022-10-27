@@ -332,7 +332,7 @@ export interface InformalNodeManagerPageModelState {
     id: string;
     checked: boolean;
     matchErrors: string[];
-    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'];
+    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'] | IRules['comment'];
     efficientInfos: {
       count: number;
       type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
