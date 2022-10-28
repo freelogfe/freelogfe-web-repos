@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
@@ -67,6 +67,9 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
           atLeastOneUsing={resourceAuthPage.status === 1}
           dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
+            if (data.using) {
+              self._czc.push(['_trackEvent', '授权信息页', '上线', '', 1]);
+            }
             // const usedCount: number = resourceAuthPage.policies.filter((p) => {
             //   return p.status === 1;
             // }).length;
@@ -81,7 +84,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             //     cancelText: FI18n.i18nNext.t('btn_cancel'),
             //   });
             // } else {
-              onPolicyStatusChange(data.id, data.using);
+            onPolicyStatusChange(data.id, data.using);
             // }
           }}
         />)
