@@ -488,7 +488,13 @@ const Model: ResourceVersionCreatorModelType = {
         description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
 
-      const { data } = yield call(FServiceAPI.Resource.createVersion, params);
+      const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc.push(['_trackEvent', '版本发行页', '发行', '', 0]);
+        fMessage('创建失败', 'error');
+        return;
+      }
+      self._czc.push(['_trackEvent', '版本发行页', '发行', '', 1]);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
