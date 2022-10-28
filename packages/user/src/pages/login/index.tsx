@@ -71,11 +71,11 @@ function Login({ dispatch, loginPage }: LoginProps) {
         >
           {/*<i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')} />*/}
           <div className='flex-column align-center flex-1'>
-            <div className='flex-3'></div>
+            <div className='flex-3' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText type='h1' text={'登录freelog'} />
             </div>
-            <div className='flex-2'></div>
+            <div className='flex-2' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.box} ref={boxRef}>
@@ -166,6 +166,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 className={styles.btn}
                 disabled={submitBtnDisabled}
                 onClick={() => {
+                  self._czc.push(['_trackEvent', '登录页面', '登录', '', 1]);
                   dispatch<LoginAction>({
                     type: 'loginPage/login',
                     payload: urlParams.goTo || '',
