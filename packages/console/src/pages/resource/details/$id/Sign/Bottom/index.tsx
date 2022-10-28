@@ -30,6 +30,7 @@ function Bottom({ dispatch, resourceDetailPage }: BottomProps) {
             // })
           }
           onClick={async () => {
+            self._czc.push(['_trackEvent', '资源详情页', '立即签约', '', 1]);
             dispatch<OnClick_SignBtn_Action>({
               type: 'resourceDetailPage/onClick_SignBtn',
             });
