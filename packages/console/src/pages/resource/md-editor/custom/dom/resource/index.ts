@@ -4,37 +4,16 @@ import './index.less';
 import { h, VNode } from 'snabbdom';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { SlateElement } from '@wangeditor/editor';
-
-interface HashImgUrlResult {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  r: number;
-  width: number;
-  height: number;
-}
-
-/** 解析资源文件路径参数 */
-const hashImgUrl = (str: string): HashImgUrlResult => {
-  let params = str.split('#')[1];
-  let param = params.split('&');
-  let obj: { [key: string]: number } = {};
-  for (const kv of param) {
-    let [key, value] = kv.split('=');
-    obj[key] = Number(value);
-  }
-  if (typeof obj['r'] !== 'number') {
-    obj['r'] = 0;
-  }
-  return obj as any;
-};
+import { CustomResource } from '../../../core/interface';
+import { hashImgUrl } from '../../../core/common';
+import { defaultCover } from '../../../core/assets';
 
 /** 获取资源信息与授权状态 */
 const getResourceData = async (id: string) => {
   const [resourceRes, authRes] = await Promise.all([
     FServiceAPI.Resource.info({ resourceIdOrName: id }),
     FServiceAPI.Resource.batchAuth({ resourceIds: id }),
+    FServiceAPI.Resource.info({ resourceIdOrName: id }),
   ]);
   if (resourceRes.errCode !== 0 || authRes.errCode !== 0) return null;
 
@@ -44,7 +23,7 @@ const getResourceData = async (id: string) => {
 };
 
 /** 未授权资源 DOM */
-const unauthorizedResource = (data: any): VNode => {
+const unauthorizedResource = (data: CustomResource): VNode => {
   const {
     resourceId,
     coverImages,
@@ -52,17 +31,12 @@ const unauthorizedResource = (data: any): VNode => {
     resourceType,
     latestVersion,
     policies,
+    authType,
   } = data;
 
   // 整理封面尺寸与坐标
-  const cover =
-    coverImages[0] ||
-    FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png';
-  let coverStyle = {
-    width: '100%',
-    height: '100%',
-    transform: 'none',
-  };
+  const cover = coverImages[0] || defaultCover;
+  let coverStyle = { width: '100%', height: '100%', transform: 'none' };
   if (cover.includes('#')) {
     const { x, y, w, width: wh, height: ht } = hashImgUrl(cover);
     const scale: number = 280 / w;
@@ -73,7 +47,7 @@ const unauthorizedResource = (data: any): VNode => {
     };
   }
 
-  // 整理上架策略
+  // 过滤已上架策略
   const onlinePolicies = policies.filter(
     (item: { status: number }) => item.status === 1,
   );
@@ -130,40 +104,213 @@ const unauthorizedResource = (data: any): VNode => {
         ],
       ),
       // 右侧区域
-      h('div.right-area', {}, [
-        h('i.freelog fl-icon-warningxiaochicun', {}),
-        h('div.tip', {}, [FI18n.i18nNext.t('msg_posteditor_getauth')]),
-        h(
-          'div.auth-btn',
-          {
-            on: {
-              click() {
-                console.error('打开授权弹窗');
+      authType === 0
+        ? // 未授权
+          h('div.right-area unauthorized', {}, [
+            h('i.freelog fl-icon-warningxiaochicun', {}),
+            h('div.tip', {}, [FI18n.i18nNext.t('msg_posteditor_getauth')]),
+            h(
+              'div.auth-btn',
+              {
+                on: {
+                  click() {
+                    console.error('打开授权弹窗');
+                  },
+                },
               },
-            },
-          },
-          [FI18n.i18nNext.t('btn_posteditor_getauth')],
-        ),
-      ]),
+              [FI18n.i18nNext.t('btn_posteditor_getauth')],
+            ),
+          ])
+        : // 上抛
+          h('div.right-area upcast', {}, [
+            h('i.freelog fl-icon-shangpao'),
+            h('div.tip', {}, ['资源已上抛']),
+            h('div.desc', {}, [FI18n.i18nNext.t('info_posteditor_upcast')]),
+            h(
+              'div.auth-btn',
+              {
+                on: {
+                  click() {
+                    console.error('打开授权弹窗');
+                  },
+                },
+              },
+              [FI18n.i18nNext.t('btn_view_authdetails')],
+            ),
+          ]),
     ],
   );
 };
 
-/** 图片资源 DOM */
-const imageResource = (url: string): VNode => {
-  return h('div.authorized-resource-wrapper', {}, [
-    // 图片
-    h('img', { props: { src: url } }),
-    // 已授权按钮
+/** 工具栏授权状态 */
+const ToolbarAuthStatus = (data: CustomResource): VNode => {
+  const authStatusMapping = {
+    1: h('div.toolbar-auth', {}, [
+      h(
+        'div.authorize-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        ['处理授权'],
+      ),
+    ]),
+    2: h('div.toolbar-auth', {}, [
+      h('i.freelog fl-icon-suoding'),
+      h('div.auth-text unauthorized-text', {}, ['待授权']),
+      h(
+        'div.authorize-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        ['授权管理'],
+      ),
+    ]),
+    3: h('div.toolbar-auth', {}, [
+      h('i.freelog fl-icon-a-chenggongzhengqueduigou1'),
+      h('div.auth-text authorize-text', {}, ['已授权']),
+      h(
+        'div.authorize-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        ['授权管理'],
+      ),
+    ]),
+    4: h('div.toolbar-auth', {}, [
+      h('i.freelog fl-icon-shangpao'),
+      h('div.auth-text upcast-text', {}, ['已上抛']),
+      h(
+        'div.authorize-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        ['授权管理'],
+      ),
+    ]),
+  };
+
+  return authStatusMapping[data.authType];
+};
+
+/** 资源工具栏 */
+const ResourceToolbar = (data: CustomResource): VNode => {
+  const toolbar = h('div.resource-toolbar', {}, [
     h('div.toolbar', {}, [
-      h('i.freelog fl-icon-xuanzhong', {}),
-      h('div', {}, ['已授权']),
+      h('div.type', {}, [
+        // TODO 类型，目前写死
+        '资源',
+      ]),
+      h(
+        'div.name',
+        {
+          title: data.resourceName,
+          on: {
+            click() {
+              window.open(
+                FUtil.LinkTo.resourceDetails({
+                  resourceID: data.resourceId,
+                }),
+              );
+            },
+          },
+        },
+        [data.resourceName],
+      ),
+      ToolbarAuthStatus(data),
     ]),
   ]);
+
+  return toolbar;
+};
+
+/** 图片 dom 授权状态 */
+const ImageAuthStatus = (data: CustomResource): VNode => {
+  const authStatusMapping = {
+    1: h('div.image-auth', {}, [
+      h('i.freelog fl-icon-suoding', {
+        on: {
+          click() {
+            console.error('授权管理');
+          },
+        },
+      }),
+      h('div.auth-text', {}, ['引用资源作为文章的依赖，需处理授权']),
+    ]),
+    2: h('div.image-auth', {}, [
+      h('i.freelog fl-icon-suoding', {
+        on: {
+          click() {
+            console.error('授权管理');
+          },
+        },
+      }),
+      h('div.auth-text', {}, ['已签约，未获得授权']),
+    ]),
+    3: h('div'),
+    4: h('div.image-auth', {}, [
+      h('i.freelog fl-icon-shangpao'),
+      h('div.auth-text', {}, ['已上抛，将由资源创作者/节点商处理授权']),
+    ]),
+  };
+
+  return authStatusMapping[data.authType];
+};
+
+/** 图片资源 DOM */
+const ImageResource = (data: CustomResource): VNode => {
+  // 整理封面尺寸与坐标
+  const cover = data.coverImages[0] || defaultCover;
+  let coverStyle = { width: '100%', height: '100%', transform: 'none' };
+  if (cover.includes('#')) {
+    const { x, y, w, width: wh, height: ht } = hashImgUrl(cover);
+    const scale: number = 280 / w;
+    coverStyle = {
+      width: wh * scale + 'px',
+      height: ht * scale + 'px',
+      transform: `translateX(${-x * scale}px) translateY(${-y * scale}px)`,
+    };
+  }
+
+  // 未授权通过
+  const unauthorizedImage = h('div.unauthorized-image', {}, [
+    h('div.cover', {}, [
+      h('img', {
+        props: { src: cover },
+        style: coverStyle,
+      }),
+      ImageAuthStatus(data),
+    ]),
+    ResourceToolbar(data),
+  ]);
+
+  // 已授权通过
+  const authorizedImage = h('div.authorized-image', {}, [
+    // 图片
+    h('img', { props: { src: data.content } }),
+    ResourceToolbar(data),
+  ]);
+
+  return data.authType === 3 ? authorizedImage : unauthorizedImage;
 };
 
 /** 视频资源 DOM */
-const videoResource = (url: string): VNode => {
+const VideoResource = (url: string): VNode => {
   return h('div.authorized-resource-wrapper', {}, [
     // 视频
     h('video', { props: { src: url, controls: true } }),
@@ -176,7 +323,7 @@ const videoResource = (url: string): VNode => {
 };
 
 /** 音频资源 DOM */
-const audioResource = (url: string): VNode => {
+const AudioResource = (url: string): VNode => {
   return h('div.authorized-resource-wrapper', {}, [
     // 音频
     h('audio', { props: { src: url, controls: true } }),
@@ -189,10 +336,15 @@ const audioResource = (url: string): VNode => {
 };
 
 /** 文本资源 DOM */
-const textResource = (content: string): VNode => {
+const TextResource = (content: string): VNode => {
+  setTimeout(() => {
+    const docContent = document.getElementById('docContent');
+    if (!docContent) return;
+    docContent.innerHTML = content;
+  }, 0);
   return h('div.authorized-resource-wrapper', {}, [
     // 文本
-    h('div', {}, [content]),
+    h('div#docContent'),
     // 已授权按钮
     h('div.toolbar', {}, [
       h('i.freelog fl-icon-xuanzhong', {}),
@@ -202,46 +354,40 @@ const textResource = (content: string): VNode => {
 };
 
 /** 渲染资源元素 */
-const renderResource = (data: any): VNode => {
-  if (!data.isAuth) {
-    // 未授权资源，无视资源类型，统一渲染未授权资源 DOM
-    return unauthorizedResource(data);
-  }
-
+const renderResource = (data: CustomResource): VNode => {
   const resourseFirstType = data.resourceType[0];
-  if (['图片', '视频', '音频'].includes(resourseFirstType)) {
-    // 媒体资源
-    const url =
-      'https://image.freelog.com/preview-image/f4f110bb9e55ec9910594ec5e8225f39a84c9375.jpg#x=266.51296912453944&y=813.2151264713248&r=0&w=389.2526206575793&h=291.9394654931845&width=720&height=1280';
-    if (resourseFirstType === '图片') {
-      console.error('图片');
-      return imageResource(url);
-    } else if (resourseFirstType === '视频') {
-      console.error('视频');
-      return videoResource(url);
-    } else if (resourseFirstType === '音频') {
-      console.error('音频');
-      return audioResource(url);
-    }
+  if (resourseFirstType === '图片') {
+    return ImageResource(data);
+  } else if (resourseFirstType === '视频') {
+    return VideoResource(data.content);
+  } else if (resourseFirstType === '音频') {
+    return AudioResource(data.content);
   } else if (resourseFirstType === '阅读') {
-    // 文本资源
-    console.error('阅读');
-    return textResource('未授权资源，无视资源类型，统一渲染未授权资源');
+    return TextResource(data.content);
   }
   return h('div');
 };
 
 /** 将资源元素转为 HTML */
-const resourceToHtml = (data: any): string => {
+const resourceToHtml = (data: CustomResource): string => {
   const html = `
-  <span
-    data-w-e-type="resource" 
-    data-w-e-is-void 
-    data-w-e-is-inline 
-    data-id="${data.resourceId}"
-  >
-    此资源来自于 freelog
-  </span>`;
+    <span
+      data-w-e-type="resource"
+      data-w-e-is-void
+      data-w-e-is-inline
+      data-resourceId="${data.resourceId}"
+      data-authType="${data.authType}"
+      data-resourceName="${data.resourceName}"
+      data-coverImages="${JSON.stringify(data.coverImages)}"
+      data-resourceType="${JSON.stringify(data.resourceType)}"
+      data-latestVersion="${data.latestVersion}"
+      data-version="${data.version || data.latestVersion}"
+      data-policies="${JSON.stringify(data.policies)}"
+      data-content="${data.content}"
+    >
+      此资源来自于 freelog
+    </span>
+  `;
 
   return html;
 };
@@ -249,23 +395,27 @@ const resourceToHtml = (data: any): string => {
 /** 将 HTML 渲染为 DOM */
 /** TODO: 不接受异步，目前方案是在 setHtml 前将数据整理好，将数据写入标签 data */
 const htmlToResource = (domElem: Element): SlateElement => {
-  // const res = await getResourceData(data.id);
-  // if (!res) return h('div', {}, []);
-
-  // const link = domElem.getAttribute('data-link') || '';
-  // const fileName = domElem.getAttribute('data-fileName') || '';
+  const resourceId = domElem.getAttribute('data-resourceId') || '';
+  const authType = domElem.getAttribute('data-authType') || '';
+  const resourceName = domElem.getAttribute('data-resourceName') || '';
+  const coverImages = domElem.getAttribute('data-coverImages') || '';
+  const resourceType = domElem.getAttribute('data-resourceType') || '';
+  const latestVersion = domElem.getAttribute('data-latestVersion') || '';
+  const version = domElem.getAttribute('data-version') || '';
+  const policies = domElem.getAttribute('data-policies') || '';
+  const content = domElem.getAttribute('data-content') || '';
 
   const data = {
+    resourceId,
+    authType: Number(authType),
+    resourceName,
+    coverImages: JSON.parse(coverImages),
+    resourceType: JSON.parse(resourceType),
+    latestVersion,
+    version,
+    policies: JSON.parse(policies),
+    content,
     type: 'resource',
-    resourceId: '61b9a6947841ed002e5c995f',
-    resourceName: 'ZhuC/奥克斯的缝',
-    resourceType: ['图片'],
-    latestVersion: '1.0.3',
-    policies: ['免费', 'asdf', 'wcwccw'],
-    coverImages: [
-      'https://image.freelog.com/preview-image/f4f110bb9e55ec9910594ec5e8225f39a84c9375.jpg#x=266.51296912453944&y=813.2151264713248&r=0&w=389.2526206575793&h=291.9394654931845&width=720&height=1280',
-    ],
-    isAuth: true,
     children: [{ text: '' }],
   };
 

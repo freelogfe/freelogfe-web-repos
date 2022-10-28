@@ -1,6 +1,7 @@
 /** markdown 编辑器 */
 
 import './index.less';
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { connect } from 'dva';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
@@ -13,6 +14,9 @@ import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { Prompt, history } from 'umi';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
+import { formatDate } from './core/common';
+
+export const editorContext = React.createContext<any>({});
 
 /** 编辑器 */
 const MarkdownEditor = () => {
@@ -49,33 +53,6 @@ const MarkdownEditor = () => {
       setLastSaveTime(saveTime);
     }, 500);
     setEdited(false);
-  };
-
-  /**
-   * 格式化日期
-   * @param time 时间戳、字符串日期等等
-   * @param format 自定义输出结果格式（YYYY:年，MM:月，DD:日，hh:时，mm:分，ss:秒）
-   */
-  const formatDate = (time: number, format = 'YYYY-MM-DD hh:mm:ss') => {
-    if (!time) return '';
-
-    const date = new Date(time);
-
-    const year = String(date.getFullYear());
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    const result = format
-      .replace('YYYY', year)
-      .replace('MM', month)
-      .replace('DD', day)
-      .replace('hh', hour)
-      .replace('mm', minutes)
-      .replace('ss', seconds);
-    return result;
   };
 
   useEffect(() => {
@@ -134,88 +111,88 @@ const MarkdownEditor = () => {
   }, [edited]);
 
   return (
-    <div className="markdown-editor-wrapper">
-      <Prompt
-        when={!promptShow && edited}
-        message={(location: any) => {
-          setPromptShow(true);
-          fConfirmModal({
-            message: FI18n.i18nNext.t('alarm_leave_page'),
-            onOk() {
-              history.push(location);
-            },
-            onCancel() {
-              setPromptShow(false);
-            },
-          });
-          return false;
-        }}
-      />
+    <editorContext.Provider value={{ editor }}>
+      <div className="markdown-editor-wrapper">
+        <Prompt
+          when={!promptShow && edited}
+          message={(location: any) => {
+            setPromptShow(true);
+            fConfirmModal({
+              message: FI18n.i18nNext.t('alarm_leave_page'),
+              onOk() {
+                history.push(location);
+              },
+              onCancel() {
+                setPromptShow(false);
+              },
+            });
+            return false;
+          }}
+        />
 
-      <div className="header">
-        <div className="title" onClick={outputMarkdown}>
-          {FI18n.i18nNext.t('title_edit_post')}
-        </div>
-        <div className="article-info">
-          <span>
-            {`${FI18n.i18nNext.t('title_edit_post')} ${markdown.length}`}
-          </span>
-          {saveType === 1 && (
-            <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
-          )}
-          {saveType === 2 && (
-            <span>
-              {FI18n.i18nNext.t('posteditor_state_saved', {
-                LastEditTime: formatDate(lastSaveTime),
-              })}
-            </span>
-          )}
-          {saveType === 3 && (
-            <span>
-              {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
-                LastEditTime: formatDate(lastSaveTime),
-              })}
-            </span>
-          )}
-        </div>
-        <div className="btns">
-          <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
-            {FI18n.i18nNext.t('btn_save_post')}
+        <div className="header">
+          <div className="title" onClick={outputMarkdown}>
+            {FI18n.i18nNext.t('title_edit_post')}
           </div>
-          <div className="exit-btn" onClick={exit}>
-            {FI18n.i18nNext.t('btn_quit_editor')}
+          <div className="article-info">
+            <span>
+              {`${FI18n.i18nNext.t('title_edit_post')} ${markdown.length}`}
+            </span>
+            {saveType === 1 && (
+              <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
+            )}
+            {saveType === 2 && (
+              <span>
+                {FI18n.i18nNext.t('posteditor_state_saved', {
+                  LastEditTime: formatDate(lastSaveTime),
+                })}
+              </span>
+            )}
+            {saveType === 3 && (
+              <span>
+                {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
+                  LastEditTime: formatDate(lastSaveTime),
+                })}
+              </span>
+            )}
+          </div>
+          <div className="btns">
+            <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
+              {FI18n.i18nNext.t('btn_save_post')}
+            </div>
+            <div className="exit-btn" onClick={exit}>
+              {FI18n.i18nNext.t('btn_quit_editor')}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="editor-toolbar">
-        <Toolbar editor={editor} defaultConfig={toolbarConfig} />
-      </div>
+        <div className="editor-toolbar">
+          <Toolbar editor={editor} defaultConfig={toolbarConfig} />
+        </div>
 
-      <div className="editor">
-        <Editor
-          defaultConfig={editorConfig}
-          value={html}
-          onCreated={setEditor}
-          onChange={(editor) => setHtml(editor.getHtml())}
-          mode="default"
+        <div className="editor">
+          <Editor
+            defaultConfig={editorConfig}
+            value={html}
+            onCreated={setEditor}
+            onChange={(editor) => setHtml(editor.getHtml())}
+            mode="default"
+          />
+        </div>
+
+        <ImportDocDrawer
+          show={importDrawer}
+          close={() => setImportDrawer(false)}
+          setHtml={setHtml}
+        />
+
+        <InsertResourceDrawer
+          show={!!drawerType}
+          close={() => setDrawerType('')}
+          drawerType={drawerType}
         />
       </div>
-
-      <ImportDocDrawer
-        show={importDrawer}
-        close={() => setImportDrawer(false)}
-        setHtml={setHtml}
-        editor={editor}
-      />
-
-      <InsertResourceDrawer
-        show={!!drawerType}
-        close={() => setDrawerType('')}
-        drawerType={drawerType}
-        editor={editor}
-      />
-    </div>
+    </editorContext.Provider>
   );
 };
 

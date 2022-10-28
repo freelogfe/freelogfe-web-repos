@@ -3,7 +3,7 @@
 import './index.less';
 import { Drawer, Popover, Select, Tabs, Upload } from 'antd';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import FInput from '@/components/FInput';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
@@ -12,6 +12,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { ObjectItem } from '../object-item';
 import { ResourceCard } from '../resource-card';
+import { editorContext } from '../..';
 
 const { Option } = Select;
 
@@ -19,11 +20,11 @@ interface Props {
   show: boolean;
   close: () => void;
   drawerType: string;
-  editor: any;
 }
 
 export const InsertResourceDrawer = (props: Props) => {
-  const { show, close, drawerType, editor } = props;
+  const { editor } = useContext(editorContext);
+  const { show, close, drawerType } = props;
   let body: Element | null = null;
   const resourceMapping: any = {
     image: {
@@ -101,7 +102,7 @@ export const InsertResourceDrawer = (props: Props) => {
     getResourceList(true);
     getMineList(true);
     getCollectionList(true);
-    getBuckets();
+    if (drawerType !== 'text') getBuckets();
     setUrl('');
 
     return () => {
@@ -508,7 +509,7 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="resource-list">
               {resourceList.map((item) => (
                 <div className="resource-item" key={item.resourceId}>
-                  <ResourceCard data={item} editor={editor} />
+                  <ResourceCard data={item} />
                 </div>
               ))}
             </div>
@@ -547,7 +548,7 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="resource-list">
               {mineList.map((item) => (
                 <div className="resource-item" key={item.resourceId}>
-                  <ResourceCard data={item} editor={editor} />
+                  <ResourceCard data={item} />
                 </div>
               ))}
             </div>
@@ -586,7 +587,7 @@ export const InsertResourceDrawer = (props: Props) => {
             <div className="resource-list">
               {collectionList.map((item) => (
                 <div className="resource-item" key={item.resourceId}>
-                  <ResourceCard data={item} editor={editor} />
+                  <ResourceCard data={item} />
                 </div>
               ))}
             </div>
@@ -597,6 +598,7 @@ export const InsertResourceDrawer = (props: Props) => {
     {
       label: FI18n.i18nNext.t('insert_tab_storage'),
       key: 'bucket',
+      disabled: drawerType === 'text',
       children: (
         <div className="buckets-area">
           <div className="header">

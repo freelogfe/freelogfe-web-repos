@@ -2,15 +2,20 @@
 
 import FCoverImage from '@/components/FCoverImage';
 import { FI18n, FUtil } from '@freelog/tools-lib';
+import { useContext } from 'react';
+import { editorContext } from '../..';
+import { defaultCover } from '../../core/assets';
+import { CustomResource } from '../../core/interface';
+import { insertResource } from '../../custom/dom/resource/utils';
 import './index.less';
 
 interface Props {
-  data: any;
-  editor: any;
+  data: CustomResource;
 }
 
 export const ResourceCard = (props: Props) => {
-  const { data, editor } = props;
+  const { editor } = useContext(editorContext);
+  const { data } = props;
   const {
     resourceId,
     coverImages,
@@ -22,22 +27,14 @@ export const ResourceCard = (props: Props) => {
   const onlinePolicies = policies.filter(
     (item: { status: number }) => item.status === 1,
   );
-  const defaultCover = `${FUtil.Format.completeUrlByDomain(
-    'static',
-  )}/static/default_cover.png`;
 
   return (
     <div
       className="resource-card-wrapper"
       key={resourceId}
       onClick={() => {
-        editor.insertNode({
-          ...data,
-          type: 'resource',
-          children: [{ text: '' }],
-          isAuth: true,
-        });
-        editor.insertBreak();
+        // TODO authType 目前写死
+        insertResource({ ...data, authType: 4 }, editor);
         editor.setDrawerType('');
       }}
     >
@@ -46,7 +43,7 @@ export const ResourceCard = (props: Props) => {
         width={280}
         style={{ borderRadius: 4 }}
       />
-      <div className="name">111{resourceName}</div>
+      <div className="name">{resourceName}</div>
       <div className="info">
         <div>{FUtil.Format.resourceTypeKeyArrToResourceType(resourceType)}</div>
         <div>

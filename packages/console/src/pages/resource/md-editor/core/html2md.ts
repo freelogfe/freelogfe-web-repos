@@ -7,16 +7,20 @@ export const html2md = (htmlText: string) => {
   let olContent = []; // ol 标签
   let imgContent = []; // img 标签
   let aContent = []; // a 标签
+  let resourceContent = []; // 资源
 
   // 清除 <style> 和 <script> 及内容
   markdownText = markdownText
-    .replace(/<style\s*[^>]*?>[^]*?<\/style>/gi, "")
-    .replace(/<script\s*[^>]*?>[^]*?<\/script>/gi, "");
+    .replace(/<style\s*[^>]*?>[^]*?<\/style>/gi, '')
+    .replace(/<script\s*[^>]*?>[^]*?<\/script>/gi, '');
 
   // 储存 <pre> 内容
   preContent = markdownText.match(/<pre\s*[^>]*?>[^]*?<\/pre>/gi) || [];
   // 标记原文本中 <pre> 的内容
-  markdownText = markdownText.replace(/(?<=<pre\s*[^>]*?>)[\s\S]*?(?=<\/pre>)/gi, "`#preContent#`");
+  markdownText = markdownText.replace(
+    /(?<=<pre\s*[^>]*?>)[\s\S]*?(?=<\/pre>)/gi,
+    '`#preContent#`',
+  );
   // 存在 <pre>
   if (preContent && preContent.length) {
     for (let i = 0; i < preContent.length; i++) {
@@ -24,20 +28,32 @@ export const html2md = (htmlText: string) => {
       // 匹配代码块的语言
       const languageMatch = text.match(/(?<=language-).*?(?=[\s'"])/i) || [];
       // 获取代码块的语言
-      const language = languageMatch && languageMatch[0] ? `${languageMatch[0]}[~wrap]` : "[~wrap]";
+      const language =
+        languageMatch && languageMatch[0]
+          ? `${languageMatch[0]}[~wrap]`
+          : '[~wrap]';
       // 去掉多余标签获得内容
       const content = clearHtmlTag(text);
       // 将内容替换标记
-      markdownText = markdownText.replace(/`#preContent#`/i, language + content);
+      markdownText = markdownText.replace(
+        /`#preContent#`/i,
+        language + content,
+      );
     }
     // 清除 <pre>、</pre> 标签
-    markdownText = markdownText.replace(/<pre\s*[^>]*?>/gi, "```").replace(/<\/pre>/gi, "[~wrap]```[~wrap][~wrap]");
+    markdownText = markdownText
+      .replace(/<pre\s*[^>]*?>/gi, '```')
+      .replace(/<\/pre>/gi, '[~wrap]```[~wrap][~wrap]');
   }
 
   // 储存 <code> 内容
-  codeContent = markdownText.match(/(?<=<code\s*[^>]*?>)[\s\S]*?(?=<\/code>)/gi) || [];
+  codeContent =
+    markdownText.match(/(?<=<code\s*[^>]*?>)[\s\S]*?(?=<\/code>)/gi) || [];
   // 标记原文本中 <code> 的内容
-  markdownText = markdownText.replace(/(?<=<code\s*[^>]*?>)[\s\S]*?(?=<\/code>)/gi, "`#codeContent#`");
+  markdownText = markdownText.replace(
+    /(?<=<code\s*[^>]*?>)[\s\S]*?(?=<\/code>)/gi,
+    '`#codeContent#`',
+  );
   // 存在 <code>
   if (codeContent) {
     for (let i = 0; i < codeContent.length; i++) {
@@ -48,13 +64,18 @@ export const html2md = (htmlText: string) => {
       markdownText = markdownText.replace(/`#codeContent#`/i, content);
     }
     // 清除 <code>、</code> 标签
-    markdownText = markdownText.replace(/<code>/gi, "`").replace(/<\/code>/gi, "`");
+    markdownText = markdownText
+      .replace(/<code>/gi, '`')
+      .replace(/<\/code>/gi, '`');
   }
 
   // 储存 <a> 内容
   aContent = markdownText.match(/<a\s*[^>]*?>[^]*?<\/a>/gi) || [];
   // 标记原文本中 <a> 的内容
-  markdownText = markdownText.replace(/<a\s*[^>]*?>[^]*?<\/a>/gi, "`#aContent#`");
+  markdownText = markdownText.replace(
+    /<a\s*[^>]*?>[^]*?<\/a>/gi,
+    '`#aContent#`',
+  );
   // 存在 <a>
   if (aContent) {
     for (let i = 0; i < aContent.length; i++) {
@@ -73,7 +94,10 @@ export const html2md = (htmlText: string) => {
   // 储存 <img> 内容
   imgContent = markdownText.match(/<img\s*[^>]*?>[^]*?(<\/img>)?/gi) || [];
   // 标记原文本中 <img> 的内容
-  markdownText = markdownText.replace(/<img\s*[^>]*?>[^]*?(<\/img>)?/gi, "`#imgContent#`");
+  markdownText = markdownText.replace(
+    /<img\s*[^>]*?>[^]*?(<\/img>)?/gi,
+    '`#imgContent#`',
+  );
   // 存在 <img>
   if (imgContent) {
     for (let i = 0; i < imgContent.length; i++) {
@@ -89,52 +113,69 @@ export const html2md = (htmlText: string) => {
     }
   }
 
+  // 储存依赖资源内容（<span data-w-e-type="resource"）
+  resourceContent =
+    markdownText.match(
+      /<span\s*data-w-e-type="resource"[^>]*?>[^]*?<\/span>/gi,
+    ) || [];
+  // 标记原文本中依赖资源内容
+  markdownText = markdownText.replace(
+    /<span\s*data-w-e-type="resource"[^>]*?>[^]*?<\/span>/gi,
+    '`#resourceContent#`',
+  );
+
   // 获取纯净（无属性）的 html
-  markdownText = markdownText.replace(/(?<=<[a-zA-Z0-9]*)\s.*?(?=>)/g, "");
+  markdownText = markdownText.replace(/(?<=<[a-zA-Z0-9]*)\s.*?(?=>)/g, '');
 
   // <h1><h2>...等标题标签转为 #
   markdownText = markdownText
-    .replace(/<h1>/gi, "[~wrap]# ")
-    .replace(/<\/h1>/gi, "[~wrap][~wrap]")
-    .replace(/<h2>/gi, "[~wrap]## ")
-    .replace(/<\/h2>/gi, "[~wrap][~wrap]")
-    .replace(/<h3>/gi, "[~wrap]### ")
-    .replace(/<\/h3>/gi, "[~wrap][~wrap]")
-    .replace(/<h4>/gi, "[~wrap]#### ")
-    .replace(/<\/h4>/gi, "[~wrap][~wrap]")
-    .replace(/<h5>/gi, "[~wrap]##### ")
-    .replace(/<\/h5>/gi, "[~wrap][~wrap]")
-    .replace(/<h6>/gi, "[~wrap]###### ")
-    .replace(/<\/h6>/gi, "[~wrap][~wrap]");
+    .replace(/<h1>/gi, '[~wrap]# ')
+    .replace(/<\/h1>/gi, '[~wrap][~wrap]')
+    .replace(/<h2>/gi, '[~wrap]## ')
+    .replace(/<\/h2>/gi, '[~wrap][~wrap]')
+    .replace(/<h3>/gi, '[~wrap]### ')
+    .replace(/<\/h3>/gi, '[~wrap][~wrap]')
+    .replace(/<h4>/gi, '[~wrap]#### ')
+    .replace(/<\/h4>/gi, '[~wrap][~wrap]')
+    .replace(/<h5>/gi, '[~wrap]##### ')
+    .replace(/<\/h5>/gi, '[~wrap][~wrap]')
+    .replace(/<h6>/gi, '[~wrap]###### ')
+    .replace(/<\/h6>/gi, '[~wrap][~wrap]');
 
   // 处理一些常用的结构标签
   markdownText = markdownText
-    .replace(/<br>/gi, "[~wrap]")
-    .replace(/<\/p>|<br\/>|<\/div>/gi, "[~wrap][~wrap]")
-    .replace(/<meta>|<span>|<p>|<div>|<\/span>/gi, "");
+    .replace(/<br>/gi, '[~wrap]')
+    .replace(/<\/p>|<br\/>|<\/div>/gi, '[~wrap][~wrap]')
+    .replace(/<meta>|<span>|<p>|<div>|<\/span>/gi, '');
 
   // 分割线：将 <hr> 转为 ---
-  markdownText = markdownText.replace(/<hr>|<hr\/>/gi, "---[~wrap][~wrap]");
+  markdownText = markdownText.replace(/<hr>|<hr\/>/gi, '---[~wrap][~wrap]');
 
   // 粗体：将 <b>、<strong> 转为 **
-  markdownText = markdownText.replace(/<b>|<strong>|<\/b>|<\/strong>/gi, "**");
+  markdownText = markdownText.replace(/<b>|<strong>|<\/b>|<\/strong>/gi, '**');
 
   // 斜体：将 <i>、<em>、<abbr>、<dfn>、<cite>、<address> 转为 *
   markdownText = markdownText.replace(
     /<i>|<em>|<abbr>|<dfn>|<cite>|<address>|<\/i>|<\/em>|<\/abbr>|<\/dfn>|<\/cite>|<\/address>/gi,
-    "*"
+    '*',
   );
 
   // 删除线：将 <s>、<del> 转为 ~~
-  markdownText = markdownText.replace(/<del>|<s>|<\/del>|<\/s>/gi, "~~");
+  markdownText = markdownText.replace(/<del>|<s>|<\/del>|<\/s>/gi, '~~');
 
   // 引用：将 <blockquote> 转为 >
-  markdownText = markdownText.replace(/<blockquote>/gi, "[~wrap]> ").replace(/<\/blockquote>/gi, "[~wrap][~wrap]");
+  markdownText = markdownText
+    .replace(/<blockquote>/gi, '[~wrap]> ')
+    .replace(/<\/blockquote>/gi, '[~wrap][~wrap]');
 
   // 储存 <table> 内容
-  tableContent = markdownText.match(/(?<=<table\s*[^>]*?>)[\s\S]*?(?=<\/table>)/gi) || [];
+  tableContent =
+    markdownText.match(/(?<=<table\s*[^>]*?>)[\s\S]*?(?=<\/table>)/gi) || [];
   // 标记原文本中 <table> 的内容
-  markdownText = markdownText.replace(/<table\s*[^>]*?>[^]*?<\/table>/gi, "`#tableContent#`");
+  markdownText = markdownText.replace(
+    /<table\s*[^>]*?>[^]*?<\/table>/gi,
+    '`#tableContent#`',
+  );
   // 存在 <table>
   if (tableContent) {
     const tableDataList = [];
@@ -151,16 +192,20 @@ export const html2md = (htmlText: string) => {
     if (tableDataList.length) {
       for (let i = 0; i < tableDataList.length; i++) {
         // 构建表格
-        const result = buildTable(tableDataList[i]) || "";
+        const result = buildTable(tableDataList[i]) || '';
         markdownText = markdownText.replace(/`#tableContent#`/i, result);
       }
     }
   }
 
   // 储存 <ol> 内容
-  olContent = markdownText.match(/(?<=<ol\s*[^>]*?>)[\s\S]*?(?=<\/ol>)/gi) || [];
+  olContent =
+    markdownText.match(/(?<=<ol\s*[^>]*?>)[\s\S]*?(?=<\/ol>)/gi) || [];
   // 标记原文本中 <ol> 的内容
-  markdownText = markdownText.replace(/(?<=<ol\s*[^>]*?>)[\s\S]*?(?=<\/ol>)/gi, "`#olContent#`");
+  markdownText = markdownText.replace(
+    /(?<=<ol\s*[^>]*?>)[\s\S]*?(?=<\/ol>)/gi,
+    '`#olContent#`',
+  );
   // 存在 <ol>
   if (olContent) {
     for (let i = 0; i < olContent.length; i++) {
@@ -170,40 +215,73 @@ export const html2md = (htmlText: string) => {
       const num = (text.match(/<li>/gi) || []).length;
       for (let i = 1; i <= num; i++) {
         // 清除 <li> 标签
-        result = result.replace(/<li>/i, `[~wrap]${i}. `).replace(/<\/li>/, "[~wrap]");
+        result = result
+          .replace(/<li>/i, `[~wrap]${i}. `)
+          .replace(/<\/li>/, '[~wrap]');
       }
-      markdownText = markdownText.replace(/`#olContent#`/i, clearHtmlTag(result));
+      markdownText = markdownText.replace(
+        /`#olContent#`/i,
+        clearHtmlTag(result),
+      );
     }
   }
 
   // 无序列表：将 <li>、<dd> 转为 -
-  markdownText = markdownText.replace(/<li>|<dd>/gi, "[~wrap] - ").replace(/<\/li>|<\/dd>/gi, "[~wrap]");
+  markdownText = markdownText
+    .replace(/<li>|<dd>/gi, '[~wrap] - ')
+    .replace(/<\/li>|<\/dd>/gi, '[~wrap]');
 
   // 换行处理：将换行标记 [~wrap] 转为为 \n，删除多余换行，删除首行换行
   markdownText = markdownText
-    .replace(/\[~wrap\]/gi, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .replace(/^\n{1,}/i, "");
+    .replace(/\[~wrap\]/gi, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/^\n{1,}/i, '');
 
   // 清除剩余 html 标签
   markdownText = clearHtmlTag(markdownText);
 
   // 还原原文本中的 < 和 > 符号
-  markdownText = markdownText.replace(/&lt;/gi, "<").replace(/&gt;/gi, ">");
+  markdownText = markdownText.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>');
+
+  // 存在依赖资源
+  if (resourceContent) {
+    for (let i = 0; i < resourceContent.length; i++) {
+      let result = '';
+      const text = resourceContent[i];
+      // 获取资源名称
+      const resourceName = text.match(
+        /(?<=data-resourceName=['"])[\s\S]*?(?=['"])/i,
+      );
+      const resourceType =
+        text.match(/(?<=data-resourceType="\[")[\s\S]*?(?=")/i) || [];
+      // 转化依赖语法
+      if (resourceType[0] === '图片') {
+        result = `<img src='freelog://${resourceName}'>`;
+      } else if (resourceType[0] === '视频') {
+        result = `<video controls src='freelog://${resourceName}'>`;
+      } else if (resourceType[0] === '音频') {
+        result = `<audio controls src='freelog://${resourceName}'>`;
+      } else if (resourceType[0] === '阅读') {
+        result = `{{freelog://${resourceName}}}`;
+      }
+      // 将图片文本替换标记
+      markdownText = markdownText.replace(/`#resourceContent#`/i, result);
+    }
+  }
 
   return markdownText;
 };
 
 /** 清除所有 HTML 标签 */
-const clearHtmlTag = (str = "") => {
-  return str.replace(/<[\s\S]*?>/g, "");
+const clearHtmlTag = (str = '') => {
+  return str.replace(/<[\s\S]*?>/g, '');
 };
 
 /** 构建 md 格式的 table */
 const buildTable = (tableData: any[] | null = null) => {
   if (!tableData) return;
 
-  let result = "";
+  let result = '';
 
   // 不存在 th 标签，则视表格为一层处理
   if (!tableData[0]) {

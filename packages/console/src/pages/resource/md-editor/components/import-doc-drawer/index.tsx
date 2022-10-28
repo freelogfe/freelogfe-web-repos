@@ -5,7 +5,7 @@ import ObjectIcon from '../../images/object.png';
 import { Drawer, Popconfirm, Popover, Select, Tabs, Upload } from 'antd';
 import fMessage from '@/components/fMessage';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import FInput from '@/components/FInput';
 import showdown from 'showdown';
 import { ObjectItem } from '../object-item';
@@ -13,6 +13,8 @@ import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
+import { editorContext } from '../..';
+import { importDoc } from '../../custom/dom/resource/utils';
 
 const { Option } = Select;
 
@@ -29,11 +31,11 @@ interface Props {
   show: boolean;
   close: () => void;
   setHtml: React.Dispatch<React.SetStateAction<string>>;
-  editor: any;
 }
 
 export const ImportDocDrawer = (props: Props) => {
-  const { show, close, setHtml, editor } = props;
+  const { editor } = useContext(editorContext);
+  const { show, close, setHtml } = props;
   let body: Element | null = null;
 
   const refs = useRef({
@@ -107,67 +109,16 @@ export const ImportDocDrawer = (props: Props) => {
   };
 
   /** 确认导入 */
-  const sureImport = () => {
-    console.error('确认导入===>', refs.current.uploadFileData);
-    const html = converter.makeHtml(refs.current.uploadFileData.content);
+  const sureImport = async (versionInfo?: {
+    resourceId: string;
+    version: string;
+  }) => {
+    const html = await importDoc(
+      refs.current.uploadFileData.content,
+      versionInfo,
+    );
     setHtml(html);
   };
-
-  // const getContent = async () => {
-  //   let html = "";
-  //   const { exhibitProperty, dependencyTree } = props.data.versionInfo;
-  //   if (exhibitProperty.mime === "text/markdown") {
-  //     // markdown 文件，以 markdown 解析
-  //     const converter = new showdown.Converter();
-  //     html = converter.makeHtml(props.data.content);
-  //   } else {
-  //     html = props.data.content;
-  //     html = html.replace(/\n/g, "<br/>");
-  //   }
-
-  //   const deps = dependencyTree.filter((_: any, index: number) => index !== 0);
-  //   let promiseArr = [] as Promise<any>[];
-  //   deps.forEach((dep: { resourceType: string; parentNid: any; articleId: any }) => {
-  //     const isMediaResource =
-  //       dep.resourceType.includes("图片") || dep.resourceType.includes("视频") || dep.resourceType.includes("音频");
-  //     const depContent: Promise<any> = getExhibitDepFileStream(
-  //       props.data.exhibitId,
-  //       dep.parentNid,
-  //       dep.articleId,
-  //       isMediaResource
-  //     );
-  //     promiseArr.push(depContent);
-  //   });
-
-  //   await Promise.all(promiseArr).then((res) => {
-  //     res.forEach((dep, index) => {
-  //       if (dep.data) {
-  //         // 进一步判断是否为文本文件
-  //         if (!dep.headers["content-type"].startsWith("text")) return;
-
-  //         // 返回数据是对象，且有data属性，说明该依赖为非媒体资源
-  //         const reg = new RegExp("{{" + `freelog://${deps[index].articleName}` + "}}", "g");
-  //         const converter = new showdown.Converter();
-  //         const data = converter.makeHtml(dep.data);
-  //         html = html.replace(reg, data);
-  //       } else {
-  //         // 媒体资源
-  //         const reg = new RegExp("src=['\"]" + `freelog://${deps[index].articleName}` + "['\"]", "g");
-  //         html = html.replace(reg, `id="${deps[index].articleId}" src="${dep}"`);
-  //       }
-  //     });
-  //   });
-
-  //   content.value = html;
-
-  //   nextTick(() => {
-  //     const elements = [...contentBody.value.children];
-  //     const titles = elements.filter((item: HTMLElement) => ["H1", "H2", "H3"].includes(item.nodeName));
-  //     context.emit("getDirectory", titles);
-
-  //     videoPlayDuration();
-  //   });
-  // };
 
   /** 上传文件 */
   const uploadLocalFile = (info: any) => {
@@ -231,7 +182,7 @@ export const ImportDocDrawer = (props: Props) => {
   const getHistoryVersion = async () => {
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${'629f195b2fbdf6002fa290ac'}/versions`,
+      url: `/v2/resources/${'62272318182192002eefc16d'}/versions`,
       params: { projection: 'versionId,version,updateDate,filename' },
     });
     refs.current.historyList = res.data.reverse();
@@ -272,11 +223,11 @@ export const ImportDocDrawer = (props: Props) => {
     const { version, filename } = item;
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${'629f195b2fbdf6002fa290ac'}/versions/${version}/download`,
+      url: `/v2/resources/${'62272318182192002eefc16d'}/versions/${version}/download`,
     });
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport();
+    sureImport({ resourceId: '62272318182192002eefc16d', version });
   };
 
   /** 修改新的存储空间名称 */
@@ -561,7 +512,7 @@ export const ImportDocDrawer = (props: Props) => {
                     <div className="cancel-btn" onClick={cancelImport}>
                       {FI18n.i18nNext.t('btn_cancel')}
                     </div>
-                    <div className="import-btn" onClick={sureImport}>
+                    <div className="import-btn" onClick={() => sureImport()}>
                       {FI18n.i18nNext.t('btn_import_post')}
                     </div>
                   </div>
