@@ -3,7 +3,8 @@ import styles from './index.less';
 import { Space } from 'antd';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
 import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import FPolicyList from '@/components/FPolicyList';
 import { FI18n } from '@freelog/tools-lib';
@@ -26,6 +27,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
         exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
           size='small'
           onClick={() => {
+            self._czc.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
             dispatch<ChangeAction>({
               type: 'exhibitInfoPage/change',
               payload: {
@@ -47,12 +49,15 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           />
           <div style={{ height: 20 }} />
           <FComponentsLib.FRectBtn
-            onClick={() => dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
-              payload: {
-                policy_BuildDrawer_Visible: true,
-              },
-            })}
+            onClick={() => {
+              self._czc.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
+              dispatch<ChangeAction>({
+                type: 'exhibitInfoPage/change',
+                payload: {
+                  policy_BuildDrawer_Visible: true,
+                },
+              });
+            }}
             type='primary'
           >{FI18n.i18nNext.t('btn_create_auth_plan')}</FComponentsLib.FRectBtn>
         </div>)
@@ -60,6 +65,9 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           atLeastOneUsing={exhibitInfoPage.exhibit_Online}
           dataSource={exhibitInfoPage.policy_List}
           onCheckChange={(data) => {
+            if (data.using) {
+              self._czc.push(['_trackEvent', '授权策略页', '上线', '', 1]);
+            }
             dispatch<UpdateAPolicyAction>({
               type: 'exhibitInfoPage/updateAPolicy',
               payload: { id: data.id, status: data.using ? 1 : 0 },
