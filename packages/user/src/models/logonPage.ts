@@ -189,7 +189,7 @@ const Model: LogonPageModelType = {
   namespace: 'logonPage',
   state: initStates,
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, {}: EffectsCommandMap) {
       if (FUtil.Tool.getUserIDByCookies() === -1) {
         return;
       }
@@ -447,10 +447,11 @@ const Model: LogonPageModelType = {
       const { data, msg, errCode, ret } = yield call(FServiceAPI.User.logon, params);
 
       if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc.push(['_trackEvent', '注册页面', '注册', '', 0]);
         fMessage(msg, 'error');
         return;
       }
-
+      self._czc.push(['_trackEvent', '注册页面', '注册', '', 1]);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
