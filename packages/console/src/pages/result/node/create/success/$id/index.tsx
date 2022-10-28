@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { withRouter, history } from 'umi';
-import { ChangeAction } from '@/models/global';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FTooltip from '@/components/FTooltip';
