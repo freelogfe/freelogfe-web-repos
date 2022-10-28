@@ -4,6 +4,7 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import fMessage from '@/components/fMessage';
 
 export interface ResourceCreatorPageModelState {
   userName: string;
@@ -160,8 +161,13 @@ const Model: ResourceCreatorPageModelType = {
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       };
-      const { data } = yield call(FServiceAPI.Resource.create, params);
-
+      const { ret, errCode, data } = yield call(FServiceAPI.Resource.create, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc.push(['_trackEvent', '资源创建页', '创建资源', '', 0]);
+        fMessage('资源创建失败', 'error');
+        return;
+      }
+      self._czc.push(['_trackEvent', '资源创建页', '创建资源', '', 1]);
       yield put<ChangeAction>({
         type: 'change',
         payload: {

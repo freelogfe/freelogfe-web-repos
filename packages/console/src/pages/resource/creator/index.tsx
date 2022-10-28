@@ -58,42 +58,6 @@ function ResourceCreator({
       type: 'resourceCreatorPage/onUnmount_Page',
     });
   });
-  // React.useEffect(() => {
-  //   return () => {
-  //     dispatch<ClearDataAction>({
-  //       type: 'resourceCreatorPage/clearData',
-  //     });
-  //     window.onbeforeunload = null;
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   // const func = () => 1234;
-  //   if (
-  //     resourceCreatorPage.name !== initStates['name'] ||
-  //     resourceCreatorPage.resource_Type.length !== 0 ||
-  //     resourceCreatorPage.introduction !== initStates['introduction'] ||
-  //     resourceCreatorPage.cover !== initStates['cover'] ||
-  //     resourceCreatorPage.labels !== initStates['labels']
-  //   ) {
-  //     window.onbeforeunload = () => true;
-  //   } else {
-  //     window.onbeforeunload = null;
-  //   }
-  // }, [
-  //   resourceCreatorPage.name,
-  //   resourceCreatorPage.resource_Type,
-  //   resourceCreatorPage.introduction,
-  //   resourceCreatorPage.cover,
-  //   resourceCreatorPage.labels,
-  // ]);
-
-  // function onClickCreate() {
-  //   // console.log('onClickCreate', '0932jdlfsf');
-  //   dispatch<OnCreateAction>({
-  //     type: 'resourceCreatorPage/create',
-  //   });
-  // }
 
   function onChange(payload: ChangeAction['payload']) {
     dispatch<ChangeAction>({
@@ -102,8 +66,6 @@ function ResourceCreator({
     });
   }
 
-  // console.log(resourceCreatorPage.promptLeavePath, 'resourceCreatorPage.promptLeavePath09wsdkfjlsdkfjlk');
-  // console.log(resourceCreatorPage, 'sdfoiksdo9i8ekwdlslksdfjlsdkjflkjl');
   return (
     <>
       <Prompt
@@ -157,7 +119,7 @@ function ResourceCreator({
               !!resourceCreatorPage.introductionErrorText
             }
             onClickCreate={() => {
-
+              // console.log('********')
               dispatch<OnClick_CreateBtn_Action>({
                 type: 'resourceCreatorPage/onClick_CreateBtn',
               });
