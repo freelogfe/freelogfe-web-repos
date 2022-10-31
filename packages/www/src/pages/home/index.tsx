@@ -8,8 +8,8 @@ import Banner2 from '@/pages/home/Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
-import { FI18n, FUtil, FServiceAPI } from '@freelog/tools-lib';
-import * as AHooks from 'ahooks';
+import { FI18n, FUtil } from '@freelog/tools-lib';
+// import * as AHooks from 'ahooks';
 
 interface HomePageProps {
 
@@ -144,6 +144,7 @@ function HomePage({}: HomePageProps) {
           fontWeight: 400,
         }}
         onClick={() => {
+          self._czc.push(['_trackEvent', '首页', '免费使用', '', 1]);
           window.location.href = FUtil.Tool.getUserIDByCookies() === -1
             ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
             : FUtil.Format.completeUrlByDomain('console');
