@@ -308,7 +308,10 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               {userData.usedCount < 5 && (
                 <a
                   className='get-more link'
-                  onClick={() => scrollToAnchor('inner-test')}
+                  onClick={() => {
+                    self._czc.push(['_trackEvent', '邀请好友页', '获取更多邀请名额', '', 1]);
+                    scrollToAnchor('inner-test');
+                  }}
                 >
                   获取更多名额
                 </a>
