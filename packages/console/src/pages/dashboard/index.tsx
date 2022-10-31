@@ -55,6 +55,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
@@ -72,6 +73,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
@@ -89,6 +91,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
@@ -121,8 +124,9 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   height: 3,
                   borderRadius: '50%',
                   marginTop: 8,
-                  marginRight: 5,
+                  // marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
@@ -133,7 +137,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
               }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>
               <FComponentsLib.FContentText
-                text={'，将内测期间领取的现金奖励申请提现至微信钱宝。'}
+                text={'，将内测期间获取的现金奖励提现至微信钱包。。'}
                 type='normal'
               />
             </div>
@@ -147,6 +151,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText

@@ -7,7 +7,7 @@ import img_LatticeGreen from '@/assets/home/lattice-green.png';
 import img_Case1 from '@/assets/home/case1.jpg';
 import img_Case2 from '@/assets/home/case2.jpg';
 import img_Case3 from '@/assets/home/case3.jpg';
-import img_Case4 from '@/assets/home/case4.jpg';
+import img_Case4 from '@/assets/home/case2.jpg';
 import img_Case5 from '@/assets/home/case5.jpg';
 import img_Case6 from '@/assets/home/case6.jpg';
 import img_Case7 from '@/assets/home/case7.jpg';
