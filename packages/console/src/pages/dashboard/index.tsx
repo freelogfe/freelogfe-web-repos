@@ -137,7 +137,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
               }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>
               <FComponentsLib.FContentText
-                text={'，将内测期间获取的现金奖励提现至微信钱包。。'}
+                text={'，将内测期间获取的现金奖励提现至微信钱包。'}
                 type='normal'
               />
             </div>
