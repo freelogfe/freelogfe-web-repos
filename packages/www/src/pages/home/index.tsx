@@ -9,6 +9,7 @@ import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
 import { FI18n, FUtil } from '@freelog/tools-lib';
+
 // import * as AHooks from 'ahooks';
 
 interface HomePageProps {
@@ -85,6 +86,7 @@ function HomePage({}: HomePageProps) {
             style={{ height: 42, fontSize: 16 }}
             onClick={() => {
               self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self.open(FI18n.i18nNext.t('btn_features_01_link'));
             }}
           >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
@@ -103,6 +105,7 @@ function HomePage({}: HomePageProps) {
             style={{ height: 42, fontSize: 16 }}
             onClick={() => {
               self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self.open(FI18n.i18nNext.t('btn_features_02_link'));
             }}
           >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
@@ -122,6 +125,7 @@ function HomePage({}: HomePageProps) {
           <FComponentsLib.FRectBtn
             onClick={() => {
               self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self.open(FI18n.i18nNext.t('btn_features_03_link'));
             }}
             style={{ height: 42, fontSize: 16 }}
           >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
