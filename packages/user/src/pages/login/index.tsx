@@ -29,11 +29,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
   const boxRef = React.useRef(null);
 
   AHooks.useMount(() => {
-    // fetch('https://api.freelog.com/v2/thirdParty/registerOrBind', {
-    //   credentials: 'include',
-    // }).then((res) => {
-    //   console.log(res);
-    // });
+    self._czc.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'loginPage/onMountPage',
       payload: {

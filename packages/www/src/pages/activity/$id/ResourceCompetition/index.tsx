@@ -12,6 +12,7 @@ import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import moment from 'moment';
+import * as AHooks from 'ahooks';
 
 interface ResourceCompetitionProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -21,6 +22,10 @@ function ResourceCompetition({
                                activityDetailsPage,
                              }: ResourceCompetitionProps): React.ReactElement {
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
+
+  AHooks.useMount(() => {
+    self._czc.push(['_trackPageview', self.location.pathname]);
+  });
 
   // const [allDate, set_allDate] = React.useState<{
   //   start: string;

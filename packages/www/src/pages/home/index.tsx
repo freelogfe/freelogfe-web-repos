@@ -9,8 +9,7 @@ import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
 import { FI18n, FUtil } from '@freelog/tools-lib';
-
-// import * as AHooks from 'ahooks';
+import * as AHooks from 'ahooks';
 
 interface HomePageProps {
 
@@ -20,16 +19,18 @@ function HomePage({}: HomePageProps) {
 
   const [topLink, set_topLink] = React.useState<string>(FI18n.i18nNext.t('beta_event_guideline_contest_link'));
 
-  // AHooks.useMount(async () => {
-  //   const { data } = await FServiceAPI.Activity.adsList({
-  //     place: 1,
-  //   });
-  //   // console.log(data, 'data09ioweskjfsldkfjsldkfjdslkjl');
-  //   if (!data || !data.dataList || data.dataList.length === 0) {
-  //     return;
-  //   }
-  //   set_topLink(data.dataList[0].link);
-  // });
+
+  AHooks.useMount(async () => {
+    self._czc.push(['_trackPageview', self.location.pathname]);
+    // const { data } = await FServiceAPI.Activity.adsList({
+    //   place: 1,
+    // });
+    // // console.log(data, 'data09ioweskjfsldkfjsldkfjdslkjl');
+    // if (!data || !data.dataList || data.dataList.length === 0) {
+    //   return;
+    // }
+    // set_topLink(data.dataList[0].link);
+  });
 
   return (<div>
     <div className={styles.banner0}>

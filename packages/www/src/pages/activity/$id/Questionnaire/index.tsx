@@ -10,6 +10,7 @@ interface QuestionnaireProps {
 function Questionnaire({}: QuestionnaireProps) {
 
   AHooks.useMount(async () => {
+    self._czc.push(['_trackPageview', self.location.pathname]);
 
     if (FUtil.Tool.getUserIDByCookies() === -1) {
       self.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({

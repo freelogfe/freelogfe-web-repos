@@ -42,6 +42,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
   }[]>([]);
 
   AHooks.useMount(() => {
+    self._czc.push(['_trackPageview', self.location.pathname]);
     getData();
   });
 
