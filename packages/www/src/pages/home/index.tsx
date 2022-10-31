@@ -53,6 +53,7 @@ function HomePage({}: HomePageProps) {
         <div style={{ height: 40 }} />
         <FComponentsLib.FRectBtn
           onClick={() => {
+            self._czc.push(['_trackEvent', '首页', '免费使用', '', 1]);
             window.location.href = FUtil.Tool.getUserIDByCookies() === -1
               ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
               : FUtil.Format.completeUrlByDomain('console');
@@ -81,7 +82,11 @@ function HomePage({}: HomePageProps) {
           <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_01_descr')}</div>
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
+            style={{ height: 42, fontSize: 16 }}
+            onClick={() => {
+              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+            }}
+          >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
       </div>
 
@@ -95,7 +100,11 @@ function HomePage({}: HomePageProps) {
           <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_02_descr')}</div>
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
+            style={{ height: 42, fontSize: 16 }}
+            onClick={() => {
+              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+            }}
+          >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
         <div />
       </div>
@@ -111,7 +120,11 @@ function HomePage({}: HomePageProps) {
           <div className={styles.banner3_Content_DisplayH2}>{FI18n.i18nNext.t('home_features_03_descr')}</div>
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            style={{ height: 42, fontSize: 16 }}>{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
+            onClick={() => {
+              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+            }}
+            style={{ height: 42, fontSize: 16 }}
+          >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
         </div>
       </div>
 

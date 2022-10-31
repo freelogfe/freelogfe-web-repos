@@ -53,6 +53,9 @@ function Ads({}: AdsProps) {
 
   return (<a
     href={info.href}
+    onClick={() => {
+      self._czc.push(['_trackEvent', '首页', '参与内测（浮窗）', '', 1]);
+    }}
     target='_blank'
     className={styles.rewardSuspension}
   >
