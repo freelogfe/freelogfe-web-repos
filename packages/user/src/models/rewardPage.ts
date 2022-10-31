@@ -304,8 +304,10 @@ const Model: RewardPageModelType = {
       };
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Activity.withdrawCoinAccount, params);
       if (ret !== 0 || errCode !== 0) {
+        self._czc.push(['_trackEvent', '个人中心页', '提现至微信', '', 1]);
         fMessage(msg, 'error');
       } else {
+        self._czc.push(['_trackEvent', '个人中心页', '提现至微信', '', 0]);
         fMessage('提现成功', 'success');
 
         yield put<ChangeAction>({
