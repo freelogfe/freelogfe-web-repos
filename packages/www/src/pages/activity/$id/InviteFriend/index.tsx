@@ -285,6 +285,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                   fMessage(<span>此活动仅对内测用户开放!</span>, 'warning');
                   return;
                 }
+                self._czc.push(['_trackEvent', '邀请好友页', '立即邀请', '', 1]);
                 setShowInvite(true);
                 e.stopPropagation();
               }}
