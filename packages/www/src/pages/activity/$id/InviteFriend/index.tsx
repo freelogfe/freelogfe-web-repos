@@ -409,7 +409,6 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               </a>
               中的【完善个人信息】【
               Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；
-              解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             <span className=''>
               4.&nbsp;
