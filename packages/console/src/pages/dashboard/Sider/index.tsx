@@ -53,12 +53,12 @@ function Sider({}: SiderProps) {
     <div style={{ height: 50 }} />
     <Space size={10} direction={'vertical'} className={styles.statisticsRight}>
 
-
       {
         ads.map((ad) => {
-          return (<a key={ad.id} href={ad.href} target='_blank' className={styles.imgCard}>
-            <img src={ad.cover} alt={''} />
-          </a>);
+          // return (<a key={ad.id} href={ad.href} target='_blank' className={styles.imgCard}>
+          //   <img src={ad.cover} alt={''} />
+          // </a>);
+          return (<Advertisement ad={ad} />);
         })
       }
 
@@ -154,3 +154,30 @@ function Sider({}: SiderProps) {
 }
 
 export default Sider;
+
+interface AdvertisementProps {
+  ad: {
+    id: string;
+    href: string;
+    cover: string;
+  };
+}
+
+function Advertisement({ ad }: AdvertisementProps) {
+
+  AHooks.useMount(async () => {
+    await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: ad.id });
+  });
+
+  return (<a
+    key={ad.id}
+    href={ad.href}
+    target='_blank'
+    className={styles.imgCard}
+    onClick={async () => {
+      await FServiceAPI.Activity.eventTrackingAdsClick({ _id: ad.id });
+    }}
+  >
+    <img src={ad.cover} alt={''} />
+  </a>);
+}
