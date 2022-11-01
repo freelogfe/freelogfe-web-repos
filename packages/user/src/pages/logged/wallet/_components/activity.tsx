@@ -178,7 +178,7 @@ function CoinActivity(props: CoinActivity) {
               props.goActive();
             }}
           >
-            激励羽币账户
+            激活羽币账户
           </FComponentsLib.FRectBtn>
           <div
             className={styles.bottomTip + ' mt-20 mb-15'}
