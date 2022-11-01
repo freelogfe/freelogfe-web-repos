@@ -7,7 +7,7 @@ import img_LatticeGreen from '@/assets/home/lattice-green.png';
 import img_Case1 from '@/assets/home/case1.jpg';
 import img_Case2 from '@/assets/home/case2.jpg';
 import img_Case3 from '@/assets/home/case3.jpg';
-import img_Case4 from '@/assets/home/case2.jpg';
+import img_Case4 from '@/assets/home/case4.jpg';
 import img_Case5 from '@/assets/home/case5.jpg';
 import img_Case6 from '@/assets/home/case6.jpg';
 import img_Case7 from '@/assets/home/case7.jpg';
@@ -200,13 +200,13 @@ function Banner2({}: Banner2Props) {
             return (<React.Fragment key={i}>
               <img
                 className={[styles.imgTop, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
-                src={configInfo[activatedIndex].img1}
+                src={configInfo[activatedIndex].img2}
                 style={{ opacity: i === activatedIndex ? 1 : 0 }}
                 alt={''}
               />
               <img
                 className={[styles.imgBottom, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
-                src={configInfo[activatedIndex].img2}
+                src={configInfo[activatedIndex].img1}
                 alt={''}
                 style={{ opacity: i === activatedIndex ? 1 : 0 }}
               />
