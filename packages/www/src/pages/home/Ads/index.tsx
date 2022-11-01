@@ -3,8 +3,6 @@ import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
-// import AOrLink from '@/components/FHeaderNavigation/AOrLink';
-
 interface AdsProps {
 
 }
