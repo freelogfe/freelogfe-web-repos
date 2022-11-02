@@ -22,7 +22,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
   const [showPage, setShowPage] = React.useState<'wallet' | 'reward' | 'contract' | 'setting'>('wallet');
 
   AHooks.useMount(() => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<FetchInfoAction>({
       type: 'user/fetchInfo',
     });

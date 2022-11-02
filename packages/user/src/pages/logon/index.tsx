@@ -43,7 +43,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   const [urlParams] = useUrlState<{ goTo: string }>();
 
   AHooks.useMount(() => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'logonPage/onMountPage',
       payload: {

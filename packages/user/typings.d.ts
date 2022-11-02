@@ -12,7 +12,7 @@ declare module '*.svg' {
 }
 
 interface Window {
-  _czc: {
+  _czc?: {
     push(params: any[]): void;
   };
 }

@@ -43,13 +43,13 @@ function CoinActivity(props: CoinActivity) {
     let { ret, errCode, data } = await FServiceAPI.User.signForCoins();
     // console.log(ret, errCode, data, '09ewiokfjlskdfjsldklll');
     if (data) {
-      self._czc.push(['_trackEvent', '个人中心页', '立即领取羽币', '', 1]);
+      self._czc?.push(['_trackEvent', '个人中心页', '立即领取羽币', '', 1]);
       setTimeout(() => {
         getData(true);
         setLoading(false);
       }, 1000);
     } else {
-      self._czc.push(['_trackEvent', '个人中心页', '立即领取羽币', '', 0]);
+      self._czc?.push(['_trackEvent', '个人中心页', '立即领取羽币', '', 0]);
       setLoading(false);
     }
   }

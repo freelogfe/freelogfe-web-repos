@@ -29,7 +29,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
   const boxRef = React.useRef(null);
 
   AHooks.useMount(() => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'loginPage/onMountPage',
       payload: {
@@ -162,7 +162,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 className={styles.btn}
                 disabled={submitBtnDisabled}
                 onClick={() => {
-                  self._czc.push(['_trackEvent', '登录页面', '登录', '', 1]);
+                  self._czc?.push(['_trackEvent', '登录页面', '登录', '', 1]);
                   dispatch<LoginAction>({
                     type: 'loginPage/login',
                     payload: urlParams.goTo || '',

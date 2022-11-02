@@ -676,11 +676,11 @@ const Model: WalletPageModelType = {
       const { data, msg, errCode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
       if (errCode !== 0 || !data) {
-        self._czc.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 0]);
+        self._czc?.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 0]);
         return fMessage(msg, 'error');
       }
 
-      self._czc.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 1]);
+      self._czc?.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 1]);
       fMessage(FI18n.i18nNext.t('msg_feather_account_successfully_actived'));
 
       const params1: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
