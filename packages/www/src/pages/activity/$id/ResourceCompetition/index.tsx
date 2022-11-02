@@ -24,7 +24,7 @@ function ResourceCompetition({
   const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
 
   AHooks.useMount(() => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
   });
 
   // const [allDate, set_allDate] = React.useState<{

@@ -57,7 +57,7 @@ function Ads({}: AdsProps) {
   return (<a
     href={info.href}
     onClick={async () => {
-      self._czc.push(['_trackEvent', '首页', '参与内测（浮窗）', '', 1]);
+      self._czc?.push(['_trackEvent', '首页', '参与内测（浮窗）', '', 1]);
       await FServiceAPI.Activity.eventTrackingAdsClick({ _id: info.id });
     }}
     target='_blank'

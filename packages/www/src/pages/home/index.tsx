@@ -21,7 +21,7 @@ function HomePage({}: HomePageProps) {
 
 
   AHooks.useMount(async () => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     // const { data } = await FServiceAPI.Activity.adsList({
     //   place: 1,
     // });
@@ -55,7 +55,7 @@ function HomePage({}: HomePageProps) {
         <div style={{ height: 40 }} />
         <FComponentsLib.FRectBtn
           onClick={() => {
-            self._czc.push(['_trackEvent', '首页', '免费使用', '', 1]);
+            self._czc?.push(['_trackEvent', '首页', '免费使用', '', 1]);
             window.location.href = FUtil.Tool.getUserIDByCookies() === -1
               ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
               : FUtil.Format.completeUrlByDomain('console');
@@ -86,7 +86,7 @@ function HomePage({}: HomePageProps) {
           <FComponentsLib.FRectBtn
             style={{ height: 42, fontSize: 16 }}
             onClick={() => {
-              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self._czc?.push(['_trackEvent', '首页', '进一步了解', '', 1]);
               self.open(FI18n.i18nNext.t('btn_features_01_link'));
             }}
           >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
@@ -105,7 +105,7 @@ function HomePage({}: HomePageProps) {
           <FComponentsLib.FRectBtn
             style={{ height: 42, fontSize: 16 }}
             onClick={() => {
-              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self._czc?.push(['_trackEvent', '首页', '进一步了解', '', 1]);
               self.open(FI18n.i18nNext.t('btn_features_02_link'));
             }}
           >{FI18n.i18nNext.t('btn_learnmore')}</FComponentsLib.FRectBtn>
@@ -125,7 +125,7 @@ function HomePage({}: HomePageProps) {
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
             onClick={() => {
-              self._czc.push(['_trackEvent', '首页', '进一步了解', '', 1]);
+              self._czc?.push(['_trackEvent', '首页', '进一步了解', '', 1]);
               self.open(FI18n.i18nNext.t('btn_features_03_link'));
             }}
             style={{ height: 42, fontSize: 16 }}
@@ -149,7 +149,7 @@ function HomePage({}: HomePageProps) {
           fontWeight: 400,
         }}
         onClick={() => {
-          self._czc.push(['_trackEvent', '首页', '免费使用', '', 1]);
+          self._czc?.push(['_trackEvent', '首页', '免费使用', '', 1]);
           window.location.href = FUtil.Tool.getUserIDByCookies() === -1
             ? FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon()
             : FUtil.Format.completeUrlByDomain('console');

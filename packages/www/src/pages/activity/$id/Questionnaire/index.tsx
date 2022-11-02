@@ -10,7 +10,7 @@ interface QuestionnaireProps {
 function Questionnaire({}: QuestionnaireProps) {
 
   AHooks.useMount(async () => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
 
     if (FUtil.Tool.getUserIDByCookies() === -1) {
       self.location.replace(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
@@ -20,7 +20,7 @@ function Questionnaire({}: QuestionnaireProps) {
     }
 
     const { data: data_resourceTask }: { data: any[] } = await FServiceAPI.Activity.getResourceTaskInfo();
-    self._czc.push(['_trackEvent', '调研问卷页', '填写问卷', '', 1]);
+    self._czc?.push(['_trackEvent', '调研问卷页', '填写问卷', '', 1]);
     // console.log(data_resourceTask, 'data_resourceTask9ojwksdflksdjlkjl');
     if (data_resourceTask.every((rt) => rt.status === 2)) {
       return self.location.replace(FI18n.i18nNext.t('beta_survey_link_a'));

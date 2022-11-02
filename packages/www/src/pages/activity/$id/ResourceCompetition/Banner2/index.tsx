@@ -29,7 +29,7 @@ function Banner2({ activityDetailsPage, onClickRuleBtn }: Banner2Props) {
             padding: '0 50px',
           }}
           onClick={() => {
-            self._czc.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
+            self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
             self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
           }}
           disabled={activityDetailsPage.timeValidity !== 'Validity'}
@@ -43,7 +43,7 @@ function Banner2({ activityDetailsPage, onClickRuleBtn }: Banner2Props) {
           style={{ bottom: 0, left: 0, position: 'absolute' }}
           onClick={() => {
             // set_ModalVisible(true);
-            self._czc.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
+            self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
             onClickRuleBtn && onClickRuleBtn();
           }}
         >规则详情</FComponentsLib.FTextBtn>

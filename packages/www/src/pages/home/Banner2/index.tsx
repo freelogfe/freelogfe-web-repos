@@ -93,7 +93,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                self._czc.push(['_trackEvent', '首页', '小说阅读', '', 1]);
+                self._czc?.push(['_trackEvent', '首页', '小说阅读', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_01_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_reading')}</FComponentsLib.FRectBtn>
@@ -102,7 +102,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                self._czc.push(['_trackEvent', '首页', '漫画阅读', '', 1]);
+                self._czc?.push(['_trackEvent', '首页', '漫画阅读', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_01_link_02'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_comics')}</FComponentsLib.FRectBtn>
@@ -129,7 +129,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                self._czc.push(['_trackEvent', '首页', '现在体验', '', 1]);
+                self._czc?.push(['_trackEvent', '首页', '现在体验', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_02_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_02')}</FComponentsLib.FRectBtn>
@@ -155,7 +155,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                self._czc.push(['_trackEvent', '首页', '现在体验', '', 1]);
+                self._czc?.push(['_trackEvent', '首页', '现在体验', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_03_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_03')}</FComponentsLib.FRectBtn>
@@ -181,7 +181,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                self._czc.push(['_trackEvent', '首页', '马上注册', '', 1]);
+                self._czc?.push(['_trackEvent', '首页', '马上注册', '', 1]);
                 window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon());
               }}
             >{FI18n.i18nNext.t('btn_signupnow')}</FComponentsLib.FRectBtn>
