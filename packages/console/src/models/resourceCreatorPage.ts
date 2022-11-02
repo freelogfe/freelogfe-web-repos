@@ -163,11 +163,11 @@ const Model: ResourceCreatorPageModelType = {
       };
       const { ret, errCode, data } = yield call(FServiceAPI.Resource.create, params);
       if (ret !== 0 || errCode !== 0 || !data) {
-        self._czc.push(['_trackEvent', '资源创建页', '创建资源', '', 0]);
+        self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 0]);
         fMessage('资源创建失败', 'error');
         return;
       }
-      self._czc.push(['_trackEvent', '资源创建页', '创建资源', '', 1]);
+      self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 1]);
       yield put<ChangeAction>({
         type: 'change',
         payload: {

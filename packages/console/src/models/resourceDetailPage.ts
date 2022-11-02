@@ -512,11 +512,11 @@ const Model: ResourceDetailPageModelType = {
       };
       const { data, ret, errCode, msg } = yield call(FServiceAPI.Exhibit.createPresentable, params);
       if (ret !== 0 || errCode !== 0) {
-        self._czc.push(['_trackEvent', '确认签约页', '确认签约', '', 0]);
+        self._czc?.push(['_trackEvent', '确认签约页', '确认签约', '', 0]);
         fMessage(msg, 'error');
         return;
       }
-      self._czc.push(['_trackEvent', '确认签约页', '确认签约', '', 1]);
+      self._czc?.push(['_trackEvent', '确认签约页', '确认签约', '', 1]);
       history.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
     },
     * onChangeAndVerifySignExhibitName({ payload }: OnChangeAndVerifySignExhibitNameAction, {

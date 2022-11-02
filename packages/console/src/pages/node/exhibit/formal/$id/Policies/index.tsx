@@ -27,7 +27,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
         exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
           size='small'
           onClick={() => {
-            self._czc.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
+            self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
             dispatch<ChangeAction>({
               type: 'exhibitInfoPage/change',
               payload: {
@@ -50,7 +50,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           <div style={{ height: 20 }} />
           <FComponentsLib.FRectBtn
             onClick={() => {
-              self._czc.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
+              self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
               dispatch<ChangeAction>({
                 type: 'exhibitInfoPage/change',
                 payload: {
@@ -66,7 +66,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           dataSource={exhibitInfoPage.policy_List}
           onCheckChange={(data) => {
             if (data.using) {
-              self._czc.push(['_trackEvent', '授权策略页', '上线', '', 1]);
+              self._czc?.push(['_trackEvent', '授权策略页', '上线', '', 1]);
             }
             dispatch<UpdateAPolicyAction>({
               type: 'exhibitInfoPage/updateAPolicy',

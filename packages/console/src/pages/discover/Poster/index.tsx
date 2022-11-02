@@ -39,7 +39,7 @@ function Poster({}: PosterProps) {
   return (<div className={styles.poster}>
     {
       poster.map((p) => {
-        return (<Advertisement ad={p} />);
+        return (<Advertisement key={p.id} ad={p} />);
       })
     }
   </div>);

@@ -163,7 +163,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
             <FComponentsLib.FCircleBtn
               size='small'
               onClick={() => {
-                self._czc.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+                self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
                 dispatch<ChangeAction>({
                   type: 'resourceAuthPage/change',
                   payload: {
@@ -175,7 +175,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
             <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
-                self._czc.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+                self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
                 dispatch<ChangeAction>({
                   type: 'resourceAuthPage/change',
                   payload: {

@@ -454,7 +454,7 @@ function FPolicyBuilder({
   }
 
   async function onClick_VerifyBtn() {
-    self._czc.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '检验', '', 1]);
+    self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '检验', '', 1]);
     setIsVerifying(true);
 
     if (editMode === 'code') {
@@ -586,7 +586,7 @@ function FPolicyBuilder({
     {
       showView === 'success' && (<FComponentsLib.FRectBtn
         onClick={() => {
-          self._czc.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
+          self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
 
           onConfirm && onConfirm({
             title: successResult?.title || '',

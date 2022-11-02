@@ -84,7 +84,7 @@ function Success({ match, dispatch }: SuccessProps) {
     let result = await FServiceAPI.Exhibit.createPresentable(params);
 
     if (result.errCode !== 0) {
-      self._czc.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
+      self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
       fMessage('节点创建成功页', 'error');
       setActiveId(null);
       return;
@@ -97,13 +97,13 @@ function Success({ match, dispatch }: SuccessProps) {
     result = await FServiceAPI.Exhibit.presentablesOnlineStatus(activeParams);
 
     if (result.errCode !== 0) {
-      self._czc.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
+      self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
       fMessage('激活失败', 'error');
       setActiveId(null);
       return;
     }
 
-    self._czc.push(['_trackEvent', '资源创建页', '激活主题', '', 1]);
+    self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 1]);
 
     let time = 3;
     setActiveId(null);

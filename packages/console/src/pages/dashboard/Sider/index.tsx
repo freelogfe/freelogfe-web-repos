@@ -58,7 +58,7 @@ function Sider({}: SiderProps) {
           // return (<a key={ad.id} href={ad.href} target='_blank' className={styles.imgCard}>
           //   <img src={ad.cover} alt={''} />
           // </a>);
-          return (<Advertisement ad={ad} />);
+          return (<Advertisement key={ad.id} ad={ad} />);
         })
       }
 

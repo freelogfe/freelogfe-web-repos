@@ -68,7 +68,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
           dataSource={resourceAuthPage.policies}
           onCheckChange={(data) => {
             if (data.using) {
-              self._czc.push(['_trackEvent', '授权信息页', '上线', '', 1]);
+              self._czc?.push(['_trackEvent', '授权信息页', '上线', '', 1]);
             }
             // const usedCount: number = resourceAuthPage.policies.filter((p) => {
             //   return p.status === 1;

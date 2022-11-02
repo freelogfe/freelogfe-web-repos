@@ -79,7 +79,7 @@ const tasks = {
       </div>
     </div>),
     onClick() {
-      self._czc.push(['_trackEvent', 'Console页', '查看Freelog使用教程', '', 1]);
+      self._czc?.push(['_trackEvent', 'Console页', '查看Freelog使用教程', '', 1]);
       self.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f');
     },
   },

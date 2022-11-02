@@ -48,7 +48,7 @@ function ResourceCreator({
                          }: ResourceCreatorProps) {
 
   AHooks.useMount(() => {
-    self._czc.push(['_trackPageview', self.location.pathname]);
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMount_Page_Action>({
       type: 'resourceCreatorPage/onMount_Page',
     });

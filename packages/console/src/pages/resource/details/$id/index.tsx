@@ -130,7 +130,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
               type='default'
               className={styles.favoriteBtn}
               onClick={() => {
-                self._czc.push(['_trackEvent', '资源详情页', '收藏', '', 1]);
+                self._czc?.push(['_trackEvent', '资源详情页', '收藏', '', 1]);
                 dispatch<OnClickCollectionAction>({
                   type: 'resourceDetailPage/onClickCollection',
                 });

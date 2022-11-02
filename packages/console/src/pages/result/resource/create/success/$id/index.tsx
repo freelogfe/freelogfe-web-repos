@@ -24,7 +24,7 @@ function Success({ match, dispatch }: SuccessProps) {
   // }, [route]);
 
   function goto() {
-    self._czc.push(['_trackEvent', '资源创建成功页', '创建新版本', '', 1]);
+    self._czc?.push(['_trackEvent', '资源创建成功页', '创建新版本', '', 1]);
     history.replace(FUtil.LinkTo.resourceCreateVersion({
       resourceID: match.params.id,
     }));
