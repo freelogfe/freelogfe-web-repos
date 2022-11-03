@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { withRouter, history } from 'umi';
-import { ChangeAction } from '@/models/global';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FTooltip from '@/components/FTooltip';
@@ -32,25 +32,6 @@ function Success({ match, dispatch }: SuccessProps) {
     setThemeList(themeList.data);
     setEmptyTheme(emptyThemeList.data[0]);
   });
-
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  // }, [route]);
-
-  // function goto() {
-  //   dispatch<DiscoverChangeAction>({
-  //     type: 'discoverPage/change',
-  //     payload: {
-  //       resourceType: 'theme',
-  //     },
-  //   });
-  //   router.push(FUtil.LinkTo.market());
-  // }
 
   /** 跳转资源详情页 */
   const toResourceDetail = (id: string) => {
@@ -103,7 +84,8 @@ function Success({ match, dispatch }: SuccessProps) {
     let result = await FServiceAPI.Exhibit.createPresentable(params);
 
     if (result.errCode !== 0) {
-      fMessage('激活失败', 'error');
+      self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
+      fMessage('节点创建成功页', 'error');
       setActiveId(null);
       return;
     }
@@ -115,10 +97,13 @@ function Success({ match, dispatch }: SuccessProps) {
     result = await FServiceAPI.Exhibit.presentablesOnlineStatus(activeParams);
 
     if (result.errCode !== 0) {
+      self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 0]);
       fMessage('激活失败', 'error');
       setActiveId(null);
       return;
     }
+
+    self._czc?.push(['_trackEvent', '资源创建页', '激活主题', '', 1]);
 
     let time = 3;
     setActiveId(null);

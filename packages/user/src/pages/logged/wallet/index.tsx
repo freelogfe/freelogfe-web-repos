@@ -307,7 +307,31 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
           ).dayOfYear() > moment().dayOfYear() && moment().year() == 2022 && (
             <Activity
               inActive={true}
-              goActive={() => {
+              goActive={async() => {
+                const { email, mobile } = await userPermission.getUserInfo();
+                if (email === '' && mobile === '') {
+                  fConfirmModal({
+                    message: FI18n.i18nNext.t(
+                      'activatefethaccount_err_connectwithmobileoremail',
+                    ),
+                    okText: FI18n.i18nNext.t(
+                      'activatefethaccount_btn_connectnow',
+                    ),
+                    cancelText: FI18n.i18nNext.t(
+                      'activatefethaccount_btn_later',
+                    ),
+                    onOk() {
+                      history.push(FUtil.LinkTo.setting());
+                      dispatch<ChangeAction>({
+                        type: 'settingPage/change',
+                        payload: {
+                          showPage: 'security',
+                        },
+                      });
+                    },
+                  });
+                  return;
+                }
                 dispatch<OnClick_Activate_AccountBtn_Action>({
                   type: 'walletPage/onClick_Activate_AccountBtn',
                 });

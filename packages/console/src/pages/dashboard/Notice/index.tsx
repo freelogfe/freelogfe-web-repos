@@ -41,9 +41,11 @@ function Notice({}: NoticeProps) {
         href: d.linkActivityId
           ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
           : d.link,
-        date: '0000-00-00'
+        date: '0000-00-00',
       };
     }));
+
+    await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
   });
 
   AHooks.useUnmount(() => {
@@ -66,7 +68,8 @@ function Notice({}: NoticeProps) {
             {/*<span>{n.date}</span>*/}
             <FComponentsLib.FTextBtn
               type='primary'
-              onClick={() => {
+              onClick={async () => {
+                await FServiceAPI.Activity.eventTrackingAdsClick({ _id: n.id });
                 window.open(n.href);
               }}
             >查看详情</FComponentsLib.FTextBtn>

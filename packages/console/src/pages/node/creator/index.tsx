@@ -27,6 +27,7 @@ interface NodeCreatorProps {
 function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMount_Page_Action>({
       type: 'nodeCreatorPage/onMount_Page',
     });

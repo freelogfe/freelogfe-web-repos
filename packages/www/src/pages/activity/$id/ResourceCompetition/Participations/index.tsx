@@ -195,6 +195,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
               self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
@@ -205,6 +206,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>
@@ -293,6 +295,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
@@ -303,6 +306,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>

@@ -31,6 +31,7 @@ import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
+
 // import { FCheck } from '@/components/FIcons';
 
 interface LogonProps {
@@ -42,6 +43,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   const [urlParams] = useUrlState<{ goTo: string }>();
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'logonPage/onMountPage',
       payload: {
@@ -143,11 +145,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
         <div className='flex-column align-center flex-1'>
-          <div className='flex-3'></div>
+          <div className='flex-3' />
           <div className='shrink-0 flex-column-center'>
             <FComponentsLib.FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
-          <div className='flex-2'></div>
+          <div className='flex-2' />
         </div>
         <div className=' flex-column-center shrink-0'>
           <div>

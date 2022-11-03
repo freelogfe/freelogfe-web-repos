@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
-// import { FInfo, FLoading } from '../FIcons';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
 import FSelect from '../FSelect';
@@ -19,7 +18,7 @@ import { Base64 } from 'js-base64';
 
 const FDatePicker: any = DatePicker;
 
-const { compile, report } = require('@freelog/resource-policy-lang');
+const { compile } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -455,6 +454,7 @@ function FPolicyBuilder({
   }
 
   async function onClick_VerifyBtn() {
+    self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '检验', '', 1]);
     setIsVerifying(true);
 
     if (editMode === 'code') {
@@ -586,6 +586,8 @@ function FPolicyBuilder({
     {
       showView === 'success' && (<FComponentsLib.FRectBtn
         onClick={() => {
+          self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
+
           onConfirm && onConfirm({
             title: successResult?.title || '',
             text: successResult?.code || '',

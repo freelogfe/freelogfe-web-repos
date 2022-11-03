@@ -3,7 +3,6 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import Sign from './Sign';
-// import { FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
@@ -130,11 +129,12 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             <FComponentsLib.FTextBtn
               type='default'
               className={styles.favoriteBtn}
-              onClick={() =>
+              onClick={() => {
+                self._czc?.push(['_trackEvent', '资源详情页', '收藏', '', 1]);
                 dispatch<OnClickCollectionAction>({
                   type: 'resourceDetailPage/onClickCollection',
-                })
-              }
+                });
+              }}
             >
               {/*{marketResourcePage.hasCollect ? <FC}*/}
               <FComponentsLib.FIcons.FFavorite filled={resourceDetailPage.resource_IsCollected} />

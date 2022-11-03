@@ -798,9 +798,11 @@ const Model: SettingPageModelType = {
 
       const {ret, errCode, msg} = yield call(FServiceAPI.User.updateDetailInfo, params);
       if (ret !== 0 || errCode !== 0) {
+        self._czc?.push(['_trackEvent', '个人中心页', '提交修改', '', 1]);
         return fMessage(msg, 'error');
       }
 
+      self._czc?.push(['_trackEvent', '个人中心页', '提交修改', '', 0]);
       fMessage(FI18n.i18nNext.t('msg_updated_successfully'));
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, {put}: EffectsCommandMap) {

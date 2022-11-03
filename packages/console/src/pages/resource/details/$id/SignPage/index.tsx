@@ -14,7 +14,6 @@ import {
 } from '@/models/resourceDetailPage';
 import FContentLayout from '@/layouts/FContentLayout';
 import FFormLayout from '@/components/FFormLayout';
-// import { FLeft, FNodes } from '@/components/FIcons';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';

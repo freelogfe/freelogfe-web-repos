@@ -42,6 +42,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
   }[]>([]);
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     getData();
   });
 
@@ -285,6 +286,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                   fMessage(<span>此活动仅对内测用户开放!</span>, 'warning');
                   return;
                 }
+                self._czc?.push(['_trackEvent', '邀请好友页', '立即邀请', '', 1]);
                 setShowInvite(true);
                 e.stopPropagation();
               }}
@@ -307,7 +309,10 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               {userData.usedCount < 5 && (
                 <a
                   className='get-more link'
-                  onClick={() => scrollToAnchor('inner-test')}
+                  onClick={() => {
+                    self._czc?.push(['_trackEvent', '邀请好友页', '获取更多邀请名额', '', 1]);
+                    scrollToAnchor('inner-test');
+                  }}
                 >
                   获取更多名额
                 </a>
@@ -404,7 +409,6 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               </a>
               中的【完善个人信息】【
               Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；
-              解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             <span className=''>
               4.&nbsp;

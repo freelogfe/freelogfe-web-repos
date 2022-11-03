@@ -213,32 +213,11 @@ const Model: NodeCreatorPageModelType = {
       const { data, ret, errCode, msg } = yield call(FServiceAPI.Node.create, params);
 
       if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc?.push(['_trackEvent', '创建节点页', '创建节点', '', 0]);
         fMessage(msg, 'error');
         return;
       }
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     list: [
-      //       ...nodes.list,
-      //       // {
-      //       //   nodeDomain: data.nodeDomain,
-      //       //   nodeId: data.nodeId,
-      //       //   nodeName: data.nodeName,
-      //       // },
-      //     ],
-      //   },
-      // });
-
-
-      // console.log(data, 'data210934uoifa');
-
-      // yield put<FetchNodesAction>({
-      //   type: 'fetchNodes',
-      // });
-
-      // router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
+      self._czc?.push(['_trackEvent', '创建节点页', '创建节点', '', 1]);
       history.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
     },
   },
