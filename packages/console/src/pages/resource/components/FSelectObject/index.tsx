@@ -82,20 +82,6 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
     };
     const { data } = await FServiceAPI.Storage.objectDetails(params);
 
-    // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-    //   sha1: data.sha1,
-    //   // resourceType: resourceVersionCreatorPage.resourceType,
-    // };
-    //
-    // const { data: data4 } = await FServiceAPI.Storage.fileProperty(params4);
-    // console.log(data4, 'data4data4data4data4(((((((');
-    // if (!data4) {
-    //   return onChange({
-    //     selectedFileStatus: 2,
-    //     selectedFileObjectDrawerVisible: false,
-    //   });
-    // }
-
     await onChange({
       selectedFileName: data.objectName,
       selectedFileSha1: data.sha1,

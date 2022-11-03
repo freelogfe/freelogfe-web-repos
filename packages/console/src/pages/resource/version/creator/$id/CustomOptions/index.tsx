@@ -9,11 +9,9 @@ import {
   ImportLastVersionDataAction,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
-// import FUp from '@/components/FIcons/FUp';
 import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
-  // StorageObjectEditorModelState
 } from '@/models/connect';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
