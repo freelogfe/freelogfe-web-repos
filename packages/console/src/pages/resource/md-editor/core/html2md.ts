@@ -113,12 +113,12 @@ export const html2md = (htmlText: string) => {
     }
   }
 
-  // 储存依赖资源内容（<span data-w-e-type="resource"）
+  // 储存资源内容（<span data-w-e-type="resource"）
   resourceContent =
     markdownText.match(
       /<span\s*data-w-e-type="resource"[^>]*?>[^]*?<\/span>/gi,
     ) || [];
-  // 标记原文本中依赖资源内容
+  // 标记原文本中资源内容
   markdownText = markdownText.replace(
     /<span\s*data-w-e-type="resource"[^>]*?>[^]*?<\/span>/gi,
     '`#resourceContent#`',
@@ -243,26 +243,42 @@ export const html2md = (htmlText: string) => {
   // 还原原文本中的 < 和 > 符号
   markdownText = markdownText.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>');
 
-  // 存在依赖资源
+  // 存在资源
   if (resourceContent) {
     for (let i = 0; i < resourceContent.length; i++) {
+      let replaceUrl = '';
       let result = '';
       const text = resourceContent[i];
-      // 获取资源名称
-      const resourceName = text.match(
-        /(?<=data-resourceName=['"])[\s\S]*?(?=['"])/i,
+      // 来源类型
+      const originType = text.match(
+        /(?<=data-originType=['"])[\s\S]*?(?=['"])/i,
       );
+      // 资源类型
       const resourceType =
         text.match(/(?<=data-resourceType="\[")[\s\S]*?(?=")/i) || [];
+      if (Number(originType) === 1) {
+        // 来自资源
+        // 资源名称
+        const resourceName = text.match(
+          /(?<=data-resourceName=['"])[\s\S]*?(?=['"])/i,
+        );
+        replaceUrl = `freelog://${resourceName}`;
+      } else if (Number(originType) === 2) {
+        // 来自对象或 url
+        // 内容（url）
+        const content =
+          text.match(/(?<=data-content=['"])[\s\S]*?(?=['"])/i) || [];
+        replaceUrl = content[0];
+      }
       // 转化依赖语法
       if (resourceType[0] === '图片') {
-        result = `<img src='freelog://${resourceName}'>`;
+        result = `<img src='${replaceUrl}' />`;
       } else if (resourceType[0] === '视频') {
-        result = `<video controls src='freelog://${resourceName}'>`;
+        result = `<video controls src='${replaceUrl}' />`;
       } else if (resourceType[0] === '音频') {
-        result = `<audio controls src='freelog://${resourceName}'>`;
+        result = `<audio controls src='${replaceUrl}' />`;
       } else if (resourceType[0] === '阅读') {
-        result = `{{freelog://${resourceName}}}`;
+        result = `{{${replaceUrl}}}`;
       }
       // 将图片文本替换标记
       markdownText = markdownText.replace(/`#resourceContent#`/i, result);

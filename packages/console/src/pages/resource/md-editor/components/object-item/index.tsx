@@ -10,10 +10,11 @@ interface Props {
   upload?: (task: any) => void;
   update?: (task: any) => void;
   importFile?: (task: any) => void;
+  insert?: (task: any) => void;
 }
 
 export const ObjectItem = (props: Props) => {
-  const { data, cancel, upload, update, importFile } = props;
+  const { data, cancel, upload, update, importFile, insert } = props;
 
   const statusMapping: any = {
     uploading: {
@@ -21,46 +22,50 @@ export const ObjectItem = (props: Props) => {
         <Tooltip
           overlayClassName="object-btn-tooltip"
           placement="bottomRight"
-          title="取消上传"
+          title={FI18n.i18nNext.t('uploadobject_tooltip_cancel_uploading')}
         >
           <i className="freelog fl-icon-guanbi"></i>
         </Tooltip>
       ),
     },
-    success: { status: '上传成功' },
+    success: {
+      status: FI18n.i18nNext.t('uploadobject_msg_uploaded_successfully'),
+    },
     cancel: {
-      status: '已取消',
+      status: FI18n.i18nNext.t('uploadobject_msg_canceled'),
       btn: (
         <Tooltip
           overlayClassName="object-btn-tooltip"
           placement="bottomRight"
-          title="重新上传"
+          title={FI18n.i18nNext.t('uploadobject_tooltip_resume_uploading')}
         >
           <i className="freelog fl-icon-zhongzhi"></i>
         </Tooltip>
       ),
     },
     fail: {
-      status: '上传失败',
+      status: FI18n.i18nNext.t('uploadobject_msg_upload_failed'),
       btn: (
         <Tooltip
           overlayClassName="object-btn-tooltip"
           placement="bottomRight"
-          title="重新上传"
+          title={FI18n.i18nNext.t('uploadobject_tooltip_resume_uploading')}
         >
           <i className="freelog fl-icon-zhongzhi"></i>
         </Tooltip>
       ),
     },
     repeatName: {
-      status: '存在同名对象',
+      status: FI18n.i18nNext.t('uploadobject_msg_object_exist'),
       btn: (
         <Tooltip
           overlayClassName="object-btn-tooltip"
           placement="bottomRight"
-          title="覆盖原有同名文件，保留依赖、自定义属性"
+          title={FI18n.i18nNext.t('uploadobject_tooltip_update')}
         >
-          <div className="update-btn">更新</div>
+          <div className="update-btn">
+            {FI18n.i18nNext.t('uploadobject_btn_update')}
+          </div>
         </Tooltip>
       ),
     },
@@ -124,7 +129,7 @@ export const ObjectItem = (props: Props) => {
           okText={FI18n.i18nNext.t('btn_import_post')}
           cancelText={FI18n.i18nNext.t('btn_cancel')}
         >
-          <div className="choose-btn">
+          <div className="choose-btn" onClick={() => insert && insert(data)}>
             {FI18n.i18nNext.t('btn_import_post')}
           </div>
         </Popconfirm>

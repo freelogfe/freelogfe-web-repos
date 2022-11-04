@@ -53,9 +53,36 @@ export const toolbarConfig: Partial<IToolbarConfig> = {
 export const editorConfig: Partial<IEditorConfig> = {
   placeholder: FI18n.i18nNext.t('hint_posteditor_contentfiled'),
   hoverbarKeys: {
-    link: {
-      // 重写 link 元素的 hoverbar
-      menuKeys: [],
+    divider: { menuKeys: [] },
+    image: { menuKeys: [] },
+    pre: { menuKeys: ['codeBlock', 'codeSelectLang'] },
+    table: {
+      menuKeys: [
+        'tableHeader',
+        'insertTableRow',
+        'deleteTableRow',
+        'insertTableCol',
+        'deleteTableCol',
+        'deleteTable',
+      ],
+    },
+    video: { menuKeys: [] },
+    text: {
+      menuKeys: [
+        'headerSelect',
+        'blockquote',
+        '|',
+        'bold',
+        'through',
+        'italic',
+        '|',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'insertLink',
+        'code',
+        'codeBlock',
+      ],
     },
   },
 };

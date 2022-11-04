@@ -7,7 +7,6 @@ import fMessage from '@/components/fMessage';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FInput from '@/components/FInput';
-import showdown from 'showdown';
 import { ObjectItem } from '../object-item';
 import FUpload from '@/components/FUpload';
 import { RcFile } from 'antd/lib/upload/interface';
@@ -17,15 +16,6 @@ import { editorContext } from '../..';
 import { importDoc } from '../../custom/dom/resource/utils';
 
 const { Option } = Select;
-
-showdown.setOption('tables', true);
-showdown.setOption('tasklists', true);
-showdown.setOption('simplifiedAutoLink', true);
-showdown.setOption('openLinksInNewWindow', true);
-showdown.setOption('backslashEscapesHTMLTags', true);
-showdown.setOption('emoji', true);
-
-const converter = new showdown.Converter();
 
 interface Props {
   show: boolean;
@@ -42,7 +32,7 @@ export const ImportDocDrawer = (props: Props) => {
     uploadFileData: null as any,
     pageIndex: 0,
     noMore: false,
-    bucket: '全部Bucket',
+    bucket: FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
     uploadBucket: null as string | null,
     objectKey: '',
     uploadQueue: [] as any[],
@@ -78,7 +68,7 @@ export const ImportDocDrawer = (props: Props) => {
         uploadFileData: null as any,
         pageIndex: 0,
         noMore: false,
-        bucket: '全部Bucket',
+        bucket: FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
         uploadBucket: null,
         objectKey: '',
         uploadQueue: refs.current.uploadQueue,
@@ -118,6 +108,7 @@ export const ImportDocDrawer = (props: Props) => {
       versionInfo,
     );
     setHtml(html);
+    close();
   };
 
   /** 上传文件 */
@@ -141,7 +132,7 @@ export const ImportDocDrawer = (props: Props) => {
       };
     } else if (status === 'error') {
       setUploadStatus(1);
-      fMessage('上传失败', 'error');
+      fMessage(FI18n.i18nNext.t('uploadobject_msg_upload_failed'), 'error');
     }
   };
 
@@ -163,7 +154,10 @@ export const ImportDocDrawer = (props: Props) => {
       skip: refs.current.pageIndex * 20,
       limit: 20,
       bucketName:
-        refs.current.bucket === '全部Bucket' ? '_all' : refs.current.bucket,
+        refs.current.bucket ===
+        FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+          ? '_all'
+          : refs.current.bucket,
       mime: 'text',
       keywords: refs.current.objectKey,
     };
@@ -257,7 +251,12 @@ export const ImportDocDrawer = (props: Props) => {
       bucketName: newBucketName,
     };
     const result = await FServiceAPI.Storage.createBucket(params);
+    const { errCode, msg } = result;
     setCreateBucketShow(false);
+    if (errCode !== 0) {
+      fMessage(msg);
+      return;
+    }
     getBuckets();
   };
 
@@ -267,7 +266,7 @@ export const ImportDocDrawer = (props: Props) => {
     const IS_EXSIT_BIG_FILE =
       fileList.filter((item) => item.size > 200 * 1024 * 1024).length > 0;
     if (IS_EXSIT_BIG_FILE) {
-      fMessage('单个文件不能大于 200 M', 'warning');
+      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'), 'warning');
       return;
     }
 
@@ -278,7 +277,7 @@ export const ImportDocDrawer = (props: Props) => {
       .map((item) => item.size)
       .reduce((pre, cur) => pre + cur, 0);
     if (storageLimit - totalFileSize < totalSize) {
-      fMessage('超出储存', 'warning');
+      fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
       return;
     }
 
@@ -535,12 +534,24 @@ export const ImportDocDrawer = (props: Props) => {
                 value={refs.current.bucket}
                 onChange={(e) => {
                   refs.current.bucket = e;
-                  refs.current.uploadBucket = e === '全部Bucket' ? null : e;
-                  setUploadBucket(e === '全部Bucket' ? null : e);
+                  refs.current.uploadBucket =
+                    e ===
+                    FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+                      ? null
+                      : e;
+                  setUploadBucket(
+                    e ===
+                      FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+                      ? null
+                      : e,
+                  );
                   getObjects(true);
                 }}
               >
-                {['全部Bucket', ...bucketList].map((item) => (
+                {[
+                  FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
+                  ...bucketList,
+                ].map((item) => (
                   <Option value={item} key={item}>
                     {item}
                   </Option>
@@ -578,6 +589,7 @@ export const ImportDocDrawer = (props: Props) => {
                                   className="create-bucket-btn"
                                   onClick={() => {
                                     setUploadPopShow(false);
+                                    setNewBucketName('');
                                     setCreateBucketShow(true);
                                   }}
                                 >
@@ -633,6 +645,7 @@ export const ImportDocDrawer = (props: Props) => {
                           className="btn"
                           onClick={() => {
                             setUploadPopShow(false);
+                            setNewBucketName('');
                             setCreateBucketShow(true);
                           }}
                         >
@@ -680,7 +693,8 @@ export const ImportDocDrawer = (props: Props) => {
           {uploadQueue
             .filter(
               (item) =>
-                refs.current.bucket === '全部Bucket' ||
+                refs.current.bucket ===
+                  FI18n.i18nNext.t('posteditor_insert_label_all_buckets') ||
                 item.bucketName === refs.current.bucket,
             )
             .map((item) => (
@@ -751,7 +765,7 @@ export const ImportDocDrawer = (props: Props) => {
                         })}
                     </div>
                   ) : newBucketError === 2 ? (
-                    '存储空间名称重复'
+                    FI18n.i18nNext.t('bucket_createbucket_err_bucketexists')
                   ) : (
                     ''
                   )

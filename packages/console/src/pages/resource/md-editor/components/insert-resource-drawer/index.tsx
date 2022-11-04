@@ -1,7 +1,7 @@
 /** 插入资源弹窗组件 */
 
 import './index.less';
-import { Drawer, Popover, Select, Tabs, Upload } from 'antd';
+import { Drawer, Popover, Select, Tabs } from 'antd';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FInput from '@/components/FInput';
@@ -12,6 +12,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { ObjectItem } from '../object-item';
 import { ResourceCard } from '../resource-card';
+import { insertUrlResource } from '../../custom/dom/resource/utils';
 import { editorContext } from '../..';
 
 const { Option } = Select;
@@ -70,7 +71,7 @@ export const InsertResourceDrawer = (props: Props) => {
     collectionKey: '',
     bucketPageIndex: 0,
     bucketNoMore: false,
-    bucket: '全部Bucket',
+    bucket: FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
     uploadBucket: null as string | null,
     objectKey: '',
     uploadQueue: [] as any[],
@@ -119,7 +120,7 @@ export const InsertResourceDrawer = (props: Props) => {
         collectionKey: '',
         bucketPageIndex: 0,
         bucketNoMore: false,
-        bucket: '全部Bucket',
+        bucket: FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
         uploadBucket: null,
         objectKey: '',
         uploadQueue: refs.current.uploadQueue,
@@ -246,7 +247,10 @@ export const InsertResourceDrawer = (props: Props) => {
       skip: refs.current.bucketPageIndex * 12,
       limit: 12,
       bucketName:
-        refs.current.bucket === '全部Bucket' ? '_all' : refs.current.bucket,
+        refs.current.bucket ===
+        FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+          ? '_all'
+          : refs.current.bucket,
       mime: drawerType,
       keywords: refs.current.objectKey,
     };
@@ -288,7 +292,12 @@ export const InsertResourceDrawer = (props: Props) => {
       bucketName: newBucketName,
     };
     const result = await FServiceAPI.Storage.createBucket(params);
+    const { errCode, msg } = result;
     setCreateBucketShow(false);
+    if (errCode !== 0) {
+      fMessage(msg);
+      return;
+    }
     getBuckets();
   };
 
@@ -298,7 +307,7 @@ export const InsertResourceDrawer = (props: Props) => {
     const IS_EXSIT_BIG_FILE =
       fileList.filter((item) => item.size > 200 * 1024 * 1024).length > 0;
     if (IS_EXSIT_BIG_FILE) {
-      fMessage('单个文件不能大于 200 M', 'warning');
+      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'), 'warning');
       return;
     }
 
@@ -309,7 +318,7 @@ export const InsertResourceDrawer = (props: Props) => {
       .map((item) => item.size)
       .reduce((pre, cur) => pre + cur, 0);
     if (storageLimit - totalFileSize < totalSize) {
-      fMessage('超出储存', 'warning');
+      fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
       return;
     }
 
@@ -476,6 +485,18 @@ export const InsertResourceDrawer = (props: Props) => {
     setUploadQueue([...refs.current.uploadQueue]);
   };
 
+  /** 从存储空间插入对象 */
+  const insertFromObject = async (item: {
+    objectId: string;
+    objectName: string;
+  }) => {
+    const url = `${FUtil.Format.completeUrlByDomain(
+      'qi',
+    )}/v2/storages/objects/${item.objectId}/file`;
+    insertUrlResource(url, editor, resourceMapping[drawerType].resourceType);
+    close();
+  };
+
   /** tab 选项卡区域列表 */
   const tabItems = [
     {
@@ -608,12 +629,24 @@ export const InsertResourceDrawer = (props: Props) => {
                 value={refs.current.bucket}
                 onChange={(e) => {
                   refs.current.bucket = e;
-                  refs.current.uploadBucket = e === '全部Bucket' ? null : e;
-                  setUploadBucket(e === '全部Bucket' ? null : e);
+                  refs.current.uploadBucket =
+                    e ===
+                    FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+                      ? null
+                      : e;
+                  setUploadBucket(
+                    e ===
+                      FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+                      ? null
+                      : e,
+                  );
                   getObjects(true);
                 }}
               >
-                {['全部Bucket', ...bucketList].map((item) => (
+                {[
+                  FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
+                  ...bucketList,
+                ].map((item) => (
                   <Option value={item} key={item}>
                     {item}
                   </Option>
@@ -651,6 +684,7 @@ export const InsertResourceDrawer = (props: Props) => {
                                   className="create-bucket-btn"
                                   onClick={() => {
                                     setUploadPopShow(false);
+                                    setNewBucketName('');
                                     setCreateBucketShow(true);
                                   }}
                                 >
@@ -708,6 +742,7 @@ export const InsertResourceDrawer = (props: Props) => {
                           className="btn"
                           onClick={() => {
                             setUploadPopShow(false);
+                            setNewBucketName('');
                             setCreateBucketShow(true);
                           }}
                         >
@@ -755,7 +790,8 @@ export const InsertResourceDrawer = (props: Props) => {
           {uploadQueue
             .filter(
               (item) =>
-                refs.current.bucket === '全部Bucket' ||
+                refs.current.bucket ===
+                  FI18n.i18nNext.t('posteditor_insert_label_all_buckets') ||
                 item.bucketName === refs.current.bucket,
             )
             .map((item) => (
@@ -768,7 +804,11 @@ export const InsertResourceDrawer = (props: Props) => {
               ></ObjectItem>
             ))}
           {objectList.map((item) => (
-            <ObjectItem key={item.objectId} data={item}></ObjectItem>
+            <ObjectItem
+              key={item.objectId}
+              data={item}
+              insert={insertFromObject}
+            ></ObjectItem>
           ))}
 
           <FModal
@@ -822,7 +862,7 @@ export const InsertResourceDrawer = (props: Props) => {
                         })}
                     </div>
                   ) : newBucketError === 2 ? (
-                    '存储空间名称重复'
+                    FI18n.i18nNext.t('bucket_createbucket_err_bucketexists')
                   ) : (
                     ''
                   )
@@ -851,7 +891,12 @@ export const InsertResourceDrawer = (props: Props) => {
             <div
               className="insert-btn"
               onClick={() => {
-                console.error(url);
+                insertUrlResource(
+                  url,
+                  editor,
+                  resourceMapping[drawerType].resourceType,
+                );
+                close();
               }}
             >
               {FI18n.i18nNext.t('btn_insert_from_url')}
