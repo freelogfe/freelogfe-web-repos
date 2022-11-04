@@ -218,13 +218,8 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
         },
       }, true);
       uploadCancelHandler = cancel;
-      // console.log(returns, 'returnsreturns1234');
       const { data } = await promise;
       uploadCancelHandler = null;
-      // console.log(data, 'data1241234');
-      // if (!data) {
-      //
-      // }
 
       setProgress(null);
     }
