@@ -36,6 +36,7 @@ import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
+import FPublishObjectFile from '@/components/FPublishObjectFile';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -176,6 +177,7 @@ function VersionCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
+            <FPublishObjectFile fileInfo={null}/>
             <FSelectObject />
 
             <CustomOptions />
