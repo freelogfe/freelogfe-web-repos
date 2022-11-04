@@ -1,10 +1,11 @@
 import * as React from 'react';
-import styles from './index.less';
+import * as ReactDOM from 'react-dom';
 import FUpload from '@/components/FUpload';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '../../../../@freelog/tools-lib';
 import { Space } from 'antd';
 import { RcFile } from 'antd/lib/upload/interface';
+import FDrawer from '@/components/FDrawer';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -43,25 +44,6 @@ interface FPublishObjectFileStates {
   fUploadingProgress: number;
   objectDrawerVisible: boolean;
 }
-
-// selectedFileStatus: -3 /* 上传成功 */
-// | -2 /* 正在上传 */
-// | -1 /* 正在校验 */
-// | 0 /* 未上传 */
-// | 1 /* 文件太大 */
-// | 2 /* 类型不符 */
-// | 3 /* 自己已上传 */
-// | 4 /* 他人已上传 */
-// ;
-// selectedFileUsedResource: {
-//   resourceID: string;
-//   resourceName: string;
-//   resourceType: string;
-//   resourceVersion: string;
-//   url: string;
-// }
-// [];
-// selectedFileObjectDrawerVisible: boolean;
 
 const initStates: FPublishObjectFileStates = {
   fInfo: null,
@@ -258,7 +240,8 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
       <FComponentsLib.FRectBtn
         type='default'
         onClick={() => {
-          set_objectDrawerVisible(true);
+          // set_objectDrawerVisible(true);
+          fM();
         }}
       >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
     </Space>);
@@ -268,3 +251,19 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
 }
 
 export default FPublishObjectFile;
+
+let wrap: HTMLElement;
+
+function fM() {
+  return () => {
+    if (!wrap) {
+      wrap = document.createElement('div');
+    }
+    if (wrap) {
+      document.body && document.body.appendChild(wrap);
+    }
+    ReactDOM.createPortal((<FDrawer title={'HelloWorld'} visible={true}>
+      12
+    </FDrawer>), wrap);
+  };
+}
