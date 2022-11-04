@@ -6,6 +6,7 @@ import { FI18n, FServiceAPI, FUtil } from '../../../../@freelog/tools-lib';
 import { Space } from 'antd';
 import { RcFile } from 'antd/lib/upload/interface';
 import FDrawer from '@/components/FDrawer';
+import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -242,7 +243,8 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
         onClick={() => {
           // set_objectDrawerVisible(true);
           console.log('********90832iuojklsdf');
-          fM();
+          // fM();
+          fObjectSelectorDrawer();
         }}
       >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
     </Space>);
@@ -254,40 +256,40 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
 export default FPublishObjectFile;
 
 
-function fM() {
-
-  const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
-  return root.render((<D afterVisibleChange={() => {
-    setTimeout(() => {
-      root.unmount();
-    }, 100);
-
-  }} />));
-}
-
-interface DProps {
-  afterVisibleChange(): void;
-}
-
-function D({ afterVisibleChange }: DProps) {
-
-  const [visible, set_visible] = React.useState(true);
-
-  return (<FDrawer
-    title={'HelloWorld'}
-    visible={visible}
-    onClose={() => {
-      set_visible(false);
-    }}
-    afterVisibleChange={(visible) => {
-      if (!visible) {
-        afterVisibleChange && afterVisibleChange();
-      }
-    }}
-  >
-    12
-  </FDrawer>);
-}
+// function fM() {
+//
+//   const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
+//   return root.render((<D afterVisibleChange={() => {
+//     setTimeout(() => {
+//       root.unmount();
+//     }, 100);
+//
+//   }} />));
+// }
+//
+// interface DProps {
+//   afterVisibleChange(): void;
+// }
+//
+// function D({ afterVisibleChange }: DProps) {
+//
+//   const [visible, set_visible] = React.useState(true);
+//
+//   return (<FDrawer
+//     title={'HelloWorld'}
+//     visible={visible}
+//     onClose={() => {
+//       set_visible(false);
+//     }}
+//     afterVisibleChange={(visible) => {
+//       if (!visible) {
+//         afterVisibleChange && afterVisibleChange();
+//       }
+//     }}
+//   >
+//     12
+//   </FDrawer>);
+// }
 
 // function DDD() {
 //   return (<div>222222</div>);
