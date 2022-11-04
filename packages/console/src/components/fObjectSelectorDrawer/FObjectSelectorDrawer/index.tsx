@@ -1,0 +1,181 @@
+import * as React from 'react';
+import styles from './index.less';
+import FDrawer from '@/components/FDrawer';
+import FDropdownMenu from '@/components/FDropdownMenu';
+import { DownOutlined } from '@ant-design/icons';
+import FInput from '@/components/FInput';
+import FComponentsLib from '@freelog/components-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
+import { ChangeAction } from '@/models/storageObjectDepSelector';
+import { FetchExhibitListAction } from '@/models/informalNodeManagerPage';
+import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
+
+interface FObjectSelectorDrawerProps {
+  onSelect?({ objID, objName, sha1 }: { objID: string; objName: string; sha1: string }): void;
+
+  onClose?(): void;
+}
+
+interface FObjectSelectorDrawerStates {
+  visible: boolean;
+  selectOptions: { text: string; value: string; }[];
+  selected: string;
+  inputValue: string;
+  objList: {
+    objID: string;
+    objName: string;
+    sha1: string;
+    resourceType: string[];
+    updateTime: string;
+  }[];
+  objListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  objListMore: 'loading' | 'andMore' | 'noMore';
+}
+
+const initStates: FObjectSelectorDrawerStates = {
+  visible: true,
+  selectOptions: [{
+    text: '全部Bucket',
+    value: '_all',
+  }],
+  selected: '_all',
+  inputValue: '',
+  objList: [],
+  objListState: 'loading',
+  objListMore: 'loading',
+};
+
+function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
+
+  const [visible, set_visible] = React.useState<FObjectSelectorDrawerStates['visible']>(initStates['visible']);
+  const [selectOptions, set_selectOptions] = React.useState<FObjectSelectorDrawerStates['selectOptions']>(initStates['selectOptions']);
+  const [selected, set_selected] = React.useState<FObjectSelectorDrawerStates['selected']>(initStates['selected']);
+  const [inputValue, set_inputValue] = React.useState<FObjectSelectorDrawerStates['inputValue']>(initStates['inputValue']);
+  const [objList, set_objList] = React.useState<FObjectSelectorDrawerStates['objList']>(initStates['objList']);
+  const [objListState, set_objListState] = React.useState<FObjectSelectorDrawerStates['objListState']>(initStates['objListState']);
+  const [objListMore, set_objListMore] = React.useState<FObjectSelectorDrawerStates['objListMore']>(initStates['objListMore']);
+
+  async function loadData() {
+    const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
+      bucketName: selected,
+      // resourceType: selector.visibleOResourceType || undefined,
+      isLoadingTypeless: 1,
+      keywords: inputValue,
+      skip: 0,
+      limit: FUtil.Predefined.pageSize,
+    };
+    const { data } = await FServiceAPI.Storage.objectList(params);
+    console.log(data, 'data09woi3e4jfsldkfsdjlfksdjflkj');
+    const { state, more } = listStateAndListMore({
+      list_Length: objList.length,
+      total_Length: data.totalItem,
+      has_FilterCriteria: selected !== '_all' || inputValue !== '',
+    });
+    set_objListState(state);
+    set_objListMore(more);
+    set_objList(data.dataList.map((d: any) => {
+      return {
+        objID: d.objectId,
+        objName: d.objectName,
+        sha1: d.sha1,
+        resourceType: d.resourceType,
+        updateTime: '',
+      };
+    }));
+    // console.log(data, 'datadata322');
+    // yield put<ChangeAction>({
+    //   type: 'change',
+    //   payload: {
+    //     oTotal: data.totalItem,
+    //     objectList: [
+    //       ...objectListData,
+    //       ...data.dataList.map((o: any) => ({
+    //         objectId: o.objectId,
+    //         bucketName: o.bucketName,
+    //         objectName: o.objectName,
+    //         resourceType: o.resourceType,
+    //         updateDate: FUtil.Format.formatDateTime(o.updateDate, true),
+    //       })),
+    //     ],
+    //   },
+    // });
+  }
+
+  return (<FDrawer
+    title={'选择对象'}
+    onClose={() => {
+      set_visible(false);
+    }}
+    afterVisibleChange={(visible) => {
+      if (visible) {
+        loadData();
+      } else {
+
+      }
+    }}
+    visible={visible}
+    width={820}
+  >
+    <div className={styles.filter}>
+      <FDropdownMenu
+        options={selectOptions}
+        onChange={(value) => {
+        }}
+      >
+        <a>{(selectOptions.find((rs) => rs.value === selected) as any).text} <DownOutlined
+          style={{ marginLeft: 8 }} /></a>
+      </FDropdownMenu>
+      <FInput
+        theme='dark'
+        debounce={300}
+        value={inputValue}
+        onDebounceChange={(value) => {
+
+        }}
+      />
+    </div>
+    {
+      objList.map((obj) => {
+        return (<div id={obj.objID} className={styles.bucket}>
+          <div>
+            <div className={styles.title}>
+              <div>
+                <FComponentsLib.FContentText
+                  singleRow={true}
+                  text={obj.objName}
+                />
+              </div>
+            </div>
+            <div style={{ height: 2 }} />
+            <FComponentsLib.FContentText
+              type={'additional2'}
+              text={(obj.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(obj.resourceType)}` : '未设置类型') + ` | 更新时间 ${obj.updateTime}`}
+            />
+          </div>
+          <FComponentsLib.FRectBtn
+            type='secondary'
+            size='small'
+            onClick={() => {
+
+            }}
+          >选择</FComponentsLib.FRectBtn>
+        </div>);
+      })
+    }
+    <FListFooter
+      state={objListMore}
+      onClickLoadMore={() => {
+        // dispatch<FetchExhibitListAction>({
+        //   type: 'informalNodeManagerPage/fetchExhibitList',
+        //   payload: {
+        //     isRematch: false,
+        //     isRestart: false,
+        //   },
+        // });
+      }}
+    />
+  </FDrawer>);
+}
+
+export default FObjectSelectorDrawer;
