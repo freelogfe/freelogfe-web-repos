@@ -51,7 +51,7 @@ function Task({
   }, []);
 
   async function verifySameName() {
-    console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
+    // console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
     const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
       // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
       fullObjectNames: bucketName + '/' + file.name,
