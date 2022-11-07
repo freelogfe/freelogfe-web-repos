@@ -51,7 +51,9 @@ function Task({
   }, []);
 
   async function verifySameName() {
+    console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
     const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
+      // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
@@ -92,7 +94,7 @@ function Task({
       }
     }
 
-    const {result} = await FServiceAPI.recombination.getFilesSha1Info({
+    const { result } = await FServiceAPI.recombination.getFilesSha1Info({
       sha1: [file.sha1],
     });
 

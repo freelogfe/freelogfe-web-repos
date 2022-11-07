@@ -343,8 +343,12 @@ const Model: StorageHomePageModelType = {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
+      // new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$/)
+      // console.log(payload.objectName.replace(, '_')
+      // console.log(payload.objectName, payload.objectName.replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_'), '93wslidkjflksdjflksdjflsdkj');
       const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
         bucketName: storageHomePage.activatedBucket,
+        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
         objectName: payload.objectName,
         sha1: payload.sha1,
       };
@@ -464,7 +468,10 @@ const Model: StorageHomePageModelType = {
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
 
       const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
-        fullObjectNames: payload.map((p) => storageHomePage.activatedBucket + '/' + p.name).join(','),
+        fullObjectNames: payload.map((p) => {
+        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
+          return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
+        }).join(','),
         projection: 'objectId,objectName',
       };
 
