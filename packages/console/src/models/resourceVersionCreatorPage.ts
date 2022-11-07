@@ -71,26 +71,32 @@ export interface ResourceVersionCreatorPageModelState {
   versionVerify: 0 | 2;
   versionErrorText: string;
 
-  selectedFileName: string;
-  selectedFileSha1: string;
-  selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */
-    | -2 /* 正在上传 */
-    | -1 /* 正在校验 */
-    | 0 /* 未上传 */
-    | 1 /* 文件太大 */
-    | 2 /* 类型不符 */
-    | 3 /* 自己已上传 */
-    | 4 /* 他人已上传 */
-  ;
-  selectedFileUsedResource: {
-    resourceID: string;
-    resourceName: string;
-    resourceType: string;
-    resourceVersion: string;
-    url: string;
-  }[];
-  selectedFileObjectDrawerVisible: boolean;
+  selectedFileInfo: {
+    name: string;
+    sha1: string;
+    from: string;
+  } | null;
+
+  // selectedFileName: string;
+  // selectedFileSha1: string;
+  // selectedFileOrigin: string;
+  // selectedFileStatus: -3 /* 上传成功 */
+  //   | -2 /* 正在上传 */
+  //   | -1 /* 正在校验 */
+  //   | 0 /* 未上传 */
+  //   | 1 /* 文件太大 */
+  //   | 2 /* 类型不符 */
+  //   | 3 /* 自己已上传 */
+  //   | 4 /* 他人已上传 */
+  // ;
+  // selectedFileUsedResource: {
+  //   resourceID: string;
+  //   resourceName: string;
+  //   resourceType: string;
+  //   resourceVersion: string;
+  //   url: string;
+  // }[];
+  // selectedFileObjectDrawerVisible: boolean;
 
   depRelationship: Relationships;
   dependencies: DepResources;
@@ -224,6 +230,19 @@ export interface OnClickCacheBtnAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onClickCacheBtn';
 }
 
+export interface OnSuccess_ObjectFile_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile';
+  payload: {
+    name: string;
+    sha1: string;
+    from: string;
+  };
+}
+
+export interface OnDelete_ObjectFile_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
+}
+
 export interface InitModelStatesAction extends AnyAction {
   type: 'resourceVersionCreatorPage/initModelStates';
 }
@@ -284,6 +303,8 @@ export interface ResourceVersionCreatorModelType {
     onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
     onClickCreateBtn: (action: OnClickCreateBtnAction, effects: EffectsCommandMap) => void;
     onClickCacheBtn: (action: OnClickCacheBtnAction, effects: EffectsCommandMap) => void;
+    onSuccess_ObjectFile: (action: OnSuccess_ObjectFile_Action, effects: EffectsCommandMap) => void;
+    onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
 
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
@@ -313,12 +334,14 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionVerify: 0,
   versionErrorText: '',
 
-  selectedFileName: '',
-  selectedFileSha1: '',
-  selectedFileOrigin: '',
-  selectedFileStatus: 0,
-  selectedFileUsedResource: [],
-  selectedFileObjectDrawerVisible: false,
+  selectedFileInfo: null,
+
+  // selectedFileName: '',
+  // selectedFileSha1: '',
+  // selectedFileOrigin: '',
+  // selectedFileStatus: 0,
+  // selectedFileUsedResource: [],
+  // selectedFileObjectDrawerVisible: false,
 
   rawProperties: [],
   rawPropertiesState: 'success',
@@ -421,9 +444,15 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * onClickCreateBtn({}: OnClickCreateBtnAction, { put, call, select }: EffectsCommandMap) {
+
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
+
+      if (!resourceVersionCreatorPage.selectedFileInfo) {
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -451,8 +480,8 @@ const Model: ResourceVersionCreatorModelType = {
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
-        fileSha1: resourceVersionCreatorPage.selectedFileSha1,
-        filename: resourceVersionCreatorPage.selectedFileName,
+        fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
+        filename: resourceVersionCreatorPage.selectedFileInfo.name,
         baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({ resourceId: baseUpId })),
         dependencies: resourceVersionCreatorPage.dependencies
           .filter((dep) => {
@@ -543,6 +572,22 @@ const Model: ResourceVersionCreatorModelType = {
 
       yield put<FetchDraftDataAction>({
         type: 'resourceInfo/fetchDraftData',
+      });
+    },
+    * onSuccess_ObjectFile({ payload }: OnSuccess_ObjectFile_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          selectedFileInfo: payload,
+        },
+      });
+    },
+    * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          selectedFileInfo: null,
+        },
       });
     },
     * fetchDraft({}: FetchDraftAction, { call, put, select }: EffectsCommandMap) {
@@ -684,10 +729,14 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      // console.log(resourceVersionCreatorPage.selectedFileSha1, 'resourceVersionCreatorPage.selectedFileSha109ewoijsdikfjls');
-      if (!resourceVersionCreatorPage.selectedFileSha1) {
+      if (!resourceVersionCreatorPage.selectedFileInfo) {
         return;
       }
+
+      // console.log(resourceVersionCreatorPage.selectedFileSha1, 'resourceVersionCreatorPage.selectedFileSha109ewoijsdikfjls');
+      // if (!resourceVersionCreatorPage.selectedFileSha1) {
+      //   return;
+      // }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -697,7 +746,7 @@ const Model: ResourceVersionCreatorModelType = {
       });
 
       const params: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: [resourceVersionCreatorPage.selectedFileSha1],
+        sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
       };
       // console.log('*(*********');
       const {

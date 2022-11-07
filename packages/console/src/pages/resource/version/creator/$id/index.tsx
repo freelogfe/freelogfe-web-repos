@@ -15,11 +15,11 @@ import {
 import {
   ChangeAction,
   OnClickCacheBtnAction,
-  OnClickCreateBtnAction,
+  OnClickCreateBtnAction, OnDelete_ObjectFile_Action,
   OnMountPageAction,
   OnPromptPageLeaveAction,
   OnPromptPageLeaveCancelAction,
-  OnPromptPageLeaveConfirmAction,
+  OnPromptPageLeaveConfirmAction, OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -89,7 +89,7 @@ function VersionCreator({
     // 版本
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
     // 选择的文件对象
-    || resourceVersionCreatorPage.selectedFileStatus !== -3
+    || !resourceVersionCreatorPage.selectedFileInfo
     || resourceVersionCreatorPage.rawPropertiesState !== 'success'
     // 依赖
     || resourceVersionCreatorPage.dependencies.some((dd) => {
@@ -177,8 +177,37 @@ function VersionCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
-            <FPublishObjectFile fileInfo={null}/>
-            <FSelectObject />
+            <FPublishObjectFile
+              fileInfo={resourceVersionCreatorPage.selectedFileInfo}
+              onSucceed_UploadFile={(file) => {
+                console.log(file, 'onSucceed_UploadFile390oisjdf');
+                dispatch<OnSuccess_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  payload: {
+                    name: file.fileName,
+                    sha1: file.sha1,
+                    from: '本地上传',
+                  },
+                });
+              }}
+              onSucceed_ImportObject={(obj) => {
+                console.log(obj, 'onSucceed_ImportObject390oisjdf');
+                dispatch<OnSuccess_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  payload: {
+                    name: obj.objName,
+                    sha1: obj.sha1,
+                    from: '存储空间',
+                  },
+                });
+              }}
+              onClick_DeleteBtn={() => {
+                dispatch<OnDelete_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                });
+              }}
+            />
+            {/*<FSelectObject />*/}
 
             <CustomOptions />
           </FFormLayout.FBlock>

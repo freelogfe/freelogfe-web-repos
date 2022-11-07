@@ -7,6 +7,7 @@ import { Progress, Space } from 'antd';
 import { RcFile } from 'antd/lib/upload/interface';
 import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 import img from '@/assets/file-object.svg';
+import FTable from '@/components/FTable';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -25,6 +26,8 @@ interface FPublishObjectFileProps {
     objName: string;
     sha1: string;
   }): void;
+
+  onClick_DeleteBtn?(): void;
 }
 
 interface FPublishObjectFileStates {
@@ -53,7 +56,12 @@ const initStates: FPublishObjectFileStates = {
   fUploadingProgress: 0,
 };
 
-function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_UploadFile }: FPublishObjectFileProps) {
+function FPublishObjectFile({
+                              fileInfo,
+                              onSucceed_ImportObject,
+                              onSucceed_UploadFile,
+                              onClick_DeleteBtn,
+                            }: FPublishObjectFileProps) {
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
   const [fState, set_fState] = React.useState<FPublishObjectFileStates['fState']>(initStates['fState']);
   const [fUploadedError, set_fUploadedError] = React.useState<FPublishObjectFileStates['fUploadedError']>(initStates['fUploadedError']);
@@ -64,12 +72,12 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
   const tempUploadFileInfo = React.useRef<{
     fileName: string;
     sha1: string;
-  }>();
+  } | null>(null);
   const tempImportObjectInfo = React.useRef<{
     objID: string;
     objName: string;
     sha1: string;
-  }>();
+  } | null>(null);
 
   React.useEffect(() => {
     set_fInfo(null);
@@ -119,7 +127,7 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
           tempUploadFileInfo.current = {
             fileName: file.name,
             sha1: sha1,
-          }
+          };
           set_fUsedResource(usedResources);
           set_fState('unsuccessful');
           set_fUploadedError('selfTakeUp');
@@ -207,7 +215,7 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
           objID: objectID,
           objName: objectName,
           sha1: sha1,
-        }
+        };
         set_fUsedResource(usedResources);
         set_fState('unsuccessful');
         set_fUploadedError('selfTakeUp');
@@ -261,7 +269,9 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
       </div>
       <FComponentsLib.FTextBtn
         type='danger'
-        // onClick={() => onClickDelete && onClickDelete()}
+        onClick={() => {
+          onClick_DeleteBtn && onClick_DeleteBtn();
+        }}
         // className={styles.delete}
       >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
     </div>));
@@ -299,55 +309,124 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
     </div>));
   }
 
-  return (<Space size={15}>
-    <FUpload
-      // accept={resourceType === 'image' ? 'image/*' : '*'}
-      beforeUpload={(file, FileList) => {
-        onUploadFilesLocally(file);
-        return false;
-      }}
-      showUploadList={false}
-    >
+  return (<div>
+    <Space size={15}>
+      <FUpload
+        // accept={resourceType === 'image' ? 'image/*' : '*'}
+        beforeUpload={(file, FileList) => {
+          onUploadFilesLocally(file);
+          return false;
+        }}
+        showUploadList={false}
+      >
+        <FComponentsLib.FRectBtn
+          type='default'
+        >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+      </FUpload>
       <FComponentsLib.FRectBtn
         type='default'
-      >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-    </FUpload>
-    <FComponentsLib.FRectBtn
-      type='default'
-      onClick={async () => {
-        const obj = await fObjectSelectorDrawer();
-        if (!obj) {
-          return;
-        }
-        onImportObject({
-          objectID: obj.objID,
-          objectName: obj.objName,
-          sha1: obj.sha1,
-        });
-      }}
-    >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+        onClick={async () => {
+          const obj = await fObjectSelectorDrawer();
+          if (!obj) {
+            return;
+          }
+          onImportObject({
+            objectID: obj.objID,
+            objectName: obj.objName,
+            sha1: obj.sha1,
+          });
+        }}
+      >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+
+      {
+        fUploadedError === 'unexpectedSize' && (<span className={styles.objectErrorInfo}>文件大小不能超过200MB</span>)
+      }
+
+      {
+        fUploadedError === 'selfTakeUp' && (<Space size={10}>
+          <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
+          <FComponentsLib.FTextBtn
+            onClick={() => {
+              if (!!tempUploadFileInfo.current) {
+                onSucceed_UploadFile && onSucceed_UploadFile(tempUploadFileInfo.current);
+              }
+              if (!!tempImportObjectInfo.current) {
+                onSucceed_ImportObject && onSucceed_ImportObject(tempImportObjectInfo.current);
+              }
+
+              tempUploadFileInfo.current = null;
+              tempImportObjectInfo.current = null;
+            }}
+          >继续上传/导入</FComponentsLib.FTextBtn>
+        </Space>)
+      }
+
+      {
+        fUploadedError === 'othersTakeUp' && (
+          <span className={styles.objectErrorInfo}>{FI18n.i18nNext.t('resource_exist')}</span>)
+      }
+
+    </Space>
 
     {
-      fUploadedError === 'unexpectedSize' && (<span className={styles.objectErrorInfo}>文件大小不能超过200MB</span>)
+      fUploadedError === 'selfTakeUp' && fUsedResource.length > 0 && (<>
+        <div style={{ height: 20 }} />
+        <div className={styles.tableWrap}>
+          <FTable
+            rowClassName={styles.tableRowClassName}
+            scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
+            columns={[
+              {
+                title: '资源',
+                dataIndex: 'resourceName',
+                width: 400,
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceName}
+                    style={{ maxWidth: 370 }}
+                  />);
+                },
+              },
+              {
+                title: '类型',
+                dataIndex: 'resourceType',
+                width: 100,
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceType}
+                  />);
+                },
+              },
+              {
+                title: '版本',
+                dataIndex: 'resourceVersion',
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceVersion}
+                  />);
+                },
+              },
+              {
+                title: '操作',
+                dataIndex: 'operation',
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FTextBtn onClick={() => {
+                    window.open(record.url);
+                  }}>查看</FComponentsLib.FTextBtn>);
+                },
+              },
+            ]}
+            dataSource={fUsedResource.map((sfur) => {
+              return {
+                key: sfur.url,
+                ...sfur,
+              };
+            })}
+          />
+        </div>
+      </>)
     }
-
-    {
-      fUploadedError === 'selfTakeUp' && (<Space size={10}>
-        <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
-        <FComponentsLib.FTextBtn
-          onClick={() => {
-
-          }}
-        >继续上传/导入</FComponentsLib.FTextBtn>
-      </Space>)
-    }
-
-    {
-      fUploadedError === 'othersTakeUp' && (
-        <span className={styles.objectErrorInfo}>{FI18n.i18nNext.t('resource_exist')}</span>)
-    }
-
-  </Space>);
+  </div>);
 }
 
 export default FPublishObjectFile;
