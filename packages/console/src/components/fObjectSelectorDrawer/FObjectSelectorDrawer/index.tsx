@@ -46,7 +46,7 @@ const initStates: FObjectSelectorDrawerStates = {
   objListMore: 'loading',
 };
 
-function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
+function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps) {
 
   const [visible, set_visible] = React.useState<FObjectSelectorDrawerStates['visible']>(initStates['visible']);
   const [selectOptions, set_selectOptions] = React.useState<FObjectSelectorDrawerStates['selectOptions']>(initStates['selectOptions']);
@@ -66,7 +66,7 @@ function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
       limit: FUtil.Predefined.pageSize,
     };
     const { data } = await FServiceAPI.Storage.objectList(params);
-    console.log(data, 'data09woi3e4jfsldkfsdjlfksdjflkj');
+    // console.log(data, 'data09woi3e4jfsldkfsdjlfksdjflkj');
     const { state, more } = listStateAndListMore({
       list_Length: objList.length,
       total_Length: data.totalItem,
@@ -111,7 +111,7 @@ function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
       if (visible) {
         loadData();
       } else {
-
+        onClose && onClose();
       }
     }}
     visible={visible}
@@ -137,7 +137,7 @@ function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
     </div>
     {
       objList.map((obj) => {
-        return (<div id={obj.objID} className={styles.bucket}>
+        return (<div key={obj.objID} className={styles.bucket}>
           <div>
             <div className={styles.title}>
               <div>
@@ -157,7 +157,8 @@ function FObjectSelectorDrawer({ onSelect }: FObjectSelectorDrawerProps) {
             type='secondary'
             size='small'
             onClick={() => {
-
+              onSelect && onSelect(obj);
+              set_visible(false);
             }}
           >选择</FComponentsLib.FRectBtn>
         </div>);

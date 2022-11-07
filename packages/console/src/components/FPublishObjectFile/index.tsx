@@ -240,11 +240,12 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
       </FUpload>
       <FComponentsLib.FRectBtn
         type='default'
-        onClick={() => {
+        onClick={async () => {
           // set_objectDrawerVisible(true);
-          console.log('********90832iuojklsdf');
+          // console.log('********90832iuojklsdf');
           // fM();
-          fObjectSelectorDrawer();
+          const obj = await fObjectSelectorDrawer();
+          console.log(obj, '09w3oiejfsldkfjsdlkfj');
         }}
       >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
     </Space>);
