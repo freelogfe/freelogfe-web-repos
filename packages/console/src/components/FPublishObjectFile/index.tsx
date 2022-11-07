@@ -61,6 +61,15 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
   const [fUploadingProgress, set_fUploadingProgress] = React.useState<FPublishObjectFileStates['fUploadingProgress']>(initStates['fUploadingProgress']);
 
   const uploadCancelHandler = React.useRef<any>();
+  const tempUploadFileInfo = React.useRef<{
+    fileName: string;
+    sha1: string;
+  }>();
+  const tempImportObjectInfo = React.useRef<{
+    objID: string;
+    objName: string;
+    sha1: string;
+  }>();
 
   React.useEffect(() => {
     set_fInfo(null);
@@ -107,6 +116,10 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
               };
             });
           }).flat();
+          tempUploadFileInfo.current = {
+            fileName: file.name,
+            sha1: sha1,
+          }
           set_fUsedResource(usedResources);
           set_fState('unsuccessful');
           set_fUploadedError('selfTakeUp');
@@ -190,6 +203,11 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
             };
           });
         }).flat();
+        tempImportObjectInfo.current = {
+          objID: objectID,
+          objName: objectName,
+          sha1: sha1,
+        }
         set_fUsedResource(usedResources);
         set_fState('unsuccessful');
         set_fUploadedError('selfTakeUp');
@@ -308,79 +326,28 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
         });
       }}
     >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+
+    {
+      fUploadedError === 'unexpectedSize' && (<span className={styles.objectErrorInfo}>文件大小不能超过200MB</span>)
+    }
+
+    {
+      fUploadedError === 'selfTakeUp' && (<Space size={10}>
+        <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
+        <FComponentsLib.FTextBtn
+          onClick={() => {
+
+          }}
+        >继续上传/导入</FComponentsLib.FTextBtn>
+      </Space>)
+    }
+
+    {
+      fUploadedError === 'othersTakeUp' && (
+        <span className={styles.objectErrorInfo}>{FI18n.i18nNext.t('resource_exist')}</span>)
+    }
+
   </Space>);
 }
 
 export default FPublishObjectFile;
-
-
-// function fM() {
-//
-//   const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
-//   return root.render((<D afterVisibleChange={() => {
-//     setTimeout(() => {
-//       root.unmount();
-//     }, 100);
-//
-//   }} />));
-// }
-//
-// interface DProps {
-//   afterVisibleChange(): void;
-// }
-//
-// function D({ afterVisibleChange }: DProps) {
-//
-//   const [visible, set_visible] = React.useState(true);
-//
-//   return (<FDrawer
-//     title={'HelloWorld'}
-//     visible={visible}
-//     onClose={() => {
-//       set_visible(false);
-//     }}
-//     afterVisibleChange={(visible) => {
-//       if (!visible) {
-//         afterVisibleChange && afterVisibleChange();
-//       }
-//     }}
-//   >
-//     12
-//   </FDrawer>);
-// }
-
-// function DDD() {
-//   return (<div>222222</div>);
-// }
-
-
-// class Modal extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     // Create a div that we'll render the modal into. Because each
-//     // Modal component has its own element, we can render multiple
-//     // modal components into the modal container.
-//     this.el = document.createElement('div');
-//   }
-//
-//   componentDidMount() {
-//     // Append the element into the DOM on mount. We'll render
-//     // into the modal container element (see the HTML tab).
-//     modalRootEl.appendChild(this.el);
-//   }
-//
-//   componentWillUnmount() {
-//     // Remove the element from the DOM when we unmount
-//     modalRootEl.removeChild(this.el);
-//   }
-//
-//   render() {
-//     // Use a portal to render the children into the element
-//     return ReactDOM.createPortal(
-//       // Any valid React child: JSX, strings, arrays, etc.
-//       this.props.children,
-//       // A DOM element
-//       this.el,
-//     );
-//   }
-// }
