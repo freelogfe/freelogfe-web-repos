@@ -77,27 +77,6 @@ export interface ResourceVersionCreatorPageModelState {
     from: string;
   } | null;
 
-  // selectedFileName: string;
-  // selectedFileSha1: string;
-  // selectedFileOrigin: string;
-  // selectedFileStatus: -3 /* 上传成功 */
-  //   | -2 /* 正在上传 */
-  //   | -1 /* 正在校验 */
-  //   | 0 /* 未上传 */
-  //   | 1 /* 文件太大 */
-  //   | 2 /* 类型不符 */
-  //   | 3 /* 自己已上传 */
-  //   | 4 /* 他人已上传 */
-  // ;
-  // selectedFileUsedResource: {
-  //   resourceID: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   resourceVersion: string;
-  //   url: string;
-  // }[];
-  // selectedFileObjectDrawerVisible: boolean;
-
   depRelationship: Relationships;
   dependencies: DepResources;
   depActivatedID: string;
@@ -335,13 +314,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionErrorText: '',
 
   selectedFileInfo: null,
-
-  // selectedFileName: '',
-  // selectedFileSha1: '',
-  // selectedFileOrigin: '',
-  // selectedFileStatus: 0,
-  // selectedFileUsedResource: [],
-  // selectedFileObjectDrawerVisible: false,
 
   rawProperties: [],
   rawPropertiesState: 'success',
