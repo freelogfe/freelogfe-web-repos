@@ -55,6 +55,33 @@ const MarkdownEditor = () => {
     setEdited(false);
   };
 
+  /** 禁止资源内容保存（禁止右键菜单） */
+  const preventSaveResource = () => {
+    /** 禁止图片右键菜单 */
+    const imgs = document.getElementsByClassName('image-area');
+    for (const item of imgs) {
+      (item as any).oncontextmenu = () => {
+        return false;
+      };
+    }
+
+    /** 禁止视频右键菜单 */
+    const videos = document.getElementsByClassName('video-area');
+    for (const item of videos) {
+      (item as any).oncontextmenu = () => {
+        return false;
+      };
+    }
+
+    /** 禁止音频右键菜单 */
+    const audios = document.getElementsByClassName('audio-area');
+    for (const item of audios) {
+      (item as any).oncontextmenu = () => {
+        return false;
+      };
+    }
+  };
+
   useEffect(() => {
     if (editor) {
       editor.setDrawerType = async (type: string) => {
@@ -74,6 +101,8 @@ const MarkdownEditor = () => {
   }, [editor]);
 
   useEffect(() => {
+    preventSaveResource();
+
     const newMarkdown = html2md(html);
     const edited = markdown !== newMarkdown;
     setEdited(edited);

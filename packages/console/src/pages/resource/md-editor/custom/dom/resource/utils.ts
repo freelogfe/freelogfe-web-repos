@@ -16,7 +16,7 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
     latestVersion,
     version,
   } = data;
-  // TODO authType 目前写死
+  // TODO authType 目前写死，之后需要通过接口获取授权状态
   const authType = 3;
   const insertData: CustomResource = {
     originType: 1,
@@ -33,11 +33,11 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
   };
   if (authType === 3) {
     if (['图片', '视频', '音频'].includes(resourceType[0])) {
-      // 媒体资源，获取 url
+      /** 媒体资源，获取 url */
       const url = getMediaUrl(resourceId, version || latestVersion);
       insertData.content = url;
     } else if (['阅读'].includes(resourceType[0])) {
-      // 文本资源，获取内容
+      /** 文本资源，获取内容 */
       const res = await getDocContent(resourceId, version || latestVersion);
       insertData.content = await getRealContent(res, data);
     }
@@ -79,19 +79,20 @@ const getRealContent = async (
 
   const resArr = await Promise.all(promiseArr);
 
-  // 以摊开的所有依赖为准，一个一个替换依赖资源，否则会有遗漏
+  // 以摊开的所有依赖为准，循环替换依赖资源
   allDeps.forEach((dep) => {
     const isMedia = ['图片', '视频', '音频'].includes(dep.resourceType[0]);
 
     if (isMedia) {
-      // 媒体资源
+      /** 媒体资源 */
       const regText = `src=[\'"]freelog://${dep.resourceName}[\'"]`;
       const reg = new RegExp(regText, 'g');
       const url = getMediaUrl(dep.resourceId, dep.version);
-      const replaceText = `src="${url}"`;
+      // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
+      const replaceText = `src="${url}" controlslist="nodownload" oncontextmenu="return false"`;
       html = html.replace(reg, replaceText);
     } else if (['阅读'].includes(dep.resourceType[0])) {
-      // 非媒体资源
+      /** 非媒体资源 */
       const depResultIndex = requestDeps.findIndex(
         (requestDep) => requestDep.versionId === dep.versionId,
       );
@@ -146,8 +147,6 @@ const getDeps = async (resourceId: string, version: string) => {
   const requestDeps = [] as any[];
   // 第一层依赖，用于区别深层依赖
   let basicDeps = [] as any[];
-  // 深层依赖，用于区别第一层依赖
-  let deepDeps = [] as any[];
 
   const res = await FUtil.Request({
     method: 'GET',
@@ -159,7 +158,6 @@ const getDeps = async (resourceId: string, version: string) => {
   const getSubDeps = (subDeps: any[]) => {
     subDeps.forEach((dep) => {
       allDeps.push(dep);
-      deepDeps.push(dep);
       const index = requestDeps.findIndex(
         (item) => item.versionId === dep.versionId,
       );
@@ -170,7 +168,7 @@ const getDeps = async (resourceId: string, version: string) => {
 
   getSubDeps(res.data);
 
-  return { allDeps, requestDeps, basicDeps, deepDeps };
+  return { allDeps, requestDeps, basicDeps };
 };
 
 /**
@@ -185,10 +183,6 @@ export const importDoc = async (
     version: string;
   },
 ) => {
-  // TODO!!! 解决文档依赖识别：从历史版本导入需要对应依赖版本号，否则以依赖最新版本号为版本插入
-  console.error('versionInfo===>', versionInfo);
-  if (!versionInfo) return converter.makeHtml(content);
-
   let html = content;
 
   const {
@@ -201,47 +195,55 @@ export const importDoc = async (
   } = getInternalResources(content);
   html = newContent;
 
-  const { allDeps, requestDeps, basicDeps, deepDeps } = await getDeps(
-    versionInfo.resourceId,
-    versionInfo.version,
-  );
-  console.error('basicDeps===>', basicDeps);
+  let deps = [];
 
-  mdImgContent.forEach(async (item) => {
+  if (versionInfo) {
+    const { basicDeps } = await getDeps(
+      versionInfo.resourceId,
+      versionInfo.version,
+    );
+    deps = basicDeps;
+  }
+
+  /** 循环处理 md 语法图片标记 */
+  for (const item of mdImgContent) {
     const url = item.match(/(?<=!\[[^\]]*?]\()[\s\S]*?(?=\))/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', basicDeps);
+    const domHtml = await dealInternalResources(url[0], '图片', deps);
     // 将图片文本替换标记
     html = html.replace(/`#mdImgContent#`/i, domHtml);
-  });
+  }
 
-  imgContent.forEach(async (item) => {
+  /** 循环处理图片标记 */
+  for (const item of imgContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', basicDeps);
+    const domHtml = await dealInternalResources(url[0], '图片', deps);
     // 将图片文本替换标记
     html = html.replace(/`#imgContent#`/i, domHtml);
-  });
+  }
 
-  videoContent.forEach(async (item) => {
+  /** 循环处理视频标记 */
+  for (const item of videoContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '视频', basicDeps);
-    // 将图片文本替换标记
+    const domHtml = await dealInternalResources(url[0], '视频', deps);
+    // 将视频文本替换标记
     html = html.replace(/`#videoContent#`/i, domHtml);
-  });
+  }
 
-  audioContent.forEach(async (item) => {
+  /** 循环处理音频标记 */
+  for (const item of audioContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '音频', basicDeps);
-    // 将图片文本替换标记
+    const domHtml = await dealInternalResources(url[0], '音频', deps);
+    // 将音频文本替换标记
     html = html.replace(/`#audioContent#`/i, domHtml);
-  });
+  }
 
-  docContent.forEach(async (item) => {
+  /** 循环处理文档标记 */
+  for (const item of docContent) {
     const url = item.match(/(?<={{)[\s\S]*?(?=}})/i) || [];
-    const domHtml = await dealInternalResources(url[0], '阅读', basicDeps);
-    // 将图片文本替换标记
+    const domHtml = await dealInternalResources(url[0], '阅读', deps);
+    // 将文档文本替换标记
     html = html.replace(/`#docContent#`/i, domHtml);
-  });
-  console.error(html);
+  }
 
   return `<p>${html}</p>`;
 };
@@ -259,6 +261,7 @@ const getInternalResources = (content: string) => {
   const audioContent = newContent.match(/<audio[^>]*?>/gi) || [];
   // 储存文档内容（{{}}）
   const docContent = newContent.match(/{{[^}]*?}}/gi) || [];
+
   // 标记原文本中 md 语法的图片内容
   newContent = newContent.replace(
     /!\[[^\]]*?]\([^\)]*?\)/gi,
@@ -298,9 +301,12 @@ const dealInternalResources = async (
   // 是否为依赖路径
   const isRely = url.startsWith('freelog://');
   if (isRely) {
-    // 依赖资源
-    const dep = deps.find((item) => item.resourceName === resourceName) || {};
-    data = dep;
+    /** 依赖资源 */
+    // 从第一层依赖中找到当前处理的依赖信息
+    const currentDep =
+      deps.find((item) => item.resourceName === resourceName) || {};
+    data = currentDep;
+    // 取消依赖前缀
     const resourceName = url.replace('freelog://', '');
 
     // 请求依赖资源数据
@@ -308,114 +314,87 @@ const dealInternalResources = async (
       { resourceNames: resourceName };
     const resourceRes = await FServiceAPI.Resource.batchInfo(resourceParams);
     if (resourceRes.data) {
-      const { coverImages, latestVersion } = resourceRes.data[0];
-      // TODO authType 目前写死
+      const {
+        resourceId,
+        resourceName,
+        coverImages,
+        resourceType,
+        latestVersion,
+      } = resourceRes.data[0];
+
+      // TODO authType 目前写死，之后需要通过接口获取授权状态
       data.authType = 3;
+      data.originType = 1;
+      data.resourceId = resourceId;
+      data.resourceName = resourceName;
       data.coverImages = coverImages;
+      data.resourceType = resourceType;
       data.latestVersion = latestVersion;
+      // 以已处理的依赖版本为指定版本，如该依赖未处理，则以依赖资源最新版本为指定版本
+      data.version = data.version || latestVersion;
 
       if (['图片', '视频', '音频'].includes(type)) {
-        // 媒体资源
-        data.content = getMediaUrl(dep.resourceId, dep.version);
+        /** 媒体资源 */
+        data.content = getMediaUrl(data.resourceId, data.version);
       } else if (type === '阅读') {
-        // 文档资源
-        const docContent = await getDocContent(dep.resourceId, dep.version);
-        dep.content = converter.makeHtml(docContent);
+        /** 文档资源 */
+        const docContent = await getDocContent(data.resourceId, data.version);
+        data.content = converter.makeHtml(docContent);
+
+        const { allDeps, requestDeps } = await getDeps(
+          data.resourceId,
+          data.version,
+        );
+
+        // 请求文档依赖内容
+        let promiseArr = [] as Promise<any>[];
+        requestDeps.forEach((dep) => {
+          const depContent = getDocContent(dep.resourceId, dep.version);
+          promiseArr.push(depContent);
+        });
+        const resArr = await Promise.all(promiseArr);
+
+        /** 处理深层依赖，此类依赖无需处理为资源 dom，解析为 html 即可 */
+        allDeps.forEach((dep) => {
+          const isMedia = ['图片', '视频', '音频'].includes(
+            dep.resourceType[0],
+          );
+
+          if (isMedia) {
+            /** 媒体资源 */
+            const url = getMediaUrl(dep.resourceId, dep.version);
+            // 编辑器解析属性时，使用的 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value，所以从 md 转为 html 时，属性值内的双引号需转为 ASCII 编码（&#34;）
+            // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
+            const replaceText = `src=&#34;${url}&#34; controlslist=&#34;nodownload&#34; oncontextmenu=&#34;return false&#34;`;
+
+            /** 替换双引号引用文本 */
+            let regText = `src=[\'"]freelog://${dep.resourceName}[\'"]`;
+            let reg = new RegExp(regText, 'g');
+            data.content = data.content.replace(reg, replaceText);
+
+            /** 替换双引号 ASCII 编码 &#34; 的引用文本，此类文本从下文阅读内容替换时出现 */
+            regText = `src=&#34;freelog://${dep.resourceName}&#34;`;
+            reg = new RegExp(regText, 'g');
+            data.content = data.content.replace(reg, replaceText);
+          } else if (['阅读'].includes(dep.resourceType[0])) {
+            /** 非媒体资源 */
+            const depResultIndex = requestDeps.findIndex(
+              (requestDep) => requestDep.versionId === dep.versionId,
+            );
+            if (depResultIndex === -1) return;
+
+            const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
+            const reg = new RegExp(regText, 'g');
+            const depResult = resArr[depResultIndex];
+            const replaceText = converter.makeHtml(depResult);
+            data.content = data.content.replace(
+              reg,
+              replaceText.replace(/"/g, '&#34;'),
+            );
+          }
+        });
       }
     }
-    console.error(resourceRes);
-
-    // // 请求文档依赖内容
-    // let promiseArr = [] as Promise<any>[];
-    // requestDeps.forEach((dep) => {
-    //   const depContent = getDocContent(dep.resourceId, dep.version);
-    //   promiseArr.push(depContent);
-    // });
-    // const resArr = await Promise.all(promiseArr);
-
-    // // 先处理第一层依赖，需处理资源 dom
-    // basicDeps.forEach((dep) => {
-    //   const index = resourceRes.data.findIndex(
-    //     (item) => item.resourceName === dep.resourceName,
-    //   );
-    //   if (index !== -1) {
-    //     dep.coverImages = resourceRes.data[index].coverImages;
-    //     dep.latestVersion = resourceRes.data[index].latestVersion;
-    //   }
-    //   // TODO authType 目前写死
-    //   dep.authType = 3;
-
-    //   const resourceFirstType = dep.resourceType[0];
-    //   let regText = '';
-
-    //   if (resourceFirstType === '图片') {
-    //     // 图片资源
-    //     regText = `<img[^>]*?src=[\'"]freelog://${dep.resourceName}[\'"][^>]*?>`;
-    //     dep.content = getMediaUrl(dep.resourceId, dep.version);
-    //   } else if (resourceFirstType === '视频') {
-    //     // 视频资源
-    //     regText = `<video[^>]*?src=[\'"]freelog://${dep.resourceName}[\'"][^>]*?>`;
-    //     dep.content = getMediaUrl(dep.resourceId, dep.version);
-    //   } else if (resourceFirstType === '音频') {
-    //     // 音频资源
-    //     regText = `<audio[^>]*?src=[\'"]freelog://${dep.resourceName}[\'"][^>]*?>`;
-    //     dep.content = getMediaUrl(dep.resourceId, dep.version);
-    //   } else if (['阅读'].includes(dep.resourceType[0])) {
-    //     // 文档资源
-    //     const depResultIndex = requestDeps.findIndex(
-    //       (requestDep) => requestDep.versionId === dep.versionId,
-    //     );
-    //     if (depResultIndex === -1) return;
-
-    //     const depResult = resArr[depResultIndex];
-    //     regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
-    //     dep.content = converter.makeHtml(depResult);
-    //   }
-    //   const reg = new RegExp(regText, 'g');
-    //   const replaceText = customResourceHtml(dep);
-    //   html = html.replace(reg, replaceText);
-    // });
-
-    // // 处理深层依赖，此类依赖无需处理为资源 dom，解析为 html 即可
-    // deepDeps.forEach((dep) => {
-    //   const index = resourceRes.data.findIndex(
-    //     (item) => item.resourceName === dep.resourceName,
-    //   );
-    //   if (index !== -1) {
-    //     dep.coverImages = resourceRes.data[index].coverImages;
-    //     dep.latestVersion = resourceRes.data[index].latestVersion;
-    //     dep.policies = resourceRes.data[index].policies;
-    //   }
-    //   // TODO authType 目前写死
-    //   dep.authType = 3;
-
-    //   const isMedia = ['图片', '视频', '音频'].includes(dep.resourceType[0]);
-
-    //   if (isMedia) {
-    //     // 媒体资源
-    //     const url = getMediaUrl(dep.resourceId, dep.version);
-    //     // 编辑器解析属性时 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value，所以从 md 转为 html 时，将双引号先转为 ASCII 编码（&#34;）
-    //     const replaceText = `src=&#34;${url}&#34;`;
-    //     let regText = `src='freelog://${dep.resourceName}'`;
-    //     let reg = new RegExp(regText, 'g');
-    //     html = html.replace(reg, replaceText);
-    //     regText = `src=&#34;freelog://${dep.resourceName}&#34;`;
-    //     reg = new RegExp(regText, 'g');
-    //     html = html.replace(reg, replaceText);
-    //   } else if (['阅读'].includes(dep.resourceType[0])) {
-    //     // 非媒体资源
-    //     const depResultIndex = requestDeps.findIndex(
-    //       (requestDep) => requestDep.versionId === dep.versionId,
-    //     );
-    //     if (depResultIndex === -1) return;
-
-    //     const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
-    //     const reg = new RegExp(regText, 'g');
-    //     const depResult = resArr[depResultIndex];
-    //     const replaceText = converter.makeHtml(depResult);
-    //     html = html.replace(reg, replaceText.replace(/"/g, '&#34;'));
-    //   }
-    // });
   } else {
     // 外部路径
     data = {
@@ -429,7 +408,11 @@ const dealInternalResources = async (
 
 /** 获取资源自定义 html */
 const customResourceHtml = (data: CustomResource) => {
-  // 编辑器解析属性时 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value，所以从 md 转为 html 时，将双引号先转为 ASCII 编码（&#34;）
+  /**
+   * 重要：
+   * 编辑器解析属性时，使用的 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value
+   * 所以从 md 转为 html 时，属性值内的双引号需转为 ASCII 编码（&#34;）
+   */
   const html = `
     <span
       data-w-e-type="resource"

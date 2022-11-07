@@ -56,7 +56,13 @@ export const VideoResource = (data: CustomResource): VNode => {
       ResourceToolbar(data),
       // 视频
       h('div.video-area', {}, [
-        h('video', { props: { src: data.content, controls: true } }),
+        h('video', {
+          props: {
+            src: data.content,
+            controls: true,
+            controlsList: 'nodownload',
+          },
+        }),
       ]),
     ]);
   } else {

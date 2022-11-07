@@ -11,7 +11,7 @@ const AudioAuthStatus = (data: CustomResource): VNode => {
   if (!data.authType) {
     return h('div');
   }
-  
+
   const authStatusMapping = {
     1: h('div.audio-auth', {}, [
       h('i.freelog fl-icon-suoding', {
@@ -49,7 +49,13 @@ export const AudioResource = (data: CustomResource): VNode => {
     ResourceToolbar(data),
     // 音频
     h('div.audio-area', {}, [
-      h('audio', { props: { src: data.content, controls: true } }),
+      h('audio', {
+        props: {
+          src: data.content,
+          controls: true,
+          controlsList: 'nodownload',
+        },
+      }),
       AudioAuthStatus(data),
     ]),
   ]);
