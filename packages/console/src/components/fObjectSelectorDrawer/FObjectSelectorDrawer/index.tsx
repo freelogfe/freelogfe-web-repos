@@ -57,6 +57,27 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
   const [objListMore, set_objListMore] = React.useState<FObjectSelectorDrawerStates['objListMore']>(initStates['objListMore']);
 
   async function loadData() {
+
+    const params1: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
+      bucketType: 1,
+    };
+
+    const { data: data_bucketList } = await FServiceAPI.Storage.bucketList(params1);
+    // console.log(data_bucketList, 'ddd9oiejflksdfjlk');
+
+    set_selectOptions([
+      {
+        text: '全部Bucket',
+        value: '_all',
+      },
+      ...data_bucketList.map((bl: any) => {
+        return {
+          text: bl.bucketName,
+          value: bl.bucketName,
+        };
+      }),
+    ]);
+
     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
       bucketName: selected,
       // resourceType: selector.visibleOResourceType || undefined,
