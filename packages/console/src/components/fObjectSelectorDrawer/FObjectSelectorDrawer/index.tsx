@@ -56,8 +56,11 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
   const [objListState, set_objListState] = React.useState<FObjectSelectorDrawerStates['objListState']>(initStates['objListState']);
   const [objListMore, set_objListMore] = React.useState<FObjectSelectorDrawerStates['objListMore']>(initStates['objListMore']);
 
-  async function loadData() {
+  React.useEffect(() => {
+    loadData();
+  }, [selected, inputValue]);
 
+  async function initData() {
     const params1: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
       bucketType: 1,
     };
@@ -78,6 +81,10 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
       }),
     ]);
 
+    // loadData();
+  }
+
+  async function loadData() {
     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
       bucketName: selected,
       // resourceType: selector.visibleOResourceType || undefined,
@@ -104,23 +111,6 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
         updateTime: '',
       };
     }));
-    // console.log(data, 'datadata322');
-    // yield put<ChangeAction>({
-    //   type: 'change',
-    //   payload: {
-    //     oTotal: data.totalItem,
-    //     objectList: [
-    //       ...objectListData,
-    //       ...data.dataList.map((o: any) => ({
-    //         objectId: o.objectId,
-    //         bucketName: o.bucketName,
-    //         objectName: o.objectName,
-    //         resourceType: o.resourceType,
-    //         updateDate: FUtil.Format.formatDateTime(o.updateDate, true),
-    //       })),
-    //     ],
-    //   },
-    // });
   }
 
   return (<FDrawer
@@ -130,7 +120,7 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
     }}
     afterVisibleChange={(visible) => {
       if (visible) {
-        loadData();
+        initData();
       } else {
         onClose && onClose();
       }
@@ -142,6 +132,9 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
       <FDropdownMenu
         options={selectOptions}
         onChange={(value) => {
+          set_selected((prevState) => {
+            return value;
+          });
         }}
       >
         <a>{(selectOptions.find((rs) => rs.value === selected) as any).text} <DownOutlined
@@ -152,7 +145,7 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
         debounce={300}
         value={inputValue}
         onDebounceChange={(value) => {
-
+          set_inputValue(value);
         }}
       />
     </div>
