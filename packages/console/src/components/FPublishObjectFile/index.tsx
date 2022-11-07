@@ -1,12 +1,12 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
+import styles from './index.less';
 import FUpload from '@/components/FUpload';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n, FServiceAPI, FUtil } from '../../../../@freelog/tools-lib';
-import { Space } from 'antd';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { Progress, Space } from 'antd';
 import { RcFile } from 'antd/lib/upload/interface';
-import FDrawer from '@/components/FDrawer';
 import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
+import img from '@/assets/file-object.svg';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -43,7 +43,6 @@ interface FPublishObjectFileStates {
     url: string;
   }[];
   fUploadingProgress: number;
-  objectDrawerVisible: boolean;
 }
 
 const initStates: FPublishObjectFileStates = {
@@ -52,7 +51,6 @@ const initStates: FPublishObjectFileStates = {
   fUploadedError: '',
   fUsedResource: [],
   fUploadingProgress: 0,
-  objectDrawerVisible: false,
 };
 
 function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_UploadFile }: FPublishObjectFileProps) {
@@ -61,7 +59,6 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
   const [fUploadedError, set_fUploadedError] = React.useState<FPublishObjectFileStates['fUploadedError']>(initStates['fUploadedError']);
   const [fUsedResource, set_fUsedResource] = React.useState<FPublishObjectFileStates['fUsedResource']>(initStates['fUsedResource']);
   const [fUploadingProgress, set_fUploadingProgress] = React.useState<FPublishObjectFileStates['fUploadingProgress']>(initStates['fUploadingProgress']);
-  const [objectDrawerVisible, set_objectDrawerVisible] = React.useState<FPublishObjectFileStates['objectDrawerVisible']>(initStates['objectDrawerVisible']);
 
   const uploadCancelHandler = React.useRef<any>();
 
@@ -224,34 +221,94 @@ function FPublishObjectFile({ fileInfo, onSucceed_ImportObject, onSucceed_Upload
     }
   }
 
-  if (fState === 'unsuccessful') {
-    return (<Space size={15}>
-      <FUpload
-        // accept={resourceType === 'image' ? 'image/*' : '*'}
-        beforeUpload={(file, FileList) => {
-          onUploadFilesLocally(file);
-          return false;
-        }}
-        showUploadList={false}
-      >
-        <FComponentsLib.FRectBtn
-          type='default'
-        >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-      </FUpload>
-      <FComponentsLib.FRectBtn
-        type='default'
-        onClick={async () => {
-          // set_objectDrawerVisible(true);
-          // console.log('********90832iuojklsdf');
-          // fM();
-          const obj = await fObjectSelectorDrawer();
-          console.log(obj, '09w3oiejfsldkfjsdlkfj');
-        }}
-      >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
-    </Space>);
+  if (fState === 'succeeded' && fileInfo) {
+    return ((<div className={styles.styles}>
+      <div className={styles.card}>
+        <img src={img} className={styles.img} alt='' />
+        <div style={{ width: 20 }} />
+        <div>
+          <FComponentsLib.FContentText
+            type='highlight'
+            text={fileInfo.name}
+          />
+          <div style={{ height: 18 }} />
+          <div className={styles.info}>
+            <FComponentsLib.FContentText
+              className={styles.infoSize}
+              type='additional1'
+              text={fileInfo.from}
+            />
+          </div>
+        </div>
+      </div>
+      <FComponentsLib.FTextBtn
+        type='danger'
+        // onClick={() => onClickDelete && onClickDelete()}
+        // className={styles.delete}
+      >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
+    </div>));
   }
 
-  return (<div></div>);
+  if (fState === 'uploading' && fInfo) {
+    return ((<div className={styles.styles}>
+      <div className={styles.card}>
+        <img src={img} className={styles.img} alt='' />
+        <div style={{ width: 20 }} />
+        <div>
+          <FComponentsLib.FContentText
+            type='highlight'
+            text={fInfo.name}
+          />
+          <div style={{ height: 18 }} />
+          <div className={styles.info}>
+            <span style={{ paddingRight: 10 }}>{fUploadingProgress}%</span>
+            <Progress
+              className={styles.Progress}
+              width={100}
+              showInfo={false}
+              percent={fUploadingProgress}
+              size='small'
+              trailColor='#EBEBEB'
+            />
+          </div>
+        </div>
+      </div>
+      <FComponentsLib.FTextBtn
+        type='danger'
+        // onClick={() => onClickDelete && onClickDelete()}
+        // className={styles.delete}
+      >{FI18n.i18nNext.t('cancel_uploading')}</FComponentsLib.FTextBtn>
+    </div>));
+  }
+
+  return (<Space size={15}>
+    <FUpload
+      // accept={resourceType === 'image' ? 'image/*' : '*'}
+      beforeUpload={(file, FileList) => {
+        onUploadFilesLocally(file);
+        return false;
+      }}
+      showUploadList={false}
+    >
+      <FComponentsLib.FRectBtn
+        type='default'
+      >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+    </FUpload>
+    <FComponentsLib.FRectBtn
+      type='default'
+      onClick={async () => {
+        const obj = await fObjectSelectorDrawer();
+        if (!obj) {
+          return;
+        }
+        onImportObject({
+          objectID: obj.objID,
+          objectName: obj.objName,
+          sha1: obj.sha1,
+        });
+      }}
+    >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+  </Space>);
 }
 
 export default FPublishObjectFile;
