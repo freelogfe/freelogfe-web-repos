@@ -17,7 +17,7 @@ import FFormLayout from '@/components/FFormLayout';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '../../../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;

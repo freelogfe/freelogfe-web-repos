@@ -36,7 +36,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-import { FI18n } from '../../../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 // const RangePicker: any = DatePicker.RangePicker;
 
