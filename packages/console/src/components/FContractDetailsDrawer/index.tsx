@@ -3,11 +3,11 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
+// import { FNodes, FUp } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
-import FResource from '@/components/FIcons/FResource';
+// import FResource from '@/components/FIcons/FResource';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
@@ -340,13 +340,13 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
               </div>
               <Space size={10}>
                 {
-                  baseInfo?.licensorIdentityType === 'resource' && (<FResource />)
+                  baseInfo?.licensorIdentityType === 'resource' && (<FComponentsLib.FIcons.FResource />)
                 }
                 {
-                  baseInfo?.licensorIdentityType === 'node' && (<FNodes />)
+                  baseInfo?.licensorIdentityType === 'node' && (<FComponentsLib.FIcons.FNodes />)
                 }
                 {
-                  baseInfo?.licensorIdentityType === 'user' && (<FUser />)
+                  baseInfo?.licensorIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
                 }
                 <FComponentsLib.FContentText
                   type='highlight'
@@ -364,13 +364,13 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
               </div>
               <Space size={10}>
                 {
-                  baseInfo?.licenseeIdentityType === 'resource' && (<FResource />)
+                  baseInfo?.licenseeIdentityType === 'resource' && (<FComponentsLib.FIcons.FResource />)
                 }
                 {
-                  baseInfo?.licenseeIdentityType === 'node' && (<FNodes />)
+                  baseInfo?.licenseeIdentityType === 'node' && (<FComponentsLib.FIcons.FNodes />)
                 }
                 {
-                  baseInfo?.licenseeIdentityType === 'user' && (<FUser />)
+                  baseInfo?.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
                 }
                 <FComponentsLib.FContentText
                   type='highlight'
@@ -522,7 +522,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
                           </Space>
                         </div>
                         {
-                          ac.expansion ? (<FUp />) : (<FDown />)
+                          ac.expansion ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)
                         }
 
                       </div>

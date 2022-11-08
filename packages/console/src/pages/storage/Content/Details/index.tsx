@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
 import {
   ChangeAction,
@@ -12,7 +13,7 @@ import {
 import DepsCards from './DepsCards';
 import FBaseProperties from '@/components/FBaseProperties';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-import { FDown, FInfo, FUp, FDownload } from '@/components/FIcons';
+// import { FUp } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -125,7 +126,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
                       });
                     }}
-                  ><FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
+                  ><FComponentsLib.FIcons.FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
                 </div>
               </FTooltip>
             </Space>
@@ -185,11 +186,11 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               style={{ fontSize: 12, fontWeight: 600 }}
             >
               <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
+              {storageObjectEditor.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)}
             </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
-                <FInfo />
+                <FComponentsLib.FIcons.FInfo />
               </div>
             </FTooltip>
           </Space>

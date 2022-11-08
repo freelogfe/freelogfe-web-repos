@@ -24,6 +24,7 @@ export interface ContractPageModelState {
     value: 'all' | Authorize_Status
     text: string;
   }[];
+  authorized_SubjectIds: string;
   authorize_Status: 'all' | Authorize_Status;
   authorize_Date: [Moment, Moment] | null;
   authorize_Keywords: string;
@@ -155,6 +156,15 @@ export interface OnChange_Authorized_Status_Action extends AnyAction {
   };
 }
 
+export interface OnChange_Authorized_SubjectIds_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_SubjectIds';
+  payload: {
+    authorized_Status: 'all' | Authorized_Status,
+    authorized_SubjectType: 'all' | Authorized_SubjectType;
+    authorized_SubjectIds: string,
+  };
+}
+
 export interface OnChange_Authorized_Date_Action extends AnyAction {
   type: 'contractPage/onChange_Authorized_Date';
   payload: {
@@ -202,7 +212,7 @@ interface ContractPageModelType {
     onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_KeywordsInput: (action: OnChange_Authorize_KeywordsInput_Action, effects: EffectsCommandMap) => void;
     onClick_Authorize_LoadMoreBtn: (action: OnClick_Authorize_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
-
+    onChange_Authorized_SubjectIds: (action: OnChange_Authorized_SubjectIds_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_SubjectType: (action: OnChange_Authorized_SubjectType_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Status: (action: OnChange_Authorized_Status_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Date: (action: OnChange_Authorized_Date_Action, effects: EffectsCommandMap) => void;
@@ -400,6 +410,22 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorized_List',
       });
     },
+    * onChange_Authorized_SubjectIds({ payload }: OnChange_Authorized_SubjectIds_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_Status: payload.authorized_Status,
+          authorized_SubjectType: payload.authorized_SubjectType,
+          authorized_SubjectIds: payload.authorized_SubjectIds,
+        },
+      });
+      if(payload.authorized_SubjectIds){
+        return null
+      }
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
     * onChange_Authorized_Status({ payload }: OnChange_Authorized_Status_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -512,7 +538,6 @@ const Model: ContractPageModelType = {
           ...contractPage.authorize_List,
         ];
       }
-
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
@@ -658,7 +683,7 @@ const Model: ContractPageModelType = {
       }
 
       // console.log(contractPage, 'contractPagecontractPage@#%@#@#@#@@@');
-      const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
+      let params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
         // limit: 100,
@@ -670,7 +695,12 @@ const Model: ContractPageModelType = {
         endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
       };
-
+      if(contractPage.authorized_SubjectIds){
+        params = {
+          ...params,
+          subjectIds: contractPage.authorized_SubjectIds
+        }
+      }
       const data = yield call(contractList, params);
 
       // console.log(data, 'DDDDF093ujlksjdlfsdkflsdfls');

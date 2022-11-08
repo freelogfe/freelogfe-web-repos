@@ -10,7 +10,8 @@ import {
   OnChange_Graph_Tab_Action,
   OnClick_Graph_FullScreenBtn_Action,
 } from '@/models/informExhibitInfoPage';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FResultTip from '@/components/FResultTip';
 import { FI18n } from '@freelog/tools-lib';
@@ -143,7 +144,8 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
           justifyContent: 'center',
         }}>
           <FResultTip h1={'即将推出，敬请期待...'} />
-        </div>)
+        </div>
+        )
         {/*{*/}
         {/*  informExhibitInfoPage.graph_Viewport_Show === 'relationship' && (<FAntvG6RelationshipGraph*/}
         {/*    nodes={informExhibitInfoPage.graph_Viewport_RelationGraph_Nodes}*/}

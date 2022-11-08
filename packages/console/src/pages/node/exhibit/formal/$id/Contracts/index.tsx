@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import Resources from './Resources';

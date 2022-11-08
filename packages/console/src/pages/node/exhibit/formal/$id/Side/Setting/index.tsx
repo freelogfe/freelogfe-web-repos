@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
-import { FDelete, FSwap, FRedo, FDoubleDown, FDoubleUp, FInfo } from '@/components/FIcons';
+// import { FSwap, FRedo} from '@/components/FIcons';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -21,7 +21,8 @@ import {
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
 import FInput from '@/components/FInput';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -53,7 +54,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       }}
     >
       <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
-        text={exhibitInfoPage.side_Version} /><FSwap /></Space>
+        text={exhibitInfoPage.side_Version} /><FComponentsLib.FIcons.FSwap /></Space>
     </FDropdownMenu>
 
     {
@@ -95,7 +96,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         title={io.description}
                         color={'#fff'}
                       >
-                        <FInfo
+                        <FComponentsLib.FIcons.FInfo
                           style={{ cursor: 'pointer', fontSize: 14 }}
                         />
                       </FTooltip>)
@@ -114,7 +115,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                             },
                           });
                         }}
-                      ><FRedo /></FComponentsLib.FTextBtn>
+                      ><FComponentsLib.FIcons.FRedo /></FComponentsLib.FTextBtn>
                     </div>
                   </FTooltip>
                 </div>
@@ -189,7 +190,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         title={co.description}
                         color={'#fff'}
                       >
-                        <FInfo
+                        <FComponentsLib.FIcons.FInfo
                           style={{ cursor: 'pointer', fontSize: 14 }}
                         />
                       </FTooltip>)
@@ -213,7 +214,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                     </FTooltip>
                     <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
                       <div>
-                        <FDelete
+                        <FComponentsLib.FIcons.FDelete
                           style={{ color: '#EE4040', cursor: 'pointer' }}
                           onClick={() => {
                             fConfirmModal({
@@ -301,7 +302,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           });
         }}
       >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
-        <FDoubleUp /></> : <>更多 <FDoubleDown /></>}</FComponentsLib.FTextBtn>
+        <FComponentsLib.FIcons.FDoubleUp /></> : <>更多 <FComponentsLib.FIcons.FDoubleDown /></>}</FComponentsLib.FTextBtn>
     </div>
 
     <FCustomOptionsEditorDrawer

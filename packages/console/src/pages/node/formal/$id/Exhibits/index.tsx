@@ -1,27 +1,22 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FMenu from '@/components/FMenu';
-import { DownOutlined } from '@ant-design/icons';
-import categoryData from '@/utils/category';
-// import FDropdown from '@/components/FDropdown';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   ChangeAction,
-  // FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
-  // OnChange_Exhibit_SelectedType_Action,
+  OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
   OnMount_ExhibitPage_Action,
-  // OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -40,7 +35,7 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
+import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 
 interface ExhibitsProps {
@@ -49,10 +44,7 @@ interface ExhibitsProps {
 }
 
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
-  const [category, setCategory] = React.useState<any>({
-    first: '-1',
-    second: '',
-  });
+
   let [operateExhibit, setOperateExhibit] = React.useState<any>(null);
   const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
@@ -73,18 +65,16 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   });
 
   /** 上下架 */
-  const changeStatus = (value: boolean, exhibit: any) => {
+  async function changeStatus(value: boolean, exhibit: any) {
     operateExhibit = exhibit;
-    setOperateExhibit(exhibit);
+    await setOperateExhibit(exhibit);
 
     if (value) {
       // 上架
       const { policiesList } = exhibit;
       if (policiesList.length === 0) {
         setActiveDialogShow(true);
-      } else if (
-        policiesList.filter((item: { status: number }) => item.status === 1).length === 0
-      ) {
+      } else if (policiesList.filter((item: { status: number }) => item.status === 1).length === 0) {
         exhibit.policiesList.forEach((item: any) => {
           item.checked = false;
         });
@@ -177,7 +167,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         });
         nodeManagerPage.exhibit_List[index].policies = nodeManagerPage.exhibit_List[
           index
-        ].policiesList
+          ].policiesList
           .filter((item) => item.status === 1)
           .map((item: { policyName: any }) => item.policyName);
       }
@@ -289,7 +279,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         return (
           <Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
             <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
-              <FComponentsLib.FTextBtn
+              <span><FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -300,11 +290,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 }}
               >
                 <FComponentsLib.FIcons.FEdit />
-              </FComponentsLib.FTextBtn>
+              </FComponentsLib.FTextBtn></span>
             </FTooltip>
 
             <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-              <FComponentsLib.FTextBtn
+              <span><FComponentsLib.FTextBtn
                 type='primary'
                 onClick={() => {
                   window.open(
@@ -314,8 +304,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   );
                 }}
               >
-                <FFileSearch />
-              </FComponentsLib.FTextBtn>
+                <FComponentsLib.FIcons.FFileSearch />
+              </FComponentsLib.FTextBtn></span>
             </FTooltip>
           </Space>
         );
@@ -366,7 +356,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             />
             {!record.isAuth && (
               <FTooltip title={record.authErrorText}>
-                <FWarning />
+                <FComponentsLib.FIcons.FWarning />
               </FTooltip>
             )}
           </Space>
@@ -392,60 +382,44 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
-                      options={[
-                        {
-                          value: '-1',
-                          text: '全部',
-                        },
-                        ...categoryData.first.map((i, index) => {
-                          return {
-                            value: index + '',
-                            text: i,
-                          };
-                        }),
-                      ]}
-                      value={category.first}
+                      options={nodeManagerPage.exhibit_ResourceTypeOptions1}
+                      value={nodeManagerPage.exhibit_SelectedType1}
                       onClick={(value) => {
-                        setCategory({
-                          ...category,
-                          first: value,
-                          second: category.first === value ? category.second : '-1',
+                        dispatch<OnChange_Exhibit_SelectedType_Action>({
+                          type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                          payload: {
+                            value: value,
+                            level: 1,
+                          },
                         });
-                        //onChangeResourceType && onChangeResourceType(value)
                       }}
                     />
                   }
                 >
                   <span style={{ cursor: 'pointer' }}>
-                    {categoryData.first[category.first] || '全部'}
-                    <DownOutlined style={{ marginLeft: 8 }} />
+                    {/*{categoryData.first[category.first] || '全部'}*/}
+                    {nodeManagerPage.exhibit_ResourceTypeOptions1.find((rt) => {
+                      return rt.value === nodeManagerPage.exhibit_SelectedType1;
+                    })?.text || '全部'}
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                   </span>
                 </FComponentsLib.FDropdown>
 
-                {category.first > 1 ? (
+                {nodeManagerPage.exhibit_ResourceTypeOptions2.length > 0 ? (
                   <>
-                    <span className="ml-30">子类型：</span>
+                    <span className='ml-30'>子类型：</span>
                     <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
-                          // @ts-ignore
-                          options={[
-                            {
-                              value: '-1',
-                              text: '全部',
-                            },
-                            // @ts-ignore
-                            ...categoryData.second[category.first].map((i, index) => {
-                              return {
-                                value: index + '',
-                                text: i,
-                              };
-                            }),
-                          ]}
+                          value={nodeManagerPage.exhibit_SelectedType2}
+                          options={nodeManagerPage.exhibit_ResourceTypeOptions2}
                           onClick={(value) => {
-                            setCategory({
-                              ...category,
-                              second: value,
+                            dispatch<OnChange_Exhibit_SelectedType_Action>({
+                              type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                              payload: {
+                                value: value,
+                                level: 2,
+                              },
                             });
                             // onChangeResourceType && onChangeResourceType(value)
                           }}
@@ -453,11 +427,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       }
                     >
                       <span style={{ cursor: 'pointer' }}>
-                        {
-                          // @ts-ignore
-                          categoryData.second[category.first][category.second] || '全部'
-                        }
-                        <DownOutlined style={{ marginLeft: 8 }} />
+                        {nodeManagerPage.exhibit_ResourceTypeOptions2.find((rt) => {
+                          return rt.value === nodeManagerPage.exhibit_SelectedType2;
+                        })?.text || '全部'}
+                        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
                       </span>
                     </FComponentsLib.FDropdown>
                   </>
@@ -482,14 +455,14 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
                       })?.text
                     }
-                    <FDown style={{ marginLeft: 10 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 14 }} />
                   </span>
                 </FDropdownMenu>
               </div>
               <div>
                 <FInput
                   className={styles.input}
-                  theme="dark"
+                  theme='dark'
                   value={nodeManagerPage.exhibit_InputFilter}
                   debounce={300}
                   onDebounceChange={(value) => {
@@ -500,6 +473,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       },
                     });
                   }}
+                  placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                 />
               </div>
             </Space>
@@ -553,9 +527,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={activeDialogShow}
-          title="提醒"
-          desc="请先为资源添加一个授权策略，再进行上架操作"
-          sureText="添加策略"
+          title='提醒'
+          desc='请先为资源添加一个授权策略，再进行上架操作'
+          sureText='添加策略'
           cancel={() => {
             setActiveDialogShow(false);
           }}
@@ -565,9 +539,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={inactiveDialogShow}
-          title="提醒"
-          desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-          sureText="下架资源"
+          title='提醒'
+          desc='下架后其它用户将无法签约该资源，确认要下架吗？'
+          sureText='下架资源'
           cancel={() => {
             setInactiveDialogShow(false);
           }}
@@ -592,7 +566,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           alreadyUsedTitles={operateExhibit?.policiesList.map((ip: any) => {
             return ip.policyName;
           })}
-          targetType="resource"
+          targetType='resource'
           onCancel={() => {
             dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
@@ -604,9 +578,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           onConfirm={({ title, text }) => addPolicy(title, text)}
         />
 
-        <FPolicyOperaterDrawer
+        <FPolicyOperatorDrawer
           visible={nodeManagerPage.policyOperaterVisible}
-          type="resource"
+          // type='resource'
+          titleText={FI18n.i18nNext.t('showexhibit_activate_authplan_title')}
+          confirmText={FI18n.i18nNext.t('showexhibit_activate_authplan_btn')}
+          tipText={'展品上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
           policiesList={operateExhibit?.policiesList || []}
           onCancel={() => {
             dispatch<ChangeAction>({
@@ -627,7 +604,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <div className={styles['loader']}>
                   <LoadingOutlined className={styles['loader-icon']} />
                   <div className={styles['loader-text']}>
-                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                    {resultPopupType === 1 ? FI18n.i18nNext.t('showexhibit_inprocessing') : '正在下架'}
                   </div>
                 </div>
               ) : (
@@ -638,7 +615,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     }`}
                   />
                   <div className={styles['result-text']}>
-                    已{resultPopupType === 1 ? '上架' : '下架'}
+                    {resultPopupType === 1 ? FI18n.i18nNext.t('msg_done') : '已下架'}
                   </div>
                 </div>
               )}

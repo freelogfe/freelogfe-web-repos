@@ -20,6 +20,7 @@ import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '
 import fMessage from '@/components/fMessage';
 import { history } from 'umi';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
+import { fileAttrUnits } from '@/utils/format';
 
 const { decompile } = require('@freelog/nmr_translator');
 
@@ -614,7 +615,7 @@ const Model: ExhibitInfoPageModelType = {
             .map<InformExhibitInfoPageModelState['side_Exhibit_OnlyReadAttrs'][number]>((cr: any) => {
               return {
                 theKey: cr.key,
-                value: cr.key === 'fileSize' ? FUtil.Format.humanizeSize(cr.value) : cr.value,
+                value: fileAttrUnits[cr.key] ? fileAttrUnits[cr.key](cr.value) : cr.value,
               };
             }),
           side_Exhibit_OnlyEditAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])

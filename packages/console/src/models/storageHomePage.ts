@@ -5,13 +5,13 @@ import { ConnectState } from '@/models/connect';
 import moment from 'moment';
 import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
   newBucketNameIsDirty: boolean;
-  newBucketNameError: boolean;
+  newBucketNameError: string;
   newBucketModalVisible: boolean;
 
   bucketList: {
@@ -64,9 +64,15 @@ export interface FetchBucketsAction extends AnyAction {
   },
 }
 
-export interface OnChangeNewBucketAction extends AnyAction {
-  type: 'storageHomePage/onChangeNewBucket';
-  payload: string;
+export interface OnChange_NewBucketModal_Input_Action extends AnyAction {
+  type: 'storageHomePage/onChange_NewBucketModal_Input';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlur_NewBucketModal_Input_Action extends AnyAction {
+  type: 'storageHomePage/onBlur_NewBucketModal_Input';
 }
 
 export interface CreateBucketAction extends AnyAction {
@@ -117,7 +123,8 @@ interface StorageHomePageModelType {
   state: StorageHomePageModelState;
   effects: {
     fetchBuckets: (action: FetchBucketsAction, effects: EffectsCommandMap) => void;
-    onChangeNewBucket: (action: OnChangeNewBucketAction, effects: EffectsCommandMap) => void;
+    onChange_NewBucketModal_Input: (action: OnChange_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
+    onBlur_NewBucketModal_Input: (action: OnBlur_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
     createBucket: (action: CreateBucketAction, effects: EffectsCommandMap) => void;
     onChangeActivatedBucket: (action: OnChangeActivatedBucketAction, effects: EffectsCommandMap) => void;
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
@@ -141,7 +148,7 @@ const Model: StorageHomePageModelType = {
   state: {
     newBucketName: '',
     newBucketNameIsDirty: false,
-    newBucketNameError: false,
+    newBucketNameError: '',
     newBucketModalVisible: false,
 
     bucketList: null,
@@ -187,34 +194,55 @@ const Model: StorageHomePageModelType = {
         type: 'fetchSpaceStatistic',
       });
     },
-    * onChangeNewBucket({ payload }: OnChangeNewBucketAction, { put, select, call }: EffectsCommandMap) {
-      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
-
+    * onChange_NewBucketModal_Input({ payload }: OnChange_NewBucketModal_Input_Action, {
+      put,
+      select,
+      call,
+    }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          newBucketName: payload,
+          newBucketName: payload.value,
           newBucketNameIsDirty: true,
+          newBucketNameError: '',
         },
       });
+    },
+    * onBlur_NewBucketModal_Input({}: OnBlur_NewBucketModal_Input_Action, { select, put, call }: EffectsCommandMap) {
 
-      if (!FUtil.Regexp.BUCKET_NAME.test(payload) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(payload)) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
+      if (!FUtil.Regexp.BUCKET_NAME.test(storageHomePage.newBucketName)) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            newBucketNameError: true,
+            newBucketNameError: FI18n.i18nNext.t('naming_convention_bucket_name'),
           },
         });
-      } else {
-        const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
-          bucketName: payload,
-        };
-        const { data } = yield call(FServiceAPI.Storage.bucketIsExist, params);
-        // console.log(data, '@@@@@Dddddddddddd====');
+        return;
+      }
+
+      if (storageHomePage.bucketList?.some((b) => {
+        return b.bucketName === storageHomePage.newBucketName;
+      })) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            newBucketNameError: data,
+            newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
+          },
+        });
+        return;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
+        bucketName: storageHomePage.newBucketName,
+      };
+      const { data } = yield call(FServiceAPI.Storage.bucketIsExist, params);
+      // console.log(data, '@@@@@Dddddddddddd====');
+      if (data) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
           },
         });
       }
@@ -315,8 +343,12 @@ const Model: StorageHomePageModelType = {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
+      // new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$/)
+      // console.log(payload.objectName.replace(, '_')
+      // console.log(payload.objectName, payload.objectName.replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_'), '93wslidkjflksdjflksdjflsdkj');
       const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
         bucketName: storageHomePage.activatedBucket,
+        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
         objectName: payload.objectName,
         sha1: payload.sha1,
       };
@@ -417,7 +449,7 @@ const Model: StorageHomePageModelType = {
       }
       const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
       if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
-        fMessage('超出储存', 'warning');
+        fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
         return;
       }
 
@@ -436,7 +468,10 @@ const Model: StorageHomePageModelType = {
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
 
       const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
-        fullObjectNames: payload.map((p) => storageHomePage.activatedBucket + '/' + p.name).join(','),
+        fullObjectNames: payload.map((p) => {
+        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
+          return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
+        }).join(','),
         projection: 'objectId,objectName',
       };
 

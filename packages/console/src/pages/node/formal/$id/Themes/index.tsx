@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
-import { FWarning } from '@/components/FIcons';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
@@ -16,7 +16,7 @@ import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-import Sider from '@/pages/node/formal/$id/Sider';
+import Sider from '../Sider';
 import FTooltip from '@/components/FTooltip';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
@@ -143,23 +143,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
       <FLeftSiderLayout
         // header={''}
         sider={<Sider />}
-        type="empty"
+        type='empty'
       >
         {nodeManagerPage.theme_ListState === 'noData' ? (
-          // (<FNoDataTip
-          //   height={'calc(100vh - 70px)'}
-          //   tipText={FI18n.i18nNext.t('manage_themes_empty')}
-          //   btnText={FI18n.i18nNext.t('btn_add_theme')}
-          //   onClick={() => {
-          //     dispatch<DiscoverChangeAction>({
-          //       type: 'discoverPage/change',
-          //       payload: {
-          //         resourceType: 'theme',
-          //       },
-          //     });
-          //     router.push(FUtil.LinkTo.market());
-          //   }}
-          // />)
           <div className={styles.wrapper}>
             <div className={styles['recommend-area']}>
               <div className={styles.btns}>
@@ -179,14 +165,14 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                   return (
                     <div className={styles.theme} key={item.resourceId}>
                       <div className={styles.cover}>
-                        <img className={styles['cover-img']} src={item.coverImages[0]} />
-                        <div className={styles.triangle}></div>
+                        <img className={styles['cover-img']} src={item.coverImages[0]} alt={''} />
+                        <div className={styles.triangle} />
                         <div className={styles['free-text']}>免费</div>
                       </div>
                       <div className={styles['right-area']}>
                         <div className={styles['title-area']}>
                           <div className={styles.title}>{item.resourceName.split('/')[1]}</div>
-                          <FTooltip title="查看资源详情">
+                          <FTooltip title='查看资源详情'>
                             <i
                               className={`freelog fl-icon-chakanziyuan ${styles['view-detail']}`}
                               onClick={() => toResourceDetail(item.resourceId)}
@@ -235,10 +221,10 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
         ) : (
           <>
             <div className={styles.header}>
-              <FComponentsLib.FTitleText type="h1" text={'主题管理'} />
+              <FComponentsLib.FTitleText type='h1' text={'主题管理'} />
               <FInput
                 className={styles.input}
-                theme="dark"
+                theme='dark'
                 debounce={300}
                 onDebounceChange={(value) => {
                   dispatch<OnChangeThemeAction>({
@@ -248,6 +234,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                     },
                   });
                 }}
+                placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
               />
             </div>
             {nodeManagerPage.theme_ListState === 'loading' && (
@@ -267,13 +254,14 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                         <Space size={10}>
                           {i.isOnline && (
                             <label className={styles.label}>
-                              {FI18n.i18nNext.t('state_active')}
+                              {/*{FI18n.i18nNext.t('state_active')}*/}
+                              {FI18n.i18nNext.t('theme_state_active')}
                             </label>
                           )}
 
                           {!i.isAuth && (
                             <FTooltip title={i.authErrorText}>
-                              <FWarning />
+                              <FComponentsLib.FIcons.FWarning />
                             </FTooltip>
                           )}
                         </Space>
@@ -286,7 +274,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
 
                         {nodeManagerPage.theme_ActivatingThemeID === i.id ? (
                           <div className={styles.processing}>
-                            <span>处理中…</span>
+                            <span>{FI18n.i18nNext.t('activatetheme_inprocessing')}</span>
                           </div>
                         ) : (
                           <div
@@ -298,25 +286,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                 {
                                   type: hasActiveBtn ? 'active' : '',
                                   fn() {
-                                    if (i.policies.length === 0) {
-                                      // return;
-                                      if (i.policies.length === 0) {
-                                        if (!i.hasPolicy) {
-                                          fMessage(
-                                            FI18n.i18nNext.t('alarm_exhibits_show_plan '),
-                                            'error',
-                                          );
-                                        } else {
-                                          fMessage(
-                                            FI18n.i18nNext.t(
-                                              'msg_set_exhibits_avaliable_for_auth  ',
-                                            ),
-                                            'error',
-                                          );
-                                        }
-                                        return;
-                                      }
-                                    }
+
                                     if (!i.isAuth) {
                                       // fMessage(F)
                                       fMessage(i.authErrorText, 'error');
@@ -333,13 +303,38 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                     }
 
                                     fConfirmModal({
-                                      message: FI18n.i18nNext.t('msg_change_theme_confirm'),
-                                      // message: '激活该主题，将下线其它主题',
-                                      okText: FI18n.i18nNext.t('active_new_theme'),
-                                      // okText: '激活',
+                                      message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
+                                      okText: FI18n.i18nNext.t('btn_activate_theme'),
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
-                                      // cancelText: '保持当前主题',
                                       onOk() {
+
+                                        if (!i.hasPolicy) {
+                                          fConfirmModal({
+                                            message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+                                            okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
+                                            onOk() {
+                                              // onDelete(bp.theKey);
+                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
+                                            },
+                                          });
+                                          return;
+                                        }
+
+                                        if (i.policies.length === 0) {
+                                          fConfirmModal({
+                                            // message: '需要先启用策略',
+                                            message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+                                            okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
+                                            onOk() {
+                                              // onDelete(bp.theKey);
+                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
+                                            },
+                                          });
+                                          return;
+                                        }
+
                                         dispatch<OnActiveAction>({
                                           type: 'nodeManagerPage/onActive',
                                           payload: {
@@ -372,9 +367,9 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                         )}
                       </div>
                       <div style={{ height: 12 }} />
-                      <FComponentsLib.FContentText text={i.title} singleRow type="highlight" />
+                      <FComponentsLib.FContentText text={i.title} singleRow type='highlight' />
                       <div style={{ height: 6 }} />
-                      <FComponentsLib.FContentText type="additional1" text={'展示版本 ' + i.version} />
+                      <FComponentsLib.FContentText type='additional1' text={'展示版本 ' + i.version} />
                       <div style={{ height: 15 }} />
                       <div className={styles.bottom}>
                         <div className={styles.polices}>
@@ -388,7 +383,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                               })}
                             />
                           ) : (
-                            <FComponentsLib.FContentText text={'暂无策略…'} type="additional2" />
+                            <FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />
                           )}
                         </div>
                       </div>

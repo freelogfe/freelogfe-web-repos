@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, RetrievePageModelState } from '@/models/connect';
 import { history } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
@@ -29,7 +30,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePage';
-import { FCheck } from '@/components/FIcons';
+// import { FCheck } from '@/components/FIcons';
 
 interface RetrieveProps {
   dispatch: Dispatch;
@@ -109,7 +110,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
     return (
       <div className={styles.resetPasswordSuccess}>
         <div className={styles.box}>
-          <FCheck style={{ fontSize: 96 }} />
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
           <FComponentsLib.FTitleText text={'重置密码成功'} />
           <div style={{ height: 40 }} />

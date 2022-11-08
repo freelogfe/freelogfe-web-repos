@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState } from '@/models/connect';
 import {
   UpdateDataSourceAction,
@@ -11,7 +12,6 @@ import {
   SyncAllPropertiesAction,
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
-import RouterTypes from 'umi/routerTypes';
 import { withRouter } from 'umi';
 import FInput from '@/components/FInput';
 import FTooltip from '@/components/FTooltip';
@@ -19,7 +19,6 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import FDownload from '@/components/FIcons/FDownload';
 import {
   // FAntvG6AuthorizationGraph,
   // FAntvG6DependencyGraph,
@@ -48,7 +47,7 @@ interface VersionEditorProps extends RouteComponentProps<{
   resourceInfo: ResourceInfoModelState,
 }
 
-function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps & RouterTypes) {
+function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps) {
   // console.log(route, 'route!@#$@!#$@!#42134');
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
@@ -90,20 +89,20 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     }
   }
 
-  function onUpdateProperties(data: any[]) {
-    dispatch<UpdateDataSourceAction>({
-      type: 'resourceVersionEditorPage/updateDataSource',
-      payload: {
-        customPropertyDescriptors: data.map((i) => ({
-          key: i.key as string,
-          defaultValue: i.value as string,
-          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
-          candidateItems: i.customOption ? i.customOption.split(',') : [],
-          remark: i.description,
-        })),
-      },
-    });
-  }
+  // function onUpdateProperties(data: any[]) {
+  //   dispatch<UpdateDataSourceAction>({
+  //     type: 'resourceVersionEditorPage/updateDataSource',
+  //     payload: {
+  //       customPropertyDescriptors: data.map((i) => ({
+  //         key: i.key as string,
+  //         defaultValue: i.value as string,
+  //         type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
+  //         candidateItems: i.customOption ? i.customOption.split(',') : [],
+  //         remark: i.description,
+  //       })),
+  //     },
+  //   });
+  // }
 
   function onCloseCustomOptionDrawer() {
     onChange({
@@ -221,7 +220,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               ? (<FBraftEditor
                 value={editor}
                 // defaultValue={editorText}
-                onChange={(value) => setEditor(value)}
+                onChange={(value: EditorState) => setEditor(value)}
                 style={{ height: 500 }}
               />)
               : (resourceVersionEditorPage.description && (
@@ -287,12 +286,13 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   {/*}*/}
 
                   {
-                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
+                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (
+                      <FGraph_Tree_Authorization_Resource
+                        resourceID={resourceVersionEditorPage.resourceID}
+                        version={resourceVersionEditorPage.version}
+                        width={860}
+                        height={500}
+                      />)
                   }
 
                   {/*{*/}
@@ -690,7 +690,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 width: 950,
               }}
               // defaultValue={editorText}
-              onChange={(value) => setEditor(value)}
+              onChange={(value: EditorState) => setEditor(value)}
             />)
             : (resourceVersionEditorPage.description && (
               <div
@@ -741,7 +741,7 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
               type='primary'
               onClick={() => onClickDownload && onClickDownload()}
             >
-              <FDownload
+              <FComponentsLib.FIcons.FDownload
                 style={{ fontSize: 16, fontWeight: 600 }}
               />
             </FComponentsLib.FTextBtn>

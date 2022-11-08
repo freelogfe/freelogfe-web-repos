@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Menu, Space } from 'antd';
-import { FDown } from '@/components/FIcons';
+// import { FDown } from '@/components/FIcons';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
@@ -96,7 +96,7 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
               </>)
         }
       </Space>
-      <FDown />
+      <FComponentsLib.FIcons.FDown />
     </div>
   </FComponentsLib.FDropdown>);
 }

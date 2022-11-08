@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FPentagram from '@/components/FIcons/FPentagram';
+// import FPentagram from '@/components/FIcons/FPentagram';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
@@ -22,12 +22,12 @@ function Reward({ activityDetailsPage }: RewardProps) {
     endDate: string;
   }[]>([]);
 
-  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(-1);
+  const [sunlightAmount, set_sunlightAmount] = React.useState<number>(0);
 
   AHooks.useMount(async () => {
     const today: string = moment().format('YYYY-MM-DD');
     const { data }: { data: { resourceUsername: string }[] } = await FServiceAPI.Activity.lotteryShow({
-      startDate: activityDetailsPage.startTime ? activityDetailsPage.startTime.replace(/·/g, '-') : '2022-01-01',
+      startDate: activityDetailsPage.startTime?.format('YYYY-MM-DD') || 'YYYY-MM-DD',
       limitDate: today,
       // startDate: '2022-01-01',
       // limitDate: '2022-12-31',
@@ -64,11 +64,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
     <div className={styles.rewardCards}>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FBF5EA' }}>
         <div className={styles.title1} style={{ color: '#E9A923' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>大触奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
@@ -90,11 +90,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FBF5EA' }}>
         <div className={styles.title1} style={{ color: '#E9A923' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>大触宣发奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#E9A923' }}>
@@ -116,11 +116,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#E5F6EF' }}>
         <div className={styles.title1} style={{ color: '#42C28C' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>优秀奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
@@ -142,11 +142,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#E5F6EF' }}>
         <div className={styles.title1} style={{ color: '#42C28C' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>优秀宣发奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 30 }} />
         <div className={styles.title2} style={{ color: '#42C28C' }}>
@@ -169,14 +169,14 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#EDF6FF' }}>
         <div className={styles.title2} style={{ color: '#2784FF' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           {/*<span>优秀宣发奖</span>*/}
           <span>普照奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
-        <div style={{ height: 60 }} />
+        <div style={{ height: 20 }} />
         <div className={styles.title3}>
           <span>每创建并发行1个资源可领取 5～20元 现金奖励</span>
         </div>
@@ -185,7 +185,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <span>游戏类资源可获得20元，漫画/小说/图片等类型资源可获得5元</span>
         </div>
         <div style={{ height: 20 }} />
-        <div className={styles.title4}>* 同一用户限领3次资源发行奖励</div>
+        <div className={styles.title4}>* 同一用户限领3次，奖励将在资源通过审核后发放</div>
         <div style={{ height: 10 }} />
         <Space
           size={10}
@@ -195,8 +195,10 @@ function Reward({ activityDetailsPage }: RewardProps) {
             height: 68,
             borderRadius: 10,
           }}>
+          {/*{console.log(sunlightAmount, '90ioewjlksdfjl')}*/}
           <span>{sunlightAmount}元现金奖励已发放</span>
           <FComponentsLib.FRectBtn
+            disabled={sunlightAmount === 0}
             type='primary'
             onClick={() => {
               self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
@@ -206,11 +208,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
       </div>
       <div className={styles.rewardCard} style={{ backgroundColor: '#FCF0FF' }}>
         <div className={styles.title2} style={{ color: '#BD10E0' }}>
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
           <div style={{ width: 10 }} />
           <span>幸运奖</span>
           <div style={{ width: 10 }} />
-          <FPentagram />
+          <FComponentsLib.FIcons.FPentagram />
         </div>
         <div style={{ height: 20 }} />
         <div className={styles.title3}>

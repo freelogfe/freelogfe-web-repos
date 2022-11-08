@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@ant-design/pro-layout': ^6.5.0
   '@freelog/components-lib': ^0.1.20
-  '@freelog/tools-lib': ^0.1.135
+  '@freelog/tools-lib': ^0.1.137
   '@types/react': ^18.0.17
   '@types/react-copy-to-clipboard': ^5.0.4
   '@types/react-dom': ^18.0.6
@@ -27,8 +27,8 @@ specifiers:
 
 dependencies:
   '@ant-design/pro-layout': 6.38.22_biqbaboplfbrettd7655fr4n2y
-  '@freelog/components-lib': 0.1.20
-  '@freelog/tools-lib': 0.1.135
+  '@freelog/components-lib': 0.1.20_react@18.2.0
+  '@freelog/tools-lib': 0.1.137
   ahooks: 3.7.0_react@18.2.0
   antd: 4.23.0_biqbaboplfbrettd7655fr4n2y
   copy-to-clipboard: 3.3.2
@@ -625,9 +625,11 @@ packages:
     deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
     dev: true
 
-  /@freelog/components-lib/0.1.20:
+  /@freelog/components-lib/0.1.20_react@18.2.0:
     resolution: {integrity: sha512-oqVnwRyY9QxNBVVcNbqsxTq9x5ijfPw5LmEce4Vx+YjlKuUip6qEq4Akq80ApCVDteMN17m5OldK3yxG7ub4EQ==}
     engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
     dependencies:
       antd: 4.23.0_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
@@ -644,8 +646,8 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.135:
-    resolution: {integrity: sha512-/is++yQRzDQc6WkPuC0aOeeEMyj2mXOXhkwQNhR818hi3mwA56yVYpunMn9eSyYWmBMU+MtzkR7YbRGb9B7JPg==}
+  /@freelog/tools-lib/0.1.137:
+    resolution: {integrity: sha512-n/IpCDUU8Tum5Mr42PnX7EhamD2YsQUcMjCsCzagFBImkJePAMETDaI8PBjDlf+quCK+pTjJynKaD45Xikc4Yg==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
@@ -733,7 +735,7 @@ packages:
     dependencies:
       '@jest/fake-timers': 26.6.2
       '@jest/types': 26.6.2
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
       jest-mock: 26.6.2
     dev: true
 
@@ -743,7 +745,7 @@ packages:
     dependencies:
       '@jest/types': 26.6.2
       '@sinonjs/fake-timers': 6.0.1
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
       jest-message-util: 26.6.2
       jest-mock: 26.6.2
       jest-util: 26.6.2
@@ -6218,7 +6220,7 @@ packages:
     engines: {node: '>= 10.14.2'}
     dependencies:
       '@jest/types': 26.6.2
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
     dev: true
 
   /jest-pnp-resolver/1.2.2_jest-resolve@26.6.2:

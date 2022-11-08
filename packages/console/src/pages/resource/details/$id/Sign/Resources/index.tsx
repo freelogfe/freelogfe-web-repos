@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch, FWarning } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
-import FForbid from '@/components/FIcons/FForbid';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -61,7 +60,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
               {
                 r.error === 'freeze' && (<>
-                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
                   <div style={{ width: 5 }} />
                 </>)
               }
@@ -69,14 +68,14 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               {
                 r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
               {
                 r.error === '' && r.warning === 'ownerFreeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
@@ -160,7 +159,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                   window.open(FUtil.LinkTo.resourceDetails({
                     resourceID: r.id,
                   }));
-                }}><FFileSearch /></FComponentsLib.FTextBtn>
+                }}><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn>
               </span>
               </FTooltip>
               {/*{*/}
@@ -186,21 +185,21 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
               {
                 r.error === 'freeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
                 </>)
               }
 
               {
                 r.error === '' && r.warning === 'authException' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 
               {
                 r.error === '' && r.warning === 'ownerFreeze' && (<>
                   <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
                 </>)
               }
 

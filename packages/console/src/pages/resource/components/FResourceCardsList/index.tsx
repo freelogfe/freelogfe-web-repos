@@ -95,7 +95,7 @@ function FResourceCardsList({
       // @ts-ignore
       str = categoryData.second[category.first][category.second];
     }
-    console.log(str)
+    // console.log(str, '09i8owejklsdjflaskdjflksdj')
     onChangeResourceType && onChangeResourceType(str);
   }, [category]);
   React.useEffect(() => {

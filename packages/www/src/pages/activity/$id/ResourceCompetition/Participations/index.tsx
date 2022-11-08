@@ -180,7 +180,12 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div style={{ height: 10 }} />
         <div className={styles.participation_Text2}>校园、热血、搞笑、恋爱等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
-        <div className={styles.participation_Text3}>1.创建发布漫画资源，并添加 #内测集结！漫画家召集令# 活动标签；</div>
+        <div className={styles.participation_Text3}>1.创建发布漫画资源，并添加 <FComponentsLib.FCopyToClipboard
+          text={'内测集结！漫画家召集令'}
+          title={'点击复制标签'}
+        ><span
+          style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！漫画家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
+        </div>
         <div style={{ height: 20 }} />
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
@@ -190,7 +195,8 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
-              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
+              self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
             ? '即将开始'
@@ -200,6 +206,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>
@@ -273,7 +280,12 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div style={{ height: 10 }} />
         <div className={styles.participation_Text2}>同人、言情、玄幻、耽美等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
-        <div className={styles.participation_Text3}>1.创建发布小说资源，并添加 #内测集结！小说家召集令# 活动标签；</div>
+        <div className={styles.participation_Text3}>1.创建发布小说资源，并添加 <FComponentsLib.FCopyToClipboard
+          text={'内测集结！小说家召集令'}
+          title={'点击复制标签'}
+        ><span
+          style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！小说家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
+        </div>
         <div style={{ height: 20 }} />
         <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
         <div style={{ height: 50 }} />
@@ -283,6 +295,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
@@ -293,6 +306,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>

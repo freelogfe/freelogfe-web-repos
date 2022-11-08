@@ -4,10 +4,17 @@ import Sider from './Sider';
 import Content from './Content';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState, StorageObjectEditorModelState } from '@/models/connect';
-import { CreateBucketAction, OnChangeActivatedBucketAction, OnChangeNewBucketAction } from '@/models/storageHomePage';
-import { history, withRouter } from 'umi';
+import {
+  CreateBucketAction,
+  OnBlur_NewBucketModal_Input_Action,
+  OnChange_NewBucketModal_Input_Action,
+  OnChangeActivatedBucketAction,
+  // OnChangeNewBucketAction,
+} from '@/models/storageHomePage';
+import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import { ChangeAction, FetchInfoAction, storageObjectEditorInitData } from '@/models/storageObjectEditor';
 import Details from '@/pages/storage/Content/Details';
@@ -52,7 +59,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         type: 'storageHomePage/change',
         payload: {
           newBucketName: '',
-          newBucketNameError: false,
+          newBucketNameError: '',
           newBucketModalVisible: false,
         },
       });
@@ -111,7 +118,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
       visible={storageHomePage.newBucketModalVisible}
       width={640}
       okButtonProps={{
-        disabled: !storageHomePage.newBucketName || storageHomePage.newBucketNameError,
+        disabled: storageHomePage.newBucketName === '' || storageHomePage.newBucketNameError !== '',
         // disabled: true,
       }}
       cancelText={FI18n.i18nNext.t('btn_cancel')}
@@ -146,22 +153,33 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
         <div style={{ height: 10 }} />
         <FInput
           value={storageHomePage.newBucketName}
-          // onChange={(e) => {
-          //
-          // }}
           placeholder={FI18n.i18nNext.t('enter_bucket_name')}
-          debounce={300}
-          onDebounceChange={(value) => {
-            dispatch<OnChangeNewBucketAction>({
-              type: 'storageHomePage/onChangeNewBucket',
-              payload: value,
+          onChange={(e) => {
+            dispatch<OnChange_NewBucketModal_Input_Action>({
+              type: 'storageHomePage/onChange_NewBucketModal_Input',
+              payload: {
+                value: e.target.value,
+              },
             });
           }}
+          onBlur={() => {
+            dispatch<OnBlur_NewBucketModal_Input_Action>({
+              type: 'storageHomePage/onBlur_NewBucketModal_Input',
+            });
+          }}
+          // debounce={300}
+          // onDebounceChange={(value) => {
+          //   dispatch<OnChangeNewBucketAction>({
+          //     type: 'storageHomePage/onChangeNewBucket',
+          //     payload: value,
+          //   });
+          // }}
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
           errorText={storageHomePage.newBucketNameError ? (<div>
             {
-              FI18n.i18nNext.t('naming_convention_bucket_name')
+              // FI18n.i18nNext.t('naming_convention_bucket_name')
+              storageHomePage.newBucketNameError
                 .split('\n')
                 .map((s, i) => {
                   return (<div key={i}>{s}</div>);

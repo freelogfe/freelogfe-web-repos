@@ -10,11 +10,17 @@ import profiletitle from '@/assets/testplay/profiletitle.png';
 import quest from '@/assets/testplay/quest.png';
 import redpacket from '@/assets/testplay/redpacket.png';
 import { FUtil, FI18n } from '@freelog/tools-lib';
+import FFooter from '@/components/Footer';
+import { ActivityDetailsPageModelState } from '@/models/activityDetailsPage';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
+
 
 interface PlayNewerProps {
+  activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function PlayNewer({}: PlayNewerProps) {
+function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
   const scrollToAnchor = (anchorName: any) => {
     let state: any = {
       behavior: 'smooth',
@@ -79,15 +85,25 @@ function PlayNewer({}: PlayNewerProps) {
                 <div className='titleLabel2 op-0' />
                 <a
                   // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-                  href={FI18n.i18nNext.t('beta_event_guideline_resouce_quickstart_link')}
+                  href={FI18n.i18nNext.t(
+                    'beta_event_guideline_resouce_quickstart_link',
+                  )}
                   target={'_blank'}
                   className='link mr-40'
-                >查看图文教程</a>
+                >
+                  <span>查看图文教程</span>
+                  <i className={'freelog fl-icon-tuwen ml-5'} />
+                </a>
                 <a
-                  href={FI18n.i18nNext.t('beta_event_guideline_resouce_demo_link')}
+                  href={FI18n.i18nNext.t(
+                    'beta_event_guideline_resouce_demo_link',
+                  )}
                   target={'_blank'}
                   className='link'
-                >查看视频教程</a>
+                >
+                  <span>查看视频教程</span>
+                  <i className={'freelog fl-icon-bofang-daibiankuang ml-5'} />
+                </a>
               </div>
             </div>
             <div className='flex-column'>
@@ -123,16 +139,24 @@ function PlayNewer({}: PlayNewerProps) {
                 <div className='titleLabel2 op-0' />
                 <a
                   // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-                  href={FI18n.i18nNext.t('beta_event_guideline_node_quickstart_link')}
+                  href={FI18n.i18nNext.t(
+                    'beta_event_guideline_node_quickstart_link',
+                  )}
                   target={'_blank'}
                   className='link mr-40'
-                >查看图文教程</a>
+                >
+                  <span>查看图文教程</span>
+                  <i className={'freelog fl-icon-tuwen ml-5'} />
+                </a>
                 <a
                   // href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
                   href={FI18n.i18nNext.t('beta_event_guideline_node_demo_link')}
                   target={'_blank'}
                   className='link'
-                >查看视频教程</a>
+                >
+                  <span>查看视频教程</span>
+                  <i className={'freelog fl-icon-bofang-daibiankuang ml-5'} />
+                </a>
               </div>
             </div>
           </div>
@@ -148,7 +172,8 @@ function PlayNewer({}: PlayNewerProps) {
             <div className='flex-column'>
               <span className='title'>一、内测集结！漫画、小说家召集令</span>
               <span className='title-grey mb-15'>活动时间</span>
-              <span className='content mb-30'>2022/08/08～2022/10/10</span>
+              <span
+                className='content mb-30'>{activityDetailsPage.startTime?.format('YYYY/MM/DD') || 'YYYY/MM/DD'}～{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY/MM/DD'}</span>
               <span className='title-grey mb-15'>活动内容</span>
               <span className='content mb-15'>
                 1. 创建并发行一个合规漫画或小说资源，选择添加对应的活动标签；
@@ -193,7 +218,8 @@ function PlayNewer({}: PlayNewerProps) {
                   target={'_blank'}
                   className='link '
                 >
-                  快快戳我了解详情参与活动吧！
+                  <span>快快戳我了解详情参与活动吧！</span>
+                  <i className={'freelog fl-icon-qianjin ml-5'} />
                 </a>
               </div>
 
@@ -217,12 +243,17 @@ function PlayNewer({}: PlayNewerProps) {
               <div className='content text-break text-align-center'>
                 还能领取20元现金奖励！
               </div>
+
               <a
                 target={'_blank'}
-                href={FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard()}
+                href={
+                  FUtil.Format.completeUrlByDomain('console') +
+                  FUtil.LinkTo.dashboard()
+                }
                 className='link mt-30'
               >
-                完成全部任务仅需**分钟，快戳我领现金奖励吧！
+                <span>完成全部任务仅需9分钟，快戳我领现金奖励吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
           </div>
@@ -240,7 +271,8 @@ function PlayNewer({}: PlayNewerProps) {
                 target={'_blank'}
                 className='link mt-30'
               >
-                内测活动仅限800人，快快戳我邀请好友参加吧！
+                <span>内测活动仅限800人，快快戳我邀请好友参加吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
             <div className='h-360 over-h'>
@@ -264,20 +296,18 @@ function PlayNewer({}: PlayNewerProps) {
                 target={'_blank'}
                 className='link mt-30'
               >
-                快快戳我参与问卷领取现金奖吧！
+                <span>快快戳我参与问卷领取现金奖吧！</span>
+                <i className={'freelog fl-icon-qianjin ml-5'} />
               </a>
             </div>
           </div>
         </div>
       </div>
-      <div className='footer flex-column align-center w-100x' style={{ zIndex: 20 }}>
-        <div className='title'>Freelog，专业免费的资源发行和运营平台</div>
-        <div className='title2'>
-          支持图片、小说、游戏、漫画、视频、音乐、主题、插件等各类型资源快速变现
-        </div>
-      </div>
+      <FFooter />
     </div>
   );
 }
 
-export default PlayNewer;
+export default connect(({ activityDetailsPage }: ConnectState) => ({
+  activityDetailsPage,
+}))(PlayNewer);

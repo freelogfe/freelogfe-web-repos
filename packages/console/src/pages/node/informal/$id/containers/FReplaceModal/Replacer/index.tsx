@@ -3,7 +3,8 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Radio, Space } from 'antd';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   ConnectState, InformalNodeManagerPageModelState,
   // ReplaceInformExhibitState,
@@ -17,7 +18,7 @@ import {
   OnReplacerKeywordsChangeAction,
   OnReplacerListCheckedChangeAction, OnReplacerListVersionRangeChangeAction, OnReplacerBucketChangeAction,
 } from '@/models/informalNodeManagerPage';
-import { FDown } from '@/components/FIcons';
+// import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
@@ -218,7 +219,7 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
                           >
                             {rl.versionRange || '最新版本'}
                             &nbsp;
-                            <FDown />
+                            <FComponentsLib.FIcons.FDown />
                           </FComponentsLib.FTextBtn>
 
                         </FVersionHandlerPopover>)

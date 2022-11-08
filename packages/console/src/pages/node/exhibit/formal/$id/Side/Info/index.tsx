@@ -4,7 +4,8 @@ import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FTooltip from '@/components/FTooltip';
@@ -28,7 +29,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     });
   }
 
-  if (exhibitInfoPage.side_ResourceType === 'theme') {
+  if (exhibitInfoPage.side_ResourceType.includes('主题')) {
     return null;
   }
 
@@ -55,10 +56,6 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
         });
       }}>
       <div className={styles.cover}>
-        {/*<img*/}
-        {/*  alt=''*/}
-        {/*  src={exhibitInfoPage.side_ExhibitCover || imgSrc}*/}
-        {/*/>*/}
         <FCoverImage src={exhibitInfoPage.side_ExhibitCover || ''} width={220} style={{ borderRadius: 10 }} />
         <div className={styles.coverEdit}>
 

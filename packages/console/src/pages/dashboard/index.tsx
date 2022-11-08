@@ -1,19 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FAdd, FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FFormLayout from '@/components/FFormLayout';
-import FContent from '@/components/FIcons/FContent';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import BoardCard from './BoardCard';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 import { ConnectState, DashboardPageModelState } from '@/models/connect';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPage';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
 import FPopover from '@/components/FPopover';
@@ -57,10 +55,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
-                text={'内测活动时间：*****'}
+                text={'内测活动时间：' + FI18n.i18nNext.t('event_newbie_eventperiod')}
                 type='normal'
               />
             </div>
@@ -74,6 +73,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
@@ -91,17 +91,78 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   marginTop: 8,
                   marginRight: 5,
                   backgroundColor: '#666',
+                  flexShrink: 0,
                 }}
               />
               <FComponentsLib.FContentText
-                text={'（奖励发放|提现说明），活动的最终解释权归Freelog所有。'}
+                text={'分别完成下方的基础任务、资源任务和节点任务，即可领取对应的现金奖励。'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'完成【基础任务】中的【完善个人信息】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  // marginRight: 5,
+                  backgroundColor: '#666',
+                  flexShrink: 0,
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'可通过'}
+                type='normal'
+              />
+              <FComponentsLib.FTextBtn onClick={() => {
+                self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
+              }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>
+              <FComponentsLib.FContentText
+                text={'，将内测期间获取的现金奖励提现至微信钱包。'}
+                type='normal'
+              />
+            </div>
+            <div style={{ height: 15 }} />
+            <div style={{ display: 'flex' }}>
+              <i
+                style={{
+                  width: 3,
+                  height: 3,
+                  borderRadius: '50%',
+                  marginTop: 8,
+                  marginRight: 5,
+                  backgroundColor: '#666',
+                  flexShrink: 0,
+                }}
+              />
+              <FComponentsLib.FContentText
+                text={'活动的最终解释权归Freelog所有。'}
                 type='normal'
               />
             </div>
           </div>}
         ><span>
           <FComponentsLib.FTextBtn>
-            <FInfo />
+            <FComponentsLib.FIcons.FInfo />
             <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
           </FComponentsLib.FTextBtn>
         </span></FPopover>
@@ -110,7 +171,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       <div style={{ height: 20 }} />
       <div className={styles.title2}>
         完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
-        完成全部任务仅需**分钟，快开始萌新之旅吧~
+        完成全部任务仅需9分钟，快开始萌新之旅吧~
       </div>
       <div style={{ height: 30 }} />
       <BoardCard />
@@ -160,7 +221,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       window.open(FUtil.LinkTo.resourceCreator());
                     }}
                     type='default'>
-                    <FAdd style={{ fontSize: 16 }} />
+                    <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>新资源</span>
                   </FComponentsLib.FTextBtn>
 
@@ -169,7 +230,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                       window.open(FUtil.LinkTo.myResources());
                     }}
                     type='default'>
-                    <FContent style={{ fontSize: 16 }} />
+                    <FComponentsLib.FIcons.FContent style={{ fontSize: 16 }} />
                     <span style={{ paddingLeft: 3, display: 'inline-block' }}>查看全部</span>
                   </FComponentsLib.FTextBtn>
                 </Space>}
@@ -278,7 +339,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                     window.open(FUtil.LinkTo.nodeCreator());
                   }}
                 >
-                  <FAdd style={{ fontSize: 16 }} />
+                  <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
                   <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
                 </FComponentsLib.FTextBtn>}
               >

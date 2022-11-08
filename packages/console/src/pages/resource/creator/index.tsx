@@ -25,7 +25,7 @@ import {
   OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
 import { history } from 'umi';
-import { FCheck, FLoading } from '@/components/FIcons';
+// import { FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
 import * as H from 'history';
 import { Prompt } from 'umi';
@@ -48,6 +48,7 @@ function ResourceCreator({
                          }: ResourceCreatorProps) {
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMount_Page_Action>({
       type: 'resourceCreatorPage/onMount_Page',
     });
@@ -58,42 +59,6 @@ function ResourceCreator({
       type: 'resourceCreatorPage/onUnmount_Page',
     });
   });
-  // React.useEffect(() => {
-  //   return () => {
-  //     dispatch<ClearDataAction>({
-  //       type: 'resourceCreatorPage/clearData',
-  //     });
-  //     window.onbeforeunload = null;
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   // const func = () => 1234;
-  //   if (
-  //     resourceCreatorPage.name !== initStates['name'] ||
-  //     resourceCreatorPage.resource_Type.length !== 0 ||
-  //     resourceCreatorPage.introduction !== initStates['introduction'] ||
-  //     resourceCreatorPage.cover !== initStates['cover'] ||
-  //     resourceCreatorPage.labels !== initStates['labels']
-  //   ) {
-  //     window.onbeforeunload = () => true;
-  //   } else {
-  //     window.onbeforeunload = null;
-  //   }
-  // }, [
-  //   resourceCreatorPage.name,
-  //   resourceCreatorPage.resource_Type,
-  //   resourceCreatorPage.introduction,
-  //   resourceCreatorPage.cover,
-  //   resourceCreatorPage.labels,
-  // ]);
-
-  // function onClickCreate() {
-  //   // console.log('onClickCreate', '0932jdlfsf');
-  //   dispatch<OnCreateAction>({
-  //     type: 'resourceCreatorPage/create',
-  //   });
-  // }
 
   function onChange(payload: ChangeAction['payload']) {
     dispatch<ChangeAction>({
@@ -102,8 +67,6 @@ function ResourceCreator({
     });
   }
 
-  // console.log(resourceCreatorPage.promptLeavePath, 'resourceCreatorPage.promptLeavePath09wsdkfjlsdkfjlk');
-  // console.log(resourceCreatorPage, 'sdfoiksdo9i8ekwdlslksdfjlsdkjflkjl');
   return (
     <>
       <Prompt
@@ -124,6 +87,8 @@ function ResourceCreator({
           });
           fConfirmModal({
             message: '还没有创建资源，现在离开会导致信息丢失',
+            cancelText: FI18n.i18nNext.t('btn_cancel'),
+            okText: FI18n.i18nNext.t('btn_leave'),
             onOk() {
               // console.log('OK');
               history.push(location.pathname + location.search);
@@ -155,7 +120,7 @@ function ResourceCreator({
               !!resourceCreatorPage.introductionErrorText
             }
             onClickCreate={() => {
-
+              // console.log('********')
               dispatch<OnClick_CreateBtn_Action>({
                 type: 'resourceCreatorPage/onClick_CreateBtn',
               });
@@ -189,9 +154,9 @@ function ResourceCreator({
                 lengthLimit={60}
               />
               <div style={{ width: 10 }} />
-              {resourceCreatorPage.nameVerify === 1 && <FLoading />}
+              {resourceCreatorPage.nameVerify === 1 && <FComponentsLib.FIcons.FLoading />}
               {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && (
-                <FCheck />
+                <FComponentsLib.FIcons.FCheck />
               )}
             </div>
           </FFormLayout.FBlock>

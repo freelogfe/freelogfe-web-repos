@@ -3,7 +3,7 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
-import { FFileSearch, FInfo } from '@/components/FIcons';
+// import { FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
@@ -174,7 +174,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                     e.stopPropagation();
                     window.open(ac.detailsUrl);
                   }}
-                ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+                ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
               </div>
               <div style={{ height: 5 }} />
               <FComponentsLib.FContentText
@@ -231,7 +231,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 15 }} />
               <div className={styles.hasPolicyTip}>
-                <FInfo style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
                 <div style={{ width: 5 }} />
                 <span>最下方有可签约的策略</span>
               </div>

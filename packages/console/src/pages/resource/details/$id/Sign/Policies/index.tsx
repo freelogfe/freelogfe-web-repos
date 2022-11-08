@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Checkbox } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
@@ -96,7 +96,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
               // setFullScreenVisible(true);
               setVisibleModalPolicyID(p.fullInfo.policyId);
             }}
-          ><FFullScreen style={{ fontSize: 12 }} /></a>
+          ><FComponentsLib.FIcons.FFullScreen style={{ fontSize: 12 }} /></a>
 
 
         </div>);

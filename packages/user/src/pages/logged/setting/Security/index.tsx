@@ -431,7 +431,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     type='highlight'
                   />
                   <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
+                  {location.host.includes('testfreelog.com') ? <FComponentsLib.FTextBtn
                     type='danger'
                     onClick={() => {
                       if (!settingPage.email && !settingPage.phone) {
@@ -457,7 +457,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     }}
                   >
                     解绑
-                  </FComponentsLib.FTextBtn>
+                  </FComponentsLib.FTextBtn> :null}
                 </div>
               )}
             </div>

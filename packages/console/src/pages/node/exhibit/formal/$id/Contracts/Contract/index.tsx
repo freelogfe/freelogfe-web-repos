@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { Space } from 'antd';
 import FDivider from '@/components/FDivider';
 import FSwitch from '@/components/FSwitch';
 import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
-import { FDown, FUp } from '@/components/FIcons';
+// import { FDown, FUp } from '@/components/FIcons';
 import FContractDisplay from '@/components/FContractDisplay';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
 import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
@@ -133,8 +134,8 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                               &nbsp;
                               {
                                 c.exhibitOpen
-                                  ? (<FUp />)
-                                  : (<FDown />)
+                                  ? (<FComponentsLib.FIcons.FUp />)
+                                  : (<FComponentsLib.FIcons.FDown />)
                               }
                             </FComponentsLib.FTitleText>
                           </FComponentsLib.FTextBtn>

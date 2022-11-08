@@ -19,21 +19,23 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText text={'成功创建1个节点即可。'} type='highlight' />
       <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（视频）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >节点创建教程</a>
-        <FComponentsLib.FContentText text={'（图文）创建节点。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）创建节点。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.nodeCreator());
@@ -44,21 +46,23 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText text={'资源被签约到节点即变为展品。'} type='highlight' />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >展品添加上线教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）在资源市场添加并上线展品。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'（视频）在资源市场添加并上线展品。'} style={{ display: 'contents' }} />
+      </div>
       <div style={{ height: 15 }} />
       <div style={{ color: '#EE4040' }}>
         *只有处于上线状态的展品才能被用户签约消费。
@@ -73,21 +77,23 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type='highlight' />
       <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >主题激活教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
+        &nbsp;
+        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）激活主题。'} />
-      </Space>
+        &nbsp;
+        <FComponentsLib.FContentText text={'（视频）激活主题。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.market({ query: '主题' }));

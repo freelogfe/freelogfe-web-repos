@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FLink from '@/components/FLink';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, UserModelState } from '@/models/connect';
 import { FetchInfoAction } from '@/models/user';
 import UserSVG from '@/assets/user.svg';
@@ -21,6 +22,7 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
   const [showPage, setShowPage] = React.useState<'wallet' | 'reward' | 'contract' | 'setting'>('wallet');
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<FetchInfoAction>({
       type: 'user/fetchInfo',
     });

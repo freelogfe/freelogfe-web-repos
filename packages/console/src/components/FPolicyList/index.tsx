@@ -3,7 +3,6 @@ import styles from './index.less';
 import FSwitch from '../FSwitch';
 import { Space } from 'antd';
 import FModal from '../FModal';
-import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FI18n } from '@freelog/tools-lib';
@@ -108,7 +107,7 @@ export function PolicyCard({
           setFullScreenVisible(true);
         }}
       >
-        <FFullScreen style={{ fontSize: 12 }} />
+        <FComponentsLib.FIcons.FFullScreen style={{ fontSize: 12 }} />
       </a>
       <FModal
         title={null}

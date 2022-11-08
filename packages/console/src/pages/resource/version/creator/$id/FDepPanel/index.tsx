@@ -7,13 +7,11 @@ import Policies from './Policies';
 import IsUpthrow from './IsUpthrow';
 import UpthrowList from './UpthrowList';
 import Market from './Market';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
-import FForbid from '@/components/FIcons/FForbid';
-import FUpcast from '@/components/FIcons/FUpcast';
-import { FWarning } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -26,7 +24,6 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const resource = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as DepResources[number];
-  // console.log(resource, 'resource23qeasdj98io');
 
   return (<>
     <Space size={15}>
@@ -75,7 +72,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
               // resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
               resource?.error === 'offline' && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
-                  <FForbid className={styles.errorIcon} />
+                  <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                   <FComponentsLib.FTipText
                     text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
                     type='second'
@@ -85,7 +82,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             {
               // resource?.status === 2 && (<div className={styles.errorBox}>
               resource?.error === 'cyclicDependency' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText
                   text={FI18n.i18nNext.t('authorization_issue_circular_reply')}
                   type='second'
@@ -95,20 +92,20 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
             {
               // resource?.status === 3 && (<div className={styles.errorBox}>
               resource?.error === 'storageObject' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'该依赖是存储空间对象，无法获取授权。'} type='second' />
               </div>)
             }
             {
               // resource?.status === 4 && (<div className={styles.errorBox}>
               resource?.error === 'upThrow' && (<div className={styles.errorBox}>
-                <FUpcast className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'此依赖为当前资源的基础上抛'} type='second' />
               </div>)
             }
             {
               resource?.error === 'freeze' && (<div className={styles.errorBox}>
-                <FForbid className={styles.errorIcon} />
+                <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
                 <FComponentsLib.FTipText text={'此资源因违规无法授权'} type='second' />
               </div>)
             }
@@ -127,7 +124,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 {
                   // resource.authProblem && (<Space size={10}>
                   resource.warning === 'authException' && (<Space size={10}>
-                    <FWarning style={{ fontSize: 20 }} />
+                    <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
                   </Space>)
                 }
@@ -135,7 +132,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
                 {
                   // resource.authProblem && (<Space size={10}>
                   resource.warning === 'ownerFreeze' && (<Space size={10}>
-                    <FWarning style={{ fontSize: 20 }} />
+                    <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
                     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
                   </Space>)
                 }

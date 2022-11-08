@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.less';
-import FPlayer from '@/components/FIcons/FPlayer';
+// import FPlayer from '@/components/FIcons/FPlayer';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import img_blog from '@/assets/flnode_blog.jpg';
@@ -8,6 +8,7 @@ import img_comics from '@/assets/flnode_comics.jpg';
 import img_docs from '@/assets/flnode_docs.jpg';
 import img_reading from '@/assets/flnode_reading.jpg';
 import img_stock from '@/assets/flnode_stock.jpg';
+import img_podcast from '@/assets/flnode_podcast.jpg';
 
 const nodeData: {
   id: string;
@@ -57,6 +58,14 @@ const nodeData: {
     text: FI18n.i18nNext.t('flnode_docs_descr'),
     href: FI18n.i18nNext.t('flnode_docs_addr'),
   },
+  {
+    id: '6',
+    cover: img_podcast,
+    title: FI18n.i18nNext.t('flnode_podcast'),
+    tags: [],
+    text: FI18n.i18nNext.t('flnode_podcast_descr'),
+    href: FI18n.i18nNext.t('flnode_podcast_addr'),
+  },
 ];
 
 function Examples({}) {
@@ -77,6 +86,7 @@ function Examples({}) {
               <img
                 className={styles.cover}
                 src={n.cover}
+                alt={''}
               />
               <div style={{ width: 20 }} />
               <div className={styles.content}>
@@ -99,7 +109,7 @@ function Examples({}) {
                   window.open(n.href);
                 }}
               >
-                <FPlayer />
+                <FComponentsLib.FIcons.FPlayer />
                 &nbsp;
                 <span>浏览节点</span>
               </FComponentsLib.FTextBtn>

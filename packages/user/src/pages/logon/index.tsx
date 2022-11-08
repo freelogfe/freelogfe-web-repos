@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -30,7 +31,8 @@ import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
-import { FCheck } from '@/components/FIcons';
+
+// import { FCheck } from '@/components/FIcons';
 
 interface LogonProps {
   dispatch: Dispatch;
@@ -41,6 +43,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   const [urlParams] = useUrlState<{ goTo: string }>();
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'logonPage/onMountPage',
       payload: {
@@ -113,7 +116,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
     return (
       <div className={styles.resetPasswordSuccess}>
         <div className={styles.box}>
-          <FCheck style={{ fontSize: 96 }} />
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
           <FComponentsLib.FTitleText text={'注册成功'} />
           <div style={{ height: 40 }} />
@@ -142,11 +145,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
         <div className='flex-column align-center flex-1'>
-          <div className='flex-3'></div>
+          <div className='flex-3' />
           <div className='shrink-0 flex-column-center'>
             <FComponentsLib.FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
-          <div className='flex-2'></div>
+          <div className='flex-2' />
         </div>
         <div className=' flex-column-center shrink-0'>
           <div>

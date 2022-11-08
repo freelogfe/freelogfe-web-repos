@@ -3,10 +3,9 @@ import styles from './index.less';
 import FNoDataTip from '@/components/FNoDataTip';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
-import FAdd from '@/components/FIcons/FAdd';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import FMenu from '@/components/FMenu';
 import { DownOutlined } from '@ant-design/icons';
@@ -25,7 +24,6 @@ import {
 } from '@/models/informalNodeManagerPage';
 import ExhibitTable from './ExhibitTable';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FDown } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import FListFooter from '@/components/FListFooter';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
@@ -37,6 +35,17 @@ interface ExhibitProps {
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
+
+// const categoryData = {
+//   first: ['插件','阅读', '音频', '图片', '视频', '游戏' ],
+//   second: {
+//     1:['文章','演示文稿'],
+//     2:['音效','音乐','播客节目'],
+//     3:['照片','插画'],
+//     4:['动态影像','实拍片段','短视频','长视频'],
+//     5:['红白机'],
+//   }
+// };
 
 function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
   const [category, setCategory] = React.useState<any>({
@@ -66,12 +75,12 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
       // @ts-ignore
       str = categoryData.second[category.first][category.second];
     }
-    dispatch<OnChangeExhibitTypeAction>({
-      type: 'informalNodeManagerPage/onChangeExhibitType',
-      payload: {
-        value: str,
-      },
-    });
+    // dispatch<OnChangeExhibitTypeAction>({
+    //   type: 'informalNodeManagerPage/onChangeExhibitType',
+    //   payload: {
+    //     // value: str,
+    //   },
+    // });
   }, [category]);
   if (informalNodeManagerPage.exhibit_PageError) {
     return (
@@ -97,8 +106,9 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
         informalNodeManagerPage.exhibit_ListState === 'noData' ? (
           <FNoDataTip
             height={'calc(100vh - 94px)'}
-            tipText={'当前测试节点没有添加展品'}
-            btnText={'添加测试展品'}
+            // tipText={'当前测试节点没有添加展品'}
+            tipText={FI18n.i18nNext.t('testnode_exhibits_msg_empty')}
+            btnText={FI18n.i18nNext.t('testnode_exhibits_btn')}
             onClick={() => {
               dispatch<OnClickExhibitsAddBtnAction>({
                 type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
@@ -119,7 +129,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FAdd />
+                    <FComponentsLib.FIcons.FAdd />
                     {/*<FContentText text={}/>*/}
                     <span>{FI18n.i18nNext.t('title_add_test_exhibit')}</span>
                   </Space>
@@ -135,7 +145,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FMappingRuleReplace />
+                    <FComponentsLib.FIcons.FMappingRuleReplace />
                     {/*<FContentText text={FI18n.i18nNext.t('btn_replace_resource')}/>*/}
                     <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                   </Space>
@@ -147,96 +157,69 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                     <FComponentsLib.FDropdown
                       overlay={
                         <FMenu
-                          options={[
-                            {
-                              value: '-1',
-                              text: '全部',
-                            },
-                            ...categoryData.first.map((i, index) => {
-                              return {
-                                value: index + '',
-                                text: i,
-                              };
-                            }),
-                          ]}
-                          value={category.first}
+                          options={informalNodeManagerPage.exhibit_TypeOptions1}
+                          value={informalNodeManagerPage.exhibit_SelectedType1}
                           onClick={(value) => {
-                            setCategory({
-                              ...category,
-                              first: value,
-                              second: category.first === value ? category.second : '-1',
-                            });
+                            // setCategory({
+                            //   ...category,
+                            //   first: value,
+                            //   second: category.first === value ? category.second : '-1',
+                            // });
                             //onChangeResourceType && onChangeResourceType(value)
+                            dispatch<OnChangeExhibitTypeAction>({
+                              type: 'informalNodeManagerPage/onChangeExhibitType',
+                              payload: {
+                                value: value,
+                                level: 1,
+                              },
+                            });
                           }}
                         />
                       }
                     >
                       <span style={{ cursor: 'pointer' }}>
-                        {categoryData.first[category.first] || '全部'}
+                        {informalNodeManagerPage.exhibit_TypeOptions1.find((ro) => {
+                          return ro.value === informalNodeManagerPage.exhibit_SelectedType1;
+                        })?.text || '全部'}
                         <DownOutlined style={{ marginLeft: 8 }} />
                       </span>
                     </FComponentsLib.FDropdown>
 
-                    {category.first > 1 ? (
+                    {informalNodeManagerPage.exhibit_TypeOptions2.length > 0 ? (
                       <>
                         <span className='ml-30'>子类型：</span>
                         <FComponentsLib.FDropdown
                           overlay={
                             <FMenu
-                              // @ts-ignore
-                              options={[
-                                {
-                                  value: '-1',
-                                  text: '全部',
-                                },
-                                // @ts-ignore
-                                ...categoryData.second[category.first].map((i, index) => {
-                                  return {
-                                    value: index + '',
-                                    text: i,
-                                  };
-                                }),
-                              ]}
+                              options={informalNodeManagerPage.exhibit_TypeOptions2}
+                              value={informalNodeManagerPage.exhibit_SelectedType2}
                               onClick={(value) => {
-                                setCategory({
-                                  ...category,
-                                  second: value,
-                                });
+                                // setCategory({
+                                //   ...category,
+                                //   second: value,
+                                // });
                                 // onChangeResourceType && onChangeResourceType(value)
+                                dispatch<OnChangeExhibitTypeAction>({
+                                  type: 'informalNodeManagerPage/onChangeExhibitType',
+                                  payload: {
+                                    value: value,
+                                    level: 2,
+                                  },
+                                });
                               }}
                             />
                           }
                         >
                           <span style={{ cursor: 'pointer' }}>
-                            {
-                              // @ts-ignore
-                              categoryData.second[category.first][category.second] || '全部'
-                            }
+                            {informalNodeManagerPage.exhibit_TypeOptions2.find((ro) => {
+                              return ro.value === informalNodeManagerPage.exhibit_SelectedType2;
+                            })?.text || '全部'}
                             <DownOutlined style={{ marginLeft: 8 }} />
                           </span>
                         </FComponentsLib.FDropdown>
                       </>
                     ) : null}
                   </div>
-                  {/* <span>类型：</span>
-                  <FDropdownMenu
-                    options={informalNodeManagerPage.exhibit_TypeOptions}
-                    onChange={(value) => {
-                      dispatch<OnChangeExhibitTypeAction>({
-                        type: 'informalNodeManagerPage/onChangeExhibitType',
-                        payload: {
-                          value: value,
-                        },
-                      });
-                    }}
-                  >
-                    <span style={{ cursor: 'pointer' }}>
-                      {informalNodeManagerPage.exhibit_TypeOptions.find(
-                        (rto) => rto.value === informalNodeManagerPage.exhibit_SelectedType,
-                      )?.text || ''}
-                      <FDown style={{ marginLeft: 8 }} />
-                    </span>
-                  </FDropdownMenu> */}
                 </div>
                 <div>
                   <span>状态：</span>
@@ -259,7 +242,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                           );
                         })?.text
                       }
-                      <FDown style={{ marginLeft: 10 }} />
+                      <FComponentsLib.FIcons.FDown style={{ marginLeft: 10 }} />
                     </span>
                   </FDropdownMenu>
                 </div>
@@ -276,6 +259,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                         },
                       });
                     }}
+                    placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                   />
                 </div>
               </Space>

@@ -3,7 +3,6 @@ import styles from './index.less';
 import FResourceStatusBadge from '../FResourceStatusBadge';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
-import { FWarning } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
@@ -95,7 +94,7 @@ function FResourceCard({
                       : 'offline'}
               />
               <div style={{ width: 10 }} />
-              {resource.authProblem && <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>}
+              {resource.authProblem && <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
           </>)
         }

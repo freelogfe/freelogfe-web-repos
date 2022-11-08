@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Dispatch, connect} from 'dva';
-import {ConnectState, ResourceDetailPageModelState} from '@/models/connect';
-import FTooltip from "@/components/FTooltip";
-import {FInfo} from "@/components/FIcons";
-import {Space} from "antd";
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
+import FTooltip from '@/components/FTooltip';
+import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 
 interface PropertyProps {
@@ -12,19 +12,19 @@ interface PropertyProps {
   resourceDetailPage: ResourceDetailPageModelState,
 }
 
-function Property({dispatch, resourceDetailPage}: PropertyProps) {
+function Property({ dispatch, resourceDetailPage }: PropertyProps) {
   if (resourceDetailPage.resourceVersion_Info.properties.length === 0) {
     return null;
   }
 
   return (<>
-    <div style={{height: 30}}/>
+    <div style={{ height: 30 }} />
     <div>
       <FComponentsLib.FTitleText
         text={'基础属性'}
-        type="h3"
+        type='h3'
       />
-      <div style={{height: 20}}/>
+      <div style={{ height: 20 }} />
       <div className={styles.list}>
         {
           resourceDetailPage.resourceVersion_Info.properties.map((p, index) => {
@@ -32,21 +32,21 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
               <Space size={10}>
                 <FComponentsLib.FContentText
                   text={p.key}
-                  type="negative"
+                  type='negative'
                 />
                 {
                   p.description && (<FTooltip
                     title={p.description}
                   >
-                    <FInfo
-                      style={{cursor: 'pointer', fontSize: 14}}
+                    <FComponentsLib.FIcons.FInfo
+                      style={{ cursor: 'pointer', fontSize: 14 }}
                     />
                   </FTooltip>)
                 }
               </Space>
-              <div style={{height: 10}}/>
+              <div style={{ height: 10 }} />
               <FComponentsLib.FContentText
-                style={{maxWidth: 215}}
+                style={{ maxWidth: 215 }}
                 text={p.value}
                 singleRow
               />
@@ -117,11 +117,11 @@ function Property({dispatch, resourceDetailPage}: PropertyProps) {
       {/*  </div>*/}
       {/*</div>*/}
     </div>
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
   </>);
 }
 
-export default connect(({resourceDetailPage}: ConnectState) => ({resourceDetailPage}))(Property);
+export default connect(({ resourceDetailPage }: ConnectState) => ({ resourceDetailPage }))(Property);
 
 // interface ItemProps {
 //   tTey: string;

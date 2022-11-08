@@ -14,7 +14,7 @@ interface InviteProps {
 
 function Invite({ jump }: InviteProps) {
   const [code, setCode] = React.useState<string>('');
-  const [isCorrect, setIsCorrect] = React.useState<boolean>(true);
+  const [errorMessege, setError] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   function submit() {
     return FServiceAPI.TestQualification.betaCodesActivate({
@@ -34,7 +34,7 @@ function Invite({ jump }: InviteProps) {
         setLoading(false);
         if (data) {
           if (data.errCode) {
-            setIsCorrect(false);
+            setError('无效邀请码，请重新输入');
           } else {
             fMessage('验证成功！', 'success');
             setTimeout(() => {
@@ -69,17 +69,17 @@ function Invite({ jump }: InviteProps) {
           placeholder="请输入内测邀请码"
           wrapClassName={styles.input}
           onChange={(e) => {
-            setIsCorrect(true);
-            setCode(e.currentTarget.value);
+            setError('');
+            setCode(e.currentTarget.value.trim());
           }}
         />
-        <div className={styles.codeError}>{isCorrect ? '' : '无效邀请码，请重新输入'}</div>
+        <div className={styles.codeError}>{errorMessege}</div>
         <FComponentsLib.FRectBtn
           onClick={() => {
             run();
             setLoading(true);
           }}
-          disabled={!code || !isCorrect}
+          disabled={!code || !!errorMessege}
         >
           验证邀请码
         </FComponentsLib.FRectBtn>

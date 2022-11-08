@@ -7,6 +7,10 @@ import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { listStateAndListMore } from '@/components/FListFooter';
+import userPermission from '@/permissions/UserPermission';
+import fConfirmModal from '@/components/fConfirmModal';
+import { history } from 'umi';
+
 // import FUtil1 from '@/utils';
 
 export interface WalletPageModelState {
@@ -503,10 +507,15 @@ const Model: WalletPageModelType = {
       });
     },
 
-    * onClick_Activate_AccountBtn(action: OnClick_Activate_AccountBtn_Action, { select, put }: EffectsCommandMap) {
+    * onClick_Activate_AccountBtn(action: OnClick_Activate_AccountBtn_Action, {
+      select,
+      put,
+      call,
+    }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
 
       yield put<ChangeAction>({
         type: 'change',
@@ -667,9 +676,11 @@ const Model: WalletPageModelType = {
       const { data, msg, errCode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
       if (errCode !== 0 || !data) {
+        self._czc?.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 0]);
         return fMessage(msg, 'error');
       }
 
+      self._czc?.push(['_trackEvent', '个人中心页', '激活羽币账户', '', 1]);
       fMessage(FI18n.i18nNext.t('msg_feather_account_successfully_actived'));
 
       const params1: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
@@ -842,7 +853,7 @@ const Model: WalletPageModelType = {
       const { data } = yield call(FServiceAPI.Transaction.verifyTransactionPassword, params);
 
       if (!data) {
-        return fMessage(FI18n.i18nNext.t('alert_paymentpasswordincorrect '), 'error');
+        return fMessage(FI18n.i18nNext.t('alert_paymentpasswordincorrect'), 'error');
       }
 
       yield put<ChangeAction>({
@@ -891,6 +902,7 @@ const Model: WalletPageModelType = {
         type: 'change',
         payload: {
           changingPassword_NewPasswordModal_Password2: payload.value,
+          changingPassword_NewPasswordModal_Password2Error: '',
         },
       });
     },

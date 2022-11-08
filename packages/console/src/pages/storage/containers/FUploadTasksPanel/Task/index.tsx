@@ -9,6 +9,7 @@ import { Canceler } from 'axios';
 import { StorageHomePageModelState } from '@/models/storageHomePage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import { getFilesSha1Info } from '@/utils/service';
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -51,7 +52,9 @@ function Task({
   }, []);
 
   async function verifySameName() {
+    // console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
     const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
+      // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
@@ -92,7 +95,7 @@ function Task({
       }
     }
 
-    const result = await FServiceAPI.recombination.getFilesSha1Info({
+    const {result} = await getFilesSha1Info({
       sha1: [file.sha1],
     });
 

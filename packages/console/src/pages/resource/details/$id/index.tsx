@@ -3,7 +3,6 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import Sign from './Sign';
-import { FFavorite, FSwap } from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
@@ -130,14 +129,15 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             <FComponentsLib.FTextBtn
               type='default'
               className={styles.favoriteBtn}
-              onClick={() =>
+              onClick={() => {
+                self._czc?.push(['_trackEvent', '资源详情页', '收藏', '', 1]);
                 dispatch<OnClickCollectionAction>({
                   type: 'resourceDetailPage/onClickCollection',
-                })
-              }
+                });
+              }}
             >
               {/*{marketResourcePage.hasCollect ? <FC}*/}
-              <FFavorite filled={resourceDetailPage.resource_IsCollected} />
+              <FComponentsLib.FIcons.FFavorite filled={resourceDetailPage.resource_IsCollected} />
               <div style={{ width: 2 }} />
               <span>{resourceDetailPage.resource_IsCollected ? '已收藏' : '收藏'}</span>
               <div style={{ width: 5 }} />
@@ -174,7 +174,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
                     );
                   }}
                 >
-                  <FSwap style={{ cursor: 'pointer' }} />
+                  <FComponentsLib.FIcons.FSwap style={{ cursor: 'pointer' }} />
                 </FDropdownMenu>
               </Space>
 

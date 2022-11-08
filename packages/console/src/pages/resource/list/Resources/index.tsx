@@ -10,7 +10,8 @@ import {
 } from '@/models/resourceListPage';
 import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';

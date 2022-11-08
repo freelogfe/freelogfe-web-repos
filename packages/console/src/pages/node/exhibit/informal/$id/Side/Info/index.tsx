@@ -10,7 +10,8 @@ import {
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FCoverImage from '@/components/FCoverImage';
@@ -24,7 +25,7 @@ interface InfoProps {
 
 function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
 
-  if (informExhibitInfoPage.exhibit_ResourceType === 'theme') {
+  if (informExhibitInfoPage.exhibit_ResourceType.includes('主题')) {
     return null;
   }
 

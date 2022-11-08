@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
@@ -8,12 +9,9 @@ import {
   ImportLastVersionDataAction,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
-import FUp from '@/components/FIcons/FUp';
-import { FDown, FInfo } from '@/components/FIcons';
 import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
-  // StorageObjectEditorModelState
 } from '@/models/connect';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -108,7 +106,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           }}
         />
         {
-          resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{backgroundColor: '#F7F8F9'}}>
+          resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>
             <FLoadingTip height={100} />
           </div>)
         }
@@ -127,10 +125,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             }}
           >
             <span>自定义选项（高级）</span>
-            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
+            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)}
           </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-            <div><FInfo /></div>
+            <div><FComponentsLib.FIcons.FInfo /></div>
           </FTooltip>
         </Space>
 

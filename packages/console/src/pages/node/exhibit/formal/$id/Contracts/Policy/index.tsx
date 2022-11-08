@@ -6,7 +6,6 @@ import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { Space } from 'antd';
 import { UpdateRelationAction } from '@/models/exhibitInfoPage';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
@@ -67,7 +66,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
             onClick={() => {
               setFullScreenVisibleID(p.policyId);
             }}
-          ><FFullScreen style={{ fontSize: 12 }} /></a>
+          ><FComponentsLib.FIcons.FFullScreen style={{ fontSize: 12 }} /></a>
 
         </div>))
       }

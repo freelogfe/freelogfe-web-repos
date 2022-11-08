@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
-import { FFileSearch } from '@/components/FIcons';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -52,7 +52,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
             resourceID: mainResource.id,
           }));
         }}
-      ><FFileSearch /></FComponentsLib.FTextBtn></span>
+      ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
         </FTooltip>
       </div>
       <div style={{ height: 5 }} />
@@ -98,7 +98,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
                 resourceID: r.id,
               }));
             }}
-          ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+          ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
         </div>
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText

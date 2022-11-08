@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import { ColumnsType } from 'antd/lib/table/interface';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FFileSearch, FWarning } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
@@ -183,7 +183,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                   // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
                   title={'存在授权问题'}
                 >
-                  <FWarning />
+                  <FComponentsLib.FIcons.FWarning />
                 </FTooltip>
               )}
             </Space>
@@ -338,7 +338,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
           <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
             <span>
               <FComponentsLib.FTextBtn type="primary" onClick={() => onSearch()}>
-                <FFileSearch />
+                <FComponentsLib.FIcons.FFileSearch />
               </FComponentsLib.FTextBtn>
             </span>
           </FTooltip>
@@ -354,7 +354,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
               },
             });
           }}
-          className={styles.Delete}><FDelete /></FComponentsLib.FTextBtn>)
+          className={styles.Delete}><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>)
       }
 
     </Space>

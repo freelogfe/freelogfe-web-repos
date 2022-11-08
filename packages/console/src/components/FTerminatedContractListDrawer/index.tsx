@@ -7,8 +7,8 @@ import FCoverImage from '@/components/FCoverImage';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
-import FResource from '@/components/FIcons/FResource';
-import { FNodes, FUser } from '@/components/FIcons';
+// import FResource from '@/components/FIcons/FResource';
+// import { FNodes } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 
@@ -151,10 +151,10 @@ function FTerminatedContractListDrawer({
         return (<div className={styles.signatory}>
           <Space size={5}>
             {
-              record.licensorType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licensorType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licensorType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licensorType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {/*{*/}
@@ -166,14 +166,14 @@ function FTerminatedContractListDrawer({
           <div style={{ height: 10 }} />
           <Space size={5}>
             {
-              record.licenseeType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licenseeType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licenseeType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licenseeType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
             <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />

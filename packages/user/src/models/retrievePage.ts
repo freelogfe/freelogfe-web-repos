@@ -2,7 +2,7 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
 export type RetrievePageModelState = WholeReadonly<{
@@ -353,7 +353,8 @@ const Model: RetrievePageModelType = {
       }
 
       if (retrievePage.confirmPasswordInput !== '' && (retrievePage.confirmPasswordInput !== retrievePage.newPasswordInput)) {
-        confirmPasswordInputError = '两次输入不一致';
+        // confirmPasswordInputError = '两次输入不一致';
+        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch ');
       }
 
       yield put<ChangeAction>({
@@ -383,7 +384,8 @@ const Model: RetrievePageModelType = {
       if (!retrievePage.confirmPasswordInput) {
         confirmPasswordInputError = '请输入密码';
       } else if (retrievePage.newPasswordInput !== retrievePage.confirmPasswordInput) {
-        confirmPasswordInputError = '两次输入不一致';
+        // confirmPasswordInputError = '两次输入不一致';
+        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch ');
       }
 
       yield put<ChangeAction>({

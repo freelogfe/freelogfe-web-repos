@@ -3,7 +3,6 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
-import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from './FDepPanel';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -15,11 +14,11 @@ import {
 import {
   ChangeAction,
   OnClickCacheBtnAction,
-  OnClickCreateBtnAction,
+  OnClickCreateBtnAction, OnDelete_ObjectFile_Action,
   OnMountPageAction,
   OnPromptPageLeaveAction,
   OnPromptPageLeaveCancelAction,
-  OnPromptPageLeaveConfirmAction,
+  OnPromptPageLeaveConfirmAction, OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -33,10 +32,10 @@ import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import FPaperPlane from '@/components/FIcons/FPaperPlane';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
+import FPublishObjectFile from '@/components/FPublishObjectFile';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -89,7 +88,7 @@ function VersionCreator({
     // 版本
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
     // 选择的文件对象
-    || resourceVersionCreatorPage.selectedFileStatus !== -3
+    || !resourceVersionCreatorPage.selectedFileInfo
     || resourceVersionCreatorPage.rawPropertiesState !== 'success'
     // 依赖
     || resourceVersionCreatorPage.dependencies.some((dd) => {
@@ -177,7 +176,37 @@ function VersionCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
-            <FSelectObject />
+            <FPublishObjectFile
+              fileInfo={resourceVersionCreatorPage.selectedFileInfo}
+              onSucceed_UploadFile={(file) => {
+                console.log(file, 'onSucceed_UploadFile390oisjdf');
+                dispatch<OnSuccess_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  payload: {
+                    name: file.fileName,
+                    sha1: file.sha1,
+                    from: '本地上传',
+                  },
+                });
+              }}
+              onSucceed_ImportObject={(obj) => {
+                console.log(obj, 'onSucceed_ImportObject390oisjdf');
+                dispatch<OnSuccess_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  payload: {
+                    name: obj.objName,
+                    sha1: obj.sha1,
+                    from: '存储空间',
+                  },
+                });
+              }}
+              onClick_DeleteBtn={() => {
+                dispatch<OnDelete_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                });
+              }}
+            />
+            {/*<FSelectObject />*/}
 
             <CustomOptions />
           </FFormLayout.FBlock>
@@ -228,7 +257,7 @@ function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderP
         onClick={onClickCreate}
         disabled={disabledCreate}
       >
-        <FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
+        <FComponentsLib.FIcons.FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
         <div style={{ width: 5 }} />
         {FI18n.i18nNext.t('release_to_market')}
       </FComponentsLib.FRectBtn>

@@ -3,18 +3,17 @@ import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { Space } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
+// import { FNodes, FUp } from '@/components/FIcons';
 import FDrawer from '@/components/FDrawer';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
-import FResource from '@/components/FIcons/FResource';
+// import FResource from '@/components/FIcons/FResource';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
 import FCheckbox from '@/components/FCheckbox';
 import FSwitch from '@/components/FSwitch';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-import FForbid from '@/components/FIcons/FForbid';
 
 interface BaseInfo {
   subjectId: string;
@@ -25,7 +24,6 @@ interface BaseInfo {
   licensorId: string;
   licensorName: string;
   licensorIdentityType: 'resource' | 'node' | 'user';
-  licensorError: '' | 'freeze';
 
   licenseeOwnerIsCurrentUser: boolean;
   licenseeId: string;
@@ -119,58 +117,46 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
       isLoadPolicyInfo: 1,
     };
 
-    const { data: data_contractDetails } = await FServiceAPI.Contract.contractDetails(params);
-    set_IsSelfLicensorOwner(data_contractDetails.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
-    set_IsSelfLicenseeOwner(data_contractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
+    const { data } = await FServiceAPI.Contract.contractDetails(params);
+    set_IsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
+    set_IsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
     // console.log(data, 'data90234oi');
     const baseInfoData: BaseInfo = {
-      subjectId: data_contractDetails.subjectId,
-      subjectName: data_contractDetails.subjectName,
-      subjectType: data_contractDetails.subjectType,
+      subjectId: data.subjectId,
+      subjectName: data.subjectName,
+      subjectType: data.subjectType,
       subjectCover: '',
 
-      licensorId: data_contractDetails.licensorId,
-      licensorName: data_contractDetails.licensorName,
-      licensorIdentityType: data_contractDetails.subjectType === 1 ? 'resource' : data_contractDetails.subjectType === 2 ? 'node' : 'user',
-      licensorError: '',
+      licensorId: data.licensorId,
+      licensorName: data.licensorName,
+      licensorIdentityType: data.subjectType === 1 ? 'resource' : data.subjectType === 2 ? 'node' : 'user',
 
-      licenseeOwnerIsCurrentUser: data_contractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies(),
-      licenseeId: data_contractDetails.licenseeId,
-      licenseeName: data_contractDetails.licenseeName,
-      licenseeIdentityType: data_contractDetails.licenseeIdentityType === 1 ? 'resource' : data_contractDetails.licenseeIdentityType === 2 ? 'node' : 'user',
+      licenseeOwnerIsCurrentUser: data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies(),
+      licenseeId: data.licenseeId,
+      licenseeName: data.licenseeName,
+      licenseeIdentityType: data.licenseeIdentityType === 1 ? 'resource' : data.licenseeIdentityType === 2 ? 'node' : 'user',
 
-      contractId: data_contractDetails.contractId,
-      contractName: data_contractDetails.contractName,
-      contractCreateDate: FUtil.Format.formatDateTime(data_contractDetails.createDate, true),
-      contractStatus: data_contractDetails.status === 1 ? 'terminal' : (data_contractDetails.authStatus === 1 || data_contractDetails.authStatus === 3) ? 'active' : data_contractDetails.authStatus === 2 ? 'testActive' : 'inactive',
+      contractId: data.contractId,
+      contractName: data.contractName,
+      contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
+      contractStatus: data.status === 1 ? 'terminal' : (data.authStatus === 1 || data.authStatus === 3) ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
 
-      policyID: data_contractDetails.policyId,
-      policyText: data_contractDetails.policyInfo.policyText,
+      policyID: data.policyId,
+      policyText: data.policyInfo.policyText,
     };
 
     // console.log(data, 'data12432433333########');
 
-    if (baseInfoData.licensorIdentityType === 'resource') {
+    if (data.subjectType === 1) {
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: data_contractDetails.subjectId,
-        isLoadFreezeReason: 1,
+        resourceIdOrName: data.subjectId,
       };
 
-      const { data: data_resourceInfo } = await FServiceAPI.Resource.info(params1);
+      const { data: data1 } = await FServiceAPI.Resource.info(params1);
       // console.log(data1, '!@#$!@#$!@#$');
-      if (data_resourceInfo.coverImages.length > 0) {
-        baseInfoData.subjectCover = data_resourceInfo.coverImages[0];
+      if (data1.coverImages.length > 0) {
+        baseInfoData.subjectCover = data1.coverImages[0];
       }
-      baseInfoData.licensorError = (data_resourceInfo.status & 2) === 2 ? 'freeze' : '';
-    }
-
-    if (baseInfoData.licensorIdentityType === 'node') {
-      const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
-        nodeId: Number(baseInfoData.licensorId),
-      };
-
-      const { data: data_NodeDetails } = await FServiceAPI.Node.details(params2);
-      baseInfoData.licensorError = (data_NodeDetails.status & 4) === 4 ? 'freeze' : '';
     }
 
     if (baseInfoData.licenseeIdentityType === 'resource' && baseInfoData.licenseeOwnerIsCurrentUser) {
@@ -202,7 +188,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
     if (baseInfoData.licenseeIdentityType === 'node' && baseInfoData.licenseeOwnerIsCurrentUser) {
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        nodeId: data_contractDetails.licenseeId,
+        nodeId: data.licenseeId,
         resolveResourceIds: baseInfoData.licensorId,
       };
 
@@ -240,17 +226,17 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
     setBaseInfo(baseInfoData);
 
     const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-      subjectIds: data_contractDetails.subjectId,
-      subjectType: data_contractDetails.subjectType,
-      licenseeIdentityType: data_contractDetails.licenseeIdentityType,
-      licensorId: data_contractDetails.licensorId,
-      licenseeId: data_contractDetails.licenseeId,
+      subjectIds: data.subjectId,
+      subjectType: data.subjectType,
+      licenseeIdentityType: data.licenseeIdentityType,
+      licensorId: data.licensorId,
+      licenseeId: data.licenseeId,
       isLoadPolicyInfo: 1,
     };
     const { data: data2 } = await FServiceAPI.Contract.batchContracts(params2);
     // console.log(data2, 'data22222222#$##$@$##$');
     const AssociateContractsResult: FContractDetailsDrawerStates['associateContracts'] = (data2 as any)
-      .filter((d: any) => d.contractId !== data_contractDetails.contractId)
+      .filter((d: any) => d.contractId !== data.contractId)
       .map((d: any) => {
         return {
           expansion: false,
@@ -331,308 +317,298 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
       !baseInfo
         ? <FLoadingTip height={'calc(100vh - 140px)'} />
         : (<FFormLayout>
-          {
-            baseInfo.licensorError === 'freeze' && (<div className={styles.errorBox}>
-              <FForbid className={styles.errorIcon} />
-              <FComponentsLib.FTipText text={'此标的物违规，相关授权操作已被禁用'} type='second' />
-            </div>)
-          }
+          <FFormLayout.FBlock title={'标的物'}>
+            <Space size={10}>
+              <FCoverImage src={baseInfo?.subjectCover || ''} width={60} />
+              <div>
+                <FComponentsLib.FContentText
+                  type='highlight'
+                  text={baseInfo?.subjectName}
+                />
+                <div style={{ height: 5 }} />
+                <FIdentityTypeBadge
+                  status={baseInfo?.subjectType === 1 ? 'resource' : 'exhibit'}
+                />
+              </div>
+            </Space>
+          </FFormLayout.FBlock>
 
-          {
-            baseInfo.licensorError === '' && (<>
-              <FFormLayout.FBlock title={'标的物'}>
+          <FFormLayout.FBlock title={'缔约方'}>
+            <Space size={10}>
+              <div style={{ width: 80 }}>
+                <FComponentsLib.FContentText type='negative' text={'授权方'} />
+              </div>
+              <Space size={10}>
+                {
+                  baseInfo?.licensorIdentityType === 'resource' && (<FComponentsLib.FIcons.FResource />)
+                }
+                {
+                  baseInfo?.licensorIdentityType === 'node' && (<FComponentsLib.FIcons.FNodes />)
+                }
+                {
+                  baseInfo?.licensorIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
+                }
+                <FComponentsLib.FContentText
+                  type='highlight'
+                  text={baseInfo?.licensorName}
+                />
+              </Space>
+            </Space>
+            <div style={{ height: 15 }} />
+            <Space size={10}>
+              <div style={{ width: 80 }}>
+                <FComponentsLib.FContentText
+                  type='negative'
+                  text={'被授权方'}
+                />
+              </div>
+              <Space size={10}>
+                {
+                  baseInfo?.licenseeIdentityType === 'resource' && (<FComponentsLib.FIcons.FResource />)
+                }
+                {
+                  baseInfo?.licenseeIdentityType === 'node' && (<FComponentsLib.FIcons.FNodes />)
+                }
+                {
+                  baseInfo?.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
+                }
+                <FComponentsLib.FContentText
+                  type='highlight'
+                  text={baseInfo?.licenseeName}
+                />
+              </Space>
+            </Space>
+          </FFormLayout.FBlock>
+
+          <FFormLayout.FBlock title={'所签授权策略'}>
+            <div className={styles.currentContract}>
+              <div style={{ height: 15 }} />
+              <div style={{ padding: '0 20px' }}>
                 <Space size={10}>
-                  <FCoverImage src={baseInfo?.subjectCover || ''} width={60} />
-                  <div>
-                    <FComponentsLib.FContentText
-                      type='highlight'
-                      text={baseInfo?.subjectName}
-                    />
-                    <div style={{ height: 5 }} />
-                    <FIdentityTypeBadge
-                      status={baseInfo?.subjectType === 1 ? 'resource' : 'exhibit'}
-                    />
-                  </div>
+                  <FComponentsLib.FContentText
+                    text={baseInfo?.contractName}
+                    type='highlight'
+                  />
                 </Space>
-              </FFormLayout.FBlock>
+              </div>
+              <div style={{ height: 10 }} />
 
-              <FFormLayout.FBlock title={'缔约方'}>
-                <Space size={10}>
-                  <div style={{ width: 80 }}>
-                    <FComponentsLib.FContentText type='negative' text={'授权方'} />
-                  </div>
-                  <Space size={10}>
-                    {
-                      baseInfo?.licensorIdentityType === 'resource' && (<FResource />)
-                    }
-                    {
-                      baseInfo?.licensorIdentityType === 'node' && (<FNodes />)
-                    }
-                    {
-                      baseInfo?.licensorIdentityType === 'user' && (<FUser />)
-                    }
-                    <FComponentsLib.FContentText
-                      type='highlight'
-                      text={baseInfo?.licensorName}
-                    />
-                  </Space>
+              <div style={{ padding: '0 20px' }}>
+                <Space size={5}>
+                  <FComponentsLib.FContentText
+                    type='additional2'
+                    text={`签约时间：${baseInfo?.contractCreateDate}`}
+                  />
+                  <FDivider style={{ fontSize: 14 }} />
+                  <FComponentsLib.FContentText
+                    type='additional2'
+                    text={`合约ID：${baseInfo?.contractId}`}
+                  />
                 </Space>
-                <div style={{ height: 15 }} />
-                <Space size={10}>
-                  <div style={{ width: 80 }}>
-                    <FComponentsLib.FContentText
-                      type='negative'
-                      text={'被授权方'}
-                    />
-                  </div>
-                  <Space size={10}>
-                    {
-                      baseInfo?.licenseeIdentityType === 'resource' && (<FResource />)
-                    }
-                    {
-                      baseInfo?.licenseeIdentityType === 'node' && (<FNodes />)
-                    }
-                    {
-                      baseInfo?.licenseeIdentityType === 'user' && (<FUser />)
-                    }
-                    <FComponentsLib.FContentText
-                      type='highlight'
-                      text={baseInfo?.licenseeName}
-                    />
-                  </Space>
-                </Space>
-              </FFormLayout.FBlock>
+              </div>
+              <div style={{ height: 10 }} />
 
-              <FFormLayout.FBlock title={'所签授权策略'}>
-                <div className={styles.currentContract}>
-                  <div style={{ height: 15 }} />
-                  <div style={{ padding: '0 20px' }}>
-                    <Space size={10}>
-                      <FComponentsLib.FContentText
-                        text={baseInfo?.contractName}
-                        type='highlight'
-                      />
-                    </Space>
-                  </div>
-                  <div style={{ height: 10 }} />
-
-                  <div style={{ padding: '0 20px' }}>
-                    <Space size={5}>
-                      <FComponentsLib.FContentText
-                        type='additional2'
-                        text={`签约时间：${baseInfo?.contractCreateDate}`}
-                      />
-                      <FDivider style={{ fontSize: 14 }} />
-                      <FComponentsLib.FContentText
-                        type='additional2'
-                        text={`合约ID：${baseInfo?.contractId}`}
-                      />
-                    </Space>
-                  </div>
-                  <div style={{ height: 10 }} />
-
-                  {
-                    contractID && (<div style={{ padding: '0 20px' }}>
-                      <FContractDisplay
-                        contractID={contractID}
-                        onChangedEvent={() => {
-                          reportedInformation();
-                        }}
-                      />
-                    </div>)
-                  }
-                  <div style={{ height: 15 }} />
-                  {
-                    isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
-
-                      <div style={{ padding: '0 20px' }}>
-                        <FVersions
-                          versionAllContractIDs={versionAllContractIDs}
-                          resourceName={baseInfo.licenseeName}
-                          currentPolicyID={baseInfo.policyID}
-                          // onChangeVersionAllContractIDs={(value) => {
-                          //   // console.log(value, '@#$@#$@#');
-                          //   setVersionAllContractIDs(value);
-                          //   reportedInformation();
-                          // }}
-                          onChangeVersionContractIDs={async (value, values) => {
-                            // console.log(value, '##$@#$@#$');
-                            setVersionAllContractIDs(values);
-                            await syncVersionUsedContracts(value);
-                            reportedInformation();
-                          }}
-                        />
-                      </div>
-                    </>)
-                  }
-
-                  {
-                    isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
-                      <div style={{ padding: '0 20px' }}>
-                        <FExhibits
-                          nodeName={baseInfo.licenseeName}
-                          exhibitAllContractIDs={exhibitAllContractIDs}
-                          currentPolicyID={baseInfo.policyID}
-                          // onChangeExhibitAllContractIDs={(value) => {
-                          //   // console.log(value, '@#$@#$@#$@#09sdj');
-                          //   setExhibitAllContractIDs(value);
-                          //   reportedInformation();
-                          // }}
-                          onChangeExhibitContractIDs={async (value, values) => {
-                            // console.log(value, '@#$@#098jsdlfkjl');
-                            setExhibitAllContractIDs(values);
-                            await syncExhibitUsedContracts(value);
-                            reportedInformation();
-                          }}
-                        />
-                      </div>
-                    </>)
-                  }
-
-                </div>
-              </FFormLayout.FBlock>
               {
-                associateContracts && associateContracts.length > 0 && (<FFormLayout.FBlock title={'关联合约'}>
-                  <Space size={10} direction='vertical' className={styles.associateContracts}>
-                    {
-                      associateContracts?.map((ac) => {
-                        return (<div
-                          key={ac.contractId}
-                          className={styles.associateContract}
-                        >
-                          <div
-                            className={styles.associateContractHeader}
-                            onClick={() => {
-                              setAssociateContracts(associateContracts?.map((acm) => {
-                                if (acm.contractId !== ac.contractId) {
-                                  return acm;
-                                }
-                                return {
-                                  ...acm,
-                                  expansion: !acm.expansion,
-                                };
-                              }));
-                            }}
-                          >
-                            <div>
-                              <Space size={10}>
-                                <FComponentsLib.FContentText
-                                  text={ac.contractName}
-                                  type='highlight'
-                                />
-                              </Space>
-                              <div style={{ height: 10 }} />
-                              <Space size={40}>
-                                <Space size={10}>
-                                  <FComponentsLib.FContentText
-                                    text={'签约时间'}
-                                    type='additional2'
-                                  />
-                                  <FComponentsLib.FContentText
-                                    text={ac.contractCreateDate}
-                                  />
-                                </Space>
-                                <Space size={10}>
-                                  <FComponentsLib.FContentText
-                                    text={'合约ID'}
-                                    type='additional2'
-                                  />
-                                  <FComponentsLib.FContentText
-                                    text={ac.contractId}
-                                  />
-                                </Space>
-                              </Space>
-                            </div>
-                            {
-                              ac.expansion ? (<FUp />) : (<FDown />)
+                contractID && (<div style={{ padding: '0 20px' }}>
+                  <FContractDisplay
+                    contractID={contractID}
+                    onChangedEvent={() => {
+                      reportedInformation();
+                    }}
+                  />
+                </div>)
+              }
+              <div style={{ height: 15 }} />
+              {
+                isSelfLicenseeOwner && versionAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
+
+                  <div style={{ padding: '0 20px' }}>
+                    <FVersions
+                      versionAllContractIDs={versionAllContractIDs}
+                      resourceName={baseInfo.licenseeName}
+                      currentPolicyID={baseInfo.policyID}
+                      // onChangeVersionAllContractIDs={(value) => {
+                      //   // console.log(value, '@#$@#$@#');
+                      //   setVersionAllContractIDs(value);
+                      //   reportedInformation();
+                      // }}
+                      onChangeVersionContractIDs={async (value, values) => {
+                        // console.log(value, '##$@#$@#$');
+                        setVersionAllContractIDs(values);
+                        await syncVersionUsedContracts(value);
+                        reportedInformation();
+                      }}
+                    />
+                  </div>
+                </>)
+              }
+
+              {
+                isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && baseInfo.contractStatus !== 'terminal' && (<>
+                  <div style={{ padding: '0 20px' }}>
+                    <FExhibits
+                      nodeName={baseInfo.licenseeName}
+                      exhibitAllContractIDs={exhibitAllContractIDs}
+                      currentPolicyID={baseInfo.policyID}
+                      // onChangeExhibitAllContractIDs={(value) => {
+                      //   // console.log(value, '@#$@#$@#$@#09sdj');
+                      //   setExhibitAllContractIDs(value);
+                      //   reportedInformation();
+                      // }}
+                      onChangeExhibitContractIDs={async (value, values) => {
+                        // console.log(value, '@#$@#098jsdlfkjl');
+                        setExhibitAllContractIDs(values);
+                        await syncExhibitUsedContracts(value);
+                        reportedInformation();
+                      }}
+                    />
+                  </div>
+                </>)
+              }
+
+            </div>
+          </FFormLayout.FBlock>
+          {/*{console.log(associateContracts, 'associateContractsassociateContractsassociateContractsassociateContracts')}*/}
+          {
+            associateContracts && associateContracts.length > 0 && (<FFormLayout.FBlock title={'关联合约'}>
+              <Space size={10} direction='vertical' className={styles.associateContracts}>
+                {
+                  associateContracts?.map((ac) => {
+                    return (<div
+                      key={ac.contractId}
+                      className={styles.associateContract}
+                    >
+                      <div
+                        className={styles.associateContractHeader}
+                        onClick={() => {
+                          setAssociateContracts(associateContracts?.map((acm) => {
+                            if (acm.contractId !== ac.contractId) {
+                              return acm;
                             }
+                            return {
+                              ...acm,
+                              expansion: !acm.expansion,
+                            };
+                          }));
+                        }}
+                      >
+                        <div>
+                          <Space size={10}>
+                            <FComponentsLib.FContentText
+                              text={ac.contractName}
+                              type='highlight'
+                            />
+                          </Space>
+                          <div style={{ height: 10 }} />
+                          <Space size={40}>
+                            <Space size={10}>
+                              <FComponentsLib.FContentText
+                                text={'签约时间'}
+                                type='additional2'
+                              />
+                              <FComponentsLib.FContentText
+                                text={ac.contractCreateDate}
+                              />
+                            </Space>
+                            <Space size={10}>
+                              <FComponentsLib.FContentText
+                                text={'合约ID'}
+                                type='additional2'
+                              />
+                              <FComponentsLib.FContentText
+                                text={ac.contractId}
+                              />
+                            </Space>
+                          </Space>
+                        </div>
+                        {
+                          ac.expansion ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)
+                        }
 
-                          </div>
+                      </div>
 
-                          <div style={{ display: ac.expansion ? 'block' : 'none', padding: '0 20px' }}>
-                            <FContractDisplay
-                              contractID={ac.contractId}
-                              onChangedEvent={() => {
+                      <div style={{ display: ac.expansion ? 'block' : 'none', padding: '0 20px' }}>
+                        <FContractDisplay
+                          contractID={ac.contractId}
+                          onChangedEvent={() => {
+                            reportedInformation();
+                          }}
+                        />
+                        <div style={{ height: 10 }} />
+                      </div>
+
+                      {
+                        isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
+                          {/*<div style={{ height: 10 }} />*/}
+                          {
+                            !ac.expansion && (<>
+                              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+                              <div style={{ height: 15 }} />
+                            </>)
+                          }
+
+
+                          <div style={{ padding: '0 20px' }}>
+                            <FVersions
+                              versionAllContractIDs={versionAllContractIDs}
+                              resourceName={baseInfo.licenseeName}
+                              currentPolicyID={ac.policyID}
+                              // onChangeVersionAllContractIDs={(value) => {
+                              //   // console.log(value, '@#$@#$@#');
+                              //   setVersionAllContractIDs(value);
+                              //   reportedInformation();
+                              // }}
+                              onChangeVersionContractIDs={async (value, values) => {
+                                // console.log(value, '##$@#$@#$');
+                                setVersionAllContractIDs(values);
+                                await syncVersionUsedContracts(value);
                                 reportedInformation();
                               }}
                             />
-                            <div style={{ height: 10 }} />
+
                           </div>
+                          <div style={{ height: 10 }} />
+                        </>)
+                      }
+
+                      {
+                        isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
+                          {/*<div style={{ height: 10 }} />*/}
 
                           {
-                            isSelfLicenseeOwner && versionAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
-                              {/*<div style={{ height: 10 }} />*/}
-                              {
-                                !ac.expansion && (<>
-                                  <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
-                                  <div style={{ height: 15 }} />
-                                </>)
-                              }
-
-
-                              <div style={{ padding: '0 20px' }}>
-                                <FVersions
-                                  versionAllContractIDs={versionAllContractIDs}
-                                  resourceName={baseInfo.licenseeName}
-                                  currentPolicyID={ac.policyID}
-                                  // onChangeVersionAllContractIDs={(value) => {
-                                  //   // console.log(value, '@#$@#$@#');
-                                  //   setVersionAllContractIDs(value);
-                                  //   reportedInformation();
-                                  // }}
-                                  onChangeVersionContractIDs={async (value, values) => {
-                                    // console.log(value, '##$@#$@#$');
-                                    setVersionAllContractIDs(values);
-                                    await syncVersionUsedContracts(value);
-                                    reportedInformation();
-                                  }}
-                                />
-
-                              </div>
-                              <div style={{ height: 10 }} />
+                            !ac.expansion && (<>
+                              <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
+                              <div style={{ height: 15 }} />
                             </>)
                           }
 
-                          {
-                            isSelfLicenseeOwner && exhibitAllContractIDs.length > 0 && ac.contractStatus !== 'terminal' && (<>
-                              {/*<div style={{ height: 10 }} />*/}
+                          <div style={{ padding: '0 20px' }}>
+                            <FExhibits
+                              nodeName={baseInfo.licenseeName}
+                              exhibitAllContractIDs={exhibitAllContractIDs}
+                              currentPolicyID={ac.policyID}
+                              // onChangeExhibitAllContractIDs={(value) => {
+                              //   // console.log(value, '@#$@#$@#$@#09sdj');
+                              //   setExhibitAllContractIDs(value);
+                              //   reportedInformation();
+                              // }}
+                              onChangeExhibitContractIDs={async (value, values) => {
+                                // console.log(value, '@#$@#098jsdlfkjl');
+                                setExhibitAllContractIDs(values);
+                                await syncExhibitUsedContracts(value);
+                                reportedInformation();
+                              }}
+                            />
+                          </div>
+                        </>)
+                      }
 
-                              {
-                                !ac.expansion && (<>
-                                  <div style={{ borderTop: '1px solid #E5E7EB', margin: '0 20px' }} />
-                                  <div style={{ height: 15 }} />
-                                </>)
-                              }
+                    </div>);
+                  })
+                }
 
-                              <div style={{ padding: '0 20px' }}>
-                                <FExhibits
-                                  nodeName={baseInfo.licenseeName}
-                                  exhibitAllContractIDs={exhibitAllContractIDs}
-                                  currentPolicyID={ac.policyID}
-                                  // onChangeExhibitAllContractIDs={(value) => {
-                                  //   // console.log(value, '@#$@#$@#$@#09sdj');
-                                  //   setExhibitAllContractIDs(value);
-                                  //   reportedInformation();
-                                  // }}
-                                  onChangeExhibitContractIDs={async (value, values) => {
-                                    // console.log(value, '@#$@#098jsdlfkjl');
-                                    setExhibitAllContractIDs(values);
-                                    await syncExhibitUsedContracts(value);
-                                    reportedInformation();
-                                  }}
-                                />
-                              </div>
-                            </>)
-                          }
-
-                        </div>);
-                      })
-                    }
-
-                  </Space>
-                </FFormLayout.FBlock>)
-              }
-            </>)
+              </Space>
+            </FFormLayout.FBlock>)
           }
 
         </FFormLayout>)

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import {
   ChangeAction,
@@ -10,9 +11,7 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FFileSearch, FWarning } from '@/components/FIcons';
-import FForbid from '@/components/FIcons/FForbid';
-import FUpcast from '@/components/FIcons/FUpcast';
+// import FUpcast from '@/components/FIcons/FUpcast';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -105,7 +104,7 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                           }));
                         }}
                       >
-                        <FFileSearch />
+                        <FComponentsLib.FIcons.FFileSearch />
                       </FComponentsLib.FTextBtn>
                     </span></FTooltip>
                     {/*<FComponentsLib.FTextBtn*/}
@@ -126,16 +125,17 @@ function Resources({ dispatch, resourceVersionCreatorPage }: ResourcesProps) {
                     {/*{rrr.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
                     {rrr.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                     {/*{rrr.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
-                    {rrr.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'cyclicDependency' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
                     {/*{rrr.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
-                    {rrr.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
                     {/*{rrr.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
-                    {rrr.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
-                    {rrr.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
+                    {rrr.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
                     {rrr.error === '' && rrr.warning === 'authException' && (
-                      <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                      <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
                     {rrr.error === '' && rrr.warning === 'ownerFreeze' && (
-                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                        style={{ fontSize: 14 }} /></FTooltip>)}
                   </div>
                   <div style={{ height: 9 }} />
                   <FComponentsLib.FContentText type='additional2'>
@@ -275,7 +275,7 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
                       resourceID: i.id,
                     }));
                   }}
-                ><FFileSearch /></FComponentsLib.FTextBtn></span>
+                ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
               </FTooltip>
               {/*<FComponentsLib.FTextBtn*/}
               {/*  onClick={(e) => {*/}
@@ -294,16 +294,17 @@ function SmallNav({ dataSource, activatedID, onClick }: SmallNavProps) {
               {/*{i.status === 0 && (<FResourceStatusBadge status={'offline'} />)}*/}
               {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
               {/*{i.status === 2 && (<FForbid className={styles.titleErrorIcon} />)}*/}
-              {i.error === 'cyclicDependency' && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.error === 'cyclicDependency' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
               {/*{i.status === 3 && (<FForbid className={styles.titleErrorIcon} />)}*/}
-              {i.error === 'storageObject' && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
               {/*{i.status === 4 && (<FUpcast className={styles.titleErrorIcon} />)}*/}
-              {i.error === 'upThrow' && (<FUpcast className={styles.titleErrorIcon} />)}
-              {i.error === 'freeze' && (<FForbid className={styles.titleErrorIcon} />)}
+              {i.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
+              {i.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
               {i.error === '' && i.warning === 'authException' && (
-                <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
               {i.error === '' && i.warning === 'ownerFreeze' && (
-                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                  style={{ fontSize: 14 }} /></FTooltip>)}
             </div>
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText type='additional2'>

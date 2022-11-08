@@ -14,20 +14,18 @@ import {
   OnMountThemePageAction,
   OnUnmountThemePageAction,
 } from '@/models/informalNodeManagerPage';
-import FAdd from '@/components/FIcons/FAdd';
 import FInput from '@/components/FInput';
-import { Dispatch, connect } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { ConnectState } from '@/models/connect';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FMappingRuleReplace from '@/components/FIcons/FMappingRuleReplace';
 import FCoverImage from '@/components/FCoverImage';
 import FAddInformExhibitDrawer from '@/pages/node/informal/$id/components/AddInformExhibitDrawer';
 import FTooltip from '@/components/FTooltip';
-import { FWarning } from '@/components/FIcons';
 import { Helmet } from 'react-helmet';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import FComponentsLib from '@freelog/components-lib';
@@ -68,8 +66,9 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
       informalNodeManagerPage.theme_ListState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
-          tipText={'当前节点没有添加主题展品'}
-          btnText={'添加测试主题展品'}
+          // tipText={'当前节点没有添加主题展品'}
+          tipText={FI18n.i18nNext.t('testnode_themes_msg_empty')}
+          btnText={FI18n.i18nNext.t('testnode_themes_btn_add_theme')}
           onClick={() => {
             dispatch<OnClickThemesAddBtnAction>({
               type: 'informalNodeManagerPage/onClickThemesAddBtn',
@@ -89,7 +88,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   });
                 }}>
                 <Space size={5}>
-                  <FAdd />
+                  <FComponentsLib.FIcons.FAdd />
                   <span>{FI18n.i18nNext.t('btn_add_test_theme')}</span>
                 </Space>
               </FComponentsLib.FTextBtn>
@@ -102,7 +101,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   });
                 }}>
                 <Space size={5}>
-                  <FMappingRuleReplace />
+                  <FComponentsLib.FIcons.FMappingRuleReplace />
                   <span>{FI18n.i18nNext.t('btn_replace_resource')}</span>
                 </Space>
               </FComponentsLib.FTextBtn>
@@ -120,6 +119,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                       },
                     });
                   }}
+                  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
                 />
               </div>
             </Space>
@@ -187,7 +187,7 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                                       // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
                                       title={'存在授权问题'}
                                     >
-                                      <FWarning />
+                                      <FComponentsLib.FIcons.FWarning />
                                     </FTooltip>
                                   }
                                 </div>

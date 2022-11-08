@@ -1,0 +1,201 @@
+.actionContainer {
+  .title {
+    height: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222222;
+    line-height: 24px;
+    margin-right: 20px;
+  }
+  .title2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #222222;
+    line-height: 24px;
+  }
+  .total {
+    height: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e9a923;
+    line-height: 18px;
+    margin-bottom: 20px;
+  }
+  .tip {
+    font-size: 12px;
+    font-weight: 400;
+    color: #000000;
+    margin-right: 10px;
+    line-height: 18px;
+    opacity: 0.6;
+  }
+  .link {
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 400;
+    color: #2784ff;
+    line-height: 18px;
+    &:hover {
+      color: #529dff;
+    }
+    &:active {
+      color: #2376e5;
+    }
+  }
+}
+
+// 详情提示
+.tiptile {
+  font-size: 18px;
+  font-weight: 400;
+  color: #222222;
+  line-height: 25px;
+}
+.text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a869a;
+  line-height: 18px;
+}
+.text1 {
+  height: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222222;
+  line-height: 20px;
+}
+.dot {
+  width: 4px;
+  height: 4px;
+  margin-right: 6px;
+  background: #000000;
+  opacity: 0.2;
+  border-radius: 50%;
+}
+
+// 账户提示
+.accountTitle {
+  font-size: 18px;
+  font-weight: 400;
+  color: #222222;
+  line-height: 25px;
+}
+.middleTip {
+  font-size: 16px;
+  font-weight: 400;
+  color: #666666;
+  line-height: 22px;
+}
+.bottomTip {
+  font-size: 14px;
+  font-weight: 400;
+  color: #999999;
+  line-height: 20px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.keyframes() {
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    50% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes cash {
+    0% {
+      transform: translate(0%);
+    }
+
+    100% {
+      transform: translate(114px);
+      opacity: 0;
+      display: none !important;
+    }
+  }
+  @keyframes star {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale3d(0.3, 0.3, 0.3);
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+    17% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+    68% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+    84% {
+      opacity: 0;
+      -webkit-transform: scale3d(0.3, 0.3, 0.3);
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes zoomOut {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+      -webkit-transform: scale3d(0.3, 0.3, 0.3);
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+//固定模式
+.animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
+  @animation-iteration-count,
+  @animation-direction) {
+  animation: @arguments;
+}
+.keyframes();
+
+.starMove{
+  opacity: 0;
+  .animation(star,2s,linear,1s,1,normal );
+  animation-fill-mode:forwards;
+}
+
+.titleMove{
+  opacity: 0;
+  .animation(slideInUp,1s,linear,1s,1,normal );
+  animation-fill-mode:forwards;
+}
+
+.lightMove {
+  display: block !important;
+  .animation(cash,0.5s,linear,0s,1,normal );
+  animation-fill-mode:forwards;
+}
+
+
+.flight {
+  display: none;
+  width: 6px;
+  margin-right: -10px;
+  top: 14px;
+  left: 0px;
+  border-radius: 2px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.615);
+  height: 16px;
+  z-index: 10;
+}
