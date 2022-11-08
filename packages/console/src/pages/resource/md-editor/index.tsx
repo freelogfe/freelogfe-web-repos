@@ -16,6 +16,10 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
 
+// TODO 授权完成需要删除
+import { Select } from 'antd';
+const { Option } = Select;
+
 export const editorContext = React.createContext<any>({});
 
 /** 编辑器 */
@@ -32,6 +36,13 @@ const MarkdownEditor = () => {
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
   const [promptShow, setPromptShow] = useState(false);
+
+  // TODO 授权完成需要删除
+  const [authorizeType, setAuthorizeType] = useState(1);
+  const changeAuthorizeType = (e: number) => {
+    setAuthorizeType(e);
+    sessionStorage.setItem('authorizeType', String(e));
+  };
 
   /** 输出 markdown */
   const outputMarkdown = () => {
@@ -160,8 +171,32 @@ const MarkdownEditor = () => {
         />
 
         <div className="header">
-          <div className="title" onClick={outputMarkdown}>
+          <div className="title">
             {FI18n.i18nNext.t('title_edit_post')}
+
+            {/* TODO 授权完成需要删除 */}
+            <Select
+              style={{
+                position: 'absolute',
+                width: '200px',
+                top: '93px',
+                left: '120px',
+              }}
+              value={authorizeType}
+              placeholder="请选择模拟的授权状态"
+              onChange={changeAuthorizeType}
+            >
+              {[
+                { value: 1, label: '未签约' },
+                { value: 2, label: '已签约未授权' },
+                { value: 3, label: '已授权' },
+                { value: 4, label: '上抛' },
+              ].map((item) => (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
           </div>
           <div className="article-info">
             <span>

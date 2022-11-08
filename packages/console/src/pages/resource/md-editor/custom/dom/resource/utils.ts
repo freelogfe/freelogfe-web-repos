@@ -17,7 +17,11 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
     version,
   } = data;
   // TODO authType 目前写死，之后需要通过接口获取授权状态
-  const authType = 3;
+  const authType = Number(sessionStorage.getItem('authorizeType') || 1) as
+    | 1
+    | 2
+    | 3
+    | 4;
   const insertData: CustomResource = {
     originType: 1,
     resourceId,
@@ -253,27 +257,27 @@ const getInternalResources = (content: string) => {
   let newContent = content;
   // 储存 md 语法的图片（![]()）
   const mdImgContent = newContent.match(/!\[[^\]]*?]\([^\)]*?\)/gi) || [];
-  // 储存图片内容（<img）
+  // 储存图片（<img）
   const imgContent = newContent.match(/<img[^>]*?>/gi) || [];
-  // 储存视频内容（<video）
+  // 储存视频（<video）
   const videoContent = newContent.match(/<video[^>]*?>/gi) || [];
-  // 储存音频内容（<video）
+  // 储存音频（<video）
   const audioContent = newContent.match(/<audio[^>]*?>/gi) || [];
-  // 储存文档内容（{{}}）
+  // 储存文档（{{}}）
   const docContent = newContent.match(/{{[^}]*?}}/gi) || [];
 
-  // 标记原文本中 md 语法的图片内容
+  // 标记原文本中 md 语法的图片
   newContent = newContent.replace(
     /!\[[^\]]*?]\([^\)]*?\)/gi,
     '`#mdImgContent#`',
   );
-  // 标记原文本中图片内容
+  // 标记原文本中图片
   newContent = newContent.replace(/<img[^>]*?>/gi, '`#imgContent#`');
-  // 标记原文本中视频内容
+  // 标记原文本中视频
   newContent = newContent.replace(/<video[^>]*?>/gi, '`#videoContent#`');
-  // 标记原文本中音频内容
+  // 标记原文本中音频
   newContent = newContent.replace(/<audio[^>]*?>/gi, '`#audioContent#`');
-  // 标记原文本中文档内容
+  // 标记原文本中文档
   newContent = newContent.replace(/{{[^}]*?}}/gi, '`#docContent#`');
 
   return {
@@ -284,6 +288,42 @@ const getInternalResources = (content: string) => {
     docContent,
     newContent,
   };
+};
+
+/** 识别文档内容的依赖 */
+export const getDependences = (content: string) => {
+  // 匹配 md 语法的图片依赖（![]()）
+  const mdImgContent =
+    content.match(/(?<=!\[[^\]]*?]\(freelog:\/\/)[\s\S]*?(?=\))/gi) || [];
+  // 匹配图片依赖（<img）
+  const imgContent =
+    content.match(
+      /(?<=<img[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
+    ) || [];
+  // 匹配视频依赖（<video）
+  const videoContent =
+    content.match(
+      /(?<=<video[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
+    ) || [];
+  // 匹配音频依赖（<video）
+  const audioContent =
+    content.match(
+      /(?<=<audio[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
+    ) || [];
+  // 匹配文档依赖（{{}}）
+  const docContent = content.match(/(?<={{freelog:\/\/)[\s\S]*?(?=}})/gi) || [];
+
+  // 依赖列表（去重）
+  const dependencesList: string[] = [
+    ...new Set([
+      ...mdImgContent,
+      ...imgContent,
+      ...videoContent,
+      ...audioContent,
+      ...docContent,
+    ]),
+  ];
+  console.log(dependencesList);
 };
 
 /**
@@ -323,7 +363,11 @@ const dealInternalResources = async (
       } = resourceRes.data[0];
 
       // TODO authType 目前写死，之后需要通过接口获取授权状态
-      data.authType = 3;
+      data.authType = Number(sessionStorage.getItem('authorizeType') || 1) as
+        | 1
+        | 2
+        | 3
+        | 4;
       data.originType = 1;
       data.resourceId = resourceId;
       data.resourceName = resourceName;

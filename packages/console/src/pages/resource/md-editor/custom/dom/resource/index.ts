@@ -48,7 +48,6 @@ const resourceToHtml = (data: CustomResource): string => {
 };
 
 /** 将 HTML 渲染为 DOM */
-/** TODO: 不接受异步，目前方案是在 setHtml 前将数据整理好，将数据写入标签 data */
 const htmlToResource = (domElem: Element): SlateElement => {
   const originType = domElem.getAttribute('data-originType') || '';
   const resourceId = domElem.getAttribute('data-resourceId') || '';
