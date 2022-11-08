@@ -14,11 +14,13 @@ import {
 import {
   ChangeAction,
   OnClickCacheBtnAction,
-  OnClickCreateBtnAction, OnDelete_ObjectFile_Action,
+  OnClickCreateBtnAction,
+  OnDelete_ObjectFile_Action,
   OnMountPageAction,
   OnPromptPageLeaveAction,
   OnPromptPageLeaveCancelAction,
-  OnPromptPageLeaveConfirmAction, OnSuccess_ObjectFile_Action,
+  OnPromptPageLeaveConfirmAction,
+  OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -36,19 +38,21 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
+import { MarkdownEditor } from '@/pages/resource/md-editor';
 
-interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
+interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
-  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState,
-  resourceInfo: ResourceInfoModelState,
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
+  resourceInfo: ResourceInfoModelState;
 }
 
 function VersionCreator({
-                          dispatch,
-                          resourceInfo,
-                          resourceVersionCreatorPage,
-                          match,
-                        }: VersionCreatorProps) {
+  dispatch,
+  resourceInfo,
+  resourceVersionCreatorPage,
+  match,
+}: VersionCreatorProps) {
+  const [show, setShow] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -73,7 +77,6 @@ function VersionCreator({
     } else {
       window.onbeforeunload = null;
     }
-
   }, [resourceVersionCreatorPage.dataIsDirty]);
 
   async function onChange(payload: ChangeAction['payload']) {
@@ -86,22 +89,51 @@ function VersionCreator({
 
   const hasError: boolean =
     // 版本
-    !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
+    !resourceVersionCreatorPage.version ||
+    !!resourceVersionCreatorPage.versionErrorText ||
     // 选择的文件对象
-    || !resourceVersionCreatorPage.selectedFileInfo
-    || resourceVersionCreatorPage.rawPropertiesState !== 'success'
+    !resourceVersionCreatorPage.selectedFileInfo ||
+    resourceVersionCreatorPage.rawPropertiesState !== 'success' ||
     // 依赖
-    || resourceVersionCreatorPage.dependencies.some((dd) => {
-      return !dd.upthrow && !dd.enableReuseContracts.some((erc) => erc.checked) && !dd.enabledPolicies.some((ep) => ep.checked);
+    resourceVersionCreatorPage.dependencies.some((dd) => {
+      return (
+        !dd.upthrow &&
+        !dd.enableReuseContracts.some((erc) => erc.checked) &&
+        !dd.enabledPolicies.some((ep) => ep.checked)
+      );
     });
 
-  return (<>
+  return (
+    <>
+      <MarkdownEditor
+        show={show}
+        close={() => {
+          setShow(false);
+          document.body.style.overflowY = 'auto';
+        }}
+      />
+
+      <div
+        style={{ position: 'absolute', left: '300px', top: '80px' }}
+        onClick={() => {
+          setShow(true);
+          document.body.style.overflowY = 'hidden';
+        }}
+      >
+        打开编辑器
+      </div>
+
       <Helmet>
-        <title>{`创建版本 · ${resourceInfo.info?.resourceName || ''}  - Freelog`}</title>
+        <title>{`创建版本 · ${
+          resourceInfo.info?.resourceName || ''
+        }  - Freelog`}</title>
       </Helmet>
 
       <Prompt
-        when={resourceVersionCreatorPage.promptLeavePath === '' && resourceVersionCreatorPage.dataIsDirty}
+        when={
+          resourceVersionCreatorPage.promptLeavePath === '' &&
+          resourceVersionCreatorPage.dataIsDirty
+        }
         message={(location: H.Location, action: H.Action) => {
           // console.log(location, action, 'LAAAAL');
           // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
@@ -132,20 +164,22 @@ function VersionCreator({
       />
       <FLeftSiderLayout
         sider={<Sider />}
-        header={<Header
-          onClickCreate={() => {
-            // window.onbeforeunload = null;
-            dispatch<OnClickCreateBtnAction>({
-              type: 'resourceVersionCreatorPage/onClickCreateBtn',
-            });
-          }}
-          onClickCache={() => {
-            dispatch<OnClickCacheBtnAction>({
-              type: 'resourceVersionCreatorPage/onClickCacheBtn',
-            });
-          }}
-          disabledCreate={hasError}
-        />}
+        header={
+          <Header
+            onClickCreate={() => {
+              // window.onbeforeunload = null;
+              dispatch<OnClickCreateBtnAction>({
+                type: 'resourceVersionCreatorPage/onClickCreateBtn',
+              });
+            }}
+            onClickCache={() => {
+              dispatch<OnClickCacheBtnAction>({
+                type: 'resourceVersionCreatorPage/onClickCacheBtn',
+              });
+            }}
+            disabledCreate={hasError}
+          />
+        }
       >
         <FFormLayout>
           <FFormLayout.FBlock
@@ -175,7 +209,10 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={true} title={FI18n.i18nNext.t('release_object')}>
+          <FFormLayout.FBlock
+            dot={true}
+            title={FI18n.i18nNext.t('release_object')}
+          >
             <FPublishObjectFile
               fileInfo={resourceVersionCreatorPage.selectedFileInfo}
               onSucceed_UploadFile={(file) => {
@@ -215,7 +252,10 @@ function VersionCreator({
             <FDepPanel />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('version_description')}>
+          <FFormLayout.FBlock
+            dot={false}
+            title={FI18n.i18nNext.t('version_description')}
+          >
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
               onChange={(value: EditorState) => {
@@ -242,30 +282,39 @@ interface HeaderProps {
   disabledCreate?: boolean;
 }
 
-function Header({ onClickCache, onClickCreate, disabledCreate = false }: HeaderProps) {
-  return (<div className={styles.Header}>
-    {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-    <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
+function Header({
+  onClickCache,
+  onClickCreate,
+  disabledCreate = false,
+}: HeaderProps) {
+  return (
+    <div className={styles.Header}>
+      {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
+      <FComponentsLib.FTitleText text={'创建版本'} type="h1" />
 
-    <Space size={30}>
-      <FComponentsLib.FTextBtn
-        type='default'
-        onClick={onClickCache}
-      >{FI18n.i18nNext.t('save_as_draft')}</FComponentsLib.FTextBtn>
-      <FComponentsLib.FRectBtn
-        style={{ display: 'flex', alignItems: 'center' }}
-        onClick={onClickCreate}
-        disabled={disabledCreate}
-      >
-        <FComponentsLib.FIcons.FPaperPlane style={{ fontWeight: 400, fontSize: 16 }} />
-        <div style={{ width: 5 }} />
-        {FI18n.i18nNext.t('release_to_market')}
-      </FComponentsLib.FRectBtn>
-    </Space>
-  </div>);
+      <Space size={30}>
+        <FComponentsLib.FTextBtn type="default" onClick={onClickCache}>
+          {FI18n.i18nNext.t('save_as_draft')}
+        </FComponentsLib.FTextBtn>
+        <FComponentsLib.FRectBtn
+          style={{ display: 'flex', alignItems: 'center' }}
+          onClick={onClickCreate}
+          disabled={disabledCreate}
+        >
+          <FComponentsLib.FIcons.FPaperPlane
+            style={{ fontWeight: 400, fontSize: 16 }}
+          />
+          <div style={{ width: 5 }} />
+          {FI18n.i18nNext.t('release_to_market')}
+        </FComponentsLib.FRectBtn>
+      </Space>
+    </div>
+  );
 }
 
-export default withRouter(connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
-  resourceVersionCreatorPage: resourceVersionCreatorPage,
-  resourceInfo: resourceInfo,
-}))(VersionCreator));
+export default withRouter(
+  connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
+    resourceVersionCreatorPage: resourceVersionCreatorPage,
+    resourceInfo: resourceInfo,
+  }))(VersionCreator),
+);

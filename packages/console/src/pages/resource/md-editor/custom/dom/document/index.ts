@@ -11,7 +11,7 @@ const DocumentAuthStatus = (data: CustomResource): VNode => {
   if (!data.authType) {
     return h('div');
   }
-  
+
   const authStatusMapping = {
     1: h('div.document-auth', {}, [
       h('i.freelog fl-icon-suoding', {
@@ -62,17 +62,10 @@ export const DocumentResource = (data: CustomResource): VNode => {
   const authorizedDocment = h('div.authorized-document', {}, [
     ResourceToolbar(data),
     // 文档
-    h('div.document-area', {}, [h('div#docContent')]),
+    h('div.document-area', { props: { innerHTML: data.content } }, [
+      h('div#docContent'),
+    ]),
   ]);
-
-  if (data.authType === 3) {
-    // 已授权通过，渲染文档 html
-    setTimeout(() => {
-      const docContent = document.getElementById('docContent');
-      if (!docContent) return;
-      docContent.innerHTML = data.content;
-    }, 0);
-  }
 
   return data.authType === 3 ? authorizedDocment : unauthorizedDocument;
 };

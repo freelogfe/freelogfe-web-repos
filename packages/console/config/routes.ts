@@ -58,7 +58,6 @@ export default [
           { exact: true, path: 'details/:id', component: '../pages/resource/details/$id', title: '市场资源 - Freelog' },
           { exact: true, path: 'info/:id', component: '../pages/resource/info/$id', title: '资源信息 - Freelog' },
           { exact: true, path: 'auth/:id', component: '../pages/resource/auth/$id', title: '授权信息 - Freelog' },
-          { exact: true, path: 'md-editor', component: '../pages/resource/md-editor', title: '编辑文章 - Freelog' },
           {
             path: 'version',
             routes: [

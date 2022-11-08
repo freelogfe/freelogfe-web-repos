@@ -20,10 +20,17 @@ import { formatDate } from './core/common';
 import { Select } from 'antd';
 const { Option } = Select;
 
+interface EditorProps {
+  show: boolean;
+  close: () => void;
+}
+
 export const editorContext = React.createContext<any>({});
 
 /** 编辑器 */
-const MarkdownEditor = () => {
+export const MarkdownEditor = (props: EditorProps) => {
+  const { show, close } = props;
+
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
 
@@ -43,6 +50,10 @@ const MarkdownEditor = () => {
     setAuthorizeType(e);
     sessionStorage.setItem('authorizeType', String(e));
   };
+  useEffect(() => {
+    const type = sessionStorage.getItem('authorizeType') || 1;
+    setAuthorizeType(Number(type));
+  }, []);
 
   /** 输出 markdown */
   const outputMarkdown = () => {
@@ -52,7 +63,7 @@ const MarkdownEditor = () => {
 
   /** 退出 */
   const exit = () => {
-    console.error('退出');
+    close();
   };
 
   /** 保存 */
@@ -152,7 +163,7 @@ const MarkdownEditor = () => {
 
   return (
     <editorContext.Provider value={{ editor }}>
-      <div className="markdown-editor-wrapper">
+      <div className={`markdown-editor-wrapper ${show && 'show'}`}>
         <Prompt
           when={!promptShow && edited}
           message={(location: any) => {
@@ -179,7 +190,7 @@ const MarkdownEditor = () => {
               style={{
                 position: 'absolute',
                 width: '200px',
-                top: '93px',
+                top: '23px',
                 left: '120px',
               }}
               value={authorizeType}
