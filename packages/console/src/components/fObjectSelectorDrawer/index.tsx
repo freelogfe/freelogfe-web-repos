@@ -15,9 +15,6 @@ function fObjectSelectorDrawer({}: fObjectSelectorDrawerProps = {}): Promise<Ret
     return root.render((<FObjectSelectorDrawer
       onSelect={(obj) => {
         resolve(obj);
-        setTimeout(() => {
-          root.unmount();
-        }, 300);
       }}
       onClose={() => {
         resolve(null);
