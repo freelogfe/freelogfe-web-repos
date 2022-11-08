@@ -546,19 +546,64 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * onSuccess_ObjectFile({ payload }: OnSuccess_ObjectFile_Action, { put }: EffectsCommandMap) {
+    * onSuccess_ObjectFile({ payload }: OnSuccess_ObjectFile_Action, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           selectedFileInfo: payload,
         },
       });
+
+      const {error, result } = yield call(getFilesSha1Info, {
+        sha1: [payload.sha1],
+      });
+
+      // console.log(result, 'result90iojwesflksdjflksdjl');
+
+      if (error !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+        return fMessage(error, 'error');
+      }
+
+      if (result[0].state === 'fail') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
+        });
+        return fMessage('文件解析失败', 'error');
+      }
+
+      if (result[0].state === 'success') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+              return {
+                key: rp[0],
+                // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+              };
+            }),
+            rawPropertiesState: 'success',
+          },
+        });
+      }
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           selectedFileInfo: null,
+          rawProperties: [],
         },
       });
     },

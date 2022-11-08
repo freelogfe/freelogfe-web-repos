@@ -40,7 +40,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
   return (<>
     {
-      resourceVersionCreatorPage.selectedFileStatus === -3 && (<>
+      !!resourceVersionCreatorPage.selectedFileInfo && (<>
         <div style={{ height: 5 }} />
         <FBaseProperties
           basics={resourceVersionCreatorPage.rawProperties}

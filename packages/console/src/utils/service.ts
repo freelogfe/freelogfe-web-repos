@@ -65,7 +65,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
         } else if (d.metaAnalyzeStatus === 3) {
           state = 'fail';
         }
-        console.log(d, '90wieojiksdjf;lkasdjf;lksdjflksjdflkjsdlfkjsdlkj');
+        // console.log(d, '90wieojiksdjf;lkasdjf;lksdjflksjdflkjsdlfkjsdlkj');
         return {
           sha1: d.sha1,
           state,

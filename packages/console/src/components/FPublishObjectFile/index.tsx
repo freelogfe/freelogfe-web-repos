@@ -36,7 +36,7 @@ interface FPublishObjectFileStates {
     sha1: string;
     from: string;
   } | null;
-  fState: 'unsuccessful' | 'uploading' | 'succeeded';
+  fState: 'unsuccessful' | 'parsing' | 'uploading' | 'succeeded';
   fUploadedError: '' | 'unexpectedSize' | 'selfTakeUp' | 'othersTakeUp';
   fUsedResource: {
     resourceID: string;
@@ -91,12 +91,28 @@ function FPublishObjectFile({
     }
   }, [fileInfo]);
 
+  function resetData() {
+    set_fInfo(null);
+    set_fState('unsuccessful');
+    set_fUploadedError('');
+    set_fUsedResource([]);
+    set_fUploadingProgress(0);
+  }
+
   async function onUploadFilesLocally(file: RcFile) {
     if (file.size > 200 * 1024 * 1024) {
       set_fState('unsuccessful');
       set_fUploadedError('unexpectedSize');
       return;
     }
+
+    set_fState('parsing');
+    set_fUploadedError('');
+    set_fInfo({
+      sha1: '',
+      name: file.name,
+      from: '本地上传',
+    });
 
     const sha1: string = await FUtil.Tool.getSHA1Hash(file);
     const { data: data_fileIssExists }: any = await FServiceAPI.Storage.fileIsExist({ sha1 });
@@ -247,6 +263,33 @@ function FPublishObjectFile({
     }
   }
 
+  if (fState === 'parsing' && fInfo) {
+    return ((<div className={styles.styles}>
+      <div className={styles.card}>
+        <img src={img} className={styles.img} alt='' />
+        <div style={{ width: 20 }} />
+        <div>
+          <FComponentsLib.FContentText
+            type='highlight'
+            text={fInfo.name}
+          />
+          <div style={{ height: 18 }} />
+          <div className={styles.info}>
+            <FComponentsLib.FContentText
+              className={styles.infoSize}
+              type='additional1'
+              text={fInfo.from}
+            />
+          </div>
+        </div>
+      </div>
+      <FComponentsLib.FContentText
+        type={'additional1'}
+        // className={styles.delete}
+      >正在解析...</FComponentsLib.FContentText>
+    </div>));
+  }
+
   if (fState === 'succeeded' && fileInfo) {
     return ((<div className={styles.styles}>
       <div className={styles.card}>
@@ -303,8 +346,10 @@ function FPublishObjectFile({
       </div>
       <FComponentsLib.FTextBtn
         type='danger'
-        // onClick={() => onClickDelete && onClickDelete()}
-        // className={styles.delete}
+        onClick={() => {
+          uploadCancelHandler.current && uploadCancelHandler.current();
+          resetData();
+        }}
       >{FI18n.i18nNext.t('cancel_uploading')}</FComponentsLib.FTextBtn>
     </div>));
   }
