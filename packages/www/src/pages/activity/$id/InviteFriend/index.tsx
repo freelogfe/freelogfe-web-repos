@@ -112,14 +112,26 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
     let userInfo = { data: {} };
     userInfo =
       userID > -1 ? await FServiceAPI.User.currentUserInfo() : userInfo;
-    console.log(userInfo);
+    // console.log(userInfo);
+    // setUserData({
+    //   userInfo: userInfo.data,
+    //   ...res.data,
+    //   textCopy: `邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
+    // \n邀请码${
+    //     ' ' + res.data.code + ' '
+    //   }\n\n 前往Freelog注册：https://www.freelog.com/`,
+    // });
     setUserData({
       userInfo: userInfo.data,
       ...res.data,
-      textCopy: `邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
-    \n邀请码${
-        ' ' + res.data.code + ' '
-      }\n\n 前往Freelog注册：https://www.freelog.com/`,
+      textCopy: `邀你一起参与Freelog内测啦！Freelog，国内首家基于智能合约的资源自动化交易平台，参与内测至少可领【61元】现金奖励，发布小说、漫画等资源还可赢取【2000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
+
+
+前往Freelog注册：https://www.freelog.com/
+
+
+邀请码：${res.data.code}
+`,
     });
   }
 
@@ -179,7 +191,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 >
                   Freelog内测玩法指南
                 </a>
-                <span className='tip'>(至少可领58元现金奖励哦!)</span>
+                <span className='tip'>(至少可领61元现金奖励哦!)</span>
               </div>
             </div>
           </div>

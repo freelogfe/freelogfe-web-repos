@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import img_Cartoon1 from '@/assets/activity/cartoon1@2x.png';
-import img_Cartoon2 from '@/assets/activity/cartoon2@2x.png';
-import img_Cartoon3 from '@/assets/activity/cartoon3@2x.png';
-import img_Cartoon4 from '@/assets/activity/cartoon4@2x.png';
-import img_Novel1 from '@/assets/activity/novel1@2x.png';
-import img_Novel2 from '@/assets/activity/novel2@2x.png';
-import img_Novel3 from '@/assets/activity/novel3@2x.png';
-import img_Novel4 from '@/assets/activity/novel4@2x.png';
+import img_Cartoon1 from '@/assets/activity/cartoon1.png';
+import img_Cartoon2 from '@/assets/activity/cartoon2.png';
+import img_Cartoon3 from '@/assets/activity/cartoon3.png';
+import img_Cartoon4 from '@/assets/activity/cartoon4.png';
+import img_Novel1 from '@/assets/activity/novel1.png';
+import img_Novel2 from '@/assets/activity/novel2.png';
+import img_Novel3 from '@/assets/activity/novel3.png';
+import img_Novel4 from '@/assets/activity/novel4.png';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
@@ -99,31 +99,31 @@ const initStates: ActivityStates = {
     {
       id: 'cartoon1',
       img: img_Cartoon1,
-      description: 'ワンパンマン_ONE PUNCH-MAN',
+      description: '宅家一天',
     },
     {
       id: 'cartoon2',
       img: img_Cartoon2,
-      description: '刺客伍六七',
+      description: '病毒退散',
     },
     {
       id: 'cartoon3',
       img: img_Cartoon3,
-      description: '国王排名 王様ランキング',
+      description: '活着真好',
     },
     {
       id: 'cartoon4',
       img: img_Cartoon4,
-      description: '鬼滅の刃（鬼灭之刃）',
+      description: '新的世界',
     },
   ],
   display_Cartoon_Css: [...css1],
   display_Cartoon_Index: 0,
   display_Novel: [
-    { id: 'novel1', img: img_Novel1, description: '五极异域' },
-    { id: 'novel2', img: img_Novel2, description: '你躲在时间门外' },
-    { id: 'novel3', img: img_Novel3, description: '渡心劫' },
-    { id: 'novel4', img: img_Novel4, description: '盗墓笔记' },
+    { id: 'novel1', img: img_Novel1, description: '红楼梦' },
+    { id: 'novel2', img: img_Novel2, description: '三国演义' },
+    { id: 'novel3', img: img_Novel3, description: '水浒传' },
+    { id: 'novel4', img: img_Novel4, description: '西游记' },
   ],
   display_Novel_Css: [...css2],
   display_Novel_Index: 0,
