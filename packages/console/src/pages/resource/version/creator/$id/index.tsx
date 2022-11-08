@@ -179,7 +179,7 @@ function VersionCreator({
             <FPublishObjectFile
               fileInfo={resourceVersionCreatorPage.selectedFileInfo}
               onSucceed_UploadFile={(file) => {
-                console.log(file, 'onSucceed_UploadFile390oisjdf');
+                // console.log(file, 'onSucceed_UploadFile390oisjdf');
                 dispatch<OnSuccess_ObjectFile_Action>({
                   type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
                   payload: {
