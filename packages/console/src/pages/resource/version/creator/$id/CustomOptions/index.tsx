@@ -75,7 +75,22 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
                   ],
                 });
-                console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                if (!dataSource) {
+                  return;
+                }
+                onChange({
+                  baseProperties: [
+                    ...resourceVersionCreatorPage.baseProperties,
+                    ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                      return {
+                        key: ds.key,
+                        value: ds.value,
+                        description: ds.description,
+                      };
+                    }),
+                  ],
+                });
               }}
             >补充属性</FComponentsLib.FTextBtn>
             {
@@ -233,42 +248,42 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       </>)
     }
 
-    <FBasePropsEditorDrawer
-      visible={resourceVersionCreatorPage.basePropertiesEditorVisible}
-      dataSource={resourceVersionCreatorPage.basePropertiesEditorData}
-      disabledKeys={[
-        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-      ]}
-      onChange={(value) => {
-        onChange({
-          basePropertiesEditorData: value,
-        });
-      }}
-      onCancel={() => {
-        onChange({
-          basePropertiesEditorData: [],
-          basePropertiesEditorVisible: false,
-        });
-      }}
-      onConfirm={() => {
-        onChange({
-          basePropertiesEditorData: [],
-          basePropertiesEditorVisible: false,
-          baseProperties: [
-            ...resourceVersionCreatorPage.baseProperties,
-            ...resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
-              return {
-                key: bped.key,
-                value: bped.value,
-                description: bped.description,
-              };
-            }),
-          ],
-        });
-      }}
-    />
+    {/*<FBasePropsEditorDrawer*/}
+    {/*  visible={resourceVersionCreatorPage.basePropertiesEditorVisible}*/}
+    {/*  dataSource={resourceVersionCreatorPage.basePropertiesEditorData}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),*/}
+    {/*    ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),*/}
+    {/*  ]}*/}
+    {/*  onChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: value,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: [],*/}
+    {/*      basePropertiesEditorVisible: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: [],*/}
+    {/*      basePropertiesEditorVisible: false,*/}
+    {/*      baseProperties: [*/}
+    {/*        ...resourceVersionCreatorPage.baseProperties,*/}
+    {/*        ...resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {*/}
+    {/*          return {*/}
+    {/*            key: bped.key,*/}
+    {/*            value: bped.value,*/}
+    {/*            description: bped.description,*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      ],*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
     <FBasePropEditorDrawer
       usedKeys={[
