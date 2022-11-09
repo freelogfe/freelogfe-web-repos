@@ -9,7 +9,7 @@ import img_Novel1 from '@/assets/activity/novel1.jpg';
 import img_Novel2 from '@/assets/activity/novel2.jpg';
 import img_Novel3 from '@/assets/activity/novel3.jpg';
 import img_Novel4 from '@/assets/activity/novel4.jpg';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
@@ -217,7 +217,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           set_Delay(undefined);
         }}
         onMouseLeave={() => {
-          set_Delay(5000);
+          set_Delay(2000);
         }}
         className={styles.participation_Display}
       >
@@ -228,9 +228,11 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
                 className={styles.participation_Display_Cover}
                 style={{ ...display_Cartoon_Css[i] }}
                 key={d.id}
-                onClick={() => {
-                  onClick_Display_Cartoon(i);
-                }}
+                // onClick={() => {
+                //   // onClick_Display_Cartoon(i);
+                // }}
+                href={FI18n.i18nNext.t('flnode_comics_addr')}
+                target={'_blank'}
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
@@ -250,7 +252,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           set_Delay(undefined);
         }}
         onMouseLeave={() => {
-          set_Delay(5000);
+          set_Delay(2000);
         }}
         className={styles.participation_Display}
       >
@@ -261,9 +263,11 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
                 className={styles.participation_Display_Cover}
                 style={{ ...display_Novel_Css[i] }}
                 key={d.id}
-                onClick={() => {
-                  onClick_Display_Novel(i);
-                }}
+                // onClick={() => {
+                //   // onClick_Display_Novel(i);
+                // }}
+                href={FI18n.i18nNext.t('flnode_reading_addr')}
+                target={'_blank'}
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
