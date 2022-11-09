@@ -363,71 +363,71 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     {/*  }}*/}
     {/*/>*/}
 
-    <FBasePropEditorDrawer
-      usedKeys={[
-        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.filter((bp, ind) => ind !== resourceVersionCreatorPage.basePropertyEditorIndex).map((bp) => {
-          return bp.key;
-        }),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-      ]}
-      visible={resourceVersionCreatorPage.basePropertyEditorIndex > -1}
-      keyInput={resourceVersionCreatorPage.basePropertyEditorData?.key || ''}
-      keyInputError={resourceVersionCreatorPage.basePropertyEditorData?.keyError || ''}
-      valueInput={resourceVersionCreatorPage.basePropertyEditorData?.value || ''}
-      valueInputError={resourceVersionCreatorPage.basePropertyEditorData?.valueError || ''}
-      descriptionInput={resourceVersionCreatorPage.basePropertyEditorData?.description || ''}
-      descriptionInputError={resourceVersionCreatorPage.basePropertyEditorData?.descriptionError || ''}
-      onCancel={() => {
-        onChange({
-          basePropertyEditorIndex: -1,
-          basePropertyEditorData: null,
-        });
-      }}
-      onConfirm={() => {
-        onChange({
-          baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, ind) => {
-            if (ind !== resourceVersionCreatorPage.basePropertyEditorIndex) {
-              return bp;
-            }
-            return {
-              key: resourceVersionCreatorPage.basePropertyEditorData?.key || '',
-              value: resourceVersionCreatorPage.basePropertyEditorData?.value || '',
-              description: resourceVersionCreatorPage.basePropertyEditorData?.description || '',
-            };
-          }),
-          basePropertyEditorIndex: -1,
-          basePropertyEditorData: null,
-        });
-      }}
-      onKeyInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {
-            ...resourceVersionCreatorPage.basePropertyEditorData,
-            key: value.value,
-            keyError: value.errorText,
-          } : null,
-        });
-      }}
-      onValueInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {
-            ...resourceVersionCreatorPage.basePropertyEditorData,
-            value: value.value,
-            valueError: value.errorText,
-          } : null,
-        });
-      }}
-      onDescriptionInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {
-            ...resourceVersionCreatorPage.basePropertyEditorData,
-            description: value.value,
-            descriptionError: value.errorText,
-          } : null,
-        });
-      }}
-    />
+    {/*<FBasePropEditorDrawer*/}
+    {/*  usedKeys={[*/}
+    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...resourceVersionCreatorPage.baseProperties.filter((bp, ind) => ind !== resourceVersionCreatorPage.basePropertyEditorIndex).map((bp) => {*/}
+    {/*      return bp.key;*/}
+    {/*    }),*/}
+    {/*    ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),*/}
+    {/*  ]}*/}
+    {/*  visible={resourceVersionCreatorPage.basePropertyEditorIndex > -1}*/}
+    {/*  keyInput={resourceVersionCreatorPage.basePropertyEditorData?.key || ''}*/}
+    {/*  keyInputError={resourceVersionCreatorPage.basePropertyEditorData?.keyError || ''}*/}
+    {/*  valueInput={resourceVersionCreatorPage.basePropertyEditorData?.value || ''}*/}
+    {/*  valueInputError={resourceVersionCreatorPage.basePropertyEditorData?.valueError || ''}*/}
+    {/*  descriptionInput={resourceVersionCreatorPage.basePropertyEditorData?.description || ''}*/}
+    {/*  descriptionInputError={resourceVersionCreatorPage.basePropertyEditorData?.descriptionError || ''}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorIndex: -1,*/}
+    {/*      basePropertyEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={() => {*/}
+    {/*    onChange({*/}
+    {/*      baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, ind) => {*/}
+    {/*        if (ind !== resourceVersionCreatorPage.basePropertyEditorIndex) {*/}
+    {/*          return bp;*/}
+    {/*        }*/}
+    {/*        return {*/}
+    {/*          key: resourceVersionCreatorPage.basePropertyEditorData?.key || '',*/}
+    {/*          value: resourceVersionCreatorPage.basePropertyEditorData?.value || '',*/}
+    {/*          description: resourceVersionCreatorPage.basePropertyEditorData?.description || '',*/}
+    {/*        };*/}
+    {/*      }),*/}
+    {/*      basePropertyEditorIndex: -1,*/}
+    {/*      basePropertyEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onKeyInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {*/}
+    {/*        ...resourceVersionCreatorPage.basePropertyEditorData,*/}
+    {/*        key: value.value,*/}
+    {/*        keyError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onValueInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {*/}
+    {/*        ...resourceVersionCreatorPage.basePropertyEditorData,*/}
+    {/*        value: value.value,*/}
+    {/*        valueError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onDescriptionInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: resourceVersionCreatorPage.basePropertyEditorData ? {*/}
+    {/*        ...resourceVersionCreatorPage.basePropertyEditorData,*/}
+    {/*        description: value.value,*/}
+    {/*        descriptionError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
     <FCustomOptionsEditorDrawer
       visible={resourceVersionCreatorPage.customOptionsEditorVisible}
