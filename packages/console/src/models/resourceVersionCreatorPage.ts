@@ -12,6 +12,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
+import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 export type DepResources = {
   id: string;
@@ -94,24 +95,24 @@ export interface ResourceVersionCreatorPageModelState {
     value: string;
     description: string;
   }[];
-  basePropertiesEditorVisible: boolean;
-  basePropertiesEditorData: {
-    key: string;
-    keyError: string;
-    value: string;
-    valueError: string;
-    description: string;
-    descriptionError: string;
-  }[];
-  basePropertyEditorIndex: number;
-  basePropertyEditorData: {
-    key: string;
-    keyError: string;
-    value: string;
-    valueError: string;
-    description: string;
-    descriptionError: string;
-  } | null;
+  // basePropertiesEditorVisible: boolean;
+  // basePropertiesEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   value: string;
+  //   valueError: string;
+  //   description: string;
+  //   descriptionError: string;
+  // }[];
+  // basePropertyEditorIndex: number;
+  // basePropertyEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   value: string;
+  //   valueError: string;
+  //   description: string;
+  //   descriptionError: string;
+  // } | null;
 
   customOptionsDataVisible: boolean;
   customOptionsData: {
@@ -256,10 +257,10 @@ export interface AddDepsByMainIDsAction extends AnyAction {
   payload: string[]; // 主资源 ids
 }
 
-export interface HandleObjectInfoAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/handleObjectInfo';
-  payload: string; // 对象 id
-}
+// export interface HandleObjectInfoAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/handleObjectInfo';
+//   payload: string; // 对象 id
+// }
 
 export interface DeleteDependencyByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/deleteDependencyByID';
@@ -290,7 +291,7 @@ export interface ResourceVersionCreatorModelType {
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
-    handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
+    // handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     dddDepsByMainIDs: (action: AddDepsByMainIDsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
@@ -319,10 +320,10 @@ const initStates: ResourceVersionCreatorPageModelState = {
   rawPropertiesState: 'success',
 
   baseProperties: [],
-  basePropertiesEditorVisible: false,
-  basePropertiesEditorData: [],
-  basePropertyEditorIndex: -1,
-  basePropertyEditorData: null,
+  // basePropertiesEditorVisible: false,
+  // basePropertiesEditorData: [],
+  // basePropertyEditorIndex: -1,
+  // basePropertyEditorData: null,
 
   customOptionsDataVisible: false,
   customOptionsData: [],
@@ -554,7 +555,7 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      const {error, result } = yield call(getFilesSha1Info, {
+      const { error, result } = yield call(getFilesSha1Info, {
         sha1: [payload.sha1],
       });
 
@@ -1026,160 +1027,160 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * handleObjectInfo({ payload }: HandleObjectInfoAction, { select, put, call }: EffectsCommandMap) {
-      // console.log(payload, '!!!@@@#$@#$#$');
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
-        objectIdOrName: payload,
-      };
-      const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
-      // console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
-
-      // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-      //   sha1: data.sha1,
-      //   // resourceType: resourceVersionCreatorPage.resourceType,
-      // };
-      //
-      // const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
-      // console.log(data4, '@#@#@#@#@#@##@$@#$data4');
-      // if (!data4) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       selectedFileStatus: 2,
-      //     },
-      //   });
-      // } else {
-      const params4: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: data.sha1,
-      };
-      const data4: any[] = yield call(getFilesSha1Info, params4);
-      // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-            // console.log(rp, 'rprprprprpyu2341234');
-            return {
-              key: rp[0],
-              // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-              value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-            };
-          }),
-          baseProperties: (data.customPropertyDescriptors as any[])
-            .filter((cpd: any) => cpd.type === 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
-              return {
-                key: cpd.key,
-                value: cpd.defaultValue,
-                description: cpd.remark,
-              };
-            }),
-          customOptionsData: (data.customPropertyDescriptors as any[])
-            .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
-              return {
-                key: cpd.key,
-                // keyError: '',
-                description: cpd.remark,
-                // descriptionError: '',
-                custom: cpd.type === 'editableText' ? 'input' : 'select',
-                defaultValue: cpd.defaultValue,
-                // defaultValueError: '',
-                customOption: cpd.candidateItems.join(','),
-                // customOptionError: '',
-              };
-            }),
-        },
-      });
-      // }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          depRelationship: [],
-          dependencies: [],
-        },
-        caller: '972^&YUGJHGHJ93874823yu4oi234io23hjkfdsasdf',
-      });
-
-      const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
-      // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
-
-      if (depResources.length > 0) {
-
-        const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-          resourceNames: depResources.map<string>((dr) => dr.name).join(','),
-        };
-        const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
-        // console.log(data2, '#ASGDFASDF');
-        const relations = data2.map((dd: any) => {
-          return {
-            id: dd.resourceId,
-            children: dd.baseUpcastResources.map((bur: any) => {
-              return {
-                id: bur.resourceId,
-              };
-            }),
-          };
-        });
-
-        const versions = depResources.map((dr) => {
-          const resource = data2.find((d2: any) => d2.resourceName);
-          return {
-            id: resource.resourceId,
-            versionRange: dr.versionRange,
-          };
-        });
-
-        yield put<AddDepsAction>({
-          type: 'addDeps',
-          payload: {
-            relationships: relations,
-            versions: versions,
-          },
-        });
-      }
-
-      const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
-      // console.log(depObjects, '9023jlkdfsj');
-      if (depObjects.length > 0) {
-        const allDepObjects: ResourceVersionCreatorPageModelState['dependencies'] = depObjects.map((dpo: any) => {
-          // console.log(dpo, 'dpo!@#$@#$!$@#$!@#$');
-          return {
-            id: dpo.name,
-            title: dpo.name,
-            resourceType: [],
-            status: 3,
-            error: 'storageObject',
-            warning: '',
-            versionRange: '',
-            versions: [],
-            upthrow: false,
-            upthrowDisabled: true,
-            authProblem: false,
-            enableReuseContracts: [],
-            terminatedContractIDs: [],
-            enabledPolicies: [],
-          };
-        });
-        const allRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = allDepObjects.map((oo) => {
-          return { id: oo.id, children: [] };
-        });
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            dependencies: allDepObjects,
-            depRelationship: allRelationship,
-          },
-          caller: '97293^%^$^%$$874823yu4oi234io23hjkfdsasdf',
-        });
-      }
-    },
+    // * handleObjectInfo({ payload }: HandleObjectInfoAction, { select, put, call }: EffectsCommandMap) {
+    //   // console.log(payload, '!!!@@@#$@#$#$');
+    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //
+    //   const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+    //     objectIdOrName: payload,
+    //   };
+    //   const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
+    //   // console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
+    //
+    //   // const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
+    //   //   sha1: data.sha1,
+    //   //   // resourceType: resourceVersionCreatorPage.resourceType,
+    //   // };
+    //   //
+    //   // const { data: data4 } = yield call(FServiceAPI.Storage.fileProperty, params4);
+    //   // console.log(data4, '@#@#@#@#@#@##@$@#$data4');
+    //   // if (!data4) {
+    //   //   yield put<ChangeAction>({
+    //   //     type: 'change',
+    //   //     payload: {
+    //   //       selectedFileStatus: 2,
+    //   //     },
+    //   //   });
+    //   // } else {
+    //   const params4: Parameters<typeof getFilesSha1Info>[0] = {
+    //     sha1: data.sha1,
+    //   };
+    //   const data4: any[] = yield call(getFilesSha1Info, params4);
+    //   // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+    //         // console.log(rp, 'rprprprprpyu2341234');
+    //         return {
+    //           key: rp[0],
+    //           // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+    //           value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+    //         };
+    //       }),
+    //       baseProperties: (data.customPropertyDescriptors as any[])
+    //         .filter((cpd: any) => cpd.type === 'readonlyText')
+    //         .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+    //           return {
+    //             key: cpd.key,
+    //             value: cpd.defaultValue,
+    //             description: cpd.remark,
+    //           };
+    //         }),
+    //       customOptionsData: (data.customPropertyDescriptors as any[])
+    //         .filter((cpd: any) => cpd.type !== 'readonlyText')
+    //         .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+    //           return {
+    //             key: cpd.key,
+    //             // keyError: '',
+    //             description: cpd.remark,
+    //             // descriptionError: '',
+    //             custom: cpd.type === 'editableText' ? 'input' : 'select',
+    //             defaultValue: cpd.defaultValue,
+    //             // defaultValueError: '',
+    //             customOption: cpd.candidateItems.join(','),
+    //             // customOptionError: '',
+    //           };
+    //         }),
+    //     },
+    //   });
+    //   // }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       depRelationship: [],
+    //       dependencies: [],
+    //     },
+    //     caller: '972^&YUGJHGHJ93874823yu4oi234io23hjkfdsasdf',
+    //   });
+    //
+    //   const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
+    //   // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
+    //
+    //   if (depResources.length > 0) {
+    //
+    //     const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    //       resourceNames: depResources.map<string>((dr) => dr.name).join(','),
+    //     };
+    //     const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
+    //     // console.log(data2, '#ASGDFASDF');
+    //     const relations = data2.map((dd: any) => {
+    //       return {
+    //         id: dd.resourceId,
+    //         children: dd.baseUpcastResources.map((bur: any) => {
+    //           return {
+    //             id: bur.resourceId,
+    //           };
+    //         }),
+    //       };
+    //     });
+    //
+    //     const versions = depResources.map((dr) => {
+    //       const resource = data2.find((d2: any) => d2.resourceName);
+    //       return {
+    //         id: resource.resourceId,
+    //         versionRange: dr.versionRange,
+    //       };
+    //     });
+    //
+    //     yield put<AddDepsAction>({
+    //       type: 'addDeps',
+    //       payload: {
+    //         relationships: relations,
+    //         versions: versions,
+    //       },
+    //     });
+    //   }
+    //
+    //   const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
+    //   // console.log(depObjects, '9023jlkdfsj');
+    //   if (depObjects.length > 0) {
+    //     const allDepObjects: ResourceVersionCreatorPageModelState['dependencies'] = depObjects.map((dpo: any) => {
+    //       // console.log(dpo, 'dpo!@#$@#$!$@#$!@#$');
+    //       return {
+    //         id: dpo.name,
+    //         title: dpo.name,
+    //         resourceType: [],
+    //         status: 3,
+    //         error: 'storageObject',
+    //         warning: '',
+    //         versionRange: '',
+    //         versions: [],
+    //         upthrow: false,
+    //         upthrowDisabled: true,
+    //         authProblem: false,
+    //         enableReuseContracts: [],
+    //         terminatedContractIDs: [],
+    //         enabledPolicies: [],
+    //       };
+    //     });
+    //     const allRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = allDepObjects.map((oo) => {
+    //       return { id: oo.id, children: [] };
+    //     });
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         dependencies: allDepObjects,
+    //         depRelationship: allRelationship,
+    //       },
+    //       caller: '97293^%^$^%$$874823yu4oi234io23hjkfdsasdf',
+    //     });
+    //   }
+    // },
     * deleteDependencyByID({ payload }: DeleteDependencyByIDAction, { select, put }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -1213,36 +1214,38 @@ const Model: ResourceVersionCreatorModelType = {
       // preVersionBaseProperties,
       //   preVersionOptionProperties,
       if (payload === 'baseProps') {
-        const allKeys: string[] = [
-          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-            return rp.key;
-          }),
-          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-            return pp.key;
-          }),
-          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-            return pp.key;
-          }),
-        ];
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            basePropertiesEditorVisible: true,
-            basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
-              .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
-                return {
-                  key: cpd.key,
-                  keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-                  value: cpd.value,
-                  valueError: '',
-                  description: cpd.description,
-                  descriptionError: '',
-                };
-              }),
-          },
-          caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
-        });
-        return;
+
+
+        // const allKeys: string[] = [
+        //   ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+        //     return rp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+        //     return pp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+        //     return pp.key;
+        //   }),
+        // ];
+        // yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {
+        // basePropertiesEditorVisible: true,
+        // basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
+        //   .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
+        //     return {
+        //       key: cpd.key,
+        //       keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
+        //       value: cpd.value,
+        //       valueError: '',
+        //       description: cpd.description,
+        //       descriptionError: '',
+        //     };
+        //   }),
+        //   },
+        //   caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
+        // });
+        // return;
       }
 
       if (payload === 'optionProps') {

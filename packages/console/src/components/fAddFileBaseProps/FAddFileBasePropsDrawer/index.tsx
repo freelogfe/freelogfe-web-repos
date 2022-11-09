@@ -1,12 +1,31 @@
 import * as React from 'react';
 import styles from './index.less';
+import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
+import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
-import FInput from '../FInput';
-import FDrawer from '../FDrawer';
-import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FInput from '@/components/FInput';
+import { FUtil } from '@freelog/tools-lib';
 
-interface FBasePropsEditorDrawerProps {
+interface FAddFileBasePropsDrawerProps {
+  disabledKeys: string[];
+  defaultData: {
+    key: string;
+    value: string;
+    description: string;
+  }[];
+
+  onOk?(data: {
+    key: string;
+    value: string;
+    description: string;
+  }[]): void;
+
+  onClose?(): void;
+}
+
+interface FAddFileBasePropsDrawerStates {
   visible: boolean;
   dataSource: {
     key: string;
@@ -16,25 +35,19 @@ interface FBasePropsEditorDrawerProps {
     description: string;
     descriptionError: string;
   }[];
-  disabledKeys: string[];
-
-  onChange?(value: FBasePropsEditorDrawerProps['dataSource']): void;
-
-  onConfirm?(): void;
-
-  onCancel?(): void;
 }
 
-function FBasePropsEditorDrawer({
-                                  visible,
-                                  dataSource,
-                                  disabledKeys,
-                                  onChange,
-                                  onConfirm,
-                                  onCancel,
-                                }: FBasePropsEditorDrawerProps) {
+const initData: FAddFileBasePropsDrawerStates = {
+  visible: true,
+  dataSource: [],
+};
 
-  function onChangeData(value: Partial<FBasePropsEditorDrawerProps['dataSource'][number]>, index: number) {
+function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
+
+  const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initData['visible']);
+  const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initData['dataSource']);
+
+  function onChangeData(value: Partial<FAddFileBasePropsDrawerStates['dataSource'][number]>, index: number) {
     const dd = dataSource.map((ds, i) => {
       if (i !== index) {
         return ds;
@@ -44,59 +57,56 @@ function FBasePropsEditorDrawer({
         ...value,
       };
     });
-    onChange && onChange(verifyDuplication(dd));
+    set_dataSource(verifyDuplication(dd, disabledKeys));
   }
 
-  function verifyDuplication(data: FBasePropsEditorDrawerProps['dataSource']) {
-    const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
-      return [dk, 1];
-    }));
-    for (const item of data) {
-      if (item.key === '') {
-        continue;
-      }
-      if (map.has(item.key)) {
-        map.set(item.key, map.get(item.key) as number + 1);
-      } else {
-        map.set(item.key, 1);
-      }
-    }
-    const errorText: string = '键不能重复';
-
-    return data.map((d) => {
-      if (d.keyError && d.keyError !== errorText) {
-        return d;
-      }
-      // console.log(d.key, map.get(d.key), '9812347928137');
-      return {
-        ...d,
-        keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
-      };
-    });
-  }
-
+  // console.log(dataSource, 'dataSourceoikdsfldfjlk');
   return (<FDrawer
     title={'补充属性'}
     onClose={() => {
-      onCancel && onCancel();
+      set_visible(false);
     }}
     visible={visible}
+    afterVisibleChange={(vis) => {
+      if (!vis) {
+        onClose && onClose();
+      } else {
+        set_dataSource(defaultData.map<FAddFileBasePropsDrawerStates['dataSource'][number]>((cpd) => {
+          return {
+            key: cpd.key,
+            keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
+            value: cpd.value,
+            valueError: '',
+            description: cpd.description,
+            descriptionError: '',
+          };
+        }));
+      }
+    }}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
-          onCancel && onCancel();
+          set_visible(false);
         }}
       >取消</FComponentsLib.FTextBtn>
+
       <FComponentsLib.FRectBtn
-        disabled={!!dataSource.find((eds) => {
+        disabled={dataSource.length === 0 || !!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || !eds.value || !!eds.valueError
             || !!eds.descriptionError;
         })}
         onClick={() => {
-          onConfirm && onConfirm();
+          onOk && onOk(dataSource.map((ds) => {
+            return {
+              key: ds.key,
+              value: ds.value,
+              description: ds.description,
+            };
+          }));
+          set_visible(false);
         }}
       >确定</FComponentsLib.FRectBtn>
     </Space>}
@@ -192,7 +202,7 @@ function FBasePropsEditorDrawer({
                 <FComponentsLib.FCircleBtn
                   type='danger'
                   onClick={() => {
-                    onChange && onChange(dataSource.filter((eds, edsIndex) => {
+                    set_dataSource(dataSource.filter((eds, edsIndex) => {
                       return edsIndex !== index;
                     }));
                   }}
@@ -212,7 +222,7 @@ function FBasePropsEditorDrawer({
       <FComponentsLib.FCircleBtn
         size='small'
         onClick={() => {
-          onChange && onChange([
+          set_dataSource([
             ...dataSource,
             {
               key: '',
@@ -232,4 +242,32 @@ function FBasePropsEditorDrawer({
   </FDrawer>);
 }
 
-export default FBasePropsEditorDrawer;
+export default FAddFileBasePropsDrawer;
+
+function verifyDuplication(data: FAddFileBasePropsDrawerStates['dataSource'], disabledKeys: string[]) {
+  const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+    return [dk, 1];
+  }));
+  for (const item of data) {
+    if (item.key === '') {
+      continue;
+    }
+    if (map.has(item.key)) {
+      map.set(item.key, map.get(item.key) as number + 1);
+    } else {
+      map.set(item.key, 1);
+    }
+  }
+  const errorText: string = '键不能重复';
+
+  return data.map((d) => {
+    if (d.keyError && d.keyError !== errorText) {
+      return d;
+    }
+    // console.log(d.key, map.get(d.key), '9812347928137');
+    return {
+      ...d,
+      keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
+    };
+  });
+}
