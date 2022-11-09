@@ -2,53 +2,254 @@ import * as React from 'react';
 import styles from './index.less';
 import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+import FDrawer from '@/components/FDrawer';
+import { Space } from 'antd';
+import FComponentsLib from '@freelog/components-lib';
+import FInput from '@/components/FInput';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FAddFileBasePropsDrawerProps {
-  onOk?(): void;
+  disabledKeys: string[];
+
+  onOk?(data: {
+    key: string;
+    value: string;
+    description: string;
+  }[]): void;
 
   onClose?(): void;
 }
 
-function FAddFileBasePropsDrawer({ onOk, onClose }: FAddFileBasePropsDrawerProps) {
+interface FAddFileBasePropsDrawerStates {
+  visible: boolean;
+  dataSource: {
+    key: string;
+    keyError: string;
+    value: string;
+    valueError: string;
+    description: string;
+    descriptionError: string;
+  }[];
+}
 
-  const [visible, set_visible] = React.useState<boolean>(true);
+const initData: FAddFileBasePropsDrawerStates = {
+  visible: false,
+  dataSource: [],
+};
 
-  return (<FBasePropsEditorDrawer
-    visible={resourceVersionCreatorPage.basePropertiesEditorVisible}
-    dataSource={resourceVersionCreatorPage.basePropertiesEditorData}
-    disabledKeys={[
-      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-      ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-      ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-    ]}
-    onChange={(value) => {
-      onChange({
-        basePropertiesEditorData: value,
-      });
+function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
+
+  const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initData['visible']);
+  const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initData['dataSource']);
+
+  function onChangeData(value: Partial<FAddFileBasePropsDrawerStates['dataSource'][number]>, index: number) {
+    const dd = dataSource.map((ds, i) => {
+      if (i !== index) {
+        return ds;
+      }
+      return {
+        ...ds,
+        ...value,
+      };
+    });
+    set_dataSource(verifyDuplication(dd, disabledKeys));
+  }
+
+
+  return (<FDrawer
+    title={'补充属性'}
+    onClose={() => {
+      set_visible(false);
     }}
-    onCancel={() => {
-      onChange({
-        basePropertiesEditorData: [],
-        basePropertiesEditorVisible: false,
-      });
+    visible={visible}
+    afterVisibleChange={(vis) => {
+      if (!vis) {
+        onClose && onClose();
+      }
     }}
-    onConfirm={() => {
-      onChange({
-        basePropertiesEditorData: [],
-        basePropertiesEditorVisible: false,
-        baseProperties: [
-          ...resourceVersionCreatorPage.baseProperties,
-          ...resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+    width={720}
+    topRight={<Space size={30}>
+      <FComponentsLib.FTextBtn
+        type='default'
+        onClick={() => {
+          set_visible(false);
+        }}
+      >取消</FComponentsLib.FTextBtn>
+      <FComponentsLib.FRectBtn
+        disabled={!!dataSource.find((eds) => {
+          return !eds.key || !!eds.keyError
+            || !eds.value || !!eds.valueError
+            || !!eds.descriptionError;
+        })}
+        onClick={() => {
+          onOk && onOk(dataSource.map((ds) => {
             return {
-              key: bped.key,
-              value: bped.value,
-              description: bped.description,
+              key: ds.key,
+              value: ds.value,
+              description: ds.description,
             };
-          }),
-        ],
-      });
-    }}
-  />);
+          }));
+        }}
+      >确定</FComponentsLib.FRectBtn>
+    </Space>}
+  >
+    <Space
+      size={30}
+      direction='vertical'
+      style={{ width: '100%' }}
+    >
+      {
+        dataSource.map((ds, index) => {
+          return (<Space key={index} size={10}>
+            <div className={styles.input}>
+              <div className={styles.title}>
+                <i className={styles.dot} />
+                <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
+              </div>
+              <div style={{ height: 5 }} />
+              <FInput
+                value={ds.key}
+                errorText={ds.keyError}
+                className={styles.input}
+                onChange={(e) => {
+                  const value: string = e.target.value;
+                  let keyError: string = '';
+                  if (value === '') {
+                    keyError = '请输入';
+                  } else if (value.length > 15) {
+                    keyError = '不超过15个字符';
+                  } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+                    keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+                  }
+                  onChangeData({
+                    key: value,
+                    keyError: keyError,
+                  }, index);
+                }}
+                placeholder={'输入key'}
+              />
+            </div>
+            <div className={styles.input}>
+              <div className={styles.title}>
+                <i className={styles.dot} />
+                <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
+              </div>
+              <div style={{ height: 5 }} />
+              <FInput
+                value={ds.value}
+                errorText={ds.valueError}
+                className={styles.input}
+                onChange={(e) => {
+                  const value: string = e.target.value;
+                  let valueError: string = '';
+                  if (value === '') {
+                    valueError = '请输入';
+                  } else if (value.length > 30) {
+                    valueError = '不超过30个字符';
+                  }
+                  onChangeData({
+                    value: value,
+                    valueError: valueError,
+                  }, index);
+                }}
+                placeholder={'输入value'}
+              />
+            </div>
+            <div className={styles.input}>
+              <div className={styles.title}>
+                <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
+              </div>
+              <div style={{ height: 5 }} />
+              <FInput
+                value={ds.description}
+                errorText={ds.descriptionError}
+                className={styles.input}
+                onChange={(e) => {
+                  const value: string = e.target.value;
+                  let descriptionError: string = '';
+                  if (value.length > 50) {
+                    descriptionError = '不超过50个字符';
+                  }
+                  onChangeData({
+                    description: value,
+                    descriptionError: descriptionError,
+                  }, index);
+                }}
+                placeholder={'输入属性说明'}
+              />
+            </div>
+            <div>
+              <div style={{ height: 22 }} />
+              <div className={styles.delete}>
+                <FComponentsLib.FCircleBtn
+                  type='danger'
+                  onClick={() => {
+                    set_dataSource(dataSource.filter((eds, edsIndex) => {
+                      return edsIndex !== index;
+                    }));
+                  }}
+                />
+              </div>
+            </div>
+          </Space>);
+        })
+      }
+    </Space>
+
+    {
+      dataSource.length > 0 && (<div style={{ height: 30 }} />)
+    }
+
+    <Space size={10}>
+      <FComponentsLib.FCircleBtn
+        size='small'
+        onClick={() => {
+          set_dataSource([
+            ...dataSource,
+            {
+              key: '',
+              keyError: '',
+              value: '',
+              valueError: '',
+              description: '',
+              descriptionError: '',
+            },
+          ]);
+        }}
+      />
+      <FComponentsLib.FContentText
+        text={'新增一项属性'}
+      />
+    </Space>
+  </FDrawer>);
 }
 
 export default FAddFileBasePropsDrawer;
+
+function verifyDuplication(data: FAddFileBasePropsDrawerStates['dataSource'], disabledKeys: string[]) {
+  const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+    return [dk, 1];
+  }));
+  for (const item of data) {
+    if (item.key === '') {
+      continue;
+    }
+    if (map.has(item.key)) {
+      map.set(item.key, map.get(item.key) as number + 1);
+    } else {
+      map.set(item.key, 1);
+    }
+  }
+  const errorText: string = '键不能重复';
+
+  return data.map((d) => {
+    if (d.keyError && d.keyError !== errorText) {
+      return d;
+    }
+    // console.log(d.key, map.get(d.key), '9812347928137');
+    return {
+      ...d,
+      keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
+    };
+  });
+}

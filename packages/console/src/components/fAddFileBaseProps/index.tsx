@@ -4,16 +4,21 @@ import * as ReactDOM from 'react-dom/client';
 import FAddFileBasePropsDrawer from './FAddFileBasePropsDrawer';
 
 interface fAddFileBasePropsProps {
-
+  disabledKeys: string[];
 }
 
-type ReturnData = { objID: string; objName: string; sha1: string } | null;
+type ReturnData = {
+  key: string;
+  value: string;
+  description: string;
+}[] | null;
 
-function fAddFileBaseProps({}: fAddFileBasePropsProps = {}): Promise<ReturnData> {
+function fAddFileBaseProps({ disabledKeys }: fAddFileBasePropsProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render((<FAddFileBasePropsDrawer
-      onSelect={(obj) => {
+      disabledKeys={[]}
+      onOk={(obj) => {
         resolve(obj);
       }}
       onClose={() => {
