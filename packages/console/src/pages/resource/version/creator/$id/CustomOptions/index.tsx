@@ -22,6 +22,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
+import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -143,24 +144,67 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 : undefined
             }
           </Space>}
-          onClickEdit={(theKey) => {
+          onClickEdit={async (theKey) => {
             const ind = resourceVersionCreatorPage.baseProperties.findIndex((bp) => {
               return bp.key === theKey;
             });
-            const cur = resourceVersionCreatorPage.baseProperties[ind];
-            onChange({
-              basePropertyEditorIndex: ind,
-              basePropertyEditorData: ind === -1
-                ? null
-                : {
-                  key: cur.key,
-                  keyError: '',
-                  value: cur.value,
-                  valueError: '',
-                  description: cur.description,
-                  descriptionError: '',
-                },
+            const cur = resourceVersionCreatorPage.baseProperties.find((bp) => {
+              return bp.key === theKey;
             });
+            if (!cur) {
+              return;
+            }
+
+            const data = await fEditFileBaseProp({
+              disabledKeys: [
+                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                ...resourceVersionCreatorPage.baseProperties.filter((bp, ind) => ind !== resourceVersionCreatorPage.basePropertyEditorIndex).map((bp) => {
+                  return bp.key;
+                }),
+                ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+              ],
+              defaultData: {
+                key: cur.key,
+                value: cur.value,
+                description: cur.description,
+              },
+            });
+
+            // console.log(data, 'dataio9jseflksdjflkjsdl');
+
+            if (!data) {
+              return;
+            }
+
+            // console.log(data, 'data9iewsdofjsdlkfjsdlkj');
+
+            onChange({
+              baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
+                if (i !== ind) {
+                  return bp;
+                }
+                return {
+                  key: data.key,
+                  value: data.value,
+                  description: data.description,
+                };
+              }),
+              // basePropertyEditorIndex: -1,
+              // basePropertyEditorData: null,
+            });
+            // onChange({
+            //   basePropertyEditorIndex: ind,
+            //   basePropertyEditorData: ind === -1
+            //     ? null
+            //     : {
+            //       key: cur.key,
+            //       keyError: '',
+            //       value: cur.value,
+            //       valueError: '',
+            //       description: cur.description,
+            //       descriptionError: '',
+            //     },
+            // });
           }}
         />
         {
