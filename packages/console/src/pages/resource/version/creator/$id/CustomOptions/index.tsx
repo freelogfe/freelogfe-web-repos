@@ -157,11 +157,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
             const data = await fEditFileBaseProp({
               disabledKeys: [
-                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => {
+                  return rp.key;
+                }),
                 ...resourceVersionCreatorPage.baseProperties.map((bp) => {
                   return bp.key;
                 }),
-                ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => {
+                  return pp.key;
+                }),
               ],
               defaultData: {
                 key: cur.key,
@@ -170,13 +174,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               },
             });
 
-            // console.log(data, 'dataio9jseflksdjflkjsdl');
-
             if (!data) {
               return;
             }
-
-            // console.log(data, 'data9iewsdofjsdlkfjsdlkj');
 
             onChange({
               baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
@@ -189,22 +189,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   description: data.description,
                 };
               }),
-              // basePropertyEditorIndex: -1,
-              // basePropertyEditorData: null,
             });
-            // onChange({
-            //   basePropertyEditorIndex: ind,
-            //   basePropertyEditorData: ind === -1
-            //     ? null
-            //     : {
-            //       key: cur.key,
-            //       keyError: '',
-            //       value: cur.value,
-            //       valueError: '',
-            //       description: cur.description,
-            //       descriptionError: '',
-            //     },
-            // });
           }}
         />
         {
