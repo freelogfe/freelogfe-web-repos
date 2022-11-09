@@ -33,7 +33,7 @@ interface FAddFileBasePropsDrawerStates {
 }
 
 const initData: FAddFileBasePropsDrawerStates = {
-  visible: false,
+  visible: true,
   dataSource: [],
 };
 
@@ -55,7 +55,7 @@ function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePr
     set_dataSource(verifyDuplication(dd, disabledKeys));
   }
 
-
+  // console.log(dataSource, 'dataSourceoikdsfldfjlk');
   return (<FDrawer
     title={'补充属性'}
     onClose={() => {
@@ -75,8 +75,9 @@ function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePr
           set_visible(false);
         }}
       >取消</FComponentsLib.FTextBtn>
+
       <FComponentsLib.FRectBtn
-        disabled={!!dataSource.find((eds) => {
+        disabled={dataSource.length === 0 || !!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || !eds.value || !!eds.valueError
             || !!eds.descriptionError;
@@ -89,6 +90,7 @@ function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePr
               description: ds.description,
             };
           }));
+          set_visible(false);
         }}
       >确定</FComponentsLib.FRectBtn>
     </Space>}
