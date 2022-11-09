@@ -53,6 +53,7 @@ function VersionCreator({
   match,
 }: VersionCreatorProps) {
   const [show, setShow] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -106,19 +107,17 @@ function VersionCreator({
   return (
     <>
       <MarkdownEditor
+        resourceId={match.params.id}
         show={show}
         close={() => {
           setShow(false);
-          document.body.style.overflowY = 'auto';
         }}
+        setSaved={setSaved}
       />
 
       <div
         style={{ position: 'absolute', left: '300px', top: '80px' }}
-        onClick={() => {
-          setShow(true);
-          document.body.style.overflowY = 'hidden';
-        }}
+        onClick={() => setShow(true)}
       >
         打开编辑器
       </div>

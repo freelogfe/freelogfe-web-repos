@@ -16,32 +16,53 @@ const VideoAuthStatus = (data: CustomResource): VNode => {
 
   const authStatusMapping = {
     1: h('div.video-auth', {}, [
-      h('i.freelog fl-icon-suoding', {
-        on: {
-          click() {
-            console.error('授权管理');
-          },
-        },
-      }),
+      h('i.freelog fl-icon-suoding'),
       h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_getauth')]),
       h('i.freelog fl-icon-bofang-daibiankuang'),
-    ]),
-    2: h('div.video-auth', {}, [
-      h('i.freelog fl-icon-suoding', {
-        on: {
-          click() {
-            console.error('授权管理');
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
           },
         },
-      }),
+        [FI18n.i18nNext.t('insert_toolbar_btn_getauth')],
+      ),
+    ]),
+    2: h('div.video-auth', {}, [
+      h('i.freelog fl-icon-suoding'),
       h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_noauth')]),
       h('i.freelog fl-icon-bofang-daibiankuang'),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
     ]),
     3: h('div'),
     4: h('div.video-auth', {}, [
       h('i.freelog fl-icon-shangpao'),
       h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_upcasted')]),
       h('i.freelog fl-icon-bofang-daibiankuang'),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
     ]),
   };
 

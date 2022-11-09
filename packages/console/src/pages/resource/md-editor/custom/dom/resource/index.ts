@@ -25,24 +25,22 @@ const renderResource = (data: CustomResource): VNode => {
 
 /** 将资源元素转为 HTML */
 const resourceToHtml = (data: CustomResource): string => {
-  const html = `
-    <span
-      data-w-e-type="resource"
-      data-w-e-is-void
-      data-w-e-is-inline
-      data-originType="${data.originType}"
-      data-resourceId="${data.resourceId}"
-      data-authType="${data.authType}"
-      data-resourceName="${data.resourceName}"
-      data-coverImages="${JSON.stringify(data.coverImages)}"
-      data-resourceType="${JSON.stringify(data.resourceType)}"
-      data-latestVersion="${data.latestVersion}"
-      data-version="${data.version || data.latestVersion}"
-      data-content="${data.content}"
-    >
-      此资源来自于 freelog
-    </span>
-  `;
+  const html = `<span
+    data-w-e-type="resource"
+    data-w-e-is-void
+    data-w-e-is-inline
+    data-originType="${data.originType}"
+    data-resourceId="${data.resourceId}"
+    data-authType="${data.authType}"
+    data-resourceName="${data.resourceName}"
+    data-coverImages="${JSON.stringify(data.coverImages)}"
+    data-resourceType="${JSON.stringify(data.resourceType)}"
+    data-latestVersion="${data.latestVersion}"
+    data-version="${data.version || data.latestVersion}"
+    data-content="${data.content}"
+  >
+    此资源来自于 freelog
+  </span>`;
 
   return html;
 };

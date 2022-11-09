@@ -16,29 +16,50 @@ const ImageAuthStatus = (data: CustomResource): VNode => {
 
   const authStatusMapping = {
     1: h('div.image-auth', {}, [
-      h('i.freelog fl-icon-suoding', {
-        on: {
-          click() {
-            console.error('授权管理');
+      h('i.freelog fl-icon-suoding'),
+      h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_getauth')]),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
           },
         },
-      }),
-      h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_getauth')]),
+        [FI18n.i18nNext.t('insert_toolbar_btn_getauth')],
+      ),
     ]),
     2: h('div.image-auth', {}, [
-      h('i.freelog fl-icon-suoding', {
-        on: {
-          click() {
-            console.error('授权管理');
+      h('i.freelog fl-icon-suoding'),
+      h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_noauth')]),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
           },
         },
-      }),
-      h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_noauth')]),
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
     ]),
     3: h('div'),
     4: h('div.image-auth', {}, [
       h('i.freelog fl-icon-shangpao'),
       h('div.auth-text', {}, [FI18n.i18nNext.t('insert_msg_upcasted')]),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              console.error('授权管理');
+            },
+          },
+        },
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
     ]),
   };
 
