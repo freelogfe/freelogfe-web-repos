@@ -158,7 +158,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             const data = await fEditFileBaseProp({
               disabledKeys: [
                 ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                ...resourceVersionCreatorPage.baseProperties.filter((bp, ind) => ind !== resourceVersionCreatorPage.basePropertyEditorIndex).map((bp) => {
+                ...resourceVersionCreatorPage.baseProperties.map((bp) => {
                   return bp.key;
                 }),
                 ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
