@@ -80,6 +80,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   return;
                 }
                 onChange({
+                  dataIsDirty: true,
                   baseProperties: [
                     ...resourceVersionCreatorPage.baseProperties,
                     ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
@@ -98,12 +99,45 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 ? (<FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
-                  onClick={() => {
-                    dispatch<ImportLastVersionDataAction>({
-                      type: 'resourceVersionCreatorPage/importLastVersionData',
-                      payload: 'baseProps',
+                  onClick={async () => {
+                    // dispatch<ImportLastVersionDataAction>({
+                    //   type: 'resourceVersionCreatorPage/importLastVersionData',
+                    //   payload: 'baseProps',
+                    // });
+                    const dataSource = await fAddFileBaseProps({
+                      defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
+                      disabledKeys: [
+                        ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                          return rp.key;
+                        }),
+                        ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                          return pp.key;
+                        }),
+                        ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                          return pp.key;
+                        }),
+                      ],
                     });
-                    onChange({ dataIsDirty: true });
+                    // onChange({
+                    //   dataIsDirty: true,
+                    //
+                    // });
+                    if (!dataSource) {
+                      return;
+                    }
+                    onChange({
+                      dataIsDirty: true,
+                      baseProperties: [
+                        ...resourceVersionCreatorPage.baseProperties,
+                        ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                          return {
+                            key: ds.key,
+                            value: ds.value,
+                            description: ds.description,
+                          };
+                        }),
+                      ],
+                    });
                   }}
                 >从上个版本导入</FComponentsLib.FTextBtn>)
                 : undefined

@@ -12,6 +12,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
+import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 export type DepResources = {
   id: string;
@@ -94,15 +95,15 @@ export interface ResourceVersionCreatorPageModelState {
     value: string;
     description: string;
   }[];
-  basePropertiesEditorVisible: boolean;
-  basePropertiesEditorData: {
-    key: string;
-    keyError: string;
-    value: string;
-    valueError: string;
-    description: string;
-    descriptionError: string;
-  }[];
+  // basePropertiesEditorVisible: boolean;
+  // basePropertiesEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   value: string;
+  //   valueError: string;
+  //   description: string;
+  //   descriptionError: string;
+  // }[];
   basePropertyEditorIndex: number;
   basePropertyEditorData: {
     key: string;
@@ -319,8 +320,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   rawPropertiesState: 'success',
 
   baseProperties: [],
-  basePropertiesEditorVisible: false,
-  basePropertiesEditorData: [],
+  // basePropertiesEditorVisible: false,
+  // basePropertiesEditorData: [],
   basePropertyEditorIndex: -1,
   basePropertyEditorData: null,
 
@@ -554,7 +555,7 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      const {error, result } = yield call(getFilesSha1Info, {
+      const { error, result } = yield call(getFilesSha1Info, {
         sha1: [payload.sha1],
       });
 
@@ -1213,36 +1214,38 @@ const Model: ResourceVersionCreatorModelType = {
       // preVersionBaseProperties,
       //   preVersionOptionProperties,
       if (payload === 'baseProps') {
-        const allKeys: string[] = [
-          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-            return rp.key;
-          }),
-          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-            return pp.key;
-          }),
-          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-            return pp.key;
-          }),
-        ];
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            basePropertiesEditorVisible: true,
-            basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
-              .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
-                return {
-                  key: cpd.key,
-                  keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-                  value: cpd.value,
-                  valueError: '',
-                  description: cpd.description,
-                  descriptionError: '',
-                };
-              }),
-          },
-          caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
-        });
-        return;
+
+
+        // const allKeys: string[] = [
+        //   ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+        //     return rp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+        //     return pp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+        //     return pp.key;
+        //   }),
+        // ];
+        // yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {
+        // basePropertiesEditorVisible: true,
+        // basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
+        //   .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
+        //     return {
+        //       key: cpd.key,
+        //       keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
+        //       value: cpd.value,
+        //       valueError: '',
+        //       description: cpd.description,
+        //       descriptionError: '',
+        //     };
+        //   }),
+        //   },
+        //   caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
+        // });
+        // return;
       }
 
       if (payload === 'optionProps') {

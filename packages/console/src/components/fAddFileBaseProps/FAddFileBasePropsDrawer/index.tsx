@@ -10,6 +10,11 @@ import { FUtil } from '@freelog/tools-lib';
 
 interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
+  defaultData: {
+    key: string;
+    value: string;
+    description: string;
+  }[];
 
   onOk?(data: {
     key: string;
@@ -37,7 +42,7 @@ const initData: FAddFileBasePropsDrawerStates = {
   dataSource: [],
 };
 
-function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
+function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
 
   const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initData['visible']);
   const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initData['dataSource']);
@@ -65,6 +70,17 @@ function FAddFileBasePropsDrawer({ disabledKeys, onOk, onClose }: FAddFileBasePr
     afterVisibleChange={(vis) => {
       if (!vis) {
         onClose && onClose();
+      } else {
+        set_dataSource(defaultData.map<FAddFileBasePropsDrawerStates['dataSource'][number]>((cpd) => {
+          return {
+            key: cpd.key,
+            keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
+            value: cpd.value,
+            valueError: '',
+            description: cpd.description,
+            descriptionError: '',
+          };
+        }));
       }
     }}
     width={720}
