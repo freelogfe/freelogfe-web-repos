@@ -10,7 +10,8 @@ import UserList from './_components/user';
 import Drawer from './_components/drawer';
 import fMessage from '@/components/fMessage';
 
-interface SearchProps {}
+interface SearchProps {
+}
 
 function Search({}: SearchProps) {
   const [urlParams] = useUrlState<{
@@ -109,7 +110,7 @@ function Search({}: SearchProps) {
     if (tab === 'resource' && keywords) {
       run();
     }
-    if (tab === 'user'  && keywords) {
+    if (tab === 'user' && keywords) {
       run();
     }
   }, [tab]);
@@ -251,11 +252,11 @@ function Search({}: SearchProps) {
             });
             setKeywords(value);
           }}
-          theme="dark"
+          theme='dark'
           className={styles.input}
           placeholder={FI18n.i18nNext.t('输入关键词')}
         />
-        <div className="flex-row ">
+        <div className='flex-row '>
           <span
             onClick={() => {
               setTab('resource');
@@ -277,9 +278,9 @@ function Search({}: SearchProps) {
       </div>
       <div className={styles.list + ' flex-1 w-100x '}>
         {tab === 'user' ? (
-          <div className="w-100x h-100x    flex-column align-center">
+          <div className='w-100x h-100x    flex-column align-center'>
             {showUserResource && (
-              <div className="w-100x h-100x   px-115 flex-column-center">
+              <div className='w-100x h-100x   px-115 flex-column-center'>
                 <div
                   className={
                     'flex-row flex-wrap h-100x   pt-40 w-100x' +
@@ -298,13 +299,18 @@ function Search({}: SearchProps) {
                       <i className={styles.close + ' freelog fl-icon-guanbi'} />
                     </div>
                     <div className={'h-100x ' + styles.cContainer}>
-                      <div className="flex-row align-center mb-20 mt-6 ml-10">
+                      <div className='flex-row align-center mb-20 mt-6 ml-10'>
                         <div className={styles.userimg + ' over-h shrink-0'}>
-                          <img src={selectedUser.headImage} className="w-100x" />
+                          <img src={selectedUser.headImage} className='w-100x' />
                         </div>
                         <span className={styles.userName}>{selectedUser.username}</span>
                         <span className={styles.userResource}>
-                          上架的资源（{selectedUser.createdResourceCount}）
+                          {/*上架的资源（{selectedUser.createdResourceCount}）*/}
+                          {
+                            FI18n.i18nNext.t('search_result_user_resource_qty02', {
+                              ResourceQty: selectedUser.createdResourceCount,
+                            })
+                          }
                         </span>
                       </div>
                       <div
@@ -320,7 +326,7 @@ function Search({}: SearchProps) {
                           resourcesListPure={userResourcesListPure}
                           pageData={userResourcePageData}
                           setPageData={setUserResourcePageData}
-                        ></ResourceList>
+                        />
                       </div>
                     </div>
                   </Drawer>
@@ -341,15 +347,15 @@ function Search({}: SearchProps) {
             </div>
           </div>
         ) : (
-          <div className="w-100x h-100x   px-115 flex-column-center">
+          <div className='w-100x h-100x   px-115 flex-column-center'>
             <div className={'h-100x   pt-40  flex-column-center ' + styles.rContainer}>
               {!resourcesListPure.length ? (
-                <div className="flex-column-center w-100x h-100x">
-                  <div className="flex-2"></div>
+                <div className='flex-column-center w-100x h-100x'>
+                  <div className='flex-2'></div>
                   <span className={styles.none}>
                     抱歉，没有找到与{' ' + keywords + ' '}相关的结果
                   </span>
-                  <div className="flex-3"></div>
+                  <div className='flex-3'></div>
                 </div>
               ) : (
                 <div className={styles.tip + ' mb-20 w-100x ml-18'}>

@@ -130,7 +130,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       // 上架
       const { policies, info } = resourceInfo;
       if (!info?.latestVersion) {
-        fMessage('资源上架之前，需要先发行一个版本', 'error');
+        fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
       } else if (policies.length === 0) {
         setActiveDialogShow(true);
       } else if (policies.filter((item) => item.status === 1).length === 0) {

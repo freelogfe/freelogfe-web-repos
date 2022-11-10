@@ -468,7 +468,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 <div className={styles['loader']}>
                   <LoadingOutlined className={styles['loader-icon']} />
                   <div className={styles['loader-text']}>
-                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                    {
+                      resultPopupType === 1
+                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}
                   </div>
                 </div>
               ) : (
@@ -479,7 +482,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     }`}
                   />
                   <div className={styles['result-text']}>
-                    已{resultPopupType === 1 ? '上架' : '下架'}
+                    {
+                      resultPopupType === 1
+                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                    }
                   </div>
                 </div>
               )}
