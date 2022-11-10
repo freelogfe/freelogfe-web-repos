@@ -4,6 +4,7 @@ import styles from './index.less';
 import FDrawer from '../FDrawer';
 import { PolicyCard } from '../FPolicyList';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FPolicyOperaterDrawerProps {
   titleText: string;
@@ -23,16 +24,16 @@ interface FPolicyOperaterDrawerProps {
 // const typeMapping = { resource: '资源', exhibit: '展品' };
 
 function FPolicyOperatorDrawer({
-                                        titleText,
-                                        confirmText,
-                                        tipText,
-                                        visible = false,
-                                        policiesList,
-                                        // type,
-                                        onCancel,
-                                        onConfirm,
-                                        onNewPolicy,
-                                      }: FPolicyOperaterDrawerProps) {
+                                 titleText,
+                                 confirmText,
+                                 tipText,
+                                 visible = false,
+                                 policiesList,
+                                 // type,
+                                 onCancel,
+                                 onConfirm,
+                                 onNewPolicy,
+                               }: FPolicyOperaterDrawerProps) {
 
   const [activeList, setActiveList] = React.useState<string[]>([]);
   const updateActiveList = () => {
@@ -51,14 +52,15 @@ function FPolicyOperatorDrawer({
         title={
           <Space size={10}>
             {/*<FComponentsLib.FTitleText type='h2' text={`启用策略并上架${typeMapping[type]}`} />*/}
-            <FComponentsLib.FTitleText type='h2' text={titleText} singleRow style={{width: 290}} />
+            <FComponentsLib.FTitleText type='h2' text={titleText} singleRow style={{ width: 290 }} />
           </Space>
         }
         width={700}
         onClose={() => onCancel()}
         topRight={
           <Space size={30}>
-            <FComponentsLib.FTextBtn onClick={() => onCancel()}>取消</FComponentsLib.FTextBtn>
+            <FComponentsLib.FTextBtn
+              onClick={() => onCancel()}>{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
             <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type='primary'>
               {confirmText}
             </FComponentsLib.FRectBtn>
@@ -88,7 +90,7 @@ function FPolicyOperatorDrawer({
           );
         })}
         <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type='primary'>
-          创建新授权策略
+          {FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_create')}
         </FComponentsLib.FRectBtn>
       </FDrawer>
     </>

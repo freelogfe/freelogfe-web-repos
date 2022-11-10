@@ -538,9 +538,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         <FDialog
           show={inactiveDialogShow}
-          title='提醒'
-          desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-          sureText='下架资源'
+          title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
+          desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}
+          sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}
           cancel={() => {
             setInactiveDialogShow(false);
           }}
@@ -552,7 +552,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               checked={noLonger}
               onChange={(e) => setNoLonger(e.target.checked)}
             >
-              不再提醒
+              {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
             </Checkbox>
           }
         />

@@ -388,13 +388,13 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         }}
         sure={openPolicyBuilder}
         loading={loading}
-      ></FDialog>
+      />
 
       <FDialog
         show={inactiveDialogShow}
-        title='提醒'
-        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-        sureText='下架资源'
+        title={FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title')}
+        desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}
+        sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -406,10 +406,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             checked={noLonger}
             onChange={(e) => setNoLonger(e.target.checked)}
           >
-            不再提醒
+            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
           </Checkbox>
         }
-      ></FDialog>
+      />
 
       <FPolicyBuilderDrawer
         visible={resourceInfo.policyEditorVisible}
@@ -451,9 +451,9 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
 
       <FPolicyOperatorDrawer
         visible={resourceInfo.policyOperaterVisible}
-        titleText={'启用策略并上架资源'}
-        confirmText={'上架资源'}
-        tipText={'资源上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
+        titleText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
+        confirmText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done')}
+        tipText={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02')}
         // type='resource'
         policiesList={resourceInfo.policies}
         onCancel={() => {
@@ -484,7 +484,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
                   className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
                     styles[resultPopupType === 1 ? 'up' : 'down']
                   }`}
-                ></i>
+                />
                 <div className={styles['result-text']}>
                   已{resultPopupType === 1 ? '上架' : '下架'}
                 </div>

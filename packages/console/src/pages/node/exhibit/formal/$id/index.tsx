@@ -389,9 +389,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FDialog
         show={inactiveDialogShow}
-        title='提醒'
-        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-        sureText='下架资源'
+        title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
+        desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}
+        sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -403,7 +403,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             checked={noLonger}
             onChange={(e) => setNoLonger(e.target.checked)}
           >
-            不再提醒
+            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
           </Checkbox>
         }
       />
@@ -441,8 +441,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           ? FI18n.i18nNext.t('activatetheme_activate_authplan_btn')
           : FI18n.i18nNext.t('showexhibit_activate_authplan_btn')}
         tipText={exhibitInfoPage.side_ResourceType.includes('主题')
-          ? '主题激活需要启用至少一个授权策略，请选择你想要启用的授权策略'
-          : '展品上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
+          ? FI18n.i18nNext.t('msg_activate_theme_for_auth')
+          : FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth')}
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
           dispatch<FetchInfoAction>({
