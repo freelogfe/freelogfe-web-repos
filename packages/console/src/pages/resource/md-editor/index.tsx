@@ -3,7 +3,6 @@
 import './index.less';
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { connect } from 'dva';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import '@wangeditor/editor/dist/css/style.css';
 import { html2md } from './core/html2md';
@@ -11,28 +10,34 @@ import { toolbarConfig, editorConfig } from './core/editor-config';
 import { ImportDocDrawer } from './components/import-doc-drawer';
 import { InsertResourceDrawer } from './components/insert-resource-drawer';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
-import { Prompt, history } from 'umi';
-import fConfirmModal from '@/components/fConfirmModal';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
 
 // TODO 授权完成需要删除
 import { Select } from 'antd';
+import fMessage from '@/components/fMessage';
 const { Option } = Select;
 
 interface EditorProps {
+  // 资源 id
+  resourceId: string;
+  // 是否显示
   show: boolean;
+  // 关闭编辑器弹窗
   close: () => void;
+  // 设置是否已保存
+  setSaved: (saved: boolean) => void;
 }
 
 export const editorContext = React.createContext<any>({});
 
 /** 编辑器 */
 export const MarkdownEditor = (props: EditorProps) => {
-  const { show, close } = props;
+  const { resourceId, show, close, setSaved } = props;
 
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
+  const markdownRef = useRef('');
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -42,7 +47,6 @@ export const MarkdownEditor = (props: EditorProps) => {
   const [edited, setEdited] = useState(false);
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
-  const [promptShow, setPromptShow] = useState(false);
 
   // TODO 授权完成需要删除
   const [authorizeType, setAuthorizeType] = useState(1);
@@ -67,17 +71,33 @@ export const MarkdownEditor = (props: EditorProps) => {
   };
 
   /** 保存 */
-  const save = () => {
+  const save = async () => {
     setSaveType(1);
-    setTimeout(() => {
-      const saveTime = new Date().getTime();
-      setSaveType(2);
-      setLastSaveTime(saveTime);
-    }, 500);
+    const params = new FormData();
+    params.append('file', new File([markdownRef.current], 'newMD.md'));
+    const res = await FUtil.Request({
+      headers: { 'Content-Type': 'multipart/form-data' },
+      method: 'POST',
+      url: `/v2/storages/files/upload`,
+      data: params,
+    });
+    if (res.errCode !== 0) {
+      fMessage(res.msg);
+      return;
+    }
+
+    // const result = await FUtil.Request({
+    //   method: 'GET',
+    //   url: `/v2/storages/files/${res.data.sha1}/download`,
+    // });
+
+    const saveTime = new Date().getTime();
+    setSaveType(2);
+    setLastSaveTime(saveTime);
     setEdited(false);
   };
 
-  /** 禁止资源内容保存（禁止右键菜单） */
+  /** 禁止编辑器内的资源内容保存（禁止右键菜单） */
   const preventSaveResource = () => {
     /** 禁止图片右键菜单 */
     const imgs = document.getElementsByClassName('image-area');
@@ -105,6 +125,12 @@ export const MarkdownEditor = (props: EditorProps) => {
   };
 
   useEffect(() => {
+    console.error(resourceId)
+    if (show) document.body.style.overflowY = 'auto';
+    document.body.style.overflowY = 'hidden';
+  }, [show]);
+
+  useEffect(() => {
     if (editor) {
       editor.setDrawerType = async (type: string) => {
         setDrawerType(type);
@@ -128,6 +154,7 @@ export const MarkdownEditor = (props: EditorProps) => {
     const newMarkdown = html2md(html);
     const edited = markdown !== newMarkdown;
     setEdited(edited);
+    markdownRef.current = newMarkdown;
     setMarkdown(newMarkdown);
 
     if (edited) {
@@ -154,33 +181,12 @@ export const MarkdownEditor = (props: EditorProps) => {
   }, [html]);
 
   useEffect(() => {
-    if (edited) {
-      window.onbeforeunload = () => true;
-    } else {
-      window.onbeforeunload = null;
-    }
+    setSaved(edited);
   }, [edited]);
 
   return (
     <editorContext.Provider value={{ editor }}>
       <div className={`markdown-editor-wrapper ${show && 'show'}`}>
-        <Prompt
-          when={!promptShow && edited}
-          message={(location: any) => {
-            setPromptShow(true);
-            fConfirmModal({
-              message: FI18n.i18nNext.t('alarm_leave_page'),
-              onOk() {
-                history.push(location);
-              },
-              onCancel() {
-                setPromptShow(false);
-              },
-            });
-            return false;
-          }}
-        />
-
         <div className="header">
           <div className="title">
             {FI18n.i18nNext.t('title_edit_post')}
@@ -270,5 +276,3 @@ export const MarkdownEditor = (props: EditorProps) => {
     </editorContext.Provider>
   );
 };
-
-export default connect(() => ({}))(MarkdownEditor);

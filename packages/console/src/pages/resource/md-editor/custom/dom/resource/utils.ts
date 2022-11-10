@@ -457,31 +457,29 @@ const customResourceHtml = (data: CustomResource) => {
    * 编辑器解析属性时，使用的 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value
    * 所以从 md 转为 html 时，属性值内的双引号需转为 ASCII 编码（&#34;）
    */
-  const html = `
-    <span
-      data-w-e-type="resource"
-      data-w-e-is-void
-      data-w-e-is-inline
-      data-originType="${data.originType}"
-      data-resourceId="${data.resourceId || ''}"
-      data-authType="${data.authType || ''}"
-      data-resourceName="${data.resourceName || ''}"
-      data-coverImages="${
-        data.coverImages
-          ? JSON.stringify(data.coverImages).replace(/"/g, '&#34;')
-          : ''
-      }"
-      data-resourceType="${JSON.stringify(data.resourceType).replace(
-        /"/g,
-        '&#34;',
-      )}"
-      data-latestVersion="${data.latestVersion || ''}"
-      data-version="${data.version || ''}"
-      data-content="${data.content.replace(/"/g, '&#34;')}"
-    >
-      此资源来自于 freelog
-    </span>
-  `;
+  const html = `<span
+    data-w-e-type="resource"
+    data-w-e-is-void
+    data-w-e-is-inline
+    data-originType="${data.originType}"
+    data-resourceId="${data.resourceId || ''}"
+    data-authType="${data.authType || ''}"
+    data-resourceName="${data.resourceName || ''}"
+    data-coverImages="${
+      data.coverImages
+        ? JSON.stringify(data.coverImages).replace(/"/g, '&#34;')
+        : ''
+    }"
+    data-resourceType="${JSON.stringify(data.resourceType).replace(
+      /"/g,
+      '&#34;',
+    )}"
+    data-latestVersion="${data.latestVersion || ''}"
+    data-version="${data.version || ''}"
+    data-content="${data.content.replace(/"/g, '&#34;')}"
+  >
+    此资源来自于 freelog
+  </span>`;
 
   return html;
 };

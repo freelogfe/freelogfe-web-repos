@@ -6,24 +6,49 @@
   top: 0;
   bottom: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #e9a923;
 
-  .fl-icon-suoding {
-    font-size: 20px;
-    cursor: pointer;
+  .tip {
+    color: #e9a923;
+    display: flex;
+    align-items: center;
+
+    .freelog {
+      font-size: 20px;
+    }
+
+    .auth-text {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      margin-left: 10px;
+    }
+
+    &.upcast {
+      color: #ee4040;
+    }
   }
 
-  .auth-text {
+  .auth-btn {
+    padding: 15px 50px;
+    background: #2784ff;
+    border-radius: 4px;
     font-size: 14px;
     font-weight: 600;
+    color: #ffffff;
     line-height: 20px;
-    margin-left: 10px;
-  }
+    margin-top: 20px;
+    cursor: pointer;
 
-  &.upcast {
-    color: #ee4040;
+    &:hover {
+      background: #529dff;
+    }
+
+    &:active {
+      background: #2376e5;
+    }
   }
 }
 
