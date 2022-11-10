@@ -67,7 +67,7 @@ export default function ResourceList({
           <div className='flex-column-center w-100x py-50 cur-pointer'>
             <div
               onClick={() => {
-                console.log(pageData, pageData.totalItem, resourcesListPure.length);
+                // console.log(pageData, pageData.totalItem, resourcesListPure.length);
                 setPageData({
                   ...pageData,
                   skip: resourcesListPure.length,
