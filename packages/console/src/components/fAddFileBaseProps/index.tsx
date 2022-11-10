@@ -22,7 +22,7 @@ function fAddFileBaseProps({ disabledKeys, defaultData }: fAddFileBasePropsProps
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render((<FAddFileBasePropsDrawer
-      defaultData={defaultData || []}
+      defaultData={defaultData}
       disabledKeys={disabledKeys}
       onOk={(obj) => {
         resolve(obj);
