@@ -24,6 +24,7 @@ import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
+import fEditCustomOptions from '@/components/fEditCustomOption';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -237,7 +238,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
                     ],
                   });
-                  console.log(data, 'data90iowsejflskdfjlsdk');
+                  // console.log(data, 'data90iowsejflskdfjlsdk');
                   if (!data) {
                     return;
                   }
@@ -262,7 +263,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       ],
                       defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
                     });
-                    console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+                    // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
                     if (!data) {
                       return;
                     }
@@ -303,27 +304,66 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       }),
                     });
                   }}
-                  onEdit={(theKey) => {
+                  onEdit={async (theKey) => {
                     const ind: number = resourceVersionCreatorPage.customOptionsData.findIndex((cod) => {
                       return cod.key === theKey;
                     });
                     const cur = resourceVersionCreatorPage.customOptionsData[ind];
-                    onChange({
-                      customOptionIndex: ind,
-                      customOptionEditorData: ind === -1
-                        ? null
-                        : {
-                          key: cur.key,
-                          keyError: '',
-                          description: cur.description,
-                          descriptionError: '',
-                          custom: cur.custom,
-                          defaultValue: cur.defaultValue,
-                          defaultValueError: '',
-                          customOption: cur.customOption,
-                          customOptionError: '',
-                        },
+
+                    if (!cur) {
+                      return;
+                    }
+
+                    const data = await fEditCustomOptions({
+                      defaultData: cur,
+                      disabledKeys: [
+                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => {
+                          return rp.key;
+                        }),
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => {
+                          return pp.key;
+                        }),
+                        ...resourceVersionCreatorPage.customOptionsData.map((cod) => {
+                          return cod.key;
+                        }),
+                      ],
                     });
+
+                    console.log(data, 'data09ewiodjfls;kdfjlsdkfjlsdk');
+                    if (!data) {
+                      return;
+                    }
+
+                    onChange({
+                      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {
+                        if (ind !== resourceVersionCreatorPage.customOptionIndex) {
+                          return cod;
+                        }
+                        return {
+                          key: data.key,
+                          description: data.description,
+                          custom: data.custom,
+                          defaultValue: data.defaultValue,
+                          customOption: data.customOption,
+                        };
+                      }),
+                    });
+                    // onChange({
+                    //   customOptionIndex: ind,
+                    //   customOptionEditorData: ind === -1
+                    //     ? null
+                    //     : {
+                    //       key: cur.key,
+                    //       keyError: '',
+                    //       description: cur.description,
+                    //       descriptionError: '',
+                    //       custom: cur.custom,
+                    //       defaultValue: cur.defaultValue,
+                    //       defaultValueError: '',
+                    //       customOption: cur.customOption,
+                    //       customOptionError: '',
+                    //     },
+                    // });
                   }}
                 />)
                 : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
@@ -335,30 +375,30 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       </>)
     }
 
-    <FCustomOptionsEditorDrawer
-      visible={resourceVersionCreatorPage.customOptionsEditorVisible}
-      defaultValue={resourceVersionCreatorPage.customOptionsEditorDataSource}
-      onCancel={() => {
-        onChange({
-          customOptionsEditorVisible: false,
-          customOptionsEditorDataSource: [],
-        });
-      }}
-      disabledKeys={[
-        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
-      ]}
-      onConfirm={(value) => {
-        onChange({
-          customOptionsData: [
-            ...resourceVersionCreatorPage.customOptionsData,
-            ...value,
-          ],
-          customOptionsEditorVisible: false,
-        });
-      }}
-    />
+    {/*<FCustomOptionsEditorDrawer*/}
+    {/*  visible={resourceVersionCreatorPage.customOptionsEditorVisible}*/}
+    {/*  defaultValue={resourceVersionCreatorPage.customOptionsEditorDataSource}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionsEditorVisible: false,*/}
+    {/*      customOptionsEditorDataSource: [],*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
+    {/*    ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),*/}
+    {/*  ]}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionsData: [*/}
+    {/*        ...resourceVersionCreatorPage.customOptionsData,*/}
+    {/*        ...value,*/}
+    {/*      ],*/}
+    {/*      customOptionsEditorVisible: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
     <FCustomOptionEditorDrawer
       visible={resourceVersionCreatorPage.customOptionIndex !== -1}

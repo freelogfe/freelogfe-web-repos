@@ -1,28 +1,32 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as ReactDOM from 'react-dom/client';
-import FEditFileBasePropDrawer from './FEditFileBasePropDrawer';
+import FEditCustomOptionDrawer from './FEditCustomOptionDrawer';
 
-interface fEditFileBasePropProps {
+interface fEditCustomOptionsProps {
   disabledKeys: string[];
   defaultData: {
     key: string;
-    value: string;
     description: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    customOption: string;
   };
 }
 
 type ReturnData = {
   key: string;
-  value: string;
   description: string;
+  custom: 'input' | 'select';
+  defaultValue: string;
+  customOption: string;
 } | null;
 
-function fEditFileBaseProp({disabledKeys, defaultData}: fEditFileBasePropProps): Promise<ReturnData> {
+function fEditCustomOptions({ disabledKeys, defaultData }: fEditCustomOptionsProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
-    return root.render(<FEditFileBasePropDrawer
-      defaultData={defaultData || []}
+    return root.render(<FEditCustomOptionDrawer
+      defaultData={defaultData}
       disabledKeys={disabledKeys}
       onOk={(obj) => {
         resolve(obj);
@@ -37,4 +41,4 @@ function fEditFileBaseProp({disabledKeys, defaultData}: fEditFileBasePropProps):
   });
 }
 
-export default fEditFileBaseProp;
+export default fEditCustomOptions;

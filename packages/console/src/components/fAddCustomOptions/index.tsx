@@ -23,7 +23,11 @@ type ReturnData = {
   customOption: string;
 }[] | null;
 
-function fAddCustomOptions({ disabledKeys, defaultData, hideTypeSelect = false }: fAddCustomOptionsProps) {
+function fAddCustomOptions({
+                             disabledKeys,
+                             defaultData,
+                             hideTypeSelect = false,
+                           }: fAddCustomOptionsProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render(<FAddCustomOptionsDrawer

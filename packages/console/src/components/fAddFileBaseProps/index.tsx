@@ -21,7 +21,7 @@ type ReturnData = {
 function fAddFileBaseProps({ disabledKeys, defaultData }: fAddFileBasePropsProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
-    return root.render((<FAddFileBasePropsDrawer
+    return root.render(<FAddFileBasePropsDrawer
       defaultData={defaultData}
       disabledKeys={disabledKeys}
       onOk={(obj) => {
@@ -33,7 +33,7 @@ function fAddFileBaseProps({ disabledKeys, defaultData }: fAddFileBasePropsProps
           root.unmount();
         }, 300);
       }}
-    />));
+    />);
   });
 
 }
