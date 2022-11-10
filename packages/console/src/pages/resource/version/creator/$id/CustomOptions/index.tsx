@@ -23,6 +23,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fEditFileBaseProp from '@/components/fEditFileBaseProp';
+import fAddCustomOptions from '@/components/fAddCustomOptions';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -228,32 +229,69 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             <Space size={40}>
               <FComponentsLib.FTextBtn
                 style={{ fontSize: 12, fontWeight: 600 }}
-                onClick={() => {
-                  onChange({
-                    customOptionsEditorDataSource: [{
-                      key: '',
-                      keyError: '',
-                      description: '',
-                      descriptionError: '',
-                      custom: 'input',
-                      customOption: '',
-                      customOptionError: '',
-                      defaultValue: '',
-                      defaultValueError: '',
-                    }],
-                    customOptionsEditorVisible: true,
+                onClick={async () => {
+                  const data = await fAddCustomOptions({
+                    disabledKeys: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+                      ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+                    ],
                   });
+                  console.log(data, 'data90iowsejflskdfjlsdk');
+                  if (!data) {
+                    return;
+                  }
+                  onChange({
+                    customOptionsData: [
+                      ...resourceVersionCreatorPage.customOptionsData,
+                      ...data,
+                    ],
+                    // customOptionsEditorVisible: false,
+                  });
+                  // onChange({
+                  //   customOptionsEditorDataSource: [{
+                  //     key: '',
+                  //     keyError: '',
+                  //     description: '',
+                  //     descriptionError: '',
+                  //     custom: 'input',
+                  //     customOption: '',
+                  //     customOptionError: '',
+                  //     defaultValue: '',
+                  //     defaultValueError: '',
+                  //   }],
+                  //   customOptionsEditorVisible: true,
+                  // });
                 }}
               >添加选项</FComponentsLib.FTextBtn>
               {
                 resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
-                  onClick={() => {
-                    dispatch<ImportLastVersionDataAction>({
-                      type: 'resourceVersionCreatorPage/importLastVersionData',
-                      payload: 'optionProps',
+                  onClick={async () => {
+                    const data = await fAddCustomOptions({
+                      disabledKeys: [
+                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+                        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+                      ],
+                      defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
                     });
-                    onChange({ dataIsDirty: true });
+                    console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+                    if (!data) {
+                      return;
+                    }
+                    onChange({
+                      customOptionsData: [
+                        ...resourceVersionCreatorPage.customOptionsData,
+                        ...data,
+                      ],
+                      // customOptionsEditorVisible: false,
+                    });
+                    // dispatch<ImportLastVersionDataAction>({
+                    //   type: 'resourceVersionCreatorPage/importLastVersionData',
+                    //   payload: 'optionProps',
+                    // });
+                    // onChange({ dataIsDirty: true });
                   }}>从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
