@@ -6,17 +6,17 @@ import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
   ChangeAction,
-  ImportLastVersionDataAction,
+  // ImportLastVersionDataAction,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
 } from '@/models/connect';
-import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+// import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
-import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
+// import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
