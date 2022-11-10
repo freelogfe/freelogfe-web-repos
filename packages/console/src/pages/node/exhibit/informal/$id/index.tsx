@@ -255,7 +255,13 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
             {loading ? (
               <div className={styles['loader']}>
                 <LoadingOutlined className={styles['loader-icon']} />
-                <div className={styles['loader-text']}>正在{resultPopupType ? '上架' : '下架'}</div>
+                <div className={styles['loader-text']}>
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')
+                  }
+                </div>
               </div>
             ) : (
               <div className={styles['result']}>
@@ -263,8 +269,14 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                   className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
                     styles[resultPopupType ? 'up' : 'down']
                   }`}
-                ></i>
-                <div className={styles['result-text']}>已{resultPopupType ? '上架' : '下架'}</div>
+                />
+                <div className={styles['result-text']}>
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                  }
+                </div>
               </div>
             )}
           </div>

@@ -380,9 +380,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
 
       <FDialog
         show={activeDialogShow}
-        title='提醒'
-        desc='请先为资源添加一个授权策略，再进行上架操作'
-        sureText='添加策略'
+        title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
+        desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
+        sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
+        cancelText={FI18n.i18nNext.t('btn_cancel')}
         cancel={() => {
           setActiveDialogShow(false);
         }}
@@ -475,7 +476,12 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
               <div className={styles['loader']}>
                 <LoadingOutlined className={styles['loader-icon']} />
                 <div className={styles['loader-text']}>
-                  正在{resultPopupType === 1 ? '上架' : '下架'}
+                  {/*正在{resultPopupType === 1 ? '上架' : '下架'}*/}
+                  {
+                    resultPopupType === 1
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')
+                  }
                 </div>
               </div>
             ) : (
@@ -486,7 +492,11 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
                   }`}
                 />
                 <div className={styles['result-text']}>
-                  已{resultPopupType === 1 ? '上架' : '下架'}
+                  {
+                    resultPopupType === 1
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                  }
                 </div>
               </div>
             )}
