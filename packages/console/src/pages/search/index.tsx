@@ -343,7 +343,7 @@ function Search({}: SearchProps) {
                 keywords={keywords}
                 userPageData={userPageData}
                 setUserPageData={setUserPageData}
-              ></UserList>
+              />
             </div>
           </div>
         ) : (
@@ -351,11 +351,11 @@ function Search({}: SearchProps) {
             <div className={'h-100x   pt-40  flex-column-center ' + styles.rContainer}>
               {!resourcesListPure.length ? (
                 <div className='flex-column-center w-100x h-100x'>
-                  <div className='flex-2'></div>
+                  <div className='flex-2' />
                   <span className={styles.none}>
                     抱歉，没有找到与{' ' + keywords + ' '}相关的结果
                   </span>
-                  <div className='flex-3'></div>
+                  <div className='flex-3' />
                 </div>
               ) : (
                 <div className={styles.tip + ' mb-20 w-100x ml-18'}>
@@ -375,7 +375,7 @@ function Search({}: SearchProps) {
                   resourcesListPure={resourcesListPure}
                   pageData={pageData}
                   setPageData={setPageData}
-                ></ResourceList>
+                />
               </div>
             </div>
           </div>

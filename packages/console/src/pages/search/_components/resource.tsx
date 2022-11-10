@@ -5,6 +5,7 @@ import ResourceImage from './resource/image';
 import ResourceInfo from './resource/info';
 import PolicyTag from './resource/policyTag';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
+import FNoDataTip from '@/components/FNoDataTip';
 
 interface ResourceListProps {
   onClick?: any;
@@ -76,7 +77,9 @@ export default function ResourceList({
           </div>
         </div>
       ) : (
-        <div className="h-50 w-100x"></div>
+        <div className="h-50 w-100x">
+          <FNoDataTip height={600} tipText={'暂无上架资源'} />
+        </div>
       )}
     </>
   );
