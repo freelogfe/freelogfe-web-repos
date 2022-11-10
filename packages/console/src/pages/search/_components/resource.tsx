@@ -18,13 +18,14 @@ interface ResourceListProps {
   pageData: any;
   setPageData: any;
 }
+
 export default function ResourceList({
-  resourcesList,
-  keywords,
-  resourcesListPure,
-  pageData,
-  setPageData,
-}: ResourceListProps) {
+                                       resourcesList,
+                                       keywords,
+                                       resourcesListPure,
+                                       pageData,
+                                       setPageData,
+                                     }: ResourceListProps) {
   return (
     <>
       {resourcesList.map((item: any, index: number) => {
@@ -51,36 +52,42 @@ export default function ResourceList({
               type={item.resourceType}
               version={item.latestVersion}
             />
-            <div className="flex-row over-h">
+            <div className='flex-row over-h'>
               {item.policies.map((policy: any) => (
                 <PolicyTag name={policy.policyName} key={policy.policyId} />
               ))}
             </div>
           </CardContainer>
         ) : (
-          <CardContainer className="d-none" diabled key={item.resourceId + index} />
+          <CardContainer className='d-none' diabled key={item.resourceId + index} />
         );
       })}
-      {pageData.totalItem > resourcesListPure.length ? (
-        <div className="flex-column-center w-100x py-50 cur-pointer">
-          <div
-            onClick={() => {
-              console.log(pageData, pageData.totalItem, resourcesListPure.length);
-              setPageData({
-                ...pageData,
-                skip: resourcesListPure.length,
-              });
-            }}
-            className={styles.getMore}
-          >
-            加载更多
+      {
+        pageData.totalItem > resourcesListPure.length ? (
+          <div className='flex-column-center w-100x py-50 cur-pointer'>
+            <div
+              onClick={() => {
+                console.log(pageData, pageData.totalItem, resourcesListPure.length);
+                setPageData({
+                  ...pageData,
+                  skip: resourcesListPure.length,
+                });
+              }}
+              className={styles.getMore}
+            >
+              加载更多
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="h-50 w-100x">
-          <FNoDataTip height={600} tipText={'暂无上架资源'} />
-        </div>
-      )}
+        ) : (
+          <div className='h-50 w-100x'>
+            {
+              pageData.totalItem === 0 && (<FNoDataTip height={600} tipText={'暂无上架资源'} />)
+            }
+          </div>
+        )
+      }
+
+
     </>
   );
 }
