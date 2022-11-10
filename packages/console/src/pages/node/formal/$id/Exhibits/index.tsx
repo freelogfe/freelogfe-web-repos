@@ -540,8 +540,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         <FDialog
           show={inactiveDialogShow}
           title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
-          desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}
-          sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}
+          desc={FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth')}
+          sureText={FI18n.i18nNext.t('btn_remove_exhibits_from_auth')}
           cancel={() => {
             setInactiveDialogShow(false);
           }}
