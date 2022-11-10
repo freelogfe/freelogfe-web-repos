@@ -248,20 +248,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     ],
                     // customOptionsEditorVisible: false,
                   });
-                  // onChange({
-                  //   customOptionsEditorDataSource: [{
-                  //     key: '',
-                  //     keyError: '',
-                  //     description: '',
-                  //     descriptionError: '',
-                  //     custom: 'input',
-                  //     customOption: '',
-                  //     customOptionError: '',
-                  //     defaultValue: '',
-                  //     defaultValueError: '',
-                  //   }],
-                  //   customOptionsEditorVisible: true,
-                  // });
                 }}
               >添加选项</FComponentsLib.FTextBtn>
               {

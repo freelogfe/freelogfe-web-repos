@@ -74,7 +74,7 @@ function FAddCustomOptionsDrawer({
       set_dataSource(defaultData.map((dd) => {
         return {
           key: dd.key,
-          keyError: '',
+          keyError: disabledKeys.includes(dd.key) ? '键不能重复' : '',
           description: dd.description,
           descriptionError: '',
           custom: dd.custom,
