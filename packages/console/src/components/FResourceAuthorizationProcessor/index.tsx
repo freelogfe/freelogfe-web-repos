@@ -32,6 +32,8 @@ interface Processor {
 }
 
 interface FResourceAuthorizationProcessorProps {
+  resourceID: string;
+  
   onMount?(processor: Processor): void;
 }
 
@@ -152,6 +154,10 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
           }),
         };
       });
+  }
+
+  if (relations.length === 0) {
+    return null;
   }
 
   return (<div>__Template</div>);
