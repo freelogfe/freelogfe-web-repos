@@ -33,7 +33,7 @@ interface Processor {
 
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
-  
+
   onMount?(processor: Processor): void;
 }
 
