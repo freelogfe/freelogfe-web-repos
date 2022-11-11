@@ -377,9 +377,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FDialog
         show={activeDialogShow}
-        title='提醒'
-        desc='请先为资源添加一个授权策略，再进行上架操作'
-        sureText='添加策略'
+        title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
+        desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
+        sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
+        cancelText={FI18n.i18nNext.t('btn_cancel')}
         cancel={() => {
           setActiveDialogShow(false);
         }}
@@ -389,9 +390,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <FDialog
         show={inactiveDialogShow}
-        title='提醒'
-        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-        sureText='下架资源'
+        title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
+        desc={FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth')}
+        sureText={FI18n.i18nNext.t('btn_remove_exhibits_from_auth')}
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -403,7 +404,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             checked={noLonger}
             onChange={(e) => setNoLonger(e.target.checked)}
           >
-            不再提醒
+            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
           </Checkbox>
         }
       />
@@ -441,8 +442,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           ? FI18n.i18nNext.t('activatetheme_activate_authplan_btn')
           : FI18n.i18nNext.t('showexhibit_activate_authplan_btn')}
         tipText={exhibitInfoPage.side_ResourceType.includes('主题')
-          ? '主题激活需要启用至少一个授权策略，请选择你想要启用的授权策略'
-          : '展品上架需要启用至少一个授权策略，请选择你想要启用的授权策略'}
+          ? FI18n.i18nNext.t('msg_activate_theme_for_auth')
+          : FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth')}
         policiesList={exhibitInfoPage?.policy_List || []}
         onCancel={() => {
           dispatch<FetchInfoAction>({
@@ -467,7 +468,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 <div className={styles['loader']}>
                   <LoadingOutlined className={styles['loader-icon']} />
                   <div className={styles['loader-text']}>
-                    正在{resultPopupType === 1 ? '上架' : '下架'}
+                    {
+                      resultPopupType === 1
+                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}
                   </div>
                 </div>
               ) : (
@@ -478,7 +482,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     }`}
                   />
                   <div className={styles['result-text']}>
-                    已{resultPopupType === 1 ? '上架' : '下架'}
+                    {
+                      resultPopupType === 1
+                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                    }
                   </div>
                 </div>
               )}
