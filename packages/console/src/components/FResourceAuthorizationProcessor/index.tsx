@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { useGetState } from '@/utils/hooks';
 
 interface Target {
   id: string;
@@ -86,9 +87,9 @@ const initStates: FResourceAuthorizationProcessorStates = {
 
 function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProcessorProps) {
 
-  const [relations, set_relations] = React.useState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
-  const [targetInfos, set_targetInfos] = React.useState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
-  const [activatedTarget, set_activatedTarget] = React.useState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+  const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
+  const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
+  const [activatedTarget, set_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
   AHooks.useMount(() => {
     onMount && onMount({
@@ -114,7 +115,7 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
   }
 
   async function getAllTargets(): Promise<Target[]> {
-    return relations.map((r) => {
+    return get_relations().map((r) => {
       return {
         id: r.id,
         name: r.name,
@@ -135,22 +136,22 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
       contractID: string;
     }[];
   }[]> {
-    return targetInfos
+    return get_targetInfos()
       .filter((t) => {
         return t.targetNameType === 'resource';
       })
       .map((t) => {
-      return {
-        resourceID: t.targetID,
-        resourceName: t.targetName,
-        contracts: t.contracts.map((c) => {
-          return {
-            policyID: c.policyID,
-            contractID: c.contractID,
-          }
-        })
-      }
-    });
+        return {
+          resourceID: t.targetID,
+          resourceName: t.targetName,
+          contracts: t.contracts.map((c) => {
+            return {
+              policyID: c.policyID,
+              contractID: c.contractID,
+            };
+          }),
+        };
+      });
   }
 
   return (<div>__Template</div>);
