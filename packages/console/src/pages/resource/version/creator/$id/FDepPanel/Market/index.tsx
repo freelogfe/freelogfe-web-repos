@@ -10,6 +10,7 @@ import { ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPage
 import FResourceList from '@/components/FResourceList';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { ChangeAction, FetchResourcesAction } from '@/models/resourceDepSelector';
+import { processor } from '@/components/FResourceAuthorizationProcessor';
 
 const selectOptions: { text?: string, value: string }[] = [
   { text: '资源市场', value: '1' },
@@ -83,6 +84,11 @@ function Market({ dispatch, resourceDepSelector, resourceVersionCreatorPage }: M
         loading={resourceDepSelector.totalItem === -1}
         stillMore={resourceDepSelector.resourceList.length < resourceDepSelector.totalItem}
         onSelect={(value) => {
+          processor?.addTargets([{
+            id: value.id,
+            name: value.title,
+            type: 'resource',
+          }]);
           dispatch<AddDepsByMainIDsAction>({
             type: 'resourceVersionCreatorPage/dddDepsByMainIDs',
             payload: [value.id],

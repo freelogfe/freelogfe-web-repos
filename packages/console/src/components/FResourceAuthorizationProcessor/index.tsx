@@ -4,6 +4,7 @@ import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
+import Content from './Content';
 
 interface Target {
   id: string;
@@ -35,7 +36,7 @@ interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
 
-  onMount?(processor: Processor): void;
+  // onMount?(processor: Processor): void;
 }
 
 interface FResourceAuthorizationProcessorStates {
@@ -88,24 +89,35 @@ const initStates: FResourceAuthorizationProcessorStates = {
   activatedTarget: null,
 };
 
-function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProcessorProps) {
+export let processor: Processor | null = null;
+
+function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProps) {
 
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
   AHooks.useMount(() => {
-    onMount && onMount({
+    // onMount && onMount({
+    //   addTargets,
+    //   removeTarget,
+    //   activeTarget,
+    //   getAllTargets,
+    //   isCompleteAuthorization,
+    //   getAllResourcesWithContracts,
+    // });
+    processor = {
       addTargets,
       removeTarget,
       activeTarget,
       getAllTargets,
       isCompleteAuthorization,
       getAllResourcesWithContracts,
-    });
+    };
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
+    console.log(targets, 's9oidfjlskdfjlsdjflk');
     return { err: '' };
   }
 
@@ -172,7 +184,10 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
     </div>
 
     <div className={styles.DepPanelContent}>
-
+      <Content
+        activatedTarget={activatedTarget}
+        targetInfos={targetInfos}
+      />
     </div>
   </div>);
 }

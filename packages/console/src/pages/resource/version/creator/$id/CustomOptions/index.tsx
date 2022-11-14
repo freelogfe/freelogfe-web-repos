@@ -60,17 +60,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               style={{ fontSize: 12, fontWeight: 600 }}
               type='primary'
               onClick={async () => {
-                // onChange({
-                //   basePropertiesEditorVisible: true,
-                //   basePropertiesEditorData: [{
-                //     key: '',
-                //     keyError: '',
-                //     value: '',
-                //     valueError: '',
-                //     description: '',
-                //     descriptionError: '',
-                //   }],
-                // });
                 const dataSource = await fAddFileBaseProps({
                   disabledKeys: [
                     ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
@@ -103,10 +92,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={async () => {
-                    // dispatch<ImportLastVersionDataAction>({
-                    //   type: 'resourceVersionCreatorPage/importLastVersionData',
-                    //   payload: 'baseProps',
-                    // });
                     const dataSource = await fAddFileBaseProps({
                       defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
                       disabledKeys: [
@@ -121,10 +106,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         }),
                       ],
                     });
-                    // onChange({
-                    //   dataIsDirty: true,
-                    //
-                    // });
                     if (!dataSource) {
                       return;
                     }
@@ -329,14 +310,14 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       ],
                     });
 
-                    console.log(data, 'data09ewiodjfls;kdfjlsdkfjlsdk');
+                    // console.log(data, 'data09ewiodjfls;kdfjlsdkfjlsdk');
                     if (!data) {
                       return;
                     }
 
                     onChange({
-                      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {
-                        if (ind !== resourceVersionCreatorPage.customOptionIndex) {
+                      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
+                        if (ind !== i) {
                           return cod;
                         }
                         return {
@@ -400,48 +381,48 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     {/*  }}*/}
     {/*/>*/}
 
-    <FCustomOptionEditorDrawer
-      visible={resourceVersionCreatorPage.customOptionIndex !== -1}
-      dataSource={{
-        key: resourceVersionCreatorPage.customOptionEditorData?.key || '',
-        description: resourceVersionCreatorPage.customOptionEditorData?.description || '',
-        value: (resourceVersionCreatorPage.customOptionEditorData?.custom === 'input' ? resourceVersionCreatorPage.customOptionEditorData?.defaultValue : resourceVersionCreatorPage.customOptionEditorData?.customOption) || '',
-        valueType: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',
-      }}
-      disabledKeys={[
-        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-        ...resourceVersionCreatorPage.customOptionsData.filter((cod, ind) => {
-          return ind !== resourceVersionCreatorPage.customOptionIndex;
-        }).map((cod) => {
-          return cod.key;
-        }),
-      ]}
-      onCancel={() => {
-        onChange({
-          customOptionIndex: -1,
-          customOptionEditorData: null,
-        });
-      }}
-      onConfirm={(value) => {
-        onChange({
-          customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {
-            if (ind !== resourceVersionCreatorPage.customOptionIndex) {
-              return cod;
-            }
-            return {
-              key: value.key,
-              description: value.description,
-              custom: value.valueType,
-              defaultValue: value.value,
-              customOption: value.value,
-            };
-          }),
-          customOptionIndex: -1,
-          customOptionEditorData: null,
-        });
-      }}
-    />
+    {/*<FCustomOptionEditorDrawer*/}
+    {/*  visible={resourceVersionCreatorPage.customOptionIndex !== -1}*/}
+    {/*  dataSource={{*/}
+    {/*    key: resourceVersionCreatorPage.customOptionEditorData?.key || '',*/}
+    {/*    description: resourceVersionCreatorPage.customOptionEditorData?.description || '',*/}
+    {/*    value: (resourceVersionCreatorPage.customOptionEditorData?.custom === 'input' ? resourceVersionCreatorPage.customOptionEditorData?.defaultValue : resourceVersionCreatorPage.customOptionEditorData?.customOption) || '',*/}
+    {/*    valueType: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',*/}
+    {/*  }}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
+    {/*    ...resourceVersionCreatorPage.customOptionsData.filter((cod, ind) => {*/}
+    {/*      return ind !== resourceVersionCreatorPage.customOptionIndex;*/}
+    {/*    }).map((cod) => {*/}
+    {/*      return cod.key;*/}
+    {/*    }),*/}
+    {/*  ]}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionIndex: -1,*/}
+    {/*      customOptionEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {*/}
+    {/*        if (ind !== resourceVersionCreatorPage.customOptionIndex) {*/}
+    {/*          return cod;*/}
+    {/*        }*/}
+    {/*        return {*/}
+    {/*          key: value.key,*/}
+    {/*          description: value.description,*/}
+    {/*          custom: value.valueType,*/}
+    {/*          defaultValue: value.value,*/}
+    {/*          customOption: value.value,*/}
+    {/*        };*/}
+    {/*      }),*/}
+    {/*      customOptionIndex: -1,*/}
+    {/*      customOptionEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
   </>);
 }
 

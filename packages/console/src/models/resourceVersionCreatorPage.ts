@@ -12,7 +12,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
-import fAddFileBaseProps from '@/components/fAddFileBaseProps';
+// import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 export type DepResources = {
   id: string;
@@ -95,26 +95,8 @@ export interface ResourceVersionCreatorPageModelState {
     value: string;
     description: string;
   }[];
-  // basePropertiesEditorVisible: boolean;
-  // basePropertiesEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   value: string;
-  //   valueError: string;
-  //   description: string;
-  //   descriptionError: string;
-  // }[];
-  // basePropertyEditorIndex: number;
-  // basePropertyEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   value: string;
-  //   valueError: string;
-  //   description: string;
-  //   descriptionError: string;
-  // } | null;
 
-  // customOptionsDataVisible: boolean;
+  customOptionsDataVisible: boolean;
   customOptionsData: {
     key: string;
     description: string;
@@ -122,30 +104,6 @@ export interface ResourceVersionCreatorPageModelState {
     defaultValue: string;
     customOption: string;
   }[];
-  // customOptionsEditorVisible: boolean;
-  // customOptionsEditorDataSource: {
-  //   key: string;
-  //   keyError: string;
-  //   description: string;
-  //   descriptionError: string;
-  //   custom: 'input' | 'select';
-  //   defaultValue: string;
-  //   defaultValueError: string;
-  //   customOption: string;
-  //   customOptionError: string;
-  // }[];
-  // customOptionIndex: number;
-  // customOptionEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   description: string;
-  //   descriptionError: string;
-  //   custom: 'input' | 'select';
-  //   defaultValue: string;
-  //   defaultValueError: string;
-  //   customOption: string;
-  //   customOptionError: string;
-  // } | null;
 
   description: EditorState;
 
@@ -223,10 +181,6 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
-// export interface InitModelStatesAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/initModelStates';
-// }
-
 export interface FetchDraftAction extends AnyAction {
   type: 'fetchDraft';
 }
@@ -256,11 +210,6 @@ export interface AddDepsByMainIDsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/dddDepsByMainIDs';
   payload: string[]; // 主资源 ids
 }
-
-// export interface HandleObjectInfoAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/handleObjectInfo';
-//   payload: string; // 对象 id
-// }
 
 export interface DeleteDependencyByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/deleteDependencyByID';
@@ -320,17 +269,9 @@ const initStates: ResourceVersionCreatorPageModelState = {
   rawPropertiesState: 'success',
 
   baseProperties: [],
-  // basePropertiesEditorVisible: false,
-  // basePropertiesEditorData: [],
-  // basePropertyEditorIndex: -1,
-  // basePropertyEditorData: null,
 
-  // customOptionsDataVisible: false,
+  customOptionsDataVisible: false,
   customOptionsData: [],
-  // customOptionsEditorVisible: false,
-  // customOptionsEditorDataSource: [],
-  // customOptionIndex: -1,
-  // customOptionEditorData: null,
 
   depRelationship: [],
   dependencies: [],

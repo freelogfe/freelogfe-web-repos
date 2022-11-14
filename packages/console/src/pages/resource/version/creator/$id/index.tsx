@@ -39,6 +39,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
 import { MarkdownEditor } from '@/pages/resource/md-editor';
+import FResourceAuthorizationProcessor, { processor } from '@/components/FResourceAuthorizationProcessor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -47,11 +48,11 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 }
 
 function VersionCreator({
-  dispatch,
-  resourceInfo,
-  resourceVersionCreatorPage,
-  match,
-}: VersionCreatorProps) {
+                          dispatch,
+                          resourceInfo,
+                          resourceVersionCreatorPage,
+                          match,
+                        }: VersionCreatorProps) {
   const [show, setShow] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
 
@@ -249,6 +250,9 @@ function VersionCreator({
 
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
             <FDepPanel />
+            <FResourceAuthorizationProcessor
+              resourceID={resourceVersionCreatorPage.resourceId}
+            />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock
@@ -282,17 +286,17 @@ interface HeaderProps {
 }
 
 function Header({
-  onClickCache,
-  onClickCreate,
-  disabledCreate = false,
-}: HeaderProps) {
+                  onClickCache,
+                  onClickCreate,
+                  disabledCreate = false,
+                }: HeaderProps) {
   return (
     <div className={styles.Header}>
       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-      <FComponentsLib.FTitleText text={'创建版本'} type="h1" />
+      <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
 
       <Space size={30}>
-        <FComponentsLib.FTextBtn type="default" onClick={onClickCache}>
+        <FComponentsLib.FTextBtn type='default' onClick={onClickCache}>
           {FI18n.i18nNext.t('save_as_draft')}
         </FComponentsLib.FTextBtn>
         <FComponentsLib.FRectBtn
