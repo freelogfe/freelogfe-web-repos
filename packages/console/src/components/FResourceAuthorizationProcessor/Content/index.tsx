@@ -204,7 +204,10 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
       style={{ width: '100%' }}
       direction='vertical'
     >
-      <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('getauth_title_authplanavailable')} />
+      <FComponentsLib.FContentText
+        type='additional2'
+        text={FI18n.i18nNext.t('getauth_title_authplanavailable')}
+      />
       {info.enabledPolicies.map((i) => (
         <div key={i.policyFullInfo.policyId} className={styles.Policy}>
           <div style={{ height: 15 }} />
