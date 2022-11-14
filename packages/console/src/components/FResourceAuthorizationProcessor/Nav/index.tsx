@@ -5,7 +5,6 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-// import { DepResources, ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { DepResources } from '@/models/resourceVersionCreatorPage';
 

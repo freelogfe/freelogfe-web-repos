@@ -42,7 +42,6 @@ function IsUpthrow({ resourceVersionCreatorPage, dispatch }: IsUpthrowProps) {
   }
 
   return (<div className={styles.radios}>
-    {/*{(!resource.upthrowDisabled || resource.upthrow) && (*/}
     <Space size={20}>
       <Space size={2}>
         <Radio
@@ -60,7 +59,6 @@ function IsUpthrow({ resourceVersionCreatorPage, dispatch }: IsUpthrowProps) {
     </Space>
 
     <div style={{ height: 15 }} />
-    {/*{(!resource.upthrowDisabled || !resource.upthrow) && (*/}
     <Space size={20}>
       <Space size={2}>
         <Radio

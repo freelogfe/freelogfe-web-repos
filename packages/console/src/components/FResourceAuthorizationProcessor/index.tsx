@@ -3,6 +3,7 @@ import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { useGetState } from '@/utils/hooks';
+import Nav from './Nav';
 
 interface Target {
   id: string;
@@ -52,7 +53,7 @@ interface FResourceAuthorizationProcessorStates {
   targetInfos: {
     targetID: string;
     targetName: string;
-    targetNameType: 'resource' | 'object';
+    targetType: 'resource' | 'object';
     targetResourceType: string[];
     error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
     warning: '' | 'authException' | 'ownerFreeze';
@@ -140,7 +141,7 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
   }[]> {
     return get_targetInfos()
       .filter((t) => {
-        return t.targetNameType === 'resource';
+        return t.targetType === 'resource';
       })
       .map((t) => {
         return {
@@ -160,7 +161,20 @@ function FResourceAuthorizationProcessor({ onMount }: FResourceAuthorizationProc
     return null;
   }
 
-  return (<div>__Template</div>);
+  return (<div className={styles.DepPanel}>
+
+    <div className={styles.DepPanelNavs}>
+      <Nav
+        relations={relations}
+        targetInfos={targetInfos}
+        activatedTarget={activatedTarget}
+      />
+    </div>
+
+    <div className={styles.DepPanelContent}>
+
+    </div>
+  </div>);
 }
 
 export default FResourceAuthorizationProcessor;
