@@ -125,9 +125,11 @@ export const MarkdownEditor = (props: EditorProps) => {
   };
 
   useEffect(() => {
-    console.error(resourceId)
-    if (show) document.body.style.overflowY = 'auto';
-    document.body.style.overflowY = 'hidden';
+    console.error(resourceId);
+    if (show) document.body.style.overflowY = 'hidden';
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
   }, [show]);
 
   useEffect(() => {
