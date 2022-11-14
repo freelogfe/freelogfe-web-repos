@@ -80,7 +80,7 @@ export function PolicyCard({
             </label>
 
             <FTooltip
-              title={'已上架的标的物必须启用至少一个授权策略'}
+              title={FI18n.i18nNext.t('msg_activateauthplan_disable')}
               zIndex={onlineDisable ? 1 : -1}
             >
               <div>

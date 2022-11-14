@@ -1,0 +1,34 @@
+@import '../../../config.less';
+
+.styles {
+  width: 100%;
+
+  .item {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+
+    & > div {
+      flex-shrink: 1;
+      width: 100%;
+    }
+
+    & > button {
+      flex-shrink: 0;
+    }
+
+    //.delete {
+    //  display: flex;
+    //  justify-content: flex-end;
+    //
+    //  & > span {
+    //    color: @f-error-color1;
+    //    cursor: pointer;
+    //  }
+    //
+    //}
+  }
+}
+
+

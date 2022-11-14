@@ -10,7 +10,7 @@ import { FUtil } from '@freelog/tools-lib';
 
 interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
-  defaultData: {
+  defaultData?: {
     key: string;
     value: string;
     description: string;
@@ -37,15 +37,37 @@ interface FAddFileBasePropsDrawerStates {
   }[];
 }
 
-const initData: FAddFileBasePropsDrawerStates = {
+const initStates: FAddFileBasePropsDrawerStates = {
   visible: true,
-  dataSource: [],
+  dataSource: [{
+    key: '',
+    keyError: '',
+    value: '',
+    valueError: '',
+    description: '',
+    descriptionError: '',
+  }],
 };
 
 function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
 
-  const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initData['visible']);
-  const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initData['dataSource']);
+  const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initStates['visible']);
+  const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initStates['dataSource']);
+
+  function initData() {
+    if (defaultData) {
+      set_dataSource(defaultData.map<FAddFileBasePropsDrawerStates['dataSource'][number]>((cpd) => {
+        return {
+          key: cpd.key,
+          keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
+          value: cpd.value,
+          valueError: '',
+          description: cpd.description,
+          descriptionError: '',
+        };
+      }));
+    }
+  }
 
   function onChangeData(value: Partial<FAddFileBasePropsDrawerStates['dataSource'][number]>, index: number) {
     const dd = dataSource.map((ds, i) => {
@@ -71,16 +93,7 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
       if (!vis) {
         onClose && onClose();
       } else {
-        set_dataSource(defaultData.map<FAddFileBasePropsDrawerStates['dataSource'][number]>((cpd) => {
-          return {
-            key: cpd.key,
-            keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
-            value: cpd.value,
-            valueError: '',
-            description: cpd.description,
-            descriptionError: '',
-          };
-        }));
+        initData();
       }
     }}
     width={720}

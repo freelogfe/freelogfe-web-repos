@@ -114,7 +114,7 @@ export interface ResourceVersionCreatorPageModelState {
   //   descriptionError: string;
   // } | null;
 
-  customOptionsDataVisible: boolean;
+  // customOptionsDataVisible: boolean;
   customOptionsData: {
     key: string;
     description: string;
@@ -122,30 +122,30 @@ export interface ResourceVersionCreatorPageModelState {
     defaultValue: string;
     customOption: string;
   }[];
-  customOptionsEditorVisible: boolean;
-  customOptionsEditorDataSource: {
-    key: string;
-    keyError: string;
-    description: string;
-    descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
-  }[];
-  customOptionIndex: number;
-  customOptionEditorData: {
-    key: string;
-    keyError: string;
-    description: string;
-    descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
-  } | null;
+  // customOptionsEditorVisible: boolean;
+  // customOptionsEditorDataSource: {
+  //   key: string;
+  //   keyError: string;
+  //   description: string;
+  //   descriptionError: string;
+  //   custom: 'input' | 'select';
+  //   defaultValue: string;
+  //   defaultValueError: string;
+  //   customOption: string;
+  //   customOptionError: string;
+  // }[];
+  // customOptionIndex: number;
+  // customOptionEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   description: string;
+  //   descriptionError: string;
+  //   custom: 'input' | 'select';
+  //   defaultValue: string;
+  //   defaultValueError: string;
+  //   customOption: string;
+  //   customOptionError: string;
+  // } | null;
 
   description: EditorState;
 
@@ -223,9 +223,9 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
-export interface InitModelStatesAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/initModelStates';
-}
+// export interface InitModelStatesAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/initModelStates';
+// }
 
 export interface FetchDraftAction extends AnyAction {
   type: 'fetchDraft';
@@ -296,7 +296,7 @@ export interface ResourceVersionCreatorModelType {
     dddDepsByMainIDs: (action: AddDepsByMainIDsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
-    initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    // initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
@@ -325,12 +325,12 @@ const initStates: ResourceVersionCreatorPageModelState = {
   // basePropertyEditorIndex: -1,
   // basePropertyEditorData: null,
 
-  customOptionsDataVisible: false,
+  // customOptionsDataVisible: false,
   customOptionsData: [],
-  customOptionsEditorVisible: false,
-  customOptionsEditorDataSource: [],
-  customOptionIndex: -1,
-  customOptionEditorData: null,
+  // customOptionsEditorVisible: false,
+  // customOptionsEditorDataSource: [],
+  // customOptionIndex: -1,
+  // customOptionEditorData: null,
 
   depRelationship: [],
   dependencies: [],
@@ -1249,38 +1249,38 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       if (payload === 'optionProps') {
-        const allKeys: string[] = [
-          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-            return rp.key;
-          }),
-          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-            return pp.key;
-          }),
-          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-            return pp.key;
-          }),
-        ];
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            customOptionsEditorDataSource: resourceVersionCreatorPage.preVersionOptionProperties
-              .map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cpd) => {
-                return {
-                  key: cpd.key,
-                  keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-                  description: cpd.description,
-                  descriptionError: '',
-                  custom: cpd.custom,
-                  defaultValue: cpd.defaultValue,
-                  defaultValueError: '',
-                  customOption: cpd.customOption,
-                  customOptionError: '',
-                };
-              }),
-            customOptionsEditorVisible: true,
-          },
-          caller: '97293874823yu4oi234io23hjkfdsasd98890698678&*^&^&f',
-        });
+        // const allKeys: string[] = [
+        //   ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+        //     return rp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+        //     return pp.key;
+        //   }),
+        //   ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+        //     return pp.key;
+        //   }),
+        // ];
+        // yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {
+        //     customOptionsEditorDataSource: resourceVersionCreatorPage.preVersionOptionProperties
+        //       .map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cpd) => {
+        //         return {
+        //           key: cpd.key,
+        //           keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
+        //           description: cpd.description,
+        //           descriptionError: '',
+        //           custom: cpd.custom,
+        //           defaultValue: cpd.defaultValue,
+        //           defaultValueError: '',
+        //           customOption: cpd.customOption,
+        //           customOptionError: '',
+        //         };
+        //       }),
+        //     customOptionsEditorVisible: true,
+        //   },
+        //   caller: '97293874823yu4oi234io23hjkfdsasd98890698678&*^&^&f',
+        // });
         return;
       }
 
@@ -1303,13 +1303,13 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-        caller: '97%^%^%^^^293874823yu4oi234io23hjkfdsasdf',
-      });
-    },
+    // * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: initStates,
+    //     caller: '97%^%^%^^^293874823yu4oi234io23hjkfdsasdf',
+    //   });
+    // },
   },
 
   reducers: {
