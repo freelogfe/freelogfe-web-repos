@@ -88,6 +88,7 @@ function Market({ dispatch, resourceDepSelector, resourceVersionCreatorPage }: M
             id: value.id,
             name: value.title,
             type: 'resource',
+            versionRange: '^' + value.latestVersion,
           }]);
           dispatch<AddDepsByMainIDsAction>({
             type: 'resourceVersionCreatorPage/dddDepsByMainIDs',
