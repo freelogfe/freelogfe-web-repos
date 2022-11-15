@@ -183,7 +183,7 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
       }[];
     } = await FServiceAPI.Resource.batchInfo(params);
 
-    console.log(data_batchResourceInfo, 'data_batchResourceInfo09iwoejflksdjflsdkjl');
+    // console.log(data_batchResourceInfo, 'data_batchResourceInfo09iwoejflksdjflsdkjl');
 
     const result: FResourceAuthorizationProcessorStates['relations'] = needAddResources.map((t) => {
       const r = data_batchResourceInfo.find((r) => {
@@ -225,7 +225,7 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
     return { err: '' };
   }
 
-  function _syncTargetInfo() {
+  async function _syncTargetInfo() {
     let relationResourceIDs: string[] = [
       ...get_relations()
         .filter((r) => {
@@ -280,6 +280,25 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
     const needAddObjectIDs: string[] = relationResourceIDs.filter((r) => {
       return !existentObjectIDs.includes(r);
     });
+
+    const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+      resourceIds: needAddResourceIDs.join(','),
+      isLoadPolicyInfo: 1,
+      isLoadLatestVersionInfo: 1,
+      // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
+      // isLoadFreezeReason: 1,
+      isTranslate: 1,
+    };
+
+    const { data: data_batchResourceInfo }: {
+      data: {
+        resourceId: string;
+        baseUpcastResources: {
+          resourceId: string;
+          resourceName: string;
+        }[];
+      }[];
+    } = await FServiceAPI.Resource.batchInfo(params);
   }
 
   async function removeTarget(targets: Target): Promise<{ err: string }> {
