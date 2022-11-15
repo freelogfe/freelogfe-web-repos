@@ -16,7 +16,6 @@ interface TargetInfo {
   targetResourceType: string[];
   error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
   warning: '' | 'authException' | 'ownerFreeze';
-  versionRange: string;
   versions: string[];
   upThrow: boolean;
   upThrowDisabled: boolean;

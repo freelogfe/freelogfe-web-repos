@@ -15,7 +15,6 @@ interface TargetInfo {
   targetResourceType: string[];
   error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
   warning: '' | 'authException' | 'ownerFreeze';
-  versionRange: string;
   versions: string[];
   upThrow: boolean;
   upThrowDisabled: boolean;
@@ -38,6 +37,7 @@ interface NavProps {
     id: string;
     name: string;
     type: 'resource' | 'object';
+    versionRange: string;
     children: {
       id: string;
       name: string;
@@ -133,9 +133,9 @@ function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
                         ? <span style={{ paddingRight: 5 }}>暂无版本</span>
                         : <>
                     <span
-                      style={{ paddingRight: 5 }}>{FI18n.i18nNext.t('version_range')}：{info.versionRange}</span>
+                      style={{ paddingRight: 5 }}>{FI18n.i18nNext.t('version_range')}：{r.versionRange}</span>
                           <FVersionHandlerPopover
-                            value={info.versionRange}
+                            value={r.versionRange}
                             versionOptions={info.versions}
                             onChange={(version) => {
                               // onChangeVersion(version, i.id)

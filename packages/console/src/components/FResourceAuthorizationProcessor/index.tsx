@@ -44,6 +44,7 @@ interface FResourceAuthorizationProcessorStates {
     id: string;
     name: string;
     type: 'resource' | 'object';
+    versionRange: string;
     children: {
       id: string;
       name: string;
@@ -58,7 +59,6 @@ interface FResourceAuthorizationProcessorStates {
     targetResourceType: string[];
     error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
     warning: '' | 'authException' | 'ownerFreeze';
-    versionRange: string;
     versions: string[];
     upThrow: boolean;
     upThrowDisabled: boolean;
