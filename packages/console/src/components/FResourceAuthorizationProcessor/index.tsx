@@ -10,6 +10,7 @@ interface Target {
   id: string;
   name: string;
   type: 'resource' | 'object';
+  versionRange: string;
 }
 
 interface Processor {
@@ -135,6 +136,7 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
         id: r.id,
         name: r.name,
         type: r.type,
+        versionRange: r.versionRange,
       };
     });
   }
