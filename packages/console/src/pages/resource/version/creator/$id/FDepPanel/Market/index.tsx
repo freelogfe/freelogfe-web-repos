@@ -90,10 +90,10 @@ function Market({ dispatch, resourceDepSelector, resourceVersionCreatorPage }: M
             type: 'resource',
             versionRange: '^' + value.latestVersion,
           }]);
-          dispatch<AddDepsByMainIDsAction>({
-            type: 'resourceVersionCreatorPage/dddDepsByMainIDs',
-            payload: [value.id],
-          });
+          // dispatch<AddDepsByMainIDsAction>({
+          //   type: 'resourceVersionCreatorPage/dddDepsByMainIDs',
+          //   payload: [value.id],
+          // });
         }}
         onLoadMord={() => {
           dispatch<FetchResourcesAction>({

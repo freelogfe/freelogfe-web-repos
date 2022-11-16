@@ -137,7 +137,9 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
             <div style={{ height: 10 }} />
 
             <div style={{ padding: '0 20px' }}>
-              <FContractDisplay contractID={k.contractID} />
+              <FContractDisplay
+                contractID={k.contractID}
+              />
             </div>
 
             <div style={{ height: 10 }} />

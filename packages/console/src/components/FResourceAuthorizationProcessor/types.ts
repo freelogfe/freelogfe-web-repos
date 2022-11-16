@@ -14,7 +14,6 @@ export interface ITargetInfo {
     contractID: string;
     policyID: string;
     title: string;
-    code: string;
     date: string;
   }[];
   terminatedContractIDs: string[];

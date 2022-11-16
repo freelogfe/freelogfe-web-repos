@@ -5,7 +5,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
 import Content from './Content';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { IActivatedTarget, IRelation, ITargetInfo } from './types';
 
 interface Target {
@@ -43,14 +43,14 @@ interface FResourceAuthorizationProcessorProps {
 }
 
 interface FResourceAuthorizationProcessorStates {
+  resourceID: string;
   relations: IRelation[];
-
   targetInfos: ITargetInfo[];
-
   activatedTarget: IActivatedTarget | null;
 }
 
 const initStates: FResourceAuthorizationProcessorStates = {
+  resourceID: '',
   relations: [],
   targetInfos: [],
   activatedTarget: null,
@@ -58,11 +58,18 @@ const initStates: FResourceAuthorizationProcessorStates = {
 
 export let processor: Processor | null = null;
 
-function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProps) {
+function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationProcessorProps) {
 
+  // console.log(resourceID, 'resourceIDoisjedflksdjl');
+
+  const [_, set_resourceID, get_resourceID] = useGetState<FResourceAuthorizationProcessorStates['resourceID']>(initStates['resourceID']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+
+  React.useEffect(() => {
+    set_resourceID(resourceID);
+  }, [resourceID]);
 
   AHooks.useMount(() => {
     // onMount && onMount({
@@ -84,23 +91,6 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
-    console.log(targets, 's9oidfjlskdfjlsdjflk');
-
-    // const resourceIDs = targets
-    //   .filter((t) => {
-    //     return t.type === 'resource';
-    //   })
-    //   .map((t) => {
-    //     return t.id;
-    //   });
-    //
-    // const objectIDs = targets
-    //   .filter((t) => {
-    //     return t.type === 'object';
-    //   })
-    //   .map((t) => {
-    //     return t.id;
-    //   });
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
@@ -266,9 +256,38 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
         }[];
       } = await FServiceAPI.Resource.batchInfo(params) as any;
 
-      console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
+      // console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
+      console.log(resourceID, 'resourceIDoiidddddd');
+      const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+        subjectIds: needAddResourceIDs.join(','),
+        licenseeId: get_resourceID(),
+        subjectType: 1,
+        licenseeIdentityType: 1,
+        isLoadPolicyInfo: 1,
+      };
+      const { data: data_batchContracts }: {
+        data: {
+          contractId: string;
+          contractName: string;
+          policyId: string;
+          createDate: string;
+          licensorId: string;
+          status: 0 | 1;
+        }[];
+      } = await FServiceAPI.Contract.batchContracts(params1);
+
+      console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
 
       const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
+        let error: string = '';
+        let warning: string = '';
+
+        const contracts = data_batchContracts.filter((dc) => {
+          return dc.licensorId === r.resourceId && dc.status === 0;
+        });
+        const contractIDs = contracts.map((c) => {
+          return c.policyId;
+        });
         return {
           targetID: r.resourceId,
           targetName: r.resourceName,
@@ -281,14 +300,32 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
           }),
           upThrow: false,
           upThrowDisabled: r.latestVersion !== '',
-          contracts: [],
-          terminatedContractIDs: [],
-          enabledPolicies: r.policies.map((p) => {
+          contracts: contracts.map((c) => {
             return {
-              checked: false,
-              policyFullInfo: p,
+              contractID: c.contractId,
+              policyID: c.policyId,
+              title: c.contractName,
+              code: '',
+              date: FUtil.Format.formatDateTime(c.createDate),
             };
           }),
+          terminatedContractIDs: data_batchContracts
+            .filter((dc: any) => {
+              return dc.licensorId === r.resourceId && dc.status === 1;
+            })
+            .map((dc: any) => {
+              return dc.contractId;
+            }),
+          enabledPolicies: r.policies
+            .filter((p) => {
+              return !contractIDs.includes(p.policyId) && p.status === 1;
+            })
+            .map((p) => {
+              return {
+                checked: false,
+                policyFullInfo: p,
+              };
+            }),
         };
       });
 
