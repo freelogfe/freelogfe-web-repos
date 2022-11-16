@@ -256,11 +256,13 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
           }[];
           latestVersion: string;
           policies: PolicyFullInfo_Type[],
+          status: number;
         }[];
       } = await FServiceAPI.Resource.batchInfo(params) as any;
 
       // console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
-      console.log(resourceID, 'resourceIDoiidddddd');
+      // console.log(resourceID, 'resourceIDoiidddddd');
+
       const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
         subjectIds: needAddResourceIDs.join(','),
         licenseeId: get_resourceID(),
@@ -279,11 +281,30 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         }[];
       } = await FServiceAPI.Contract.batchContracts(params1);
 
-      console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
+      // console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
+
+      const params2: BatchCycleDependencyCheckParams = {
+        resourceId: get_resourceID(),
+        dependencies: get_relations().map<{ resourceId: string; versionRange: string; }>((d) => {
+          return {
+            resourceId: d.id,
+            versionRange: d.versionRange,
+          };
+        }),
+      };
+      const cycleDependencyResourceID: string[] = await batchCycleDependencyCheck(params2);
 
       const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
-        let error: string = '';
+        let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
         let warning: string = '';
+
+        if (r.status === 0) {
+          error = 'offline';
+        } else if ((r.status & 2) === 2) {
+          error = 'freeze';
+        } else if (cycleDependencyResourceID.includes(r.resourceId)) {
+          error = 'cyclicDependency';
+        }
 
         const contracts = data_batchContracts.filter((dc) => {
           return dc.licensorId === r.resourceId && dc.status === 0;
@@ -297,7 +318,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
           targetName: r.resourceName,
           targetType: 'resource',
           targetResourceType: r.resourceType,
-          error: '',
+          error: error,
           warning: '',
           versions: r.resourceVersions.map((v) => {
             return v.version;
@@ -458,3 +479,40 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
 }
 
 export default FResourceAuthorizationProcessor;
+
+interface BatchCycleDependencyCheckParams {
+  resourceId: string;
+  dependencies: {
+    resourceId: string;
+    versionRange: string;
+  }[];
+}
+
+async function batchCycleDependencyCheck({
+                                           resourceId,
+                                           dependencies,
+                                         }: BatchCycleDependencyCheckParams): Promise<string[]> {
+  const promises: Promise<any>[] = [];
+  for (const dependency of dependencies) {
+    const params: Parameters<typeof FServiceAPI.Resource.cycleDependencyCheck>[0] = {
+      resourceId: resourceId,
+      dependencies: [{
+        resourceId: dependency.resourceId,
+        versionRange: dependency.versionRange,
+      }],
+    };
+    promises.push(FServiceAPI.Resource.cycleDependencyCheck(params));
+  }
+  const results = await Promise.all(promises);
+
+  const resourceIDs: string[] = [];
+  // console.log(results, 'results12390j');
+  for (const [index, result] of Object.entries(results)) {
+    // console.log(index, value);
+    const { data } = result;
+    if (!data) {
+      resourceIDs.push(dependencies[Number(index)].resourceId);
+    }
+  }
+  return resourceIDs;
+}
