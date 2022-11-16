@@ -625,10 +625,10 @@ function FPolicyBuilder({
         </FTooltip>
       </Space>}
       onClose={() => onCancel && onCancel()}
-      visible={visible}
+      open={visible}
       width={720}
       topRight={DrawerTopRight}
-      afterVisibleChange={onChange_DrawerVisible}
+      afterOpenChange={onChange_DrawerVisible}
     >
       {
         showView === 'success' && (<div>

@@ -146,7 +146,8 @@ function FContract_AvailablePolicy_Card({
     </FModal>
 
     <FDrawer
-      visible={drawerVisible}
+      // visible={drawerVisible}
+      open={drawerVisible}
       width={720}
       title={'获取授权'}
       topRight={<Space size={30}>
@@ -163,7 +164,7 @@ function FContract_AvailablePolicy_Card({
           onClick={onConfirm_VersionsDrawer}
         >签约</FComponentsLib.FRectBtn>
       </Space>}
-      afterVisibleChange={onChange_VersionsDrawer_Visible}
+      afterOpenChange={onChange_VersionsDrawer_Visible}
     >
       <div className={styles.versionDrawerTip}>当前依赖资源被以下版本所用，请确认新合约应用的版本范围</div>
       <div style={{ height: 25 }} />

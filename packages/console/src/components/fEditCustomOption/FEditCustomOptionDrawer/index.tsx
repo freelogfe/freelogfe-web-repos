@@ -80,9 +80,9 @@ function FEditCustomOptionDrawer({ disabledKeys, defaultData, onClose, onOk }: F
       onClose={() => {
         set_visible(false);
       }}
-      visible={visible}
+      open={visible}
       width={720}
-      afterVisibleChange={(visible) => {
+      afterOpenChange={(visible) => {
         if (visible) {
           initData();
         } else {

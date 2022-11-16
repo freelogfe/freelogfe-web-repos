@@ -63,7 +63,7 @@ function FCustomOptionsEditorDrawer({
     onClose={() => {
       onCancel && onCancel();
     }}
-    visible={visible}
+    open={visible}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -82,7 +82,7 @@ function FCustomOptionsEditorDrawer({
         onClick={onClick_ConfirmBtn}
       >确定</FComponentsLib.FRectBtn>
     </Space>}
-    afterVisibleChange={(visible) => {
+    afterOpenChange={(visible) => {
       if (!visible) {
         setDataSource(initDataSource);
       } else {

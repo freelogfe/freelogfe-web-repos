@@ -436,10 +436,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }
 
   return (<FDrawer
-    visible={!!bothSidesInfo}
+    // visible={!!bothSidesInfo}
+    open={!!bothSidesInfo}
     title={'授权关系'}
     // onClose={() => onClose && onClose()}
-    afterVisibleChange={onChange_DrawerVisible}
+    // afterVisibleChange={onChange_DrawerVisible}
+    afterOpenChange={onChange_DrawerVisible}
     onClose={() => {
       onClose && onClose();
     }}

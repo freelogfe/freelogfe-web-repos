@@ -7,56 +7,19 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { DepResources } from '@/models/resourceVersionCreatorPage';
-
-interface TargetInfo {
-  targetID: string;
-  targetName: string;
-  targetType: 'resource' | 'object';
-  targetResourceType: string[];
-  error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
-  warning: '' | 'authException' | 'ownerFreeze';
-  versions: string[];
-  upThrow: boolean;
-  upThrowDisabled: boolean;
-  contracts: {
-    contractID: string;
-    policyID: string;
-    title: string;
-    code: string;
-    date: string;
-  }[];
-  terminatedContractIDs: string[];
-  enabledPolicies: {
-    checked: boolean;
-    policyFullInfo: PolicyFullInfo_Type;
-  }[];
-}
+import { IActivatedTarget, IRelation, ITargetInfo } from '../types';
 
 interface NavProps {
-  relations: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-    versionRange: string;
-    children: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-    }[]
-  }[];
+  relations: IRelation[];
 
-  targetInfos: TargetInfo[];
+  targetInfos: ITargetInfo[];
 
-  activatedTarget: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-  } | null;
+  activatedTarget: IActivatedTarget | null;
 }
 
 function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
 
-  console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
+  // console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
   if (!activatedTarget || targetInfos.length === 0 || relations.length === 0) {
     return null;
   }
@@ -64,7 +27,7 @@ function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
   return (<div className={styles.styles}>
     {
       relations.map((r) => {
-          const info: TargetInfo | undefined = targetInfos
+          const info: ITargetInfo | undefined = targetInfos
             .find((t) => {
               return t.targetID === r.id && t.targetName === r.name && t.targetType === r.type;
             });
@@ -227,7 +190,7 @@ interface SmallNavProps {
     type: 'resource' | 'object';
   }[];
 
-  targetInfos: TargetInfo[];
+  targetInfos: ITargetInfo[];
 
   activatedTarget: {
     id: string;
@@ -253,7 +216,7 @@ function SmallNav({ relations, targetInfos, activatedTarget }: SmallNavProps) {
     </div>
     {
       relations.map((r) => {
-        const info: TargetInfo | undefined = targetInfos
+        const info: ITargetInfo | undefined = targetInfos
           .find((t) => {
             return t.targetID === r.id && t.targetName === r.name && t.targetType === r.type;
           });

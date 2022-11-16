@@ -6,6 +6,7 @@ import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
 import Content from './Content';
 import { FServiceAPI } from '@freelog/tools-lib';
+import { IActivatedTarget, IRelation, ITargetInfo } from './types';
 
 interface Target {
   id: string;
@@ -42,47 +43,11 @@ interface FResourceAuthorizationProcessorProps {
 }
 
 interface FResourceAuthorizationProcessorStates {
-  relations: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-    versionRange: string;
-    children: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-    }[];
-  }[];
+  relations: IRelation[];
 
-  targetInfos: {
-    targetID: string;
-    targetName: string;
-    targetType: 'resource' | 'object';
-    targetResourceType: string[];
-    error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
-    warning: '' | 'authException' | 'ownerFreeze';
-    versions: string[];
-    upThrow: boolean;
-    upThrowDisabled: boolean;
-    contracts: {
-      contractID: string;
-      policyID: string;
-      title: string;
-      code: string;
-      date: string;
-    }[];
-    terminatedContractIDs: string[];
-    enabledPolicies: {
-      checked: boolean;
-      policyFullInfo: PolicyFullInfo_Type;
-    }[];
-  }[];
+  targetInfos: ITargetInfo[];
 
-  activatedTarget: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-  } | null;
+  activatedTarget: IActivatedTarget | null;
 }
 
 const initStates: FResourceAuthorizationProcessorStates = {

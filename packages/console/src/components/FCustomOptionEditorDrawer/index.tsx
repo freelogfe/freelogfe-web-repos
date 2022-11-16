@@ -87,9 +87,9 @@ function FCustomOptionEditorDrawer({
       onClose={() => {
         onCancel && onCancel();
       }}
-      visible={visible}
+      open={visible}
       width={720}
-      afterVisibleChange={(visible) => {
+      afterOpenChange={(visible) => {
         if (visible) {
           onVisible_Drawer();
         } else {

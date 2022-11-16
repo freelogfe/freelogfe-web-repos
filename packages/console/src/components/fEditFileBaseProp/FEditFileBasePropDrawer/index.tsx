@@ -64,9 +64,9 @@ function FEditFileBasePropDrawer({ disabledKeys, defaultData, onOk, onClose }: F
     onClose={() => {
       set_visible(false);
     }}
-    visible={visible}
+    open={visible}
     width={720}
-    afterVisibleChange={(v) => {
+    afterOpenChange={(v) => {
       if (!v) {
         onClose && onClose();
       } else {

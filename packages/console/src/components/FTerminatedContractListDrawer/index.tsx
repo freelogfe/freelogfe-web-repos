@@ -221,13 +221,13 @@ function FTerminatedContractListDrawer({
   ];
 
   return (<FDrawer
-    visible={terminatedContractIDs && terminatedContractIDs.length > 0}
+    open={terminatedContractIDs && terminatedContractIDs.length > 0}
     title={'已终止合约'}
     width={window.innerWidth - 280}
     onClose={() => {
       onClose && onClose();
     }}
-    afterVisibleChange={(visible) => {
+    afterOpenChange={(visible) => {
       if (visible) {
         handleData();
       }

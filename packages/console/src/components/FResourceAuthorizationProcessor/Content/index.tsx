@@ -8,39 +8,12 @@ import FTooltip from '@/components/FTooltip';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-
-interface TargetInfo {
-  targetID: string;
-  targetName: string;
-  targetType: 'resource' | 'object';
-  targetResourceType: string[];
-  error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
-  warning: '' | 'authException' | 'ownerFreeze';
-  versions: string[];
-  upThrow: boolean;
-  upThrowDisabled: boolean;
-  contracts: {
-    contractID: string;
-    policyID: string;
-    title: string;
-    code: string;
-    date: string;
-  }[];
-  terminatedContractIDs: string[];
-  enabledPolicies: {
-    checked: boolean;
-    policyFullInfo: PolicyFullInfo_Type;
-  }[];
-}
+import { IActivatedTarget, ITargetInfo } from '../types';
 
 interface ContentProps {
-  targetInfos: TargetInfo[];
+  targetInfos: ITargetInfo[];
 
-  activatedTarget: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-  } | null;
+  activatedTarget: IActivatedTarget | null;
 }
 
 function Content({ targetInfos, activatedTarget }: ContentProps) {
@@ -49,7 +22,7 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
     return null;
   }
 
-  const info: TargetInfo | undefined = targetInfos.find((i) => {
+  const info: ITargetInfo | undefined = targetInfos.find((i) => {
     return activatedTarget.id === i.targetID && activatedTarget.name === i.targetName && activatedTarget.type === i.targetType;
   });
 

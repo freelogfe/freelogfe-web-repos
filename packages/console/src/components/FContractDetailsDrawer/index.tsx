@@ -308,10 +308,12 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
   }
 
   return (<FDrawer
-    visible={!!contractID}
+    // visible={!!contractID}
+    open={!!contractID}
     title={'合约详情'}
     onClose={() => onClose && onClose()}
-    afterVisibleChange={onChange_DrawerVisible}
+    // afterVisibleChange={onChange_DrawerVisible}
+    afterOpenChange={onChange_DrawerVisible}
   >
     {
       !baseInfo

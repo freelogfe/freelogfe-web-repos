@@ -118,14 +118,14 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
     onClose={() => {
       set_visible(false);
     }}
-    afterVisibleChange={(visible) => {
+    afterOpenChange={(visible) => {
       if (visible) {
         initData();
       } else {
         onClose && onClose();
       }
     }}
-    visible={visible}
+    open={visible}
     width={820}
   >
     <div className={styles.filter}>

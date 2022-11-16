@@ -88,8 +88,10 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
     onClose={() => {
       set_visible(false);
     }}
-    visible={visible}
-    afterVisibleChange={(vis) => {
+    // visible={visible}
+    open={visible}
+    // afterVisibleChange={(vis) => {
+    afterOpenChange={(vis) => {
       if (!vis) {
         onClose && onClose();
       } else {
