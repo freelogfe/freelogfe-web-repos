@@ -12,7 +12,7 @@ import { FetchExhibitListAction } from '@/models/informalNodeManagerPage';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 
 interface FObjectSelectorDrawerProps {
-  onSelect?({ objID, objName, sha1 }: { objID: string; objName: string; sha1: string }): void;
+  onSelect?(obj: { bucketID: string; bucketName: string; objID: string; objName: string; sha1: string }): void;
 
   onClose?(): void;
 }
@@ -23,6 +23,8 @@ interface FObjectSelectorDrawerStates {
   selected: string;
   inputValue: string;
   objList: {
+    bucketID: string;
+    bucketName: string;
     objID: string;
     objName: string;
     sha1: string;
@@ -104,6 +106,8 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
     set_objListMore(more);
     set_objList(data.dataList.map((d: any) => {
       return {
+        bucketID: d.bucketId,
+        bucketName: d.bucketName,
         objID: d.objectId,
         objName: d.objectName,
         sha1: d.sha1,

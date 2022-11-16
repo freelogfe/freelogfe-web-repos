@@ -7,7 +7,13 @@ interface fObjectSelectorDrawerProps {
 
 }
 
-type ReturnData = { objID: string; objName: string; sha1: string } | null;
+type ReturnData = {
+  bucketID: string;
+  bucketName: string;
+  objID: string;
+  objName: string;
+  sha1: string
+} | null;
 
 function fObjectSelectorDrawer({}: fObjectSelectorDrawerProps = {}): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {

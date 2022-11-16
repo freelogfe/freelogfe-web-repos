@@ -22,6 +22,8 @@ interface FPublishObjectFileProps {
   }): void;
 
   onSucceed_ImportObject?(obj: {
+    bucketID: string;
+    bucketName: string;
     objID: string;
     objName: string;
     sha1: string;
@@ -74,6 +76,8 @@ function FPublishObjectFile({
     sha1: string;
   } | null>(null);
   const tempImportObjectInfo = React.useRef<{
+    bucketID: string;
+    bucketName: string;
     objID: string;
     objName: string;
     sha1: string;
@@ -200,10 +204,12 @@ function FPublishObjectFile({
   }
 
   async function onImportObject({
+                                  bucketID,
+                                  bucketName,
                                   objectID,
                                   objectName,
                                   sha1,
-                                }: { objectID: string; objectName: string; sha1: string; }) {
+                                }: { objectID: string; objectName: string; sha1: string; bucketID: string; bucketName: string; }) {
 
     const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
       fileSha1: sha1,
@@ -228,6 +234,8 @@ function FPublishObjectFile({
           });
         }).flat();
         tempImportObjectInfo.current = {
+          bucketID: bucketID,
+          bucketName: bucketName,
           objID: objectID,
           objName: objectName,
           sha1: sha1,
@@ -256,6 +264,8 @@ function FPublishObjectFile({
       }
     } else {
       onSucceed_ImportObject && onSucceed_ImportObject({
+        bucketID: bucketID,
+        bucketName: bucketName,
         sha1,
         objID: objectID,
         objName: objectName,
@@ -376,6 +386,8 @@ function FPublishObjectFile({
             return;
           }
           onImportObject({
+            bucketID: obj.bucketID,
+            bucketName: obj.bucketName,
             objectID: obj.objID,
             objectName: obj.objName,
             sha1: obj.sha1,
