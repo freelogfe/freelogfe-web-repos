@@ -15,9 +15,13 @@ interface NavProps {
   targetInfos: ITargetInfo[];
 
   activatedTarget: IActivatedTarget | null;
+
+  onChange_Relations?(value: IRelation[]): void;
+
+  onChange_ActivatedTarget?(value: IActivatedTarget): void;
 }
 
-function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
+function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onChange_ActivatedTarget }: NavProps) {
 
   // console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
   if (!activatedTarget || targetInfos.length === 0 || relations.length === 0) {
@@ -40,6 +44,11 @@ function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
             <div
               onClick={() => {
                 // onChangeActiveID(rrr.id);
+                onChange_ActivatedTarget && onChange_ActivatedTarget({
+                  id: info.targetID,
+                  name: info.targetName,
+                  type: info.targetType,
+                });
               }}
               className={[styles.DepPanelNav, info.targetID === activatedTarget.id && info.targetName === activatedTarget.name && info.targetType === activatedTarget.type ? styles.DepPanelNavActive : ''].join(' ')}
             >
@@ -159,7 +168,9 @@ function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
               <FComponentsLib.FCircleBtn
                 onClick={(e) => {
                   e.stopPropagation();
-                  // return onDeleteResource(i.id);
+                  onChange_Relations && onChange_Relations(relations.filter((rl) => {
+                    return !(r.id === rl.id && r.name === rl.name && r.type === rl.type);
+                  }));
                 }}
                 type='danger'
               />
@@ -170,8 +181,9 @@ function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
               relations={r.children}
               targetInfos={targetInfos}
               activatedTarget={activatedTarget}
-              onClick={(resourceID) => {
+              onClick={(value) => {
                 // onChangeActiveID(resourceID);
+                onChange_ActivatedTarget && onChange_ActivatedTarget(value);
               }}
             />
 
@@ -192,16 +204,12 @@ interface SmallNavProps {
 
   targetInfos: ITargetInfo[];
 
-  activatedTarget: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-  } | null;
+  activatedTarget: IActivatedTarget | null;
 
-  onClick?: (resourceID: DepResources[number]['id']) => void;
+  onClick?: (resourceID: IActivatedTarget) => void;
 }
 
-function SmallNav({ relations, targetInfos, activatedTarget }: SmallNavProps) {
+function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNavProps) {
   if (relations.length === 0 || targetInfos.length === 0 || !activatedTarget) {
     return null;
   }
@@ -229,6 +237,11 @@ function SmallNav({ relations, targetInfos, activatedTarget }: SmallNavProps) {
             onClick={(e) => {
               e.stopPropagation();
               // onClick && onClick(i.id);
+              onClick && onClick({
+                id: info.targetID,
+                name: info.targetName,
+                type: info.targetType,
+              });
             }}
             // className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
             className={[styles.childrenDepPanelNav, info.targetID === activatedTarget.id && info.targetName === activatedTarget.name && info.targetType === activatedTarget.type ? styles.DepPanelNavActive : ''].join(' ')}

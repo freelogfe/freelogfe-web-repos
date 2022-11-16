@@ -34,6 +34,8 @@ interface Processor {
       contractID: string;
     }[];
   }[]>;
+
+  clear(): Promise<{ err: string }>;
 }
 
 interface FResourceAuthorizationProcessorProps {
@@ -87,6 +89,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
       getAllTargets,
       isCompleteAuthorization,
       getAllResourcesWithContracts,
+      clear,
     };
   });
 
@@ -288,6 +291,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         const contractIDs = contracts.map((c) => {
           return c.policyId;
         });
+
         return {
           targetID: r.resourceId,
           targetName: r.resourceName,
@@ -348,13 +352,25 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
     if (get_relations().length === 0) {
       set_activatedTarget(null);
     } else {
-      if (!get_activatedTarget()) {
+      const at = get_activatedTarget();
+      if (!at) {
+        set_activatedTarget(get_relations()[0]);
+        return;
+      }
+
+      if (!get_targetInfos().some((t) => {
+        return t.targetID === at.id && t.targetName === at.name && t.targetType === at.type;
+      })) {
         set_activatedTarget(get_relations()[0]);
       }
     }
   }
 
-  async function removeTarget(targets: Target): Promise<{ err: string }> {
+  async function removeTarget(target: Target): Promise<{ err: string }> {
+    const result: FResourceAuthorizationProcessorStates['relations'] = get_relations().filter((r) => {
+      return !(r.id === target.id && r.name === target.name && r.type === target.type);
+    });
+    set_relations(result);
     return { err: '' };
   }
 
@@ -403,6 +419,13 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
       });
   }
 
+  async function clear(): Promise<{ err: string }> {
+    set_relations(initStates['relations']);
+    set_targetInfos(initStates['targetInfos']);
+    set_activatedTarget(initStates['activatedTarget']);
+    return { err: '' };
+  }
+
   if (relations.length === 0) {
     return null;
   }
@@ -414,6 +437,14 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         relations={relations}
         targetInfos={targetInfos}
         activatedTarget={activatedTarget}
+        onChange_Relations={async (v) => {
+          set_relations(v);
+          await _syncTargetInfo();
+          await _syncActivatedTarget();
+        }}
+        onChange_ActivatedTarget={(v) => {
+          set_activatedTarget(v);
+        }}
       />
     </div>
 
