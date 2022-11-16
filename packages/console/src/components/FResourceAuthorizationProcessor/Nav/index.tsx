@@ -112,6 +112,15 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                             versionOptions={info.versions}
                             onChange={(version) => {
                               // onChangeVersion(version, i.id)
+                              onChange_Relations && onChange_Relations(relations.map((rl) => {
+                                if (r.id === rl.id && r.name === rl.name && r.type === rl.type) {
+                                  return {
+                                    ...rl,
+                                    versionRange: version,
+                                  };
+                                }
+                                return rl;
+                              }));
                             }}
                           ><FComponentsLib.FIcons.FEdit style={{ fontSize: 14 }} /></FVersionHandlerPopover>
                         </>
