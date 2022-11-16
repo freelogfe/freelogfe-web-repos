@@ -3,7 +3,7 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
-// import FDepPanel from './FDepPanel';
+import FDepPanel from './FDepPanel';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -34,7 +34,7 @@ import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
@@ -226,8 +226,8 @@ function VersionCreator({
                   },
                 });
               }}
-              onSucceed_ImportObject={(obj) => {
-                console.log(obj, 'onSucceed_ImportObject390oisjdf');
+              onSucceed_ImportObject={async (obj) => {
+                // console.log(obj, 'onSucceed_ImportObject390oisjdf');
                 dispatch<OnSuccess_ObjectFile_Action>({
                   type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
                   payload: {
@@ -236,6 +236,48 @@ function VersionCreator({
                     from: '存储空间',
                   },
                 });
+
+                const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+                  objectIdOrName: obj.objID,
+                };
+                const { data: data_objectDetails }: {
+                  data: {
+                    dependencies: {
+                      name: string;
+                      type: 'resource' | 'object';
+                      versionRange?: string;
+                    }[];
+                  }
+                } = await FServiceAPI.Storage.objectDetails(params);
+
+                console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
+                const resourceNames: string[] = data_objectDetails.dependencies
+                  .filter((d) => {
+                    return d.type === 'resource';
+                  })
+                  .map((d) => {
+                    return d.name;
+                  });
+
+                const objNames: string[] = data_objectDetails.dependencies
+                  .filter((d) => {
+                    return d.type === 'object';
+                  })
+                  .map((d) => {
+                    return d.name;
+                  });
+
+                let addR = [];
+                if (resourceNames.length > 0) {
+                  await FServiceAPI.Resource.batchInfo({
+                    resourceNames: resourceNames.join(),
+                  });
+                }
+
+                if (objNames.length > 0) {
+                  // await FServiceAPI.Storage.bu
+                }
+
               }}
               onClick_DeleteBtn={() => {
                 dispatch<OnDelete_ObjectFile_Action>({
@@ -249,7 +291,7 @@ function VersionCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
-            {/*<FDepPanel />*/}
+            <FDepPanel />
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
             />
