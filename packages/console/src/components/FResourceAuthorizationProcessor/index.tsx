@@ -217,11 +217,8 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
       }),
       ...get_relations(),
     ]);
-
-    if (!get_activatedTarget()) {
-      set_activatedTarget(result[0]);
-    }
-
+    _syncActivatedTarget();
+    await _syncTargetInfo();
     return { err: '' };
   }
 
@@ -281,24 +278,78 @@ function FResourceAuthorizationProcessor({}: FResourceAuthorizationProcessorProp
       return !existentObjectIDs.includes(r);
     });
 
-    const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-      resourceIds: needAddResourceIDs.join(','),
-      isLoadPolicyInfo: 1,
-      isLoadLatestVersionInfo: 1,
-      // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
-      // isLoadFreezeReason: 1,
-      isTranslate: 1,
-    };
+    if (needAddResourceIDs.length > 0) {
+      const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        resourceIds: needAddResourceIDs.join(','),
+        isLoadPolicyInfo: 1,
+        // isLoadLatestVersionInfo: 1,
+        // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
+        // isLoadFreezeReason: 1,
+        isTranslate: 1,
+      };
 
-    const { data: data_batchResourceInfo }: {
-      data: {
-        resourceId: string;
-        baseUpcastResources: {
+      const { data: data_batchResourceInfo }: {
+        data: {
           resourceId: string;
           resourceName: string;
+          resourceType: string[];
+          resourceVersions: {
+            version: string;
+          }[];
+          latestVersion: string;
+          policies: PolicyFullInfo_Type[],
         }[];
-      }[];
-    } = await FServiceAPI.Resource.batchInfo(params);
+      } = await FServiceAPI.Resource.batchInfo(params) as any;
+
+      console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
+
+      const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
+        return {
+          targetID: r.resourceId,
+          targetName: r.resourceName,
+          targetType: 'resource',
+          targetResourceType: r.resourceType,
+          error: '',
+          warning: '',
+          versions: r.resourceVersions.map((v) => {
+            return v.version;
+          }),
+          upThrow: false,
+          upThrowDisabled: r.latestVersion !== '',
+          contracts: [],
+          terminatedContractIDs: [],
+          enabledPolicies: r.policies.map((p) => {
+            return {
+              checked: false,
+              policyFullInfo: p,
+            };
+          }),
+        };
+      });
+
+      targetInfos = [
+        ...resourceTargetInfos,
+        ...targetInfos,
+      ];
+    }
+
+
+    if (needAddObjectIDs.length > 0) {
+
+    }
+
+    set_targetInfos(targetInfos);
+
+  }
+
+  function _syncActivatedTarget() {
+    if (get_relations().length === 0) {
+      set_activatedTarget(null);
+    } else {
+      if (!get_activatedTarget()) {
+        set_activatedTarget(get_relations()[0]);
+      }
+    }
   }
 
   async function removeTarget(targets: Target): Promise<{ err: string }> {

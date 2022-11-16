@@ -56,6 +56,7 @@ interface NavProps {
 
 function Nav({ relations, targetInfos, activatedTarget }: NavProps) {
 
+  console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
   if (!activatedTarget || targetInfos.length === 0 || relations.length === 0) {
     return null;
   }

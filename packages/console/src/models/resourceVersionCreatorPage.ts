@@ -1500,8 +1500,6 @@ async function handleResourceBatchInfo({ resourceIDs }: HandleResourceBatchInfoP
     isTranslate: 1,
   };
 
-  // 本次要添加的一些列资源信息
-  // const { data: data_batchResourceInfo }: { data: Omit<HandleResourceBatchInfoReturn, 'authProblem'> } = await FServiceAPI.Resource.batchInfo(params);
   const { data: data_batchResourceInfo }: { data: any[] } = await FServiceAPI.Resource.batchInfo(params);
 
   // console.log(data_batchResourceInfo, 'data_batchResourceInfo 238998sdhfkjshdfksdf');
