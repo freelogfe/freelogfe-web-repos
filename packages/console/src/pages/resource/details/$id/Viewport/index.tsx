@@ -3,7 +3,8 @@ import styles from './index.less';
 import {
   FViewportTabs,
 } from '@/components/FAntvG6';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import FDrawer from '@/components/FDrawer';
@@ -127,7 +128,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
         {/*}*/}
 
         {
-          resourceDetailPage.graph_ViewportGraphShow === 'dependency' &&  (<FGraph_Tree_Dependency_Resource
+          resourceDetailPage.graph_ViewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
             resourceID={resourceDetailPage.resource_ID}
             version={resourceDetailPage.resourceVersion_SelectedVersion}
             width={window.innerWidth - 60}
