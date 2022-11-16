@@ -24,7 +24,7 @@ function FReplaceModal({ dispatch, informalNodeManagerPage }: FReplaceModalProps
   return (<FModal
     title={null}
     width={947}
-    visible={informalNodeManagerPage.replaceModal_Visible}
+    open={informalNodeManagerPage.replaceModal_Visible}
     closable={false}
     destroyOnClose
     onCancel={() => {

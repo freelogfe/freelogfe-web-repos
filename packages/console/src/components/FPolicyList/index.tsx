@@ -111,7 +111,7 @@ export function PolicyCard({
       </a>
       <FModal
         title={null}
-        visible={fullScreenVisible}
+        open={fullScreenVisible}
         onCancel={() => {
           setFullScreenVisible(false);
         }}

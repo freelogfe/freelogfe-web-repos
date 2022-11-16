@@ -48,7 +48,7 @@ function FPolicyOperatorDrawer({
   return (
     <>
       <FDrawer
-        visible={visible}
+        open={visible}
         title={
           <Space size={10}>
             {/*<FComponentsLib.FTitleText type='h2' text={`启用策略并上架${typeMapping[type]}`} />*/}

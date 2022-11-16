@@ -468,7 +468,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     <FModal
       title={null}
       footer={null}
-      visible={modal_Visible}
+      open={modal_Visible}
       width={600}
       onCancel={() => {
         set_Modal_Visible(false);

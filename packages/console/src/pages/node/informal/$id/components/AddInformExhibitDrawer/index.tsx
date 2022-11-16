@@ -328,7 +328,7 @@ function FAddInformExhibitDrawer({
                           title={l.disabledReason}
                           getPopupContainer={() => containerRef.current}
                           trigger='hover'
-                          visible={l.disabled ? undefined : false}
+                          open={l.disabled ? undefined : false}
                         >
                           <div>
                             <FCheckbox

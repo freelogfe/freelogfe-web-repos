@@ -394,7 +394,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       onClose={() => {
         onCloseBaseAttrDrawer();
       }}
-      visible={resourceVersionEditorPage.basePEditorVisible}
+      open={resourceVersionEditorPage.basePEditorVisible}
       width={720}
       topRight={<Space size={30}>
         <FComponentsLib.FTextBtn
@@ -552,7 +552,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     />
 
     <FDrawer
-      visible={resourceVersionEditorPage.graphFullScreen}
+      open={resourceVersionEditorPage.graphFullScreen}
       title={'相关视图'}
       destroyOnClose
       width={'100%'}
@@ -633,7 +633,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     </FDrawer>
 
     <FDrawer
-      visible={resourceVersionEditorPage.descriptionFullScreen}
+      open={resourceVersionEditorPage.descriptionFullScreen}
       title={'版本描述'}
       destroyOnClose
       mask={false}

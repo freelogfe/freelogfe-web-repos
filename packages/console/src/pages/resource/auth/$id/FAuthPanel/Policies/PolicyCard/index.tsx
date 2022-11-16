@@ -101,7 +101,7 @@ function PolicyCard({ fullInfo, allVersions, onClickLicense }: PolicyCardProps) 
 
     <FModal
       title={null}
-      visible={fullScreenVisible}
+      open={fullScreenVisible}
       onCancel={() => {
         setFullScreenVisible(false);
       }}

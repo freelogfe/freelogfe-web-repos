@@ -115,7 +115,7 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
 
     <FModal
       title={null}
-      visible={storageHomePage.newBucketModalVisible}
+      open={storageHomePage.newBucketModalVisible}
       width={640}
       okButtonProps={{
         disabled: storageHomePage.newBucketName === '' || storageHomePage.newBucketNameError !== '',

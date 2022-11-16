@@ -96,7 +96,7 @@ function Viewport({ dispatch, resourceDetailPage }: ViewportProps) {
     <div style={{ height: 20 }} />
 
     <FDrawer
-      visible={resourceDetailPage.graph_FullScreen}
+      open={resourceDetailPage.graph_FullScreen}
       title={'相关视图'}
       destroyOnClose
       width={'100%'}

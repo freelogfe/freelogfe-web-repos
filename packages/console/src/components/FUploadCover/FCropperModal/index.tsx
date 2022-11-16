@@ -24,7 +24,7 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
   const [cropper, setCropper] = React.useState<any>();
 
   return (<Modal
-    visible={!!imgSrc}
+    open={!!imgSrc}
     width={950}
     title={<FComponentsLib.FTitleText text={'上传资源图片'} type='popup' />}
     destroyOnClose

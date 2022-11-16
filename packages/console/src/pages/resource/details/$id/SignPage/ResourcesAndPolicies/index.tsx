@@ -163,7 +163,7 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
     }
 
     <Drawer
-      visible={!!visibleR}
+      open={!!visibleR}
       // title={<span style={{fontWeight: 400}}>stefan/Smell like teen spirit</span>}
       title={null}
       width={720}

@@ -1178,7 +1178,7 @@ function FPolicyBuilder({
 
       <FDrawer
         width={640}
-        visible={templateVisible}
+        open={templateVisible}
         title={'策略模板'}
         onClose={() => setTemplateVisible(false)}
       >

@@ -105,7 +105,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
 
     <FModal
       title={null}
-      visible={!!visibleModalPolicyID}
+      open={!!visibleModalPolicyID}
       onCancel={() => {
         setVisibleModalPolicyID('');
       }}

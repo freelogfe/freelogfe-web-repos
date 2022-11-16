@@ -114,7 +114,7 @@ function Viewports({ dispatch, informExhibitInfoPage }: ViewportsProps) {
     </FViewportTabs>
 
     <FDrawer
-      visible={informExhibitInfoPage.graph_FullScreen}
+      open={informExhibitInfoPage.graph_FullScreen}
       title={'相关视图'}
       destroyOnClose
       width={'100%'}

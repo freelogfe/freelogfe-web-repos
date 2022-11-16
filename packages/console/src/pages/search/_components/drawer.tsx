@@ -13,7 +13,7 @@ export default function Image(props: ImageProps) {
       className={styles.drawer}
       closable={false}
       onClose={props.close}
-      visible={true}
+      open={true}
       bodyStyle={{ borderRadius: '10px', background: '#FAFBFC' }}
       contentWrapperStyle={{ borderRadius: '10px',overflow: 'hidden' }}
       height="calc(100vh - 80px)"

@@ -114,7 +114,7 @@ function FAddCustomOptionsDrawer({
 
   return (<FDrawer
     title={'添加自定义选项'}
-    visible={visible}
+    open={visible}
     onClose={() => {
       set_visible(false);
     }}

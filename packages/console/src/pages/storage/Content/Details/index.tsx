@@ -57,7 +57,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
   return (<FDrawer
     title={'编辑对象信息'}
-    visible={!!storageObjectEditor.objectId}
+    open={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -332,7 +332,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
       <FDrawer
         title='添加依赖'
         width={640}
-        visible={depInfoVisible}
+        open={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
         destroyOnClose
       >

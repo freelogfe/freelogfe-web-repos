@@ -73,7 +73,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
     </Space>
     <FModal
       title={null}
-      visible={!!fullScreenVisibleID}
+      open={!!fullScreenVisibleID}
       onCancel={() => {
         setFullScreenVisibleID('');
       }}

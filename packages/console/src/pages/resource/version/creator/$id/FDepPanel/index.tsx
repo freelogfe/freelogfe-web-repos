@@ -155,7 +155,7 @@ function FDepPanel({ dispatch, resourceVersionCreatorPage }: FDepPanelProps) {
       // title={FUtil.I18n.message('add_rely_resource')}
       title={'添加依赖'}
       onClose={() => setModalVisible(false)}
-      visible={modalVisible}
+      open={modalVisible}
       width={820}
     >
       <Market />

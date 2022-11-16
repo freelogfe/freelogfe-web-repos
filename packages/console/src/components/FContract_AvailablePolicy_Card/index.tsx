@@ -114,7 +114,7 @@ function FContract_AvailablePolicy_Card({
 
     <FModal
       title={null}
-      visible={fullScreenVisible}
+      open={fullScreenVisible}
       onCancel={() => {
         setFullScreenVisible(false);
       }}
