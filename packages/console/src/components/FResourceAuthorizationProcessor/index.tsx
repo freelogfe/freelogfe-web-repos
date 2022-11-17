@@ -511,6 +511,7 @@ async function _batchHandleResources({
       latestVersion: string;
       policies: PolicyFullInfo_Type[],
       status: number;
+      userId: number;
     }[];
   } = await FServiceAPI.Resource.batchInfo(params) as any;
 
@@ -548,9 +549,45 @@ async function _batchHandleResources({
   };
   const cycleDependencyResourceID: string[] = await batchCycleDependencyCheck(params2);
 
+
+  const params3: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
+    userIds: data_batchResourceInfo.map<number>((r) => {
+      return r.userId;
+    }).join(','),
+  };
+
+  const { data: data_batchUserList }: {
+    data: {
+      userId: number;
+      status: 0 | 1 | 2 | 3; // 用户状态 0:正常 1:冻结 2:测试资格审核中 3:申请测试资格未通过
+    }[];
+  } = await FServiceAPI.User.batchUserList(params3);
+
+  // console.log(data_batchUserList, 'data_batchUserList9isfjsdlijj89ijhokj');
+
+  const params4: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+    resourceIds: licensorResourceIDs.join(','),
+  };
+  const { data: data_batchAuth }: {
+    data: {
+      isAuth: boolean;
+      resourceId: string;
+    }[];
+  } = await FServiceAPI.Resource.batchAuth(params4);
+
+  console.log(data_batchAuth, 'data_batchAuth9iowsejfsldkfjl;skdjflksdj');
+
   const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
     let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
-    let warning: string = '';
+    let warning: FResourceAuthorizationProcessorStates['targetInfos'][number]['warning'] = '';
+
+    const ownerUserInfo = data_batchUserList.find((user) => {
+      return user.userId === r.userId;
+    });
+
+    const resourceAuth = data_batchAuth.find((a) => {
+      return a.resourceId === r.resourceId;
+    });
 
     if (r.status === 0) {
       error = 'offline';
@@ -562,6 +599,12 @@ async function _batchHandleResources({
       return b.resourceID === r.resourceId;
     })) {
       error = 'upThrow';
+    }
+
+    if (ownerUserInfo?.status === 1) {
+      warning = 'ownerFreeze';
+    } else if (!resourceAuth) {
+      warning = 'authException';
     }
 
     const contracts = data_batchContracts.filter((dc) => {
@@ -577,7 +620,7 @@ async function _batchHandleResources({
       targetType: 'resource',
       targetResourceType: r.resourceType,
       error: error,
-      warning: '',
+      warning: warning,
       versions: r.resourceVersions.map((v) => {
         return v.version;
       }),
