@@ -267,16 +267,64 @@ function VersionCreator({
                     return d.name;
                   });
 
-                let addR = [];
+                let addR: {
+                  id: string;
+                  name: string;
+                  type: 'resource';
+                  versionRange: string;
+                }[] = [];
+                let addO: {
+                  id: string;
+                  name: string;
+                  type: 'object';
+                }[] = [];
                 if (resourceNames.length > 0) {
-                  await FServiceAPI.Resource.batchInfo({
+                  const { data: data_resources }: {
+                    data: {
+                      resourceId: string;
+                      resourceName: string;
+                      latestVersion: string;
+                    }[];
+                  } = await FServiceAPI.Resource.batchInfo({
                     resourceNames: resourceNames.join(),
+                  });
+                  // console.log(data_resources, 'resourceiojlkdsjflsdjflk');
+                  addR = data_resources.map((r) => {
+                    return {
+                      id: r.resourceId,
+                      name: r.resourceName,
+                      type: 'resource',
+                      versionRange: '^' + r.latestVersion,
+                    };
                   });
                 }
 
                 if (objNames.length > 0) {
-                  // await FServiceAPI.Storage.bu
+                  const { data: data_objs }: {
+                    data: {
+                      objectId: string;
+                      objectName: string;
+                    }[];
+                  } = await FServiceAPI.Storage.batchObjectList({
+                    fullObjectNames: objNames.map((o) => {
+                      return encodeURIComponent(o);
+                    }).join(','),
+                  });
+
+                  // console.log(data_objs, 'objsoisjdlfksjfljsdlkfjsdlfjl');
+                  addO = data_objs.map((o) => {
+                    return {
+                      id: o.objectId,
+                      name: o.objectName,
+                      type: 'object',
+                    };
+                  });
                 }
+
+                processor?.addTargets([
+                  ...addR,
+                  ...addO,
+                ]);
 
               }}
               onClick_DeleteBtn={() => {

@@ -12,7 +12,7 @@ interface Target {
   id: string;
   name: string;
   type: 'resource' | 'object';
-  versionRange: string;
+  versionRange?: string;
 }
 
 interface Processor {
@@ -151,7 +151,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         id: t.id,
         name: t.name,
         type: t.type,
-        versionRange: t.versionRange,
+        versionRange: t.versionRange || '',
         children: r ? r.baseUpcastResources.map((br) => {
           return {
             id: br.resourceId,
@@ -204,6 +204,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         return r.id;
       });
 
+    // let targetInfos = [];
     let targetInfos = get_targetInfos()
       .filter((t) => {
         if (t.targetType === 'resource') {
@@ -232,7 +233,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
       return !existentResourceIDs.includes(r);
     });
 
-    const needAddObjectIDs: string[] = relationResourceIDs.filter((r) => {
+    const needAddObjectIDs: string[] = relationObjectIDs.filter((r) => {
       return !existentObjectIDs.includes(r);
     });
 
@@ -362,7 +363,38 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
 
 
     if (needAddObjectIDs.length > 0) {
+      // console.log(needAddObjectIDs, 'needAddObjectIDsdsoijfsdklfjdslkj');
+      const { data: data_objs }: {
+        data: {
+          objectId: string;
+          objectName: string;
+          resourceType: string[];
+        }[];
+      } = await FServiceAPI.Storage.batchObjectList({
+        objectIds: needAddObjectIDs.join(','),
+      });
+      // console.log(data_objs, 'data_objsisoedjflskdjfl');
+      const objTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_objs.map((o) => {
+        return {
+          targetID: o.objectId,
+          targetName: o.objectName,
+          targetType: 'object',
+          targetResourceType: o.resourceType,
+          error: 'storageObject',
+          warning: '',
+          versions: [],
+          upThrow: false,
+          upThrowDisabled: false,
+          contracts: [],
+          terminatedContractIDs: [],
+          enabledPolicies: [],
+        };
+      });
 
+      targetInfos = [
+        ...targetInfos,
+        ...objTargetInfos,
+      ];
     }
 
     set_targetInfos(targetInfos);
