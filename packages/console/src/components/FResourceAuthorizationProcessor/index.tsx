@@ -106,14 +106,6 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
   }, [resourceID]);
 
   AHooks.useMount(() => {
-    // onMount && onMount({
-    //   addTargets,
-    //   removeTarget,
-    //   activeTarget,
-    //   getAllTargets,
-    //   isCompleteAuthorization,
-    //   getAllResourcesWithContracts,
-    // });
     processor = {
       addTargets,
       removeTarget,
@@ -236,14 +228,14 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
         return r.id;
       });
 
-    // let targetInfos = [];
-    let targetInfos = get_targetInfos()
-      .filter((t) => {
-        if (t.targetType === 'resource') {
-          return relationResourceIDs.includes(t.targetID);
-        }
-        return relationObjectIDs.includes(t.targetID);
-      });
+    let targetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = [];
+    // let targetInfos = get_targetInfos()
+    //   .filter((t) => {
+    //     if (t.targetType === 'resource') {
+    //       return relationResourceIDs.includes(t.targetID);
+    //     }
+    //     return relationObjectIDs.includes(t.targetID);
+    //   });
 
     const existentResourceIDs: string[] = targetInfos
       .filter((t) => {
@@ -575,7 +567,7 @@ async function _batchHandleResources({
     }[];
   } = await FServiceAPI.Resource.batchAuth(params4);
 
-  console.log(data_batchAuth, 'data_batchAuth9iowsejfsldkfjl;skdjflksdj');
+  // console.log(data_batchAuth, 'data_batchAuth9iowsejfsldkfjl;skdjflksdj');
 
   const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
     let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
