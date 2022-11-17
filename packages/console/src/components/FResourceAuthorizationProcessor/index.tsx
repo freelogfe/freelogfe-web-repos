@@ -238,123 +238,17 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
     });
 
     if (needAddResourceIDs.length > 0) {
-      const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        resourceIds: needAddResourceIDs.join(','),
-        isLoadPolicyInfo: 1,
-        // isLoadLatestVersionInfo: 1,
-        // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
-        // isLoadFreezeReason: 1,
-        isTranslate: 1,
-      };
 
-      const { data: data_batchResourceInfo }: {
-        data: {
-          resourceId: string;
-          resourceName: string;
-          resourceType: string[];
-          resourceVersions: {
-            version: string;
-          }[];
-          latestVersion: string;
-          policies: PolicyFullInfo_Type[],
-          status: number;
-        }[];
-      } = await FServiceAPI.Resource.batchInfo(params) as any;
-
-      // console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
-      // console.log(resourceID, 'resourceIDoiidddddd');
-
-      const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-        subjectIds: needAddResourceIDs.join(','),
-        licenseeId: get_resourceID(),
-        subjectType: 1,
-        licenseeIdentityType: 1,
-        isLoadPolicyInfo: 1,
-      };
-      const { data: data_batchContracts }: {
-        data: {
-          contractId: string;
-          contractName: string;
-          policyId: string;
-          createDate: string;
-          licensorId: string;
-          status: 0 | 1;
-        }[];
-      } = await FServiceAPI.Contract.batchContracts(params1);
-
-      // console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
-
-      const params2: BatchCycleDependencyCheckParams = {
-        resourceId: get_resourceID(),
-        dependencies: get_relations().map<{ resourceId: string; versionRange: string; }>((d) => {
+      const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = await _batchHandleResources({
+        licenseeResourceID: get_resourceID(),
+        licensorResourceIDs: needAddResourceIDs,
+        needCheckedCyclicDependenciesResourceInfos: get_relations().map((r) => {
           return {
-            resourceId: d.id,
-            versionRange: d.versionRange,
+            resourceID: r.id,
+            versionRange: r.versionRange,
           };
         }),
-      };
-      const cycleDependencyResourceID: string[] = await batchCycleDependencyCheck(params2);
-
-      const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
-        let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
-        let warning: string = '';
-
-        if (r.status === 0) {
-          error = 'offline';
-        } else if ((r.status & 2) === 2) {
-          error = 'freeze';
-        } else if (cycleDependencyResourceID.includes(r.resourceId)) {
-          error = 'cyclicDependency';
-        }
-
-        const contracts = data_batchContracts.filter((dc) => {
-          return dc.licensorId === r.resourceId && dc.status === 0;
-        });
-        const contractIDs = contracts.map((c) => {
-          return c.policyId;
-        });
-
-        return {
-          targetID: r.resourceId,
-          targetName: r.resourceName,
-          targetType: 'resource',
-          targetResourceType: r.resourceType,
-          error: error,
-          warning: '',
-          versions: r.resourceVersions.map((v) => {
-            return v.version;
-          }),
-          upThrow: false,
-          upThrowDisabled: r.latestVersion !== '',
-          contracts: contracts.map((c) => {
-            return {
-              contractID: c.contractId,
-              policyID: c.policyId,
-              title: c.contractName,
-              code: '',
-              date: FUtil.Format.formatDateTime(c.createDate),
-            };
-          }),
-          terminatedContractIDs: data_batchContracts
-            .filter((dc: any) => {
-              return dc.licensorId === r.resourceId && dc.status === 1;
-            })
-            .map((dc: any) => {
-              return dc.contractId;
-            }),
-          enabledPolicies: r.policies
-            .filter((p) => {
-              return !contractIDs.includes(p.policyId) && p.status === 1;
-            })
-            .map((p) => {
-              return {
-                checked: false,
-                policyFullInfo: p,
-              };
-            }),
-        };
       });
-
       targetInfos = [
         ...resourceTargetInfos,
         ...targetInfos,
@@ -547,4 +441,140 @@ async function batchCycleDependencyCheck({
     }
   }
   return resourceIDs;
+}
+
+interface I_batchHandleResources_Params {
+  licenseeResourceID: string;
+  licensorResourceIDs: string[];
+  needCheckedCyclicDependenciesResourceInfos: {
+    resourceID: string;
+    versionRange: string;
+  }[];
+}
+
+type I_batchHandleResources_Return = FResourceAuthorizationProcessorStates['targetInfos'];
+
+async function _batchHandleResources({
+                                       licenseeResourceID,
+                                       licensorResourceIDs,
+                                       needCheckedCyclicDependenciesResourceInfos,
+                                     }: I_batchHandleResources_Params): Promise<I_batchHandleResources_Return> {
+  const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    resourceIds: licensorResourceIDs.join(','),
+    isLoadPolicyInfo: 1,
+    // isLoadLatestVersionInfo: 1,
+    // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
+    // isLoadFreezeReason: 1,
+    isTranslate: 1,
+  };
+
+  const { data: data_batchResourceInfo }: {
+    data: {
+      resourceId: string;
+      resourceName: string;
+      resourceType: string[];
+      resourceVersions: {
+        version: string;
+      }[];
+      latestVersion: string;
+      policies: PolicyFullInfo_Type[],
+      status: number;
+    }[];
+  } = await FServiceAPI.Resource.batchInfo(params) as any;
+
+  // console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
+  // console.log(resourceID, 'resourceIDoiidddddd');
+
+  const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+    subjectIds: licensorResourceIDs.join(','),
+    licenseeId: licenseeResourceID,
+    subjectType: 1,
+    licenseeIdentityType: 1,
+    isLoadPolicyInfo: 1,
+  };
+  const { data: data_batchContracts }: {
+    data: {
+      contractId: string;
+      contractName: string;
+      policyId: string;
+      createDate: string;
+      licensorId: string;
+      status: 0 | 1;
+    }[];
+  } = await FServiceAPI.Contract.batchContracts(params1);
+
+  // console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
+
+  const params2: BatchCycleDependencyCheckParams = {
+    resourceId: licenseeResourceID,
+    dependencies: needCheckedCyclicDependenciesResourceInfos.map<{ resourceId: string; versionRange: string; }>((d) => {
+      return {
+        resourceId: d.resourceID,
+        versionRange: d.versionRange,
+      };
+    }),
+  };
+  const cycleDependencyResourceID: string[] = await batchCycleDependencyCheck(params2);
+
+  const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
+    let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
+    let warning: string = '';
+
+    if (r.status === 0) {
+      error = 'offline';
+    } else if ((r.status & 2) === 2) {
+      error = 'freeze';
+    } else if (cycleDependencyResourceID.includes(r.resourceId)) {
+      error = 'cyclicDependency';
+    }
+
+    const contracts = data_batchContracts.filter((dc) => {
+      return dc.licensorId === r.resourceId && dc.status === 0;
+    });
+    const contractIDs = contracts.map((c) => {
+      return c.policyId;
+    });
+
+    return {
+      targetID: r.resourceId,
+      targetName: r.resourceName,
+      targetType: 'resource',
+      targetResourceType: r.resourceType,
+      error: error,
+      warning: '',
+      versions: r.resourceVersions.map((v) => {
+        return v.version;
+      }),
+      upThrow: false,
+      upThrowDisabled: r.latestVersion !== '',
+      contracts: contracts.map((c) => {
+        return {
+          contractID: c.contractId,
+          policyID: c.policyId,
+          title: c.contractName,
+          code: '',
+          date: FUtil.Format.formatDateTime(c.createDate),
+        };
+      }),
+      terminatedContractIDs: data_batchContracts
+        .filter((dc: any) => {
+          return dc.licensorId === r.resourceId && dc.status === 1;
+        })
+        .map((dc: any) => {
+          return dc.contractId;
+        }),
+      enabledPolicies: r.policies
+        .filter((p) => {
+          return !contractIDs.includes(p.policyId) && p.status === 1;
+        })
+        .map((p) => {
+          return {
+            checked: false,
+            policyFullInfo: p,
+          };
+        }),
+    };
+  });
+
+  return resourceTargetInfos;
 }
