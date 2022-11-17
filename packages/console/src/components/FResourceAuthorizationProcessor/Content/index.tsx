@@ -73,17 +73,17 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
   }
 
   if (info.warning === 'authException') {
-    return (<Space size={10}>
+    return (<div className={styles.errorBox}>
       <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
       <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
-    </Space>);
+    </div>);
   }
 
   if (info.warning === 'ownerFreeze') {
-    return (<Space size={10}>
+    return (<div className={styles.errorBox}>
       <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
       <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
-    </Space>);
+    </div>);
   }
 
   return (<>

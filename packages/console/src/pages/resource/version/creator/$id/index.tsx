@@ -250,7 +250,7 @@ function VersionCreator({
                   }
                 } = await FServiceAPI.Storage.objectDetails(params);
 
-                console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
+                // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
                 const resourceNames: string[] = data_objectDetails.dependencies
                   .filter((d) => {
                     return d.type === 'resource';
