@@ -45,14 +45,22 @@ interface FResourceAuthorizationProcessorProps {
 }
 
 interface FResourceAuthorizationProcessorStates {
-  resourceID: string;
+  licenseeResource: {
+    resourceID: string;
+    resourceName: string;
+    latestVersion: string;
+    baseUpcastResources: {
+      resourceID: string;
+      resourceName: string;
+    }[];
+  } | null;
   relations: IRelation[];
   targetInfos: ITargetInfo[];
   activatedTarget: IActivatedTarget | null;
 }
 
 const initStates: FResourceAuthorizationProcessorStates = {
-  resourceID: '',
+  licenseeResource: null,
   relations: [],
   targetInfos: [],
   activatedTarget: null,
@@ -62,15 +70,39 @@ export let processor: Processor | null = null;
 
 function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationProcessorProps) {
 
-  // console.log(resourceID, 'resourceIDoisjedflksdjl');
-
-  const [_, set_resourceID, get_resourceID] = useGetState<FResourceAuthorizationProcessorStates['resourceID']>(initStates['resourceID']);
+  const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
-  React.useEffect(() => {
-    set_resourceID(resourceID);
+  AHooks.useAsyncEffect(async () => {
+    if (resourceID !== '') {
+      const { data: data_resource }: {
+        data: {
+          resourceId: string;
+          resourceName: string;
+          latestVersion: string;
+          baseUpcastResources: {
+            resourceId: string;
+            resourceName: string;
+          }[];
+        }
+      } = await FServiceAPI.Resource.info({
+        resourceIdOrName: resourceID,
+      });
+      // console.log(data_resource, 'data_resource asoidflsdkfjlsdkfjsdfsd');
+      set_licenseeResource({
+        resourceID: data_resource.resourceId,
+        resourceName: data_resource.resourceName,
+        latestVersion: data_resource.latestVersion,
+        baseUpcastResources: data_resource.baseUpcastResources.map((b) => {
+          return {
+            resourceID: b.resourceId,
+            resourceName: b.resourceName,
+          };
+        }),
+      });
+    }
   }, [resourceID]);
 
   AHooks.useMount(() => {
@@ -240,7 +272,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
     if (needAddResourceIDs.length > 0) {
 
       const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = await _batchHandleResources({
-        licenseeResourceID: get_resourceID(),
+        licenseeResource: get_licenseeResource(),
         licensorResourceIDs: needAddResourceIDs,
         needCheckedCyclicDependenciesResourceInfos: get_relations().map((r) => {
           return {
@@ -444,7 +476,7 @@ async function batchCycleDependencyCheck({
 }
 
 interface I_batchHandleResources_Params {
-  licenseeResourceID: string;
+  licenseeResource: FResourceAuthorizationProcessorStates['licenseeResource'];
   licensorResourceIDs: string[];
   needCheckedCyclicDependenciesResourceInfos: {
     resourceID: string;
@@ -455,7 +487,7 @@ interface I_batchHandleResources_Params {
 type I_batchHandleResources_Return = FResourceAuthorizationProcessorStates['targetInfos'];
 
 async function _batchHandleResources({
-                                       licenseeResourceID,
+                                       licenseeResource,
                                        licensorResourceIDs,
                                        needCheckedCyclicDependenciesResourceInfos,
                                      }: I_batchHandleResources_Params): Promise<I_batchHandleResources_Return> {
@@ -487,7 +519,7 @@ async function _batchHandleResources({
 
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: licensorResourceIDs.join(','),
-    licenseeId: licenseeResourceID,
+    licenseeId: licenseeResource?.resourceID || '',
     subjectType: 1,
     licenseeIdentityType: 1,
     isLoadPolicyInfo: 1,
@@ -506,7 +538,7 @@ async function _batchHandleResources({
   // console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
 
   const params2: BatchCycleDependencyCheckParams = {
-    resourceId: licenseeResourceID,
+    resourceId: licenseeResource?.resourceID || '',
     dependencies: needCheckedCyclicDependenciesResourceInfos.map<{ resourceId: string; versionRange: string; }>((d) => {
       return {
         resourceId: d.resourceID,
@@ -526,6 +558,10 @@ async function _batchHandleResources({
       error = 'freeze';
     } else if (cycleDependencyResourceID.includes(r.resourceId)) {
       error = 'cyclicDependency';
+    } else if (licenseeResource?.baseUpcastResources.some((b) => {
+      return b.resourceID === r.resourceId;
+    })) {
+      error = 'upThrow';
     }
 
     const contracts = data_batchContracts.filter((dc) => {
@@ -546,7 +582,7 @@ async function _batchHandleResources({
         return v.version;
       }),
       upThrow: false,
-      upThrowDisabled: r.latestVersion !== '',
+      upThrowDisabled: licenseeResource?.latestVersion !== '',
       contracts: contracts.map((c) => {
         return {
           contractID: c.contractId,
