@@ -39,7 +39,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
 import { MarkdownEditor } from '@/pages/resource/md-editor';
-import FResourceAuthorizationProcessor, { processor } from '@/components/FResourceAuthorizationProcessor';
+import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -321,7 +321,8 @@ function VersionCreator({
                   });
                 }
 
-                processor?.addTargets([
+                const processor = await getProcessor();
+                await processor.addTargets([
                   ...addR,
                   ...addO,
                 ]);

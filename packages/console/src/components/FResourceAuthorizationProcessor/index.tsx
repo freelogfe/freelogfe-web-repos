@@ -66,7 +66,7 @@ const initStates: FResourceAuthorizationProcessorStates = {
   activatedTarget: null,
 };
 
-export let processor: Processor | null = null;
+let processor: Processor | null = null;
 
 function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationProcessorProps) {
 
@@ -115,6 +115,10 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
       getAllResourcesWithContracts,
       clear,
     };
+  });
+
+  AHooks.useUnmount(() => {
+    processor = null;
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
@@ -648,4 +652,13 @@ async function _batchHandleResources({
   });
 
   return resourceTargetInfos;
+}
+
+export async function getProcessor() {
+  while (true) {
+    if (processor) {
+      return processor;
+    }
+    await FUtil.Tool.promiseSleep(300);
+  }
 }
