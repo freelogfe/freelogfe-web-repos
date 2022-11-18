@@ -343,6 +343,9 @@ function VersionCreator({
             <FDepPanel />
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
+              onMount={(processor) => {
+
+              }}
             />
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
