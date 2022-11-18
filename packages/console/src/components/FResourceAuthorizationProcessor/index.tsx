@@ -352,8 +352,16 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     return { err: '' };
   }
 
-  async function activeTarget(targets: Target): Promise<{ err: string }> {
-    return { err: '' };
+  async function activeTarget(target: Target): Promise<{ err: string }> {
+    if (get_targetInfos().some((t) => {
+      return t.targetID === target.id && t.targetName === target.name && t.targetType === target.type;
+    })) {
+      set_activatedTarget(target);
+      return { err: '' };
+    }
+
+    return { err: '该标的不存在' };
+
   }
 
   async function getAllTargets(): Promise<Target[]> {
@@ -368,7 +376,9 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   }
 
   async function isCompleteAuthorization(): Promise<boolean> {
-    return true;
+    return get_targetInfos().every((t) => {
+      return t.upThrow || t.contracts.length > 0;
+    });
   }
 
   async function getAllResourcesWithContracts(): Promise<{
