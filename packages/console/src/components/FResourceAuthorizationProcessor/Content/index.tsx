@@ -147,105 +147,110 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
     </div>
 
     {
-      info.upThrow && (<div className={styles.errorBox} style={{height: 300}}>
+      info.upThrow && (<div className={styles.errorBox} style={{ height: 300 }}>
         <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} />
         <FComponentsLib.FTipText text={'已选择上抛'} type='second' />
       </div>)
     }
 
     {
-      !info.upThrow && (<div>
-        <Space size={15} style={{ width: '100%' }} direction='vertical'>
-          <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
-          {
-            info.contracts
-              .map((k) => (<div key={k.contractID} className={styles.Policy}>
+      !info.upThrow && (<div className={styles.contractAndPolicyList}>
 
-                <div style={{ height: 15 }} />
-                <div className={styles.PolicyGrammarName}>
-                  <Space size={10}>
-                    <span>{k.title}</span>
+        {
+          info.contracts.length > 0 && (<Space size={15} style={{ width: '100%' }} direction='vertical'>
+            <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
+            {
+              info.contracts
+                .map((k) => (<div key={k.contractID} className={styles.Policy}>
+
+                  <div style={{ height: 15 }} />
+                  <div className={styles.PolicyGrammarName}>
+                    <Space size={10}>
+                      <span>{k.title}</span>
+                    </Space>
+                  </div>
+
+                  <div style={{ height: 10 }} />
+
+                  <div style={{ padding: '0 20px' }}>
+                    <FContractDisplay
+                      contractID={k.contractID}
+                    />
+                  </div>
+
+                  <div style={{ height: 10 }} />
+
+                  <Space style={{ padding: '0 20px' }} size={2}>
+                    <FComponentsLib.FContentText
+                      type='additional2'
+                      text={FI18n.i18nNext.t('contract_id') + '：' + k.contractID}
+                    />
+                    <FDivider style={{ fontSize: 14 }} />
+                    <FComponentsLib.FContentText
+                      type='additional2'
+                      text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
+                    />
                   </Space>
+                </div>))
+            }
+          </Space>)
+        }
+
+        {
+          info.terminatedContractIDs.length > 0 && (<div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
+              <FComponentsLib.FTextBtn onClick={() => {
+                // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                // set_TerminatedContractIDs(resource.terminatedContractIDs);
+              }}>查看已终止合约</FComponentsLib.FTextBtn>
+              {/*<div style={{ height: 5 }} />*/}
+            </div>
+          </div>)
+        }
+
+        {
+          info.enabledPolicies.length > 0 && (<Space
+            size={15}
+            style={{ width: '100%' }}
+            direction='vertical'
+          >
+            <FComponentsLib.FContentText
+              type='additional2'
+              text={FI18n.i18nNext.t('getauth_title_authplanavailable')}
+            />
+            {
+              info.enabledPolicies.map((i) => (
+                <div key={i.policyFullInfo.policyId} className={styles.Policy}>
+                  <div style={{ height: 15 }} />
+                  <div className={styles.PolicyName}>
+                    <span>{i.policyFullInfo.policyName}</span>
+                    <Checkbox
+                      checked={i.checked}
+                      onChange={(e) => {
+                        const enabledPolicies = info.enabledPolicies.map((p) => {
+                          if (i.policyFullInfo.policyId !== p.policyFullInfo.policyId) {
+                            return p;
+                          }
+                          return {
+                            ...p,
+                            checked: e.target.checked,
+                          };
+                        });
+                        onChange({ enabledPolicies: enabledPolicies });
+                      }}
+                    />
+                  </div>
+                  <div style={{ height: 10 }} />
+                  <div style={{ padding: '0 20px' }}>
+                    <FPolicyDisplay fullInfo={i.policyFullInfo} />
+                  </div>
                 </div>
+              ))
+            }
+          </Space>)
+        }
 
-                <div style={{ height: 10 }} />
-
-                <div style={{ padding: '0 20px' }}>
-                  <FContractDisplay
-                    contractID={k.contractID}
-                  />
-                </div>
-
-                <div style={{ height: 10 }} />
-
-                <Space style={{ padding: '0 20px' }} size={2}>
-                  <FComponentsLib.FContentText
-                    type='additional2'
-                    text={FI18n.i18nNext.t('contract_id') + '：' + k.contractID}
-                  />
-                  <FDivider style={{ fontSize: 14 }} />
-                  <FComponentsLib.FContentText
-                    type='additional2'
-                    text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
-                  />
-                </Space>
-              </div>))
-          }
-
-          {
-            info.terminatedContractIDs.length > 0 && (<div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FComponentsLib.FTextBtn onClick={() => {
-                  // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                  // set_TerminatedContractIDs(resource.terminatedContractIDs);
-                }}>查看已终止合约</FComponentsLib.FTextBtn>
-                {/*<div style={{ height: 5 }} />*/}
-              </div>
-            </div>)
-          }
-
-        </Space>
-
-        <Space
-          size={15}
-          style={{ width: '100%' }}
-          direction='vertical'
-        >
-          <FComponentsLib.FContentText
-            type='additional2'
-            text={FI18n.i18nNext.t('getauth_title_authplanavailable')}
-          />
-          {
-            info.enabledPolicies.map((i) => (
-              <div key={i.policyFullInfo.policyId} className={styles.Policy}>
-                <div style={{ height: 15 }} />
-                <div className={styles.PolicyName}>
-                  <span>{i.policyFullInfo.policyName}</span>
-                  <Checkbox
-                    checked={i.checked}
-                    onChange={(e) => {
-                      const enabledPolicies = info.enabledPolicies.map((p) => {
-                        if (i.policyFullInfo.policyId !== p.policyFullInfo.policyId) {
-                          return p;
-                        }
-                        return {
-                          ...p,
-                          checked: e.target.checked,
-                        };
-                      });
-                      onChange({ enabledPolicies: enabledPolicies });
-                    }}
-                  />
-                </div>
-                <div style={{ height: 10 }} />
-                <div style={{ padding: '0 20px' }}>
-                  <FPolicyDisplay fullInfo={i.policyFullInfo} />
-                </div>
-              </div>
-            ))
-          }
-        </Space>
       </div>)
     }
 
