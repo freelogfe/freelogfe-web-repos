@@ -1,7 +1,7 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
+import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState, StorageObjectDepSelectorModelState} from "@/models/connect";
+import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceDepSelectorModelState{
