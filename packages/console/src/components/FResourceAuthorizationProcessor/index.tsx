@@ -7,6 +7,7 @@ import Nav from './Nav';
 import Content from './Content';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { IActivatedTarget, IRelation, ITargetInfo } from './types';
+import FComponentsLib from '@freelog/components-lib';
 
 interface Target {
   id: string;
@@ -405,29 +406,35 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
     return null;
   }
 
-  return (<div className={styles.DepPanel}>
+  return (<div className={styles.box}>
+    <div className={styles.DepPanel}>
 
-    <div className={styles.DepPanelNavs}>
-      <Nav
-        relations={relations}
-        targetInfos={targetInfos}
-        activatedTarget={activatedTarget}
-        onChange_Relations={async (v) => {
-          set_relations(v);
-          await _syncTargetInfo();
-          await _syncActivatedTarget();
-        }}
-        onChange_ActivatedTarget={(v) => {
-          set_activatedTarget(v);
-        }}
-      />
+      <div className={styles.DepPanelNavs}>
+        <Nav
+          relations={relations}
+          targetInfos={targetInfos}
+          activatedTarget={activatedTarget}
+          onChange_Relations={async (v) => {
+            set_relations(v);
+            await _syncTargetInfo();
+            await _syncActivatedTarget();
+          }}
+          onChange_ActivatedTarget={(v) => {
+            set_activatedTarget(v);
+          }}
+        />
+      </div>
+
+      <div className={styles.DepPanelContent}>
+        <Content
+          activatedTarget={activatedTarget}
+          targetInfos={targetInfos}
+        />
+      </div>
     </div>
-
-    <div className={styles.DepPanelContent}>
-      <Content
-        activatedTarget={activatedTarget}
-        targetInfos={targetInfos}
-      />
+    <div style={{ height: 20 }} />
+    <div className={styles.boxFooter}>
+      <FComponentsLib.FRectBtn style={{ width: 300 }}>获取授权</FComponentsLib.FRectBtn>
     </div>
   </div>);
 }
