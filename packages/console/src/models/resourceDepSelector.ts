@@ -94,7 +94,8 @@ const Model: ResourceDepSelectorModelType = {
         ];
       } else {
         const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-          startResourceId: resourceList[0]?.resourceId,
+          // startResourceId: resourceList[0]?.resourceId,
+          // startResourceId: '',
           skip: resourceList.length,
           // limit: resourceDepSelector.limit,
           limit: FUtil.Predefined.pageSize,
