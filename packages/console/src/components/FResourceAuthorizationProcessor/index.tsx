@@ -461,7 +461,17 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     </div>
     {/*<div style={{ height: 20 }} />*/}
     <div className={styles.boxFooter}>
-      <FComponentsLib.FRectBtn style={{ width: 300 }}>获取授权</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
+        style={{ width: 300 }}
+        disabled={!targetInfos.some((t) => {
+          return !t.upThrow && t.enabledPolicies.some((p) => {
+            return p.checked;
+          });
+        })}
+        onClick={async () => {
+
+        }}
+      >获取授权</FComponentsLib.FRectBtn>
     </div>
   </div>);
 }
