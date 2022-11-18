@@ -14,9 +14,11 @@ interface ContentProps {
   targetInfos: ITargetInfo[];
 
   activatedTarget: IActivatedTarget | null;
+
+  onChange_TargetInfos?(value: ITargetInfo[]): void;
 }
 
-function Content({ targetInfos, activatedTarget }: ContentProps) {
+function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: ContentProps) {
 
   if (!activatedTarget) {
     return null;
@@ -25,6 +27,18 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
   const info: ITargetInfo | undefined = targetInfos.find((i) => {
     return activatedTarget.id === i.targetID && activatedTarget.name === i.targetName && activatedTarget.type === i.targetType;
   });
+
+  function onChange(v: Partial<ITargetInfo>) {
+    onChange_TargetInfos && onChange_TargetInfos(targetInfos.map((t) => {
+      if (t.targetID !== activatedTarget?.id) {
+        return t;
+      }
+      return {
+        ...t,
+        ...v,
+      };
+    }));
+  }
 
   if (!info) {
     return null;
@@ -94,7 +108,9 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
             style={{ lineHeight: '16px', color: 'red' }}
             checked={info.upThrow}
             disabled={info.upThrowDisabled && !info.upThrow}
-            // onClick={() => onChangeIsUpthrow(true)}
+            onClick={() => {
+              onChange({ upThrow: true });
+            }}
           />
           <span style={{ color: '#666' }}>上抛</span>
         </Space>
@@ -111,7 +127,9 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
             style={{ lineHeight: '16px' }}
             checked={!info.upThrow}
             disabled={info.upThrowDisabled}
-            // onClick={() => onChangeIsUpthrow(false)}
+            onClick={() => {
+              onChange({ upThrow: false });
+            }}
           />
           <span style={{ color: '#666' }}>{FI18n.i18nNext.t('sign_contract')}</span>
         </Space>
@@ -182,23 +200,35 @@ function Content({ targetInfos, activatedTarget }: ContentProps) {
         type='additional2'
         text={FI18n.i18nNext.t('getauth_title_authplanavailable')}
       />
-      {info.enabledPolicies.map((i) => (
-        <div key={i.policyFullInfo.policyId} className={styles.Policy}>
-          <div style={{ height: 15 }} />
-          <div className={styles.PolicyName}>
-            <span>{i.policyFullInfo.policyName}</span>
-            <Checkbox
-              // disabled={i.status === 0}
-              checked={i.checked}
-              // onChange={(e) => onChangeChecked(e.target.checked, i)}
-            />
+      {
+        info.enabledPolicies.map((i) => (
+          <div key={i.policyFullInfo.policyId} className={styles.Policy}>
+            <div style={{ height: 15 }} />
+            <div className={styles.PolicyName}>
+              <span>{i.policyFullInfo.policyName}</span>
+              <Checkbox
+                checked={i.checked}
+                onChange={(e) => {
+                  const enabledPolicies = info.enabledPolicies.map((p) => {
+                    if (i.policyFullInfo.policyId !== p.policyFullInfo.policyId) {
+                      return p;
+                    }
+                    return {
+                      ...p,
+                      checked: e.target.checked,
+                    };
+                  });
+                  onChange({ enabledPolicies: enabledPolicies });
+                }}
+              />
+            </div>
+            <div style={{ height: 10 }} />
+            <div style={{ padding: '0 20px' }}>
+              <FPolicyDisplay fullInfo={i.policyFullInfo} />
+            </div>
           </div>
-          <div style={{ height: 10 }} />
-          <div style={{ padding: '0 20px' }}>
-            <FPolicyDisplay fullInfo={i.policyFullInfo} />
-          </div>
-        </div>
-      ))}
+        ))
+      }
     </Space>
   </>);
 }

@@ -434,6 +434,9 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
         <Content
           activatedTarget={activatedTarget}
           targetInfos={targetInfos}
+          onChange_TargetInfos={(v) => {
+            set_targetInfos(v);
+          }}
         />
       </div>
     </div>
