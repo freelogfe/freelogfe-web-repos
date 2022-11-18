@@ -404,10 +404,6 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     return { err: '' };
   }
 
-  async function _onSignContracts() {
-
-  }
-
   if (relations.length === 0) {
     return null;
   }
