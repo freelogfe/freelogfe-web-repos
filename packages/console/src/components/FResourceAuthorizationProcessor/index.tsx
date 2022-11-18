@@ -469,7 +469,34 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
           });
         })}
         onClick={async () => {
-
+          const subjects: {
+            subjectId: string;
+            policyId: string;
+          }[] = get_targetInfos()
+            .filter((t) => {
+              return !t.upThrow;
+            })
+            .map((t) => {
+              return t.enabledPolicies
+                .filter((p) => {
+                  return p.checked;
+                })
+                .map((p) => {
+                  return {
+                    subjectId: t.targetID,
+                    policyId: p.policyFullInfo.policyId,
+                  };
+                });
+            })
+            .flat();
+          // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
+          await FServiceAPI.Contract.batchCreateContracts({
+            subjects: subjects,
+            subjectType: 1,
+            licenseeId: get_licenseeResource()?.resourceID || '',
+            licenseeIdentityType: 1,
+          });
+          await _syncTargetInfo();
         }}
       >获取授权</FComponentsLib.FRectBtn>
     </div>

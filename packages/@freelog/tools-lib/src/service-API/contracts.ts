@@ -22,7 +22,7 @@ interface BatchCreateContractsParamsType {
   subjects: {
     subjectId: string;
     policyId: string;
-  };
+  }[];
   subjectType: 1 | 2 | 3; // 标的物类型 1:资源 2:展品 3:用户组
   licenseeId: string | number;
   licenseeIdentityType: 1 | 2 | 3; // 乙方身份类型 1:资源方 2:节点方 3:C端用户
