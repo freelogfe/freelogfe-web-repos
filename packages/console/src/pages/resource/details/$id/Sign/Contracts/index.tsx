@@ -1,13 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Checkbox, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
 import { FUtil } from '@freelog/tools-lib';
 import FContractDisplay from '@/components/FContractDisplay';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -15,7 +17,7 @@ interface ContractsProps {
 }
 
 function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
+  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const selectedResource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
   const contracts = selectedResource?.contracts;
@@ -123,21 +125,24 @@ function Contracts({ dispatch, resourceDetailPage }: ContractsProps) {
       selectedResource && selectedResource.terminatedContractIDs.length > 0 && (<div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-          <FComponentsLib.FTextBtn onClick={() => {
+          <FComponentsLib.FTextBtn onClick={async () => {
             // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-            set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
+            // set_TerminatedContractIDs(selectedResource.terminatedContractIDs);
+            await fViewTerminatedContracts({
+              terminatedContractIDs: selectedResource.terminatedContractIDs,
+            });
           }}>查看已终止合约</FComponentsLib.FTextBtn>
         </div>
         <div style={{ height: 25 }} />
       </div>)
     }
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_TerminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </div>);
 }
 

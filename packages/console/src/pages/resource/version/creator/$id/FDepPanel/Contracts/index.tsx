@@ -10,8 +10,9 @@ import {
 import { FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import FContractDisplay from '@/components/FContractDisplay';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -19,7 +20,7 @@ interface ContractsProps {
 }
 
 function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
+  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
@@ -126,9 +127,12 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
         resource.terminatedContractIDs.length > 0 && (<div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-            <FComponentsLib.FTextBtn onClick={() => {
+            <FComponentsLib.FTextBtn onClick={async () => {
               // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-              set_TerminatedContractIDs(resource.terminatedContractIDs);
+              // set_TerminatedContractIDs(resource.terminatedContractIDs);
+              await fViewTerminatedContracts({
+                terminatedContractIDs: resource.terminatedContractIDs,
+              });
             }}>查看已终止合约</FComponentsLib.FTextBtn>
             {/*<div style={{ height: 5 }} />*/}
           </div>
@@ -136,12 +140,12 @@ function Contracts({ resourceVersionCreatorPage, dispatch }: ContractsProps) {
       }
 
     </Space>
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_TerminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </>);
 }
 

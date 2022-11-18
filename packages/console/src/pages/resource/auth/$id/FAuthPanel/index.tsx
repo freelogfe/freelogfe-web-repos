@@ -6,8 +6,9 @@ import Policies from './Policies';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -16,7 +17,7 @@ export interface FAuthPanelProps {
 
 function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
 
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
+  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
@@ -36,9 +37,12 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
             <div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FComponentsLib.FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={async () => {
                   // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                  set_TerminatedContractIDs(activeResource.terminatedContractIDs);
+                  // set_TerminatedContractIDs(activeResource.terminatedContractIDs);
+                  await fViewTerminatedContracts({
+                    terminatedContractIDs: activeResource.terminatedContractIDs,
+                  });
                 }}>查看已终止合约</FComponentsLib.FTextBtn>
               </div>
             </div>
@@ -51,12 +55,12 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
       </div>
     </div>
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_TerminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </div>);
 }
 

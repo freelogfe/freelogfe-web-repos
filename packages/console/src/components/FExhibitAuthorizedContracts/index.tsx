@@ -11,9 +11,10 @@ import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -44,14 +45,14 @@ interface FExhibitAuthorizedContractsStates {
     terminatedContractIDs: string[];
     policies: PolicyFullInfo_Type[];
   }[];
-  terminatedContractIDs: string[];
+  // terminatedContractIDs: string[];
 }
 
 function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
+  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -324,9 +325,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                  <FComponentsLib.FTextBtn onClick={() => {
-                    set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
+                  <FComponentsLib.FTextBtn onClick={async () => {
+                    // set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
                     // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                    await fViewTerminatedContracts({
+                      terminatedContractIDs: selectedAuthorizedContract.terminatedContractIDs,
+                    });
                   }}>查看已终止合约</FComponentsLib.FTextBtn>
                 </div>
               </>)
@@ -379,12 +383,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
         </div>)
     }
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_TerminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </div>);
 }
 
@@ -572,13 +576,13 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     /********* End 处理合约相关数据 *********************************************************/
 
     /************** Start 处理策略相关数据 *********************************************************/
-    // console.log(theResource, 'theResource90oewjlksdfjldskjl');
+      // console.log(theResource, 'theResource90oewjlksdfjldskjl');
     const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = (!theResource || theResource.status !== 1)
-      ? []
-      : theResource.policies
-        .filter((thp) => {
-          return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
-        });
+        ? []
+        : theResource.policies
+          .filter((thp) => {
+            return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
+          });
     /************** End 处理策略相关数据 *********************************************************/
     return {
       subjectID: rr.resourceId,
