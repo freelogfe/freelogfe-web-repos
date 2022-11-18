@@ -14,6 +14,11 @@ interface FBasicUpcastCardProps {
 }
 
 function FBasicUpcastCard({ dataSource, onClick }: FBasicUpcastCardProps) {
+
+  if (dataSource.length === 0) {
+    return null;
+  }
+
   return (<div className={styles.styles}>
     <div style={{ height: 10 }} />
     <div className={styles.redBorder}>

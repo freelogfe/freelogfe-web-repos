@@ -8,6 +8,7 @@ import Content from './Content';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { IActivatedTarget, IRelation, ITargetInfo } from './types';
 import FComponentsLib from '@freelog/components-lib';
+import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 
 interface Target {
   id: string;
@@ -412,6 +413,24 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   }
 
   return (<div className={styles.box}>
+    <FBasicUpcastCard
+      dataSource={targetInfos
+        .filter((t) => {
+          return t.targetType === 'resource' && t.upThrow;
+        })
+        .map((t) => {
+          return {
+            resourceID: t.targetID,
+            resourceName: t.targetName,
+          };
+        })}
+      onClick={(resourceID) => {
+        window.open(FUtil.LinkTo.resourceDetails({
+          resourceID: resourceID,
+        }));
+      }}
+    />
+
     <div className={styles.DepPanel}>
 
       <div className={styles.DepPanelNavs}>
@@ -440,7 +459,7 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
         />
       </div>
     </div>
-    <div style={{ height: 20 }} />
+    {/*<div style={{ height: 20 }} />*/}
     <div className={styles.boxFooter}>
       <FComponentsLib.FRectBtn style={{ width: 300 }}>获取授权</FComponentsLib.FRectBtn>
     </div>
