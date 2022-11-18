@@ -344,6 +344,9 @@ function VersionCreator({
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
             />
+            <FResourceAuthorizationProcessor
+              resourceID={resourceVersionCreatorPage.resourceId}
+            />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock

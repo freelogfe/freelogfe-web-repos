@@ -42,7 +42,7 @@ interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
 
-  // onMount?(processor: Processor): void;
+  onMount?(processor: Processor): void;
 }
 
 interface FResourceAuthorizationProcessorStates {
@@ -69,7 +69,7 @@ const initStates: FResourceAuthorizationProcessorStates = {
 
 let processor: Processor | null = null;
 
-function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationProcessorProps) {
+function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAuthorizationProcessorProps) {
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
@@ -116,6 +116,7 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
       getAllResourcesWithContracts,
       clear,
     };
+    onMount && onMount(processor);
   });
 
   AHooks.useUnmount(() => {
@@ -400,6 +401,10 @@ function FResourceAuthorizationProcessor({ resourceID }: FResourceAuthorizationP
     set_targetInfos(initStates['targetInfos']);
     set_activatedTarget(initStates['activatedTarget']);
     return { err: '' };
+  }
+
+  async function _onSignContracts() {
+
   }
 
   if (relations.length === 0) {
