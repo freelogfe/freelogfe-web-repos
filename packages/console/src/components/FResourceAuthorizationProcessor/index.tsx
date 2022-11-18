@@ -654,7 +654,7 @@ async function _batchHandleResources({
   return resourceTargetInfos;
 }
 
-export async function getProcessor() {
+export async function getProcessor(): Promise<Processor> {
   while (true) {
     if (processor) {
       return processor;
