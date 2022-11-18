@@ -9,6 +9,7 @@ import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import { IActivatedTarget, ITargetInfo } from '../types';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface ContentProps {
   targetInfos: ITargetInfo[];
@@ -200,10 +201,12 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
           info.terminatedContractIDs.length > 0 && (<div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-              <FComponentsLib.FTextBtn onClick={() => {
-                // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                // set_TerminatedContractIDs(resource.terminatedContractIDs);
-              }}>查看已终止合约</FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn
+                onClick={async () => {
+                  await fViewTerminatedContracts({
+                    terminatedContractIDs: info.terminatedContractIDs,
+                  });
+                }}>查看已终止合约</FComponentsLib.FTextBtn>
               {/*<div style={{ height: 5 }} />*/}
             </div>
           </div>)
