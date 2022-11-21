@@ -91,18 +91,12 @@ export interface ResourceVersionCreatorPageModelState {
   }[];
 
   version: string;
-  versionVerify: 0 | 2;
-  versionErrorText: string;
 
   selectedFileInfo: {
     name: string;
     sha1: string;
     from: string;
   } | null;
-
-  // depRelationship: Relationships;
-  // dependencies: DepResources;
-  // depActivatedID: string;
 
   dataIsDirty: boolean;
 
@@ -211,10 +205,10 @@ export interface FetchResourceInfoAction extends AnyAction {
   type: 'fetchResourceInfo';
 }
 
-export interface VerifyVersionInputAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
-  // payload: string;
-}
+// export interface VerifyVersionInputAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
+//   // payload: string;
+// }
 
 export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
@@ -242,7 +236,7 @@ export interface ResourceVersionCreatorModelType {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
-    verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
+    // verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -258,8 +252,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   baseUpcastResources: [],
 
   version: '',
-  versionVerify: 0,
-  versionErrorText: '',
 
   selectedFileInfo: null,
 
@@ -616,31 +608,31 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * verifyVersionInput({}: VerifyVersionInputAction, { select, put }: EffectsCommandMap) {
-      const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
-                                                                                         resourceInfo,
-                                                                                         resourceVersionCreatorPage,
-                                                                                       }: ConnectState) => ({
-        resourceInfo,
-        resourceVersionCreatorPage,
-      }));
-      let versionErrorText: string = '';
-      if (!resourceVersionCreatorPage.version) {
-        versionErrorText = '请输入版本号';
-      } else if (!semver.valid(resourceVersionCreatorPage.version)) {
-        versionErrorText = '版本号不合法';
-      } else if (!semver.gt(resourceVersionCreatorPage.version, resourceInfo.info?.latestVersion || '0.0.0')) {
-        versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
-      }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          // $version: resourceVersionCreatorPage.$version,
-          versionVerify: 2,
-          versionErrorText: versionErrorText,
-        },
-      });
-    },
+    // * verifyVersionInput({}: VerifyVersionInputAction, { select, put }: EffectsCommandMap) {
+    //   const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
+    //                                                                                      resourceInfo,
+    //                                                                                      resourceVersionCreatorPage,
+    //                                                                                    }: ConnectState) => ({
+    //     resourceInfo,
+    //     resourceVersionCreatorPage,
+    //   }));
+    //   let versionErrorText: string = '';
+    //   if (!resourceVersionCreatorPage.version) {
+    //     versionErrorText = '请输入版本号';
+    //   } else if (!semver.valid(resourceVersionCreatorPage.version)) {
+    //     versionErrorText = '版本号不合法';
+    //   } else if (!semver.gt(resourceVersionCreatorPage.version, resourceInfo.info?.latestVersion || '0.0.0')) {
+    //     versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
+    //   }
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       // $version: resourceVersionCreatorPage.$version,
+    //       versionVerify: 2,
+    //       versionErrorText: versionErrorText,
+    //     },
+    //   });
+    // },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
