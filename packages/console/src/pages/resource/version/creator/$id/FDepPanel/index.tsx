@@ -10,7 +10,7 @@ import Market from './Market';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
-import { ChangeAction, DepResources, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
+import { ChangeAction, ImportLastVersionDataAction } from '@/models/resourceVersionCreatorPage';
 import FDrawer from '@/components/FDrawer';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';

@@ -433,18 +433,23 @@ const Model: ResourceVersionCreatorModelType = {
 
       const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
                                                                                          resourceVersionCreatorPage,
-                                                                                         resourceInfo,
+                                                                                         // resourceInfo,
                                                                                        }: ConnectState) => ({
         resourceInfo, resourceVersionCreatorPage,
       }));
 
+      const draftData: IDraft = {
+        versionInput: resourceVersionCreatorPage.version,
+        selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
+        baseProperties: resourceVersionCreatorPage.baseProperties,
+        customOptionsData: resourceVersionCreatorPage.customOptionsData,
+        directDependencies: [],
+        descriptionEditorInput: resourceVersionCreatorPage.description.toHTML(),
+      };
+
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
         resourceId: resourceInfo.info?.resourceId || '',
-        draftData: {
-          ...resourceVersionCreatorPage,
-          description: resourceVersionCreatorPage.description.toHTML(),
-          dataIsDirty: false,
-        },
+        draftData: draftData,
       };
       yield call(FServiceAPI.Resource.saveVersionsDraft, params);
       fMessage('暂存草稿成功');
