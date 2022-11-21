@@ -78,6 +78,12 @@ export interface IDraft {
     defaultValue: string;
     customOption: string;
   }[];
+  directDependencies: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
   descriptionEditorInput: string;
 }
 
@@ -137,10 +143,17 @@ export interface ResourceVersionCreatorPageModelState {
     customOption: string;
   }[];
 
-  preVersionDeps: {
-    // relationships: Relationships;
-    // versions: { id: string; versionRange: string }[];
-  };
+  preVersionDirectDependencies: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+
+  // preVersionDeps: {
+  // relationships: Relationships;
+  // versions: { id: string; versionRange: string }[];
+  // };
 
   promptLeavePath: string;
 }
@@ -267,10 +280,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   preVersionBaseProperties: [],
   preVersionOptionProperties: [],
-  preVersionDeps: {
-    relationships: [],
-    versions: [],
-  },
+  preVersionDirectDependencies: [],
 
   dataIsDirty: false,
 
@@ -527,10 +537,7 @@ const Model: ResourceVersionCreatorModelType = {
       let description: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
       let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
-      let preVersionDeps = {
-        relationships: [],
-        versions: [],
-      };
+      let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
       if (data.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: resourceVersionCreatorPage.resourceId,
@@ -587,10 +594,11 @@ const Model: ResourceVersionCreatorModelType = {
             };
           });
 
-          preVersionDeps = {
-            relationships: relations as any,
-            versions: versions as any,
-          };
+          // preVersionDeps = {
+          //   relationships: relations as any,
+          //   versions: versions as any,
+          // };
+          preVersionDirectDependencies = [];
         }
       }
 
@@ -603,7 +611,7 @@ const Model: ResourceVersionCreatorModelType = {
           version: resourceVersionCreatorPage.version ? resourceVersionCreatorPage.version : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
           preVersionBaseProperties,
           preVersionOptionProperties,
-          preVersionDeps,
+          preVersionDirectDependencies,
           description,
         },
       });

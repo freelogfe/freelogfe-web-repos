@@ -3,7 +3,7 @@ import styles from './index.less';
 // import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
-import FDepPanel from './FDepPanel';
+// import FDepPanel from './FDepPanel';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
