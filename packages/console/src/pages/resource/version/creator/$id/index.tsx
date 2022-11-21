@@ -13,8 +13,8 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  OnClickCacheBtnAction,
-  OnClickCreateBtnAction,
+  OnClick_SaveCacheBtn_Action,
+  OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
   OnPromptPageLeaveAction,
@@ -92,18 +92,19 @@ function VersionCreator({
   const hasError: boolean =
     // 版本
     !resourceVersionCreatorPage.version ||
-    !!resourceVersionCreatorPage.versionErrorText ||
+    // !!resourceVersionCreatorPage.versionErrorText ||
     // 选择的文件对象
     !resourceVersionCreatorPage.selectedFileInfo ||
-    resourceVersionCreatorPage.rawPropertiesState !== 'success' ||
-    // 依赖
-    resourceVersionCreatorPage.dependencies.some((dd) => {
-      return (
-        !dd.upthrow &&
-        !dd.enableReuseContracts.some((erc) => erc.checked) &&
-        !dd.enabledPolicies.some((ep) => ep.checked)
-      );
-    });
+    resourceVersionCreatorPage.rawPropertiesState !== 'success';
+  // ||
+  // 依赖
+  // resourceVersionCreatorPage.dependencies.some((dd) => {
+  //   return (
+  //     !dd.upthrow &&
+  //     !dd.enableReuseContracts.some((erc) => erc.checked) &&
+  //     !dd.enabledPolicies.some((ep) => ep.checked)
+  //   );
+  // });
 
   return (
     <>
@@ -168,13 +169,13 @@ function VersionCreator({
           <Header
             onClickCreate={() => {
               // window.onbeforeunload = null;
-              dispatch<OnClickCreateBtnAction>({
-                type: 'resourceVersionCreatorPage/onClickCreateBtn',
+              dispatch<OnClick_CreateVersionBtn_Action>({
+                type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
               });
             }}
             onClickCache={() => {
-              dispatch<OnClickCacheBtnAction>({
-                type: 'resourceVersionCreatorPage/onClickCacheBtn',
+              dispatch<OnClick_SaveCacheBtn_Action>({
+                type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
               });
             }}
             disabledCreate={hasError}
@@ -195,7 +196,6 @@ function VersionCreator({
                     version: e.target.value,
                     dataIsDirty: true,
                   },
-                  caller: '23$^%%%%^&^&&4532434345234324534%#$%#$%#$%#$#$',
                 });
               }}
               onBlur={() => {
@@ -347,9 +347,6 @@ function VersionCreator({
 
               }}
             />
-            {/*<FResourceAuthorizationProcessor*/}
-            {/*  resourceID={resourceVersionCreatorPage.resourceId}*/}
-            {/*/>*/}
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock
@@ -412,9 +409,7 @@ function Header({
   );
 }
 
-export default withRouter(
-  connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
-    resourceVersionCreatorPage: resourceVersionCreatorPage,
-    resourceInfo: resourceInfo,
-  }))(VersionCreator),
-);
+export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
+  resourceInfo: resourceInfo,
+}))(VersionCreator);
