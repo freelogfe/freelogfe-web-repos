@@ -639,7 +639,6 @@ const Model: ResourceVersionCreatorModelType = {
           versionVerify: 2,
           versionErrorText: versionErrorText,
         },
-        caller: '97293874823yu4oi234io23hjkfdsasdf++++++=',
       });
     },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
