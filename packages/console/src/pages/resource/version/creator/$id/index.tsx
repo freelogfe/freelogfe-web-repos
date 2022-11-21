@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
 import FDepPanel from './FDepPanel';
@@ -21,10 +21,10 @@ import {
   OnPromptPageLeaveCancelAction,
   OnPromptPageLeaveConfirmAction,
   OnSuccess_ObjectFile_Action,
-  OnUnmountPageAction,
-  VerifyVersionInputAction,
+  OnUnmountPageAction, ImportLastVersionDataAction,
+  // VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import { withRouter, Prompt } from 'umi';
+import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
@@ -40,6 +40,9 @@ import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
 import { MarkdownEditor } from '@/pages/resource/md-editor';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import VersionInput from './VersionInput';
+import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
+import FDrawer from '@/components/FDrawer';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -187,26 +190,39 @@ function VersionCreator({
             dot={true}
             title={FI18n.i18nNext.t('version_number')}
           >
-            <FInput
+            <VersionInput
               value={resourceVersionCreatorPage.version}
-              onChange={(e) => {
+              resourceLatestVersion={resourceVersionCreatorPage.latestVersion}
+              onChange={(value) => {
                 dispatch<ChangeAction>({
                   type: 'resourceVersionCreatorPage/change',
                   payload: {
-                    version: e.target.value,
-                    dataIsDirty: true,
+                    version: value,
+                    // dataIsDirty: true,
                   },
                 });
               }}
-              onBlur={() => {
-                dispatch<VerifyVersionInputAction>({
-                  type: 'resourceVersionCreatorPage/verifyVersionInput',
-                  // payload: e.target.value,
-                });
-              }}
-              className={styles.versionInput}
-              errorText={resourceVersionCreatorPage.versionErrorText}
             />
+            {/*<FInput*/}
+            {/*  value={resourceVersionCreatorPage.version}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<ChangeAction>({*/}
+            {/*      type: 'resourceVersionCreatorPage/change',*/}
+            {/*      payload: {*/}
+            {/*        version: e.target.value,*/}
+            {/*        dataIsDirty: true,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  onBlur={() => {*/}
+            {/*    dispatch<VerifyVersionInputAction>({*/}
+            {/*      type: 'resourceVersionCreatorPage/verifyVersionInput',*/}
+            {/*      // payload: e.target.value,*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  className={styles.versionInput}*/}
+            {/*  errorText={resourceVersionCreatorPage.versionErrorText}*/}
+            {/*/>*/}
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock
@@ -340,7 +356,46 @@ function VersionCreator({
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
-            <FDepPanel />
+            {/*<FDepPanel />*/}
+
+            <Space size={15}>
+              <FComponentsLib.FRectBtn
+                onClick={() => {
+
+                }}
+                type='default'
+              >添加依赖</FComponentsLib.FRectBtn>
+              <FDrawer
+                // title={FUtil.I18n.message('add_rely_resource')}
+                title={'添加依赖'}
+                // onClose={() => setModalVisible(false)}
+                // open={modalVisible}
+                width={820}
+              >
+                <Market />
+              </FDrawer>
+              {
+                resourceVersionCreatorPage.preVersionDeps &&
+                <FComponentsLib.FRectBtn
+                  type='default'
+                  onClick={() => {
+                    dispatch<ImportLastVersionDataAction>({
+                      type: 'resourceVersionCreatorPage/importLastVersionData',
+                      payload: 'deps',
+                    });
+                    dispatch<ChangeAction>({
+                      type: 'resourceVersionCreatorPage/change',
+                      payload: {
+                        dataIsDirty: true,
+                      },
+                      caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
+                    });
+                  }}
+                >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
+              }
+
+            </Space>
+
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
               onMount={(processor) => {
