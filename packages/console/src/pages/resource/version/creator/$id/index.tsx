@@ -43,6 +43,7 @@ import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FRes
 import VersionInput from './VersionInput';
 import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
 import FDrawer from '@/components/FDrawer';
+import fAddDependencies from '@/components/fAddDependencies';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -360,8 +361,12 @@ function VersionCreator({
 
             <Space size={15}>
               <FComponentsLib.FRectBtn
-                onClick={() => {
-
+                onClick={async () => {
+                  await fAddDependencies({
+                    existingResources: [],
+                    baseUpcastResources: [],
+                  });
+                  console.log('——————-----————8iiddi');
                 }}
                 type='default'
               >添加依赖</FComponentsLib.FRectBtn>
