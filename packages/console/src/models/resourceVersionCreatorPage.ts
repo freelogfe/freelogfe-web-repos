@@ -831,44 +831,6 @@ const Model: ResourceVersionCreatorModelType = {
 
 export default Model;
 
-// 批量检查是否循环依赖，返回循环依赖的 ID
-// interface BatchCycleDependencyCheckParams {
-//   resourceId: string;
-//   dependencies: {
-//     resourceId: string;
-//     versionRange: string;
-//   }[];
-// }
-//
-// async function batchCycleDependencyCheck({
-//                                            resourceId,
-//                                            dependencies,
-//                                          }: BatchCycleDependencyCheckParams): Promise<string[]> {
-//   const promises: Promise<any>[] = [];
-//   for (const dependency of dependencies) {
-//     const params: Parameters<typeof FServiceAPI.Resource.cycleDependencyCheck>[0] = {
-//       resourceId: resourceId,
-//       dependencies: [{
-//         resourceId: dependency.resourceId,
-//         versionRange: dependency.versionRange,
-//       }],
-//     };
-//     promises.push(FServiceAPI.Resource.cycleDependencyCheck(params));
-//   }
-//   const results = await Promise.all(promises);
-//
-//   const resourceIDs: string[] = [];
-//   // console.log(results, 'results12390j');
-//   for (const [index, result] of Object.entries(results)) {
-//     // console.log(index, value);
-//     const { data } = result;
-//     if (!data) {
-//       resourceIDs.push(dependencies[Number(index)].resourceId);
-//     }
-//   }
-//   return resourceIDs;
-// }
-
 // interface HandledDraftParamsType {
 //   resourceID: string;
 // }
