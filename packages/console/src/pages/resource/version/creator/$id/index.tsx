@@ -365,15 +365,7 @@ function VersionCreator({
                 }}
                 type='default'
               >添加依赖</FComponentsLib.FRectBtn>
-              <FDrawer
-                // title={FUtil.I18n.message('add_rely_resource')}
-                title={'添加依赖'}
-                // onClose={() => setModalVisible(false)}
-                // open={modalVisible}
-                width={820}
-              >
-                <Market />
-              </FDrawer>
+
               {
                 resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
                 <FComponentsLib.FRectBtn
