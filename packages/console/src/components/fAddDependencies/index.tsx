@@ -4,8 +4,14 @@ import * as ReactDOM from 'react-dom/client';
 import FAddDependenciesDrawer from './FAddDependenciesDrawer';
 
 interface fAddDependenciesProps {
-  existingResourceIDs: string[];
-  baseUpcastResourceIDs: string[];
+  existingResources: {
+    resourceID: string;
+    resourceNme: string;
+  }[];
+  baseUpcastResources: {
+    resourceID: string;
+    resourceNme: string;
+  }[];
 
   onSelect_Resource?(value: {
     resourceID: string;
@@ -19,16 +25,20 @@ interface fAddDependenciesProps {
 }
 
 async function fAddDependencies({
-                                  existingResourceIDs,
-                                  baseUpcastResourceIDs,
+                                  existingResources,
+                                  baseUpcastResources,
                                   onSelect_Resource,
                                   onDeselect_Resource,
                                 }: fAddDependenciesProps): Promise<void> {
   return new Promise<void>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render(<FAddDependenciesDrawer
-      existingResourceIDs={existingResourceIDs}
-      baseUpcastResourceIDs={baseUpcastResourceIDs}
+      existingResourceIDs={existingResources.map<string>((r) => {
+        return r.resourceID;
+      })}
+      baseUpcastResourceIDs={baseUpcastResources.map((r) => {
+        return r.resourceID;
+      })}
       onSelect_Resource={(value) => {
         onSelect_Resource && onSelect_Resource(value);
       }}
