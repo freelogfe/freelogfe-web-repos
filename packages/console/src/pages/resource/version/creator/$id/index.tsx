@@ -375,7 +375,7 @@ function VersionCreator({
                 <Market />
               </FDrawer>
               {
-                resourceVersionCreatorPage.preVersionDeps &&
+                resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
                 <FComponentsLib.FRectBtn
                   type='default'
                   onClick={() => {

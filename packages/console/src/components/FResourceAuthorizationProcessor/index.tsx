@@ -22,7 +22,11 @@ interface Processor {
 
   removeTarget(target: Target): Promise<{ err: string }>;
 
-  activeTarget(target: Target): Promise<{ err: string }>;
+  activeTarget(target: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+  }): Promise<{ err: string }>;
 
   getAllTargets(): Promise<Target[]>;
 
@@ -352,7 +356,11 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     return { err: '' };
   }
 
-  async function activeTarget(target: Target): Promise<{ err: string }> {
+  async function activeTarget(target: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+  }): Promise<{ err: string }> {
     if (get_targetInfos().some((t) => {
       return t.targetID === target.id && t.targetName === target.name && t.targetType === target.type;
     })) {
