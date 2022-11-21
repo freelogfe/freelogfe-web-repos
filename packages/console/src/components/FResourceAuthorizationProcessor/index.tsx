@@ -20,7 +20,11 @@ interface Target {
 interface Processor {
   addTargets(targets: Target[]): Promise<{ err: string }>;
 
-  removeTarget(target: Target): Promise<{ err: string }>;
+  removeTarget(target: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+  }): Promise<{ err: string }>;
 
   activeTarget(target: {
     id: string;
