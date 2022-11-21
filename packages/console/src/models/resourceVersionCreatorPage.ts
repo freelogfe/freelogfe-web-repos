@@ -652,11 +652,6 @@ const Model: ResourceVersionCreatorModelType = {
         return;
       }
 
-      // console.log(resourceVersionCreatorPage.selectedFileSha1, 'resourceVersionCreatorPage.selectedFileSha109ewoijsdikfjls');
-      // if (!resourceVersionCreatorPage.selectedFileSha1) {
-      //   return;
-      // }
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -708,7 +703,6 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             rawPropertiesState: 'success',
           },
-          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
         });
       }
 
