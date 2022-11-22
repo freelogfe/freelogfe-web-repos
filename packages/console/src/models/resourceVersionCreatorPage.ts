@@ -100,7 +100,7 @@ export interface ResourceVersionCreatorPageModelState {
     resourceName: string;
   }[];
 
-  version: string;
+  versionInput: string;
 
   selectedFileInfo: {
     name: string;
@@ -131,7 +131,7 @@ export interface ResourceVersionCreatorPageModelState {
     customOption: string;
   }[];
 
-  description: EditorState;
+  descriptionEditorState: EditorState;
 
   preVersionBaseProperties: {
     key: string;
@@ -292,7 +292,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   resourceType: [],
   baseUpcastResources: [],
 
-  version: '',
+  versionInput: '',
 
   selectedFileInfo: null,
 
@@ -304,7 +304,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   customOptionsDataVisible: false,
   customOptionsData: [],
 
-  description: BraftEditor.createEditorState(''),
+  descriptionEditorState: BraftEditor.createEditorState(''),
 
   preVersionBaseProperties: [],
   preVersionOptionProperties: [],
@@ -333,6 +333,29 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
       });
+
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: payload.resourceID,
+      };
+      const { data: data_draft }: {
+        data: null | {
+          draftData: IResourceCreateVersionDraft;
+        };
+      } = yield call(FServiceAPI.Resource.lookDraft, params);
+
+      if (data_draft) {
+        const { draftData } = data_draft;
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionInput: draftData.versionInput,
+            selectedFileInfo: draftData.selectedFileInfo,
+            baseProperties: draftData.baseProperties,
+            customOptionsData: draftData.customOptionsData,
+            descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
+          },
+        });
+      }
 
       // const params: HandledDraftParamsType = {
       //   resourceID: payload.resourceID,
@@ -450,7 +473,7 @@ const Model: ResourceVersionCreatorModelType = {
         });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
-        version: resourceVersionCreatorPage.version,
+        version: resourceVersionCreatorPage.versionInput,
         fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
         filename: resourceVersionCreatorPage.selectedFileInfo.name,
         baseUpcastResources: baseUpcastResources,
@@ -477,7 +500,9 @@ const Model: ResourceVersionCreatorModelType = {
             };
           }),
         ],
-        description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
+        description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
+          ? ''
+          : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
       };
 
       const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
@@ -518,13 +543,13 @@ const Model: ResourceVersionCreatorModelType = {
       // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
 
       const draftData: IResourceCreateVersionDraft = {
-        versionInput: resourceVersionCreatorPage.version,
+        versionInput: resourceVersionCreatorPage.versionInput,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
         baseProperties: resourceVersionCreatorPage.baseProperties,
         customOptionsData: resourceVersionCreatorPage.customOptionsData,
         // directDependencies: payload.dependentAllTargets,
         directDependencies: directDependencies,
-        descriptionEditorInput: resourceVersionCreatorPage.description.toHTML(),
+        descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
@@ -619,7 +644,7 @@ const Model: ResourceVersionCreatorModelType = {
       const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '2093jdsl;kfasdf');
 
-      let description: EditorState = BraftEditor.createEditorState('');
+      let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
       let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
       let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
@@ -630,7 +655,7 @@ const Model: ResourceVersionCreatorModelType = {
         };
         const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
         // console.log(data2, 'data2092384u0');
-        description = BraftEditor.createEditorState(data2.description);
+        descriptionEditorState = BraftEditor.createEditorState(data2.description);
         preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
           .filter((cpd: any) => cpd.type === 'readonlyText')
           .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
@@ -693,11 +718,13 @@ const Model: ResourceVersionCreatorModelType = {
           resourceType: data.resourceType,
           baseUpcastResources: data.baseUpcastResources,
           latestVersion: data.latestVersion,
-          version: resourceVersionCreatorPage.version ? resourceVersionCreatorPage.version : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
+          versionInput: resourceVersionCreatorPage.versionInput
+            ? resourceVersionCreatorPage.versionInput
+            : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
           preVersionBaseProperties,
           preVersionOptionProperties,
           preVersionDirectDependencies,
-          description,
+          descriptionEditorState,
         },
       });
 

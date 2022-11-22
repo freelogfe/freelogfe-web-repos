@@ -46,16 +46,12 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   resourceInfo: ResourceInfoModelState;
 }
 
-// let processor: Processor | null = null;
-
 function VersionCreator({
                           dispatch,
                           resourceInfo,
                           resourceVersionCreatorPage,
                           match,
                         }: VersionCreatorProps) {
-  // const [show, setShow] = React.useState(false);
-  // const [saved, setSaved] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -86,15 +82,11 @@ function VersionCreator({
     await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
-      caller: '2345324343452===-0-9--34324534%#$%#$%#$%#$#$',
     });
   }
 
   const hasError: boolean =
-    // 版本
-    !resourceVersionCreatorPage.version ||
-    // !!resourceVersionCreatorPage.versionErrorText ||
-    // 选择的文件对象
+    !resourceVersionCreatorPage.versionInput ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
   // ||
@@ -117,13 +109,6 @@ function VersionCreator({
       {/*  // }}*/}
       {/*  // setSaved={setSaved}*/}
       {/*/>*/}
-
-      {/*<div*/}
-      {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
-      {/*  onClick={() => setShow(true)}*/}
-      {/*>*/}
-      {/*  打开编辑器*/}
-      {/*</div>*/}
 
       <Helmet>
         <title>{`创建版本 · ${
@@ -166,27 +151,16 @@ function VersionCreator({
       />
       <FLeftSiderLayout
         sider={<Sider />}
-        // sider={<div/>}
         header={
           <Header
             onClickCreate={async () => {
-              // window.onbeforeunload = null;
-              // const p = await getProcessor();
               dispatch<OnClick_CreateVersionBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-                // payload: {
-                //   dependentAllTargets: await p.getAllTargets(),
-                //   dependentAllResourcesWithContracts: await p.getAllResourcesWithContracts(),
-                // },
               });
             }}
             onClickCache={async () => {
-              // const p = await getProcessor();
               dispatch<OnClick_SaveCacheBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
-                // payload: {
-                //   dependentAllTargets: await p.getAllTargets(),
-                // },
               });
             }}
             disabledCreate={hasError}
@@ -199,38 +173,18 @@ function VersionCreator({
             title={FI18n.i18nNext.t('version_number')}
           >
             <VersionInput
-              value={resourceVersionCreatorPage.version}
+              value={resourceVersionCreatorPage.versionInput}
               resourceLatestVersion={resourceVersionCreatorPage.latestVersion}
               onChange={(value) => {
                 dispatch<ChangeAction>({
                   type: 'resourceVersionCreatorPage/change',
                   payload: {
-                    version: value,
+                    versionInput: value,
                     // dataIsDirty: true,
                   },
                 });
               }}
             />
-            {/*<FInput*/}
-            {/*  value={resourceVersionCreatorPage.version}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    dispatch<ChangeAction>({*/}
-            {/*      type: 'resourceVersionCreatorPage/change',*/}
-            {/*      payload: {*/}
-            {/*        version: e.target.value,*/}
-            {/*        dataIsDirty: true,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  onBlur={() => {*/}
-            {/*    dispatch<VerifyVersionInputAction>({*/}
-            {/*      type: 'resourceVersionCreatorPage/verifyVersionInput',*/}
-            {/*      // payload: e.target.value,*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  className={styles.versionInput}*/}
-            {/*  errorText={resourceVersionCreatorPage.versionErrorText}*/}
-            {/*/>*/}
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock
@@ -421,7 +375,6 @@ function VersionCreator({
                         payload: {
                           dataIsDirty: true,
                         },
-                        caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
                       });
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
@@ -444,11 +397,11 @@ function VersionCreator({
             title={FI18n.i18nNext.t('version_description')}
           >
             <FBraftEditor
-              value={resourceVersionCreatorPage.description}
+              value={resourceVersionCreatorPage.descriptionEditorState}
               onChange={(value: EditorState) => {
                 // console.log('######!!~@#@!#!@');
                 onChange({
-                  description: value,
+                  descriptionEditorState: value,
                   dataIsDirty: true,
                 });
               }}
@@ -503,12 +456,3 @@ export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectSta
   resourceVersionCreatorPage: resourceVersionCreatorPage,
   resourceInfo: resourceInfo,
 }))(VersionCreator);
-
-// export async function getProcessor(): Promise<Processor> {
-//   while (true) {
-//     if (processor) {
-//       return processor;
-//     }
-//     await FUtil.Tool.promiseSleep(300);
-//   }
-// }
