@@ -34,15 +34,15 @@ import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import { FI18n, FServiceAPI } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
 import { MarkdownEditor } from '@/pages/resource/md-editor';
-import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
-import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
-import FDrawer from '@/components/FDrawer';
+// import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
+// import FDrawer from '@/components/FDrawer';
 import fAddDependencies from '@/components/fAddDependencies';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
@@ -50,6 +50,8 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   resourceInfo: ResourceInfoModelState;
 }
+
+let processor: Processor | null = null;
 
 function VersionCreator({
                           dispatch,
@@ -362,11 +364,40 @@ function VersionCreator({
             <Space size={15}>
               <FComponentsLib.FRectBtn
                 onClick={async () => {
+                  const p = await getProcessor();
                   await fAddDependencies({
-                    existingResources: [],
-                    baseUpcastResources: [],
+                    existingResources: (await p.getAllTargets()).map((t) => {
+                      return {
+                        resourceID: t.id,
+                        resourceNme: t.name,
+                      };
+                    }),
+                    baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources.map((r) => {
+                      return {
+                        resourceID: r.resourceId,
+                        resourceNme: r.resourceName,
+                      };
+                    }),
+                    async onSelect_Resource({ resourceID, resourceName }) {
+                      console.log('8***********8sdflksdjlkj');
+                      const p = await getProcessor();
+                      await p.addTargets([{
+                        id: resourceID,
+                        name: resourceName,
+                        type: 'resource',
+                        // versionRange: '^0.1.0',
+                      }]);
+                    },
+                    async onDeselect_Resource({ resourceID, resourceName }) {
+                      const p = await getProcessor();
+                      await p.removeTarget({
+                        id: resourceID,
+                        name: resourceName,
+                        type: 'resource',
+                      });
+                    },
                   });
-                  console.log('——————-----————8iiddi');
+                  // console.log('——————-----————8iiddi');
                 }}
                 type='default'
               >添加依赖</FComponentsLib.FRectBtn>
@@ -395,8 +426,8 @@ function VersionCreator({
 
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
-              onMount={(processor) => {
-
+              onMount={(p) => {
+                processor = p;
               }}
             />
           </FFormLayout.FBlock>
@@ -465,3 +496,12 @@ export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectSta
   resourceVersionCreatorPage: resourceVersionCreatorPage,
   resourceInfo: resourceInfo,
 }))(VersionCreator);
+
+export async function getProcessor(): Promise<Processor> {
+  while (true) {
+    if (processor) {
+      return processor;
+    }
+    await FUtil.Tool.promiseSleep(300);
+  }
+}

@@ -15,12 +15,12 @@ interface fAddDependenciesProps {
 
   onSelect_Resource?(value: {
     resourceID: string;
-    resourceNme: string;
+    resourceName: string;
   }): void;
 
   onDeselect_Resource?(value: {
     resourceID: string;
-    resourceNme: string;
+    resourceName: string;
   }): void;
 }
 

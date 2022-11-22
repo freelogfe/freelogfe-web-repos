@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
-import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
+// import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
@@ -9,7 +9,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FServiceAPI, FUtil } from '../../../../../@freelog/tools-lib';
 // import { ResourceDepSelectorModelState } from '@/models/resourceDepSelector';
 import * as AHooks from 'ahooks';
-import { FetchObjectsAction } from '@/models/storageHomePage';
+// import { FetchObjectsAction } from '@/models/storageHomePage';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -20,12 +20,12 @@ interface FAddDependenciesDrawerProps {
 
   onSelect_Resource?(value: {
     resourceID: string;
-    resourceNme: string;
+    resourceName: string;
   }): void;
 
   onDeselect_Resource?(value: {
     resourceID: string;
-    resourceNme: string;
+    resourceName: string;
   }): void;
 
   onClose?(): void;
@@ -233,7 +233,6 @@ function FAddDependenciesDrawer({
         </div>
 
         <div style={{ height: 17 }} />
-        {console.log(resourceListState, resourceListMore, 'ioisedjfoisjdlfjsdlfjsdfjsdjfjsdjlll')}
         {
           resourceListState === 'loading' && (<FLoadingTip height={600} />)
         }
@@ -250,7 +249,7 @@ function FAddDependenciesDrawer({
 
         {
           resourceListState === 'loaded' && resourceList.map((resource) => {
-            return (<div className={styles.bucket}>
+            return (<div className={styles.bucket} key={resource.resourceID}>
               <div>
                 <div className={styles.title}>
                   <div>
@@ -275,6 +274,14 @@ function FAddDependenciesDrawer({
                     type='secondary'
                     size='small'
                     onClick={() => {
+                      onSelect_Resource && onSelect_Resource({
+                        resourceID: resource.resourceID,
+                        resourceName: resource.resourceName,
+                      });
+                      set_selectedResourceIDs([
+                        ...selectedResourceIDs,
+                        resource.resourceID,
+                      ]);
                     }}
                     // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
                   >选择</FComponentsLib.FRectBtn>)
@@ -282,9 +289,15 @@ function FAddDependenciesDrawer({
                     type='danger2'
                     size='small'
                     onClick={() => {
-
+                      onDeselect_Resource && onDeselect_Resource({
+                        resourceID: resource.resourceID,
+                        resourceName: resource.resourceName,
+                      });
+                      set_selectedResourceIDs(selectedResourceIDs.filter((rid) => {
+                        return rid !== resource.resourceID;
+                      }));
                     }}
-                    disabled={selectedResourceIDs.includes(resource.resourceID)}
+                    // disabled={selectedResourceIDs.includes(resource.resourceID)}
                   >移除</FComponentsLib.FRectBtn>)
               }
             </div>);
