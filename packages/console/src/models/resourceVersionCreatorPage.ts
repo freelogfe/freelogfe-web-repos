@@ -330,8 +330,109 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<FetchResourceInfoAction>({
-        type: 'fetchResourceInfo',
+      // yield put<FetchResourceInfoAction>({
+      //   type: 'fetchResourceInfo',
+      // });
+
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: payload.resourceID,
+        isLoadLatestVersionInfo: 1,
+      };
+      const { data: data_resourceInfo }: {
+        data: {
+          resourceId: string;
+          resourceName: string;
+          resourceType: string[];
+          latestVersion: string;
+          baseUpcastResources: {
+            resourceId: string;
+            resourceName: string;
+          }[];
+        };
+      } = yield call(FServiceAPI.Resource.info, params1);
+      // console.log(data, '2093jdsl;kfasdf');
+
+      let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
+      let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
+      let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
+      let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
+      if (data_resourceInfo.latestVersion) {
+        const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
+          resourceId: data_resourceInfo.resourceId,
+          version: data_resourceInfo.latestVersion,
+        };
+        const { data: data_resourceVersionInfo } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
+        // console.log(data2, 'data2092384u0');
+        descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
+        preVersionBaseProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
+          .filter((cpd: any) => cpd.type === 'readonlyText')
+          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
+            return {
+              key: cpd.key,
+              value: cpd.defaultValue,
+              description: cpd.remark,
+            };
+          });
+
+        preVersionOptionProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
+          .filter((cpd: any) => cpd.type !== 'readonlyText')
+          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
+            return {
+              key: cpd.key,
+              description: cpd.remark,
+              custom: cpd.type === 'editableText' ? 'input' : 'select',
+              defaultValue: cpd.defaultValue,
+              customOption: cpd.candidateItems.join(','),
+            };
+          });
+
+        // const depResourceIds: string = (data_resourceVersionInfo.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
+        //
+        // if (depResourceIds.length > 0) {
+        //   const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        //     resourceIds: depResourceIds,
+        //   };
+        //   const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
+        //   // console.log(data2, '#ASGDFASDF');
+        //   const relations: any[] = data3.map((dd: any) => {
+        //     return {
+        //       id: dd.resourceId,
+        //       children: dd.baseUpcastResources.map((bur: any) => {
+        //         return {
+        //           id: bur.resourceId,
+        //         };
+        //       }),
+        //     };
+        //   });
+        //
+        //   // const versions = (data_resourceVersionInfo.dependencies as any[]).map((dr: any) => {
+        //   //   return {
+        //   //     id: dr.resourceId,
+        //   //     versionRange: dr.versionRange,
+        //   //   };
+        //   // });
+        //
+        //   // preVersionDeps = {
+        //   //   relationships: relations as any,
+        //   //   versions: versions as any,
+        //   // };
+        //
+        // }
+        preVersionDirectDependencies = [];
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceType: data_resourceInfo.resourceType,
+          baseUpcastResources: data_resourceInfo.baseUpcastResources,
+          latestVersion: data_resourceInfo.latestVersion,
+          versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '0.1.0'),
+          preVersionBaseProperties,
+          preVersionOptionProperties,
+          preVersionDirectDependencies,
+          descriptionEditorState,
+        },
       });
 
       const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
@@ -345,6 +446,8 @@ const Model: ResourceVersionCreatorModelType = {
 
       if (data_draft) {
         const { draftData } = data_draft;
+        const p: { addTargets(value: any): void; getAllResourcesWithContracts(): void; } = yield call(getProcessor, 'resourceVersionCreator');
+
         yield put<ChangeAction>({
           type: 'change',
           payload: {
@@ -355,6 +458,7 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
+        p.addTargets(draftData.directDependencies);
       }
 
       // const params: HandledDraftParamsType = {

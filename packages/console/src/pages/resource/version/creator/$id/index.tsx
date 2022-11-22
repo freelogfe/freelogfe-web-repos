@@ -313,13 +313,11 @@ function VersionCreator({
                 });
               }}
             />
-            {/*<FSelectObject />*/}
 
             <CustomOptions />
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
-            {/*<FDepPanel />*/}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 15 }}>
               <Space size={15}>
                 <FComponentsLib.FRectBtn
