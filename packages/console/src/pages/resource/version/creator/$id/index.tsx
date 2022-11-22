@@ -46,7 +46,7 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   resourceInfo: ResourceInfoModelState;
 }
 
-let processor: Processor | null = null;
+// let processor: Processor | null = null;
 
 function VersionCreator({
                           dispatch,
@@ -366,76 +366,77 @@ function VersionCreator({
 
           <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
             {/*<FDepPanel />*/}
-
-            <Space size={15}>
-              <FComponentsLib.FRectBtn
-                onClick={async () => {
-                  const p = await getProcessor('resourceVersionCreator');
-                  await fAddDependencies({
-                    existingResources: (await p.getAllTargets()).map((t) => {
-                      return {
-                        resourceID: t.id,
-                        resourceNme: t.name,
-                      };
-                    }),
-                    baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources.map((r) => {
-                      return {
-                        resourceID: r.resourceId,
-                        resourceNme: r.resourceName,
-                      };
-                    }),
-                    async onSelect_Resource({ resourceID, resourceName }) {
-                      // console.log('8***********8sdflksdjlkj');
-                      const p = await getProcessor('resourceVersionCreator');
-                      await p.addTargets([{
-                        id: resourceID,
-                        name: resourceName,
-                        type: 'resource',
-                        // versionRange: '^0.1.0',
-                      }]);
-                    },
-                    async onDeselect_Resource({ resourceID, resourceName }) {
-                      const p = await getProcessor('resourceVersionCreator');
-                      await p.removeTarget({
-                        id: resourceID,
-                        name: resourceName,
-                        type: 'resource',
-                      });
-                    },
-                  });
-                }}
-                type='default'
-              >添加依赖</FComponentsLib.FRectBtn>
-
-              {
-                resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 15 }}>
+              <Space size={15}>
                 <FComponentsLib.FRectBtn
-                  type='default'
-                  onClick={() => {
-                    dispatch<ImportLastVersionDataAction>({
-                      type: 'resourceVersionCreatorPage/importLastVersionData',
-                      payload: 'deps',
-                    });
-                    dispatch<ChangeAction>({
-                      type: 'resourceVersionCreatorPage/change',
-                      payload: {
-                        dataIsDirty: true,
+                  onClick={async () => {
+                    const p = await getProcessor('resourceVersionCreator');
+                    await fAddDependencies({
+                      existingResources: (await p.getAllTargets()).map((t) => {
+                        return {
+                          resourceID: t.id,
+                          resourceNme: t.name,
+                        };
+                      }),
+                      baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources.map((r) => {
+                        return {
+                          resourceID: r.resourceId,
+                          resourceNme: r.resourceName,
+                        };
+                      }),
+                      async onSelect_Resource({ resourceID, resourceName }) {
+                        // console.log('8***********8sdflksdjlkj');
+                        const p = await getProcessor('resourceVersionCreator');
+                        await p.addTargets([{
+                          id: resourceID,
+                          name: resourceName,
+                          type: 'resource',
+                          // versionRange: '^0.1.0',
+                        }]);
                       },
-                      caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
+                      async onDeselect_Resource({ resourceID, resourceName }) {
+                        const p = await getProcessor('resourceVersionCreator');
+                        await p.removeTarget({
+                          id: resourceID,
+                          name: resourceName,
+                          type: 'resource',
+                        });
+                      },
                     });
                   }}
-                >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
-              }
+                  type='default'
+                >添加依赖</FComponentsLib.FRectBtn>
 
-            </Space>
+                {
+                  resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
+                  <FComponentsLib.FRectBtn
+                    type='default'
+                    onClick={() => {
+                      dispatch<ImportLastVersionDataAction>({
+                        type: 'resourceVersionCreatorPage/importLastVersionData',
+                        payload: 'deps',
+                      });
+                      dispatch<ChangeAction>({
+                        type: 'resourceVersionCreatorPage/change',
+                        payload: {
+                          dataIsDirty: true,
+                        },
+                        caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
+                      });
+                    }}
+                  >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
+                }
 
-            <FResourceAuthorizationProcessor
-              resourceID={resourceVersionCreatorPage.resourceId}
-              processorIdentifier={'resourceVersionCreator'}
-              // onMount={(p) => {
-              //   processor = p;
-              // }}
-            />
+              </Space>
+
+              <FResourceAuthorizationProcessor
+                resourceID={resourceVersionCreatorPage.resourceId}
+                processorIdentifier={'resourceVersionCreator'}
+                // onMount={(p) => {
+                //   processor = p;
+                // }}
+              />
+            </div>
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock
