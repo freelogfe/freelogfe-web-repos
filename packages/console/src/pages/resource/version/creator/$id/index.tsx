@@ -379,7 +379,7 @@ function VersionCreator({
                       };
                     }),
                     async onSelect_Resource({ resourceID, resourceName }) {
-                      console.log('8***********8sdflksdjlkj');
+                      // console.log('8***********8sdflksdjlkj');
                       const p = await getProcessor();
                       await p.addTargets([{
                         id: resourceID,
