@@ -38,7 +38,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
-// import { MarkdownEditor } from '@/pages/resource/md-editor';
+import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
 import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 // import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
@@ -114,14 +114,14 @@ function VersionCreator({
 
   return (
     <>
-      {/*<MarkdownEditor*/}
-      {/*  resourceId={match.params.id}*/}
-      {/*  show={show}*/}
-      {/*  close={() => {*/}
-      {/*    setShow(false);*/}
-      {/*  }}*/}
-      {/*  setSaved={setSaved}*/}
-      {/*/>*/}
+      <MarkdownEditor
+        resourceId={match.params.id}
+        show={true}
+        // close={() => {
+        //   setShow(false);
+        // }}
+        // setSaved={setSaved}
+      />
 
       {/*<div*/}
       {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
