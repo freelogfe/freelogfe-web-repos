@@ -38,7 +38,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
-import { MarkdownEditor } from '@/pages/resource/md-editor';
+// import { MarkdownEditor } from '@/pages/resource/md-editor';
 import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 // import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
@@ -59,8 +59,8 @@ function VersionCreator({
                           resourceVersionCreatorPage,
                           match,
                         }: VersionCreatorProps) {
-  const [show, setShow] = React.useState(false);
-  const [saved, setSaved] = React.useState(false);
+  // const [show, setShow] = React.useState(false);
+  // const [saved, setSaved] = React.useState(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -114,21 +114,21 @@ function VersionCreator({
 
   return (
     <>
-      <MarkdownEditor
-        resourceId={match.params.id}
-        show={show}
-        close={() => {
-          setShow(false);
-        }}
-        setSaved={setSaved}
-      />
+      {/*<MarkdownEditor*/}
+      {/*  resourceId={match.params.id}*/}
+      {/*  show={show}*/}
+      {/*  close={() => {*/}
+      {/*    setShow(false);*/}
+      {/*  }}*/}
+      {/*  setSaved={setSaved}*/}
+      {/*/>*/}
 
-      <div
-        style={{ position: 'absolute', left: '300px', top: '80px' }}
-        onClick={() => setShow(true)}
-      >
-        打开编辑器
-      </div>
+      {/*<div*/}
+      {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
+      {/*  onClick={() => setShow(true)}*/}
+      {/*>*/}
+      {/*  打开编辑器*/}
+      {/*</div>*/}
 
       <Helmet>
         <title>{`创建版本 · ${
