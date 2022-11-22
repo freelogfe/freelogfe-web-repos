@@ -13,6 +13,7 @@ import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
 import FResourceAuthorizationProcessor from '@/components/FResourceAuthorizationProcessor';
+import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 
 // TODO 授权完成需要删除
 import { Select } from 'antd';
@@ -146,11 +147,23 @@ export const MarkdownEditor = (props: EditorProps) => {
     if (show) {
       document.body.style.overflowY = 'hidden';
       editor && editor.focus();
+
+      getDraftData();
     }
     return () => {
       document.body.style.overflowY = 'auto';
     };
   }, [show]);
+
+  /** 获取草稿数据 */
+  const getDraftData = async () => {
+    const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
+    console.error(draft);
+    if (draft.errCode !== 0) {
+      fMessage(draft.msg);
+      return;
+    }
+  };
 
   useEffect(() => {
     if (editor) {
