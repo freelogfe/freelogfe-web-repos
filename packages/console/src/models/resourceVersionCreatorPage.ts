@@ -12,6 +12,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
+import { getProcessor } from '@/pages/resource/version/creator/$id';
 // import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 // export type DepResources = {
@@ -368,6 +369,9 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
+      const { processor } = yield call(getProcessor);
+      console.log(processor, 'processoriosjdlfkjsdlfjsdlkfjl');
+      // return;
       const baseUpcastResourceIds: any[] = [];
       const resolveResources: any[] = [];
       const directlyDependentIds: string[] = [];
