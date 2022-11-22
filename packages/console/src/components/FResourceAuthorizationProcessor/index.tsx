@@ -50,6 +50,7 @@ export interface Processor {
 
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
+  processorIdentifier?: string;
 
   onMount?(processor: Processor): void;
 }
@@ -76,9 +77,15 @@ const initStates: FResourceAuthorizationProcessorStates = {
   activatedTarget: null,
 };
 
-let processor: Processor | null = null;
+let processors: {
+  [key: string]: Processor;
+} = {};
 
-function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAuthorizationProcessorProps) {
+function FResourceAuthorizationProcessor({
+                                           resourceID,
+                                           processorIdentifier = '',
+                                           onMount,
+                                         }: FResourceAuthorizationProcessorProps) {
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
@@ -116,7 +123,7 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   }, [resourceID]);
 
   AHooks.useMount(() => {
-    processor = {
+    const processor = {
       addTargets,
       removeTarget,
       activeTarget,
@@ -125,11 +132,12 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
       getAllResourcesWithContracts,
       clear,
     };
+    processors[processorIdentifier] = processor;
     onMount && onMount(processor);
   });
 
   AHooks.useUnmount(() => {
-    processor = null;
+    delete processors[processorIdentifier];
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
@@ -744,10 +752,10 @@ async function _batchHandleResources({
   return resourceTargetInfos;
 }
 
-export async function getProcessor(): Promise<Processor> {
+export async function getProcessor(processorIdentifier: string): Promise<Processor> {
   while (true) {
-    if (processor) {
-      return processor;
+    if (processors[processorIdentifier]) {
+      return processors[processorIdentifier];
     }
     await FUtil.Tool.promiseSleep(300);
   }

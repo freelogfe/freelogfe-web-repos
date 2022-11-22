@@ -12,9 +12,10 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
-import { getProcessor } from '@/pages/resource/version/creator/$id';
+// import { getProcessor } from '@/pages/resource/version/creator/$id';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
-import { IRelation, ITargetInfo } from '@/components/FResourceAuthorizationProcessor/types';
+import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+// import { IRelation, ITargetInfo } from '@/components/FResourceAuthorizationProcessor/types';
 // import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 // export type DepResources = {
@@ -497,12 +498,18 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
+      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
+      console.log(p, 'pdsifo9jsdlfk');
+      const directDependencies: any[] = yield call(p.getAllTargets);
+      console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
+
       const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.version,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
         baseProperties: resourceVersionCreatorPage.baseProperties,
         customOptionsData: resourceVersionCreatorPage.customOptionsData,
-        directDependencies: payload.dependentAllTargets,
+        // directDependencies: payload.dependentAllTargets,
+        directDependencies: directDependencies,
         descriptionEditorInput: resourceVersionCreatorPage.description.toHTML(),
       };
 
