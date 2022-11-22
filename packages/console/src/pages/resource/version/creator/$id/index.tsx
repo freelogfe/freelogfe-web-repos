@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
-// import FDepPanel from './FDepPanel';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -22,7 +20,6 @@ import {
   OnPromptPageLeaveConfirmAction,
   OnSuccess_ObjectFile_Action,
   OnUnmountPageAction, ImportLastVersionDataAction,
-  // VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -38,11 +35,9 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
-import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
+// import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
 import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
-// import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
-// import FDrawer from '@/components/FDrawer';
 import fAddDependencies from '@/components/fAddDependencies';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
@@ -114,14 +109,14 @@ function VersionCreator({
 
   return (
     <>
-      <MarkdownEditor
-        resourceId={match.params.id}
-        show={true}
-        // close={() => {
-        //   setShow(false);
-        // }}
-        // setSaved={setSaved}
-      />
+      {/*<MarkdownEditor*/}
+      {/*  resourceId={match.params.id}*/}
+      {/*  show={true}*/}
+      {/*  // close={() => {*/}
+      {/*  //   setShow(false);*/}
+      {/*  // }}*/}
+      {/*  // setSaved={setSaved}*/}
+      {/*/>*/}
 
       {/*<div*/}
       {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
@@ -233,6 +228,7 @@ function VersionCreator({
             title={FI18n.i18nNext.t('release_object')}
           >
             <FPublishObjectFile
+              showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceType[1] === '文章'}
               fileInfo={resourceVersionCreatorPage.selectedFileInfo}
               onSucceed_UploadFile={(file) => {
                 // console.log(file, 'onSucceed_UploadFile390oisjdf');
