@@ -114,14 +114,14 @@ function VersionCreator({
 
   return (
     <>
-      <MarkdownEditor
-        resourceId={match.params.id}
-        show={true}
-        // close={() => {
-        //   setShow(false);
-        // }}
-        // setSaved={setSaved}
-      />
+      {/*<MarkdownEditor*/}
+      {/*  resourceId={match.params.id}*/}
+      {/*  show={true}*/}
+      {/*  // close={() => {*/}
+      {/*  //   setShow(false);*/}
+      {/*  // }}*/}
+      {/*  // setSaved={setSaved}*/}
+      {/*/>*/}
 
       {/*<div*/}
       {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
@@ -233,6 +233,7 @@ function VersionCreator({
             title={FI18n.i18nNext.t('release_object')}
           >
             <FPublishObjectFile
+              showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceType[1] === '文章'}
               fileInfo={resourceVersionCreatorPage.selectedFileInfo}
               onSucceed_UploadFile={(file) => {
                 // console.log(file, 'onSucceed_UploadFile390oisjdf');

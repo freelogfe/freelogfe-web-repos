@@ -16,6 +16,8 @@ interface FPublishObjectFileProps {
     from: string;
   } | null;
 
+  showEditBtnAfterSucceed?: boolean;
+
   onSucceed_UploadFile?(file: {
     fileName: string;
     sha1: string;
@@ -63,6 +65,7 @@ function FPublishObjectFile({
                               onSucceed_ImportObject,
                               onSucceed_UploadFile,
                               onClick_DeleteBtn,
+                              showEditBtnAfterSucceed = false,
                             }: FPublishObjectFileProps) {
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
   const [fState, set_fState] = React.useState<FPublishObjectFileStates['fState']>(initStates['fState']);
@@ -321,13 +324,16 @@ function FPublishObjectFile({
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <FComponentsLib.FTextBtn
-          type='primary'
-          onClick={() => {
+        {
+          showEditBtnAfterSucceed && (<FComponentsLib.FTextBtn
+            type='primary'
+            onClick={() => {
 
-          }}
-          // className={styles.delete}
-        >编辑</FComponentsLib.FTextBtn>
+            }}
+            // className={styles.delete}
+          >编辑</FComponentsLib.FTextBtn>)
+        }
+
         <FComponentsLib.FTextBtn
           type='danger'
           onClick={() => {
