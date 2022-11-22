@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 
-interface __TemplateProps {
+interface fResourceMarkdownEditorProps {
 
 }
 
-function __Template({}: __TemplateProps) {
+function fResourceMarkdownEditor({}: fResourceMarkdownEditorProps) {
   return (<div>__Template</div>);
 }
 
-export default __Template;
+export default fResourceMarkdownEditor;
