@@ -36,7 +36,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
 // import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
-import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
+import FResourceAuthorizationProcessor, { getProcessor, Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
 
@@ -171,22 +171,22 @@ function VersionCreator({
           <Header
             onClickCreate={async () => {
               // window.onbeforeunload = null;
-              const p = await getProcessor();
+              // const p = await getProcessor();
               dispatch<OnClick_CreateVersionBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-                payload: {
-                  dependentAllTargets: await p.getAllTargets(),
-                  dependentAllResourcesWithContracts: await p.getAllResourcesWithContracts(),
-                },
+                // payload: {
+                //   dependentAllTargets: await p.getAllTargets(),
+                //   dependentAllResourcesWithContracts: await p.getAllResourcesWithContracts(),
+                // },
               });
             }}
             onClickCache={async () => {
-              const p = await getProcessor();
+              // const p = await getProcessor();
               dispatch<OnClick_SaveCacheBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
-                payload: {
-                  dependentAllTargets: await p.getAllTargets(),
-                },
+                // payload: {
+                //   dependentAllTargets: await p.getAllTargets(),
+                // },
               });
             }}
             disabledCreate={hasError}
@@ -346,7 +346,7 @@ function VersionCreator({
                   });
                 }
 
-                const processor = await getProcessor();
+                const processor = await getProcessor('resourceVersionCreator');
                 await processor.addTargets([
                   ...addR,
                   ...addO,
@@ -370,7 +370,7 @@ function VersionCreator({
             <Space size={15}>
               <FComponentsLib.FRectBtn
                 onClick={async () => {
-                  const p = await getProcessor();
+                  const p = await getProcessor('resourceVersionCreator');
                   await fAddDependencies({
                     existingResources: (await p.getAllTargets()).map((t) => {
                       return {
@@ -386,7 +386,7 @@ function VersionCreator({
                     }),
                     async onSelect_Resource({ resourceID, resourceName }) {
                       // console.log('8***********8sdflksdjlkj');
-                      const p = await getProcessor();
+                      const p = await getProcessor('resourceVersionCreator');
                       await p.addTargets([{
                         id: resourceID,
                         name: resourceName,
@@ -395,7 +395,7 @@ function VersionCreator({
                       }]);
                     },
                     async onDeselect_Resource({ resourceID, resourceName }) {
-                      const p = await getProcessor();
+                      const p = await getProcessor('resourceVersionCreator');
                       await p.removeTarget({
                         id: resourceID,
                         name: resourceName,
@@ -432,9 +432,9 @@ function VersionCreator({
             <FResourceAuthorizationProcessor
               resourceID={resourceVersionCreatorPage.resourceId}
               processorIdentifier={'resourceVersionCreator'}
-              onMount={(p) => {
-                processor = p;
-              }}
+              // onMount={(p) => {
+              //   processor = p;
+              // }}
             />
           </FFormLayout.FBlock>
 
@@ -503,11 +503,11 @@ export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectSta
   resourceInfo: resourceInfo,
 }))(VersionCreator);
 
-export async function getProcessor(): Promise<Processor> {
-  while (true) {
-    if (processor) {
-      return processor;
-    }
-    await FUtil.Tool.promiseSleep(300);
-  }
-}
+// export async function getProcessor(): Promise<Processor> {
+//   while (true) {
+//     if (processor) {
+//       return processor;
+//     }
+//     await FUtil.Tool.promiseSleep(300);
+//   }
+// }

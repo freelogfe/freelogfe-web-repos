@@ -195,35 +195,34 @@ export interface OnPromptPageLeaveCancelAction extends AnyAction {
 
 export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
-  payload: {
-    dependentAllTargets: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-      versionRange?: string;
-    }[];
-    dependentAllResourcesWithContracts: {
-      resourceID: string;
-      resourceName: string;
-      contracts: {
-        policyID: string;
-        contractID: string;
-      }[];
-    }[];
-
-  };
+  // payload: {
+  //   dependentAllTargets: {
+  //     id: string;
+  //     name: string;
+  //     type: 'resource' | 'object';
+  //     versionRange?: string;
+  //   }[];
+  //   dependentAllResourcesWithContracts: {
+  //     resourceID: string;
+  //     resourceName: string;
+  //     contracts: {
+  //       policyID: string;
+  //       contractID: string;
+  //     }[];
+  //   }[];
+  // };
 }
 
 export interface OnClick_SaveCacheBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn';
-  payload: {
-    dependentAllTargets: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-      versionRange?: string;
-    }[];
-  };
+  // payload: {
+  //   dependentAllTargets: {
+  //     id: string;
+  //     name: string;
+  //     type: 'resource' | 'object';
+  //     versionRange?: string;
+  //   }[];
+  // };
 }
 
 export interface OnSuccess_ObjectFile_Action extends AnyAction {
@@ -397,8 +396,23 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
+      const p: { getAllTargets(): void; getAllResourcesWithContracts(): void; } = yield call(getProcessor, 'resourceVersionCreator');
+      const dependentAllResourcesWithContracts: {
+        resourceID: string;
+        resourceName: string;
+        contracts: {
+          policyID: string;
+          contractID: string;
+        }[];
+      }[] = yield call(p.getAllResourcesWithContracts);
+      const dependentAllTargets: {
+        id: string;
+        name: string;
+        type: 'resource' | 'object';
+        versionRange?: string;
+      }[] = yield call(p.getAllTargets);
       // console.log(payload, 'payload98isfjsdolifjksdlfjlkj');
-      const baseUpcastResources: { resourceId: string }[] = payload.dependentAllResourcesWithContracts
+      const baseUpcastResources: { resourceId: string }[] = dependentAllResourcesWithContracts
         .filter((r) => {
           return r.contracts.length === 0;
         })
@@ -408,7 +422,7 @@ const Model: ResourceVersionCreatorModelType = {
       const dependencies: {
         resourceId: string;
         versionRange: string;
-      }[] = payload.dependentAllTargets
+      }[] = dependentAllTargets
         .map((r) => {
           return {
             resourceId: r.id,
@@ -420,7 +434,7 @@ const Model: ResourceVersionCreatorModelType = {
         contracts: {
           policyId: string;
         }[];
-      }[] = payload.dependentAllResourcesWithContracts
+      }[] = dependentAllResourcesWithContracts
         .filter((r) => {
           return r.contracts.length > 0;
         })
@@ -499,9 +513,9 @@ const Model: ResourceVersionCreatorModelType = {
       }));
 
       const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
-      console.log(p, 'pdsifo9jsdlfk');
+      // console.log(p, 'pdsifo9jsdlfk');
       const directDependencies: any[] = yield call(p.getAllTargets);
-      console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
+      // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
 
       const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.version,
