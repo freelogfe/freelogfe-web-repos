@@ -320,13 +320,22 @@ function FPublishObjectFile({
           </div>
         </div>
       </div>
-      <FComponentsLib.FTextBtn
-        type='danger'
-        onClick={() => {
-          onClick_DeleteBtn && onClick_DeleteBtn();
-        }}
-        // className={styles.delete}
-      >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <FComponentsLib.FTextBtn
+          type='primary'
+          onClick={() => {
+
+          }}
+          // className={styles.delete}
+        >编辑</FComponentsLib.FTextBtn>
+        <FComponentsLib.FTextBtn
+          type='danger'
+          onClick={() => {
+            onClick_DeleteBtn && onClick_DeleteBtn();
+          }}
+          // className={styles.delete}
+        >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
+      </div>
     </div>));
   }
 
@@ -385,7 +394,7 @@ function FPublishObjectFile({
           if (!obj) {
             return;
           }
-          onImportObject({
+          await onImportObject({
             bucketID: obj.bucketID,
             bucketName: obj.bucketName,
             objectID: obj.objID,
