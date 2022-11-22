@@ -35,7 +35,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
-import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
+// import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
 import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
@@ -169,15 +169,24 @@ function VersionCreator({
         // sider={<div/>}
         header={
           <Header
-            onClickCreate={() => {
+            onClickCreate={async () => {
               // window.onbeforeunload = null;
+              const p = await getProcessor();
               dispatch<OnClick_CreateVersionBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
+                payload: {
+                  dependentAllTargets: await p.getAllTargets(),
+                  dependentAllResourcesWithContracts: await p.getAllResourcesWithContracts(),
+                },
               });
             }}
-            onClickCache={() => {
+            onClickCache={async () => {
+              const p = await getProcessor();
               dispatch<OnClick_SaveCacheBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
+                payload: {
+                  dependentAllTargets: await p.getAllTargets(),
+                },
               });
             }}
             disabledCreate={hasError}
@@ -394,7 +403,6 @@ function VersionCreator({
                       });
                     },
                   });
-                  // console.log('——————-----————8iiddi');
                 }}
                 type='default'
               >添加依赖</FComponentsLib.FRectBtn>
