@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import { Space } from 'antd';
-// import FDepPanel from './FDepPanel';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -22,7 +20,6 @@ import {
   OnPromptPageLeaveConfirmAction,
   OnSuccess_ObjectFile_Action,
   OnUnmountPageAction, ImportLastVersionDataAction,
-  // VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -41,8 +38,6 @@ import FPublishObjectFile from '@/components/FPublishObjectFile';
 import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
 import FResourceAuthorizationProcessor, { Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
-// import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
-// import FDrawer from '@/components/FDrawer';
 import fAddDependencies from '@/components/fAddDependencies';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
