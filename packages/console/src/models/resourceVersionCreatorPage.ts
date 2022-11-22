@@ -446,7 +446,10 @@ const Model: ResourceVersionCreatorModelType = {
 
       if (data_draft) {
         const { draftData } = data_draft;
-        const p: { addTargets(value: any): void; getAllResourcesWithContracts(): void; } = yield call(getProcessor, 'resourceVersionCreator');
+        const p: {
+          addTargets(value: any): void;
+          clear(): void;
+        } = yield call(getProcessor, 'resourceVersionCreator');
 
         yield put<ChangeAction>({
           type: 'change',
@@ -458,7 +461,8 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
-        p.addTargets(draftData.directDependencies);
+        yield call(p.clear);
+        yield call(p.addTargets, draftData.directDependencies);
       }
 
       // const params: HandledDraftParamsType = {
