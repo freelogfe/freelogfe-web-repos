@@ -370,8 +370,8 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-      const { processor } = yield call(getProcessor);
-      console.log(processor, 'processoriosjdlfkjsdlfjsdlkfjl');
+      // const { processor } = yield call(getProcessor);
+      // console.log(processor, 'processoriosjdlfkjsdlfjsdlkfjl');
       // return;
       const baseUpcastResourceIds: any[] = [];
       const resolveResources: any[] = [];
@@ -436,11 +436,8 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * onClick_SaveCacheBtn({}: OnClick_SaveCacheBtn_Action, { put, select, call }: EffectsCommandMap) {
 
-      const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
-                                                                                         resourceVersionCreatorPage,
-                                                                                         // resourceInfo,
-                                                                                       }: ConnectState) => ({
-        resourceInfo, resourceVersionCreatorPage,
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
       }));
 
       const draftData: IResourceCreateVersionDraft = {
@@ -453,7 +450,7 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-        resourceId: resourceInfo.info?.resourceId || '',
+        resourceId: resourceVersionCreatorPage.resourceId,
         draftData: draftData,
       };
       yield call(FServiceAPI.Resource.saveVersionsDraft, params);
@@ -625,6 +622,10 @@ const Model: ResourceVersionCreatorModelType = {
           description,
         },
       });
+
+      // yield put<OnClick_SaveCacheBtn_Action>({
+      //   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
+      // });
     },
     // * verifyVersionInput({}: VerifyVersionInputAction, { select, put }: EffectsCommandMap) {
     //   const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
