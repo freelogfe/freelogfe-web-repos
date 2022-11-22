@@ -72,7 +72,7 @@ export const MarkdownEditor = (props: EditorProps) => {
 
   /** 退出 */
   const exit = async () => {
-    close();
+    close && close();
   };
 
   /** 保存 */
@@ -145,7 +145,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   useEffect(() => {
     if (show) {
       document.body.style.overflowY = 'hidden';
-      editor.focus();
+      editor && editor.focus();
     }
     return () => {
       document.body.style.overflowY = 'auto';
@@ -217,7 +217,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   }, [html]);
 
   useEffect(() => {
-    setSaved(edited);
+    setSaved && setSaved(edited);
   }, [edited]);
 
   return (
