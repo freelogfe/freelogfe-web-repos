@@ -22,11 +22,10 @@ import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 
-interface SilderProps
-  extends RouteComponentProps<{
-    id: string;
-    version: string;
-  }> {
+interface SilderProps extends RouteComponentProps<{
+  id: string;
+  version: string;
+}> {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
 }
@@ -340,7 +339,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
                   resourceID: match.params.id,
                 })}
               >
-                {resourceInfo.draftData?.version || '未输入版本号'}（草稿）
+                {resourceInfo.draftData?.versionInput || '未输入版本号'}（草稿）
               </FLink>
             ) : resourceInfo.showPage.creator ? (
               <FLink
@@ -507,9 +506,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   );
 }
 
-export default withRouter(
-  connect(({ resourceInfo, resourceVersionCreatorPage }: ConnectState) => ({
-    resourceInfo: resourceInfo,
-    resourceVersionCreatorPage: resourceVersionCreatorPage,
-  }))(Sider),
-);
+export default connect(({ resourceInfo, resourceVersionCreatorPage }: ConnectState) => ({
+  resourceInfo: resourceInfo,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
+}))(withRouter(Sider));

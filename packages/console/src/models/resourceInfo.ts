@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -46,7 +47,7 @@ export interface ResourceInfoModelState {
   };
   authProblem: boolean;
 
-  draftData: null | { [key: string]: any };
+  draftData: null | IResourceCreateVersionDraft;
 
   policyEditorVisible: boolean;
   policies: PolicyFullInfo_Type[];
@@ -188,12 +189,12 @@ const Model: ResourceInfoModelType = {
         });
         return;
       }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          draftData: data.draftData,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     draftData: data.draftData,
+      //   },
+      // });
     },
     *initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

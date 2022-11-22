@@ -109,14 +109,14 @@ function VersionCreator({
 
   return (
     <>
-      <MarkdownEditor
-        resourceId={match.params.id}
-        show={true}
-        // close={() => {
-        //   setShow(false);
-        // }}
-        // setSaved={setSaved}
-      />
+      {/*<MarkdownEditor*/}
+      {/*  resourceId={match.params.id}*/}
+      {/*  show={true}*/}
+      {/*  // close={() => {*/}
+      {/*  //   setShow(false);*/}
+      {/*  // }}*/}
+      {/*  // setSaved={setSaved}*/}
+      {/*/>*/}
 
       {/*<div*/}
       {/*  style={{ position: 'absolute', left: '300px', top: '80px' }}*/}
@@ -165,8 +165,8 @@ function VersionCreator({
         }}
       />
       <FLeftSiderLayout
-        // sider={<Sider />}
-        sider={<div/>}
+        sider={<Sider />}
+        // sider={<div/>}
         header={
           <Header
             onClickCreate={() => {

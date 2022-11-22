@@ -13,6 +13,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { getProcessor } from '@/pages/resource/version/creator/$id';
+import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 // import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 // export type DepResources = {
@@ -60,33 +61,33 @@ import { getProcessor } from '@/pages/resource/version/creator/$id';
 //   }>[];
 // }[];
 
-export interface IDraft {
-  versionInput: string;
-  selectedFileInfo: {
-    name: string;
-    sha1: string;
-    from: string;
-  } | null;
-  baseProperties: {
-    key: string;
-    value: string;
-    description: string;
-  }[];
-  customOptionsData: {
-    key: string;
-    description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
-  }[];
-  directDependencies: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-    versionRange?: string;
-  }[];
-  descriptionEditorInput: string;
-}
+// export interface IDraft {
+//   versionInput: string;
+//   selectedFileInfo: {
+//     name: string;
+//     sha1: string;
+//     from: string;
+//   } | null;
+//   baseProperties: {
+//     key: string;
+//     value: string;
+//     description: string;
+//   }[];
+//   customOptionsData: {
+//     key: string;
+//     description: string;
+//     custom: 'input' | 'select';
+//     defaultValue: string;
+//     customOption: string;
+//   }[];
+//   directDependencies: {
+//     id: string;
+//     name: string;
+//     type: 'resource' | 'object';
+//     versionRange?: string;
+//   }[];
+//   descriptionEditorInput: string;
+// }
 
 export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
@@ -442,7 +443,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceInfo, resourceVersionCreatorPage,
       }));
 
-      const draftData: IDraft = {
+      const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.version,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
         baseProperties: resourceVersionCreatorPage.baseProperties,
