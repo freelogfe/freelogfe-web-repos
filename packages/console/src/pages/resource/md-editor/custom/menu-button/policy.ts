@@ -25,8 +25,7 @@ class PolicyBtnMenu implements IButtonMenu {
     return false;
   }
   exec(editor: any) {
-    // editor.setDrawerType('policy');
-    console.error('打开授权弹窗');
+    editor.openPolicyDrawer();
   }
 }
 

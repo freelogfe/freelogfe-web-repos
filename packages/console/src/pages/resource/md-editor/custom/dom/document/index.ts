@@ -7,7 +7,7 @@ import { ResourceToolbar } from '../toolbar';
 import { FI18n } from '@freelog/tools-lib';
 
 /** 授权状态遮罩 */
-const DocumentAuthStatus = (data: CustomResource): VNode => {
+const DocumentAuthStatus = (data: CustomResource, editor: any): VNode => {
   if (!data.authType) {
     return h('div');
   }
@@ -23,7 +23,7 @@ const DocumentAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -40,7 +40,7 @@ const DocumentAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -58,7 +58,7 @@ const DocumentAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -71,23 +71,23 @@ const DocumentAuthStatus = (data: CustomResource): VNode => {
 };
 
 /** 文档资源 DOM */
-export const DocumentResource = (data: CustomResource): VNode => {
+export const DocumentResource = (data: CustomResource, editor: any): VNode => {
   // 未授权通过
   const unauthorizedDocument = h('div.unauthorized-document', {}, [
-    ResourceToolbar(data),
+    ResourceToolbar(data, editor),
     h('div.main-area', {}, [
       // 默认 ui
       h('div.row', {}, [h('div.mini'), h('div.mini')]),
       h('div.row', {}, [h('div.small'), h('div.small'), h('div.small')]),
       h('div.row', {}, [h('div.large'), h('div.large')]),
       h('div.row', {}, [h('div.middle')]),
-      DocumentAuthStatus(data),
+      DocumentAuthStatus(data, editor),
     ]),
   ]);
 
   // 已授权通过
   const authorizedDocment = h('div.authorized-document', {}, [
-    ResourceToolbar(data),
+    ResourceToolbar(data, editor),
     // 文档
     h('div.document-area', { props: { innerHTML: data.content } }, [
       h('div#docContent'),

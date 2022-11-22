@@ -10,12 +10,14 @@ import { toolbarConfig, editorConfig } from './core/editor-config';
 import { ImportDocDrawer } from './components/import-doc-drawer';
 import { InsertResourceDrawer } from './components/insert-resource-drawer';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
+import FResourceAuthorizationProcessor from '@/components/FResourceAuthorizationProcessor';
 
 // TODO 授权完成需要删除
 import { Select } from 'antd';
 import fMessage from '@/components/fMessage';
+import { CustomResource } from './core/interface';
 const { Option } = Select;
 
 interface EditorProps {
@@ -38,12 +40,15 @@ export const MarkdownEditor = (props: EditorProps) => {
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
   const markdownRef = useRef('');
+  const policyProcessor = useRef<any>(null);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
   const [markdown, setMarkdown] = useState('');
   const [drawerType, setDrawerType] = useState('');
   const [importDrawer, setImportDrawer] = useState(false);
+  const [policyDrawer, setPolicyDrawer] = useState(false);
+  const [depTargets, setDepTargets] = useState([]);
   const [edited, setEdited] = useState(false);
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
@@ -66,7 +71,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   };
 
   /** 退出 */
-  const exit = () => {
+  const exit = async () => {
     close();
   };
 
@@ -74,7 +79,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   const save = async () => {
     setSaveType(1);
     const params = new FormData();
-    params.append('file', new File([markdownRef.current], 'newMD.md'));
+    params.append('file', new File([markdownRef.current], 'newMarkdown.md'));
     const res = await FUtil.Request({
       headers: { 'Content-Type': 'multipart/form-data' },
       method: 'POST',
@@ -86,10 +91,23 @@ export const MarkdownEditor = (props: EditorProps) => {
       return;
     }
 
-    // const result = await FUtil.Request({
-    //   method: 'GET',
-    //   url: `/v2/storages/files/${res.data.sha1}/download`,
-    // });
+    const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
+    if (draft.errCode !== 0) {
+      fMessage(draft.msg);
+      return;
+    }
+    const draftData = draft.data;
+    console.error(draft);
+    // TODO 更新文件信息
+    // TODO 更新依赖列表
+    const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
+      resourceId,
+      draftData,
+    });
+    if (saveDraftRes.errCode !== 0) {
+      fMessage(saveDraftRes.msg);
+      return;
+    }
 
     const saveTime = new Date().getTime();
     setSaveType(2);
@@ -125,8 +143,10 @@ export const MarkdownEditor = (props: EditorProps) => {
   };
 
   useEffect(() => {
-    console.error(resourceId);
-    if (show) document.body.style.overflowY = 'hidden';
+    if (show) {
+      document.body.style.overflowY = 'hidden';
+      editor.focus();
+    }
     return () => {
       document.body.style.overflowY = 'auto';
     };
@@ -140,6 +160,20 @@ export const MarkdownEditor = (props: EditorProps) => {
       editor.openUploadDrawer = async () => {
         setImportDrawer(true);
       };
+      editor.openPolicyDrawer = async (data?: CustomResource) => {
+        if (data) {
+          // 在授权队列中选中对应资源
+          policyProcessor.current.activeTarget({
+            id: data.resourceId,
+            name: data.resourceName,
+            type: 'resource',
+          });
+        }
+        const targets = await policyProcessor.current.getAllTargets();
+        setDepTargets(targets);
+        setPolicyDrawer(true);
+      };
+      editor.policyProcessor = policyProcessor.current;
     }
 
     return () => {
@@ -187,11 +221,13 @@ export const MarkdownEditor = (props: EditorProps) => {
   }, [edited]);
 
   return (
-    <editorContext.Provider value={{ editor }}>
+    <editorContext.Provider value={{ editor, resourceId }}>
       <div className={`markdown-editor-wrapper ${show && 'show'}`}>
         <div className="header">
           <div className="title">
-            {FI18n.i18nNext.t('title_edit_post')}
+            <span onClick={outputMarkdown}>
+              {FI18n.i18nNext.t('title_edit_post')}
+            </span>
 
             {/* TODO 授权完成需要删除 */}
             <Select
@@ -274,6 +310,52 @@ export const MarkdownEditor = (props: EditorProps) => {
           close={() => setDrawerType('')}
           drawerType={drawerType}
         />
+
+        <div className={`policy-drawer ${policyDrawer && 'show'}`}>
+          <div className="policy-header">
+            <div className="header-box">
+              <div className="title">
+                {FI18n.i18nNext.t('title_posteditor_getauth')}
+              </div>
+              <i
+                className="freelog fl-icon-guanbi close-btn"
+                onClick={() => {
+                  setPolicyDrawer(false);
+                  editor.focus();
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="authorization-processor-box">
+            <FResourceAuthorizationProcessor
+              resourceID={resourceId}
+              onMount={async (processor) => {
+                policyProcessor.current = processor;
+              }}
+            />
+          </div>
+
+          {!depTargets.length && (
+            <div className="no-dep-box">
+              <div className="title">
+                {FI18n.i18nNext.t('posteditor_authlist_empty')}
+              </div>
+              <div className="desc">
+                {FI18n.i18nNext.t('posteditor_authlist_empty_desc')}
+              </div>
+              <div
+                className="close-btn"
+                onClick={() => {
+                  setPolicyDrawer(false);
+                  editor.focus();
+                }}
+              >
+                {FI18n.i18nNext.t('posteditor_authlist_empty_btn_back')}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </editorContext.Provider>
   );

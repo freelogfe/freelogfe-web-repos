@@ -1,7 +1,7 @@
 /** 编辑器自定义元素-资源 */
 
 import { h, VNode } from 'snabbdom';
-import { SlateElement } from '@wangeditor/editor';
+import { IDomEditor, SlateElement } from '@wangeditor/editor';
 import { CustomResource } from '../../../core/interface';
 import { ImageResource } from '../image';
 import { VideoResource } from '../video';
@@ -9,16 +9,20 @@ import { AudioResource } from '../audio';
 import { DocumentResource } from '../document';
 
 /** 渲染资源元素 */
-const renderResource = (data: CustomResource): VNode => {
+const renderResource = (
+  data: CustomResource,
+  children: VNode[] | null,
+  editor: IDomEditor,
+): VNode => {
   const resourseFirstType = data.resourceType[0];
   if (resourseFirstType === '图片') {
-    return ImageResource(data);
+    return ImageResource(data, editor);
   } else if (resourseFirstType === '视频') {
-    return VideoResource(data);
+    return VideoResource(data, editor);
   } else if (resourseFirstType === '音频') {
-    return AudioResource(data);
+    return AudioResource(data, editor);
   } else if (resourseFirstType === '阅读') {
-    return DocumentResource(data);
+    return DocumentResource(data, editor);
   }
   return h('div');
 };

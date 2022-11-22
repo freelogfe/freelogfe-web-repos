@@ -7,7 +7,7 @@ import { ResourceToolbar } from '../toolbar';
 import { FI18n } from '@freelog/tools-lib';
 
 /** 授权状态遮罩 */
-const AudioAuthStatus = (data: CustomResource): VNode => {
+const AudioAuthStatus = (data: CustomResource, editor: any): VNode => {
   if (!data.authType) {
     return h('div');
   }
@@ -21,7 +21,7 @@ const AudioAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -36,7 +36,7 @@ const AudioAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -52,7 +52,7 @@ const AudioAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -65,9 +65,9 @@ const AudioAuthStatus = (data: CustomResource): VNode => {
 };
 
 /** 音频资源 DOM */
-export const AudioResource = (data: CustomResource): VNode => {
+export const AudioResource = (data: CustomResource, editor: any): VNode => {
   const audio = h('div.audio-wrapper', {}, [
-    ResourceToolbar(data),
+    ResourceToolbar(data, editor),
     // 音频
     h('div.audio-area', {}, [
       h('audio', {
@@ -77,7 +77,7 @@ export const AudioResource = (data: CustomResource): VNode => {
           controlsList: 'nodownload',
         },
       }),
-      AudioAuthStatus(data),
+      AudioAuthStatus(data, editor),
     ]),
   ]);
 

@@ -9,7 +9,7 @@ import { ResourceToolbar } from '../toolbar';
 import { FI18n } from '@freelog/tools-lib';
 
 /** 授权状态遮罩 */
-const ImageAuthStatus = (data: CustomResource): VNode => {
+const ImageAuthStatus = (data: CustomResource, editor: any): VNode => {
   if (!data.authType) {
     return h('div');
   }
@@ -23,7 +23,7 @@ const ImageAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -38,7 +38,7 @@ const ImageAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -54,7 +54,7 @@ const ImageAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -67,11 +67,11 @@ const ImageAuthStatus = (data: CustomResource): VNode => {
 };
 
 /** 图片资源 DOM */
-export const ImageResource = (data: CustomResource): VNode => {
+export const ImageResource = (data: CustomResource, editor: any): VNode => {
   if ((data.originType === 1 && data.authType === 3) || data.originType === 2) {
     // 授权通过的资源或对象/url
     return h('div.authorized-image', {}, [
-      ResourceToolbar(data),
+      ResourceToolbar(data, editor),
       // 图片
       h('div.image-area', {}, [h('img', { props: { src: data.content } })]),
     ]);
@@ -80,12 +80,12 @@ export const ImageResource = (data: CustomResource): VNode => {
     const cover = (data.coverImages && data.coverImages[0]) || defaultCover;
 
     return h('div.unauthorized-image', {}, [
-      ResourceToolbar(data),
+      ResourceToolbar(data, editor),
       h('div.main-area', {}, [
         // 封面
         h('div.cover', {}, [
           h('img', { props: { src: cover }, style: getCoverStyle(cover) }),
-          ImageAuthStatus(data),
+          ImageAuthStatus(data, editor),
         ]),
       ]),
     ]);

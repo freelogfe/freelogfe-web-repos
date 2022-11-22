@@ -9,7 +9,7 @@ import { ResourceToolbar } from '../toolbar';
 import { FI18n } from '@freelog/tools-lib';
 
 /** 授权状态遮罩 */
-const VideoAuthStatus = (data: CustomResource): VNode => {
+const VideoAuthStatus = (data: CustomResource, editor: any): VNode => {
   if (!data.authType) {
     return h('div');
   }
@@ -24,7 +24,7 @@ const VideoAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -40,7 +40,7 @@ const VideoAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -57,7 +57,7 @@ const VideoAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -70,11 +70,11 @@ const VideoAuthStatus = (data: CustomResource): VNode => {
 };
 
 /** 视频资源 DOM */
-export const VideoResource = (data: CustomResource): VNode => {
+export const VideoResource = (data: CustomResource, editor: any): VNode => {
   if ((data.originType === 1 && data.authType === 3) || data.originType === 2) {
     // 授权通过的资源或对象/url
     return h('div.authorized-video', {}, [
-      ResourceToolbar(data),
+      ResourceToolbar(data, editor),
       // 视频
       h('div.video-area', {}, [
         h('video', {
@@ -91,7 +91,7 @@ export const VideoResource = (data: CustomResource): VNode => {
     const cover = (data.coverImages && data.coverImages[0]) || defaultCover;
 
     return h('div.unauthorized-video', {}, [
-      ResourceToolbar(data),
+      ResourceToolbar(data, editor),
       h('div.main-area', {}, [
         // 封面
         h('div.cover', {}, [
@@ -99,7 +99,7 @@ export const VideoResource = (data: CustomResource): VNode => {
             props: { src: cover },
             style: getCoverStyle(cover),
           }),
-          VideoAuthStatus(data),
+          VideoAuthStatus(data, editor),
         ]),
       ]),
     ]);

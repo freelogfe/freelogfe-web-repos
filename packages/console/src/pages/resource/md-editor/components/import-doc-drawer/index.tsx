@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const ImportDocDrawer = (props: Props) => {
-  const { editor } = useContext(editorContext);
+  const { resourceId } = useContext(editorContext);
   const { show, close, setHtml } = props;
   let body: Element | null = null;
 
@@ -176,7 +176,7 @@ export const ImportDocDrawer = (props: Props) => {
   const getHistoryVersion = async () => {
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${'62272318182192002eefc16d'}/versions`,
+      url: `/v2/resources/${resourceId}/versions`,
       params: { projection: 'versionId,version,updateDate,filename' },
     });
     refs.current.historyList = res.data.reverse();
@@ -217,11 +217,11 @@ export const ImportDocDrawer = (props: Props) => {
     const { version, filename } = item;
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${'62272318182192002eefc16d'}/versions/${version}/download`,
+      url: `/v2/resources/${resourceId}/versions/${version}/download`,
     });
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ resourceId: '62272318182192002eefc16d', version });
+    sureImport({ resourceId, version });
   };
 
   /** 修改新的存储空间名称 */

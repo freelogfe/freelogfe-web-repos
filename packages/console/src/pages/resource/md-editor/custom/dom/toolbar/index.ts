@@ -6,7 +6,7 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 import { CustomResource } from '../../../core/interface';
 
 /** 工具栏授权状态 */
-const ToolbarAuthStatus = (data: CustomResource): VNode => {
+const ToolbarAuthStatus = (data: CustomResource, editor: any): VNode => {
   if (!data.authType) {
     return h('div');
   }
@@ -18,7 +18,7 @@ const ToolbarAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -35,7 +35,7 @@ const ToolbarAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -52,7 +52,7 @@ const ToolbarAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -69,7 +69,7 @@ const ToolbarAuthStatus = (data: CustomResource): VNode => {
         {
           on: {
             click() {
-              console.error('授权管理');
+              editor.openPolicyDrawer(data);
             },
           },
         },
@@ -82,7 +82,7 @@ const ToolbarAuthStatus = (data: CustomResource): VNode => {
 };
 
 /** 资源工具栏 */
-export const ResourceToolbar = (data: CustomResource): VNode => {
+export const ResourceToolbar = (data: CustomResource, editor: any): VNode => {
   const { originType, resourceName, resourceId, content } = data;
   if (originType === 1) {
     return h('div.resource-toolbar', {}, [
@@ -104,7 +104,7 @@ export const ResourceToolbar = (data: CustomResource): VNode => {
           },
           [resourceName],
         ),
-        ToolbarAuthStatus(data),
+        ToolbarAuthStatus(data, editor),
       ]),
     ]);
   } else {
@@ -112,7 +112,7 @@ export const ResourceToolbar = (data: CustomResource): VNode => {
       h('div.toolbar', {}, [
         h('div.type', {}, [FI18n.i18nNext.t('insert_toolbar_type_url')]),
         h('div.url', { title: content }, [content]),
-        ToolbarAuthStatus(data),
+        ToolbarAuthStatus(data, editor),
       ]),
     ]);
   }

@@ -48,6 +48,13 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
   }
   editor.insertNode(insertData);
   editor.insertBreak();
+  editor.policyProcessor.addTargets([
+    {
+      id: resourceId,
+      name: resourceName,
+      type: 'resource',
+    },
+  ]);
 };
 
 /** 插入 url 资源 */
@@ -187,8 +194,6 @@ export const importDoc = async (
     version: string;
   },
 ) => {
-  let html = content;
-
   const {
     mdImgContent,
     imgContent,
@@ -197,7 +202,7 @@ export const importDoc = async (
     docContent,
     newContent,
   } = getInternalResources(content);
-  html = newContent;
+  let html = newContent;
 
   let deps = [];
 
@@ -254,7 +259,7 @@ export const importDoc = async (
 
 /** 识别文档内容内部的资源引入 */
 const getInternalResources = (content: string) => {
-  let newContent = content;
+  let newContent = converter.makeHtml(content);
   // 储存 md 语法的图片（![]()）
   const mdImgContent = newContent.match(/!\[[^\]]*?]\([^\)]*?\)/gi) || [];
   // 储存图片（<img）
@@ -290,8 +295,16 @@ const getInternalResources = (content: string) => {
   };
 };
 
-/** 识别文档内容的依赖 */
-export const getDependences = (content: string) => {
+/**
+ * 识别文档内容的依赖
+ * @param sha1 文件 sha1 值
+ * @returns 依赖资源名称集合 string[]
+ */
+export const getDependences = async (sha1: string): Promise<string[]> => {
+  const content = await FUtil.Request({
+    url: `/v2/storages/files/${sha1}/download`,
+  });
+
   // 匹配 md 语法的图片依赖（![]()）
   const mdImgContent =
     content.match(/(?<=!\[[^\]]*?]\(freelog:\/\/)[\s\S]*?(?=\))/gi) || [];
@@ -323,7 +336,7 @@ export const getDependences = (content: string) => {
       ...docContent,
     ]),
   ];
-  console.log(dependencesList);
+  return dependencesList;
 };
 
 /**
