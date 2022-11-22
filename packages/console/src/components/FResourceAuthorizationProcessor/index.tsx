@@ -17,10 +17,14 @@ interface Target {
   versionRange?: string;
 }
 
-interface Processor {
+export interface Processor {
   addTargets(targets: Target[]): Promise<{ err: string }>;
 
-  removeTarget(target: Target): Promise<{ err: string }>;
+  removeTarget(target: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+  }): Promise<{ err: string }>;
 
   activeTarget(target: {
     id: string;
@@ -169,6 +173,7 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     const { data: data_batchResourceInfo }: {
       data: {
         resourceId: string;
+        latestVersion: string;
         baseUpcastResources: {
           resourceId: string;
           resourceName: string;
@@ -186,7 +191,7 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
         id: t.id,
         name: t.name,
         type: t.type,
-        versionRange: t.versionRange || '',
+        versionRange: t.versionRange || ('^' + r?.latestVersion),
         children: r ? r.baseUpcastResources.map((br) => {
           return {
             id: br.resourceId,
