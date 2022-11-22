@@ -7,8 +7,12 @@ import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FServiceAPI, FUtil } from '../../../../../@freelog/tools-lib';
-import { ResourceDepSelectorModelState } from '@/models/resourceDepSelector';
+// import { ResourceDepSelectorModelState } from '@/models/resourceDepSelector';
 import * as AHooks from 'ahooks';
+import { FetchObjectsAction } from '@/models/storageHomePage';
+import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
+import FLoadingTip from '@/components/FLoadingTip';
+import FNoDataTip from '@/components/FNoDataTip';
 
 interface FAddDependenciesDrawerProps {
   existingResourceIDs: string[];
@@ -44,6 +48,8 @@ interface FAddDependenciesDrawerStates {
     status: 'online' | 'offline';
     latestVersion: string;
   }[];
+  resourceListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  resourceListMore: 'loading' | 'andMore' | 'noMore';
 }
 
 
@@ -58,6 +64,8 @@ const initStates: FAddDependenciesDrawerStates = {
   resourceFrom: 'market',
   searchInput: '',
   resourceList: [],
+  resourceListState: 'loading',
+  resourceListMore: 'loading',
 };
 
 function FAddDependenciesDrawer({
@@ -74,24 +82,29 @@ function FAddDependenciesDrawer({
   const [resourceFrom, set_resourceFrom] = React.useState<FAddDependenciesDrawerStates['resourceFrom']>(initStates['resourceFrom']);
   const [searchInput, set_searchInput] = React.useState<FAddDependenciesDrawerStates['searchInput']>(initStates['searchInput']);
   const [resourceList, set_resourceList] = React.useState<FAddDependenciesDrawerStates['resourceList']>(initStates['resourceList']);
+  const [resourceListState, set_resourceListState] = React.useState<FAddDependenciesDrawerStates['resourceListState']>(initStates['resourceListState']);
+  const [resourceListMore, set_resourceListMore] = React.useState<FAddDependenciesDrawerStates['resourceListMore']>(initStates['resourceListMore']);
 
   AHooks.useMount(() => {
     set_selectedResourceIDs(existingResourceIDs);
   });
 
   React.useEffect(() => {
-    fetchResourceList();
+    fetchResourceList(true);
   }, [resourceFrom, searchInput]);
 
-  async function fetchResourceList() {
-    let resourceList: FAddDependenciesDrawerStates['resourceList'] = [];
-    // if (!payload) {
-    //   resourceList = resourceDepSelector.resourceList;
-    // }
+  async function fetchResourceList(restart: boolean = false) {
+    let resourceListResult: FAddDependenciesDrawerStates['resourceList'] = [];
+    if (!restart) {
+      resourceListResult = [...resourceList];
+    } else {
+      set_resourceListState('loading');
+    }
+    set_resourceListMore('loading');
     // let dataSource: any;
     if (resourceFrom === 'favorite') {
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-        skip: resourceList.length,
+        skip: resourceListResult.length,
         limit: FUtil.Predefined.pageSize,
         keywords: searchInput,
       };
@@ -105,10 +118,11 @@ function FAddDependenciesDrawer({
             status: 0 | 1;
             latestVersion: 0 | 1;
           }[];
+          totalItem: number;
         };
       } = await FServiceAPI.Collection.collectionResources(params);
-      resourceList = [
-        ...resourceList,
+      resourceListResult = [
+        ...resourceListResult,
         ...data_favoriteResources.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r: any) => {
           // console.log(r, 'r20893u4oi23');
           return {
@@ -121,9 +135,18 @@ function FAddDependenciesDrawer({
           };
         }),
       ];
+      const { state, more } = listStateAndListMore({
+        list_Length: resourceListResult.length,
+        total_Length: data_favoriteResources.totalItem,
+        has_FilterCriteria: searchInput !== '',
+      });
+      set_resourceList(resourceListResult);
+      set_resourceListState(state);
+      set_resourceListMore(more);
+
     } else {
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-        skip: resourceList.length,
+        skip: resourceListResult.length,
         limit: FUtil.Predefined.pageSize,
         keywords: searchInput,
         status: resourceFrom === 'my' ? undefined : 1,
@@ -139,10 +162,11 @@ function FAddDependenciesDrawer({
             status: 0 | 1;
             latestVersion: string;
           }[];
+          totalItem: number;
         };
       } = await FServiceAPI.Resource.list(params);
-      resourceList = [
-        ...resourceList,
+      resourceListResult = [
+        ...resourceListResult,
         ...data_list.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r) => {
           return {
             resourceID: r.resourceId,
@@ -154,8 +178,16 @@ function FAddDependenciesDrawer({
           };
         }),
       ];
+      const { state, more } = listStateAndListMore({
+        list_Length: resourceListResult.length,
+        total_Length: data_list.totalItem,
+        has_FilterCriteria: searchInput !== '',
+      });
+      set_resourceList(resourceListResult);
+      set_resourceListState(state);
+      set_resourceListMore(more);
     }
-    set_resourceList(resourceList);
+
   }
 
   return (<FDrawer
@@ -201,9 +233,23 @@ function FAddDependenciesDrawer({
         </div>
 
         <div style={{ height: 17 }} />
+        {console.log(resourceListState, resourceListMore, 'ioisedjfoisjdlfjsdlfjsdfjsdjfjsdjlll')}
+        {
+          resourceListState === 'loading' && (<FLoadingTip height={600} />)
+        }
 
         {
-          resourceList.map((resource) => {
+          resourceListState === 'noData' && (
+            <FNoDataTip height={600} tipText={'无数据'} />)
+        }
+
+        {
+          resourceListState === 'noSearchResult' && (
+            <FNoDataTip height={600} tipText={'无搜索结果'} />)
+        }
+
+        {
+          resourceListState === 'loaded' && resourceList.map((resource) => {
             return (<div className={styles.bucket}>
               <div>
                 <div className={styles.title}>
@@ -245,6 +291,12 @@ function FAddDependenciesDrawer({
           })
         }
       </div>
+      <FListFooter
+        state={resourceListMore}
+        onClickLoadMore={async () => {
+          await fetchResourceList(false);
+        }}
+      />
     </FDrawer>
   );
 }

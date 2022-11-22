@@ -27,7 +27,7 @@ function VersionInput({ value, resourceLatestVersion, onChange }: VersionInputPr
   const [inputError, set_inputError, get_inputError] = useGetState<VersionInputStates['inputError']>(initStates['inputError']);
 
   React.useEffect(() => {
-    console.log(get_input(), value, 'value89888********88');
+    // console.log(get_input(), value, 'value89888********88');
     if (get_input() === value) {
       return;
     }
