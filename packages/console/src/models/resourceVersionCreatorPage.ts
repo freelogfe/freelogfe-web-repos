@@ -14,6 +14,7 @@ import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { getProcessor } from '@/pages/resource/version/creator/$id';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IRelation, ITargetInfo } from '@/components/FResourceAuthorizationProcessor/types';
 // import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 // export type DepResources = {
@@ -193,10 +194,35 @@ export interface OnPromptPageLeaveCancelAction extends AnyAction {
 
 export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
+  payload: {
+    dependentAllTargets: {
+      id: string;
+      name: string;
+      type: 'resource' | 'object';
+      versionRange?: string;
+    }[];
+    dependentAllResourcesWithContracts: {
+      resourceID: string;
+      resourceName: string;
+      contracts: {
+        policyID: string;
+        contractID: string;
+      }[];
+    }[];
+
+  };
 }
 
 export interface OnClick_SaveCacheBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn';
+  payload: {
+    dependentAllTargets: {
+      id: string;
+      name: string;
+      type: 'resource' | 'object';
+      versionRange?: string;
+    }[];
+  };
 }
 
 export interface OnSuccess_ObjectFile_Action extends AnyAction {
@@ -354,7 +380,7 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onClick_CreateVersionBtn({}: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
+    * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -370,19 +396,50 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-      // const { processor } = yield call(getProcessor);
-      // console.log(processor, 'processoriosjdlfkjsdlfjsdlkfjl');
-      // return;
-      const baseUpcastResourceIds: any[] = [];
-      const resolveResources: any[] = [];
-      const directlyDependentIds: string[] = [];
+      // console.log(payload, 'payload98isfjsdolifjksdlfjlkj');
+      const baseUpcastResources: { resourceId: string }[] = payload.dependentAllResourcesWithContracts
+        .filter((r) => {
+          return r.contracts.length === 0;
+        })
+        .map((r) => {
+          return { resourceId: r.resourceID };
+        });
+      const dependencies: {
+        resourceId: string;
+        versionRange: string;
+      }[] = payload.dependentAllTargets
+        .map((r) => {
+          return {
+            resourceId: r.id,
+            versionRange: r.versionRange || '',
+          };
+        });
+      const resolveResources: {
+        resourceId: string;
+        contracts: {
+          policyId: string;
+        }[];
+      }[] = payload.dependentAllResourcesWithContracts
+        .filter((r) => {
+          return r.contracts.length > 0;
+        })
+        .map((r) => {
+          return {
+            resourceId: r.resourceID,
+            contracts: r.contracts.map((c) => {
+              return {
+                policyId: c.policyID,
+              };
+            }),
+          };
+        });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
         filename: resourceVersionCreatorPage.selectedFileInfo.name,
-        baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({ resourceId: baseUpId })),
-        dependencies: [],
+        baseUpcastResources: baseUpcastResources,
+        dependencies: dependencies,
         resolveResources: resolveResources,
         customPropertyDescriptors: [
           ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
@@ -434,7 +491,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * onClick_SaveCacheBtn({}: OnClick_SaveCacheBtn_Action, { put, select, call }: EffectsCommandMap) {
+    * onClick_SaveCacheBtn({ payload }: OnClick_SaveCacheBtn_Action, { put, select, call }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -445,7 +502,7 @@ const Model: ResourceVersionCreatorModelType = {
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
         baseProperties: resourceVersionCreatorPage.baseProperties,
         customOptionsData: resourceVersionCreatorPage.customOptionsData,
-        directDependencies: [],
+        directDependencies: payload.dependentAllTargets,
         descriptionEditorInput: resourceVersionCreatorPage.description.toHTML(),
       };
 
