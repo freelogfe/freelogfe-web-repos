@@ -13,7 +13,6 @@ import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 
-
 export interface ResourceVersionCreatorPageModelState {
   resourceInfo: {
     resourceID: string;
@@ -25,6 +24,8 @@ export interface ResourceVersionCreatorPageModelState {
     }[];
   } | null;
 
+  dataIsDirty: boolean;
+
   versionInput: string;
 
   selectedFileInfo: {
@@ -32,9 +33,7 @@ export interface ResourceVersionCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
-
-  dataIsDirty: boolean;
-
+  
   rawProperties: {
     key: string;
     value: string;
@@ -154,8 +153,8 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
-export interface FetchRawPropsAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/fetchRawProps';
+export interface _FetchRawPropsAction extends AnyAction {
+  type: '_FetchRawProps';
 }
 
 export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
@@ -186,10 +185,10 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
-
-    fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
+
+    _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
@@ -376,27 +375,8 @@ const Model: ResourceVersionCreatorModelType = {
         yield call(p.addTargets, draftData.directDependencies);
 
         if (draftData.selectedFileInfo) {
-          const params: Parameters<typeof getFilesSha1Info>[0] = {
-            sha1: [draftData.selectedFileInfo.sha1],
-          };
-          // console.log('*(*********');
-          const {
-            result,
-            error,
-          }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
-
-          yield put<ChangeAction>({
-            type: 'change',
-            payload: {
-              rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-                return {
-                  key: rp[0],
-                  // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-                  value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-                };
-              }),
-              rawPropertiesState: 'success',
-            },
+          yield put<_FetchRawPropsAction>({
+            type: '_FetchRawProps',
           });
         }
       }
@@ -633,49 +613,9 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      const { error, result } = yield call(getFilesSha1Info, {
-        sha1: [payload.sha1],
+      yield put<_FetchRawPropsAction>({
+        type: '_FetchRawProps',
       });
-
-      // console.log(result, 'result90iojwesflksdjflksdjl');
-
-      if (error !== '') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-        });
-        return fMessage(error, 'error');
-      }
-
-      if (result[0].state === 'fail') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-        });
-        return fMessage('文件解析失败', 'error');
-      }
-
-      if (result[0].state === 'success') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-              return {
-                key: rp[0],
-                // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-              };
-            }),
-            rawPropertiesState: 'success',
-          },
-        });
-      }
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -686,24 +626,6 @@ const Model: ResourceVersionCreatorModelType = {
             name: payload.name,
             from: '存储空间',
           },
-        },
-      });
-
-      const { error, result } = yield call(getFilesSha1Info, {
-        sha1: [payload.sha1],
-      });
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-            return {
-              key: rp[0],
-              // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-              value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-            };
-          }),
-          rawPropertiesState: 'success',
         },
       });
 
@@ -798,6 +720,10 @@ const Model: ResourceVersionCreatorModelType = {
         ...addR,
         ...addO,
       ]);
+
+      yield put<_FetchRawPropsAction>({
+        type: '_FetchRawProps',
+      });
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -848,95 +774,11 @@ const Model: ResourceVersionCreatorModelType = {
         yield call(p.addTargets, draftData.directDependencies);
 
         if (draftData.selectedFileInfo) {
-          const params: Parameters<typeof getFilesSha1Info>[0] = {
-            sha1: [draftData.selectedFileInfo.sha1],
-          };
-          // console.log('*(*********');
-          const {
-            result,
-            error,
-          }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
-
-          yield put<ChangeAction>({
-            type: 'change',
-            payload: {
-              rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-                return {
-                  key: rp[0],
-                  // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-                  value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-                };
-              }),
-              rawPropertiesState: 'success',
-            },
+          yield put<_FetchRawPropsAction>({
+            type: '_FetchRawProps',
           });
         }
       }
-    },
-    * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.selectedFileInfo) {
-        return;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawPropertiesState: 'parsing',
-        },
-      });
-
-      const params: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
-      };
-      // console.log('*(*********');
-      const {
-        result,
-        error,
-      }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
-      // console.log(result, 'RRR98wseoidfkldfjsldfkjsdlfjkdslj');
-      if (error !== '') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-        });
-        return fMessage(error, 'error');
-      }
-
-      if (result[0].state === 'fail') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-          // caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
-        });
-        return fMessage('文件解析失败', 'error');
-      }
-
-      if (result[0].state === 'success') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-              return {
-                key: rp[0],
-                // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
-                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-              };
-            }),
-            rawPropertiesState: 'success',
-          },
-        });
-      }
-
     },
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
@@ -960,6 +802,67 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
+
+    * _FetchRawProps({}: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      if (!resourceVersionCreatorPage.selectedFileInfo) {
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawPropertiesState: 'parsing',
+        },
+      });
+
+      const params: Parameters<typeof getFilesSha1Info>[0] = {
+        sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
+      };
+      const {
+        result,
+        error,
+      }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
+      if (error !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+        });
+        return fMessage(error, 'error');
+      }
+
+      if (result[0].state === 'fail') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+          },
+        });
+        return fMessage('文件解析失败', 'error');
+      }
+
+      if (result[0].state === 'success') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+              return {
+                key: rp[0],
+                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+              };
+            }),
+            rawPropertiesState: 'success',
+          },
+        });
+      }
+
+    },
+
   },
 
   reducers: {
