@@ -42,6 +42,8 @@ import FPublishObjectFile from '@/components/FPublishObjectFile';
 import FResourceAuthorizationProcessor, { getProcessor, Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
+import { history } from '@@/core/history';
+import FPrompt from '@/components/FPrompt';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -105,39 +107,44 @@ function VersionCreator({
         }  - Freelog`}</title>
       </Helmet>
 
-      <Prompt
-        when={
-          resourceVersionCreatorPage.promptLeavePath === '' &&
-          resourceVersionCreatorPage.dataIsDirty
-        }
-        message={(location: H.Location, action: H.Action) => {
-          // console.log(location, action, 'LAAAAL');
-          // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
-          const locationHref: string = location.pathname + location.search;
-
-          dispatch<OnPromptPageLeaveAction>({
-            type: 'resourceVersionCreatorPage/onPromptPageLeave',
-            payload: {
-              href: locationHref,
-            },
-          });
-
-          fConfirmModal({
-            message: '还没有保存草稿或发行，现在离开会导致信息丢失',
-            onOk() {
-              dispatch<OnPromptPageLeaveConfirmAction>({
-                type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm',
-              });
-            },
-            onCancel() {
-              dispatch<OnPromptPageLeaveCancelAction>({
-                type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel',
-              });
-            },
-          });
-          return false;
-        }}
+      <FPrompt
+        when={true}
+        messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
+      {/*<Prompt*/}
+      {/*  when={*/}
+      {/*    resourceVersionCreatorPage.promptLeavePath === '' &&*/}
+      {/*    resourceVersionCreatorPage.dataIsDirty*/}
+      {/*  }*/}
+      {/*  message={(location: H.Location, action: H.Action) => {*/}
+      {/*    // console.log(location, action, 'LAAAAL');*/}
+      {/*    // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');*/}
+      {/*    const locationHref: string = location.pathname + location.search;*/}
+
+      {/*    dispatch<OnPromptPageLeaveAction>({*/}
+      {/*      type: 'resourceVersionCreatorPage/onPromptPageLeave',*/}
+      {/*      payload: {*/}
+      {/*        href: locationHref,*/}
+      {/*      },*/}
+      {/*    });*/}
+
+      {/*    fConfirmModal({*/}
+      {/*      message: '还没有保存草稿或发行，现在离开会导致信息丢失',*/}
+      {/*      onOk() {*/}
+      {/*        // dispatch<OnPromptPageLeaveConfirmAction>({*/}
+      {/*        //   type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm',*/}
+      {/*        // });*/}
+      {/*        history.push(resourceVersionCreatorPage.promptLeavePath);*/}
+      {/*      },*/}
+      {/*      onCancel() {*/}
+      {/*        // dispatch<OnPromptPageLeaveCancelAction>({*/}
+      {/*        //   type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel',*/}
+      {/*        // });*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    return false;*/}
+      {/*  }}*/}
+      {/*/>*/}
       <FLeftSiderLayout
         sider={<Sider />}
         header={
