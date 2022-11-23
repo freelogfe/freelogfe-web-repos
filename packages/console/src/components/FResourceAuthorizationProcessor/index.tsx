@@ -144,7 +144,7 @@ function FResourceAuthorizationProcessor({
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
 
-    console.log(targets, 'targetsiosjdlfkjsdlkfjlsdkj');
+    // console.log(targets, 'targetsiosjdlfkjsdlkfjlsdkj');
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
