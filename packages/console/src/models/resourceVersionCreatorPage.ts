@@ -7,89 +7,12 @@ import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 import * as semver from 'semver';
-// import moment from 'moment';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-// import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
-// import { getProcessor } from '@/pages/resource/version/creator/$id';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-// import { IRelation, ITargetInfo } from '@/components/FResourceAuthorizationProcessor/types';
-// import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
-// export type DepResources = {
-//   id: string;
-//   title: string;
-//   resourceType: string[];
-//   status: 0 /*该资源已下线，无法获取授权。*/
-//     | 1
-//     | 2 /*循环依赖不支持授权。*/
-//     | 3 /*该依赖是存储空间对象，无法获取授权。*/
-//     | 4 /*上抛资源，无法获取授权*/;
-//   error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
-//   warning: '' | 'authException' | 'ownerFreeze';
-//   versionRange: string;
-//   versions: string[];
-//   upthrow: boolean;
-//   upthrowDisabled: boolean;
-//   authProblem: boolean;
-//   enableReuseContracts: {
-//     checked: boolean;
-//     id: string;
-//     policyId: string;
-//     title: string;
-//     // status: 'executing' | 'stopped';
-//     status: 0 | 1 | 2;
-//     code: string;
-//     date: string;
-//     versions: string[];
-//   }[];
-//   terminatedContractIDs: string[];
-//   enabledPolicies: {
-//     checked: boolean;
-//     id: string;
-//     title: string;
-//     code: string;
-//     status: 0 | 1;
-//     policyFullInfo: PolicyFullInfo_Type;
-//   }[];
-// }[];
-
-// export type Relationships = {
-//   id: string;
-//   children: Readonly<{
-//     id: string;
-//   }>[];
-// }[];
-
-// export interface IDraft {
-//   versionInput: string;
-//   selectedFileInfo: {
-//     name: string;
-//     sha1: string;
-//     from: string;
-//   } | null;
-//   baseProperties: {
-//     key: string;
-//     value: string;
-//     description: string;
-//   }[];
-//   customOptionsData: {
-//     key: string;
-//     description: string;
-//     custom: 'input' | 'select';
-//     defaultValue: string;
-//     customOption: string;
-//   }[];
-//   directDependencies: {
-//     id: string;
-//     name: string;
-//     type: 'resource' | 'object';
-//     versionRange?: string;
-//   }[];
-//   descriptionEditorInput: string;
-// }
 
 export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
@@ -154,11 +77,6 @@ export interface ResourceVersionCreatorPageModelState {
     versionRange?: string;
   }[];
 
-  // preVersionDeps: {
-  // relationships: Relationships;
-  // versions: { id: string; versionRange: string }[];
-  // };
-
   promptLeavePath: string;
 }
 
@@ -195,34 +113,10 @@ export interface OnPromptPageLeaveCancelAction extends AnyAction {
 
 export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
-  // payload: {
-  //   dependentAllTargets: {
-  //     id: string;
-  //     name: string;
-  //     type: 'resource' | 'object';
-  //     versionRange?: string;
-  //   }[];
-  //   dependentAllResourcesWithContracts: {
-  //     resourceID: string;
-  //     resourceName: string;
-  //     contracts: {
-  //       policyID: string;
-  //       contractID: string;
-  //     }[];
-  //   }[];
-  // };
 }
 
 export interface OnClick_SaveCacheBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn';
-  // payload: {
-  //   dependentAllTargets: {
-  //     id: string;
-  //     name: string;
-  //     type: 'resource' | 'object';
-  //     versionRange?: string;
-  //   }[];
-  // };
 }
 
 export interface OnSuccess_ObjectFile_Action extends AnyAction {
@@ -245,11 +139,6 @@ export interface FetchDraftAction extends AnyAction {
 export interface FetchResourceInfoAction extends AnyAction {
   type: 'fetchResourceInfo';
 }
-
-// export interface VerifyVersionInputAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
-//   // payload: string;
-// }
 
 export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
@@ -277,7 +166,6 @@ export interface ResourceVersionCreatorModelType {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
-    // verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -330,10 +218,6 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      // yield put<FetchResourceInfoAction>({
-      //   type: 'fetchResourceInfo',
-      // });
-
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload.resourceID,
         isLoadLatestVersionInfo: 1,
@@ -361,8 +245,18 @@ const Model: ResourceVersionCreatorModelType = {
           resourceId: data_resourceInfo.resourceId,
           version: data_resourceInfo.latestVersion,
         };
-        const { data: data_resourceVersionInfo } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
-        // console.log(data2, 'data2092384u0');
+        const { data: data_resourceVersionInfo }: {
+          data: {
+            customPropertyDescriptors: any[];
+            dependencies: {
+              resourceId: string;
+              resourceName: string;
+              versionRange: string;
+            }[];
+            description: string;
+          }
+        } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
+        // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo90-32iokpsdlfsdfsdlfkjl');
         descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
         preVersionBaseProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
           .filter((cpd: any) => cpd.type === 'readonlyText')
@@ -385,40 +279,14 @@ const Model: ResourceVersionCreatorModelType = {
               customOption: cpd.candidateItems.join(','),
             };
           });
+        // preVersionDirectDependencies = [];
 
-        // const depResourceIds: string = (data_resourceVersionInfo.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
-        //
-        // if (depResourceIds.length > 0) {
-        //   const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        //     resourceIds: depResourceIds,
-        //   };
-        //   const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
-        //   // console.log(data2, '#ASGDFASDF');
-        //   const relations: any[] = data3.map((dd: any) => {
-        //     return {
-        //       id: dd.resourceId,
-        //       children: dd.baseUpcastResources.map((bur: any) => {
-        //         return {
-        //           id: bur.resourceId,
-        //         };
-        //       }),
-        //     };
-        //   });
-        //
-        //   // const versions = (data_resourceVersionInfo.dependencies as any[]).map((dr: any) => {
-        //   //   return {
-        //   //     id: dr.resourceId,
-        //   //     versionRange: dr.versionRange,
-        //   //   };
-        //   // });
-        //
-        //   // preVersionDeps = {
-        //   //   relationships: relations as any,
-        //   //   versions: versions as any,
-        //   // };
-        //
-        // }
-        preVersionDirectDependencies = [];
+        const p: {
+          addTargets(value: any): void;
+          clear(): void;
+        } = yield call(getProcessor, 'resourceVersionCreator');
+        yield call(p.clear);
+        // yield call(p.addTargets, draftData.directDependencies);
       }
 
       yield put<ChangeAction>({
@@ -446,10 +314,6 @@ const Model: ResourceVersionCreatorModelType = {
 
       if (data_draft) {
         const { draftData } = data_draft;
-        const p: {
-          addTargets(value: any): void;
-          clear(): void;
-        } = yield call(getProcessor, 'resourceVersionCreator');
 
         yield put<ChangeAction>({
           type: 'change',
@@ -461,8 +325,38 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
+        const p: {
+          addTargets(value: any): void;
+          clear(): void;
+        } = yield call(getProcessor, 'resourceVersionCreator');
         yield call(p.clear);
         yield call(p.addTargets, draftData.directDependencies);
+
+        if (draftData.selectedFileInfo) {
+          const params: Parameters<typeof getFilesSha1Info>[0] = {
+            sha1: [draftData.selectedFileInfo.sha1],
+          };
+          // console.log('*(*********');
+          const {
+            result,
+            error,
+          }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
+
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+                return {
+                  key: rp[0],
+                  // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                  value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+                };
+              }),
+              rawPropertiesState: 'success',
+            },
+          });
+        }
+
       }
 
       // const params: HandledDraftParamsType = {
@@ -840,31 +734,6 @@ const Model: ResourceVersionCreatorModelType = {
       //   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
       // });
     },
-    // * verifyVersionInput({}: VerifyVersionInputAction, { select, put }: EffectsCommandMap) {
-    //   const { resourceInfo, resourceVersionCreatorPage }: ConnectState = yield select(({
-    //                                                                                      resourceInfo,
-    //                                                                                      resourceVersionCreatorPage,
-    //                                                                                    }: ConnectState) => ({
-    //     resourceInfo,
-    //     resourceVersionCreatorPage,
-    //   }));
-    //   let versionErrorText: string = '';
-    //   if (!resourceVersionCreatorPage.version) {
-    //     versionErrorText = '请输入版本号';
-    //   } else if (!semver.valid(resourceVersionCreatorPage.version)) {
-    //     versionErrorText = '版本号不合法';
-    //   } else if (!semver.gt(resourceVersionCreatorPage.version, resourceInfo.info?.latestVersion || '0.0.0')) {
-    //     versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
-    //   }
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       // $version: resourceVersionCreatorPage.$version,
-    //       versionVerify: 2,
-    //       versionErrorText: versionErrorText,
-    //     },
-    //   });
-    // },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
