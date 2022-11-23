@@ -92,6 +92,8 @@ function FResourceAuthorizationProcessor({
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
+  console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
+
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
       const { data: data_resource }: {
@@ -141,6 +143,8 @@ function FResourceAuthorizationProcessor({
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
+
+    console.log(targets, 'targetsiosjdlfkjsdlkfjlsdkj');
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
@@ -308,6 +312,8 @@ function FResourceAuthorizationProcessor({
       // console.log(needAddObjectIDs, 'needAddObjectIDsdsoijfsdklfjdslkj');
       const { data: data_objs }: {
         data: {
+          bucketId: string;
+          bucketName: string;
           objectId: string;
           objectName: string;
           resourceType: string[];
@@ -320,7 +326,7 @@ function FResourceAuthorizationProcessor({
       const objTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_objs.map((o) => {
         return {
           targetID: o.objectId,
-          targetName: o.objectName,
+          targetName: `${o.bucketName}/${o.objectName}`,
           targetType: 'object',
           targetResourceType: o.resourceType,
           error: 'storageObject',

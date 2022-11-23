@@ -11,7 +11,7 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  OnClick_SaveCacheBtn_Action,
+  OnTrigger_SaveCache_Action,
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
@@ -148,8 +148,8 @@ function VersionCreator({
               });
             }}
             onClickCache={async () => {
-              dispatch<OnClick_SaveCacheBtn_Action>({
-                type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
+              dispatch<OnTrigger_SaveCache_Action>({
+                type: 'resourceVersionCreatorPage/onClick_SaveCache',
               });
             }}
             disabledCreate={hasError}
@@ -285,6 +285,8 @@ function VersionCreator({
                   if (objNames.length > 0) {
                     const { data: data_objs }: {
                       data: {
+                        bucketId: string;
+                        bucketName: string;
                         objectId: string;
                         objectName: string;
                       }[];
@@ -298,7 +300,7 @@ function VersionCreator({
                     addO = data_objs.map((o) => {
                       return {
                         id: o.objectId,
-                        name: o.objectName,
+                        name: `${o.bucketName}/${o.objectName}`,
                         type: 'object',
                       };
                     });
