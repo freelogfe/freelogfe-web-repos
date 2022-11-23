@@ -774,7 +774,6 @@ const Model: ResourceVersionCreatorModelType = {
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
       select,
-      put,
     }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
