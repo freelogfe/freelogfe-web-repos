@@ -92,7 +92,7 @@ function FResourceAuthorizationProcessor({
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
-  console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
+  // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {

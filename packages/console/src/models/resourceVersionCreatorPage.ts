@@ -97,20 +97,20 @@ export interface OnUnmountPageAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onUnmountPage';
 }
 
-export interface OnPromptPageLeaveAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onPromptPageLeave';
-  payload: {
-    href: string;
-  };
-}
-
-export interface OnPromptPageLeaveConfirmAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm';
-}
-
-export interface OnPromptPageLeaveCancelAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel';
-}
+// export interface OnPromptPageLeaveAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/onPromptPageLeave';
+//   payload: {
+//     href: string;
+//   };
+// }
+//
+// export interface OnPromptPageLeaveConfirmAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm';
+// }
+//
+// export interface OnPromptPageLeaveCancelAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel';
+// }
 
 export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
@@ -174,9 +174,9 @@ export interface ResourceVersionCreatorModelType {
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
-    onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
-    onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
-    onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
+    // onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
+    // onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
+    // onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
 
     onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
     onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
@@ -388,29 +388,29 @@ const Model: ResourceVersionCreatorModelType = {
         payload: initStates,
       });
     },
-    * onPromptPageLeave({ payload }: OnPromptPageLeaveAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          promptLeavePath: payload.href,
-        },
-      });
-    },
-    * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, { select }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      history.push(resourceVersionCreatorPage.promptLeavePath);
-    },
-    * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'resourceVersionCreatorPage/change',
-        payload: {
-          promptLeavePath: '',
-        },
-      });
-    },
+    // * onPromptPageLeave({ payload }: OnPromptPageLeaveAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       promptLeavePath: payload.href,
+    //     },
+    //   });
+    // },
+    // * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, { select }: EffectsCommandMap) {
+    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //
+    //   history.push(resourceVersionCreatorPage.promptLeavePath);
+    // },
+    // * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'resourceVersionCreatorPage/change',
+    //     payload: {
+    //       promptLeavePath: '',
+    //     },
+    //   });
+    // },
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({

@@ -73,13 +73,13 @@ function VersionCreator({
     });
   });
 
-  React.useEffect(() => {
-    if (resourceVersionCreatorPage.dataIsDirty) {
-      window.onbeforeunload = () => true;
-    } else {
-      window.onbeforeunload = null;
-    }
-  }, [resourceVersionCreatorPage.dataIsDirty]);
+  // React.useEffect(() => {
+  //   if (resourceVersionCreatorPage.dataIsDirty) {
+  //     window.onbeforeunload = () => true;
+  //   } else {
+  //     window.onbeforeunload = null;
+  //   }
+  // }, [resourceVersionCreatorPage.dataIsDirty]);
 
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
@@ -108,7 +108,7 @@ function VersionCreator({
       </Helmet>
 
       <FPrompt
-        when={true}
+        watch={true}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       {/*<Prompt*/}
