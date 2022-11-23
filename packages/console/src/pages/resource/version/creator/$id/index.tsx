@@ -21,7 +21,7 @@ import {
   OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   OnChange_VersionInput_Action,
-  OnClick_ImportLastVersionDependents_Btn_Action,
+  OnClick_ImportLastVersionDependents_Btn_Action, OnChange_DescriptionEditorState_Action,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -402,10 +402,11 @@ function VersionCreator({
             <FBraftEditor
               value={resourceVersionCreatorPage.descriptionEditorState}
               onChange={(value: EditorState) => {
-                // console.log('######!!~@#@!#!@');
-                onChange({
-                  descriptionEditorState: value,
-                  dataIsDirty: true,
+                dispatch<OnChange_DescriptionEditorState_Action>({
+                  type: 'resourceVersionCreatorPage/onChange_DescriptionEditorState',
+                  payload: {
+                    state: value,
+                  },
                 });
               }}
               style={{

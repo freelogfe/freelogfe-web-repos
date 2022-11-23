@@ -153,6 +153,13 @@ export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyActio
   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
 
+export interface OnChange_DescriptionEditorState_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_DescriptionEditorState';
+  payload: {
+    state: EditorState;
+  };
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -172,6 +179,7 @@ export interface ResourceVersionCreatorModelType {
     // fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
+    onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
@@ -807,6 +815,14 @@ const Model: ResourceVersionCreatorModelType = {
       } = yield call(getProcessor, 'resourceVersionCreator');
       yield call(p.clear);
       yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
+    },
+    * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          descriptionEditorState: payload.state,
+        },
+      });
     },
   },
 
