@@ -403,8 +403,8 @@ function FResourceAuthorizationProcessor({
         return !t.upThrow;
       })
       .every((t) => {
-      return t.upThrow || t.contracts.length > 0;
-    });
+        return t.upThrow || t.contracts.length > 0;
+      });
   }
 
   async function getAllResourcesWithContracts(): Promise<{
@@ -440,20 +440,27 @@ function FResourceAuthorizationProcessor({
     return { err: '' };
   }
 
-  if (relations.length === 0) {
+  if (!licenseeResource) {
     return null;
   }
 
   return (<div className={styles.box}>
     <FBasicUpcastCard
-      dataSource={targetInfos
-        .filter((t) => {
-          return t.targetType === 'resource' && t.upThrow;
-        })
-        .map((t) => {
+      dataSource={licenseeResource.latestVersion === ''
+        ? targetInfos
+          .filter((t) => {
+            return t.targetType === 'resource' && t.upThrow;
+          })
+          .map((t) => {
+            return {
+              resourceID: t.targetID,
+              resourceName: t.targetName,
+            };
+          })
+        : licenseeResource.baseUpcastResources.map((bur) => {
           return {
-            resourceID: t.targetID,
-            resourceName: t.targetName,
+            resourceID: bur.resourceID,
+            resourceName: bur.resourceName,
           };
         })}
       onClick={(resourceID) => {
@@ -463,75 +470,80 @@ function FResourceAuthorizationProcessor({
       }}
     />
 
-    <div className={styles.DepPanel}>
+    {
+      relations.length !== 0 && (<>
+        <div className={styles.DepPanel}>
 
-      <div className={styles.DepPanelNavs}>
-        <Nav
-          relations={relations}
-          targetInfos={targetInfos}
-          activatedTarget={activatedTarget}
-          onChange_Relations={async (v) => {
-            set_relations(v);
-            await _syncTargetInfo();
-            await _syncActivatedTarget();
-          }}
-          onChange_ActivatedTarget={(v) => {
-            set_activatedTarget(v);
-          }}
-        />
-      </div>
+          <div className={styles.DepPanelNavs}>
+            <Nav
+              relations={relations}
+              targetInfos={targetInfos}
+              activatedTarget={activatedTarget}
+              onChange_Relations={async (v) => {
+                set_relations(v);
+                await _syncTargetInfo();
+                await _syncActivatedTarget();
+              }}
+              onChange_ActivatedTarget={(v) => {
+                set_activatedTarget(v);
+              }}
+            />
+          </div>
 
-      <div className={styles.DepPanelContent}>
-        <Content
-          activatedTarget={activatedTarget}
-          targetInfos={targetInfos}
-          onChange_TargetInfos={(v) => {
-            set_targetInfos(v);
-          }}
-        />
-      </div>
-    </div>
-    {/*<div style={{ height: 20 }} />*/}
-    <div className={styles.boxFooter}>
-      <FComponentsLib.FRectBtn
-        style={{ width: 300 }}
-        disabled={!targetInfos.some((t) => {
-          return !t.upThrow && t.enabledPolicies.some((p) => {
-            return p.checked;
-          });
-        })}
-        onClick={async () => {
-          const subjects: {
-            subjectId: string;
-            policyId: string;
-          }[] = get_targetInfos()
-            .filter((t) => {
-              return !t.upThrow;
-            })
-            .map((t) => {
-              return t.enabledPolicies
-                .filter((p) => {
-                  return p.checked;
+          <div className={styles.DepPanelContent}>
+            <Content
+              activatedTarget={activatedTarget}
+              targetInfos={targetInfos}
+              onChange_TargetInfos={(v) => {
+                set_targetInfos(v);
+              }}
+            />
+          </div>
+        </div>
+        
+        <div className={styles.boxFooter}>
+          <FComponentsLib.FRectBtn
+            style={{ width: 300 }}
+            disabled={!targetInfos.some((t) => {
+              return !t.upThrow && t.enabledPolicies.some((p) => {
+                return p.checked;
+              });
+            })}
+            onClick={async () => {
+              const subjects: {
+                subjectId: string;
+                policyId: string;
+              }[] = get_targetInfos()
+                .filter((t) => {
+                  return !t.upThrow;
                 })
-                .map((p) => {
-                  return {
-                    subjectId: t.targetID,
-                    policyId: p.policyFullInfo.policyId,
-                  };
-                });
-            })
-            .flat();
-          // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
-          await FServiceAPI.Contract.batchCreateContracts({
-            subjects: subjects,
-            subjectType: 1,
-            licenseeId: get_licenseeResource()?.resourceID || '',
-            licenseeIdentityType: 1,
-          });
-          await _syncTargetInfo();
-        }}
-      >获取授权</FComponentsLib.FRectBtn>
-    </div>
+                .map((t) => {
+                  return t.enabledPolicies
+                    .filter((p) => {
+                      return p.checked;
+                    })
+                    .map((p) => {
+                      return {
+                        subjectId: t.targetID,
+                        policyId: p.policyFullInfo.policyId,
+                      };
+                    });
+                })
+                .flat();
+              // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
+              await FServiceAPI.Contract.batchCreateContracts({
+                subjects: subjects,
+                subjectType: 1,
+                licenseeId: get_licenseeResource()?.resourceID || '',
+                licenseeIdentityType: 1,
+              });
+              await _syncTargetInfo();
+            }}
+          >获取授权</FComponentsLib.FRectBtn>
+        </div>
+      </>)
+    }
+
   </div>);
 }
 
