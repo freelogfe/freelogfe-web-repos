@@ -18,10 +18,13 @@ import {
   OnPromptPageLeaveAction,
   OnPromptPageLeaveCancelAction,
   OnPromptPageLeaveConfirmAction,
-  OnSuccess_ObjectFile_Action,
+  // OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   OnChange_VersionInput_Action,
-  OnClick_ImportLastVersionDependents_Btn_Action, OnChange_DescriptionEditorState_Action,
+  OnClick_ImportLastVersionDependents_Btn_Action,
+  OnChange_DescriptionEditorState_Action,
+  OnSucceed_UploadFile_Action,
+  OnSucceed_ImportObject_Action,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -205,117 +208,25 @@ function VersionCreator({
                 fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                 onSucceed_UploadFile={(file) => {
                   // console.log(file, 'onSucceed_UploadFile390oisjdf');
-                  dispatch<OnSuccess_ObjectFile_Action>({
-                    type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  dispatch<OnSucceed_UploadFile_Action>({
+                    type: 'resourceVersionCreatorPage/onSucceed_UploadFile',
                     payload: {
                       name: file.fileName,
                       sha1: file.sha1,
-                      from: '本地上传',
+                      // from: '本地上传',
                     },
                   });
                 }}
                 onSucceed_ImportObject={async (obj) => {
                   // console.log(obj, 'onSucceed_ImportObject390oisjdf');
-                  dispatch<OnSuccess_ObjectFile_Action>({
-                    type: 'resourceVersionCreatorPage/onSuccess_ObjectFile',
+                  dispatch<OnSucceed_ImportObject_Action>({
+                    type: 'resourceVersionCreatorPage/onSucceed_ImportObject',
                     payload: {
                       name: obj.objName,
                       sha1: obj.sha1,
-                      from: '存储空间',
+                      objID: obj.objID,
                     },
                   });
-
-                  const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
-                    objectIdOrName: obj.objID,
-                  };
-                  const { data: data_objectDetails }: {
-                    data: {
-                      dependencies: {
-                        name: string;
-                        type: 'resource' | 'object';
-                        versionRange?: string;
-                      }[];
-                    }
-                  } = await FServiceAPI.Storage.objectDetails(params);
-
-                  // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
-                  const resourceNames: string[] = data_objectDetails.dependencies
-                    .filter((d) => {
-                      return d.type === 'resource';
-                    })
-                    .map((d) => {
-                      return d.name;
-                    });
-
-                  const objNames: string[] = data_objectDetails.dependencies
-                    .filter((d) => {
-                      return d.type === 'object';
-                    })
-                    .map((d) => {
-                      return d.name;
-                    });
-
-                  let addR: {
-                    id: string;
-                    name: string;
-                    type: 'resource';
-                    versionRange: string;
-                  }[] = [];
-                  let addO: {
-                    id: string;
-                    name: string;
-                    type: 'object';
-                  }[] = [];
-                  if (resourceNames.length > 0) {
-                    const { data: data_resources }: {
-                      data: {
-                        resourceId: string;
-                        resourceName: string;
-                        latestVersion: string;
-                      }[];
-                    } = await FServiceAPI.Resource.batchInfo({
-                      resourceNames: resourceNames.join(),
-                    });
-                    // console.log(data_resources, 'resourceiojlkdsjflsdjflk');
-                    addR = data_resources.map((r) => {
-                      return {
-                        id: r.resourceId,
-                        name: r.resourceName,
-                        type: 'resource',
-                        versionRange: '^' + r.latestVersion,
-                      };
-                    });
-                  }
-
-                  if (objNames.length > 0) {
-                    const { data: data_objs }: {
-                      data: {
-                        bucketId: string;
-                        bucketName: string;
-                        objectId: string;
-                        objectName: string;
-                      }[];
-                    } = await FServiceAPI.Storage.batchObjectList({
-                      fullObjectNames: objNames.map((o) => {
-                        return encodeURIComponent(o);
-                      }).join(','),
-                    });
-
-                    // console.log(data_objs, 'objsoisjdlfksjfljsdlkfjsdlfjl');
-                    addO = data_objs.map((o) => {
-                      return {
-                        id: o.objectId,
-                        name: `${o.bucketName}/${o.objectName}`,
-                        type: 'object',
-                      };
-                    });
-                  }
-
-                  const processor = await getProcessor('resourceVersionCreator');
-                  await processor.addTargets([
-                    ...addR,
-                    ...addO,
-                  ]);
 
                 }}
                 onClick_DeleteBtn={() => {

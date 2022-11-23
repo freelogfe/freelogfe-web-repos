@@ -133,12 +133,20 @@ export interface OnChange_VersionInput_Action extends AnyAction {
   };
 }
 
-export interface OnSuccess_ObjectFile_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onSuccess_ObjectFile';
+export interface OnSucceed_UploadFile_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onSucceed_UploadFile';
   payload: {
     name: string;
     sha1: string;
-    from: string;
+  };
+}
+
+export interface OnSucceed_ImportObject_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onSucceed_ImportObject';
+  payload: {
+    name: string;
+    sha1: string;
+    objID: string;
   };
 }
 
@@ -175,7 +183,8 @@ export interface ResourceVersionCreatorModelType {
     onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
-    onSuccess_ObjectFile: (action: OnSuccess_ObjectFile_Action, effects: EffectsCommandMap) => void;
+    onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
+    onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
 
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
@@ -612,11 +621,15 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * onSuccess_ObjectFile({ payload }: OnSuccess_ObjectFile_Action, { put, call }: EffectsCommandMap) {
+    * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          selectedFileInfo: payload,
+          selectedFileInfo: {
+            sha1: payload.sha1,
+            name: payload.name,
+            from: '本地上传',
+          },
         },
       });
 
@@ -663,6 +676,128 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
       }
+    },
+    * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          selectedFileInfo: {
+            sha1: payload.sha1,
+            name: payload.name,
+            from: '存储空间',
+          },
+        },
+      });
+
+      const { error, result } = yield call(getFilesSha1Info, {
+        sha1: [payload.sha1],
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+            return {
+              key: rp[0],
+              // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+            };
+          }),
+          rawPropertiesState: 'success',
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+        objectIdOrName: payload.objID,
+      };
+      const { data: data_objectDetails }: {
+        data: {
+          dependencies: {
+            name: string;
+            type: 'resource' | 'object';
+            versionRange?: string;
+          }[];
+        }
+      } = yield call(FServiceAPI.Storage.objectDetails, params);
+
+      // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
+      const resourceNames: string[] = data_objectDetails.dependencies
+        .filter((d) => {
+          return d.type === 'resource';
+        })
+        .map((d) => {
+          return d.name;
+        });
+
+      const objNames: string[] = data_objectDetails.dependencies
+        .filter((d) => {
+          return d.type === 'object';
+        })
+        .map((d) => {
+          return d.name;
+        });
+
+      let addR: {
+        id: string;
+        name: string;
+        type: 'resource';
+        versionRange: string;
+      }[] = [];
+      let addO: {
+        id: string;
+        name: string;
+        type: 'object';
+      }[] = [];
+      if (resourceNames.length > 0) {
+        const { data: data_resources }: {
+          data: {
+            resourceId: string;
+            resourceName: string;
+            latestVersion: string;
+          }[];
+        } = yield call(FServiceAPI.Resource.batchInfo, {
+          resourceNames: resourceNames.join(),
+        });
+        // console.log(data_resources, 'resourceiojlkdsjflsdjflk');
+        addR = data_resources.map((r) => {
+          return {
+            id: r.resourceId,
+            name: r.resourceName,
+            type: 'resource',
+            versionRange: '^' + r.latestVersion,
+          };
+        });
+      }
+
+      if (objNames.length > 0) {
+        const { data: data_objs }: {
+          data: {
+            bucketId: string;
+            bucketName: string;
+            objectId: string;
+            objectName: string;
+          }[];
+        } = yield call(FServiceAPI.Storage.batchObjectList, {
+          fullObjectNames: objNames.map((o) => {
+            return encodeURIComponent(o);
+          }).join(','),
+        });
+
+        // console.log(data_objs, 'objsoisjdlfksjfljsdlkfjsdlfjl');
+        addO = data_objs.map((o) => {
+          return {
+            id: o.objectId,
+            name: `${o.bucketName}/${o.objectName}`,
+            type: 'object',
+          };
+        });
+      }
+
+      const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
+      yield call(processor.addTargets, [
+        ...addR,
+        ...addO,
+      ]);
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
