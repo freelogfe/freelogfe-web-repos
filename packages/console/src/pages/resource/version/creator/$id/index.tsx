@@ -14,9 +14,9 @@ import {
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
-  OnPromptPageLeaveAction,
-  OnPromptPageLeaveCancelAction,
-  OnPromptPageLeaveConfirmAction,
+  // OnPromptPageLeaveAction,
+  // OnPromptPageLeaveCancelAction,
+  // OnPromptPageLeaveConfirmAction,
   OnUnmountPageAction,
   OnChange_VersionInput_Action,
   OnClick_ImportLastVersionDependents_Btn_Action,
@@ -24,12 +24,12 @@ import {
   OnSucceed_UploadFile_Action,
   OnSucceed_ImportObject_Action,
 } from '@/models/resourceVersionCreatorPage';
-import { Prompt } from 'umi';
+// import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import * as H from 'history';
-import fConfirmModal from '@/components/fConfirmModal';
+// import * as H from 'history';
+// import fConfirmModal from '@/components/fConfirmModal';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
@@ -42,7 +42,7 @@ import FPublishObjectFile from '@/components/FPublishObjectFile';
 import FResourceAuthorizationProcessor, { getProcessor, Processor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
-import { history } from '@@/core/history';
+// import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
