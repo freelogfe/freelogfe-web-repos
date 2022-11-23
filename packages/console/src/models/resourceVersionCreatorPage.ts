@@ -358,22 +358,6 @@ const Model: ResourceVersionCreatorModelType = {
         }
 
       }
-
-      // const params: HandledDraftParamsType = {
-      //   resourceID: payload.resourceID,
-      // };
-
-      // const result: ResourceVersionCreatorPageModelState | null = yield call(handledDraft, params);
-
-      // if (result) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       ...result,
-      //     },
-      //   });
-      // }
-
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
