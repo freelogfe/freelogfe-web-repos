@@ -15,13 +15,15 @@ import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 
 
 export interface ResourceVersionCreatorPageModelState {
-  resourceId: string;
-  latestVersion: string;
-  resourceType: string[];
-  baseUpcastResources: {
-    resourceId: string;
-    resourceName: string;
-  }[];
+  resourceInfo: {
+    resourceID: string;
+    latestVersion: string;
+    resourceType: string[];
+    baseUpcastResources: {
+      resourceID: string;
+      resourceName: string;
+    }[];
+  } | null;
 
   versionInput: string;
 
@@ -178,10 +180,7 @@ export interface ResourceVersionCreatorModelType {
 }
 
 const initStates: ResourceVersionCreatorPageModelState = {
-  resourceId: '',
-  latestVersion: '',
-  resourceType: [],
-  baseUpcastResources: [],
+  resourceInfo: null,
 
   versionInput: '',
 
@@ -214,12 +213,12 @@ const Model: ResourceVersionCreatorModelType = {
 
   effects: {
     * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          resourceId: payload.resourceID,
-        },
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     resourceId: payload.resourceID,
+      //   },
+      // });
 
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload.resourceID,
@@ -238,6 +237,22 @@ const Model: ResourceVersionCreatorModelType = {
         };
       } = yield call(FServiceAPI.Resource.info, params1);
       // console.log(data, '2093jdsl;kfasdf');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceInfo: {
+            resourceID: data_resourceInfo.resourceId,
+            latestVersion: data_resourceInfo.latestVersion,
+            resourceType: data_resourceInfo.resourceType,
+            baseUpcastResources: data_resourceInfo.baseUpcastResources.map((bur) => {
+              return {
+                resourceID: bur.resourceId,
+                resourceName: bur.resourceName,
+              };
+            }),
+          },
+        },
+      });
 
       let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
@@ -302,9 +317,9 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: data_resourceInfo.resourceType,
-          baseUpcastResources: data_resourceInfo.baseUpcastResources,
-          latestVersion: data_resourceInfo.latestVersion,
+          // resourceType: data_resourceInfo.resourceType,
+          // baseUpcastResources: data_resourceInfo.baseUpcastResources,
+          // latestVersion: data_resourceInfo.latestVersion,
           versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '0.1.0'),
           preVersionBaseProperties,
           preVersionOptionProperties,
@@ -404,7 +419,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      if (!resourceVersionCreatorPage.selectedFileInfo) {
+      if (!resourceVersionCreatorPage.resourceInfo || !resourceVersionCreatorPage.selectedFileInfo) {
         return;
       }
 
@@ -479,7 +494,7 @@ const Model: ResourceVersionCreatorModelType = {
           };
         });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceId,
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
         version: resourceVersionCreatorPage.versionInput,
         fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
         filename: resourceVersionCreatorPage.selectedFileInfo.name,
@@ -552,6 +567,10 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
+      if (!resourceVersionCreatorPage.resourceInfo) {
+        return;
+      }
+
       const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
       // console.log(p, 'pdsifo9jsdlfk');
       const directDependencies: any[] = yield call(p.getAllTargets);
@@ -568,7 +587,7 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceId,
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
         draftData: draftData,
       };
       yield call(FServiceAPI.Resource.saveVersionsDraft, params);
@@ -651,8 +670,12 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
+      if (!resourceVersionCreatorPage.resourceInfo) {
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceId,
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
       };
       const { data: data_draft }: {
         data: null | {

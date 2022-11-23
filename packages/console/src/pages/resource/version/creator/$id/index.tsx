@@ -90,6 +90,10 @@ function VersionCreator({
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
 
+  if (!resourceVersionCreatorPage.resourceInfo) {
+    return null;
+  }
+
   return (
     <>
       {/*<MarkdownEditor*/}
@@ -165,7 +169,7 @@ function VersionCreator({
           >
             <VersionInput
               value={resourceVersionCreatorPage.versionInput}
-              resourceLatestVersion={resourceVersionCreatorPage.latestVersion}
+              resourceLatestVersion={resourceVersionCreatorPage.resourceInfo.latestVersion}
               onChange={(value) => {
                 dispatch<OnChange_VersionInput_Action>({
                   type: 'resourceVersionCreatorPage/onChange_VersionInput',
@@ -184,7 +188,7 @@ function VersionCreator({
             <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
 
               {
-                resourceVersionCreatorPage.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (
+                resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (
                   <div className={styles.markdownRecommended}>
                     <div className={styles.markdownRecommended_tip}>
                       <FComponentsLib.FTitleText text={'Freelog Markdown'} type={'h3'} />
@@ -197,7 +201,7 @@ function VersionCreator({
 
 
               <FPublishObjectFile
-                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceType[1] === '文章'}
+                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                 onSucceed_UploadFile={(file) => {
                   // console.log(file, 'onSucceed_UploadFile390oisjdf');
@@ -338,12 +342,12 @@ function VersionCreator({
                           resourceNme: t.name,
                         };
                       }),
-                      baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources.map((r) => {
+                      baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
                         return {
-                          resourceID: r.resourceId,
+                          resourceID: r.resourceID,
                           resourceNme: r.resourceName,
                         };
-                      }),
+                      }) || [],
                       async onSelect_Resource({ resourceID, resourceName }) {
                         // console.log('8***********8sdflksdjlkj');
                         const p = await getProcessor('resourceVersionCreator');
@@ -382,7 +386,7 @@ function VersionCreator({
               </Space>
 
               <FResourceAuthorizationProcessor
-                resourceID={resourceVersionCreatorPage.resourceId}
+                resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                 processorIdentifier={'resourceVersionCreator'}
                 // onMount={(p) => {
                 //   processor = p;
