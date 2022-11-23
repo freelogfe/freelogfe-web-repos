@@ -10,7 +10,6 @@ import {
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
-  ChangeAction,
   OnTrigger_SaveCache_Action,
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
@@ -18,7 +17,6 @@ import {
   OnPromptPageLeaveAction,
   OnPromptPageLeaveCancelAction,
   OnPromptPageLeaveConfirmAction,
-  // OnSuccess_ObjectFile_Action,
   OnUnmountPageAction,
   OnChange_VersionInput_Action,
   OnClick_ImportLastVersionDependents_Btn_Action,
@@ -80,13 +78,6 @@ function VersionCreator({
       window.onbeforeunload = null;
     }
   }, [resourceVersionCreatorPage.dataIsDirty]);
-
-  async function onChange(payload: ChangeAction['payload']) {
-    await dispatch<ChangeAction>({
-      type: 'resourceVersionCreatorPage/change',
-      payload,
-    });
-  }
 
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
