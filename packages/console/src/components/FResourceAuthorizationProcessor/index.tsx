@@ -500,7 +500,7 @@ function FResourceAuthorizationProcessor({
             />
           </div>
         </div>
-        
+
         <div className={styles.boxFooter}>
           <FComponentsLib.FRectBtn
             style={{ width: 300 }}
