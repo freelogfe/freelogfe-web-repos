@@ -120,11 +120,6 @@ export interface OnTrigger_SaveCache_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onTrigger_SaveCache';
 }
 
-export interface OnTrigger_FetchDraft_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onTrigger_FetchDraft';
-}
-
-
 export interface OnChange_VersionInput_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_VersionInput';
   payload: {
@@ -153,10 +148,6 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
-export interface _FetchRawPropsAction extends AnyAction {
-  type: '_FetchRawProps';
-}
-
 export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
@@ -166,6 +157,14 @@ export interface OnChange_DescriptionEditorState_Action extends AnyAction {
   payload: {
     state: EditorState;
   };
+}
+
+export interface _FetchDraft_Action extends AnyAction {
+  type: '_FetchDraft';
+}
+
+export interface _FetchRawPropsAction extends AnyAction {
+  type: '_FetchRawProps';
 }
 
 export interface ResourceVersionCreatorModelType {
@@ -179,7 +178,6 @@ export interface ResourceVersionCreatorModelType {
     // onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
 
     onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
-    onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
@@ -188,6 +186,7 @@ export interface ResourceVersionCreatorModelType {
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
+    _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
     _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -345,41 +344,45 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: payload.resourceID,
-      };
-      const { data: data_draft }: {
-        data: null | {
-          draftData: IResourceCreateVersionDraft;
-        };
-      } = yield call(FServiceAPI.Resource.lookDraft, params);
+      yield put<_FetchDraft_Action>({
+        type: '_FetchDraft',
+      });
 
-      if (data_draft) {
-        const { draftData } = data_draft;
-
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            versionInput: draftData.versionInput,
-            selectedFileInfo: draftData.selectedFileInfo,
-            baseProperties: draftData.baseProperties,
-            customOptionsData: draftData.customOptionsData,
-            descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
-          },
-        });
-        const p: {
-          addTargets(value: any): void;
-          clear(): void;
-        } = yield call(getProcessor, 'resourceVersionCreator');
-        yield call(p.clear);
-        yield call(p.addTargets, draftData.directDependencies);
-
-        if (draftData.selectedFileInfo) {
-          yield put<_FetchRawPropsAction>({
-            type: '_FetchRawProps',
-          });
-        }
-      }
+      // const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+      //   resourceId: payload.resourceID,
+      // };
+      // const { data: data_draft }: {
+      //   data: null | {
+      //     draftData: IResourceCreateVersionDraft;
+      //   };
+      // } = yield call(FServiceAPI.Resource.lookDraft, params);
+      //
+      // if (data_draft) {
+      //   const { draftData } = data_draft;
+      //
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       versionInput: draftData.versionInput,
+      //       selectedFileInfo: draftData.selectedFileInfo,
+      //       baseProperties: draftData.baseProperties,
+      //       customOptionsData: draftData.customOptionsData,
+      //       descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
+      //     },
+      //   });
+      //   const p: {
+      //     addTargets(value: any): void;
+      //     clear(): void;
+      //   } = yield call(getProcessor, 'resourceVersionCreator');
+      //   yield call(p.clear);
+      //   yield call(p.addTargets, draftData.directDependencies);
+      //
+      //   if (draftData.selectedFileInfo) {
+      //     yield put<_FetchRawPropsAction>({
+      //       type: '_FetchRawProps',
+      //     });
+      //   }
+      // }
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
@@ -734,7 +737,31 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onTrigger_FetchDraft({}: OnTrigger_FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
+
+    * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
+      call,
+      select,
+    }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+      const p: {
+        addTargets(value: any): void;
+        clear(): void;
+      } = yield call(getProcessor, 'resourceVersionCreator');
+      yield call(p.clear);
+      yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
+    },
+    * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          descriptionEditorState: payload.state,
+        },
+      });
+    },
+
+    * _FetchDraft({}: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -780,29 +807,6 @@ const Model: ResourceVersionCreatorModelType = {
         }
       }
     },
-    * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
-      call,
-      select,
-    }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-      const p: {
-        addTargets(value: any): void;
-        clear(): void;
-      } = yield call(getProcessor, 'resourceVersionCreator');
-      yield call(p.clear);
-      yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
-    },
-    * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          descriptionEditorState: payload.state,
-        },
-      });
-    },
-
     * _FetchRawProps({}: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
