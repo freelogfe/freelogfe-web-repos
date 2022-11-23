@@ -158,7 +158,7 @@ function VersionCreator({
             }}
             onClickCache={async () => {
               dispatch<OnTrigger_SaveCache_Action>({
-                type: 'resourceVersionCreatorPage/onClick_SaveCache',
+                type: 'resourceVersionCreatorPage/onTrigger_SaveCache',
               });
             }}
             disabledCreate={hasError}

@@ -33,7 +33,7 @@ export interface ResourceVersionCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
-  
+
   rawProperties: {
     key: string;
     value: string;
@@ -117,7 +117,7 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
 }
 
 export interface OnTrigger_SaveCache_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onClick_SaveCache';
+  type: 'resourceVersionCreatorPage/onTrigger_SaveCache';
 }
 
 export interface OnTrigger_FetchDraft_Action extends AnyAction {
