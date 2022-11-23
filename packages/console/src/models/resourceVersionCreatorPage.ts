@@ -115,10 +115,6 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
 }
 
-export interface OnClick_SaveCacheBtn_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn';
-}
-
 export interface OnSuccess_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onSuccess_ObjectFile';
   payload: {
@@ -132,12 +128,12 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
-export interface FetchDraftAction extends AnyAction {
-  type: 'fetchDraft';
+export interface OnTrigger_SaveCache_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClick_SaveCache';
 }
 
-export interface FetchResourceInfoAction extends AnyAction {
-  type: 'fetchResourceInfo';
+export interface OnTrigger_FetchDraft_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onTrigger_FetchDraft';
 }
 
 export interface FetchRawPropsAction extends AnyAction {
@@ -159,12 +155,11 @@ export interface ResourceVersionCreatorModelType {
     onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
     onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
-    onClick_SaveCacheBtn: (action: OnClick_SaveCacheBtn_Action, effects: EffectsCommandMap) => void;
     onSuccess_ObjectFile: (action: OnSuccess_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
-
-    fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
-    fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
+    onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
+    onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
+    // fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
   };
@@ -356,7 +351,6 @@ const Model: ResourceVersionCreatorModelType = {
             },
           });
         }
-
       }
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -529,7 +523,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/fetchDraftData',
       });
     },
-    * onClick_SaveCacheBtn({ payload }: OnClick_SaveCacheBtn_Action, { put, select, call }: EffectsCommandMap) {
+    * onTrigger_SaveCache({ payload }: OnTrigger_SaveCache_Action, { put, select, call }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -628,108 +622,166 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * fetchDraft({}: FetchDraftAction, { call, put, select }: EffectsCommandMap) {
+    * onTrigger_FetchDraft({}: OnTrigger_FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
 
-    },
-    * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: resourceVersionCreatorPage.resourceId,
-        isLoadLatestVersionInfo: 1,
+
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: resourceVersionCreatorPage.resourceId,
       };
-      const { data } = yield call(FServiceAPI.Resource.info, params);
-      // console.log(data, '2093jdsl;kfasdf');
-
-      let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
-      let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
-      let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
-      let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
-      if (data.latestVersion) {
-        const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
-          resourceId: resourceVersionCreatorPage.resourceId,
-          version: data.latestVersion,
+      const { data: data_draft }: {
+        data: null | {
+          draftData: IResourceCreateVersionDraft;
         };
-        const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
-        // console.log(data2, 'data2092384u0');
-        descriptionEditorState = BraftEditor.createEditorState(data2.description);
-        preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
-          .filter((cpd: any) => cpd.type === 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
-            return {
-              key: cpd.key,
-              value: cpd.key === 'fileSize' ? FUtil.Format.humanizeSize(cpd.defaultValue) : cpd.defaultValue,
-              description: cpd.remark,
-            };
-          });
+      } = yield call(FServiceAPI.Resource.lookDraft, params);
 
-        preVersionOptionProperties = (data2.customPropertyDescriptors as any[])
-          .filter((cpd: any) => cpd.type !== 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
-            return {
-              key: cpd.key,
-              description: cpd.remark,
-              custom: cpd.type === 'editableText' ? 'input' : 'select',
-              defaultValue: cpd.defaultValue,
-              customOption: cpd.candidateItems.join(','),
-            };
-          });
+      if (data_draft) {
+        const { draftData } = data_draft;
 
-        const depResourceIds: string = (data2.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionInput: draftData.versionInput,
+            selectedFileInfo: draftData.selectedFileInfo,
+            baseProperties: draftData.baseProperties,
+            customOptionsData: draftData.customOptionsData,
+            descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
+          },
+        });
+        const p: {
+          addTargets(value: any): void;
+          clear(): void;
+        } = yield call(getProcessor, 'resourceVersionCreator');
+        yield call(p.clear);
+        yield call(p.addTargets, draftData.directDependencies);
 
-        if (depResourceIds.length > 0) {
-          const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-            resourceIds: depResourceIds,
+        if (draftData.selectedFileInfo) {
+          const params: Parameters<typeof getFilesSha1Info>[0] = {
+            sha1: [draftData.selectedFileInfo.sha1],
           };
-          const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
-          // console.log(data2, '#ASGDFASDF');
-          const relations: any[] = data3.map((dd: any) => {
-            return {
-              id: dd.resourceId,
-              children: dd.baseUpcastResources.map((bur: any) => {
+          // console.log('*(*********');
+          const {
+            result,
+            error,
+          }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
+
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
                 return {
-                  id: bur.resourceId,
+                  key: rp[0],
+                  // value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+                  value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
                 };
               }),
-            };
+              rawPropertiesState: 'success',
+            },
           });
-
-          const versions = (data2.dependencies as any[]).map((dr: any) => {
-            return {
-              id: dr.resourceId,
-              versionRange: dr.versionRange,
-            };
-          });
-
-          // preVersionDeps = {
-          //   relationships: relations as any,
-          //   versions: versions as any,
-          // };
-          preVersionDirectDependencies = [];
         }
       }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          resourceType: data.resourceType,
-          baseUpcastResources: data.baseUpcastResources,
-          latestVersion: data.latestVersion,
-          versionInput: resourceVersionCreatorPage.versionInput
-            ? resourceVersionCreatorPage.versionInput
-            : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
-          preVersionBaseProperties,
-          preVersionOptionProperties,
-          preVersionDirectDependencies,
-          descriptionEditorState,
-        },
-      });
-
-      // yield put<OnClick_SaveCacheBtn_Action>({
-      //   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
-      // });
     },
+    // * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
+    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //   const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+    //     resourceIdOrName: resourceVersionCreatorPage.resourceId,
+    //     isLoadLatestVersionInfo: 1,
+    //   };
+    //   const { data } = yield call(FServiceAPI.Resource.info, params);
+    //   // console.log(data, '2093jdsl;kfasdf');
+    //
+    //   let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
+    //   let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
+    //   let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
+    //   let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
+    //   if (data.latestVersion) {
+    //     const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
+    //       resourceId: resourceVersionCreatorPage.resourceId,
+    //       version: data.latestVersion,
+    //     };
+    //     const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
+    //     // console.log(data2, 'data2092384u0');
+    //     descriptionEditorState = BraftEditor.createEditorState(data2.description);
+    //     preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
+    //       .filter((cpd: any) => cpd.type === 'readonlyText')
+    //       .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
+    //         return {
+    //           key: cpd.key,
+    //           value: cpd.key === 'fileSize' ? FUtil.Format.humanizeSize(cpd.defaultValue) : cpd.defaultValue,
+    //           description: cpd.remark,
+    //         };
+    //       });
+    //
+    //     preVersionOptionProperties = (data2.customPropertyDescriptors as any[])
+    //       .filter((cpd: any) => cpd.type !== 'readonlyText')
+    //       .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
+    //         return {
+    //           key: cpd.key,
+    //           description: cpd.remark,
+    //           custom: cpd.type === 'editableText' ? 'input' : 'select',
+    //           defaultValue: cpd.defaultValue,
+    //           customOption: cpd.candidateItems.join(','),
+    //         };
+    //       });
+    //
+    //     const depResourceIds: string = (data2.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
+    //
+    //     if (depResourceIds.length > 0) {
+    //       const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    //         resourceIds: depResourceIds,
+    //       };
+    //       const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
+    //       // console.log(data2, '#ASGDFASDF');
+    //       const relations: any[] = data3.map((dd: any) => {
+    //         return {
+    //           id: dd.resourceId,
+    //           children: dd.baseUpcastResources.map((bur: any) => {
+    //             return {
+    //               id: bur.resourceId,
+    //             };
+    //           }),
+    //         };
+    //       });
+    //
+    //       const versions = (data2.dependencies as any[]).map((dr: any) => {
+    //         return {
+    //           id: dr.resourceId,
+    //           versionRange: dr.versionRange,
+    //         };
+    //       });
+    //
+    //       // preVersionDeps = {
+    //       //   relationships: relations as any,
+    //       //   versions: versions as any,
+    //       // };
+    //       preVersionDirectDependencies = [];
+    //     }
+    //   }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       resourceType: data.resourceType,
+    //       baseUpcastResources: data.baseUpcastResources,
+    //       latestVersion: data.latestVersion,
+    //       versionInput: resourceVersionCreatorPage.versionInput
+    //         ? resourceVersionCreatorPage.versionInput
+    //         : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
+    //       preVersionBaseProperties,
+    //       preVersionOptionProperties,
+    //       preVersionDirectDependencies,
+    //       descriptionEditorState,
+    //     },
+    //   });
+    //
+    //   // yield put<OnClick_SaveCacheBtn_Action>({
+    //   //   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
+    //   // });
+    // },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
