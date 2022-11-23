@@ -69,8 +69,6 @@ function VersionCreator({
   });
 
   React.useEffect(() => {
-    // const func = () => 1234;
-    // console.log('#######89iowkejsldfjl')
     if (resourceVersionCreatorPage.dataIsDirty) {
       window.onbeforeunload = () => true;
     } else {
@@ -89,15 +87,6 @@ function VersionCreator({
     !resourceVersionCreatorPage.versionInput ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
-  // ||
-  // 依赖
-  // resourceVersionCreatorPage.dependencies.some((dd) => {
-  //   return (
-  //     !dd.upthrow &&
-  //     !dd.enableReuseContracts.some((erc) => erc.checked) &&
-  //     !dd.enabledPolicies.some((ep) => ep.checked)
-  //   );
-  // });
 
   return (
     <>
