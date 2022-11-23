@@ -19,7 +19,7 @@ import {
   OnPromptPageLeaveCancelAction,
   OnPromptPageLeaveConfirmAction,
   OnSuccess_ObjectFile_Action,
-  OnUnmountPageAction, ImportLastVersionDataAction,
+  OnUnmountPageAction, ImportLastVersionDataAction, OnChange_VersionInput_Action,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -165,11 +165,10 @@ function VersionCreator({
               value={resourceVersionCreatorPage.versionInput}
               resourceLatestVersion={resourceVersionCreatorPage.latestVersion}
               onChange={(value) => {
-                dispatch<ChangeAction>({
-                  type: 'resourceVersionCreatorPage/change',
+                dispatch<OnChange_VersionInput_Action>({
+                  type: 'resourceVersionCreatorPage/onChange_VersionInput',
                   payload: {
-                    versionInput: value,
-                    // dataIsDirty: true,
+                    value: value,
                   },
                 });
               }}

@@ -115,6 +115,13 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
 }
 
+export interface OnChange_VersionInput_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_VersionInput';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnSuccess_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onSuccess_ObjectFile';
   payload: {
@@ -154,7 +161,9 @@ export interface ResourceVersionCreatorModelType {
     onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
     onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
     onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
+
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSuccess_ObjectFile: (action: OnSuccess_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
@@ -521,6 +530,14 @@ const Model: ResourceVersionCreatorModelType = {
 
       yield put<FetchDraftDataAction>({
         type: 'resourceInfo/fetchDraftData',
+      });
+    },
+    * onChange_VersionInput({ payload }: OnChange_VersionInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          versionInput: payload.value,
+        },
       });
     },
     * onTrigger_SaveCache({ payload }: OnTrigger_SaveCache_Action, { put, select, call }: EffectsCommandMap) {
