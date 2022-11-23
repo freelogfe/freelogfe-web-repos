@@ -147,9 +147,8 @@ export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
 }
 
-export interface ImportLastVersionDataAction extends AnyAction {
-  type: 'importLastVersionData' | 'resourceVersionCreatorPage/importLastVersionData';
-  payload: 'baseProps' | 'optionProps' | 'deps';
+export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
 
 export interface ResourceVersionCreatorModelType {
@@ -170,7 +169,7 @@ export interface ResourceVersionCreatorModelType {
     onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
     // fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
-    importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
+    onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
@@ -283,14 +282,21 @@ const Model: ResourceVersionCreatorModelType = {
               customOption: cpd.candidateItems.join(','),
             };
           });
-        // preVersionDirectDependencies = [];
+        preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
+          return {
+            id: d.resourceId,
+            name: d.resourceName,
+            type: 'resource',
+            versionRange: d.versionRange,
+          };
+        });
 
-        const p: {
-          addTargets(value: any): void;
-          clear(): void;
-        } = yield call(getProcessor, 'resourceVersionCreator');
-        yield call(p.clear);
-        // yield call(p.addTargets, draftData.directDependencies);
+        // const p: {
+        //   addTargets(value: any): void;
+        //   clear(): void;
+        // } = yield call(getProcessor, 'resourceVersionCreator');
+        // yield call(p.clear);
+        // yield call(p.addTargets, preVersionDirectDependencies);
       }
 
       yield put<ChangeAction>({
@@ -700,105 +706,6 @@ const Model: ResourceVersionCreatorModelType = {
         }
       }
     },
-    // * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
-    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-    //     resourceVersionCreatorPage,
-    //   }));
-    //   const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-    //     resourceIdOrName: resourceVersionCreatorPage.resourceId,
-    //     isLoadLatestVersionInfo: 1,
-    //   };
-    //   const { data } = yield call(FServiceAPI.Resource.info, params);
-    //   // console.log(data, '2093jdsl;kfasdf');
-    //
-    //   let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
-    //   let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
-    //   let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
-    //   let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
-    //   if (data.latestVersion) {
-    //     const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
-    //       resourceId: resourceVersionCreatorPage.resourceId,
-    //       version: data.latestVersion,
-    //     };
-    //     const { data: data2 } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
-    //     // console.log(data2, 'data2092384u0');
-    //     descriptionEditorState = BraftEditor.createEditorState(data2.description);
-    //     preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
-    //       .filter((cpd: any) => cpd.type === 'readonlyText')
-    //       .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
-    //         return {
-    //           key: cpd.key,
-    //           value: cpd.key === 'fileSize' ? FUtil.Format.humanizeSize(cpd.defaultValue) : cpd.defaultValue,
-    //           description: cpd.remark,
-    //         };
-    //       });
-    //
-    //     preVersionOptionProperties = (data2.customPropertyDescriptors as any[])
-    //       .filter((cpd: any) => cpd.type !== 'readonlyText')
-    //       .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
-    //         return {
-    //           key: cpd.key,
-    //           description: cpd.remark,
-    //           custom: cpd.type === 'editableText' ? 'input' : 'select',
-    //           defaultValue: cpd.defaultValue,
-    //           customOption: cpd.candidateItems.join(','),
-    //         };
-    //       });
-    //
-    //     const depResourceIds: string = (data2.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
-    //
-    //     if (depResourceIds.length > 0) {
-    //       const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-    //         resourceIds: depResourceIds,
-    //       };
-    //       const { data: data3 } = yield call(FServiceAPI.Resource.batchInfo, params3);
-    //       // console.log(data2, '#ASGDFASDF');
-    //       const relations: any[] = data3.map((dd: any) => {
-    //         return {
-    //           id: dd.resourceId,
-    //           children: dd.baseUpcastResources.map((bur: any) => {
-    //             return {
-    //               id: bur.resourceId,
-    //             };
-    //           }),
-    //         };
-    //       });
-    //
-    //       const versions = (data2.dependencies as any[]).map((dr: any) => {
-    //         return {
-    //           id: dr.resourceId,
-    //           versionRange: dr.versionRange,
-    //         };
-    //       });
-    //
-    //       // preVersionDeps = {
-    //       //   relationships: relations as any,
-    //       //   versions: versions as any,
-    //       // };
-    //       preVersionDirectDependencies = [];
-    //     }
-    //   }
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       resourceType: data.resourceType,
-    //       baseUpcastResources: data.baseUpcastResources,
-    //       latestVersion: data.latestVersion,
-    //       versionInput: resourceVersionCreatorPage.versionInput
-    //         ? resourceVersionCreatorPage.versionInput
-    //         : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
-    //       preVersionBaseProperties,
-    //       preVersionOptionProperties,
-    //       preVersionDirectDependencies,
-    //       descriptionEditorState,
-    //     },
-    //   });
-    //
-    //   // yield put<OnClick_SaveCacheBtn_Action>({
-    //   //   type: 'resourceVersionCreatorPage/onClick_SaveCacheBtn',
-    //   // });
-    // },
     * fetchRawProps({}: FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       // console.log('FetchRawPropsAction', 'FetchRawPropsAction09wiofjsdklfsdjlk');
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -864,102 +771,20 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
     },
-    * importLastVersionData({ payload }: ImportLastVersionDataAction, { call, select, put }: EffectsCommandMap) {
+    * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
+      call,
+      select,
+      put,
+    }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-
-      // preVersionBaseProperties,
-      //   preVersionOptionProperties,
-      if (payload === 'baseProps') {
-
-
-        // const allKeys: string[] = [
-        //   ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-        //     return rp.key;
-        //   }),
-        //   ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-        //     return pp.key;
-        //   }),
-        //   ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-        //     return pp.key;
-        //   }),
-        // ];
-        // yield put<ChangeAction>({
-        //   type: 'change',
-        //   payload: {
-        // basePropertiesEditorVisible: true,
-        // basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
-        //   .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
-        //     return {
-        //       key: cpd.key,
-        //       keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-        //       value: cpd.value,
-        //       valueError: '',
-        //       description: cpd.description,
-        //       descriptionError: '',
-        //     };
-        //   }),
-        //   },
-        //   caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
-        // });
-        // return;
-      }
-
-      if (payload === 'optionProps') {
-        // const allKeys: string[] = [
-        //   ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-        //     return rp.key;
-        //   }),
-        //   ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-        //     return pp.key;
-        //   }),
-        //   ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-        //     return pp.key;
-        //   }),
-        // ];
-        // yield put<ChangeAction>({
-        //   type: 'change',
-        //   payload: {
-        //     customOptionsEditorDataSource: resourceVersionCreatorPage.preVersionOptionProperties
-        //       .map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cpd) => {
-        //         return {
-        //           key: cpd.key,
-        //           keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-        //           description: cpd.description,
-        //           descriptionError: '',
-        //           custom: cpd.custom,
-        //           defaultValue: cpd.defaultValue,
-        //           defaultValueError: '',
-        //           customOption: cpd.customOption,
-        //           customOptionError: '',
-        //         };
-        //       }),
-        //     customOptionsEditorVisible: true,
-        //   },
-        //   caller: '97293874823yu4oi234io23hjkfdsasd98890698678&*^&^&f',
-        // });
-        return;
-      }
-
-      if (payload === 'deps') {
-        // yield put<ChangeAction>({
-        //   type: 'change',
-        //   payload: {
-        //     depRelationship: [],
-        //     dependencies: [],
-        //   },
-        //   caller: '9729$%*(&*(&()**(W#$#$3874823yu4oi234io23hjkfdsasdf',
-        // });
-        //
-        // yield put<AddDepsAction>({
-        //   type: 'addDeps',
-        //   payload: {
-        //     relationships: resourceVersionCreatorPage.preVersionDeps.relationships,
-        //     versions: resourceVersionCreatorPage.preVersionDeps.versions,
-        //   },
-        // });
-      }
+      const p: {
+        addTargets(value: any): void;
+        clear(): void;
+      } = yield call(getProcessor, 'resourceVersionCreator');
+      yield call(p.clear);
+      yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
     },
   },
 

@@ -19,7 +19,9 @@ import {
   OnPromptPageLeaveCancelAction,
   OnPromptPageLeaveConfirmAction,
   OnSuccess_ObjectFile_Action,
-  OnUnmountPageAction, ImportLastVersionDataAction, OnChange_VersionInput_Action,
+  OnUnmountPageAction,
+  OnChange_VersionInput_Action,
+  OnClick_ImportLastVersionDependents_Btn_Action,
 } from '@/models/resourceVersionCreatorPage';
 import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -370,15 +372,8 @@ function VersionCreator({
                   <FComponentsLib.FRectBtn
                     type='default'
                     onClick={() => {
-                      dispatch<ImportLastVersionDataAction>({
-                        type: 'resourceVersionCreatorPage/importLastVersionData',
-                        payload: 'deps',
-                      });
-                      dispatch<ChangeAction>({
-                        type: 'resourceVersionCreatorPage/change',
-                        payload: {
-                          dataIsDirty: true,
-                        },
+                      dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
+                        type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
                       });
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
