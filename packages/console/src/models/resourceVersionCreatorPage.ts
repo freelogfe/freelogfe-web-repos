@@ -117,6 +117,15 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
 }
 
+export interface OnTrigger_SaveCache_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClick_SaveCache';
+}
+
+export interface OnTrigger_FetchDraft_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onTrigger_FetchDraft';
+}
+
+
 export interface OnChange_VersionInput_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_VersionInput';
   payload: {
@@ -135,14 +144,6 @@ export interface OnSuccess_ObjectFile_Action extends AnyAction {
 
 export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
-}
-
-export interface OnTrigger_SaveCache_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onClick_SaveCache';
-}
-
-export interface OnTrigger_FetchDraft_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onTrigger_FetchDraft';
 }
 
 export interface FetchRawPropsAction extends AnyAction {
@@ -170,13 +171,13 @@ export interface ResourceVersionCreatorModelType {
     onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
     onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
 
+    onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
+    onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSuccess_ObjectFile: (action: OnSuccess_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
-    onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
-    onTrigger_FetchDraft: (action: OnTrigger_FetchDraft_Action, effects: EffectsCommandMap) => void;
-    // fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
+
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
