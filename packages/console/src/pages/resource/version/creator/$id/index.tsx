@@ -108,7 +108,7 @@ function VersionCreator({
       </Helmet>
 
       <FPrompt
-        watch={true}
+        watch={false}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       {/*<Prompt*/}
