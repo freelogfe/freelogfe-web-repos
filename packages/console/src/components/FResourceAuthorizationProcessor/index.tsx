@@ -316,6 +316,7 @@ function FResourceAuthorizationProcessor({
         objectIds: needAddObjectIDs.join(','),
       });
       // console.log(data_objs, 'data_objsisoedjflskdjfl');
+
       const objTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_objs.map((o) => {
         return {
           targetID: o.objectId,
@@ -397,7 +398,11 @@ function FResourceAuthorizationProcessor({
   }
 
   async function isCompleteAuthorization(): Promise<boolean> {
-    return get_targetInfos().every((t) => {
+    return get_targetInfos()
+      .filter((t) => {
+        return !t.upThrow;
+      })
+      .every((t) => {
       return t.upThrow || t.contracts.length > 0;
     });
   }
@@ -708,6 +713,9 @@ async function _batchHandleResources({
       return c.policyId;
     });
 
+    const upThrow: boolean = licenseeResource?.baseUpcastResources.some((bur) => {
+      return bur.resourceID === r.resourceId;
+    }) || false;
     return {
       targetID: r.resourceId,
       targetName: r.resourceName,
@@ -718,7 +726,7 @@ async function _batchHandleResources({
       versions: r.resourceVersions.map((v) => {
         return v.version;
       }),
-      upThrow: false,
+      upThrow: upThrow,
       upThrowDisabled: licenseeResource?.latestVersion !== '',
       contracts: contracts.map((c) => {
         return {

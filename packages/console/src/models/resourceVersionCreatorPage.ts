@@ -405,7 +405,19 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-      const p: { getAllTargets(): void; getAllResourcesWithContracts(): void; } = yield call(getProcessor, 'resourceVersionCreator');
+      const p: {
+        getAllTargets(): void;
+        getAllResourcesWithContracts(): void;
+        isCompleteAuthorization(): void;
+      } = yield call(getProcessor, 'resourceVersionCreator');
+
+      const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
+
+      if (!isCompleteAuthorization) {
+        fMessage('依赖中存在未获取授权的资源', 'error');
+        return;
+      }
+
       const dependentAllResourcesWithContracts: {
         resourceID: string;
         resourceName: string;
