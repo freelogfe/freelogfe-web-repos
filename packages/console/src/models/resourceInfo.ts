@@ -189,12 +189,12 @@ const Model: ResourceInfoModelType = {
         });
         return;
       }
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     draftData: data.draftData,
-      //   },
-      // });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draftData: data.draftData,
+        },
+      });
     },
     *initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

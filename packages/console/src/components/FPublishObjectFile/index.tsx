@@ -18,6 +18,8 @@ interface FPublishObjectFileProps {
 
   showEditBtnAfterSucceed?: boolean;
 
+  onClick_EditMarkdownBtn?(): void;
+
   onSucceed_UploadFile?(file: {
     fileName: string;
     sha1: string;
@@ -66,6 +68,7 @@ function FPublishObjectFile({
                               onSucceed_UploadFile,
                               onClick_DeleteBtn,
                               showEditBtnAfterSucceed = false,
+                              onClick_EditMarkdownBtn,
                             }: FPublishObjectFileProps) {
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
   const [fState, set_fState] = React.useState<FPublishObjectFileStates['fState']>(initStates['fState']);
@@ -328,7 +331,7 @@ function FPublishObjectFile({
           showEditBtnAfterSucceed && (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
-
+              onClick_EditMarkdownBtn && onClick_EditMarkdownBtn();
             }}
             // className={styles.delete}
           >编辑</FComponentsLib.FTextBtn>)

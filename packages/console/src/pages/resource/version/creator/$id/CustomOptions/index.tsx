@@ -253,13 +253,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         ...resourceVersionCreatorPage.customOptionsData,
                         ...data,
                       ],
-                      // customOptionsEditorVisible: false,
                     });
-                    // dispatch<ImportLastVersionDataAction>({
-                    //   type: 'resourceVersionCreatorPage/importLastVersionData',
-                    //   payload: 'optionProps',
-                    // });
-                    // onChange({ dataIsDirty: true });
                   }}>从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
@@ -329,22 +323,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         };
                       }),
                     });
-                    // onChange({
-                    //   customOptionIndex: ind,
-                    //   customOptionEditorData: ind === -1
-                    //     ? null
-                    //     : {
-                    //       key: cur.key,
-                    //       keyError: '',
-                    //       description: cur.description,
-                    //       descriptionError: '',
-                    //       custom: cur.custom,
-                    //       defaultValue: cur.defaultValue,
-                    //       defaultValueError: '',
-                    //       customOption: cur.customOption,
-                    //       customOptionError: '',
-                    //     },
-                    // });
                   }}
                 />)
                 : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
@@ -356,73 +334,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       </>)
     }
 
-    {/*<FCustomOptionsEditorDrawer*/}
-    {/*  visible={resourceVersionCreatorPage.customOptionsEditorVisible}*/}
-    {/*  defaultValue={resourceVersionCreatorPage.customOptionsEditorDataSource}*/}
-    {/*  onCancel={() => {*/}
-    {/*    onChange({*/}
-    {/*      customOptionsEditorVisible: false,*/}
-    {/*      customOptionsEditorDataSource: [],*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  disabledKeys={[*/}
-    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
-    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
-    {/*    ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),*/}
-    {/*  ]}*/}
-    {/*  onConfirm={(value) => {*/}
-    {/*    onChange({*/}
-    {/*      customOptionsData: [*/}
-    {/*        ...resourceVersionCreatorPage.customOptionsData,*/}
-    {/*        ...value,*/}
-    {/*      ],*/}
-    {/*      customOptionsEditorVisible: false,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
-
-    {/*<FCustomOptionEditorDrawer*/}
-    {/*  visible={resourceVersionCreatorPage.customOptionIndex !== -1}*/}
-    {/*  dataSource={{*/}
-    {/*    key: resourceVersionCreatorPage.customOptionEditorData?.key || '',*/}
-    {/*    description: resourceVersionCreatorPage.customOptionEditorData?.description || '',*/}
-    {/*    value: (resourceVersionCreatorPage.customOptionEditorData?.custom === 'input' ? resourceVersionCreatorPage.customOptionEditorData?.defaultValue : resourceVersionCreatorPage.customOptionEditorData?.customOption) || '',*/}
-    {/*    valueType: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',*/}
-    {/*  }}*/}
-    {/*  disabledKeys={[*/}
-    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
-    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
-    {/*    ...resourceVersionCreatorPage.customOptionsData.filter((cod, ind) => {*/}
-    {/*      return ind !== resourceVersionCreatorPage.customOptionIndex;*/}
-    {/*    }).map((cod) => {*/}
-    {/*      return cod.key;*/}
-    {/*    }),*/}
-    {/*  ]}*/}
-    {/*  onCancel={() => {*/}
-    {/*    onChange({*/}
-    {/*      customOptionIndex: -1,*/}
-    {/*      customOptionEditorData: null,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  onConfirm={(value) => {*/}
-    {/*    onChange({*/}
-    {/*      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {*/}
-    {/*        if (ind !== resourceVersionCreatorPage.customOptionIndex) {*/}
-    {/*          return cod;*/}
-    {/*        }*/}
-    {/*        return {*/}
-    {/*          key: value.key,*/}
-    {/*          description: value.description,*/}
-    {/*          custom: value.valueType,*/}
-    {/*          defaultValue: value.value,*/}
-    {/*          customOption: value.value,*/}
-    {/*        };*/}
-    {/*      }),*/}
-    {/*      customOptionIndex: -1,*/}
-    {/*      customOptionEditorData: null,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
   </>);
 }
 

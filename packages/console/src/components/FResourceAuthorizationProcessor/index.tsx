@@ -50,6 +50,7 @@ export interface Processor {
 
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
+  processorIdentifier?: string;
 
   onMount?(processor: Processor): void;
 }
@@ -76,14 +77,22 @@ const initStates: FResourceAuthorizationProcessorStates = {
   activatedTarget: null,
 };
 
-let processor: Processor | null = null;
+let processors: {
+  [key: string]: Processor;
+} = {};
 
-function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAuthorizationProcessorProps) {
+function FResourceAuthorizationProcessor({
+                                           resourceID,
+                                           processorIdentifier = '',
+                                           onMount,
+                                         }: FResourceAuthorizationProcessorProps) {
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+
+  // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -116,7 +125,7 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   }, [resourceID]);
 
   AHooks.useMount(() => {
-    processor = {
+    const processor = {
       addTargets,
       removeTarget,
       activeTarget,
@@ -125,11 +134,12 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
       getAllResourcesWithContracts,
       clear,
     };
+    processors[processorIdentifier] = processor;
     onMount && onMount(processor);
   });
 
   AHooks.useUnmount(() => {
-    processor = null;
+    delete processors[processorIdentifier];
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
@@ -299,6 +309,8 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
       // console.log(needAddObjectIDs, 'needAddObjectIDsdsoijfsdklfjdslkj');
       const { data: data_objs }: {
         data: {
+          bucketId: string;
+          bucketName: string;
           objectId: string;
           objectName: string;
           resourceType: string[];
@@ -307,10 +319,11 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
         objectIds: needAddObjectIDs.join(','),
       });
       // console.log(data_objs, 'data_objsisoedjflskdjfl');
+
       const objTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_objs.map((o) => {
         return {
           targetID: o.objectId,
-          targetName: o.objectName,
+          targetName: `${o.bucketName}/${o.objectName}`,
           targetType: 'object',
           targetResourceType: o.resourceType,
           error: 'storageObject',
@@ -388,9 +401,13 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   }
 
   async function isCompleteAuthorization(): Promise<boolean> {
-    return get_targetInfos().every((t) => {
-      return t.upThrow || t.contracts.length > 0;
-    });
+    return get_targetInfos()
+      .filter((t) => {
+        return !t.upThrow;
+      })
+      .every((t) => {
+        return t.upThrow || t.contracts.length > 0;
+      });
   }
 
   async function getAllResourcesWithContracts(): Promise<{
@@ -426,20 +443,27 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
     return { err: '' };
   }
 
-  if (relations.length === 0) {
+  if (!licenseeResource) {
     return null;
   }
 
   return (<div className={styles.box}>
     <FBasicUpcastCard
-      dataSource={targetInfos
-        .filter((t) => {
-          return t.targetType === 'resource' && t.upThrow;
-        })
-        .map((t) => {
+      dataSource={licenseeResource.latestVersion === ''
+        ? targetInfos
+          .filter((t) => {
+            return t.targetType === 'resource' && t.upThrow;
+          })
+          .map((t) => {
+            return {
+              resourceID: t.targetID,
+              resourceName: t.targetName,
+            };
+          })
+        : licenseeResource.baseUpcastResources.map((bur) => {
           return {
-            resourceID: t.targetID,
-            resourceName: t.targetName,
+            resourceID: bur.resourceID,
+            resourceName: bur.resourceName,
           };
         })}
       onClick={(resourceID) => {
@@ -449,75 +473,80 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
       }}
     />
 
-    <div className={styles.DepPanel}>
+    {
+      relations.length !== 0 && (<>
+        <div className={styles.DepPanel}>
 
-      <div className={styles.DepPanelNavs}>
-        <Nav
-          relations={relations}
-          targetInfos={targetInfos}
-          activatedTarget={activatedTarget}
-          onChange_Relations={async (v) => {
-            set_relations(v);
-            await _syncTargetInfo();
-            await _syncActivatedTarget();
-          }}
-          onChange_ActivatedTarget={(v) => {
-            set_activatedTarget(v);
-          }}
-        />
-      </div>
+          <div className={styles.DepPanelNavs}>
+            <Nav
+              relations={relations}
+              targetInfos={targetInfos}
+              activatedTarget={activatedTarget}
+              onChange_Relations={async (v) => {
+                set_relations(v);
+                await _syncTargetInfo();
+                await _syncActivatedTarget();
+              }}
+              onChange_ActivatedTarget={(v) => {
+                set_activatedTarget(v);
+              }}
+            />
+          </div>
 
-      <div className={styles.DepPanelContent}>
-        <Content
-          activatedTarget={activatedTarget}
-          targetInfos={targetInfos}
-          onChange_TargetInfos={(v) => {
-            set_targetInfos(v);
-          }}
-        />
-      </div>
-    </div>
-    {/*<div style={{ height: 20 }} />*/}
-    <div className={styles.boxFooter}>
-      <FComponentsLib.FRectBtn
-        style={{ width: 300 }}
-        disabled={!targetInfos.some((t) => {
-          return !t.upThrow && t.enabledPolicies.some((p) => {
-            return p.checked;
-          });
-        })}
-        onClick={async () => {
-          const subjects: {
-            subjectId: string;
-            policyId: string;
-          }[] = get_targetInfos()
-            .filter((t) => {
-              return !t.upThrow;
-            })
-            .map((t) => {
-              return t.enabledPolicies
-                .filter((p) => {
-                  return p.checked;
+          <div className={styles.DepPanelContent}>
+            <Content
+              activatedTarget={activatedTarget}
+              targetInfos={targetInfos}
+              onChange_TargetInfos={(v) => {
+                set_targetInfos(v);
+              }}
+            />
+          </div>
+        </div>
+
+        <div className={styles.boxFooter}>
+          <FComponentsLib.FRectBtn
+            style={{ width: 300 }}
+            disabled={!targetInfos.some((t) => {
+              return !t.upThrow && t.enabledPolicies.some((p) => {
+                return p.checked;
+              });
+            })}
+            onClick={async () => {
+              const subjects: {
+                subjectId: string;
+                policyId: string;
+              }[] = get_targetInfos()
+                .filter((t) => {
+                  return !t.upThrow;
                 })
-                .map((p) => {
-                  return {
-                    subjectId: t.targetID,
-                    policyId: p.policyFullInfo.policyId,
-                  };
-                });
-            })
-            .flat();
-          // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
-          await FServiceAPI.Contract.batchCreateContracts({
-            subjects: subjects,
-            subjectType: 1,
-            licenseeId: get_licenseeResource()?.resourceID || '',
-            licenseeIdentityType: 1,
-          });
-          await _syncTargetInfo();
-        }}
-      >获取授权</FComponentsLib.FRectBtn>
-    </div>
+                .map((t) => {
+                  return t.enabledPolicies
+                    .filter((p) => {
+                      return p.checked;
+                    })
+                    .map((p) => {
+                      return {
+                        subjectId: t.targetID,
+                        policyId: p.policyFullInfo.policyId,
+                      };
+                    });
+                })
+                .flat();
+              // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
+              await FServiceAPI.Contract.batchCreateContracts({
+                subjects: subjects,
+                subjectType: 1,
+                licenseeId: get_licenseeResource()?.resourceID || '',
+                licenseeIdentityType: 1,
+              });
+              await _syncTargetInfo();
+            }}
+          >获取授权</FComponentsLib.FRectBtn>
+        </div>
+      </>)
+    }
+
   </div>);
 }
 
@@ -699,6 +728,9 @@ async function _batchHandleResources({
       return c.policyId;
     });
 
+    const upThrow: boolean = licenseeResource?.baseUpcastResources.some((bur) => {
+      return bur.resourceID === r.resourceId;
+    }) || false;
     return {
       targetID: r.resourceId,
       targetName: r.resourceName,
@@ -709,7 +741,7 @@ async function _batchHandleResources({
       versions: r.resourceVersions.map((v) => {
         return v.version;
       }),
-      upThrow: false,
+      upThrow: upThrow,
       upThrowDisabled: licenseeResource?.latestVersion !== '',
       contracts: contracts.map((c) => {
         return {
@@ -743,10 +775,10 @@ async function _batchHandleResources({
   return resourceTargetInfos;
 }
 
-export async function getProcessor(): Promise<Processor> {
+export async function getProcessor(processorIdentifier: string): Promise<Processor> {
   while (true) {
-    if (processor) {
-      return processor;
+    if (processors[processorIdentifier]) {
+      return processors[processorIdentifier];
     }
     await FUtil.Tool.promiseSleep(300);
   }
