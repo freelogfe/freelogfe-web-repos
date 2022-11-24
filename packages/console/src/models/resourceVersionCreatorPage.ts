@@ -101,8 +101,8 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
 }
 
-export interface OnTrigger_SaveCache_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onTrigger_SaveCache';
+export interface OnTrigger_SaveDraft_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onTrigger_SaveDraft';
 }
 
 export interface OnChange_VersionInput_Action extends AnyAction {
@@ -163,7 +163,7 @@ export interface ResourceVersionCreatorModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
 
-    onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
+    onTrigger_SaveDraft: (action: OnTrigger_SaveDraft_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
@@ -476,7 +476,7 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onTrigger_SaveCache({ payload }: OnTrigger_SaveCache_Action, { put, select, call }: EffectsCommandMap) {
+    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put, select, call }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,

@@ -10,7 +10,7 @@ import {
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
-  OnTrigger_SaveCache_Action,
+  // OnTrigger_SaveCache_Action,
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
@@ -19,7 +19,7 @@ import {
   OnClick_ImportLastVersionDependents_Btn_Action,
   OnChange_DescriptionEditorState_Action,
   OnSucceed_UploadFile_Action,
-  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action,
+  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action, OnTrigger_SaveDraft_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -76,10 +76,13 @@ function VersionCreator({
   }
 
   async function onClick_EditMarkdownBtn() {
+    await dispatch<OnTrigger_SaveDraft_Action>({
+      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+    });
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
     });
-    dispatch<OnClose_MarkdownEditor_Action>({
+    await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     });
   }
@@ -106,8 +109,8 @@ function VersionCreator({
               });
             }}
             onClickCache={async () => {
-              dispatch<OnTrigger_SaveCache_Action>({
-                type: 'resourceVersionCreatorPage/onTrigger_SaveCache',
+              dispatch<OnTrigger_SaveDraft_Action>({
+                type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
               });
             }}
             disabledCreate={hasError}
