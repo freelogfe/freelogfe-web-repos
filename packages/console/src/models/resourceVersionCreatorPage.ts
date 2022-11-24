@@ -104,6 +104,9 @@ export interface OnClick_CreateVersionBtn_Action extends AnyAction {
 
 export interface OnTrigger_SaveDraft_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft';
+  payload: {
+    showSuccessTip: boolean;
+  };
 }
 
 export interface OnChange_VersionInput_Action extends AnyAction {
@@ -510,7 +513,10 @@ const Model: ResourceVersionCreatorModelType = {
         draftData: draftData,
       };
       yield call(FServiceAPI.Resource.saveVersionsDraft, params);
-      fMessage('暂存草稿成功');
+      if (payload.showSuccessTip) {
+        fMessage('暂存草稿成功');
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {

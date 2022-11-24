@@ -4,9 +4,8 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { PolicyFullInfo_Type } from '@/type/contractTypes';
+// import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import { DepResources } from '@/models/resourceVersionCreatorPage';
 import { IActivatedTarget, IRelation, ITargetInfo } from '../types';
 
 interface NavProps {
@@ -63,6 +62,8 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                       />
                     </span></FTooltip>
 
+                  <div style={{ width: 5 }} />
+
                   <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span>
 
                       <FComponentsLib.FTextBtn
@@ -78,7 +79,7 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                           }));
                         }}
                       >
-                        <FComponentsLib.FIcons.FFileSearch />
+                        <FComponentsLib.FIcons.FFileSearch style={{fontSize: 16}} />
                       </FComponentsLib.FTextBtn>
                     </span></FTooltip>
 
@@ -265,6 +266,7 @@ function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNav
                   type='highlight'
                 />
               </span></FTooltip>
+              <div style={{ width: 5 }} />
               <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                 <span><FComponentsLib.FTextBtn
                   type='primary'
@@ -278,7 +280,7 @@ function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNav
                       resourceID: info.targetID,
                     }));
                   }}
-                ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
+                ><FComponentsLib.FIcons.FFileSearch style={{fontSize: 16}} /></FComponentsLib.FTextBtn></span>
               </FTooltip>
               <div style={{ width: 5 }} />
               {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}

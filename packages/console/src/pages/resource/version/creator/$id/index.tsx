@@ -78,6 +78,9 @@ function VersionCreator({
   async function onClick_EditMarkdownBtn() {
     await dispatch<OnTrigger_SaveDraft_Action>({
       type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+      payload: {
+        showSuccessTip: false,
+      },
     });
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
@@ -111,6 +114,9 @@ function VersionCreator({
             onClickCache={async () => {
               dispatch<OnTrigger_SaveDraft_Action>({
                 type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                payload: {
+                  showSuccessTip: true,
+                },
               });
             }}
             disabledCreate={hasError}
