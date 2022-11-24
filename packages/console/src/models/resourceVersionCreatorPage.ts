@@ -17,6 +17,7 @@ import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 export interface ResourceVersionCreatorPageModelState {
   resourceInfo: {
     resourceID: string;
+    resourceName: string;
     latestVersion: string;
     resourceType: string[];
     baseUpcastResources: {
@@ -79,7 +80,7 @@ export interface ResourceVersionCreatorPageModelState {
     versionRange?: string;
   }[];
 
-  promptLeavePath: string;
+  // promptLeavePath: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -192,6 +193,8 @@ export interface ResourceVersionCreatorModelType {
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceInfo: null,
 
+  dataIsDirty: false,
+
   versionInput: '',
 
   selectedFileInfo: null,
@@ -210,9 +213,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   preVersionOptionProperties: [],
   preVersionDirectDependencies: [],
 
-  dataIsDirty: false,
-
-  promptLeavePath: '',
+  // promptLeavePath: '',
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -246,6 +247,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           resourceInfo: {
             resourceID: data_resourceInfo.resourceId,
+            resourceName: data_resourceInfo.resourceName,
             latestVersion: data_resourceInfo.latestVersion,
             resourceType: data_resourceInfo.resourceType,
             baseUpcastResources: data_resourceInfo.baseUpcastResources.map((bur) => {
@@ -471,6 +473,13 @@ const Model: ResourceVersionCreatorModelType = {
         version: data.version,
       }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
+
       // yield put<FetchDraftDataAction>({
       //   type: 'resourceInfo/fetchDraftData',
       // });
@@ -486,6 +495,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           versionInput: payload.value,
+          dataIsDirty: true,
         },
       });
     },
@@ -549,6 +559,7 @@ const Model: ResourceVersionCreatorModelType = {
             name: payload.name,
             from: '本地上传',
           },
+          dataIsDirty: true,
         },
       });
 
@@ -568,6 +579,7 @@ const Model: ResourceVersionCreatorModelType = {
             name: payload.name,
             from: '存储空间',
           },
+          dataIsDirty: true,
         },
       });
 
@@ -676,6 +688,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           selectedFileInfo: null,
           rawProperties: [],
+          dataIsDirty: true,
         },
       });
     },
@@ -688,6 +701,7 @@ const Model: ResourceVersionCreatorModelType = {
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
       select,
+      put,
     }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -698,12 +712,19 @@ const Model: ResourceVersionCreatorModelType = {
       } = yield call(getProcessor, 'resourceVersionCreator');
       yield call(p.clear);
       yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: true,
+        },
+      });
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           descriptionEditorState: payload.state,
+          dataIsDirty: true,
         },
       });
     },

@@ -94,12 +94,12 @@ function VersionCreator({
     <>
       <Helmet>
         <title>{`创建版本 · ${
-          resourceInfo.info?.resourceName || ''
-        }  - Freelog`}</title>
+          resourceVersionCreatorPage.resourceInfo?.resourceName || ''
+        } - Freelog`}</title>
       </Helmet>
 
       <FPrompt
-        watch={false}
+        watch={resourceVersionCreatorPage.dataIsDirty}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       <FLeftSiderLayout
