@@ -796,7 +796,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
 
-        console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
+        // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
 
         if (payload.ifMarkdownFetchDependencies && result[0].info.metaInfo['mime'] === 'text/markdown') {
           const deps: string[] = yield call(getDependenciesBySha1, resourceVersionCreatorPage.selectedFileInfo.sha1);
