@@ -93,7 +93,7 @@ export const MarkdownEditor = (props: EditorProps) => {
         method: 'GET',
         url: `/v2/storages/files/${selectedFileInfo.sha1}/download`,
       });
-      const html = await importDoc(content);
+      const html = await importDoc(content, { type: 'draft' });
       setHtml(html);
     }
     const targets = directDependencies;
@@ -121,8 +121,8 @@ export const MarkdownEditor = (props: EditorProps) => {
           });
         }
       });
-      editor.policyProcessor.clear();
-      editor.policyProcessor.addTargets(targets);
+      policyProcessor.current.clear();
+      policyProcessor.current.addTargets(targets);
     }
   };
 
