@@ -77,6 +77,13 @@ export interface InitModelStatesAction extends AnyAction {
   type: 'resourceInfo/initModelStates';
 }
 
+export interface OnChange_DraftData_Action extends AnyAction {
+  type: 'resourceInfo/onChange_DraftData';
+  payload: {
+    draftData: IResourceCreateVersionDraft | null;
+  };
+}
+
 export interface ResourceInfoModelType {
   namespace: 'resourceInfo';
   state: WholeReadonly<ResourceInfoModelState>;
@@ -84,6 +91,7 @@ export interface ResourceInfoModelType {
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     fetchDraftData: (action: FetchDraftDataAction, effects: EffectsCommandMap) => void;
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    onChange_DraftData: (action: OnChange_DraftData_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     changeInfo: DvaReducer<ResourceInfoModelState, ChangeInfoAction>;
@@ -111,7 +119,7 @@ const Model: ResourceInfoModelType = {
   state: initStates,
 
   effects: {
-    *fetchDataSource(
+    * fetchDataSource(
       { payload }: FetchDataSourceAction,
       { call, put, select }: EffectsCommandMap,
     ): Generator<any, void, any> {
@@ -129,7 +137,7 @@ const Model: ResourceInfoModelType = {
       }
 
       if ((data.status & 2) === 2) {
-        history.replace(FUtil.LinkTo.resourceFreeze({resourceID: data.resourceId}));
+        history.replace(FUtil.LinkTo.resourceFreeze({ resourceID: data.resourceId }));
         return;
       }
 
@@ -171,7 +179,7 @@ const Model: ResourceInfoModelType = {
         },
       });
     },
-    *fetchDraftData({}: FetchDraftDataAction, { select, put, call }: EffectsCommandMap) {
+    * fetchDraftData({}: FetchDraftDataAction, { select, put, call }: EffectsCommandMap) {
       const { resourceInfo }: ConnectState = yield select(({ resourceInfo }: ConnectState) => ({
         resourceInfo,
       }));
@@ -196,10 +204,18 @@ const Model: ResourceInfoModelType = {
         },
       });
     },
-    *initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
+    * initModelState({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+      });
+    },
+    * onChange_DraftData({ payload }: OnChange_DraftData_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draftData: payload.draftData,
+        },
       });
     },
   },

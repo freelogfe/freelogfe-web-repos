@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
+import { FetchDataSourceAction, FetchDraftDataAction, OnChange_DraftData_Action } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { fileAttrUnits } from '@/utils/format';
@@ -471,8 +471,14 @@ const Model: ResourceVersionCreatorModelType = {
         version: data.version,
       }));
 
-      yield put<FetchDraftDataAction>({
-        type: 'resourceInfo/fetchDraftData',
+      // yield put<FetchDraftDataAction>({
+      //   type: 'resourceInfo/fetchDraftData',
+      // });
+      yield put<OnChange_DraftData_Action>({
+        type: 'resourceInfo/onChange_DraftData',
+        payload: {
+          draftData: null,
+        },
       });
     },
     * onChange_VersionInput({ payload }: OnChange_VersionInput_Action, { put }: EffectsCommandMap) {
@@ -524,8 +530,14 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<FetchDraftDataAction>({
-        type: 'resourceInfo/fetchDraftData',
+      // yield put<FetchDraftDataAction>({
+      //   type: 'resourceInfo/fetchDraftData',
+      // });
+      yield put<OnChange_DraftData_Action>({
+        type: 'resourceInfo/onChange_DraftData',
+        payload: {
+          draftData: draftData,
+        },
       });
     },
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
