@@ -110,6 +110,13 @@ export interface OnTrigger_SaveDraft_Action extends AnyAction {
   };
 }
 
+export interface OnChange_DataIsDirty_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_DataIsDirty';
+  payload: {
+    value: boolean;
+  };
+}
+
 export interface OnChange_VersionInput_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_VersionInput';
   payload: {
@@ -173,6 +180,7 @@ export interface ResourceVersionCreatorModelType {
 
     onTrigger_SaveDraft: (action: OnTrigger_SaveDraft_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_DataIsDirty: (action: OnChange_DataIsDirty_Action, effects: EffectsCommandMap) => void;
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
@@ -487,6 +495,14 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resourceInfo/onChange_DraftData',
         payload: {
           draftData: null,
+        },
+      });
+    },
+    * onChange_DataIsDirty({ payload }: OnChange_DataIsDirty_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: payload.value,
         },
       });
     },

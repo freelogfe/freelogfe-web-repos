@@ -19,7 +19,7 @@ import {
   OnClick_ImportLastVersionDependents_Btn_Action,
   OnChange_DescriptionEditorState_Action,
   OnSucceed_UploadFile_Action,
-  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action, OnTrigger_SaveDraft_Action,
+  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action, OnTrigger_SaveDraft_Action, OnChange_DataIsDirty_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -84,6 +84,14 @@ function VersionCreator({
     });
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+      async onChange_Saved(saved: boolean) {
+        await dispatch<OnChange_DataIsDirty_Action>({
+          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+          payload: {
+            value: saved,
+          },
+        });
+      },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
@@ -234,6 +242,12 @@ function VersionCreator({
                           type: 'resource',
                           // versionRange: '^0.1.0',
                         }]);
+                        await dispatch<OnChange_DataIsDirty_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                          payload: {
+                            value: true,
+                          },
+                        });
                       },
                       async onDeselect_Resource({ resourceID, resourceName }) {
                         const p = await getProcessor('resourceVersionCreator');
@@ -241,6 +255,12 @@ function VersionCreator({
                           id: resourceID,
                           name: resourceName,
                           type: 'resource',
+                        });
+                        await dispatch<OnChange_DataIsDirty_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                          payload: {
+                            value: true,
+                          },
                         });
                       },
                     });
