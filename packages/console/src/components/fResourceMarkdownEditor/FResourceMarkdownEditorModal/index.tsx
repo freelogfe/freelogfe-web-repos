@@ -19,6 +19,7 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { Select } from 'antd';
 import fMessage from '@/components/fMessage';
 import { CustomResource } from './core/interface';
+import { getDependences, importDoc } from './custom/dom/resource/utils';
 const { Option } = Select;
 
 interface EditorProps {
@@ -37,6 +38,8 @@ export const editorContext = React.createContext<any>({});
 /** 编辑器 */
 export const MarkdownEditor = (props: EditorProps) => {
   const { resourceId, show, close, setSaved } = props;
+
+  let draftData = null;
 
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
@@ -76,6 +79,53 @@ export const MarkdownEditor = (props: EditorProps) => {
     close && close();
   };
 
+  /** 获取草稿数据 */
+  const getDraftData = async () => {
+    const res = await FServiceAPI.Resource.lookDraft({ resourceId });
+    if (res.errCode !== 0) {
+      fMessage(res.msg);
+      return;
+    }
+    draftData = res.data ? res.data.draftData : {};
+    const { selectedFileInfo, directDependencies = [] } = draftData;
+    if (selectedFileInfo) {
+      const content = await FUtil.Request({
+        method: 'GET',
+        url: `/v2/storages/files/${selectedFileInfo.sha1}/download`,
+      });
+      const html = await importDoc(content);
+      setHtml(html);
+    }
+    const targets = directDependencies;
+    const dependencesByIdentify = selectedFileInfo
+      ? await getDependences(selectedFileInfo.sha1)
+      : [];
+    if (dependencesByIdentify.length) {
+      const depsData = await FServiceAPI.Resource.batchInfo({
+        resourceNames: dependencesByIdentify.join(),
+      });
+      depsData.data.forEach(async (dep: any) => {
+        if (!dep) return;
+
+        const index = targets.findIndex(
+          (item: { name: string }) => dep.resourceName === item.name,
+        );
+        if (index === -1) {
+          // 识别出的依赖不在依赖树中，需添加进依赖树
+          const { resourceId, resourceName, latestVersion } = dep;
+          targets.push({
+            id: resourceId,
+            name: resourceName,
+            type: 'resource',
+            versionRange: latestVersion,
+          });
+        }
+      });
+      editor.policyProcessor.clear();
+      editor.policyProcessor.addTargets(targets);
+    }
+  };
+
   /** 保存 */
   const save = async () => {
     setSaveType(1);
@@ -92,23 +142,23 @@ export const MarkdownEditor = (props: EditorProps) => {
       return;
     }
 
-    const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
-    if (draft.errCode !== 0) {
-      fMessage(draft.msg);
-      return;
-    }
-    const draftData = draft.data;
-    console.error(draft);
-    // TODO 更新文件信息
-    // TODO 更新依赖列表
-    const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
-      resourceId,
-      draftData,
-    });
-    if (saveDraftRes.errCode !== 0) {
-      fMessage(saveDraftRes.msg);
-      return;
-    }
+    // const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
+    // if (draft.errCode !== 0) {
+    //   fMessage(draft.msg);
+    //   return;
+    // }
+    // const newDraftData = draft.data;
+    // console.error(draft);
+    // // TODO 更新文件信息
+    // // TODO 更新依赖列表
+    // const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
+    //   resourceId,
+    //   draftData: newDraftData,
+    // });
+    // if (saveDraftRes.errCode !== 0) {
+    //   fMessage(saveDraftRes.msg);
+    //   return;
+    // }
 
     const saveTime = new Date().getTime();
     setSaveType(2);
@@ -154,16 +204,6 @@ export const MarkdownEditor = (props: EditorProps) => {
       document.body.style.overflowY = 'auto';
     };
   }, [show]);
-
-  /** 获取草稿数据 */
-  const getDraftData = async () => {
-    const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
-    console.error(draft);
-    if (draft.errCode !== 0) {
-      fMessage(draft.msg);
-      return;
-    }
-  };
 
   useEffect(() => {
     if (editor) {

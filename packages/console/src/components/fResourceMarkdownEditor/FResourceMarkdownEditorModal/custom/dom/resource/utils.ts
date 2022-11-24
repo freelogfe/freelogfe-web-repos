@@ -48,13 +48,6 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
   }
   editor.insertNode(insertData);
   editor.insertBreak();
-  editor.policyProcessor.addTargets([
-    {
-      id: resourceId,
-      name: resourceName,
-      type: 'resource',
-    },
-  ]);
 };
 
 /** 插入 url 资源 */
@@ -185,15 +178,18 @@ const getDeps = async (resourceId: string, version: string) => {
 /**
  * 导入文档
  * @param content 文档内容
- * @param versionInfo 版本信息：resourceId - 资源 id，version - 版本号
+ * @param dataInfo 版本信息：type - 类型（资源/对象/上传），resourceId - 资源 id，version - 版本号
  */
 export const importDoc = async (
   content: string,
-  versionInfo?: {
-    resourceId: string;
-    version: string;
+  dataInfo: {
+    type: 'resource' | 'object' | 'upload';
+    resourceId?: string;
+    version?: string;
+    objectId?: string;
   },
 ) => {
+  const { type, resourceId = '', version = '', objectId = '' } = dataInfo;
   const {
     mdImgContent,
     imgContent,
@@ -206,11 +202,8 @@ export const importDoc = async (
 
   let deps = [];
 
-  if (versionInfo) {
-    const { basicDeps } = await getDeps(
-      versionInfo.resourceId,
-      versionInfo.version,
-    );
+  if (type === 'resource') {
+    const { basicDeps } = await getDeps(resourceId, version);
     deps = basicDeps;
   }
 
@@ -296,7 +289,7 @@ const getInternalResources = (content: string) => {
 };
 
 /**
- * 识别文档内容的依赖
+ * 根据文件 sha1 识别文档内容的依赖
  * @param sha1 文件 sha1 值
  * @returns 依赖资源名称集合 string[]
  */
@@ -304,7 +297,15 @@ export const getDependences = async (sha1: string): Promise<string[]> => {
   const content = await FUtil.Request({
     url: `/v2/storages/files/${sha1}/download`,
   });
+  return getDependencesByContent(content);
+};
 
+/**
+ * 根据内容识别文档内容的依赖
+ * @param content 文件内容
+ * @returns 依赖资源名称集合 string[]
+ */
+export const getDependencesByContent = (content: string): string[] => {
   // 匹配 md 语法的图片依赖（![]()）
   const mdImgContent =
     content.match(/(?<=!\[[^\]]*?]\(freelog:\/\/)[\s\S]*?(?=\))/gi) || [];
@@ -347,7 +348,7 @@ export const getDependences = async (sha1: string): Promise<string[]> => {
  */
 const dealInternalResources = async (
   url: string,
-  type: string,
+  type: '图片' | '视频' | '音频' | '阅读',
   deps: any[],
 ) => {
   let data: CustomResource;
@@ -363,9 +364,10 @@ const dealInternalResources = async (
     const resourceName = url.replace('freelog://', '');
 
     // 请求依赖资源数据
-    const resourceParams: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] =
-      { resourceNames: resourceName };
-    const resourceRes = await FServiceAPI.Resource.batchInfo(resourceParams);
+    const resourceParams: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+      resourceIdOrName: resourceName,
+    };
+    const resourceRes = await FServiceAPI.Resource.info(resourceParams);
     if (resourceRes.data) {
       const {
         resourceId,
@@ -373,7 +375,7 @@ const dealInternalResources = async (
         coverImages,
         resourceType,
         latestVersion,
-      } = resourceRes.data[0];
+      } = resourceRes.data;
 
       // TODO authType 目前写死，之后需要通过接口获取授权状态
       data.authType = Number(sessionStorage.getItem('authorizeType') || 1) as
@@ -451,6 +453,8 @@ const dealInternalResources = async (
           }
         });
       }
+    } else {
+      return invalidResourceHtml(url, type);
     }
   } else {
     // 外部路径
@@ -461,6 +465,26 @@ const dealInternalResources = async (
     };
   }
   return customResourceHtml(data);
+};
+
+/**
+ * 获取无效资源控件 html
+ * @param url 路径
+ * @param type 资源类型
+ */
+const invalidResourceHtml = (
+  url: string,
+  type: '图片' | '视频' | '音频' | '阅读',
+) => {
+  if (type === '图片') {
+    return `<img src="${url}">`;
+  } else if (type === '视频') {
+    return `<video controls src="${url}">`;
+  } else if (type === '音频') {
+    return `<audio controls src="${url}">`;
+  } else if (type === '阅读') {
+    return `{{${url}"`;
+  }
 };
 
 /** 获取资源自定义 html */

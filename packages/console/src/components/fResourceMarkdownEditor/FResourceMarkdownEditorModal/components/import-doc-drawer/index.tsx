@@ -13,7 +13,10 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { editorContext } from '../..';
-import { importDoc } from '../../custom/dom/resource/utils';
+import {
+  getDependencesByContent,
+  importDoc,
+} from '../../custom/dom/resource/utils';
 
 const { Option } = Select;
 
@@ -24,7 +27,7 @@ interface Props {
 }
 
 export const ImportDocDrawer = (props: Props) => {
-  const { resourceId } = useContext(editorContext);
+  const { resourceId, editor } = useContext(editorContext);
   const { show, close, setHtml } = props;
   let body: Element | null = null;
 
@@ -99,16 +102,99 @@ export const ImportDocDrawer = (props: Props) => {
   };
 
   /** 确认导入 */
-  const sureImport = async (versionInfo?: {
-    resourceId: string;
-    version: string;
+  const sureImport = async (dataInfo: {
+    type: 'resource' | 'object' | 'upload';
+    resourceId?: string;
+    version?: string;
+    objectId?: string;
   }) => {
-    const html = await importDoc(
-      refs.current.uploadFileData.content,
-      versionInfo,
-    );
+    const { content } = refs.current.uploadFileData;
+    const html = await importDoc(content, dataInfo);
     setHtml(html);
     close();
+
+    const { type, resourceId = '', version = '', objectId = '' } = dataInfo;
+    let targets: {
+      id: any;
+      name: any;
+      type: 'resource' | 'object';
+      versionRange: any;
+    }[] = [];
+    if (type === 'resource') {
+      const res = await FUtil.Request({
+        method: 'GET',
+        url: `/v2/resources/${resourceId}/dependencyTree`,
+        params: { version },
+      });
+      targets = res.data.map((item: any) => {
+        return {
+          id: item.resourceId,
+          name: item.resourceName,
+          type: 'resource',
+          versionRange: item.versionRange,
+        };
+      });
+    } else if (type === 'object') {
+      const res = await FServiceAPI.Storage.objectDetails({
+        objectIdOrName: objectId,
+      });
+      const { dependencies } = res.data;
+      if (dependencies.length) {
+        const resourceNameList = dependencies
+          .filter((item: any) => item.type === 'resource')
+          .map((item: any) => item.name);
+        const objectNameList = dependencies
+          .filter((item: any) => item.type === 'object')
+          .map((item: any) => item.name);
+        const resourceData = await FServiceAPI.Resource.batchInfo({
+          resourceNames: resourceNameList.join(),
+        });
+        resourceData.data.forEach((resource) => {
+          const { resourceId, resourceName } = resource;
+          const item = dependencies.find(
+            (dep: any) => dep.name === resourceName,
+          );
+          item.id = resourceId;
+        });
+        const objectData = await FServiceAPI.Storage.batchObjectList({
+          fullObjectNames: objectNameList.join(),
+        });
+        objectData.data.forEach((object: any) => {
+          const { objectId, bucketName, objectName } = object;
+          const item = dependencies.find(
+            (dep: any) => dep.name === `${bucketName}/${objectName}`,
+          );
+          item.id = objectId;
+          item.versionRange = '';
+        });
+      }
+      targets = dependencies;
+    }
+    const dependencesByIdentify = getDependencesByContent(content);
+    if (dependencesByIdentify.length) {
+      const depsData = await FServiceAPI.Resource.batchInfo({
+        resourceNames: dependencesByIdentify.join(),
+      });
+      depsData.data.forEach(async (dep: any) => {
+        if (!dep) return;
+
+        const index = targets.findIndex(
+          (item: { name: string }) => dep.resourceName === item.name,
+        );
+        if (index === -1) {
+          // 识别出的依赖不在依赖树中，需添加进依赖树
+          const { resourceId, resourceName, latestVersion } = dep;
+          targets.push({
+            id: resourceId,
+            name: resourceName,
+            type: 'resource',
+            versionRange: latestVersion,
+          });
+        }
+      });
+    }
+    editor.policyProcessor.clear();
+    editor.policyProcessor.addTargets(targets);
   };
 
   /** 上传文件 */
@@ -206,7 +292,7 @@ export const ImportDocDrawer = (props: Props) => {
     });
     refs.current.uploadFileData = { name: objectName, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport();
+    sureImport({ type: 'object', objectId });
   };
 
   /** 从版本导入文档 */
@@ -221,7 +307,7 @@ export const ImportDocDrawer = (props: Props) => {
     });
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ resourceId, version });
+    sureImport({ type: 'resource', resourceId, version });
   };
 
   /** 修改新的存储空间名称 */
@@ -511,7 +597,10 @@ export const ImportDocDrawer = (props: Props) => {
                     <div className="cancel-btn" onClick={cancelImport}>
                       {FI18n.i18nNext.t('btn_cancel')}
                     </div>
-                    <div className="import-btn" onClick={() => sureImport()}>
+                    <div
+                      className="import-btn"
+                      onClick={() => sureImport({ type: 'upload' })}
+                    >
                       {FI18n.i18nNext.t('btn_import_post')}
                     </div>
                   </div>

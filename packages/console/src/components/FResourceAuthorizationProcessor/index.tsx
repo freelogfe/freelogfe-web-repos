@@ -133,7 +133,6 @@ function FResourceAuthorizationProcessor({ resourceID, onMount }: FResourceAutho
   });
 
   async function addTargets(targets: Target[]): Promise<{ err: string }> {
-
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
         return t.type === 'resource';
