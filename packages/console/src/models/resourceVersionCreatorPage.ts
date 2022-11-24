@@ -133,6 +133,10 @@ export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
+export interface OnClose_MarkdownEditor_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
+}
+
 export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
@@ -165,6 +169,7 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
+    onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
@@ -644,6 +649,11 @@ const Model: ResourceVersionCreatorModelType = {
           selectedFileInfo: null,
           rawProperties: [],
         },
+      });
+    },
+    * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
+      yield put<_FetchDraft_Action>({
+        type: '_FetchDraft',
       });
     },
 

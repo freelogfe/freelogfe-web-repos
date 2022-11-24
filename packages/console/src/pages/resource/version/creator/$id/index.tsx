@@ -22,7 +22,7 @@ import {
   OnClick_ImportLastVersionDependents_Btn_Action,
   OnChange_DescriptionEditorState_Action,
   OnSucceed_UploadFile_Action,
-  OnSucceed_ImportObject_Action,
+  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action,
 } from '@/models/resourceVersionCreatorPage';
 // import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -74,14 +74,6 @@ function VersionCreator({
     });
   });
 
-  // React.useEffect(() => {
-  //   if (resourceVersionCreatorPage.dataIsDirty) {
-  //     window.onbeforeunload = () => true;
-  //   } else {
-  //     window.onbeforeunload = null;
-  //   }
-  // }, [resourceVersionCreatorPage.dataIsDirty]);
-
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
     !resourceVersionCreatorPage.selectedFileInfo ||
@@ -91,17 +83,17 @@ function VersionCreator({
     return null;
   }
 
+  async function onClick_EditMarkdownBtn() {
+    await fResourceMarkdownEditor({
+      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    });
+    dispatch<OnClose_MarkdownEditor_Action>({
+      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    });
+  }
+
   return (
     <>
-      {/*<MarkdownEditor*/}
-      {/*  resourceId={match.params.id}*/}
-      {/*  show={true}*/}
-      {/*  // close={() => {*/}
-      {/*  //   setShow(false);*/}
-      {/*  // }}*/}
-      {/*  // setSaved={setSaved}*/}
-      {/*/>*/}
-
       <Helmet>
         <title>{`创建版本 · ${
           resourceInfo.info?.resourceName || ''
@@ -166,9 +158,7 @@ function VersionCreator({
                     <FComponentsLib.FRectBtn
                       type={'secondary'}
                       onClick={async () => {
-                        await fResourceMarkdownEditor({
-                          resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-                        });
+                        await onClick_EditMarkdownBtn();
                       }}
                     >立即体验</FComponentsLib.FRectBtn>
                   </div>)
@@ -207,9 +197,7 @@ function VersionCreator({
                 }}
                 showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 onClick_EditMarkdownBtn={async () => {
-                  await fResourceMarkdownEditor({
-                    resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-                  });
+                  await onClick_EditMarkdownBtn();
                 }}
               />
             </Space>
