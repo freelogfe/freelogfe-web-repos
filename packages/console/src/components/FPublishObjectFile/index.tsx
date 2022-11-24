@@ -338,6 +338,14 @@ function FPublishObjectFile({
         }
 
         <FComponentsLib.FTextBtn
+          type='primary'
+          onClick={() => {
+            self.location.href = FUtil.Format.completeUrlByDomain('qi')
+              + `/v2/storages/files/${fileInfo.sha1}/download?attachmentName=${fileInfo.name}`;
+          }}
+        >下载</FComponentsLib.FTextBtn>
+
+        <FComponentsLib.FTextBtn
           type='danger'
           onClick={() => {
             onClick_DeleteBtn && onClick_DeleteBtn();
