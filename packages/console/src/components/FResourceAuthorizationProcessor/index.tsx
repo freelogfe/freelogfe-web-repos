@@ -297,6 +297,13 @@ function FResourceAuthorizationProcessor({
             versionRange: r.versionRange,
           };
         }),
+        upcastResourceIDs: get_targetInfos()
+          .filter((t) => {
+            return t.upThrow;
+          })
+          .map((t) => {
+            return t.targetID;
+          }),
       });
       targetInfos = [
         ...resourceTargetInfos,
@@ -596,6 +603,7 @@ interface I_batchHandleResources_Params {
     resourceID: string;
     versionRange: string;
   }[];
+  upcastResourceIDs: string[];
 }
 
 type I_batchHandleResources_Return = FResourceAuthorizationProcessorStates['targetInfos'];
@@ -604,6 +612,7 @@ async function _batchHandleResources({
                                        licenseeResource,
                                        licensorResourceIDs,
                                        needCheckedCyclicDependenciesResourceInfos,
+                                       upcastResourceIDs,
                                      }: I_batchHandleResources_Params): Promise<I_batchHandleResources_Return> {
   const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: licensorResourceIDs.join(','),
@@ -728,7 +737,7 @@ async function _batchHandleResources({
       return c.policyId;
     });
 
-    const upThrow: boolean = licenseeResource?.baseUpcastResources.some((bur) => {
+    const upThrow: boolean = upcastResourceIDs.includes(r.resourceId) || licenseeResource?.baseUpcastResources.some((bur) => {
       return bur.resourceID === r.resourceId;
     }) || false;
     return {
