@@ -178,12 +178,12 @@ const getDeps = async (resourceId: string, version: string) => {
 /**
  * 导入文档
  * @param content 文档内容
- * @param dataInfo 版本信息：type - 类型（资源/对象/上传），resourceId - 资源 id，version - 版本号
+ * @param dataInfo 版本信息：type - 类型（资源/对象/上传/草稿），resourceId - 资源 id，version - 版本号
  */
 export const importDoc = async (
   content: string,
   dataInfo: {
-    type: 'resource' | 'object' | 'upload';
+    type: 'resource' | 'object' | 'upload' | 'draft';
     resourceId?: string;
     version?: string;
     objectId?: string;
