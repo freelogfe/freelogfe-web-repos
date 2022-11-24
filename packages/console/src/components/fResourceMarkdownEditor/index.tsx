@@ -3,6 +3,7 @@ import styles from './index.less';
 import * as ReactDOM from 'react-dom/client';
 import { MarkdownEditor } from './FResourceMarkdownEditorModal';
 import * as AHooks from 'ahooks';
+import { getDependences } from './FResourceMarkdownEditorModal/custom/dom/resource/utils';
 
 interface fResourceMarkdownEditorProps {
   resourceID: string;
@@ -61,4 +62,8 @@ function BufferModal({ resourceID, onChange_Saved, onClose }: BufferModalProps) 
       }, 300);
     }}
   />);
+}
+
+export async function getDependenciesBySha1(sha1: string): Promise<string[]> {
+  return await getDependences(sha1);
 }

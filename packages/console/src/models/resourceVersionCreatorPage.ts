@@ -12,6 +12,7 @@ import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 
 export interface ResourceVersionCreatorPageModelState {
   resourceInfo: {
@@ -154,6 +155,9 @@ export interface _FetchDraft_Action extends AnyAction {
 
 export interface _FetchRawPropsAction extends AnyAction {
   type: '_FetchRawProps';
+  payload: {
+    ifMarkdownFetchDependencies: boolean;
+  };
 }
 
 export interface ResourceVersionCreatorModelType {
@@ -532,6 +536,9 @@ const Model: ResourceVersionCreatorModelType = {
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
+        payload: {
+          ifMarkdownFetchDependencies: true,
+        },
       });
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
@@ -640,6 +647,9 @@ const Model: ResourceVersionCreatorModelType = {
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
+        payload: {
+          ifMarkdownFetchDependencies: true,
+        },
       });
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
@@ -722,11 +732,14 @@ const Model: ResourceVersionCreatorModelType = {
         if (draftData.selectedFileInfo) {
           yield put<_FetchRawPropsAction>({
             type: '_FetchRawProps',
+            payload: {
+              ifMarkdownFetchDependencies: false,
+            },
           });
         }
       }
     },
-    * _FetchRawProps({}: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
+    * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
@@ -782,6 +795,40 @@ const Model: ResourceVersionCreatorModelType = {
             rawPropertiesState: 'success',
           },
         });
+
+        console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
+
+        if (payload.ifMarkdownFetchDependencies && result[0].info.metaInfo['mime'] === 'text/markdown') {
+          const deps: string[] = yield call(getDependenciesBySha1, resourceVersionCreatorPage.selectedFileInfo.sha1);
+          // console.log(deps, 'depsiowejlfksjdlfkjsdlkfjlk');
+          if (deps.length > 0) {
+            const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+              resourceNames: deps.join(','),
+            };
+            const { data: data_batchInfo }: {
+              data: {
+                resourceId: string;
+                resourceName: string;
+              }[];
+            } = yield call(FServiceAPI.Resource.batchInfo, params);
+            // console.log(data_batchInfo, 'data_batchInfoiosfjsldkjfldsjlskfjlksdj');
+
+            const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
+            const needAddTargets: {
+              id: string;
+              name: string;
+              type: 'resource';
+            }[] = data_batchInfo.map((bi) => {
+              return {
+                id: bi.resourceId,
+                name: bi.resourceName,
+                type: 'resource',
+              };
+            });
+            yield call(processor.addTargets, needAddTargets);
+          }
+
+        }
       }
 
     },
