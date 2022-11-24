@@ -14,9 +14,6 @@ import {
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
-  // OnPromptPageLeaveAction,
-  // OnPromptPageLeaveCancelAction,
-  // OnPromptPageLeaveConfirmAction,
   OnUnmountPageAction,
   OnChange_VersionInput_Action,
   OnClick_ImportLastVersionDependents_Btn_Action,
@@ -24,25 +21,20 @@ import {
   OnSucceed_UploadFile_Action,
   OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action,
 } from '@/models/resourceVersionCreatorPage';
-// import { Prompt } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-// import * as H from 'history';
-// import fConfirmModal from '@/components/fConfirmModal';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
-// import { MarkdownEditor } from '@/components/fResourceMarkdownEditor/FResourceMarkdownEditorModal';
-import FResourceAuthorizationProcessor, { getProcessor, Processor } from '@/components/FResourceAuthorizationProcessor';
+import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
-// import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 
