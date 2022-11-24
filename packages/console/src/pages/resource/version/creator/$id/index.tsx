@@ -44,6 +44,7 @@ import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
 // import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
+import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -111,40 +112,6 @@ function VersionCreator({
         watch={false}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
-      {/*<Prompt*/}
-      {/*  when={*/}
-      {/*    resourceVersionCreatorPage.promptLeavePath === '' &&*/}
-      {/*    resourceVersionCreatorPage.dataIsDirty*/}
-      {/*  }*/}
-      {/*  message={(location: H.Location, action: H.Action) => {*/}
-      {/*    // console.log(location, action, 'LAAAAL');*/}
-      {/*    // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');*/}
-      {/*    const locationHref: string = location.pathname + location.search;*/}
-
-      {/*    dispatch<OnPromptPageLeaveAction>({*/}
-      {/*      type: 'resourceVersionCreatorPage/onPromptPageLeave',*/}
-      {/*      payload: {*/}
-      {/*        href: locationHref,*/}
-      {/*      },*/}
-      {/*    });*/}
-
-      {/*    fConfirmModal({*/}
-      {/*      message: '还没有保存草稿或发行，现在离开会导致信息丢失',*/}
-      {/*      onOk() {*/}
-      {/*        // dispatch<OnPromptPageLeaveConfirmAction>({*/}
-      {/*        //   type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm',*/}
-      {/*        // });*/}
-      {/*        history.push(resourceVersionCreatorPage.promptLeavePath);*/}
-      {/*      },*/}
-      {/*      onCancel() {*/}
-      {/*        // dispatch<OnPromptPageLeaveCancelAction>({*/}
-      {/*        //   type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel',*/}
-      {/*        // });*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*    return false;*/}
-      {/*  }}*/}
-      {/*/>*/}
       <FLeftSiderLayout
         sider={<Sider />}
         header={
@@ -196,13 +163,19 @@ function VersionCreator({
                       <div style={{ height: 8 }} />
                       <FComponentsLib.FContentText text={'在线新建和编辑文章，无需导出本地，快速生产资源'} type={'additional2'} />
                     </div>
-                    <FComponentsLib.FRectBtn type={'secondary'}>立即体验</FComponentsLib.FRectBtn>
+                    <FComponentsLib.FRectBtn
+                      type={'secondary'}
+                      onClick={async () => {
+                        await fResourceMarkdownEditor({
+                          resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+                        });
+                      }}
+                    >立即体验</FComponentsLib.FRectBtn>
                   </div>)
               }
 
 
               <FPublishObjectFile
-                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                 onSucceed_UploadFile={(file) => {
                   // console.log(file, 'onSucceed_UploadFile390oisjdf');
@@ -230,6 +203,12 @@ function VersionCreator({
                 onClick_DeleteBtn={() => {
                   dispatch<OnDelete_ObjectFile_Action>({
                     type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                  });
+                }}
+                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
+                onClick_EditMarkdownBtn={async () => {
+                  await fResourceMarkdownEditor({
+                    resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
                   });
                 }}
               />

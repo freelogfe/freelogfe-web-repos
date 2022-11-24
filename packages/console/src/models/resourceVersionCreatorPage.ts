@@ -322,7 +322,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: initStates,
       });
     },
-    
+
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
