@@ -197,7 +197,7 @@ export const importDoc = async (
     audioContent,
     docContent,
     newContent,
-  } = getInternalResources(content);
+  } = getInternalResources(String(content));
   let html = newContent;
 
   let deps = [];
@@ -297,7 +297,7 @@ export const getDependences = async (sha1: string): Promise<string[]> => {
   const content = await FUtil.Request({
     url: `/v2/storages/files/${sha1}/download`,
   });
-  return getDependencesByContent(content);
+  return getDependencesByContent(String(content));
 };
 
 /**
@@ -453,8 +453,6 @@ const dealInternalResources = async (
           }
         });
       }
-    } else {
-      return invalidResourceHtml(url, type);
     }
   } else {
     // 外部路径
@@ -465,26 +463,6 @@ const dealInternalResources = async (
     };
   }
   return customResourceHtml(data);
-};
-
-/**
- * 获取无效资源控件 html
- * @param url 路径
- * @param type 资源类型
- */
-const invalidResourceHtml = (
-  url: string,
-  type: '图片' | '视频' | '音频' | '阅读',
-) => {
-  if (type === '图片') {
-    return `<img src="${url}">`;
-  } else if (type === '视频') {
-    return `<video controls src="${url}">`;
-  } else if (type === '音频') {
-    return `<audio controls src="${url}">`;
-  } else if (type === '阅读') {
-    return `{{${url}"`;
-  }
 };
 
 /** 获取资源自定义 html */

@@ -104,6 +104,7 @@ export const ImportDocDrawer = (props: Props) => {
   /** 确认导入 */
   const sureImport = async (dataInfo: {
     type: 'resource' | 'object' | 'upload';
+    fileName: string;
     resourceId?: string;
     version?: string;
     objectId?: string;
@@ -113,32 +114,67 @@ export const ImportDocDrawer = (props: Props) => {
     setHtml(html);
     close();
 
-    const { type, resourceId = '', version = '', objectId = '' } = dataInfo;
+    const {
+      type,
+      fileName,
+      resourceId = '',
+      version = '',
+      objectId = '',
+    } = dataInfo;
     let targets: {
       id: any;
       name: any;
       type: 'resource' | 'object';
       versionRange: any;
-    }[] = [];
+    }[] = editor.draftData.directDependencies;
     if (type === 'resource') {
-      const res = await FUtil.Request({
-        method: 'GET',
-        url: `/v2/resources/${resourceId}/dependencyTree`,
-        params: { version },
+      const resourceData = await FServiceAPI.Resource.info({
+        resourceIdOrName: resourceId,
       });
-      targets = res.data.map((item: any) => {
-        return {
-          id: item.resourceId,
-          name: item.resourceName,
-          type: 'resource',
-          versionRange: item.versionRange,
-        };
-      });
+      console.error(resourceData)
+      // editor.draftData.selectedFileInfo.name = 'fileName';
+      // editor.draftData.baseProperties = customPropertyDescriptors
+      //   .filter((item: any) => item.type === 'readonlyText')
+      //   .map((item: any) => ({
+      //     key: item.key,
+      //     value: item.defaultValue,
+      //     description: item.remark,
+      //   }));
+      // editor.draftData.customOptionsData = customPropertyDescriptors
+      //   .filter(
+      //     (item: any) => item.type === 'editableText' || item.type === 'select',
+      //   )
+      //   .map((item: any) => ({
+      //     key: item.key,
+      //     description: item.remark,
+      //     custom: item.type === 'select' ? 'select' : 'input',
+      //     defaultValue: item.defaultValue,
+      //     customOption: item.candidateItems,
+      //   }));
+      // dependencies.forEach(async (dep: any) => {
+      //   const index = targets.findIndex(
+      //     (item: { name: string }) => dep.name === item.name,
+      //   );
+      //   if (index === -1) {
+      //     // 识别出的依赖不在依赖树中，需添加进依赖树
+      //     targets.push(dep);
+      //   } else {
+      //     targets[index].versionRange = dep.versionRange;
+      //   }
+      // });
+      // targets = res.data.map((item: any) => {
+      //   return {
+      //     id: item.resourceId,
+      //     name: item.resourceName,
+      //     type: 'resource',
+      //     versionRange: item.versionRange,
+      //   };
+      // });
     } else if (type === 'object') {
       const res = await FServiceAPI.Storage.objectDetails({
         objectIdOrName: objectId,
       });
-      const { dependencies } = res.data;
+      const { objectName, customPropertyDescriptors, dependencies } = res.data;
       if (dependencies.length) {
         const resourceNameList = dependencies
           .filter((item: any) => item.type === 'resource')
@@ -159,16 +195,51 @@ export const ImportDocDrawer = (props: Props) => {
         const objectData = await FServiceAPI.Storage.batchObjectList({
           fullObjectNames: objectNameList.join(),
         });
-        objectData.data.forEach((object: any) => {
-          const { objectId, bucketName, objectName } = object;
-          const item = dependencies.find(
-            (dep: any) => dep.name === `${bucketName}/${objectName}`,
-          );
-          item.id = objectId;
-          item.versionRange = '';
-        });
+        if (objectData.data) {
+          objectData.data.forEach((object: any) => {
+            const { objectId, bucketName, objectName } = object;
+            const item = dependencies.find(
+              (dep: any) => dep.name === `${bucketName}/${objectName}`,
+            );
+            item.id = objectId;
+            item.versionRange = '';
+          });
+        }
       }
-      targets = dependencies;
+      editor.draftData.selectedFileInfo.name = objectName;
+      editor.draftData.baseProperties = customPropertyDescriptors
+        .filter((item: any) => item.type === 'readonlyText')
+        .map((item: any) => ({
+          key: item.key,
+          value: item.defaultValue,
+          description: item.remark,
+        }));
+      editor.draftData.customOptionsData = customPropertyDescriptors
+        .filter(
+          (item: any) => item.type === 'editableText' || item.type === 'select',
+        )
+        .map((item: any) => ({
+          key: item.key,
+          description: item.remark,
+          custom: item.type === 'select' ? 'select' : 'input',
+          defaultValue: item.defaultValue,
+          customOption: item.candidateItems,
+        }));
+      dependencies.forEach(async (dep: any) => {
+        const index = targets.findIndex(
+          (item: { name: string }) => dep.name === item.name,
+        );
+        if (index === -1) {
+          // 识别出的依赖不在依赖树中，需添加进依赖树
+          targets.push(dep);
+        } else {
+          targets[index].versionRange = dep.versionRange;
+        }
+      });
+    } else if (type === 'upload') {
+      editor.draftData.selectedFileInfo.name = fileName;
+      editor.draftData.baseProperties = [];
+      editor.draftData.customOptionsData = [];
     }
     const dependencesByIdentify = getDependencesByContent(content);
     if (dependencesByIdentify.length) {
@@ -176,8 +247,6 @@ export const ImportDocDrawer = (props: Props) => {
         resourceNames: dependencesByIdentify.join(),
       });
       depsData.data.forEach(async (dep: any) => {
-        if (!dep) return;
-
         const index = targets.findIndex(
           (item: { name: string }) => dep.resourceName === item.name,
         );
@@ -292,7 +361,7 @@ export const ImportDocDrawer = (props: Props) => {
     });
     refs.current.uploadFileData = { name: objectName, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ type: 'object', objectId });
+    sureImport({ type: 'object', fileName: objectName, objectId });
   };
 
   /** 从版本导入文档 */
@@ -307,7 +376,7 @@ export const ImportDocDrawer = (props: Props) => {
     });
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ type: 'resource', resourceId, version });
+    sureImport({ type: 'resource', fileName: filename, resourceId, version });
   };
 
   /** 修改新的存储空间名称 */
@@ -599,7 +668,12 @@ export const ImportDocDrawer = (props: Props) => {
                     </div>
                     <div
                       className="import-btn"
-                      onClick={() => sureImport({ type: 'upload' })}
+                      onClick={() =>
+                        sureImport({
+                          type: 'upload',
+                          fileName: refs.current.uploadFileData.name,
+                        })
+                      }
                     >
                       {FI18n.i18nNext.t('btn_import_post')}
                     </div>

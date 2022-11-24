@@ -19,7 +19,11 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { Select } from 'antd';
 import fMessage from '@/components/fMessage';
 import { CustomResource } from './core/interface';
-import { getDependences, importDoc } from './custom/dom/resource/utils';
+import {
+  getDependences,
+  getDependencesByContent,
+  importDoc,
+} from './custom/dom/resource/utils';
 const { Option } = Select;
 
 interface EditorProps {
@@ -39,12 +43,11 @@ export const editorContext = React.createContext<any>({});
 export const MarkdownEditor = (props: EditorProps) => {
   const { resourceId, show, close, setSaved } = props;
 
-  let draftData = null;
-
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
   const markdownRef = useRef('');
   const policyProcessor = useRef<any>(null);
+  const draftData = useRef<IResourceCreateVersionDraft | null>(null);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -86,8 +89,12 @@ export const MarkdownEditor = (props: EditorProps) => {
       fMessage(res.msg);
       return;
     }
-    draftData = res.data ? res.data.draftData : {};
-    const { selectedFileInfo, directDependencies = [] } = draftData;
+    draftData.current = res.data.draftData as IResourceCreateVersionDraft;
+    console.error('原始草稿数据===>', draftData.current);
+    editor.draftData = { ...draftData.current };
+    const { selectedFileInfo, directDependencies = [] } = draftData.current;
+    const targets = directDependencies;
+    let dependencesByIdentify: string[] = [];
     if (selectedFileInfo) {
       const content = await FUtil.Request({
         method: 'GET',
@@ -95,11 +102,8 @@ export const MarkdownEditor = (props: EditorProps) => {
       });
       const html = await importDoc(content, { type: 'draft' });
       setHtml(html);
+      dependencesByIdentify = getDependencesByContent(content);
     }
-    const targets = directDependencies;
-    const dependencesByIdentify = selectedFileInfo
-      ? await getDependences(selectedFileInfo.sha1)
-      : [];
     if (dependencesByIdentify.length) {
       const depsData = await FServiceAPI.Resource.batchInfo({
         resourceNames: dependencesByIdentify.join(),
@@ -128,9 +132,22 @@ export const MarkdownEditor = (props: EditorProps) => {
 
   /** 保存 */
   const save = async () => {
+    if (!draftData.current) return;
+
     setSaveType(1);
+    const saveTime = new Date().getTime();
+    let fileName = draftData.current.selectedFileInfo?.name;
+    if (!fileName) {
+      // 草稿数据中没有文件名称，说明是新建文件，文件名称命名规则为{资源名称 最后保存时间}
+      const resourceData = await FServiceAPI.Resource.info({
+        resourceIdOrName: resourceId,
+      });
+      fileName =
+        resourceData.data.resourceName.split('/')[1] +
+        formatDate(saveTime, 'YYYYMMDDhhmm');
+    }
     const params = new FormData();
-    params.append('file', new File([markdownRef.current], 'newMarkdown.md'));
+    params.append('file', new File([markdownRef.current], fileName));
     const res = await FUtil.Request({
       headers: { 'Content-Type': 'multipart/form-data' },
       method: 'POST',
@@ -142,25 +159,23 @@ export const MarkdownEditor = (props: EditorProps) => {
       return;
     }
 
-    // const draft = await FServiceAPI.Resource.lookDraft({ resourceId });
-    // if (draft.errCode !== 0) {
-    //   fMessage(draft.msg);
-    //   return;
-    // }
-    // const newDraftData = draft.data;
-    // console.error(draft);
-    // // TODO 更新文件信息
-    // // TODO 更新依赖列表
+    draftData.current.selectedFileInfo = {
+      name: fileName,
+      sha1: res.data.sha1,
+      from: `最近编辑时间 ${formatDate(saveTime)}`,
+    };
+    draftData.current.directDependencies =
+      await policyProcessor.current.getAllTargets();
+    console.error('newDraftData====>', draftData.current);
     // const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
     //   resourceId,
-    //   draftData: newDraftData,
+    //   draftData: draftData.current,
     // });
     // if (saveDraftRes.errCode !== 0) {
     //   fMessage(saveDraftRes.msg);
     //   return;
     // }
 
-    const saveTime = new Date().getTime();
     setSaveType(2);
     setLastSaveTime(saveTime);
     setEdited(false);
@@ -207,12 +222,16 @@ export const MarkdownEditor = (props: EditorProps) => {
 
   useEffect(() => {
     if (editor) {
+      /** 初始化编辑器一些方法 */
+      // 控制资源弹窗
       editor.setDrawerType = async (type: string) => {
         setDrawerType(type);
       };
+      // 控制导入弹窗
       editor.openUploadDrawer = async () => {
         setImportDrawer(true);
       };
+      // 控制依赖授权弹窗
       editor.openPolicyDrawer = async (data?: CustomResource) => {
         if (data) {
           // 在授权队列中选中对应资源
@@ -226,6 +245,7 @@ export const MarkdownEditor = (props: EditorProps) => {
         setDepTargets(targets);
         setPolicyDrawer(true);
       };
+      // 依赖授权组件实例
       editor.policyProcessor = policyProcessor.current;
     }
 
