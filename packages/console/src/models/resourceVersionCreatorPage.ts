@@ -97,21 +97,6 @@ export interface OnUnmountPageAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onUnmountPage';
 }
 
-// export interface OnPromptPageLeaveAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onPromptPageLeave';
-//   payload: {
-//     href: string;
-//   };
-// }
-//
-// export interface OnPromptPageLeaveConfirmAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm';
-// }
-//
-// export interface OnPromptPageLeaveCancelAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel';
-// }
-
 export interface OnClick_CreateVersionBtn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn';
 }
@@ -173,9 +158,6 @@ export interface ResourceVersionCreatorModelType {
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
-    // onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
-    // onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
-    // onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
 
     onTrigger_SaveCache: (action: OnTrigger_SaveCache_Action, effects: EffectsCommandMap) => void;
     onClick_CreateVersionBtn: (action: OnClick_CreateVersionBtn_Action, effects: EffectsCommandMap) => void;
@@ -229,12 +211,6 @@ const Model: ResourceVersionCreatorModelType = {
 
   effects: {
     * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     resourceId: payload.resourceID,
-      //   },
-      // });
 
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload.resourceID,
@@ -321,21 +297,11 @@ const Model: ResourceVersionCreatorModelType = {
             versionRange: d.versionRange,
           };
         });
-
-        // const p: {
-        //   addTargets(value: any): void;
-        //   clear(): void;
-        // } = yield call(getProcessor, 'resourceVersionCreator');
-        // yield call(p.clear);
-        // yield call(p.addTargets, preVersionDirectDependencies);
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // resourceType: data_resourceInfo.resourceType,
-          // baseUpcastResources: data_resourceInfo.baseUpcastResources,
-          // latestVersion: data_resourceInfo.latestVersion,
           versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '0.1.0'),
           preVersionBaseProperties,
           preVersionOptionProperties,
@@ -348,41 +314,6 @@ const Model: ResourceVersionCreatorModelType = {
         type: '_FetchDraft',
       });
 
-      // const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-      //   resourceId: payload.resourceID,
-      // };
-      // const { data: data_draft }: {
-      //   data: null | {
-      //     draftData: IResourceCreateVersionDraft;
-      //   };
-      // } = yield call(FServiceAPI.Resource.lookDraft, params);
-      //
-      // if (data_draft) {
-      //   const { draftData } = data_draft;
-      //
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       versionInput: draftData.versionInput,
-      //       selectedFileInfo: draftData.selectedFileInfo,
-      //       baseProperties: draftData.baseProperties,
-      //       customOptionsData: draftData.customOptionsData,
-      //       descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
-      //     },
-      //   });
-      //   const p: {
-      //     addTargets(value: any): void;
-      //     clear(): void;
-      //   } = yield call(getProcessor, 'resourceVersionCreator');
-      //   yield call(p.clear);
-      //   yield call(p.addTargets, draftData.directDependencies);
-      //
-      //   if (draftData.selectedFileInfo) {
-      //     yield put<_FetchRawPropsAction>({
-      //       type: '_FetchRawProps',
-      //     });
-      //   }
-      // }
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
@@ -391,29 +322,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: initStates,
       });
     },
-    // * onPromptPageLeave({ payload }: OnPromptPageLeaveAction, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       promptLeavePath: payload.href,
-    //     },
-    //   });
-    // },
-    // * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, { select }: EffectsCommandMap) {
-    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-    //     resourceVersionCreatorPage,
-    //   }));
-    //
-    //   history.push(resourceVersionCreatorPage.promptLeavePath);
-    // },
-    // * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'resourceVersionCreatorPage/change',
-    //     payload: {
-    //       promptLeavePath: '',
-    //     },
-    //   });
-    // },
+    
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
