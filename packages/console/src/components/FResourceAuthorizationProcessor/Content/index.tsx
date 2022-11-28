@@ -215,6 +215,8 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
                       text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
                     />
                   </Space>
+
+                  <div style={{ height: 10 }} />
                 </div>))
             }
           </Space>)
