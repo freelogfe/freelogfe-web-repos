@@ -24,7 +24,7 @@ import {
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import { RouteComponentProps } from 'react-router';
+// import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
@@ -37,6 +37,7 @@ import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
 import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+import { RouteComponentProps } from 'react-router';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -57,13 +58,13 @@ function VersionCreator({
       payload: {
         resourceID: match.params.id,
       },
-    });
+    } as const);
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
-    });
+    } as const);
   });
 
   const hasError: boolean =
@@ -81,7 +82,7 @@ function VersionCreator({
       payload: {
         showSuccessTip: false,
       },
-    });
+    } as const);
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {
@@ -90,12 +91,12 @@ function VersionCreator({
           payload: {
             value: saved,
           },
-        });
+        } as const);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    });
+    } as const);
   }
 
   return (
@@ -117,7 +118,7 @@ function VersionCreator({
             onClickCreate={async () => {
               dispatch<OnClick_CreateVersionBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-              });
+              } as const);
             }}
             onClickCache={async () => {
               dispatch<OnTrigger_SaveDraft_Action>({
@@ -125,7 +126,7 @@ function VersionCreator({
                 payload: {
                   showSuccessTip: true,
                 },
-              });
+              } as const);
             }}
             disabledCreate={hasError}
           />
@@ -145,7 +146,7 @@ function VersionCreator({
                   payload: {
                     value: value,
                   },
-                });
+                } as const);
               }}
             />
           </FFormLayout.FBlock>
@@ -185,7 +186,7 @@ function VersionCreator({
                       sha1: file.sha1,
                       // from: '本地上传',
                     },
-                  });
+                  } as const);
                 }}
                 onSucceed_ImportObject={async (obj) => {
                   // console.log(obj, 'onSucceed_ImportObject390oisjdf');
@@ -196,13 +197,13 @@ function VersionCreator({
                       sha1: obj.sha1,
                       objID: obj.objID,
                     },
-                  });
+                  } as const);
 
                 }}
                 onClick_DeleteBtn={() => {
                   dispatch<OnDelete_ObjectFile_Action>({
                     type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  });
+                  } as const);
                 }}
                 showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 onClick_EditMarkdownBtn={async () => {
@@ -247,7 +248,7 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        });
+                        } as const);
                       },
                       async onDeselect_Resource({ resourceID, resourceName }) {
                         const p = await getProcessor('resourceVersionCreator');
@@ -261,7 +262,7 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        });
+                        } as const);
                       },
                     });
                   }}
@@ -275,7 +276,7 @@ function VersionCreator({
                     onClick={() => {
                       dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
-                      });
+                      } as const);
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
@@ -304,7 +305,7 @@ function VersionCreator({
                   payload: {
                     state: value,
                   },
-                });
+                } as const);
               }}
               style={{
                 height: 500,
