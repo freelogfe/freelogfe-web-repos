@@ -10,7 +10,7 @@ specifiers:
   '@freelog/components-lib': ^0.1.22
   '@freelog/nmr_translator': ^5.1.4
   '@freelog/resource-policy-lang': ^1.5.3
-  '@freelog/tools-lib': ^0.1.139
+  '@freelog/tools-lib': ^0.1.140
   '@types/file-saver': ^2.0.1
   '@types/react': ^18.0.17
   '@types/react-copy-to-clipboard': ^4.3.0
@@ -54,7 +54,7 @@ dependencies:
   '@freelog/components-lib': 0.1.22
   '@freelog/nmr_translator': 5.1.4
   '@freelog/resource-policy-lang': 1.5.3_typescript@4.8.2
-  '@freelog/tools-lib': 0.1.139
+  '@freelog/tools-lib': 0.1.140
   '@types/react-copy-to-clipboard': 4.3.0
   '@wangeditor/editor': 5.1.15
   '@wangeditor/editor-for-react': 1.0.5_vg7nl43mud7isktftkqkdhk6pu
@@ -945,8 +945,8 @@ packages:
       - typescript
     dev: false
 
-  /@freelog/tools-lib/0.1.139:
-    resolution: {integrity: sha512-LmudJLWC4hLTpErv/bQQWdMZKAYJ5HODfLCMaFGa4pbbHPL3g+tuX+mhO8BXtiGcIIjJorbbyYv1S6lnqdpy4g==}
+  /@freelog/tools-lib/0.1.140:
+    resolution: {integrity: sha512-QEVOM3iEDUiPqb2YyhvIC32kqu3eJv4MoT7BSzL4r+6xOwl4SPnLU/wKGVnTUf36L+N8fYvAvMmluAarjSho2A==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
@@ -1209,20 +1209,20 @@ packages:
   /@probe.gl/env/3.5.2:
     resolution: {integrity: sha512-JlNvJ2p6+ObWX7es6n3TycGPTv5CfVrCS8vblI1eHhrFCcZ6RxIo727ffRVwldpp0YTzdgjx3/4fB/1dnVYElw==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
     dev: false
 
   /@probe.gl/log/3.5.2:
     resolution: {integrity: sha512-5yo8Dg8LrSltuPBdGlLh/WOvt4LdU7DDHu75GMeiS0fKM+J4IACRpGV8SOrktCj1MWZ6JVHcNQkJnoyZ6G7p/w==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
       '@probe.gl/env': 3.5.2
     dev: false
 
   /@probe.gl/stats/3.5.2:
     resolution: {integrity: sha512-YKaYXiHF//fgy1OkX38JD70Lc8qxg2Viw8Q2CTNMwGPDJe12wda7kEmMKPJNw2oYLyFUfTzv00KJMA5h18z02w==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
     dev: false
 
   /@qixian.cs/path-to-regexp/6.1.0:
@@ -4432,13 +4432,13 @@ packages:
   /i18next/20.6.1:
     resolution: {integrity: sha512-yCMYTMEJ9ihCwEQQ3phLo7I/Pwycf8uAx+sRHwwk5U9Aui/IZYgQRyMqXafQOw5QQ7DM1Z+WyEXWIqSuJHhG2A==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
     dev: false
 
   /i18next/21.9.2:
     resolution: {integrity: sha512-00fVrLQOwy45nm3OtC9l1WiLK3nJlIYSljgCt0qzTaAy65aciMdRy9GsuW+a2AtKtdg9/njUGfRH30LRupV7ZQ==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
     dev: false
 
   /iconv-lite/0.4.24:
@@ -6503,7 +6503,7 @@ packages:
   /probe.gl/3.5.2:
     resolution: {integrity: sha512-8lFQVmi7pMQZkqfj8+VjX4GU9HTkyxgRm5/h/xxA/4/IvZPv3qtP996L+awPwZsrPRKEw99t12SvqEHqSls/sA==}
     dependencies:
-      '@babel/runtime': 7.19.0
+      '@babel/runtime': 7.20.1
       '@probe.gl/env': 3.5.2
       '@probe.gl/log': 3.5.2
       '@probe.gl/stats': 3.5.2
