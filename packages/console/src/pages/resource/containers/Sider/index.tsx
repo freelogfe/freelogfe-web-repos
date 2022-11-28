@@ -44,7 +44,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       payload: {
         resourceID: match.params.id,
       },
-    });
+    } as const);
 
   });
 
@@ -82,7 +82,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     return () => {
       dispatch<InitModelStatesAction>({
         type: 'resourceInfo/initModelStates',
-      });
+      } as const);
     };
   }, [match.params.id]);
 
@@ -94,7 +94,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     await dispatch<ChangeAction>({
       type: 'resourceInfo/change',
       payload,
-    });
+    } as const);
   }
 
   async function onChangeMatchParamsId() {
@@ -103,11 +103,11 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       payload: {
         resourceID: match.params.id,
       },
-    });
+    } as const);
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
-    });
+    } as const);
   }
 
   function gotoCreator() {
@@ -141,7 +141,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           payload: {
             policyOperaterVisible: true,
           },
-        });
+        } as const);
       } else {
         const data = { status: 1 };
         operateResource(data);
@@ -165,7 +165,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       payload: {
         policyEditorVisible: true,
       },
-    });
+    } as const);
     setActiveDialogShow(false);
   };
 
@@ -210,10 +210,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       dispatch<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: match.params.id,
-      });
+      } as const);
       dispatch<FetchResourceInfoAction>({
         type: 'resourceAuthPage/fetchResourceInfo',
-      });
+      } as const);
 
       if (data.updatePolicies) {
         dispatch<ChangeAction>({
@@ -221,7 +221,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           payload: {
             policyOperaterVisible: false,
           },
-        });
+        } as const);
       }
     } else {
       fMessage(result.msg, 'error');
@@ -245,10 +245,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             (resourceInfo.info?.status & 2) === 2
               ? 'freeze'
               : resourceInfo.info?.status === 1
-                ? 'online'
-                : !!resourceInfo.info?.latestVersion
-                  ? 'offline'
-                  : 'unreleased'
+              ? 'online'
+              : !!resourceInfo.info?.latestVersion
+                ? 'offline'
+                : 'unreleased'
           }
         />
         <div style={{ height: 15 }} />
@@ -426,7 +426,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             payload: {
               policyEditorVisible: false,
             },
-          });
+          } as const);
         }}
         onConfirm={({ title, text }) => {
           dispatch<UpdatePoliciesAction>({
@@ -439,13 +439,13 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
                 },
               ],
             },
-          });
+          } as const);
           dispatch<ChangeAction>({
             type: 'resourceInfo/change',
             payload: {
               policyEditorVisible: false,
             },
-          });
+          } as const);
         }}
       />
 
@@ -462,7 +462,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             payload: {
               policyOperaterVisible: false,
             },
-          });
+          } as const);
         }}
         onConfirm={activeResource}
         onNewPolicy={openPolicyBuilder}

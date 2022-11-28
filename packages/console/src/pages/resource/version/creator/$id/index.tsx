@@ -28,6 +28,7 @@ import FFormLayout from '@/components/FFormLayout';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
+// import { Helmet } from 'umi';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
@@ -51,7 +52,7 @@ function VersionCreator({
                           resourceVersionCreatorPage,
                           match,
                         }: VersionCreatorProps) {
-
+  // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'resourceVersionCreatorPage/onMountPage',
