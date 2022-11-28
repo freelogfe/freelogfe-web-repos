@@ -29,7 +29,7 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
         payload: {
           value: 'market',
         },
-      });
+      } as const);
     }
     if (match.path.startsWith(FUtil.LinkTo.exampleNodes())) {
       dispatch<OnChange_ShowPage_Action>({
@@ -37,7 +37,7 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
         payload: {
           value: 'example',
         },
-      });
+      } as const);
     }
   }, [match]);
 
