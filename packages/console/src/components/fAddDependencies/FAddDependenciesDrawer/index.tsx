@@ -42,7 +42,7 @@ interface FAddDependenciesDrawerStates {
     resourceName: string;
     resourceType: string[];
     updateDate: string;
-    status: 'online' | 'offline';
+    waring: '' | 'offline' | 'unreleased' | 'upcast';
     latestVersion: string;
   }[];
   resourceListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
@@ -65,36 +65,20 @@ const initStates: FAddDependenciesDrawerStates = {
 };
 
 function FAddDependenciesDrawer({
-  existingResourceIDs,
-  baseUpcastResourceIDs,
-  onSelect_Resource,
-  onDeselect_Resource,
-  onClose,
-}: FAddDependenciesDrawerProps) {
-  const [visible, set_visible] = React.useState<
-    FAddDependenciesDrawerStates['visible']
-  >(initStates['visible']);
-  const [selectedResourceIDs, set_selectedResourceIDs] = React.useState<
-    FAddDependenciesDrawerStates['selectedResourceIDs']
-  >(initStates['selectedResourceIDs']);
-  const [resourceFromOptions, set_resourceFromOptions] = React.useState<
-    FAddDependenciesDrawerStates['resourceFromOptions']
-  >(initStates['resourceFromOptions']);
-  const [resourceFrom, set_resourceFrom] = React.useState<
-    FAddDependenciesDrawerStates['resourceFrom']
-  >(initStates['resourceFrom']);
-  const [searchInput, set_searchInput] = React.useState<
-    FAddDependenciesDrawerStates['searchInput']
-  >(initStates['searchInput']);
-  const [resourceList, set_resourceList] = React.useState<
-    FAddDependenciesDrawerStates['resourceList']
-  >(initStates['resourceList']);
-  const [resourceListState, set_resourceListState] = React.useState<
-    FAddDependenciesDrawerStates['resourceListState']
-  >(initStates['resourceListState']);
-  const [resourceListMore, set_resourceListMore] = React.useState<
-    FAddDependenciesDrawerStates['resourceListMore']
-  >(initStates['resourceListMore']);
+                                  existingResourceIDs,
+                                  baseUpcastResourceIDs,
+                                  onSelect_Resource,
+                                  onDeselect_Resource,
+                                  onClose,
+                                }: FAddDependenciesDrawerProps) {
+  const [visible, set_visible] = React.useState<FAddDependenciesDrawerStates['visible']>(initStates['visible']);
+  const [selectedResourceIDs, set_selectedResourceIDs] = React.useState<FAddDependenciesDrawerStates['selectedResourceIDs']>(initStates['selectedResourceIDs']);
+  const [resourceFromOptions, set_resourceFromOptions] = React.useState<FAddDependenciesDrawerStates['resourceFromOptions']>(initStates['resourceFromOptions']);
+  const [resourceFrom, set_resourceFrom] = React.useState<FAddDependenciesDrawerStates['resourceFrom']>(initStates['resourceFrom']);
+  const [searchInput, set_searchInput] = React.useState<FAddDependenciesDrawerStates['searchInput']>(initStates['searchInput']);
+  const [resourceList, set_resourceList] = React.useState<FAddDependenciesDrawerStates['resourceList']>(initStates['resourceList']);
+  const [resourceListState, set_resourceListState] = React.useState<FAddDependenciesDrawerStates['resourceListState']>(initStates['resourceListState']);
+  const [resourceListMore, set_resourceListMore] = React.useState<FAddDependenciesDrawerStates['resourceListMore']>(initStates['resourceListMore']);
 
   AHooks.useMount(() => {
     set_selectedResourceIDs(existingResourceIDs);
@@ -114,9 +98,7 @@ function FAddDependenciesDrawer({
     set_resourceListMore('loading');
     // let dataSource: any;
     if (resourceFrom === 'favorite') {
-      const params: Parameters<
-        typeof FServiceAPI.Collection.collectionResources
-      >[0] = {
+      const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: resourceListResult.length,
         limit: FUtil.Predefined.pageSize,
         keywords: searchInput,
@@ -138,16 +120,24 @@ function FAddDependenciesDrawer({
       } = await FServiceAPI.Collection.collectionResources(params);
       resourceListResult = [
         ...resourceListResult,
-        ...data_favoriteResources.dataList.map<
-          FAddDependenciesDrawerStates['resourceList'][number]
-        >((r: any) => {
+        ...data_favoriteResources.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r: any) => {
           // console.log(r, 'r20893u4oi23');
+          let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
+          if (baseUpcastResourceIDs.includes(r.resourceId)) {
+            waring = 'upcast';
+          } else if (r.resourceStatus === 0) {
+            if (r.latestVersion === '') {
+              waring = 'unreleased';
+            } else {
+              waring = 'offline';
+            }
+          }
           return {
             resourceID: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
-            status: r.resourceStatus === 1 ? 'online' : 'offline',
+            waring: waring,
             latestVersion: r.latestVersion,
           };
         }),
@@ -185,15 +175,23 @@ function FAddDependenciesDrawer({
       } = await FServiceAPI.Resource.list(params);
       resourceListResult = [
         ...resourceListResult,
-        ...data_list.dataList.map<
-          FAddDependenciesDrawerStates['resourceList'][number]
-        >((r) => {
+        ...data_list.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r) => {
+          let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
+          if (baseUpcastResourceIDs.includes(r.resourceId)) {
+            waring = 'upcast';
+          } else if (r.resourceStatus === 0) {
+            if (r.latestVersion === '') {
+              waring = 'unreleased';
+            } else {
+              waring = 'offline';
+            }
+          }
           return {
             resourceID: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.updateDate, true),
-            status: r.status === 1 ? 'online' : 'offline',
+            waring: waring,
             latestVersion: r.latestVersion,
           };
         }),
@@ -252,8 +250,8 @@ function FAddDependenciesDrawer({
             }}
             value={searchInput}
             className={styles.filterInput}
-            theme="dark"
-            size="small"
+            theme='dark'
+            size='small'
           />
         </div>
 
@@ -269,83 +267,98 @@ function FAddDependenciesDrawer({
         )}
 
         {resourceListState === 'loaded' &&
-          resourceList.map((resource) => {
-            return (
-              <div className={styles.bucket} key={resource.resourceID}>
-                <div>
-                  <div className={styles.title}>
-                    <div>
-                      <FComponentsLib.FContentText
-                        singleRow={true}
-                        text={resource.resourceName}
-                      />
-                    </div>
-                    <div style={{ width: 5 }} />
-                    {resource.status === 'offline' && (
-                      <FResourceStatusBadge
-                        status={
-                          resource.latestVersion === ''
-                            ? 'unreleased'
-                            : 'offline'
-                        }
-                      />
-                    )}
+        resourceList.map((resource) => {
+          return (
+            <div className={styles.bucket} key={resource.resourceID}>
+              <div>
+                <div className={styles.title}>
+                  <div>
+                    <FComponentsLib.FContentText
+                      singleRow={true}
+                      text={resource.resourceName}
+                    />
                   </div>
-                  <div style={{ height: 2 }} />
-                  <FComponentsLib.FContentText
-                    type={'additional2'}
-                    text={
-                      (resource.resourceType.length > 0
-                        ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
-                            resource.resourceType,
-                          )}`
-                        : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
-                    }
-                  />
+                  <div style={{ width: 5 }} />
+                  {
+                    resource.waring === 'offline' && (<FResourceStatusBadge
+                      status={'offline'}
+                    />)
+                  }
+                  {
+                    resource.waring === 'unreleased' && (<FResourceStatusBadge
+                      status={'unreleased'}
+                    />)
+                  }
+                  {
+                    resource.waring === 'upcast' && (<label
+                      style={{
+                        color: '#EE4040',
+                        backgroundColor: '#FDEBEC',
+                        // border: '1px solid #F2C9CC',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        lineHeight: '17px',
+                        padding: '3px 5px',
+                        borderRadius: 4,
+                      }}
+                    >上抛</label>)
+                  }
                 </div>
-                {!selectedResourceIDs.includes(resource.resourceID) ? (
-                  <FComponentsLib.FRectBtn
-                    type="secondary"
-                    size="small"
-                    onClick={() => {
-                      onSelect_Resource &&
-                        onSelect_Resource({
-                          resourceID: resource.resourceID,
-                          resourceName: resource.resourceName,
-                        });
-                      set_selectedResourceIDs([
-                        ...selectedResourceIDs,
-                        resource.resourceID,
-                      ]);
-                    }}
-                    // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-                  >
-                    选择
-                  </FComponentsLib.FRectBtn>
-                ) : (
-                  <FComponentsLib.FRectBtn
-                    type="danger2"
-                    size="small"
-                    onClick={() => {
-                      onDeselect_Resource &&
-                        onDeselect_Resource({
-                          resourceID: resource.resourceID,
-                          resourceName: resource.resourceName,
-                        });
-                      set_selectedResourceIDs(
-                        selectedResourceIDs.filter((rid) => {
-                          return rid !== resource.resourceID;
-                        }),
-                      );
-                    }}
-                    // disabled={selectedResourceIDs.includes(resource.resourceID)}
-                  >
-                    移除
-                  </FComponentsLib.FRectBtn>
-                )}
+                <div style={{ height: 2 }} />
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  text={
+                    (resource.resourceType.length > 0
+                      ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
+                        resource.resourceType,
+                      )}`
+                      : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
+                  }
+                />
               </div>
-            );
-          })}
+              {!selectedResourceIDs.includes(resource.resourceID) ? (
+                <FComponentsLib.FRectBtn
+                  type='secondary'
+                  size='small'
+                  onClick={() => {
+                    onSelect_Resource &&
+                    onSelect_Resource({
+                      resourceID: resource.resourceID,
+                      resourceName: resource.resourceName,
+                    });
+                    set_selectedResourceIDs([
+                      ...selectedResourceIDs,
+                      resource.resourceID,
+                    ]);
+                  }}
+                  // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
+                >
+                  选择
+                </FComponentsLib.FRectBtn>
+              ) : (
+                <FComponentsLib.FRectBtn
+                  type='danger2'
+                  size='small'
+                  onClick={() => {
+                    onDeselect_Resource &&
+                    onDeselect_Resource({
+                      resourceID: resource.resourceID,
+                      resourceName: resource.resourceName,
+                    });
+                    set_selectedResourceIDs(
+                      selectedResourceIDs.filter((rid) => {
+                        return rid !== resource.resourceID;
+                      }),
+                    );
+                  }}
+                  // disabled={selectedResourceIDs.includes(resource.resourceID)}
+                >
+                  移除
+                </FComponentsLib.FRectBtn>
+              )}
+            </div>
+          );
+        })}
       </div>
       <FListFooter
         state={resourceListMore}
