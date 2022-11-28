@@ -266,7 +266,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
           },
         },
-      });
+      } as const);
 
       let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
@@ -330,11 +330,11 @@ const Model: ResourceVersionCreatorModelType = {
           preVersionDirectDependencies,
           descriptionEditorState,
         },
-      });
+      } as const);
 
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      });
+      } as const);
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -342,7 +342,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
-      });
+      } as const);
     },
 
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
@@ -360,7 +360,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      });
+      } as const);
       const p: {
         getAllTargets(): void;
         getAllResourcesWithContracts(): void;
@@ -469,12 +469,12 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
-      });
+      } as const);
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
         caller: '97293874823yu4oi234io23hjkfdsasdf',
-      });
+      } as const);
       // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
       history.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
         resourceID: data.resourceId,
@@ -486,7 +486,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      });
+      } as const);
 
       // yield put<FetchDraftDataAction>({
       //   type: 'resourceInfo/fetchDraftData',
@@ -496,7 +496,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           draftData: null,
         },
-      });
+      } as const);
     },
     * onChange_DataIsDirty({ payload }: OnChange_DataIsDirty_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -504,7 +504,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: payload.value,
         },
-      });
+      } as const);
     },
     * onChange_VersionInput({ payload }: OnChange_VersionInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -513,7 +513,7 @@ const Model: ResourceVersionCreatorModelType = {
           versionInput: payload.value,
           dataIsDirty: true,
         },
-      });
+      } as const);
     },
     * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put, select, call }: EffectsCommandMap) {
 
@@ -554,7 +554,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      });
+      } as const);
 
       // yield put<FetchDraftDataAction>({
       //   type: 'resourceInfo/fetchDraftData',
@@ -564,7 +564,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           draftData: draftData,
         },
-      });
+      } as const);
     },
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -577,14 +577,14 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      });
+      } as const);
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      });
+      } as const);
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -597,7 +597,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      });
+      } as const);
 
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: payload.objID,
@@ -696,7 +696,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      });
+      } as const);
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -706,12 +706,12 @@ const Model: ResourceVersionCreatorModelType = {
           rawProperties: [],
           dataIsDirty: true,
         },
-      });
+      } as const);
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      });
+      } as const);
     },
 
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
@@ -733,7 +733,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: true,
         },
-      });
+      } as const);
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -742,7 +742,7 @@ const Model: ResourceVersionCreatorModelType = {
           descriptionEditorState: payload.state,
           dataIsDirty: true,
         },
-      });
+      } as const);
     },
 
     * _FetchDraft({}: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
@@ -776,7 +776,7 @@ const Model: ResourceVersionCreatorModelType = {
             customOptionsData: draftData.customOptionsData,
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
-        });
+        } as const);
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -790,7 +790,7 @@ const Model: ResourceVersionCreatorModelType = {
             payload: {
               ifMarkdownFetchDependencies: false,
             },
-          });
+          } as const);
         }
       }
     },
@@ -808,7 +808,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           rawPropertiesState: 'parsing',
         },
-      });
+      } as const);
 
       const params: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
@@ -823,7 +823,7 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             rawProperties: [],
           },
-        });
+        } as const);
         return fMessage(error, 'error');
       }
 
@@ -833,7 +833,7 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             rawProperties: [],
           },
-        });
+        } as const);
         return fMessage('文件解析失败', 'error');
       }
 
@@ -849,7 +849,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             rawPropertiesState: 'success',
           },
-        });
+        } as const);
 
         // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
 
