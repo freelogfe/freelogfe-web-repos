@@ -70,16 +70,19 @@ function VersionCreator({
 
   AHooks.useDebounceEffect(
     () => {
-      dispatch<OnTrigger_SaveDraft_Action>({
-        type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      if (resourceVersionCreatorPage.dataIsDirty) {
+        dispatch<OnTrigger_SaveDraft_Action>({
+          type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+          payload: {
+            showSuccessTip: false,
+          },
+        } as const);
+      }
+      
     },
-    [resourceVersionCreatorPage.descriptionEditorState],
+    [resourceVersionCreatorPage.dataIsDirty],
     {
-      wait: 3000,
+      wait: 300,
     },
   );
 
@@ -281,12 +284,12 @@ function VersionCreator({
                         } as const);
                       },
                     });
-                    await dispatch<OnTrigger_SaveDraft_Action>({
-                      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                      payload: {
-                        showSuccessTip: false,
-                      },
-                    } as const);
+                    // await dispatch<OnTrigger_SaveDraft_Action>({
+                    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                    //   payload: {
+                    //     showSuccessTip: false,
+                    //   },
+                    // } as const);
                   }}
                   type='default'
                 >添加依赖</FComponentsLib.FRectBtn>

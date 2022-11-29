@@ -35,12 +35,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       payload,
     } as const);
 
-    await dispatch<OnTrigger_SaveDraft_Action>({
-      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-      payload: {
-        showSuccessTip: false,
-      },
-    } as const);
+    // await dispatch<OnTrigger_SaveDraft_Action>({
+    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+    //   payload: {
+    //     showSuccessTip: false,
+    //   },
+    // } as const);
   }
 
   return (<>

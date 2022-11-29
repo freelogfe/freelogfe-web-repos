@@ -529,12 +529,12 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       } as const);
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
 
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
@@ -557,12 +557,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -676,12 +676,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -693,12 +693,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
       yield put<_FetchDraft_Action>({
@@ -727,12 +727,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
