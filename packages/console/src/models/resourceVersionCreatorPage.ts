@@ -164,6 +164,13 @@ export interface _FetchDraft_Action extends AnyAction {
   type: '_FetchDraft';
 }
 
+export interface _SaveDraft_Action extends AnyAction {
+  type: '_SaveDraft';
+  payload: {
+    showSuccessTip: boolean;
+  };
+}
+
 export interface _FetchRawPropsAction extends AnyAction {
   type: '_FetchRawProps';
   payload: {
@@ -190,6 +197,7 @@ export interface ResourceVersionCreatorModelType {
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
     _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
+    _SaveDraft: (action: _SaveDraft_Action, effects: EffectsCommandMap) => void;
     _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -514,55 +522,13 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       } as const);
+      yield put<Save>;
     },
-    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put, select, call }: EffectsCommandMap) {
-
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.resourceInfo) {
-        return;
-      }
-
-      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
-      // console.log(p, 'pdsifo9jsdlfk');
-      const directDependencies: any[] = yield call(p.getAllTargets);
-      // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
-
-      const draftData: IResourceCreateVersionDraft = {
-        versionInput: resourceVersionCreatorPage.versionInput,
-        selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
-        baseProperties: resourceVersionCreatorPage.baseProperties,
-        customOptionsData: resourceVersionCreatorPage.customOptionsData,
-        // directDependencies: payload.dependentAllTargets,
-        directDependencies: directDependencies,
-        descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
-      };
-
-      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
-        draftData: draftData,
-      };
-      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
-      if (payload.showSuccessTip) {
-        fMessage('暂存草稿成功');
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
+    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put }: EffectsCommandMap) {
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
         payload: {
-          dataIsDirty: false,
-        },
-      } as const);
-
-      // yield put<FetchDraftDataAction>({
-      //   type: 'resourceInfo/fetchDraftData',
-      // });
-      yield put<OnChange_DraftData_Action>({
-        type: 'resourceInfo/onChange_DraftData',
-        payload: {
-          draftData: draftData,
+          showSuccessTip: payload.showSuccessTip,
         },
       } as const);
     },
@@ -745,7 +711,7 @@ const Model: ResourceVersionCreatorModelType = {
       } as const);
     },
 
-    * _FetchDraft({}: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
+    * _FetchDraft({ payload }: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -793,6 +759,56 @@ const Model: ResourceVersionCreatorModelType = {
           } as const);
         }
       }
+    },
+    * _SaveDraft({}: _SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      if (!resourceVersionCreatorPage.resourceInfo) {
+        return;
+      }
+
+      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
+      // console.log(p, 'pdsifo9jsdlfk');
+      const directDependencies: any[] = yield call(p.getAllTargets);
+      // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
+
+      const draftData: IResourceCreateVersionDraft = {
+        versionInput: resourceVersionCreatorPage.versionInput,
+        selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
+        baseProperties: resourceVersionCreatorPage.baseProperties,
+        customOptionsData: resourceVersionCreatorPage.customOptionsData,
+        // directDependencies: payload.dependentAllTargets,
+        directDependencies: directDependencies,
+        descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+      };
+
+      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
+        draftData: draftData,
+      };
+      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      if (payload.showSuccessTip) {
+        fMessage('暂存草稿成功');
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      } as const);
+
+      // yield put<FetchDraftDataAction>({
+      //   type: 'resourceInfo/fetchDraftData',
+      // });
+      yield put<OnChange_DraftData_Action>({
+        type: 'resourceInfo/onChange_DraftData',
+        payload: {
+          draftData: draftData,
+        },
+      } as const);
     },
     * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
