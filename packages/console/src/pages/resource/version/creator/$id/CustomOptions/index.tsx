@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
-  ChangeAction, OnTrigger_SaveDraft_Action,
+  ChangeAction, OnChange_BaseProperties_Action, OnChange_CustomOptions_Action, OnTrigger_SaveDraft_Action,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
@@ -28,20 +28,21 @@ interface CustomOptionsProps {
 
 function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsProps) {
 
+  const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
 
-  async function onChange(payload: ChangeAction['payload']) {
-    await dispatch<ChangeAction>({
-      type: 'resourceVersionCreatorPage/change',
-      payload,
-    } as const);
-
-    // await dispatch<OnTrigger_SaveDraft_Action>({
-    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-    //   payload: {
-    //     showSuccessTip: false,
-    //   },
-    // } as const);
-  }
+  // async function onChange(payload: ChangeAction['payload']) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'resourceVersionCreatorPage/change',
+  //     payload,
+  //   } as const);
+  //
+  //   // await dispatch<OnTrigger_SaveDraft_Action>({
+  //   //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+  //   //   payload: {
+  //   //     showSuccessTip: false,
+  //   //   },
+  //   // } as const);
+  // }
 
   return (<>
     {
@@ -51,10 +52,16 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           basics={resourceVersionCreatorPage.rawProperties}
           additions={resourceVersionCreatorPage.baseProperties}
           onChangeAdditions={async (value) => {
-            await onChange({
-              baseProperties: value,
-              dataIsDirty: true,
-            });
+            // await onChange({
+            //   baseProperties: value,
+            //   dataIsDirty: true,
+            // });
+            await dispatch<OnChange_BaseProperties_Action>({
+              type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+              payload: {
+                value: value,
+              },
+            } as const);
           }}
           rightTop={<Space size={20}>
             <FComponentsLib.FTextBtn
@@ -72,19 +79,34 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 if (!dataSource) {
                   return;
                 }
-                await onChange({
-                  dataIsDirty: true,
-                  baseProperties: [
-                    ...resourceVersionCreatorPage.baseProperties,
-                    ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                      return {
-                        key: ds.key,
-                        value: ds.value,
-                        description: ds.description,
-                      };
-                    }),
-                  ],
-                });
+                // await onChange({
+                //   dataIsDirty: true,
+                //   baseProperties: [
+                //     ...resourceVersionCreatorPage.baseProperties,
+                //     ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                //       return {
+                //         key: ds.key,
+                //         value: ds.value,
+                //         description: ds.description,
+                //       };
+                //     }),
+                //   ],
+                // });
+                await dispatch<OnChange_BaseProperties_Action>({
+                  type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                  payload: {
+                    value: [
+                      ...resourceVersionCreatorPage.baseProperties,
+                      ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                        return {
+                          key: ds.key,
+                          value: ds.value,
+                          description: ds.description,
+                        };
+                      }),
+                    ],
+                  },
+                } as const);
               }}
             >补充属性</FComponentsLib.FTextBtn>
             {
@@ -110,19 +132,35 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!dataSource) {
                       return;
                     }
-                    await onChange({
-                      dataIsDirty: true,
-                      baseProperties: [
-                        ...resourceVersionCreatorPage.baseProperties,
-                        ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                          return {
-                            key: ds.key,
-                            value: ds.value,
-                            description: ds.description,
-                          };
-                        }),
-                      ],
-                    });
+                    // await onChange({
+                    //   dataIsDirty: true,
+                    //   baseProperties: [
+                    //     ...resourceVersionCreatorPage.baseProperties,
+                    //     ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                    //       return {
+                    //         key: ds.key,
+                    //         value: ds.value,
+                    //         description: ds.description,
+                    //       };
+                    //     }),
+                    //   ],
+                    // });
+
+                    await dispatch<OnChange_BaseProperties_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                      payload: {
+                        value: [
+                          ...resourceVersionCreatorPage.baseProperties,
+                          ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                            return {
+                              key: ds.key,
+                              value: ds.value,
+                              description: ds.description,
+                            };
+                          }),
+                        ],
+                      },
+                    } as const);
                   }}
                 >从上个版本导入</FComponentsLib.FTextBtn>)
                 : undefined
@@ -162,18 +200,34 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               return;
             }
 
-            await onChange({
-              baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
-                if (i !== ind) {
-                  return bp;
-                }
-                return {
-                  key: data.key,
-                  value: data.value,
-                  description: data.description,
-                };
-              }),
-            });
+            // await onChange({
+            //   baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
+            //     if (i !== ind) {
+            //       return bp;
+            //     }
+            //     return {
+            //       key: data.key,
+            //       value: data.value,
+            //       description: data.description,
+            //     };
+            //   }),
+            // });
+
+            await dispatch<OnChange_BaseProperties_Action>({
+              type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+              payload: {
+                value: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
+                  if (i !== ind) {
+                    return bp;
+                  }
+                  return {
+                    key: data.key,
+                    value: data.value,
+                    description: data.description,
+                  };
+                }),
+              },
+            } as const);
           }}
         />
         {
@@ -190,13 +244,14 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             style={{ fontSize: 12, fontWeight: 600 }}
             type='default'
             onClick={async () => {
-              await onChange({
-                customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
-              });
+              // await onChange({
+              //   customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
+              // });
+              set_customOptionsDataVisible(!customOptionsDataVisible)
             }}
           >
             <span>自定义选项（高级）</span>
-            {resourceVersionCreatorPage.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (
+            {customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (
               <FComponentsLib.FIcons.FDown />)}
           </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
@@ -205,7 +260,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         </Space>
 
         {
-          resourceVersionCreatorPage.customOptionsDataVisible && (<>
+          customOptionsDataVisible && (<>
 
             <div style={{ height: 20 }} />
 
@@ -224,13 +279,23 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   if (!data) {
                     return;
                   }
-                  await onChange({
-                    customOptionsData: [
-                      ...resourceVersionCreatorPage.customOptionsData,
-                      ...data,
-                    ],
-                    // customOptionsEditorVisible: false,
-                  });
+                  // await onChange({
+                  //   customOptionsData: [
+                  //     ...resourceVersionCreatorPage.customOptionsData,
+                  //     ...data,
+                  //   ],
+                  //   // customOptionsEditorVisible: false,
+                  // });
+
+                  await dispatch<OnChange_CustomOptions_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    payload: {
+                      value: [
+                        ...resourceVersionCreatorPage.customOptionsData,
+                        ...data,
+                      ],
+                    },
+                  } as const);
                 }}
               >添加选项</FComponentsLib.FTextBtn>
               {
@@ -249,12 +314,21 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!data) {
                       return;
                     }
-                    await onChange({
-                      customOptionsData: [
-                        ...resourceVersionCreatorPage.customOptionsData,
-                        ...data,
-                      ],
-                    });
+                    // await onChange({
+                    //   customOptionsData: [
+                    //     ...resourceVersionCreatorPage.customOptionsData,
+                    //     ...data,
+                    //   ],
+                    // });
+                    await dispatch<OnChange_CustomOptions_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                      payload: {
+                        value: [
+                          ...resourceVersionCreatorPage.customOptionsData,
+                          ...data,
+                        ],
+                      },
+                    } as const);
                   }}>从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
@@ -274,11 +348,19 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     };
                   })}
                   onDelete={async (theKey) => {
-                    await onChange({
-                      customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
-                        return cod.key !== theKey;
-                      }),
-                    });
+                    // await onChange({
+                    //   customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
+                    //     return cod.key !== theKey;
+                    //   }),
+                    // });
+                    await dispatch<OnChange_CustomOptions_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                      payload: {
+                        value: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
+                          return cod.key !== theKey;
+                        }),
+                      },
+                    } as const);
                   }}
                   onEdit={async (theKey) => {
                     const ind: number = resourceVersionCreatorPage.customOptionsData.findIndex((cod) => {
@@ -310,20 +392,38 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       return;
                     }
 
-                    await onChange({
-                      customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
-                        if (ind !== i) {
-                          return cod;
-                        }
-                        return {
-                          key: data.key,
-                          description: data.description,
-                          custom: data.custom,
-                          defaultValue: data.defaultValue,
-                          customOption: data.customOption,
-                        };
-                      }),
-                    });
+                    // await onChange({
+                    //   customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
+                    //     if (ind !== i) {
+                    //       return cod;
+                    //     }
+                    //     return {
+                    //       key: data.key,
+                    //       description: data.description,
+                    //       custom: data.custom,
+                    //       defaultValue: data.defaultValue,
+                    //       customOption: data.customOption,
+                    //     };
+                    //   }),
+                    // });
+
+                    await dispatch<OnChange_CustomOptions_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                      payload: {
+                        value: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
+                          if (ind !== i) {
+                            return cod;
+                          }
+                          return {
+                            key: data.key,
+                            description: data.description,
+                            custom: data.custom,
+                            defaultValue: data.defaultValue,
+                            customOption: data.customOption,
+                          };
+                        }),
+                      },
+                    } as const);
                   }}
                 />)
                 : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)

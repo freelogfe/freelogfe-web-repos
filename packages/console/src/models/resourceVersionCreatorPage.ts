@@ -149,6 +149,20 @@ export interface OnClose_MarkdownEditor_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
 }
 
+export interface OnChange_BaseProperties_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_BaseProperties';
+  payload: {
+    value: ResourceVersionCreatorPageModelState['baseProperties'];
+  };
+}
+
+export interface OnChange_CustomOptions_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_CustomOptions';
+  payload: {
+    value: ResourceVersionCreatorPageModelState['customOptionsData'];
+  };
+}
+
 export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
@@ -193,6 +207,8 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
+    onChange_BaseProperties: (action: OnChange_BaseProperties_Action, effects: EffectsCommandMap) => void;
+    onChange_CustomOptions: (action: OnChange_CustomOptions_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
@@ -705,7 +721,24 @@ const Model: ResourceVersionCreatorModelType = {
         type: '_FetchDraft',
       } as const);
     },
-
+    * onChange_BaseProperties({ payload }: OnChange_BaseProperties_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          baseProperties: payload.value,
+          dataIsDirty: true,
+        },
+      } as const);
+    },
+    * onChange_CustomOptions({ payload }: OnChange_CustomOptions_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          customOptionsData: payload.value,
+          dataIsDirty: true,
+        },
+      } as const);
+    },
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
       select,

@@ -10,7 +10,6 @@ import {
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
-  // OnTrigger_SaveCache_Action,
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
@@ -24,11 +23,9 @@ import {
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-// import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-// import { Helmet } from 'umi';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
@@ -78,7 +75,7 @@ function VersionCreator({
           },
         } as const);
       }
-      
+
     },
     [resourceVersionCreatorPage.dataIsDirty],
     {
