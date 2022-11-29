@@ -173,13 +173,14 @@ function FAddDependenciesDrawer({
           totalItem: number;
         };
       } = await FServiceAPI.Resource.list(params);
+      // console.log(data_list, 'data_listiosjdlfkjsdlfkjsdlkfjlkj###########');
       resourceListResult = [
         ...resourceListResult,
         ...data_list.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r) => {
           let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
           if (baseUpcastResourceIDs.includes(r.resourceId)) {
             waring = 'upcast';
-          } else if (r.resourceStatus === 0) {
+          } else if (r.status === 0) {
             if (r.latestVersion === '') {
               waring = 'unreleased';
             } else {
@@ -265,7 +266,7 @@ function FAddDependenciesDrawer({
         {resourceListState === 'noSearchResult' && (
           <FNoDataTip height={600} tipText={'无搜索结果'} />
         )}
-
+        {/*{console.log(resourceList, 'resourceListiosdjflksdjflkj')}*/}
         {resourceListState === 'loaded' &&
         resourceList.map((resource) => {
           return (

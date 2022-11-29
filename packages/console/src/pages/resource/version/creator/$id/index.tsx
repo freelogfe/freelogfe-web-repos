@@ -287,6 +287,7 @@ function VersionCreator({
               <FResourceAuthorizationProcessor
                 resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                 processorIdentifier={'resourceVersionCreator'}
+                // width={1100}
                 // onMount={(p) => {
                 //   processor = p;
                 // }}
