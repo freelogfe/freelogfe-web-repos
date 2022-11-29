@@ -743,12 +743,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
 
     * _FetchDraft({ payload }: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {

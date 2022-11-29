@@ -68,6 +68,21 @@ function VersionCreator({
     } as const);
   });
 
+  AHooks.useDebounceEffect(
+    () => {
+      dispatch<OnTrigger_SaveDraft_Action>({
+        type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+        payload: {
+          showSuccessTip: false,
+        },
+      } as const);
+    },
+    [resourceVersionCreatorPage.descriptionEditorState],
+    {
+      wait: 3000,
+    },
+  );
+
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
     !resourceVersionCreatorPage.selectedFileInfo ||
@@ -266,6 +281,12 @@ function VersionCreator({
                         } as const);
                       },
                     });
+                    await dispatch<OnTrigger_SaveDraft_Action>({
+                      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                      payload: {
+                        showSuccessTip: false,
+                      },
+                    } as const);
                   }}
                   type='default'
                 >添加依赖</FComponentsLib.FRectBtn>
@@ -274,10 +295,16 @@ function VersionCreator({
                   resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
                   <FComponentsLib.FRectBtn
                     type='default'
-                    onClick={() => {
+                    onClick={async () => {
                       dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
                       } as const);
+                      // await dispatch<OnTrigger_SaveDraft_Action>({
+                      //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                      //   payload: {
+                      //     showSuccessTip: false,
+                      //   },
+                      // } as const);
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
