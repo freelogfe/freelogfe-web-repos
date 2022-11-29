@@ -77,7 +77,7 @@ function VersionCreator({
       }
 
     },
-    [resourceVersionCreatorPage.dataIsDirty],
+    [resourceVersionCreatorPage.dataIsDirty, resourceVersionCreatorPage.descriptionEditorState],
     {
       wait: 300,
     },
@@ -314,6 +314,14 @@ function VersionCreator({
               <FResourceAuthorizationProcessor
                 resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                 processorIdentifier={'resourceVersionCreator'}
+                onChanged={() => {
+                  dispatch<OnChange_DataIsDirty_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                    payload: {
+                      value: true,
+                    },
+                  } as const);
+                }}
                 // width={1100}
                 // onMount={(p) => {
                 //   processor = p;

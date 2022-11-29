@@ -54,6 +54,8 @@ interface FResourceAuthorizationProcessorProps {
   width?: number;
 
   onMount?(processor: Processor): void;
+
+  onChanged?(): void;
 }
 
 interface FResourceAuthorizationProcessorStates {
@@ -87,6 +89,7 @@ function FResourceAuthorizationProcessor({
                                            processorIdentifier = '',
                                            width = 860,
                                            onMount,
+                                           onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
@@ -495,6 +498,7 @@ function FResourceAuthorizationProcessor({
                 set_relations(v);
                 await _syncTargetInfo();
                 await _syncActivatedTarget();
+                onChanged && onChanged();
               }}
               onChange_ActivatedTarget={(v) => {
                 set_activatedTarget(v);
