@@ -352,7 +352,14 @@ const Model: ResourceVersionCreatorModelType = {
         payload: initStates,
       } as const);
     },
-
+    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put }: EffectsCommandMap) {
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: payload.showSuccessTip,
+        },
+      } as const);
+    },
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -522,16 +529,14 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       } as const);
-      yield put<Save>;
-    },
-    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put }: EffectsCommandMap) {
       yield put<_SaveDraft_Action>({
         type: '_SaveDraft',
         payload: {
-          showSuccessTip: payload.showSuccessTip,
+          showSuccessTip: false,
         },
       } as const);
     },
+
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -549,6 +554,13 @@ const Model: ResourceVersionCreatorModelType = {
         type: '_FetchRawProps',
         payload: {
           ifMarkdownFetchDependencies: true,
+        },
+      } as const);
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
         },
       } as const);
     },
@@ -663,6 +675,13 @@ const Model: ResourceVersionCreatorModelType = {
           ifMarkdownFetchDependencies: true,
         },
       } as const);
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
+        },
+      } as const);
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -671,6 +690,13 @@ const Model: ResourceVersionCreatorModelType = {
           selectedFileInfo: null,
           rawProperties: [],
           dataIsDirty: true,
+        },
+      } as const);
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
         },
       } as const);
     },
@@ -700,6 +726,13 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       } as const);
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
+        },
+      } as const);
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -707,6 +740,13 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           descriptionEditorState: payload.state,
           dataIsDirty: true,
+        },
+      } as const);
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
         },
       } as const);
     },
@@ -760,7 +800,7 @@ const Model: ResourceVersionCreatorModelType = {
         }
       }
     },
-    * _SaveDraft({}: _SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
+    * _SaveDraft({ payload }: _SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
@@ -770,16 +810,13 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
-      // console.log(p, 'pdsifo9jsdlfk');
       const directDependencies: any[] = yield call(p.getAllTargets);
-      // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
 
       const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.versionInput,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
         baseProperties: resourceVersionCreatorPage.baseProperties,
         customOptionsData: resourceVersionCreatorPage.customOptionsData,
-        // directDependencies: payload.dependentAllTargets,
         directDependencies: directDependencies,
         descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
       };
@@ -800,9 +837,6 @@ const Model: ResourceVersionCreatorModelType = {
         },
       } as const);
 
-      // yield put<FetchDraftDataAction>({
-      //   type: 'resourceInfo/fetchDraftData',
-      // });
       yield put<OnChange_DraftData_Action>({
         type: 'resourceInfo/onChange_DraftData',
         payload: {

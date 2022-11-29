@@ -5,19 +5,14 @@ import { Dispatch } from 'redux';
 import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
-  ChangeAction,
-  // ImportLastVersionDataAction,
+  ChangeAction, OnTrigger_SaveDraft_Action,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
 } from '@/models/connect';
-// import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
-// import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
@@ -38,8 +33,14 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
-      caller: '2345324343452==0-=-=-4534%#$%#$%#$%#$#$',
-    });
+    } as const);
+
+    await dispatch<OnTrigger_SaveDraft_Action>({
+      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+      payload: {
+        showSuccessTip: false,
+      },
+    } as const);
   }
 
   return (<>
@@ -49,8 +50,8 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         <FBaseProperties
           basics={resourceVersionCreatorPage.rawProperties}
           additions={resourceVersionCreatorPage.baseProperties}
-          onChangeAdditions={(value) => {
-            onChange({
+          onChangeAdditions={async (value) => {
+            await onChange({
               baseProperties: value,
               dataIsDirty: true,
             });
@@ -71,7 +72,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 if (!dataSource) {
                   return;
                 }
-                onChange({
+                await onChange({
                   dataIsDirty: true,
                   baseProperties: [
                     ...resourceVersionCreatorPage.baseProperties,
@@ -109,7 +110,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!dataSource) {
                       return;
                     }
-                    onChange({
+                    await onChange({
                       dataIsDirty: true,
                       baseProperties: [
                         ...resourceVersionCreatorPage.baseProperties,
@@ -161,7 +162,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               return;
             }
 
-            onChange({
+            await onChange({
               baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
                 if (i !== ind) {
                   return bp;
@@ -188,8 +189,8 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <FComponentsLib.FTextBtn
             style={{ fontSize: 12, fontWeight: 600 }}
             type='default'
-            onClick={() => {
-              onChange({
+            onClick={async () => {
+              await onChange({
                 customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
               });
             }}
@@ -223,7 +224,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   if (!data) {
                     return;
                   }
-                  onChange({
+                  await onChange({
                     customOptionsData: [
                       ...resourceVersionCreatorPage.customOptionsData,
                       ...data,
@@ -248,7 +249,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!data) {
                       return;
                     }
-                    onChange({
+                    await onChange({
                       customOptionsData: [
                         ...resourceVersionCreatorPage.customOptionsData,
                         ...data,
@@ -272,8 +273,8 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,
                     };
                   })}
-                  onDelete={(theKey) => {
-                    onChange({
+                  onDelete={async (theKey) => {
+                    await onChange({
                       customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
                         return cod.key !== theKey;
                       }),
@@ -309,7 +310,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       return;
                     }
 
-                    onChange({
+                    await onChange({
                       customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
                         if (ind !== i) {
                           return cod;
