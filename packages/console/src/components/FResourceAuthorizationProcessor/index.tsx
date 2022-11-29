@@ -51,6 +51,7 @@ export interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
   processorIdentifier?: string;
+  width?: number;
 
   onMount?(processor: Processor): void;
 }
@@ -84,6 +85,7 @@ let processors: {
 function FResourceAuthorizationProcessor({
                                            resourceID,
                                            processorIdentifier = '',
+                                           width = 860,
                                            onMount,
                                          }: FResourceAuthorizationProcessorProps) {
 
@@ -454,7 +456,7 @@ function FResourceAuthorizationProcessor({
     return null;
   }
 
-  return (<div className={styles.box}>
+  return (<div className={styles.box} style={{ width: width }}>
     <FBasicUpcastCard
       dataSource={licenseeResource.latestVersion === ''
         ? targetInfos
