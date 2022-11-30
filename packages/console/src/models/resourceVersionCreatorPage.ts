@@ -707,7 +707,7 @@ const Model: ResourceVersionCreatorModelType = {
           rawProperties: [],
           dataIsDirty: true,
         },
-      } as const);
+      });
 
       // yield put<_SaveDraft_Action>({
       //   type: '_SaveDraft',
@@ -906,7 +906,7 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             rawProperties: [],
           },
-        } as const);
+        });
         return fMessage(error, 'error');
       }
 
@@ -916,7 +916,7 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             rawProperties: [],
           },
-        } as const);
+        });
         return fMessage('文件解析失败', 'error');
       }
 
