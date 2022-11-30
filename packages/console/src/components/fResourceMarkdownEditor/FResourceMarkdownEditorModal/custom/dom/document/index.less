@@ -140,3 +140,66 @@
     }
   }
 }
+
+// 无效依赖
+.invalid-document {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  .main-area {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 6px;
+    padding: 15px;
+    box-sizing: border-box;
+
+    .row {
+      width: 100%;
+      display: flex;
+
+      & + .row {
+        margin-top: 12px;
+      }
+
+      div {
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: 4px;
+        height: 20px;
+
+        & + div {
+          margin-left: 10px;
+        }
+      }
+
+      .mini {
+        width: 80px;
+      }
+
+      .small {
+        width: 120px;
+      }
+
+      .large {
+        flex: 1;
+      }
+
+      .middle {
+        width: 330px;
+      }
+    }
+  }
+
+  .invalid-tip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e9a923;
+  }
+}

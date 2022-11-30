@@ -41,8 +41,9 @@
   }
 }
 
-// 图片资源 dom
-.audio-wrapper {
+// 音频资源 dom
+.audio-wrapper,
+.invalid-audio {
   position: relative;
   width: 100%;
   caret-color: transparent;
@@ -63,5 +64,14 @@
     flex-direction: column;
     align-items: center;
     transition: all 0.2s linear;
+
+    .invalid-tip {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      color: #e9a923;
+      font-size: 12px;
+      font-weight: 600;
+    }
   }
 }

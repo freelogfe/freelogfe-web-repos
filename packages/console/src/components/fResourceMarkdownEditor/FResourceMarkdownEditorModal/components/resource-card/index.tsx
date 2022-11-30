@@ -28,13 +28,18 @@ export const ResourceCard = (props: Props) => {
     (item: { status: number }) => item.status === 1,
   );
 
+  /** 插入资源 */
+  const insert = () => {
+    insertResource(data, editor);
+    editor.setDrawerType('');
+  };
+
   return (
     <div
       className="resource-card-wrapper"
       key={resourceId}
       onClick={() => {
-        insertResource(data, editor);
-        editor.setDrawerType('');
+        insert();
       }}
     >
       <FCoverImage

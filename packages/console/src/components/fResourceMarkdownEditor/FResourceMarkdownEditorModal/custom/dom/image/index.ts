@@ -61,6 +61,20 @@ const ImageAuthStatus = (data: CustomResource, editor: any): VNode => {
         [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
       ),
     ]),
+    5: h('div.image-auth', {}, [
+      h('div.auth-text', {}, [FI18n.i18nNext.t('mdeditor_auth_abnormal')]),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              editor.openPolicyDrawer(data);
+            },
+          },
+        },
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
+    ]),
   };
 
   return authStatusMapping[data.authType];
@@ -68,7 +82,26 @@ const ImageAuthStatus = (data: CustomResource, editor: any): VNode => {
 
 /** 图片资源 DOM */
 export const ImageResource = (data: CustomResource, editor: any): VNode => {
-  if ((data.originType === 1 && data.authType === 3) || data.originType === 2) {
+  if (data.originType === 3) {
+    // 无效依赖（不存在依赖或类型错误依赖）
+    const cover = (data.coverImages && data.coverImages[0]) || defaultCover;
+
+    return h('div.invalid-image', {}, [
+      h('div.main-area', {}, [
+        h('div.cover', {}, [
+          h('img', { props: { src: cover }, style: getCoverStyle(cover) }),
+          h('div.invalid-tip', {}, [
+            FI18n.i18nNext.t('posteditor_insert_error_invalid', {
+              ContentInfo: data.resourceName,
+            }),
+          ]),
+        ]),
+      ]),
+    ]);
+  } else if (
+    (data.originType === 1 && data.authType === 3) ||
+    data.originType === 2
+  ) {
     // 授权通过的资源或对象/url
     return h('div.authorized-image', {}, [
       ResourceToolbar(data, editor),

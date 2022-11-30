@@ -16,12 +16,9 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
     latestVersion,
     version,
   } = data;
-  // TODO authType 目前写死，之后需要通过接口获取授权状态
-  const authType = Number(sessionStorage.getItem('authorizeType') || 1) as
-    | 1
-    | 2
-    | 3
-    | 4;
+
+  const authType: 1 | 2 | 3 | 4 | 5 = await getAuthType(resourceId, editor);
+
   const insertData: CustomResource = {
     originType: 1,
     resourceId,
@@ -38,7 +35,7 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
   if (authType === 3) {
     if (['图片', '视频', '音频'].includes(resourceType[0])) {
       /** 媒体资源，获取 url */
-      const url = getMediaUrl(resourceId, version || latestVersion);
+      const url = await getMediaUrl(resourceId, version || latestVersion);
       insertData.content = url;
     } else if (['阅读'].includes(resourceType[0])) {
       /** 文本资源，获取内容 */
@@ -76,22 +73,22 @@ const getRealContent = async (
   const { allDeps, requestDeps } = await getDeps(data.resourceId, data.version);
 
   let promiseArr = [] as Promise<any>[];
-  requestDeps.forEach((dep) => {
-    const depContent = getDocContent(dep.resourceId, dep.version);
+  requestDeps.forEach(async (dep) => {
+    const depContent = await getDocContent(dep.resourceId, dep.version);
     promiseArr.push(depContent);
   });
 
   const resArr = await Promise.all(promiseArr);
 
   // 以摊开的所有依赖为准，循环替换依赖资源
-  allDeps.forEach((dep) => {
+  allDeps.forEach(async (dep) => {
     const isMedia = ['图片', '视频', '音频'].includes(dep.resourceType[0]);
 
     if (isMedia) {
       /** 媒体资源 */
       const regText = `src=[\'"]freelog://${dep.resourceName}[\'"]`;
       const reg = new RegExp(regText, 'g');
-      const url = getMediaUrl(dep.resourceId, dep.version);
+      const url = await getMediaUrl(dep.resourceId, dep.version);
       // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
       const replaceText = `src="${url}" controlslist="nodownload" oncontextmenu="return false"`;
       html = html.replace(reg, replaceText);
@@ -115,15 +112,59 @@ const getRealContent = async (
   return html;
 };
 
+/** 获取资源授权状态 */
+export const getAuthType = async (
+  resourceId: string,
+  editor: any,
+): Promise<1 | 2 | 3 | 4 | 5> => {
+  let authType: 1 | 2 | 3 | 4 | 5;
+  const { baseUpcastResources } = editor.resourceData;
+  const upcastIdList = baseUpcastResources.map((item: any) => item.resourceId);
+  if (upcastIdList.includes(resourceId)) {
+    // 上抛
+    authType = 4;
+    return authType;
+  }
+
+  const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+    licensorId: resourceId,
+    licenseeId: editor.resourceId,
+    licenseeIdentityType: 1,
+    subjectIds: resourceId,
+    subjectType: 1,
+  };
+  const authRes = await FServiceAPI.Contract.batchContracts(params);
+  if (!authRes.data[0]) {
+    // 没有合约，即未签约
+    authType = 1;
+  } else if (authRes.data[0].authStatus !== 1) {
+    // 签约且未授权
+    authType = 2;
+  } else {
+    // 签约且授权
+    const res = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/auths/resources/batchAuth/results`,
+      params: { resourceIds: resourceId },
+    });
+    authType = res.data[0].isAuth ? 3 : 5;
+  }
+  return authType;
+};
+
 /**
  * 获取媒体资源 url
  * @param resourceId 资源 id
  * @param version 资源版本号
  */
-const getMediaUrl = (resourceId: string, version: string) => {
-  const url = `${FUtil.Format.completeUrlByDomain(
-    'qi',
-  )}/v2/resources/${resourceId}/versions/${version}/download`;
+const getMediaUrl = async (resourceId: string, version: string) => {
+  const res = await FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/versions/${version}`,
+  });
+  const url = `${FUtil.Format.completeUrlByDomain('qi')}/v2/storages/files/${
+    res.data.fileSha1
+  }/download`;
   return url;
 };
 
@@ -132,11 +173,16 @@ const getMediaUrl = (resourceId: string, version: string) => {
  * @param resourceId 资源 id
  * @param version 资源版本号
  */
-const getDocContent = (resourceId: string, version: string) => {
-  return FUtil.Request({
+const getDocContent = async (resourceId: string, version: string) => {
+  const res = await FUtil.Request({
     method: 'GET',
-    url: `/v2/resources/${resourceId}/versions/${version}/download`,
+    url: `/v2/resources/${resourceId}/versions/${version}`,
   });
+  const content = await FUtil.Request({
+    method: 'GET',
+    url: `/v2/storages/files/${res.data.fileSha1}/download`,
+  });
+  return content;
 };
 
 /**
@@ -181,15 +227,15 @@ const getDeps = async (resourceId: string, version: string) => {
  * @param dataInfo 版本信息：type - 类型（资源/对象/上传/草稿），resourceId - 资源 id，version - 版本号
  */
 export const importDoc = async (
-  content: string,
   dataInfo: {
+    content: string;
     type: 'resource' | 'object' | 'upload' | 'draft';
     resourceId?: string;
     version?: string;
-    objectId?: string;
   },
+  editor: any,
 ) => {
-  const { type, resourceId = '', version = '', objectId = '' } = dataInfo;
+  const { content, type, resourceId = '', version = '' } = dataInfo;
   const {
     mdImgContent,
     imgContent,
@@ -210,7 +256,7 @@ export const importDoc = async (
   /** 循环处理 md 语法图片标记 */
   for (const item of mdImgContent) {
     const url = item.match(/(?<=!\[[^\]]*?]\()[\s\S]*?(?=\))/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', deps);
+    const domHtml = await dealInternalResources(url[0], '图片', deps, editor);
     // 将图片文本替换标记
     html = html.replace(/`#mdImgContent#`/i, domHtml);
   }
@@ -218,7 +264,7 @@ export const importDoc = async (
   /** 循环处理图片标记 */
   for (const item of imgContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', deps);
+    const domHtml = await dealInternalResources(url[0], '图片', deps, editor);
     // 将图片文本替换标记
     html = html.replace(/`#imgContent#`/i, domHtml);
   }
@@ -226,7 +272,7 @@ export const importDoc = async (
   /** 循环处理视频标记 */
   for (const item of videoContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '视频', deps);
+    const domHtml = await dealInternalResources(url[0], '视频', deps, editor);
     // 将视频文本替换标记
     html = html.replace(/`#videoContent#`/i, domHtml);
   }
@@ -234,7 +280,7 @@ export const importDoc = async (
   /** 循环处理音频标记 */
   for (const item of audioContent) {
     const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '音频', deps);
+    const domHtml = await dealInternalResources(url[0], '音频', deps, editor);
     // 将音频文本替换标记
     html = html.replace(/`#audioContent#`/i, domHtml);
   }
@@ -242,7 +288,7 @@ export const importDoc = async (
   /** 循环处理文档标记 */
   for (const item of docContent) {
     const url = item.match(/(?<={{)[\s\S]*?(?=}})/i) || [];
-    const domHtml = await dealInternalResources(url[0], '阅读', deps);
+    const domHtml = await dealInternalResources(url[0], '阅读', deps, editor);
     // 将文档文本替换标记
     html = html.replace(/`#docContent#`/i, domHtml);
   }
@@ -345,11 +391,13 @@ export const getDependencesByContent = (content: string): string[] => {
  * @param url 路径
  * @param type 资源类型
  * @param deps 第一层依赖
+ * @param editor 编辑器实例
  */
 const dealInternalResources = async (
   url: string,
   type: '图片' | '视频' | '音频' | '阅读',
   deps: any[],
+  editor: any,
 ) => {
   let data: CustomResource;
   // 是否为依赖路径
@@ -376,13 +424,18 @@ const dealInternalResources = async (
         resourceType,
         latestVersion,
       } = resourceRes.data;
+      if (resourceType[0] !== type) {
+        // 类型错误依赖
+        data = {
+          originType: 3,
+          resourceName,
+          resourceType: [type],
+          content: url,
+        };
+        return customResourceHtml(data);
+      }
 
-      // TODO authType 目前写死，之后需要通过接口获取授权状态
-      data.authType = Number(sessionStorage.getItem('authorizeType') || 1) as
-        | 1
-        | 2
-        | 3
-        | 4;
+      data.authType = await getAuthType(resourceId, editor);
       data.originType = 1;
       data.resourceId = resourceId;
       data.resourceName = resourceName;
@@ -394,7 +447,7 @@ const dealInternalResources = async (
 
       if (['图片', '视频', '音频'].includes(type)) {
         /** 媒体资源 */
-        data.content = getMediaUrl(data.resourceId, data.version);
+        data.content = await getMediaUrl(data.resourceId, data.version);
       } else if (type === '阅读') {
         /** 文档资源 */
         const docContent = await getDocContent(data.resourceId, data.version);
@@ -407,21 +460,21 @@ const dealInternalResources = async (
 
         // 请求文档依赖内容
         let promiseArr = [] as Promise<any>[];
-        requestDeps.forEach((dep) => {
-          const depContent = getDocContent(dep.resourceId, dep.version);
+        requestDeps.forEach(async (dep) => {
+          const depContent = await getDocContent(dep.resourceId, dep.version);
           promiseArr.push(depContent);
         });
         const resArr = await Promise.all(promiseArr);
 
         /** 处理深层依赖，此类依赖无需处理为资源 dom，解析为 html 即可 */
-        allDeps.forEach((dep) => {
+        allDeps.forEach(async (dep) => {
           const isMedia = ['图片', '视频', '音频'].includes(
             dep.resourceType[0],
           );
 
           if (isMedia) {
             /** 媒体资源 */
-            const url = getMediaUrl(dep.resourceId, dep.version);
+            const url = await getMediaUrl(dep.resourceId, dep.version);
             // 编辑器解析属性时，使用的 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value，所以从 md 转为 html 时，属性值内的双引号需转为 ASCII 编码（&#34;）
             // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
             const replaceText = `src=&#34;${url}&#34; controlslist=&#34;nodownload&#34; oncontextmenu=&#34;return false&#34;`;
@@ -453,6 +506,14 @@ const dealInternalResources = async (
           }
         });
       }
+    } else {
+      // 不存在依赖
+      data = {
+        originType: 3,
+        resourceName,
+        resourceType: [type],
+        content: url,
+      };
     }
   } else {
     // 外部路径

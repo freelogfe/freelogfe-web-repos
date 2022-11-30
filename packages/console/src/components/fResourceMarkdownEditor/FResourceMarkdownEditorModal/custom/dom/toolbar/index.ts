@@ -76,6 +76,22 @@ const ToolbarAuthStatus = (data: CustomResource, editor: any): VNode => {
         [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
       ),
     ]),
+    5: h('div.toolbar-auth', {}, [
+      h('div.auth-text upcast-text', {}, [
+        FI18n.i18nNext.t('mdeditor_auth_abnormal'),
+      ]),
+      h(
+        'div.authorize-btn',
+        {
+          on: {
+            click() {
+              editor.openPolicyDrawer(data);
+            },
+          },
+        },
+        [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
+      ),
+    ]),
   };
 
   return authStatusMapping[data.authType];
@@ -107,7 +123,7 @@ export const ResourceToolbar = (data: CustomResource, editor: any): VNode => {
         ToolbarAuthStatus(data, editor),
       ]),
     ]);
-  } else {
+  } else if (originType === 2) {
     return h('div.resource-toolbar', {}, [
       h('div.toolbar', {}, [
         h('div.type', {}, [FI18n.i18nNext.t('insert_toolbar_type_url')]),
@@ -115,5 +131,7 @@ export const ResourceToolbar = (data: CustomResource, editor: any): VNode => {
         ToolbarAuthStatus(data, editor),
       ]),
     ]);
+  } else {
+    return h('div');
   }
 };
