@@ -44,12 +44,15 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 }
 
 function VersionCreator({
-                          dispatch,
-                          resourceInfo,
-                          resourceVersionCreatorPage,
-                          match,
-                        }: VersionCreatorProps) {
+  dispatch,
+  resourceInfo,
+  resourceVersionCreatorPage,
+  match,
+}: VersionCreatorProps) {
   // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
+
+  const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
+
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'resourceVersionCreatorPage/onMountPage',
@@ -102,12 +105,13 @@ function VersionCreator({
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {
-        await dispatch<OnChange_DataIsDirty_Action>({
-          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-          payload: {
-            value: saved,
-          },
-        } as const);
+        // await dispatch<OnChange_DataIsDirty_Action>({
+        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+        //   payload: {
+        //     value: saved,
+        //   },
+        // } as const);
+        set_isMarkdownEditorDirty(!saved);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
@@ -118,13 +122,12 @@ function VersionCreator({
   return (
     <>
       <Helmet>
-        <title>{`创建版本 · ${
-          resourceVersionCreatorPage.resourceInfo?.resourceName || ''
-        } - Freelog`}</title>
+        <title>{`创建版本 · ${resourceVersionCreatorPage.resourceInfo?.resourceName || ''
+          } - Freelog`}</title>
       </Helmet>
 
       <FPrompt
-        watch={resourceVersionCreatorPage.dataIsDirty}
+        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       <FLeftSiderLayout
@@ -322,10 +325,10 @@ function VersionCreator({
                     },
                   } as const);
                 }}
-                // width={1100}
-                // onMount={(p) => {
-                //   processor = p;
-                // }}
+              // width={1100}
+              // onMount={(p) => {
+              //   processor = p;
+              // }}
               />
             </div>
           </FFormLayout.FBlock>
@@ -362,10 +365,10 @@ interface HeaderProps {
 }
 
 function Header({
-                  onClickCache,
-                  onClickCreate,
-                  disabledCreate = false,
-                }: HeaderProps) {
+  onClickCache,
+  onClickCreate,
+  disabledCreate = false,
+}: HeaderProps) {
   return (
     <div className={styles.Header}>
       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
