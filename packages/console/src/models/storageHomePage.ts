@@ -24,6 +24,7 @@ export interface StorageHomePageModelState {
   totalStorage: number;
   usedStorage: number;
 
+  filterInput: string;
   object_List: {
     key: string;
     id: string;
@@ -98,6 +99,13 @@ export interface CreateObjectAction extends AnyAction {
   payload: { sha1: string; objectName: string };
 }
 
+export interface OnChange_FilterInput_Action extends AnyAction {
+  type: 'storageHomePage/onChange_FilterInput';
+  payload: {
+    value: string;
+  };
+}
+
 export interface FetchObjectsAction extends AnyAction {
   type: 'storageHomePage/fetchObjects' | 'fetchObjects';
   payload?: 'restart' | 'insert' | 'append';
@@ -130,6 +138,7 @@ interface StorageHomePageModelType {
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
+    onChange_FilterInput: (action: OnChange_FilterInput_Action, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
     uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
@@ -156,6 +165,7 @@ const Model: StorageHomePageModelType = {
     totalStorage: -1,
     usedStorage: -1,
 
+    filterInput: '',
     object_List: [],
     object_ListState: 'loading',
     object_ListMore: 'loading',
@@ -354,6 +364,20 @@ const Model: StorageHomePageModelType = {
       };
       yield call(FServiceAPI.Storage.createObject, params);
     },
+    * onChange_FilterInput({ payload }: OnChange_FilterInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          filterInput: payload.value,
+        },
+      });
+
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
+        payload: 'restart',
+      });
+
+    },
     * fetchObjects({ payload = 'restart' }: FetchObjectsAction, { select, call, put }: EffectsCommandMap) {
       const { storageHomePage, user }: ConnectState = yield select(({ storageHomePage, user }: ConnectState) => ({
         storageHomePage,
@@ -380,6 +404,7 @@ const Model: StorageHomePageModelType = {
         limit,
         skip,
         sort: 'updateDate:-1',
+        keywords: storageHomePage.filterInput,
       };
       yield put<ChangeAction>({
         type: 'change',
@@ -469,7 +494,7 @@ const Model: StorageHomePageModelType = {
 
       const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
         fullObjectNames: payload.map((p) => {
-        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
+          // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
           return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
         }).join(','),
         projection: 'objectId,objectName',
