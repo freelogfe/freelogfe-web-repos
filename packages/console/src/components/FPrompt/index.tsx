@@ -45,6 +45,8 @@ function FPrompt({ watch, messageText }: FPromptProps) {
         onCancel() {
           set_promptLeavePath(promptLeavePath);
         },
+        okText: '确定',
+        cancelText: '取消',
       });
       return false;
     }}
