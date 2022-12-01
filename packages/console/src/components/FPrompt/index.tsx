@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import fConfirmModal from '@/components/fConfirmModal';
 import { Prompt } from 'umi';
-import * as H from 'history';
+// import * as H from 'history';
 import { history } from '@@/core/history';
 
 interface FPromptProps {
@@ -32,7 +32,7 @@ function FPrompt({ watch, messageText }: FPromptProps) {
 
   return (<Prompt
     when={promptLeavePath === '' && watch}
-    message={(location: H.Location, action: H.Action) => {
+    message={(location, action) => {
       // console.log(location, action, 'lLLLLLLddfsido9fjsldkfjsdlfjsdlkjl');
       const locationHref: string = location.pathname + location.search + location.hash;
       set_promptLeavePath(locationHref);

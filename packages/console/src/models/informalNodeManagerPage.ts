@@ -340,7 +340,7 @@ export interface InformalNodeManagerPageModelState {
   }[];
   rule_CodeInput: string;
   rule_CodeIsDirty: boolean;
-  rule_PromptLeavePath: string;
+  // rule_PromptLeavePath: string;
 
   rule_CodeState: 'editing' | 'checking' | 'compileError' | 'executionError' | 'noError';
   rule_CodeCompileErrors: {
@@ -414,20 +414,20 @@ export interface OnUnmountRulePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onUnmountRulePage';
 }
 
-export interface OnPromptRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onPromptRulePageLeave';
-  payload: {
-    href: string;
-  };
-}
-
-export interface OnConfirmRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onConfirmRulePageLeave';
-}
-
-export interface OnCancelRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onCancelRulePageLeave';
-}
+// export interface OnPromptRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onPromptRulePageLeave';
+//   payload: {
+//     href: string;
+//   };
+// }
+//
+// export interface OnConfirmRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onConfirmRulePageLeave';
+// }
+//
+// export interface OnCancelRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onCancelRulePageLeave';
+// }
 
 export interface FetchNodeInfoAction extends AnyAction {
   type: 'fetchNodeInfo';
@@ -768,9 +768,9 @@ interface InformalNodeManagerPageModelType {
     onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
     onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
     onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
-    onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
+    // onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
+    // onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
+    // onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
 
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
 
@@ -906,7 +906,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_RuleList' |
   'rule_CodeInput' |
   'rule_CodeIsDirty' |
-  'rule_PromptLeavePath' |
+  // 'rule_PromptLeavePath' |
   'rule_CodeState' |
   'rule_CodeCompileErrors' |
   'rule_CodeExecutionErrors' |
@@ -915,7 +915,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   rule_RuleList: [],
   rule_CodeInput: '',
   rule_CodeIsDirty: false,
-  rule_PromptLeavePath: '',
+  // rule_PromptLeavePath: '',
   rule_CodeState: 'editing',
   rule_CodeCompileErrors: [],
   rule_CodeExecutionErrors: [],
@@ -1069,30 +1069,30 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onPromptRulePageLeave({ payload }: OnPromptRulePageLeaveAction, { put }: EffectsCommandMap) {
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rule_PromptLeavePath: payload.href,
-        },
-      });
-
-    },
-    * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, { select }: EffectsCommandMap) {
-      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
-      history.push(informalNodeManagerPage.rule_PromptLeavePath);
-    },
-    * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rule_PromptLeavePath: '',
-        },
-      });
-    },
+    // * onPromptRulePageLeave({ payload }: OnPromptRulePageLeaveAction, { put }: EffectsCommandMap) {
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       // rule_PromptLeavePath: payload.href,
+    //     },
+    //   });
+    //
+    // },
+    // * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, { select }: EffectsCommandMap) {
+    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+    //     informalNodeManagerPage,
+    //   }));
+    //   // history.push(informalNodeManagerPage.rule_PromptLeavePath);
+    // },
+    // * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       // rule_PromptLeavePath: '',
+    //     },
+    //   });
+    // },
     * fetchNodeInfo({}: FetchNodeInfoAction, { select, put, call }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
