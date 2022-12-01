@@ -112,26 +112,13 @@ function ResourceCreator({
       {/*  }}*/}
       {/*/>*/}
       <FContentLayout
-        header={
-          <Header
-            disabled={
-              resourceCreatorPage.name === '' ||
-              resourceCreatorPage.nameVerify !== 2 ||
-              // resourceCreatorPage.resourceTypeVerify !== 2 ||
-              resourceCreatorPage.nameErrorText !== '' ||
-              // !!resourceCreatorPage.resourceTypeErrorText ||
-              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
-              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
-              !!resourceCreatorPage.introductionErrorText
-            }
-            onClickCreate={() => {
-              // console.log('********')
-              dispatch<OnClick_CreateBtn_Action>({
-                type: 'resourceCreatorPage/onClick_CreateBtn',
-              });
-            }}
+        header={<div className={styles.Header}>
+          <FComponentsLib.FTitleText
+            // text={FUtil.I18n.message('create_resource')}
+            text={'创建资源'}
+            type='h1'
           />
-        }
+        </div>}
       >
         <FFormLayout>
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
@@ -260,28 +247,28 @@ function ResourceCreator({
   );
 }
 
-interface HeaderProps {
-  onClickCreate: () => void;
-  disabled?: boolean;
-}
-
-function Header({ onClickCreate, disabled = false }: HeaderProps) {
-  return (
-    <div className={styles.Header}>
-      <FComponentsLib.FTitleText
-        // text={FUtil.I18n.message('create_resource')}
-        text={'创建资源'}
-        type='h1'
-      />
-
-      {/*<Space size={30}>*/}
-      {/*  <FComponentsLib.FRectBtn disabled={disabled} onClick={onClickCreate}>*/}
-      {/*    {FI18n.i18nNext.t('create')}*/}
-      {/*  </FComponentsLib.FRectBtn>*/}
-      {/*</Space>*/}
-    </div>
-  );
-}
+// interface HeaderProps {
+//   onClickCreate: () => void;
+//   disabled?: boolean;
+// }
+//
+// function Header({ onClickCreate, disabled = false }: HeaderProps) {
+//   return (
+//     <div className={styles.Header}>
+//       <FComponentsLib.FTitleText
+//         // text={FUtil.I18n.message('create_resource')}
+//         text={'创建资源'}
+//         type='h1'
+//       />
+//
+//       {/*<Space size={30}>*/}
+//       {/*  <FComponentsLib.FRectBtn disabled={disabled} onClick={onClickCreate}>*/}
+//       {/*    {FI18n.i18nNext.t('create')}*/}
+//       {/*  </FComponentsLib.FRectBtn>*/}
+//       {/*</Space>*/}
+//     </div>
+//   );
+// }
 
 export default connect(({ resourceCreatorPage, user }: ConnectState) => ({
   resourceCreatorPage: resourceCreatorPage,

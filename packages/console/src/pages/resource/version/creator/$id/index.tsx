@@ -44,11 +44,11 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 }
 
 function VersionCreator({
-  dispatch,
-  resourceInfo,
-  resourceVersionCreatorPage,
-  match,
-}: VersionCreatorProps) {
+                          dispatch,
+                          resourceInfo,
+                          resourceVersionCreatorPage,
+                          match,
+                        }: VersionCreatorProps) {
   // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
@@ -123,7 +123,7 @@ function VersionCreator({
     <>
       <Helmet>
         <title>{`创建版本 · ${resourceVersionCreatorPage.resourceInfo?.resourceName || ''
-          } - Freelog`}</title>
+        } - Freelog`}</title>
       </Helmet>
 
       <FPrompt
@@ -131,25 +131,12 @@ function VersionCreator({
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       <FLeftSiderLayout
+        // hasBottom={false}
         sider={<Sider />}
-        header={
-          <Header
-            onClickCreate={async () => {
-              dispatch<OnClick_CreateVersionBtn_Action>({
-                type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-              } as const);
-            }}
-            onClickCache={async () => {
-              dispatch<OnTrigger_SaveDraft_Action>({
-                type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                payload: {
-                  showSuccessTip: true,
-                },
-              } as const);
-            }}
-            disabledCreate={hasError}
-          />
-        }
+        header={<div className={styles.Header}>
+          {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
+          <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
+        </div>}
       >
         <FFormLayout>
           <FFormLayout.FBlock
@@ -325,10 +312,10 @@ function VersionCreator({
                     },
                   } as const);
                 }}
-              // width={1100}
-              // onMount={(p) => {
-              //   processor = p;
-              // }}
+                // width={1100}
+                // onMount={(p) => {
+                //   processor = p;
+                // }}
               />
             </div>
           </FFormLayout.FBlock>
@@ -353,46 +340,81 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
         </FFormLayout>
+        <div style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', right: -30, top: 60 }}>
+            <Space size={30}>
+              <FComponentsLib.FTextBtn
+                type='default'
+                onClick={() => {
+                  dispatch<OnTrigger_SaveDraft_Action>({
+                    type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                    payload: {
+                      showSuccessTip: true,
+                    },
+                  });
+                }}
+              >
+                {FI18n.i18nNext.t('save_as_draft')}
+              </FComponentsLib.FTextBtn>
+              <FComponentsLib.FRectBtn
+                style={{ display: 'flex', alignItems: 'center' }}
+                onClick={() => {
+                  dispatch<OnClick_CreateVersionBtn_Action>({
+                    type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
+                  });
+                }}
+                disabled={hasError}
+              >
+                <FComponentsLib.FIcons.FPaperPlane
+                  style={{ fontWeight: 400, fontSize: 16 }}
+                />
+                <div style={{ width: 5 }} />
+                {FI18n.i18nNext.t('release_to_market')}
+              </FComponentsLib.FRectBtn>
+            </Space>
+          </div>
+        </div>
       </FLeftSiderLayout>
+
     </>
   );
 }
 
-interface HeaderProps {
-  onClickCache: () => void;
-  onClickCreate: () => void;
-  disabledCreate?: boolean;
-}
-
-function Header({
-  onClickCache,
-  onClickCreate,
-  disabledCreate = false,
-}: HeaderProps) {
-  return (
-    <div className={styles.Header}>
-      {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-      <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
-
-      <Space size={30}>
-        <FComponentsLib.FTextBtn type='default' onClick={onClickCache}>
-          {FI18n.i18nNext.t('save_as_draft')}
-        </FComponentsLib.FTextBtn>
-        <FComponentsLib.FRectBtn
-          style={{ display: 'flex', alignItems: 'center' }}
-          onClick={onClickCreate}
-          disabled={disabledCreate}
-        >
-          <FComponentsLib.FIcons.FPaperPlane
-            style={{ fontWeight: 400, fontSize: 16 }}
-          />
-          <div style={{ width: 5 }} />
-          {FI18n.i18nNext.t('release_to_market')}
-        </FComponentsLib.FRectBtn>
-      </Space>
-    </div>
-  );
-}
+// interface HeaderProps {
+//   onClickCache: () => void;
+//   onClickCreate: () => void;
+//   disabledCreate?: boolean;
+// }
+//
+// function Header({
+//                   onClickCache,
+//                   onClickCreate,
+//                   disabledCreate = false,
+//                 }: HeaderProps) {
+//   return (
+//     <div className={styles.Header}>
+//       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
+//       <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
+//
+//       {/*<Space size={30}>*/}
+//       {/*  <FComponentsLib.FTextBtn type='default' onClick={onClickCache}>*/}
+//       {/*    {FI18n.i18nNext.t('save_as_draft')}*/}
+//       {/*  </FComponentsLib.FTextBtn>*/}
+//       {/*  <FComponentsLib.FRectBtn*/}
+//       {/*    style={{ display: 'flex', alignItems: 'center' }}*/}
+//       {/*    onClick={onClickCreate}*/}
+//       {/*    disabled={disabledCreate}*/}
+//       {/*  >*/}
+//       {/*    <FComponentsLib.FIcons.FPaperPlane*/}
+//       {/*      style={{ fontWeight: 400, fontSize: 16 }}*/}
+//       {/*    />*/}
+//       {/*    <div style={{ width: 5 }} />*/}
+//       {/*    {FI18n.i18nNext.t('release_to_market')}*/}
+//       {/*  </FComponentsLib.FRectBtn>*/}
+//       {/*</Space>*/}
+//     </div>
+//   );
+// }
 
 export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
