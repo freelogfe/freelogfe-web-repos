@@ -25,7 +25,7 @@ export interface ResourceCreatorPageModelState {
   cover: string;
   labels: string[];
 
-  promptLeavePath: string;
+  // promptLeavePath: string;
   dataIsDirty: boolean;
 }
 
@@ -121,7 +121,7 @@ export const initStates: ResourceCreatorPageModelState = {
 
   labels: [],
 
-  promptLeavePath: '',
+  // promptLeavePath: '',
   dataIsDirty: false,
 };
 

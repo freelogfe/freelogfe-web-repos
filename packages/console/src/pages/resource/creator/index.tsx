@@ -24,16 +24,17 @@ import {
   OnChange_Cover_Action,
   OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
-import { history } from 'umi';
+// import { history } from 'umi';
 // import { FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
-import * as H from 'history';
-import { Prompt } from 'umi';
-import fConfirmModal from '@/components/fConfirmModal';
+// import * as H from 'history';
+// import { Prompt } from 'umi';
+// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
+import FPrompt from '@/components/FPrompt';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -69,43 +70,47 @@ function ResourceCreator({
 
   return (
     <>
-      <Prompt
-        when={
-          resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] && resourceCreatorPage.dataIsDirty
-        }
-        message={(location: H.Location, action: H.Action) => {
-          // console.log(location, action, 'LAAAAL');
-          // return window.confirm('还没有创建资源，现在离开会导致信息丢失');
-          if (location.pathname === FUtil.LinkTo.resourceCreator()) {
-            return true;
-          }
-          dispatch<ChangeAction>({
-            type: 'resourceCreatorPage/change',
-            payload: {
-              promptLeavePath: location.pathname + location.search,
-            },
-          });
-          fConfirmModal({
-            message: '还没有创建资源，现在离开会导致信息丢失',
-            cancelText: FI18n.i18nNext.t('btn_cancel'),
-            okText: FI18n.i18nNext.t('btn_leave'),
-            onOk() {
-              // console.log('OK');
-              history.push(location.pathname + location.search);
-            },
-            onCancel() {
-              // console.log('Cancel');
-              dispatch<ChangeAction>({
-                type: 'resourceCreatorPage/change',
-                payload: {
-                  promptLeavePath: '',
-                },
-              });
-            },
-          });
-          return false;
-        }}
+      <FPrompt
+        watch={resourceCreatorPage.dataIsDirty}
+        messageText={'还没有创建资源，现在离开会导致信息丢失'}
       />
+      {/*<Prompt*/}
+      {/*  when={*/}
+      {/*    resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] && resourceCreatorPage.dataIsDirty*/}
+      {/*  }*/}
+      {/*  message={(location: H.Location, action: H.Action) => {*/}
+      {/*    // console.log(location, action, 'LAAAAL');*/}
+      {/*    // return window.confirm('还没有创建资源，现在离开会导致信息丢失');*/}
+      {/*    if (location.pathname === FUtil.LinkTo.resourceCreator()) {*/}
+      {/*      return true;*/}
+      {/*    }*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'resourceCreatorPage/change',*/}
+      {/*      payload: {*/}
+      {/*        promptLeavePath: location.pathname + location.search,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    fConfirmModal({*/}
+      {/*      message: '还没有创建资源，现在离开会导致信息丢失',*/}
+      {/*      cancelText: FI18n.i18nNext.t('btn_cancel'),*/}
+      {/*      okText: FI18n.i18nNext.t('btn_leave'),*/}
+      {/*      onOk() {*/}
+      {/*        // console.log('OK');*/}
+      {/*        history.push(location.pathname + location.search);*/}
+      {/*      },*/}
+      {/*      onCancel() {*/}
+      {/*        // console.log('Cancel');*/}
+      {/*        dispatch<ChangeAction>({*/}
+      {/*          type: 'resourceCreatorPage/change',*/}
+      {/*          payload: {*/}
+      {/*            promptLeavePath: '',*/}
+      {/*          },*/}
+      {/*        });*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    return false;*/}
+      {/*  }}*/}
+      {/*/>*/}
       <FContentLayout
         header={
           <Header
@@ -131,7 +136,7 @@ function ResourceCreator({
         <FFormLayout>
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
             <div className={styles.resourceName}>
-              <FComponentsLib.FContentText text={`${user.info?.username} /`} />
+              <FComponentsLib.FContentText text={`${resourceCreatorPage.userName} /`} />
               &nbsp;
               <FInput
                 errorText={resourceCreatorPage.nameErrorText}
@@ -229,6 +234,28 @@ function ResourceCreator({
           </FFormLayout.FBlock>
         </FFormLayout>
       </FContentLayout>
+
+      <div style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: 920 }}>
+          <FComponentsLib.FRectBtn
+            disabled={resourceCreatorPage.name === '' ||
+              resourceCreatorPage.nameVerify !== 2 ||
+              // resourceCreatorPage.resourceTypeVerify !== 2 ||
+              resourceCreatorPage.nameErrorText !== '' ||
+              // !!resourceCreatorPage.resourceTypeErrorText ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
+              !!resourceCreatorPage.introductionErrorText}
+            onClick={() => {
+              dispatch<OnClick_CreateBtn_Action>({
+                type: 'resourceCreatorPage/onClick_CreateBtn',
+              });
+            }}
+          >
+            {FI18n.i18nNext.t('create')}
+          </FComponentsLib.FRectBtn>
+        </div>
+      </div>
     </>
   );
 }
@@ -247,11 +274,11 @@ function Header({ onClickCreate, disabled = false }: HeaderProps) {
         type='h1'
       />
 
-      <Space size={30}>
-        <FComponentsLib.FRectBtn disabled={disabled} onClick={onClickCreate}>
-          {FI18n.i18nNext.t('create')}
-        </FComponentsLib.FRectBtn>
-      </Space>
+      {/*<Space size={30}>*/}
+      {/*  <FComponentsLib.FRectBtn disabled={disabled} onClick={onClickCreate}>*/}
+      {/*    {FI18n.i18nNext.t('create')}*/}
+      {/*  </FComponentsLib.FRectBtn>*/}
+      {/*</Space>*/}
     </div>
   );
 }
