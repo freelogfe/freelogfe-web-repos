@@ -290,7 +290,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
           },
         },
-      } as const);
+      });
 
       let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
@@ -354,11 +354,11 @@ const Model: ResourceVersionCreatorModelType = {
           preVersionDirectDependencies,
           descriptionEditorState,
         },
-      } as const);
+      });
 
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      } as const);
+      });
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -366,7 +366,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
-      } as const);
+      });
     },
     * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put }: EffectsCommandMap) {
       yield put<_SaveDraft_Action>({
@@ -374,7 +374,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           showSuccessTip: payload.showSuccessTip,
         },
-      } as const);
+      });
     },
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
@@ -391,7 +391,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      } as const);
+      });
       const p: {
         getAllTargets(): void;
         getAllResourcesWithContracts(): void;
@@ -500,12 +500,12 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
-      } as const);
+      });
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
         caller: '97293874823yu4oi234io23hjkfdsasdf',
-      } as const);
+      });
       // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
       history.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
         resourceID: data.resourceId,
@@ -517,17 +517,14 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      } as const);
+      });
 
-      // yield put<FetchDraftDataAction>({
-      //   type: 'resourceInfo/fetchDraftData',
-      // });
       yield put<OnChange_DraftData_Action>({
         type: 'resourceInfo/onChange_DraftData',
         payload: {
           draftData: null,
         },
-      } as const);
+      });
     },
     * onChange_DataIsDirty({ payload }: OnChange_DataIsDirty_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -535,7 +532,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: payload.value,
         },
-      } as const);
+      });
     },
     * onChange_VersionInput({ payload }: OnChange_VersionInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -544,13 +541,7 @@ const Model: ResourceVersionCreatorModelType = {
           versionInput: payload.value,
           dataIsDirty: true,
         },
-      } as const);
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
+      });
     },
 
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
@@ -564,21 +555,14 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      } as const);
+      });
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      } as const);
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
+      });
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -591,7 +575,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      } as const);
+      });
 
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: payload.objID,
@@ -690,14 +674,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      } as const);
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
+      });
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -708,18 +685,11 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       });
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      } as const);
+      });
     },
     * onChange_BaseProperties({ payload }: OnChange_BaseProperties_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -728,7 +698,7 @@ const Model: ResourceVersionCreatorModelType = {
           baseProperties: payload.value,
           dataIsDirty: true,
         },
-      } as const);
+      });
     },
     * onChange_CustomOptions({ payload }: OnChange_CustomOptions_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -737,7 +707,7 @@ const Model: ResourceVersionCreatorModelType = {
           customOptionsData: payload.value,
           dataIsDirty: true,
         },
-      } as const);
+      });
     },
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
@@ -758,14 +728,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: true,
         },
-      } as const);
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
+      });
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -774,14 +737,7 @@ const Model: ResourceVersionCreatorModelType = {
           descriptionEditorState: payload.state,
           dataIsDirty: true,
         },
-      } as const);
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // } as const);
+      });
     },
 
     * _FetchDraft({ payload }: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
@@ -815,7 +771,7 @@ const Model: ResourceVersionCreatorModelType = {
             customOptionsData: draftData.customOptionsData,
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
-        } as const);
+        });
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -829,7 +785,7 @@ const Model: ResourceVersionCreatorModelType = {
             payload: {
               ifMarkdownFetchDependencies: false,
             },
-          } as const);
+          });
         }
       }
     },
@@ -868,14 +824,14 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      } as const);
+      });
 
       yield put<OnChange_DraftData_Action>({
         type: 'resourceInfo/onChange_DraftData',
         payload: {
           draftData: draftData,
         },
-      } as const);
+      });
     },
     * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -891,7 +847,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           rawPropertiesState: 'parsing',
         },
-      } as const);
+      });
 
       const params: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
@@ -932,7 +888,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             rawPropertiesState: 'success',
           },
-        } as const);
+        });
 
         // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
 
