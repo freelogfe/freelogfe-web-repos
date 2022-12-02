@@ -380,42 +380,6 @@ function VersionCreator({
   );
 }
 
-// interface HeaderProps {
-//   onClickCache: () => void;
-//   onClickCreate: () => void;
-//   disabledCreate?: boolean;
-// }
-//
-// function Header({
-//                   onClickCache,
-//                   onClickCreate,
-//                   disabledCreate = false,
-//                 }: HeaderProps) {
-//   return (
-//     <div className={styles.Header}>
-//       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
-//       <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
-//
-//       {/*<Space size={30}>*/}
-//       {/*  <FComponentsLib.FTextBtn type='default' onClick={onClickCache}>*/}
-//       {/*    {FI18n.i18nNext.t('save_as_draft')}*/}
-//       {/*  </FComponentsLib.FTextBtn>*/}
-//       {/*  <FComponentsLib.FRectBtn*/}
-//       {/*    style={{ display: 'flex', alignItems: 'center' }}*/}
-//       {/*    onClick={onClickCreate}*/}
-//       {/*    disabled={disabledCreate}*/}
-//       {/*  >*/}
-//       {/*    <FComponentsLib.FIcons.FPaperPlane*/}
-//       {/*      style={{ fontWeight: 400, fontSize: 16 }}*/}
-//       {/*    />*/}
-//       {/*    <div style={{ width: 5 }} />*/}
-//       {/*    {FI18n.i18nNext.t('release_to_market')}*/}
-//       {/*  </FComponentsLib.FRectBtn>*/}
-//       {/*</Space>*/}
-//     </div>
-//   );
-// }
-
 export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
   resourceInfo: resourceInfo,

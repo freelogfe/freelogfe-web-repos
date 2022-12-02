@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import fConfirmModal from '@/components/fConfirmModal';
 import { Prompt } from 'umi';
-// import * as H from 'history';
 import { history } from '@@/core/history';
 
 interface FPromptProps {

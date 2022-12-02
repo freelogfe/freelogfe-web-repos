@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FFormLayout from '@/components/FFormLayout';
-// import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
@@ -101,10 +99,6 @@ function Setting({ dispatch, settingPage }: SettingProps) {
     </div>
   );
 }
-
-// export default connect(({ settingPage }: ConnectState) => ({
-//   settingPage,
-// }))(Setting);
 
 export default connect(({ settingPage }: ConnectState) => ({
   settingPage,

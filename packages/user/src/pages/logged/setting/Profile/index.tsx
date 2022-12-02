@@ -12,9 +12,7 @@ import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, message, Upload } from 'antd';
-// import type { UploadChangeParam } from 'antd/es/upload';
-import { LoadingOutlined } from '@ant-design/icons';
-// import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+// import { LoadingOutlined } from '@ant-design/icons';
 import {
   OnChange_Birthday_Action,
   OnChange_Career_Action,
@@ -22,15 +20,11 @@ import {
   OnChange_ProfileText_Action,
   OnChange_Residence_Action,
   OnClick_SubmitUserInfoBtn_Action,
-  ChangeAction as SettingPageChangeAction,
+  ChangeAction as SettingPageChangeAction, OnClick_EditUserInfoBtn_Action,
 } from '@/models/settingPage';
 import { ChangeAction as UserChangeAction } from '@/models/user';
 import { Moment } from 'moment';
-// import { FServiceAPI } from '@freelog/tools-lib';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-
-
-const DatePickerAsAnyType: any = DatePicker;
 import FComponentsLib from '@freelog/components-lib';
 import FUploadAvatar from '@/components/FUploadAvatar';
 import fMessage from '@/components/fMessage';
@@ -43,84 +37,6 @@ interface ProfileProps {
 
 
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
-  // FServiceAPI.User.uploadHeadImg({
-  //   file: File,
-  // })
-  const [loading, setLoading] = React.useState(false);
-
-  // const handleChange: UploadProps['onChange'] = async (
-  //   info: UploadChangeParam<UploadFile>,
-  // ) => {
-  //   if (info.file.status === 'uploading') {
-  //     setLoading(true);
-  //     return;
-  //   }
-  //   if (info.file.status === 'done') {
-  //     // console.log(info.file.originFileObj);
-  //     await FServiceAPI.User.uploadHeadImg({
-  //       // @ts-ignore
-  //       file: info.file.originFileObj,
-  //     });
-  //     dispatch<FetchInfoAction>({
-  //       type: 'user/fetchInfo',
-  //     });
-  //
-  //     setLoading(false);
-  //     // Get this url from response in real world.
-  //     // getBase64(info.file.originFileObj as RcFile, (url) => {
-  //     //   setLoading(false);
-  //     //   setImageUrl(url);
-  //     // });
-  //   }
-  // };
-
-  // async function beforeUpload(file: RcFile) {
-  //   const isJpgOrPng =
-  //     file.type === 'image/jpeg' ||
-  //     file.type === 'image/png' ||
-  //     file.type === 'image/gif';
-  //   if (!isJpgOrPng) {
-  //     return message.error('You can only upload JPG/PNG/gif file!');
-  //   }
-  //   const isLt2M = file.size / 1024 / 1024 < 2;
-  //   if (!isLt2M) {
-  //     return message.error('Image must smaller than 2MB!');
-  //   }
-  //
-  //   // return isJpgOrPng && isLt2M;
-  //   const { data } = await FServiceAPI.User.uploadHeadImg({
-  //     file: file,
-  //   });
-  //
-  //   const nowTime: number = Date.now();
-  //
-  //   dispatch<SettingPageChangeAction>({
-  //     type: 'settingPage/change',
-  //     payload: {
-  //       avatar: data + '&' + nowTime,
-  //     },
-  //   });
-  //   // console.log(data, '0983ioslkdfsldkjflsdkj');
-  //
-  //   dispatch<UserChangeAction>({
-  //     type: 'user/change',
-  //     payload: {
-  //       // @ts-ignore
-  //       userInfo: {
-  //         ...(user?.userInfo || {}),
-  //         headImage: data + '&' + nowTime,
-  //       },
-  //     },
-  //   });
-  //   // setTimeout(() => {
-  //   //   dispatch<FetchInfoAction>({
-  //   //     type: 'user/fetchInfo',
-  //   //   });
-  //   // }, 1000);
-  //
-  //
-  //   return false;
-  // }
 
   return (
     <>
@@ -136,39 +52,31 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             dispatch<SettingPageChangeAction>({
               type: 'settingPage/change',
               payload: {
-                avatar: data + '&' + nowTime,
+                profile_avatar: data + '&' + nowTime,
               },
             });
 
-            dispatch<UserChangeAction>({
-              type: 'user/change',
-              payload: {
-                // @ts-ignore
-                userInfo: {
-                  ...(user?.userInfo || {}),
-                  headImage: data + '&' + nowTime,
+            if (user?.userInfo) {
+              dispatch<UserChangeAction>({
+                type: 'user/change',
+                payload: {
+                  userInfo: {
+                    ...user.userInfo,
+                    headImage: data + '&' + nowTime,
+                  },
                 },
-              },
-            });
+              });
+            }
           }}
         >
           <div
             className={styles.container}
           >
-            {/*<Upload*/}
-            {/*  name='avatar'*/}
-            {/*  className='avatar-uploader'*/}
-            {/*  showUploadList={false}*/}
-            {/*  beforeUpload={beforeUpload}*/}
-            {/*  // onChange={handleChange}*/}
-            {/*>*/}
             <div
-              // src={settingPage.avatar}
-              // alt="avatar"
               style={{
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${settingPage.avatar})`,
+                backgroundImage: `url(${settingPage.profile_avatar})`,
                 width: 130,
                 height: 130,
                 borderRadius: '50%',
@@ -176,11 +84,9 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             />
             <div
               className={styles.hoverDiv}
-              style={loading ? { display: 'flex' } : {}}
-            >
-              {loading ? <LoadingOutlined /> : '修改头像'}
+              style={{}}
+            >修改头像
             </div>
-            {/*</Upload>*/}
           </div>
         </FUploadAvatar>
       </div>
@@ -193,34 +99,57 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'性别'} type='normal' />
               </div>
               <div className={styles.right}>
-                <FRadio
-                  checked={settingPage.gender === 'male'}
-                  onClick={() => {
-                    dispatch<OnChange_Gender_Action>({
-                      type: 'settingPage/onChange_Gender',
-                      payload: {
-                        value: 'male',
-                      },
-                    });
-                  }}
-                >
-                  男
-                </FRadio>
-                <div style={{ width: 20 }} />
-                <FRadio
-                  checked={settingPage.gender === 'female'}
-                  onClick={() => {
-                    dispatch<OnChange_Gender_Action>({
-                      type: 'settingPage/onChange_Gender',
-                      payload: {
-                        value: 'female',
-                      },
-                    });
-                  }}
-                >
-                  女
-                </FRadio>
+                {
+                  settingPage.profile_state === 'editing' && (<><FRadio
+                    checked={settingPage.profile_gender === 'male'}
+                    onClick={() => {
+                      dispatch<OnChange_Gender_Action>({
+                        type: 'settingPage/onChange_Gender',
+                        payload: {
+                          value: 'male',
+                        },
+                      });
+                    }}
+                  >
+                    男
+                  </FRadio>
+                    <div style={{ width: 20 }} />
+                    <FRadio
+                      checked={settingPage.profile_gender === 'female'}
+                      onClick={() => {
+                        dispatch<OnChange_Gender_Action>({
+                          type: 'settingPage/onChange_Gender',
+                          payload: {
+                            value: 'female',
+                          },
+                        });
+                      }}
+                    >
+                      女
+                    </FRadio>
+                  </>)
+                }
+
+                {
+                  settingPage.profile_state === 'normal' && (<>
+                    {
+                      settingPage.profile_gender === 'male' && (
+                        <FComponentsLib.FContentText text={'男'} type={'highlight'} />)
+                    }
+
+                    {
+                      settingPage.profile_gender === 'female' && (
+                        <FComponentsLib.FContentText text={'女'} type={'highlight'} />)
+                    }
+
+                    {
+                      settingPage.profile_gender === 'unknown' && (
+                        <FComponentsLib.FContentText text={'未填写'} type={'negative'} />)
+                    }
+                  </>)
+                }
               </div>
+
             </div>
 
             <div className={styles.row}>
@@ -228,22 +157,33 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'个人简介'} type='normal' />
               </div>
               <div className={styles.right}>
-                <FInput
-                  value={settingPage.profileText}
-                  className={styles.blockInput}
-                  wrapClassName={styles.blockInput}
-                  placeholder={'一句话介绍自己'}
-                  lengthLimit={40}
-                  errorText={''}
-                  onChange={(e) => {
-                    dispatch<OnChange_ProfileText_Action>({
-                      type: 'settingPage/onChange_ProfileText',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }}
-                />
+                {
+                  settingPage.profile_state === 'editing' && (<FInput
+                    value={settingPage.profile_profileText}
+                    className={styles.blockInput}
+                    wrapClassName={styles.blockInput}
+                    placeholder={'一句话介绍自己'}
+                    lengthLimit={40}
+                    errorText={''}
+                    onChange={(e) => {
+                      dispatch<OnChange_ProfileText_Action>({
+                        type: 'settingPage/onChange_ProfileText',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
+                  />)
+                }
+
+                {
+                  settingPage.profile_state === 'normal' && (
+                    <FComponentsLib.FContentText
+                      text={settingPage.profile_profileText || '未填写'}
+                      type={settingPage.profile_profileText === '' ? 'negative' : 'highlight'}
+                    />)
+                }
+
               </div>
             </div>
 
@@ -252,20 +192,31 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'出生年月'} type='normal' />
               </div>
               <div className={styles.right}>
-                <DatePicker
-                  allowClear={false}
-                  value={settingPage.birthday}
-                  style={{ width: 220, height: 38 }}
-                  placeholder={'出生年月日'}
-                  onChange={(value: Moment | null, dateString: string) => {
-                    dispatch<OnChange_Birthday_Action>({
-                      type: 'settingPage/onChange_Birthday',
-                      payload: {
-                        value: value,
-                      },
-                    });
-                  }}
-                />
+                {
+                  settingPage.profile_state === 'editing' && (<DatePicker
+                    allowClear={false}
+                    value={settingPage.profile_birthday}
+                    style={{ width: 220, height: 38 }}
+                    placeholder={'出生年月日'}
+                    onChange={(value: Moment | null, dateString: string) => {
+                      dispatch<OnChange_Birthday_Action>({
+                        type: 'settingPage/onChange_Birthday',
+                        payload: {
+                          value: value,
+                        },
+                      });
+                    }}
+                  />)
+                }
+
+                {
+                  settingPage.profile_state === 'normal' && (
+                    <FComponentsLib.FContentText
+                      text={settingPage.profile_birthday?.format(FUtil.Predefined.momentDateFormat) || '未填写'}
+                      type={!settingPage.profile_birthday ? 'negative' : 'highlight'}
+                    />)
+                }
+
               </div>
             </div>
 
@@ -274,21 +225,37 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'居住地'} type='normal' />
               </div>
               <div className={styles.right}>
-                <Cascader
-                  allowClear={false}
-                  className={styles.Cascader}
-                  options={settingPage.residenceOptions}
-                  value={settingPage.residence}
-                  placeholder='常驻城市'
-                  onChange={(value) => {
-                    dispatch<OnChange_Residence_Action>({
-                      type: 'settingPage/onChange_Residence',
-                      payload: {
-                        value: value,
-                      },
-                    });
-                  }}
-                />
+                {
+                  settingPage.profile_state === 'editing' && (<Cascader
+                    allowClear={false}
+                    className={styles.Cascader}
+                    options={settingPage.profile_residenceOptions}
+                    value={settingPage.profile_residence}
+                    placeholder='常驻城市'
+                    onChange={(value, selectedOptions) => {
+                      console.log(value, selectedOptions, 'selectedOptionssdfjlkfjsdlkfjlksdjljl');
+                      dispatch<OnChange_Residence_Action>({
+                        type: 'settingPage/onChange_Residence',
+                        payload: {
+                          value: value,
+                          text: selectedOptions
+                            .map((o) => {
+                              return o.label;
+                            })
+                            .join(''),
+                        },
+                      });
+                    }}
+                  />)
+                }
+
+                {
+                  settingPage.profile_state === 'normal' && (<FComponentsLib.FContentText
+                    text={settingPage.profile_residenceText || '未填写'}
+                    type={settingPage.profile_residenceText === '' ? 'negative' : 'highlight'}
+                  />)
+                }
+
               </div>
             </div>
 
@@ -297,35 +264,61 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FContentText text={'职业'} type='normal' />
               </div>
               <div className={styles.right}>
-                <FInput
-                  value={settingPage.career}
-                  onChange={(e) => {
-                    dispatch<OnChange_Career_Action>({
-                      type: 'settingPage/onChange_Career',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }}
-                  placeholder='职位名称'
-                  className={styles.widthInput}
-                  wrapClassName={styles.widthInput}
-                />
+                {
+                  settingPage.profile_state === 'editing' && (<FInput
+                    value={settingPage.profile_career}
+                    onChange={(e) => {
+                      dispatch<OnChange_Career_Action>({
+                        type: 'settingPage/onChange_Career',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
+                    placeholder='职位名称'
+                    className={styles.widthInput}
+                    wrapClassName={styles.widthInput}
+                  />)
+                }
+
+                {
+                  settingPage.profile_state === 'normal' && (<FComponentsLib.FContentText
+                    text={settingPage.profile_career || '未填写'}
+                    type={settingPage.profile_career === '' ? 'negative' : 'highlight'}
+                  />)
+                }
+
               </div>
             </div>
           </Space>
           <div style={{ height: 40 }} />
           <div className={styles.submit}>
-            <FComponentsLib.FRectBtn
-              type='primary'
-              onClick={() => {
-                dispatch<OnClick_SubmitUserInfoBtn_Action>({
-                  type: 'settingPage/onClick_SubmitUserInfoBtn',
-                });
-              }}
-            >
-              提交修改
-            </FComponentsLib.FRectBtn>
+            {
+              settingPage.profile_state === 'editing' && (<FComponentsLib.FRectBtn
+                type='primary'
+                onClick={() => {
+                  dispatch<OnClick_SubmitUserInfoBtn_Action>({
+                    type: 'settingPage/onClick_SubmitUserInfoBtn',
+                  });
+                }}
+              >
+                保存
+              </FComponentsLib.FRectBtn>)
+            }
+
+            {
+              settingPage.profile_state === 'normal' && (<FComponentsLib.FRectBtn
+                type='primary'
+                onClick={() => {
+                  dispatch<OnClick_EditUserInfoBtn_Action>({
+                    type: 'settingPage/onClick_EditUserInfoBtn',
+                  });
+                }}
+              >
+                编辑
+              </FComponentsLib.FRectBtn>)
+            }
+
           </div>
         </FFormLayout.FBlock>
       </FFormLayout>
