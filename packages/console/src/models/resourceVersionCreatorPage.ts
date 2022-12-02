@@ -587,8 +587,41 @@ const Model: ResourceVersionCreatorModelType = {
             type: 'resource' | 'object';
             versionRange?: string;
           }[];
+          customPropertyDescriptors: any[],
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
+
+      // console.log(data_objectDetails, 'data_objectDetailssfiojdlkfjdslkfjdslkflskdjflk');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          baseProperties: data_objectDetails.customPropertyDescriptors
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                value: cpd.defaultValue,
+                description: cpd.remark,
+              };
+            }),
+          customOptionsData: data_objectDetails.customPropertyDescriptors
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                // keyError: '',
+                description: cpd.remark,
+                // descriptionError: '',
+                custom: cpd.type === 'editableText' ? 'input' : 'select',
+                defaultValue: cpd.defaultValue,
+                // defaultValueError: '',
+                customOption: cpd.candidateItems.join(','),
+                // customOptionError: '',
+              };
+            }),
+        },
+      });
 
       // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
       const resourceNames: string[] = data_objectDetails.dependencies
@@ -682,6 +715,8 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           selectedFileInfo: null,
           rawProperties: [],
+          baseProperties: [],
+          customOptionsData: [],
           dataIsDirty: true,
         },
       });
