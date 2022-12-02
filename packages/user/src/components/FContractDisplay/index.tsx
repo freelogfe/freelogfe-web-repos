@@ -4,14 +4,11 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
 import fMessage from '../fMessage';
-// import { FUp } from '../FIcons';
 import { ContractStatus } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FContractDisplayProps {
   contractID: string;
-
-  // containerHeight?: string | number;
 
   onChangedEvent?(): void;
 }

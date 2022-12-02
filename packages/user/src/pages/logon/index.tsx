@@ -32,8 +32,6 @@ import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 
-// import { FCheck } from '@/components/FIcons';
-
 interface LogonProps {
   dispatch: Dispatch;
   logonPage: LogonPageModelState;

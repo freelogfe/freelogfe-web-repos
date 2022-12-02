@@ -400,6 +400,11 @@ const Model: RetrievePageModelType = {
         retrievePage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(retrievePage.verifyCode)) {
+        fMessage('验证码必须全部为数字');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.resetPassword>[0] = {
         loginName: retrievePage.verifyMode === 'phone' ? retrievePage.phoneInput : retrievePage.emailInput,
         password: retrievePage.newPasswordInput,

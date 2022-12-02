@@ -442,6 +442,11 @@ const Model: LogonPageModelType = {
         logonPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(logonPage.verificationCodeInput)) {
+        fMessage('验证码必须全部为数字');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.logon>[0] = {
         loginName: logonPage.accountType === 'email' ? logonPage.emailInput : logonPage.phoneInput,
         password: logonPage.passwordInput,

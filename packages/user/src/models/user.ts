@@ -76,18 +76,7 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put }: EffectsCommandMap) {
-      // if (!FUtil.Tool.getUserIDByCookies()) {
-      //   return;
-      // }
-      // const { data } = yield call(FServiceAPI.User.currentUserInfo);
-      // // console.log(data, '!@#$!@#$@#$@#$');
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     userInfo: data,
-      //   },
-      // });
-      const data: any = yield call(userPermission.getUserInfo);
+      const data: null = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
 
       yield put<ChangeAction>({
@@ -138,38 +127,10 @@ const Model: UserModelType = {
   },
   subscriptions: {
     setup({ dispatch }: SubscriptionAPI) {
-      // dispatch<FetchInfoAction>({
-      //   type: 'fetchInfo',
-      // });
+
     },
-    // checkUser({ dispatch }: SubscriptionAPI) {
-    //   window.document.addEventListener('visibilitychange', () => {
-    //     // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
-    //     // Modify behavior...
-    //     dispatch<OnVisibilityChangeAction>({
-    //       type: 'onVisibilityChange',
-    //       payload: {
-    //         hidden: document.hidden,
-    //       },
-    //     });
-    //   });
-    //   window.addEventListener('pagehide', event => {
-    //     if (event.persisted) {
-    //       /* the page isn't being discarded, so it can be reused later */
-    //       console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-    //     }
-    //   }, false);
-    // },
     checkUser({ dispatch }) {
       window.document.addEventListener('visibilitychange', function() {
-        // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
-        // Modify behavior...
-        // dispatch<OnVisibilityChangeAction>({
-        //   type: 'onVisibilityChange',
-        //   payload: {
-        //     hidden: document.hidden,
-        //   },
-        // });
         userPermission.check()
           .then((code) => {
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
@@ -177,16 +138,10 @@ const Model: UserModelType = {
             }
           });
       });
-      // window.addEventListener('pagehide', event => {
-      //   if (event.persisted) {
-      //     /* the page isn't being discarded, so it can be reused later */
-      //     console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-      //   }
-      // }, false);
     },
     checkUserPermission({ dispatch, history }) {
       // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
-      history.listen((listener) => {
+      history.listen(() => {
         // console.log(listener, 'listener098phijnoweklf');
         userPermission.checkUrl(history.location.pathname)
           .then(({ code, goToUrl }) => {
