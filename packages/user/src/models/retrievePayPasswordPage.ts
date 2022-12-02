@@ -291,6 +291,11 @@ const Model: RetrievePayPasswordPageModelType = {
         retrievePayPasswordPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(retrievePayPasswordPage.captcha_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: retrievePayPasswordPage.captcha_CaptchaInput,
         address: retrievePayPasswordPage.captcha_VerifyMode === 'phone' ? retrievePayPasswordPage.userPhone : retrievePayPasswordPage.userEmail,
@@ -367,6 +372,11 @@ const Model: RetrievePayPasswordPageModelType = {
       const { retrievePayPasswordPage }: ConnectState = yield select(({ retrievePayPasswordPage }: ConnectState) => ({
         retrievePayPasswordPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(retrievePayPasswordPage.captcha_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Transaction.resetPassword>[0] = {
         loginPassword: retrievePayPasswordPage.userPassword_PasswordInput,

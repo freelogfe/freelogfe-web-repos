@@ -596,6 +596,11 @@ const Model: WalletPageModelType = {
         walletPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(walletPage.activating_Captcha)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: walletPage.activating_Captcha,
         address: walletPage.activating_AccountType === 'email' ? walletPage.activating_AccountEmail : walletPage.activating_AccountMobile,
@@ -666,6 +671,11 @@ const Model: WalletPageModelType = {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(walletPage.activating_Captcha)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Transaction.activateIndividualAccounts>[0] = {
         password: walletPage.activating_PasswordOne,
@@ -799,6 +809,11 @@ const Model: WalletPageModelType = {
         walletPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(walletPage.changingPassword_CaptchaModal_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: walletPage.changingPassword_CaptchaModal_CaptchaInput,
         address: walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'email' ? walletPage.changingPassword_CaptchaModal_Email : walletPage.changingPassword_CaptchaModal_Phone,
@@ -928,6 +943,11 @@ const Model: WalletPageModelType = {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(walletPage.changingPassword_CaptchaModal_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Transaction.changePassword>[0] = {
         password: walletPage.changingPassword_NewPasswordModal_Password1,

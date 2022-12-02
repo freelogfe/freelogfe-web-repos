@@ -985,6 +985,11 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.bindEmail_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         // oldAuthCod?: string;
         newAuthCode: settingPage.bindEmail_CaptchaInput,
@@ -1091,6 +1096,11 @@ const Model: SettingPageModelType = {
       const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: settingPage.changeEmail_Old_CaptchaInput,
@@ -1224,6 +1234,16 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_New_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         oldAuthCode: settingPage.changeEmail_Old_CaptchaInput,
         newAuthCode: settingPage.changeEmail_New_CaptchaInput,
@@ -1356,6 +1376,11 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.bindPhone_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         newAuthCode: settingPage.bindPhone_CaptchaInput,
         newLoginName: settingPage.bindPhone_PhoneInput,
@@ -1464,6 +1489,11 @@ const Model: SettingPageModelType = {
       const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changePhone_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: settingPage.changePhone_Old_CaptchaInput,
@@ -1596,6 +1626,11 @@ const Model: SettingPageModelType = {
       const {settingPage}: ConnectState = yield select(({settingPage}: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changePhone_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         oldAuthCode: settingPage.changePhone_Old_CaptchaInput,

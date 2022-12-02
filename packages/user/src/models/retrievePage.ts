@@ -401,7 +401,7 @@ const Model: RetrievePageModelType = {
       }));
 
       if (!new RegExp(/^[0-9]*$/).test(retrievePage.verifyCode)) {
-        fMessage('验证码必须全部为数字');
+        fMessage('验证码必须全部为数字', 'error');
         return;
       }
 
