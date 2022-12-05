@@ -36,6 +36,7 @@ import fAddDependencies from '@/components/fAddDependencies';
 import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -44,11 +45,11 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 }
 
 function VersionCreator({
-  dispatch,
-  resourceInfo,
-  resourceVersionCreatorPage,
-  match,
-}: VersionCreatorProps) {
+                          dispatch,
+                          resourceInfo,
+                          resourceVersionCreatorPage,
+                          match,
+                        }: VersionCreatorProps) {
   // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
@@ -111,6 +112,7 @@ function VersionCreator({
         //     value: saved,
         //   },
         // } as const);
+        // console.log(saved, 'savedsavedsavedsaveddiosfjslkdfjlsdkjlk');
         set_isMarkdownEditorDirty(!saved);
       },
     });
@@ -123,7 +125,7 @@ function VersionCreator({
     <>
       <Helmet>
         <title>{`创建版本 · ${resourceVersionCreatorPage.resourceInfo?.resourceName || ''
-          } - Freelog`}</title>
+        } - Freelog`}</title>
       </Helmet>
 
       <FPrompt
@@ -220,9 +222,16 @@ function VersionCreator({
 
                 }}
                 onClick_DeleteBtn={() => {
-                  dispatch<OnDelete_ObjectFile_Action>({
-                    type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  } as const);
+                  fConfirmModal({
+                    message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                    okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                    cancelText: FI18n.i18nNext.t('btn_cancel'),
+                    onOk() {
+                      dispatch<OnDelete_ObjectFile_Action>({
+                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                      });
+                    },
+                  });
                 }}
                 showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 onClick_EditMarkdownBtn={async () => {
@@ -325,10 +334,10 @@ function VersionCreator({
                     },
                   } as const);
                 }}
-              // width={1100}
-              // onMount={(p) => {
-              //   processor = p;
-              // }}
+                // width={1100}
+                // onMount={(p) => {
+                //   processor = p;
+                // }}
               />
             </div>
           </FFormLayout.FBlock>
@@ -365,10 +374,10 @@ interface HeaderProps {
 }
 
 function Header({
-  onClickCache,
-  onClickCreate,
-  disabledCreate = false,
-}: HeaderProps) {
+                  onClickCache,
+                  onClickCreate,
+                  disabledCreate = false,
+                }: HeaderProps) {
   return (
     <div className={styles.Header}>
       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
