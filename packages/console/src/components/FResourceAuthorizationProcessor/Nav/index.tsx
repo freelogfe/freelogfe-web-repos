@@ -62,8 +62,6 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                       />
                     </span></FTooltip>
 
-                  <div style={{ width: 5 }} />
-
                   <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span>
 
                       <FComponentsLib.FTextBtn
@@ -79,11 +77,10 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                           }));
                         }}
                       >
-                        <FComponentsLib.FIcons.FFileSearch style={{fontSize: 16}} />
+                        <FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} />
                       </FComponentsLib.FTextBtn>
                     </span></FTooltip>
 
-                  <div style={{ width: 5 }} />
                   {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                   {info.error === 'cyclicDependency' && (
                     <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
@@ -128,52 +125,50 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                     }
                   </div>
                 </FComponentsLib.FContentText>
-                <>
-                  <div style={{ height: 5 }} />
-                  <div className={styles.DepPanelLabels}>
-                    {
-                      !info.upThrow && (<>
+                <div style={{ height: 5 }} />
+                <div className={styles.DepPanelLabels}>
+                  {
+                    !info.upThrow && (<>
 
-                        {
-                          [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)]
-                            .length === 0
-                            ? (<div style={{
-                              color: '#E9A923',
-                              fontSize: 12,
-                              lineHeight: '18px',
-                              fontWeight: 400,
-                            }}>未处理授权</div>)
-                            : (<FComponentsLib.F_Contract_And_Policy_Labels
-                              data={[
-                                ...info.contracts
-                                  .map((c) => {
-                                    return {
-                                      text: c.title,
-                                      dot: '' as '',
-                                    };
-                                  }),
-                                ...info.enabledPolicies
-                                  .filter((k) => {
-                                    return k.checked;
-                                  })
-                                  .map((j) => {
-                                    return {
-                                      text: j.policyFullInfo.policyName,
-                                      dot: '' as '',
-                                    };
-                                  }),
-                              ]}
-                            />)
-                        }
-                      </>)
-                    }
-                    {
-                      info.upThrow && (<label
-                        className={styles.labelError}
-                      >上抛</label>)
-                    }
-                  </div>
-                </>
+                      {
+                        [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)]
+                          .length === 0
+                          ? (<div style={{
+                            color: '#E9A923',
+                            fontSize: 12,
+                            lineHeight: '18px',
+                            fontWeight: 400,
+                          }}>未处理授权</div>)
+                          : (<FComponentsLib.F_Contract_And_Policy_Labels
+                            data={[
+                              ...info.contracts
+                                .map((c) => {
+                                  return {
+                                    text: c.title,
+                                    dot: '' as '',
+                                  };
+                                }),
+                              ...info.enabledPolicies
+                                .filter((k) => {
+                                  return k.checked;
+                                })
+                                .map((j) => {
+                                  return {
+                                    text: j.policyFullInfo.policyName,
+                                    dot: '' as '',
+                                  };
+                                }),
+                            ]}
+                          />)
+                      }
+                    </>)
+                  }
+                  {
+                    info.upThrow && (<label
+                      className={styles.labelError}
+                    >上抛</label>)
+                  }
+                </div>
               </div>
               <FComponentsLib.FCircleBtn
                 onClick={(e) => {
@@ -280,7 +275,7 @@ function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNav
                       resourceID: info.targetID,
                     }));
                   }}
-                ><FComponentsLib.FIcons.FFileSearch style={{fontSize: 16}} /></FComponentsLib.FTextBtn></span>
+                ><FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} /></FComponentsLib.FTextBtn></span>
               </FTooltip>
               <div style={{ width: 5 }} />
               {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}

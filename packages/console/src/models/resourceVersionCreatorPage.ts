@@ -149,6 +149,20 @@ export interface OnClose_MarkdownEditor_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
 }
 
+export interface OnChange_BaseProperties_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_BaseProperties';
+  payload: {
+    value: ResourceVersionCreatorPageModelState['baseProperties'];
+  };
+}
+
+export interface OnChange_CustomOptions_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_CustomOptions';
+  payload: {
+    value: ResourceVersionCreatorPageModelState['customOptionsData'];
+  };
+}
+
 export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
 }
@@ -162,6 +176,13 @@ export interface OnChange_DescriptionEditorState_Action extends AnyAction {
 
 export interface _FetchDraft_Action extends AnyAction {
   type: '_FetchDraft';
+}
+
+export interface _SaveDraft_Action extends AnyAction {
+  type: '_SaveDraft';
+  payload: {
+    showSuccessTip: boolean;
+  };
 }
 
 export interface _FetchRawPropsAction extends AnyAction {
@@ -186,10 +207,13 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
+    onChange_BaseProperties: (action: OnChange_BaseProperties_Action, effects: EffectsCommandMap) => void;
+    onChange_CustomOptions: (action: OnChange_CustomOptions_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
     _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
+    _SaveDraft: (action: _SaveDraft_Action, effects: EffectsCommandMap) => void;
     _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -266,7 +290,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
           },
         },
-      });
+      } as const);
 
       let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
       let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
@@ -330,11 +354,11 @@ const Model: ResourceVersionCreatorModelType = {
           preVersionDirectDependencies,
           descriptionEditorState,
         },
-      });
+      } as const);
 
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      });
+      } as const);
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -342,9 +366,16 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
-      });
+      } as const);
     },
-
+    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put }: EffectsCommandMap) {
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: payload.showSuccessTip,
+        },
+      } as const);
+    },
     * onClick_CreateVersionBtn({ payload }: OnClick_CreateVersionBtn_Action, { put, call, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -360,7 +391,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      });
+      } as const);
       const p: {
         getAllTargets(): void;
         getAllResourcesWithContracts(): void;
@@ -469,12 +500,12 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
-      });
+      } as const);
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
         caller: '97293874823yu4oi234io23hjkfdsasdf',
-      });
+      } as const);
       // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
       history.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
         resourceID: data.resourceId,
@@ -486,7 +517,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
-      });
+      } as const);
 
       // yield put<FetchDraftDataAction>({
       //   type: 'resourceInfo/fetchDraftData',
@@ -496,7 +527,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           draftData: null,
         },
-      });
+      } as const);
     },
     * onChange_DataIsDirty({ payload }: OnChange_DataIsDirty_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -504,7 +535,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: payload.value,
         },
-      });
+      } as const);
     },
     * onChange_VersionInput({ payload }: OnChange_VersionInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -513,59 +544,15 @@ const Model: ResourceVersionCreatorModelType = {
           versionInput: payload.value,
           dataIsDirty: true,
         },
-      });
+      } as const);
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
-    * onTrigger_SaveDraft({ payload }: OnTrigger_SaveDraft_Action, { put, select, call }: EffectsCommandMap) {
 
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.resourceInfo) {
-        return;
-      }
-
-      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
-      // console.log(p, 'pdsifo9jsdlfk');
-      const directDependencies: any[] = yield call(p.getAllTargets);
-      // console.log(directDependencies, 'directDependenciesoisjdlkjsdlskfjlkj');
-
-      const draftData: IResourceCreateVersionDraft = {
-        versionInput: resourceVersionCreatorPage.versionInput,
-        selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
-        baseProperties: resourceVersionCreatorPage.baseProperties,
-        customOptionsData: resourceVersionCreatorPage.customOptionsData,
-        // directDependencies: payload.dependentAllTargets,
-        directDependencies: directDependencies,
-        descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
-      };
-
-      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
-        draftData: draftData,
-      };
-      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
-      if (payload.showSuccessTip) {
-        fMessage('暂存草稿成功');
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          dataIsDirty: false,
-        },
-      });
-
-      // yield put<FetchDraftDataAction>({
-      //   type: 'resourceInfo/fetchDraftData',
-      // });
-      yield put<OnChange_DraftData_Action>({
-        type: 'resourceInfo/onChange_DraftData',
-        payload: {
-          draftData: draftData,
-        },
-      });
-    },
     * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -577,14 +564,21 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      });
+      } as const);
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      });
+      } as const);
+
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -597,7 +591,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
           dataIsDirty: true,
         },
-      });
+      } as const);
 
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: payload.objID,
@@ -609,8 +603,41 @@ const Model: ResourceVersionCreatorModelType = {
             type: 'resource' | 'object';
             versionRange?: string;
           }[];
+          customPropertyDescriptors: any[],
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
+
+      // console.log(data_objectDetails, 'data_objectDetailssfiojdlkfjdslkfjdslkflskdjflk');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          baseProperties: data_objectDetails.customPropertyDescriptors
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                value: cpd.defaultValue,
+                description: cpd.remark,
+              };
+            }),
+          customOptionsData: data_objectDetails.customPropertyDescriptors
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                // keyError: '',
+                description: cpd.remark,
+                // descriptionError: '',
+                custom: cpd.type === 'editableText' ? 'input' : 'select',
+                defaultValue: cpd.defaultValue,
+                // defaultValueError: '',
+                customOption: cpd.candidateItems.join(','),
+                // customOptionError: '',
+              };
+            }),
+        },
+      });
 
       // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
       const resourceNames: string[] = data_objectDetails.dependencies
@@ -696,7 +723,14 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           ifMarkdownFetchDependencies: true,
         },
-      });
+      } as const);
+
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -704,16 +738,42 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           selectedFileInfo: null,
           rawProperties: [],
+          baseProperties: [],
+          customOptionsData: [],
           dataIsDirty: true,
         },
       });
+
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
-      });
+      } as const);
     },
-
+    * onChange_BaseProperties({ payload }: OnChange_BaseProperties_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          baseProperties: payload.value,
+          dataIsDirty: true,
+        },
+      } as const);
+    },
+    * onChange_CustomOptions({ payload }: OnChange_CustomOptions_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          customOptionsData: payload.value,
+          dataIsDirty: true,
+        },
+      } as const);
+    },
     * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
       call,
       select,
@@ -733,7 +793,14 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: true,
         },
-      });
+      } as const);
+
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -742,10 +809,17 @@ const Model: ResourceVersionCreatorModelType = {
           descriptionEditorState: payload.state,
           dataIsDirty: true,
         },
-      });
+      } as const);
+
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // } as const);
     },
 
-    * _FetchDraft({}: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
+    * _FetchDraft({ payload }: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
 
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -776,7 +850,7 @@ const Model: ResourceVersionCreatorModelType = {
             customOptionsData: draftData.customOptionsData,
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
-        });
+        } as const);
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -790,9 +864,53 @@ const Model: ResourceVersionCreatorModelType = {
             payload: {
               ifMarkdownFetchDependencies: false,
             },
-          });
+          } as const);
         }
       }
+    },
+    * _SaveDraft({ payload }: _SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      if (!resourceVersionCreatorPage.resourceInfo) {
+        return;
+      }
+
+      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
+      const directDependencies: any[] = yield call(p.getAllTargets);
+
+      const draftData: IResourceCreateVersionDraft = {
+        versionInput: resourceVersionCreatorPage.versionInput,
+        selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
+        baseProperties: resourceVersionCreatorPage.baseProperties,
+        customOptionsData: resourceVersionCreatorPage.customOptionsData,
+        directDependencies: directDependencies,
+        descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+      };
+
+      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
+        draftData: draftData,
+      };
+      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      if (payload.showSuccessTip) {
+        fMessage('暂存草稿成功');
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      } as const);
+
+      yield put<OnChange_DraftData_Action>({
+        type: 'resourceInfo/onChange_DraftData',
+        payload: {
+          draftData: draftData,
+        },
+      } as const);
     },
     * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -808,7 +926,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           rawPropertiesState: 'parsing',
         },
-      });
+      } as const);
 
       const params: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
@@ -849,7 +967,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             rawPropertiesState: 'success',
           },
-        });
+        } as const);
 
         // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
 
@@ -908,153 +1026,3 @@ const Model: ResourceVersionCreatorModelType = {
 };
 
 export default Model;
-
-// interface HandledDraftParamsType {
-//   resourceID: string;
-// }
-
-// async function handledDraft({ resourceID }: HandledDraftParamsType): Promise<ResourceVersionCreatorPageModelState | null> {
-//   const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-//     resourceId: resourceID,
-//   };
-//
-//   const { data: data3 } = await FServiceAPI.Resource.lookDraft(params3);
-//
-//   // console.log(data3, 'dat2342890fj;lkasdf;adsjf;lfda');
-//   if (!data3) {
-//     return null;
-//   }
-//
-//   const draftData: ResourceVersionCreatorPageModelState = data3.draftData;
-//
-//   // 本次要添加全部资源 ID
-//   // const allIDs: string[] = draftData.dependencies.map((d) => d.id);
-//
-//   // const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-//   //   resourceIds: allIDs.join(','),
-//   //   isLoadPolicyInfo: 1,
-//   //   isLoadLatestVersionInfo: 1,
-//   // };
-//   //
-//   // const { data: data_batchResourceInfo } = await FServiceAPI.Resource.batchInfo(params);
-//   const params: Parameters<typeof handleResourceBatchInfo>[0] = {
-//     resourceIDs: allIDs,
-//   };
-//
-//   // 本次要添加的一些列资源信息
-//   const data_batchResourceInfo: HandleResourceBatchInfoReturn = await handleResourceBatchInfo(params);
-//   console.log(data_batchResourceInfo, 'data_batchResourceInfo');
-//
-//   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-//     subjectIds: allIDs.join(','),
-//     licenseeId: resourceID,
-//     subjectType: 1,
-//     licenseeIdentityType: 1,
-//     isLoadPolicyInfo: 1,
-//   };
-//   const { data: data1 } = await FServiceAPI.Contract.batchContracts(params1);
-//   // console.log(data1, 'data1 109234ui2o34');
-//
-//   // 如果有合约，就获取合约应用的版本
-//   let coverageVersions: any[] = [];
-//   if (data1.length > 0) {
-//     const params2: Parameters<typeof FServiceAPI.Resource.batchGetCoverageVersions>[0] = {
-//       resourceId: resourceID,
-//       contractIds: data1.map((ci: any) => ci.contractId).join(','),
-//     };
-//     const { data: data2 } = await FServiceAPI.Resource.batchGetCoverageVersions(params2);
-//     coverageVersions = data2;
-//   }
-//
-//   const allUserID: number[] = data_batchResourceInfo.map<number>((dbr) => {
-//     return dbr.userId;
-//   });
-//
-//   const params4: Parameters<typeof FServiceAPI.User.batchUserList>[0] = {
-//     userIds: allUserID.join(','),
-//   };
-//
-//   const { data: data_batchUserList } = await FServiceAPI.User.batchUserList(params4);
-//   // 组织添加的依赖数据
-//   const dependencies: DepResources = data_batchResourceInfo.map<DepResources[number]>((dr) => {
-//     const ownerUserInfo = data_batchUserList.find((dbu: any) => {
-//       return dbu.userId === dr.userId;
-//     });
-//
-//     const depC: any[] = data1.filter((dc: any) => {
-//       return dc.licensorId === dr.resourceId && dc.status === 0;
-//     });
-//     const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
-//     // const theVersion = versions?.find((v) => v.id === dr.resourceId);
-//     const theVersion = draftData.dependencies.find((v) => v.id === dr.resourceId);
-//
-//     const isUpthrow: boolean = draftData.baseUpcastResources.some((b) => dr.resourceId === b.resourceId);
-//
-//     return {
-//       id: dr.resourceId,
-//       title: dr.resourceName,
-//       resourceType: dr.resourceType,
-//       status: isUpthrow ? 4 : dr.status,
-//
-//       // status: isUpthrow ? 4 : dr.status,
-//       error: isUpthrow
-//         ? 'upThrow'
-//         : dr.status === 0
-//           ? 'offline'
-//           : (dr.status & 2) === 2
-//             ? 'freeze'
-//             : '',
-//       warning: ownerUserInfo.status === 1
-//         ? 'ownerFreeze'
-//         : dr.authProblem
-//           ? 'authException'
-//           : '',
-//
-//       versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
-//       versions: dr.resourceVersions.map((version: any) => version.version),
-//       upthrow: isUpthrow,
-//       upthrowDisabled: !!draftData.latestVersion,
-//       authProblem: dr.authProblem,
-//       enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
-//         return {
-//           checked: false,
-//           id: c.contractId,
-//           policyId: c.policyId,
-//           title: c.contractName,
-//           status: c.status,
-//           code: c.policyInfo.policyText,
-//           date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-//           versions: coverageVersions
-//             .find((cv) => c.contractId === cv.contractId)
-//             .versions.map((ccc: any) => ccc.version),
-//         };
-//       }),
-//       terminatedContractIDs: data1
-//         .filter((dc: any) => {
-//           return dc.licensorId === dr.resourceId && dc.status === 1;
-//         }).map((dc: any) => {
-//           return dc.contractId;
-//         }),
-//       enabledPolicies: dr.policies
-//         .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
-//         .map((policy: any) => {
-//           // console.log(policy, 'PPPPafwe98iokl');
-//           return {
-//             checked: false,
-//             id: policy.policyId,
-//             title: policy.policyName,
-//             code: policy.policyText,
-//             status: policy.status,
-//             policyFullInfo: policy,
-//           };
-//         }),
-//     };
-//   });
-//
-//   return {
-//     ...data3.draftData,
-//     description: BraftEditor.createEditorState(draftData.description),
-//     dataIsDirty: false,
-//     dependencies: dependencies,
-//   };
-// }

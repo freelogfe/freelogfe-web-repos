@@ -48,7 +48,8 @@
 
 // 图片资源 dom
 .unauthorized-image,
-.authorized-image {
+.authorized-image,
+.invalid-image {
   position: relative;
   width: 100%;
   caret-color: transparent;
@@ -87,5 +88,21 @@
     display: flex;
     justify-content: center;
     transition: all 0.2s linear;
+  }
+
+  .invalid-tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
   }
 }

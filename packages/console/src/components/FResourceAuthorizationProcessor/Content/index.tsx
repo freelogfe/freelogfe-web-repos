@@ -109,53 +109,76 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
   // }
 
   return (<>
-    <div>
-      <Space size={20}>
-        <Space size={2}>
-          <Radio
-            style={{ lineHeight: '16px', color: 'red' }}
-            checked={info.upThrow}
-            disabled={info.upThrowDisabled && !info.upThrow}
-            onClick={() => {
-              onChange({ upThrow: true });
-            }}
-          />
-          <span style={{ color: '#666' }}>上抛</span>
-        </Space>
+    {/*<div>*/}
+    {/*  <Space size={20}>*/}
+    {/*    <Space size={2}>*/}
+    {/*      <Radio*/}
+    {/*        style={{ lineHeight: '16px', color: 'red' }}*/}
+    {/*        checked={info.upThrow}*/}
+    {/*        disabled={info.upThrowDisabled && !info.upThrow}*/}
+    {/*        onClick={() => {*/}
+    {/*          onChange({ upThrow: true });*/}
+    {/*        }}*/}
+    {/*      />*/}
+    {/*      <span style={{ color: '#666' }}>上抛</span>*/}
+    {/*    </Space>*/}
 
-        <FTooltip title={FI18n.i18nNext.t('info_upcast')}>
-          <div><FComponentsLib.FIcons.FInfo /></div>
-        </FTooltip>
-      </Space>
+    {/*    <FTooltip title={FI18n.i18nNext.t('info_upcast')}>*/}
+    {/*      <div><FComponentsLib.FIcons.FInfo /></div>*/}
+    {/*    </FTooltip>*/}
+    {/*  </Space>*/}
 
-      <div style={{ height: 15 }} />
-      <Space size={20}>
-        <Space size={2}>
-          <Radio
-            style={{ lineHeight: '16px' }}
-            checked={!info.upThrow}
-            disabled={info.upThrowDisabled}
+    {/*  <div style={{ height: 15 }} />*/}
+    {/*  <Space size={20}>*/}
+    {/*    <Space size={2}>*/}
+    {/*      <Radio*/}
+    {/*        style={{ lineHeight: '16px' }}*/}
+    {/*        checked={!info.upThrow}*/}
+    {/*        disabled={info.upThrowDisabled}*/}
+    {/*        onClick={() => {*/}
+    {/*          onChange({ upThrow: false });*/}
+    {/*        }}*/}
+    {/*      />*/}
+    {/*      <span style={{ color: '#666' }}>{FI18n.i18nNext.t('sign_contract')}</span>*/}
+    {/*    </Space>*/}
+    {/*    <FTooltip title={FI18n.i18nNext.t('info_sign_contract')}>*/}
+    {/*      <div><FComponentsLib.FIcons.FInfo /></div>*/}
+    {/*    </FTooltip>*/}
+    {/*  </Space>*/}
+    {/*</div>*/}
+
+    {
+      info.upThrow && (<div className={styles.errorBox} style={{ flexDirection: 'column' }}>
+        <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} style={{ fontSize: 48 }} />
+        <div style={{ height: 20 }} />
+        <FComponentsLib.FTipText text={'已选择上抛'} type='second' />
+        <div style={{ height: 40 }} />
+        {
+          !info.upThrowDisabled && (<FComponentsLib.FRectBtn
+            type={'secondary'}
             onClick={() => {
               onChange({ upThrow: false });
             }}
-          />
-          <span style={{ color: '#666' }}>{FI18n.i18nNext.t('sign_contract')}</span>
-        </Space>
-        <FTooltip title={FI18n.i18nNext.t('info_sign_contract')}>
-          <div><FComponentsLib.FIcons.FInfo /></div>
-        </FTooltip>
-      </Space>
-    </div>
+          >重新选择授权方案</FComponentsLib.FRectBtn>)
+        }
 
-    {
-      info.upThrow && (<div className={styles.errorBox} style={{ height: 300 }}>
-        <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} />
-        <FComponentsLib.FTipText text={'已选择上抛'} type='second' />
       </div>)
     }
 
     {
       !info.upThrow && (<div className={styles.contractAndPolicyList}>
+
+        {
+          !info.upThrowDisabled && (<FComponentsLib.FTextBtn
+            type={'danger'}
+            style={{ position: 'absolute', right: 20, top: 15, fontSize: 12 }}
+            onClick={() => {
+              onChange({ upThrow: true });
+            }}
+          >
+            <FComponentsLib.FIcons.FUpcast style={{ fontSize: 12 }} />将资源上抛
+          </FComponentsLib.FTextBtn>)
+        }
 
         {
           info.contracts.length > 0 && (<Space size={15} style={{ width: '100%' }} direction='vertical'>
@@ -192,6 +215,8 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
                       text={FI18n.i18nNext.t('contract_signed_time') + '：' + k.date}
                     />
                   </Space>
+
+                  <div style={{ height: 10 }} />
                 </div>))
             }
           </Space>)
@@ -218,6 +243,7 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
             style={{ width: '100%' }}
             direction='vertical'
           >
+
             <FComponentsLib.FContentText
               type='additional2'
               text={FI18n.i18nNext.t('getauth_title_authplanavailable')}

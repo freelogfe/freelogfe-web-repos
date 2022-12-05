@@ -217,7 +217,7 @@ export const html2md = (htmlText: string) => {
         // 清除 <li> 标签
         result = result
           .replace(/<li>/i, `[~wrap]${i}. `)
-          .replace(/<\/li>/, '[~wrap]');
+          .replace(/<\/li>/, '[~wrap][~wrap]');
       }
       markdownText = markdownText.replace(
         /`#olContent#`/i,
@@ -229,7 +229,7 @@ export const html2md = (htmlText: string) => {
   // 无序列表：将 <li>、<dd> 转为 -
   markdownText = markdownText
     .replace(/<li>|<dd>/gi, '[~wrap] - ')
-    .replace(/<\/li>|<\/dd>/gi, '[~wrap]');
+    .replace(/<\/li>|<\/dd>/gi, '[~wrap][~wrap]');
 
   // 换行处理：将换行标记 [~wrap] 转为为 \n，删除多余换行，删除首行换行
   markdownText = markdownText
@@ -269,6 +269,12 @@ export const html2md = (htmlText: string) => {
         const content =
           text.match(/(?<=data-content=['"])[\s\S]*?(?=['"])/i) || [];
         replaceUrl = content[0];
+      } else if (Number(originType) === 3) {
+        // 无效资源
+        // 将无效的资源名称作为url
+        const content =
+          text.match(/(?<=data-resourceName=['"])[\s\S]*?(?=['"])/i) || [];
+        replaceUrl = 'freelog://' + content[0];
       }
       // 转化依赖语法
       if (resourceType[0] === '图片') {

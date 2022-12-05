@@ -51,8 +51,11 @@ export interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
   processorIdentifier?: string;
+  width?: number;
 
   onMount?(processor: Processor): void;
+
+  onChanged?(): void;
 }
 
 interface FResourceAuthorizationProcessorStates {
@@ -84,7 +87,9 @@ let processors: {
 function FResourceAuthorizationProcessor({
                                            resourceID,
                                            processorIdentifier = '',
+                                           width = 860,
                                            onMount,
+                                           onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
@@ -454,7 +459,7 @@ function FResourceAuthorizationProcessor({
     return null;
   }
 
-  return (<div className={styles.box}>
+  return (<div className={styles.box} style={{ width: width }}>
     <FBasicUpcastCard
       dataSource={licenseeResource.latestVersion === ''
         ? targetInfos
@@ -493,6 +498,7 @@ function FResourceAuthorizationProcessor({
                 set_relations(v);
                 await _syncTargetInfo();
                 await _syncActivatedTarget();
+                onChanged && onChanged();
               }}
               onChange_ActivatedTarget={(v) => {
                 set_activatedTarget(v);

@@ -7,9 +7,9 @@ import FCenterLayout from '@/layouts/FCenterLayout';
 import Resources from './market';
 import Examples from './examples';
 // import FFooter from '@/layouts/FFooter';
-import { withRouter } from 'umi';
+import { withRouter, Dispatch } from 'umi';
 import { connect } from 'dva';
-import {Dispatch} from 'redux';
+// import { Dispatch } from 'redux';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import { OnChange_ShowPage_Action } from '@/models/discoverPage';
@@ -29,7 +29,7 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
         payload: {
           value: 'market',
         },
-      });
+      } as const);
     }
     if (match.path.startsWith(FUtil.LinkTo.exampleNodes())) {
       dispatch<OnChange_ShowPage_Action>({
@@ -37,7 +37,7 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
         payload: {
           value: 'example',
         },
-      });
+      } as const);
     }
   }, [match]);
 

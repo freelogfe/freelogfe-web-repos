@@ -10,7 +10,6 @@ import {
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
-  // OnTrigger_SaveCache_Action,
   OnClick_CreateVersionBtn_Action,
   OnDelete_ObjectFile_Action,
   OnMountPageAction,
@@ -24,7 +23,6 @@ import {
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
-import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
@@ -37,6 +35,7 @@ import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
 import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+import { RouteComponentProps } from 'react-router';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -45,11 +44,14 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 }
 
 function VersionCreator({
-                          dispatch,
-                          resourceInfo,
-                          resourceVersionCreatorPage,
-                          match,
-                        }: VersionCreatorProps) {
+  dispatch,
+  resourceInfo,
+  resourceVersionCreatorPage,
+  match,
+}: VersionCreatorProps) {
+  // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
+
+  const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -57,14 +59,32 @@ function VersionCreator({
       payload: {
         resourceID: match.params.id,
       },
-    });
+    } as const);
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
-    });
+    } as const);
   });
+
+  AHooks.useDebounceEffect(
+    () => {
+      if (resourceVersionCreatorPage.dataIsDirty) {
+        dispatch<OnTrigger_SaveDraft_Action>({
+          type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+          payload: {
+            showSuccessTip: false,
+          },
+        } as const);
+      }
+
+    },
+    [resourceVersionCreatorPage.dataIsDirty, resourceVersionCreatorPage.descriptionEditorState],
+    {
+      wait: 300,
+    },
+  );
 
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
@@ -81,33 +101,33 @@ function VersionCreator({
       payload: {
         showSuccessTip: false,
       },
-    });
+    } as const);
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {
-        await dispatch<OnChange_DataIsDirty_Action>({
-          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-          payload: {
-            value: saved,
-          },
-        });
+        // await dispatch<OnChange_DataIsDirty_Action>({
+        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+        //   payload: {
+        //     value: saved,
+        //   },
+        // } as const);
+        set_isMarkdownEditorDirty(!saved);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    });
+    } as const);
   }
 
   return (
     <>
       <Helmet>
-        <title>{`创建版本 · ${
-          resourceVersionCreatorPage.resourceInfo?.resourceName || ''
-        } - Freelog`}</title>
+        <title>{`创建版本 · ${resourceVersionCreatorPage.resourceInfo?.resourceName || ''
+          } - Freelog`}</title>
       </Helmet>
 
       <FPrompt
-        watch={resourceVersionCreatorPage.dataIsDirty}
+        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       <FLeftSiderLayout
@@ -117,7 +137,7 @@ function VersionCreator({
             onClickCreate={async () => {
               dispatch<OnClick_CreateVersionBtn_Action>({
                 type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-              });
+              } as const);
             }}
             onClickCache={async () => {
               dispatch<OnTrigger_SaveDraft_Action>({
@@ -125,7 +145,7 @@ function VersionCreator({
                 payload: {
                   showSuccessTip: true,
                 },
-              });
+              } as const);
             }}
             disabledCreate={hasError}
           />
@@ -145,7 +165,7 @@ function VersionCreator({
                   payload: {
                     value: value,
                   },
-                });
+                } as const);
               }}
             />
           </FFormLayout.FBlock>
@@ -185,7 +205,7 @@ function VersionCreator({
                       sha1: file.sha1,
                       // from: '本地上传',
                     },
-                  });
+                  } as const);
                 }}
                 onSucceed_ImportObject={async (obj) => {
                   // console.log(obj, 'onSucceed_ImportObject390oisjdf');
@@ -196,13 +216,13 @@ function VersionCreator({
                       sha1: obj.sha1,
                       objID: obj.objID,
                     },
-                  });
+                  } as const);
 
                 }}
                 onClick_DeleteBtn={() => {
                   dispatch<OnDelete_ObjectFile_Action>({
                     type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  });
+                  } as const);
                 }}
                 showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                 onClick_EditMarkdownBtn={async () => {
@@ -247,7 +267,7 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        });
+                        } as const);
                       },
                       async onDeselect_Resource({ resourceID, resourceName }) {
                         const p = await getProcessor('resourceVersionCreator');
@@ -261,9 +281,15 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        });
+                        } as const);
                       },
                     });
+                    // await dispatch<OnTrigger_SaveDraft_Action>({
+                    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                    //   payload: {
+                    //     showSuccessTip: false,
+                    //   },
+                    // } as const);
                   }}
                   type='default'
                 >添加依赖</FComponentsLib.FRectBtn>
@@ -272,10 +298,16 @@ function VersionCreator({
                   resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
                   <FComponentsLib.FRectBtn
                     type='default'
-                    onClick={() => {
+                    onClick={async () => {
                       dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
-                      });
+                      } as const);
+                      // await dispatch<OnTrigger_SaveDraft_Action>({
+                      //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                      //   payload: {
+                      //     showSuccessTip: false,
+                      //   },
+                      // } as const);
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
@@ -285,9 +317,18 @@ function VersionCreator({
               <FResourceAuthorizationProcessor
                 resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                 processorIdentifier={'resourceVersionCreator'}
-                // onMount={(p) => {
-                //   processor = p;
-                // }}
+                onChanged={() => {
+                  dispatch<OnChange_DataIsDirty_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                    payload: {
+                      value: true,
+                    },
+                  } as const);
+                }}
+              // width={1100}
+              // onMount={(p) => {
+              //   processor = p;
+              // }}
               />
             </div>
           </FFormLayout.FBlock>
@@ -304,7 +345,7 @@ function VersionCreator({
                   payload: {
                     state: value,
                   },
-                });
+                } as const);
               }}
               style={{
                 height: 500,
@@ -324,10 +365,10 @@ interface HeaderProps {
 }
 
 function Header({
-                  onClickCache,
-                  onClickCreate,
-                  disabledCreate = false,
-                }: HeaderProps) {
+  onClickCache,
+  onClickCreate,
+  disabledCreate = false,
+}: HeaderProps) {
   return (
     <div className={styles.Header}>
       {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}

@@ -14,17 +14,12 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
 import FResourceAuthorizationProcessor from '@/components/FResourceAuthorizationProcessor';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
-
-// TODO 授权完成需要删除
-import { Select } from 'antd';
 import fMessage from '@/components/fMessage';
 import { CustomResource } from './core/interface';
 import {
-  getDependences,
   getDependencesByContent,
   importDoc,
 } from './custom/dom/resource/utils';
-const { Option } = Select;
 
 interface EditorProps {
   // 资源 id
@@ -47,7 +42,6 @@ export const MarkdownEditor = (props: EditorProps) => {
   const stopTimer = useRef<Timeout | null>(null);
   const markdownRef = useRef('');
   const policyProcessor = useRef<any>(null);
-  const draftData = useRef<IResourceCreateVersionDraft | null>(null);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -60,26 +54,17 @@ export const MarkdownEditor = (props: EditorProps) => {
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
 
-  // TODO 授权完成需要删除
-  const [authorizeType, setAuthorizeType] = useState(1);
-  const changeAuthorizeType = (e: number) => {
-    setAuthorizeType(e);
-    sessionStorage.setItem('authorizeType', String(e));
-  };
-  useEffect(() => {
-    const type = sessionStorage.getItem('authorizeType') || 1;
-    setAuthorizeType(Number(type));
-  }, []);
-
-  /** 输出 markdown */
-  const outputMarkdown = () => {
-    console.log('原HTML文本===>\n', html);
-    console.log('markdown文本===>\n', markdown);
-  };
-
   /** 退出 */
   const exit = async () => {
     close && close();
+  };
+
+  /** 获取资源数据 */
+  const getResourceData = async () => {
+    const res = await FServiceAPI.Resource.info({
+      resourceIdOrName: resourceId,
+    });
+    editor.resourceData = res.data;
   };
 
   /** 获取草稿数据 */
@@ -89,20 +74,22 @@ export const MarkdownEditor = (props: EditorProps) => {
       fMessage(res.msg);
       return;
     }
-    draftData.current = res.data.draftData as IResourceCreateVersionDraft;
-    console.error('原始草稿数据===>', draftData.current);
-    editor.draftData = { ...draftData.current };
-    const { selectedFileInfo, directDependencies = [] } = draftData.current;
-    const targets = directDependencies;
+    editor.draftData = res.data.draftData as IResourceCreateVersionDraft;
+    const { selectedFileInfo, directDependencies = [] } = editor.draftData;
+    const targets = [...directDependencies];
     let dependencesByIdentify: string[] = [];
     if (selectedFileInfo) {
       const content = await FUtil.Request({
         method: 'GET',
         url: `/v2/storages/files/${selectedFileInfo.sha1}/download`,
       });
-      const html = await importDoc(content, { type: 'draft' });
+      const contentStr = String(content);
+      const html = await importDoc(
+        { content: contentStr, type: 'draft' },
+        editor,
+      );
       setHtml(html);
-      dependencesByIdentify = getDependencesByContent(content);
+      dependencesByIdentify = getDependencesByContent(contentStr);
     }
     if (dependencesByIdentify.length) {
       const depsData = await FServiceAPI.Resource.batchInfo({
@@ -125,26 +112,31 @@ export const MarkdownEditor = (props: EditorProps) => {
           });
         }
       });
-      policyProcessor.current.clear();
-      policyProcessor.current.addTargets(targets);
     }
+    editor.draftData.directDependencies = [...targets];
+    policyProcessor.current.clear();
+    policyProcessor.current.addTargets(targets);
+  };
+
+  /** 关闭授权弹窗 */
+  const closePolicyDrawer = () => {
+    getDraftData();
+    setPolicyDrawer(false);
+    editor.focus();
   };
 
   /** 保存 */
   const save = async () => {
-    if (!draftData.current) return;
+    if (!editor.draftData) return;
 
     setSaveType(1);
     const saveTime = new Date().getTime();
-    let fileName = draftData.current.selectedFileInfo?.name;
+    let fileName = editor.draftData.selectedFileInfo?.name;
     if (!fileName) {
       // 草稿数据中没有文件名称，说明是新建文件，文件名称命名规则为{资源名称 最后保存时间}
-      const resourceData = await FServiceAPI.Resource.info({
-        resourceIdOrName: resourceId,
-      });
       fileName =
-        resourceData.data.resourceName.split('/')[1] +
-        formatDate(saveTime, 'YYYYMMDDhhmm');
+        editor.resourceData.resourceName.split('/')[1] +
+        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
     }
     const params = new FormData();
     params.append('file', new File([markdownRef.current], fileName));
@@ -159,26 +151,66 @@ export const MarkdownEditor = (props: EditorProps) => {
       return;
     }
 
-    draftData.current.selectedFileInfo = {
+    editor.draftData.selectedFileInfo = {
       name: fileName,
       sha1: res.data.sha1,
       from: `最近编辑时间 ${formatDate(saveTime)}`,
     };
-    draftData.current.directDependencies =
-      await policyProcessor.current.getAllTargets();
-    console.error('newDraftData====>', draftData.current);
-    // const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
-    //   resourceId,
-    //   draftData: draftData.current,
-    // });
-    // if (saveDraftRes.errCode !== 0) {
-    //   fMessage(saveDraftRes.msg);
-    //   return;
-    // }
+    const targets = await policyProcessor.current.getAllTargets();
+    const dependencesByIdentify = getDependencesByContent(markdownRef.current);
+    if (dependencesByIdentify.length) {
+      const newDep: string[] = [];
+      dependencesByIdentify.forEach((depName) => {
+        const index = targets.findIndex((item: any) => item.name === depName);
+        if (index === -1) newDep.push(depName);
+      });
+      const depsData = await FServiceAPI.Resource.batchInfo({
+        resourceNames: newDep.join(),
+      });
+      depsData.data.forEach(async (dep: any) => {
+        const { resourceId, resourceName, latestVersion } = dep;
+        const target = {
+          id: resourceId,
+          name: resourceName,
+          type: 'resource',
+          versionRange: latestVersion,
+        };
+        targets.push(target);
+        policyProcessor.current.addTargets([target]);
+      });
+    }
+    editor.draftData.directDependencies = [...targets];
+    const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
+      resourceId,
+      draftData: editor.draftData,
+    });
+    if (saveDraftRes.errCode !== 0) {
+      fMessage(saveDraftRes.msg);
+      return;
+    }
 
     setSaveType(2);
     setLastSaveTime(saveTime);
     setEdited(false);
+    if (inputTimer.current) {
+      clearTimeout(inputTimer.current);
+      inputTimer.current = null;
+    }
+    if (stopTimer.current) {
+      clearTimeout(stopTimer.current);
+      stopTimer.current = null;
+    }
+  };
+
+  /** 依赖授权队列变化 */
+  const depChange = async () => {
+    const targets = await policyProcessor.current.getAllTargets();
+    setDepTargets(targets);
+    editor.draftData.directDependencies = [...targets];
+    await FServiceAPI.Resource.saveVersionsDraft({
+      resourceId,
+      draftData: editor.draftData,
+    });
   };
 
   /** 禁止编辑器内的资源内容保存（禁止右键菜单） */
@@ -212,8 +244,11 @@ export const MarkdownEditor = (props: EditorProps) => {
     if (show) {
       document.body.style.overflowY = 'hidden';
       editor && editor.focus();
+      getResourceData();
 
-      getDraftData();
+      setTimeout(() => {
+        getDraftData();
+      }, 400);
     }
     return () => {
       document.body.style.overflowY = 'auto';
@@ -223,6 +258,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   useEffect(() => {
     if (editor) {
       /** 初始化编辑器一些方法 */
+      editor.resourceId = resourceId;
       // 控制资源弹窗
       editor.setDrawerType = async (type: string) => {
         setDrawerType(type);
@@ -298,33 +334,7 @@ export const MarkdownEditor = (props: EditorProps) => {
       <div className={`markdown-editor-wrapper ${show && 'show'}`}>
         <div className="header">
           <div className="title">
-            <span onClick={outputMarkdown}>
-              {FI18n.i18nNext.t('title_edit_post')}
-            </span>
-
-            {/* TODO 授权完成需要删除 */}
-            <Select
-              style={{
-                position: 'absolute',
-                width: '200px',
-                top: '23px',
-                left: '120px',
-              }}
-              value={authorizeType}
-              placeholder="请选择模拟的授权状态"
-              onChange={changeAuthorizeType}
-            >
-              {[
-                { value: 1, label: '未签约' },
-                { value: 2, label: '已签约未授权' },
-                { value: 3, label: '已授权' },
-                { value: 4, label: '上抛' },
-              ].map((item) => (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              ))}
-            </Select>
+            <span>{FI18n.i18nNext.t('title_edit_post')}</span>
           </div>
           <div className="article-info">
             <span>
@@ -392,10 +402,7 @@ export const MarkdownEditor = (props: EditorProps) => {
               </div>
               <i
                 className="freelog fl-icon-guanbi close-btn"
-                onClick={() => {
-                  setPolicyDrawer(false);
-                  editor.focus();
-                }}
+                onClick={closePolicyDrawer}
               />
             </div>
           </div>
@@ -403,9 +410,11 @@ export const MarkdownEditor = (props: EditorProps) => {
           <div className="authorization-processor-box">
             <FResourceAuthorizationProcessor
               resourceID={resourceId}
+              width={1100}
               onMount={async (processor) => {
                 policyProcessor.current = processor;
               }}
+              onChanged={depChange}
             />
           </div>
 

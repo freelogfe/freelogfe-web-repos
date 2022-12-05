@@ -27,7 +27,7 @@ interface Props {
 }
 
 export const ImportDocDrawer = (props: Props) => {
-  const { resourceId, editor } = useContext(editorContext);
+  const { editor } = useContext(editorContext);
   const { show, close, setHtml } = props;
   let body: Element | null = null;
 
@@ -103,18 +103,19 @@ export const ImportDocDrawer = (props: Props) => {
 
   /** 确认导入 */
   const sureImport = async (dataInfo: {
+    content: string;
     type: 'resource' | 'object' | 'upload';
     fileName: string;
     resourceId?: string;
     version?: string;
     objectId?: string;
   }) => {
-    const { content } = refs.current.uploadFileData;
-    const html = await importDoc(content, dataInfo);
+    const html = await importDoc(dataInfo, editor);
     setHtml(html);
     close();
 
     const {
+      content,
       type,
       fileName,
       resourceId = '',
@@ -128,48 +129,43 @@ export const ImportDocDrawer = (props: Props) => {
       versionRange: any;
     }[] = editor.draftData.directDependencies;
     if (type === 'resource') {
-      const resourceData = await FServiceAPI.Resource.info({
-        resourceIdOrName: resourceId,
+      const res = await FServiceAPI.Resource.resourceVersionInfo1({
+        resourceId,
+        version,
       });
-      console.error(resourceData)
-      // editor.draftData.selectedFileInfo.name = 'fileName';
-      // editor.draftData.baseProperties = customPropertyDescriptors
-      //   .filter((item: any) => item.type === 'readonlyText')
-      //   .map((item: any) => ({
-      //     key: item.key,
-      //     value: item.defaultValue,
-      //     description: item.remark,
-      //   }));
-      // editor.draftData.customOptionsData = customPropertyDescriptors
-      //   .filter(
-      //     (item: any) => item.type === 'editableText' || item.type === 'select',
-      //   )
-      //   .map((item: any) => ({
-      //     key: item.key,
-      //     description: item.remark,
-      //     custom: item.type === 'select' ? 'select' : 'input',
-      //     defaultValue: item.defaultValue,
-      //     customOption: item.candidateItems,
-      //   }));
-      // dependencies.forEach(async (dep: any) => {
-      //   const index = targets.findIndex(
-      //     (item: { name: string }) => dep.name === item.name,
-      //   );
-      //   if (index === -1) {
-      //     // 识别出的依赖不在依赖树中，需添加进依赖树
-      //     targets.push(dep);
-      //   } else {
-      //     targets[index].versionRange = dep.versionRange;
-      //   }
-      // });
-      // targets = res.data.map((item: any) => {
-      //   return {
-      //     id: item.resourceId,
-      //     name: item.resourceName,
-      //     type: 'resource',
-      //     versionRange: item.versionRange,
-      //   };
-      // });
+      const { filename, customPropertyDescriptors, dependencies } = res.data;
+      const baseProperties = customPropertyDescriptors
+        .filter((item: any) => item.type === 'readonlyText')
+        .map((item: any) => ({
+          key: item.key,
+          value: item.defaultValue,
+          description: item.remark,
+        }));
+      const customOptionsData = customPropertyDescriptors
+        .filter(
+          (item: any) => item.type === 'editableText' || item.type === 'select',
+        )
+        .map((item: any) => ({
+          key: item.key,
+          description: item.remark,
+          custom: item.type === 'select' ? 'select' : 'input',
+          defaultValue: item.defaultValue,
+          customOption: item.candidateItems,
+        }));
+      editor.draftData.selectedFileInfo = { name: filename };
+      editor.draftData.baseProperties = baseProperties;
+      editor.draftData.customOptionsData = customOptionsData;
+      dependencies.forEach(async (dep: any) => {
+        const index = targets.findIndex(
+          (item: { name: string }) => dep.name === item.name,
+        );
+        if (index === -1) {
+          // 识别出的依赖不在依赖树中，需添加进依赖树
+          targets.push(dep);
+        } else {
+          targets[index].versionRange = dep.versionRange;
+        }
+      });
     } else if (type === 'object') {
       const res = await FServiceAPI.Storage.objectDetails({
         objectIdOrName: objectId,
@@ -206,15 +202,14 @@ export const ImportDocDrawer = (props: Props) => {
           });
         }
       }
-      editor.draftData.selectedFileInfo.name = objectName;
-      editor.draftData.baseProperties = customPropertyDescriptors
+      const baseProperties = customPropertyDescriptors
         .filter((item: any) => item.type === 'readonlyText')
         .map((item: any) => ({
           key: item.key,
           value: item.defaultValue,
           description: item.remark,
         }));
-      editor.draftData.customOptionsData = customPropertyDescriptors
+      const customOptionsData = customPropertyDescriptors
         .filter(
           (item: any) => item.type === 'editableText' || item.type === 'select',
         )
@@ -225,6 +220,9 @@ export const ImportDocDrawer = (props: Props) => {
           defaultValue: item.defaultValue,
           customOption: item.candidateItems,
         }));
+      editor.draftData.selectedFileInfo = { name: objectName };
+      editor.draftData.baseProperties = baseProperties;
+      editor.draftData.customOptionsData = customOptionsData;
       dependencies.forEach(async (dep: any) => {
         const index = targets.findIndex(
           (item: { name: string }) => dep.name === item.name,
@@ -237,7 +235,7 @@ export const ImportDocDrawer = (props: Props) => {
         }
       });
     } else if (type === 'upload') {
-      editor.draftData.selectedFileInfo.name = fileName;
+      editor.draftData.selectedFileInfo = { name: fileName };
       editor.draftData.baseProperties = [];
       editor.draftData.customOptionsData = [];
     }
@@ -331,7 +329,7 @@ export const ImportDocDrawer = (props: Props) => {
   const getHistoryVersion = async () => {
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${resourceId}/versions`,
+      url: `/v2/resources/${editor.resourceId}/versions`,
       params: { projection: 'versionId,version,updateDate,filename' },
     });
     refs.current.historyList = res.data.reverse();
@@ -359,9 +357,18 @@ export const ImportDocDrawer = (props: Props) => {
       method: 'GET',
       url: `/v2/storages/objects/${objectId}/file`,
     });
+    if (res.length > 10 ** 5) {
+      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      return;
+    }
     refs.current.uploadFileData = { name: objectName, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ type: 'object', fileName: objectName, objectId });
+    sureImport({
+      content: res,
+      type: 'object',
+      fileName: objectName,
+      objectId,
+    });
   };
 
   /** 从版本导入文档 */
@@ -372,11 +379,17 @@ export const ImportDocDrawer = (props: Props) => {
     const { version, filename } = item;
     const res = await FUtil.Request({
       method: 'GET',
-      url: `/v2/resources/${resourceId}/versions/${version}/download`,
+      url: `/v2/resources/${editor.resourceId}/versions/${version}/download`,
     });
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
-    sureImport({ type: 'resource', fileName: filename, resourceId, version });
+    sureImport({
+      content: res,
+      type: 'resource',
+      fileName: filename,
+      resourceId: editor.resourceId,
+      version,
+    });
   };
 
   /** 修改新的存储空间名称 */
@@ -670,6 +683,7 @@ export const ImportDocDrawer = (props: Props) => {
                       className="import-btn"
                       onClick={() =>
                         sureImport({
+                          content: refs.current.uploadFileData.content,
                           type: 'upload',
                           fileName: refs.current.uploadFileData.name,
                         })
