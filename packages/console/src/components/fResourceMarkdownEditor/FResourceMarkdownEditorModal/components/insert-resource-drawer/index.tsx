@@ -486,13 +486,10 @@ export const InsertResourceDrawer = (props: Props) => {
   };
 
   /** 从存储空间插入对象 */
-  const insertFromObject = async (item: {
-    objectId: string;
-    objectName: string;
-  }) => {
-    const url = `${FUtil.Format.completeUrlByDomain(
-      'qi',
-    )}/v2/storages/objects/${item.objectId}/file`;
+  const insertFromObject = async (item: { sha1: string }) => {
+    const url = `${FUtil.Format.completeUrlByDomain('qi')}/v2/storages/files/${
+      item.sha1
+    }/download`;
     insertUrlResource(url, editor, resourceMapping[drawerType].resourceType);
     close();
   };

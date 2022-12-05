@@ -57,7 +57,7 @@ export const ResourceCard = (props: Props) => {
           {onlinePolicies.map(
             (policy: { policyName: string; policyId: string }) => (
               <div className="tag" key={policy.policyId}>
-                {policy.policyId}
+                {policy.policyName}
               </div>
             ),
           )}
