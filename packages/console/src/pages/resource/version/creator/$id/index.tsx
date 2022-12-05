@@ -119,6 +119,7 @@ function VersionCreator({
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     } as const);
+
   }
 
   return (
@@ -233,7 +234,11 @@ function VersionCreator({
                     },
                   });
                 }}
-                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
+                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
+                && resourceVersionCreatorPage.rawProperties.some((b) => {
+                  return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
+                })}
                 onClick_EditMarkdownBtn={async () => {
                   await onClick_EditMarkdownBtn();
                 }}
