@@ -752,6 +752,12 @@ const Model: ResourceVersionCreatorModelType = {
       // } as const);
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
       } as const);
