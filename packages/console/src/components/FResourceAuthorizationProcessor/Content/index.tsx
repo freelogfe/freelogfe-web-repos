@@ -87,19 +87,19 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
     </div>);
   }
 
-  if (info.warning === 'authException') {
-    return (<div className={styles.errorBox}>
-      <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
-      <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
-    </div>);
-  }
-
-  if (info.warning === 'ownerFreeze') {
-    return (<div className={styles.errorBox}>
-      <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
-      <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
-    </div>);
-  }
+  // if (info.warning === 'authException') {
+  //   return (<div className={styles.warningBox}>
+  //     <FComponentsLib.FIcons.FWarning className={styles.warningIcon} />
+  //     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
+  //   </div>);
+  // }
+  //
+  // if (info.warning === 'ownerFreeze') {
+  //   return (<div className={styles.warningBox}>
+  //     <FComponentsLib.FIcons.FWarning className={styles.warningIcon} />
+  //     <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
+  //   </div>);
+  // }
 
   // if (info.upThrow) {
   //   return (<div className={styles.errorBox}>
@@ -109,43 +109,6 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
   // }
 
   return (<>
-    {/*<div>*/}
-    {/*  <Space size={20}>*/}
-    {/*    <Space size={2}>*/}
-    {/*      <Radio*/}
-    {/*        style={{ lineHeight: '16px', color: 'red' }}*/}
-    {/*        checked={info.upThrow}*/}
-    {/*        disabled={info.upThrowDisabled && !info.upThrow}*/}
-    {/*        onClick={() => {*/}
-    {/*          onChange({ upThrow: true });*/}
-    {/*        }}*/}
-    {/*      />*/}
-    {/*      <span style={{ color: '#666' }}>上抛</span>*/}
-    {/*    </Space>*/}
-
-    {/*    <FTooltip title={FI18n.i18nNext.t('info_upcast')}>*/}
-    {/*      <div><FComponentsLib.FIcons.FInfo /></div>*/}
-    {/*    </FTooltip>*/}
-    {/*  </Space>*/}
-
-    {/*  <div style={{ height: 15 }} />*/}
-    {/*  <Space size={20}>*/}
-    {/*    <Space size={2}>*/}
-    {/*      <Radio*/}
-    {/*        style={{ lineHeight: '16px' }}*/}
-    {/*        checked={!info.upThrow}*/}
-    {/*        disabled={info.upThrowDisabled}*/}
-    {/*        onClick={() => {*/}
-    {/*          onChange({ upThrow: false });*/}
-    {/*        }}*/}
-    {/*      />*/}
-    {/*      <span style={{ color: '#666' }}>{FI18n.i18nNext.t('sign_contract')}</span>*/}
-    {/*    </Space>*/}
-    {/*    <FTooltip title={FI18n.i18nNext.t('info_sign_contract')}>*/}
-    {/*      <div><FComponentsLib.FIcons.FInfo /></div>*/}
-    {/*    </FTooltip>*/}
-    {/*  </Space>*/}
-    {/*</div>*/}
 
     {
       info.upThrow && (<div className={styles.errorBox} style={{ flexDirection: 'column' }}>
@@ -164,6 +127,21 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
 
       </div>)
     }
+
+    {
+      info.warning === 'authException' && (<div className={styles.warningBox}>
+        <FComponentsLib.FIcons.FWarning className={styles.warningIcon} />
+        <span style={{ fontSize: 14, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
+      </div>)
+    }
+
+    {
+      info.warning === 'ownerFreeze' && (<div className={styles.warningBox}>
+        <FComponentsLib.FIcons.FWarning className={styles.warningIcon} />
+        <span style={{ fontSize: 14, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
+      </div>)
+    }
+
 
     {
       !info.upThrow && (<div className={styles.contractAndPolicyList}>

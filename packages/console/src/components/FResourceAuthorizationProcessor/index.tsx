@@ -732,7 +732,7 @@ async function _batchHandleResources({
 
     if (ownerUserInfo?.status === 1) {
       warning = 'ownerFreeze';
-    } else if (!resourceAuth) {
+    } else if (!resourceAuth?.isAuth) {
       warning = 'authException';
     }
 
