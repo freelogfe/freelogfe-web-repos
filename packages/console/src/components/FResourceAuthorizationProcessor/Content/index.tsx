@@ -45,7 +45,7 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
     return null;
   }
 
-  if (info.error === 'offline' && info.contracts.length === 0 && info.enabledPolicies.length === 0) {
+  if (info.error === 'offline' && info.contracts.length === 0) {
     return (
       <div className={styles.errorBox}>
         <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
