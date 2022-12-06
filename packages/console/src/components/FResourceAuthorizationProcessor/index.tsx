@@ -147,7 +147,9 @@ function FResourceAuthorizationProcessor({
     delete processors[processorIdentifier];
   });
 
-  async function addTargets(targets: Target[]): Promise<{ err: string }> {
+  async function addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
+
+    const targets = _deduplicateTargets(targetsFrom);
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
@@ -798,4 +800,17 @@ export async function getProcessor(processorIdentifier: string): Promise<Process
     }
     await FUtil.Tool.promiseSleep(300);
   }
+}
+
+function _deduplicateTargets(targets: Target[]): Target[] {
+  const result: Target[] = [];
+  const keywords: Set<string> = new Set<string>();
+  for (const t of targets) {
+    const text: string = t.type + '-' + t.id + '-' + t.name;
+    if (!keywords.has(text)) {
+      result.push(t);
+      keywords.add(text);
+    }
+  }
+  return result;
 }
