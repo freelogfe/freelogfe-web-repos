@@ -117,7 +117,8 @@ class I18nNext {
   }
 
   private async _fetchData(this: I18nNext): Promise<Resource> {
-    const res: any = await axios.get(window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test, {
+    const url: string = window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test;
+    const res: any = await axios.get(url + '?timestamp=' + Date.now(), {
       withCredentials: false,
     });
     // console.log(res, 'data09oiw3qjelsfkdfjlsdkfjl');

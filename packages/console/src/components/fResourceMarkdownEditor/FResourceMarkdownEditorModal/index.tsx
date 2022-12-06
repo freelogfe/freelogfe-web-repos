@@ -136,7 +136,7 @@ export const MarkdownEditor = (props: EditorProps) => {
       // 草稿数据中没有文件名称，说明是新建文件，文件名称命名规则为{资源名称 最后保存时间}
       fileName =
         editor.resourceData.resourceName.split('/')[1] +
-        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
+        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2) + '.md';
     }
     const params = new FormData();
     params.append('file', new File([markdownRef.current], fileName));
@@ -326,7 +326,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   }, [html]);
 
   useEffect(() => {
-    setSaved && setSaved(edited);
+    setSaved && setSaved(!edited);
   }, [edited]);
 
   return (

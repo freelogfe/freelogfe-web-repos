@@ -347,6 +347,16 @@ export const ImportDocDrawer = (props: Props) => {
     setHistoryList(list);
   };
 
+  /** 从本地上传导入文档 */
+  const importFromUpload = async () => {
+    const { content, name } = refs.current.uploadFileData;
+    if (content.length > 10 ** 5) {
+      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      return;
+    }
+    sureImport({ content, type: 'upload', fileName: name });
+  };
+
   /** 从存储对象导入文档 */
   const importFromObject = async (item: {
     objectId: string;
@@ -381,6 +391,10 @@ export const ImportDocDrawer = (props: Props) => {
       method: 'GET',
       url: `/v2/resources/${editor.resourceId}/versions/${version}/download`,
     });
+    if (res.length > 10 ** 5) {
+      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      return;
+    }
     refs.current.uploadFileData = { name: filename, content: res };
     setUploadFileData(refs.current.uploadFileData);
     sureImport({
@@ -679,16 +693,7 @@ export const ImportDocDrawer = (props: Props) => {
                     <div className="cancel-btn" onClick={cancelImport}>
                       {FI18n.i18nNext.t('btn_cancel')}
                     </div>
-                    <div
-                      className="import-btn"
-                      onClick={() =>
-                        sureImport({
-                          content: refs.current.uploadFileData.content,
-                          type: 'upload',
-                          fileName: refs.current.uploadFileData.name,
-                        })
-                      }
-                    >
+                    <div className="import-btn" onClick={importFromUpload}>
                       {FI18n.i18nNext.t('btn_import_post')}
                     </div>
                   </div>

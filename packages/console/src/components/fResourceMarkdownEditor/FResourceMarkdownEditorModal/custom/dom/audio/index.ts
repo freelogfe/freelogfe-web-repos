@@ -80,20 +80,21 @@ const AudioAuthStatus = (data: CustomResource, editor: any): VNode => {
 
 /** 音频资源 DOM */
 export const AudioResource = (data: CustomResource, editor: any): VNode => {
-  if (data.originType === 3) {
+  const { originType, content, resourceName, authType } = data;
+  if (originType === 3) {
     // 无效依赖（不存在依赖或类型错误依赖）
     return h('div.invalid-audio', {}, [
       h('div.audio-area', {}, [
         h('audio', {
           props: {
-            src: data.content,
+            src: content,
             controls: true,
             controlsList: 'nodownload',
           },
         }),
         h('div.invalid-tip', {}, [
           FI18n.i18nNext.t('posteditor_insert_error_invalid', {
-            ContentInfo: data.resourceName,
+            ContentInfo: resourceName,
           }),
         ]),
       ]),
@@ -105,7 +106,7 @@ export const AudioResource = (data: CustomResource, editor: any): VNode => {
       h('div.audio-area', {}, [
         h('audio', {
           props: {
-            src: data.authType === 3 ? data.content : '',
+            src: authType === 3 || originType === 2 ? content : '',
             controls: true,
             controlsList: 'nodownload',
           },

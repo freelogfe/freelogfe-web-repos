@@ -36,6 +36,7 @@ import fAddDependencies from '@/components/fAddDependencies';
 import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -111,12 +112,14 @@ function VersionCreator({
         //     value: saved,
         //   },
         // } as const);
+        // console.log(saved, 'savedsavedsavedsaveddiosfjslkdfjlsdkjlk');
         set_isMarkdownEditorDirty(!saved);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     } as const);
+
   }
 
   return (
@@ -207,11 +210,22 @@ function VersionCreator({
 
                 }}
                 onClick_DeleteBtn={() => {
-                  dispatch<OnDelete_ObjectFile_Action>({
-                    type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  } as const);
+                  fConfirmModal({
+                    message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                    okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                    cancelText: FI18n.i18nNext.t('btn_cancel'),
+                    onOk() {
+                      dispatch<OnDelete_ObjectFile_Action>({
+                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                      });
+                    },
+                  });
                 }}
-                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
+                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
+                && resourceVersionCreatorPage.rawProperties.some((b) => {
+                  return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
+                })}
                 onClick_EditMarkdownBtn={async () => {
                   await onClick_EditMarkdownBtn();
                 }}
@@ -375,7 +389,6 @@ function VersionCreator({
           </div>
         </div>
       </FLeftSiderLayout>
-
     </>
   );
 }
