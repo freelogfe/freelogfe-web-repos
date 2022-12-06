@@ -244,8 +244,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   preVersionBaseProperties: [],
   preVersionOptionProperties: [],
   preVersionDirectDependencies: [],
-
-  // promptLeavePath: '',
 };
 
 const Model: ResourceVersionCreatorModelType = {
