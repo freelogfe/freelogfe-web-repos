@@ -92,12 +92,25 @@ function FResourceAuthorizationProcessor({
                                            onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
 
+  const addingTargetsRef = React.useRef<Target[]>([]);
+
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
 
   // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
+
+  const { run } = AHooks.useDebounceFn(
+    async () => {
+      // setValue(value + 1);
+      const res = await _addTargets(addingTargetsRef.current);
+      addingTargetsRef.current = [];
+    },
+    {
+      wait: 500,
+    },
+  );
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -148,6 +161,16 @@ function FResourceAuthorizationProcessor({
   });
 
   async function addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
+    addingTargetsRef.current = [
+      ...addingTargetsRef.current,
+      ...targetsFrom,
+    ];
+    run();
+
+    return { err: '' };
+  }
+
+  async function _addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
 
     console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
 
