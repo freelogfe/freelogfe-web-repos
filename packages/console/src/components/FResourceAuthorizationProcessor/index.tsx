@@ -149,6 +149,8 @@ function FResourceAuthorizationProcessor({
 
   async function addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
 
+    console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
+
     const targets = _deduplicateTargets(targetsFrom);
 
     const existResourceIDs: string[] = get_relations()
