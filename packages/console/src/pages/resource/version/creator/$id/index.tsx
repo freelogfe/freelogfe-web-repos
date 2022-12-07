@@ -36,6 +36,7 @@ import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
+import FTooltip from '@/components/FTooltip';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -181,7 +182,13 @@ function VersionCreator({
             <CustomOptions />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
+          <FFormLayout.FBlock
+            dot={false}
+            title={FI18n.i18nNext.t('rely')}
+            subtitle={<FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
+              <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
+            </FTooltip>}
+          >
             <FDepPanel />
           </FFormLayout.FBlock>
 
