@@ -21,6 +21,7 @@ import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resource
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -160,15 +161,49 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   };
 
   /** 打开添加策略弹窗 */
-  const openPolicyBuilder = () => {
+  async function openPolicyBuilder() {
+    // dispatch<ChangeAction>({
+    //   type: 'resourceInfo/change',
+    //   payload: {
+    //     policyEditorVisible: true,
+    //   },
+    // });
+    setActiveDialogShow(false);
+    const policy = await fPolicyBuilder({
+      alreadyUsedTexts: resourceInfo.policies
+        .map<string>((ip) => {
+          return ip.policyText;
+        }),
+      alreadyUsedTitles: resourceInfo.policies
+        .map((ip) => {
+          return ip.policyName;
+        }),
+      targetType: 'resource',
+    });
+
+    if (!policy) {
+      return null;
+    }
+
+    dispatch<UpdatePoliciesAction>({
+      type: 'resourceAuthPage/updatePolicies',
+      payload: {
+        addPolicies: [
+          {
+            policyName: policy.title,
+            policyText: window.encodeURIComponent(policy.text),
+          },
+        ],
+      },
+    });
     dispatch<ChangeAction>({
       type: 'resourceInfo/change',
       payload: {
-        policyEditorVisible: true,
+        policyEditorVisible: false,
       },
     });
-    setActiveDialogShow(false);
-  };
+
+  }
 
   /** 上架 */
   const activeResource = () => {
