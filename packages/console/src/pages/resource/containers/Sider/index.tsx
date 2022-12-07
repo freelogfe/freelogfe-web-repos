@@ -196,12 +196,12 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         ],
       },
     });
-    dispatch<ChangeAction>({
-      type: 'resourceInfo/change',
-      payload: {
-        policyEditorVisible: false,
-      },
-    });
+    // dispatch<ChangeAction>({
+    //   type: 'resourceInfo/change',
+    //   payload: {
+    //     policyEditorVisible: false,
+    //   },
+    // });
 
   }
 
@@ -447,43 +447,43 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         }
       />
 
-      <FPolicyBuilderDrawer
-        visible={resourceInfo.policyEditorVisible}
-        alreadyUsedTexts={resourceInfo.policies.map<string>((ip) => {
-          return ip.policyText;
-        })}
-        alreadyUsedTitles={resourceInfo.policies.map((ip) => {
-          return ip.policyName;
-        })}
-        targetType='resource'
-        onCancel={() => {
-          dispatch<ChangeAction>({
-            type: 'resourceInfo/change',
-            payload: {
-              policyEditorVisible: false,
-            },
-          });
-        }}
-        onConfirm={({ title, text }) => {
-          dispatch<UpdatePoliciesAction>({
-            type: 'resourceAuthPage/updatePolicies',
-            payload: {
-              addPolicies: [
-                {
-                  policyName: title,
-                  policyText: window.encodeURIComponent(text),
-                },
-              ],
-            },
-          });
-          dispatch<ChangeAction>({
-            type: 'resourceInfo/change',
-            payload: {
-              policyEditorVisible: false,
-            },
-          });
-        }}
-      />
+      {/*<FPolicyBuilderDrawer*/}
+      {/*  visible={resourceInfo.policyEditorVisible}*/}
+      {/*  alreadyUsedTexts={resourceInfo.policies.map<string>((ip) => {*/}
+      {/*    return ip.policyText;*/}
+      {/*  })}*/}
+      {/*  alreadyUsedTitles={resourceInfo.policies.map((ip) => {*/}
+      {/*    return ip.policyName;*/}
+      {/*  })}*/}
+      {/*  targetType='resource'*/}
+      {/*  onCancel={() => {*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'resourceInfo/change',*/}
+      {/*      payload: {*/}
+      {/*        policyEditorVisible: false,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*  onConfirm={({ title, text }) => {*/}
+      {/*    dispatch<UpdatePoliciesAction>({*/}
+      {/*      type: 'resourceAuthPage/updatePolicies',*/}
+      {/*      payload: {*/}
+      {/*        addPolicies: [*/}
+      {/*          {*/}
+      {/*            policyName: title,*/}
+      {/*            policyText: window.encodeURIComponent(text),*/}
+      {/*          },*/}
+      {/*        ],*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'resourceInfo/change',*/}
+      {/*      payload: {*/}
+      {/*        policyEditorVisible: false,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*/>*/}
 
       <FPolicyOperatorDrawer
         visible={resourceInfo.policyOperaterVisible}
