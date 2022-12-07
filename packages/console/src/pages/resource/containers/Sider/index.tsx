@@ -8,7 +8,7 @@ import { withRouter, history } from 'umi';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
 import { Checkbox, Modal, Popconfirm, Space } from 'antd';
@@ -24,6 +24,7 @@ import FComponentsLib from '@freelog/components-lib';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import fPolicyOperator from '@/components/fPolicyOperator';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -127,91 +128,198 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     return null;
   }
 
+  async function resourceOnline(): Promise<boolean> {
+    const { policies, info } = resourceInfo;
+    if (!info?.latestVersion) {
+      fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
+      return false;
+    } else if (policies.length === 0) {
+      const confirm = await fPromiseModalConfirm({
+        title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+        icon: null,
+        content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+        okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
+        cancelText: FI18n.i18nNext.t('btn_cancel'),
+      });
+      // console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
+      if (!confirm) {
+        return false;
+      }
+
+      const policy = await fPolicyBuilder({
+        alreadyUsedTexts: resourceInfo.policies
+          .map<string>((ip) => {
+            return ip.policyText;
+          }),
+        alreadyUsedTitles: resourceInfo.policies
+          .map((ip) => {
+            return ip.policyName;
+          }),
+        targetType: 'resource',
+      });
+
+      if (!policy) {
+        return false;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceInfo.resourceID,
+        status: 1,
+        addPolicies: [
+          {
+            policyName: policy.title,
+            policyText: window.encodeURIComponent(policy.text),
+            status: 1,
+          },
+        ],
+      };
+      await FServiceAPI.Resource.update(params);
+      return true;
+
+    } else if (policies.filter((item) => item.status === 1).length === 0) {
+      // TODO: 干掉这个脏操作
+      // resourceInfo.policies.forEach((item: any) => {
+      //   item.checked = false;
+      // });
+      const existingUsedPolicy = await fPolicyOperator({
+        titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+        confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
+        tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
+        policiesList: resourceInfo.policies,
+      });
+
+      if (!existingUsedPolicy) {
+        return false;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceInfo.resourceID,
+        status: 1,
+        updatePolicies: existingUsedPolicy.map((p) => {
+          return {
+            policyId: p.policyID,
+            status: p.checked ? 1 : 0, // 0:下线策略 1:上线策略
+          };
+        }),
+      };
+      await FServiceAPI.Resource.update(params);
+      return true;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+      resourceId: resourceInfo.resourceID,
+      status: 1,
+    };
+    await FServiceAPI.Resource.update(params);
+
+    return true;
+  }
+
   /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
-      // 上架
-      const { policies, info } = resourceInfo;
-      if (!info?.latestVersion) {
-        fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
-        return;
-      } else if (policies.length === 0) {
-        // setActiveDialogShow(true);
-        // title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
-        // desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
-        // sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
-        // cancelText={FI18n.i18nNext.t('btn_cancel')}
-        // cancel={() => {
-        //   setActiveDialogShow(false);
-        // }}
-        // sure={openPolicyBuilder}
-        // Modal.confirm({
-        //   title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-        //   icon: null,
-        //   content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
-        //   okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
-        //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-        //   onOk() {
-        //     // console.log('OK');
-        //   },
-        //   onCancel() {
-        //     // console.log('Cancel');
-        //   },
-        // });
-        const confirm = await fPromiseModalConfirm({
-          title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-          icon: null,
-          content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
-          okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
-          cancelText: FI18n.i18nNext.t('btn_cancel'),
+      const onlineSuccess = await resourceOnline();
+      if (onlineSuccess) {
+        dispatch<FetchDataSourceAction>({
+          type: 'resourceInfo/fetchDataSource',
+          payload: match.params.id,
         });
-        console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
-        if (!confirm) {
-          return;
-        }
-
-        const policy = await fPolicyBuilder({
-          alreadyUsedTexts: resourceInfo.policies
-            .map<string>((ip) => {
-              return ip.policyText;
-            }),
-          alreadyUsedTitles: resourceInfo.policies
-            .map((ip) => {
-              return ip.policyName;
-            }),
-          targetType: 'resource',
+        dispatch<FetchResourceInfoAction>({
+          type: 'resourceAuthPage/fetchResourceInfo',
         });
-
-        if (!policy) {
-          return null;
-        }
-
-        await dispatch<UpdatePoliciesAction>({
-          type: 'resourceAuthPage/updatePolicies',
-          payload: {
-            addPolicies: [
-              {
-                policyName: policy.title,
-                policyText: window.encodeURIComponent(policy.text),
-              },
-            ],
-          },
-        });
-
-      } else if (policies.filter((item) => item.status === 1).length === 0) {
-        resourceInfo.policies.forEach((item: any) => {
-          item.checked = false;
-        });
-        dispatch<ChangeAction>({
-          type: 'resourceInfo/change',
-          payload: {
-            policyOperaterVisible: true,
-          },
-        });
-      } else {
-        const data = { status: 1 };
-        operateResource(data);
       }
+      // 上架
+      // const { policies, info } = resourceInfo;
+      // if (!info?.latestVersion) {
+      //   fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
+      //   return false;
+      // } else if (policies.length === 0) {
+      //   // setActiveDialogShow(true);
+      //   // title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
+      //   // desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
+      //   // sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
+      //   // cancelText={FI18n.i18nNext.t('btn_cancel')}
+      //   // cancel={() => {
+      //   //   setActiveDialogShow(false);
+      //   // }}
+      //   // sure={openPolicyBuilder}
+      //   // Modal.confirm({
+      //   //   title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+      //   //   icon: null,
+      //   //   content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+      //   //   okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
+      //   //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+      //   //   onOk() {
+      //   //     // console.log('OK');
+      //   //   },
+      //   //   onCancel() {
+      //   //     // console.log('Cancel');
+      //   //   },
+      //   // });
+      //   const confirm = await fPromiseModalConfirm({
+      //     title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+      //     icon: null,
+      //     content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+      //     okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
+      //     cancelText: FI18n.i18nNext.t('btn_cancel'),
+      //   });
+      //   console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
+      //   if (!confirm) {
+      //     return false;
+      //   }
+      //
+      //   const policy = await fPolicyBuilder({
+      //     alreadyUsedTexts: resourceInfo.policies
+      //       .map<string>((ip) => {
+      //         return ip.policyText;
+      //       }),
+      //     alreadyUsedTitles: resourceInfo.policies
+      //       .map((ip) => {
+      //         return ip.policyName;
+      //       }),
+      //     targetType: 'resource',
+      //   });
+      //
+      //   if (!policy) {
+      //     return false;
+      //   }
+      //
+      //   await dispatch<UpdatePoliciesAction>({
+      //     type: 'resourceAuthPage/updatePolicies',
+      //     payload: {
+      //       addPolicies: [
+      //         {
+      //           policyName: policy.title,
+      //           policyText: window.encodeURIComponent(policy.text),
+      //         },
+      //       ],
+      //     },
+      //   });
+      //
+      // } else if (policies.filter((item) => item.status === 1).length === 0) {
+      //   resourceInfo.policies.forEach((item: any) => {
+      //     item.checked = false;
+      //   });
+      //   // dispatch<ChangeAction>({
+      //   //   type: 'resourceInfo/change',
+      //   //   payload: {
+      //   //     policyOperaterVisible: true,
+      //   //   },
+      //   // });
+      //   const existingUsedPolicy = fPolicyOperator({
+      //     titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+      //     confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
+      //     tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
+      //     policiesList: resourceInfo.policies,
+      //   });
+      //
+      //   if (!existingUsedPolicy) {
+      //     return false;
+      //   }
+      // } else {
+      //   const data = { status: 1 };
+      //   operateResource(data);
+      // }
     } else {
       // 下架
       const resourceNoTip = localStorage.getItem('resourceNoTip') || false;
@@ -555,7 +663,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         titleText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
         confirmText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done')}
         tipText={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02')}
-        // type='resource'
         policiesList={resourceInfo.policies}
         onCancel={() => {
           dispatch<ChangeAction>({

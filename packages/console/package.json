@@ -28,7 +28,7 @@
     "@freelog/components-lib": "^0.1.22",
     "@freelog/nmr_translator": "^5.1.4",
     "@freelog/resource-policy-lang": "^1.5.3",
-    "@freelog/tools-lib": "^0.1.138",
+    "@freelog/tools-lib": "^0.1.143",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "antd": "^4.23.2",
     "axios": "^0.19.2",
