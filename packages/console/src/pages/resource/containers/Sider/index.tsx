@@ -11,17 +11,19 @@ import FLink from '@/components/FLink';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
-import { Checkbox, Popconfirm, Space } from 'antd';
+import { Checkbox, Modal, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
-import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
+// import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fConfirmModal from '@/components/fConfirmModal';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface SilderProps
   extends RouteComponentProps<{
@@ -33,7 +35,7 @@ interface SilderProps
 }
 
 function Sider({ resourceInfo, match, dispatch }: SilderProps) {
-  const [activeDialogShow, setActiveDialogShow] = React.useState(false);
+  // const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
   const [loading, setLoading] = React.useState(false);
@@ -126,14 +128,76 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   }
 
   /** 上下架 */
-  const changeStatus = (value: boolean) => {
+  async function changeStatus(value: boolean) {
     if (value) {
       // 上架
       const { policies, info } = resourceInfo;
       if (!info?.latestVersion) {
         fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
+        return;
       } else if (policies.length === 0) {
-        setActiveDialogShow(true);
+        // setActiveDialogShow(true);
+        // title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
+        // desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
+        // sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
+        // cancelText={FI18n.i18nNext.t('btn_cancel')}
+        // cancel={() => {
+        //   setActiveDialogShow(false);
+        // }}
+        // sure={openPolicyBuilder}
+        // Modal.confirm({
+        //   title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+        //   icon: null,
+        //   content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+        //   okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
+        //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+        //   onOk() {
+        //     // console.log('OK');
+        //   },
+        //   onCancel() {
+        //     // console.log('Cancel');
+        //   },
+        // });
+        const confirm = await fPromiseModalConfirm({
+          title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+          icon: null,
+          content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+          okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
+          cancelText: FI18n.i18nNext.t('btn_cancel'),
+        });
+        console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
+        if (!confirm) {
+          return;
+        }
+
+        const policy = await fPolicyBuilder({
+          alreadyUsedTexts: resourceInfo.policies
+            .map<string>((ip) => {
+              return ip.policyText;
+            }),
+          alreadyUsedTitles: resourceInfo.policies
+            .map((ip) => {
+              return ip.policyName;
+            }),
+          targetType: 'resource',
+        });
+
+        if (!policy) {
+          return null;
+        }
+
+        await dispatch<UpdatePoliciesAction>({
+          type: 'resourceAuthPage/updatePolicies',
+          payload: {
+            addPolicies: [
+              {
+                policyName: policy.title,
+                policyText: window.encodeURIComponent(policy.text),
+              },
+            ],
+          },
+        });
+
       } else if (policies.filter((item) => item.status === 1).length === 0) {
         resourceInfo.policies.forEach((item: any) => {
           item.checked = false;
@@ -158,7 +222,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         setInactiveDialogShow(true);
       }
     }
-  };
+  }
 
   /** 打开添加策略弹窗 */
   async function openPolicyBuilder() {
@@ -168,7 +232,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     //     policyEditorVisible: true,
     //   },
     // });
-    setActiveDialogShow(false);
+    // setActiveDialogShow(false);
     const policy = await fPolicyBuilder({
       alreadyUsedTexts: resourceInfo.policies
         .map<string>((ip) => {
@@ -185,7 +249,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       return null;
     }
 
-    dispatch<UpdatePoliciesAction>({
+    await dispatch<UpdatePoliciesAction>({
       type: 'resourceAuthPage/updatePolicies',
       payload: {
         addPolicies: [
@@ -226,7 +290,8 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
 
   /** 资源上下架 */
   const operateResource = async (data: any) => {
-    setActiveDialogShow(false);
+
+    // TODO: setActiveDialogShow(false);
     setInactiveDialogShow(false);
     setLoading(true);
     setResultPopupType(data.status);
@@ -413,18 +478,18 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       </div>
       <div style={{ height: 40 }} />
 
-      <FDialog
-        show={activeDialogShow}
-        title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
-        desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
-        sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
-        cancelText={FI18n.i18nNext.t('btn_cancel')}
-        cancel={() => {
-          setActiveDialogShow(false);
-        }}
-        sure={openPolicyBuilder}
-        loading={loading}
-      />
+      {/*<FDialog*/}
+      {/*  show={activeDialogShow}*/}
+      {/*  title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}*/}
+      {/*  desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}*/}
+      {/*  sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}*/}
+      {/*  cancelText={FI18n.i18nNext.t('btn_cancel')}*/}
+      {/*  cancel={() => {*/}
+      {/*    setActiveDialogShow(false);*/}
+      {/*  }}*/}
+      {/*  sure={openPolicyBuilder}*/}
+      {/*  loading={loading}*/}
+      {/*/>*/}
 
       <FDialog
         show={inactiveDialogShow}

@@ -47,7 +47,7 @@ interface TempProps {
 
 function Temp({ alreadyUsedTitles, alreadyUsedTexts, targetType, onConfirm, onClose }: TempProps) {
 
-  const [visible, set_visible] = React.useState<boolean>(false);
+  const [visible, set_visible] = React.useState<boolean>(true);
 
   return (<FPolicyBuilderDrawer
     visible={visible}
