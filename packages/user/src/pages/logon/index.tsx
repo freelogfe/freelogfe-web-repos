@@ -375,43 +375,43 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             )}
           </div>
 
-          <div style={{ height: 20 }} />
+          {/*<div style={{ height: 20 }} />*/}
 
-          <div>
-            <div>
-              <div className={styles.title}>
-                {/*<i>*</i>*/}
-                {/*<div style={{ width: 5 }} />*/}
-                <FComponentsLib.FTitleText type='h4' text={'内测邀请码'} />
-              </div>
-            </div>
-            <div style={{ height: 5 }} />
-            <FInput
-              // type='password'
-              placeholder='请输入内测邀请码'
-              className={styles.input}
-              wrapClassName={styles.input}
-              value={logonPage.invitationCodeInput}
-              onChange={(e) => {
-                dispatch<OnChange_InvitationCodeInput_Action>({
-                  type: 'logonPage/onChange_InvitationCodeInput',
-                  payload: {
-                    value: e.target.value,
-                  },
-                });
-              }}
-              onBlur={() => {
-                // dispatch<OnBlurPasswordInputAction>({
-                //   type: 'logonPage/onBlurPasswordInput',
-                // });
-              }}
-            />
-            {logonPage.passwordInputError && (
-              <div className={styles.errorTip}>
-                {logonPage.passwordInputError}
-              </div>
-            )}
-          </div>
+          {/*<div>*/}
+          {/*  <div>*/}
+          {/*    <div className={styles.title}>*/}
+          {/*      /!*<i>*</i>*!/*/}
+          {/*      /!*<div style={{ width: 5 }} />*!/*/}
+          {/*      <FComponentsLib.FTitleText type='h4' text={'内测邀请码'} />*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*  <div style={{ height: 5 }} />*/}
+          {/*  <FInput*/}
+          {/*    // type='password'*/}
+          {/*    placeholder='请输入内测邀请码'*/}
+          {/*    className={styles.input}*/}
+          {/*    wrapClassName={styles.input}*/}
+          {/*    value={logonPage.invitationCodeInput}*/}
+          {/*    onChange={(e) => {*/}
+          {/*      dispatch<OnChange_InvitationCodeInput_Action>({*/}
+          {/*        type: 'logonPage/onChange_InvitationCodeInput',*/}
+          {/*        payload: {*/}
+          {/*          value: e.target.value,*/}
+          {/*        },*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*    onBlur={() => {*/}
+          {/*      // dispatch<OnBlurPasswordInputAction>({*/}
+          {/*      //   type: 'logonPage/onBlurPasswordInput',*/}
+          {/*      // });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*  {logonPage.passwordInputError && (*/}
+          {/*    <div className={styles.errorTip}>*/}
+          {/*      {logonPage.passwordInputError}*/}
+          {/*    </div>*/}
+          {/*  )}*/}
+          {/*</div>*/}
 
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
