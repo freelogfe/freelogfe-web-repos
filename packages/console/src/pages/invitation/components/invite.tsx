@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './invite.less';
 import * as AHooks from 'ahooks';
 import FInput from '@/components/FInput';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
 import fMessage from '@/components/fMessage';
@@ -13,6 +13,7 @@ interface InviteProps {
 }
 
 function Invite({ jump }: InviteProps) {
+  // console.log('iiiiiiii')
   const [urlState] = useUrlState<{ returnUrl?: string; invitationCode?: string; }>();
 
   const [code, setCode] = React.useState<string>(urlState.invitationCode || '');
@@ -27,20 +28,8 @@ function Invite({ jump }: InviteProps) {
     if (loading) {
       setTimeout(() => {
         setLoading(false);
-        if (data) {
-          if (data.errCode) {
-            setError('无效邀请码，请重新输入');
-          } else {
-            fMessage('验证成功！', 'success');
-            setTimeout(() => {
-              if (urlState.returnUrl) {
-                window.location.href = decodeURIComponent(urlState.returnUrl);
-              } else {
-                history.push('/dashboard');
-              }
-            }, 1500);
-          }
-        }
+        console.log(data, 'data09weiojflsikdjflksadjflksjdflkfjlk');
+
       }, 1000);
     }
   }, [data]);
@@ -48,11 +37,28 @@ function Invite({ jump }: InviteProps) {
   AHooks.useUnmount(() => {
   });
 
-  function submit() {
-    return FServiceAPI.TestQualification.betaCodesActivate({
+  async function submit() {
+    const { data } = await FServiceAPI.TestQualification.betaCodesActivate({
       // @ts-ignore
       code: code,
     });
+
+    if (data) {
+      if (data.errCode) {
+        setError('无效邀请码，请重新输入');
+      } else {
+        fMessage('验证成功！', 'success');
+        console.log(urlState);
+        if (urlState.returnUrl) {
+          console.log('returnUrl09weiojflksdfjlsdkjl');
+          window.location.replace(decodeURIComponent(urlState.returnUrl));
+        } else {
+          // history.push('/dashboard');
+          console.log(FUtil.LinkTo.dashboard(), 'asd98fiojweikfja;lskdjflsdjl');
+          window.location.replace(FUtil.LinkTo.dashboard());
+        }
+      }
+    }
   }
 
   function flatCss(arr: Array<string>) {
