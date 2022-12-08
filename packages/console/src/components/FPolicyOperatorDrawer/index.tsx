@@ -16,9 +16,9 @@ interface FPolicyOperaterDrawerProps {
 
   onCancel(): void;
 
-  onConfirm(): void;
+  onConfirm?(policies: { policyID: string; checked: boolean; }[]): void;
 
-  onNewPolicy(): void;
+  onNewPolicy?(): void;
 }
 
 // const typeMapping = { resource: '资源', exhibit: '展品' };
@@ -61,7 +61,17 @@ function FPolicyOperatorDrawer({
           <Space size={30}>
             <FComponentsLib.FTextBtn
               onClick={() => onCancel()}>{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
-            <FComponentsLib.FRectBtn disabled={activeList.length === 0} onClick={() => onConfirm()} type='primary'>
+            <FComponentsLib.FRectBtn
+              disabled={activeList.length === 0}
+              onClick={() => {
+                const updatePolicies: { policyID: string; checked: boolean; }[] = policiesList
+                  .map((item) => {
+                    return { policyID: item.policyId, checked: item.checked };
+                  });
+                onConfirm && onConfirm(updatePolicies);
+              }}
+              type='primary'
+            >
               {confirmText}
             </FComponentsLib.FRectBtn>
           </Space>
@@ -89,9 +99,9 @@ function FPolicyOperatorDrawer({
             </div>
           );
         })}
-        <FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type='primary'>
-          {FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_create')}
-        </FComponentsLib.FRectBtn>
+        {/*<FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type='primary'>*/}
+        {/*  {FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_create')}*/}
+        {/*</FComponentsLib.FRectBtn>*/}
       </FDrawer>
     </>
   );

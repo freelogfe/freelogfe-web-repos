@@ -3,7 +3,7 @@ import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
 export interface ResourceCreatorPageModelState {
@@ -177,7 +177,11 @@ const Model: ResourceCreatorPageModelType = {
       self.onbeforeunload = null;
 
       setTimeout(() => {
-        history.replace(FUtil.LinkTo.resourceCreateSuccess({
+        // history.replace(FUtil.LinkTo.resourceCreateSuccess({
+        //   resourceID: data.resourceId,
+        // }));
+        fMessage(FI18n.i18nNext.t('resource_created_successfully'), 'success');
+        history.replace(FUtil.LinkTo.resourceCreateVersion({
           resourceID: data.resourceId,
         }));
       });

@@ -296,11 +296,13 @@ export function login({goTo}: LoginParamsType = {}) {
 // 注册
 interface LoginParamsType {
   goTo?: string;
+  invitationCode?: string;
 }
 
-export function logon({goTo}: LoginParamsType = {}) {
+export function logon({goTo, ...params}: LoginParamsType = {}) {
   return `/logon${handleQuery({
     goTo: goTo ? encodeURIComponent(goTo) : undefined,
+    ...params,
   })}`;
 }
 

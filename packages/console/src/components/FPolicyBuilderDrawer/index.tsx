@@ -31,6 +31,8 @@ interface FPolicyBuilderDrawerProps {
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
   onCancel?(): void;
+
+  afterVisibleChange?(visible: boolean): void;
 }
 
 type CombinationStructureType = {
@@ -159,6 +161,7 @@ function FPolicyBuilder({
                           onConfirm,
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
+                          afterVisibleChange,
                         }: FPolicyBuilderDrawerProps) {
   const refBottomDiv = React.useRef<any>(null);
   const refMaskingContainer = React.useRef<any>(null);
@@ -628,7 +631,10 @@ function FPolicyBuilder({
       open={visible}
       width={720}
       topRight={DrawerTopRight}
-      afterOpenChange={onChange_DrawerVisible}
+      afterVisibleChange={(visible) => {
+        onChange_DrawerVisible(visible);
+        afterVisibleChange && afterVisibleChange(visible);
+      }}
     >
       {
         showView === 'success' && (<div>
