@@ -7,6 +7,7 @@ import { connect, Dispatch } from 'dva';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
+import { resourceOnline } from '@/pages/resource/containers/Sider';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -75,14 +76,21 @@ function Success({ match, dispatch }: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText type='third' text={'未添加策略的资源不会出现在资源市场中'} />
+          <FComponentsLib.FTipText type='third' text={'添加策略后可将资源上架，上架后才能在资源'} />
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            onClick={() => {
-              gotoAuth();
+            onClick={async () => {
+              // gotoAuth();
+              const onlineSuccess = await resourceOnline(match.params.id);
+              if (onlineSuccess) {
+                // history.replace(FUtil.LinkTo.resourceInfo({
+                //   resourceID: match.params.id,
+                // }));
+                gotoVersionInfo();
+              }
             }}
             style={{ padding: '0 20px' }}
-          >立即添加授权策略</FComponentsLib.FRectBtn>
+          >创建策略并上架资源</FComponentsLib.FRectBtn>
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
