@@ -25,7 +25,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
   OnChangeWaitingTimeAction,
-  OnTrigger_Login_Action,
+  OnTrigger_Login_Action, OnChange_InvitationCodeInput_Action,
 } from '@/models/logonPage';
 import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
@@ -40,7 +40,7 @@ interface LogonProps {
 }
 
 function Logon({ dispatch, logonPage }: LogonProps) {
-  const [urlParams] = useUrlState<{ goTo: string }>();
+  const [urlParams] = useUrlState<{ goTo: string; invitationCode?: string; }>();
 
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
@@ -48,6 +48,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
       type: 'logonPage/onMountPage',
       payload: {
         url: urlParams.goTo ? decodeURIComponent(urlParams.goTo) : '',
+        invitationCode: urlParams.invitationCode || '',
       },
     });
   });
@@ -365,6 +366,44 @@ function Logon({ dispatch, logonPage }: LogonProps) {
                 dispatch<OnBlurPasswordInputAction>({
                   type: 'logonPage/onBlurPasswordInput',
                 });
+              }}
+            />
+            {logonPage.passwordInputError && (
+              <div className={styles.errorTip}>
+                {logonPage.passwordInputError}
+              </div>
+            )}
+          </div>
+
+          <div style={{ height: 20 }} />
+
+          <div>
+            <div>
+              <div className={styles.title}>
+                {/*<i>*</i>*/}
+                {/*<div style={{ width: 5 }} />*/}
+                <FComponentsLib.FTitleText type='h4' text={'内测邀请码'} />
+              </div>
+            </div>
+            <div style={{ height: 5 }} />
+            <FInput
+              // type='password'
+              placeholder='请输入内测邀请码'
+              className={styles.input}
+              wrapClassName={styles.input}
+              value={logonPage.invitationCodeInput}
+              onChange={(e) => {
+                dispatch<OnChange_InvitationCodeInput_Action>({
+                  type: 'logonPage/onChange_InvitationCodeInput',
+                  payload: {
+                    value: e.target.value,
+                  },
+                });
+              }}
+              onBlur={() => {
+                // dispatch<OnBlurPasswordInputAction>({
+                //   type: 'logonPage/onBlurPasswordInput',
+                // });
               }}
             />
             {logonPage.passwordInputError && (
