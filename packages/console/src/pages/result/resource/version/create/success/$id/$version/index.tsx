@@ -77,7 +77,11 @@ function Success({ match, dispatch }: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText type='third' text={'添加策略后可将资源上架，上架后才能在资源'} />
+          <FComponentsLib.FTipText
+            type='third'
+            // text={'添加策略后可将资源上架，上架后才能在资源'}
+            text={FI18n.i18nNext.t('versionreleased_desc')}
+          />
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
             onClick={async () => {
@@ -91,18 +95,21 @@ function Success({ match, dispatch }: SuccessProps) {
               }
             }}
             style={{ padding: '0 20px' }}
-          >创建策略并上架资源</FComponentsLib.FRectBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')}</FComponentsLib.FRectBtn>
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
               gotoVersionInfo();
             }}
-          >暂不添加</FComponentsLib.FTextBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_later')}</FComponentsLib.FTextBtn>
         </div>)
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FComponentsLib.FTipText type='third' text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })} />
+          <FComponentsLib.FTipText
+            type='third'
+            text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })}
+          />
           <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}
