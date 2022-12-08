@@ -74,10 +74,10 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
           }),
         );
 
-      console.log(
-        data_friendInfos,
-        '111data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj',
-      );
+      // console.log(
+      //   data_friendInfos,
+      //   '111data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj',
+      // );
 
       setRecords(
         data_invitees.map((d) => {
