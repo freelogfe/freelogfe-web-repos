@@ -16,7 +16,6 @@ import FFooter from '@/components/Footer';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
-import moment from 'moment';
 
 const states = {
   expire: '已过期',
@@ -390,7 +389,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
         <div className='flex-column tutorial w-100x align-center'>
           <div className='category'>
             <div className='invite-circle active-policy'>
-              <div className='circle-inside'></div>
+              <div className='circle-inside' />
             </div>
             <span>邀请攻略</span>
           </div>

@@ -509,7 +509,11 @@ const Model: LogonPageModelType = {
       const { data } = yield call(FServiceAPI.User.login, params);
 
       if (data?.userId) {
-        if (payload.goToUrl !== '') {
+        if (logonPage.invitationCodeInput !== '') {
+          window.location.replace(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation({
+            invitationCode: logonPage.invitationCodeInput,
+          }));
+        } else if (payload.goToUrl !== '') {
           window.location.replace(decodeURIComponent(payload.goToUrl));
         } else {
           // history.replace(FUtil.LinkTo.wallet());
