@@ -4,7 +4,7 @@ specifiers:
   '@ahooksjs/use-url-state': ^3.5.0
   '@ant-design/icons': ^4.7.0
   '@freelog/components-lib': ^0.1.22
-  '@freelog/tools-lib': ^0.1.144
+  '@freelog/tools-lib': ^0.1.145
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@umijs/preset-react': ^2.1.4
@@ -23,7 +23,7 @@ dependencies:
   '@ahooksjs/use-url-state': 3.5.0_react@18.2.0
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@freelog/components-lib': 0.1.22
-  '@freelog/tools-lib': 0.1.144
+  '@freelog/tools-lib': 0.1.145
   animate.css: 4.1.1
   antd: 4.22.8_biqbaboplfbrettd7655fr4n2y
   dva: 2.4.1_biqbaboplfbrettd7655fr4n2y
@@ -668,8 +668,8 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.144:
-    resolution: {integrity: sha512-R+ksEjveq/epQmtcU6BMkr9KE08rTBOVrP2P8rB6qLdRaQWEPWITo8WLQ/CY4xbelfnpWxo4HQ+ELRYmW2DPlw==}
+  /@freelog/tools-lib/0.1.145:
+    resolution: {integrity: sha512-fe1jMYz45AVGNN/m0r+6kxytdimbPp73RbcoOOc5BgBqqgO+/TwoEwxyhqDOjS7OM2JecGzAAwhAuFxrxvxg3w==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
