@@ -110,10 +110,6 @@ export const ImportDocDrawer = (props: Props) => {
     version?: string;
     objectId?: string;
   }) => {
-    const html = await importDoc(dataInfo, editor);
-    setHtml(html);
-    close();
-
     const {
       content,
       type,
@@ -262,6 +258,12 @@ export const ImportDocDrawer = (props: Props) => {
     }
     editor.policyProcessor.clear();
     editor.policyProcessor.addTargets(targets);
+
+    const html = await importDoc(dataInfo, editor);
+    setTimeout(() => {
+      setHtml(html);
+      close();
+    }, 0);
   };
 
   /** 上传文件 */
@@ -351,7 +353,7 @@ export const ImportDocDrawer = (props: Props) => {
   const importFromUpload = async () => {
     const { content, name } = refs.current.uploadFileData;
     if (content.length > 10 ** 5) {
-      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'));
       return;
     }
     sureImport({ content, type: 'upload', fileName: name });
@@ -368,7 +370,7 @@ export const ImportDocDrawer = (props: Props) => {
       url: `/v2/storages/objects/${objectId}/file`,
     });
     if (res.length > 10 ** 5) {
-      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'));
       return;
     }
     refs.current.uploadFileData = { name: objectName, content: res };
@@ -392,7 +394,7 @@ export const ImportDocDrawer = (props: Props) => {
       url: `/v2/resources/${editor.resourceId}/versions/${version}/download`,
     });
     if (res.length > 10 ** 5) {
-      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'));
+      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'));
       return;
     }
     refs.current.uploadFileData = { name: filename, content: res };
@@ -448,7 +450,10 @@ export const ImportDocDrawer = (props: Props) => {
     const IS_EXSIT_BIG_FILE =
       fileList.filter((item) => item.size > 200 * 1024 * 1024).length > 0;
     if (IS_EXSIT_BIG_FILE) {
-      fMessage(FI18n.i18nNext.t('uploadobject_err_file_size'), 'warning');
+      fMessage(
+        FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'),
+        'warning',
+      );
       return;
     }
 
@@ -729,6 +734,7 @@ export const ImportDocDrawer = (props: Props) => {
                   );
                   getObjects(true);
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {[
                   FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
@@ -763,6 +769,7 @@ export const ImportDocDrawer = (props: Props) => {
                             refs.current.uploadBucket = e;
                             setUploadBucket(e);
                           }}
+                          onClick={(e) => e.stopPropagation()}
                           dropdownRender={(menu) => (
                             <>
                               {menu}
@@ -856,6 +863,7 @@ export const ImportDocDrawer = (props: Props) => {
                 refs.current.objectKey = (e || '').trim();
                 getObjects(true);
               }}
+              onClick={(e) => e.stopPropagation()}
               theme="dark"
             />
           </div>
@@ -935,6 +943,7 @@ export const ImportDocDrawer = (props: Props) => {
                 onDebounceChange={(value) => {
                   changeNewBucketName(value);
                 }}
+                onClick={(e) => e.stopPropagation()}
                 wrapClassName="input"
                 errorText={
                   newBucketError === 1 ? (
@@ -973,6 +982,7 @@ export const ImportDocDrawer = (props: Props) => {
               refs.current.historyKey = (e || '').trim();
               searchHistoryList();
             }}
+            onClick={(e) => e.stopPropagation()}
             theme="dark"
           />
           {historyList.map((item) => (

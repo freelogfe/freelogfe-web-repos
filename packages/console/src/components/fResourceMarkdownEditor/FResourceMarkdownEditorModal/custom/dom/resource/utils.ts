@@ -1,10 +1,7 @@
 /** 资源 dom 相关方法 */
 
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import showdown from 'showdown';
 import { ResourceInEditor, CustomResource } from '../../../core/interface';
-
-const converter = new showdown.Converter();
 
 /** 插入资源 */
 export const insertResource = async (data: ResourceInEditor, editor: any) => {
@@ -35,12 +32,16 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
   if (authType === 3) {
     if (['图片', '视频', '音频'].includes(resourceType[0])) {
       /** 媒体资源，获取 url */
-      const url = await getMediaUrl(resourceId, version || latestVersion);
+      const url = await getMediaUrl(
+        resourceId,
+        version || latestVersion,
+        editor,
+      );
       insertData.content = url;
     } else if (['阅读'].includes(resourceType[0])) {
       /** 文本资源，获取内容 */
       const res = await getDocContent(resourceId, version || latestVersion);
-      insertData.content = await getRealContent(res, data);
+      insertData.content = await getRealContent(res, data, editor);
     }
   }
   editor.insertNode(insertData);
@@ -68,6 +69,7 @@ export const insertUrlResource = async (
 const getRealContent = async (
   content: string,
   data: ResourceInEditor,
+  editor: any
 ): Promise<string> => {
   let html = content;
   const { allDeps, requestDeps } = await getDeps(data.resourceId, data.version);
@@ -88,7 +90,7 @@ const getRealContent = async (
       /** 媒体资源 */
       const regText = `src=[\'"]freelog://${dep.resourceName}[\'"]`;
       const reg = new RegExp(regText, 'g');
-      const url = await getMediaUrl(dep.resourceId, dep.version);
+      const url = await getMediaUrl(dep.resourceId, dep.version, editor);
       // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
       const replaceText = `src="${url}" controlslist="nodownload" oncontextmenu="return false"`;
       html = html.replace(reg, replaceText);
@@ -102,12 +104,12 @@ const getRealContent = async (
       const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
       const reg = new RegExp(regText, 'g');
       const depResult = resArr[depResultIndex];
-      const replaceText = converter.makeHtml(depResult);
+      const replaceText = editor.converter.makeHtml(depResult);
       html = html.replace(reg, replaceText);
     }
   });
 
-  html = converter.makeHtml(html);
+  html = editor.converter.makeHtml(html);
 
   return html;
 };
@@ -156,15 +158,18 @@ export const getAuthType = async (
  * 获取媒体资源 url
  * @param resourceId 资源 id
  * @param version 资源版本号
+ * @param editor 编辑器实例
  */
-const getMediaUrl = async (resourceId: string, version: string) => {
-  const res = await FUtil.Request({
-    method: 'GET',
-    url: `/v2/resources/${resourceId}/versions/${version}`,
-  });
-  const url = `${FUtil.Format.completeUrlByDomain('qi')}/v2/storages/files/${
-    res.data.fileSha1
-  }/download`;
+const getMediaUrl = async (
+  resourceId: string,
+  version: string,
+  editor: any,
+) => {
+  const url = `${FUtil.Format.completeUrlByDomain(
+    'file',
+  )}/resources/${resourceId}?version=${version}&licenseeId=${
+    editor.resourceId
+  }`;
   return url;
 };
 
@@ -243,7 +248,7 @@ export const importDoc = async (
     audioContent,
     docContent,
     newContent,
-  } = getInternalResources(String(content));
+  } = getInternalResources(String(content), editor);
   let html = newContent;
 
   let deps = [];
@@ -297,8 +302,8 @@ export const importDoc = async (
 };
 
 /** 识别文档内容内部的资源引入 */
-const getInternalResources = (content: string) => {
-  let newContent = converter.makeHtml(content);
+const getInternalResources = (content: string, editor: any) => {
+  let newContent = editor.converter.makeHtml(content);
   // 储存 md 语法的图片（![]()）
   const mdImgContent = newContent.match(/!\[[^\]]*?]\([^\)]*?\)/gi) || [];
   // 储存图片（<img）
@@ -447,11 +452,11 @@ const dealInternalResources = async (
 
       if (['图片', '视频', '音频'].includes(type)) {
         /** 媒体资源 */
-        data.content = await getMediaUrl(data.resourceId, data.version);
+        data.content = await getMediaUrl(data.resourceId, data.version, editor);
       } else if (type === '阅读') {
         /** 文档资源 */
         const docContent = await getDocContent(data.resourceId, data.version);
-        data.content = converter.makeHtml(docContent);
+        data.content = editor.converter.makeHtml(docContent);
 
         const { allDeps, requestDeps } = await getDeps(
           data.resourceId,
@@ -474,7 +479,7 @@ const dealInternalResources = async (
 
           if (isMedia) {
             /** 媒体资源 */
-            const url = await getMediaUrl(dep.resourceId, dep.version);
+            const url = await getMediaUrl(dep.resourceId, dep.version, editor);
             // 编辑器解析属性时，使用的 getAttribute 方法查询到双引号 " 截止，会导致字符串中的双引号错误地截断属性的 value，所以从 md 转为 html 时，属性值内的双引号需转为 ASCII 编码（&#34;）
             // controlslist="nodownload" oncontextmenu="return false" 为了将依赖资源里的下载按钮隐藏、右键菜单隐藏
             const replaceText = `src=&#34;${url}&#34; controlslist=&#34;nodownload&#34; oncontextmenu=&#34;return false&#34;`;
@@ -498,11 +503,13 @@ const dealInternalResources = async (
             const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
             const reg = new RegExp(regText, 'g');
             const depResult = resArr[depResultIndex];
-            const replaceText = converter.makeHtml(depResult);
-            data.content = data.content.replace(
-              reg,
-              replaceText.replace(/"/g, '&#34;'),
-            );
+            const replaceText = editor.converter.makeHtml(depResult);
+            if (replaceText) {
+              data.content = data.content.replace(
+                reg,
+                replaceText.replace(/"/g, '&#34;'),
+              );
+            }
           }
         });
       }

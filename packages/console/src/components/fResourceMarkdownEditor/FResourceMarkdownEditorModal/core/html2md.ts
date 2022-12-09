@@ -313,7 +313,7 @@ const buildTable = (tableData: any[] | null = null) => {
     }
     result += `|[~wrap]`;
     for (let i = 0; i < colNum; i++) {
-      result += `| :- `;
+      result += `| :-- `;
     }
     result += `|[~wrap]`;
     return result;
@@ -326,7 +326,7 @@ const buildTable = (tableData: any[] | null = null) => {
   }
   result += `|[~wrap]`;
   for (let i = 0; i < colNum; i++) {
-    result += `| :- `;
+    result += `| :-- `;
   }
   result += `|[~wrap]`;
   for (let i = 0; i < tableData[1].length; ) {

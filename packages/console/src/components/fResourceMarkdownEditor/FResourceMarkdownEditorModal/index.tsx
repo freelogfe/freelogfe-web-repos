@@ -20,6 +20,8 @@ import {
   getDependencesByContent,
   importDoc,
 } from './custom/dom/resource/utils';
+import { Modal } from 'antd';
+import showdown from 'showdown';
 
 interface EditorProps {
   // 资源 id
@@ -32,7 +34,16 @@ interface EditorProps {
   setSaved: (saved: boolean) => void;
 }
 
+showdown.setOption('tables', true);
+showdown.setOption('tasklists', true);
+showdown.setOption('simplifiedAutoLink', true);
+showdown.setOption('openLinksInNewWindow', true);
+showdown.setOption('backslashEscapesHTMLTags', true);
+showdown.setOption('emoji', true);
+
 export const editorContext = React.createContext<any>({});
+
+const { confirm } = Modal;
 
 /** 编辑器 */
 export const MarkdownEditor = (props: EditorProps) => {
@@ -42,6 +53,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   const stopTimer = useRef<Timeout | null>(null);
   const markdownRef = useRef('');
   const policyProcessor = useRef<any>(null);
+  const relyChanged = useRef(false);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -54,27 +66,39 @@ export const MarkdownEditor = (props: EditorProps) => {
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
 
+  /** 输出 markdown */
+  const outputMarkdown = () => {
+    console.log('原HTML文本===>\n', html);
+    console.log('markdown文本===>\n', markdown);
+  };
+
   /** 退出 */
   const exit = async () => {
-    close && close();
+    if (edited) {
+      confirm({
+        content: FI18n.i18nNext.t('alarm_leave_page'),
+        onOk() {
+          close && close();
+        },
+      });
+    } else {
+      close && close();
+    }
   };
 
-  /** 获取资源数据 */
-  const getResourceData = async () => {
-    const res = await FServiceAPI.Resource.info({
+  /** 获取资源与草稿数据 */
+  const getData = async () => {
+    const resourceRes = await FServiceAPI.Resource.info({
       resourceIdOrName: resourceId,
     });
-    editor.resourceData = res.data;
-  };
+    editor.resourceData = resourceRes.data;
 
-  /** 获取草稿数据 */
-  const getDraftData = async () => {
-    const res = await FServiceAPI.Resource.lookDraft({ resourceId });
-    if (res.errCode !== 0) {
-      fMessage(res.msg);
+    const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
+    if (draftRes.errCode !== 0) {
+      fMessage(draftRes.msg);
       return;
     }
-    editor.draftData = res.data.draftData as IResourceCreateVersionDraft;
+    editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraft;
     const { selectedFileInfo, directDependencies = [] } = editor.draftData;
     const targets = [...directDependencies];
     let dependencesByIdentify: string[] = [];
@@ -118,13 +142,6 @@ export const MarkdownEditor = (props: EditorProps) => {
     policyProcessor.current.addTargets(targets);
   };
 
-  /** 关闭授权弹窗 */
-  const closePolicyDrawer = () => {
-    getDraftData();
-    setPolicyDrawer(false);
-    editor.focus();
-  };
-
   /** 保存 */
   const save = async () => {
     if (!editor.draftData) return;
@@ -136,7 +153,8 @@ export const MarkdownEditor = (props: EditorProps) => {
       // 草稿数据中没有文件名称，说明是新建文件，文件名称命名规则为{资源名称 最后保存时间}
       fileName =
         editor.resourceData.resourceName.split('/')[1] +
-        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2) + '.md';
+        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2) +
+        '.md';
     }
     const params = new FormData();
     params.append('file', new File([markdownRef.current], fileName));
@@ -156,30 +174,6 @@ export const MarkdownEditor = (props: EditorProps) => {
       sha1: res.data.sha1,
       from: `最近编辑时间 ${formatDate(saveTime)}`,
     };
-    const targets = await policyProcessor.current.getAllTargets();
-    const dependencesByIdentify = getDependencesByContent(markdownRef.current);
-    if (dependencesByIdentify.length) {
-      const newDep: string[] = [];
-      dependencesByIdentify.forEach((depName) => {
-        const index = targets.findIndex((item: any) => item.name === depName);
-        if (index === -1) newDep.push(depName);
-      });
-      const depsData = await FServiceAPI.Resource.batchInfo({
-        resourceNames: newDep.join(),
-      });
-      depsData.data.forEach(async (dep: any) => {
-        const { resourceId, resourceName, latestVersion } = dep;
-        const target = {
-          id: resourceId,
-          name: resourceName,
-          type: 'resource',
-          versionRange: latestVersion,
-        };
-        targets.push(target);
-        policyProcessor.current.addTargets([target]);
-      });
-    }
-    editor.draftData.directDependencies = [...targets];
     const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
       resourceId,
       draftData: editor.draftData,
@@ -202,15 +196,54 @@ export const MarkdownEditor = (props: EditorProps) => {
     }
   };
 
-  /** 依赖授权队列变化 */
-  const depChange = async () => {
+  /** 更新依赖队列 */
+  const updateRely = async () => {
     const targets = await policyProcessor.current.getAllTargets();
-    setDepTargets(targets);
+    const dependencesByIdentify = getDependencesByContent(markdownRef.current);
+    if (dependencesByIdentify.length) {
+      const newDep: string[] = [];
+      dependencesByIdentify.forEach((depName) => {
+        const index = targets.findIndex((item: any) => item.name === depName);
+        if (index === -1) newDep.push(depName);
+      });
+      if (newDep.length) {
+        const depsData = await FServiceAPI.Resource.batchInfo({
+          resourceNames: newDep.join(),
+        });
+        depsData.data.forEach(async (dep: any) => {
+          const { resourceId, resourceName, latestVersion } = dep;
+          const target = {
+            id: resourceId,
+            name: resourceName,
+            type: 'resource',
+            versionRange: latestVersion,
+          };
+          targets.push(target);
+          policyProcessor.current.addTargets([target]);
+        });
+      }
+    }
     editor.draftData.directDependencies = [...targets];
-    await FServiceAPI.Resource.saveVersionsDraft({
-      resourceId,
-      draftData: editor.draftData,
-    });
+    setDepTargets(editor.draftData.directDependencies);
+  };
+
+  /** 关闭授权弹窗 */
+  const closePolicyDrawer = async () => {
+    if (relyChanged.current) {
+      editor.draftData.directDependencies = [...depTargets];
+      await FServiceAPI.Resource.saveVersionsDraft({
+        resourceId,
+        draftData: editor.draftData,
+      });
+      const html = await importDoc(
+        { content: markdown, type: 'draft' },
+        editor,
+      );
+      setHtml(html);
+      relyChanged.current = false;
+    }
+    setPolicyDrawer(false);
+    editor.focus();
   };
 
   /** 禁止编辑器内的资源内容保存（禁止右键菜单） */
@@ -244,10 +277,9 @@ export const MarkdownEditor = (props: EditorProps) => {
     if (show) {
       document.body.style.overflowY = 'hidden';
       editor && editor.focus();
-      getResourceData();
 
       setTimeout(() => {
-        getDraftData();
+        getData();
       }, 400);
     }
     return () => {
@@ -260,11 +292,11 @@ export const MarkdownEditor = (props: EditorProps) => {
       /** 初始化编辑器一些方法 */
       editor.resourceId = resourceId;
       // 控制资源弹窗
-      editor.setDrawerType = async (type: string) => {
+      editor.setDrawerType = (type: string) => {
         setDrawerType(type);
       };
       // 控制导入弹窗
-      editor.openUploadDrawer = async () => {
+      editor.openUploadDrawer = () => {
         setImportDrawer(true);
       };
       // 控制依赖授权弹窗
@@ -281,6 +313,8 @@ export const MarkdownEditor = (props: EditorProps) => {
         setDepTargets(targets);
         setPolicyDrawer(true);
       };
+      // markdown 转换器
+      editor.converter = new showdown.Converter();
       // 依赖授权组件实例
       editor.policyProcessor = policyProcessor.current;
     }
@@ -297,12 +331,13 @@ export const MarkdownEditor = (props: EditorProps) => {
     preventSaveResource();
 
     const newMarkdown = html2md(html);
-    const edited = markdown !== newMarkdown;
-    setEdited(edited);
-    markdownRef.current = newMarkdown;
-    setMarkdown(newMarkdown);
+    if (markdown !== newMarkdown) {
+      setEdited(true);
+      markdownRef.current = newMarkdown;
+      setMarkdown(newMarkdown);
 
-    if (edited) {
+      updateRely();
+
       if (!inputTimer.current) {
         inputTimer.current = setTimeout(() => {
           save();
@@ -331,32 +366,38 @@ export const MarkdownEditor = (props: EditorProps) => {
 
   return (
     <editorContext.Provider value={{ editor, resourceId }}>
-      <div className={`markdown-editor-wrapper ${show && 'show'}`}>
+      <div
+        className={`markdown-editor-wrapper ${show && 'show'}`}
+        onClick={() => editor.focus()}
+      >
         <div className="header">
-          <div className="title">
+          <div className="title" onClick={outputMarkdown}>
             <span>{FI18n.i18nNext.t('title_edit_post')}</span>
           </div>
           <div className="article-info">
-            <span>
-              {`${FI18n.i18nNext.t('title_edit_post')} ${markdown.length}`}
-            </span>
-            {saveType === 1 && (
-              <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
-            )}
-            {saveType === 2 && (
-              <span>
-                {FI18n.i18nNext.t('posteditor_state_saved', {
-                  LastEditTime: formatDate(lastSaveTime),
-                })}
-              </span>
-            )}
-            {saveType === 3 && (
-              <span>
-                {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
-                  LastEditTime: formatDate(lastSaveTime),
-                })}
-              </span>
-            )}
+            <div></div>
+            <div>
+              {`${FI18n.i18nNext.t('label_wordscounter')} ${markdown.length}`}
+            </div>
+            <div>
+              {saveType === 1 && (
+                <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
+              )}
+              {saveType === 2 && (
+                <span>
+                  {FI18n.i18nNext.t('posteditor_state_saved', {
+                    LastEditTime: formatDate(lastSaveTime),
+                  })}
+                </span>
+              )}
+              {saveType === 3 && (
+                <span>
+                  {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
+                    LastEditTime: formatDate(lastSaveTime),
+                  })}
+                </span>
+              )}
+            </div>
           </div>
           <div className="btns">
             <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
@@ -414,7 +455,11 @@ export const MarkdownEditor = (props: EditorProps) => {
               onMount={async (processor) => {
                 policyProcessor.current = processor;
               }}
-              onChanged={depChange}
+              onChanged={async () => {
+                relyChanged.current = true;
+                const targets = await policyProcessor.current.getAllTargets();
+                setDepTargets(targets);
+              }}
             />
           </div>
 

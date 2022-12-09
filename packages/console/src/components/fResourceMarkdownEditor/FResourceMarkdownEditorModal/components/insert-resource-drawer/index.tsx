@@ -486,10 +486,10 @@ export const InsertResourceDrawer = (props: Props) => {
   };
 
   /** 从存储空间插入对象 */
-  const insertFromObject = async (item: { sha1: string }) => {
-    const url = `${FUtil.Format.completeUrlByDomain('qi')}/v2/storages/files/${
-      item.sha1
-    }/download`;
+  const insertFromObject = async (item: { objectId: string }) => {
+    const url = `${FUtil.Format.completeUrlByDomain('file')}/objects/${
+      item.objectId
+    }`;
     insertUrlResource(url, editor, resourceMapping[drawerType].resourceType);
     close();
   };
@@ -510,6 +510,7 @@ export const InsertResourceDrawer = (props: Props) => {
               refs.current.resourceKey = (e || '').trim();
               getResourceList(true);
             }}
+            onClick={(e) => e.stopPropagation()}
             theme="dark"
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
@@ -549,6 +550,7 @@ export const InsertResourceDrawer = (props: Props) => {
               refs.current.mineKey = (e || '').trim();
               getMineList(true);
             }}
+            onClick={(e) => e.stopPropagation()}
             theme="dark"
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
@@ -588,6 +590,7 @@ export const InsertResourceDrawer = (props: Props) => {
               refs.current.collectionKey = (e || '').trim();
               getCollectionList(true);
             }}
+            onClick={(e) => e.stopPropagation()}
             theme="dark"
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
@@ -639,6 +642,7 @@ export const InsertResourceDrawer = (props: Props) => {
                   );
                   getObjects(true);
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {[
                   FI18n.i18nNext.t('posteditor_insert_label_all_buckets'),
@@ -673,6 +677,7 @@ export const InsertResourceDrawer = (props: Props) => {
                             refs.current.uploadBucket = e;
                             setUploadBucket(e);
                           }}
+                          onClick={(e) => e.stopPropagation()}
                           dropdownRender={(menu) => (
                             <>
                               {menu}
@@ -768,6 +773,7 @@ export const InsertResourceDrawer = (props: Props) => {
                 refs.current.objectKey = (e || '').trim();
                 getObjects(true);
               }}
+              onClick={(e) => e.stopPropagation()}
               theme="dark"
             />
           </div>
@@ -847,6 +853,7 @@ export const InsertResourceDrawer = (props: Props) => {
                 onDebounceChange={(value) => {
                   changeNewBucketName(value);
                 }}
+                onClick={(e) => e.stopPropagation()}
                 wrapClassName="input"
                 errorText={
                   newBucketError === 1 ? (
@@ -883,6 +890,7 @@ export const InsertResourceDrawer = (props: Props) => {
             onChange={(e) => {
               setUrl(e.target.value);
             }}
+            onClick={(e) => e.stopPropagation()}
           ></textarea>
           <div className="btn-box">
             <div
