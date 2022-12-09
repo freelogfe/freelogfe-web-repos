@@ -992,7 +992,7 @@ const Model: ResourceVersionCreatorModelType = {
       const data4: {
         result: any[];
       } = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
-      console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl');
+      // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl');
 
       yield put<ChangeAction>({
         type: 'change',
