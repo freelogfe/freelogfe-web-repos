@@ -989,13 +989,15 @@ const Model: ResourceVersionCreatorModelType = {
       const params4: Parameters<typeof FServiceAPI.recombination.getFilesSha1Info>[0] = {
         sha1: data.sha1,
       };
-      const data4: any[] = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
-      // console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl')
+      const data4: {
+        result: any[];
+      } = yield call(FServiceAPI.recombination.getFilesSha1Info, params4);
+      console.log(data4, 'data4093oiwjsdflsdkfjsdlfkjl');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          rawProperties: Object.entries(data4[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+          rawProperties: Object.entries(data4.result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
             // console.log(rp, 'rprprprprpyu2341234');
             return {
               key: rp[0],

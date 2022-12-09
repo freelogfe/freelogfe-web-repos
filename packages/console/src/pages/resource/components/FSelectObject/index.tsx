@@ -19,6 +19,8 @@ import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 // import { FLoading } from '@/components/FIcons';
 import FComponentsLib from '@freelog/components-lib';
+import img_upload from '@/assets/createVersion_upload.png';
+import img_markdown from '@/assets/createVersion_markdown.png';
 
 const errorTexts = {
   duplicated: FI18n.i18nNext.t('resource_exist'),
@@ -272,36 +274,66 @@ function FSelectObject({ dispatch, resourceVersionCreatorPage, user }: FSelectOb
     {
       resourceVersionCreatorPage.selectedFileStatus !== -3 && resourceVersionCreatorPage.selectedFileStatus !== -2
         ? (<div>
-          <Space size={50} style={{ height: 38 }}>
+          <Space
+            size={20}
+            direction={'vertical'}
+            style={{ width: '100%' }}
+          >
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
                   <span>{FI18n.i18nNext.t('verifying')}<FComponentsLib.FIcons.FLoading style={{ paddingLeft: 10 }} /></span>
                   <span style={{ color: '#666' }}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
-                : (<Space size={15}>
-                  <FUpload
-                    // accept={resourceType === 'image' ? 'image/*' : '*'}
-                    beforeUpload={(file, FileList) => {
-                      beforeUpload(file);
-                      return false;
-                    }}
-                    showUploadList={false}
-                  >
-                    <FComponentsLib.FRectBtn
-                      type='default'
-                    >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-                  </FUpload>
-                  <FComponentsLib.FRectBtn
-                    type='default'
-                    onClick={() => {
-                      // setModalVisible(true)
-                      onChange({
-                        selectedFileObjectDrawerVisible: true,
-                      });
-                    }}
-                  >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
-                </Space>)
+                : (<div className={styles.selectObjectCards}>
+                  <div className={styles.selectObjectCard}>
+
+                    <img src={img_upload} alt={''} />
+                    <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
+                    <Space size={15}>
+                      <FUpload
+                        // accept={resourceType === 'image' ? 'image/*' : '*'}
+                        beforeUpload={(file, FileList) => {
+                          beforeUpload(file);
+                          return false;
+                        }}
+                        showUploadList={false}
+                      >
+                        <FComponentsLib.FRectBtn
+                          type='primary'
+                        >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+                      </FUpload>
+                      <FComponentsLib.FRectBtn
+                        type='primary'
+                        onClick={() => {
+                          // setModalVisible(true)
+                          onChange({
+                            selectedFileObjectDrawerVisible: true,
+                          });
+                        }}
+                      >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+                    </Space>
+
+                  </div>
+                  {/*<div className={styles.selectObjectCard}>*/}
+                  {/*  <img src={img_markdown} alt={''} />*/}
+                  {/*  <FComponentsLib.FContentText*/}
+                  {/*    type={'additional2'}*/}
+                  {/*    text={'在线新建和编辑文章，无需导出本地，快速生产资源'}*/}
+                  {/*    style={{ color: 'rgba(0,0,0,.3)' }}*/}
+                  {/*  />*/}
+
+                  {/*  <FComponentsLib.FRectBtn*/}
+                  {/*    type='primary'*/}
+                  {/*    onClick={() => {*/}
+                  {/*      // setModalVisible(true)*/}
+                  {/*      onChange({*/}
+                  {/*        selectedFileObjectDrawerVisible: true,*/}
+                  {/*      });*/}
+                  {/*    }}*/}
+                  {/*  >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>*/}
+                  {/*</div>*/}
+                </div>)
             }
 
             {
