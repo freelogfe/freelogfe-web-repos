@@ -9,6 +9,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
 import { resourceOnline } from '@/pages/resource/containers/Sider';
+import fMessage from '@/components/fMessage';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -91,7 +92,9 @@ function Success({ match, dispatch }: SuccessProps) {
                 // history.replace(FUtil.LinkTo.resourceInfo({
                 //   resourceID: match.params.id,
                 // }));
-                gotoVersionInfo();
+                fMessage('上线成功', 'success');
+                // gotoVersionInfo();
+                history.replace(FUtil.LinkTo.myResources());
               }
             }}
             style={{ padding: '0 20px' }}
