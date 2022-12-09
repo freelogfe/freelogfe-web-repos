@@ -166,22 +166,22 @@ function VersionCreator({
           >
             <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
 
-              {
-                resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (
-                  <div className={styles.markdownRecommended}>
-                    <div className={styles.markdownRecommended_tip}>
-                      <FComponentsLib.FTitleText text={'Freelog Markdown'} type={'h3'} />
-                      <div style={{ height: 8 }} />
-                      <FComponentsLib.FContentText text={'在线新建和编辑文章，无需导出本地，快速生产资源'} type={'additional2'} />
-                    </div>
-                    <FComponentsLib.FRectBtn
-                      type={'secondary'}
-                      onClick={async () => {
-                        await onClick_EditMarkdownBtn();
-                      }}
-                    >立即体验</FComponentsLib.FRectBtn>
-                  </div>)
-              }
+              {/*{*/}
+              {/*  resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (*/}
+              {/*    <div className={styles.markdownRecommended}>*/}
+              {/*      <div className={styles.markdownRecommended_tip}>*/}
+              {/*        <FComponentsLib.FTitleText text={'Freelog Markdown'} type={'h3'} />*/}
+              {/*        <div style={{ height: 8 }} />*/}
+              {/*        <FComponentsLib.FContentText text={'在线新建和编辑文章，无需导出本地，快速生产资源'} type={'additional2'} />*/}
+              {/*      </div>*/}
+              {/*      <FComponentsLib.FRectBtn*/}
+              {/*        type={'secondary'}*/}
+              {/*        onClick={async () => {*/}
+              {/*          await onClick_EditMarkdownBtn();*/}
+              {/*        }}*/}
+              {/*      >立即体验</FComponentsLib.FRectBtn>*/}
+              {/*    </div>)*/}
+              {/*}*/}
 
 
               <FPublishObjectFile
@@ -195,7 +195,7 @@ function VersionCreator({
                       sha1: file.sha1,
                       // from: '本地上传',
                     },
-                  } as const);
+                  });
                 }}
                 onSucceed_ImportObject={async (obj) => {
                   // console.log(obj, 'onSucceed_ImportObject390oisjdf');
@@ -206,7 +206,7 @@ function VersionCreator({
                       sha1: obj.sha1,
                       objID: obj.objID,
                     },
-                  } as const);
+                  });
 
                 }}
                 onClick_DeleteBtn={() => {
@@ -220,6 +220,11 @@ function VersionCreator({
                       });
                     },
                   });
+                }}
+
+                showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
+                onClick_OpenMarkdownBtn={async () => {
+                  await onClick_EditMarkdownBtn();
                 }}
                 showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
                 && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'

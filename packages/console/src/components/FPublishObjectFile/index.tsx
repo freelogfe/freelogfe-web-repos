@@ -19,7 +19,10 @@ interface FPublishObjectFileProps {
     from: string;
   } | null;
 
+  showOpenMarkdownEditor?: boolean;
   showEditBtnAfterSucceed?: boolean;
+
+  onClick_OpenMarkdownBtn?(): void;
 
   onClick_EditMarkdownBtn?(): void;
 
@@ -70,7 +73,9 @@ function FPublishObjectFile({
                               onSucceed_ImportObject,
                               onSucceed_UploadFile,
                               onClick_DeleteBtn,
+                              showOpenMarkdownEditor = false,
                               showEditBtnAfterSucceed = false,
+                              onClick_OpenMarkdownBtn,
                               onClick_EditMarkdownBtn,
                             }: FPublishObjectFileProps) {
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
@@ -431,20 +436,25 @@ function FPublishObjectFile({
         </Space>
 
       </div>
-      <div className={styles.selectObjectCard}>
-        <img src={img_markdown} alt={''} />
-        <FComponentsLib.FContentText
-          type={'additional2'}
-          text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
-          style={{ color: 'rgba(0,0,0,.3)' }}
-        />
 
-        <FComponentsLib.FRectBtn
-          type='primary'
-          onClick={() => {
-          }}
-        >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
-      </div>
+      {
+        showOpenMarkdownEditor && (<div className={styles.selectObjectCard}>
+          <img src={img_markdown} alt={''} />
+          <FComponentsLib.FContentText
+            type={'additional2'}
+            text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
+            style={{ color: 'rgba(0,0,0,.3)' }}
+          />
+
+          <FComponentsLib.FRectBtn
+            type='primary'
+            onClick={() => {
+              onClick_OpenMarkdownBtn && onClick_OpenMarkdownBtn();
+            }}
+          >立即体验</FComponentsLib.FRectBtn>
+        </div>)
+      }
+
     </div>
     <div>
 
