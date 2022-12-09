@@ -218,8 +218,17 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
+      setLoading(true);
       const onlineSuccess = await resourceOnline(match.params.id);
       if (onlineSuccess) {
+        // setActiveDialogShow(true);
+        setResultPopupType(1);
+        setTimeout(() => {
+          setLoading(false);
+          setTimeout(() => {
+            setResultPopupType(null);
+          }, 1000);
+        }, 1000);
         dispatch<FetchDataSourceAction>({
           type: 'resourceInfo/fetchDataSource',
           payload: match.params.id,

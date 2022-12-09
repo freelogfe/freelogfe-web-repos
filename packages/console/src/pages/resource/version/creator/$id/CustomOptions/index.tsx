@@ -106,7 +106,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       }),
                     ],
                   },
-                } as const);
+                });
               }}
             >补充属性</FComponentsLib.FTextBtn>
             {
@@ -160,7 +160,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           }),
                         ],
                       },
-                    } as const);
+                    });
                   }}
                 >从上个版本导入</FComponentsLib.FTextBtn>)
                 : undefined
@@ -247,7 +247,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               // await onChange({
               //   customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
               // });
-              set_customOptionsDataVisible(!customOptionsDataVisible)
+              set_customOptionsDataVisible(!customOptionsDataVisible);
             }}
           >
             <span>自定义选项（高级）</span>
@@ -255,7 +255,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               <FComponentsLib.FIcons.FDown />)}
           </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-            <div><FComponentsLib.FIcons.FInfo /></div>
+            <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
           </FTooltip>
         </Space>
 
@@ -295,7 +295,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         ...data,
                       ],
                     },
-                  } as const);
+                  });
                 }}
               >添加选项</FComponentsLib.FTextBtn>
               {
@@ -328,7 +328,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...data,
                         ],
                       },
-                    } as const);
+                    });
                   }}>从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
