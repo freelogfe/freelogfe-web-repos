@@ -102,7 +102,7 @@ function VersionCreator({
       payload: {
         showSuccessTip: false,
       },
-    } as const);
+    });
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {

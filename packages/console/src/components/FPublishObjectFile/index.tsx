@@ -8,6 +8,9 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 import img from '@/assets/file-object.svg';
 import FTable from '@/components/FTable';
+import img_upload from '@/assets/createVersion_upload.png';
+// import img_upload from '@/assets/createVersion_upload.png';
+import img_markdown from '@/assets/createVersion_markdown.png';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -390,36 +393,60 @@ function FPublishObjectFile({
     </div>));
   }
 
-  return (<div>
-    <Space size={15}>
-      <FUpload
-        // accept={resourceType === 'image' ? 'image/*' : '*'}
-        beforeUpload={(file, FileList) => {
-          onUploadFilesLocally(file);
-          return false;
-        }}
-        showUploadList={false}
-      >
+  return (<Space size={20} direction={'vertical'} style={{ width: '100%' }}>
+    <div className={styles.selectObjectCards}>
+      <div className={styles.selectObjectCard}>
+
+        <img src={img_upload} alt={''} />
+        <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
+        <Space size={15}>
+          <FUpload
+            // accept={resourceType === 'image' ? 'image/*' : '*'}
+            beforeUpload={(file, FileList) => {
+              onUploadFilesLocally(file);
+              return false;
+            }}
+            showUploadList={false}
+          >
+            <FComponentsLib.FRectBtn
+              type='primary'
+            >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+          </FUpload>
+          <FComponentsLib.FRectBtn
+            type='primary'
+            onClick={async () => {
+              const obj = await fObjectSelectorDrawer();
+              if (!obj) {
+                return;
+              }
+              await onImportObject({
+                bucketID: obj.bucketID,
+                bucketName: obj.bucketName,
+                objectID: obj.objID,
+                objectName: obj.objName,
+                sha1: obj.sha1,
+              });
+            }}
+          >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+        </Space>
+
+      </div>
+      <div className={styles.selectObjectCard}>
+        <img src={img_markdown} alt={''} />
+        <FComponentsLib.FContentText
+          type={'additional2'}
+          text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
+          style={{ color: 'rgba(0,0,0,.3)' }}
+        />
+
         <FComponentsLib.FRectBtn
-          type='default'
-        >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-      </FUpload>
-      <FComponentsLib.FRectBtn
-        type='default'
-        onClick={async () => {
-          const obj = await fObjectSelectorDrawer();
-          if (!obj) {
-            return;
-          }
-          await onImportObject({
-            bucketID: obj.bucketID,
-            bucketName: obj.bucketName,
-            objectID: obj.objID,
-            objectName: obj.objName,
-            sha1: obj.sha1,
-          });
-        }}
-      >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+          type='primary'
+          onClick={() => {
+          }}
+        >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+      </div>
+    </div>
+    <div>
 
       {
         fUploadedError === 'unexpectedSize' && (<span className={styles.objectErrorInfo}>文件大小不能超过200MB</span>)
@@ -449,67 +476,64 @@ function FPublishObjectFile({
           <span className={styles.objectErrorInfo}>{FI18n.i18nNext.t('resource_exist')}</span>)
       }
 
-    </Space>
+    </div>
 
     {
-      fUploadedError === 'selfTakeUp' && fUsedResource.length > 0 && (<>
-        <div style={{ height: 20 }} />
-        <div className={styles.tableWrap}>
-          <FTable
-            rowClassName={styles.tableRowClassName}
-            scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
-            columns={[
-              {
-                title: '资源',
-                dataIndex: 'resourceName',
-                width: 400,
-                render(value: any, record: any, index: number) {
-                  return (<FComponentsLib.FContentText
-                    text={record.resourceName}
-                    style={{ maxWidth: 370 }}
-                  />);
-                },
+      fUploadedError === 'selfTakeUp' && fUsedResource.length > 0 && (<div className={styles.tableWrap}>
+        <FTable
+          rowClassName={styles.tableRowClassName}
+          scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
+          columns={[
+            {
+              title: '资源',
+              dataIndex: 'resourceName',
+              width: 400,
+              render(value: any, record: any, index: number) {
+                return (<FComponentsLib.FContentText
+                  text={record.resourceName}
+                  style={{ maxWidth: 370 }}
+                />);
               },
-              {
-                title: '类型',
-                dataIndex: 'resourceType',
-                width: 100,
-                render(value: any, record: any, index: number) {
-                  return (<FComponentsLib.FContentText
-                    text={record.resourceType}
-                  />);
-                },
+            },
+            {
+              title: '类型',
+              dataIndex: 'resourceType',
+              width: 100,
+              render(value: any, record: any, index: number) {
+                return (<FComponentsLib.FContentText
+                  text={record.resourceType}
+                />);
               },
-              {
-                title: '版本',
-                dataIndex: 'resourceVersion',
-                render(value: any, record: any, index: number) {
-                  return (<FComponentsLib.FContentText
-                    text={record.resourceVersion}
-                  />);
-                },
+            },
+            {
+              title: '版本',
+              dataIndex: 'resourceVersion',
+              render(value: any, record: any, index: number) {
+                return (<FComponentsLib.FContentText
+                  text={record.resourceVersion}
+                />);
               },
-              {
-                title: '操作',
-                dataIndex: 'operation',
-                render(value: any, record: any, index: number) {
-                  return (<FComponentsLib.FTextBtn onClick={() => {
-                    window.open(record.url);
-                  }}>查看</FComponentsLib.FTextBtn>);
-                },
+            },
+            {
+              title: '操作',
+              dataIndex: 'operation',
+              render(value: any, record: any, index: number) {
+                return (<FComponentsLib.FTextBtn onClick={() => {
+                  window.open(record.url);
+                }}>查看</FComponentsLib.FTextBtn>);
               },
-            ]}
-            dataSource={fUsedResource.map((sfur) => {
-              return {
-                key: sfur.url,
-                ...sfur,
-              };
-            })}
-          />
-        </div>
-      </>)
+            },
+          ]}
+          dataSource={fUsedResource.map((sfur) => {
+            return {
+              key: sfur.url,
+              ...sfur,
+            };
+          })}
+        />
+      </div>)
     }
-  </div>);
+  </Space>);
 }
 
 export default FPublishObjectFile;
