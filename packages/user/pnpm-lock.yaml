@@ -5,7 +5,7 @@ specifiers:
   '@ant-design/icons': ^4.7.0
   '@emotion/react': ^11.10.4
   '@freelog/components-lib': ^0.1.22
-  '@freelog/tools-lib': ^0.1.145
+  '@freelog/tools-lib': ^0.1.146
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@umijs/preset-react': ^1.8.8
@@ -28,7 +28,7 @@ dependencies:
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@emotion/react': 11.10.4_nkg6ltyp3ohebrgoa4zjzfifi4
   '@freelog/components-lib': 0.1.22
-  '@freelog/tools-lib': 0.1.145
+  '@freelog/tools-lib': 0.1.146
   ahooks: 3.7.0_react@18.2.0
   animate.css: 4.1.1
   cropperjs: 1.5.12
@@ -845,8 +845,8 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.145:
-    resolution: {integrity: sha512-fe1jMYz45AVGNN/m0r+6kxytdimbPp73RbcoOOc5BgBqqgO+/TwoEwxyhqDOjS7OM2JecGzAAwhAuFxrxvxg3w==}
+  /@freelog/tools-lib/0.1.146:
+    resolution: {integrity: sha512-cbNGx8krDh2vQi5fhUE1Sxq+QQ2/68/DpwT1MD3bA5ofh23WdklnL+fOSln8GCpeYpF642mXbC5aU9dz6ecSrw==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
@@ -2474,7 +2474,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001436
+      caniuse-lite: 1.0.30001439
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -2557,8 +2557,8 @@ packages:
   /caniuse-lite/1.0.30001388:
     resolution: {integrity: sha512-znVbq4OUjqgLxMxoNX2ZeeLR0d7lcDiE5uJ4eUiWdml1J1EkxbnQq6opT9jb9SMfJxB0XA16/ziHwni4u1I3GQ==}
 
-  /caniuse-lite/1.0.30001436:
-    resolution: {integrity: sha512-ZmWkKsnC2ifEPoWUvSAIGyOYwT+keAaaWPHiQ9DfMqS1t6tfuyFYoWR78TeZtznkEQ64+vGXH9cZrElwR2Mrxg==}
+  /caniuse-lite/1.0.30001439:
+    resolution: {integrity: sha512-1MgUzEkoMO6gKfXflStpYgZDlFM7M/ck/bgfVCACO5vnAf0fXoNVHdWtqGU+MYca+4bL9Z5bpOVmR33cWW9G2A==}
     dev: false
 
   /capture-exit/2.0.0:
