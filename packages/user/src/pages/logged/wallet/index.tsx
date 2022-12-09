@@ -510,7 +510,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                       style={{ maxWidth: 70 }}
                       singleRow
                       text={`${FI18n.i18nNext.t(
-                        'filter_transaction_amount ',
+                        'filter_transaction_amount',
                       )}：`}
                     />
                     <div style={{ width: 5 }} />

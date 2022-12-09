@@ -167,58 +167,58 @@ function ResourceCreator({
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>
-            <FIntroductionEditor
-              value={resourceCreatorPage.introduction}
-              onChange={(e) => {
-                // onChange({
-                //   introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
-                //   introduction: e.target.value,
-                // })
-                dispatch<OnChange_IntroductionInput_Action>({
-                  type: 'resourceCreatorPage/onChange_IntroductionInput',
-                  payload: {
-                    value: e.target.value,
-                  },
-                });
-              }}
-              placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}
-            />
-          </FFormLayout.FBlock>
+        {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>*/}
+        {/*    <FIntroductionEditor*/}
+        {/*      value={resourceCreatorPage.introduction}*/}
+        {/*      onChange={(e) => {*/}
+        {/*        // onChange({*/}
+        {/*        //   introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',*/}
+        {/*        //   introduction: e.target.value,*/}
+        {/*        // })*/}
+        {/*        dispatch<OnChange_IntroductionInput_Action>({*/}
+        {/*          type: 'resourceCreatorPage/onChange_IntroductionInput',*/}
+        {/*          payload: {*/}
+        {/*            value: e.target.value,*/}
+        {/*          },*/}
+        {/*        });*/}
+        {/*      }}*/}
+        {/*      placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}*/}
+        {/*    />*/}
+        {/*  </FFormLayout.FBlock>*/}
 
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>
-            <FUploadResourceCover
-              value={resourceCreatorPage.cover}
-              onChange={(value) => {
-                // onChange({
-                //   cover: value,
-                // })
-                dispatch<OnChange_Cover_Action>({
-                  type: 'resourceCreatorPage/onChange_Cover',
-                  payload: {
-                    value: value,
-                  },
-                });
-              }}
-            />
-          </FFormLayout.FBlock>
+        {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>*/}
+        {/*    <FUploadResourceCover*/}
+        {/*      value={resourceCreatorPage.cover}*/}
+        {/*      onChange={(value) => {*/}
+        {/*        // onChange({*/}
+        {/*        //   cover: value,*/}
+        {/*        // })*/}
+        {/*        dispatch<OnChange_Cover_Action>({*/}
+        {/*          type: 'resourceCreatorPage/onChange_Cover',*/}
+        {/*          payload: {*/}
+        {/*            value: value,*/}
+        {/*          },*/}
+        {/*        });*/}
+        {/*      }}*/}
+        {/*    />*/}
+        {/*  </FFormLayout.FBlock>*/}
 
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
-            <FLabelEditor
-              values={resourceCreatorPage.labels}
-              onChange={(value) => {
-                // onChange({
-                //   labels: value,
-                // })
-                dispatch<OnChange_Labels_Action>({
-                  type: 'resourceCreatorPage/onChange_Labels',
-                  payload: {
-                    value: value,
-                  },
-                });
-              }}
-            />
-          </FFormLayout.FBlock>
+        {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>*/}
+        {/*    <FLabelEditor*/}
+        {/*      values={resourceCreatorPage.labels}*/}
+        {/*      onChange={(value) => {*/}
+        {/*        // onChange({*/}
+        {/*        //   labels: value,*/}
+        {/*        // })*/}
+        {/*        dispatch<OnChange_Labels_Action>({*/}
+        {/*          type: 'resourceCreatorPage/onChange_Labels',*/}
+        {/*          payload: {*/}
+        {/*            value: value,*/}
+        {/*          },*/}
+        {/*        });*/}
+        {/*      }}*/}
+        {/*    />*/}
+        {/*  </FFormLayout.FBlock>*/}
         </FFormLayout>
       </FContentLayout>
 

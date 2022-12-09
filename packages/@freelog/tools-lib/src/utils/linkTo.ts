@@ -230,15 +230,17 @@ export function nodeCreateSuccess({nodeID}: NodeCreateSuccessParamsType) {
   return `/result/node/create/success/${nodeID}`;
 }
 
-// 节点创建成功
+// 内测资格申请
 interface InvitationParamsType {
   goTo?: string;
+  invitationCode?: string;
 }
 
-export function invitation({...params}: InvitationParamsType = {}) {
+export function invitation({goTo, ...params}: InvitationParamsType = {}) {
   // console.log(params.goTo, 'goTo9iowjefklsdj;flksdjflk')
   return `/invitation${handleQuery({
-    returnUrl: params.goTo ? encodeURIComponent(params.goTo) : undefined,
+    ...params,
+    returnUrl: goTo ? encodeURIComponent(goTo) : undefined,
   })}`;
 }
 
@@ -296,11 +298,13 @@ export function login({goTo}: LoginParamsType = {}) {
 // 注册
 interface LoginParamsType {
   goTo?: string;
+  invitationCode?: string;
 }
 
-export function logon({goTo}: LoginParamsType = {}) {
+export function logon({goTo, ...params}: LoginParamsType = {}) {
   return `/logon${handleQuery({
     goTo: goTo ? encodeURIComponent(goTo) : undefined,
+    ...params,
   })}`;
 }
 

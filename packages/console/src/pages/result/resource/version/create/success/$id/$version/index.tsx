@@ -8,6 +8,8 @@ import { Dispatch } from 'redux';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
+import { resourceOnline } from '@/pages/resource/containers/Sider';
+import fMessage from '@/components/fMessage';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -76,25 +78,41 @@ function Success({ match, dispatch }: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText type='third' text={'未添加策略的资源不会出现在资源市场中'} />
+          <FComponentsLib.FTipText
+            type='third'
+            // text={'添加策略后可将资源上架，上架后才能在资源'}
+            text={FI18n.i18nNext.t('versionreleased_desc')}
+          />
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            onClick={() => {
-              gotoAuth();
+            onClick={async () => {
+              // gotoAuth();
+              const onlineSuccess = await resourceOnline(match.params.id);
+              if (onlineSuccess) {
+                // history.replace(FUtil.LinkTo.resourceInfo({
+                //   resourceID: match.params.id,
+                // }));
+                fMessage('上线成功', 'success');
+                // gotoVersionInfo();
+                history.replace(FUtil.LinkTo.myResources());
+              }
             }}
             style={{ padding: '0 20px' }}
-          >立即添加授权策略</FComponentsLib.FRectBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')}</FComponentsLib.FRectBtn>
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
               gotoVersionInfo();
             }}
-          >暂不添加</FComponentsLib.FTextBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_later')}</FComponentsLib.FTextBtn>
         </div>)
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FComponentsLib.FTipText type='third' text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })} />
+          <FComponentsLib.FTipText
+            type='third'
+            text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })}
+          />
           <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}

@@ -51,6 +51,7 @@ export function create(params: CreateParamsType) {
 // 更新资源信息
 interface UpdateParamsType {
   resourceId: string;
+  status?: 0 | 1;
   intro?: string;
   tags?: string[];
   coverImages?: string[];

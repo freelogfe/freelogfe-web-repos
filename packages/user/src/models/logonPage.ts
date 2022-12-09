@@ -24,6 +24,7 @@ export type LogonPageModelState = WholeReadonly<{
   verifyCodeReSendWait: number,
   passwordInput: string;
   passwordInputError: string;
+  invitationCodeInput: string;
 
   waitingTimeToLogin: number;
 }>;
@@ -37,6 +38,7 @@ export interface OnMountPageAction extends AnyAction {
   type: 'logonPage/onMountPage';
   payload: {
     url: string;
+    invitationCode: string;
   };
 }
 
@@ -117,6 +119,13 @@ export interface OnBlurPasswordInputAction extends AnyAction {
   type: 'logonPage/onBlurPasswordInput';
 }
 
+export interface OnChange_InvitationCodeInput_Action extends AnyAction {
+  type: 'logonPage/onChange_InvitationCodeInput';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnClickLogonBtnAction extends AnyAction {
   type: 'logonPage/onClickLogonBtn';
 }
@@ -154,6 +163,7 @@ interface LogonPageModelType {
     onChangeVerifyCodeReSendWait: (action: OnChangeVerifyCodeReSendWaitAction, effects: EffectsCommandMap) => void;
     onChangePasswordInput: (action: OnChangePasswordInputAction, effects: EffectsCommandMap) => void;
     onBlurPasswordInput: (action: OnBlurPasswordInputAction, effects: EffectsCommandMap) => void;
+    onChange_InvitationCodeInput: (action: OnChange_InvitationCodeInput_Action, effects: EffectsCommandMap) => void;
     onClickLogonBtn: (action: OnClickLogonBtnAction, effects: EffectsCommandMap) => void;
     onChangeWaitingTime: (action: OnChangeWaitingTimeAction, effects: EffectsCommandMap) => void;
     onTrigger_Login: (action: OnTrigger_Login_Action, effects: EffectsCommandMap) => void;
@@ -181,6 +191,7 @@ const initStates: LogonPageModelState = {
   verifyCodeReSendWait: 0,
   passwordInput: '',
   passwordInputError: '',
+  invitationCodeInput: '',
 
   waitingTimeToLogin: 0,
 };
@@ -189,8 +200,14 @@ const Model: LogonPageModelType = {
   namespace: 'logonPage',
   state: initStates,
   effects: {
-    * onMountPage({ payload }: OnMountPageAction, {}: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, { put }: EffectsCommandMap) {
       if (FUtil.Tool.getUserIDByCookies() === -1) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            invitationCodeInput: payload.invitationCode,
+          },
+        });
         return;
       }
       window.location.replace(payload.url || FUtil.Format.completeUrlByDomain('www'));
@@ -437,6 +454,14 @@ const Model: LogonPageModelType = {
       });
 
     },
+    * onChange_InvitationCodeInput({ payload }: OnChange_InvitationCodeInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          invitationCodeInput: payload.value,
+        },
+      });
+    },
     * onClickLogonBtn(action: OnClickLogonBtnAction, { select, call, put }: EffectsCommandMap) {
       const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
         logonPage,
@@ -494,7 +519,11 @@ const Model: LogonPageModelType = {
       const { data } = yield call(FServiceAPI.User.login, params);
 
       if (data?.userId) {
-        if (payload.goToUrl !== '') {
+        if (logonPage.invitationCodeInput !== '') {
+          window.location.replace(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation({
+            invitationCode: logonPage.invitationCodeInput,
+          }));
+        } else if (payload.goToUrl !== '') {
           window.location.replace(decodeURIComponent(payload.goToUrl));
         } else {
           // history.replace(FUtil.LinkTo.wallet());

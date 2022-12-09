@@ -172,7 +172,7 @@ function FResourceAuthorizationProcessor({
 
   async function _addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
 
-    console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
+    // console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
 
     const targets = _deduplicateTargets(targetsFrom);
 
