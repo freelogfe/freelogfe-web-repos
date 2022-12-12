@@ -394,6 +394,7 @@ const Model: ResourceVersionCreatorModelType = {
         getAllTargets(): void;
         getAllResourcesWithContracts(): void;
         isCompleteAuthorization(): void;
+        getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
       } = yield call(getProcessor, 'resourceVersionCreator');
 
       const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
@@ -402,6 +403,7 @@ const Model: ResourceVersionCreatorModelType = {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
+
 
       const dependentAllResourcesWithContracts: {
         resourceID: string;
@@ -418,13 +420,18 @@ const Model: ResourceVersionCreatorModelType = {
         versionRange?: string;
       }[] = yield call(p.getAllTargets);
       // console.log(payload, 'payload98isfjsdolifjksdlfjlkj');
-      const baseUpcastResources: { resourceId: string }[] = dependentAllResourcesWithContracts
-        .filter((r) => {
-          return r.contracts.length === 0;
-        })
-        .map((r) => {
-          return { resourceId: r.resourceID };
-        });
+
+      const baseUpcastResources: {
+        resourceID: string;
+        resourceName: string;
+      }[] = yield call(p.getBaseUpcastResources);
+      // const baseUpcastResources: { resourceId: string }[] = dependentAllResourcesWithContracts
+      //   .filter((r) => {
+      //     return r.contracts.length === 0;
+      //   })
+      //   .map((r) => {
+      //     return { resourceId: r.resourceID };
+      //   });
       const dependencies: {
         resourceId: string;
         versionRange: string;
@@ -455,38 +462,43 @@ const Model: ResourceVersionCreatorModelType = {
           };
         });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
-        version: resourceVersionCreatorPage.versionInput,
-        fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
-        filename: resourceVersionCreatorPage.selectedFileInfo.name,
-        baseUpcastResources: baseUpcastResources,
-        dependencies: dependencies,
-        resolveResources: resolveResources,
-        customPropertyDescriptors: [
-          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-            return {
-              type: 'readonlyText',
-              key: i.key,
-              remark: i.description,
-              defaultValue: i.value,
-            };
+          resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
+          version: resourceVersionCreatorPage.versionInput,
+          fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
+          filename: resourceVersionCreatorPage.selectedFileInfo.name,
+          baseUpcastResources: baseUpcastResources.map((r) => {
+            return { resourceId: r.resourceID };
           }),
-          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-            const isInput: boolean = i.custom === 'input';
-            const options: string[] = i.customOption.split(',');
-            return {
-              type: isInput ? 'editableText' : 'select',
-              key: i.key,
-              remark: i.description,
-              defaultValue: isInput ? i.defaultValue : options[0],
-              candidateItems: isInput ? undefined : options,
-            };
-          }),
-        ],
-        description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
-          ? ''
-          : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
-      };
+          dependencies: dependencies,
+          resolveResources: resolveResources,
+          customPropertyDescriptors: [
+            ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+            ((i) => {
+              return {
+                type: 'readonlyText',
+                key: i.key,
+                remark: i.description,
+                defaultValue: i.value,
+              };
+            }),
+            ...
+              resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+                const isInput: boolean = i.custom === 'input';
+                const options: string[] = i.customOption.split(',');
+                return {
+                  type: isInput ? 'editableText' : 'select',
+                  key: i.key,
+                  remark: i.description,
+                  defaultValue: isInput ? i.defaultValue : options[0],
+                  candidateItems: isInput ? undefined : options,
+                };
+              }),
+          ],
+          description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
+            ? ''
+            : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+        }
+      ;
 
       const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
       if (ret !== 0 || errCode !== 0 || !data) {
@@ -837,8 +849,12 @@ const Model: ResourceVersionCreatorModelType = {
         return;
       }
 
-      const p: { getAllTargets(): void } = yield call(getProcessor, 'resourceVersionCreator');
+      const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
       const directDependencies: any[] = yield call(p.getAllTargets);
+      const baseUpcastResources: {
+        resourceID: string;
+        resourceName: string;
+      }[] = yield call(p.getBaseUpcastResources);
 
       const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.versionInput,
@@ -847,6 +863,7 @@ const Model: ResourceVersionCreatorModelType = {
         customOptionsData: resourceVersionCreatorPage.customOptionsData,
         directDependencies: directDependencies,
         descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+        baseUpcastResources: baseUpcastResources,
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
