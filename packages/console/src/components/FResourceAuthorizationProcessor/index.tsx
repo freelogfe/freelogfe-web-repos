@@ -98,7 +98,7 @@ function FResourceAuthorizationProcessor({
                                            onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
 
-  const addingTargetsRef = React.useRef<Target[]>([]);
+  // const addingTargetsRef = React.useRef<Target[]>([]);
 
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
@@ -108,16 +108,16 @@ function FResourceAuthorizationProcessor({
 
   // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
 
-  const { run } = AHooks.useDebounceFn(
-    async () => {
-      // setValue(value + 1);
-      const res = await _addTargets(addingTargetsRef.current);
-      addingTargetsRef.current = [];
-    },
-    {
-      wait: 500,
-    },
-  );
+  // const { run } = AHooks.useDebounceFn(
+  //   async () => {
+  //     // setValue(value + 1);
+  //     const res = await _addTargets(addingTargetsRef.current);
+  //     addingTargetsRef.current = [];
+  //   },
+  //   {
+  //     wait: 500,
+  //   },
+  // );
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -179,17 +179,6 @@ function FResourceAuthorizationProcessor({
   });
 
   async function addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
-    addingTargetsRef.current = [
-      ...addingTargetsRef.current,
-      ...targetsFrom,
-    ];
-    run();
-
-    return { err: '' };
-  }
-
-  async function _addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
-
     // console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
 
     const targets = _deduplicateTargets(targetsFrom);
@@ -220,6 +209,16 @@ function FResourceAuthorizationProcessor({
     const needAddObjects = targets.filter((t) => {
       return t.type === 'object' && !existObjectIDs.includes(t.id);
     });
+
+    set_relations(needAddResources.map((r) => {
+      return {
+        id: r.id,
+        name: r.name,
+        type: 'resource',
+        versionRange: '',
+        children: [],
+      };
+    }));
 
     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: needAddResourceIDs.join(','),
@@ -273,12 +272,21 @@ function FResourceAuthorizationProcessor({
           children: [],
         };
       }),
-      ...get_relations(),
+      ...get_relations().filter((r) => {
+        return r.type !== 'resource' || !needAddResources.some((nr) => {
+          return nr.id === r.id && nr.name === r.name;
+        });
+      }),
     ]);
     _syncActivatedTarget();
     await _syncTargetInfo();
     return { err: '' };
   }
+
+  // async function _addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
+  //
+  //
+  // }
 
   async function _syncTargetInfo() {
     let relationResourceIDs: string[] = [
