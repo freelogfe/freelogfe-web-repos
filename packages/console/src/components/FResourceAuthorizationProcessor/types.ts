@@ -43,5 +43,5 @@ export interface IActivatedTarget {
 
 export interface IBaseUpcastResource {
   resourceID: string;
-  resourceNme: string;
+  resourceName: string;
 }

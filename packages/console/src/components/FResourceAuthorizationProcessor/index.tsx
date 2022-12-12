@@ -507,23 +507,24 @@ function FResourceAuthorizationProcessor({
 
   return (<div className={styles.box} style={{ width: width }}>
     <FBasicUpcastCard
-      dataSource={licenseeResource.latestVersion === ''
-        ? targetInfos
-          .filter((t) => {
-            return t.targetType === 'resource' && t.upThrow;
-          })
-          .map((t) => {
-            return {
-              resourceID: t.targetID,
-              resourceName: t.targetName,
-            };
-          })
-        : licenseeResource.baseUpcastResources.map((bur) => {
-          return {
-            resourceID: bur.resourceID,
-            resourceName: bur.resourceName,
-          };
-        })}
+      // dataSource={licenseeResource.latestVersion === ''
+      //   ? targetInfos
+      //     .filter((t) => {
+      //       return t.targetType === 'resource' && t.upThrow;
+      //     })
+      //     .map((t) => {
+      //       return {
+      //         resourceID: t.targetID,
+      //         resourceName: t.targetName,
+      //       };
+      //     })
+      //   : licenseeResource.baseUpcastResources.map((bur) => {
+      //     return {
+      //       resourceID: bur.resourceID,
+      //       resourceName: bur.resourceName,
+      //     };
+      //   })}
+      dataSource={baseUpcastResources}
       onClick={(resourceID) => {
         window.open(FUtil.LinkTo.resourceDetails({
           resourceID: resourceID,
