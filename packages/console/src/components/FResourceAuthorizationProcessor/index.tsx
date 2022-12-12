@@ -399,7 +399,15 @@ function FResourceAuthorizationProcessor({
     }
 
     set_targetInfos(targetInfos);
-
+    await setBaseUpcastResources(get_baseUpcastResources().filter((r) => {
+      return targetInfos
+        .filter((t) => {
+          return t.targetType === 'resource';
+        })
+        .some((t) => {
+          return t.targetID === r.resourceID && t.targetName === r.resourceName;
+        });
+    }));
   }
 
   function _syncActivatedTarget() {
