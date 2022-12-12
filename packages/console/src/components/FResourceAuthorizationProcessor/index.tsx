@@ -183,6 +183,8 @@ function FResourceAuthorizationProcessor({
 
     const targets = _deduplicateTargets(targetsFrom);
 
+    const oldRelations: IRelation[] = get_relations();
+
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
         return t.type === 'resource';
@@ -210,15 +212,18 @@ function FResourceAuthorizationProcessor({
       return t.type === 'object' && !existObjectIDs.includes(t.id);
     });
 
-    set_relations(needAddResources.map((r) => {
-      return {
-        id: r.id,
-        name: r.name,
-        type: 'resource',
-        versionRange: '',
-        children: [],
-      };
-    }));
+    set_relations([
+      ...needAddResources.map((r) => {
+        return {
+          id: r.id,
+          name: r.name,
+          type: 'resource' as 'resource',
+          versionRange: '',
+          children: [],
+        };
+      }),
+      ...oldRelations,
+    ]);
 
     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
       resourceIds: needAddResourceIDs.join(','),
@@ -272,11 +277,7 @@ function FResourceAuthorizationProcessor({
           children: [],
         };
       }),
-      ...get_relations().filter((r) => {
-        return r.type !== 'resource' || !needAddResources.some((nr) => {
-          return nr.id === r.id && nr.name === r.name;
-        });
-      }),
+      ...oldRelations,
     ]);
     _syncActivatedTarget();
     await _syncTargetInfo();
@@ -524,7 +525,7 @@ function FResourceAuthorizationProcessor({
   }
 
   async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
-    console.log(value, 'valueiosdjflksdjflksdjflkj');
+    // console.log(value, 'valueiosdjflksdjflksdjflkj');
     if (get_licenseeResource()?.latestVersion !== '') {
       return { err: '非首个版本，基础上抛无法修改' };
     }
