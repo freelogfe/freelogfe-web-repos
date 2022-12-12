@@ -23,5 +23,9 @@ export interface IResourceCreateVersionDraft {
     type: 'resource' | 'object';
     versionRange?: string;
   }[];
+  baseUpcastResources: {
+    resourceID: string;
+    resourceName: string;
+  }[];
   descriptionEditorInput: string;
 }

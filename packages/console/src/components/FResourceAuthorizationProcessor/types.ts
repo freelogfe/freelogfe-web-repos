@@ -40,3 +40,8 @@ export interface IActivatedTarget {
   name: string;
   type: 'resource' | 'object';
 }
+
+export interface IBaseUpcastResource {
+  resourceID: string;
+  resourceNme: string;
+}

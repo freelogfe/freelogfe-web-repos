@@ -6,7 +6,7 @@ import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
 import Content from './Content';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { IActivatedTarget, IRelation, ITargetInfo } from './types';
+import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from './types';
 import FComponentsLib from '@freelog/components-lib';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 
@@ -45,6 +45,10 @@ export interface Processor {
     }[];
   }[]>;
 
+  getBaseUpcastResources(): Promise<IBaseUpcastResource[]>;
+
+  setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }>;
+
   clear(): Promise<{ err: string }>;
 }
 
@@ -71,6 +75,7 @@ interface FResourceAuthorizationProcessorStates {
   relations: IRelation[];
   targetInfos: ITargetInfo[];
   activatedTarget: IActivatedTarget | null;
+  baseUpcastResources: IBaseUpcastResource[];
 }
 
 const initStates: FResourceAuthorizationProcessorStates = {
@@ -78,6 +83,7 @@ const initStates: FResourceAuthorizationProcessorStates = {
   relations: [],
   targetInfos: [],
   activatedTarget: null,
+  baseUpcastResources: [],
 };
 
 let processors: {
@@ -98,6 +104,7 @@ function FResourceAuthorizationProcessor({
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+  const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
 
   // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
 
@@ -151,6 +158,8 @@ function FResourceAuthorizationProcessor({
       isCompleteAuthorization,
       getAllResourcesWithContracts,
       clear,
+      getBaseUpcastResources,
+      setBaseUpcastResources,
     };
     processors[processorIdentifier] = processor;
     onMount && onMount(processor);
@@ -480,6 +489,15 @@ function FResourceAuthorizationProcessor({
     set_relations(initStates['relations']);
     set_targetInfos(initStates['targetInfos']);
     set_activatedTarget(initStates['activatedTarget']);
+    return { err: '' };
+  }
+
+  async function getBaseUpcastResources(): Promise<IBaseUpcastResource[]> {
+    return get_baseUpcastResources();
+  }
+
+  async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
+    set_baseUpcastResources(value);
     return { err: '' };
   }
 
