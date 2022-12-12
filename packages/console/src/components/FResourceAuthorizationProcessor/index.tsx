@@ -445,6 +445,7 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
+    onChanged && onChanged();
     return { err: '' };
   }
 
@@ -596,6 +597,7 @@ function FResourceAuthorizationProcessor({
                 set_targetInfos(v);
               }}
               onChange_baseUpcastResources={(v) => {
+                onChanged && onChanged();
                 set_baseUpcastResources(v);
               }}
             />
@@ -639,6 +641,7 @@ function FResourceAuthorizationProcessor({
                 licenseeIdentityType: 1,
               });
               await _syncTargetInfo();
+              onChanged && onChanged();
             }}
           >获取授权</FComponentsLib.FRectBtn>
         </div>
