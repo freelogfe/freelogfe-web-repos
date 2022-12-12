@@ -8,7 +8,7 @@ import FTooltip from '@/components/FTooltip';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
-import { IActivatedTarget, ITargetInfo } from '../types';
+import { IActivatedTarget, IBaseUpcastResource, ITargetInfo } from '../types';
 import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface ContentProps {
@@ -16,10 +16,22 @@ interface ContentProps {
 
   activatedTarget: IActivatedTarget | null;
 
+  baseUpcastResources: IBaseUpcastResource[];
+  baseUpcastDisabled: boolean;
+
   onChange_TargetInfos?(value: ITargetInfo[]): void;
+
+  onChange_baseUpcastResources?(value: IBaseUpcastResource[]): void;
 }
 
-function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: ContentProps) {
+function Content({
+                   targetInfos,
+                   activatedTarget,
+                   baseUpcastResources,
+                   baseUpcastDisabled,
+                   onChange_TargetInfos,
+                   onChange_baseUpcastResources,
+                 }: ContentProps) {
 
   if (!activatedTarget) {
     return null;
@@ -111,16 +123,21 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
   return (<>
 
     {
-      info.upThrow && (<div className={styles.errorBox} style={{ flexDirection: 'column' }}>
+      info.targetType === 'resource' && baseUpcastResources.some((r) => {
+        return r.resourceID === info?.targetID && r.resourceName === info.targetName;
+      }) && (<div className={styles.errorBox} style={{ flexDirection: 'column' }}>
         <FComponentsLib.FIcons.FUpcast className={styles.errorIcon} style={{ fontSize: 48 }} />
         <div style={{ height: 20 }} />
         <FComponentsLib.FTipText text={'已选择上抛'} type='second' />
         <div style={{ height: 40 }} />
         {
-          !info.upThrowDisabled && (<FComponentsLib.FRectBtn
+          !baseUpcastDisabled && (<FComponentsLib.FRectBtn
             type={'secondary'}
             onClick={() => {
-              onChange({ upThrow: false });
+              // onChange({ upThrow: false });
+              onChange_baseUpcastResources && onChange_baseUpcastResources(baseUpcastResources.filter((r) => {
+                return r.resourceID !== info?.targetID && r.resourceName === info?.targetName;
+              }));
             }}
           >重新选择授权方案</FComponentsLib.FRectBtn>)
         }
@@ -144,14 +161,23 @@ function Content({ targetInfos, activatedTarget, onChange_TargetInfos }: Content
 
 
     {
-      !info.upThrow && (<div className={styles.contractAndPolicyList}>
+      (info.targetType !== 'resource' || !baseUpcastResources.some((r) => {
+        return r.resourceID === info?.targetID && r.resourceName === info.targetName;
+      })) && (<div className={styles.contractAndPolicyList}>
 
         {
-          !info.upThrowDisabled && (<FComponentsLib.FTextBtn
+          !baseUpcastDisabled && (<FComponentsLib.FTextBtn
             type={'danger'}
             style={{ position: 'absolute', right: 20, top: 15, fontSize: 12 }}
             onClick={() => {
-              onChange({ upThrow: true });
+              // onChange({ upThrow: true });
+              onChange_baseUpcastResources && onChange_baseUpcastResources([
+                ...baseUpcastResources,
+                {
+                  resourceID: info?.targetID,
+                  resourceName: info?.targetName,
+                },
+              ]);
             }}
           >
             <FComponentsLib.FIcons.FUpcast style={{ fontSize: 12 }} />将资源上抛

@@ -8,8 +8,8 @@ export interface ITargetInfo {
   error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
   warning: '' | 'authException' | 'ownerFreeze';
   versions: string[];
-  upThrow: boolean;
-  upThrowDisabled: boolean;
+  // upThrow: boolean;
+  // upThrowDisabled: boolean;
   contracts: {
     contractID: string;
     policyID: string;

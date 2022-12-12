@@ -146,6 +146,12 @@ function FResourceAuthorizationProcessor({
           };
         }),
       });
+      set_baseUpcastResources(data_resource.baseUpcastResources.map((b) => {
+        return {
+          resourceID: b.resourceId,
+          resourceName: b.resourceName,
+        };
+      }));
     }
   }, [resourceID]);
 
@@ -339,13 +345,13 @@ function FResourceAuthorizationProcessor({
             versionRange: r.versionRange,
           };
         }),
-        upcastResourceIDs: get_targetInfos()
-          .filter((t) => {
-            return t.upThrow;
-          })
-          .map((t) => {
-            return t.targetID;
-          }),
+        // upcastResourceIDs: get_targetInfos()
+        //   .filter((t) => {
+        //     return t.upThrow;
+        //   })
+        //   .map((t) => {
+        //     return t.targetID;
+        //   }),
       });
       targetInfos = [
         ...resourceTargetInfos,
@@ -452,10 +458,12 @@ function FResourceAuthorizationProcessor({
   async function isCompleteAuthorization(): Promise<boolean> {
     return get_targetInfos()
       .filter((t) => {
-        return !t.upThrow;
+        return t.targetType === 'resource' && !get_baseUpcastResources().some((r) => {
+          return r.resourceID !== t.targetID && r.resourceName !== t.targetName;
+        });
       })
       .every((t) => {
-        return t.upThrow || t.contracts.length > 0;
+        return t.contracts.length > 0;
       });
   }
 
@@ -497,6 +505,9 @@ function FResourceAuthorizationProcessor({
   }
 
   async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
+    if (get_licenseeResource()?.latestVersion !== '') {
+      return { err: '非首个版本，基础上抛无法修改' };
+    }
     set_baseUpcastResources(value);
     return { err: '' };
   }
@@ -552,13 +563,18 @@ function FResourceAuthorizationProcessor({
               }}
             />
           </div>
-
+          {/*{console.log(baseUpcastResources, 'baseUpcastResourcesi9ojdlkfjsdlfkjl')}*/}
           <div className={styles.DepPanelContent}>
             <Content
               activatedTarget={activatedTarget}
               targetInfos={targetInfos}
+              baseUpcastDisabled={licenseeResource.latestVersion !== ''}
+              baseUpcastResources={baseUpcastResources}
               onChange_TargetInfos={(v) => {
                 set_targetInfos(v);
+              }}
+              onChange_baseUpcastResources={(v) => {
+                set_baseUpcastResources(v);
               }}
             />
           </div>
@@ -568,7 +584,7 @@ function FResourceAuthorizationProcessor({
           <FComponentsLib.FRectBtn
             style={{ width: 300 }}
             disabled={!targetInfos.some((t) => {
-              return !t.upThrow && t.enabledPolicies.some((p) => {
+              return t.enabledPolicies.some((p) => {
                 return p.checked;
               });
             })}
@@ -577,9 +593,9 @@ function FResourceAuthorizationProcessor({
                 subjectId: string;
                 policyId: string;
               }[] = get_targetInfos()
-                .filter((t) => {
-                  return !t.upThrow;
-                })
+                // .filter((t) => {
+                //   return !t.upThrow;
+                // })
                 .map((t) => {
                   return t.enabledPolicies
                     .filter((p) => {
@@ -656,7 +672,7 @@ interface I_batchHandleResources_Params {
     resourceID: string;
     versionRange: string;
   }[];
-  upcastResourceIDs: string[];
+  // upcastResourceIDs: string[];
 }
 
 type I_batchHandleResources_Return = FResourceAuthorizationProcessorStates['targetInfos'];
@@ -665,7 +681,7 @@ async function _batchHandleResources({
                                        licenseeResource,
                                        licensorResourceIDs,
                                        needCheckedCyclicDependenciesResourceInfos,
-                                       upcastResourceIDs,
+                                       // upcastResourceIDs,
                                      }: I_batchHandleResources_Params): Promise<I_batchHandleResources_Return> {
   const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: licensorResourceIDs.join(','),
@@ -790,9 +806,9 @@ async function _batchHandleResources({
       return c.policyId;
     });
 
-    const upThrow: boolean = upcastResourceIDs.includes(r.resourceId) || licenseeResource?.baseUpcastResources.some((bur) => {
-      return bur.resourceID === r.resourceId;
-    }) || false;
+    // const upThrow: boolean = upcastResourceIDs.includes(r.resourceId) || licenseeResource?.baseUpcastResources.some((bur) => {
+    //   return bur.resourceID === r.resourceId;
+    // }) || false;
     return {
       targetID: r.resourceId,
       targetName: r.resourceName,
@@ -803,8 +819,8 @@ async function _batchHandleResources({
       versions: r.resourceVersions.map((v) => {
         return v.version;
       }),
-      upThrow: upThrow,
-      upThrowDisabled: licenseeResource?.latestVersion !== '',
+      // upThrow: upThrow,
+      // upThrowDisabled: licenseeResource?.latestVersion !== '',
       contracts: contracts.map((c) => {
         return {
           contractID: c.contractId,
