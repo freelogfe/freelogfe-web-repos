@@ -6,7 +6,7 @@ import FTooltip from '@/components/FTooltip';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 // import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
-import { IActivatedTarget, IRelation, ITargetInfo } from '../types';
+import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from '../types';
 
 interface NavProps {
   relations: IRelation[];
@@ -15,12 +15,21 @@ interface NavProps {
 
   activatedTarget: IActivatedTarget | null;
 
+  baseUpcastResources: IBaseUpcastResource[];
+
   onChange_Relations?(value: IRelation[]): void;
 
   onChange_ActivatedTarget?(value: IActivatedTarget): void;
 }
 
-function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onChange_ActivatedTarget }: NavProps) {
+function Nav({
+               relations,
+               targetInfos,
+               activatedTarget,
+               baseUpcastResources,
+               onChange_Relations,
+               onChange_ActivatedTarget,
+             }: NavProps) {
 
   // console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
   if (!activatedTarget || targetInfos.length === 0 || relations.length === 0) {
@@ -128,7 +137,9 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                 <div style={{ height: 5 }} />
                 <div className={styles.DepPanelLabels}>
                   {
-                    !info.upThrow && (<>
+                    info.targetType === 'resource' && baseUpcastResources.every((r) => {
+                      return r.resourceID !== info?.targetID && r.resourceName !== info?.targetName;
+                    }) && (<>
 
                       {
                         [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)]
@@ -164,7 +175,9 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
                     </>)
                   }
                   {
-                    info.upThrow && (<label
+                    info.targetType === 'resource' && baseUpcastResources.some((r) => {
+                      return r.resourceID === info?.targetID && r.resourceName === info?.targetName;
+                    }) && (<label
                       className={styles.labelError}
                     >上抛</label>)
                   }
@@ -186,6 +199,7 @@ function Nav({ relations, targetInfos, activatedTarget, onChange_Relations, onCh
               relations={r.children}
               targetInfos={targetInfos}
               activatedTarget={activatedTarget}
+              baseUpcastResources={baseUpcastResources}
               onClick={(value) => {
                 // onChangeActiveID(resourceID);
                 onChange_ActivatedTarget && onChange_ActivatedTarget(value);
@@ -211,10 +225,12 @@ interface SmallNavProps {
 
   activatedTarget: IActivatedTarget | null;
 
+  baseUpcastResources: IBaseUpcastResource[];
+
   onClick?: (resourceID: IActivatedTarget) => void;
 }
 
-function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNavProps) {
+function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources, onClick }: SmallNavProps) {
   if (relations.length === 0 || targetInfos.length === 0 || !activatedTarget) {
     return null;
   }
@@ -297,7 +313,9 @@ function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNav
             <div style={{ height: 5 }} />
             <div className={styles.DepPanelLabels}>
               {
-                !info.upThrow && [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)].length === 0
+                info.targetType === 'resource' && baseUpcastResources.every((r) => {
+                  return r.resourceID !== info?.targetID && r.resourceName !== info?.targetName;
+                }) && [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)].length === 0
                   ? (<div style={{
                     color: '#E9A923',
                     fontSize: 12,
@@ -326,7 +344,9 @@ function SmallNav({ relations, targetInfos, activatedTarget, onClick }: SmallNav
                   />)
               }
               {
-                info.upThrow && (<label
+                info.targetType === 'resource' && baseUpcastResources.some((r) => {
+                  return r.resourceID === info?.targetID && r.resourceName === info?.targetName;
+                }) && (<label
                   className={styles.labelError}
                 >上抛</label>)
               }

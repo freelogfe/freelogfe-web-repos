@@ -552,6 +552,7 @@ function FResourceAuthorizationProcessor({
               relations={relations}
               targetInfos={targetInfos}
               activatedTarget={activatedTarget}
+              baseUpcastResources={baseUpcastResources}
               onChange_Relations={async (v) => {
                 set_relations(v);
                 await _syncTargetInfo();
