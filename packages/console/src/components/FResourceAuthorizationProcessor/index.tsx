@@ -146,12 +146,15 @@ function FResourceAuthorizationProcessor({
           };
         }),
       });
-      set_baseUpcastResources(data_resource.baseUpcastResources.map((b) => {
-        return {
-          resourceID: b.resourceId,
-          resourceName: b.resourceName,
-        };
-      }));
+      if (data_resource.latestVersion !== '') {
+        set_baseUpcastResources(data_resource.baseUpcastResources.map((b) => {
+          return {
+            resourceID: b.resourceId,
+            resourceName: b.resourceName,
+          };
+        }));
+      }
+
     }
   }, [resourceID]);
 
@@ -513,6 +516,7 @@ function FResourceAuthorizationProcessor({
   }
 
   async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
+    console.log(value, 'valueiosdjflksdjflksdjflkj');
     if (get_licenseeResource()?.latestVersion !== '') {
       return { err: '非首个版本，基础上抛无法修改' };
     }

@@ -13,6 +13,7 @@ import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
+import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 
 export interface ResourceVersionCreatorPageModelState {
   resourceInfo: {
@@ -826,10 +827,13 @@ const Model: ResourceVersionCreatorModelType = {
         const p: {
           addTargets(value: any): void;
           clear(): void;
+          setBaseUpcastResources(value: IBaseUpcastResource[]): void;
         } = yield call(getProcessor, 'resourceVersionCreator');
         yield call(p.clear);
         yield call(p.addTargets, draftData.directDependencies);
-
+        yield call(FUtil.Tool.promiseSleep);
+        // console.log(draftData.baseUpcastResources, 'draftData.baseUpcastResourcesoiskdejflkdjl');
+        yield call(p.setBaseUpcastResources, draftData.baseUpcastResources);
         if (draftData.selectedFileInfo) {
           yield put<_FetchRawPropsAction>({
             type: '_FetchRawProps',
@@ -855,6 +859,8 @@ const Model: ResourceVersionCreatorModelType = {
         resourceID: string;
         resourceName: string;
       }[] = yield call(p.getBaseUpcastResources);
+
+      // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
       const draftData: IResourceCreateVersionDraft = {
         versionInput: resourceVersionCreatorPage.versionInput,
