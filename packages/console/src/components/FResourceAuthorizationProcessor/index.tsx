@@ -449,7 +449,6 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
-    onChanged && onChanged();
     return { err: '' };
   }
 
@@ -580,6 +579,9 @@ function FResourceAuthorizationProcessor({
               activatedTarget={activatedTarget}
               baseUpcastResources={baseUpcastResources}
               onChange_Relations={async (v) => {
+                if (get_relations().length > v.length) {
+                  onChanged && onChanged();
+                }
                 set_relations(v);
                 await _syncTargetInfo();
                 await _syncActivatedTarget();

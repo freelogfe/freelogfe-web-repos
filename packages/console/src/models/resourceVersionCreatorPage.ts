@@ -12,7 +12,7 @@ import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
+// import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 
 export interface ResourceVersionCreatorPageModelState {
