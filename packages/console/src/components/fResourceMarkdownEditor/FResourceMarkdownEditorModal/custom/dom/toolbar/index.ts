@@ -92,6 +92,7 @@ const ToolbarAuthStatus = (data: CustomResource, editor: any): VNode => {
         [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
       ),
     ]),
+    6: h('div'),
   };
 
   return authStatusMapping[data.authType];

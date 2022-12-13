@@ -22,6 +22,7 @@ import {
 } from './custom/dom/resource/utils';
 import { Modal } from 'antd';
 import showdown from 'showdown';
+import { i18nChangeLanguage } from '@wangeditor/editor';
 
 interface EditorProps {
   // 资源 id
@@ -86,6 +87,19 @@ export const MarkdownEditor = (props: EditorProps) => {
     }
   };
 
+  /** 创建编辑器 */
+  const createEditor = (editor: any) => {
+    let language = '';
+    const currentLanguage = FI18n.i18nNext.getCurrentLanguage();
+    if (currentLanguage === 'zh_CN') {
+      language = 'zh-CN';
+    } else if (currentLanguage === 'en_US') {
+      language = 'en';
+    }
+    i18nChangeLanguage(language);
+    setEditor(editor);
+  };
+
   /** 获取资源与草稿数据 */
   const getData = async () => {
     const resourceRes = await FServiceAPI.Resource.info({
@@ -99,9 +113,13 @@ export const MarkdownEditor = (props: EditorProps) => {
       return;
     }
     editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraft;
-    const { selectedFileInfo, directDependencies = [] } = editor.draftData;
+    const {
+      selectedFileInfo,
+      directDependencies = [],
+      baseUpcastResources = [],
+    } = editor.draftData;
     const targets = [...directDependencies];
-    let dependencesByIdentify: string[] = [];
+    // let dependencesByIdentify: string[] = [];
     if (selectedFileInfo) {
       const content = await FUtil.Request({
         method: 'GET',
@@ -113,33 +131,34 @@ export const MarkdownEditor = (props: EditorProps) => {
         editor,
       );
       setHtml(html);
-      dependencesByIdentify = getDependencesByContent(contentStr);
+      // dependencesByIdentify = getDependencesByContent(contentStr);
     }
-    if (dependencesByIdentify.length) {
-      const depsData = await FServiceAPI.Resource.batchInfo({
-        resourceNames: dependencesByIdentify.join(),
-      });
-      depsData.data.forEach(async (dep: any) => {
-        if (!dep) return;
+    // if (dependencesByIdentify.length) {
+    //   const depsData = await FServiceAPI.Resource.batchInfo({
+    //     resourceNames: dependencesByIdentify.join(),
+    //   });
+    //   depsData.data.forEach(async (dep: any) => {
+    //     if (!dep) return;
 
-        const index = targets.findIndex(
-          (item: { name: string }) => dep.resourceName === item.name,
-        );
-        if (index === -1) {
-          // 识别出的依赖不在依赖树中，需添加进依赖树
-          const { resourceId, resourceName, latestVersion } = dep;
-          targets.push({
-            id: resourceId,
-            name: resourceName,
-            type: 'resource',
-            versionRange: latestVersion,
-          });
-        }
-      });
-    }
-    editor.draftData.directDependencies = [...targets];
+    //     const index = targets.findIndex(
+    //       (item: { name: string }) => dep.resourceName === item.name,
+    //     );
+    //     if (index === -1) {
+    //       // 识别出的依赖不在依赖树中，需添加进依赖树
+    //       const { resourceId, resourceName, latestVersion } = dep;
+    //       targets.push({
+    //         id: resourceId,
+    //         name: resourceName,
+    //         type: 'resource',
+    //         versionRange: latestVersion,
+    //       });
+    //     }
+    //   });
+    // }
+    editor.draftData.directDependencies = targets;
     policyProcessor.current.clear();
     policyProcessor.current.addTargets(targets);
+    policyProcessor.current.setBaseUpcastResources(baseUpcastResources);
   };
 
   /** 保存 */
@@ -196,52 +215,47 @@ export const MarkdownEditor = (props: EditorProps) => {
     }
   };
 
+  /** 添加依赖 */
+  const addRely = async (target: any) => {
+    editor.policyProcessor.addTargets([target]);
+    const targets = await policyProcessor.current.getAllTargets();
+    editor.draftData.directDependencies = targets;
+    setDepTargets(targets);
+  };
+
   /** 更新依赖队列 */
   const updateRely = async () => {
     const targets = await policyProcessor.current.getAllTargets();
     const dependencesByIdentify = getDependencesByContent(markdownRef.current);
-    if (dependencesByIdentify.length) {
-      const newDep: string[] = [];
-      dependencesByIdentify.forEach((depName) => {
-        const index = targets.findIndex((item: any) => item.name === depName);
-        if (index === -1) newDep.push(depName);
-      });
-      if (newDep.length) {
-        const depsData = await FServiceAPI.Resource.batchInfo({
-          resourceNames: newDep.join(),
-        });
-        depsData.data.forEach(async (dep: any) => {
-          const { resourceId, resourceName, latestVersion } = dep;
-          const target = {
-            id: resourceId,
-            name: resourceName,
-            type: 'resource',
-            versionRange: latestVersion,
-          };
-          targets.push(target);
-          policyProcessor.current.addTargets([target]);
-        });
+    if (dependencesByIdentify.length < targets.length) {
+      /** 只处理删除的情况 */
+      for (let i = targets.length - 1; i >= 0; i--) {
+        if (!dependencesByIdentify.includes(targets[i].name)) {
+          // 识别出的依赖中不包含之前依赖队列中的此依赖，视为从已内容中删除
+          policyProcessor.current.removeTarget(targets[i]);
+          targets.splice(i, 1);
+        }
       }
+      editor.draftData.directDependencies = targets;
+      setDepTargets(targets);
     }
-    editor.draftData.directDependencies = [...targets];
-    setDepTargets(editor.draftData.directDependencies);
   };
 
   /** 关闭授权弹窗 */
   const closePolicyDrawer = async () => {
-    if (relyChanged.current) {
-      editor.draftData.directDependencies = [...depTargets];
-      await FServiceAPI.Resource.saveVersionsDraft({
-        resourceId,
-        draftData: editor.draftData,
-      });
-      const html = await importDoc(
-        { content: markdown, type: 'draft' },
-        editor,
-      );
-      setHtml(html);
-      relyChanged.current = false;
-    }
+    // if (relyChanged.current) {
+    const upcastResources =
+      await policyProcessor.current.getBaseUpcastResources();
+    editor.draftData.baseUpcastResources = [...upcastResources];
+    editor.draftData.directDependencies = [...depTargets];
+    await FServiceAPI.Resource.saveVersionsDraft({
+      resourceId,
+      draftData: editor.draftData,
+    });
+    const html = await importDoc({ content: markdown, type: 'draft' }, editor);
+    setHtml(html);
+    relyChanged.current = false;
+    // }
     setPolicyDrawer(false);
     editor.focus();
   };
@@ -309,10 +323,13 @@ export const MarkdownEditor = (props: EditorProps) => {
             type: 'resource',
           });
         }
-        const targets = await policyProcessor.current.getAllTargets();
-        setDepTargets(targets);
+        // const targets = await policyProcessor.current.getAllTargets();
+        // setDepTargets(targets);
+        updateRely();
         setPolicyDrawer(true);
       };
+      // 添加依赖
+      editor.addRely = addRely;
       // markdown 转换器
       editor.converter = new showdown.Converter();
       // 依赖授权组件实例
@@ -335,8 +352,6 @@ export const MarkdownEditor = (props: EditorProps) => {
       setEdited(true);
       markdownRef.current = newMarkdown;
       setMarkdown(newMarkdown);
-
-      updateRely();
 
       if (!inputTimer.current) {
         inputTimer.current = setTimeout(() => {
@@ -417,7 +432,7 @@ export const MarkdownEditor = (props: EditorProps) => {
           <Editor
             defaultConfig={editorConfig}
             value={html}
-            onCreated={setEditor}
+            onCreated={createEditor}
             onChange={(editor) => setHtml(editor.getHtml())}
             mode="default"
           />

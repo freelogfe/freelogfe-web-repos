@@ -14,7 +14,15 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
     version,
   } = data;
 
-  const authType: 1 | 2 | 3 | 4 | 5 = await getAuthType(resourceId, editor);
+  const target = {
+    id: resourceId,
+    name: resourceName,
+    type: 'resource',
+    versionRange: version || latestVersion,
+  };
+  await editor.addRely(target);
+
+  const authType: 1 | 2 | 3 | 4 | 5 | 6 = await getAuthType(resourceId, editor);
 
   const insertData: CustomResource = {
     originType: 1,
@@ -69,7 +77,7 @@ export const insertUrlResource = async (
 const getRealContent = async (
   content: string,
   data: ResourceInEditor,
-  editor: any
+  editor: any,
 ): Promise<string> => {
   let html = content;
   const { allDeps, requestDeps } = await getDeps(data.resourceId, data.version);
@@ -118,13 +126,22 @@ const getRealContent = async (
 export const getAuthType = async (
   resourceId: string,
   editor: any,
-): Promise<1 | 2 | 3 | 4 | 5> => {
-  let authType: 1 | 2 | 3 | 4 | 5;
-  const { baseUpcastResources } = editor.resourceData;
-  const upcastIdList = baseUpcastResources.map((item: any) => item.resourceId);
+): Promise<1 | 2 | 3 | 4 | 5 | 6> => {
+  let authType: 1 | 2 | 3 | 4 | 5 | 6;
+  const { baseUpcastResources } = editor.draftData;
+  const upcastIdList = baseUpcastResources.map((item: any) => item.resourceID);
   if (upcastIdList.includes(resourceId)) {
     // 上抛
     authType = 4;
+    return authType;
+  }
+
+  const depIdList = editor.draftData.directDependencies.map(
+    (item: any) => item.id,
+  );
+  if (!depIdList.includes(resourceId)) {
+    // 未加入依赖队列
+    authType = 6;
     return authType;
   }
 

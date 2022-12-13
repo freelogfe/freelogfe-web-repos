@@ -75,6 +75,29 @@ const ImageAuthStatus = (data: CustomResource, editor: any): VNode => {
         [FI18n.i18nNext.t('insert_toolbar_btn_authmanager')],
       ),
     ]),
+    6: h('div.image-auth', {}, [
+      h('div.auth-text', {}, [
+        FI18n.i18nNext.t('posteditor_import_addrely_msg'),
+      ]),
+      h(
+        'div.auth-btn',
+        {
+          on: {
+            click() {
+              const target = {
+                id: data.resourceId,
+                name: data.resourceName,
+                type: 'resource',
+                versionRange: data.version || data.latestVersion,
+              };
+              editor.addRely(target);
+              editor.openPolicyDrawer(data);
+            },
+          },
+        },
+        [FI18n.i18nNext.t('posteditor_import_addrely_btn')],
+      ),
+    ]),
   };
 
   return authStatusMapping[data.authType];

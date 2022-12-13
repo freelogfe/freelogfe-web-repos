@@ -30,7 +30,7 @@ export interface CustomResource {
   resourceType: string[];
   latestVersion?: string;
   version?: string;
-  authType?: 1 | 2 | 3 | 4 | 5; // 1-未签约；2-已签约未授权；3-已授权；4-上抛；5-授权链异常
+  authType?: 1 | 2 | 3 | 4 | 5 | 6; // 1-未签约；2-已签约未授权；3-已授权；4-上抛；5-授权链异常；6-未加入依赖队列
   content: string; // url（媒体资源）/ 内容（文本资源）
   type?: 'resource';
   children?: any[];

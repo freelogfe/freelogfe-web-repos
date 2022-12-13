@@ -14,7 +14,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { editorContext } from '../..';
 import {
-  getDependencesByContent,
+  // getDependencesByContent,
   importDoc,
 } from '../../custom/dom/resource/utils';
 
@@ -235,27 +235,27 @@ export const ImportDocDrawer = (props: Props) => {
       editor.draftData.baseProperties = [];
       editor.draftData.customOptionsData = [];
     }
-    const dependencesByIdentify = getDependencesByContent(content);
-    if (dependencesByIdentify.length) {
-      const depsData = await FServiceAPI.Resource.batchInfo({
-        resourceNames: dependencesByIdentify.join(),
-      });
-      depsData.data.forEach(async (dep: any) => {
-        const index = targets.findIndex(
-          (item: { name: string }) => dep.resourceName === item.name,
-        );
-        if (index === -1) {
-          // 识别出的依赖不在依赖树中，需添加进依赖树
-          const { resourceId, resourceName, latestVersion } = dep;
-          targets.push({
-            id: resourceId,
-            name: resourceName,
-            type: 'resource',
-            versionRange: latestVersion,
-          });
-        }
-      });
-    }
+    // const dependencesByIdentify = getDependencesByContent(content);
+    // if (dependencesByIdentify.length) {
+    //   const depsData = await FServiceAPI.Resource.batchInfo({
+    //     resourceNames: dependencesByIdentify.join(),
+    //   });
+    //   depsData.data.forEach(async (dep: any) => {
+    //     const index = targets.findIndex(
+    //       (item: { name: string }) => dep.resourceName === item.name,
+    //     );
+    //     if (index === -1) {
+    //       // 识别出的依赖不在依赖树中，需添加进依赖树
+    //       const { resourceId, resourceName, latestVersion } = dep;
+    //       targets.push({
+    //         id: resourceId,
+    //         name: resourceName,
+    //         type: 'resource',
+    //         versionRange: latestVersion,
+    //       });
+    //     }
+    //   });
+    // }
     editor.policyProcessor.clear();
     editor.policyProcessor.addTargets(targets);
 
