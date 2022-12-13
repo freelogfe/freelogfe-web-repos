@@ -183,7 +183,7 @@ function FResourceAuthorizationProcessor({
 
     const targets = _deduplicateTargets(targetsFrom);
 
-    const oldRelations: IRelation[] = get_relations();
+    // const oldRelations: IRelation[] = get_relations();
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
@@ -222,7 +222,7 @@ function FResourceAuthorizationProcessor({
           children: [],
         };
       }),
-      ...oldRelations,
+      ...get_relations(),
     ]);
 
     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
@@ -277,7 +277,11 @@ function FResourceAuthorizationProcessor({
           children: [],
         };
       }),
-      ...oldRelations,
+      ...get_relations().filter((r) => {
+        return r.type !== 'resource' || !needAddResources.some((nr) => {
+          return nr.id === r.id && nr.name === r.name;
+        });
+      }),
     ]);
     _syncActivatedTarget();
     await _syncTargetInfo();
@@ -445,7 +449,6 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
-    onChanged && onChanged();
     return { err: '' };
   }
 
@@ -576,6 +579,9 @@ function FResourceAuthorizationProcessor({
               activatedTarget={activatedTarget}
               baseUpcastResources={baseUpcastResources}
               onChange_Relations={async (v) => {
+                if (get_relations().length > v.length) {
+                  onChanged && onChanged();
+                }
                 set_relations(v);
                 await _syncTargetInfo();
                 await _syncActivatedTarget();

@@ -12,7 +12,7 @@ import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
+// import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 
 export interface ResourceVersionCreatorPageModelState {
@@ -954,37 +954,37 @@ const Model: ResourceVersionCreatorModelType = {
 
         // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
 
-        if (payload.ifMarkdownFetchDependencies && result[0].info.metaInfo['mime'] === 'text/markdown') {
-          const deps: string[] = yield call(getDependenciesBySha1, resourceVersionCreatorPage.selectedFileInfo.sha1);
-          // console.log(deps, 'depsiowejlfksjdlfkjsdlkfjlk');
-          if (deps.length > 0) {
-            const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-              resourceNames: deps.join(','),
-            };
-            const { data: data_batchInfo }: {
-              data: {
-                resourceId: string;
-                resourceName: string;
-              }[];
-            } = yield call(FServiceAPI.Resource.batchInfo, params);
-            // console.log(data_batchInfo, 'data_batchInfoiosfjsldkjfldsjlskfjlksdj');
-
-            const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
-            const needAddTargets: {
-              id: string;
-              name: string;
-              type: 'resource';
-            }[] = data_batchInfo.map((bi) => {
-              return {
-                id: bi.resourceId,
-                name: bi.resourceName,
-                type: 'resource',
-              };
-            });
-            yield call(processor.addTargets, needAddTargets);
-          }
-
-        }
+        // if (payload.ifMarkdownFetchDependencies && result[0].info.metaInfo['mime'] === 'text/markdown') {
+        //   const deps: string[] = yield call(getDependenciesBySha1, resourceVersionCreatorPage.selectedFileInfo.sha1);
+        //   // console.log(deps, 'depsiowejlfksjdlfkjsdlkfjlk');
+        //   if (deps.length > 0) {
+        //     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        //       resourceNames: deps.join(','),
+        //     };
+        //     const { data: data_batchInfo }: {
+        //       data: {
+        //         resourceId: string;
+        //         resourceName: string;
+        //       }[];
+        //     } = yield call(FServiceAPI.Resource.batchInfo, params);
+        //     // console.log(data_batchInfo, 'data_batchInfoiosfjsldkjfldsjlskfjlksdj');
+        //
+        //     const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
+        //     const needAddTargets: {
+        //       id: string;
+        //       name: string;
+        //       type: 'resource';
+        //     }[] = data_batchInfo.map((bi) => {
+        //       return {
+        //         id: bi.resourceId,
+        //         name: bi.resourceName,
+        //         type: 'resource',
+        //       };
+        //     });
+        //     yield call(processor.addTargets, needAddTargets);
+        //   }
+        //
+        // }
       }
 
     },
