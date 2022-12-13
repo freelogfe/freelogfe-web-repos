@@ -833,7 +833,7 @@ const Model: ResourceVersionCreatorModelType = {
         yield call(p.addTargets, draftData.directDependencies);
         yield call(FUtil.Tool.promiseSleep);
         // console.log(draftData.baseUpcastResources, 'draftData.baseUpcastResourcesoiskdejflkdjl');
-        yield call(p.setBaseUpcastResources, draftData.baseUpcastResources);
+        yield call(p.setBaseUpcastResources, draftData?.baseUpcastResources || []);
         if (draftData.selectedFileInfo) {
           yield put<_FetchRawPropsAction>({
             type: '_FetchRawProps',
