@@ -105,7 +105,7 @@ function FResourceAuthorizationProcessor({
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
-
+  // console.log(baseUpcastResources, 'baseUpcastResourceso9ipwjslfksdjflksdjlk');
   // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
 
   // const { run } = AHooks.useDebounceFn(
@@ -529,11 +529,11 @@ function FResourceAuthorizationProcessor({
   }
 
   async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
-    // console.log(value, 'valueiosdjflksdjflksdjflkj');
+    // console.log(value, 'valueiosdjflksdjflksdjflkj==========================');
     if (get_licenseeResource()?.latestVersion !== '') {
       return { err: '非首个版本，基础上抛无法修改' };
     }
-    set_baseUpcastResources(value);
+    set_baseUpcastResources(value || []);
     return { err: '' };
   }
 
