@@ -237,8 +237,8 @@ export const MarkdownEditor = (props: EditorProps) => {
         }
       }
       editor.draftData.directDependencies = targets;
-      setDepTargets(targets);
     }
+    setDepTargets(targets);
   };
 
   /** 关闭授权弹窗 */
@@ -254,7 +254,7 @@ export const MarkdownEditor = (props: EditorProps) => {
     });
     const html = await importDoc({ content: markdown, type: 'draft' }, editor);
     setHtml(html);
-    relyChanged.current = false;
+    // relyChanged.current = false;
     // }
     setPolicyDrawer(false);
     editor.focus();
@@ -323,8 +323,6 @@ export const MarkdownEditor = (props: EditorProps) => {
             type: 'resource',
           });
         }
-        // const targets = await policyProcessor.current.getAllTargets();
-        // setDepTargets(targets);
         updateRely();
         setPolicyDrawer(true);
       };
@@ -444,11 +442,7 @@ export const MarkdownEditor = (props: EditorProps) => {
           setHtml={setHtml}
         />
 
-        <InsertResourceDrawer
-          show={!!drawerType}
-          close={() => setDrawerType('')}
-          drawerType={drawerType}
-        />
+        <InsertResourceDrawer show={!!drawerType} drawerType={drawerType} />
 
         <div className={`policy-drawer ${policyDrawer && 'show'}`}>
           <div className="policy-header">
@@ -471,7 +465,7 @@ export const MarkdownEditor = (props: EditorProps) => {
                 policyProcessor.current = processor;
               }}
               onChanged={async () => {
-                relyChanged.current = true;
+                // relyChanged.current = true;
                 const targets = await policyProcessor.current.getAllTargets();
                 setDepTargets(targets);
               }}

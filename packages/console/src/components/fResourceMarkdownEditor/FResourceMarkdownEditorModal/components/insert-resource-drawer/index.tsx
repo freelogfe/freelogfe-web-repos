@@ -19,13 +19,12 @@ const { Option } = Select;
 
 interface Props {
   show: boolean;
-  close: () => void;
   drawerType: string;
 }
 
 export const InsertResourceDrawer = (props: Props) => {
   const { editor } = useContext(editorContext);
-  const { show, close, drawerType } = props;
+  const { show, drawerType } = props;
   let body: Element | null = null;
   const resourceMapping: any = {
     image: {
@@ -487,11 +486,12 @@ export const InsertResourceDrawer = (props: Props) => {
 
   /** 从存储空间插入对象 */
   const insertFromObject = async (item: { objectId: string }) => {
+    editor.focus();
     const url = `${FUtil.Format.completeUrlByDomain('file')}/objects/${
       item.objectId
     }`;
     insertUrlResource(url, editor, resourceMapping[drawerType].resourceType);
-    close();
+    editor.setDrawerType('');
   };
 
   /** tab 选项卡区域列表 */
@@ -896,12 +896,13 @@ export const InsertResourceDrawer = (props: Props) => {
             <div
               className="insert-btn"
               onClick={() => {
+                editor.focus();
                 insertUrlResource(
                   url,
                   editor,
                   resourceMapping[drawerType].resourceType,
                 );
-                close();
+                editor.setDrawerType('');
               }}
             >
               {FI18n.i18nNext.t('btn_insert_from_url')}
@@ -919,8 +920,13 @@ export const InsertResourceDrawer = (props: Props) => {
       title={show ? resourceMapping[drawerType].key : ''}
       closable={false}
       open={!!drawerType}
-      onClose={close}
-      extra={<i className="freelog fl-icon-guanbi close-btn" onClick={close} />}
+      onClose={() => editor.setDrawerType('')}
+      extra={
+        <i
+          className="freelog fl-icon-guanbi close-btn"
+          onClick={() => editor.setDrawerType('')}
+        />
+      }
       destroyOnClose
     >
       <Tabs

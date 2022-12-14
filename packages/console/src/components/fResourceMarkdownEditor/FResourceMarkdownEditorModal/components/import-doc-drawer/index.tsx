@@ -2,7 +2,7 @@
 
 import './index.less';
 import ObjectIcon from '../../images/object.png';
-import { Drawer, Popconfirm, Popover, Select, Tabs, Upload } from 'antd';
+import { Drawer, Popconfirm, Popover, Select, Tabs } from 'antd';
 import fMessage from '@/components/fMessage';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -645,15 +645,19 @@ export const ImportDocDrawer = (props: Props) => {
             <div className="warning">
               {FI18n.i18nNext.t('msg_import_post_from_local_02')}
             </div>
-            <Upload
+            <FUpload
+              action={`${FUtil.Format.completeUrlByDomain(
+                'qi',
+              )}/v2/storages/files/upload`}
+              withCredentials={true}
               showUploadList={false}
-              onChange={uploadLocalFile}
               accept=".md,.txt"
+              onChange={uploadLocalFile}
             >
               <div className="upload-btn">
                 {FI18n.i18nNext.t('btn_upload_local_file')}
               </div>
-            </Upload>
+            </FUpload>
           </div>
           {uploadStatus > 1 && (
             <>

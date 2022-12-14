@@ -127,23 +127,16 @@ export const getAuthType = async (
   resourceId: string,
   editor: any,
 ): Promise<1 | 2 | 3 | 4 | 5 | 6> => {
-  let authType: 1 | 2 | 3 | 4 | 5 | 6;
   const { baseUpcastResources } = editor.draftData;
   const upcastIdList = baseUpcastResources.map((item: any) => item.resourceID);
-  if (upcastIdList.includes(resourceId)) {
-    // 上抛
-    authType = 4;
-    return authType;
-  }
+  // 上抛
+  if (upcastIdList.includes(resourceId)) return 4;
 
   const depIdList = editor.draftData.directDependencies.map(
     (item: any) => item.id,
   );
-  if (!depIdList.includes(resourceId)) {
-    // 未加入依赖队列
-    authType = 6;
-    return authType;
-  }
+  // 未加入依赖队列
+  if (!depIdList.includes(resourceId)) return 6;
 
   const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     licensorId: resourceId,
@@ -153,22 +146,26 @@ export const getAuthType = async (
     subjectType: 1,
   };
   const authRes = await FServiceAPI.Contract.batchContracts(params);
-  if (!authRes.data[0]) {
-    // 没有合约，即未签约
-    authType = 1;
-  } else if (authRes.data[0].authStatus !== 1) {
-    // 签约且未授权
-    authType = 2;
+  const contractsList = authRes.data;
+  // 没有合约（未签约）
+  if (!contractsList.length) return 1;
+
+  const authStatusList = contractsList.map((item: any) => item.authStatus);
+  // 签约且未授权
+  if (!authStatusList.includes(1)) return 2;
+
+  const res = await FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/batchAuth/results`,
+    params: { resourceIds: resourceId },
+  });
+  if (res.data[0].isAuth) {
+    // 已授权
+    return 3;
   } else {
-    // 签约且授权
-    const res = await FUtil.Request({
-      method: 'GET',
-      url: `/v2/auths/resources/batchAuth/results`,
-      params: { resourceIds: resourceId },
-    });
-    authType = res.data[0].isAuth ? 3 : 5;
+    // 授权链异常
+    return 5;
   }
-  return authType;
 };
 
 /**
