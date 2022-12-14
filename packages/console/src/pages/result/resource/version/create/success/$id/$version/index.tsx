@@ -63,7 +63,7 @@ function Success({ match, dispatch }: SuccessProps) {
   //   }));
   // }
 
-  console.log(FI18n.i18nNext.t('versionreleased_desc'), 'siodjflksdjfl;ksjdflkjoiwsejfo;isjdlfkj');
+  // console.log(FI18n.i18nNext.t('versionreleased_desc'), 'siodjflksdjfl;ksjdflkjoiwsejfo;isjdlfkj');
 
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
