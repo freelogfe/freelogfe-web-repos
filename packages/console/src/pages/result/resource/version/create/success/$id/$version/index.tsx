@@ -57,18 +57,21 @@ function Success({ match, dispatch }: SuccessProps) {
     }));
   }
 
-  function gotoAuth() {
-    return history.replace(FUtil.LinkTo.resourceAuth({
-      resourceID: match.params.id,
-    }));
-  }
+  // function gotoAuth() {
+  //   return history.replace(FUtil.LinkTo.resourceAuth({
+  //     resourceID: match.params.id,
+  //   }));
+  // }
+
+  console.log(FI18n.i18nNext.t('versionreleased_desc'), 'siodjflksdjfl;ksjdflkjoiwsejfo;isjdlfkj');
 
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
       {
         gotoState !== 0 && (<>
-          <i className={'freelog fl-icon-shenqingchenggong'} />
+          {/*<i className={'freelog fl-icon-shenqingchenggong'} />*/}
+          <FComponentsLib.FIcons.FCheck />
           <div style={{ height: 20 }} />
           <FComponentsLib.FTipText
             type='second'
@@ -81,11 +84,18 @@ function Success({ match, dispatch }: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText
-            type='third'
-            // text={'添加策略后可将资源上架，上架后才能在资源'}
-            text={FI18n.i18nNext.t('versionreleased_desc')}
-          />
+          {
+            FI18n.i18nNext.t('versionreleased_desc')
+              .split('\n')
+              .map((text) => {
+                return (<FComponentsLib.FTipText
+                  type='third'
+                  // text={'添加策略后可将资源上架，上架后才能在资源'}
+                  text={text}
+                />);
+              })
+          }
+
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
             onClick={async () => {
