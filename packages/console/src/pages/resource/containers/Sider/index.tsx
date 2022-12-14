@@ -731,7 +731,7 @@ export default withRouter(
   }))(Sider),
 );
 
-export async function resourceOnline(resourceID: string): Promise<boolean> {
+async function resourceOnline(resourceID: string): Promise<boolean> {
 
   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
     resourceIdOrName: resourceID,
