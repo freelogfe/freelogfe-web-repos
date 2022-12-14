@@ -449,6 +449,8 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
+    await _syncTargetInfo();
+    await _syncActivatedTarget();
     return { err: '' };
   }
 
@@ -582,7 +584,7 @@ function FResourceAuthorizationProcessor({
                 if (get_relations().length > v.length) {
                   onChanged && onChanged();
                 }
-                set_relations(v);
+                await set_relations(v);
                 await _syncTargetInfo();
                 await _syncActivatedTarget();
                 onChanged && onChanged();
