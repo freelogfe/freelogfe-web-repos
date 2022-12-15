@@ -139,6 +139,37 @@ function VersionCreator({
         header={<div className={styles.Header}>
           {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
           <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
+
+          <Space size={30}>
+            <FComponentsLib.FTextBtn
+              type='default'
+              onClick={() => {
+                dispatch<OnTrigger_SaveDraft_Action>({
+                  type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                  payload: {
+                    showSuccessTip: true,
+                  },
+                });
+              }}
+            >
+              {FI18n.i18nNext.t('save_as_draft')}
+            </FComponentsLib.FTextBtn>
+            <FComponentsLib.FRectBtn
+              style={{ display: 'flex', alignItems: 'center' }}
+              onClick={() => {
+                dispatch<OnClick_CreateVersionBtn_Action>({
+                  type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
+                });
+              }}
+              disabled={hasError}
+            >
+              <FComponentsLib.FIcons.FPaperPlane
+                style={{ fontWeight: 400, fontSize: 16 }}
+              />
+              <div style={{ width: 5 }} />
+              {FI18n.i18nNext.t('release_to_market')}
+            </FComponentsLib.FRectBtn>
+          </Space>
         </div>}
       >
         <FFormLayout>
@@ -166,24 +197,6 @@ function VersionCreator({
           >
             <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
 
-              {/*{*/}
-              {/*  resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (*/}
-              {/*    <div className={styles.markdownRecommended}>*/}
-              {/*      <div className={styles.markdownRecommended_tip}>*/}
-              {/*        <FComponentsLib.FTitleText text={'Freelog Markdown'} type={'h3'} />*/}
-              {/*        <div style={{ height: 8 }} />*/}
-              {/*        <FComponentsLib.FContentText text={'在线新建和编辑文章，无需导出本地，快速生产资源'} type={'additional2'} />*/}
-              {/*      </div>*/}
-              {/*      <FComponentsLib.FRectBtn*/}
-              {/*        type={'secondary'}*/}
-              {/*        onClick={async () => {*/}
-              {/*          await onClick_EditMarkdownBtn();*/}
-              {/*        }}*/}
-              {/*      >立即体验</FComponentsLib.FRectBtn>*/}
-              {/*    </div>)*/}
-              {/*}*/}
-
-
               <FPublishObjectFile
                 fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                 onSucceed_UploadFile={(file) => {
@@ -210,16 +223,23 @@ function VersionCreator({
 
                 }}
                 onClick_DeleteBtn={() => {
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                    okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                    cancelText: FI18n.i18nNext.t('btn_cancel'),
-                    onOk() {
-                      dispatch<OnDelete_ObjectFile_Action>({
-                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                      });
-                    },
-                  });
+                  if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
+                    fConfirmModal({
+                      message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                      okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                      cancelText: FI18n.i18nNext.t('btn_cancel'),
+                      onOk() {
+                        dispatch<OnDelete_ObjectFile_Action>({
+                          type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                        });
+                      },
+                    });
+                  } else {
+                    dispatch<OnDelete_ObjectFile_Action>({
+                      type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                    });
+                  }
+
                 }}
 
                 showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
@@ -359,40 +379,11 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
         </FFormLayout>
-        <div style={{ position: 'relative' }}>
-          <div style={{ position: 'absolute', right: -30, top: 60 }}>
-            <Space size={30}>
-              <FComponentsLib.FTextBtn
-                type='default'
-                onClick={() => {
-                  dispatch<OnTrigger_SaveDraft_Action>({
-                    type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                    payload: {
-                      showSuccessTip: true,
-                    },
-                  });
-                }}
-              >
-                {FI18n.i18nNext.t('save_as_draft')}
-              </FComponentsLib.FTextBtn>
-              <FComponentsLib.FRectBtn
-                style={{ display: 'flex', alignItems: 'center' }}
-                onClick={() => {
-                  dispatch<OnClick_CreateVersionBtn_Action>({
-                    type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-                  });
-                }}
-                disabled={hasError}
-              >
-                <FComponentsLib.FIcons.FPaperPlane
-                  style={{ fontWeight: 400, fontSize: 16 }}
-                />
-                <div style={{ width: 5 }} />
-                {FI18n.i18nNext.t('release_to_market')}
-              </FComponentsLib.FRectBtn>
-            </Space>
-          </div>
-        </div>
+        {/*<div style={{ position: 'relative' }}>*/}
+        {/*  <div style={{ position: 'absolute', right: -30, top: 60 }}>*/}
+
+        {/*  </div>*/}
+        {/*</div>*/}
       </FLeftSiderLayout>
     </>
   );

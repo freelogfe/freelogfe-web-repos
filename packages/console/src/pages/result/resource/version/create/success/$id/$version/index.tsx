@@ -8,8 +8,11 @@ import { Dispatch } from 'redux';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
-import { resourceOnline } from '@/pages/resource/containers/Sider';
+// import { resourceOnline } from '@/pages/resource/containers/Sider';
 import fMessage from '@/components/fMessage';
+// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fPolicyOperator from '@/components/fPolicyOperator';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -54,18 +57,21 @@ function Success({ match, dispatch }: SuccessProps) {
     }));
   }
 
-  function gotoAuth() {
-    return history.replace(FUtil.LinkTo.resourceAuth({
-      resourceID: match.params.id,
-    }));
-  }
+  // function gotoAuth() {
+  //   return history.replace(FUtil.LinkTo.resourceAuth({
+  //     resourceID: match.params.id,
+  //   }));
+  // }
+
+  // console.log(FI18n.i18nNext.t('versionreleased_desc'), 'siodjflksdjfl;ksjdflkjoiwsejfo;isjdlfkj');
 
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
       {
         gotoState !== 0 && (<>
-          <i className={'freelog fl-icon-shenqingchenggong'} />
+          {/*<i className={'freelog fl-icon-shenqingchenggong'} />*/}
+          <FComponentsLib.FIcons.FCheck />
           <div style={{ height: 20 }} />
           <FComponentsLib.FTipText
             type='second'
@@ -78,22 +84,25 @@ function Success({ match, dispatch }: SuccessProps) {
 
       {
         gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText
-            type='third'
-            // text={'添加策略后可将资源上架，上架后才能在资源'}
-            text={FI18n.i18nNext.t('versionreleased_desc')}
-          />
+          {
+            FI18n.i18nNext.t('versionreleased_desc')
+              .split('\n')
+              .map((text) => {
+                return (<FComponentsLib.FTipText
+                  type='third'
+                  // text={'添加策略后可将资源上架，上架后才能在资源'}
+                  text={text}
+                />);
+              })
+          }
+
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
             onClick={async () => {
-              // gotoAuth();
               const onlineSuccess = await resourceOnline(match.params.id);
+
               if (onlineSuccess) {
-                // history.replace(FUtil.LinkTo.resourceInfo({
-                //   resourceID: match.params.id,
-                // }));
                 fMessage('上线成功', 'success');
-                // gotoVersionInfo();
                 history.replace(FUtil.LinkTo.myResources());
               }
             }}
@@ -126,3 +135,79 @@ function Success({ match, dispatch }: SuccessProps) {
 
 
 export default withRouter(connect()(Success));
+
+async function resourceOnline(resourceID: string): Promise<boolean> {
+
+  const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+    resourceIdOrName: resourceID,
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
+    isTranslate: 1,
+  });
+
+  if (data_resourceInfo.policies.length === 0) {
+
+    const policy = await fPolicyBuilder({
+      alreadyUsedTexts: data_resourceInfo.policies
+        .map<string>((ip: any) => {
+          return ip.policyText;
+        }),
+      alreadyUsedTitles: data_resourceInfo.policies
+        .map((ip) => {
+          return ip.policyName;
+        }),
+      targetType: 'resource',
+    });
+
+    if (!policy) {
+      return false;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+      resourceId: resourceID,
+      status: 1,
+      addPolicies: [
+        {
+          policyName: policy.title,
+          policyText: window.encodeURIComponent(policy.text),
+          status: 1,
+        },
+      ],
+    };
+    await FServiceAPI.Resource.update(params);
+    return true;
+
+  } else if (data_resourceInfo.policies.every((p) => p.status === 0)) {
+    const existingUsedPolicy = await fPolicyOperator({
+      titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+      confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
+      tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
+      policiesList: data_resourceInfo.policies,
+    });
+
+    if (!existingUsedPolicy) {
+      return false;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+      resourceId: resourceID,
+      status: 1,
+      updatePolicies: existingUsedPolicy.map((p) => {
+        return {
+          policyId: p.policyID,
+          status: p.checked ? 1 : 0, // 0:下线策略 1:上线策略
+        };
+      }),
+    };
+    await FServiceAPI.Resource.update(params);
+    return true;
+  }
+
+  const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+    resourceId: resourceID,
+    status: 1,
+  };
+  await FServiceAPI.Resource.update(params);
+
+  return true;
+}

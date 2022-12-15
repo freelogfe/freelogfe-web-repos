@@ -3,6 +3,7 @@ import styles from './index.less';
 import fConfirmModal from '@/components/fConfirmModal';
 import { Prompt } from 'umi';
 import { history } from '@@/core/history';
+import { FI18n } from '../../../../@freelog/tools-lib';
 
 interface FPromptProps {
   watch: boolean;
@@ -44,8 +45,8 @@ function FPrompt({ watch, messageText }: FPromptProps) {
         onCancel() {
           set_promptLeavePath(promptLeavePath);
         },
-        okText: '确定',
-        cancelText: '取消',
+        okText: FI18n.i18nNext.t('btn_leave'),
+        cancelText: FI18n.i18nNext.t('btn_cancel'),
       });
       return false;
     }}
