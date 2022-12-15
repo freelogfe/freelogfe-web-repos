@@ -37,6 +37,7 @@ import FPrompt from '@/components/FPrompt';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
+import FTooltip from '@/components/FTooltip';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -266,7 +267,13 @@ function VersionCreator({
 
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FI18n.i18nNext.t('rely')}>
+          <FFormLayout.FBlock
+            dot={false}
+            title={FI18n.i18nNext.t('rely')}
+            subtitle={<FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
+              <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
+            </FTooltip>}
+          >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 15 }}>
               <Space size={15}>
                 <FComponentsLib.FRectBtn
