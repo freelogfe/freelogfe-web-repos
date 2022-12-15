@@ -141,6 +141,12 @@ function VersionCreator({
           <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
 
           <Space size={30}>
+
+            {resourceVersionCreatorPage.draftSaveTime && (<FComponentsLib.FContentText
+              text={`已保存 ${resourceVersionCreatorPage.draftSaveTime}`}
+              type={'additional2'}
+            />)}
+
             <FComponentsLib.FTextBtn
               type='default'
               onClick={() => {

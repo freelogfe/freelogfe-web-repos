@@ -14,6 +14,7 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 // import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
+import moment from 'moment';
 
 export interface ResourceVersionCreatorPageModelState {
   resourceInfo: {
@@ -26,6 +27,8 @@ export interface ResourceVersionCreatorPageModelState {
       resourceName: string;
     }[];
   } | null;
+
+  draftSaveTime: string;
 
   dataIsDirty: boolean;
 
@@ -226,6 +229,7 @@ export interface ResourceVersionCreatorModelType {
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceInfo: null,
 
+  draftSaveTime: '',
   dataIsDirty: false,
 
   versionInput: '',
@@ -884,6 +888,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          draftSaveTime: moment(Date()).format('YYYY-MM-DD hh:mm:ss'),
           dataIsDirty: false,
         },
       });
