@@ -3,7 +3,7 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-import { ChangeAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
+import { ChangeAction, OnAdd_Policy_Action, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyList from '@/components/FPolicyList';
 // import fConfirmModal from '@/components/fConfirmModal';
@@ -61,7 +61,11 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
           />
           <div style={{ height: 20 }} />
           <FComponentsLib.FRectBtn
-            onClick={openNewVisible}>{'添加授权策略'}</FComponentsLib.FRectBtn>
+            onClick={() => {
+              dispatch<OnAdd_Policy_Action>({
+                type: 'resourceAuthPage/onAdd_Policy',
+              });
+            }}>{'添加授权策略'}</FComponentsLib.FRectBtn>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={resourceAuthPage.status === 1}

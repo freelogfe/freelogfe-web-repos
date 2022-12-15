@@ -7,6 +7,7 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -102,6 +103,10 @@ export interface UpdateAuthorizedAction extends AnyAction {
   }[];
 }
 
+export interface OnAdd_Policy_Action extends AnyAction {
+  type: 'resourceAuthPage/onAdd_Policy';
+}
+
 export interface OnTrigger_AuthorizedContractEvent_Action extends AnyAction {
   type: 'resourceAuthPage/onTrigger_AuthorizedContractEvent';
 }
@@ -116,6 +121,7 @@ interface ResourceAuthPageModelType {
     fetchAuthorize: (action: FetchAuthorizeAction, effects: EffectsCommandMap) => void;
     updateAuthorized: (action: UpdateAuthorizedAction, effects: EffectsCommandMap) => void;
 
+    onAdd_Policy: (action: OnAdd_Policy_Action, effects: EffectsCommandMap) => void;
     onTrigger_AuthorizedContractEvent: (action: OnTrigger_AuthorizedContractEvent_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -387,6 +393,50 @@ const Model: ResourceAuthPageModelType = {
       });
     },
 
+    * onAdd_Policy({}: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
+      self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
+        resourceAuthPage,
+      }));
+      const parmas: Parameters<typeof fPolicyBuilder>[0] = {
+        targetType: 'resource',
+        alreadyUsedTexts: resourceAuthPage.policies.map<string>((ip) => {
+          return ip.policyText;
+        }),
+        alreadyUsedTitles: resourceAuthPage.policies.map((ip) => {
+          return ip.policyName;
+        }),
+      };
+      const result: null | { title: string; text: string; } = yield call(fPolicyBuilder, parmas);
+      if (!result) {
+        return;
+      }
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceAuthPage.resourceID,
+        addPolicies: [{
+          policyName: result.title,
+          policyText: window.encodeURIComponent(result.text),
+        }],
+      };
+      const res: {
+        ret: number;
+        errCode: number;
+        msg: string;
+      } = yield call(FServiceAPI.Resource.update, params);
+
+      if (res.ret !== 0 || res.errCode !== 0) {
+        fMessage(res.msg, 'error');
+        return;
+      }
+
+      yield put<FetchDataSourceAction>({
+        type: 'resourceInfo/fetchDataSource',
+        payload: resourceAuthPage.resourceID,
+      });
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
+      });
+    },
     * onTrigger_AuthorizedContractEvent({}: OnTrigger_AuthorizedContractEvent_Action, {
       select,
       put,

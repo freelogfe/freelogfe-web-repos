@@ -14,7 +14,7 @@ import {
   ChangeAction,
   FetchAuthorizeAction,
   FetchAuthorizedAction,
-  FetchResourceInfoAction,
+  FetchResourceInfoAction, OnAdd_Policy_Action,
 } from '@/models/resourceAuthPage';
 import { withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -163,24 +163,30 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
             <FComponentsLib.FCircleBtn
               size='small'
               onClick={() => {
-                self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
-                dispatch<ChangeAction>({
-                  type: 'resourceAuthPage/change',
-                  payload: {
-                    policyEditorVisible: true,
-                  },
+                // self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+                // dispatch<ChangeAction>({
+                //   type: 'resourceAuthPage/change',
+                //   payload: {
+                //     policyEditorVisible: true,
+                //   },
+                // });
+                dispatch<OnAdd_Policy_Action>({
+                  type: 'resourceAuthPage/onAdd_Policy',
                 });
               }}
             />
             <FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
-                self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
-                dispatch<ChangeAction>({
-                  type: 'resourceAuthPage/change',
-                  payload: {
-                    policyEditorVisible: true,
-                  },
+                // self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+                // dispatch<ChangeAction>({
+                //   type: 'resourceAuthPage/change',
+                //   payload: {
+                //     policyEditorVisible: true,
+                //   },
+                // });
+                dispatch<OnAdd_Policy_Action>({
+                  type: 'resourceAuthPage/onAdd_Policy',
                 });
               }}
             >添加策略</FComponentsLib.FTextBtn>
