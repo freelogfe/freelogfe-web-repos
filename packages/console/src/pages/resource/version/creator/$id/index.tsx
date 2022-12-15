@@ -139,6 +139,37 @@ function VersionCreator({
         header={<div className={styles.Header}>
           {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
           <FComponentsLib.FTitleText text={'创建版本'} type='h1' />
+
+          <Space size={30}>
+            <FComponentsLib.FTextBtn
+              type='default'
+              onClick={() => {
+                dispatch<OnTrigger_SaveDraft_Action>({
+                  type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                  payload: {
+                    showSuccessTip: true,
+                  },
+                });
+              }}
+            >
+              {FI18n.i18nNext.t('save_as_draft')}
+            </FComponentsLib.FTextBtn>
+            <FComponentsLib.FRectBtn
+              style={{ display: 'flex', alignItems: 'center' }}
+              onClick={() => {
+                dispatch<OnClick_CreateVersionBtn_Action>({
+                  type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
+                });
+              }}
+              disabled={hasError}
+            >
+              <FComponentsLib.FIcons.FPaperPlane
+                style={{ fontWeight: 400, fontSize: 16 }}
+              />
+              <div style={{ width: 5 }} />
+              {FI18n.i18nNext.t('release_to_market')}
+            </FComponentsLib.FRectBtn>
+          </Space>
         </div>}
       >
         <FFormLayout>
@@ -348,40 +379,11 @@ function VersionCreator({
             />
           </FFormLayout.FBlock>
         </FFormLayout>
-        <div style={{ position: 'relative' }}>
-          <div style={{ position: 'absolute', right: -30, top: 60 }}>
-            <Space size={30}>
-              <FComponentsLib.FTextBtn
-                type='default'
-                onClick={() => {
-                  dispatch<OnTrigger_SaveDraft_Action>({
-                    type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                    payload: {
-                      showSuccessTip: true,
-                    },
-                  });
-                }}
-              >
-                {FI18n.i18nNext.t('save_as_draft')}
-              </FComponentsLib.FTextBtn>
-              <FComponentsLib.FRectBtn
-                style={{ display: 'flex', alignItems: 'center' }}
-                onClick={() => {
-                  dispatch<OnClick_CreateVersionBtn_Action>({
-                    type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-                  });
-                }}
-                disabled={hasError}
-              >
-                <FComponentsLib.FIcons.FPaperPlane
-                  style={{ fontWeight: 400, fontSize: 16 }}
-                />
-                <div style={{ width: 5 }} />
-                {FI18n.i18nNext.t('release_to_market')}
-              </FComponentsLib.FRectBtn>
-            </Space>
-          </div>
-        </div>
+        {/*<div style={{ position: 'relative' }}>*/}
+        {/*  <div style={{ position: 'absolute', right: -30, top: 60 }}>*/}
+
+        {/*  </div>*/}
+        {/*</div>*/}
       </FLeftSiderLayout>
     </>
   );
