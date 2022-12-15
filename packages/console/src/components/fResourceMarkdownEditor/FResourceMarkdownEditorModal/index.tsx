@@ -54,7 +54,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   const stopTimer = useRef<Timeout | null>(null);
   const markdownRef = useRef('');
   const policyProcessor = useRef<any>(null);
-  const relyChanged = useRef(false);
+  // const relyChanged = useRef(false);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -78,6 +78,8 @@ export const MarkdownEditor = (props: EditorProps) => {
     if (edited) {
       confirm({
         content: FI18n.i18nNext.t('alarm_leave_page'),
+        okText: FI18n.i18nNext.t('btn_leave'),
+        cancelText: FI18n.i18nNext.t('btn_cancel'),
         onOk() {
           close && close();
         },
