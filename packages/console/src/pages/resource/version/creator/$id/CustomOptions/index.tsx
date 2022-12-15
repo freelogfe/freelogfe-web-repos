@@ -251,8 +251,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             }}
           >
             <span>自定义选项（高级）</span>
-            {customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (
-              <FComponentsLib.FIcons.FDown />)}
+            {
+              customOptionsDataVisible
+                ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
+                : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
+            }
           </FComponentsLib.FTextBtn>
           <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
             <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
