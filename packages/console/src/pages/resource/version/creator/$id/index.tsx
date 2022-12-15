@@ -166,24 +166,6 @@ function VersionCreator({
           >
             <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
 
-              {/*{*/}
-              {/*  resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo && (*/}
-              {/*    <div className={styles.markdownRecommended}>*/}
-              {/*      <div className={styles.markdownRecommended_tip}>*/}
-              {/*        <FComponentsLib.FTitleText text={'Freelog Markdown'} type={'h3'} />*/}
-              {/*        <div style={{ height: 8 }} />*/}
-              {/*        <FComponentsLib.FContentText text={'在线新建和编辑文章，无需导出本地，快速生产资源'} type={'additional2'} />*/}
-              {/*      </div>*/}
-              {/*      <FComponentsLib.FRectBtn*/}
-              {/*        type={'secondary'}*/}
-              {/*        onClick={async () => {*/}
-              {/*          await onClick_EditMarkdownBtn();*/}
-              {/*        }}*/}
-              {/*      >立即体验</FComponentsLib.FRectBtn>*/}
-              {/*    </div>)*/}
-              {/*}*/}
-
-
               <FPublishObjectFile
                 fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                 onSucceed_UploadFile={(file) => {
@@ -210,16 +192,23 @@ function VersionCreator({
 
                 }}
                 onClick_DeleteBtn={() => {
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                    okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                    cancelText: FI18n.i18nNext.t('btn_cancel'),
-                    onOk() {
-                      dispatch<OnDelete_ObjectFile_Action>({
-                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                      });
-                    },
-                  });
+                  if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
+                    fConfirmModal({
+                      message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                      okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                      cancelText: FI18n.i18nNext.t('btn_cancel'),
+                      onOk() {
+                        dispatch<OnDelete_ObjectFile_Action>({
+                          type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                        });
+                      },
+                    });
+                  } else {
+                    dispatch<OnDelete_ObjectFile_Action>({
+                      type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                    });
+                  }
+
                 }}
 
                 showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
