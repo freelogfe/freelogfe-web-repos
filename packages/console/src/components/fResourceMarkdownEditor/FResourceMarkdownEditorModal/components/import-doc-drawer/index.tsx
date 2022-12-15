@@ -111,7 +111,7 @@ export const ImportDocDrawer = (props: Props) => {
     objectId?: string;
   }) => {
     const {
-      content,
+      // content,
       type,
       fileName,
       resourceId = '',
@@ -690,13 +690,9 @@ export const ImportDocDrawer = (props: Props) => {
                     <div className="tip-text">
                       {FI18n.i18nNext.t('uploadfile_state_uploaded')}
                     </div>
-                    <div className="file-name">{uploadFileData.name}</div>
                   </div>
                   <div className="warning">
-                    <i className="freelog fl-icon-warningxiaochicun"></i>
-                    <div className="warning-text">
-                      {FI18n.i18nNext.t('msg_import_post_from_local_03')}
-                    </div>
+                    {FI18n.i18nNext.t('msg_import_post_from_local_02')}
                   </div>
                   <div className="btns">
                     <div className="cancel-btn" onClick={cancelImport}>

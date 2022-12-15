@@ -55,6 +55,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   const markdownRef = useRef('');
   const policyProcessor = useRef<any>(null);
   // const relyChanged = useRef(false);
+  const statementRely = useRef<string[]>([]);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -121,7 +122,7 @@ export const MarkdownEditor = (props: EditorProps) => {
       baseUpcastResources = [],
     } = editor.draftData;
     const targets = [...directDependencies];
-    // let dependencesByIdentify: string[] = [];
+    let dependencesByIdentify: string[] = [];
     if (selectedFileInfo) {
       const content = await FUtil.Request({
         method: 'GET',
@@ -133,8 +134,13 @@ export const MarkdownEditor = (props: EditorProps) => {
         editor,
       );
       setHtml(html);
-      // dependencesByIdentify = getDependencesByContent(contentStr);
+      dependencesByIdentify = getDependencesByContent(contentStr);
     }
+    targets.forEach((item) => {
+      if (!dependencesByIdentify.includes(item.name)) {
+        statementRely.current.push(item.name);
+      }
+    });
     // if (dependencesByIdentify.length) {
     //   const depsData = await FServiceAPI.Resource.batchInfo({
     //     resourceNames: dependencesByIdentify.join(),
@@ -161,6 +167,7 @@ export const MarkdownEditor = (props: EditorProps) => {
     policyProcessor.current.clear();
     policyProcessor.current.addTargets(targets);
     policyProcessor.current.setBaseUpcastResources(baseUpcastResources);
+    setDepTargets(editor.draftData.directDependencies);
   };
 
   /** 保存 */
@@ -219,6 +226,11 @@ export const MarkdownEditor = (props: EditorProps) => {
 
   /** 添加依赖 */
   const addRely = async (target: any) => {
+    const index = statementRely.current.findIndex(
+      (item) => item === target.name,
+    );
+    // 申明类的依赖被插入内容中，该依赖不再视为申明类依赖，不再被保护
+    if (index !== -1) statementRely.current.splice(index, 1);
     editor.policyProcessor.addTargets([target]);
     const targets = await policyProcessor.current.getAllTargets();
     editor.draftData.directDependencies = targets;
@@ -232,8 +244,11 @@ export const MarkdownEditor = (props: EditorProps) => {
     if (dependencesByIdentify.length < targets.length) {
       /** 只处理删除的情况 */
       for (let i = targets.length - 1; i >= 0; i--) {
-        if (!dependencesByIdentify.includes(targets[i].name)) {
-          // 识别出的依赖中不包含之前依赖队列中的此依赖，视为从已内容中删除
+        if (
+          !dependencesByIdentify.includes(targets[i].name) &&
+          !statementRely.current.includes(targets[i].name)
+        ) {
+          // 识别出申明的依赖与内容的依赖中不包含之前依赖队列中的此依赖，视为从已内容中删除
           policyProcessor.current.removeTarget(targets[i]);
           targets.splice(i, 1);
         }
@@ -289,8 +304,21 @@ export const MarkdownEditor = (props: EditorProps) => {
     }
   };
 
+  /** 快捷键 */
+  const keyup = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeAllPopup();
+  };
+
+  /** 关闭所有弹窗 */
+  const closeAllPopup = () => {
+    setDrawerType('');
+    setImportDrawer(false);
+    setPolicyDrawer(false);
+  };
+
   useEffect(() => {
     if (show) {
+      window.addEventListener('keyup', keyup);
       document.body.style.overflowY = 'hidden';
       editor && editor.focus();
 
@@ -299,6 +327,7 @@ export const MarkdownEditor = (props: EditorProps) => {
       }, 400);
     }
     return () => {
+      window.removeEventListener('keyup', keyup);
       document.body.style.overflowY = 'auto';
     };
   }, [show]);
