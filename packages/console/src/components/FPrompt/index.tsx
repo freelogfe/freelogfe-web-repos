@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import fConfirmModal from '@/components/fConfirmModal';
-import { Prompt } from 'umi';
-import { history } from '@@/core/history';
-import { FI18n } from '../../../../@freelog/tools-lib';
+import { Prompt, history } from 'umi';
+// import {} from 'umi';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FPromptProps {
   watch: boolean;
