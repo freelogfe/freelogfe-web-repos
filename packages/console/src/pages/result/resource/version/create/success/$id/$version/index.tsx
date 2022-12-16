@@ -88,6 +88,9 @@ function Success({ match, dispatch }: SuccessProps) {
             FI18n.i18nNext.t('versionreleased_desc')
               .split('\n')
               .map((text) => {
+                if (!text) {
+                  return (<div style={{ height: 20 }} />);
+                }
                 return (<FComponentsLib.FTipText
                   type='third'
                   // text={'添加策略后可将资源上架，上架后才能在资源'}
