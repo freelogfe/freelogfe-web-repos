@@ -17,7 +17,8 @@ import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 import FComponentsLib from '@freelog/components-lib';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -76,7 +77,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           <div style={{ width: 18 }}>
             {nodeCreatorPage.nodeDomainState === 'verifying' && <FComponentsLib.FIcons.FLoading />}
             {nodeCreatorPage.nodeDomainState === 'verified' && !nodeCreatorPage.nodeDomainError &&
-              <FComponentsLib.FIcons.FCheck />}
+            <FComponentsLib.FIcons.FCheck />}
           </div>
         </Space>
         <pre className={styles.errorTip}>{nodeCreatorPage.nodeDomainError}</pre>
@@ -106,16 +107,17 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           <div style={{ width: 18 }}>
             {nodeCreatorPage.nodeNameState === 'verifying' && <FComponentsLib.FIcons.FLoading />}
             {nodeCreatorPage.nodeNameState === 'verified' && !nodeCreatorPage.nodeNameError &&
-              <FComponentsLib.FIcons.FCheck />}
+            <FComponentsLib.FIcons.FCheck />}
           </div>
         </Space>
         <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
+        <div style={{width: 'fit-content', height: 'fit-content', position: 'relative'}}>
         <FComponentsLib.FRectBtn
           className={styles.button}
           disabled={nodeCreatorPage.nodeDomainState === 'verifying'
-            || nodeCreatorPage.nodeDomainError !== ''
-            || nodeCreatorPage.nodeNameState === 'verifying'
-            || nodeCreatorPage.nodeNameError !== ''
+          || nodeCreatorPage.nodeDomainError !== ''
+          || nodeCreatorPage.nodeNameState === 'verifying'
+          || nodeCreatorPage.nodeNameError !== ''
           }
           onClick={() => {
             dispatch<OnClick_CreateBtn_Action>({
@@ -124,6 +126,12 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           }}
           type='primary'
         >创建节点</FComponentsLib.FRectBtn>
+          <FHotspotTooltip
+            style={{position: 'absolute', left: -52, top: 4}}
+            text={FI18n.i18nNext.t('hotpots_createnode_btn_create')}
+          />
+        </div>
+
         <div style={{ height: 60 }} />
         <FComponentsLib.FContentText text={'每个用户最多可创建3个节点，节点创建之后无法删除，请谨慎操作。'} type={'additional2'} />
       </div>
