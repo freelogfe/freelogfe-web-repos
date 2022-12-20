@@ -11,6 +11,7 @@ import FTable from '@/components/FTable';
 import img_upload from '@/assets/createVersion_upload.png';
 // import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -405,6 +406,7 @@ function FPublishObjectFile({
         <img src={img_upload} alt={''} />
         <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
         <Space size={15}>
+
           <FUpload
             // accept={resourceType === 'image' ? 'image/*' : '*'}
             beforeUpload={(file, FileList) => {
@@ -413,10 +415,16 @@ function FPublishObjectFile({
             }}
             showUploadList={false}
           >
-            <FComponentsLib.FRectBtn
-              type='primary'
-            >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+            <FHotspotTooltip
+              style={{ left: -52, top: 4 }}
+              text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
+            >
+              <FComponentsLib.FRectBtn
+                type='primary'
+              >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+            </FHotspotTooltip>
           </FUpload>
+
           <FComponentsLib.FRectBtn
             type='primary'
             onClick={async () => {
