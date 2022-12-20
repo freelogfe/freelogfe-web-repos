@@ -31,6 +31,7 @@ import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -166,9 +167,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     }
   }
 
-  function activateTheme() {
-
-  }
+  // function activateTheme() {
+  //
+  // }
 
   /** 打开添加策略弹窗 */
   function openPolicyBuilder() {
@@ -309,55 +310,60 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               singleRow
             />
           </div>
-          <Space size={20}>
-            {
-              exhibitInfoPage.side_ResourceType.includes('主题') && (<>
-                {
-                  exhibitInfoPage.exhibit_Online
-                    ? (<div style={{
-                      backgroundColor: '#42C28C',
-                      borderRadius: 12,
-                      lineHeight: '18px',
-                      color: 'white',
-                      fontSize: 12,
-                      padding: '3px 10px',
-                    }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
-                    : (<>
+          <FHotspotTooltip
+            style={{ left: -42, top: -4 }}
+            text={FI18n.i18nNext.t('hotpots_exhibit_toggle_exhibit')}
+          >
+            <Space size={20}>
+              {
+                exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+                  {
+                    exhibitInfoPage.exhibit_Online
+                      ? (<div style={{
+                        backgroundColor: '#42C28C',
+                        borderRadius: 12,
+                        lineHeight: '18px',
+                        color: 'white',
+                        fontSize: 12,
+                        padding: '3px 10px',
+                      }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
+                      : (<>
                     <span
                       style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>
 
-                      <FSwitch
-                        disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-                        checked={exhibitInfoPage.exhibit_Online}
-                        loading={loading}
-                        onClick={(checked) => changeExhibitStatus(checked)}
-                      />
-                    </>)
-                }
+                        <FSwitch
+                          disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                          checked={exhibitInfoPage.exhibit_Online}
+                          loading={loading}
+                          onClick={(checked) => changeExhibitStatus(checked)}
+                        />
+                      </>)
+                  }
 
-              </>)
-            }
+                </>)
+              }
 
-            {
-              !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+              {
+                !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
                 <span
                   style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
 
-                <FSwitch
-                  disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-                  checked={exhibitInfoPage.exhibit_Online}
-                  loading={loading}
-                  onClick={(checked) => changeExhibitStatus(checked)}
-                />
-              </>)
-            }
+                  <FSwitch
+                    disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                    checked={exhibitInfoPage.exhibit_Online}
+                    loading={loading}
+                    onClick={(checked) => changeExhibitStatus(checked)}
+                  />
+                </>)
+              }
 
-            {!exhibitInfoPage.exhibit_IsAuth && (
-              <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
-                <FComponentsLib.FIcons.FWarning />
-              </FTooltip>
-            )}
-          </Space>
+              {!exhibitInfoPage.exhibit_IsAuth && (
+                <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
+                  <FComponentsLib.FIcons.FWarning />
+                </FTooltip>
+              )}
+            </Space>
+          </FHotspotTooltip>
         </div>
         <div className={styles.body}>
           <div className={styles.content}>
