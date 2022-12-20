@@ -117,7 +117,7 @@ function FHeaderNavigation({
                                     {
                                         m.id === 'discover'
                                             ? (<FHotspotTooltip
-                                                style={{left: '28%', bottom: -20}}
+                                                style={{left: '50%', marginLeft: -16, bottom: -20}}
                                                 text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
                                             >
                                                 <AOrLink
@@ -164,7 +164,7 @@ function FHeaderNavigation({
             <Space size={30}>
                 {
                     showGotoConsole && (<FHotspotTooltip
-                        style={{left: '36%', bottom: -42}}
+                        style={{left: '50%', marginLeft: -16, bottom: -42}}
                         text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
                     >
                         <FComponentsLib.FRectBtn
