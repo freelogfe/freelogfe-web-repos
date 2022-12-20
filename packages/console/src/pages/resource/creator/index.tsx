@@ -35,6 +35,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -74,43 +75,6 @@ function ResourceCreator({
         watch={resourceCreatorPage.dataIsDirty}
         messageText={'还没有创建资源，现在离开会导致信息丢失'}
       />
-      {/*<Prompt*/}
-      {/*  when={*/}
-      {/*    resourceCreatorPage.promptLeavePath === initStates['promptLeavePath'] && resourceCreatorPage.dataIsDirty*/}
-      {/*  }*/}
-      {/*  message={(location: H.Location, action: H.Action) => {*/}
-      {/*    // console.log(location, action, 'LAAAAL');*/}
-      {/*    // return window.confirm('还没有创建资源，现在离开会导致信息丢失');*/}
-      {/*    if (location.pathname === FUtil.LinkTo.resourceCreator()) {*/}
-      {/*      return true;*/}
-      {/*    }*/}
-      {/*    dispatch<ChangeAction>({*/}
-      {/*      type: 'resourceCreatorPage/change',*/}
-      {/*      payload: {*/}
-      {/*        promptLeavePath: location.pathname + location.search,*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*    fConfirmModal({*/}
-      {/*      message: '还没有创建资源，现在离开会导致信息丢失',*/}
-      {/*      cancelText: FI18n.i18nNext.t('btn_cancel'),*/}
-      {/*      okText: FI18n.i18nNext.t('btn_leave'),*/}
-      {/*      onOk() {*/}
-      {/*        // console.log('OK');*/}
-      {/*        history.push(location.pathname + location.search);*/}
-      {/*      },*/}
-      {/*      onCancel() {*/}
-      {/*        // console.log('Cancel');*/}
-      {/*        dispatch<ChangeAction>({*/}
-      {/*          type: 'resourceCreatorPage/change',*/}
-      {/*          payload: {*/}
-      {/*            promptLeavePath: '',*/}
-      {/*          },*/}
-      {/*        });*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*    return false;*/}
-      {/*  }}*/}
-      {/*/>*/}
       <FContentLayout
         header={<div className={styles.Header}>
           <FComponentsLib.FTitleText
@@ -119,23 +83,29 @@ function ResourceCreator({
             type='h1'
           />
 
-          <FComponentsLib.FRectBtn
-            disabled={resourceCreatorPage.name === '' ||
-            resourceCreatorPage.nameVerify !== 2 ||
-            // resourceCreatorPage.resourceTypeVerify !== 2 ||
-            resourceCreatorPage.nameErrorText !== '' ||
-            // !!resourceCreatorPage.resourceTypeErrorText ||
-            resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
-            resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
-            !!resourceCreatorPage.introductionErrorText}
-            onClick={() => {
-              dispatch<OnClick_CreateBtn_Action>({
-                type: 'resourceCreatorPage/onClick_CreateBtn',
-              });
-            }}
+          <FHotspotTooltip
+            // style={{ left: '36%', bottom: -42 }}
+            style={{ left: -52, top: 4 }}
+            text={FI18n.i18nNext.t('hotpots_createresource_btn_create')}
           >
-            {FI18n.i18nNext.t('create')}
-          </FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn
+              disabled={resourceCreatorPage.name === '' ||
+              resourceCreatorPage.nameVerify !== 2 ||
+              // resourceCreatorPage.resourceTypeVerify !== 2 ||
+              resourceCreatorPage.nameErrorText !== '' ||
+              // !!resourceCreatorPage.resourceTypeErrorText ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
+              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
+              !!resourceCreatorPage.introductionErrorText}
+              onClick={() => {
+                dispatch<OnClick_CreateBtn_Action>({
+                  type: 'resourceCreatorPage/onClick_CreateBtn',
+                });
+              }}
+            >
+              {FI18n.i18nNext.t('create')}
+            </FComponentsLib.FRectBtn>
+          </FHotspotTooltip>
         </div>}
       >
         <FFormLayout>
@@ -241,11 +211,6 @@ function ResourceCreator({
       </FContentLayout>
 
       <div style={{ height: 100 }} />
-      {/*<div style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>*/}
-      {/*  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: 920 }}>*/}
-
-      {/*  </div>*/}
-      {/*</div>*/}
     </>
   );
 }
