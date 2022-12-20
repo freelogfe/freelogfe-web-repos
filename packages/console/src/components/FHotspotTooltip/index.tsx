@@ -31,7 +31,6 @@ function FHotspotTooltip({ children, style = {}, text }: FHotspotTooltipProps) {
         ...style,
         width: 40,
         position: 'absolute',
-        // width: 'fit-content',
       }}>
         <img
           className={styles.respiration}
