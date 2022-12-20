@@ -13,7 +13,12 @@ interface FHotspotTooltipProps {
 }
 
 function FHotspotTooltip({ children, style = {}, text }: FHotspotTooltipProps) {
-  return (<div style={{ width: 'fit-content', height: 'fit-content', position: 'relative' }}>
+
+  const ref = React.useRef<any>();
+
+  return (<div
+    ref={ref}
+    style={{ width: 'fit-content', height: 'fit-content', position: 'relative' }}>
     {children}
     <Tooltip
       open
@@ -25,20 +30,20 @@ function FHotspotTooltip({ children, style = {}, text }: FHotspotTooltipProps) {
         borderRadius: 8,
         maxWidth: 240,
       }}
+      getPopupContainer={() => ref.current}
       // overlayStyle={{ transform: 'translate(12px, -4px)' }}
     >
       <div style={{
         ...style,
         width: 40,
         position: 'absolute',
+        zIndex: 10000,
       }}>
         <img
           className={styles.respiration}
           src={img_respiration}
           alt={''}
-          style={{
-
-          }}
+          style={{}}
         />
       </div>
     </Tooltip>

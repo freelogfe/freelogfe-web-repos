@@ -15,6 +15,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 const FDatePicker: any = DatePicker;
 
@@ -759,14 +760,19 @@ function FPolicyBuilder({
                     </FComponentsLib.FTextBtn>)
                 }
 
-                <FComponentsLib.FTextBtn
-                  type='default'
-                  onClick={() => setTemplateVisible(true)}>
-                  <Space size={4}>
-                    <FComponentsLib.FIcons.FFileText />
-                    <span>策略模板</span>
-                  </Space>
-                </FComponentsLib.FTextBtn>
+                <FHotspotTooltip
+                  style={{ left: '36%', bottom: -42 }}
+                  text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')}
+                >
+                  <FComponentsLib.FTextBtn
+                    type='default'
+                    onClick={() => setTemplateVisible(true)}>
+                    <Space size={4}>
+                      <FComponentsLib.FIcons.FFileText />
+                      <span>策略模板</span>
+                    </Space>
+                  </FComponentsLib.FTextBtn>
+                </FHotspotTooltip>
               </Space>
             </div>
             {titleInputError && <>
