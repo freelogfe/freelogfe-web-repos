@@ -35,7 +35,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -83,7 +83,7 @@ function ResourceCreator({
             type='h1'
           />
 
-          <FHotspotTooltip
+          <FComponentsLib.FHotspotTooltip
             // style={{ left: '36%', bottom: -42 }}
             style={{ left: -52, top: 4 }}
             text={FI18n.i18nNext.t('hotpots_createresource_btn_create')}
@@ -105,7 +105,7 @@ function ResourceCreator({
             >
               {FI18n.i18nNext.t('create')}
             </FComponentsLib.FRectBtn>
-          </FHotspotTooltip>
+          </FComponentsLib.FHotspotTooltip>
         </div>}
       >
         <FFormLayout>

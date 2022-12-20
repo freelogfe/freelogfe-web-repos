@@ -9,6 +9,7 @@ import FCodeFormatter from './FCodeFormatter';
 import FContractStatusBadge from './FContractStatusBadge';
 import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
+import FHotspotTooltip from './FHotspotTooltip';
 
 const FComponentsLib = {
     FIcons,
@@ -26,5 +27,6 @@ const FComponentsLib = {
     FContractStatusBadge,
     FPaymentPasswordInput,
     FCopyToClipboard,
+    FHotspotTooltip,
 };
 export default FComponentsLib;

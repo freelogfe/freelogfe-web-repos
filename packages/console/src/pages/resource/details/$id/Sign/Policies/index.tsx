@@ -9,7 +9,7 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -74,7 +74,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
             <div className={styles.singPolicyTitle}>
               <FComponentsLib.FContentText text={p.fullInfo.policyName} type='highlight' />
               {
-                !isSignedNode && (<FHotspotTooltip
+                !isSignedNode && (<FComponentsLib.FHotspotTooltip
                   style={{ left: -44, top: -4 }}
                   text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
                 >
@@ -85,7 +85,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
                       onChangeResourceChecked(p.fullInfo.policyId, e.target.checked);
                     }}
                   />
-                </FHotspotTooltip>)
+                </FComponentsLib.FHotspotTooltip>)
               }
 
             </div>

@@ -38,7 +38,7 @@ import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -164,7 +164,7 @@ function VersionCreator({
               {FI18n.i18nNext.t('save_as_draft')}
             </FComponentsLib.FTextBtn>
 
-            <FHotspotTooltip
+            <FComponentsLib.FHotspotTooltip
               style={{ left: '36%', bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
             >
@@ -183,7 +183,7 @@ function VersionCreator({
                 <div style={{ width: 5 }} />
                 {FI18n.i18nNext.t('release_to_market')}
               </FComponentsLib.FRectBtn>
-            </FHotspotTooltip>
+            </FComponentsLib.FHotspotTooltip>
           </Space>
         </div>}
       >

@@ -15,7 +15,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 const FDatePicker: any = DatePicker;
 
@@ -571,7 +571,7 @@ function FPolicyBuilder({
               disabled={true}
               type='primary'
             >校验中</FComponentsLib.FRectBtn>)
-            : (<FHotspotTooltip
+            : (<FComponentsLib.FHotspotTooltip
               style={{ left: '36%', bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')}
             >
@@ -580,7 +580,7 @@ function FPolicyBuilder({
                 type='primary'
                 disabled={disabledExecute}
               >校验</FComponentsLib.FRectBtn>
-            </FHotspotTooltip>)
+            </FComponentsLib.FHotspotTooltip>)
         }
       </>
     }
@@ -593,7 +593,7 @@ function FPolicyBuilder({
     }
 
     {
-      showView === 'success' && (<FHotspotTooltip
+      showView === 'success' && (<FComponentsLib.FHotspotTooltip
         style={{ left: '36%', bottom: -42 }}
         text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')}
       >
@@ -608,7 +608,7 @@ function FPolicyBuilder({
           }}
           type='primary'
         >创建</FComponentsLib.FRectBtn>
-      </FHotspotTooltip>)
+      </FComponentsLib.FHotspotTooltip>)
     }
 
   </Space>);
@@ -770,7 +770,7 @@ function FPolicyBuilder({
                     </FComponentsLib.FTextBtn>)
                 }
 
-                <FHotspotTooltip
+                <FComponentsLib.FHotspotTooltip
                   style={{ left: '36%', bottom: -42 }}
                   text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')}
                 >
@@ -782,7 +782,7 @@ function FPolicyBuilder({
                       <span>策略模板</span>
                     </Space>
                   </FComponentsLib.FTextBtn>
-                </FHotspotTooltip>
+                </FComponentsLib.FHotspotTooltip>
               </Space>
             </div>
             {titleInputError && <>

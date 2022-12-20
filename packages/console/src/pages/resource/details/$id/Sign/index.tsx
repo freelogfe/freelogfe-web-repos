@@ -11,7 +11,7 @@ import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 import { FI18n } from '@freelog/tools-lib';
 
 interface SignProps {
@@ -56,14 +56,14 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
     </div>
     <div className={styles.cell} />
     <div className={styles.infoRight}>
-      <FHotspotTooltip
+      <FComponentsLib.FHotspotTooltip
         style={{ left: '44%', top: 8 }}
         text={FI18n.i18nNext.t('hotpots_createnode_selectnode')}
       >
       <div className={styles.top}>
           <NodeSelector />
       </div>
-      </FHotspotTooltip>
+      </FComponentsLib.FHotspotTooltip>
       <div className={styles.mid}>
         <div className={styles.sign}>
           <div className={styles.signLeft}>

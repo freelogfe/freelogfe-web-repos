@@ -31,7 +31,7 @@ import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -310,7 +310,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               singleRow
             />
           </div>
-          <FHotspotTooltip
+          <FComponentsLib.FHotspotTooltip
             style={{ left: -42, top: -4 }}
             text={FI18n.i18nNext.t('hotpots_exhibit_toggle_exhibit')}
           >
@@ -363,7 +363,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 </FTooltip>
               )}
             </Space>
-          </FHotspotTooltip>
+          </FComponentsLib.FHotspotTooltip>
         </div>
         <div className={styles.body}>
           <div className={styles.content}>

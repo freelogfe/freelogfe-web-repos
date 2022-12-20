@@ -18,7 +18,7 @@ import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
-import FHotspotTooltip from '@/components/FHotspotTooltip';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -112,7 +112,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </Space>
         <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
 
-          <FHotspotTooltip
+          <FComponentsLib.FHotspotTooltip
             style={{left: -52, top: 4}}
             text={FI18n.i18nNext.t('hotpots_createnode_btn_create')}
           >
@@ -130,7 +130,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
               }}
               type='primary'
             >创建节点</FComponentsLib.FRectBtn>
-          </FHotspotTooltip>
+          </FComponentsLib.FHotspotTooltip>
 
         <div style={{ height: 60 }} />
         <FComponentsLib.FContentText text={'每个用户最多可创建3个节点，节点创建之后无法删除，请谨慎操作。'} type={'additional2'} />
