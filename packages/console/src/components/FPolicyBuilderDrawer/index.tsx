@@ -572,7 +572,7 @@ function FPolicyBuilder({
               type='primary'
             >校验中</FComponentsLib.FRectBtn>)
             : (<FComponentsLib.FHotspotTooltip
-              style={{ left: '36%', bottom: -42 }}
+              style={{ left: '50%', marginLeft: -16, bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')}
             >
               <FComponentsLib.FRectBtn
@@ -594,7 +594,7 @@ function FPolicyBuilder({
 
     {
       showView === 'success' && (<FComponentsLib.FHotspotTooltip
-        style={{ left: '36%', bottom: -42 }}
+        style={{ left: '60%', marginLeft: -16, bottom: -42 }}
         text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')}
       >
         <FComponentsLib.FRectBtn
@@ -771,7 +771,7 @@ function FPolicyBuilder({
                 }
 
                 <FComponentsLib.FHotspotTooltip
-                  style={{ left: '36%', bottom: -42 }}
+                  style={{ left: '50%', marginLeft: -16, bottom: -42 }}
                   text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')}
                 >
                   <FComponentsLib.FTextBtn

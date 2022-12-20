@@ -38,6 +38,7 @@ import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
+
 // import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
@@ -165,7 +166,7 @@ function VersionCreator({
             </FComponentsLib.FTextBtn>
 
             <FComponentsLib.FHotspotTooltip
-              style={{ left: '36%', bottom: -42 }}
+              style={{ left: '50%', marginLeft: -16, bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
             >
               <FComponentsLib.FRectBtn
