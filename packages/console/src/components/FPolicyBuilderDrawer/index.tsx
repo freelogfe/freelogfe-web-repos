@@ -571,11 +571,16 @@ function FPolicyBuilder({
               disabled={true}
               type='primary'
             >校验中</FComponentsLib.FRectBtn>)
-            : (<FComponentsLib.FRectBtn
-              onClick={onClick_VerifyBtn}
-              type='primary'
-              disabled={disabledExecute}
-            >校验</FComponentsLib.FRectBtn>)
+            : (<FHotspotTooltip
+              style={{ left: '36%', bottom: -42 }}
+              text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')}
+            >
+              <FComponentsLib.FRectBtn
+                onClick={onClick_VerifyBtn}
+                type='primary'
+                disabled={disabledExecute}
+              >校验</FComponentsLib.FRectBtn>
+            </FHotspotTooltip>)
         }
       </>
     }
@@ -588,17 +593,22 @@ function FPolicyBuilder({
     }
 
     {
-      showView === 'success' && (<FComponentsLib.FRectBtn
-        onClick={() => {
-          self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
+      showView === 'success' && (<FHotspotTooltip
+        style={{ left: '36%', bottom: -42 }}
+        text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')}
+      >
+        <FComponentsLib.FRectBtn
+          onClick={() => {
+            self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
 
-          onConfirm && onConfirm({
-            title: successResult?.title || '',
-            text: successResult?.code || '',
-          });
-        }}
-        type='primary'
-      >创建</FComponentsLib.FRectBtn>)
+            onConfirm && onConfirm({
+              title: successResult?.title || '',
+              text: successResult?.code || '',
+            });
+          }}
+          type='primary'
+        >创建</FComponentsLib.FRectBtn>
+      </FHotspotTooltip>)
     }
 
   </Space>);
