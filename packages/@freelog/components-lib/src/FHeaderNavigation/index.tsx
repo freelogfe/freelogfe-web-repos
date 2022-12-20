@@ -101,7 +101,7 @@ function FHeaderNavigation({
                     <div className={styles.Menus}>
                         {
                             menu.map((m) => {
-                                // console.log(m.emptyItemsTip, 'm.emptyItemsTip');
+                                console.log(m, 'm.emptyItemsTip3fsdfasdfsd');
                                 return (<FComponentsLib.FDropdown
                                     key={m.id}
                                     disabled={m.items.length === 0 && !m.emptyItemsTip}
@@ -114,12 +114,27 @@ function FHeaderNavigation({
                                             UmiLinkPatch={UmiLinkPatch}
                                         />}
                                 >
-                                    <AOrLink
-                                        href={m.href}
-                                        target={m.target}
-                                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                                        UmiLinkPatch={UmiLinkPatch}
-                                    ><span>{m.text}</span></AOrLink>
+                                    {
+                                        m.id === 'discover'
+                                            ? (<FHotspotTooltip
+                                                style={{left: '28%', bottom: -20}}
+                                                text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
+                                            >
+                                                <AOrLink
+                                                    href={m.href}
+                                                    target={m.target}
+                                                    className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                                                    UmiLinkPatch={UmiLinkPatch}
+                                                ><span>{m.text}</span></AOrLink>
+                                            </FHotspotTooltip>)
+                                            : (<AOrLink
+                                                href={m.href}
+                                                target={m.target}
+                                                className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                                                UmiLinkPatch={UmiLinkPatch}
+                                            ><span>{m.text}</span></AOrLink>)
+                                    }
+
                                 </FComponentsLib.FDropdown>);
 
                             })
@@ -150,7 +165,7 @@ function FHeaderNavigation({
                 {
                     showGotoConsole && (<FHotspotTooltip
                         style={{left: '36%', bottom: -42}}
-                        text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
+                        text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
                     >
                         <FComponentsLib.FRectBtn
                             size='small'
