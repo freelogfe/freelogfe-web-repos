@@ -38,6 +38,7 @@ import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
+import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -148,6 +149,7 @@ function VersionCreator({
               type={'additional2'}
             />)}
 
+
             <FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
@@ -161,21 +163,27 @@ function VersionCreator({
             >
               {FI18n.i18nNext.t('save_as_draft')}
             </FComponentsLib.FTextBtn>
-            <FComponentsLib.FRectBtn
-              style={{ display: 'flex', alignItems: 'center' }}
-              onClick={() => {
-                dispatch<OnClick_CreateVersionBtn_Action>({
-                  type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
-                });
-              }}
-              disabled={hasError}
+
+            <FHotspotTooltip
+              style={{ left: '36%', bottom: -42 }}
+              text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
             >
-              <FComponentsLib.FIcons.FPaperPlane
-                style={{ fontWeight: 400, fontSize: 16 }}
-              />
-              <div style={{ width: 5 }} />
-              {FI18n.i18nNext.t('release_to_market')}
-            </FComponentsLib.FRectBtn>
+              <FComponentsLib.FRectBtn
+                style={{ display: 'flex', alignItems: 'center' }}
+                onClick={() => {
+                  dispatch<OnClick_CreateVersionBtn_Action>({
+                    type: 'resourceVersionCreatorPage/onClick_CreateVersionBtn',
+                  });
+                }}
+                disabled={hasError}
+              >
+                <FComponentsLib.FIcons.FPaperPlane
+                  style={{ fontWeight: 400, fontSize: 16 }}
+                />
+                <div style={{ width: 5 }} />
+                {FI18n.i18nNext.t('release_to_market')}
+              </FComponentsLib.FRectBtn>
+            </FHotspotTooltip>
           </Space>
         </div>}
       >

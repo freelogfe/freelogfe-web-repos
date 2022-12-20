@@ -25,18 +25,23 @@ function FHotspotTooltip({ children, style = {}, text }: FHotspotTooltipProps) {
         borderRadius: 8,
         maxWidth: 240,
       }}
-      overlayStyle={{ transform: 'translate(16px, -4px)' }}
+      // overlayStyle={{ transform: 'translate(12px, -4px)' }}
     >
-      <img
-        className={styles.respiration}
-        src={img_respiration}
-        alt={''}
-        style={{
-          ...style,
-          position: 'absolute',
-          width: 'fit-content',
-        }}
-      />
+      <div style={{
+        ...style,
+        width: 40,
+        position: 'absolute',
+        // width: 'fit-content',
+      }}>
+        <img
+          className={styles.respiration}
+          src={img_respiration}
+          alt={''}
+          style={{
+
+          }}
+        />
+      </div>
     </Tooltip>
   </div>);
 }
