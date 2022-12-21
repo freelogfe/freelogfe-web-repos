@@ -6,22 +6,26 @@ import { Space, Tooltip } from 'antd';
 import * as AHooks from 'ahooks';
 
 interface fNoviceGuideProps {
+  windowInfo: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
 
+  title: string;
+  step: number;
+  total: number;
 }
 
-function fNoviceGuide({}: fNoviceGuideProps): Promise<boolean> {
+function fNoviceGuide({ windowInfo, title, step, total }: fNoviceGuideProps): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('novice-guide-root') as HTMLDivElement);
     return root.render(<NoviceGuide
-      windowInfo={{
-        top: 100,
-        left: 200,
-        width: 400,
-        height: 100,
-      }}
-      title={'您可以通过此菜单快速创建资源和节点您可以通过此菜单快速创建资源和节点您可以通过此菜单快速'}
-      step={5}
-      total={5}
+      windowInfo={windowInfo}
+      title={title}
+      step={step}
+      total={total}
       onClickNext={() => {
         resolve(true);
         root.unmount();
