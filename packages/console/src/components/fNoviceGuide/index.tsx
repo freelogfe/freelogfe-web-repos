@@ -62,9 +62,9 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
   const ref = React.useRef<any>();
 
   AHooks.useMount(() => {
-    // ref.current.add
     setTimeout(() => {
-      ref.current.addEventListener('mousewheel', (e) => {
+      // document.getElementById('').addEventListener('mousewheel', (e: HTMLElementEventMap) => {
+      ref.current.addEventListener('mousewheel', (e: Event) => {
         // console.log('mousewheelsdfoksd;lk;');
         e.stopPropagation();
         e.preventDefault();
