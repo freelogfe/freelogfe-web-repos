@@ -62,14 +62,12 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
   const ref = React.useRef<any>();
 
   AHooks.useMount(() => {
-    setTimeout(() => {
-      // document.getElementById('').addEventListener('mousewheel', (e: HTMLElementEventMap) => {
-      ref.current.addEventListener('mousewheel', (e: Event) => {
-        // console.log('mousewheelsdfoksd;lk;');
-        e.stopPropagation();
-        e.preventDefault();
-      });
-    }, 300);
+    // document.getElementById('').addEventListener('mousewheel', (e: HTMLElementEventMap) => {
+    ref.current.addEventListener('mousewheel', (e: Event) => {
+      // console.log('mousewheelsdfoksd;lk;');
+      e.stopPropagation();
+      e.preventDefault();
+    });
 
   });
 

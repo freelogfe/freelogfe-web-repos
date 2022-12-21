@@ -38,7 +38,17 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
   });
 
   AHooks.useMount(() => {
-    fNoviceGuide({});
+    fNoviceGuide({
+      windowInfo: {
+        top: 100,
+        left: 200,
+        width: 400,
+        height: 100,
+      },
+      title: '您可以通过此菜单快速创建资源和节点您可以通过此菜单快速创建资源和节点您可以通过此菜单快速',
+      step: 5,
+      total: 5,
+    });
   });
 
   return (<div className={styles.dashboard}>
