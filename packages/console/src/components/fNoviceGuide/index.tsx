@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as ReactDOM from 'react-dom/client';
-// import FHotspotTooltip from '../../../../@freelog/components-lib/src/FHotspotTooltip';
 import { Space, Tooltip } from 'antd';
 import * as AHooks from 'ahooks';
 
