@@ -5,6 +5,31 @@ import * as ReactDOM from 'react-dom/client';
 import { Space, Tooltip } from 'antd';
 import * as AHooks from 'ahooks';
 
+const NOVICE_GUIDE_LOCALSTORAGE_KEY = 'NoviceGuide';
+
+type ContentKey = 'dashboardPage';
+type ContentValue = 'finished';
+
+type NoviceGuideLocalStorageContent = {
+  [k in ContentKey]?: ContentValue;
+};
+
+export function getNoviceGuide_LocalStorage_Content(key: ContentKey) {
+  const contentString: string = self.localStorage.getItem(NOVICE_GUIDE_LOCALSTORAGE_KEY) || '{}';
+  const content: NoviceGuideLocalStorageContent = JSON.parse(contentString);
+  return content[key];
+}
+
+export function setNoviceGuide_LocalStorage_Content(key: ContentKey, value: ContentValue) {
+  const contentString: string = self.localStorage.getItem(NOVICE_GUIDE_LOCALSTORAGE_KEY) || '{}';
+  const content: NoviceGuideLocalStorageContent = JSON.parse(contentString);
+  const newContentString: string = JSON.stringify({
+    ...content,
+    [key]: value,
+  });
+  self.localStorage.setItem(NOVICE_GUIDE_LOCALSTORAGE_KEY, newContentString);
+}
+
 interface fNoviceGuideProps {
   windowInfo: {
     top: number;
@@ -62,13 +87,10 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
   const ref = React.useRef<any>();
 
   AHooks.useMount(() => {
-    // document.getElementById('').addEventListener('mousewheel', (e: HTMLElementEventMap) => {
     ref.current.addEventListener('mousewheel', (e: Event) => {
-      // console.log('mousewheelsdfoksd;lk;');
       e.stopPropagation();
       e.preventDefault();
     });
-
   });
 
   return (<div
