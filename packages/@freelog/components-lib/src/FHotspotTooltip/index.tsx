@@ -3,6 +3,47 @@ import styles from './index.less';
 import {Tooltip} from 'antd';
 import {CSSProperties} from 'react';
 
+const HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY = 'HotspotTooltip';
+
+type ContentKey = 'header.gotoConsoleBtn'
+    | 'header.discoverNav'
+    | 'createResourcePage.createBtn'
+    | 'createResourceVersionPage.createBtn'
+    | 'createResourceVersionPage.uploadFileBtn'
+    | 'policyBuilder.resource.policyTemplateBtn'
+    | 'policyBuilder.resource.policyVerifyBtn'
+    | 'policyBuilder.resource.policyCreateBtn'
+    | 'policyBuilder.exhibit.policyTemplateBtn'
+    | 'policyBuilder.exhibit.policyVerifyBtn'
+    | 'policyBuilder.exhibit.policyCreateBtn'
+    | 'createNodePage.createBtn'
+    | 'resourceDetailPage.nodeSelector'
+    | 'exhibitDetailPage.onlineSwitch'
+    ;
+type ContentValue = 'show' | 'hide';
+
+type HotspotTooltip_LocalStorage_Content = {
+    [k in ContentKey]?: ContentValue;
+};
+
+const defaultContent: HotspotTooltip_LocalStorage_Content = {};
+
+export function getHotspotTooltip_LocalStorage_Content(key: ContentKey) {
+    const contentString: string = self.localStorage.getItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY) || '{}';
+    const content: HotspotTooltip_LocalStorage_Content = JSON.parse(contentString);
+    return content[key] || defaultContent[key];
+}
+
+export function setHotspotTooltip_LocalStorage_Content(key: ContentKey, value: ContentValue) {
+    const contentString: string = self.localStorage.getItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY) || '{}';
+    const content: HotspotTooltip_LocalStorage_Content = JSON.parse(contentString);
+    const newContentString: string = JSON.stringify({
+        ...content,
+        [key]: value,
+    });
+    self.localStorage.setItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY, newContentString);
+}
+
 interface FHotspotTooltipProps {
     style?: CSSProperties;
     text: string;
