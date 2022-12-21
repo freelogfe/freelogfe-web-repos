@@ -15,7 +15,10 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
 import FPopover from '@/components/FPopover';
-import fNoviceGuide, { setNoviceGuide_LocalStorage_Content } from '@/components/fNoviceGuide';
+import fNoviceGuide, {
+  getNoviceGuide_LocalStorage_Content,
+  setNoviceGuide_LocalStorage_Content,
+} from '@/components/fNoviceGuide';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -38,6 +41,12 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
   });
 
   AHooks.useMount(async () => {
+
+    const noviceGuide_LocalStorage_Content = getNoviceGuide_LocalStorage_Content('dashboardPage');
+    if (noviceGuide_LocalStorage_Content === 'finished') {
+      return;
+    }
+
     await FUtil.Tool.promiseSleep(300);
     const header_createBtn = self.document.getElementById('header.createBtn');
     if (!header_createBtn) {
@@ -58,7 +67,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       total: 5,
     });
 
-    console.log(header_createBtn_result, 'header_createBtn_resultoisdjflksdjflkjl');
+    // console.log(header_createBtn_result, 'header_createBtn_resultoisdjflksdjflkjl');
     if (!header_createBtn_result) {
       setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
       return;
@@ -132,7 +141,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
         height: dashboardPage_node_data_ClientRects.height + 50,
       },
       title: FI18n.i18nNext.t('tours_dashboard_section_node_datas'),
-      step: 2,
+      step: 4,
       total: 5,
     });
 
@@ -140,6 +149,32 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
       setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
       return;
     }
+
+    /******* 第五步 ******************/
+    const dashboardPage_node_release = self.document.getElementById('dashboardPage.node.release');
+    if (!dashboardPage_node_release) {
+      return;
+    }
+    dashboardPage_node_release.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    await FUtil.Tool.promiseSleep(1000);
+    const dashboardPage_node_release_ClientRects = dashboardPage_node_release.getClientRects()[0];
+
+    const dashboardPage_node_release_result = await fNoviceGuide({
+      windowInfo: {
+        top: dashboardPage_node_release_ClientRects.y - 50,
+        left: dashboardPage_node_release_ClientRects.x - 10,
+        width: dashboardPage_node_release_ClientRects.width + 20,
+        height: dashboardPage_node_release_ClientRects.height + 50,
+      },
+      title: FI18n.i18nNext.t('tours_dashboard_section_node_list'),
+      step: 5,
+      total: 5,
+    });
+
+    // if (!dashboardPage_node_release_result) {
+    setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
+    // return;
+    // }
   });
 
   return (<div className={styles.dashboard}>
