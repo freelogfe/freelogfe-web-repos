@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Tooltip} from 'antd';
-// import img_respiration from '@/assets/respiration.gif';
 import {CSSProperties} from 'react';
-
-// import img_Execute from '@/assets/execute.svg';
 
 interface FHotspotTooltipProps {
     style?: CSSProperties;
@@ -30,7 +27,6 @@ function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
                 borderRadius: 8,
             }}
             getPopupContainer={() => ref.current}
-            // overlayStyle={{ transform: 'translate(12px, -4px)' }}
         >
             <div style={{
                 ...style,
@@ -42,12 +38,6 @@ function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
                 <div className={styles.outerRing}>
                     <div className={styles.innerCircle}/>
                 </div>
-                {/*<img*/}
-                {/*  className={styles.respiration}*/}
-                {/*  src={img_respiration}*/}
-                {/*  alt={''}*/}
-                {/*  style={{}}*/}
-                {/*/>*/}
             </div>
         </Tooltip>
     </div>);
