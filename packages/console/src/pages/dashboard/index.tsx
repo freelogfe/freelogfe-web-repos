@@ -15,6 +15,7 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
 import FPopover from '@/components/FPopover';
+import fNoviceGuide from '@/components/fNoviceGuide';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -30,9 +31,14 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
   });
 
   AHooks.useMount(() => {
+
     dispatch<OnUnmount_Page_Action>({
       type: 'dashboardPage/OnUnmount_Page',
     });
+  });
+
+  AHooks.useMount(() => {
+    fNoviceGuide({});
   });
 
   return (<div className={styles.dashboard}>

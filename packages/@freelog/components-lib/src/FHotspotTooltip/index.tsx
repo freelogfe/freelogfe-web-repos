@@ -28,7 +28,6 @@ function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
             overlayInnerStyle={{
                 padding: '12px 20px',
                 borderRadius: 8,
-                maxWidth: 240,
             }}
             getPopupContainer={() => ref.current}
             // overlayStyle={{ transform: 'translate(12px, -4px)' }}
@@ -38,6 +37,7 @@ function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
                 width: 40,
                 position: 'absolute',
                 zIndex: 10000,
+                maxWidth: 240,
             }}>
                 <div className={styles.outerRing}>
                     <div className={styles.innerCircle}/>

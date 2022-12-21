@@ -101,7 +101,7 @@ function FHeaderNavigation({
                     <div className={styles.Menus}>
                         {
                             menu.map((m) => {
-                                console.log(m, 'm.emptyItemsTip3fsdfasdfsd');
+                                // console.log(m, 'm.emptyItemsTip3fsdfasdfsd');
                                 return (<FComponentsLib.FDropdown
                                     key={m.id}
                                     disabled={m.items.length === 0 && !m.emptyItemsTip}
