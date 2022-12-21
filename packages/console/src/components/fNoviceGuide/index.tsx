@@ -112,7 +112,7 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
                     opacity: .4,
                   }}
                   onClick={() => {
-                    onClickNext && onClickNext();
+                    onClickSkip && onClickSkip();
                   }}
                 >跳过
                 </div>)
@@ -130,7 +130,8 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
                   color: '#2784FF',
                 }}
                 onClick={() => {
-                  onClickSkip && onClickSkip();
+
+                  onClickNext && onClickNext();
                 }}
               >{step >= total ? '完成' : '下一步'}
               </div>

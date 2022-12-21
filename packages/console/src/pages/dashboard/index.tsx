@@ -15,7 +15,7 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
 import FPopover from '@/components/FPopover';
-import fNoviceGuide from '@/components/fNoviceGuide';
+import fNoviceGuide, { setNoviceGuide_LocalStorage_Content } from '@/components/fNoviceGuide';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -37,7 +37,8 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     });
   });
 
-  AHooks.useMount(() => {
+  AHooks.useMount(async () => {
+    await FUtil.Tool.promiseSleep(300);
     const header_createBtn = self.document.getElementById('header.createBtn');
     if (!header_createBtn) {
       return;
@@ -45,17 +46,100 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     // console.log(header_createBtn.getClientRects(), 'header_createBtniojlksjdlfksjdlkj');
     const header_createBtn_ClientRects = header_createBtn.getClientRects()[0];
     // const
-    fNoviceGuide({
+    const header_createBtn_result = await fNoviceGuide({
       windowInfo: {
         top: header_createBtn_ClientRects.y + 10,
         left: header_createBtn_ClientRects.x - 10,
         width: header_createBtn_ClientRects.width + 20,
         height: header_createBtn_ClientRects.height - 20,
       },
-      title: '您可以通过此菜单快速创建资源和节点您可以通过此菜单快速创建资源和节点您可以通过此菜单快速',
-      step: 5,
+      title: FI18n.i18nNext.t('tours_dashboard_menu_create'),
+      step: 1,
       total: 5,
     });
+
+    console.log(header_createBtn_result, 'header_createBtn_resultoisdjflksdjflkjl');
+    if (!header_createBtn_result) {
+      setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
+      return;
+    }
+    /******* 第二步 ******************/
+    const dashboardPage_resource_data = self.document.getElementById('dashboardPage.resource.data');
+    if (!dashboardPage_resource_data) {
+      return;
+    }
+    dashboardPage_resource_data.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    await FUtil.Tool.promiseSleep(1000);
+    const dashboardPage_resource_data_ClientRects = dashboardPage_resource_data.getClientRects()[0];
+
+    const dashboardPage_resource_data_result = await fNoviceGuide({
+      windowInfo: {
+        top: dashboardPage_resource_data_ClientRects.y - 50,
+        left: dashboardPage_resource_data_ClientRects.x - 10,
+        width: dashboardPage_resource_data_ClientRects.width + 20,
+        height: dashboardPage_resource_data_ClientRects.height + 50,
+      },
+      title: FI18n.i18nNext.t('tours_dashboard_section_resource_datas'),
+      step: 2,
+      total: 5,
+    });
+
+    if (!dashboardPage_resource_data_result) {
+      setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
+      return;
+    }
+
+    /******* 第三步 ******************/
+    const dashboardPage_resource_release = self.document.getElementById('dashboardPage.resource.release');
+    if (!dashboardPage_resource_release) {
+      return;
+    }
+    dashboardPage_resource_release.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    await FUtil.Tool.promiseSleep(1000);
+    const dashboardPage_resource_release_ClientRects = dashboardPage_resource_release.getClientRects()[0];
+
+    const dashboardPage_resource_release_result = await fNoviceGuide({
+      windowInfo: {
+        top: dashboardPage_resource_release_ClientRects.y - 50,
+        left: dashboardPage_resource_release_ClientRects.x - 10,
+        width: dashboardPage_resource_release_ClientRects.width + 20,
+        height: dashboardPage_resource_release_ClientRects.height + 50,
+      },
+      title: FI18n.i18nNext.t('tours_dashboard_section_resource_list'),
+      step: 3,
+      total: 5,
+    });
+
+    if (!dashboardPage_resource_release_result) {
+      setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
+      return;
+    }
+
+    /******* 第四步 ******************/
+    const dashboardPage_node_data = self.document.getElementById('dashboardPage.node.data');
+    if (!dashboardPage_node_data) {
+      return;
+    }
+    dashboardPage_node_data.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    await FUtil.Tool.promiseSleep(1000);
+    const dashboardPage_node_data_ClientRects = dashboardPage_node_data.getClientRects()[0];
+
+    const dashboardPage_node_data_result = await fNoviceGuide({
+      windowInfo: {
+        top: dashboardPage_node_data_ClientRects.y - 50,
+        left: dashboardPage_node_data_ClientRects.x - 10,
+        width: dashboardPage_node_data_ClientRects.width + 20,
+        height: dashboardPage_node_data_ClientRects.height + 50,
+      },
+      title: FI18n.i18nNext.t('tours_dashboard_section_node_datas'),
+      step: 2,
+      total: 5,
+    });
+
+    if (!dashboardPage_node_data_result) {
+      setNoviceGuide_LocalStorage_Content('dashboardPage', 'finished');
+      return;
+    }
   });
 
   return (<div className={styles.dashboard}>
