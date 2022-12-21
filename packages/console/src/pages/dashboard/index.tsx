@@ -38,12 +38,19 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
   });
 
   AHooks.useMount(() => {
+    const header_createBtn = self.document.getElementById('header.createBtn');
+    if (!header_createBtn) {
+      return;
+    }
+    // console.log(header_createBtn.getClientRects(), 'header_createBtniojlksjdlfksjdlkj');
+    const header_createBtn_ClientRects = header_createBtn.getClientRects()[0];
+    // const
     fNoviceGuide({
       windowInfo: {
-        top: 100,
-        left: 200,
-        width: 400,
-        height: 100,
+        top: header_createBtn_ClientRects.y + 10,
+        left: header_createBtn_ClientRects.x - 10,
+        width: header_createBtn_ClientRects.width + 20,
+        height: header_createBtn_ClientRects.height - 20,
       },
       title: '您可以通过此菜单快速创建资源和节点您可以通过此菜单快速创建资源和节点您可以通过此菜单快速',
       step: 5,
@@ -205,28 +212,30 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               <FFormLayout.FBlock
                 title={'数据总览'}
               >
-                <div className={styles.statisticsLeft_Panel_Total}>
-                  <span>{dashboardPage.resourceStatistic.totalProfit}</span>
-                  <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
+                <div id={'dashboardPage.resource.data'}>
+                  <div className={styles.statisticsLeft_Panel_Total}>
+                    <span>{dashboardPage.resourceStatistic.totalProfit}</span>
+                    <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
+                  </div>
+                  <div style={{ height: 10 }} />
+                  <Space size={20} className={styles.statisticsLeft_Panel_Week}>
+                    <div className={styles.statisticsLeft_Panel_Week_Card}>
+                      <span>近7日收益（枚）</span>
+                      <div style={{ height: 10 }} />
+                      <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekProfit} type='h1' />
+                    </div>
+                    <div className={styles.statisticsLeft_Panel_Week_Card}>
+                      <span>近7日签约量</span>
+                      <div style={{ height: 10 }} />
+                      <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekContract} type='h1' />
+                    </div>
+                    {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
+                    {/*  <span>近7日浏览量</span>*/}
+                    {/*  <div style={{ height: 10 }} />*/}
+                    {/*  <FTitleText text={'500'} type='h1' />*/}
+                    {/*</div>*/}
+                  </Space>
                 </div>
-                <div style={{ height: 10 }} />
-                <Space size={20} className={styles.statisticsLeft_Panel_Week}>
-                  <div className={styles.statisticsLeft_Panel_Week_Card}>
-                    <span>近7日收益（枚）</span>
-                    <div style={{ height: 10 }} />
-                    <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekProfit} type='h1' />
-                  </div>
-                  <div className={styles.statisticsLeft_Panel_Week_Card}>
-                    <span>近7日签约量</span>
-                    <div style={{ height: 10 }} />
-                    <FComponentsLib.FTitleText text={dashboardPage.resourceStatistic.lastWeekContract} type='h1' />
-                  </div>
-                  {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
-                  {/*  <span>近7日浏览量</span>*/}
-                  {/*  <div style={{ height: 10 }} />*/}
-                  {/*  <FTitleText text={'500'} type='h1' />*/}
-                  {/*</div>*/}
-                </Space>
               </FFormLayout.FBlock>
 
               <FFormLayout.FBlock
@@ -251,7 +260,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   </FComponentsLib.FTextBtn>
                 </Space>}
               >
-                <div className={styles.releasedResources}>
+                <div className={styles.releasedResources} id={'dashboardPage.resource.release'}>
                   {
                     dashboardPage.latestResources.map((lr) => {
                       return (<div key={lr.resourceID} className={styles.releasedResourceCard}>
@@ -323,28 +332,30 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               <FFormLayout.FBlock
                 title={'节点'}
               >
-                <div className={styles.statisticsLeft_Panel_Total}>
-                  <span>{dashboardPage.nodeStatistic.totalProfit}</span>
-                  <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
+                <div id={'dashboardPage.node.data'}>
+                  <div className={styles.statisticsLeft_Panel_Total}>
+                    <span>{dashboardPage.nodeStatistic.totalProfit}</span>
+                    <FComponentsLib.FContentText text={'总收益（枚）'} type='normal' />
+                  </div>
+                  <div style={{ height: 10 }} />
+                  <Space size={20} className={styles.statisticsLeft_Panel_Week}>
+                    <div className={styles.statisticsLeft_Panel_Week_Card}>
+                      <span>近7日收益（枚）</span>
+                      <div style={{ height: 10 }} />
+                      <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekProfit} type='h1' />
+                    </div>
+                    <div className={styles.statisticsLeft_Panel_Week_Card}>
+                      <span>近7日签约量</span>
+                      <div style={{ height: 10 }} />
+                      <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekContract} type='h1' />
+                    </div>
+                    {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
+                    {/*  <span>近7日浏览量</span>*/}
+                    {/*  <div style={{ height: 10 }} />*/}
+                    {/*  <FTitleText text={'500'} type='h1' />*/}
+                    {/*</div>*/}
+                  </Space>
                 </div>
-                <div style={{ height: 10 }} />
-                <Space size={20} className={styles.statisticsLeft_Panel_Week}>
-                  <div className={styles.statisticsLeft_Panel_Week_Card}>
-                    <span>近7日收益（枚）</span>
-                    <div style={{ height: 10 }} />
-                    <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekProfit} type='h1' />
-                  </div>
-                  <div className={styles.statisticsLeft_Panel_Week_Card}>
-                    <span>近7日签约量</span>
-                    <div style={{ height: 10 }} />
-                    <FComponentsLib.FTitleText text={dashboardPage.nodeStatistic.lastWeekContract} type='h1' />
-                  </div>
-                  {/*<div className={styles.statisticsLeft_Panel_Week_Card}>*/}
-                  {/*  <span>近7日浏览量</span>*/}
-                  {/*  <div style={{ height: 10 }} />*/}
-                  {/*  <FTitleText text={'500'} type='h1' />*/}
-                  {/*</div>*/}
-                </Space>
               </FFormLayout.FBlock>
 
               <FFormLayout.FBlock
@@ -359,7 +370,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                   <span style={{ paddingLeft: 3, display: 'inline-block' }}>新节点</span>
                 </FComponentsLib.FTextBtn>}
               >
-                <div className={styles.nodeList}>
+                <div className={styles.nodeList} id={'dashboardPage.node.release'}>
                   {
                     dashboardPage.allNode.map((an) => {
                       return (<div key={an.nodeID} className={styles.node}>

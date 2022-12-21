@@ -183,7 +183,10 @@ function FHeaderNavigation({
                         <FComponentsLib.FDropdown
                             overlay={<NavList items={createBtnMenu} UmiLinkPatch={UmiLinkPatch}/>}
                         >
-                            <a className={styles.createBtnMenu}><span><FComponentsLib.FIcons.FPlus/></span></a>
+                            <a
+                                className={styles.createBtnMenu}
+                                id={'header.createBtn'}
+                            ><span><FComponentsLib.FIcons.FPlus/></span></a>
                         </FComponentsLib.FDropdown>
                         {/*<div style={{width: 30}}/>*/}
                     </>)
