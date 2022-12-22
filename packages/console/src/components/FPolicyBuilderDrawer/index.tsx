@@ -557,6 +557,33 @@ function FPolicyBuilder({
     };
   });
 
+  if (!disabledExecute) {
+
+    FComponentsLib.fSetHotspotTooltipVisible('policyBuilder.resource.policyTemplateBtn', {
+      value: false,
+      effectiveImmediately: true,
+      onlyNullish: false,
+    });
+
+    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+      ? 'policyBuilder.resource.policyVerifyBtn'
+      : 'policyBuilder.exhibit.policyVerifyBtn', {
+      value: true,
+      effectiveImmediately: true,
+      onlyNullish: true,
+    });
+
+    setTimeout(() => {
+      FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+        ? 'policyBuilder.resource.policyVerifyBtn'
+        : 'policyBuilder.exhibit.policyVerifyBtn', {
+        value: false,
+        effectiveImmediately: false,
+        onlyNullish: false,
+      });
+    });
+  }
+
   const DrawerTopRight = (<Space size={30}>
     <FComponentsLib.FTextBtn
       onClick={() => {
@@ -576,7 +603,10 @@ function FPolicyBuilder({
                 ? 'policyBuilder.resource.policyVerifyBtn'
                 : 'policyBuilder.exhibit.policyVerifyBtn'}
               style={{ left: '50%', marginLeft: -16, bottom: -42 }}
-              text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')}
+              text={targetType === 'resource'
+                ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')
+                : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_verify')
+              }
             >
               <FComponentsLib.FRectBtn
                 onClick={onClick_VerifyBtn}
@@ -601,7 +631,19 @@ function FPolicyBuilder({
           ? 'policyBuilder.resource.policyCreateBtn'
           : 'policyBuilder.exhibit.policyCreateBtn'}
         style={{ left: '60%', marginLeft: -16, bottom: -42 }}
-        text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')}
+        text={targetType === 'resource'
+          ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')
+          : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_create')
+        }
+        onMount={() => {
+          FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+            ? 'policyBuilder.resource.policyCreateBtn'
+            : 'policyBuilder.exhibit.policyCreateBtn', {
+            value: false,
+            effectiveImmediately: false,
+            onlyNullish: false,
+          });
+        }}
       >
         <FComponentsLib.FRectBtn
           onClick={() => {
@@ -781,7 +823,16 @@ function FPolicyBuilder({
                     ? 'policyBuilder.resource.policyTemplateBtn'
                     : 'policyBuilder.exhibit.policyTemplateBtn'}
                   style={{ left: '50%', marginLeft: -16, bottom: -42 }}
-                  text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')}
+                  text={targetType === 'resource'
+                    ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')
+                    : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_templates')}
+                  onMount={() => {
+                    FComponentsLib.fSetHotspotTooltipVisible('policyBuilder.resource.policyTemplateBtn', {
+                      value: false,
+                      effectiveImmediately: false,
+                      onlyNullish: false,
+                    });
+                  }}
                 >
                   <FComponentsLib.FTextBtn
                     type='default'

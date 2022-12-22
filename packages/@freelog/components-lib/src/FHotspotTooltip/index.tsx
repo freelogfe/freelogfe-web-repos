@@ -34,14 +34,14 @@ const defaultContent: HotspotTooltip_LocalStorage_Content = {
     'createResourceVersionPage.createBtn': 'hide',
     'policyBuilder.resource.policyTemplateBtn': 'show',
     'policyBuilder.resource.policyVerifyBtn': 'hide',
-    'policyBuilder.resource.policyCreateBtn': 'hide',
+    'policyBuilder.resource.policyCreateBtn': 'show',
     'header.discoverNav': 'hide',
     'createNodePage.createBtn': 'hide',
     'resourceDetailPage.nodeSelector': 'show',
     'resourceDetailPage.checkPolicy': 'show',
     'policyBuilder.exhibit.policyTemplateBtn': 'show',
     'policyBuilder.exhibit.policyVerifyBtn': 'hide',
-    'policyBuilder.exhibit.policyCreateBtn': 'hide',
+    'policyBuilder.exhibit.policyCreateBtn': 'show',
     'exhibitDetailPage.onlineSwitch': 'hide',
 };
 
