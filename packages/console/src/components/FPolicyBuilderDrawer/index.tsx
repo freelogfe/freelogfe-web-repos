@@ -559,7 +559,9 @@ function FPolicyBuilder({
 
   if (!disabledExecute) {
 
-    FComponentsLib.fSetHotspotTooltipVisible('policyBuilder.resource.policyTemplateBtn', {
+    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+      ? 'policyBuilder.resource.policyTemplateBtn'
+      : 'policyBuilder.exhibit.policyTemplateBtn', {
       value: false,
       effectiveImmediately: true,
       onlyNullish: false,
@@ -827,7 +829,9 @@ function FPolicyBuilder({
                     ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')
                     : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_templates')}
                   onMount={() => {
-                    FComponentsLib.fSetHotspotTooltipVisible('policyBuilder.resource.policyTemplateBtn', {
+                    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+                      ? 'policyBuilder.resource.policyTemplateBtn'
+                      : 'policyBuilder.exhibit.policyTemplateBtn', {
                       value: false,
                       effectiveImmediately: false,
                       onlyNullish: false,
