@@ -45,10 +45,10 @@ const defaultContent: HotspotTooltip_LocalStorage_Content = {
     'exhibitDetailPage.onlineSwitch': 'hide',
 };
 
-function getHotspotTooltip_LocalStorage_Content(key: ContentKey): ContentValue {
+function getHotspotTooltip_LocalStorage_Content(key: ContentKey): ContentValue | undefined {
     const contentString: string = self.localStorage.getItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY) || '{}';
     const content: HotspotTooltip_LocalStorage_Content = JSON.parse(contentString);
-    return content[key] || defaultContent[key] || 'hide';
+    return content[key];
 }
 
 function setHotspotTooltip_LocalStorage_Content(key: ContentKey, value: ContentValue) {
@@ -76,7 +76,7 @@ function FHotspotTooltip({id, children, style = {}, text}: FHotspotTooltipProps)
 
     const ref = React.useRef<any>();
 
-    const [visible, set_visible] = React.useState<boolean>(getHotspotTooltip_LocalStorage_Content(id) === 'show');
+    const [visible, set_visible] = React.useState<boolean>((getHotspotTooltip_LocalStorage_Content(id) || defaultContent[id]) === 'show');
 
     React.useEffect(() => {
         set_visible_funcs[id] = set_visible;
@@ -120,11 +120,16 @@ export default FHotspotTooltip;
 
 export function setHotspotTooltipVisible(id: ContentKey, option: {
     value: boolean;
-    immediately: boolean;
+    effectiveImmediately: boolean;
+    onlyNullish: boolean;
 }) {
-    if (option.immediately) {
+    if (option.onlyNullish && getHotspotTooltip_LocalStorage_Content(id) !== undefined) {
+        return;
+    }
+    if (option.effectiveImmediately) {
         const func = set_visible_funcs[id];
         func && func(option.value);
     }
+
     setHotspotTooltip_LocalStorage_Content(id, option.value ? 'show' : 'hide');
 }
