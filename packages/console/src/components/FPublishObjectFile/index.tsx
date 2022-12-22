@@ -411,6 +411,13 @@ function FPublishObjectFile({
             id={'createResourceVersionPage.uploadFileBtn'}
             style={{ left: -52, top: 4 }}
             text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
+            onMount={() => {
+              FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.uploadFileBtn', {
+                value: false,
+                effectiveImmediately: false,
+                onlyNullish: false,
+              });
+            }}
           >
             <FUpload
               // accept={resourceType === 'image' ? 'image/*' : '*'}
