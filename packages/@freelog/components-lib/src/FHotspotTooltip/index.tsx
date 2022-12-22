@@ -66,13 +66,15 @@ interface FHotspotTooltipProps {
     children: React.ReactNode;
     text: string;
     style?: CSSProperties;
+
+    onMount?(): void;
 }
 
 const set_visible_funcs: {
     [k in ContentKey]?: (value: boolean) => void;
 } = {};
 
-function FHotspotTooltip({id, children, style = {}, text}: FHotspotTooltipProps) {
+function FHotspotTooltip({id, children, style = {}, text, onMount}: FHotspotTooltipProps) {
 
     const ref = React.useRef<any>();
 
@@ -80,10 +82,11 @@ function FHotspotTooltip({id, children, style = {}, text}: FHotspotTooltipProps)
 
     React.useEffect(() => {
         set_visible_funcs[id] = set_visible;
+        onMount && onMount();
     }, []);
 
     if (!visible) {
-        return children;
+        return <>{children}</>;
     }
 
     return (<div
