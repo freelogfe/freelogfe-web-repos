@@ -148,6 +148,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
             },
           ],
         } : null}
+        showHotspotTooltip
       />
     </Layout.Header>
     <Space>

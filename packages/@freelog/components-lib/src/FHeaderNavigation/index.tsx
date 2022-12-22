@@ -6,7 +6,7 @@ import NavList from './NavList';
 import AOrLink from './AOrLink';
 import {FUtil, FI18n} from '@freelog/tools-lib';
 import FComponentsLib from '../';
-import FHotspotTooltip from '../FHotspotTooltip';
+import FHotspotTooltip, {setHotspotTooltipVisible} from '../FHotspotTooltip';
 import {Space} from 'antd';
 
 interface FHeaderNavigationProps {
@@ -173,6 +173,13 @@ function FHeaderNavigation({
                                     id={'header.gotoConsoleBtn'}
                                     style={{left: '50%', marginLeft: -16, bottom: -42}}
                                     text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
+                                    onMount={() => {
+                                        setHotspotTooltipVisible('header.gotoConsoleBtn', {
+                                            value: false,
+                                            effectiveImmediately: false,
+                                            onlyNullish: false,
+                                        });
+                                    }}
                                 >
                                     <FComponentsLib.FRectBtn
                                         size='small'
