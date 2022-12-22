@@ -436,6 +436,20 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         }}
         onConfirm={({ title, text }) => {
           addPolicy(title, text);
+          console.log('***8wofisjd;lfkjsdlfjsdlfjsldfjlsdjflkjflkjsdlkfjlkj');
+          FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+            value: true,
+            effectiveImmediately: true,
+            onlyNullish: true,
+          });
+
+          setTimeout(() => {
+            FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+              value: false,
+              effectiveImmediately: false,
+              onlyNullish: false,
+            });
+          });
         }}
       />
 

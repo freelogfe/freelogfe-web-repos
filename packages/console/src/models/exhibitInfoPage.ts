@@ -8,6 +8,7 @@ import { history } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
+import FComponentsLib from '@freelog/components-lib';
 
 // import FUtil1 from '@/utils';
 
@@ -606,6 +607,21 @@ const Model: ExhibitInfoPageModelType = {
         }],
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
+
+      FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+        value: true,
+        effectiveImmediately: true,
+        onlyNullish: true,
+      });
+
+      setTimeout(() => {
+        FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+          value: false,
+          effectiveImmediately: false,
+          onlyNullish: false,
+        });
+      });
+
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
