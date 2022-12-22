@@ -35,6 +35,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
+
 // import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface ResourceCreatorProps {
@@ -69,6 +70,31 @@ function ResourceCreator({
     });
   }
 
+  const createBtnDisabled: boolean = resourceCreatorPage.name === '' ||
+    resourceCreatorPage.nameVerify !== 2 ||
+    // resourceCreatorPage.resourceTypeVerify !== 2 ||
+    resourceCreatorPage.nameErrorText !== '' ||
+    // !!resourceCreatorPage.resourceTypeErrorText ||
+    resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
+    resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
+    !!resourceCreatorPage.introductionErrorText;
+
+  if (!createBtnDisabled) {
+    FComponentsLib.fSetHotspotTooltipVisible('createResourcePage.createBtn', {
+      value: true,
+      effectiveImmediately: true,
+      onlyNullish: true,
+    });
+
+    setTimeout(() => {
+      FComponentsLib.fSetHotspotTooltipVisible('createResourcePage.createBtn', {
+        value: false,
+        effectiveImmediately: false,
+        onlyNullish: false,
+      });
+    });
+  }
+
   return (
     <>
       <FPrompt
@@ -89,14 +115,7 @@ function ResourceCreator({
             text={FI18n.i18nNext.t('hotpots_createresource_btn_create')}
           >
             <FComponentsLib.FRectBtn
-              disabled={resourceCreatorPage.name === '' ||
-              resourceCreatorPage.nameVerify !== 2 ||
-              // resourceCreatorPage.resourceTypeVerify !== 2 ||
-              resourceCreatorPage.nameErrorText !== '' ||
-              // !!resourceCreatorPage.resourceTypeErrorText ||
-              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
-              resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
-              !!resourceCreatorPage.introductionErrorText}
+              disabled={createBtnDisabled}
               onClick={() => {
                 dispatch<OnClick_CreateBtn_Action>({
                   type: 'resourceCreatorPage/onClick_CreateBtn',
