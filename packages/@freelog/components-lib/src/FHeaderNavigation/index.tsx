@@ -6,8 +6,8 @@ import NavList from './NavList';
 import AOrLink from './AOrLink';
 import {FUtil, FI18n} from '@freelog/tools-lib';
 import FComponentsLib from '../';
-import FHotspotTooltip from "../FHotspotTooltip";
-import {Space} from "antd";
+import FHotspotTooltip from '../FHotspotTooltip';
+import {Space} from 'antd';
 
 interface FHeaderNavigationProps {
     logoBtn: {
@@ -62,6 +62,7 @@ interface FHeaderNavigationProps {
 
     // LinkPatch: React.ForwardRefExoticComponent<any>;
     UmiLinkPatch?: any;
+    showHotspotTooltip?: boolean;
 }
 
 function FHeaderNavigation({
@@ -75,6 +76,7 @@ function FHeaderNavigation({
                                createBtnMenu = [],
                                userPanel,
                                UmiLinkPatch,
+                               showHotspotTooltip,
                            }: FHeaderNavigationProps) {
     return (<div className={styles.FHeaderNavigation}>
         <div className={styles.FHeaderNavigation_Left}>
@@ -115,7 +117,7 @@ function FHeaderNavigation({
                                         />}
                                 >
                                     {
-                                        m.id === 'discover'
+                                        m.id === 'discover' && showHotspotTooltip
                                             ? (<FHotspotTooltip
                                                 style={{left: '50%', marginLeft: -16, bottom: -20}}
                                                 text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
@@ -163,19 +165,30 @@ function FHeaderNavigation({
 
             <Space size={30}>
                 {
-                    showGotoConsole && (<FHotspotTooltip
-                        style={{left: '50%', marginLeft: -16, bottom: -42}}
-                        text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
-                    >
-                        <FComponentsLib.FRectBtn
-                            size='small'
-                            type='secondary'
-                            onClick={() => {
-                                window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard());
-                            }}
-                        >进入工作台</FComponentsLib.FRectBtn>
-                        {/*<div style={{width: 30}}/>*/}
-                    </FHotspotTooltip>)
+                    showGotoConsole && (<>
+                        {
+                            showHotspotTooltip
+                                ? (<FHotspotTooltip
+                                    style={{left: '50%', marginLeft: -16, bottom: -42}}
+                                    text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
+                                >
+                                    <FComponentsLib.FRectBtn
+                                        size='small'
+                                        type='secondary'
+                                        onClick={() => {
+                                            window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard());
+                                        }}
+                                    >进入工作台</FComponentsLib.FRectBtn>
+                                    {/*<div style={{width: 30}}/>*/}
+                                </FHotspotTooltip>)
+                                : (<FComponentsLib.FRectBtn
+                                    size='small'
+                                    type='secondary'
+                                    onClick={() => {
+                                        window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.dashboard());
+                                    }}
+                                >进入工作台</FComponentsLib.FRectBtn>)}
+                    </>)
                 }
 
                 {

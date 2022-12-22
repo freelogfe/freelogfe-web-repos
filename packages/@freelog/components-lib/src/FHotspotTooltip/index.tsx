@@ -18,23 +18,40 @@ type ContentKey = 'header.gotoConsoleBtn'
     | 'policyBuilder.exhibit.policyCreateBtn'
     | 'createNodePage.createBtn'
     | 'resourceDetailPage.nodeSelector'
-    | 'exhibitDetailPage.onlineSwitch'
-    ;
+    | 'resourceDetailPage.checkPolicy'
+    | 'exhibitDetailPage.onlineSwitch';
+
 type ContentValue = 'show' | 'hide';
 
 type HotspotTooltip_LocalStorage_Content = {
     [k in ContentKey]?: ContentValue;
 };
 
-const defaultContent: HotspotTooltip_LocalStorage_Content = {};
+const defaultContent: HotspotTooltip_LocalStorage_Content = {
+    'header.gotoConsoleBtn': 'show',
+    'createResourcePage.createBtn': 'hide',
+    'createResourceVersionPage.uploadFileBtn': 'show',
+    'createResourceVersionPage.createBtn': 'hide',
+    'policyBuilder.resource.policyTemplateBtn': 'show',
+    'policyBuilder.resource.policyVerifyBtn': 'hide',
+    'policyBuilder.resource.policyCreateBtn': 'hide',
+    'header.discoverNav': 'hide',
+    'createNodePage.createBtn': 'hide',
+    'resourceDetailPage.nodeSelector': 'show',
+    'resourceDetailPage.checkPolicy': 'show',
+    'policyBuilder.exhibit.policyTemplateBtn': 'show',
+    'policyBuilder.exhibit.policyVerifyBtn': 'hide',
+    'policyBuilder.exhibit.policyCreateBtn': 'hide',
+    'exhibitDetailPage.onlineSwitch': 'hide',
+};
 
-export function getHotspotTooltip_LocalStorage_Content(key: ContentKey) {
+function getHotspotTooltip_LocalStorage_Content(key: ContentKey): ContentValue {
     const contentString: string = self.localStorage.getItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY) || '{}';
     const content: HotspotTooltip_LocalStorage_Content = JSON.parse(contentString);
-    return content[key] || defaultContent[key];
+    return content[key] || defaultContent[key] || 'hide';
 }
 
-export function setHotspotTooltip_LocalStorage_Content(key: ContentKey, value: ContentValue) {
+function setHotspotTooltip_LocalStorage_Content(key: ContentKey, value: ContentValue) {
     const contentString: string = self.localStorage.getItem(HOTSPOT_TOOLTIP_LOCALSTORAGE_KEY) || '{}';
     const content: HotspotTooltip_LocalStorage_Content = JSON.parse(contentString);
     const newContentString: string = JSON.stringify({
@@ -45,21 +62,32 @@ export function setHotspotTooltip_LocalStorage_Content(key: ContentKey, value: C
 }
 
 interface FHotspotTooltipProps {
-    style?: CSSProperties;
-    text: string;
+    id: ContentKey;
     children: React.ReactNode;
+    text: string;
+    style?: CSSProperties;
 }
 
-function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
+const set_visible_funcs: {
+    [k in ContentKey]?: (value: boolean) => void;
+} = {};
+
+function FHotspotTooltip({id, children, style = {}, text}: FHotspotTooltipProps) {
 
     const ref = React.useRef<any>();
+
+    const [visible, set_visible] = React.useState<boolean>(getHotspotTooltip_LocalStorage_Content(id) === 'show');
+
+    React.useEffect(() => {
+        set_visible_funcs[id] = set_visible;
+    }, []);
 
     return (<div
         ref={ref}
         style={{width: 'fit-content', height: 'fit-content', position: 'relative'}}>
         {children}
         <Tooltip
-            visible
+            visible={visible}
             placement='bottomRight'
             title={text}
             color='#FFFFFF linear-gradient(135deg, #4568DC 0%, #B06AB3 100%)'
@@ -85,3 +113,14 @@ function FHotspotTooltip({children, style = {}, text}: FHotspotTooltipProps) {
 }
 
 export default FHotspotTooltip;
+
+export function setHotspotTooltipVisible(id: ContentKey, option: {
+    value: boolean;
+    immediately: boolean;
+}) {
+    if (option.immediately) {
+        const func = set_visible_funcs[id];
+        func && func(option.value);
+    }
+    setHotspotTooltip_LocalStorage_Content(id, option.value ? 'show' : 'hide');
+}
