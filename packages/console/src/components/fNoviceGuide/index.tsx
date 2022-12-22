@@ -143,7 +143,9 @@ function NoviceGuide({ windowInfo, title, step, total, onClickNext, onClickSkip 
           padding: '12px 20px',
           borderRadius: 8,
           // maxWidth: 450,
+          boxShadow: '0 0 10px 0 rgba(255,255,255,0.2)'
         }}
+        // style={{ boxShadow: '0px 0px 10px 0px rgba(255,255,255,0.2)' }}
         getPopupContainer={() => ref.current}
         overlayStyle={{
           zIndex: 100000,
