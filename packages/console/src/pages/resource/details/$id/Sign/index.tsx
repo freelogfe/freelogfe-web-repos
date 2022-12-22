@@ -57,12 +57,13 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
     <div className={styles.cell} />
     <div className={styles.infoRight}>
       <FComponentsLib.FHotspotTooltip
+        id={'resourceDetailPage.nodeSelector'}
         style={{ left: '44%', top: 8 }}
         text={FI18n.i18nNext.t('hotpots_createnode_selectnode')}
       >
-      <div className={styles.top}>
+        <div className={styles.top}>
           <NodeSelector />
-      </div>
+        </div>
       </FComponentsLib.FHotspotTooltip>
       <div className={styles.mid}>
         <div className={styles.sign}>

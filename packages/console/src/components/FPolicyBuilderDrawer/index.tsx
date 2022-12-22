@@ -572,6 +572,9 @@ function FPolicyBuilder({
               type='primary'
             >校验中</FComponentsLib.FRectBtn>)
             : (<FComponentsLib.FHotspotTooltip
+              id={targetType === 'resource'
+                ? 'policyBuilder.resource.policyVerifyBtn'
+                : 'policyBuilder.exhibit.policyVerifyBtn'}
               style={{ left: '50%', marginLeft: -16, bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')}
             >
@@ -594,6 +597,9 @@ function FPolicyBuilder({
 
     {
       showView === 'success' && (<FComponentsLib.FHotspotTooltip
+        id={targetType === 'resource'
+          ? 'policyBuilder.resource.policyCreateBtn'
+          : 'policyBuilder.exhibit.policyCreateBtn'}
         style={{ left: '60%', marginLeft: -16, bottom: -42 }}
         text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')}
       >
@@ -771,6 +777,9 @@ function FPolicyBuilder({
                 }
 
                 <FComponentsLib.FHotspotTooltip
+                  id={targetType === 'resource'
+                    ? 'policyBuilder.resource.policyTemplateBtn'
+                    : 'policyBuilder.exhibit.policyTemplateBtn'}
                   style={{ left: '50%', marginLeft: -16, bottom: -42 }}
                   text={FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')}
                 >

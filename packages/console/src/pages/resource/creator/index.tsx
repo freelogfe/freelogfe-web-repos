@@ -84,7 +84,7 @@ function ResourceCreator({
           />
 
           <FComponentsLib.FHotspotTooltip
-            // style={{ left: '36%', bottom: -42 }}
+            id={'createResourcePage.createBtn'}
             style={{ left: -52, top: 4 }}
             text={FI18n.i18nNext.t('hotpots_createresource_btn_create')}
           >

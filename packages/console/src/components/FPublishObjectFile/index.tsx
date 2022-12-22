@@ -408,6 +408,7 @@ function FPublishObjectFile({
         <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
         <Space size={15}>
           <FComponentsLib.FHotspotTooltip
+            id={'createResourceVersionPage.uploadFileBtn'}
             style={{ left: -52, top: 4 }}
             text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
           >

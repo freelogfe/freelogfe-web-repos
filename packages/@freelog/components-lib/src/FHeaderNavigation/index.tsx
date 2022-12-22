@@ -119,6 +119,7 @@ function FHeaderNavigation({
                                     {
                                         m.id === 'discover' && showHotspotTooltip
                                             ? (<FHotspotTooltip
+                                                id={'header.discoverNav'}
                                                 style={{left: '50%', marginLeft: -16, bottom: -20}}
                                                 text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
                                             >
@@ -169,6 +170,7 @@ function FHeaderNavigation({
                         {
                             showHotspotTooltip
                                 ? (<FHotspotTooltip
+                                    id={'header.gotoConsoleBtn'}
                                     style={{left: '50%', marginLeft: -16, bottom: -42}}
                                     text={FI18n.i18nNext.t('hotpots_home_btn_gotoconsole')}
                                 >

@@ -113,6 +113,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
 
           <FComponentsLib.FHotspotTooltip
+            id={'createNodePage.createBtn'}
             style={{left: -52, top: 4}}
             text={FI18n.i18nNext.t('hotpots_createnode_btn_create')}
           >
