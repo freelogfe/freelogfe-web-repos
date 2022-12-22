@@ -79,8 +79,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     if (!dashboardPage_resource_data) {
       return;
     }
-    dashboardPage_resource_data.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    await FUtil.Tool.promiseSleep(1000);
+    dashboardPage_resource_data.scrollIntoView({
+      // behavior: 'smooth',
+      block: 'center',
+    });
+    // await FUtil.Tool.promiseSleep(300);
     const dashboardPage_resource_data_ClientRects = dashboardPage_resource_data.getClientRects()[0];
 
     const dashboardPage_resource_data_result = await fNoviceGuide({
@@ -105,8 +108,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     if (!dashboardPage_resource_release) {
       return;
     }
-    dashboardPage_resource_release.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    await FUtil.Tool.promiseSleep(1000);
+    dashboardPage_resource_release.scrollIntoView({
+      // behavior: 'smooth',
+      block: 'center',
+    });
+    // await FUtil.Tool.promiseSleep(300);
     const dashboardPage_resource_release_ClientRects = dashboardPage_resource_release.getClientRects()[0];
 
     const dashboardPage_resource_release_result = await fNoviceGuide({
@@ -131,8 +137,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     if (!dashboardPage_node_data) {
       return;
     }
-    dashboardPage_node_data.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    await FUtil.Tool.promiseSleep(1000);
+    dashboardPage_node_data.scrollIntoView({
+      // behavior: 'smooth',
+      block: 'center',
+    });
+    // await FUtil.Tool.promiseSleep(300);
     const dashboardPage_node_data_ClientRects = dashboardPage_node_data.getClientRects()[0];
 
     const dashboardPage_node_data_result = await fNoviceGuide({
@@ -157,8 +166,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     if (!dashboardPage_node_release) {
       return;
     }
-    dashboardPage_node_release.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    await FUtil.Tool.promiseSleep(1000);
+    dashboardPage_node_release.scrollIntoView({
+      // behavior: 'smooth',
+      block: 'center',
+    });
+    // await FUtil.Tool.promiseSleep(300);
     const dashboardPage_node_release_ClientRects = dashboardPage_node_release.getClientRects()[0];
 
     const dashboardPage_node_release_result = await fNoviceGuide({
