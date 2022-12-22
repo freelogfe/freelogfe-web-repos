@@ -18,6 +18,7 @@ import FPopover from '@/components/FPopover';
 import fNoviceGuide, {
   getNoviceGuide_LocalStorage_Content,
   setNoviceGuide_LocalStorage_Content,
+  clear,
 } from '@/components/fNoviceGuide';
 // import FNoDataTip from '@/components/FNoDataTip';
 import { history } from 'umi';
@@ -190,6 +191,14 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
     // return;
     // }
   });
+
+  // console.log('*****8sdo;ifjlsdkjflkj');
+
+  AHooks.useUnmount(() => {
+    // console.log('CCCCcccc098rufijosdkj');
+    clear();
+  });
+
 
   return (<div className={styles.dashboard}>
 

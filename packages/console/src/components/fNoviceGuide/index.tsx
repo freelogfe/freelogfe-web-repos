@@ -41,9 +41,11 @@ interface fNoviceGuideProps {
   total: number;
 }
 
+let root: any;
+
 function fNoviceGuide({ windowInfo, title, step, total }: fNoviceGuideProps): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
-    const root = ReactDOM.createRoot(document.getElementById('novice-guide-root') as HTMLDivElement);
+    root = ReactDOM.createRoot(document.getElementById('novice-guide-root') as HTMLDivElement);
     return root.render(<FNoviceGuider
       windowInfo={windowInfo}
       title={title}
@@ -63,5 +65,8 @@ function fNoviceGuide({ windowInfo, title, step, total }: fNoviceGuideProps): Pr
 
 export default fNoviceGuide;
 
+export function clear() {
+  root?.unmount();
+}
 
 
