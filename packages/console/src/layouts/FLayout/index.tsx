@@ -282,6 +282,7 @@ function FLayout({
               }
               : null
           }
+          showHotspotTooltip
         />
       </Layout.Header>
 

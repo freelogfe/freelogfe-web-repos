@@ -107,6 +107,18 @@ function Success({ match, dispatch }: SuccessProps) {
               if (onlineSuccess) {
                 fMessage('上线成功', 'success');
                 history.replace(FUtil.LinkTo.myResources());
+                FComponentsLib.fSetHotspotTooltipVisible('header.discoverNav', {
+                  value: true,
+                  effectiveImmediately: true,
+                  onlyNullish: true,
+                });
+                setTimeout(() => {
+                  FComponentsLib.fSetHotspotTooltipVisible('header.discoverNav', {
+                    value: false,
+                    effectiveImmediately: false,
+                    onlyNullish: false,
+                  });
+                });
               }
             }}
             style={{ padding: '0 20px' }}
