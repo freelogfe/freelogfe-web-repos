@@ -82,12 +82,16 @@ function FHotspotTooltip({id, children, style = {}, text}: FHotspotTooltipProps)
         set_visible_funcs[id] = set_visible;
     }, []);
 
+    if (!visible) {
+        return children;
+    }
+
     return (<div
         ref={ref}
         style={{width: 'fit-content', height: 'fit-content', position: 'relative'}}>
         {children}
         <Tooltip
-            visible={visible}
+            visible
             placement='bottomRight'
             title={text}
             color='#FFFFFF linear-gradient(135deg, #4568DC 0%, #B06AB3 100%)'
