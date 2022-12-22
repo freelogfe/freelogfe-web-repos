@@ -125,6 +125,22 @@ function VersionCreator({
 
   }
 
+  if (!hasError) {
+    FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.createBtn', {
+      value: true,
+      effectiveImmediately: true,
+      onlyNullish: true,
+    });
+
+    setTimeout(() => {
+      FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.createBtn', {
+        value: false,
+        effectiveImmediately: false,
+        onlyNullish: false,
+      });
+    });
+  }
+
   return (
     <>
       <Helmet>
