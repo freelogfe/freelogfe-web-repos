@@ -19,6 +19,7 @@ import fNoviceGuide, {
   getNoviceGuide_LocalStorage_Content,
   setNoviceGuide_LocalStorage_Content,
 } from '@/components/fNoviceGuide';
+import FNoDataTip from '@/components/FNoDataTip';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -381,7 +382,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               >
                 <div className={styles.releasedResources} id={'dashboardPage.resource.release'}>
                   {
-                    dashboardPage.latestResources.map((lr) => {
+                    dashboardPage.latestResources.length > 0 && dashboardPage.latestResources.map((lr) => {
                       return (<div key={lr.resourceID} className={styles.releasedResourceCard}>
                         <div className={styles.releasedResourceCard_Cover}>
                           <FCoverImage src={lr.cover} width={260} style={{ borderRadius: 4 }} />
@@ -435,6 +436,21 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                         />
                       </div>);
                     })
+                  }
+
+                  {
+                    dashboardPage.latestResources.length === 0 && (<div style={{
+                      height: 220,
+                      display: 'flex',
+                      width: '100%',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <FComponentsLib.FContentText text={'还未创建任何资源'} />
+                      <div style={{ height: 20 }} />
+                      <FComponentsLib.FRectBtn>创建资源</FComponentsLib.FRectBtn>
+                    </div>)
                   }
 
                 </div>
@@ -491,7 +507,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
               >
                 <div className={styles.nodeList} id={'dashboardPage.node.release'}>
                   {
-                    dashboardPage.allNode.map((an) => {
+                    dashboardPage.allNode.length > 0 && dashboardPage.allNode.map((an) => {
                       return (<div key={an.nodeID} className={styles.node}>
                         <FComponentsLib.FContentText text={an.nodeName} type='highlight' />
                         <Space size={20}>
@@ -510,6 +526,21 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                         </Space>
                       </div>);
                     })
+                  }
+
+                  {
+                    dashboardPage.allNode.length === 0 && (<div style={{
+                      height: 220,
+                      display: 'flex',
+                      width: '100%',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <FComponentsLib.FContentText text={'还未创建任何节点'} />
+                      <div style={{ height: 20 }} />
+                      <FComponentsLib.FRectBtn>创建节点</FComponentsLib.FRectBtn>
+                    </div>)
                   }
                 </div>
               </FFormLayout.FBlock>
