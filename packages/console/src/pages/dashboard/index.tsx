@@ -19,7 +19,8 @@ import fNoviceGuide, {
   getNoviceGuide_LocalStorage_Content,
   setNoviceGuide_LocalStorage_Content,
 } from '@/components/fNoviceGuide';
-import FNoDataTip from '@/components/FNoDataTip';
+// import FNoDataTip from '@/components/FNoDataTip';
+import { history } from 'umi';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -363,7 +364,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 extra={<Space size={25}>
                   <FComponentsLib.FTextBtn
                     onClick={() => {
-                      window.open(FUtil.LinkTo.resourceCreator());
+                      self.open(FUtil.LinkTo.resourceCreator());
                     }}
                     type='default'>
                     <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
@@ -372,7 +373,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
 
                   <FComponentsLib.FTextBtn
                     onClick={() => {
-                      window.open(FUtil.LinkTo.myResources());
+                      self.open(FUtil.LinkTo.myResources());
                     }}
                     type='default'>
                     <FComponentsLib.FIcons.FContent style={{ fontSize: 16 }} />
@@ -392,19 +393,19 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                               {
                                 type: 'resourceDetails',
                                 fn() {
-                                  window.open(lr.detailUrl);
+                                  self.open(lr.detailUrl);
                                 },
                               },
                               {
                                 type: 'edit',
                                 fn() {
-                                  window.open(lr.editUrl);
+                                  self.open(lr.editUrl);
                                 },
                               },
                               {
                                 type: 'update',
                                 fn() {
-                                  window.open(lr.updateUrl);
+                                  self.open(lr.updateUrl);
                                 },
                               },
                             ]} />
@@ -449,7 +450,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                     }}>
                       <FComponentsLib.FContentText text={'还未创建任何资源'} />
                       <div style={{ height: 20 }} />
-                      <FComponentsLib.FRectBtn>创建资源</FComponentsLib.FRectBtn>
+                      <FComponentsLib.FRectBtn
+                        onClick={() => {
+                          self.open(FUtil.LinkTo.resourceCreator());
+                        }}
+                      >创建资源</FComponentsLib.FRectBtn>
                     </div>)
                   }
 
@@ -498,7 +503,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 extra={<FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => {
-                    window.open(FUtil.LinkTo.nodeCreator());
+                    self.open(FUtil.LinkTo.nodeCreator());
                   }}
                 >
                   <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
@@ -514,13 +519,13 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           <FComponentsLib.FTextBtn
                             type='primary'
                             onClick={() => {
-                              window.open(an.displayUrl);
+                              self.open(an.displayUrl);
                             }}
                           >打开节点</FComponentsLib.FTextBtn>
                           <FComponentsLib.FTextBtn
                             type='primary'
                             onClick={() => {
-                              window.open(an.managingUrl);
+                              self.open(an.managingUrl);
                             }}
                           >管理节点</FComponentsLib.FTextBtn>
                         </Space>
@@ -539,7 +544,11 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                     }}>
                       <FComponentsLib.FContentText text={'还未创建任何节点'} />
                       <div style={{ height: 20 }} />
-                      <FComponentsLib.FRectBtn>创建节点</FComponentsLib.FRectBtn>
+                      <FComponentsLib.FRectBtn
+                        onClick={() => {
+                          self.open(FUtil.LinkTo.nodeCreator());
+                        }}
+                      >创建节点</FComponentsLib.FRectBtn>
                     </div>)
                   }
                 </div>
