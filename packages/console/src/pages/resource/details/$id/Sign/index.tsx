@@ -60,6 +60,13 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
         id={'resourceDetailPage.nodeSelector'}
         style={{ left: '44%', top: 8 }}
         text={FI18n.i18nNext.t('hotpots_createnode_selectnode')}
+        onMount={() => {
+          FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.nodeSelector', {
+            value: false,
+            effectiveImmediately: false,
+            onlyNullish: true,
+          });
+        }}
       >
         <div className={styles.top}>
           <NodeSelector />

@@ -9,6 +9,7 @@ import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
+
 // import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface PoliciesProps {
@@ -78,6 +79,13 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
                   id={'resourceDetailPage.checkPolicy'}
                   style={{ left: -44, top: -4 }}
                   text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
+                  onMount={() => {
+                    FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.checkPolicy', {
+                      value: false,
+                      effectiveImmediately: false,
+                      onlyNullish: true,
+                    });
+                  }}
                 >
                   <Checkbox
                     checked={p.checked}
