@@ -116,7 +116,7 @@ function Success({ match, dispatch }: SuccessProps) {
       if (time === 0) {
         myInterval && clearInterval(myInterval);
         history.push(
-          FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'theme' }),
+          FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' }),
         );
       }
     }, 1000);
