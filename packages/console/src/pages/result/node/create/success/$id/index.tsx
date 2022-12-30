@@ -40,15 +40,13 @@ function Success({ match, dispatch }: SuccessProps) {
 
   /** 跳转节点管理页 */
   const toNodeManagement = () => {
-    history.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id) }));
+    history.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' }));
   };
 
   /** 跳转节点-主题管理页 */
   const toNodeThemeManagement = () => {
     myInterval && clearInterval(myInterval);
-    history.push(
-      FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'theme' }),
-    );
+    history.push(FUtil.LinkTo.nodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' }));
   };
 
   /** 激活主题 */
