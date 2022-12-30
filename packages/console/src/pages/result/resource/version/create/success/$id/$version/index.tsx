@@ -189,7 +189,11 @@ async function resourceOnline(resourceID: string): Promise<boolean> {
         },
       ],
     };
-    await FServiceAPI.Resource.update(params);
+    const { ret, errCode, msg } = await FServiceAPI.Resource.update(params);
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return false;
+    }
     return true;
 
   } else if (data_resourceInfo.policies.every((p) => p.status === 0)) {
@@ -214,7 +218,11 @@ async function resourceOnline(resourceID: string): Promise<boolean> {
         };
       }),
     };
-    await FServiceAPI.Resource.update(params);
+    const { ret, errCode, msg } = await FServiceAPI.Resource.update(params);
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return false;
+    }
     return true;
   }
 
