@@ -30,6 +30,11 @@ function NodeSelector({ dispatch, resourceDetailPage, nodes }: NodeSelectorProps
             type: 'resourceDetailPage/onChangeNodeSelector',
             payload: Number(param.key),
           });
+          FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.nodeSelector', {
+            value: false,
+            effectiveImmediately: true,
+            onlyNullish: false,
+          });
         }}
       >
         {
