@@ -1,12 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-// import {
-//   ChangeAction,
-//   CreateBucketAction,
-//   OnBlur_NewBucketModal_Input_Action,
-//   OnChange_NewBucketModal_Input_Action,
-// } from '@/models/storageHomePage';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import FModal from '@/components/FModal';
