@@ -11,15 +11,12 @@ import {
   OnChange_NameInput_Action,
   OnClick_CreateBtn_Action,
 } from '@/models/nodeCreatorPage';
-// import { FLoading } from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
-
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;

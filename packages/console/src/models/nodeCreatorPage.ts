@@ -5,6 +5,7 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
+import { OnAdd_Node_Action } from '@/models/nodes';
 
 export interface NodeCreatorPageModelState {
   nodeDomain: string;
@@ -210,13 +211,36 @@ const Model: NodeCreatorPageModelType = {
         nodeName: nodeCreatorPage.nodeName.trim(),
       };
 
-      const { data, ret, errCode, msg } = yield call(FServiceAPI.Node.create, params);
+      const { data, ret, errCode, msg }: {
+        data: {
+          nodeDomain: string;
+          nodeId: number;
+          nodeName: string;
+        };
+        ret: number;
+        errCode: number;
+        msg: string;
+      } = yield call(FServiceAPI.Node.create, params);
 
       if (ret !== 0 || errCode !== 0 || !data) {
         self._czc?.push(['_trackEvent', '创建节点页', '创建节点', '', 0]);
         fMessage(msg, 'error');
         return;
       }
+
+      console.log(data, 'dataiosdjflksjdlfkjsdlkfjsldkjl');
+
+      yield put<OnAdd_Node_Action>({
+        type: 'nodes/onAdd_Node',
+        payload: {
+          value: {
+            nodeDomain: data.nodeDomain,
+            nodeId: data.nodeId,
+            nodeName: data.nodeName,
+          },
+        },
+      });
+
       self._czc?.push(['_trackEvent', '创建节点页', '创建节点', '', 1]);
       history.push(FUtil.LinkTo.nodeCreateSuccess({ nodeID: data.nodeId }));
     },
