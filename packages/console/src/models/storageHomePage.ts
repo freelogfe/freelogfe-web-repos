@@ -9,10 +9,10 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 
 export interface StorageHomePageModelState {
-  newBucketName: string;
-  newBucketNameIsDirty: boolean;
-  newBucketNameError: string;
-  newBucketModalVisible: boolean;
+  // newBucketName: string;
+  // newBucketNameIsDirty: boolean;
+  // newBucketNameError: string;
+  // newBucketModalVisible: boolean;
 
   bucketList: {
     bucketName: string;
@@ -65,19 +65,22 @@ export interface FetchBucketsAction extends AnyAction {
   },
 }
 
-export interface OnChange_NewBucketModal_Input_Action extends AnyAction {
-  type: 'storageHomePage/onChange_NewBucketModal_Input';
+// export interface OnChange_NewBucketModal_Input_Action extends AnyAction {
+//   type: 'storageHomePage/onChange_NewBucketModal_Input';
+//   payload: {
+//     value: string;
+//   };
+// }
+//
+// export interface OnBlur_NewBucketModal_Input_Action extends AnyAction {
+//   type: 'storageHomePage/onBlur_NewBucketModal_Input';
+// }
+
+export interface OnSucceed_CreateBucket_Action extends AnyAction {
+  type: 'storageHomePage/onSucceed_CreateBucket';
   payload: {
-    value: string;
+    newBucketName: string;
   };
-}
-
-export interface OnBlur_NewBucketModal_Input_Action extends AnyAction {
-  type: 'storageHomePage/onBlur_NewBucketModal_Input';
-}
-
-export interface CreateBucketAction extends AnyAction {
-  type: 'storageHomePage/createBucket';
 }
 
 export interface OnChangeActivatedBucketAction extends AnyAction {
@@ -131,9 +134,9 @@ interface StorageHomePageModelType {
   state: StorageHomePageModelState;
   effects: {
     fetchBuckets: (action: FetchBucketsAction, effects: EffectsCommandMap) => void;
-    onChange_NewBucketModal_Input: (action: OnChange_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
-    onBlur_NewBucketModal_Input: (action: OnBlur_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
-    createBucket: (action: CreateBucketAction, effects: EffectsCommandMap) => void;
+    // onChange_NewBucketModal_Input: (action: OnChange_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
+    // onBlur_NewBucketModal_Input: (action: OnBlur_NewBucketModal_Input_Action, effects: EffectsCommandMap) => void;
+    onSucceed_CreateBucket: (action: OnSucceed_CreateBucket_Action, effects: EffectsCommandMap) => void;
     onChangeActivatedBucket: (action: OnChangeActivatedBucketAction, effects: EffectsCommandMap) => void;
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
@@ -155,10 +158,10 @@ interface StorageHomePageModelType {
 const Model: StorageHomePageModelType = {
   namespace: 'storageHomePage',
   state: {
-    newBucketName: '',
-    newBucketNameIsDirty: false,
-    newBucketNameError: '',
-    newBucketModalVisible: false,
+    // newBucketName: '',
+    // newBucketNameIsDirty: false,
+    // newBucketNameError: '',
+    // newBucketModalVisible: false,
 
     bucketList: null,
     activatedBucket: '',
@@ -204,73 +207,73 @@ const Model: StorageHomePageModelType = {
         type: 'fetchSpaceStatistic',
       });
     },
-    * onChange_NewBucketModal_Input({ payload }: OnChange_NewBucketModal_Input_Action, {
-      put,
-      select,
-      call,
-    }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          newBucketName: payload.value,
-          newBucketNameIsDirty: true,
-          newBucketNameError: '',
-        },
-      });
-    },
-    * onBlur_NewBucketModal_Input({}: OnBlur_NewBucketModal_Input_Action, { select, put, call }: EffectsCommandMap) {
-
-      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
-      if (!FUtil.Regexp.BUCKET_NAME.test(storageHomePage.newBucketName)) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            newBucketNameError: FI18n.i18nNext.t('naming_convention_bucket_name'),
-          },
-        });
-        return;
-      }
-
-      // if (storageHomePage.bucketList?.some((b) => {
-      //   return b.bucketName === storageHomePage.newBucketName;
-      // })) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
-      //     },
-      //   });
-      //   return;
-      // }
-
-      const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
-        bucketName: storageHomePage.newBucketName,
-      };
-      const { data } = yield call(FServiceAPI.Storage.bucketIsExist, params);
-      // console.log(data, '@@@@@Dddddddddddd====');
-      if (data) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
-          },
-        });
-      }
-
-    },
-    * createBucket({}: CreateBucketAction, { call, select, put }: EffectsCommandMap) {
-      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
-
-      const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
-        bucketName: storageHomePage.newBucketName,
-      };
-      yield call(FServiceAPI.Storage.createBucket, params);
+    // * onChange_NewBucketModal_Input({ payload }: OnChange_NewBucketModal_Input_Action, {
+    //   put,
+    //   select,
+    //   call,
+    // }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       newBucketName: payload.value,
+    //       newBucketNameIsDirty: true,
+    //       newBucketNameError: '',
+    //     },
+    //   });
+    // },
+    // * onBlur_NewBucketModal_Input({}: OnBlur_NewBucketModal_Input_Action, { select, put, call }: EffectsCommandMap) {
+    //
+    //   const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
+    //   if (!FUtil.Regexp.BUCKET_NAME.test(storageHomePage.newBucketName)) {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         newBucketNameError: FI18n.i18nNext.t('naming_convention_bucket_name'),
+    //       },
+    //     });
+    //     return;
+    //   }
+    //
+    //   // if (storageHomePage.bucketList?.some((b) => {
+    //   //   return b.bucketName === storageHomePage.newBucketName;
+    //   // })) {
+    //   //   yield put<ChangeAction>({
+    //   //     type: 'change',
+    //   //     payload: {
+    //   //       newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
+    //   //     },
+    //   //   });
+    //   //   return;
+    //   // }
+    //
+    //   const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
+    //     bucketName: storageHomePage.newBucketName,
+    //   };
+    //   const { data } = yield call(FServiceAPI.Storage.bucketIsExist, params);
+    //   // console.log(data, '@@@@@Dddddddddddd====');
+    //   if (data) {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
+    //       },
+    //     });
+    //   }
+    //
+    // },
+    * onSucceed_CreateBucket({ payload }: OnSucceed_CreateBucket_Action, { call, select, put }: EffectsCommandMap) {
+      // const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({ storageHomePage }));
+      //
+      // const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
+      //   bucketName: storageHomePage.newBucketName,
+      // };
+      // yield call(FServiceAPI.Storage.createBucket, params);
 
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
       history.replace(FUtil.LinkTo.storageSpace({
-        bucketName: storageHomePage.newBucketName,
+        bucketName: payload.newBucketName,
         createBucket: false,
       }));
     },
