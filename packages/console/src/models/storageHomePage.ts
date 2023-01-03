@@ -231,17 +231,17 @@ const Model: StorageHomePageModelType = {
         return;
       }
 
-      if (storageHomePage.bucketList?.some((b) => {
-        return b.bucketName === storageHomePage.newBucketName;
-      })) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
-          },
-        });
-        return;
-      }
+      // if (storageHomePage.bucketList?.some((b) => {
+      //   return b.bucketName === storageHomePage.newBucketName;
+      // })) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       newBucketNameError: FI18n.i18nNext.t('bucket_createbucket_err_notavailable'),
+      //     },
+      //   });
+      //   return;
+      // }
 
       const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
         bucketName: storageHomePage.newBucketName,
