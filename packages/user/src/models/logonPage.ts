@@ -240,7 +240,8 @@ const Model: LogonPageModelType = {
       } else if (logonPage.usernameInput.length > 30) {
         usernameInputError = FI18n.i18nNext.t('signup_alarm_username_length');
       } else if (!FUtil.Regexp.USERNAME.test(logonPage.usernameInput)) {
-        usernameInputError = '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+        // usernameInputError = '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+        usernameInputError = FI18n.i18nNext.t('naming_convention_user_name');
       } else if (FUtil.Regexp.MOBILE_PHONE_NUMBER.test(logonPage.usernameInput)) {
         usernameInputError = '用户名不能是手机号';
       }

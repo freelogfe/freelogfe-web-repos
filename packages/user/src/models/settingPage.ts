@@ -1733,7 +1733,7 @@ const Model: SettingPageModelType = {
       }
 
       if (settingPage.changePassword_New1_PasswordInput !== '' && settingPage.changePassword_New2_PasswordInput !== '' && (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput)) {
-        changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
+        changePassword_New2_PasswordInput_Error = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({
@@ -1764,7 +1764,7 @@ const Model: SettingPageModelType = {
       if (settingPage.changePassword_New2_PasswordInput === '') {
         changePassword_New2_PasswordInput_Error = '请输入确认密码';
       } else if (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput) {
-        changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
+        changePassword_New2_PasswordInput_Error = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({
