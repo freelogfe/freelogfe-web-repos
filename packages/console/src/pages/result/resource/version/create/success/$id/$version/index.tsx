@@ -13,6 +13,7 @@ import fMessage from '@/components/fMessage';
 // import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -33,7 +34,7 @@ function Success({ match, dispatch }: SuccessProps) {
     if (c === 0) {
       gotoVersionInfo();
     }
-  }, gotoState === 2 ? 1000 : undefined);
+  }, gotoState === 2 && count > 0 ? 1000 : undefined);
 
   AHooks.useMount(async () => {
     const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -50,7 +51,30 @@ function Success({ match, dispatch }: SuccessProps) {
     }
   });
 
-  function gotoVersionInfo() {
+  async function gotoVersionInfo() {
+
+    const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+      resourceIdOrName: match.params.id,
+      // isLoadPolicyInfo: 1,
+      // isLoadLatestVersionInfo: 1,
+      // isTranslate: 1,
+    });
+
+    console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
+    if (data_resourceInfo.status === 0) {
+      const result = await fPromiseModalConfirm({
+        title: '资源待上架',
+        content: '将资源上架到资源市场开放授权，为你带来更多收益',
+        okText: '立即上架',
+        cancelText: '暂不上架',
+        icon: '',
+      });
+
+      if (result) {
+        await resourceOnline(match.params.id);
+      }
+    }
+
     return history.replace(FUtil.LinkTo.resourceVersion({
       resourceID: match.params.id,
       version: match.params.version,
@@ -126,7 +150,11 @@ function Success({ match, dispatch }: SuccessProps) {
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
-              gotoVersionInfo();
+              // gotoVersionInfo();
+              return history.replace(FUtil.LinkTo.resourceVersion({
+                resourceID: match.params.id,
+                version: match.params.version,
+              }));
             }}
           >{FI18n.i18nNext.t('versionreleased_btn_later')}</FComponentsLib.FTextBtn>
         </div>)
@@ -140,7 +168,12 @@ function Success({ match, dispatch }: SuccessProps) {
           <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}
-            onClick={gotoVersionInfo}
+            onClick={async () => {
+
+
+              gotoVersionInfo();
+
+            }}
           >{FI18n.i18nNext.t('jump_now')}</FComponentsLib.FTextBtn>
         </div>)
       }
@@ -159,6 +192,10 @@ async function resourceOnline(resourceID: string): Promise<boolean> {
     isLoadLatestVersionInfo: 1,
     isTranslate: 1,
   });
+
+  if (data_resourceInfo.status === 1) {
+    return true;
+  }
 
   if (data_resourceInfo.policies.length === 0) {
 
@@ -234,3 +271,7 @@ async function resourceOnline(resourceID: string): Promise<boolean> {
 
   return true;
 }
+
+// function online_afterSuccessCreateVersion(){
+//
+// }
