@@ -15,17 +15,14 @@ import { Checkbox, Modal, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
-// import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyOperator from '@/components/fPolicyOperator';
-import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
@@ -87,7 +84,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     return () => {
       dispatch<InitModelStatesAction>({
         type: 'resourceInfo/initModelStates',
-      } as const);
+      });
     };
   }, [match.params.id]);
 
@@ -99,7 +96,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     await dispatch<ChangeAction>({
       type: 'resourceInfo/change',
       payload,
-    } as const);
+    });
   }
 
   async function onChangeMatchParamsId() {
@@ -108,11 +105,11 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       payload: {
         resourceID: match.params.id,
       },
-    } as const);
+    });
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
-    } as const);
+    });
   }
 
   function gotoCreator() {
@@ -127,93 +124,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   if (!resourceInfo.info) {
     return null;
   }
-
-  // async function resourceOnline(): Promise<boolean> {
-  //   const { policies, info } = resourceInfo;
-  //   if (!info?.latestVersion) {
-  //     fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
-  //     return false;
-  //   } else if (policies.length === 0) {
-  //     const confirm = await fPromiseModalConfirm({
-  //       title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-  //       icon: null,
-  //       content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
-  //       okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
-  //       cancelText: FI18n.i18nNext.t('btn_cancel'),
-  //     });
-  //     // console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
-  //     if (!confirm) {
-  //       return false;
-  //     }
-  //
-  //     const policy = await fPolicyBuilder({
-  //       alreadyUsedTexts: resourceInfo.policies
-  //         .map<string>((ip) => {
-  //           return ip.policyText;
-  //         }),
-  //       alreadyUsedTitles: resourceInfo.policies
-  //         .map((ip) => {
-  //           return ip.policyName;
-  //         }),
-  //       targetType: 'resource',
-  //     });
-  //
-  //     if (!policy) {
-  //       return false;
-  //     }
-  //
-  //     const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
-  //       resourceId: resourceInfo.resourceID,
-  //       status: 1,
-  //       addPolicies: [
-  //         {
-  //           policyName: policy.title,
-  //           policyText: window.encodeURIComponent(policy.text),
-  //           status: 1,
-  //         },
-  //       ],
-  //     };
-  //     await FServiceAPI.Resource.update(params);
-  //     return true;
-  //
-  //   } else if (policies.filter((item) => item.status === 1).length === 0) {
-  //     // TODO: 干掉这个脏操作
-  //     // resourceInfo.policies.forEach((item: any) => {
-  //     //   item.checked = false;
-  //     // });
-  //     const existingUsedPolicy = await fPolicyOperator({
-  //       titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-  //       confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
-  //       tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
-  //       policiesList: resourceInfo.policies,
-  //     });
-  //
-  //     if (!existingUsedPolicy) {
-  //       return false;
-  //     }
-  //
-  //     const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
-  //       resourceId: resourceInfo.resourceID,
-  //       status: 1,
-  //       updatePolicies: existingUsedPolicy.map((p) => {
-  //         return {
-  //           policyId: p.policyID,
-  //           status: p.checked ? 1 : 0, // 0:下线策略 1:上线策略
-  //         };
-  //       }),
-  //     };
-  //     await FServiceAPI.Resource.update(params);
-  //     return true;
-  //   }
-  //
-  //   const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
-  //     resourceId: resourceInfo.resourceID,
-  //     status: 1,
-  //   };
-  //   await FServiceAPI.Resource.update(params);
-  //
-  //   return true;
-  // }
 
   /** 上下架 */
   async function changeStatus(value: boolean) {
@@ -421,10 +331,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       dispatch<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: match.params.id,
-      } as const);
+      });
       dispatch<FetchResourceInfoAction>({
         type: 'resourceAuthPage/fetchResourceInfo',
-      } as const);
+      });
 
       if (data.updatePolicies) {
         dispatch<ChangeAction>({
@@ -432,7 +342,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           payload: {
             policyOperaterVisible: false,
           },
-        } as const);
+        });
       }
     } else {
       fMessage(result.msg, 'error');
@@ -456,10 +366,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             (resourceInfo.info?.status & 2) === 2
               ? 'freeze'
               : resourceInfo.info?.status === 1
-              ? 'online'
-              : !!resourceInfo.info?.latestVersion
-                ? 'offline'
-                : 'unreleased'
+                ? 'online'
+                : !!resourceInfo.info?.latestVersion
+                  ? 'offline'
+                  : 'unreleased'
           }
         />
         <div style={{ height: 15 }} />
@@ -634,7 +544,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             payload: {
               policyOperaterVisible: false,
             },
-          } as const);
+          });
         }}
         onConfirm={activeResource}
         onNewPolicy={openPolicyBuilder}
