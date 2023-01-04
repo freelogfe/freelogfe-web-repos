@@ -186,7 +186,8 @@ function Content({
 
         {
           info.contracts.length > 0 && (<Space size={15} style={{ width: '100%' }} direction='vertical'>
-            <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />
+            {/*<FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('reusable_contract')} />*/}
+            <FComponentsLib.FContentText type='additional2' text={'当前合约'} />
             {
               info.contracts
                 .map((k) => (<div key={k.contractID} className={styles.Policy}>
