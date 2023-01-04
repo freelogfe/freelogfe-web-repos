@@ -479,9 +479,11 @@ const Model: ResourceAuthPageModelType = {
 export default Model;
 
 async function online_afterSuccessCreatePolicy(resourceID: string) {
-  console.log(resourceID, 'resourceIDoisdjflksjdflkjlk');
+  // console.log(resourceID, 'resourceIDoisdjflksjdflkjlk');
   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
     resourceIdOrName: resourceID,
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
   });
   if (data_resourceInfo.status === 1 || data_resourceInfo.latestVersion === '') {
     return;
