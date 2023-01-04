@@ -8,6 +8,8 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fConfirmModal from '@/components/fConfirmModal';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -429,6 +431,8 @@ const Model: ResourceAuthPageModelType = {
         return;
       }
 
+      yield call(online_afterSuccessCreatePolicy, resourceAuthPage.resourceID);
+
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: resourceAuthPage.resourceID,
@@ -473,3 +477,30 @@ const Model: ResourceAuthPageModelType = {
 };
 
 export default Model;
+
+async function online_afterSuccessCreatePolicy(resourceID: string) {
+  console.log(resourceID, 'resourceIDoisdjflksjdflkjlk');
+  const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+    resourceIdOrName: resourceID,
+  });
+  if (data_resourceInfo.status === 1 || data_resourceInfo.latestVersion === '') {
+    return;
+  }
+  const result = await fPromiseModalConfirm({
+    title: '资源待上架',
+    content: '将资源上架到资源市场开放授权，为你带来更多收益',
+    okText: '立即上架',
+    cancelText: '暂不上架',
+    icon: '',
+  });
+
+  if (!result) {
+    return;
+  }
+
+  const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+    resourceId: resourceID,
+    status: 1,
+  };
+  await FServiceAPI.Resource.update(params);
+}
