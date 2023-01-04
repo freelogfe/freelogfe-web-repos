@@ -63,13 +63,13 @@ function VersionCreator({
       payload: {
         resourceID: match.params.id,
       },
-    } as const);
+    });
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
-    } as const);
+    });
   });
 
   AHooks.useDebounceEffect(
@@ -80,7 +80,7 @@ function VersionCreator({
           payload: {
             showSuccessTip: false,
           },
-        } as const);
+        });
       }
 
     },
@@ -114,14 +114,14 @@ function VersionCreator({
         //   payload: {
         //     value: saved,
         //   },
-        // } as const);
+        // } );
         // console.log(saved, 'savedsavedsavedsaveddiosfjslkdfjlsdkjlk');
         set_isMarkdownEditorDirty(!saved);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    } as const);
+    });
 
   }
 
@@ -219,7 +219,7 @@ function VersionCreator({
                   payload: {
                     value: value,
                   },
-                } as const);
+                });
               }}
             />
           </FFormLayout.FBlock>
@@ -332,7 +332,7 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        } as const);
+                        });
                       },
                       async onDeselect_Resource({ resourceID, resourceName }) {
                         const p = await getProcessor('resourceVersionCreator');
@@ -346,7 +346,7 @@ function VersionCreator({
                           payload: {
                             value: true,
                           },
-                        } as const);
+                        });
                       },
                     });
                     // await dispatch<OnTrigger_SaveDraft_Action>({
@@ -354,7 +354,7 @@ function VersionCreator({
                     //   payload: {
                     //     showSuccessTip: false,
                     //   },
-                    // } as const);
+                    // } );
                   }}
                   type='default'
                 >添加依赖</FComponentsLib.FRectBtn>
@@ -366,13 +366,13 @@ function VersionCreator({
                     onClick={async () => {
                       dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
-                      } as const);
+                      });
                       // await dispatch<OnTrigger_SaveDraft_Action>({
                       //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
                       //   payload: {
                       //     showSuccessTip: false,
                       //   },
-                      // } as const);
+                      // } );
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
@@ -388,7 +388,7 @@ function VersionCreator({
                     payload: {
                       value: true,
                     },
-                  } as const);
+                  });
                 }}
                 // width={1100}
                 // onMount={(p) => {
@@ -410,7 +410,7 @@ function VersionCreator({
                   payload: {
                     state: value,
                   },
-                } as const);
+                });
               }}
               style={{
                 height: 500,
