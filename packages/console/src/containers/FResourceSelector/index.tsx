@@ -12,6 +12,7 @@ import {
   OnChangeRConditionsAction,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FResourceSelectorProps {
   disabledIDsOrNames?: string[];
@@ -57,8 +58,8 @@ function FResourceSelector({
           });
         }}
       >
-        <a>{(selectOptions.find((op) => op.value === storageObjectDepSelector.rSelect) as any).text} <DownOutlined
-          style={{ marginLeft: 8 }} /></a>
+        <a>{(selectOptions.find((op) => op.value === storageObjectDepSelector.rSelect) as any).text}
+          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
       <FInput
         theme='dark'
