@@ -141,8 +141,8 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
           });
         }}
       >
-        <a>{(selectOptions.find((rs) => rs.value === selected) as any).text} <DownOutlined
-          style={{ marginLeft: 8 }} /></a>
+        <a>{(selectOptions.find((rs) => rs.value === selected) as any).text}
+          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
       <FInput
         theme='dark'

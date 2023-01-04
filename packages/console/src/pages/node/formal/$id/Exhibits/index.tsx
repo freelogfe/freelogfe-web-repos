@@ -401,7 +401,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     {nodeManagerPage.exhibit_ResourceTypeOptions1.find((rt) => {
                       return rt.value === nodeManagerPage.exhibit_SelectedType1;
                     })?.text || '全部'}
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                   </span>
                 </FComponentsLib.FDropdown>
 
@@ -430,7 +430,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         {nodeManagerPage.exhibit_ResourceTypeOptions2.find((rt) => {
                           return rt.value === nodeManagerPage.exhibit_SelectedType2;
                         })?.text || '全部'}
-                        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 14 }} />
+                        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                       </span>
                     </FComponentsLib.FDropdown>
                   </>
@@ -455,7 +455,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
                       })?.text
                     }
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 14 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                   </span>
                 </FDropdownMenu>
               </div>

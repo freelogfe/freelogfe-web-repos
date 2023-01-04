@@ -60,23 +60,23 @@ interface FResourceCardsListProps {
 }
 
 function FResourceCardsList({
-  resourceType,
-  resourceStatus,
-  inputText,
-  dataSource,
-  totalNum,
-  onChangeResourceType,
-  onChangeResourceStatus,
-  onChangeInputText,
-  onloadMore,
-  showGotoCreateBtn = false,
-  isCollect = false,
-  onBoomJuice,
-  onClickDetails,
-  onClickEditing,
-  onClickRevision,
-  onClickMore,
-}: FResourceCardsListProps) {
+                              resourceType,
+                              resourceStatus,
+                              inputText,
+                              dataSource,
+                              totalNum,
+                              onChangeResourceType,
+                              onChangeResourceStatus,
+                              onChangeInputText,
+                              onloadMore,
+                              showGotoCreateBtn = false,
+                              isCollect = false,
+                              onBoomJuice,
+                              onClickDetails,
+                              onClickEditing,
+                              onClickRevision,
+                              onClickMore,
+                            }: FResourceCardsListProps) {
   const [typeText, setTypeText] = React.useState('');
   const [statusText, setStatusText] = React.useState('');
   const [category, setCategory] = React.useState<any>({
@@ -144,13 +144,14 @@ function FResourceCardsList({
             >
               <span style={{ cursor: 'pointer' }}>
                 {categoryData.first[category.first] || '全部'}
-                <DownOutlined style={{ marginLeft: 8 }} />
+                {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
+                <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
               </span>
             </FComponentsLib.FDropdown>
 
             {category.first > 1 ? (
               <>
-                <span className="ml-30">子类型：</span>
+                <span className='ml-30'>子类型：</span>
                 <FComponentsLib.FDropdown
                   overlay={
                     <FMenu
@@ -183,7 +184,8 @@ function FResourceCardsList({
                       // @ts-ignore
                       categoryData.second[category.first][category.second] || '全部'
                     }
-                    <DownOutlined style={{ marginLeft: 8 }} />
+                    {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                   </span>
                 </FComponentsLib.FDropdown>
               </>
@@ -203,7 +205,8 @@ function FResourceCardsList({
             >
               <span style={{ cursor: 'pointer' }}>
                 {statusText}
-                <DownOutlined style={{ marginLeft: 10 }} />
+                {/*<DownOutlined style={{ marginLeft: 10 }} />*/}
+                <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
               </span>
             </FComponentsLib.FDropdown>
           </div>
@@ -217,7 +220,7 @@ function FResourceCardsList({
             onDebounceChange={(value) => {
               onChangeInputText && onChangeInputText(value);
             }}
-            theme="dark"
+            theme='dark'
             className={styles.FInput}
             placeholder={FI18n.i18nNext.t('search_resource')}
           />

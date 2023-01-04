@@ -181,7 +181,8 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                         {informalNodeManagerPage.exhibit_TypeOptions1.find((ro) => {
                           return ro.value === informalNodeManagerPage.exhibit_SelectedType1;
                         })?.text || '全部'}
-                        <DownOutlined style={{ marginLeft: 8 }} />
+                        {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
+                        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                       </span>
                     </FComponentsLib.FDropdown>
 
@@ -214,7 +215,8 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                             {informalNodeManagerPage.exhibit_TypeOptions2.find((ro) => {
                               return ro.value === informalNodeManagerPage.exhibit_SelectedType2;
                             })?.text || '全部'}
-                            <DownOutlined style={{ marginLeft: 8 }} />
+                            {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
+                            <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                           </span>
                         </FComponentsLib.FDropdown>
                       </>
@@ -242,7 +244,8 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                           );
                         })?.text
                       }
-                      <FComponentsLib.FIcons.FDown style={{ marginLeft: 10 }} />
+                      {/*<FComponentsLib.FIcons.FDown style={{ marginLeft: 10 }} />*/}
+                      <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
                     </span>
                   </FDropdownMenu>
                 </div>

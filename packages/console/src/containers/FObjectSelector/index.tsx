@@ -14,6 +14,8 @@ import {
   // storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import FComponentsLib from '@freelog/components-lib';
+
 // import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
 
 interface FObjectSelectorProps {
@@ -86,8 +88,8 @@ function FObjectSelector({
           });
         }}
       >
-        <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text} <DownOutlined
-          style={{ marginLeft: 8 }} /></a>
+        <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text}
+          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
       <FInput
         theme='dark'
