@@ -62,15 +62,41 @@ export const insertUrlResource = async (
   editor: any,
   type: string,
 ) => {
-  const insertData: CustomResource = {
-    originType: 2,
-    resourceType: [type],
-    content: url,
-    type: 'resource',
-    children: [{ text: '' }],
-  };
-  editor.insertNode(insertData);
-  editor.insertBreak();
+  const IsResource = url.startsWith('freelog://');
+  if (IsResource) {
+    // 输入的是依赖语法
+    const resourceName = url.split('freelog://')[1];
+    const resourceRes = await FServiceAPI.Resource.info({
+      resourceIdOrName: resourceName,
+    });
+    const data = resourceRes.data;
+    if (!data || data.resourceType[0] !== type) {
+      // 不存在的资源 或 资源类型不符
+      const insertData: CustomResource = {
+        originType: 3,
+        resourceName,
+        resourceType: [type],
+        content: url,
+        type: 'resource',
+        children: [{ text: '' }],
+      };
+      editor.insertNode(insertData);
+      editor.insertBreak();
+    } else {
+      insertResource(data, editor);
+    }
+  } else {
+    // 输入的是网络路径
+    const insertData: CustomResource = {
+      originType: 2,
+      resourceType: [type],
+      content: url,
+      type: 'resource',
+      children: [{ text: '' }],
+    };
+    editor.insertNode(insertData);
+    editor.insertBreak();
+  }
 };
 
 /** 整理依赖，获取真实内容 */
