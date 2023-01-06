@@ -81,7 +81,7 @@ function Success({ match, dispatch }: SuccessProps) {
           payload: match.params.id,
         });
       }
-      
+
     }
   }
 
