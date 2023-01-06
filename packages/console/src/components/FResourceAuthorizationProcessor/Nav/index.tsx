@@ -7,6 +7,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 // import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from '../types';
+import { MutableRefObject } from 'react';
 
 interface NavProps {
   relations: IRelation[];
@@ -60,19 +61,39 @@ function Nav({
               }}
               className={[styles.DepPanelNav, info.targetID === activatedTarget.id && info.targetName === activatedTarget.name && info.targetType === activatedTarget.type ? styles.DepPanelNavActive : ''].join(' ')}
             >
-              <div>
+              <div style={{ width: '100%' }}>
                 <div className={styles.title}>
-                  <FTooltip title={info.targetName}><span>
-                      <FComponentsLib.FContentText
-                        className={styles.titleText}
-                        text={info.targetName}
-                        singleRow
-                        type='highlight'
-                      />
-                    </span></FTooltip>
+                  {/*<FTooltip*/}
+                  {/*  title={info.targetName}*/}
+                  {/*  placement={'top'}*/}
+                  {/*><span style={{ flexShrink: 1 }} id={'AAABBBCCC'}>*/}
+                  {/*    <FComponentsLib.FContentText*/}
+                  {/*      className={styles.titleText}*/}
+                  {/*      text={info.targetName}*/}
+                  {/*      singleRow*/}
+                  {/*      type='highlight'*/}
+                  {/*    />*/}
+                  {/*  </span></FTooltip>*/}
+                  <div style={{ flexShrink: 1 }}>
+                    <OverflowTooltip name={info.targetName + '111111111'} />
+                  </div>
 
-                  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span>
+                  <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, gap: 5, width: 'fit-content' }}>
 
+                    {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                    {info.error === 'cyclicDependency' && (
+                      <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === 'storageObject' && (
+                      <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
+                    {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === '' && info.warning === 'authException' && (
+                      <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                    {info.error === '' && info.warning === 'ownerFreeze' && (
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                        style={{ fontSize: 14 }} /></FTooltip>)}
+
+                    <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span>
                       <FComponentsLib.FTextBtn
                         type='primary'
                         onClick={(e) => {
@@ -89,19 +110,7 @@ function Nav({
                         <FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} />
                       </FComponentsLib.FTextBtn>
                     </span></FTooltip>
-
-                  {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
-                  {info.error === 'cyclicDependency' && (
-                    <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                  {info.error === 'storageObject' && (
-                    <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                  {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
-                  {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                  {info.error === '' && info.warning === 'authException' && (
-                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
-                  {info.error === '' && info.warning === 'ownerFreeze' && (
-                    <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
-                      style={{ fontSize: 14 }} /></FTooltip>)}
+                  </div>
                 </div>
                 <div style={{ height: 9 }} />
                 <FComponentsLib.FContentText type='additional2'>
@@ -367,4 +376,39 @@ async function goToObject(id: string) {
     objectID: data.objectId,
     bucketName: data.bucketName,
   }));
+}
+
+interface OverflowTooltipProps {
+  name: string;
+}
+
+function OverflowTooltip({ name }: OverflowTooltipProps) {
+
+  const refContainer: MutableRefObject<any> = React.useRef(null);
+
+  const [tooltipDisable, set_tooltipDisable] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (refContainer?.current) {
+      console.log(refContainer.current.clientWidth, refContainer.current.scrollWidth, 'asdoifjlkwjelkfjolskdjflskdjflkj');
+      set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
+    }
+
+  }, [name]);
+
+  return (<FTooltip
+    title={name}
+    placement={'top'}
+    open={!tooltipDisable ? false : undefined}
+  >
+    <div>
+      <FComponentsLib.FContentText
+        className={styles.titleText}
+        text={name}
+        singleRow
+        type='highlight'
+        ref={refContainer}
+      />
+    </div>
+  </FTooltip>);
 }
