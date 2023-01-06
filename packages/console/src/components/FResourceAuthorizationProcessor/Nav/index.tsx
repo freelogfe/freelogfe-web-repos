@@ -64,36 +64,37 @@ function Nav({
               <div style={{ width: '100%' }}>
                 {/*<div className={styles.title}>*/}
                 {/*<div className={styles.row}>*/}
-                  {/*<FTooltip*/}
-                  {/*  title={info.targetName}*/}
-                  {/*  placement={'top'}*/}
-                  {/*><span style={{ flexShrink: 1 }} id={'AAABBBCCC'}>*/}
-                  {/*    <FComponentsLib.FContentText*/}
-                  {/*      className={styles.titleText}*/}
-                  {/*      text={info.targetName}*/}
-                  {/*      singleRow*/}
-                  {/*      type='highlight'*/}
-                  {/*    />*/}
-                  {/*  </span></FTooltip>*/}
+                {/*<FTooltip*/}
+                {/*  title={info.targetName}*/}
+                {/*  placement={'top'}*/}
+                {/*><span style={{ flexShrink: 1 }} id={'AAABBBCCC'}>*/}
+                {/*    <FComponentsLib.FContentText*/}
+                {/*      className={styles.titleText}*/}
+                {/*      text={info.targetName}*/}
+                {/*      singleRow*/}
+                {/*      type='highlight'*/}
+                {/*    />*/}
+                {/*  </span></FTooltip>*/}
 
-                  <OverflowTooltip
-                    name={info.targetName}
-                    right={<>
-                      {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
-                      {info.error === 'cyclicDependency' && (
-                        <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                      {info.error === 'storageObject' && (
-                        <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                      {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
-                      {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-                      {info.error === '' && info.warning === 'authException' && (
-                        <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning
-                          style={{ fontSize: 14 }} /></FTooltip>)}
-                      {info.error === '' && info.warning === 'ownerFreeze' && (
-                        <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
-                          style={{ fontSize: 14 }} /></FTooltip>)}
+                <OverflowTooltip
+                  name={info.targetName}
+                  right={<>
+                    {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                    {info.error === 'cyclicDependency' && (
+                      <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === 'storageObject' && (
+                      <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
+                    {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                    {info.error === '' && info.warning === 'authException' && (
+                      <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning
+                        style={{ fontSize: 14 }} /></FTooltip>)}
+                    {info.error === '' && info.warning === 'ownerFreeze' && (
+                      <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                        style={{ fontSize: 14 }} /></FTooltip>)}
 
-                      <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span className={styles.FFileSearch}>
+                    <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span
+                      className={styles.FFileSearch}>
                       <FComponentsLib.FTextBtn
                         type='primary'
                         onClick={(e) => {
@@ -110,8 +111,8 @@ function Nav({
                         <FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} />
                       </FComponentsLib.FTextBtn>
                     </span></FTooltip>
-                    </>}
-                  />
+                  </>}
+                />
 
 
                 {/*</div>*/}
@@ -281,20 +282,21 @@ function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources
 
           >
             <OverflowTooltip
-            name={info.targetName}
-            right={<>
-              {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
-              {info.error === 'cyclicDependency' && (
-                <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-              {info.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-              {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
-              {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
-              {info.error === '' && info.warning === 'authException' && (
-                <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
-              {info.error === '' && info.warning === 'ownerFreeze' && (
-                <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
-                  style={{ fontSize: 14 }} /></FTooltip>)}
-              <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+              name={info.targetName}
+              right={<>
+                {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                {info.error === 'cyclicDependency' && (
+                  <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                {info.error === 'storageObject' && (
+                  <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}
+                {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}
+                {info.error === '' && info.warning === 'authException' && (
+                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}
+                {info.error === '' && info.warning === 'ownerFreeze' && (
+                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                    style={{ fontSize: 14 }} /></FTooltip>)}
+                <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                 <span className={styles.FFileSearch}><FComponentsLib.FTextBtn
                   type='primary'
                   onClick={(e) => {
@@ -308,8 +310,8 @@ function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources
                     }));
                   }}
                 ><FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} /></FComponentsLib.FTextBtn></span>
-              </FTooltip>
-            </>}
+                </FTooltip>
+              </>}
             />
             {/*<div className={styles.title}>*/}
             {/*  <FTooltip title={info.targetName}><span>*/}
