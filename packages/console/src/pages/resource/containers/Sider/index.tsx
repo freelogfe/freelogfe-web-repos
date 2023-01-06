@@ -37,7 +37,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
   const [loading, setLoading] = React.useState(false);
-  const [active, setActive] = React.useState(false);
+  // const [active, setActive] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
@@ -46,8 +46,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       payload: {
         resourceID: match.params.id,
       },
-    } as const);
-
+    });
   });
 
   React.useEffect(() => {
@@ -88,9 +87,9 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     };
   }, [match.params.id]);
 
-  React.useEffect(() => {
-    setActive(resourceInfo.info?.status === 1);
-  }, [resourceInfo.info?.status]);
+  // React.useEffect(() => {
+  //   setActive(resourceInfo.info?.status === 1);
+  // }, [resourceInfo.info?.status]);
 
   async function onChange(payload: Partial<ResourceInfoModelState>) {
     await dispatch<ChangeAction>({
@@ -147,98 +146,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           type: 'resourceAuthPage/fetchResourceInfo',
         });
       }
-      // 上架
-      // const { policies, info } = resourceInfo;
-      // if (!info?.latestVersion) {
-      //   fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
-      //   return false;
-      // } else if (policies.length === 0) {
-      //   // setActiveDialogShow(true);
-      //   // title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
-      //   // desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}
-      //   // sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}
-      //   // cancelText={FI18n.i18nNext.t('btn_cancel')}
-      //   // cancel={() => {
-      //   //   setActiveDialogShow(false);
-      //   // }}
-      //   // sure={openPolicyBuilder}
-      //   // Modal.confirm({
-      //   //   title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      //   //   icon: null,
-      //   //   content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
-      //   //   okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
-      //   //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-      //   //   onOk() {
-      //   //     // console.log('OK');
-      //   //   },
-      //   //   onCancel() {
-      //   //     // console.log('Cancel');
-      //   //   },
-      //   // });
-      //   const confirm = await fPromiseModalConfirm({
-      //     title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      //     icon: null,
-      //     content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
-      //     okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
-      //     cancelText: FI18n.i18nNext.t('btn_cancel'),
-      //   });
-      //   console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
-      //   if (!confirm) {
-      //     return false;
-      //   }
-      //
-      //   const policy = await fPolicyBuilder({
-      //     alreadyUsedTexts: resourceInfo.policies
-      //       .map<string>((ip) => {
-      //         return ip.policyText;
-      //       }),
-      //     alreadyUsedTitles: resourceInfo.policies
-      //       .map((ip) => {
-      //         return ip.policyName;
-      //       }),
-      //     targetType: 'resource',
-      //   });
-      //
-      //   if (!policy) {
-      //     return false;
-      //   }
-      //
-      //   await dispatch<UpdatePoliciesAction>({
-      //     type: 'resourceAuthPage/updatePolicies',
-      //     payload: {
-      //       addPolicies: [
-      //         {
-      //           policyName: policy.title,
-      //           policyText: window.encodeURIComponent(policy.text),
-      //         },
-      //       ],
-      //     },
-      //   });
-      //
-      // } else if (policies.filter((item) => item.status === 1).length === 0) {
-      //   resourceInfo.policies.forEach((item: any) => {
-      //     item.checked = false;
-      //   });
-      //   // dispatch<ChangeAction>({
-      //   //   type: 'resourceInfo/change',
-      //   //   payload: {
-      //   //     policyOperaterVisible: true,
-      //   //   },
-      //   // });
-      //   const existingUsedPolicy = fPolicyOperator({
-      //     titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      //     confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
-      //     tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
-      //     policiesList: resourceInfo.policies,
-      //   });
-      //
-      //   if (!existingUsedPolicy) {
-      //     return false;
-      //   }
-      // } else {
-      //   const data = { status: 1 };
-      //   operateResource(data);
-      // }
     } else {
       // 下架
       const resourceNoTip = localStorage.getItem('resourceNoTip') || false;
@@ -356,7 +263,11 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       <div style={{ height: 30 }} />
       <div className={styles.switcher}>
         <div className={styles['switcher-label']}>{FI18n.i18nNext.t('switch_set_resource_avaliable')}</div>
-        <FSwitch onClick={changeStatus} checked={active} loading={loading} />
+        <FSwitch
+          onClick={changeStatus}
+          checked={resourceInfo.info.status === 1}
+          loading={loading}
+        />
       </div>
       <div style={{ height: 30 }} />
       <div className={styles.header}>

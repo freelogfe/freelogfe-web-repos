@@ -8,12 +8,11 @@ import { Dispatch } from 'redux';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
-// import { resourceOnline } from '@/pages/resource/containers/Sider';
 import fMessage from '@/components/fMessage';
-// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -53,6 +52,11 @@ function Success({ match, dispatch }: SuccessProps) {
 
   async function gotoVersionInfo() {
 
+    history.replace(FUtil.LinkTo.resourceVersion({
+      resourceID: match.params.id,
+      version: match.params.version,
+    }));
+
     const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
       resourceIdOrName: match.params.id,
       // isLoadPolicyInfo: 1,
@@ -60,7 +64,7 @@ function Success({ match, dispatch }: SuccessProps) {
       // isTranslate: 1,
     });
 
-    console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
+    // console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
     if (data_resourceInfo.status === 0) {
       const result = await fPromiseModalConfirm({
         title: '资源待上架',
@@ -72,13 +76,13 @@ function Success({ match, dispatch }: SuccessProps) {
 
       if (result) {
         await resourceOnline(match.params.id);
+        await dispatch<FetchDataSourceAction>({
+          type: 'resourceInfo/fetchDataSource',
+          payload: match.params.id,
+        });
       }
+      
     }
-
-    return history.replace(FUtil.LinkTo.resourceVersion({
-      resourceID: match.params.id,
-      version: match.params.version,
-    }));
   }
 
   // function gotoAuth() {
