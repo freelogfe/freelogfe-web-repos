@@ -8,6 +8,7 @@ import { ChangeAction } from '@/models/exhibitInfoPage';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -34,7 +35,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         onChange({ contract_SelectedAssociatedID: mainResource.id });
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
         <FTooltip title={mainResource.name}>
       <span><FComponentsLib.FContentText
         type='highlight'
@@ -54,6 +55,8 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
       ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
         </FTooltip>
+
+        {mainResource.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
       </div>
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText
@@ -83,7 +86,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
         key={r.id}
       >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <FTooltip title={mainResource.name}><span><FComponentsLib.FContentText
             type='highlight'
             text={r.name}
@@ -99,6 +102,8 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
               }));
             }}
           ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+
+          {r.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
         </div>
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText

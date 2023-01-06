@@ -29,6 +29,7 @@ export interface ResourceAuthPageModelState {
     title: string;
     resourceType: string;
     version: string;
+    state: 'offline' | 'online';
     contracts: {
       checked: boolean;
       title: string;
@@ -259,7 +260,7 @@ const Model: ResourceAuthPageModelType = {
       const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
-      const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
+      const contractsAuthorized: ResourceAuthPageModelState['contractsAuthorized'] = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
         const currentResource = data2.find((resource: any) => resource.resourceId === i.resourceId);
         // console.log(currentResource, 'currentResource');
@@ -283,6 +284,7 @@ const Model: ResourceAuthPageModelType = {
           title: currentResource.resourceName,
           resourceType: currentResource.resourceType,
           version: '',
+          state: currentResource.status === 1 ? 'online' : 'offline',
           contracts: allContracts
             .filter((c: any) => c.status === 0)
             .map((c: any) => {

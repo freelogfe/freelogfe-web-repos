@@ -6,7 +6,6 @@ import Policies from './Policies';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
@@ -16,8 +15,6 @@ export interface FAuthPanelProps {
 }
 
 function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
-
-  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 

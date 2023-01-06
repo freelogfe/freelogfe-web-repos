@@ -39,7 +39,7 @@ export interface ExhibitInfoPageModelState {
     id: string;
     name: string;
     type: string[];
-
+    state: 'online' | 'offline';
     exhibits: {
       id: string;
       name: string;
@@ -516,6 +516,7 @@ const Model: ExhibitInfoPageModelType = {
                 name: r.resourceName,
                 type: r.resourceType,
                 exhibits: exhibits,
+                state: r.status === 1 ? 'online' : 'offline',
                 contracts: r.contracts
                   .filter((p) => {
                     return p.status !== 'terminal';

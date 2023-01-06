@@ -8,6 +8,7 @@ import { FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -35,6 +36,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
     resourceType: i.resourceType,
     version: i.version,
     contracts: i.contracts,
+    state: i.state,
   }));
 
   return (<div className={styles.styles}>
@@ -70,6 +72,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
                 ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
               </FTooltip>
 
+              {i.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
               {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
               {/*  <FResourceStatusBadge*/}
               {/*    status="online"*/}
