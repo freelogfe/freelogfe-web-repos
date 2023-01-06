@@ -425,15 +425,19 @@ function OverflowTooltip({ name, right }: OverflowTooltipProps) {
 
   const [tooltipDisable, set_tooltipDisable] = React.useState<boolean>(true);
 
-  React.useEffect(() => {
-    if (refContainer?.current) {
-      console.log(refContainer.current.clientWidth, refContainer.current.scrollWidth, 'asdoifjlkwjelkfjolskdjflskdjflkj');
+  // React.useEffect(() => {
+  //   if (refContainer?.current) {
+  //     console.log(refContainer.current.clientWidth, refContainer.current.scrollWidth, 'asdoifjlkwjelkfjolskdjflskdjflkj');
+  //     set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
+  //   }
+  //
+  // }, [name]);
+
+  return (<div
+    className={styles.row}
+    onMouseEnter={() => {
       set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
-    }
-
-  }, [name]);
-
-  return (<div className={styles.row}>
+    }}>
     <FTooltip
       title={name}
       placement={'top'}
