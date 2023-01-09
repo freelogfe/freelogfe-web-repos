@@ -9,6 +9,7 @@ import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
+import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -35,29 +36,38 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         onChange({ contract_SelectedAssociatedID: mainResource.id });
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <FTooltip title={mainResource.name}>
-      <span><FComponentsLib.FContentText
-        type='highlight'
-        text={mainResource.name}
-        singleRow
-        className={styles.FContentText}
-      /></span>
-        </FTooltip>
-        <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-      <span><FComponentsLib.FTextBtn
-        type={'primary'}
-        onClick={(e) => {
-          e.stopPropagation();
-          window.open(FUtil.LinkTo.resourceDetails({
-            resourceID: mainResource.id,
-          }));
-        }}
-      ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span>
-        </FTooltip>
-
-        {mainResource.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
-      </div>
+      <FAutoOverflowTooltipTitle
+        title={mainResource.name}
+        right={<>
+          {mainResource.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
+          <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+            <div>
+              <FComponentsLib.FTextBtn
+                type={'primary'}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: mainResource.id,
+                  }));
+                }}
+              >
+                <FComponentsLib.FIcons.FFileSearch className={styles.FFileSearch} />
+              </FComponentsLib.FTextBtn>
+            </div>
+          </FTooltip>
+        </>}
+      />
+      {/*<div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>*/}
+      {/*  <FTooltip title={mainResource.name}>*/}
+      {/*<span><FComponentsLib.FContentText*/}
+      {/*  type='highlight'*/}
+      {/*  text={mainResource.name}*/}
+      {/*  singleRow*/}
+      {/*  className={styles.FContentText}*/}
+      {/*/></span>*/}
+      {/*  </FTooltip>*/}
+      {/*  */}
+      {/*</div>*/}
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText
         type='additional2'
@@ -86,25 +96,45 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
         }}
         key={r.id}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <FTooltip title={mainResource.name}><span><FComponentsLib.FContentText
-            type='highlight'
-            text={r.name}
-            singleRow
-            className={styles.FContentText}
-          /></span></FTooltip>
+        <FAutoOverflowTooltipTitle
+          title={mainResource.name}
+          right={<>
+            {r.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
+            <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+              <div>
+                <FComponentsLib.FTextBtn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(FUtil.LinkTo.resourceDetails({
+                      resourceID: r.id,
+                    }));
+                  }}
+                >
+                  <FComponentsLib.FIcons.FFileSearch className={styles.FFileSearch} />
+                </FComponentsLib.FTextBtn>
+              </div>
+            </FTooltip>
+          </>}
+        />
+        {/*<div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>*/}
+        {/*  <FTooltip title={mainResource.name}><span><FComponentsLib.FContentText*/}
+        {/*    type='highlight'*/}
+        {/*    text={r.name}*/}
+        {/*    singleRow*/}
+        {/*    className={styles.FContentText}*/}
+        {/*  /></span></FTooltip>*/}
 
-          <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(FUtil.LinkTo.resourceDetails({
-                resourceID: r.id,
-              }));
-            }}
-          ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
+        {/*  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn*/}
+        {/*    onClick={(e) => {*/}
+        {/*      e.stopPropagation();*/}
+        {/*      window.open(FUtil.LinkTo.resourceDetails({*/}
+        {/*        resourceID: r.id,*/}
+        {/*      }));*/}
+        {/*    }}*/}
+        {/*  ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>*/}
 
-          {r.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
-        </div>
+        {/*  {r.state === 'offline' && <FResourceStatusBadge status={'offline'} />}*/}
+        {/*</div>*/}
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText
           type='additional2'
