@@ -506,7 +506,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   <div className={styles['result-text']}>
                     {
                       resultPopupType === 1
-                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                        ? exhibitInfoPage.side_ResourceType.includes('主题')
+                          ? FI18n.i18nNext.t('msg_done ')
+                          : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
                         : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
                     }
                   </div>
