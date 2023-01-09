@@ -11,17 +11,14 @@ import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
 import { FI18n } from '@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;
   resourceDetailPage: ResourceDetailPageModelState;
-  // nodes: NodesModelState;
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-  // console.log(resourceDetailPage.resource_Info, 'resourceDetailPage.resource_Info898888888');
   const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
 
   const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);

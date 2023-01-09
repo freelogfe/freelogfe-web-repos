@@ -8,6 +8,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
+import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -40,46 +41,52 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
             onClick={() => onChangeSelected(r.id)}
           >
-            <div className={styles.title}>
-              <FTooltip title={r.name}>
-              <span><FComponentsLib.FContentText
-                type='highlight'
-                text={r.name}
-                singleRow
-                className={styles.titleText}
-                style={{ maxWidth: r.status === 0 ? 170 : 220 }}
-              /></span>
-              </FTooltip>
+            <FAutoOverflowTooltipTitle
+              title={r.name}
+              right={<>
+                {
+                  r.error === 'offline' && (<>
+                    <FResourceStatusBadge status={'offline'} />
+                    <div style={{ width: 5 }} />
+                  </>)
+                }
 
-              {
-                r.error === 'offline' && (<>
-                  <FResourceStatusBadge status={'offline'} />
-                  <div style={{ width: 5 }} />
-                </>)
-              }
+                {
+                  r.error === 'freeze' && (<>
+                    <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                    <div style={{ width: 5 }} />
+                  </>)
+                }
 
-              {
-                r.error === 'freeze' && (<>
-                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
-                  <div style={{ width: 5 }} />
-                </>)
-              }
+                {
+                  r.error === '' && r.warning === 'authException' && (<>
+                    <div style={{ width: 5 }} />
+                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  </>)
+                }
 
-              {
-                r.error === '' && r.warning === 'authException' && (<>
-                  <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
-                </>)
-              }
+                {
+                  r.error === '' && r.warning === 'ownerFreeze' && (<>
+                    <div style={{ width: 5 }} />
+                    <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                      style={{ fontSize: 16 }} /></FTooltip>
+                  </>)
+                }
+              </>}
+            />
+            {/*<div className={styles.title}>*/}
+            {/*  <FTooltip title={r.name}>*/}
+            {/*  <span><FComponentsLib.FContentText*/}
+            {/*    type='highlight'*/}
+            {/*    text={r.name}*/}
+            {/*    singleRow*/}
+            {/*    className={styles.titleText}*/}
+            {/*    style={{ maxWidth: r.status === 0 ? 170 : 220 }}*/}
+            {/*  /></span>*/}
+            {/*  </FTooltip>*/}
 
-              {
-                r.error === '' && r.warning === 'ownerFreeze' && (<>
-                  <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
-                </>)
-              }
 
-            </div>
+            {/*</div>*/}
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               type='additional2'
@@ -135,75 +142,71 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
       resourceDetailPage.sign_SignResources
         .filter((r, i: number) => i !== 0)
         .map((r) => {
-          // console.log(r, '####902j3l42k3jl');
           return (<div
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
             key={r.id}
             onClick={() => onChangeSelected(r.id)}
           >
-            <div className={styles.title}>
-              <FTooltip title={r.name}>
-                <span><FComponentsLib.FContentText
-                  type='highlight'
-                  text={r.name}
-                  singleRow
-                  className={styles.titleText}
-                  style={{ maxWidth: r.status === 0 ? 150 : 200 }}
-                /></span>
-              </FTooltip>
-              <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
-              <span><FComponentsLib.FTextBtn
-                type={'primary'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: r.id,
-                  }));
-                }}><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn>
-              </span>
-              </FTooltip>
-              {/*{*/}
-              {/*  r.status === 0 && (<>*/}
-              {/*    <FResourceStatusBadge status={'offline'} />*/}
-              {/*    <div style={{ width: 5 }} />*/}
-              {/*  </>)*/}
-              {/*}*/}
-              {/*{*/}
-              {/*  r.status === 1 && r.authProblem && (<>*/}
-              {/*    <div style={{ width: 5 }} />*/}
-              {/*    <FTooltip title={'存在授权问题'}><FWarning style={{ fontSize: 16 }} /></FTooltip>*/}
-              {/*  </>)*/}
-              {/*}*/}
+            <FAutoOverflowTooltipTitle
+              title={r.name}
+              right={<>
 
-              {
-                r.error === 'offline' && (<>
-                  <div style={{ width: 5 }} />
-                  <FResourceStatusBadge status={'offline'} />
-                </>)
-              }
+                {
+                  r.error === 'offline' && (<>
+                    <div style={{ width: 5 }} />
+                    <FResourceStatusBadge status={'offline'} />
+                  </>)
+                }
 
-              {
-                r.error === 'freeze' && (<>
-                  <div style={{ width: 5 }} />
-                  <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
-                </>)
-              }
+                {
+                  r.error === 'freeze' && (<>
+                    <div style={{ width: 5 }} />
+                    <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                  </>)
+                }
 
-              {
-                r.error === '' && r.warning === 'authException' && (<>
-                  <div style={{ width: 5 }} />
-                  <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
-                </>)
-              }
+                {
+                  r.error === '' && r.warning === 'authException' && (<>
+                    <div style={{ width: 5 }} />
+                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
+                  </>)
+                }
 
-              {
-                r.error === '' && r.warning === 'ownerFreeze' && (<>
-                  <div style={{ width: 5 }} />
-                  <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
-                </>)
-              }
+                {
+                  r.error === '' && r.warning === 'ownerFreeze' && (<>
+                    <div style={{ width: 5 }} />
+                    <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning
+                      style={{ fontSize: 16 }} /></FTooltip>
+                  </>)
+                }
 
-            </div>
+                <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      type={'primary'}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(FUtil.LinkTo.resourceDetails({
+                          resourceID: r.id,
+                        }));
+                      }}>
+                      <FComponentsLib.FIcons.FFileSearch className={styles.FFileSearch} />
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>
+              </>}
+            />
+            {/*<div className={styles.title}>*/}
+            {/*<FTooltip title={r.name}>*/}
+            {/*  <span><FComponentsLib.FContentText*/}
+            {/*    type='highlight'*/}
+            {/*    text={r.name}*/}
+            {/*    singleRow*/}
+            {/*    className={styles.titleText}*/}
+            {/*    style={{ maxWidth: r.status === 0 ? 150 : 200 }}*/}
+            {/*  /></span>*/}
+            {/*</FTooltip>*/}
+            {/*</div>*/}
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               type='additional2'

@@ -51,13 +51,6 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
         <Policies />
       </div>
     </div>
-
-    {/*<FTerminatedContractListDrawer*/}
-    {/*  terminatedContractIDs={terminatedContractIDs}*/}
-    {/*  onClose={() => {*/}
-    {/*    set_TerminatedContractIDs([]);*/}
-    {/*  }}*/}
-    {/*/>*/}
   </div>);
 }
 
