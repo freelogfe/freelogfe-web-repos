@@ -122,8 +122,8 @@ function Search({}: SearchProps) {
   const resolveResources = (res: any) => {
     let dataList: any = res.dataList;
     let supplyArray: any = [];
-    if (container) {
-      const maxCount = Math.floor(container.current.clientWidth / 300);
+    if (container.current) {
+      const maxCount = Math.floor((container.current.clientWidth || 0) / 300);
       let supply = 0;
       if (pageData.skip > 0) {
         dataList = [...resourcesListPure, ...dataList];
@@ -349,34 +349,37 @@ function Search({}: SearchProps) {
         ) : (
           <div className='w-100x h-100x   px-115 flex-column-center'>
             <div className={'h-100x   pt-40  flex-column-center ' + styles.rContainer}>
-              {!resourcesListPure.length ? (
-                <div className='flex-column-center w-100x h-100x'>
-                  <div className='flex-2' />
-                  <span className={styles.none}>
+              {
+                !resourcesListPure.length ? (
+                    <div className='flex-column-center w-100x h-100x'>
+                      <div className='flex-2' />
+                      <span className={styles.none}>
                     抱歉，没有找到与{' ' + keywords + ' '}相关的结果
                   </span>
-                  <div className='flex-3' />
-                </div>
-              ) : (
-                <div className={styles.tip + ' mb-20 w-100x ml-18'}>
-                  以下是{' ' + keywords + ' '}相关的结果（{pageData.totalItem}）
-                </div>
-              )}
-              <div
-                className={
-                  'flex-row flex-wrap h-100x w-100x   ' +
-                  (resourcesListPure.length > 3 ? ' space-between' : '')
-                }
-                ref={container}
-              >
-                <ResourceList
-                  resourcesList={resourcesList}
-                  keywords={keywords}
-                  resourcesListPure={resourcesListPure}
-                  pageData={pageData}
-                  setPageData={setPageData}
-                />
-              </div>
+                      <div className='flex-3' />
+                    </div>
+                  )
+                  : (<>
+                    <div className={styles.tip + ' mb-20 w-100x ml-18'}>
+                      以下是{' ' + keywords + ' '}相关的结果（{pageData.totalItem}）
+                    </div>
+                    <div
+                      className={
+                        'flex-row flex-wrap h-100x w-100x   ' +
+                        (resourcesListPure.length > 3 ? ' space-between' : '')
+                      }
+                      ref={container}
+                    >
+                      <ResourceList
+                        resourcesList={resourcesList}
+                        keywords={keywords}
+                        resourcesListPure={resourcesListPure}
+                        pageData={pageData}
+                        setPageData={setPageData}
+                      />
+                    </div>
+                  </>)}
+
             </div>
           </div>
         )}
