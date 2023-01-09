@@ -486,34 +486,37 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         resultPopupType !== null && (
           <div className={styles['result-modal']}>
             <div className={styles['result-popup']}>
-              {loading ? (
-                <div className={styles['loader']}>
-                  <LoadingOutlined className={styles['loader-icon']} />
-                  <div className={styles['loader-text']}>
-                    {
-                      resultPopupType === 1
-                        ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
-                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}
-                  </div>
-                </div>
-              ) : (
-                <div className={styles['result']}>
-                  <i
-                    className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
-                      styles[resultPopupType === 1 ? 'up' : 'down']
-                    }`}
-                  />
-                  <div className={styles['result-text']}>
-                    {
-                      resultPopupType === 1
-                        ? exhibitInfoPage.side_ResourceType.includes('主题')
-                          ? FI18n.i18nNext.t('msg_done ')
-                          : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
-                        : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
-                    }
-                  </div>
-                </div>
-              )}
+              {
+                loading
+                  ? (
+                    <div className={styles['loader']}>
+                      <LoadingOutlined className={styles['loader-icon']} />
+                      <div className={styles['loader-text']}>
+                        {
+                          resultPopupType === 1
+                            ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                            : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}
+                      </div>
+                    </div>
+                  )
+                  : (
+                    <div className={styles['result']}>
+                      <i
+                        className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
+                          styles[resultPopupType === 1 ? 'up' : 'down']
+                        }`}
+                      />
+                      <div className={styles['result-text']}>
+                        {
+                          resultPopupType === 1
+                            ? exhibitInfoPage.side_ResourceType.includes('主题')
+                              ? FI18n.i18nNext.t('msg_done ')
+                              : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                            : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                        }
+                      </div>
+                    </div>
+                  )}
             </div>
           </div>
         )}
