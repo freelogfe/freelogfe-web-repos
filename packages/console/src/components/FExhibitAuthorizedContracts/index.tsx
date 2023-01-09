@@ -13,6 +13,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
 import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
+import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -160,21 +161,39 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 set_SelectedID(ac.subjectID);
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <FTooltip title={ac.subjectName}><span><FComponentsLib.FContentText
-                  type='highlight'
-                  text={ac.subjectName}
-                  singleRow
-                  className={styles.FContentText}
-                /></span></FTooltip>
-                <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn
-                  type={'primary'}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(ac.detailsUrl);
-                  }}
-                ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
-              </div>
+              <FAutoOverflowTooltipTitle
+                title={ac.subjectName}
+                right={<>
+                  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+                    <div>
+                      <FComponentsLib.FTextBtn
+                        type={'primary'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(ac.detailsUrl);
+                        }}
+                      >
+                        <FComponentsLib.FIcons.FFileSearch className={styles.FFileSearch} />
+                      </FComponentsLib.FTextBtn>
+                    </div>
+                  </FTooltip>
+                </>}
+              />
+              {/*<div style={{ display: 'flex', alignItems: 'center' }}>*/}
+              {/*  <FTooltip title={ac.subjectName}><span><FComponentsLib.FContentText*/}
+              {/*    type='highlight'*/}
+              {/*    text={ac.subjectName}*/}
+              {/*    singleRow*/}
+              {/*    className={styles.FContentText}*/}
+              {/*  /></span></FTooltip>*/}
+              {/*  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn*/}
+              {/*    type={'primary'}*/}
+              {/*    onClick={(e) => {*/}
+              {/*      e.stopPropagation();*/}
+              {/*      window.open(ac.detailsUrl);*/}
+              {/*    }}*/}
+              {/*  ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>*/}
+              {/*</div>*/}
               <div style={{ height: 5 }} />
               <FComponentsLib.FContentText
                 type='additional2'
