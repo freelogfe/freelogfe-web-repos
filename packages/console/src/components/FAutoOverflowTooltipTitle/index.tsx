@@ -4,11 +4,11 @@ import { MutableRefObject } from 'react';
 import FTooltip from '@/components/FTooltip';
 
 interface FAutoOverflowTooltipTitleProps {
-  name: string;
+  title: string;
   right: React.ReactNode;
 }
 
-function FAutoOverflowTooltipTitle({ name, right }: FAutoOverflowTooltipTitleProps) {
+function FAutoOverflowTooltipTitle({ title, right }: FAutoOverflowTooltipTitleProps) {
 
   const refTitle: MutableRefObject<any> = React.useRef(null);
 
@@ -20,11 +20,11 @@ function FAutoOverflowTooltipTitle({ name, right }: FAutoOverflowTooltipTitlePro
       set_tooltipDisable(refTitle.current.clientWidth < refTitle.current.scrollWidth);
     }}>
     <FTooltip
-      title={name}
+      title={title}
       placement={'top'}
       open={!tooltipDisable ? false : undefined}
     >
-      <div ref={refTitle} className={styles.title}>{name}</div>
+      <div ref={refTitle} className={styles.title}>{title}</div>
     </FTooltip>
 
     <div className={styles.right}>

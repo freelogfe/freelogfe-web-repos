@@ -78,7 +78,7 @@ function Nav({
                 {/*  </span></FTooltip>*/}
 
                 <FAutoOverflowTooltipTitle
-                  name={info.targetName}
+                  title={info.targetName}
                   right={<>
                     {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                     {info.error === 'cyclicDependency' && (
@@ -283,7 +283,7 @@ function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources
 
           >
             <FAutoOverflowTooltipTitle
-              name={info.targetName}
+              title={info.targetName}
               right={<>
                 {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                 {info.error === 'cyclicDependency' && (
