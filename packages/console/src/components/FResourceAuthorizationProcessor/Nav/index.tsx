@@ -8,6 +8,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from '../types';
 import { MutableRefObject } from 'react';
+import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface NavProps {
   relations: IRelation[];
@@ -76,7 +77,7 @@ function Nav({
                 {/*    />*/}
                 {/*  </span></FTooltip>*/}
 
-                <OverflowTooltip
+                <FAutoOverflowTooltipTitle
                   name={info.targetName}
                   right={<>
                     {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -281,7 +282,7 @@ function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources
             className={[styles.childrenDepPanelNav, info.targetID === activatedTarget.id && info.targetName === activatedTarget.name && info.targetType === activatedTarget.type ? styles.DepPanelNavActive : ''].join(' ')}
 
           >
-            <OverflowTooltip
+            <FAutoOverflowTooltipTitle
               name={info.targetName}
               right={<>
                 {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
@@ -413,41 +414,41 @@ async function goToObject(id: string) {
     bucketName: data.bucketName,
   }));
 }
-
-interface OverflowTooltipProps {
-  name: string;
-  right: React.ReactNode;
-}
-
-function OverflowTooltip({ name, right }: OverflowTooltipProps) {
-
-  const refContainer: MutableRefObject<any> = React.useRef(null);
-
-  const [tooltipDisable, set_tooltipDisable] = React.useState<boolean>(true);
-
-  // React.useEffect(() => {
-  //   if (refContainer?.current) {
-  //     console.log(refContainer.current.clientWidth, refContainer.current.scrollWidth, 'asdoifjlkwjelkfjolskdjflskdjflkj');
-  //     set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
-  //   }
-  //
-  // }, [name]);
-
-  return (<div
-    className={styles.row}
-    onMouseEnter={() => {
-      set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
-    }}>
-    <FTooltip
-      title={name}
-      placement={'top'}
-      open={!tooltipDisable ? false : undefined}
-    >
-      <div ref={refContainer} className={styles.title1}>{name}</div>
-    </FTooltip>
-
-    <div className={styles.icon}>
-      {right}
-    </div>
-  </div>);
-}
+//
+// interface OverflowTooltipProps {
+//   name: string;
+//   right: React.ReactNode;
+// }
+//
+// function OverflowTooltip({ name, right }: OverflowTooltipProps) {
+//
+//   const refContainer: MutableRefObject<any> = React.useRef(null);
+//
+//   const [tooltipDisable, set_tooltipDisable] = React.useState<boolean>(true);
+//
+//   // React.useEffect(() => {
+//   //   if (refContainer?.current) {
+//   //     console.log(refContainer.current.clientWidth, refContainer.current.scrollWidth, 'asdoifjlkwjelkfjolskdjflskdjflkj');
+//   //     set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
+//   //   }
+//   //
+//   // }, [name]);
+//
+//   return (<div
+//     className={styles.row}
+//     onMouseEnter={() => {
+//       set_tooltipDisable(refContainer.current.clientWidth < refContainer.current.scrollWidth);
+//     }}>
+//     <FTooltip
+//       title={name}
+//       placement={'top'}
+//       open={!tooltipDisable ? false : undefined}
+//     >
+//       <div ref={refContainer} className={styles.title1}>{name}</div>
+//     </FTooltip>
+//
+//     <div className={styles.icon}>
+//       {right}
+//     </div>
+//   </div>);
+// }
