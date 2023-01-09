@@ -55,7 +55,10 @@ export interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
   processorIdentifier?: string;
-  width?: number;
+  // TODO: 默认 100%
+  width?: number | string;
+  // TODO: 默认 100%
+  height?: number | string;
 
   onMount?(processor: Processor): void;
 
