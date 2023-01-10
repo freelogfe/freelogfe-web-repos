@@ -613,7 +613,7 @@ async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
     await FServiceAPI.Exhibit.updatePresentable(params1);
   }
 
-  const messageKey: number = 888999;
+  const messageKey: number = Math.random();
   message.loading({
     content: isTheme
       ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
