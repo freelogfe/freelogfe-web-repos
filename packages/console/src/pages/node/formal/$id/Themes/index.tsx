@@ -27,6 +27,8 @@ import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { LoadingOutlined } from '@ant-design/icons';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ThemesProps {
   match: any;
@@ -285,7 +287,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                               buttons={[
                                 {
                                   type: hasActiveBtn ? 'active' : '',
-                                  fn() {
+                                  async fn() {
 
                                     if (!i.isAuth) {
                                       // fMessage(F)
@@ -302,47 +304,33 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                                       return;
                                     }
 
-                                    fConfirmModal({
-                                      message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
+                                    const res1: boolean = await fPromiseModalConfirm({
+                                      title: '',
+                                      icon: <div />,
+                                      content: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
                                       okText: FI18n.i18nNext.t('btn_activate_theme'),
                                       cancelText: FI18n.i18nNext.t('keep_current_theme'),
-                                      onOk() {
+                                    });
 
-                                        if (!i.hasPolicy) {
-                                          fConfirmModal({
-                                            message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
-                                            okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
-                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
-                                            onOk() {
-                                              // onDelete(bp.theKey);
-                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
-                                            },
-                                          });
-                                          return;
-                                        }
+                                    if (!res1) {
+                                      return;
+                                    }
 
-                                        if (i.policies.length === 0) {
-                                          fConfirmModal({
-                                            // message: '需要先启用策略',
-                                            message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
-                                            okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
-                                            cancelText: FI18n.i18nNext.t('btn_cancel'),
-                                            onOk() {
-                                              // onDelete(bp.theKey);
-                                              self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
-                                            },
-                                          });
-                                          return;
-                                        }
-
-                                        dispatch<OnActiveAction>({
-                                          type: 'nodeManagerPage/onActive',
-                                          payload: {
-                                            id: i.id,
-                                          },
-                                        });
+                                    dispatch<OnActiveAction>({
+                                      type: 'nodeManagerPage/onActive',
+                                      payload: {
+                                        id: i.id,
                                       },
                                     });
+                                    // fConfirmModal({
+                                    //   message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: i.title }),
+                                    //   okText: FI18n.i18nNext.t('btn_activate_theme'),
+                                    //   cancelText: FI18n.i18nNext.t('keep_current_theme'),
+                                    //   onOk() {
+                                    //
+                                    //
+                                    //   },
+                                    // });
                                   },
                                 },
                                 {

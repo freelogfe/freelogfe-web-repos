@@ -832,25 +832,30 @@ const Model: NodeManagerModelType = {
         },
       });
 
-      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-        presentableId: payload.id,
-        onlineStatus: 1,
-      };
-      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      yield call(onlineExhibit, payload.id);
+
+      // const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      //   presentableId: payload.id,
+      //   onlineStatus: 1,
+      // };
+      // const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           theme_ActivatingThemeID: '',
         },
       });
-      if (!data) {
-        fMessage('激活失败', 'error');
-      } else {
-        fMessage(FI18n.i18nNext.t('msg_done'), 'success');
-        yield put<FetchThemesAction>({
-          type: 'fetchThemes',
-        });
-      }
+
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+      });
+
+      // if (!data) {
+      //   fMessage('激活失败', 'error');
+      // } else {
+      //   fMessage(FI18n.i18nNext.t('msg_done'), 'success');
+      //
+      // }
 
       // yield put<FetchNodeInfoAction>({
       //   type: 'fetchNodeInfo',
