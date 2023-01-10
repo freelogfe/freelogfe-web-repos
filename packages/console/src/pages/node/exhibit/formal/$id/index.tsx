@@ -15,7 +15,6 @@ import {
   FetchInfoAction,
   OnMountPageAction,
   OnUnmountPageAction,
-  // UpdateStatusAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
@@ -31,8 +30,6 @@ import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
