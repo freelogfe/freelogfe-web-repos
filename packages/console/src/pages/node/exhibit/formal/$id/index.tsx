@@ -327,7 +327,20 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                     checked={exhibitInfoPage.exhibit_Online}
                     loading={loading}
-                    onClick={(checked) => changeExhibitStatus(checked)}
+                    onChange={async (checked) => {
+                      if (checked) {
+                        await onlineExhibit(exhibitInfoPage.exhibit_ID);
+                      } else {
+                        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+                          presentableId: exhibitInfoPage.exhibit_ID,
+                          onlineStatus: 0,
+                        };
+                        await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+                      }
+                      dispatch<FetchInfoAction>({
+                        type: 'exhibitInfoPage/fetchInfo',
+                      });
+                    }}
                   />
                 </>)
               }
@@ -513,15 +526,22 @@ async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
   };
 
   const { ret, errCode, msg, data: data_exhibit } = await FServiceAPI.Exhibit.presentableDetails(params);
+  const isTheme: boolean = data_exhibit.resourceInfo.resourceType.includes('主题');
 
-  // console.log(data, 'dataiojsdlkfjlsdkjflkj');
+  // console.log(data_exhibit.resourceInfo.resourceType, 'dataiojsdlkfjlsdkjflkj');
 
   if (data_exhibit.policies.length === 0) {
     const res2: boolean = await fPromiseModalConfirm({
-      title: '',
+      title: isTheme
+        ? ''
+        : FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
       icon: <div />,
-      content: FI18n.i18nNext.t('alarm_theme_activate_plan'),
-      okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+      content: isTheme
+        ? FI18n.i18nNext.t('alarm_theme_activate_plan')
+        : FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+      okText: isTheme
+        ? FI18n.i18nNext.t('activatetheme_btn_create_auth_plan')
+        : FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });
 
@@ -549,7 +569,9 @@ async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
 
   } else if (!data_exhibit.policies.some((item: { status: number }) => item.status === 1)) {
     const res3: boolean = await fPromiseModalConfirm({
-      title: '',
+      title: isTheme
+        ? ''
+        : FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
       icon: <div />,
       content: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
       okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
@@ -560,9 +582,15 @@ async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
     }
 
     const existingUsedPolicy = await fPolicyOperator({
-      titleText: FI18n.i18nNext.t('activatetheme_activate_authplan_title'),
-      confirmText: FI18n.i18nNext.t('activatetheme_activate_authplan_btn'),
-      tipText: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+      titleText: isTheme
+        ? FI18n.i18nNext.t('activatetheme_activate_authplan_title')
+        : FI18n.i18nNext.t('showexhibit_activate_authplan_title'),
+      confirmText: isTheme
+        ? FI18n.i18nNext.t('activatetheme_activate_authplan_btn')
+        : FI18n.i18nNext.t('showexhibit_activate_authplan_btn'),
+      tipText: isTheme
+        ? FI18n.i18nNext.t('msg_activate_theme_for_auth')
+        : FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'),
       policiesList: data_exhibit.policies,
     });
 
