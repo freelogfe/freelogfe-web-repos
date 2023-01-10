@@ -23,11 +23,11 @@ import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
-import fMessage from '@/components/fMessage';
-import { FDialog } from '@/components/FDialog';
-import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
-import { LoadingOutlined } from '@ant-design/icons';
+// import fMessage from '@/components/fMessage';
+// import { FDialog } from '@/components/FDialog';
+// import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
+// import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
+// import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
@@ -45,8 +45,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
   // const [activeDialogShow, setActiveDialogShow] = React.useState(false);
   // const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
-  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
-  const [loading, setLoading] = React.useState(false);
+  // const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
+  // const [loading, setLoading] = React.useState(false);
   // const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
@@ -306,7 +306,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         <FSwitch
                           disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                           checked={exhibitInfoPage.exhibit_Online}
-                          loading={loading}
+                          // loading={loading}
                           onClick={() => {
                             activateTheme();
                           }}
@@ -325,7 +325,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   <FSwitch
                     disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                     checked={exhibitInfoPage.exhibit_Online}
-                    loading={loading}
+                    // loading={loading}
                     onChange={async (checked) => {
                       if (checked) {
                         await onlineExhibit(exhibitInfoPage.exhibit_ID);
@@ -471,45 +471,45 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       {/*  onNewPolicy={openPolicyBuilder}*/}
       {/*/>*/}
 
-      {
-        resultPopupType !== null && (
-          <div className={styles['result-modal']}>
-            <div className={styles['result-popup']}>
-              {
-                loading
-                  ? (
-                    <div className={styles['loader']}>
-                      <LoadingOutlined className={styles['loader-icon']} />
-                      <div className={styles['loader-text']}>
-                        {
-                          resultPopupType === 1
-                            ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
-                            : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}
-                      </div>
-                    </div>
-                  )
-                  : (
-                    <div className={styles['result']}>
-                      <i
-                        className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
-                          styles[resultPopupType === 1 ? 'up' : 'down']
-                        }`}
-                      />
-                      <div className={styles['result-text']}>
-                        {
-                          resultPopupType === 1
-                            ? exhibitInfoPage.side_ResourceType.includes('主题')
-                              ? FI18n.i18nNext.t('msg_done ')
-                              : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
-                            : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
-                        }
-                      </div>
-                    </div>
-                  )
-              }
-            </div>
-          </div>
-        )}
+      {/*{*/}
+      {/*  resultPopupType !== null && (*/}
+      {/*    <div className={styles['result-modal']}>*/}
+      {/*      <div className={styles['result-popup']}>*/}
+      {/*        {*/}
+      {/*          loading*/}
+      {/*            ? (*/}
+      {/*              <div className={styles['loader']}>*/}
+      {/*                <LoadingOutlined className={styles['loader-icon']} />*/}
+      {/*                <div className={styles['loader-text']}>*/}
+      {/*                  {*/}
+      {/*                    resultPopupType === 1*/}
+      {/*                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')*/}
+      {/*                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')}*/}
+      {/*                </div>*/}
+      {/*              </div>*/}
+      {/*            )*/}
+      {/*            : (*/}
+      {/*              <div className={styles['result']}>*/}
+      {/*                <i*/}
+      {/*                  className={`freelog fl-icon-shangpao ${styles['result-icon']} ${*/}
+      {/*                    styles[resultPopupType === 1 ? 'up' : 'down']*/}
+      {/*                  }`}*/}
+      {/*                />*/}
+      {/*                <div className={styles['result-text']}>*/}
+      {/*                  {*/}
+      {/*                    resultPopupType === 1*/}
+      {/*                      ? exhibitInfoPage.side_ResourceType.includes('主题')*/}
+      {/*                        ? FI18n.i18nNext.t('msg_done ')*/}
+      {/*                        : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')*/}
+      {/*                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')*/}
+      {/*                  }*/}
+      {/*                </div>*/}
+      {/*              </div>*/}
+      {/*            )*/}
+      {/*        }*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  )}*/}
     </div>
   );
 }
