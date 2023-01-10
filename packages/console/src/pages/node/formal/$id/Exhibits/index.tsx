@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
-import { Checkbox, message, Space } from 'antd';
+import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -11,7 +11,7 @@ import { history } from 'umi';
 import FMenu from '@/components/FMenu';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
-  ChangeAction,
+  // ChangeAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
   OnChange_Exhibit_SelectedType_Action,
@@ -31,13 +31,13 @@ import * as AHooks from 'ahooks';
 import FListFooter from '@/components/FListFooter';
 import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
-import fMessage from '@/components/fMessage';
+// import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
-import { FDialog } from '@/components/FDialog';
-import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
-import { LoadingOutlined } from '@ant-design/icons';
-import { onlineExhibit } from '@/pages/node/utils/tools';
+// import { FDialog } from '@/components/FDialog';
+// import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
+// import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
+// import { LoadingOutlined } from '@ant-design/icons';
+// import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -187,50 +187,50 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   // };
 
   /** 添加授权策略 */
-  // const addPolicy = async (title: string, text: string) => {
-  //   const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
-  //     presentableId: operateExhibit.id,
-  //     addPolicies: [
-  //       {
-  //         policyName: title,
-  //         policyText: text,
-  //         status: operateExhibit.status,
-  //       },
-  //     ],
-  //   };
-  //   const result = await FServiceAPI.Exhibit.updatePresentable(params);
-  //   if (result.errCode !== 0) {
-  //     fMessage(result.msg, 'error');
-  //     return;
-  //   }
-  //
-  //   const info = await FUtil.Request({
-  //     method: 'GET',
-  //     url: `/v2/presentables/${operateExhibit.id}`,
-  //     params: { isLoadPolicyInfo: 1, isTranslate: 1 },
-  //   });
-  //   const { policies } = info.data;
-  //   const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
-  //   nodeManagerPage.exhibit_List[index].policies = policies
-  //     .filter((item: any) => item.status === 1)
-  //     .map((item: any) => item.policyName);
-  //   nodeManagerPage.exhibit_List[index].policiesList = policies.reverse();
-  //   setOperateExhibit(nodeManagerPage.exhibit_List[index]);
-  //   dispatch<ChangeAction>({
-  //     type: 'nodeManagerPage/change',
-  //     payload: {
-  //       exhibit_List: nodeManagerPage.exhibit_List,
-  //       policyEditorVisible: false,
-  //     },
-  //   });
-  // };
+    // const addPolicy = async (title: string, text: string) => {
+    //   const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+    //     presentableId: operateExhibit.id,
+    //     addPolicies: [
+    //       {
+    //         policyName: title,
+    //         policyText: text,
+    //         status: operateExhibit.status,
+    //       },
+    //     ],
+    //   };
+    //   const result = await FServiceAPI.Exhibit.updatePresentable(params);
+    //   if (result.errCode !== 0) {
+    //     fMessage(result.msg, 'error');
+    //     return;
+    //   }
+    //
+    //   const info = await FUtil.Request({
+    //     method: 'GET',
+    //     url: `/v2/presentables/${operateExhibit.id}`,
+    //     params: { isLoadPolicyInfo: 1, isTranslate: 1 },
+    //   });
+    //   const { policies } = info.data;
+    //   const index = nodeManagerPage.exhibit_List.findIndex((item) => item.id === operateExhibit.id);
+    //   nodeManagerPage.exhibit_List[index].policies = policies
+    //     .filter((item: any) => item.status === 1)
+    //     .map((item: any) => item.policyName);
+    //   nodeManagerPage.exhibit_List[index].policiesList = policies.reverse();
+    //   setOperateExhibit(nodeManagerPage.exhibit_List[index]);
+    //   dispatch<ChangeAction>({
+    //     type: 'nodeManagerPage/change',
+    //     payload: {
+    //       exhibit_List: nodeManagerPage.exhibit_List,
+    //       policyEditorVisible: false,
+    //     },
+    //   });
+    // };
 
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map(
-    (i) => ({
-      key: i.id,
-      ...i,
-    }),
-  );
+      (i) => ({
+        key: i.id,
+        ...i,
+      }),
+    );
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
