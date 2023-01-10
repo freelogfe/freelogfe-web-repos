@@ -65,6 +65,10 @@ export function updatePresentable({presentableId, ...params}: UpdatePresentableP
 interface PresentablesOnlineParamsType {
   presentableId: string;
   onlineStatus: 0 | 1;
+  updatePolicies?: {
+    policyId: string;
+    status: 0 | 1;
+  }
 }
 
 export function presentablesOnlineStatus({presentableId, ...params}: PresentablesOnlineParamsType) {

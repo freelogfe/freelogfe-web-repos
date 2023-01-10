@@ -84,21 +84,23 @@ function FPolicyOperatorDrawer({
             {tipText}
           </div>
         </div>
-        {policiesList.map((item) => {
-          return (
-            <div key={item.policyId}>
-              <Checkbox
-                style={{ marginBottom: '10px' }}
-                checked={activeList.includes(item.policyId)}
-                onChange={(e) => {
-                  item.checked = e.target.checked;
-                  updateActiveList();
-                }}
-              />
-              <PolicyCard fullInfo={item} activeBtnShow={false} />
-            </div>
-          );
-        })}
+        {
+          policiesList.map((item) => {
+            return (
+              <div key={item.policyId}>
+                <Checkbox
+                  style={{ marginBottom: '10px' }}
+                  checked={activeList.includes(item.policyId)}
+                  onChange={(e) => {
+                    item.checked = e.target.checked;
+                    updateActiveList();
+                  }}
+                />
+                <PolicyCard fullInfo={item} activeBtnShow={false} />
+              </div>
+            );
+          })
+        }
         {/*<FComponentsLib.FRectBtn style={{ marginTop: '-10px' }} onClick={onNewPolicy} type='primary'>*/}
         {/*  {FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_create')}*/}
         {/*</FComponentsLib.FRectBtn>*/}

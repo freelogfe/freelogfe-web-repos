@@ -30,6 +30,9 @@ import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fPolicyOperator from '@/components/fPolicyOperator';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -81,60 +84,31 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     });
   });
 
-  /** 展品上下架 */
-  function changeExhibitStatus(value: boolean) {
-    if (exhibitInfoPage.side_ResourceType.includes('主题')) {
-      fConfirmModal({
-        message: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
-        okText: FI18n.i18nNext.t('btn_activate_theme'),
-        cancelText: FI18n.i18nNext.t('keep_current_theme'),
-        onOk() {
+  async function activateTheme() {
+    const res1: boolean = await fPromiseModalConfirm({
+      title: '',
+      icon: <div />,
+      content: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+      okText: FI18n.i18nNext.t('btn_activate_theme'),
+      cancelText: FI18n.i18nNext.t('keep_current_theme'),
+    });
 
-          if (exhibitInfoPage.policy_List.length === 0) {
-            fConfirmModal({
-              message: FI18n.i18nNext.t('alarm_theme_activate_plan'),
-              okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
-              cancelText: FI18n.i18nNext.t('btn_cancel'),
-              onOk() {
-                // onDelete(bp.theKey);
-                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openCreatePolicyDrawer=true');
-                // setActiveDialogShow(true);
-                dispatch<ChangeAction>({
-                  type: 'exhibitInfoPage/change',
-                  payload: {
-                    policyEditorVisible: true,
-                  },
-                });
-              },
-            });
-            return;
-          }
-
-          if (!exhibitInfoPage.policy_List.some((item: { status: number }) => item.status === 1)) {
-            fConfirmModal({
-              // message: '需要先启用策略',
-              message: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
-              okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
-              cancelText: FI18n.i18nNext.t('btn_cancel'),
-              onOk() {
-                // onDelete(bp.theKey);
-                // self.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }) + '?openOperatePolicyDrawer=true');
-                dispatch<ChangeAction>({
-                  type: 'exhibitInfoPage/change',
-                  payload: {
-                    policyOperaterVisible: true,
-                  },
-                });
-              },
-            });
-            return;
-          }
-
-          const data = { onlineStatus: 1 };
-          upOrDownExhibit(data);
-        },
-      });
+    if (!res1) {
       return;
+    }
+
+    await onlineExhibit(exhibitInfoPage.exhibit_ID);
+
+
+    dispatch<FetchInfoAction>({
+      type: 'exhibitInfoPage/fetchInfo',
+    });
+  }
+
+  /** 展品上下架 */
+  async function changeExhibitStatus(value: boolean) {
+    if (exhibitInfoPage.side_ResourceType.includes('主题')) {
+
     }
     if (value) {
       if (exhibitInfoPage.policy_List.length === 0) {
@@ -334,7 +308,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                           checked={exhibitInfoPage.exhibit_Online}
                           loading={loading}
-                          onClick={(checked) => changeExhibitStatus(checked)}
+                          onClick={() => {
+                            activateTheme();
+                          }}
                         />
                       </>)
                   }
@@ -513,7 +489,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         }
                       </div>
                     </div>
-                  )}
+                  )
+              }
             </div>
           </div>
         )}
@@ -524,3 +501,96 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Presentable);
+
+
+async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
+
+  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+    presentableId: exhibit_ID,
+    // isLoadCustomPropertyDescriptors: 1,
+    isLoadPolicyInfo: 1,
+    isTranslate: 1,
+  };
+
+  const { ret, errCode, msg, data: data_exhibit } = await FServiceAPI.Exhibit.presentableDetails(params);
+
+  // console.log(data, 'dataiojsdlkfjlsdkjflkj');
+
+  if (data_exhibit.policies.length === 0) {
+    const res2: boolean = await fPromiseModalConfirm({
+      title: '',
+      icon: <div />,
+      content: FI18n.i18nNext.t('alarm_theme_activate_plan'),
+      okText: FI18n.i18nNext.t('activatetheme_btn_create_auth_plan'),
+      cancelText: FI18n.i18nNext.t('btn_cancel'),
+    });
+
+    if (!res2) {
+      return false;
+    }
+
+    const policy = await fPolicyBuilder({
+      targetType: 'presentable',
+    });
+
+    if (!policy) {
+      return false;
+    }
+
+    const params1: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+      presentableId: exhibit_ID,
+      addPolicies: [{
+        policyName: policy.title,
+        policyText: policy.text,
+        status: 1,
+      }],
+    };
+    await FServiceAPI.Exhibit.updatePresentable(params1);
+
+  } else if (!data_exhibit.policies.some((item: { status: number }) => item.status === 1)) {
+    const res3: boolean = await fPromiseModalConfirm({
+      title: '',
+      icon: <div />,
+      content: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+      okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
+      cancelText: FI18n.i18nNext.t('btn_cancel'),
+    });
+    if (!res3) {
+      return false;
+    }
+
+    const existingUsedPolicy = await fPolicyOperator({
+      titleText: FI18n.i18nNext.t('activatetheme_activate_authplan_title'),
+      confirmText: FI18n.i18nNext.t('activatetheme_activate_authplan_btn'),
+      tipText: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+      policiesList: data_exhibit.policies,
+    });
+
+    if (!existingUsedPolicy) {
+      return false;
+    }
+
+    const params1: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
+      presentableId: exhibit_ID,
+      updatePolicies: existingUsedPolicy
+        ?.filter((p) => {
+          return p.checked;
+        })
+        .map((p) => {
+          return {
+            policyId: p.policyID,
+            status: 1,
+          };
+        }),
+    };
+    await FServiceAPI.Exhibit.updatePresentable(params1);
+  }
+
+  const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+    presentableId: exhibit_ID,
+    onlineStatus: 1,
+  };
+  await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+
+  return true;
+}
