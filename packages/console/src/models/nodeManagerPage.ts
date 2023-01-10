@@ -6,6 +6,8 @@ import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import moment, { Moment } from 'moment';
+import { onlineExhibit } from '@/pages/node/utils/tools';
+import { message } from 'antd';
 
 const resource_TypeData = [
   { value: '插件', parentValue: '#' },
@@ -747,28 +749,50 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    * onOnlineOrOffline(
-      { payload }: OnOnlineOrOfflineAction,
-      { call, put, select }: EffectsCommandMap,
-    ) {
+    * onOnlineOrOffline({ payload }: OnOnlineOrOfflineAction, { call, put, select }: EffectsCommandMap) {
       // console.log(payload, 'PPPPPP');
-      const { nodeManagerPage }: ConnectState = yield select(
-        ({ nodeManagerPage }: ConnectState) => ({
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
         }),
       );
 
-      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      if (payload.onlineStatus === 1) {
+        const result: boolean = yield call(onlineExhibit, payload.id);
+        if (!result) {
+          return;
+        }
+      } else {
+        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+          presentableId: payload.id,
+          onlineStatus: 0,
+        };
+        yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
+        message.success({
+          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+          duration: 2,
+        });
+      }
+
+      // const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      //   presentableId: payload.id,
+      //   onlineStatus: payload.onlineStatus,
+      // };
+      //
+      // const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+
+      // if (!data) {
+      //   fMessage('上线失败', 'error');
+      //   return;
+      // }
+
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: payload.id,
-        onlineStatus: payload.onlineStatus,
+        // isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
 
-      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
-
-      if (!data) {
-        fMessage('上线失败', 'error');
-        return;
-      }
+      const { data: data_exhibit } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -780,6 +804,11 @@ const Model: NodeManagerModelType = {
               return {
                 ...el,
                 isOnline: payload.onlineStatus === 1,
+                policiesList: data_exhibit.policies.reverse(),
+                policies: (data_exhibit.policies as any[])
+                  .filter((p: any) => p.status === 1)
+                  .map<string>((p) => p.policyName),
+                hasPolicy: data_exhibit.policies.length > 0,
               };
             })
             .filter((el) => {

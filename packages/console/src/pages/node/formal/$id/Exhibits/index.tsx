@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
-import { Checkbox, Space } from 'antd';
+import { Checkbox, message, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -16,7 +16,7 @@ import {
   OnChange_Exhibit_SelectedStatus_Action,
   OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
-  OnMount_ExhibitPage_Action,
+  OnMount_ExhibitPage_Action, OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -37,6 +37,7 @@ import { FDialog } from '@/components/FDialog';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { LoadingOutlined } from '@ant-design/icons';
+import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -335,24 +336,25 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               disabled={!record.isAuth && !record.isOnline}
               checked={record.isOnline}
               loading={loading && operateExhibit.id === record.id}
-              onClick={(checked) => changeStatus(checked, record)}
-              // onChange={(value) => {
-              //   if (value && record.policies.length === 0) {
-              //     if (!record.hasPolicy) {
-              //       fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
-              //     } else {
-              //       fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
-              //     }
-              //     return;
-              //   }
-              //   dispatch<OnOnlineOrOfflineAction>({
-              //     type: 'nodeManagerPage/onOnlineOrOffline',
-              //     payload: {
-              //       id: record.id,
-              //       onlineStatus: value ? 1 : 0,
-              //     },
-              //   });
-              // }}
+              // onClick={(checked) => changeStatus(checked, record)}
+              onChange={async (value) => {
+                // if (value && record.policies.length === 0) {
+                //   if (!record.hasPolicy) {
+                //     fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
+                //   } else {
+                //     fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
+                //   }
+                //   return;
+                // }
+
+                dispatch<OnOnlineOrOfflineAction>({
+                  type: 'nodeManagerPage/onOnlineOrOffline',
+                  payload: {
+                    id: record.id,
+                    onlineStatus: value ? 1 : 0,
+                  },
+                });
+              }}
             />
             {!record.isAuth && (
               <FTooltip title={record.authErrorText}>
