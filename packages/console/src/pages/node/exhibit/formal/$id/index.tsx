@@ -335,6 +335,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           onlineStatus: 0,
                         };
                         await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+                        message.success({
+                          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+                          duration: 2,
+                        });
                       }
                       dispatch<FetchInfoAction>({
                         type: 'exhibitInfoPage/fetchInfo',
@@ -515,7 +519,7 @@ export default connect(({ exhibitInfoPage }: ConnectState) => ({
 }))(Presentable);
 
 
-async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
+export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
 
   const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     presentableId: exhibit_ID,
