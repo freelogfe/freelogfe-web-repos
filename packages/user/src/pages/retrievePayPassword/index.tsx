@@ -94,9 +94,9 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
+            <div className='flex-1' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText className='mb-30' text={'验证登陆密码'} type='h1' />
               <FComponentsLib.FTipText
@@ -104,8 +104,8 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -162,7 +162,7 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
@@ -173,7 +173,7 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-3'></div>
+            <div className='flex-3' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText text={'双重验证'} type='h1' className='mb-30' />
               <FComponentsLib.FTipText
@@ -183,7 +183,7 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-2'></div>
+            <div className='flex-2' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -288,7 +288,7 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
@@ -299,9 +299,9 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
+            <div className='flex-1' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText className='mb-30' text={'重置支付密码'} type='h1' />
               <FComponentsLib.FTipText
@@ -309,8 +309,8 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -389,7 +389,7 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
