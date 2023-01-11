@@ -31,6 +31,7 @@ import {
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
 import { FetchInfoAction } from '@/models/user';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface RetrievePayPasswordProps {
   dispatch: Dispatch;
@@ -125,12 +126,12 @@ function RetrievePayPassword({
                     </FComponentsLib.FTextBtn>
                   </div>
                   <div style={{ height: 5 }} />
-                  <FInput
+                  <FPasswordInput
                     placeholder='输入登录密码'
-                    type='password'
+                    // type='password'
                     className={styles.blockInput}
-                    wrapClassName={styles.blockInput}
-                    size='middle'
+                    // wrapClassName={styles.blockInput}
+                    // size='middle'
                     value={retrievePayPasswordPage.userPassword_PasswordInput}
                     // errorText={retrievePayPasswordPage.userPasswordInputE}
                     onChange={(e) => {

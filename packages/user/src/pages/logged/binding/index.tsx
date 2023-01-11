@@ -5,6 +5,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { getUrlOfBindingWechat } from '@/utils';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface BindingProps {
 
@@ -48,15 +49,15 @@ function Binding({}: BindingProps) {
       </div>
 
       <div style={{ height: 5 }} />
-      <FInput
+      <FPasswordInput
         value={password}
         onChange={(e) => {
           set_password(e.target.value);
         }}
-        type='password'
+        // type='password'
         placeholder='请输入登录密码'
         className={styles.modalBlockInput}
-        wrapClassName={styles.modalBlockInput}
+        // wrapClassName={styles.modalBlockInput}
       />
       <div style={{ height: 80 }} />
       <div className={styles.modalFooter}>

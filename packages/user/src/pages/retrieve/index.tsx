@@ -30,6 +30,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePage';
+import FPasswordInput from '@/components/FPasswordInput';
 
 // import { FCheck } from '@/components/FIcons';
 
@@ -308,11 +309,11 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
+            <FPasswordInput
+              // type='password'
               placeholder='密码必须包含数字和字母；且由6-24个字符组成'
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               value={retrievePage.newPasswordInput}
               onChange={(e) => {
                 dispatch<OnChangeNewPasswordInputAction>({
@@ -344,10 +345,10 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
+            <FPasswordInput
+              // type='password'
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               placeholder='再次输入新密码'
               value={retrievePage.confirmPasswordInput}
               onChange={(e) => {

@@ -8,6 +8,7 @@ import { history } from 'umi';
 import * as AHooks from 'ahooks';
 import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
+import FPasswordInput from '@/components/FPasswordInput';
 
 function Bind() {
   const [urlParams] = useUrlState<{
@@ -103,7 +104,7 @@ function Bind() {
         >
           {/*<i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')} />*/}
           <div className='flex-column align-center flex-1'>
-            <div className='flex-3'></div>
+            <div className='flex-3' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText
                 type='h1'
@@ -113,12 +114,12 @@ function Bind() {
                 为了您的账户安全，请完成用户名和密码的设置
               </div>
             </div>
-            <div className='flex-2'></div>
+            <div className='flex-2' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.box} ref={boxRef}>
               <div className='flex-row align-center'>
-                <span className={styles.dot + ' mr-4'}></span>
+                <span className={styles.dot + ' mr-4'} />
                 <FComponentsLib.FTitleText type='h4' text={'用户名'} />
               </div>
               <div style={{ height: 5 }} />
@@ -145,19 +146,19 @@ function Bind() {
                 }}
               >
                 <div className='flex-row align-center'>
-                  <span className={styles.dot + ' mr-4'}></span>
+                  <span className={styles.dot + ' mr-4'} />
                   <FComponentsLib.FTitleText type='h4' text={'密码'} />
                 </div>
               </div>
               <div style={{ height: 5 }} />
-              <FInput
+              <FPasswordInput
                 // ref={passwordInput}
                 name='password'
                 value={bindData.password}
                 // errorText={bindData.passwordError}
                 className={styles.Input}
-                wrapClassName={styles.Input}
-                type='password'
+                // wrapClassName={styles.Input}
+                // type='password'
                 onChange={(e) => {
                   passwordChange(e.target.value);
                 }}

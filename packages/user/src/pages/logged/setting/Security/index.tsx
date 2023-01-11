@@ -72,6 +72,7 @@ import bindError from '@/assets/bind-error.png';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -457,7 +458,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     }}
                   >
                     解绑
-                  </FComponentsLib.FTextBtn> :null}
+                  </FComponentsLib.FTextBtn> : null}
                 </div>
               )}
             </div>
@@ -1105,8 +1106,8 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'原密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_Old_PasswordInput}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_Old_PasswordInput_Action>({
@@ -1118,17 +1119,17 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入原密码'
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
 
           <FComponentsLib.FTipText text={'新密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_New1_PasswordInput}
-            errorText={settingPage.changePassword_New1_PasswordInput_Error}
+            // errorText={}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_New1_PasswordInput_Action>({
                 type: 'settingPage/onChange_ChangePassword_New1_PasswordInput',
@@ -1144,8 +1145,15 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入新密码'
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_New1_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_New1_PasswordInput_Error}</div>
+            </>)
+          }
 
           <div style={{ height: 25 }} />
 

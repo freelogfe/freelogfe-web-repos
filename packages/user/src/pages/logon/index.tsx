@@ -25,12 +25,13 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
   OnChangeWaitingTimeAction,
-  OnTrigger_Login_Action, OnChange_InvitationCodeInput_Action,
+  OnTrigger_Login_Action,
 } from '@/models/logonPage';
 import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface LogonProps {
   dispatch: Dispatch;
@@ -86,9 +87,6 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   );
 
   function gotoLogin() {
-    // history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
-    //   goTo: decodeURIComponent(urlParams.goTo),
-    // } : {}));
     dispatch<OnTrigger_Login_Action>({
       type: 'logonPage/onTrigger_Login',
       payload: {
@@ -346,11 +344,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
+            <FPasswordInput
+              // type='password'
               placeholder='密码必须包含数字和字母；且由6-24个字符组成'
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               value={logonPage.passwordInput}
               onChange={(e) => {
                 dispatch<OnChangePasswordInputAction>({
