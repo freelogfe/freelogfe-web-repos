@@ -32,6 +32,7 @@ import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import FPasswordInput from '@/components/FPasswordInput';
+import FPhoneInput from '@/components/FPhoneInput';
 
 interface LogonProps {
   dispatch: Dispatch;
@@ -226,20 +227,19 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             <div style={{ height: 5 }} />
             {logonPage.accountType === 'phone' ? (
               <>
-                <FInput
+                <FPhoneInput
+                  width={360}
                   placeholder='输入11位手机号码'
-                  className={styles.verificationModeInput}
-                  wrapClassName={styles.verificationModeInput}
-                  value={logonPage.phoneInput}
-                  onChange={(e) => {
+                  inputValue={logonPage.phoneInput}
+                  onChangeInput={(value) => {
                     dispatch<OnChangePhoneInputAction>({
                       type: 'logonPage/onChangePhoneInput',
                       payload: {
-                        value: e.target.value,
+                        value: value,
                       },
                     });
                   }}
-                  onBlur={() => {
+                  onBlurInput={() => {
                     dispatch<OnBlurPhoneInputAction>({
                       type: 'logonPage/onBlurPhoneInput',
                     });
