@@ -1,15 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
-// import Market from '@/pages/resource/version/creator/$id/FDepPanel/Market';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-// import { ResourceDepSelectorModelState } from '@/models/resourceDepSelector';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-// import { FetchObjectsAction } from '@/models/storageHomePage';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -302,7 +299,7 @@ function FAddDependenciesDrawer({
                         padding: '3px 5px',
                         borderRadius: 4,
                       }}
-                    >上抛</label>)
+                    >{FI18n.i18nNext.t('addrely_label_basicupcast')}</label>)
                   }
                 </div>
                 <div style={{ height: 2 }} />

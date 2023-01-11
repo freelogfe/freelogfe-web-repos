@@ -349,12 +349,6 @@ function VersionCreator({
                         });
                       },
                     });
-                    // await dispatch<OnTrigger_SaveDraft_Action>({
-                    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                    //   payload: {
-                    //     showSuccessTip: false,
-                    //   },
-                    // } );
                   }}
                   type='default'
                 >添加依赖</FComponentsLib.FRectBtn>
