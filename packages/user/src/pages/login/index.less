@@ -1,3 +1,5 @@
+@import '../../config.less';
+
 .style {
   background-color: white;
   @media screen and (max-width: 1024px) {
@@ -11,6 +13,7 @@
       background-color: white;
       .Input {
         width: 100%;
+
       }
       .btn {
         width: 100%;
@@ -38,5 +41,19 @@
       background: #42c28c;
     }
   }
- 
+
+}
+
+.password{
+  border-width: 1px;
+  border-style: solid;
+
+  &:hover {
+    border-color: #CBCBCB;
+  }
+
+  &:focus {
+    //border-color: @f-primary-color;
+    border-color: @f-primary-color !important;
+  }
 }

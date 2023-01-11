@@ -65,7 +65,7 @@ function FInput({
         ? (
           <Input
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
-            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
+            prefix={<i className={['freelog', 'fl-icon-content', styles.darkPrefix].join(' ')} />}
             className={[...commentClass, styles.dark].join(' ')}
             allowClear={true}
             style={{ height: size === 'middle' ? 38 : 32 }}

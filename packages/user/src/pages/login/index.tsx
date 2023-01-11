@@ -17,6 +17,8 @@ import loginCover from '@/assets/loginCover.png';
 import wechatPng from '@/assets/wechat.png';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import { Input } from 'antd';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -126,14 +128,14 @@ function Login({ dispatch, loginPage }: LoginProps) {
                 </FComponentsLib.FTextBtn>
               </div>
               <div style={{ height: 5 }} />
-              <FInput
+              <FPasswordInput
                 // ref={passwordInput}
                 name='password'
                 value={loginPage.password}
                 // errorText={loginPage.passwordError}
-                className={styles.Input}
-                wrapClassName={styles.Input}
-                type='password'
+                className={styles.password}
+                // wrapClassName={styles.Input}
+                // type='password'
                 onChange={(e) => {
                   const value: string = e.target.value;
                   onChange({
