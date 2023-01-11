@@ -73,6 +73,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
 import FPasswordInput from '@/components/FPasswordInput';
+import FPhoneInput from '@/components/FPhoneInput';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -826,26 +827,34 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div style={{ height: 15 }} />
           <FComponentsLib.FTipText text={'手机号'} type='third' />
           <div style={{ height: 5 }} />
-          <FInput
-            value={settingPage.bindPhone_PhoneInput}
-            onChange={(e) => {
+          <FPhoneInput
+            inputValue={settingPage.bindPhone_PhoneInput}
+            onChangeInput={(value) => {
               dispatch<OnChange_BindPhone_PhoneInput_Action>({
                 type: 'settingPage/onChange_BindPhone_PhoneInput',
                 payload: {
-                  value: e.target.value,
+                  value: value,
                 },
               });
             }}
-            onBlur={() => {
+            onBlurInput={() => {
               dispatch<OnBlur_BindPhone_PhoneInput_Action>({
                 type: 'settingPage/onBlur_BindPhone_PhoneInput',
               });
             }}
-            errorText={settingPage.bindPhone_PhoneInputError}
+            // errorText={settingPage.bindPhone_PhoneInputError}
             placeholder='请输入手机号'
-            className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // className={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+          {
+            settingPage.bindPhone_PhoneInputError && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.bindPhone_PhoneInputError}</div>
+            </>)
+          }
+
+
           <div style={{ height: 25 }} />
           <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
@@ -1005,27 +1014,33 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'新手机号'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            value={settingPage.changePhone_New_PhoneInput}
-            onChange={(e) => {
+          <FPhoneInput
+            inputValue={settingPage.changePhone_New_PhoneInput}
+            onChangeInput={(value) => {
               dispatch<OnChange_ChangePhone_New_PhoneInput_Action>({
                 type: 'settingPage/onChange_ChangePhone_New_PhoneInput',
                 payload: {
-                  value: e.target.value,
+                  value: value,
                 },
               });
             }}
-            onBlur={() => {
+            onBlurInput={() => {
               // console.log('BBBBBBLLLLLUUUURRRR');
               dispatch<OnBlur_ChangePhone_New_PhoneInput_Action>({
                 type: 'settingPage/onBlur_ChangePhone_New_PhoneInput',
               });
             }}
-            errorText={settingPage.changePhone_New_PhoneInputError}
+            // errorText={settingPage.changePhone_New_PhoneInputError}
             placeholder='请输入手机号'
-            className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // className={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+          {
+            settingPage.changePhone_New_PhoneInputError && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePhone_New_PhoneInputError}</div>
+            </>)
+          }
           <div style={{ height: 25 }} />
           <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
