@@ -4,12 +4,8 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
-import { history } from '@@/core/history';
-// import FUtil1 from '@/utils';
-// import { LoginAction } from '@/models/loginPage';
 
-export type LogonPageModelState = WholeReadonly<{
-
+export interface LogonPageModelState {
   showView: 'logon' | 'success';
 
   usernameInput: string;
@@ -19,15 +15,18 @@ export type LogonPageModelState = WholeReadonly<{
   phoneInputError: string;
   emailInput: string;
   emailInputError: string;
-  verificationCodeInput: string;
-  verificationCodeInputError: string;
-  verifyCodeReSendWait: number,
+  phone_verificationCodeInput: string;
+  email_verificationCodeInput: string;
+  phone_verificationCodeInputError: string;
+  email_verificationCodeInputError: string;
+  phone_verifyCodeReSendWait: number,
+  email_verifyCodeReSendWait: number,
   passwordInput: string;
   passwordInputError: string;
   invitationCodeInput: string;
 
   waitingTimeToLogin: number;
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
@@ -86,23 +85,45 @@ export interface OnBlurEmailInputAction extends AnyAction {
   type: 'logonPage/onBlurEmailInput';
 }
 
-export interface OnChangeVerifyCodeInputAction extends AnyAction {
-  type: 'logonPage/onChangeVerifyCodeInput';
+export interface OnChange_Phone_VerifyCodeInput_Action extends AnyAction {
+  type: 'logonPage/onChange_Phone_VerifyCodeInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurVerifyCodeInputAction extends AnyAction {
-  type: 'logonPage/onBlurVerifyCodeInput';
+export interface OnChange_Email_VerifyCodeInput_Action extends AnyAction {
+  type: 'logonPage/onChange_Email_VerifyCodeInput';
+  payload: {
+    value: string;
+  };
 }
 
-export interface OnClickSendVerifyCodeBtnAction extends AnyAction {
-  type: 'logonPage/onClickSendVerifyCodeBtn';
+export interface OnBlur_Phone_VerifyCodeInput_Action extends AnyAction {
+  type: 'logonPage/onBlur_Phone_VerifyCodeInput';
 }
 
-export interface OnChangeVerifyCodeReSendWaitAction extends AnyAction {
-  type: 'logonPage/onChangeVerifyCodeReSendWait';
+export interface OnBlur_Email_VerifyCodeInput_Action extends AnyAction {
+  type: 'logonPage/onBlur_Email_VerifyCodeInput';
+}
+
+export interface OnClick_Phone_SendVerifyCodeBtn_Action extends AnyAction {
+  type: 'logonPage/onClick_Phone_SendVerifyCodeBtn';
+}
+
+export interface OnClick_Email_SendVerifyCodeBtn_Action extends AnyAction {
+  type: 'logonPage/onClick_Email_SendVerifyCodeBtn';
+}
+
+export interface OnChange_Phone_VerifyCodeReSendWait_Action extends AnyAction {
+  type: 'logonPage/onChange_Phone_VerifyCodeReSendWait';
+  payload: {
+    value: number;
+  };
+}
+
+export interface OnChange_Email_VerifyCodeReSendWait_Action extends AnyAction {
+  type: 'logonPage/onChange_Email_VerifyCodeReSendWait';
   payload: {
     value: number;
   };
@@ -157,10 +178,14 @@ interface LogonPageModelType {
     onBlurPhoneInput: (action: OnBlurPhoneInputAction, effects: EffectsCommandMap) => void;
     onChangeEmailInput: (action: OnChangeEmailInputAction, effects: EffectsCommandMap) => void;
     onBlurEmailInput: (action: OnBlurEmailInputAction, effects: EffectsCommandMap) => void;
-    onChangeVerifyCodeInput: (action: OnChangeVerifyCodeInputAction, effects: EffectsCommandMap) => void;
-    onBlurVerifyCodeInput: (action: OnBlurVerifyCodeInputAction, effects: EffectsCommandMap) => void;
-    onClickSendVerifyCodeBtn: (action: OnClickSendVerifyCodeBtnAction, effects: EffectsCommandMap) => void;
-    onChangeVerifyCodeReSendWait: (action: OnChangeVerifyCodeReSendWaitAction, effects: EffectsCommandMap) => void;
+    onChange_Phone_VerifyCodeInput: (action: OnChange_Phone_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onChange_Email_VerifyCodeInput: (action: OnChange_Email_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Phone_VerifyCodeInput: (action: OnBlur_Phone_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Email_VerifyCodeInput: (action: OnBlur_Email_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Phone_SendVerifyCodeBtn: (action: OnClick_Phone_SendVerifyCodeBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Email_SendVerifyCodeBtn: (action: OnClick_Email_SendVerifyCodeBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Phone_VerifyCodeReSendWait: (action: OnChange_Phone_VerifyCodeReSendWait_Action, effects: EffectsCommandMap) => void;
+    onChange_Email_VerifyCodeReSendWait: (action: OnChange_Email_VerifyCodeReSendWait_Action, effects: EffectsCommandMap) => void;
     onChangePasswordInput: (action: OnChangePasswordInputAction, effects: EffectsCommandMap) => void;
     onBlurPasswordInput: (action: OnBlurPasswordInputAction, effects: EffectsCommandMap) => void;
     onChange_InvitationCodeInput: (action: OnChange_InvitationCodeInput_Action, effects: EffectsCommandMap) => void;
@@ -186,9 +211,12 @@ const initStates: LogonPageModelState = {
   emailInputError: '',
   phoneInput: '',
   phoneInputError: '',
-  verificationCodeInput: '',
-  verificationCodeInputError: '',
-  verifyCodeReSendWait: 0,
+  phone_verificationCodeInput: '',
+  email_verificationCodeInput: '',
+  phone_verificationCodeInputError: '',
+  email_verificationCodeInputError: '',
+  phone_verifyCodeReSendWait: 0,
+  email_verifyCodeReSendWait: 0,
   passwordInput: '',
   passwordInputError: '',
   invitationCodeInput: '',
@@ -357,34 +385,65 @@ const Model: LogonPageModelType = {
       });
 
     },
-    * onChangeVerifyCodeInput({ payload }: OnChangeVerifyCodeInputAction, { put }: EffectsCommandMap) {
+    * onChange_Phone_VerifyCodeInput({ payload }: OnChange_Phone_VerifyCodeInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verificationCodeInput: payload.value,
-          verificationCodeInputError: '',
+          phone_verificationCodeInput: payload.value,
+          phone_verificationCodeInputError: '',
         },
       });
     },
-    * onBlurVerifyCodeInput(action: OnBlurVerifyCodeInputAction, { select, put }: EffectsCommandMap) {
+    * onChange_Email_VerifyCodeInput({ payload }: OnChange_Email_VerifyCodeInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verificationCodeInput: payload.value,
+          email_verificationCodeInputError: '',
+        },
+      });
+    },
+    * onBlur_Phone_VerifyCodeInput({}: OnBlur_Phone_VerifyCodeInput_Action, { select, put }: EffectsCommandMap) {
       const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
         logonPage,
       }));
 
       let verificationCodeInputError: string = '';
 
-      if (!logonPage.verificationCodeInput) {
+      if (!logonPage.phone_verificationCodeInput) {
         verificationCodeInputError = '验证码不能为空';
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verificationCodeInputError,
+          phone_verificationCodeInputError: verificationCodeInputError,
         },
       });
     },
-    * onClickSendVerifyCodeBtn({}: OnClickSendVerifyCodeBtnAction, { select, call, put }: EffectsCommandMap) {
+    * onBlur_Email_VerifyCodeInput({}: OnBlur_Email_VerifyCodeInput_Action, { select, put }: EffectsCommandMap) {
+      const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
+        logonPage,
+      }));
+
+      let verificationCodeInputError: string = '';
+
+      if (!logonPage.email_verificationCodeInput) {
+        verificationCodeInputError = '验证码不能为空';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verificationCodeInputError: verificationCodeInputError,
+        },
+      });
+    },
+    * onClick_Phone_SendVerifyCodeBtn({}: OnClick_Phone_SendVerifyCodeBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       // console.log('AAAAAAAAA3234234234');
       const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
         logonPage,
@@ -393,12 +452,12 @@ const Model: LogonPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCodeReSendWait: 60,
+          phone_verifyCodeReSendWait: 60,
         },
       });
 
       const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: logonPage.accountType === 'email' ? logonPage.emailInput : logonPage.phoneInput,
+        loginName: logonPage.phoneInput,
         authCodeType: 'register',
       };
       const { errCode, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
@@ -408,18 +467,59 @@ const Model: LogonPageModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            verifyCodeReSendWait: 0,
+            phone_verifyCodeReSendWait: 0,
           },
         });
         return;
       }
-
     },
-    * onChangeVerifyCodeReSendWait({ payload }: OnChangeVerifyCodeReSendWaitAction, { put }: EffectsCommandMap) {
+    * onClick_Email_SendVerifyCodeBtn({}: OnClick_Email_SendVerifyCodeBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      // console.log('AAAAAAAAA3234234234');
+      const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
+        logonPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCodeReSendWait: payload.value,
+          email_verifyCodeReSendWait: 60,
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
+        loginName: logonPage.emailInput,
+        authCodeType: 'register',
+      };
+      const { errCode, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+      // console.log(errCode, msg, 'errCode, msg!!!!');
+      if (errCode !== 0) {
+        fMessage(msg, 'error');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            email_verifyCodeReSendWait: 0,
+          },
+        });
+        return;
+      }
+    },
+    * onChange_Phone_VerifyCodeReSendWait({ payload }: OnChange_Phone_VerifyCodeReSendWait_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          phone_verifyCodeReSendWait: payload.value,
+        },
+      });
+    },
+    * onChange_Email_VerifyCodeReSendWait({ payload }: OnChange_Email_VerifyCodeReSendWait_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verifyCodeReSendWait: payload.value,
         },
       });
     },
@@ -468,7 +568,9 @@ const Model: LogonPageModelType = {
         logonPage,
       }));
 
-      if (!new RegExp(/^[0-9]*$/).test(logonPage.verificationCodeInput)) {
+      if (!new RegExp(/^[0-9]*$/).test(logonPage.accountType === 'email'
+        ? logonPage.email_verificationCodeInput
+        : logonPage.phone_verificationCodeInput)) {
         fMessage('验证码必须全部为数字', 'error');
         return;
       }
@@ -477,7 +579,9 @@ const Model: LogonPageModelType = {
         loginName: logonPage.accountType === 'email' ? logonPage.emailInput : logonPage.phoneInput,
         password: logonPage.passwordInput,
         username: logonPage.usernameInput,
-        authCode: logonPage.verificationCodeInput,
+        authCode: logonPage.accountType === 'email'
+          ? logonPage.email_verificationCodeInput
+          : logonPage.phone_verificationCodeInput,
       };
 
       const { data, msg, errCode, ret } = yield call(FServiceAPI.User.logon, params);
