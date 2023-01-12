@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, RetrievePageModelState } from '@/models/connect';
 import { history } from 'umi';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import * as AHooks from 'ahooks';
@@ -118,7 +118,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
           <div style={{ height: 40 }} />
           <Space size={0}>
             <FComponentsLib.FContentText
-              text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`}
+              text={`${retrievePage.waitingTimeToLogin}s后返回登录界面；`}
               type='negative'
             />
             <FComponentsLib.FTextBtn
@@ -400,7 +400,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                 );
               }}
             >
-              返回登陆页
+              {FI18n.i18nNext.t('forgetpw_btn_backtologin')}
             </FComponentsLib.FTextBtn>
             <FComponentsLib.FTextBtn
               className='mt-95'

@@ -35,6 +35,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 // import FHotspotTooltip from '@/components/FHotspotTooltip';
 
