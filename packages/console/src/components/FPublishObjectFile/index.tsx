@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FUpload from '@/components/FUpload';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Progress, Space } from 'antd';
@@ -9,10 +8,8 @@ import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 import img from '@/assets/file-object.svg';
 import FTable from '@/components/FTable';
 import img_upload from '@/assets/createVersion_upload.png';
-// import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
-
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface FPublishObjectFileProps {
   fileInfo: {
@@ -419,18 +416,25 @@ function FPublishObjectFile({
               });
             }}
           >
-            <FUpload
-              // accept={resourceType === 'image' ? 'image/*' : '*'}
-              beforeUpload={(file, FileList) => {
-                onUploadFilesLocally(file);
-                return false;
+            {/*<FUpload*/}
+            {/*  // accept={resourceType === 'image' ? 'image/*' : '*'}*/}
+            {/*  beforeUpload={(file, FileList) => {*/}
+            {/*    onUploadFilesLocally(file);*/}
+            {/*    return false;*/}
+            {/*  }}*/}
+            {/*  showUploadList={false}*/}
+            {/*>*/}
+            <FComponentsLib.FRectBtn
+              type='primary'
+              onClick={async () => {
+                const files = await fReadLocalFiles();
+                if (!files) {
+                  return;
+                }
+                await onUploadFilesLocally(files[0]);
               }}
-              showUploadList={false}
-            >
-              <FComponentsLib.FRectBtn
-                type='primary'
-              >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-            </FUpload>
+            >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+            {/*</FUpload>*/}
           </FComponentsLib.FHotspotTooltip>
 
           <FComponentsLib.FRectBtn
