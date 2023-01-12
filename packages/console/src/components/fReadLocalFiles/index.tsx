@@ -47,7 +47,7 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
   const refUpload = React.useRef<any>();
 
   AHooks.useMount(() => {
-    refDiv.current.click()
+    refDiv.current.click();
   });
 
   return (<Upload
@@ -56,6 +56,7 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
     accept={accept}
     showUploadList={false}
     beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+      // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
       onRead && onRead(fileList);
       return false;
     }}

@@ -23,6 +23,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -136,24 +137,39 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
           height={'calc(100vh - 170px)'}
           // tipText={'当前Bucket还没有上传任何对象'}
           tipText={FI18n.i18nNext.t('objects_list_empty')}
-          btn={<FUpload
-            showUploadList={false}
-            multiple={true}
-            beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-              if (file === fileList[fileList.length - 1]) {
-                dispatch<UploadFilesAction>({
-                  type: 'storageHomePage/uploadFiles',
-                  payload: fileList,
-                });
+          btn={<FComponentsLib.FRectBtn
+            onClick={async () => {
+              const files = await fReadLocalFiles({
+                multiple: true,
+              });
+              if (!files) {
+                return;
               }
-              return false;
-            }}>
-            <FComponentsLib.FRectBtn
-              size='large'
-              type='primary'
-              style={{ paddingLeft: 50, paddingRight: 50 }}
-            >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
-          </FUpload>}
+
+              dispatch<UploadFilesAction>({
+                type: 'storageHomePage/uploadFiles',
+                payload: files,
+              });
+            }}
+            size='large'
+            type='primary'
+            style={{ paddingLeft: 50, paddingRight: 50 }}
+          >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>}
+          // btn={<FUpload
+          //   showUploadList={false}
+          //   multiple={true}
+          //   beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+          //     console.log(file, fileList, '9oijlkfjsdlkfjlskdjfljsdlfkj');
+          //     if (file === fileList[fileList.length - 1]) {
+          //       dispatch<UploadFilesAction>({
+          //         type: 'storageHomePage/uploadFiles',
+          //         payload: fileList,
+          //       });
+          //     }
+          //     return false;
+          //   }}>
+          //
+          // </FUpload>}
         />
       </>)
     }
