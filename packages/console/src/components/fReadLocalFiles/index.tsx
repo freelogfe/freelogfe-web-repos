@@ -50,31 +50,33 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
     refDiv.current.click();
   });
 
-  return (<Upload
-    ref={refUpload}
-    multiple={multiple}
-    accept={accept}
-    showUploadList={false}
-    beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-      // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
-      onRead && onRead(fileList);
-      return false;
-    }}
-    openFileDialogOnClick
-  >
-    <div
-      ref={refDiv}
-      onClick={() => {
-        self.addEventListener(
-          'focus',
-          () => {
-            setTimeout(() => {
-              onClose && onClose();
-            }, 300);
-          },
-          { once: true },
-        );
+  return (<div style={{ width: 0, height: 0, overflow: 'hidden' }}>
+    <Upload
+      ref={refUpload}
+      multiple={multiple}
+      accept={accept}
+      showUploadList={false}
+      beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+        // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
+        onRead && onRead(fileList);
+        return false;
       }}
-    />
-  </Upload>);
+      openFileDialogOnClick
+    >
+      <div
+        ref={refDiv}
+        onClick={() => {
+          self.addEventListener(
+            'focus',
+            () => {
+              setTimeout(() => {
+                onClose && onClose();
+              }, 300);
+            },
+            { once: true },
+          );
+        }}
+      />
+    </Upload>
+  </div>);
 }
