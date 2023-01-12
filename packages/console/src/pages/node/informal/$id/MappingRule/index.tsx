@@ -52,6 +52,7 @@ import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -135,12 +136,37 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
         <div style={{ width: 50 }} />
         {
           informalNodeManagerPage.rule_PageStatus === 'normal' && (<Space size={30}>
-            <FUpload
-              accept={'text/plain'}
-              beforeUpload={(file) => {
-                // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
+            {/*<FUpload*/}
+            {/*  accept={'text/plain'}*/}
+            {/*  beforeUpload={(file) => {*/}
+            {/*    // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');*/}
+            {/*    const reader = new FileReader();*/}
+            {/*    reader.readAsText(file);*/}
+            {/*    reader.onload = function(evt: any) {*/}
+            {/*      // console.log(evt, 'evt2222090900980989080980988');*/}
+            {/*      dispatch<OnLoad_Rule_ImportFileInput_Action>({*/}
+            {/*        type: 'informalNodeManagerPage/onLoad_Rule_ImportFileInput',*/}
+            {/*        payload: {*/}
+            {/*          value: evt.target.result,*/}
+            {/*        },*/}
+            {/*      });*/}
+            {/*    };*/}
+            {/*    return false;*/}
+            {/*  }}*/}
+            {/*  showUploadList={false}*/}
+            {/*>*/}
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                const files = await fReadLocalFiles({
+                  multiple: true,
+                  accept: 'text/plain',
+                });
+
+                if (!files) {
+                  return;
+                }
                 const reader = new FileReader();
-                reader.readAsText(file);
+                reader.readAsText(files[0]);
                 reader.onload = function(evt: any) {
                   // console.log(evt, 'evt2222090900980989080980988');
                   dispatch<OnLoad_Rule_ImportFileInput_Action>({
@@ -150,17 +176,14 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                     },
                   });
                 };
-                return false;
               }}
-              showUploadList={false}
-            >
-              <FComponentsLib.FTextBtn type='primary'>
-                <Space size={5}>
-                  <FComponentsLib.FIcons.FImport />
-                  <span>导入</span>
-                </Space>
-              </FComponentsLib.FTextBtn>
-            </FUpload>
+              type='primary'>
+              <Space size={5}>
+                <FComponentsLib.FIcons.FImport />
+                <span>导入</span>
+              </Space>
+            </FComponentsLib.FTextBtn>
+            {/*</FUpload>*/}
             {
               informalNodeManagerPage.rule_RuleList.length > 0 && (<>
                 <FComponentsLib.FTextBtn
