@@ -11,6 +11,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -54,25 +55,37 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
           }}
           placeholder={'支持对象名称'}
         />
-        <FUpload
-          showUploadList={false}
-          multiple={true}
-          beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-            // console.log(file, FileList, 'beforeUpload 24ew890sio;');
-            if (file === fileList[fileList.length - 1]) {
-              // console.log('0923uiojfdaslk');
-              dispatch<UploadFilesAction>({
-                type: 'storageHomePage/uploadFiles',
-                payload: fileList,
-              });
+        {/*<FUpload*/}
+        {/*  showUploadList={false}*/}
+        {/*  multiple={true}*/}
+        {/*  beforeUpload={(file: RcFile, fileList: RcFile[]) => {*/}
+        {/*    // console.log(file, FileList, 'beforeUpload 24ew890sio;');*/}
+        {/*    if (file === fileList[fileList.length - 1]) {*/}
+        {/*      // console.log('0923uiojfdaslk');*/}
+        {/*      dispatch<UploadFilesAction>({*/}
+        {/*        type: 'storageHomePage/uploadFiles',*/}
+        {/*        payload: fileList,*/}
+        {/*      });*/}
+        {/*    }*/}
+        {/*    return false;*/}
+        {/*  }}*/}
+        {/*>*/}
+        <FComponentsLib.FRectBtn
+          onClick={async () => {
+            const files = await fReadLocalFiles({
+              multiple: true,
+            });
+            if (!files) {
+              return;
             }
-            return false;
+            dispatch<UploadFilesAction>({
+              type: 'storageHomePage/uploadFiles',
+              payload: files,
+            });
           }}
-        >
-          <FComponentsLib.FRectBtn
-            type='primary'
-          >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
-        </FUpload>
+          type='primary'
+        >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
+        {/*</FUpload>*/}
       </Space>)
     }
 
