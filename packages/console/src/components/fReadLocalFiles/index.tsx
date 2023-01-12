@@ -47,20 +47,8 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
   const refUpload = React.useRef<any>();
 
   AHooks.useMount(() => {
-    // console.log(, 'refUpload.currentdsfsdofijl');
-    // refUpload.current.();
     refDiv.current.click()
   });
-
-  // AHooks.useInterval(() => {
-  //   console.log(refUpload.current, 'refUpload sdiofjsldkfjlk');
-  //   refUpload.current.onError(() => {
-  //     console.log('*******');
-  //   });
-  //   refUpload.current.onProgress(() => {
-  //     console.log('########');
-  //   });
-  // }, 3000);
 
   return (<Upload
     ref={refUpload}
@@ -68,7 +56,6 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
     accept={accept}
     showUploadList={false}
     beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-      // console.log('beforeUpload, sdiofjsdlkfjsdl;kjflk;jl');
       onRead && onRead(fileList);
       return false;
     }}
