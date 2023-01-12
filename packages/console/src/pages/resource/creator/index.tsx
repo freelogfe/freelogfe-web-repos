@@ -1,43 +1,24 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
-import FLabelEditor from '@/pages/resource/components/FLabelEditor';
-import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
-import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/layouts/FContentLayout';
-import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
 import {
-  // OnCreateAction,
   ChangeAction,
   OnChange_NameInput_Action,
-  // OnChangeResourceTypeAction,
-  // ClearDataAction,
   OnMount_Page_Action,
   OnUnmount_Page_Action,
   OnChange_Resource_Type_Action,
-  initStates,
   OnClick_CreateBtn_Action,
-  OnChange_IntroductionInput_Action,
-  OnChange_Cover_Action,
-  OnChange_Labels_Action,
 } from '@/models/resourceCreatorPage';
-// import { history } from 'umi';
-// import { FLoading } from '@/components/FIcons';
 import FFormLayout from '@/components/FFormLayout';
-// import * as H from 'history';
-// import { Prompt } from 'umi';
-// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
-import fReadLocalFiles from '@/components/fReadLocalFiles';
-
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
