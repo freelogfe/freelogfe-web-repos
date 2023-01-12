@@ -17,7 +17,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
-  // OnCancelRulePageLeaveAction,
   OnChange_Rule_ListCheckbox_Action,
   OnChange_Rule_CheckAllCheckbox_Action,
   OnClick_Rule_DeleteBtn_Action,
@@ -25,10 +24,8 @@ import {
   OnClick_Rule_ExportBtn_Action,
   OnClick_Rule_ExitCoding_CancelBtn_Action,
   OnClick_Rule_ExitCoding_ConfirmBtn_Action,
-  // OnConfirmRulePaigeLeaveAction,
   OnLoad_Rule_ImportFileInput_Action,
   OnMountRulePageAction,
-  // OnPromptRulePageLeaveAction,
   OnUnmountRulePageAction,
   OnClick_Rule_ExitCodingBtn_Action,
   OnClick_Rule_Export_CancelBtn_Action,
@@ -37,14 +34,10 @@ import {
   OnClick_Rule_Delete_ConfirmBtn_Action,
   OnChange_Rule_Codemirror_Action,
   OnClick_Rule_SaveBtn_Action,
-  // IRules,
 } from '@/models/informalNodeManagerPage';
-import FUpload from '@/components/FUpload';
-// import { Prompt } from 'umi';
-// import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -83,51 +76,11 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   }, [informalNodeManagerPage.rule_CodeIsDirty]);
 
-  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload,
-  //   });
-  // }
-
   return (<>
     <Helmet>
       <title>{`映射规则管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
     </Helmet>
     <FPrompt watch={informalNodeManagerPage.rule_CodeIsDirty} messageText={'编辑后的映射规则尚未保存，现在离开会导致信息丢失'} />
-    {/*<FPrompt*/}
-    {/*  when={informalNodeManagerPage.rule_CodeIsDirty && informalNodeManagerPage.rule_PromptLeavePath === ''}*/}
-    {/*  message={(location: H.Location) => {*/}
-    {/*    // console.log(location, 'location12341234123411111111@@@@@@');*/}
-    {/*    const locationHref: string = location.pathname + location.search;*/}
-    {/*    if (locationHref === FUtil.LinkTo.informNodeManagement({*/}
-    {/*      nodeID: informalNodeManagerPage.node_ID,*/}
-    {/*      showPage: 'mappingRule',*/}
-    {/*    })) {*/}
-    {/*      return true;*/}
-    {/*    }*/}
-    {/*    dispatch<OnPromptRulePageLeaveAction>({*/}
-    {/*      type: 'informalNodeManagerPage/onPromptRulePageLeave',*/}
-    {/*      payload: {*/}
-    {/*        href: locationHref,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*    fConfirmModal({*/}
-    {/*      message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',*/}
-    {/*      onOk() {*/}
-    {/*        dispatch<OnConfirmRulePageLeaveAction>({*/}
-    {/*          type: 'informalNodeManagerPage/onConfirmRulePageLeave',*/}
-    {/*        });*/}
-    {/*      },*/}
-    {/*      onCancel() {*/}
-    {/*        dispatch<OnCancelRulePageLeaveAction>({*/}
-    {/*          type: 'informalNodeManagerPage/onCancelRulePageLeave',*/}
-    {/*        });*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*    return false;*/}
-    {/*  }}*/}
-    {/*/>*/}
     <div className={styles.header}>
       <div className={styles.headerLeft}>
         <FComponentsLib.FTitleText text={'映射规则管理'} />
