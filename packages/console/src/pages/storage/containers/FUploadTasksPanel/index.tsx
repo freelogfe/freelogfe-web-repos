@@ -14,7 +14,6 @@ import {
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
 import FLoadingTip from '@/components/FLoadingTip';
-// import {  FUp } from '@/components/FIcons';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
