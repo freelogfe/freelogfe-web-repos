@@ -52,16 +52,13 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           basics={resourceVersionCreatorPage.rawProperties}
           additions={resourceVersionCreatorPage.baseProperties}
           onChangeAdditions={async (value) => {
-            // await onChange({
-            //   baseProperties: value,
-            //   dataIsDirty: true,
-            // });
+
             await dispatch<OnChange_BaseProperties_Action>({
               type: 'resourceVersionCreatorPage/onChange_BaseProperties',
               payload: {
                 value: value,
               },
-            } as const);
+            });
           }}
           rightTop={<Space size={20}>
             <FComponentsLib.FTextBtn
@@ -79,19 +76,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 if (!dataSource) {
                   return;
                 }
-                // await onChange({
-                //   dataIsDirty: true,
-                //   baseProperties: [
-                //     ...resourceVersionCreatorPage.baseProperties,
-                //     ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                //       return {
-                //         key: ds.key,
-                //         value: ds.value,
-                //         description: ds.description,
-                //       };
-                //     }),
-                //   ],
-                // });
+
                 await dispatch<OnChange_BaseProperties_Action>({
                   type: 'resourceVersionCreatorPage/onChange_BaseProperties',
                   payload: {
@@ -132,19 +117,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!dataSource) {
                       return;
                     }
-                    // await onChange({
-                    //   dataIsDirty: true,
-                    //   baseProperties: [
-                    //     ...resourceVersionCreatorPage.baseProperties,
-                    //     ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                    //       return {
-                    //         key: ds.key,
-                    //         value: ds.value,
-                    //         description: ds.description,
-                    //       };
-                    //     }),
-                    //   ],
-                    // });
 
                     await dispatch<OnChange_BaseProperties_Action>({
                       type: 'resourceVersionCreatorPage/onChange_BaseProperties',
@@ -199,19 +171,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             if (!data) {
               return;
             }
-
-            // await onChange({
-            //   baseProperties: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
-            //     if (i !== ind) {
-            //       return bp;
-            //     }
-            //     return {
-            //       key: data.key,
-            //       value: data.value,
-            //       description: data.description,
-            //     };
-            //   }),
-            // });
 
             await dispatch<OnChange_BaseProperties_Action>({
               type: 'resourceVersionCreatorPage/onChange_BaseProperties',
@@ -282,13 +241,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   if (!data) {
                     return;
                   }
-                  // await onChange({
-                  //   customOptionsData: [
-                  //     ...resourceVersionCreatorPage.customOptionsData,
-                  //     ...data,
-                  //   ],
-                  //   // customOptionsEditorVisible: false,
-                  // });
 
                   await dispatch<OnChange_CustomOptions_Action>({
                     type: 'resourceVersionCreatorPage/onChange_CustomOptions',
@@ -317,12 +269,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     if (!data) {
                       return;
                     }
-                    // await onChange({
-                    //   customOptionsData: [
-                    //     ...resourceVersionCreatorPage.customOptionsData,
-                    //     ...data,
-                    //   ],
-                    // });
+
                     await dispatch<OnChange_CustomOptions_Action>({
                       type: 'resourceVersionCreatorPage/onChange_CustomOptions',
                       payload: {
@@ -351,11 +298,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     };
                   })}
                   onDelete={async (theKey) => {
-                    // await onChange({
-                    //   customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
-                    //     return cod.key !== theKey;
-                    //   }),
-                    // });
                     await dispatch<OnChange_CustomOptions_Action>({
                       type: 'resourceVersionCreatorPage/onChange_CustomOptions',
                       payload: {
@@ -390,25 +332,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       ],
                     });
 
-                    // console.log(data, 'data09ewiodjfls;kdfjlsdkfjlsdk');
                     if (!data) {
                       return;
                     }
-
-                    // await onChange({
-                    //   customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
-                    //     if (ind !== i) {
-                    //       return cod;
-                    //     }
-                    //     return {
-                    //       key: data.key,
-                    //       description: data.description,
-                    //       custom: data.custom,
-                    //       defaultValue: data.defaultValue,
-                    //       customOption: data.customOption,
-                    //     };
-                    //   }),
-                    // });
 
                     await dispatch<OnChange_CustomOptions_Action>({
                       type: 'resourceVersionCreatorPage/onChange_CustomOptions',
