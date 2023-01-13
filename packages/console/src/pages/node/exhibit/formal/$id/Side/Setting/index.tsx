@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import { Space } from 'antd';
-// import { FSwap, FRedo} from '@/components/FIcons';
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -30,6 +29,7 @@ import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FOverflowTooltip from '@/components/FOverflowTooltip';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -68,8 +68,28 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             <tbody>
             {
               exhibitInfoPage.side_BaseAttrs.map((pb) => (<tr key={pb.key}>
-                <td><FComponentsLib.FContentText text={pb.key} /></td>
-                <td><FComponentsLib.FContentText text={pb.value} /></td>
+                {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
+                <td><FOverflowTooltip
+                  text={pb.key}
+                  style={{
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    color: '#222',
+                    fontSize: 14,
+                    maxWidth: 90,
+                  }}
+                /></td>
+                {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
+                <td><FOverflowTooltip
+                  text={pb.value}
+                  style={{
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    color: '#222',
+                    fontSize: 14,
+                    maxWidth: 90,
+                  }}
+                /></td>
               </tr>))
             }
             </tbody>
