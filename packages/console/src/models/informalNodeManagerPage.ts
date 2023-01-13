@@ -1754,6 +1754,18 @@ const Model: InformalNodeManagerPageModelType = {
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params1);
 
       // console.log(data1, 'data1!@#$!@#$@#');
+      console.log(result, 'resultiosdjflksdjflsdjflljlksdf');
+
+      const rule_CodeExecutionWarnings: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = result.testRules
+        .filter((tr: any) => {
+          return tr.matchWarnings.length > 0;
+        })
+        .map((tr: any) => {
+          return {
+            ruleText: tr.ruleInfo.text,
+            errors: tr.matchWarnings,
+          };
+        });
 
       const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = result.testRules
         .filter((tr: any) => {
@@ -1786,7 +1798,10 @@ const Model: InformalNodeManagerPageModelType = {
           node_RuleInfo: result,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
-          rule_CodeExecutionErrors: rule_CodeExecutionErrors,
+          rule_CodeExecutionErrors: [
+            ...rule_CodeExecutionErrors,
+            ...rule_CodeExecutionWarnings,
+          ],
           rule_CodeEfficients: rule_CodeEfficients,
           rule_RuleList: result.testRules.map((tr: any) => {
             return {
