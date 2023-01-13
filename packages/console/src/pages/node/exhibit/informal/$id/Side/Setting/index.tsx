@@ -27,6 +27,7 @@ import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FSelect from '@/components/FSelect';
 import fConfirmModal from '@/components/fConfirmModal';
 import FComponentsLib from '@freelog/components-lib';
+import FOverflowTooltip from '@/components/FOverflowTooltip';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -74,8 +75,28 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
         <tbody>
         {
           informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
-            <td><FComponentsLib.FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>
-            <td><FComponentsLib.FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>
+            {/*<td><FComponentsLib.FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>*/}
+            <td><FOverflowTooltip
+              text={pb.theKey}
+              style={{
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#222',
+                fontSize: 14,
+                maxWidth: 90,
+              }}
+            /></td>
+            {/*<td><FComponentsLib.FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>*/}
+            <td><FOverflowTooltip
+              text={pb.value}
+              style={{
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#222',
+                fontSize: 14,
+                maxWidth: 90,
+              }}
+            /></td>
           </tr>))
         }
         </tbody>
