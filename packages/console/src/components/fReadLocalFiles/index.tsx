@@ -44,7 +44,6 @@ interface ReadFilesProps {
 function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
 
   const refDiv = React.useRef<any>();
-  const refUpload = React.useRef<any>();
 
   AHooks.useMount(() => {
     refDiv.current.click();
@@ -52,7 +51,6 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
 
   return (<div style={{ width: 0, height: 0, overflow: 'hidden' }}>
     <Upload
-      ref={refUpload}
       multiple={multiple}
       accept={accept}
       showUploadList={false}
