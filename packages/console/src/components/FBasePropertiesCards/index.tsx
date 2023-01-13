@@ -60,11 +60,20 @@ function FBasePropertiesCards({ rawProperties, baseProperties, onEdit, onDelete 
           <div>
             <div>
               <Space size={5}>
-                <FComponentsLib.FContentText
+                {/*<FComponentsLib.FContentText*/}
+                {/*  text={bp.theKey}*/}
+                {/*  type='additional2'*/}
+                {/*  singleRow*/}
+                {/*  style={{*/}
+                {/*    maxWidth: 80,*/}
+                {/*  }}*/}
+                {/*/>*/}
+                <FOverflowTooltip
                   text={bp.theKey}
-                  type='additional2'
-                  singleRow
                   style={{
+                    lineHeight: '18px',
+                    color: '#999',
+                    fontSize: 12,
                     maxWidth: 80,
                   }}
                 />
@@ -73,10 +82,20 @@ function FBasePropertiesCards({ rawProperties, baseProperties, onEdit, onDelete 
                     style={{ cursor: 'pointer', fontSize: 14 }} /></FTooltip>)}
               </Space>
               <div style={{ height: 10 }} />
-              <FComponentsLib.FContentText
-                singleRow
+              {/*<FComponentsLib.FContentText*/}
+              {/*  singleRow*/}
+              {/*  text={bp.value}*/}
+              {/*  style={{ maxWidth: 110 }}*/}
+              {/*/>*/}
+              <FOverflowTooltip
                 text={bp.value}
-                style={{ maxWidth: 110 }}
+                style={{
+                  fontWeight: 400,
+                  lineHeight: '20px',
+                  color: '#222',
+                  fontSize: 14,
+                  maxWidth: 110,
+                }}
               />
             </div>
             <Space size={10} className={styles.Operation}>
