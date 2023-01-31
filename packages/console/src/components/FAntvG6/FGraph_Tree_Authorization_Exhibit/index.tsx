@@ -91,12 +91,9 @@ function FGraph_Tree_Authorization_Exhibit({
                                              exhibitID,
                                              version = '',
                                            }: FGraph_Tree_Authorization_Exhibit_Props) {
-  // console.log(exhibitID, 'exhibitID@##4093uijol()((((((((((((');
-  // console.log(version, 'version@##4093uijol()((((((((((((');
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Exhibit_States['dataSource']>(initStates['dataSource']);
   const [contractID, set_ContractID] = React.useState<FGraph_Tree_Authorization_Exhibit_States['contractID']>(initStates['contractID']);
   const [bothSidesInfo, set_BothSidesInfo] = React.useState<FGraph_Tree_Authorization_Exhibit_States['bothSidesInfo']>(initStates['bothSidesInfo']);
-  // console.log(dataSource, 'dataSource093iosjdlfksdjlfk');
 
   React.useEffect(() => {
     handleData();

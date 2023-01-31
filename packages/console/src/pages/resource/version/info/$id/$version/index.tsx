@@ -33,6 +33,9 @@ import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_
 import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
 import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import FComponentsLib from '@freelog/components-lib';
+import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
+import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
+import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -241,7 +244,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               </div>
 
               <div className={styles.ViewportCardMask}>
-                <a>点击全屏查看</a>
+                <a
+                  onClick={async () => {
+                    await fGraphTree_Relationship_Resource({
+                      resourceID: resourceVersionEditorPage.resourceID,
+                      version: resourceVersionEditorPage.version,
+                    });
+                  }}
+                >点击全屏查看</a>
               </div>
             </div>
 
@@ -257,11 +267,18 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               </div>
 
               <div className={styles.ViewportCardBottom}>
-                <FComponentsLib.FContentText text={'授权链'} type={'normal'} />
+                <FComponentsLib.FContentText text={'授权树'} type={'normal'} />
               </div>
 
               <div className={styles.ViewportCardMask}>
-                <a>点击全屏查看</a>
+                <a
+                  onClick={async () => {
+                    await fGraphTree_Authorization_Resource({
+                      resourceID: resourceVersionEditorPage.resourceID,
+                      version: resourceVersionEditorPage.version,
+                    });
+                  }}
+                >点击全屏查看</a>
               </div>
             </div>
 
@@ -281,7 +298,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               </div>
 
               <div className={styles.ViewportCardMask}>
-                <a>点击全屏查看</a>
+                <a
+                  onClick={async () => {
+                    await fGraphTree_Dependency_Resource({
+                      resourceID: resourceVersionEditorPage.resourceID,
+                      version: resourceVersionEditorPage.version,
+                    });
+                  }}
+                >点击全屏查看</a>
               </div>
             </div>
           </div>
