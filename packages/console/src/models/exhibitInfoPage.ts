@@ -58,8 +58,9 @@ export interface ExhibitInfoPageModelState {
     policies: PolicyFullInfo_Type[];
   }[];
 
-  graph_FullScreen: boolean;
-  graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
+  // graph_FullScreen: boolean;
+  // graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
+  graphShow: boolean;
 
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
@@ -318,8 +319,9 @@ const initStates: ExhibitInfoPageModelState = {
   contract_SelectedAssociatedID: '',
   contract_Associated: [],
 
-  graph_FullScreen: false,
-  graph_Viewport_Show: 'relationship',
+  // graph_FullScreen: false,
+  // graph_Viewport_Show: 'relationship',
+  graphShow: true,
 
   side_ExhibitCover: '',
   side_ExhibitTitle: '',

@@ -181,6 +181,8 @@ function FGraph_Tree_Authorization_Exhibit({
 
   const Gra = React.useMemo(() => {
     return (<DecompositionTreeGraph
+      fitCenter={!fit}
+      autoFit={fit}
       style={{ backgroundColor: 'transparent' }}
       width={width}
       height={height}
