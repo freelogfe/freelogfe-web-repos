@@ -8,6 +8,7 @@ import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree
 import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
 import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
+import { useGetState } from '@/utils/hooks';
 
 interface FViewportCards_Resource_Props {
   graphShow: Array<'relationship' | 'authorization' | 'dependency'>;
@@ -24,11 +25,17 @@ function FViewportCards_Resource({
                                    onMount,
                                  }: FViewportCards_Resource_Props) {
 
-  const refArr = React.useRef<boolean[]>([]);
+  const [show, set_show, get_show] = useGetState<Array<'relationship' | 'authorization' | 'dependency'>>(graphShow);
+
+  React.useEffect(() => {
+    if (get_show().length === 0) {
+      onMount && onMount({ hasData: false });
+    }
+  }, [show]);
 
   return (<div className={styles.ViewportCards}>
     {
-      graphShow.includes('relationship') && (<div className={styles.ViewportCard}>
+      show.includes('relationship') && (<div className={styles.ViewportCard}>
         <div className={styles.Viewport}>
           <FGraph_Tree_Relationship_Resource
             resourceID={resourceID}
@@ -37,9 +44,10 @@ function FViewportCards_Resource({
             height={180}
             fit={true}
             onMount={async ({ hasData }) => {
-              refArr.current.push(hasData);
-              if (refArr.current.length === graphShow.length) {
-                onMount && onMount({ hasData: refArr.current.includes(true) });
+              if (!hasData) {
+                set_show(get_show().filter((s) => {
+                  return s !== 'relationship';
+                }));
               }
             }}
           />
@@ -72,9 +80,10 @@ function FViewportCards_Resource({
             height={180}
             fit={true}
             onMount={async ({ hasData }) => {
-              refArr.current.push(hasData);
-              if (refArr.current.length === graphShow.length) {
-                onMount && onMount({ hasData: refArr.current.includes(true) });
+              if (!hasData) {
+                set_show(get_show().filter((s) => {
+                  return s !== 'authorization';
+                }));
               }
             }}
           />
@@ -107,9 +116,10 @@ function FViewportCards_Resource({
             height={180}
             fit={true}
             onMount={async ({ hasData }) => {
-              refArr.current.push(hasData);
-              if (refArr.current.length === graphShow.length) {
-                onMount && onMount({ hasData: refArr.current.includes(true) });
+              if (!hasData) {
+                set_show(get_show().filter((s) => {
+                  return s !== 'dependency';
+                }));
               }
             }}
           />
