@@ -84,8 +84,9 @@ export interface ResourceDetailPageModelState {
     }[];
   };
 
-  graph_FullScreen: boolean;
-  graph_ViewportGraphShow: 'dependency' | 'authorization';
+  // graph_FullScreen: boolean;
+  // graph_ViewportGraphShow: 'dependency' | 'authorization';
+  graphShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -206,8 +207,9 @@ const initStates: ResourceDetailPageModelState = {
     options: [],
   },
 
-  graph_FullScreen: false,
-  graph_ViewportGraphShow: 'dependency',
+  // graph_FullScreen: false,
+  // graph_ViewportGraphShow: 'dependency',
+  graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
