@@ -15,6 +15,7 @@ interface FGraph_Tree_Dependency_Resource_Props {
   version: string;
   width: number;
   height: number;
+  fit?: boolean;
 }
 
 interface NodeTree {
@@ -45,6 +46,7 @@ function FGraph_Tree_Dependency_Resource({
                                            version,
                                            height,
                                            width,
+                                           fit = false,
                                          }: FGraph_Tree_Dependency_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
@@ -77,8 +79,8 @@ function FGraph_Tree_Dependency_Resource({
       width={width}
       height={height}
       data={dataSource as any}
-      // fitCenter={false}
-      // autoFit={true}
+      fitCenter={!fit}
+      autoFit={fit}
       nodeCfg={
         {
           type: F_DEPENDENCY_NODE_TYPE,

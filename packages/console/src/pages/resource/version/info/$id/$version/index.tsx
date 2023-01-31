@@ -231,7 +231,8 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   resourceID={resourceVersionEditorPage.resourceID}
                   version={resourceVersionEditorPage.version}
                   width={270}
-                  height={140}
+                  height={180}
+                  fit={true}
                 />
               </div>
 
@@ -250,7 +251,8 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   resourceID={resourceVersionEditorPage.resourceID}
                   version={resourceVersionEditorPage.version}
                   width={270}
-                  height={140}
+                  height={180}
+                  fit={true}
                 />
               </div>
 
@@ -269,7 +271,8 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   resourceID={resourceVersionEditorPage.resourceID}
                   version={resourceVersionEditorPage.version}
                   width={270}
-                  height={140}
+                  height={180}
+                  fit={true}
                 />
               </div>
 

@@ -40,6 +40,7 @@ interface FGraph_Tree_Authorization_Resource_Props {
   version: string;
   width: number;
   height: number;
+  fit?: boolean;
 }
 
 interface ResourceNode {
@@ -82,6 +83,7 @@ function FGraph_Tree_Authorization_Resource({
                                               height,
                                               resourceID,
                                               version,
+                                              fit = false,
                                             }: FGraph_Tree_Authorization_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Resource_States['dataSource']>(initStates['dataSource']);
@@ -157,7 +159,10 @@ function FGraph_Tree_Authorization_Resource({
   }
 
   const Gra = React.useMemo(() => {
+
     return (<DecompositionTreeGraph
+      fitCenter={!fit}
+      autoFit={fit}
       style={{ backgroundColor: 'transparent' }}
       width={width}
       height={height}
@@ -166,7 +171,8 @@ function FGraph_Tree_Authorization_Resource({
         type: F_AUTHORIZATION_NODE_TYPE,
       }}
       layout={{
-        getHeight: (node: any) => {
+        // @ts-ignore
+        getHeight: (node: any): number => {
           // console.log(node, 'DSFd09opfijlkNNNNNNOOODDEEEE98io');
           return node.nodeType === 'contract' ? (node.value.length || 1) * 64 : 64;
         },
