@@ -4,8 +4,6 @@ import FDrawer from '@/components/FDrawer';
 import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
 import * as ReactDOM from 'react-dom/client';
 
-// import FEditCustomOptionDrawer from '@/components/fEditCustomOption/FEditCustomOptionDrawer';
-
 interface fGraphTree_Relationship_Resource_Props {
   resourceID: string;
   version: string;

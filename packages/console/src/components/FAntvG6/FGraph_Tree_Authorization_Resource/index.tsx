@@ -158,11 +158,7 @@ function FGraph_Tree_Authorization_Resource({
       // children: [],
     };
     // console.log(finalDataSource, 'finalDataSource93sdlkfjsdlfkj');
-    if (finalDataSource.children.length === 0) {
-      onMount && onMount({ hasData: false });
-    } else {
-      onMount && onMount({ hasData: true });
-    }
+    onMount && onMount({ hasData: finalDataSource.children.length > 0 });
     set_DataSource(finalDataSource);
   }
 

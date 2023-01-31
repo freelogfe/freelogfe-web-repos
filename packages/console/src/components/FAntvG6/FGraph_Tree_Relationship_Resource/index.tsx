@@ -128,12 +128,7 @@ function FGraph_Tree_Relationship_Resource({
       }),
     };
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
-
-    if (dataSource.children.length === 0) {
-      onMount && onMount({ hasData: false });
-    } else {
-      onMount && onMount({ hasData: true });
-    }
+    onMount && onMount({ hasData: dataSource.children.length > 0 });
     set_DataSource(dataSource);
   }
 

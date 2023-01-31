@@ -21,6 +21,9 @@ interface FGraph_Tree_Dependency_Resource_Props {
   version?: string;
   width: number;
   height: number;
+  fit?: boolean;
+
+  onMount?({ hasData }: { hasData: boolean }): void;
 }
 
 interface ExhibitNode {
@@ -59,6 +62,8 @@ function FGraph_Tree_Dependency_Exhibit({
                                           version = '',
                                           height,
                                           width,
+                                          fit,
+                                          onMount,
                                         }: FGraph_Tree_Dependency_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Dependency_States['dataSource']>(initStates['dataSource']);
@@ -118,6 +123,7 @@ function FGraph_Tree_Dependency_Exhibit({
       },
       children: handleDataSource({ data: data_DependencyTree }),
     };
+    onMount && onMount({ hasData: dataSource.children.length > 0 });
     set_DataSource(dataSource);
   }
 
@@ -127,8 +133,8 @@ function FGraph_Tree_Dependency_Exhibit({
       width={width}
       height={height}
       data={dataSource as any}
-      // fitCenter={false}
-      // autoFit={true}
+      fitCenter={!fit}
+      autoFit={fit}
       nodeCfg={
         {
           type: F_DEPENDENCY_NODE_TYPE,

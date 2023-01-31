@@ -1,28 +1,28 @@
 import * as React from 'react';
 import styles from './index.less';
-import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
 import FComponentsLib from '@freelog/components-lib';
-import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
-import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
-import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
-import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
-import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
 import { useGetState } from '@/utils/hooks';
+import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
+import fGraphTree_Relationship_Exhibit from '@/components/FAntvG6/fGraphTree_Relationship_Exhibit';
+import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
+import fGraphTree_Authorization_Exhibit from '@/components/FAntvG6/fGraphTree_Authorization_Exhibit';
+import FGraph_Tree_Dependency_Exhibit from '@/components/FAntvG6/FGraph_Tree_Dependency_Exhibit';
+import fGraphTree_Dependency_Exhibit from '@/components/FAntvG6/fGraphTree_Dependency_Exhibit';
 
-interface FViewportCards_Resource_Props {
+interface FViewportCards_Exhibit_Props {
   graphShow: Array<'relationship' | 'authorization' | 'dependency'>;
-  resourceID: string;
+  exhibitID: string;
   version: string;
 
   onMount?({ hasData }: { hasData: boolean }): void;
 }
 
-function FViewportCards_Resource({
+function FViewportCards_Exhibit({
                                    graphShow,
-                                   resourceID,
+                                   exhibitID,
                                    version,
                                    onMount,
-                                 }: FViewportCards_Resource_Props) {
+                                 }: FViewportCards_Exhibit_Props) {
 
   const [show, set_show, get_show] = useGetState<Array<'relationship' | 'authorization' | 'dependency'>>(graphShow);
 
@@ -36,8 +36,8 @@ function FViewportCards_Resource({
     {
       show.includes('relationship') && (<div className={styles.ViewportCard}>
         <div className={styles.Viewport}>
-          <FGraph_Tree_Relationship_Resource
-            resourceID={resourceID}
+          <FGraph_Tree_Relationship_Exhibit
+            exhibitID={exhibitID}
             version={version}
             width={270}
             height={180}
@@ -59,8 +59,8 @@ function FViewportCards_Resource({
         <div className={styles.ViewportCardMask}>
           <a
             onClick={async () => {
-              await fGraphTree_Relationship_Resource({
-                resourceID: resourceID,
+              await fGraphTree_Relationship_Exhibit({
+                exhibitID: exhibitID,
                 version: version,
               });
             }}
@@ -72,8 +72,8 @@ function FViewportCards_Resource({
     {
       graphShow.includes('authorization') && (<div className={styles.ViewportCard}>
         <div className={styles.Viewport}>
-          <FGraph_Tree_Authorization_Resource
-            resourceID={resourceID}
+          <FGraph_Tree_Authorization_Exhibit
+            exhibitID={exhibitID}
             version={version}
             width={270}
             height={180}
@@ -95,8 +95,8 @@ function FViewportCards_Resource({
         <div className={styles.ViewportCardMask}>
           <a
             onClick={async () => {
-              await fGraphTree_Authorization_Resource({
-                resourceID: resourceID,
+              await fGraphTree_Authorization_Exhibit({
+                exhibitID: exhibitID,
                 version: version,
               });
             }}
@@ -108,8 +108,8 @@ function FViewportCards_Resource({
     {
       graphShow.includes('dependency') && (<div className={styles.ViewportCard}>
         <div className={styles.Viewport}>
-          <FGraph_Tree_Dependency_Resource
-            resourceID={resourceID}
+          <FGraph_Tree_Dependency_Exhibit
+            exhibitID={exhibitID}
             version={version}
             width={270}
             height={180}
@@ -131,8 +131,8 @@ function FViewportCards_Resource({
         <div className={styles.ViewportCardMask}>
           <a
             onClick={async () => {
-              await fGraphTree_Dependency_Resource({
-                resourceID: resourceID,
+              await fGraphTree_Dependency_Exhibit({
+                exhibitID: exhibitID,
                 version: version,
               });
             }}
@@ -143,4 +143,4 @@ function FViewportCards_Resource({
   </div>);
 }
 
-export default FViewportCards_Resource;
+export default FViewportCards_Exhibit;

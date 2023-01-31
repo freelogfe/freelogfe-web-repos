@@ -74,11 +74,7 @@ function FGraph_Tree_Dependency_Resource({
     const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.dependencyTree(params2);
 
     const data_source = handleDataSource(data_DependencyTree)[0];
-    if (data_source.children.length === 0) {
-      onMount && onMount({ hasData: false });
-    } else {
-      onMount && onMount({ hasData: true });
-    }
+    onMount && onMount({ hasData: data_source.children.length > 0 });
     set_DataSource(data_source);
   }
 
