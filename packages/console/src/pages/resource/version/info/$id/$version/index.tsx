@@ -36,6 +36,7 @@ import FComponentsLib from '@freelog/components-lib';
 import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
 import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
 import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
+import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -215,151 +216,29 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 </div>))
           }
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock
-          title={'相关视图'}
-          // extra={<FComponentsLib.FTextBtn
-          //   type='default'
-          //   onClick={() => {
-          //     onChange({
-          //       graphFullScreen: true,
-          //     });
-          //   }}
-          // >全屏查看</FComponentsLib.FTextBtn>}
-        >
 
-          <div className={styles.ViewportCards}>
-            <div className={styles.ViewportCard}>
-              <div className={styles.Viewport}>
-                <FGraph_Tree_Relationship_Resource
-                  resourceID={resourceVersionEditorPage.resourceID}
-                  version={resourceVersionEditorPage.version}
-                  width={270}
-                  height={180}
-                  fit={true}
-                />
-              </div>
-
-              <div className={styles.ViewportCardBottom}>
-                <FComponentsLib.FContentText text={'关系树'} type={'normal'} />
-              </div>
-
-              <div className={styles.ViewportCardMask}>
-                <a
-                  onClick={async () => {
-                    await fGraphTree_Relationship_Resource({
-                      resourceID: resourceVersionEditorPage.resourceID,
-                      version: resourceVersionEditorPage.version,
-                    });
-                  }}
-                >点击全屏查看</a>
-              </div>
-            </div>
-
-            <div className={styles.ViewportCard}>
-              <div className={styles.Viewport}>
-                <FGraph_Tree_Authorization_Resource
-                  resourceID={resourceVersionEditorPage.resourceID}
-                  version={resourceVersionEditorPage.version}
-                  width={270}
-                  height={180}
-                  fit={true}
-                />
-              </div>
-
-              <div className={styles.ViewportCardBottom}>
-                <FComponentsLib.FContentText text={'授权树'} type={'normal'} />
-              </div>
-
-              <div className={styles.ViewportCardMask}>
-                <a
-                  onClick={async () => {
-                    await fGraphTree_Authorization_Resource({
-                      resourceID: resourceVersionEditorPage.resourceID,
-                      version: resourceVersionEditorPage.version,
-                    });
-                  }}
-                >点击全屏查看</a>
-              </div>
-            </div>
-
-            <div className={styles.ViewportCard}>
-              <div className={styles.Viewport}>
-                <FGraph_Tree_Dependency_Resource
-                  resourceID={resourceVersionEditorPage.resourceID}
-                  version={resourceVersionEditorPage.version}
-                  width={270}
-                  height={180}
-                  fit={true}
-                />
-              </div>
-
-              <div className={styles.ViewportCardBottom}>
-                <FComponentsLib.FContentText text={'依赖树'} type={'normal'} />
-              </div>
-
-              <div className={styles.ViewportCardMask}>
-                <a
-                  onClick={async () => {
-                    await fGraphTree_Dependency_Resource({
-                      resourceID: resourceVersionEditorPage.resourceID,
-                      version: resourceVersionEditorPage.version,
-                    });
-                  }}
-                >点击全屏查看</a>
-              </div>
-            </div>
-          </div>
-          <FViewportTabs
-            options={[
-              { label: '关系树', value: 'relationship' },
-              { label: '授权链', value: 'authorization' },
-              { label: '依赖树', value: 'dependency' },
-            ]}
-            value={resourceVersionEditorPage.viewportGraphShow}
-            onChange={(value) => {
-              onChange({
-                viewportGraphShow: value as 'relationship',
-              });
-            }}
+        {
+          resourceVersionEditorPage.graphShow && (<FFormLayout.FBlock
+            title={'相关视图'}
           >
 
-            {
-              resourceVersionEditorPage.graphFullScreen
-                ? (<div style={{ height: 500 }} />)
-                : (<>
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
-                  }
+            <FViewportCards_Resource
+              resourceID={resourceVersionEditorPage.resourceID}
+              version={resourceVersionEditorPage.version}
+              graphShow={['relationship', 'authorization', 'dependency']}
+              onMount={({ hasData }) => {
+                dispatch<ChangeAction>({
+                  type: 'resourceVersionEditorPage/change',
+                  payload: {
+                    graphShow: hasData,
+                  },
+                });
+              }}
+            />
 
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (
-                      <FGraph_Tree_Authorization_Resource
-                        resourceID={resourceVersionEditorPage.resourceID}
-                        version={resourceVersionEditorPage.version}
-                        width={860}
-                        height={500}
-                      />)
-                  }
+          </FFormLayout.FBlock>)
+        }
 
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
-                  }
-                </>)
-            }
-
-          </FViewportTabs>
-
-        </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>
           <FBasePropertiesCards
@@ -594,60 +473,60 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       }}
     />
 
-    <FDrawer
-      open={resourceVersionEditorPage.graphFullScreen}
-      title={'相关视图'}
-      destroyOnClose
-      width={'100%'}
-      onClose={() => {
-        onChange({
-          graphFullScreen: false,
-        });
-      }}
-    >
+    {/*<FDrawer*/}
+    {/*  open={resourceVersionEditorPage.graphFullScreen}*/}
+    {/*  title={'相关视图'}*/}
+    {/*  destroyOnClose*/}
+    {/*  width={'100%'}*/}
+    {/*  onClose={() => {*/}
+    {/*    onChange({*/}
+    {/*      graphFullScreen: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*>*/}
 
-      <FViewportTabs
-        options={[
-          { label: '关系树', value: 'relationship' },
-          { label: '授权链', value: 'authorization' },
-          { label: '依赖树', value: 'dependency' },
-        ]}
-        value={resourceVersionEditorPage.viewportGraphShow}
-        onChange={(value) => {
-          onChange({
-            viewportGraphShow: value as 'relationship',
-          });
-        }}
-      >
+    {/*  <FViewportTabs*/}
+    {/*    options={[*/}
+    {/*      { label: '关系树', value: 'relationship' },*/}
+    {/*      { label: '授权链', value: 'authorization' },*/}
+    {/*      { label: '依赖树', value: 'dependency' },*/}
+    {/*    ]}*/}
+    {/*    value={resourceVersionEditorPage.viewportGraphShow}*/}
+    {/*    onChange={(value) => {*/}
+    {/*      onChange({*/}
+    {/*        viewportGraphShow: value as 'relationship',*/}
+    {/*      });*/}
+    {/*    }}*/}
+    {/*  >*/}
 
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
 
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
 
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
-      </FViewportTabs>
-    </FDrawer>
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
+    {/*  </FViewportTabs>*/}
+    {/*</FDrawer>*/}
 
     <FDrawer
       open={resourceVersionEditorPage.descriptionFullScreen}

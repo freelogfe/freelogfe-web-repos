@@ -16,6 +16,8 @@ interface FGraph_Tree_Dependency_Resource_Props {
   width: number;
   height: number;
   fit?: boolean;
+
+  onMount?({ hasData }: { hasData: boolean }): void;
 }
 
 interface NodeTree {
@@ -47,6 +49,7 @@ function FGraph_Tree_Dependency_Resource({
                                            height,
                                            width,
                                            fit = false,
+                                           onMount,
                                          }: FGraph_Tree_Dependency_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
@@ -70,7 +73,13 @@ function FGraph_Tree_Dependency_Resource({
 
     const { data: data_DependencyTree }: { data: ServerDataNode[] } = await FServiceAPI.Resource.dependencyTree(params2);
 
-    set_DataSource(handleDataSource(data_DependencyTree)[0]);
+    const data_source = handleDataSource(data_DependencyTree)[0];
+    if (data_source.children.length === 0) {
+      onMount && onMount({ hasData: false });
+    } else {
+      onMount && onMount({ hasData: true });
+    }
+    set_DataSource(data_source);
   }
 
   const Gra = React.useMemo(() => {

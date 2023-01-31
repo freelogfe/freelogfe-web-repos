@@ -15,51 +15,12 @@ export interface ResourceVersionEditorPageModelState {
   descriptionFullScreen: boolean;
   description: string;
 
-  graphFullScreen: boolean;
-  viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
-  // dependencyGraphNodes: {
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // }[];
-  // dependencyGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // authorizationGraphNodes: Array<{
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // } | {
-  //   id: string;
-  //   contracts: {
-  //     contractId: string;
-  //     contractName: string;
-  //     isAuth: boolean;
-  //     updateDate: string;
-  //   }[];
-  // }>;
-  // authorizationGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // relationGraphNodes: {
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  //   pending: boolean;
-  //   exception: boolean;
-  // }[];
-  // relationGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
+  // graphFullScreen: boolean;
+  // viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
+  // relationshipGraphShow: boolean;
+  // authorizationGraphShow: boolean;
+  // dependencyGraphShow: boolean;
+  graphShow: boolean;
 
   rawProperties: {
     key: string;
@@ -143,14 +104,12 @@ const Model: ResourceVersionEditorModelType = {
     descriptionFullScreen: false,
     description: '',
 
-    graphFullScreen: false,
-    viewportGraphShow: 'relationship',
-    // dependencyGraphNodes: [],
-    // dependencyGraphEdges: [],
-    // authorizationGraphNodes: [],
-    // authorizationGraphEdges: [],
-    // relationGraphNodes: [],
-    // relationGraphEdges: [],
+    // graphFullScreen: false,
+    // viewportGraphShow: 'relationship',
+    // relationshipGraphShow: true,
+    // authorizationGraphShow: true,
+    // dependencyGraphShow: true,
+    graphShow: true,
 
     rawProperties: [],
     baseProperties: [],

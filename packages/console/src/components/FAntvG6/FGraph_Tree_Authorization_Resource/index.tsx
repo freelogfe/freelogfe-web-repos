@@ -41,6 +41,8 @@ interface FGraph_Tree_Authorization_Resource_Props {
   width: number;
   height: number;
   fit?: boolean;
+
+  onMount?({ hasData }: { hasData: boolean }): void;
 }
 
 interface ResourceNode {
@@ -84,6 +86,7 @@ function FGraph_Tree_Authorization_Resource({
                                               resourceID,
                                               version,
                                               fit = false,
+                                              onMount,
                                             }: FGraph_Tree_Authorization_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Tree_Authorization_Resource_States['dataSource']>(initStates['dataSource']);
@@ -155,6 +158,11 @@ function FGraph_Tree_Authorization_Resource({
       // children: [],
     };
     // console.log(finalDataSource, 'finalDataSource93sdlkfjsdlfkj');
+    if (finalDataSource.children.length === 0) {
+      onMount && onMount({ hasData: false });
+    } else {
+      onMount && onMount({ hasData: true });
+    }
     set_DataSource(finalDataSource);
   }
 
