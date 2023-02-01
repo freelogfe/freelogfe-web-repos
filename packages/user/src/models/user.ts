@@ -130,11 +130,15 @@ const Model: UserModelType = {
 
     },
     checkUser({ dispatch }) {
-      window.document.addEventListener('visibilitychange', function() {
+      window.document.addEventListener('visibilitychange', () => {
         userPermission.check()
           .then((code) => {
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
-              co();
+              co(FI18n.i18nNext.t('msg_account_switched'));
+            }
+
+            if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
+              co('用户已登出');
             }
           });
       });
@@ -160,10 +164,10 @@ const Model: UserModelType = {
 
 export default Model;
 
-function co() {
+function co(message: string) {
   fConfirmModal({
     afterClose() {
-      co();
+      co(message);
     },
     onOk() {
       window.location.reload();
@@ -173,6 +177,6 @@ function co() {
         display: 'none',
       },
     },
-    message: FI18n.i18nNext.t('msg_account_switched'),
+    message: message,
   });
 }

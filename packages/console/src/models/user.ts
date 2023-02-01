@@ -4,6 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FI18n } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 import userPermission from '@/permissions/UserPermission';
+
 // import { history } from 'umi';
 
 export interface UserModelState {
@@ -110,28 +111,19 @@ const Model: MarketModelType = {
       // console.log('!@#$!@#$!@#$@#$');
     },
     checkUser({ dispatch }) {
-      window.document.addEventListener('visibilitychange', function() {
-        // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
-        // Modify behavior...
-        // dispatch<OnVisibilityChangeAction>({
-        //   type: 'onVisibilityChange',
-        //   payload: {
-        //     hidden: document.hidden,
-        //   },
-        // });
+      window.document.addEventListener('visibilitychange', () => {
         userPermission.check()
           .then((code) => {
+            console.log(code, '###3098usdoikfjsldkfjl lsjdflkjsdl');
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
-              co();
+              co(FI18n.i18nNext.t('msg_account_switched'));
+            }
+
+            if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
+              co('用户已登出');
             }
           });
       });
-      // window.addEventListener('pagehide', event => {
-      //   if (event.persisted) {
-      //     /* the page isn't being discarded, so it can be reused later */
-      //     console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-      //   }
-      // }, false);
     },
     checkUserPermission({ dispatch, history }) {
       // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
@@ -157,10 +149,10 @@ const Model: MarketModelType = {
 
 export default Model;
 
-function co() {
+function co(message: string) {
   fConfirmModal({
     afterClose() {
-      co();
+      co(message);
     },
     onOk() {
       window.location.reload();
@@ -170,7 +162,7 @@ function co() {
         display: 'none',
       },
     },
-    message: FI18n.i18nNext.t('msg_account_switched'),
+    message: message,
   });
 }
 
