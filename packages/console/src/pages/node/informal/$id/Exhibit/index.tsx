@@ -252,6 +252,7 @@ function Exhibit({ dispatch, informalNodeManagerPage }: ExhibitProps) {
                 <div>
                   <FInput
                     theme={'dark'}
+                    style={{width: 250}}
                     value={informalNodeManagerPage.exhibit_FilterKeywords}
                     debounce={300}
                     onDebounceChange={async (value) => {
