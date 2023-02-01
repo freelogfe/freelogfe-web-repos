@@ -479,31 +479,34 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
         </div>
         <FFooter />
       </div>
-      <div
-        className={'invite-text-container ' + (showInvite ? '' : 'd-none')}
-        onClick={() => setShowInvite(false)}
-      >
-        <div
-          className={'invite-text flex-column align-center pt-30 pb-25 '}
-          onClick={(e) => e.stopPropagation()}
+      {
+        showInvite && (<div
+          className={'invite-text-container'}
+          onClick={() => setShowInvite(false)}
         >
+          <div
+            className={'invite-text flex-column align-center pt-30 pb-25 '}
+            onClick={(e) => e.stopPropagation()}
+          >
           <textarea
             readOnly
             className='input mb-20'
             value={userData.textCopy || ''}
           />
-          <FComponentsLib.FRectBtn
-            onClick={() => {
-              copy(userData.textCopy, {
-                format: 'text/plain',
-              });
-              fMessage(<span>复制成功！</span>, 'success');
-            }}
-          >
-            复制内容
-          </FComponentsLib.FRectBtn>
-        </div>
-      </div>
+            <FComponentsLib.FRectBtn
+              onClick={() => {
+                copy(userData.textCopy, {
+                  format: 'text/plain',
+                });
+                fMessage(<span>复制成功！</span>, 'success');
+              }}
+            >
+              复制内容
+            </FComponentsLib.FRectBtn>
+          </div>
+        </div>)
+      }
+
     </div>
   );
 }
