@@ -1,16 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FUpload from '@/components/FUpload';
+// import FUpload from '@/components/FUpload';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { OnChange_FilterInput_Action, StorageHomePageModelState, UploadFilesAction } from '@/models/storageHomePage';
 import { ConnectState } from '@/models/connect';
-import { RcFile } from 'antd/lib/upload/interface';
+// import { RcFile } from 'antd/lib/upload/interface';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
-import * as AHooks from 'ahooks';
+// import * as AHooks from 'ahooks';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface HeaderProps {
@@ -18,9 +18,9 @@ interface HeaderProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-interface HeaderStates {
-  // fileObjects: FUploadTasksPanelProps['fileObjects'];
-}
+// interface HeaderStates {
+// fileObjects: FUploadTasksPanelProps['fileObjects'];
+// }
 
 function Header({ dispatch, storageHomePage }: HeaderProps) {
 
@@ -53,7 +53,8 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
               },
             });
           }}
-          placeholder={'支持对象名称'}
+          // placeholder={'支持对象名称'}
+          placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}
         />
         {/*<FUpload*/}
         {/*  showUploadList={false}*/}

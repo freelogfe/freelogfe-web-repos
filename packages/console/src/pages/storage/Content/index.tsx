@@ -12,8 +12,8 @@ import {
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
-import FUpload from '@/components/FUpload';
-import { RcFile } from 'antd/lib/upload/interface';
+// import FUpload from '@/components/FUpload';
+// import { RcFile } from 'antd/lib/upload/interface';
 import FLoadingTip from '@/components/FLoadingTip';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';

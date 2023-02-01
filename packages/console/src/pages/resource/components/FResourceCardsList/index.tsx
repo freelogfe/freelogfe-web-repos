@@ -238,7 +238,8 @@ function FResourceCardsList({
             }}
             theme='dark'
             className={styles.FInput}
-            placeholder={FI18n.i18nNext.t('search_resource')}
+            // placeholder={FI18n.i18nNext.t('search_resource')}
+            placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
           />
           {/* {showGotoCreateBtn && (
             <FComponentsLib.FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
