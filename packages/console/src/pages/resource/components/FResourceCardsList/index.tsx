@@ -113,6 +113,11 @@ function FResourceCardsList({
     setStatusText(selectedStatus?.text || selectedStatus?.value);
   }, [resourceStatus]);
 
+  console.log(resourceStatus, 'resourceStatus resourceStatussdefopjksdmlk');
+  console.log(resourceStatusOptions.find((rs) => {
+    return rs.value === resourceStatus;
+  }), 'resourceStatus ###09sdfujlsdkjf');
+
   return (
     <>
       <div style={{ height: 40 }} />
@@ -198,18 +203,24 @@ function FResourceCardsList({
           </div>
           <div style={{ marginLeft: 60 }}>
             <span>{FI18n.i18nNext.t('resource_state')}：</span>
+
             <FComponentsLib.FDropdown
               overlay={
                 <FMenu
                   options={resourceStatusOptions as any}
                   onClick={(value) =>
-                    onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')
+                    onChangeResourceStatus && onChangeResourceStatus(value === '#' ? value : Number(value) as 0)
                   }
                 />
               }
             >
+
               <span style={{ cursor: 'pointer' }}>
-                {statusText}
+
+                {resourceStatusOptions.find((rs) => {
+                  return rs.value === resourceStatus;
+                })?.text}
+                {/*{statusText}*/}
                 {/*<DownOutlined style={{ marginLeft: 10 }} />*/}
                 <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
               </span>

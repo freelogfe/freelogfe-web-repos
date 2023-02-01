@@ -5,12 +5,13 @@ import { ConnectState, ResourceCollectPageModelState } from '@/models/connect';
 import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
-  // ChangeStatesAction,
   OnMountAction,
   OnUnmountAction,
   OnChangeResourceTypeAction,
   OnChangeStatusAction,
-  OnChangeKeywordsAction, OnBoomJuiceAction, OnClickLoadingMordAction,
+  OnChangeKeywordsAction,
+  OnBoomJuiceAction,
+  OnClickLoadingMordAction,
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -40,7 +41,6 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
     return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }
 
-  // console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
   if (resource.dataSource.length === 0
     && !resource.inputText
     && resource.resourceType === '-1'

@@ -19,7 +19,7 @@ export interface FResourceCardProps {
     version: string;
     policy: string[];
     type: string[];
-    status: 0 | 1;
+    status: 0 | 1 | 2 | 4;
     authProblem?: boolean;
   };
   onBoomJuice?: EventFunc;
@@ -85,16 +85,17 @@ function FResourceCard({
             </nav>
             <div className={styles.Status}>
               <FResourceStatusBadge
-                status={(resource.status & 2) === 2
+                status={resource.status === 2
                   ? 'freeze'
                   : resource.status === 1
                     ? 'online'
-                    : !resource.version
+                    : resource.status === 0
                       ? 'unreleased'
                       : 'offline'}
               />
               <div style={{ width: 10 }} />
-              {resource.authProblem && <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
+              {resource.authProblem &&
+              <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
           </>)
         }
