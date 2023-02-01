@@ -82,8 +82,8 @@ function FResourceCardsList({
                               onClickRevision,
                               onClickMore,
                             }: FResourceCardsListProps) {
-  const [typeText, setTypeText] = React.useState('');
-  const [statusText, setStatusText] = React.useState('');
+  // const [typeText, setTypeText] = React.useState('');
+  // const [statusText, setStatusText] = React.useState('');
   const [category, setCategory] = React.useState<any>({
     first: -1,
     second: '',
@@ -103,20 +103,20 @@ function FResourceCardsList({
     // console.log(str, '09i8owejklsdjflaskdjflksdj')
     onChangeResourceType && onChangeResourceType(str);
   }, [category]);
-  React.useEffect(() => {
-    const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
-    setTypeText(selectedType?.text || selectedType?.value);
-  }, [resourceType]);
+  // React.useEffect(() => {
+  //   const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
+  //   setTypeText(selectedType?.text || selectedType?.value);
+  // }, [resourceType]);
 
-  React.useEffect(() => {
-    const selectedStatus: any = resourceStatusOptions.find((i) => i.value === resourceStatus);
-    setStatusText(selectedStatus?.text || selectedStatus?.value);
-  }, [resourceStatus]);
+  // React.useEffect(() => {
+  //   const selectedStatus: any = resourceStatusOptions.find((i) => i.value === resourceStatus);
+  //   setStatusText(selectedStatus?.text || selectedStatus?.value);
+  // }, [resourceStatus]);
 
-  console.log(resourceStatus, 'resourceStatus resourceStatussdefopjksdmlk');
-  console.log(resourceStatusOptions.find((rs) => {
-    return rs.value === resourceStatus;
-  }), 'resourceStatus ###09sdfujlsdkjf');
+  // console.log(resourceStatus, 'resourceStatus resourceStatussdefopjksdmlk');
+  // console.log(resourceStatusOptions.find((rs) => {
+  //   return rs.value === resourceStatus;
+  // }), 'resourceStatus ###09sdfujlsdkjf');
 
   return (
     <>
