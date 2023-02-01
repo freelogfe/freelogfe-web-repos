@@ -209,16 +209,21 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               set_customOptionsDataVisible(!customOptionsDataVisible);
             }}
           >
-            <span>自定义选项（高级）</span>
-            {
-              customOptionsDataVisible
-                ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
-                : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
-            }
+            <div style={{display: 'flex', alignItems: 'center', gap: 5}}>
+              <span>自定义选项（高级）</span>
+
+              <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
+              </FTooltip>
+
+              {
+                customOptionsDataVisible
+                  ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
+                  : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
+              }
+            </div>
           </FComponentsLib.FTextBtn>
-          <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-            <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
-          </FTooltip>
+
         </Space>
 
         {
