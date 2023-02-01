@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FSwitch from '../FSwitch';
-import { Space } from 'antd';
+import { Space, Spin } from 'antd';
 import FModal from '../FModal';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
@@ -21,8 +21,8 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
   // console.log(dataSource, 'dataSource#@@@@@#@##########');
   const disabledOnlyUsing: boolean = atLeastOneUsing
     ? dataSource.filter((ds) => {
-        return ds.status === 1;
-      }).length <= 1
+    return ds.status === 1;
+  }).length <= 1
     : false;
 
   return (
@@ -52,22 +52,28 @@ interface PolicyCardProps {
   fullInfo: PolicyFullInfo_Type;
   onlineDisable?: boolean;
   activeBtnShow?: boolean;
+
   onOnlineChange?(bool: boolean): void;
 }
 
 export function PolicyCard({
-  fullInfo,
-  onlineDisable = false,
-  activeBtnShow = true,
-  onOnlineChange,
-}: PolicyCardProps) {
-  const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
+                             fullInfo,
+                             onlineDisable = false,
+                             activeBtnShow = true,
+                             onOnlineChange,
+                           }: PolicyCardProps) {
+  const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>(false);
+  const [loading, set_loading] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    // console.log('#####89sdflsdkfjlsdjl****');
+    set_loading(false);
+  }, [fullInfo]);
   return (
     <div className={styles.policy}>
       <div className={styles.header}>
         <FComponentsLib.FContentText
-          type="highlight"
+          type='highlight'
           text={fullInfo.policyName}
           style={{ maxWidth: 150 }}
           singleRow
@@ -84,13 +90,16 @@ export function PolicyCard({
               zIndex={onlineDisable ? 1 : -1}
             >
               <div>
-                <FSwitch
-                  disabled={onlineDisable}
-                  checked={fullInfo.status === 1}
-                  onChange={(value) => {
-                    onOnlineChange && onOnlineChange(value);
-                  }}
-                />
+                <Spin spinning={loading}>
+                  <FSwitch
+                    disabled={onlineDisable}
+                    checked={fullInfo.status === 1}
+                    onChange={(value) => {
+                      onOnlineChange && onOnlineChange(value);
+                      set_loading(true);
+                    }}
+                  />
+                </Spin>
               </div>
             </FTooltip>
           </Space>
@@ -120,10 +129,10 @@ export function PolicyCard({
         centered
       >
         <div className={styles.ModalTile}>
-          <FComponentsLib.FTitleText text={fullInfo.policyName} type="h2" />
+          <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
           <div style={{ width: 20 }} />
           <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
-            {FI18n.i18nNext.t('btn_activate_auth_plan')}
+            {FI18n.i18nNext.t('btn_activate_auth_plan') + '22222'}
           </label>
           <div style={{ width: 10 }} />
           <FSwitch
