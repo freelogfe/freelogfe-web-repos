@@ -85,6 +85,7 @@ export interface ResourceVersionCreatorPageModelState {
   }[];
 
   // promptLeavePath: string;
+  releaseTipVisible: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -249,6 +250,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   preVersionBaseProperties: [],
   preVersionOptionProperties: [],
   preVersionDirectDependencies: [],
+
+  releaseTipVisible: false,
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -409,7 +412,6 @@ const Model: ResourceVersionCreatorModelType = {
         return;
       }
 
-
       const dependentAllResourcesWithContracts: {
         resourceID: string;
         resourceName: string;
@@ -424,19 +426,12 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'resource' | 'object';
         versionRange?: string;
       }[] = yield call(p.getAllTargets);
-      // console.log(payload, 'payload98isfjsdolifjksdlfjlkj');
 
       const baseUpcastResources: {
         resourceID: string;
         resourceName: string;
       }[] = yield call(p.getBaseUpcastResources);
-      // const baseUpcastResources: { resourceId: string }[] = dependentAllResourcesWithContracts
-      //   .filter((r) => {
-      //     return r.contracts.length === 0;
-      //   })
-      //   .map((r) => {
-      //     return { resourceId: r.resourceID };
-      //   });
+
       const dependencies: {
         resourceId: string;
         versionRange: string;
@@ -466,46 +461,59 @@ const Model: ResourceVersionCreatorModelType = {
             }),
           };
         });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          releaseTipVisible: true,
+        },
+      });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
-          resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
-          version: resourceVersionCreatorPage.versionInput,
-          fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
-          filename: resourceVersionCreatorPage.selectedFileInfo.name,
-          baseUpcastResources: baseUpcastResources.map((r) => {
-            return { resourceId: r.resourceID };
+        resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
+        version: resourceVersionCreatorPage.versionInput,
+        fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
+        filename: resourceVersionCreatorPage.selectedFileInfo.name,
+        baseUpcastResources: baseUpcastResources.map((r) => {
+          return { resourceId: r.resourceID };
+        }),
+        dependencies: dependencies,
+        resolveResources: resolveResources,
+        customPropertyDescriptors: [
+          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+          ((i) => {
+            return {
+              type: 'readonlyText',
+              key: i.key,
+              remark: i.description,
+              defaultValue: i.value,
+            };
           }),
-          dependencies: dependencies,
-          resolveResources: resolveResources,
-          customPropertyDescriptors: [
-            ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
-            ((i) => {
+          ...
+            resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+              const isInput: boolean = i.custom === 'input';
+              const options: string[] = i.customOption.split(',');
               return {
-                type: 'readonlyText',
+                type: isInput ? 'editableText' : 'select',
                 key: i.key,
                 remark: i.description,
-                defaultValue: i.value,
+                defaultValue: isInput ? i.defaultValue : options[0],
+                candidateItems: isInput ? undefined : options,
               };
             }),
-            ...
-              resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-                const isInput: boolean = i.custom === 'input';
-                const options: string[] = i.customOption.split(',');
-                return {
-                  type: isInput ? 'editableText' : 'select',
-                  key: i.key,
-                  remark: i.description,
-                  defaultValue: isInput ? i.defaultValue : options[0],
-                  candidateItems: isInput ? undefined : options,
-                };
-              }),
-          ],
-          description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
-            ? ''
-            : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
-        }
-      ;
+        ],
+        description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
+          ? ''
+          : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+      };
 
       const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
+      yield FUtil.Tool.promiseSleep(2000);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          releaseTipVisible: false,
+        },
+      });
       if (ret !== 0 || errCode !== 0 || !data) {
         self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 0]);
         fMessage('创建失败', 'error');

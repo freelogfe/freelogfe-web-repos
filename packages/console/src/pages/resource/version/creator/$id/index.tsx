@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FBraftEditor from '@/components/FBraftEditor';
-import { Space } from 'antd';
+import { Modal, Progress, Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -18,7 +18,10 @@ import {
   OnClick_ImportLastVersionDependents_Btn_Action,
   OnChange_DescriptionEditorState_Action,
   OnSucceed_UploadFile_Action,
-  OnSucceed_ImportObject_Action, OnClose_MarkdownEditor_Action, OnTrigger_SaveDraft_Action, OnChange_DataIsDirty_Action,
+  OnSucceed_ImportObject_Action,
+  OnClose_MarkdownEditor_Action,
+  OnTrigger_SaveDraft_Action,
+  OnChange_DataIsDirty_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -39,21 +42,18 @@ import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
 
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
-
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
-  resourceInfo: ResourceInfoModelState;
+  // resourceInfo: ResourceInfoModelState;
 }
 
 function VersionCreator({
                           dispatch,
-                          resourceInfo,
+                          // resourceInfo,
                           resourceVersionCreatorPage,
                           match,
                         }: VersionCreatorProps) {
-  // console.log(match, 'matchoisjdflkjsdflkjsdkljl');
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
 
@@ -82,7 +82,6 @@ function VersionCreator({
           },
         });
       }
-
     },
     [resourceVersionCreatorPage.dataIsDirty, resourceVersionCreatorPage.descriptionEditorState],
     {
@@ -109,20 +108,12 @@ function VersionCreator({
     await fResourceMarkdownEditor({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {
-        // await dispatch<OnChange_DataIsDirty_Action>({
-        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-        //   payload: {
-        //     value: saved,
-        //   },
-        // } );
-        // console.log(saved, 'savedsavedsavedsaveddiosfjslkdfjlsdkjlk');
         set_isMarkdownEditorDirty(!saved);
       },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     });
-
   }
 
   if (!hasError) {
@@ -161,11 +152,12 @@ function VersionCreator({
 
           <Space size={30}>
 
-            {resourceVersionCreatorPage.draftSaveTime && (<FComponentsLib.FContentText
-              text={`已保存 ${resourceVersionCreatorPage.draftSaveTime}`}
-              type={'additional2'}
-            />)}
-
+            {
+              resourceVersionCreatorPage.draftSaveTime && (<FComponentsLib.FContentText
+                text={`已保存 ${resourceVersionCreatorPage.draftSaveTime}`}
+                type={'additional2'}
+              />)
+            }
 
             <FComponentsLib.FTextBtn
               type='default'
@@ -418,6 +410,8 @@ function VersionCreator({
         {/*  </div>*/}
         {/*</div>*/}
       </FLeftSiderLayout>
+
+      <ReleaseTip visible={resourceVersionCreatorPage.releaseTipVisible} />
     </>
   );
 }
@@ -426,3 +420,41 @@ export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectSta
   resourceVersionCreatorPage: resourceVersionCreatorPage,
   resourceInfo: resourceInfo,
 }))(VersionCreator);
+
+interface ReleaseTipProps {
+  visible: boolean;
+}
+
+function ReleaseTip({ visible }: ReleaseTipProps) {
+
+  const [percent, set_percent] = React.useState(0);
+
+  AHooks.useInterval(() => {
+    set_percent(Math.min(percent + 33, 99));
+  }, visible ? 500 : undefined);
+
+  return (<Modal
+    open={visible}
+    closable={false}
+    footer={null}
+    width={920}
+  >
+    <div style={{
+      height: 452,
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+    }}>
+      <div style={{ fontSize: 20, color: '#222', lineHeight: '28px' }}>{percent}%</div>
+      <div style={{ height: 20 }} />
+      <div style={{ width: 300 }}>
+        <Progress percent={percent} showInfo={false} />
+      </div>
+      <div style={{ height: 40 }} />
+      <div style={{ fontSize: 16, color: '#666', lineHeight: '22px' }}>资源版本正在发布，请稍后</div>
+
+    </div>
+  </Modal>);
+}
