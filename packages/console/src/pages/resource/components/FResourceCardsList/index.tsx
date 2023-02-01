@@ -5,16 +5,16 @@ import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
-import { DownOutlined } from '@ant-design/icons';
+// import { DownOutlined } from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import categoryData from '@/utils/category';
 import FComponentsLib from '@freelog/components-lib';
 
-const resourceTypeOptions = [
-  { text: '全部', value: '-1' },
-  ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i })),
-];
+// const resourceTypeOptions = [
+//   { text: '全部', value: '-1' },
+//   ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i })),
+// ];
 
 const resourceStatusOptions = [
   { text: '全部', value: '#' },
