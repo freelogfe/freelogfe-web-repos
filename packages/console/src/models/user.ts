@@ -114,7 +114,7 @@ const Model: MarketModelType = {
       window.document.addEventListener('visibilitychange', () => {
         userPermission.check()
           .then((code) => {
-            console.log(code, '###3098usdoikfjsldkfjl lsjdflkjsdl');
+            // console.log(code, '###3098usdoikfjsldkfjl lsjdflkjsdl');
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
               co(FI18n.i18nNext.t('msg_account_switched'));
             }
