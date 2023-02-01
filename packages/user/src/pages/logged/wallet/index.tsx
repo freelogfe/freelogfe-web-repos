@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FSafetyLock from '@/components/FIcons/FSafetyLock';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Modal, Space, Radio, message, DatePicker } from 'antd';
@@ -59,7 +58,6 @@ import {
   OnClick_Table_Filter_SearchBtn_Action,
   OnClick_Table_Filter_ResetBtn_Action,
 } from '@/models/walletPage';
-// import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
@@ -69,9 +67,8 @@ import moment from 'moment';
 import FComponentsLib from '@freelog/components-lib';
 import userPermission from '@/permissions/UserPermission';
 import fConfirmModal from '@/components/fConfirmModal';
-import { history } from '@@/core/history';
+import { history } from 'umi';
 import { ChangeAction } from '@/models/settingPage';
-// import { individualAccounts } from '../../../../../@freelog/tools-lib/src/service-API/transactions';
 
 const RangePicker: any = DatePicker.RangePicker;
 
