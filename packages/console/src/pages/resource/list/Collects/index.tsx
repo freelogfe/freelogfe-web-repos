@@ -41,7 +41,10 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
   }
 
   // console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
-  if (resource.dataSource.length === 0 && !resource.inputText && resource.resourceType === '-1' && resource.resourceStatus === '2') {
+  if (resource.dataSource.length === 0
+    && !resource.inputText
+    && resource.resourceType === '-1'
+    && resource.resourceStatus === '#') {
     return (<FNoDataTip
       height={'calc(100vh - 140px)'}
       tipText={'未收藏任何资源'}
@@ -64,7 +67,7 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
         },
       });
     }}
-    onChangeResourceStatus={(value: string) => {
+    onChangeResourceStatus={(value) => {
       dispatch<OnChangeStatusAction>({
         type: 'resourceCollectPage/onChangeStatus',
         payload: {

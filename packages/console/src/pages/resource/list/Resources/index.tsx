@@ -44,7 +44,7 @@ function Resources({ dispatch, resource }: ResourceProps) {
     resource.dataSource.length === 0 &&
     resource.inputText === '' &&
     resource.resourceType === '-1' &&
-    resource.resourceStatus === '2'
+    resource.resourceStatus === '#'
   ) {
     return (
       <FNoDataTip

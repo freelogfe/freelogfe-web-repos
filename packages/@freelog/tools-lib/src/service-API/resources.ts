@@ -83,7 +83,7 @@ interface ListParamsType {
   omitResourceType?: string;
   isSelf?: 0 | 1;
   userId?: number;
-  status?: 0 | 1 | 2;
+  status?: 0 | 1 | 2 | 4; // 分别是 0:待发行(初始状态) 1:上架 2:冻结 4:下架(也叫待上架)
   isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   isLoadFreezeReason?: 0 | 1;

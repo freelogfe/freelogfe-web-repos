@@ -6,7 +6,7 @@ import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
-  resourceStatus: '0' | '1' | '2';
+  resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageCurrent: number;
   pageSize: number;
@@ -56,7 +56,7 @@ export interface OnChangeResourceTypeAction extends AnyAction {
 export interface OnChangeStatusAction extends AnyAction {
   type: 'resourceCollectPage/onChangeStatus';
   payload: {
-    value: string;
+    value: 0 | 1 | 2 | 4 | '#';
   };
 }
 
@@ -70,11 +70,6 @@ export interface OnChangeKeywordsAction extends AnyAction {
 export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceCollectPage/onClickLoadingMord';
 }
-
-// export interface ChangeStatesAction extends AnyAction {
-//   type: 'resourceCollectPage/changeStates',
-//   payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
-// }
 
 export interface OnBoomJuiceAction extends AnyAction {
   type: 'resourceCollectPage/onBoomJuice';
@@ -104,7 +99,7 @@ export interface ResourceCollectModelType {
 
 const initStates: ResourceCollectPageModelState = {
   resourceType: '-1',
-  resourceStatus: '2',
+  resourceStatus: '#',
   inputText: '',
   dataSource: [],
   pageSize: 20,
@@ -164,7 +159,7 @@ const Model: ResourceCollectModelType = {
         limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
         resourceType: resourceCollectPage.resourceType === '-1' ? undefined : resourceCollectPage.resourceType,
-        resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
+        resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
       };
 
       const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
@@ -229,7 +224,7 @@ const Model: ResourceCollectModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceStatus: payload.value as '1',
+          resourceStatus: payload.value,
         },
       });
 

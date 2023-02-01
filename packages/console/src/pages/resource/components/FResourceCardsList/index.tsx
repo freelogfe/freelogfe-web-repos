@@ -17,9 +17,14 @@ const resourceTypeOptions = [
 ];
 
 const resourceStatusOptions = [
-  { text: '全部', value: '2' },
-  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: '1' },
-  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: '0' },
+  { text: '全部', value: '#' },
+  { text: '待发行', value: 0 },
+  { text: '上架', value: 1 },
+  { text: '冻结', value: 2 },
+  { text: '下架', value: 4 },
+  // { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: '1' },
+  // { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: '0' },
+
 ];
 
 // const navs = [
@@ -37,14 +42,14 @@ type EventFunc = (id: string | number, record: any, index: number) => void;
 
 interface FResourceCardsListProps {
   resourceType: string;
-  resourceStatus: string;
+  resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
 
   dataSource: FResourceCardProps['resource'][];
   totalNum: number;
 
   onChangeResourceType?: (value: string) => void;
-  onChangeResourceStatus?: (value: '0' | '1' | '2') => void;
+  onChangeResourceStatus?: (value: 0 | 1 | 2 | 4 | '#') => void;
   onChangeInputText?: (value: string) => void;
 
   onloadMore?(): void;
@@ -196,7 +201,7 @@ function FResourceCardsList({
             <FComponentsLib.FDropdown
               overlay={
                 <FMenu
-                  options={resourceStatusOptions}
+                  options={resourceStatusOptions as any}
                   onClick={(value) =>
                     onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')
                   }

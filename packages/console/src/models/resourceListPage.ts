@@ -6,7 +6,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
   resourceType: string;
-  resourceStatus: string;
+  resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageSize: number;
   totalNum: number;
@@ -57,7 +57,7 @@ export interface OnChangeResourceTypeAction extends AnyAction {
 export interface OnChangeStatusAction extends AnyAction {
   type: 'resourceListPage/onChangeStatus';
   payload: {
-    value: string;
+    value: 0 | 1 | 2 | 4 | '#';
   };
 }
 
@@ -100,7 +100,7 @@ export interface ResourceListPageModelType {
 
 const initStates: ResourceListPageModelState = {
   resourceType: '-1',
-  resourceStatus: '2',
+  resourceStatus: '#',
   inputText: '',
   dataSource: [],
   // pageSize: 20,
@@ -147,7 +147,8 @@ const Model: ResourceListPageModelType = {
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
         resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
-        status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
+        // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
+        status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
       const { data } = yield call(FServiceAPI.Resource.list, params);
