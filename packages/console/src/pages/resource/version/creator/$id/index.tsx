@@ -430,8 +430,8 @@ function ReleaseTip({ visible }: ReleaseTipProps) {
   const [percent, set_percent] = React.useState(0);
 
   AHooks.useInterval(() => {
-    set_percent(Math.min(percent + 33, 99));
-  }, visible ? 500 : undefined);
+    set_percent(Math.min(percent + 1, 99));
+  }, visible ? 8 : undefined);
 
   return (<Modal
     open={visible}
