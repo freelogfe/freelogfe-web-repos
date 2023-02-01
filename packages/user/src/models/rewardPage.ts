@@ -24,6 +24,7 @@ export interface RewardPageModelState {
   withdrawModal_RealNameError: string;
   withdrawModal_Amount: string;
   withdrawModal_AmountError: string;
+  withdrawModal_drawing: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -131,6 +132,7 @@ const initStates: RewardPageModelState = {
   withdrawModal_RealNameError: '',
   withdrawModal_Amount: '',
   withdrawModal_AmountError: '',
+  withdrawModal_drawing: false,
 };
 
 const Model: RewardPageModelType = {
@@ -298,11 +300,24 @@ const Model: RewardPageModelType = {
       const { rewardPage } = yield select(({ rewardPage }: ConnectState) => ({
         rewardPage,
       }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          withdrawModal_drawing: true,
+        },
+      });
       const params: Parameters<typeof FServiceAPI.Activity.withdrawCoinAccount>[0] = {
         reUserName: rewardPage.withdrawModal_RealName,
         amount: Number(rewardPage.withdrawModal_Amount),
       };
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Activity.withdrawCoinAccount, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          withdrawModal_drawing: false,
+        },
+      });
       if (ret !== 0 || errCode !== 0) {
         self._czc?.push(['_trackEvent', '个人中心页', '提现至微信', '', 1]);
         fMessage(msg, 'error');
