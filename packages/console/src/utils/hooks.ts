@@ -10,7 +10,7 @@ export function useGetState<T>(initVal: T): [T, (newVal: T) => void, () => T] {
   }
 
   function getState(): T {
-    return ref.current
+    return ref.current;
   }
 
   return [state, setStateCopy, getState];
