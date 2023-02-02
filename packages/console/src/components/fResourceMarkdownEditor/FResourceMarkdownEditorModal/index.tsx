@@ -491,7 +491,7 @@ export const MarkdownEditor = (props: EditorProps) => {
           <div className="authorization-processor-box">
             <FResourceAuthorizationProcessor
               resourceID={resourceId}
-              width={1100}
+              // width={1100}
               onMount={async (processor) => {
                 policyProcessor.current = processor;
               }}
