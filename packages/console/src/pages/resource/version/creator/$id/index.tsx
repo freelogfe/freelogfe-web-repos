@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
   ConnectState,
-  ResourceInfoModelState,
+  // ResourceInfoModelState,
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
