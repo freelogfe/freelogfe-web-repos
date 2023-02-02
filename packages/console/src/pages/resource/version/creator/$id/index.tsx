@@ -365,7 +365,10 @@ function VersionCreator({
 
               </Space>
 
+
               <FResourceAuthorizationProcessor
+                width={860}
+                height={600}
                 resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                 processorIdentifier={'resourceVersionCreator'}
                 onChanged={() => {
@@ -376,10 +379,6 @@ function VersionCreator({
                     },
                   });
                 }}
-                // width={1100}
-                // onMount={(p) => {
-                //   processor = p;
-                // }}
               />
             </div>
           </FFormLayout.FBlock>

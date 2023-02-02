@@ -55,9 +55,7 @@ export interface Processor {
 interface FResourceAuthorizationProcessorProps {
   resourceID: string;
   processorIdentifier?: string;
-  // TODO: 默认 100%
   width?: number | string;
-  // TODO: 默认 100%
   height?: number | string;
 
   onMount?(processor: Processor): void;
@@ -96,7 +94,8 @@ let processors: {
 function FResourceAuthorizationProcessor({
                                            resourceID,
                                            processorIdentifier = '',
-                                           width = 860,
+                                           width = '100%',
+                                           height = '100%',
                                            onMount,
                                            onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
@@ -108,19 +107,6 @@ function FResourceAuthorizationProcessor({
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
-  // console.log(baseUpcastResources, 'baseUpcastResourceso9ipwjslfksdjflksdjlk');
-  // console.log(relations, 'relationssdfoijsdlfkjsdlfkjlkj');
-
-  // const { run } = AHooks.useDebounceFn(
-  //   async () => {
-  //     // setValue(value + 1);
-  //     const res = await _addTargets(addingTargetsRef.current);
-  //     addingTargetsRef.current = [];
-  //   },
-  //   {
-  //     wait: 500,
-  //   },
-  // );
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -182,11 +168,7 @@ function FResourceAuthorizationProcessor({
   });
 
   async function addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
-    // console.log(targetsFrom, 'targetsFromsdiofjsdlkfjsdlkfjlkj*****88888');
-
     const targets = _deduplicateTargets(targetsFrom);
-
-    // const oldRelations: IRelation[] = get_relations();
 
     const existResourceIDs: string[] = get_relations()
       .filter((t) => {
@@ -248,8 +230,6 @@ function FResourceAuthorizationProcessor({
       }[];
     } = await FServiceAPI.Resource.batchInfo(params);
 
-    // console.log(data_batchResourceInfo, 'data_batchResourceInfo09iwoejflksdjflsdkjl');
-
     const result: FResourceAuthorizationProcessorStates['relations'] = needAddResources.map((t) => {
       const r = data_batchResourceInfo.find((r) => {
         return t.id === r.resourceId;
@@ -290,11 +270,6 @@ function FResourceAuthorizationProcessor({
     await _syncTargetInfo();
     return { err: '' };
   }
-
-  // async function _addTargets(targetsFrom: Target[]): Promise<{ err: string }> {
-  //
-  //
-  // }
 
   async function _syncTargetInfo() {
     let relationResourceIDs: string[] = [
@@ -546,25 +521,11 @@ function FResourceAuthorizationProcessor({
     return null;
   }
 
-  return (<div className={styles.box} style={{ width: width }}>
+  return (<div className={styles.box} style={{
+    width: width,
+    height: height,
+  }}>
     <FBasicUpcastCard
-      // dataSource={licenseeResource.latestVersion === ''
-      //   ? targetInfos
-      //     .filter((t) => {
-      //       return t.targetType === 'resource' && t.upThrow;
-      //     })
-      //     .map((t) => {
-      //       return {
-      //         resourceID: t.targetID,
-      //         resourceName: t.targetName,
-      //       };
-      //     })
-      //   : licenseeResource.baseUpcastResources.map((bur) => {
-      //     return {
-      //       resourceID: bur.resourceID,
-      //       resourceName: bur.resourceName,
-      //     };
-      //   })}
       dataSource={baseUpcastResources}
       onClick={(resourceID) => {
         window.open(FUtil.LinkTo.resourceDetails({
@@ -597,7 +558,6 @@ function FResourceAuthorizationProcessor({
               }}
             />
           </div>
-          {/*{console.log(baseUpcastResources, 'baseUpcastResourcesi9ojdlkfjsdlfkjl')}*/}
           <div className={styles.DepPanelContent}>
             <Content
               activatedTarget={activatedTarget}
