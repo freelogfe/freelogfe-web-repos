@@ -523,7 +523,11 @@ function FResourceAuthorizationProcessor({
 
   return (<div className={styles.box} style={{
     width: width,
-    height: height,
+    height: relations.length > 0
+      ? height
+      : baseUpcastResources.length > 0
+        ? 'fit-content'
+        : 0,
   }}>
     <FBasicUpcastCard
       dataSource={baseUpcastResources}
