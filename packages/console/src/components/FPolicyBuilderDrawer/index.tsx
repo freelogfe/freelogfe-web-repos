@@ -80,6 +80,10 @@ interface FPolicyBuilderDrawerStates {
 
   failResult: {
     errorText: string;
+    title: string;
+    code: string;
+    translation: string;
+    view: any;
   } | null;
 
   successResult: {
@@ -481,7 +485,13 @@ function FPolicyBuilder({
 
       if (alreadyUsedTexts?.includes(code_Input)) {
         setShowView('fail');
-        setFailResult({ errorText: '当前策略已存在' });
+        setFailResult({
+          errorText: '当前策略已存在',
+          title: titleInput,
+          code: code_Input,
+          translation: text || '',
+          view: [],
+        });
         return;
       }
 
@@ -503,7 +513,13 @@ function FPolicyBuilder({
       setIsVerifying(false);
       if (alreadyUsedTexts?.includes(combinationCode)) {
         setShowView('fail');
-        setFailResult({ errorText: '当前策略已存在' });
+        setFailResult({
+          errorText: '当前策略已存在',
+          title: titleInput,
+          code: combinationCode,
+          translation: translationText || '',
+          view: [],
+        });
         return;
       }
       // setIsVerifying(false);
@@ -736,16 +752,25 @@ function FPolicyBuilder({
       {
         showView === 'fail' && (<div>
           <div className={styles.PolicyVerifyFail}>
-            <FComponentsLib.FIcons.FInfo />
+            <FComponentsLib.FIcons.FFail
+              style={{
+                fontSize: 14,
+                color: '#EE4040',
+              }}
+            />
             <div style={{ width: 5 }} />
             <div>校验失败</div>
             <div style={{ width: 20 }} />
-            <span>以下是错误信息</span>
+            {/*<span>以下是错误信息</span>*/}
+            <span>{failResult?.errorText}</span>
           </div>
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div />
+            <FComponentsLib.FTitleText
+              type='h1'
+              text={failResult?.title || ''}
+            />
 
             <FComponentsLib.FTextBtn
               type='primary'
@@ -760,9 +785,15 @@ function FPolicyBuilder({
 
           <div style={{ height: 30 }} />
 
-          <div>
-            <FComponentsLib.FContentText text={failResult?.errorText || ''} />
-          </div>
+          {/*<div>*/}
+          {/*  <FComponentsLib.FContentText text={failResult?.errorText || ''} />*/}
+          {/*</div>*/}
+
+          <PolicyShowcase
+            content={failResult?.translation || ''}
+            code={failResult?.code || ''}
+            view={failResult?.view || ''}
+          />
 
         </div>)
       }
