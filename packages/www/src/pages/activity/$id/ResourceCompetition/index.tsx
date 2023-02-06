@@ -67,7 +67,7 @@ function ResourceCompetition({
       <div style={{ height: 100 }} />
 
       <FModal
-        width={1100}
+        width={1000}
         visible={modalVisible}
         footer={null}
         centered
@@ -93,7 +93,7 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -103,48 +103,48 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
+            {/*<div className={styles.regulationItem}>*/}
+            {/*  <div className={styles.circle} />*/}
+            {/*  <div style={{ width: 15 }} />*/}
+            {/*  <div className={styles.text}>*/}
+            {/*    <span>*/}
+            {/*      用户可同时领取资源作者和节点商奖励，即用户可自己创建节点签约参赛资源为展品，参与展品被签约排名。*/}
+            {/*    </span>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
               <div className={styles.text}>
                 <span>
-                  用户可同时领取资源作者和节点商奖励，即用户可自己创建节点签约参赛资源为展品，参与展品被签约排名。
+                  同一用户限领3次资源创建奖励，同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
-            <div className={styles.regulationItem}>
-              <div className={styles.circle} />
-              <div style={{ width: 15 }} />
-              <div className={styles.text}>
-                <span>
-                  同一用户限领3次资源发行奖励，Freelog会在资源发布后的1~2个工作日内审核资源是否合规，审核通过后，奖励会自动发放到用户账号。同一账号、同一登陆设备、同一登陆IP均视为同一用户，对于非正常创建资源、展品的用户，Freelog有权取消其活动参与资格，并扣除相应奖励不予结算。
-                </span>
-              </div>
-            </div>
-            <div style={{ height: 20 }} />
-            <div className={styles.regulationItem}>
-              <div className={styles.circle} />
-              <div style={{ width: 15 }} />
-              <div className={styles.text}>
-                <span>参赛活动的节点需使用官方指定主题。</span>
-              </div>
-            </div>
-            <div style={{ height: 20 }} />
-            <div className={styles.regulationItem}>
-              <div className={styles.circle} />
-              <div style={{ width: 15 }} />
-              <div className={styles.text}>
-                <span>
-                  活动期间，Freelog会向每位用户提供最高1000个羽币领取额度，羽币仅用于资源或展品授权合约交易，不可提现。活动结束后，累计的羽币可根据相应的规则进行奖品兑换。领取途径：<FComponentsLib.FTextBtn
-                  style={{ display: 'contents' }} onClick={() => {
-                  self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
-                }}>【个人中心】-【钱包】-【每日登录】</FComponentsLib.FTextBtn>。
-                </span>
-              </div>
-            </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
+            {/*<div className={styles.regulationItem}>*/}
+            {/*  <div className={styles.circle} />*/}
+            {/*  <div style={{ width: 15 }} />*/}
+            {/*  <div className={styles.text}>*/}
+            {/*    <span>参赛活动的节点需使用官方指定主题。</span>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+            {/*<div style={{ height: 20 }} />*/}
+            {/*<div className={styles.regulationItem}>*/}
+            {/*  <div className={styles.circle} />*/}
+            {/*  <div style={{ width: 15 }} />*/}
+            {/*  <div className={styles.text}>*/}
+            {/*    <span>*/}
+            {/*      活动期间，Freelog会向每位用户提供最高1000个羽币领取额度，羽币仅用于资源或展品授权合约交易，不可提现。活动结束后，累计的羽币可根据相应的规则进行奖品兑换。领取途径：<FComponentsLib.FTextBtn*/}
+            {/*      style={{ display: 'contents' }} onClick={() => {*/}
+            {/*      self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());*/}
+            {/*    }}>【个人中心】-【钱包】-【每日登录】</FComponentsLib.FTextBtn>。*/}
+            {/*    </span>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -183,7 +183,7 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -202,7 +202,7 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -212,7 +212,7 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            <div style={{ height: 20 }} />
+            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
