@@ -57,8 +57,8 @@ function ResourceCompetition({
       <div style={{ height: 100 }} />
       <Reward />
       <div style={{ height: 100 }} />
-      <Strategy />
-      <div style={{ height: 100 }} />
+      {/*<Strategy />*/}
+      {/*<div style={{ height: 100 }} />*/}
       <Banner2
         onClickRuleBtn={() => {
           set_ModalVisible(true);
