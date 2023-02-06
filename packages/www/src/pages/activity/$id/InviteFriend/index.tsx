@@ -394,14 +394,14 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             <span>邀请攻略</span>
           </div>
           {/*<div className='flex-row container'>*/}
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: 1060 }}>
             {/*<div className='h-590 over-h '>*/}
             <div style={{ width: 515 }}>
               <img src={friend} alt='' style={{ width: '100%' }} />
             </div>
             {/*<div className='h-590 over-h '>*/}
             <div style={{ width: 515 }}>
-              <img src={code} alt='' style={{ width: '100%' }}  />
+              <img src={code} alt='' style={{ width: '100%' }} />
             </div>
             {/*<div className='h-590 over-h '>*/}
             {/*  <img src={task} alt='' className='h-100x' />*/}
