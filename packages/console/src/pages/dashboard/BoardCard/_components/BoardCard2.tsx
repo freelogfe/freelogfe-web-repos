@@ -89,6 +89,7 @@ const tasks = {
       />
       <div style={{ height: 15 }} />
       <div>
+        {/*可查阅  资源授权策略添加教程  为资源添加授权策略。*/}
         <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
         &nbsp;
         <a
@@ -97,37 +98,37 @@ const tasks = {
           type='primary'
         >资源授权策略添加教程</a>
         &nbsp;
-        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
-        &nbsp;
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >资源作者使用教程</a>
-        &nbsp;
-        <FComponentsLib.FContentText text={'(视频) 为资源添加授权策略。'} style={{ display: 'contents' }} />
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*  type='primary'*/}
+        {/*>资源作者使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'为资源添加授权策略。'} style={{ display: 'contents' }} />
       </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.myResources());
     },
   },
-  TS000024: {
-    name: '分享资源',
-    popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'好的资源值得和好友一块分享，快去资源详情页点击分享按钮，将你喜欢的资源推荐给好友。'} type='highlight' />
-    </div>),
-    async onClick() {
-      const { data } = await FServiceAPI.Resource.list({
-        limit: 1,
-        isSelf: 1,
-      });
-      self.open(FUtil.LinkTo.resourceDetails({
-        resourceID: data.dataList[0].resourceId,
-      }));
-      console.log(data, 'DDDDDD89iok3ljw2sdjfsd');
-    },
-  },
+  // TS000024: {
+  //   name: '分享资源',
+  //   popoverContent: (<div className={styles.tooltipDisplay}>
+  //     <FComponentsLib.FContentText text={'好的资源值得和好友一块分享，快去资源详情页点击分享按钮，将你喜欢的资源推荐给好友。'} type='highlight' />
+  //   </div>),
+  //   async onClick() {
+  //     const { data } = await FServiceAPI.Resource.list({
+  //       limit: 1,
+  //       isSelf: 1,
+  //     });
+  //     self.open(FUtil.LinkTo.resourceDetails({
+  //       resourceID: data.dataList[0].resourceId,
+  //     }));
+  //     console.log(data, 'DDDDDD89iok3ljw2sdjfsd');
+  //   },
+  // },
 } as const;
 
 function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
@@ -135,7 +136,9 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
 
   AHooks.useMount(async () => {
     const { data } = await FServiceAPI.Activity.getResourceTaskInfo();
-    set_dataSource(data);
+    set_dataSource(data.filter((d: any) => {
+      return d.taskConfigCode in tasks;
+    }));
   });
 
   const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
