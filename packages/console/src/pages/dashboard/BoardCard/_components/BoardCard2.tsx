@@ -18,28 +18,27 @@ const tasks = {
     name: '创建1个资源',
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText
-        text={
-          '成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'
-        }
+        text={'成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'}
         type='highlight'
       />
       <div style={{ height: 15 }} />
       <div>
+        {/*可查阅  创建资源视频教程  或  图文教程  创建资源。*/}
         <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
         &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-        >资源作者使用教程</a>
+        >创建资源视频教程</a>
         &nbsp;
-        <FComponentsLib.FContentText text={'（视频）或'} style={{ display: 'contents' }} />
+        <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
         &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-        >资源创建教程</a>
+        >图文教程</a>
         &nbsp;
-        <FComponentsLib.FContentText text={'（图文）创建资源。'} style={{ display: 'contents' }} />
+        <FComponentsLib.FContentText text={'创建资源。'} style={{ display: 'contents' }} />
       </div>
     </div>),
     onClick() {
@@ -51,27 +50,28 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText
         text={
-          '通过更新资源版本可以优化和调整资源内容，以便在相同的资源中保留多个资源文件。'
+          '通过更新资源版本可以优化和调整资源内容，同时又可以保留更新历史和文件。'
         }
         type='highlight'
       />
       <div style={{ height: 15 }} />
       <div>
+        {/*可查阅   资源版本发布教程  发布资源版本。*/}
         <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
         &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
         >资源版本发布教程</a>
-        &nbsp;
-        <FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />
-        &nbsp;
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-        >资源作者使用教程</a>
-        &nbsp;
-        <FComponentsLib.FContentText text={'（视频）发布资源版本。'} style={{ display: 'contents' }} />
+        {/*&nbsp;*/}
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*>资源作者使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'发布资源版本。'} style={{ display: 'contents' }} />
       </div>
     </div>),
     onClick() {
