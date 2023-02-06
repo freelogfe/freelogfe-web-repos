@@ -137,9 +137,9 @@ const Model: UserModelType = {
               co(FI18n.i18nNext.t('msg_account_switched'));
             }
 
-            if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
-              co('用户已登出');
-            }
+            // if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
+            //   co('用户已登出');
+            // }
           });
       });
     },

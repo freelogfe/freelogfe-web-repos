@@ -157,7 +157,7 @@ function Login({ dispatch, loginPage }: LoginProps) {
                   }
                 }}
               />
-              {loginPage.passwordError && <div>{loginPage.passwordError}</div>}
+              {loginPage.passwordError && <div className={styles.errorTip}>{loginPage.passwordError}</div>}
 
               <div style={{ height: 40 }} />
               <FComponentsLib.FRectBtn
