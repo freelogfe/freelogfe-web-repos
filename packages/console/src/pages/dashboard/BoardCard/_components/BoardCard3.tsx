@@ -141,6 +141,9 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
       if (a.taskConfigCode === 'TS000033' && b.taskConfigCode === 'TS000032') {
         return -1;
       }
+      if (a.taskConfigCode === 'TS000032' && b.taskConfigCode === 'TS000033') {
+        return 1;
+      }
       return 0;
     });
     // console.log(data1, 'data1iosdjflksdjlk');
