@@ -160,10 +160,10 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
         {
           needSteps === 0
             ? (<div className={styles.title3} style={{ opacity: .5 }}>
-              7元奖励已领取
+              6元奖励已领取
             </div>)
             : (<div className={styles.title3}>
-              还差{needSteps}步领取 <span>7元</span> 奖励
+              还差{needSteps}步领取 <span>6元</span> 奖励
             </div>)
         }
 
