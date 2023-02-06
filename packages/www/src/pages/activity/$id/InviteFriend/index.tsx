@@ -393,16 +393,19 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             </div>
             <span>邀请攻略</span>
           </div>
-          <div className='flex-row container space-between'>
-            <div className='h-590 over-h '>
-              <img src={friend} alt='' className='h-100x' />
+          {/*<div className='flex-row container'>*/}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/*<div className='h-590 over-h '>*/}
+            <div style={{ width: 515 }}>
+              <img src={friend} alt='' style={{ width: '100%' }} />
             </div>
-            <div className='h-590 over-h '>
-              <img src={code} alt='' className='h-100x' />
+            {/*<div className='h-590 over-h '>*/}
+            <div style={{ width: 515 }}>
+              <img src={code} alt='' style={{ width: '100%' }}  />
             </div>
-            <div className='h-590 over-h '>
-              <img src={task} alt='' className='h-100x' />
-            </div>
+            {/*<div className='h-590 over-h '>*/}
+            {/*  <img src={task} alt='' className='h-100x' />*/}
+            {/*</div>*/}
           </div>
         </div>
         <div className='flex-column rule w-100x align-center' id='inner-test'>
@@ -422,52 +425,64 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               'YYYY/MM/DD'}
               ；
             </span>
+            {/*<span className=''>*/}
+            {/*  2.&nbsp;*/}
+            {/*  &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；*/}
+            {/*</span> */}
             <span className=''>
               2.&nbsp;
-              &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；
+              &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动将会暂停；
             </span>
+            {/*<span className=''>*/}
+            {/*  3.&nbsp;*/}
+            {/*  &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为3次。*/}
+            {/*  完成*/}
+            {/*  <a*/}
+            {/*    href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}*/}
+            {/*    target={'_blank'}*/}
+            {/*  >*/}
+            {/*    新手任务*/}
+            {/*  </a>*/}
+            {/*  中的【完善个人信息】【*/}
+            {/*  Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；*/}
+            {/*</span>*/}
             <span className=''>
               3.&nbsp;
-              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为3次。
-              完成
-              <a
-                href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}
-                target={'_blank'}
-              >
-                新手任务
-              </a>
-              中的【完善个人信息】【
-              Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；
-            </span>
-            <span className=''>
-              4.&nbsp;
               &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；
             </span>
             <span className=''>
-              5.&nbsp;
+              4.&nbsp;
               &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于
               {activityDetailsPage.announceTime?.format('YYYY年MM月DD日') ||
               'YYYY年MM月DD日'}
               公布；
             </span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-              <span className=''>
-                6.&nbsp; &nbsp;邀请好友参与Freelog内测活动
-                ，好友在7天内完成相应指定任务，即可领取3-20元现金奖励。可通过
-              </span>
-              <FComponentsLib.FTextBtn
-                type={'primary'}
-                onClick={() => {
-                  self.open(
-                    FUtil.Format.completeUrlByDomain('user') +
-                    FUtil.LinkTo.reward(),
-                  );
-                }}
-              >
-                【个人中心】—【活动奖励】
-              </FComponentsLib.FTextBtn>
-              <span>，将内测期间领取的现金奖励申请提现至微信钱宝。</span>
-            </div>
+            <span className=''>
+              5.&nbsp;
+              &nbsp;现金奖励发放方式及提现要求说明；
+            </span>
+            <span className=''>
+              6.&nbsp;
+              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
+            </span>
+            {/*<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>*/}
+            {/*  <span className=''>*/}
+            {/*    6.&nbsp; &nbsp;邀请好友参与Freelog内测活动*/}
+            {/*    ，好友在7天内完成相应指定任务，即可领取3-20元现金奖励。可通过*/}
+            {/*  </span>*/}
+            {/*  <FComponentsLib.FTextBtn*/}
+            {/*    type={'primary'}*/}
+            {/*    onClick={() => {*/}
+            {/*      self.open(*/}
+            {/*        FUtil.Format.completeUrlByDomain('user') +*/}
+            {/*        FUtil.LinkTo.reward(),*/}
+            {/*      );*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    【个人中心】—【活动奖励】*/}
+            {/*  </FComponentsLib.FTextBtn>*/}
+            {/*  <span>，将内测期间领取的现金奖励申请提现至微信钱宝。</span>*/}
+            {/*</div>*/}
             <span className=''>
               7.&nbsp;
               &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；
