@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig} from 'axios';
-import NProgress from 'nprogress';
-import "nprogress/nprogress.css";
+// import NProgress from 'nprogress';
+// import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
 import * as LinkTo from './linkTo';
 // import {CommonReturn, RequestParamsType} from "../service-API/tools";
@@ -59,12 +59,12 @@ if (window.location.hostname.includes('.com')) {
 axios.interceptors.request.use(
   (config) => {
     // Do something before request is sent
-    NProgress.start();
+    // NProgress.start();
     return config;
   },
   (error) => {
     // Do something with request error
-    NProgress.done();
+    // NProgress.done();
     return Promise.reject(error);
   }
 );
@@ -76,7 +76,7 @@ axios.interceptors.response.use(
   (response) => {
     // Do something with response data
     // console.log(response, 'response!!!!!!');
-    NProgress.done();
+    // NProgress.done();
     if (response.status !== 200) {
 
       const error = {
@@ -110,7 +110,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     // Do something with response error
-    NProgress.done();
+    // NProgress.done();
     return Promise.reject(error);
   });
 
