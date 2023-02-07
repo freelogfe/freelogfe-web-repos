@@ -1175,10 +1175,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'重新输入新密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_New2_PasswordInput}
-            errorText={settingPage.changePassword_New2_PasswordInput_Error}
+            // errorText={settingPage.changePassword_New2_PasswordInput_Error}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_New2_PasswordInput_Action>({
                 type: 'settingPage/onChange_ChangePassword_New2_PasswordInput',
@@ -1194,8 +1194,15 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入新密码'
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_New2_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_New2_PasswordInput_Error}</div>
+            </>)
+          }
 
           <div style={{ height: 80 }} />
           <div className={styles.modalFooter}>

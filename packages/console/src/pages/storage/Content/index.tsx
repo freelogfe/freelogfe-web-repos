@@ -132,7 +132,35 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     }
 
     {
-      storageHomePage.total === 0 && (<>
+      storageHomePage.total === 0 && storageHomePage.filterInput !== '' && (<>
+        <FNoDataTip
+          height={'calc(100vh - 170px)'}
+          // tipText={'当前Bucket还没有上传任何对象'}
+          tipText={'无搜索结果'}
+          // btn={<FComponentsLib.FRectBtn
+          //   onClick={async () => {
+          //     const files = await fReadLocalFiles({
+          //       multiple: true,
+          //     });
+          //     if (!files) {
+          //       return;
+          //     }
+          //
+          //     dispatch<UploadFilesAction>({
+          //       type: 'storageHomePage/uploadFiles',
+          //       payload: files,
+          //     });
+          //   }}
+          //   size='large'
+          //   type='primary'
+          //   style={{ paddingLeft: 50, paddingRight: 50 }}
+          // >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>}
+        />
+      </>)
+    }
+
+    {
+      storageHomePage.total === 0 && storageHomePage.filterInput === '' && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
           // tipText={'当前Bucket还没有上传任何对象'}
@@ -155,21 +183,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             type='primary'
             style={{ paddingLeft: 50, paddingRight: 50 }}
           >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>}
-          // btn={<FUpload
-          //   showUploadList={false}
-          //   multiple={true}
-          //   beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-          //     console.log(file, fileList, '9oijlkfjsdlkfjlskdjfljsdlfkj');
-          //     if (file === fileList[fileList.length - 1]) {
-          //       dispatch<UploadFilesAction>({
-          //         type: 'storageHomePage/uploadFiles',
-          //         payload: fileList,
-          //       });
-          //     }
-          //     return false;
-          //   }}>
-          //
-          // </FUpload>}
         />
       </>)
     }
