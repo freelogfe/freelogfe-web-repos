@@ -31,6 +31,7 @@ import {
   OnUnmountPageAction,
 } from '@/models/retrievePage';
 import FPasswordInput from '@/components/FPasswordInput';
+import FPhoneInput from '@/components/FPhoneInput';
 
 // import { FCheck } from '@/components/FIcons';
 
@@ -191,30 +192,33 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             <div style={{ height: 5 }} />
             {retrievePage.verifyMode === 'phone' ? (
               <>
-                <FInput
+                <FPhoneInput
+                  width={360}
+                  // placeholder='输入11位手机号码'
                   placeholder='输入11位手机号码'
-                  className={styles.verificationModeInput}
-                  wrapClassName={styles.verificationModeInput}
-                  value={retrievePage.phoneInput}
-                  onChange={(e) => {
+                  // className={styles.verificationModeInput}
+                  // wrapClassName={styles.verificationModeInput}
+                  inputValue={retrievePage.phoneInput}
+                  onChangeInput={(value) => {
                     dispatch<OnChangePhoneInputAction>({
                       type: 'retrievePage/onChangePhoneInput',
                       payload: {
-                        value: e.target.value,
+                        value: value,
                       },
                     });
                   }}
-                  onBlur={() => {
+                  onBlurInput={() => {
                     dispatch<OnBlurPhoneInputAction>({
                       type: 'retrievePage/onBlurPhoneInput',
                     });
                   }}
                 />
-                {retrievePage.phoneInputError && (
+                {retrievePage.phoneInputError && (<>
+                  <div style={{ height: 5 }} />
                   <div className={styles.errorTip}>
                     {retrievePage.phoneInputError}
                   </div>
-                )}
+                </>)}
               </>
             ) : (
               <>
@@ -237,11 +241,12 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                     });
                   }}
                 />
-                {retrievePage.emailInputError && (
+                {retrievePage.emailInputError && (<>
+                  <div style={{ height: 5 }} />
                   <div className={styles.errorTip}>
                     {retrievePage.emailInputError}
                   </div>
-                )}
+                </>)}
               </>
             )}
           </div>
@@ -291,11 +296,12 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                   : `${retrievePage.verifyCodeReSendWait}秒`}
               </FComponentsLib.FRectBtn>
             </div>
-            {retrievePage.verifyCodeError && (
+            {retrievePage.verifyCodeError && (<>
+              <div style={{ height: 5 }} />
               <div className={styles.errorTip}>
                 {retrievePage.verifyCodeError}
               </div>
-            )}
+            </>)}
           </div>
 
           <div style={{ height: 20 }} />
@@ -329,11 +335,12 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                 });
               }}
             />
-            {retrievePage.newPasswordInputError && (
+            {retrievePage.newPasswordInputError && (<>
+              <div style={{ height: 5 }} />
               <div className={styles.errorTip}>
                 {retrievePage.newPasswordInputError}
               </div>
-            )}
+            </>)}
           </div>
           <div style={{ height: 20 }} />
           <div className={styles.identifyingCode}>
@@ -365,11 +372,12 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                 });
               }}
             />
-            {retrievePage.confirmPasswordInputError && (
+            {retrievePage.confirmPasswordInputError && (<>
+              <div style={{ height: 5 }} />
               <div className={styles.errorTip}>
                 {retrievePage.confirmPasswordInputError}
               </div>
-            )}
+            </>)}
           </div>
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn

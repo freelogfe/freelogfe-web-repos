@@ -18,6 +18,7 @@ function FPhoneInput({ width = '100%', placeholder, inputValue, onChangeInput, o
       className={styles.select}
       value={'+86 '}
       dropdownMatchSelectWidth={false}
+      disabled
       options={[
         {
           value: '+86',
