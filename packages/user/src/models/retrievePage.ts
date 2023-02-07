@@ -13,9 +13,12 @@ export type RetrievePageModelState = WholeReadonly<{
   phoneInputError: string;
   emailInput: string;
   emailInputError: string;
-  verifyCode: string;
-  verifyCodeError: string;
-  verifyCodeReSendWait: number;
+  phone_verifyCode: string;
+  phone_verifyCodeError: string;
+  phone_verifyCodeReSendWait: number;
+  email_verifyCode: string;
+  email_verifyCodeError: string;
+  email_verifyCodeReSendWait: number;
 
   newPasswordInput: string;
   newPasswordInputError: string;
@@ -67,23 +70,45 @@ export interface OnBlurEmailInputAction extends AnyAction {
   type: 'retrievePage/onBlurEmailInput';
 }
 
-export interface OnChangeVerifyCodeInputAction extends AnyAction {
-  type: 'retrievePage/onChangeVerifyCodeInput';
+export interface OnChange_Phone_VerifyCodeInput_Action extends AnyAction {
+  type: 'retrievePage/onChange_Phone_VerifyCodeInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurVerifyCodeInputAction extends AnyAction {
-  type: 'retrievePage/onBlurVerifyCodeInput';
+export interface OnBlur_Phone_VerifyCodeInput_Action extends AnyAction {
+  type: 'retrievePage/onBlur_Phone_VerifyCodeInput';
 }
 
-export interface OnClickSendVerifyCodeBtnAction extends AnyAction {
-  type: 'retrievePage/onClickSendVerifyCodeBtn';
+export interface OnClick_Phone_SendVerifyCodeBtn_Action extends AnyAction {
+  type: 'retrievePage/onClick_Phone_SendVerifyCodeBtn';
 }
 
-export interface OnChangeVerifyCodeReSendWaitAction extends AnyAction {
-  type: 'retrievePage/onChangeVerifyCodeReSendWait';
+export interface OnChange_Phone_VerifyCodeReSendWait_Action extends AnyAction {
+  type: 'retrievePage/onChange_Phone_VerifyCodeReSendWait';
+  payload: {
+    value: number;
+  };
+}
+
+export interface OnChange_Email_VerifyCodeInput_Action extends AnyAction {
+  type: 'retrievePage/onChange_Email_VerifyCodeInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlur_Email_VerifyCodeInput_Action extends AnyAction {
+  type: 'retrievePage/onBlur_Email_VerifyCodeInput';
+}
+
+export interface OnClick_Email_SendVerifyCodeBtn_Action extends AnyAction {
+  type: 'retrievePage/onClick_Email_SendVerifyCodeBtn';
+}
+
+export interface OnChange_Email_VerifyCodeReSendWait_Action extends AnyAction {
+  type: 'retrievePage/onChange_Email_VerifyCodeReSendWait';
   payload: {
     value: number;
   };
@@ -133,10 +158,14 @@ interface RetrievePageModelType {
     onBlurPhoneInput: (action: OnBlurPhoneInputAction, effects: EffectsCommandMap) => void;
     onChangeEmailInput: (action: OnChangeEmailInputAction, effects: EffectsCommandMap) => void;
     onBlurEmailInput: (action: OnBlurEmailInputAction, effects: EffectsCommandMap) => void;
-    onChangeVerifyCodeInput: (action: OnChangeVerifyCodeInputAction, effects: EffectsCommandMap) => void;
-    onBlurVerifyCodeInput: (action: OnBlurVerifyCodeInputAction, effects: EffectsCommandMap) => void;
-    onClickSendVerifyCodeBtn: (action: OnClickSendVerifyCodeBtnAction, effects: EffectsCommandMap) => void;
-    onChangeVerifyCodeReSendWait: (action: OnChangeVerifyCodeReSendWaitAction, effects: EffectsCommandMap) => void;
+    onChange_Phone_VerifyCodeInput: (action: OnChange_Phone_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Phone_VerifyCodeInput: (action: OnBlur_Phone_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Phone_SendVerifyCodeBtn: (action: OnClick_Phone_SendVerifyCodeBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Phone_VerifyCodeReSendWait: (action: OnChange_Phone_VerifyCodeReSendWait_Action, effects: EffectsCommandMap) => void;
+    onChange_Email_VerifyCodeInput: (action: OnChange_Email_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_Email_VerifyCodeInput: (action: OnBlur_Email_VerifyCodeInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Email_SendVerifyCodeBtn: (action: OnClick_Email_SendVerifyCodeBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Email_VerifyCodeReSendWait: (action: OnChange_Email_VerifyCodeReSendWait_Action, effects: EffectsCommandMap) => void;
     onChangeNewPasswordInput: (action: OnChangeNewPasswordInputAction, effects: EffectsCommandMap) => void;
     onBlurNewPasswordInput: (action: OnBlurNewPasswordInputAction, effects: EffectsCommandMap) => void;
     onChangeConfirmPasswordInput: (action: OnChangeConfirmPasswordInputAction, effects: EffectsCommandMap) => void;
@@ -160,9 +189,12 @@ const initStates: RetrievePageModelState = {
   phoneInputError: '',
   emailInput: '',
   emailInputError: '',
-  verifyCode: '',
-  verifyCodeError: '',
-  verifyCodeReSendWait: 0,
+  phone_verifyCode: '',
+  phone_verifyCodeError: '',
+  phone_verifyCodeReSendWait: 0,
+  email_verifyCode: '',
+  email_verifyCodeError: '',
+  email_verifyCodeReSendWait: 0,
 
   newPasswordInput: '',
   newPasswordInputError: '',
@@ -271,34 +303,38 @@ const Model: RetrievePageModelType = {
         },
       });
     },
-    * onChangeVerifyCodeInput({ payload }: OnChangeVerifyCodeInputAction, { put }: EffectsCommandMap) {
+    * onChange_Phone_VerifyCodeInput({ payload }: OnChange_Phone_VerifyCodeInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCode: payload.value,
-          verifyCodeError: '',
+          phone_verifyCode: payload.value,
+          phone_verifyCodeError: '',
         },
       });
     },
-    * onBlurVerifyCodeInput({}: OnBlurVerifyCodeInputAction, { select, put }: EffectsCommandMap) {
+    * onBlur_Phone_VerifyCodeInput({}: OnBlur_Phone_VerifyCodeInput_Action, { select, put }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
         retrievePage,
       }));
 
       let verifyCodeError: string = '';
 
-      if (retrievePage.verifyCode === '') {
+      if (retrievePage.phone_verifyCode === '') {
         verifyCodeError = '验证码不能为空';
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCodeError,
+          phone_verifyCodeError: verifyCodeError,
         },
       });
     },
-    * onClickSendVerifyCodeBtn({}: OnClickSendVerifyCodeBtnAction, { select, call, put }: EffectsCommandMap) {
+    * onClick_Phone_SendVerifyCodeBtn({}: OnClick_Phone_SendVerifyCodeBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
         retrievePage,
       }));
@@ -306,12 +342,12 @@ const Model: RetrievePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCodeReSendWait: 60,
+          phone_verifyCodeReSendWait: 60,
         },
       });
 
       const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: retrievePage.verifyMode === 'phone' ? retrievePage.phoneInput : retrievePage.emailInput,
+        loginName: retrievePage.phoneInput,
         authCodeType: 'resetPassword',
       };
 
@@ -321,14 +357,78 @@ const Model: RetrievePageModelType = {
         fMessage(msg, 'error');
       }
     },
-    * onChangeVerifyCodeReSendWait({ payload }: OnChangeVerifyCodeReSendWaitAction, { put }: EffectsCommandMap) {
+    * onChange_Phone_VerifyCodeReSendWait({ payload }: OnChange_Phone_VerifyCodeReSendWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          verifyCodeReSendWait: payload.value,
+          phone_verifyCodeReSendWait: payload.value,
         },
       });
     },
+
+    * onChange_Email_VerifyCodeInput({ payload }: OnChange_Email_VerifyCodeInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verifyCode: payload.value,
+          email_verifyCodeError: '',
+        },
+      });
+    },
+    * onBlur_Email_VerifyCodeInput({}: OnBlur_Email_VerifyCodeInput_Action, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let verifyCodeError: string = '';
+
+      if (retrievePage.email_verifyCode === '') {
+        verifyCodeError = '验证码不能为空';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verifyCodeError: verifyCodeError,
+        },
+      });
+    },
+    * onClick_Email_SendVerifyCodeBtn({}: OnClick_Email_SendVerifyCodeBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verifyCodeReSendWait: 60,
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
+        loginName: retrievePage.emailInput,
+        authCodeType: 'resetPassword',
+      };
+
+      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+
+      if (!data) {
+        fMessage(msg, 'error');
+      }
+    },
+    * onChange_Email_VerifyCodeReSendWait({ payload }: OnChange_Email_VerifyCodeReSendWait_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          email_verifyCodeReSendWait: payload.value,
+        },
+      });
+    },
+
     * onChangeNewPasswordInput({ payload }: OnChangeNewPasswordInputAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -400,7 +500,11 @@ const Model: RetrievePageModelType = {
         retrievePage,
       }));
 
-      if (!new RegExp(/^[0-9]*$/).test(retrievePage.verifyCode)) {
+      const authCode: string = retrievePage.verifyMode === 'phone'
+        ? retrievePage.phone_verifyCode
+        : retrievePage.email_verifyCode;
+
+      if (!new RegExp(/^[0-9]*$/).test(authCode)) {
         fMessage('验证码必须全部为数字', 'error');
         return;
       }
@@ -408,7 +512,7 @@ const Model: RetrievePageModelType = {
       const params: Parameters<typeof FServiceAPI.User.resetPassword>[0] = {
         loginName: retrievePage.verifyMode === 'phone' ? retrievePage.phoneInput : retrievePage.emailInput,
         password: retrievePage.newPasswordInput,
-        authCode: retrievePage.verifyCode,
+        authCode: authCode,
       };
 
       const { errCode, data, msg } = yield call(FServiceAPI.User.resetPassword, params);

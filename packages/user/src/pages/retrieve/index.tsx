@@ -16,17 +16,24 @@ import {
   OnBlurEmailInputAction,
   OnBlurNewPasswordInputAction,
   OnBlurPhoneInputAction,
-  OnBlurVerifyCodeInputAction,
   OnChangeConfirmPasswordInputAction,
   OnChangeEmailInputAction,
   OnChangeNewPasswordInputAction,
   OnChangePhoneInputAction,
-  OnChangeVerifyCodeInputAction,
-  OnChangeVerifyCodeReSendWaitAction,
   OnChangeVerifyModeAction,
   OnChangeWaitingTimeAction,
   OnClickResetBtnAction,
-  OnClickSendVerifyCodeBtnAction,
+
+  OnBlur_Phone_VerifyCodeInput_Action,
+  OnChange_Phone_VerifyCodeInput_Action,
+  OnChange_Phone_VerifyCodeReSendWait_Action,
+  OnClick_Phone_SendVerifyCodeBtn_Action,
+
+  OnBlur_Email_VerifyCodeInput_Action,
+  OnChange_Email_VerifyCodeInput_Action,
+  OnChange_Email_VerifyCodeReSendWait_Action,
+  OnClick_Email_SendVerifyCodeBtn_Action,
+
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePage';
@@ -58,14 +65,26 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
 
   AHooks.useInterval(
     () => {
-      dispatch<OnChangeVerifyCodeReSendWaitAction>({
-        type: 'retrievePage/onChangeVerifyCodeReSendWait',
+      dispatch<OnChange_Phone_VerifyCodeReSendWait_Action>({
+        type: 'retrievePage/onChange_Phone_VerifyCodeReSendWait',
         payload: {
-          value: retrievePage.verifyCodeReSendWait - 1,
+          value: retrievePage.phone_verifyCodeReSendWait - 1,
         },
       });
     },
-    retrievePage.verifyCodeReSendWait === 0 ? undefined : 1000,
+    retrievePage.phone_verifyCodeReSendWait === 0 ? undefined : 1000,
+  );
+
+  AHooks.useInterval(
+    () => {
+      dispatch<OnChange_Email_VerifyCodeReSendWait_Action>({
+        type: 'retrievePage/onChange_Email_VerifyCodeReSendWait',
+        payload: {
+          value: retrievePage.email_verifyCodeReSendWait - 1,
+        },
+      });
+    },
+    retrievePage.email_verifyCodeReSendWait === 0 ? undefined : 1000,
   );
 
   AHooks.useInterval(
@@ -86,16 +105,20 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
 
   const isVerifyModeValid: boolean =
     retrievePage.verifyMode === 'phone'
-      ? !!retrievePage.phoneInput && !retrievePage.phoneInputError
-      : !!retrievePage.emailInput && !retrievePage.emailInputError;
+      ? (retrievePage.phoneInput !== '' && retrievePage.phoneInputError === '')
+      : (retrievePage.emailInput !== '' && retrievePage.emailInputError === '');
 
-  const isVerifyAllForm: boolean =
-    isVerifyModeValid &&
-    !!retrievePage.verifyCode &&
-    !!retrievePage.newPasswordInput &&
-    !retrievePage.newPasswordInputError &&
-    !!retrievePage.confirmPasswordInput &&
-    !retrievePage.confirmPasswordInputError;
+  const verifyCode: boolean =
+    retrievePage.verifyMode === 'phone'
+      ? (retrievePage.phone_verifyCode !== '' && retrievePage.phone_verifyCodeError === '')
+      : (retrievePage.email_verifyCode !== '' && retrievePage.email_verifyCodeError === '');
+
+  const isVerifyAllForm: boolean = isVerifyModeValid
+    && verifyCode
+    && retrievePage.newPasswordInput !== ''
+    && retrievePage.newPasswordInputError === ''
+    && retrievePage.confirmPasswordInput !== ''
+    && retrievePage.confirmPasswordInputError === '';
 
   function gotoLogin() {
     history.replace(
@@ -190,67 +213,70 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               </Space>
             </div>
             <div style={{ height: 5 }} />
-            {retrievePage.verifyMode === 'phone' ? (
-              <>
-                <FPhoneInput
-                  width={360}
-                  // placeholder='输入11位手机号码'
-                  placeholder='输入11位手机号码'
-                  // className={styles.verificationModeInput}
-                  // wrapClassName={styles.verificationModeInput}
-                  inputValue={retrievePage.phoneInput}
-                  onChangeInput={(value) => {
-                    dispatch<OnChangePhoneInputAction>({
-                      type: 'retrievePage/onChangePhoneInput',
-                      payload: {
-                        value: value,
-                      },
-                    });
-                  }}
-                  onBlurInput={() => {
-                    dispatch<OnBlurPhoneInputAction>({
-                      type: 'retrievePage/onBlurPhoneInput',
-                    });
-                  }}
-                />
-                {retrievePage.phoneInputError && (<>
-                  <div style={{ height: 5 }} />
-                  <div className={styles.errorTip}>
-                    {retrievePage.phoneInputError}
-                  </div>
-                </>)}
-              </>
-            ) : (
-              <>
-                <FInput
-                  placeholder='输入邮箱'
-                  className={styles.verificationModeInput}
-                  wrapClassName={styles.verificationModeInput}
-                  value={retrievePage.emailInput}
-                  onChange={(e) => {
-                    dispatch<OnChangeEmailInputAction>({
-                      type: 'retrievePage/onChangeEmailInput',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }}
-                  onBlur={() => {
-                    dispatch<OnBlurEmailInputAction>({
-                      type: 'retrievePage/onBlurEmailInput',
-                    });
-                  }}
-                />
-                {retrievePage.emailInputError && (<>
-                  <div style={{ height: 5 }} />
-                  <div className={styles.errorTip}>
-                    {retrievePage.emailInputError}
-                  </div>
-                </>)}
-              </>
-            )}
+            {
+              retrievePage.verifyMode === 'phone'
+                ? (<>
+                  <FPhoneInput
+                    width={360}
+                    // placeholder='输入11位手机号码'
+                    placeholder='输入11位手机号码'
+                    // className={styles.verificationModeInput}
+                    // wrapClassName={styles.verificationModeInput}
+                    inputValue={retrievePage.phoneInput}
+                    onChangeInput={(value) => {
+                      dispatch<OnChangePhoneInputAction>({
+                        type: 'retrievePage/onChangePhoneInput',
+                        payload: {
+                          value: value,
+                        },
+                      });
+                    }}
+                    onBlurInput={() => {
+                      dispatch<OnBlurPhoneInputAction>({
+                        type: 'retrievePage/onBlurPhoneInput',
+                      });
+                    }}
+                  />
+                  {retrievePage.phoneInputError && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.errorTip}>
+                      {
+                        retrievePage.phoneInputError === ''
+                      }
+                    </div>
+                  </>)}
+                </>)
+                : (<>
+                  <FInput
+                    placeholder='输入邮箱'
+                    className={styles.verificationModeInput}
+                    wrapClassName={styles.verificationModeInput}
+                    value={retrievePage.emailInput}
+                    onChange={(e) => {
+                      dispatch<OnChangeEmailInputAction>({
+                        type: 'retrievePage/onChangeEmailInput',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
+                    onBlur={() => {
+                      dispatch<OnBlurEmailInputAction>({
+                        type: 'retrievePage/onBlurEmailInput',
+                      });
+                    }}
+                  />
+                  {retrievePage.emailInputError && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.errorTip}>
+                      {retrievePage.emailInputError}
+                    </div>
+                  </>)}
+                </>)
+            }
           </div>
           <div style={{ height: 20 }} />
+
           <div className={styles.identifyingCode}>
             <div className={styles.identifyingCodeHeader}>
               <div className={styles.title}>
@@ -260,48 +286,105 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <div className={styles.identifyingCodeBody}>
-              <FInput
-                className={styles.identifyingCodeInput}
-                wrapClassName={styles.identifyingCodeInput}
-                placeholder='输入验证码'
-                value={retrievePage.verifyCode}
-                onChange={(e) => {
-                  dispatch<OnChangeVerifyCodeInputAction>({
-                    type: 'retrievePage/onChangeVerifyCodeInput',
-                    payload: {
-                      value: e.target.value,
-                    },
-                  });
-                }}
-                onBlur={() => {
-                  dispatch<OnBlurVerifyCodeInputAction>({
-                    type: 'retrievePage/onBlurVerifyCodeInput',
-                  });
-                }}
-              />
-              <FComponentsLib.FRectBtn
-                style={{ width: 110 }}
-                disabled={
-                  retrievePage.verifyCodeReSendWait > 0 || !isVerifyModeValid
-                }
-                onClick={() => {
-                  dispatch<OnClickSendVerifyCodeBtnAction>({
-                    type: 'retrievePage/onClickSendVerifyCodeBtn',
-                  });
-                }}
-              >
-                {retrievePage.verifyCodeReSendWait === 0
-                  ? '获取验证码'
-                  : `${retrievePage.verifyCodeReSendWait}秒`}
-              </FComponentsLib.FRectBtn>
-            </div>
-            {retrievePage.verifyCodeError && (<>
-              <div style={{ height: 5 }} />
-              <div className={styles.errorTip}>
-                {retrievePage.verifyCodeError}
-              </div>
-            </>)}
+
+            {
+              retrievePage.verifyMode === 'phone'
+                ? (<>
+                  <div className={styles.identifyingCodeBody}>
+                    <FInput
+                      className={styles.identifyingCodeInput}
+                      wrapClassName={styles.identifyingCodeInput}
+                      placeholder='输入验证码'
+                      value={retrievePage.phone_verifyCode}
+                      onChange={(e) => {
+                        dispatch<OnChange_Phone_VerifyCodeInput_Action>({
+                          type: 'retrievePage/onChange_Phone_VerifyCodeInput',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Phone_VerifyCodeInput_Action>({
+                          type: 'retrievePage/onBlur_Phone_VerifyCodeInput',
+                        });
+                      }}
+                    />
+                    <FComponentsLib.FRectBtn
+                      style={{ width: 110 }}
+                      disabled={retrievePage.phone_verifyCodeReSendWait > 0 || !isVerifyModeValid}
+                      onClick={() => {
+                        dispatch<OnClick_Phone_SendVerifyCodeBtn_Action>({
+                          type: 'retrievePage/onClick_Phone_SendVerifyCodeBtn',
+                        });
+                      }}
+                    >
+                      {
+                        retrievePage.phone_verifyCodeReSendWait === 0
+                          ? '获取验证码'
+                          : `${retrievePage.phone_verifyCodeReSendWait}秒`
+                      }
+                    </FComponentsLib.FRectBtn>
+                  </div>
+                  {
+                    retrievePage.phone_verifyCodeError && (<>
+                      <div style={{ height: 5 }} />
+                      <div className={styles.errorTip}>
+                        {retrievePage.phone_verifyCodeError}
+                      </div>
+                    </>)
+                  }
+                </>)
+                : (<>
+                  <div className={styles.identifyingCodeBody}>
+                    <FInput
+                      className={styles.identifyingCodeInput}
+                      wrapClassName={styles.identifyingCodeInput}
+                      placeholder='输入验证码'
+                      value={retrievePage.email_verifyCode}
+                      onChange={(e) => {
+                        dispatch<OnChange_Email_VerifyCodeInput_Action>({
+                          type: 'retrievePage/onChange_Email_VerifyCodeInput',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Email_VerifyCodeInput_Action>({
+                          type: 'retrievePage/onBlur_Email_VerifyCodeInput',
+                        });
+                      }}
+                    />
+                    <FComponentsLib.FRectBtn
+                      style={{ width: 110 }}
+                      disabled={
+                        retrievePage.email_verifyCodeReSendWait > 0 || !isVerifyModeValid
+                      }
+                      onClick={() => {
+                        dispatch<OnClick_Email_SendVerifyCodeBtn_Action>({
+                          type: 'retrievePage/onClick_Email_SendVerifyCodeBtn',
+                        });
+                      }}
+                    >
+                      {
+                        retrievePage.email_verifyCodeReSendWait === 0
+                          ? '获取验证码'
+                          : `${retrievePage.email_verifyCodeReSendWait}秒`
+                      }
+                    </FComponentsLib.FRectBtn>
+                  </div>
+                  {
+                    retrievePage.email_verifyCodeError && (<>
+                      <div style={{ height: 5 }} />
+                      <div className={styles.errorTip}>
+                        {retrievePage.email_verifyCodeError}
+                      </div>
+                    </>)
+                  }
+                </>)
+            }
+
           </div>
 
           <div style={{ height: 20 }} />
