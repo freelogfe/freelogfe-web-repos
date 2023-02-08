@@ -148,7 +148,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       }
     } else {
       // 下架
-      const resourceNoTip = localStorage.getItem('resourceNoTip') || false;
+      const resourceNoTip = self.localStorage.getItem('resourceNoTip') || false;
       if (resourceNoTip) {
         inactiveResource();
       } else {
@@ -211,7 +211,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   const inactiveResource = () => {
     if (inactiveDialogShow && noLonger) localStorage.setItem('resourceNoTip', 'true');
 
-    const data = { status: 0 };
+    const data = { status: 4 };
     operateResource(data);
   };
 
@@ -323,7 +323,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
               </FTooltip>
             )}
           </Space>
-          {resourceInfo.info?.policies.length === 0 && <div className={styles.redDot} />}
+          {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot} />)}
         </FLink>
         <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>
@@ -408,19 +408,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         </div>
       </div>
       <div style={{ height: 40 }} />
-
-      {/*<FDialog*/}
-      {/*  show={activeDialogShow}*/}
-      {/*  title={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}*/}
-      {/*  desc={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01')}*/}
-      {/*  sureText={FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan')}*/}
-      {/*  cancelText={FI18n.i18nNext.t('btn_cancel')}*/}
-      {/*  cancel={() => {*/}
-      {/*    setActiveDialogShow(false);*/}
-      {/*  }}*/}
-      {/*  sure={openPolicyBuilder}*/}
-      {/*  loading={loading}*/}
-      {/*/>*/}
 
       <FDialog
         show={inactiveDialogShow}
