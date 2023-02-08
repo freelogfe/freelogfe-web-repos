@@ -52,13 +52,16 @@ function ResourceCreator({
     });
   }
 
+  const resourceTypeError: boolean = resourceCreatorPage.resource_Type.every((rt) => {
+    return rt.value === '' || rt.valueError !== '';
+  });
+
   const createBtnDisabled: boolean = resourceCreatorPage.name === '' ||
     resourceCreatorPage.nameVerify !== 2 ||
     // resourceCreatorPage.resourceTypeVerify !== 2 ||
     resourceCreatorPage.nameErrorText !== '' ||
     // !!resourceCreatorPage.resourceTypeErrorText ||
-    resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].value === '' ||
-    resourceCreatorPage.resource_Type[resourceCreatorPage.resource_Type.length - 1].valueError !== '' ||
+    resourceTypeError ||
     !!resourceCreatorPage.introductionErrorText;
 
   if (!createBtnDisabled) {
@@ -137,23 +140,30 @@ function ResourceCreator({
               <div style={{ width: 10 }} />
               {resourceCreatorPage.nameVerify === 1 && <FComponentsLib.FIcons.FLoading />}
               {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && (
-                <FComponentsLib.FIcons.FCheck />
-              )}
+                <FComponentsLib.FIcons.FCheck />)}
             </div>
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
-            <FResourceTypeInput
-              dataSource={resourceCreatorPage.resource_Type}
-              onChange={(value) => {
-                dispatch<OnChange_Resource_Type_Action>({
-                  type: 'resourceCreatorPage/onChange_Resource_Type',
-                  payload: {
-                    value,
-                  },
-                });
-              }}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <FResourceTypeInput
+                dataSource={resourceCreatorPage.resource_Type}
+                onChange={(value) => {
+                  // console.log(value, 'value9isodjflksdjflksdjflkjlkj');
+                  dispatch<OnChange_Resource_Type_Action>({
+                    type: 'resourceCreatorPage/onChange_Resource_Type',
+                    payload: {
+                      value,
+                    },
+                  });
+                }}
+              />
+
+              {
+                !resourceTypeError && (<FComponentsLib.FIcons.FCheck />)
+              }
+
+            </div>
           </FFormLayout.FBlock>
 
           {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>*/}
