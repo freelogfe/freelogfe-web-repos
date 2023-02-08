@@ -2,13 +2,14 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
-import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
+// import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import FPolicyList from '@/components/FPolicyList';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -16,6 +17,30 @@ interface PoliciesProps {
 }
 
 function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
+
+  async function addPolicy() {
+    const policy = await fPolicyBuilder({
+      alreadyUsedTexts: exhibitInfoPage.policy_List.map((p) => {
+        return p.policyText;
+      }),
+      alreadyUsedTitles: exhibitInfoPage.policy_List.map((p) => {
+        return p.policyName;
+      }),
+      targetType: 'presentable',
+    });
+
+    if (!policy) {
+      return false;
+    }
+
+    await dispatch<AddAPolicyAction>({
+      type: 'exhibitInfoPage/addAPolicy',
+      payload: {
+        text: policy.text,
+        title: policy.title,
+      },
+    });
+  }
 
   return (<div>
     <Space size={15}>
@@ -26,14 +51,15 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
       {
         exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
           size='small'
-          onClick={() => {
+          onClick={async () => {
             self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
-            dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
-              payload: {
-                policy_BuildDrawer_Visible: true,
-              },
-            });
+            // dispatch<ChangeAction>({
+            //   type: 'exhibitInfoPage/change',
+            //   payload: {
+            //     policy_BuildDrawer_Visible: true,
+            //   },
+            // });
+            await addPolicy();
           }}
         />)
       }
@@ -49,14 +75,15 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           />
           <div style={{ height: 20 }} />
           <FComponentsLib.FRectBtn
-            onClick={() => {
+            onClick={async () => {
               self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
-              dispatch<ChangeAction>({
-                type: 'exhibitInfoPage/change',
-                payload: {
-                  policy_BuildDrawer_Visible: true,
-                },
-              });
+              // dispatch<ChangeAction>({
+              //   type: 'exhibitInfoPage/change',
+              //   payload: {
+              //     policy_BuildDrawer_Visible: true,
+              //   },
+              // });
+              await addPolicy();
             }}
             type='primary'
           >{FI18n.i18nNext.t('btn_create_auth_plan')}</FComponentsLib.FRectBtn>
@@ -76,35 +103,35 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
         />)
     }
 
-    <FPolicyBuilder
-      visible={exhibitInfoPage.policy_BuildDrawer_Visible}
-      alreadyUsedTitles={exhibitInfoPage.policy_List.map((p) => {
-        return p.policyName;
-      })}
-      alreadyUsedTexts={exhibitInfoPage.policy_List.map((p) => {
-        return p.policyText;
-      })}
-      targetType='presentable'
-      onCancel={() => dispatch<ChangeAction>({
-        type: 'exhibitInfoPage/change',
-        payload: {
-          policy_BuildDrawer_Visible: false,
-        },
-      })}
-      onConfirm={({ title, text }) => {
-        // console.log(text, title, '90ijdsflfdslkk');
-        dispatch<AddAPolicyAction>({
-          type: 'exhibitInfoPage/addAPolicy',
-          payload: { text, title },
-        });
-        dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            policy_BuildDrawer_Visible: false,
-          },
-        });
-      }}
-    />
+    {/*<FPolicyBuilder*/}
+    {/*  visible={exhibitInfoPage.policy_BuildDrawer_Visible}*/}
+    {/*  alreadyUsedTitles={exhibitInfoPage.policy_List.map((p) => {*/}
+    {/*    return p.policyName;*/}
+    {/*  })}*/}
+    {/*  alreadyUsedTexts={exhibitInfoPage.policy_List.map((p) => {*/}
+    {/*    return p.policyText;*/}
+    {/*  })}*/}
+    {/*  targetType='presentable'*/}
+    {/*  onCancel={() => dispatch<ChangeAction>({*/}
+    {/*    type: 'exhibitInfoPage/change',*/}
+    {/*    payload: {*/}
+    {/*      policy_BuildDrawer_Visible: false,*/}
+    {/*    },*/}
+    {/*  })}*/}
+    {/*  onConfirm={({ title, text }) => {*/}
+    {/*    // console.log(text, title, '90ijdsflfdslkk');*/}
+    {/*    dispatch<AddAPolicyAction>({*/}
+    {/*      type: 'exhibitInfoPage/addAPolicy',*/}
+    {/*      payload: { text, title },*/}
+    {/*    });*/}
+    {/*    dispatch<ChangeAction>({*/}
+    {/*      type: 'exhibitInfoPage/change',*/}
+    {/*      payload: {*/}
+    {/*        policy_BuildDrawer_Visible: false,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
   </div>);
 }
 

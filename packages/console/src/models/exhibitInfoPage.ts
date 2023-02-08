@@ -26,7 +26,7 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_ActiveThemeId: string;
 
   policy_List: PolicyFullInfo_Type[];
-  policy_BuildDrawer_Visible: boolean;
+  // policy_BuildDrawer_Visible: boolean;
 
   contract_ExhibitAllContractIDs: {
     exhibitID: string;
@@ -313,7 +313,7 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ActiveThemeId: '',
 
   policy_List: [],
-  policy_BuildDrawer_Visible: false,
+  // policy_BuildDrawer_Visible: false,
 
   contract_ExhibitAllContractIDs: [],
   contract_SelectedAssociatedID: '',
