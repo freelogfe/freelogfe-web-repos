@@ -121,7 +121,7 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
 
   message.success({
     content: isTheme
-      ? FI18n.i18nNext.t('msg_done ')
+      ? FI18n.i18nNext.t('msg_done')
       : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
     key: messageKey,
     duration: 2,
