@@ -17,26 +17,16 @@ import FComponentsLib from '@freelog/components-lib';
 // ];
 
 const resourceStatusOptions = [
-  { text: '全部', value: '#' },
-  { text: '待发行', value: 0 },
-  { text: '上架', value: 1 },
-  { text: '冻结', value: 2 },
-  { text: '下架', value: 4 },
-  // { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: '1' },
-  // { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: '0' },
-
+  { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
+  // { text: '上架', value: 1 },
+  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 1 },
+  // { text: '下架', value: 4 },
+  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 4 },
+  // { text: '待发行', value: 0 },
+  { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
+  // { text: '冻结', value: 2 },
+  { text: FI18n.i18nNext.t('filter_resource_status_removedbyfreelog'), value: 2 },
 ];
-
-// const navs = [
-//   {
-//     value: '1',
-//     text: '我的资源',
-//   },
-//   {
-//     value: '2',
-//     text: '我的收藏',
-//   },
-// ];
 
 type EventFunc = (id: string | number, record: any, index: number) => void;
 
