@@ -4,8 +4,6 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-// import FResource from '@/components/FIcons/FResource';
-// import { FNodes } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -78,7 +76,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     {
       title: (
         <FComponentsLib.FTitleText
-          type="table"
+          type='table'
           text={'标的物 | 类型 | 所签授权策略'}
         />
       ),
@@ -101,10 +99,20 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
             <div style={{ width: 10 }} />
             <div className={styles.targetInfo}>
-              <FComponentsLib.FContentText
-                text={record.subjectName}
-                type="highlight"
-              />
+              <FComponentsLib.FTextBtn onClick={() => {
+                self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                  ? FUtil.LinkTo.resourceDetails({
+                    resourceID: record.subjectID,
+                  })
+                  : FUtil.LinkTo.exhibitManagement({
+                    exhibitID: record.subjectID,
+                  })}`);
+              }}>
+                <FComponentsLib.FContentText
+                  text={record.subjectName}
+                  type='highlight'
+                />
+              </FComponentsLib.FTextBtn>
               <div style={{ height: 10 }} />
               {/*<Space size={5} className={styles.targetInfoLabels}>*/}
               {/*  <label>{record.contractName}</label>*/}
@@ -119,7 +127,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     },
     {
       title: (
-        <FComponentsLib.FTitleText type="table" text={'授权方 | 被授权方'} />
+        <FComponentsLib.FTitleText type='table' text={'授权方 | 被授权方'} />
       ),
       dataIndex: 'signatory',
       key: 'signatory',
@@ -140,7 +148,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
               <FComponentsLib.FContentText
                 text={record.licensorName}
-                type="highlight"
+                type='highlight'
               />
             </Space>
             <div style={{ height: 10 }} />
@@ -158,7 +166,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
               <FComponentsLib.FContentText
                 text={record.licenseeName}
-                type="highlight"
+                type='highlight'
               />
             </Space>
           </div>
@@ -168,7 +176,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     {
       title: (
         <FComponentsLib.FTitleText
-          type="table"
+          type='table'
           text={'合约状态 | 签约时间 | 合约ID'}
         />
       ),
@@ -196,17 +204,17 @@ function Contract({ dispatch, contractPage }: ContractProps) {
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               text={record.dataTime}
-              type="additional2"
+              type='additional2'
             />
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               text={record.contractID}
-              type="additional2"
+              type='additional2'
             />
             <div style={{ height: 5 }} />
             <FComponentsLib.FTextBtn
               className={styles.hoverVisible}
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClickViewDetailsBtnAction>({
                   type: 'contractPage/onClickViewDetailsBtn',
@@ -228,7 +236,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     {
       title: (
         <FComponentsLib.FTitleText
-          type="table"
+          type='table'
           text={'标的物 | 类型 | 所签授权策略'}
         />
       ),
@@ -251,10 +259,20 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
             <div style={{ width: 10 }} />
             <div className={styles.targetInfo}>
-              <FComponentsLib.FContentText
-                text={record.subjectName}
-                type="highlight"
-              />
+              <FComponentsLib.FTextBtn onClick={() => {
+                self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                  ? FUtil.LinkTo.resourceDetails({
+                    resourceID: record.subjectID,
+                  })
+                  : FUtil.LinkTo.exhibitManagement({
+                    exhibitID: record.subjectID,
+                  })}`);
+              }}>
+                <FComponentsLib.FContentText
+                  text={record.subjectName}
+                  type='highlight'
+                />
+              </FComponentsLib.FTextBtn>
               <div style={{ height: 10 }} />
               <Space size={5} className={styles.targetInfoLabels}>
                 <label>{record.contractName}</label>
@@ -266,7 +284,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     },
     {
       title: (
-        <FComponentsLib.FTitleText type="table" text={'授权方 | 被授权方'} />
+        <FComponentsLib.FTitleText type='table' text={'授权方 | 被授权方'} />
       ),
       dataIndex: 'signatory',
       key: 'signatory',
@@ -274,38 +292,22 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         return (
           <div className={styles.signatory}>
             <Space size={5}>
-              {record.licensorType === 'resource' && (
-                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
-              )}
-              {record.licensorType === 'node' && (
-                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
-              )}
-
-              {/*{*/}
-              {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
-              {/*}*/}
-
+              {record.licensorType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)}
+              {record.licensorType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)}
               <FComponentsLib.FContentText
                 text={record.licensorName}
-                type="highlight"
+                type='highlight'
               />
             </Space>
             <div style={{ height: 10 }} />
             <Space size={5}>
-              {record.licenseeType === 'resource' && (
-                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
-              )}
-              {record.licenseeType === 'node' && (
-                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
-              )}
-
-              {record.licenseeType === 'user' && (
-                <FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />
-              )}
+              {record.licenseeType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)}
+              {record.licenseeType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)}
+              {record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)}
 
               <FComponentsLib.FContentText
                 text={record.licenseeName}
-                type="highlight"
+                type='highlight'
               />
             </Space>
           </div>
@@ -315,7 +317,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     {
       title: (
         <FComponentsLib.FTitleText
-          type="table"
+          type='table'
           text={'合约状态 | 签约时间 | 合约ID'}
         />
       ),
@@ -323,50 +325,38 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       key: 'contract',
       width: 190,
       render(_: any, record) {
-        return (
-          <div className={styles.contract}>
-            {record.status === 'authorized' && (
-              <span className={styles.authorized}>已授权</span>
-            )}
-            {record.status === 'testAuthorized' && (
-              <span className={styles.authorized}>测试授权</span>
-            )}
-            {record.status === 'unauthorized' && (
-              <span className={styles.pending}>未授权</span>
-            )}
-            {record.status === 'exception' && (
-              <span className={styles.exception}>异常</span>
-            )}
-            {record.status === 'terminated' && (
-              <span className={styles.terminated}>已终止</span>
-            )}
-            <div style={{ height: 5 }} />
-            <FComponentsLib.FContentText
-              text={record.dataTime}
-              type="additional2"
-            />
-            <div style={{ height: 5 }} />
-            <FComponentsLib.FContentText
-              text={record.contractID}
-              type="additional2"
-            />
-            <div style={{ height: 5 }} />
-            <FComponentsLib.FTextBtn
-              type="primary"
-              onClick={() => {
-                dispatch<OnClickViewDetailsBtnAction>({
-                  type: 'contractPage/onClickViewDetailsBtn',
-                  payload: {
-                    value: record.contractID,
-                  },
-                });
-              }}
-              className={styles.hoverVisible}
-            >
-              查看合约详情
-            </FComponentsLib.FTextBtn>
-          </div>
-        );
+        return (<div className={styles.contract}>
+          {record.status === 'authorized' && (<span className={styles.authorized}>已授权</span>)}
+          {record.status === 'testAuthorized' && (<span className={styles.authorized}>测试授权</span>)}
+          {record.status === 'unauthorized' && (<span className={styles.pending}>未授权</span>)}
+          {record.status === 'exception' && (<span className={styles.exception}>异常</span>)}
+          {record.status === 'terminated' && (<span className={styles.terminated}>已终止</span>)}
+          <div style={{ height: 5 }} />
+          <FComponentsLib.FContentText
+            text={record.dataTime}
+            type='additional2'
+          />
+          <div style={{ height: 5 }} />
+          <FComponentsLib.FContentText
+            text={record.contractID}
+            type='additional2'
+          />
+          <div style={{ height: 5 }} />
+          <FComponentsLib.FTextBtn
+            type='primary'
+            onClick={() => {
+              dispatch<OnClickViewDetailsBtnAction>({
+                type: 'contractPage/onClickViewDetailsBtn',
+                payload: {
+                  value: record.contractID,
+                },
+              });
+            }}
+            className={styles.hoverVisible}
+          >
+            查看合约详情
+          </FComponentsLib.FTextBtn>
+        </div>);
       },
     },
   ];
@@ -482,7 +472,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 <FInput
                   className={styles.filterInput}
                   wrapClassName={styles.filterInput}
-                  theme="dark"
+                  theme='dark'
                   debounce={300}
                   onDebounceChange={(value) => {
                     dispatch<OnChange_Authorize_KeywordsInput_Action>({
@@ -518,7 +508,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   <div className={styles.contentFooter}>
                     {contractPage.authorize_ListMore === 'andMore' && (
                       <FComponentsLib.FRectBtn
-                        type="primary"
+                        type='primary'
                         onClick={() => {
                           dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
                             type: 'contractPage/onClick_Authorize_LoadMoreBtn',
@@ -538,7 +528,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     {contractPage.authorize_ListMore === 'noMore' && (
                       <FComponentsLib.FTipText
                         text={'没有更多~'}
-                        type="third"
+                        type='third'
                       />
                     )}
                   </div>
@@ -621,7 +611,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 <FInput
                   className={styles.filterInput}
                   wrapClassName={styles.filterInput}
-                  theme="dark"
+                  theme='dark'
                   debounce={300}
                   onDebounceChange={(value) => {
                     dispatch<OnChange_Authorized_KeywordsInput_Action>({
@@ -676,7 +666,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   <div className={styles.contentFooter}>
                     {contractPage.authorized_ListMore === 'andMore' && (
                       <FComponentsLib.FRectBtn
-                        type="primary"
+                        type='primary'
                         onClick={() => {
                           dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
                             type: 'contractPage/onClick_Authorized_LoadMoreBtn',
@@ -696,7 +686,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     {contractPage.authorized_ListMore === 'noMore' && (
                       <FComponentsLib.FTipText
                         text={'没有更多~'}
-                        type="third"
+                        type='third'
                       />
                     )}
                   </div>

@@ -33,6 +33,7 @@ export interface ContractPageModelState {
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -63,6 +64,7 @@ export interface ContractPageModelState {
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -419,8 +421,8 @@ const Model: ContractPageModelType = {
           authorized_SubjectIds: payload.authorized_SubjectIds,
         },
       });
-      if(payload.authorized_SubjectIds){
-        return null
+      if (payload.authorized_SubjectIds) {
+        return null;
       }
       yield put<Fetch_Authorized_List_Action>({
         type: 'fetch_Authorized_List',
@@ -551,17 +553,17 @@ const Model: ContractPageModelType = {
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
-      const data = yield call(contractList, params);
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, '@2222222222')
 
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
-        ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
-
+        ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al) => {
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
             licensorId: al.licenseeId,
@@ -695,22 +697,23 @@ const Model: ContractPageModelType = {
         endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
       };
-      if(contractPage.authorized_SubjectIds){
+      if (contractPage.authorized_SubjectIds) {
         params = {
           ...params,
-          subjectIds: contractPage.authorized_SubjectIds
-        }
+          subjectIds: contractPage.authorized_SubjectIds,
+        };
       }
-      const data = yield call(contractList, params);
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, 'DDDDF093ujlksjdlfsdkflsdfls');
       // const data1 = { dataList: [] };
       const resultList: ContractPageModelState['authorized_List'] = [
         ...beforeData,
-        ...(data.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
+        ...data.dataList.map<ContractPageModelState['authorized_List'][number]>((al) => {
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
             licensorId: al.licenseeId,
