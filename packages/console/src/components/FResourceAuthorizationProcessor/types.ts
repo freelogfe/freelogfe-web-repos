@@ -5,7 +5,7 @@ export interface ITargetInfo {
   targetName: string;
   targetType: 'resource' | 'object';
   targetResourceType: string[];
-  error: '' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
+  error: '' | 'unreleased' | 'offline' | 'cyclicDependency' | 'storageObject' | 'upThrow' | 'freeze';
   warning: '' | 'authException' | 'ownerFreeze';
   versions: string[];
   // upThrow: boolean;

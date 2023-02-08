@@ -782,9 +782,11 @@ async function _batchHandleResources({
     });
 
     if (r.status === 0) {
-      error = 'offline';
-    } else if ((r.status & 2) === 2) {
+      error = 'unreleased';
+    } else if (r.status === 2) {
       error = 'freeze';
+    } else if (r.status === 4) {
+      error = 'offline';
     } else if (cycleDependencyResourceID.includes(r.resourceId)) {
       error = 'cyclicDependency';
     } else if (licenseeResource?.baseUpcastResources.some((b) => {

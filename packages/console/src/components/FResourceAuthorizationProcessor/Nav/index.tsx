@@ -80,6 +80,7 @@ function Nav({
                 <FAutoOverflowTooltipTitle
                   title={info.targetName}
                   right={<>
+                    {info.error === 'unreleased' && (<FResourceStatusBadge status={'unreleased'} />)}
                     {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                     {info.error === 'cyclicDependency' && (
                       <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}

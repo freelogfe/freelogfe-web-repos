@@ -19,9 +19,9 @@ import FComponentsLib from '@freelog/components-lib';
 const resourceStatusOptions = [
   { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
   // { text: '上架', value: 1 },
-  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 1 },
+  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 1 },
   // { text: '下架', value: 4 },
-  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 4 },
+  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 4 },
   // { text: '待发行', value: 0 },
   { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
   // { text: '冻结', value: 2 },

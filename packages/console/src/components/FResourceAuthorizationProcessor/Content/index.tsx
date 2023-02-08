@@ -57,6 +57,18 @@ function Content({
     return null;
   }
 
+  if (info.error === 'unreleased' && info.contracts.length === 0) {
+    return (
+      <div className={styles.errorBox}>
+        <FComponentsLib.FIcons.FForbid className={styles.errorIcon} />
+        <FComponentsLib.FTipText
+          // text={FI18n.i18nNext.t('authorization_issue_offline_resource')}
+          text={'该资源未发行，无法签约。'}
+          type='second'
+        />
+      </div>);
+  }
+
   if (info.error === 'offline' && info.contracts.length === 0) {
     return (
       <div className={styles.errorBox}>
