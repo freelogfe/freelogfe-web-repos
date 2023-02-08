@@ -1,17 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
-import Banner1 from '@/pages/activity/$id/ResourceCompetition/Banner1';
-import Participations from '@/pages/activity/$id/ResourceCompetition/Participations';
-import Reward from '@/pages/activity/$id/ResourceCompetition/Reward';
-import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
-import Banner2 from '@/pages/activity/$id/ResourceCompetition/Banner2';
+import Banner1 from './Banner1';
+import Participations from './Participations';
+import Reward from './Reward';
+import AddTags from './AddTags';
+// import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
+import Banner2 from './Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
-import { FUtil } from '@freelog/tools-lib';
-import moment from 'moment';
+// import { FUtil } from '@freelog/tools-lib';
+// import moment from 'moment';
 import * as AHooks from 'ahooks';
 
 interface ResourceCompetitionProps {
@@ -56,7 +57,8 @@ function ResourceCompetition({
       />
       <div style={{ height: 100 }} />
       <Reward />
-      <div style={{ height: 100 }} />
+      {/*<div style={{ height: 100 }} />*/}
+      <AddTags />
       {/*<Strategy />*/}
       {/*<div style={{ height: 100 }} />*/}
       <Banner2
@@ -183,7 +185,6 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -202,7 +203,6 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />
@@ -212,7 +212,6 @@ function ResourceCompetition({
                 </span>
               </div>
             </div>
-            {/*<div style={{ height: 20 }} />*/}
             <div className={styles.regulationItem}>
               <div className={styles.circle} />
               <div style={{ width: 15 }} />

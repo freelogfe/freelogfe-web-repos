@@ -59,6 +59,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
   });
 
   return (<div className={styles.reward}>
+    <div style={{ height: 50 }} />
     <div className={styles.rewardTitle}>活动奖励</div>
     <div style={{ height: 40 }} />
     <div className={styles.rewardCards}>
@@ -223,7 +224,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
         <Space
           size={12}
           direction='vertical'
-          style={{minHeight: 80}}
+          style={{ minHeight: 80 }}
         >
           {
             luckyPrizes.length === 0 && (<div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
@@ -258,6 +259,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
         </Space>
       </div>
     </div>
+    <div style={{ height: 60 }} />
   </div>);
 }
 
