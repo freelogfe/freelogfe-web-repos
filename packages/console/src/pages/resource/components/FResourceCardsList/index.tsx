@@ -93,6 +93,7 @@ function FResourceCardsList({
     // console.log(str, '09i8owejklsdjflaskdjflksdj')
     onChangeResourceType && onChangeResourceType(str);
   }, [category]);
+
   // React.useEffect(() => {
   //   const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
   //   setTypeText(selectedType?.text || selectedType?.value);

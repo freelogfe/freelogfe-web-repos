@@ -362,9 +362,7 @@ function VersionCreator({
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
-
               </Space>
-
 
               <FResourceAuthorizationProcessor
                 width={860}
