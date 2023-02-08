@@ -467,7 +467,7 @@ const Model: ExhibitInfoPageModelType = {
       }).flat();
       // console.log(result, 'result111122222333333');
 
-      const policies: PolicyFullInfo_Type[] = data_PresentableDetails.policies;
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
       policies.reverse();
 
       policies.sort((a, b) => {
@@ -625,8 +625,31 @@ const Model: ExhibitInfoPageModelType = {
         });
       });
 
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      // yield put<FetchInfoAction>({
+      //   type: 'fetchInfo',
+      // });
+
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+        presentableId: exhibitInfoPage.exhibit_ID,
+        isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+
+      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policy_List: policies,
+        },
       });
     },
     * updateAPolicy({ payload }: UpdateAPolicyAction, { call, select, put }: EffectsCommandMap) {
@@ -641,8 +664,31 @@ const Model: ExhibitInfoPageModelType = {
         }],
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      // yield put<FetchInfoAction>({
+      //   type: 'fetchInfo',
+      // });
+
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+        presentableId: exhibitInfoPage.exhibit_ID,
+        isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+
+      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policy_List: policies,
+        },
       });
     },
     * updateBaseInfo({ payload }: UpdateBaseInfoAction, { select, call, put }: EffectsCommandMap) {
