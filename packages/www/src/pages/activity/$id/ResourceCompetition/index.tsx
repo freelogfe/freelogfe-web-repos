@@ -14,6 +14,7 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 // import { FUtil } from '@freelog/tools-lib';
 // import moment from 'moment';
 import * as AHooks from 'ahooks';
+import FFooter from '@/components/Footer';
 
 interface ResourceCompetitionProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -66,7 +67,11 @@ function ResourceCompetition({
           set_ModalVisible(true);
         }}
       />
-      <div style={{ height: 100 }} />
+
+      <div style={{ backgroundColor: '#fff' }}>
+        <FFooter />
+      </div>
+      {/*<div style={{ height: 100 }} />*/}
 
       <FModal
         width={1000}
@@ -226,7 +231,7 @@ function ResourceCompetition({
         </div>
       </FModal>
 
-      <FComponentsLib.FPageFooter PopoverPatch={Popover} />
+      {/*<FComponentsLib.FPageFooter PopoverPatch={Popover} />*/}
     </div>
   );
 }
