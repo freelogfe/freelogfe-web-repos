@@ -1,21 +1,43 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Input, InputRef } from 'antd';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import * as AHooks from 'ahooks';
 
 interface FLabelEditor {
   values?: string[];
   showRecommendation?: boolean;
+  resourceType?: string;
   onChange?: (values: string[]) => void;
 }
 
-export default function({ values = [], showRecommendation = false, onChange }: FLabelEditor) {
+export default function({ values = [], showRecommendation = false, resourceType = '', onChange }: FLabelEditor) {
 
   const inputElementRef = React.useRef<HTMLInputElement>(null);
-  const [input, onChangeInput] = React.useState<string>('');
-  const [errorText, onChangeErrorText] = React.useState<string>('');
+  const [input, set_input] = React.useState<string>('');
+  const [errorText, set_errorText] = React.useState<string>('');
+  const [recommendations, set_recommendations] = React.useState<string[]>([]);
+
+  AHooks.useMount(async () => {
+    if (showRecommendation && resourceType) {
+      const { data }: {
+        data: {
+          tagType: 1 | 2;
+          tagName: string;
+        }[];
+      } = await FServiceAPI.Resource.availableTags({
+        resourceType: resourceType,
+      });
+      // console.log(data, '*****LJLKJLKJ');
+      set_recommendations(data.filter((d) => {
+        return d.tagType === 2;
+      }).map((d) => {
+        return d.tagName;
+      }));
+    }
+  });
 
   function onPressEnter(e: any) {
     const v = e.target.value;
@@ -29,16 +51,16 @@ export default function({ values = [], showRecommendation = false, onChange }: F
       return;
     }
     if (!input) {
-      onChangeErrorText('不能为空');
+      set_errorText('不能为空');
       return;
     }
-    onChangeInput('');
+    set_input('');
     return onChange && onChange([...values, e.target.value.replace(new RegExp(/#/, 'g'), '')]);
   }
 
   function onChangeInputText(value1: string) {
     const value = value1.replaceAll('#', '');
-    onChangeInput(value);
+    set_input(value);
 
     let errorText: string = '';
     // if (!value) {
@@ -49,11 +71,11 @@ export default function({ values = [], showRecommendation = false, onChange }: F
     } else if (values.includes(value)) {
       errorText = '不能有重复';
     }
-    onChangeErrorText(errorText);
+    set_errorText(errorText);
   }
 
   function onRemove(index: number) {
-    onChangeErrorText('');
+    set_errorText('');
     return onChange && onChange(values?.filter((i, j) => j !== index));
   }
 
@@ -71,8 +93,8 @@ export default function({ values = [], showRecommendation = false, onChange }: F
             }}
             onKeyUp={(event) => {
               if (event.key === 'Escape') {
-                onChangeInput('');
-                onChangeErrorText('');
+                set_input('');
+                set_errorText('');
                 inputElementRef.current?.blur();
               }
             }}
@@ -82,26 +104,33 @@ export default function({ values = [], showRecommendation = false, onChange }: F
             showRecommendation && (<>
               <div style={{ width: 20 }} />
               <FComponentsLib.FContentText type={'additional2'} text={'推荐标签 :'} />
-              <div style={{ width: 15 }} />
-              <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
-                <a
-                  className={styles.recommendation}
-                  onClick={() => {
-                    onChangeInputText('#内测集结，漫画家召集令#');
-                    inputElementRef.current?.focus();
-                  }}
-                >#内测集结，漫画家召集令#</a>
-              </FTooltip>
-              <div style={{ width: 15 }} />
-              <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
-                <a
-                  className={styles.recommendation}
-                  onClick={() => {
-                    onChangeInputText('#内测集结！小说家召集令#');
-                    inputElementRef.current?.focus();
-                  }}
-                >#内测集结！小说家召集令#</a>
-              </FTooltip>
+              {
+                recommendations.map((r) => {
+                  return (<React.Fragment key={r}>
+                    <div style={{ width: 15 }} />
+                    <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
+                      <a
+                        className={styles.recommendation}
+                        onClick={() => {
+                          onChangeInputText(r);
+                          inputElementRef.current?.focus();
+                        }}
+                      >#{r}#</a>
+                    </FTooltip>
+                  </React.Fragment>);
+                })
+              }
+
+              {/*<div style={{ width: 15 }} />*/}
+              {/*<FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>*/}
+              {/*  <a*/}
+              {/*    className={styles.recommendation}*/}
+              {/*    onClick={() => {*/}
+              {/*      onChangeInputText('#内测集结！小说家召集令#');*/}
+              {/*      inputElementRef.current?.focus();*/}
+              {/*    }}*/}
+              {/*  >#内测集结！小说家召集令#</a>*/}
+              {/*</FTooltip>*/}
             </>)
           }
 

@@ -99,7 +99,7 @@ interface ListParamsType {
 //   data: IResourceInfo[];
 // }
 
-export function list(params: ListParamsType){
+export function list(params: ListParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources`,
@@ -531,3 +531,15 @@ export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
   });
 }
 
+// 根据资源类型查看推荐的标签
+interface AvailableTagsParamsType {
+  resourceType: string;
+}
+
+export function availableTags({...params}: AvailableTagsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/tags/availableTags`,
+    params: params,
+  });
+}
