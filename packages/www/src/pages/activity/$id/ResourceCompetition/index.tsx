@@ -15,6 +15,7 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 // import moment from 'moment';
 import * as AHooks from 'ahooks';
 import FFooter from '@/components/Footer';
+import FPropaganda from '@/components/FPropaganda';
 
 interface ResourceCompetitionProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -68,10 +69,17 @@ function ResourceCompetition({
         }}
       />
 
-      <div style={{ backgroundColor: '#fff' }}>
-        <FFooter />
-      </div>
+      {/*<div style={{ backgroundColor: '#fff' }}>*/}
+      <FPropaganda style={{ backgroundColor: '#fff' }} />
+      {/*</div>*/}
       {/*<div style={{ height: 100 }} />*/}
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <div style={{ border: '1px solid #979797', width: 680, opacity: .15 }} />
+      </div>
+      <FComponentsLib.FPageFooter
+        PopoverPatch={Popover}
+        style={{}}
+      />
 
       <FModal
         width={1000}
@@ -231,7 +239,7 @@ function ResourceCompetition({
         </div>
       </FModal>
 
-      {/*<FComponentsLib.FPageFooter PopoverPatch={Popover} />*/}
+
     </div>
   );
 }

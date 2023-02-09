@@ -22,6 +22,7 @@ import FExit from './FExit';
 import FExport from './FExport';
 import FFail from './FFail';
 import FFavorite from './FFavorite';
+import FFeather from './FFeather';
 import FFileSearch from './FFileSearch';
 import FFileText from './FFileText';
 import FForbid from './FForbid';
@@ -91,6 +92,7 @@ const FIcons = {
     FExport,
     FFail,
     FFavorite,
+    FFeather,
     FFileSearch,
     FFileText,
     FForbid,
