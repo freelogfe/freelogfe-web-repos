@@ -8,12 +8,11 @@ import * as AHooks from 'ahooks';
 
 interface FLabelEditor {
   values?: string[];
-  showRecommendation?: boolean;
   resourceType?: string;
   onChange?: (values: string[]) => void;
 }
 
-export default function({ values = [], showRecommendation = false, resourceType = '', onChange }: FLabelEditor) {
+export default function({ values = [], resourceType = '', onChange }: FLabelEditor) {
 
   const inputElementRef = React.useRef<HTMLInputElement>(null);
   const [input, set_input] = React.useState<string>('');
@@ -21,7 +20,7 @@ export default function({ values = [], showRecommendation = false, resourceType 
   const [recommendations, set_recommendations] = React.useState<string[]>([]);
 
   AHooks.useMount(async () => {
-    if (showRecommendation && resourceType) {
+    if (resourceType !== '') {
       const { data }: {
         data: {
           tagType: 1 | 2;
@@ -101,7 +100,7 @@ export default function({ values = [], showRecommendation = false, resourceType 
             onPressEnter={onPressEnter}
           />
           {
-            showRecommendation && (<>
+            recommendations.length > 0 && (<>
               <div style={{ width: 20 }} />
               <FComponentsLib.FContentText type={'additional2'} text={'推荐标签 :'} />
               {
