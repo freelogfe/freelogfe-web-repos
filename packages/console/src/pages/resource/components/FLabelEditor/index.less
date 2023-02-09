@@ -3,10 +3,23 @@
 .styles {
 
   .InputWrap {
-    .Input {
-      width: 200px;
-      display: inline-block;
+    .InputRow {
+      display: flex;
+      align-items: center;
+
+      .Input {
+        width: 200px;
+        display: inline-block;
+      }
+
+      .recommendation {
+        font-size: 12px;
+        font-weight: 400;
+        color: #E9A923;
+        line-height: 18px;
+      }
     }
+
 
     .InputError {
       &, &:hover, &:active, &:focus {

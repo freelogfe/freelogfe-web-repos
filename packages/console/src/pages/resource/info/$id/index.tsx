@@ -154,6 +154,7 @@ function Info({ dispatch, resourceInfoPage, resourceInfo, user, match }: InfoPro
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
           <FLabelEditor
+            showRecommendation={true}
             values={resourceInfo.info?.tags}
             onChange={(value) => dispatch<OnChangeInfoAction>({
               type: 'resourceInfoPage/onChangeInfo',

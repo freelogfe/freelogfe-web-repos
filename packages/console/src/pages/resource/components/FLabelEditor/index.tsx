@@ -1,17 +1,19 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Input } from 'antd';
+import { Input, InputRef } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface FLabelEditor {
   values?: string[];
+  showRecommendation?: boolean;
   onChange?: (values: string[]) => void;
 }
 
-export default function({ values = [], onChange }: FLabelEditor) {
+export default function({ values = [], showRecommendation = false, onChange }: FLabelEditor) {
 
-  const inputElementRef = React.useRef<any>(null);
+  const inputElementRef = React.useRef<HTMLInputElement>(null);
   const [input, onChangeInput] = React.useState<string>('');
   const [errorText, onChangeErrorText] = React.useState<string>('');
 
@@ -23,7 +25,7 @@ export default function({ values = [], onChange }: FLabelEditor) {
     if (input === '') {
       // onChangeInput('');
       // onChangeErrorText('');
-      inputElementRef.current.blur();
+      inputElementRef.current?.blur();
       return;
     }
     if (!input) {
@@ -34,8 +36,8 @@ export default function({ values = [], onChange }: FLabelEditor) {
     return onChange && onChange([...values, e.target.value.replace(new RegExp(/#/, 'g'), '')]);
   }
 
-  function onChangeInputText(e: any) {
-    const value = e.target.value;
+  function onChangeInputText(value1: string) {
+    const value = value1.replaceAll('#', '');
     onChangeInput(value);
 
     let errorText: string = '';
@@ -58,21 +60,52 @@ export default function({ values = [], onChange }: FLabelEditor) {
   return (<div className={styles.styles}>
     {
       values?.length < 20 && (<div className={styles.InputWrap}>
-        <Input
-          className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
-          placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
-          ref={inputElementRef}
-          value={input}
-          onChange={onChangeInputText}
-          onKeyUp={(event) => {
-            if (event.key === 'Escape') {
-              onChangeInput('');
-              onChangeErrorText('');
-              inputElementRef.current.blur();
-            }
-          }}
-          onPressEnter={onPressEnter}
-        />
+        <div className={styles.InputRow}>
+          <Input
+            className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
+            placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
+            ref={inputElementRef as any}
+            value={input}
+            onChange={(e) => {
+              onChangeInputText(e.target.value);
+            }}
+            onKeyUp={(event) => {
+              if (event.key === 'Escape') {
+                onChangeInput('');
+                onChangeErrorText('');
+                inputElementRef.current?.blur();
+              }
+            }}
+            onPressEnter={onPressEnter}
+          />
+          {
+            showRecommendation && (<>
+              <div style={{ width: 20 }} />
+              <FComponentsLib.FContentText type={'additional2'} text={'推荐标签 :'} />
+              <div style={{ width: 15 }} />
+              <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
+                <a
+                  className={styles.recommendation}
+                  onClick={() => {
+                    onChangeInputText('#内测集结，漫画家召集令#');
+                    inputElementRef.current?.focus();
+                  }}
+                >#内测集结，漫画家召集令#</a>
+              </FTooltip>
+              <div style={{ width: 15 }} />
+              <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
+                <a
+                  className={styles.recommendation}
+                  onClick={() => {
+                    onChangeInputText('#内测集结！小说家召集令#');
+                    inputElementRef.current?.focus();
+                  }}
+                >#内测集结！小说家召集令#</a>
+              </FTooltip>
+            </>)
+          }
+
+        </div>
         <div>
           {errorText && <label>{errorText}</label>}
         </div>
