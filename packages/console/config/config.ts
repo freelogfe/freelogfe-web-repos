@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 import routes from './routes';
 
 export default defineConfig({
+  // esbuild: {},
   nodeModulesTransform: {
     type: 'none',
   },

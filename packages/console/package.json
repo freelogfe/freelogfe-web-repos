@@ -61,6 +61,7 @@
     "@types/react-router": "^5.1.19",
     "@types/semver": "^7.3.1",
     "@types/showdown": "^2.0.0",
+    "@umijs/plugin-esbuild": "^1.4.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.5.33",
     "lint-staged": "^10.0.7",
