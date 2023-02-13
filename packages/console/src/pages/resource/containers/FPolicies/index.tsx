@@ -56,12 +56,20 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             text={FI18n.i18nNext.t('hint_add_authorization_plan')}
           />
           <div style={{ height: 20 }} />
-          <FComponentsLib.FRectBtn
-            onClick={() => {
-              dispatch<OnAdd_Policy_Action>({
-                type: 'resourceAuthPage/onAdd_Policy',
-              });
-            }}>{'添加授权策略'}</FComponentsLib.FRectBtn>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <FComponentsLib.FRectBtn
+              onClick={() => {
+                dispatch<OnAdd_Policy_Action>({
+                  type: 'resourceAuthPage/onAdd_Policy',
+                });
+              }}>{'添加授权策略'}</FComponentsLib.FRectBtn>
+            <div style={{
+              backgroundColor: 'red',
+              borderRadius: '50%',
+              width: 4,
+              height: 4,
+            }} />
+          </div>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={resourceAuthPage.status === 1}
