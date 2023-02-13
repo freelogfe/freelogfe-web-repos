@@ -330,7 +330,7 @@ function FNode_Authorization({ cfg = {} }: any) {
     />);
   }
   if (cfg.nodeType === 'contract') {
-    console.log(cfg, 'value@#38s9dio');
+    // console.log(cfg, 'value@#38s9dio');
     return (<FNode_Authorization_Contract
       value={cfg.value}
       showReAuthIfNoAuth={cfg.depth <= 1}
