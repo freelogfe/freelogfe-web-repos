@@ -7,7 +7,8 @@ import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
 import {
   ChangeAction,
-  CreateObjectAction, FetchBucketsAction,
+  CreateObjectAction,
+  FetchBucketsAction,
   FetchObjectsAction,
   FetchSpaceStatisticAction,
 } from '@/models/storageHomePage';
