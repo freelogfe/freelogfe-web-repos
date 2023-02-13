@@ -6,7 +6,6 @@ import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { ChangeAction, OnAdd_Policy_Action, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
 import FPolicyList from '@/components/FPolicyList';
-// import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 

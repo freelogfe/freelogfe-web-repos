@@ -176,11 +176,15 @@ const statusInfo = {
 
 interface FNode_Authorization_Contract_Props {
   value: FNode_Authorization_Contract_Values;
+  showReAuthIfNoAuth?: boolean;
 }
 
-function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Props) {
+function FNode_Authorization_Contract({
+                                        value: contracts,
+                                        showReAuthIfNoAuth = true,
+                                      }: FNode_Authorization_Contract_Props) {
   // console.log(cfg, 'cfg@#$2309iojsdfls;dkflklklkljFFNode_Authorization_Contract');
-  const contracts = value;
+  // const contracts = value;
   // console.log(cfg, 'contracts@##3433333333');
 
   if (contracts.length === 0) {
@@ -206,41 +210,37 @@ function FNode_Authorization_Contract({ value }: FNode_Authorization_Contract_Pr
           }}
         >暂无有效合约</Text>
         <Rect style={{ height: 10 }} />
-        <Text
-          style={{
-            fill: '#2E88FF',
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: 'pointer',
-            margin: [3, 0, 0],
-          }}
-          onClick={(evt, node, shape, graph) => {
-            // console.log(node, 'NNNoikewsdflkjdlfksdl');
+        {
+          showReAuthIfNoAuth && (<Text
+            style={{
+              fill: '#2E88FF',
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: 'pointer',
+              margin: [3, 0, 0],
+            }}
+            onClick={(evt, node, shape, graph) => {
+              const licensee = {
+                licenseeID: node?._cfg?.parent._cfg.model?.value?.resourceID,
+                licenseeName: node?._cfg?.parent._cfg?.model?.value?.resourceName,
+              };
+              if (node?._cfg?.parent._cfg.model?.nodeType === 'resource') {
+                graph.emit('contract:resource2Resource', {
+                  licensor: (node?._cfg?.model?.children as any[])[0].value,
+                  licensee: node?._cfg?.parent._cfg.model?.value,
+                });
+              }
 
-            // const licenseeIdentityType = node?._cfg?.parent._cfg.model?.nodeType;
-            // const licensor = {
-            //   licensorID: (node?._cfg?.model?.children as any[])[0].value?.resourceID,
-            //   licensorName: (node?._cfg?.model?.children as any)[0].value?.resourceName,
-            // };
-            const licensee = {
-              licenseeID: node?._cfg?.parent._cfg.model?.value?.resourceID,
-              licenseeName: node?._cfg?.parent._cfg?.model?.value?.resourceName,
-            };
-            if (node?._cfg?.parent._cfg.model?.nodeType === 'resource') {
-              graph.emit('contract:resource2Resource', {
-                licensor: (node?._cfg?.model?.children as any[])[0].value,
-                licensee: node?._cfg?.parent._cfg.model?.value,
-              });
-            }
+              if (node?._cfg?.parent._cfg.model?.nodeType === 'exhibit') {
+                graph.emit('contract:resource2Node', {
+                  licensor: (node?._cfg?.model?.children as any[])[0].value,
+                  licensee: node?._cfg?.parent._cfg.model?.value,
+                });
+              }
+            }}
+          >重新获取授权</Text>)
+        }
 
-            if (node?._cfg?.parent._cfg.model?.nodeType === 'exhibit') {
-              graph.emit('contract:resource2Node', {
-                licensor: (node?._cfg?.model?.children as any[])[0].value,
-                licensee: node?._cfg?.parent._cfg.model?.value,
-              });
-            }
-          }}
-        >重新获取授权</Text>
       </Rect>
     </Group>);
   }
@@ -330,9 +330,10 @@ function FNode_Authorization({ cfg = {} }: any) {
     />);
   }
   if (cfg.nodeType === 'contract') {
-    // console.log(cfg, 'value@#38s9dio');
+    console.log(cfg, 'value@#38s9dio');
     return (<FNode_Authorization_Contract
       value={cfg.value}
+      showReAuthIfNoAuth={cfg.depth <= 1}
       onClick={() => {
         console.log('FFFFFFFF09iojsklj');
       }}
