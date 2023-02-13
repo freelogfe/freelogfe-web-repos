@@ -334,9 +334,9 @@ function FNode_Authorization({ cfg = {} }: any) {
     return (<FNode_Authorization_Contract
       value={cfg.value}
       showReAuthIfNoAuth={cfg.depth <= 1}
-      onClick={() => {
-        console.log('FFFFFFFF09iojsklj');
-      }}
+      // onClick={() => {
+      //   console.log('FFFFFFFF09iojsklj');
+      // }}
     />);
   }
   return (<Group><Text style={{ fill: '#222' }}>Error</Text></Group>);
