@@ -23,7 +23,7 @@ interface IResourceInfo {
     version: string;
     versionId: string;
   }[];
-  status: 0 | 1 | 2 | 3; // 资源状态(0:未上线 1:已上线 2:被冻结且未上线 3:被冻结且上线)
+  status: 0 | 1 | 2 | 4; // 0:待发行(初始状态) 1:上架 2:冻结 4:下架(也叫待上架)
   tags: string[];
   updateDate: string;
   userId: number;

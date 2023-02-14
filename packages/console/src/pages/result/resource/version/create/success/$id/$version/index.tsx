@@ -23,17 +23,21 @@ interface SuccessProps extends RouteComponentProps<{
 
 function Success({ match, dispatch }: SuccessProps) {
 
-  const [count, setCount] = React.useState<number>(3);
+  const [countdown, set_countdown] = React.useState<number>(3);
+  const [nextStep, set_nextStep] = React.useState<'loading' | 'goto' | 'tipOnline'>('loading');
   // 0：初始 1：第一个版本且无策略 2：非第一个版本或有策略
-  const [gotoState, setGotoState] = React.useState<0 | 1 | 2>(0);
+  // const [gotoState, setGotoState] = React.useState<0 | 1 | 2>(0);
 
   AHooks.useInterval(() => {
-    const c = count - 1;
-    setCount(c);
+    const c = countdown - 1;
+    set_countdown(c);
     if (c === 0) {
-      gotoVersionInfo();
+      // history.replace(FUtil.LinkTo.resourceVersion({
+      //   resourceID: match.params.id,
+      //   version: match.params.version,
+      // }));
     }
-  }, gotoState === 2 && count > 0 ? 1000 : undefined);
+  }, nextStep === 'goto' && countdown > 0 ? 1000 : undefined);
 
   AHooks.useMount(async () => {
     const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -43,19 +47,22 @@ function Success({ match, dispatch }: SuccessProps) {
     const { data } = await FServiceAPI.Resource.info(params);
     // console.log(data, 'DDDDTTTTAAAAA');
 
-    if (data.resourceVersions.length === 1 && data.policies.length === 0) {
-      setGotoState(1);
-    } else {
-      setGotoState(2);
+    if (data.status === 1) {
+      set_nextStep('goto');
     }
+
+    if (data.status === 4) {
+      set_nextStep('tipOnline');
+    }
+
+    // if (data.resourceVersions.length === 1 && data.policies.length === 0) {
+    //   setGotoState(1);
+    // } else {
+    //   setGotoState(2);
+    // }
   });
 
   async function gotoVersionInfo() {
-
-    history.replace(FUtil.LinkTo.resourceVersion({
-      resourceID: match.params.id,
-      version: match.params.version,
-    }));
 
     const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
       resourceIdOrName: match.params.id,
@@ -74,58 +81,50 @@ function Success({ match, dispatch }: SuccessProps) {
         icon: '',
       });
 
-      if (result) {
-        await resourceOnline(match.params.id);
-        await dispatch<FetchDataSourceAction>({
-          type: 'resourceInfo/fetchDataSource',
-          payload: match.params.id,
-        });
-      }
+      // if (result) {
+      //   await resourceOnline(match.params.id);
+      //   await dispatch<FetchDataSourceAction>({
+      //     type: 'resourceInfo/fetchDataSource',
+      //     payload: match.params.id,
+      //   });
+      // }
 
     }
   }
 
-  // function gotoAuth() {
-  //   return history.replace(FUtil.LinkTo.resourceAuth({
-  //     resourceID: match.params.id,
-  //   }));
-  // }
-
-  // console.log(FI18n.i18nNext.t('versionreleased_desc'), 'siodjflksdjfl;ksjdflkjoiwsejfo;isjdlfkj');
-
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
-      {
-        gotoState !== 0 && (<>
-          {/*<i className={'freelog fl-icon-shenqingchenggong'} />*/}
-          <FComponentsLib.FIcons.FCheck />
-          <div style={{ height: 20 }} />
-          <FComponentsLib.FTipText
-            type='second'
-            text={FI18n.i18nNext.t('version_created_successfully', { VersionNumber: match.params.version })}
-          />
-        </>)
-      }
+      <FComponentsLib.FIcons.FCheck />
+      <div style={{ height: 20 }} />
+      <FComponentsLib.FTipText
+        type='second'
+        text={FI18n.i18nNext.t('version_created_successfully', { VersionNumber: match.params.version })}
+      />
 
       <div style={{ height: 40 }} />
 
       {
-        gotoState === 1 && (<div className={styles.goto1}>
-          {
-            FI18n.i18nNext.t('versionreleased_desc')
-              .split('\n')
-              .map((text) => {
-                if (!text) {
-                  return (<div style={{ height: 20 }} />);
-                }
-                return (<FComponentsLib.FTipText
-                  type='third'
-                  // text={'添加策略后可将资源上架，上架后才能在资源'}
-                  text={text}
-                />);
-              })
-          }
+        nextStep === 'tipOnline' && (<div className={styles.goto1}>
+          {/*{*/}
+          {/*  FI18n.i18nNext.t('versionreleased_desc')*/}
+          {/*    .split('\n')*/}
+          {/*    .map((text) => {*/}
+          {/*      if (!text) {*/}
+          {/*        return (<div style={{ height: 20 }} />);*/}
+          {/*      }*/}
+          {/*      return (<FComponentsLib.FTipText*/}
+          {/*        type='third'*/}
+          {/*        // text={'添加策略后可将资源上架，上架后才能在资源'}*/}
+          {/*        text={text}*/}
+          {/*      />);*/}
+          {/*    })*/}
+          {/*}*/}
+
+          <FComponentsLib.FTipText
+            type='third'
+            text={'将资源上架到资源市场开放授权，为你带来更多收益'}
+          />
 
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
@@ -150,7 +149,8 @@ function Success({ match, dispatch }: SuccessProps) {
               }
             }}
             style={{ padding: '0 20px' }}
-          >{FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')}</FComponentsLib.FRectBtn>
+          >立即上线</FComponentsLib.FRectBtn>
+          {/*FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')*/}
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
@@ -164,19 +164,16 @@ function Success({ match, dispatch }: SuccessProps) {
         </div>)
       }
       {
-        gotoState === 2 && (<div className={styles.goto2}>
+        nextStep === 'goto' && (<div className={styles.goto2}>
           <FComponentsLib.FTipText
             type='third'
-            text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })}
+            text={FI18n.i18nNext.t('jump_to_version_edit', { timer: countdown })}
           />
           <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}
             onClick={async () => {
-
-
               gotoVersionInfo();
-
             }}
           >{FI18n.i18nNext.t('jump_now')}</FComponentsLib.FTextBtn>
         </div>)
