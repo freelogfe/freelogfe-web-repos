@@ -84,9 +84,17 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_01')} type='h1' />
+          <FComponentsLib.FTitleText
+            style={{ textAlign: 'center' }}
+            text={FI18n.i18nNext.t('home_scene_01')}
+            type='h1'
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_01_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            style={{ textAlign: 'center' }}
+            text={FI18n.i18nNext.t('home_scene_01_descr')}
+            type='h4'
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
@@ -119,9 +127,17 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_02')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_02')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_02_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_02_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             {/*<FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>*/}
@@ -146,9 +162,17 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_03')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_03')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_03_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_03_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
@@ -172,9 +196,17 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_04')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_04')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_04_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_04_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
