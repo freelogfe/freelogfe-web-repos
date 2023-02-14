@@ -10,8 +10,6 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import FComponentsLib from '@freelog/components-lib';
 
-// import FUtil1 from '@/utils';
-
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
 

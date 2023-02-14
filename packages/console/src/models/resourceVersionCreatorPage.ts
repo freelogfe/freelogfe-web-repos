@@ -462,12 +462,6 @@ const Model: ResourceVersionCreatorModelType = {
           };
         });
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          releaseTipVisible: true,
-        },
-      });
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
         version: resourceVersionCreatorPage.versionInput,
@@ -488,18 +482,17 @@ const Model: ResourceVersionCreatorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...
-            resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-              const isInput: boolean = i.custom === 'input';
-              const options: string[] = i.customOption.split(',');
-              return {
-                type: isInput ? 'editableText' : 'select',
-                key: i.key,
-                remark: i.description,
-                defaultValue: isInput ? i.defaultValue : options[0],
-                candidateItems: isInput ? undefined : options,
-              };
-            }),
+          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+            const isInput: boolean = i.custom === 'input';
+            const options: string[] = i.customOption.split(',');
+            return {
+              type: isInput ? 'editableText' : 'select',
+              key: i.key,
+              remark: i.description,
+              defaultValue: isInput ? i.defaultValue : options[0],
+              candidateItems: isInput ? undefined : options,
+            };
+          }),
         ],
         description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
           ? ''
@@ -507,33 +500,19 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
-      yield FUtil.Tool.promiseSleep(2000);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          releaseTipVisible: false,
-        },
-      });
+
       if (ret !== 0 || errCode !== 0 || !data) {
         self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 0]);
         fMessage('创建失败', 'error');
         return;
       }
       self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 1]);
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: params.resourceId,
-      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
         caller: '97293874823yu4oi234io23hjkfdsasdf',
       });
-      // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
-      history.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
-        resourceID: data.resourceId,
-        version: data.version,
-      }));
 
       yield put<ChangeAction>({
         type: 'change',
@@ -548,6 +527,11 @@ const Model: ResourceVersionCreatorModelType = {
           draftData: null,
         },
       });
+
+      history.replace(FUtil.LinkTo.resourceVersionCreateRelease({
+        resourceID: data.resourceId,
+        version: data.version,
+      }));
     },
     * onChange_DataIsDirty({ payload }: OnChange_DataIsDirty_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

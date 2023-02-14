@@ -221,6 +221,16 @@ export function resourceVersionCreateSuccess({resourceID, version}: ResourceVers
   return `/result/resource/version/create/success/${resourceID}/${version}`;
 }
 
+// 资源版本正在创建
+interface ResourceVersionCreateReleaseParamsType {
+  resourceID: string;
+  version: string;
+}
+
+export function resourceVersionCreateRelease({resourceID, version}: ResourceVersionCreateReleaseParamsType) {
+  return `/result/resource/version/create/release/${resourceID}/${version}`;
+}
+
 // 节点创建成功
 interface NodeCreateSuccessParamsType {
   nodeID: number;

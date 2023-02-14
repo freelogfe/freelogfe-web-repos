@@ -130,6 +130,12 @@ export default [
                         component: '../pages/result/resource/version/create/success/$id/$version',
                         title: '版本创建成功 - Freelog',
                       },
+                      {
+                        exact: true,
+                        path: 'release/:id/:version',
+                        component: '../pages/result/resource/version/create/release/$id/$version',
+                        title: '版本正在创建 - Freelog',
+                      },
                     ],
                   },
                 ],
