@@ -99,15 +99,17 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
             <div style={{ width: 10 }} />
             <div className={styles.targetInfo}>
-              <FComponentsLib.FTextBtn onClick={() => {
-                self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
-                  ? FUtil.LinkTo.resourceDetails({
-                    resourceID: record.subjectID,
-                  })
-                  : FUtil.LinkTo.exhibitManagement({
-                    exhibitID: record.subjectID,
-                  })}`);
-              }}>
+              <FComponentsLib.FTextBtn
+                onClick={() => {
+                  self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                    ? FUtil.LinkTo.resourceDetails({
+                      resourceID: record.subjectID,
+                    })
+                    : FUtil.LinkTo.exhibitManagement({
+                      exhibitID: record.subjectID,
+                    })}`);
+                }}
+              >
                 <FComponentsLib.FContentText
                   text={record.subjectName}
                   type='highlight'

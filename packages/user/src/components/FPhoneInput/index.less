@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   //height: 38px;
+  //gap: 10px;
 }
 
 .select {
@@ -16,6 +17,9 @@
   :global(.ant-select-selector) {
     height: 38px !important;
     border-color: #E4E7EB !important;
+    border-right: none !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 
     :global(.ant-select-selection-item) {
       display: flex;
@@ -37,6 +41,8 @@
   display: inline-block;
   flex-shrink: 1;
   width: 100%;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 
   &:hover {
     border-color: #CBCBCB !important;
