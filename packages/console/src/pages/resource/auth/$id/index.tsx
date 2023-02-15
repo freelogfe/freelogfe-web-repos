@@ -28,6 +28,7 @@ import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -232,6 +233,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
         </FFormLayout.FBlock>
       </FFormLayout>
     </FLeftSiderLayout>
+    {/*<Middleware/>*/}
   </>);
 }
 

@@ -509,8 +509,8 @@ export async function resourceOnline(resourceID: string): Promise<boolean> {
   } else if (data_resourceInfo.policies.length === 0) {
     const confirm = await fPromiseModalConfirm({
       title: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      icon: null,
-      content: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
+      // icon: null,
+      description: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
       okText: FI18n.i18nNext.t('set_resource_available_for_auth_btn_create_auth_plan'),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });

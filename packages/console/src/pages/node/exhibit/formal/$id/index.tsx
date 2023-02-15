@@ -87,9 +87,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
   async function activateTheme() {
     const res1: boolean = await fPromiseModalConfirm({
-      title: '',
-      icon: <div />,
-      content: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+      title: '提示',
+      // icon: <div />,
+      description: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
       okText: FI18n.i18nNext.t('btn_activate_theme'),
       cancelText: FI18n.i18nNext.t('keep_current_theme'),
     });

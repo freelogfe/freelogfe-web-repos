@@ -492,10 +492,9 @@ async function online_afterSuccessCreatePolicy(resourceID: string) {
   }
   const result = await fPromiseModalConfirm({
     title: '资源待上架',
-    content: '将资源上架到资源市场开放授权，为你带来更多收益',
+    description: '将资源上架到资源市场开放授权，为你带来更多收益',
     okText: '立即上架',
     cancelText: '暂不上架',
-    icon: '',
   });
 
   if (!result) {

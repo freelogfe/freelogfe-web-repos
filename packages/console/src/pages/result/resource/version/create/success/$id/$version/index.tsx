@@ -32,10 +32,10 @@ function Success({ match, dispatch }: SuccessProps) {
     const c = countdown - 1;
     set_countdown(c);
     if (c === 0) {
-      // history.replace(FUtil.LinkTo.resourceVersion({
-      //   resourceID: match.params.id,
-      //   version: match.params.version,
-      // }));
+      history.replace(FUtil.LinkTo.resourceVersion({
+        resourceID: match.params.id,
+        version: match.params.version,
+      }));
     }
   }, nextStep === 'goto' && countdown > 0 ? 1000 : undefined);
 
@@ -62,35 +62,35 @@ function Success({ match, dispatch }: SuccessProps) {
     // }
   });
 
-  async function gotoVersionInfo() {
-
-    const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
-      resourceIdOrName: match.params.id,
-      // isLoadPolicyInfo: 1,
-      // isLoadLatestVersionInfo: 1,
-      // isTranslate: 1,
-    });
-
-    // console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
-    if (data_resourceInfo.status === 0) {
-      const result = await fPromiseModalConfirm({
-        title: '资源待上架',
-        content: '将资源上架到资源市场开放授权，为你带来更多收益',
-        okText: '立即上架',
-        cancelText: '暂不上架',
-        icon: '',
-      });
-
-      // if (result) {
-      //   await resourceOnline(match.params.id);
-      //   await dispatch<FetchDataSourceAction>({
-      //     type: 'resourceInfo/fetchDataSource',
-      //     payload: match.params.id,
-      //   });
-      // }
-
-    }
-  }
+  // async function gotoVersionInfo() {
+  //
+  //   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+  //     resourceIdOrName: match.params.id,
+  //     // isLoadPolicyInfo: 1,
+  //     // isLoadLatestVersionInfo: 1,
+  //     // isTranslate: 1,
+  //   });
+  //
+  //   // console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
+  //   if (data_resourceInfo.status === 0) {
+  //     const result = await fPromiseModalConfirm({
+  //       title: '资源待上架',
+  //       content: '将资源上架到资源市场开放授权，为你带来更多收益',
+  //       okText: '立即上架',
+  //       cancelText: '暂不上架',
+  //       icon: '',
+  //     });
+  //
+  //     // if (result) {
+  //     //   await resourceOnline(match.params.id);
+  //     //   await dispatch<FetchDataSourceAction>({
+  //     //     type: 'resourceInfo/fetchDataSource',
+  //     //     payload: match.params.id,
+  //     //   });
+  //     // }
+  //
+  //   }
+  // }
 
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
@@ -173,7 +173,11 @@ function Success({ match, dispatch }: SuccessProps) {
           <FComponentsLib.FTextBtn
             // theme={'primary'}
             onClick={async () => {
-              gotoVersionInfo();
+              // gotoVersionInfo();
+              history.replace(FUtil.LinkTo.resourceVersion({
+                resourceID: match.params.id,
+                version: match.params.version,
+              }));
             }}
           >{FI18n.i18nNext.t('jump_now')}</FComponentsLib.FTextBtn>
         </div>)

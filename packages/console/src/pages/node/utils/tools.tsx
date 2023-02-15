@@ -23,10 +23,10 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
   if (data_exhibit.policies.length === 0) {
     const res2: boolean = await fPromiseModalConfirm({
       title: isTheme
-        ? ''
+        ? '提示'
         : FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      icon: <div />,
-      content: isTheme
+      // icon: <div />,
+      description: isTheme
         ? FI18n.i18nNext.t('alarm_theme_activate_plan')
         : FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
       okText: isTheme
@@ -60,10 +60,10 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
   } else if (!data_exhibit.policies.some((item: { status: number }) => item.status === 1)) {
     const res3: boolean = await fPromiseModalConfirm({
       title: isTheme
-        ? ''
+        ? '提示'
         : FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
-      icon: <div />,
-      content: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
+      // icon: <div />,
+      description: FI18n.i18nNext.t('msg_activate_theme_for_auth'),
       okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });
