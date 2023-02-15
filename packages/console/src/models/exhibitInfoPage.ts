@@ -9,6 +9,7 @@ import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEdi
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fileAttrUnits } from '@/utils/format';
 import FComponentsLib from '@freelog/components-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -599,6 +600,7 @@ const Model: ExhibitInfoPageModelType = {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
+
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
         addPolicies: [{
@@ -606,6 +608,7 @@ const Model: ExhibitInfoPageModelType = {
           policyText: payload.text,
           status: 1,
         }],
+
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
 
@@ -623,6 +626,29 @@ const Model: ExhibitInfoPageModelType = {
         });
       });
 
+      if (!exhibitInfoPage.exhibit_Online && !exhibitInfoPage.side_ResourceType.includes('主题')) {
+        const online: boolean = yield call(fPromiseModalConfirm, {
+          title: '展品待上架',
+          description: '将展品上架开放授权，为你带来更多收益',
+          okText: '立即上架',
+          cancelText: '暂不上架',
+        });
+
+        if (online) {
+          const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+            presentableId: exhibitInfoPage.exhibit_ID,
+            onlineStatus: 1,
+          };
+          yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
+        }
+      }
+
+      // const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      //   presentableId: exhibitInfoPage.exhibit_ID,
+      //   onlineStatus: 0,
+      // };
+      // await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+
       const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
         isLoadCustomPropertyDescriptors: 1,
@@ -631,10 +657,6 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
-
-      console.log(data_PresentableDetails, 'data_PresentableDetails9ioedj sidfjsldkfjlsdkjl');
-
-      
 
       const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
       policies.reverse();
@@ -647,6 +669,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           policy_List: policies,
+          exhibit_Online: data_PresentableDetails.onlineStatus === 1,
         },
       });
     },
