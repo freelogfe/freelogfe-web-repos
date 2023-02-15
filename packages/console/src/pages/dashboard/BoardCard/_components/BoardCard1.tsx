@@ -17,58 +17,18 @@ const tasks = {
   TS000011: {
     name: '查看Freelog使用教程',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      {/*<FComponentsLib.FContentText*/}
-      {/*  text={'Freelog平台存在资源作者和节点商两个角色：'}*/}
-      {/*  type='highlight'*/}
-      {/*/>*/}
-      {/*<div style={{ height: 15 }} />*/}
-      {/*<div style={{ display: 'flex' }}>*/}
-      {/*  <i*/}
-      {/*    style={{*/}
-      {/*      width: 3,*/}
-      {/*      height: 3,*/}
-      {/*      borderRadius: '50%',*/}
-      {/*      marginTop: 8,*/}
-      {/*      marginRight: 5,*/}
-      {/*      backgroundColor: '#666',*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*  <FComponentsLib.FContentText*/}
-      {/*    text={'「资源作者」可通过创建并发行资源获取收益；'}*/}
-      {/*    type='highlight'*/}
-      {/*  />*/}
-      {/*</div>*/}
-      {/*<div style={{ height: 15 }} />*/}
-      {/*<div style={{ display: 'flex' }}>*/}
-      {/*  <i*/}
-      {/*    style={{*/}
-      {/*      width: 3,*/}
-      {/*      height: 3,*/}
-      {/*      borderRadius: '50%',*/}
-      {/*      marginTop: 8,*/}
-      {/*      marginRight: 5,*/}
-      {/*      backgroundColor: '#666',*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*  <FComponentsLib.FContentText*/}
-      {/*    text={'「节点商」是资源的整合者，通过在节点展示推广资源获取中间人收益。'}*/}
-      {/*    type='highlight'*/}
-      {/*  />*/}
-      {/*</div>*/}
-      {/*<div style={{ height: 15 }} />*/}
-      {/*查看  资源创建教程   或  节点创建教程  ，完整观看任一视频教程即可完成任务，并获得一个邀请名额！*/}
       <div>
         <FComponentsLib.FContentText text={'查看'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
           target={'_blank'}
         >资源创建教程</a>
         &nbsp;
         <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
           target={'_blank'}
         >节点创建教程</a>
         &nbsp;

@@ -20,8 +20,6 @@ import fNoviceGuide, {
   setNoviceGuide_LocalStorage_Content,
   clear,
 } from '@/components/fNoviceGuide';
-// import FNoDataTip from '@/components/FNoDataTip';
-import { history } from 'umi';
 
 interface DashboardProps {
   dispatch: Dispatch;
