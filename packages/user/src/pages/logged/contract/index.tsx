@@ -137,39 +137,83 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         return (
           <div className={styles.signatory}>
             <Space size={5}>
-              {record.licensorType === 'resource' && (
-                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
-              )}
-              {record.licensorType === 'node' && (
-                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
-              )}
+              {
+                record.licensorType === 'resource' && (
+                  <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
+                )
+              }
+              {
+                record.licensorType === 'node' && (
+                  <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
+                )
+              }
 
               {/*{*/}
               {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
               {/*}*/}
 
-              <FComponentsLib.FContentText
-                text={record.licensorName}
-                type='highlight'
-              />
+              <FComponentsLib.FTextBtn
+                onClick={async () => {
+                  if (record.licensorType === 'resource') {
+                    self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                      resourceID: record.licensorId,
+                    }));
+                  }
+
+                  if (record.licensorType === 'node') {
+                    const { data } = await FServiceAPI.Node.details({
+                      nodeId: Number(record.licensorId),
+                    });
+
+                    self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                  }
+                }}
+              >
+                <FComponentsLib.FContentText
+                  text={record.licensorName}
+                  type='highlight'
+                />
+              </FComponentsLib.FTextBtn>
             </Space>
             <div style={{ height: 10 }} />
             <Space size={5}>
-              {record.licenseeType === 'resource' && (
-                <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
-              )}
-              {record.licenseeType === 'node' && (
-                <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
-              )}
+              {
+                record.licenseeType === 'resource' && (
+                  <FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />
+                )
+              }
+              {
+                record.licenseeType === 'node' && (
+                  <FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />
+                )
+              }
+              {
+                record.licenseeType === 'user' && (
+                  <FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />
+                )
+              }
+              <FComponentsLib.FTextBtn
+                onClick={async () => {
+                  if (record.licenseeType === 'resource') {
+                    self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                      resourceID: record.licenseeId,
+                    }));
+                  }
 
-              {record.licenseeType === 'user' && (
-                <FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />
-              )}
+                  if (record.licenseeType === 'node') {
+                    const { data } = await FServiceAPI.Node.details({
+                      nodeId: Number(record.licenseeId),
+                    });
 
-              <FComponentsLib.FContentText
-                text={record.licenseeName}
-                type='highlight'
-              />
+                    self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                  }
+                }}
+              >
+                <FComponentsLib.FContentText
+                  text={record.licenseeName}
+                  type='highlight'
+                />
+              </FComponentsLib.FTextBtn>
             </Space>
           </div>
         );
