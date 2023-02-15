@@ -4,17 +4,13 @@ import Banner1 from './Banner1';
 import Participations from './Participations';
 import Reward from './Reward';
 import AddTags from './AddTags';
-// import Strategy from '@/pages/activity/$id/ResourceCompetition/Strategy';
 import Banner2 from './Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover } from 'antd';
 import FModal from '@/components/FModal';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
-// import { FUtil } from '@freelog/tools-lib';
-// import moment from 'moment';
 import * as AHooks from 'ahooks';
-import FFooter from '@/components/Footer';
 import FPropaganda from '@/components/FPropaganda';
 
 interface ResourceCompetitionProps {
@@ -29,24 +25,6 @@ function ResourceCompetition({
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
   });
-
-  // const [allDate, set_allDate] = React.useState<{
-  //   start: string;
-  //   end: string;
-  //   announce: string;
-  // } | null>(null);
-  //
-  // React.useEffect(() => {
-  //   if (!!activityDetailsPage.startTime && !!activityDetailsPage.endTime) {
-  //     set_allDate({
-  //       start: moment(activityDetailsPage.startTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
-  //       end: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').format('YYYY年MM月DD日'),
-  //       announce: moment(activityDetailsPage.endTime, 'YYYY·MM·DD').add(7, 'd').format('YYYY年MM月DD日'),
-  //     });
-  //   } else {
-  //     set_allDate(null);
-  //   }
-  // }, [activityDetailsPage.startTime, activityDetailsPage.endTime]);
 
   return (
     <div className={styles.style}>
@@ -238,8 +216,6 @@ function ResourceCompetition({
           <div style={{ height: 60 }} />
         </div>
       </FModal>
-
-
     </div>
   );
 }
