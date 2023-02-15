@@ -24,14 +24,14 @@ const tasks = {
         <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
           target={'_blank'}
         >节点创建视频教程</a>
         &nbsp;
         <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.%E3%80%90%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9%E3%80%91%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97'}
           target={'_blank'}
         >图文教程</a>
         &nbsp;
