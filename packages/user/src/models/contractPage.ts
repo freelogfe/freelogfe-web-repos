@@ -246,6 +246,7 @@ const initStates: ContractPageModelState = {
     text: '展品',
   }],
   authorize_SubjectType: 'all',
+  authorized_SubjectIds: '',
   authorize_Status_Options: [{
     value: 'all',
     text: '全部',
