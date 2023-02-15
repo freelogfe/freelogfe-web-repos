@@ -381,7 +381,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     const { data } = await FServiceAPI.Node.details({
                       nodeId: Number(record.licenseeId),
                     });
-                    console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
+                    // console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
                     self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
                   }
                 }}
