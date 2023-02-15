@@ -238,27 +238,49 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               (records.length != 0 ? 'h-796' : 'h-460')
             }
           >
-            <div className='flex-row  w-100x pl-43 pr-35'>
-              <span className='des w-180 mr-87'>
-                向好友分享
+            {/*<div className='flex-row  w-100x pl-43 pr-35'>*/}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+              className={'des'}
+            >
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                {/*向好友分享*/}
+                分享邀请码
                 <br />
-                链接及邀请码
-              </span>
-              <span className='des w-180 mr-87'>
-                好友使用
-                <br />
-                邀请码注册
-              </span>
-              <span className='des w-180 mr-87'>
+                给好友
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }}>
                 好友完成
                 <br />
-                指定任务
-              </span>
-              <span className='des w-180'>
-                领取
+                Freelog网站注册
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                好友用邀请码
                 <br />
-                现金奖励
-              </span>
+                激活内测资格
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                奖励
+                <br />
+                到账
+              </div>
             </div>
             <div className='flex-row w-100x mt-40 pl-43 pr-71  align-center'>
               <div className=' flex-column-center pl-65 pr-20'>
@@ -419,10 +441,10 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             <span className=''>
               1.&nbsp; &nbsp;内测活动时间：
               {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
-              'YYYY/MM/DD'}{' '}
+                'YYYY/MM/DD'}{' '}
               -{' '}
               {activityDetailsPage.endTime?.format('YYYY/MM/DD') ||
-              'YYYY/MM/DD'}
+                'YYYY/MM/DD'}
               ；
             </span>
             {/*<span className=''>*/}
@@ -454,7 +476,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               4.&nbsp;
               &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于
               {activityDetailsPage.announceTime?.format('YYYY年MM月DD日') ||
-              'YYYY年MM月DD日'}
+                'YYYY年MM月DD日'}
               公布；
             </span>
             <span className=''>
