@@ -708,7 +708,7 @@ function FPolicyBuilder({
       open={visible}
       width={720}
       topRight={DrawerTopRight}
-      afterVisibleChange={(visible) => {
+      afterOpenChange={(visible) => {
         onChange_DrawerVisible(visible);
         afterVisibleChange && afterVisibleChange(visible);
       }}

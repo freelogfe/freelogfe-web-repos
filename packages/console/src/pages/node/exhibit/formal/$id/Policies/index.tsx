@@ -77,12 +77,6 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           <FComponentsLib.FRectBtn
             onClick={async () => {
               self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
-              // dispatch<ChangeAction>({
-              //   type: 'exhibitInfoPage/change',
-              //   payload: {
-              //     policy_BuildDrawer_Visible: true,
-              //   },
-              // });
               await addPolicy();
             }}
             type='primary'
@@ -102,36 +96,6 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
           }}
         />)
     }
-
-    {/*<FPolicyBuilder*/}
-    {/*  visible={exhibitInfoPage.policy_BuildDrawer_Visible}*/}
-    {/*  alreadyUsedTitles={exhibitInfoPage.policy_List.map((p) => {*/}
-    {/*    return p.policyName;*/}
-    {/*  })}*/}
-    {/*  alreadyUsedTexts={exhibitInfoPage.policy_List.map((p) => {*/}
-    {/*    return p.policyText;*/}
-    {/*  })}*/}
-    {/*  targetType='presentable'*/}
-    {/*  onCancel={() => dispatch<ChangeAction>({*/}
-    {/*    type: 'exhibitInfoPage/change',*/}
-    {/*    payload: {*/}
-    {/*      policy_BuildDrawer_Visible: false,*/}
-    {/*    },*/}
-    {/*  })}*/}
-    {/*  onConfirm={({ title, text }) => {*/}
-    {/*    // console.log(text, title, '90ijdsflfdslkk');*/}
-    {/*    dispatch<AddAPolicyAction>({*/}
-    {/*      type: 'exhibitInfoPage/addAPolicy',*/}
-    {/*      payload: { text, title },*/}
-    {/*    });*/}
-    {/*    dispatch<ChangeAction>({*/}
-    {/*      type: 'exhibitInfoPage/change',*/}
-    {/*      payload: {*/}
-    {/*        policy_BuildDrawer_Visible: false,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
   </div>);
 }
 

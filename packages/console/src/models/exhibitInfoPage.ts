@@ -623,10 +623,6 @@ const Model: ExhibitInfoPageModelType = {
         });
       });
 
-      // yield put<FetchInfoAction>({
-      //   type: 'fetchInfo',
-      // });
-
       const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
         isLoadCustomPropertyDescriptors: 1,
@@ -635,6 +631,10 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+
+      console.log(data_PresentableDetails, 'data_PresentableDetails9ioedj sidfjsldkfjlsdkjl');
+
+      
 
       const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
       policies.reverse();
