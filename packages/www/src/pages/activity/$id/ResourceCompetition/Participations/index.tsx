@@ -187,7 +187,8 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！漫画家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
         </div>
         <div style={{ height: 20 }} />
-        <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
+        {/*<div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>*/}
+        <div className={styles.participation_Text3}>2.参赛资源由Freelog平台评审排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FRectBtn
@@ -291,7 +292,8 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！小说家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
         </div>
         <div style={{ height: 20 }} />
-        <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
+        {/*<div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>*/}
+        <div className={styles.participation_Text3}>2.参赛资源由Freelog平台评审排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FRectBtn
