@@ -4,8 +4,6 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-// import FResource from '@/components/FIcons/FResource';
-// import { FLoading, FNodes } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -36,9 +34,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-import { FI18n } from '@freelog/tools-lib';
-
-// const RangePicker: any = DatePicker.RangePicker;
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -74,7 +70,17 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
           <div style={{ width: 10 }} />
           <div className={styles.targetInfo}>
-            <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            <FComponentsLib.FTextBtn onClick={() => {
+              self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                ? FUtil.LinkTo.resourceDetails({
+                  resourceID: record.subjectID,
+                })
+                : FUtil.LinkTo.exhibitManagement({
+                  exhibitID: record.subjectID,
+                })}`);
+            }}>
+              <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            </FComponentsLib.FTextBtn>
             <div style={{ height: 10 }} />
             {/*<Space size={5} className={styles.targetInfoLabels}>*/}
             {/*  <label>{record.contractName}</label>*/}
@@ -101,8 +107,25 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
             {/*{*/}
             {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
             {/*}*/}
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licensorType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licensorId,
+                  }));
+                }
 
-            <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+                if (record.licensorType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licensorId),
+                  });
+
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
           <Space size={5}>
@@ -117,7 +140,25 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
               record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
-            <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licenseeType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licenseeId,
+                  }));
+                }
+
+                if (record.licenseeType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licenseeId),
+                  });
+                  // console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>);
       },
@@ -187,7 +228,17 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
           <div style={{ width: 10 }} />
           <div className={styles.targetInfo}>
-            <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            <FComponentsLib.FTextBtn onClick={() => {
+              self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                ? FUtil.LinkTo.resourceDetails({
+                  resourceID: record.subjectID,
+                })
+                : FUtil.LinkTo.exhibitManagement({
+                  exhibitID: record.subjectID,
+                })}`);
+            }}>
+              <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            </FComponentsLib.FTextBtn>
             <div style={{ height: 10 }} />
             <Space size={5} className={styles.targetInfoLabels}>
               <label>{record.contractName}</label>
@@ -214,7 +265,25 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
             {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
             {/*}*/}
 
-            <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licensorType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licensorId,
+                  }));
+                }
+
+                if (record.licensorType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licensorId),
+                  });
+
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
           <Space size={5}>
@@ -229,7 +298,25 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
               record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
-            <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licenseeType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licenseeId,
+                  }));
+                }
+
+                if (record.licenseeType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licenseeId),
+                  });
+                  // console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>);
       },
