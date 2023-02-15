@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
+// import { Space } from 'antd';
 import FPopover from '@/components/FPopover';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
@@ -27,14 +27,14 @@ const tasks = {
         <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
           target={'_blank'}
         >创建资源视频教程</a>
         &nbsp;
         <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
         &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.%E3%80%90%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90%E3%80%91%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97'}
           target={'_blank'}
         >图文教程</a>
         &nbsp;
