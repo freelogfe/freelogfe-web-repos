@@ -34,11 +34,12 @@ export interface ExhibitInfoPageModelState {
   }[];
   contract_SelectedAssociatedID: string;
   contract_Associated: {
-    // selected: boolean;
     id: string;
     name: string;
     type: string[];
     state: 'online' | 'offline';
+    error: '' | 'offline' | 'unreleased' | 'freeze';
+    warning: '';
     exhibits: {
       id: string;
       name: string;
@@ -497,7 +498,7 @@ const Model: ExhibitInfoPageModelType = {
             return rr.resourceId === exhibitInfoPage.contract_SelectedAssociatedID;
           }) ? exhibitInfoPage.contract_SelectedAssociatedID : result_ContractAssociated[0].resourceId,
           contract_Associated: result_ContractAssociated
-            .map((r, index) => {
+            .map<ExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
               const exhibits = data_AllPresentables.filter((d5: any) => {
                 return d5.resolveResources.some((rr: any) => {
                   return d5.presentableId !== data_PresentableDetails.presentableId && rr.resourceId === r.resourceId;
@@ -518,6 +519,14 @@ const Model: ExhibitInfoPageModelType = {
                 type: r.resourceType,
                 exhibits: exhibits,
                 state: r.status === 1 ? 'online' : 'offline',
+                error: r.status === 0
+                  ? 'unreleased'
+                  : r.status === 2
+                    ? 'freeze'
+                    : r.status === 4
+                      ? 'offline'
+                      : '',
+                warning: '',
                 contracts: r.contracts
                   .filter((p) => {
                     return p.status !== 'terminal';
@@ -1287,7 +1296,7 @@ export type HandleRelationResult = {
   resourceId: string;
   resourceName: string;
   resourceType: string[];
-  status: 0 | 1;
+  status: 0 | 1 | 2 | 4;
   contracts: {
     contractId: string;
     contractName: string;

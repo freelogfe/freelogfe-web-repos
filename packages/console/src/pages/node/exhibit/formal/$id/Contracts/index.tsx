@@ -22,12 +22,15 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
     return null;
   }
 
-  async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
-      payload: payload,
-    });
-  }
+  const selectedResource = exhibitInfoPage.contract_Associated.find((a) => a.id === exhibitInfoPage.contract_SelectedAssociatedID);
+
+
+  // async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'exhibitInfoPage/change',
+  //     payload: payload,
+  //   });
+  // }
 
   return (<div>
     <FComponentsLib.FTitleText text={FI18n.i18nNext.t('title_relevant_contracts')} type='h3' />
@@ -39,15 +42,53 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
         <Resources />
       </div>
 
-      <div className={styles.signRight}>
-        <Space style={{ width: '100%' }} size={15} direction='vertical'>
+      {
+        selectedResource && selectedResource.error !== '' && (<div className={styles.errorContent}>
+          {
+            selectedResource.error === 'unreleased' && (<>
+              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+              <FComponentsLib.FTipText
+                text={'该资源未发行，无法授权。'}
+                type='second'
+              />
+            </>)
+          }
 
-          <Contract />
+          {
+            selectedResource.error === 'offline' && (<>
+              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+              <FComponentsLib.FTipText
+                text={'该资源未上线，无法授权。'}
+                type='second'
+              />
+            </>)
+          }
 
-          <Policy />
+          {
+            selectedResource.error === 'freeze' && (<>
+              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+              <FComponentsLib.FTipText
+                text={'该资源已封禁，无法授权。'}
+                type='second'
+              />
+            </>)
+          }
 
-        </Space>
-      </div>
+        </div>)
+      }
+
+      {
+        selectedResource && selectedResource.error === '' && (<div className={styles.signRight}>
+          <Space style={{ width: '100%' }} size={15} direction='vertical'>
+
+            <Contract />
+
+            <Policy />
+
+          </Space>
+        </div>)
+      }
+
     </div>
   </div>);
 }
