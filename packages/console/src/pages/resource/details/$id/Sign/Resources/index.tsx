@@ -159,6 +159,13 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 }
 
                 {
+                  r.error === 'unreleased' && (<>
+                    <div style={{ width: 5 }} />
+                    <FResourceStatusBadge status={'unreleased'} />
+                  </>)
+                }
+
+                {
                   r.error === 'freeze' && (<>
                     <div style={{ width: 5 }} />
                     <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />

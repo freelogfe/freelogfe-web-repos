@@ -30,7 +30,7 @@ export interface ResourceDetailPageModelState {
     resourceId: string;
     resourceName: string;
     resourceType: string[];
-    status: 0 | 1;
+    status: 0 | 1 | 2 | 4;
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
     userId: number;
@@ -40,9 +40,9 @@ export interface ResourceDetailPageModelState {
     id: string;
     name: string;
     type: string[];
-    status: 0 | 1;
-    authProblem: boolean;
-    error: '' | 'offline' | 'freeze';
+    // status: 0 | 1;
+    // authProblem: boolean;
+    error: '' | 'offline' | 'freeze' | 'unreleased';
     warning: '' | 'authException' | 'ownerFreeze';
     contracts: {
       checked: boolean;
@@ -378,13 +378,15 @@ const Model: ResourceDetailPageModelType = {
                 id: value.resourceId,
                 name: value.resourceName,
                 type: value.resourceType,
-                status: value.status,
-                authProblem: value.authProblem,
+                // status: value.status,
+                // authProblem: value.authProblem,
                 error: value.status === 0
-                  ? 'offline'
-                  : (value.status & 2) === 2
+                  ? 'unreleased'
+                  : value.status === 2
                     ? 'freeze'
-                    : '',
+                    : value.status === 4
+                      ? 'offline'
+                      : '',
                 warning: ownerUserInfo.status === 1
                   ? 'ownerFreeze'
                   : value.authProblem
@@ -644,11 +646,13 @@ const Model: ResourceDetailPageModelType = {
                 type: rs.resourceType,
                 status: rs.status,
                 authProblem: rs.authProblem,
-                error: rs.status === 0 ?
-                  'offline'
-                  : (rs.status & 2) === 2
+                error: rs.status === 0
+                  ? 'unreleased'
+                  : rs.status === 2
                     ? 'freeze'
-                    : '',
+                    : rs.status === 4
+                      ? 'offline'
+                      : '',
                 warning: ownerUserInfo.status === 1
                   ? 'ownerFreeze'
                   : rs.authProblem
