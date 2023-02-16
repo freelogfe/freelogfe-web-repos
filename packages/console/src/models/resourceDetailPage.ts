@@ -588,8 +588,9 @@ const Model: ResourceDetailPageModelType = {
       let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data_ResourceDetail];
 
       // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
+
       // 获取上抛资源信息
-      if ((data_ResourceDetail.baseUpcastResources || []).length > 0) {
+      if (data_ResourceDetail.status === 1 && (data_ResourceDetail.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
 
         const params: Parameters<typeof handleResourceBatchInfo>[0] = {
