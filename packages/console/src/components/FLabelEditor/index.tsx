@@ -12,7 +12,7 @@ interface FLabelEditor {
   onChange?: (values: string[]) => void;
 }
 
-export default function({ values = [], resourceType = '', onChange }: FLabelEditor) {
+function FLabelEditor({ values = [], resourceType = '', onChange }: FLabelEditor) {
 
   const inputElementRef = React.useRef<HTMLInputElement>(null);
   const [input, set_input] = React.useState<string>('');
@@ -105,31 +105,26 @@ export default function({ values = [], resourceType = '', onChange }: FLabelEdit
               <FComponentsLib.FContentText type={'additional2'} text={'推荐标签 :'} />
               {
                 recommendations.map((r) => {
+                  console.log(values, r, 'iosdjflkjsdlfjsdlkjlk');
+                  const disabled: boolean = values?.includes(r) || false;
                   return (<React.Fragment key={r}>
                     <div style={{ width: 15 }} />
                     <FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>
                       <a
-                        className={styles.recommendation}
+                        className={[styles.recommendation, disabled ? styles.disabled : ''].join(' ')}
                         onClick={() => {
-                          onChangeInputText(r);
-                          inputElementRef.current?.focus();
+                          if (disabled) {
+                            return;
+                          }
+                          onChange && onChange([...values, r]);
+                          // onChangeInputText(r);
+                          // inputElementRef.current?.focus();
                         }}
                       >#{r}#</a>
                     </FTooltip>
                   </React.Fragment>);
                 })
               }
-
-              {/*<div style={{ width: 15 }} />*/}
-              {/*<FTooltip title={'参与即赢2000元现金奖励'} placement={'top'}>*/}
-              {/*  <a*/}
-              {/*    className={styles.recommendation}*/}
-              {/*    onClick={() => {*/}
-              {/*      onChangeInputText('#内测集结！小说家召集令#');*/}
-              {/*      inputElementRef.current?.focus();*/}
-              {/*    }}*/}
-              {/*  >#内测集结！小说家召集令#</a>*/}
-              {/*</FTooltip>*/}
             </>)
           }
 
@@ -159,3 +154,5 @@ export default function({ values = [], resourceType = '', onChange }: FLabelEdit
 
   </div>);
 }
+
+export default FLabelEditor;

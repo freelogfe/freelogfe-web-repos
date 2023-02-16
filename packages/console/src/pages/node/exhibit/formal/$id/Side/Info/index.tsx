@@ -3,7 +3,7 @@ import styles from './index.less';
 import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import FLabelEditor from '@/pages/resource/components/FLabelEditor';
+import FLabelEditor from '@/components/FLabelEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';

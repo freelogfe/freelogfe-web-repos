@@ -9,7 +9,7 @@ import {
 } from '@/models/informExhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import FLabelEditor from '@/pages/resource/components/FLabelEditor';
+import FLabelEditor from '@/components/FLabelEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
