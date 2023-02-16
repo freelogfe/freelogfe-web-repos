@@ -30,19 +30,19 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
     });
   }
 
-  const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
-    id: i.id,
-    activated: i.activated,
-    title: i.title,
-    resourceType: i.resourceType,
-    version: i.version,
-    contracts: i.contracts,
-    state: i.state,
-  }));
+  // const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
+  //   id: i.id,
+  //   activated: i.activated,
+  //   title: i.title,
+  //   resourceType: i.resourceType,
+  //   version: i.version,
+  //   contracts: i.contracts,
+  //   state: i.state,
+  // }));
 
   return (<div className={styles.styles}>
     {
-      dataSource.map((i) => (
+      resourceAuthPage.contractsAuthorized.map((i) => (
         <div
           key={i.id}
           onClick={() => onChangeActivated(i.id)}
@@ -51,7 +51,9 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
             <FAutoOverflowTooltipTitle
               title={i.title}
               right={<>
-                {i.state === 'offline' && <FResourceStatusBadge status={'offline'} />}
+                {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
+                {i.error === 'unreleased' && (<FResourceStatusBadge status={'unreleased'} />)}
+                {i.error === 'freeze' && (<FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />)}
 
                 <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                   <div>

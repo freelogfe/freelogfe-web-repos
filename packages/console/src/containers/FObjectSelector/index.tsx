@@ -6,17 +6,13 @@ import FResourceList, { FResourceListProps } from '@/components/FResourceList';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState } from '@/models/connect';
-import { DownOutlined } from '@ant-design/icons';
 import {
   ChangeAction,
   FetchObjectsAction,
   OnChangeOConditionsAction,
-  // storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
-
-// import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];

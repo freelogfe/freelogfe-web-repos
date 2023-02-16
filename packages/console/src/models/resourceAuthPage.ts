@@ -8,7 +8,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ResourceAuthPageModelState {
@@ -30,10 +30,11 @@ export interface ResourceAuthPageModelState {
     resourceType: string;
     version: string;
     state: 'offline' | 'online';
+    error: '' | 'offline' | 'unreleased' | 'freeze';
+    warning: '';
     contracts: {
       checked: boolean;
       title: string;
-      // status: 0 | 1 | 2;
       status: 'active' | 'testActive' | 'inactive' | 'terminal';
       code: string;
       id: string;
@@ -228,10 +229,12 @@ const Model: ResourceAuthPageModelType = {
       const params: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
         resourceId: resourceAuthPage.resourceID,
       };
-      const { data } = yield call(FServiceAPI.Resource.resolveResources, params);
+      const { data: data_resolveResources }: {
+        data: any[];
+      } = yield call(FServiceAPI.Resource.resolveResources, params);
 
       // console.log(data, 'datadata232323');
-      if (data.length === 0) {
+      if (data_resolveResources.length === 0) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
@@ -242,93 +245,107 @@ const Model: ResourceAuthPageModelType = {
       }
 
       const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        resourceIds: data.map((i: any) => i.resourceId).join(','),
+        resourceIds: data_resolveResources.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
-      const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
+      const { data: data_resourceBatchInfo } = yield call(FServiceAPI.Resource.batchInfo, params2);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
       const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-        subjectIds: data.map((i: any) => i.resourceId).join(','),
+        subjectIds: data_resolveResources.map((i: any) => i.resourceId).join(','),
         licenseeId: resourceAuthPage.resourceID,
         subjectType: 1,
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
+      const { data: data_batchContracts } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
-      const contractsAuthorized: ResourceAuthPageModelState['contractsAuthorized'] = data.map((i: any/* 关系资源id */, j: number) => {
-        // 当前资源信息
-        const currentResource = data2.find((resource: any) => resource.resourceId === i.resourceId);
-        // console.log(currentResource, 'currentResource');
-        const allEnabledVersions: string[] = i.versions.map((version: any) => version.version);
-        const allContracts = data1
-          .filter((c: any) => c.licensorId === i.resourceId);
-        // console.info(allContracts, 'allContracts');
+      const contractsAuthorized: ResourceAuthPageModelState['contractsAuthorized'] = data_resolveResources
+        .map<ResourceAuthPageModelState['contractsAuthorized'][number]>((i: any, j: number) => {
+          // 当前资源信息
+          const currentResource = data_resourceBatchInfo.find((resource: any) => {
+            return resource.resourceId === i.resourceId;
+          });
 
-        const allUsedPoliciesId = allContracts
-          .filter((c: any) => c.status !== 1)
-          .map((c: any) => c.policyId);
-        // console.info(allUsedPoliciesId, 'allUsedPoliciesId');
-        const allEnabledPolicies = data2.find((resource: any) => resource.resourceId === i.resourceId)?.policies?.filter((p: any) => {
-          // console.log(p, '!@#$!@#$@#$@#!$');
-          return !allUsedPoliciesId.includes(p.policyId) && p.status === 1;
-        });
-        // console.log(allEnabledPolicies, 'allEnabledPolicies');
-        return {
-          id: currentResource.resourceId,
-          activated: activatedResourceId ? activatedResourceId === currentResource.resourceId : (j === 0),
-          title: currentResource.resourceName,
-          resourceType: currentResource.resourceType,
-          version: '',
-          state: currentResource.status === 1 ? 'online' : 'offline',
-          contracts: allContracts
-            .filter((c: any) => c.status === 0)
-            .map((c: any) => {
-              // console.log(c, '当前合约');
-              // console.log(i, '关系');
-              return {
-                checked: true,
-                id: c.contractId,
-                policyId: c.policyId,
-                title: c.contractName,
-                // status: c.status === 0 ? 'stopping' : 'executing',
-                status: c.status === 1 ? 'terminal' : (c.authStatus === 1 || c.authStatus === 3) ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
-                code: c.policyInfo.policyText,
-                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-                // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]
-                versions: allEnabledVersions.map((v: string) => {
-                  // console.log(i, currentResource, c, v, 'aw39osidc');
-                  const versionContracts = i.versions?.find((version: any) => version.version === v)?.contracts;
-                  // const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId && c.status !== 1);
-                  const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId);
-                  return {
-                    version: v,
-                    checked: versionChecked,
-                    disabled: (versionContracts.length === 1) && versionChecked,
-                  };
-                }),
-              };
-            }),
-          terminatedContractIDs: allContracts
+          const allEnabledVersions: string[] = i.versions.map((version: any) => {
+            return version.version;
+          });
+
+          const allContracts = data_batchContracts
             .filter((c: any) => {
-              return c.status === 1;
-            })
-            .map((c: any) => {
-              return c.contractId;
-            }),
-          policies: currentResource.status === 1 ? allEnabledPolicies.map((policy: any) => ({
-            // id: policy.policyId,
-            // title: policy.policyName,
-            // code: policy.policyText,
-            fullInfo: policy,
-            allEnabledVersions: allEnabledVersions,
-          })) : [],
-        };
-      });
+              return c.licensorId === i.resourceId;
+            });
+
+          const allUsedPoliciesId = allContracts
+            .filter((c: any) => c.status !== 1)
+            .map((c: any) => c.policyId);
+
+          return {
+            id: currentResource.resourceId,
+            activated: activatedResourceId ? activatedResourceId === currentResource.resourceId : (j === 0),
+            title: currentResource.resourceName,
+            resourceType: currentResource.resourceType,
+            version: '',
+            state: currentResource.status === 1 ? 'online' : 'offline',
+            error: currentResource.status === 0
+              ? 'unreleased'
+              : currentResource.status === 2
+                ? 'freeze'
+                : currentResource.status === 4
+                  ? 'offline'
+                  : '',
+            warning: '',
+            contracts: allContracts
+              .filter((c: any) => c.status === 0)
+              .map((c: any) => {
+                // console.log(c, '当前合约');
+                // console.log(i, '关系');
+                return {
+                  checked: true,
+                  id: c.contractId,
+                  policyId: c.policyId,
+                  title: c.contractName,
+                  // status: c.status === 0 ? 'stopping' : 'executing',
+                  status: c.status === 1 ? 'terminal' : (c.authStatus === 1 || c.authStatus === 3) ? 'active' : c.authStatus === 2 ? 'testActive' : 'inactive',
+                  code: c.policyInfo.policyText,
+                  date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+                  // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]
+                  versions: allEnabledVersions.map((v: string) => {
+                    // console.log(i, currentResource, c, v, 'aw39osidc');
+                    const versionContracts = i.versions?.find((version: any) => version.version === v)?.contracts;
+                    // const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId && c.status !== 1);
+                    const versionChecked: boolean = versionContracts?.some((contract: any) => contract.contractId === c.contractId);
+                    return {
+                      version: v,
+                      checked: versionChecked,
+                      disabled: (versionContracts.length === 1) && versionChecked,
+                    };
+                  }),
+                };
+              }),
+            terminatedContractIDs: allContracts
+              .filter((c: any) => {
+                return c.status === 1;
+              })
+              .map((c: any) => {
+                return c.contractId;
+              }),
+            policies: currentResource
+              ?.policies
+              .filter((p: any) => {
+                return !allUsedPoliciesId.includes(p.policyId) && p.status === 1;
+              })
+              .map((policy: any) => {
+                return {
+                  fullInfo: policy,
+                  allEnabledVersions: allEnabledVersions,
+                };
+              }),
+          };
+        });
       // console.log(contractsAuthorized, 'contractsAuthorized9023oijhilkjsdklj;fajlsdj');
       yield put<ChangeAction>({
         type: 'change',
