@@ -5,7 +5,8 @@ import { Dispatch } from 'redux';
 import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
-  ChangeAction, OnChange_BaseProperties_Action, OnChange_CustomOptions_Action, OnTrigger_SaveDraft_Action,
+  OnChange_BaseProperties_Action,
+  OnChange_CustomOptions_Action,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
@@ -29,20 +30,6 @@ interface CustomOptionsProps {
 function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsProps) {
 
   const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
-
-  // async function onChange(payload: ChangeAction['payload']) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'resourceVersionCreatorPage/change',
-  //     payload,
-  //   } as const);
-  //
-  //   // await dispatch<OnTrigger_SaveDraft_Action>({
-  //   //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-  //   //   payload: {
-  //   //     showSuccessTip: false,
-  //   //   },
-  //   // } as const);
-  // }
 
   return (<>
     {
@@ -203,19 +190,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             style={{ fontSize: 12, fontWeight: 600 }}
             type='default'
             onClick={async () => {
-              // await onChange({
-              //   customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
-              // });
               set_customOptionsDataVisible(!customOptionsDataVisible);
             }}
           >
-            <div style={{display: 'flex', alignItems: 'center', gap: 5}}>
-              <span>自定义选项（高级）</span>
-
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{translate: '0 -1px'}}>自定义选项（高级）</div>
               <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-                <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
+                <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14, fontWeight: 400 }} /></div>
               </FTooltip>
-
+              <div style={{ width: 5 }} />
               {
                 customOptionsDataVisible
                   ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
