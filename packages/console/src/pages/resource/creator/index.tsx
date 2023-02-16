@@ -52,7 +52,7 @@ function ResourceCreator({
     });
   }
 
-  const resourceTypeError: boolean = resourceCreatorPage.resource_Type.every((rt) => {
+  const resourceTypeError: boolean = resourceCreatorPage.resource_Type.some((rt) => {
     return rt.value === '' || rt.valueError !== '';
   });
 
