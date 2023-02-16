@@ -39,7 +39,8 @@ interface FAddDependenciesDrawerStates {
     resourceName: string;
     resourceType: string[];
     updateDate: string;
-    waring: '' | 'offline' | 'unreleased' | 'upcast';
+    state: '' | 'offline' | 'unreleased' | 'freeze';
+    waring: '' | 'upcast';
     latestVersion: string;
   }[];
   resourceListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
@@ -109,8 +110,8 @@ function FAddDependenciesDrawer({
             resourceName: string;
             resourceType: string[];
             updateDate: string;
-            status: 0 | 1;
-            latestVersion: 0 | 1;
+            status: 0 | 1 | 2 | 4;
+            latestVersion: string;
           }[];
           totalItem: number;
         };
@@ -119,22 +120,30 @@ function FAddDependenciesDrawer({
         ...resourceListResult,
         ...data_favoriteResources.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r: any) => {
           // console.log(r, 'r20893u4oi23');
-          let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
-          if (baseUpcastResourceIDs.includes(r.resourceId)) {
-            waring = 'upcast';
-          } else if (r.resourceStatus === 0) {
-            if (r.latestVersion === '') {
-              waring = 'unreleased';
-            } else {
-              waring = 'offline';
-            }
-          }
+          // let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
+          // if () {
+          //   waring = 'upcast';
+          // }
+
+          // if (r.latestVersion === '') {
+          //   waring = 'unreleased';
+          // } else {
+          //   waring = 'offline';
+          // }
+
           return {
             resourceID: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
-            waring: waring,
+            state: r.status === 0
+              ? 'unreleased'
+              : r.status === 2
+                ? 'freeze'
+                : r.status === 4
+                  ? 'offline'
+                  : '',
+            waring: baseUpcastResourceIDs.includes(r.resourceId) ? 'upcast' : '',
             latestVersion: r.latestVersion,
           };
         }),
@@ -164,7 +173,7 @@ function FAddDependenciesDrawer({
             resourceName: string;
             resourceType: string[];
             updateDate: string;
-            status: 0 | 1;
+            status: 0 | 1 | 2 | 4;
             latestVersion: string;
           }[];
           totalItem: number;
@@ -174,22 +183,29 @@ function FAddDependenciesDrawer({
       resourceListResult = [
         ...resourceListResult,
         ...data_list.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r) => {
-          let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
-          if (baseUpcastResourceIDs.includes(r.resourceId)) {
-            waring = 'upcast';
-          } else if (r.status === 0) {
-            if (r.latestVersion === '') {
-              waring = 'unreleased';
-            } else {
-              waring = 'offline';
-            }
-          }
+          // let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
+          // if (baseUpcastResourceIDs.includes(r.resourceId)) {
+          //   waring = 'upcast';
+          // } else if (r.status === 0) {
+          //   if (r.latestVersion === '') {
+          //     waring = 'unreleased';
+          //   } else {
+          //     waring = 'offline';
+          //   }
+          // }
           return {
             resourceID: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.updateDate, true),
-            waring: waring,
+            state: r.status === 0
+              ? 'unreleased'
+              : r.status === 2
+                ? 'freeze'
+                : r.status === 4
+                  ? 'offline'
+                  : '',
+            waring: baseUpcastResourceIDs.includes(r.resourceId) ? 'upcast' : '',
             latestVersion: r.latestVersion,
           };
         }),
@@ -265,98 +281,102 @@ function FAddDependenciesDrawer({
         )}
         {/*{console.log(resourceList, 'resourceListiosdjflksdjflkj')}*/}
         {resourceListState === 'loaded' &&
-        resourceList.map((resource) => {
-          return (
-            <div className={styles.bucket} key={resource.resourceID}>
-              <div>
-                <div className={styles.title}>
-                  <div>
-                    <FComponentsLib.FContentText
-                      singleRow={true}
-                      text={resource.resourceName}
-                    />
+          resourceList.map((resource) => {
+            return (
+              <div className={styles.bucket} key={resource.resourceID}>
+                <div>
+                  <div className={styles.title}>
+                    <div>
+                      <FComponentsLib.FContentText
+                        singleRow={true}
+                        text={resource.resourceName}
+                      />
+                    </div>
+                    {
+                      resource.state === 'offline' && (<FResourceStatusBadge
+                        status={'offline'}
+                      />)
+                    }
+                    {
+                      resource.state === 'unreleased' && (<FResourceStatusBadge
+                        status={'unreleased'}
+                      />)
+                    }
+                    {
+                      resource.state === 'freeze' && (<FResourceStatusBadge
+                        status={'freeze'}
+                      />)
+                    }
+                    {
+                      resource.waring === 'upcast' && (<label
+                        style={{
+                          color: '#EE4040',
+                          backgroundColor: '#FDEBEC',
+                          // border: '1px solid #F2C9CC',
+                          fontSize: 12,
+                          fontWeight: 600,
+                          lineHeight: '17px',
+                          padding: '3px 5px',
+                          borderRadius: 4,
+                        }}
+                      >{FI18n.i18nNext.t('addrely_label_basicupcast')}</label>)
+                    }
                   </div>
-                  <div style={{ width: 5 }} />
-                  {
-                    resource.waring === 'offline' && (<FResourceStatusBadge
-                      status={'offline'}
-                    />)
-                  }
-                  {
-                    resource.waring === 'unreleased' && (<FResourceStatusBadge
-                      status={'unreleased'}
-                    />)
-                  }
-                  {
-                    resource.waring === 'upcast' && (<label
-                      style={{
-                        color: '#EE4040',
-                        backgroundColor: '#FDEBEC',
-                        // border: '1px solid #F2C9CC',
-                        fontSize: 12,
-                        fontWeight: 600,
-                        lineHeight: '17px',
-                        padding: '3px 5px',
-                        borderRadius: 4,
-                      }}
-                    >{FI18n.i18nNext.t('addrely_label_basicupcast')}</label>)
-                  }
+                  <div style={{ height: 2 }} />
+                  <FComponentsLib.FContentText
+                    type={'additional2'}
+                    text={
+                      (resource.resourceType.length > 0
+                        ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
+                          resource.resourceType,
+                        )}`
+                        : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
+                    }
+                  />
                 </div>
-                <div style={{ height: 2 }} />
-                <FComponentsLib.FContentText
-                  type={'additional2'}
-                  text={
-                    (resource.resourceType.length > 0
-                      ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
-                        resource.resourceType,
-                      )}`
-                      : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
-                  }
-                />
+                {!selectedResourceIDs.includes(resource.resourceID) ? (
+                  <FComponentsLib.FRectBtn
+                    type='secondary'
+                    size='small'
+                    onClick={() => {
+                      onSelect_Resource &&
+                      onSelect_Resource({
+                        resourceID: resource.resourceID,
+                        resourceName: resource.resourceName,
+                      });
+                      set_selectedResourceIDs([
+                        ...selectedResourceIDs,
+                        resource.resourceID,
+                      ]);
+                    }}
+                    // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
+                  >
+                    选择
+                  </FComponentsLib.FRectBtn>
+                ) : (
+                  <FComponentsLib.FRectBtn
+                    type='danger2'
+                    size='small'
+                    onClick={() => {
+                      onDeselect_Resource &&
+                      onDeselect_Resource({
+                        resourceID: resource.resourceID,
+                        resourceName: resource.resourceName,
+                      });
+                      set_selectedResourceIDs(
+                        selectedResourceIDs.filter((rid) => {
+                          return rid !== resource.resourceID;
+                        }),
+                      );
+                    }}
+                    // disabled={selectedResourceIDs.includes(resource.resourceID)}
+                  >
+                    移除
+                  </FComponentsLib.FRectBtn>
+                )}
               </div>
-              {!selectedResourceIDs.includes(resource.resourceID) ? (
-                <FComponentsLib.FRectBtn
-                  type='secondary'
-                  size='small'
-                  onClick={() => {
-                    onSelect_Resource &&
-                    onSelect_Resource({
-                      resourceID: resource.resourceID,
-                      resourceName: resource.resourceName,
-                    });
-                    set_selectedResourceIDs([
-                      ...selectedResourceIDs,
-                      resource.resourceID,
-                    ]);
-                  }}
-                  // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-                >
-                  选择
-                </FComponentsLib.FRectBtn>
-              ) : (
-                <FComponentsLib.FRectBtn
-                  type='danger2'
-                  size='small'
-                  onClick={() => {
-                    onDeselect_Resource &&
-                    onDeselect_Resource({
-                      resourceID: resource.resourceID,
-                      resourceName: resource.resourceName,
-                    });
-                    set_selectedResourceIDs(
-                      selectedResourceIDs.filter((rid) => {
-                        return rid !== resource.resourceID;
-                      }),
-                    );
-                  }}
-                  // disabled={selectedResourceIDs.includes(resource.resourceID)}
-                >
-                  移除
-                </FComponentsLib.FRectBtn>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
       <FListFooter
         state={resourceListMore}

@@ -353,12 +353,6 @@ function VersionCreator({
                       dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
                       });
-                      // await dispatch<OnTrigger_SaveDraft_Action>({
-                      //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                      //   payload: {
-                      //     showSuccessTip: false,
-                      //   },
-                      // } );
                     }}
                   >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
                 }
