@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Input, InputRef } from 'antd';
+import { Input } from 'antd';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
