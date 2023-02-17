@@ -8,7 +8,7 @@ interface FSkeletonNodeProps {
 }
 
 function FSkeletonNode({ width = 340, height = 38 }: FSkeletonNodeProps) {
-  return (<Skeleton.Node style={{ width, height }} active>
+  return (<Skeleton.Node style={{ width, height }} className={styles.styles} active>
     <div />
   </Skeleton.Node>);
 }
