@@ -13,6 +13,7 @@ import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
+  pageState: 'loading' | 'loaded';
 
   policies: PolicyFullInfo_Type[];
   policyPreviewVisible: boolean;
@@ -146,7 +147,7 @@ const Model: ResourceAuthPageModelType = {
 
   state: {
     resourceID: '',
-
+    pageState: 'loading',
     policies: [],
     policyPreviewVisible: false,
     policyPreviewText: '',

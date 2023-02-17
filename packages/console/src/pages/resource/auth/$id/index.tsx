@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import FAuthPanel from './FAuthPanel';
-import { Space } from 'antd';
+import { Skeleton, Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -29,6 +29,8 @@ import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import * as AHooks from 'ahooks';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -38,29 +40,45 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
 
 function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
+  // React.useEffect(() => {
+  //
+  // }, [dispatch, match.params.id]);
+  // pageState
+  AHooks.useMount(async () => {
+    await dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
       payload: {
         resourceID: match.params.id,
+        pageState: 'loading',
       },
     });
 
-    dispatch<FetchResourceInfoAction>({
+    await dispatch<FetchResourceInfoAction>({
       type: 'resourceAuthPage/fetchResourceInfo',
       // payload: data.resourceId,
     });
 
-    dispatch<FetchAuthorizeAction>({
+    await dispatch<FetchAuthorizeAction>({
       type: 'resourceAuthPage/fetchAuthorize',
       // payload: data.resourceId,
     });
 
-    dispatch<FetchAuthorizedAction>({
+    await dispatch<FetchAuthorizedAction>({
       type: 'resourceAuthPage/fetchAuthorized',
       payload: {},
     });
-  }, [dispatch, match.params.id]);
+
+    await dispatch<ChangeAction>({
+      type: 'resourceAuthPage/change',
+      payload: {
+        pageState: 'loaded',
+      },
+    });
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   const columns: ColumnsType<ResourceAuthPageModelState['contractsAuthorize'][number]> = [
     {
@@ -150,88 +168,121 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
     </Helmet>
     <FLeftSiderLayout
       sider={<Sider />}
-      header={<FComponentsLib.FTitleText
+      header={(<FComponentsLib.FTitleText
         text={FI18n.i18nNext.t('authorization_infomation')}
         type='h1'
-      />}>
-      <FFormLayout>
-        <FFormLayout.FBlock
-          dot={resourceAuthPage.policies.length === 0}
-          title={FI18n.i18nNext.t('authorization_plan')}
-          extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
-            <FComponentsLib.FCircleBtn
-              size='small'
-              onClick={() => {
-                dispatch<OnAdd_Policy_Action>({
-                  type: 'resourceAuthPage/onAdd_Policy',
+      />)}
+    >
+      {
+        resourceAuthPage.pageState === 'loading' && (<div>
+          <FSkeletonNode width={120} height={22} />
+          <div style={{ height: 20 }} />
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
+            <FSkeletonNode width={420} height={240} />
+            <FSkeletonNode width={420} height={240} />
+          </div>
+          <div style={{ height: 50 }} />
+          <FSkeletonNode width={120} height={22} />
+          <div style={{ height: 20 }} />
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
+            <FSkeletonNode width={340} height={38} />
+            <FSkeletonNode width={500} height={38} />
+          </div>
+          <div style={{ height: 20 }} />
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 180 }}>
+            <FSkeletonNode width={180} height={38} />
+            <FSkeletonNode width={220} height={38} />
+          </div>
+          <div style={{ height: 50 }} />
+          <FSkeletonNode width={120} height={22} />
+          <div style={{ height: 20 }} />
+          <FSkeletonNode width={860} height={38} />
+          <div style={{ height: 20 }} />
+          <FSkeletonNode width={340} height={38} />
+        </div>)
+      }
+
+      {
+        resourceAuthPage.pageState === 'loaded' && (<FFormLayout>
+          <FFormLayout.FBlock
+            dot={resourceAuthPage.policies.length === 0}
+            title={FI18n.i18nNext.t('authorization_plan')}
+            extra={resourceAuthPage.policies?.length !== 0 && (<Space size={5}>
+              <FComponentsLib.FCircleBtn
+                size='small'
+                onClick={() => {
+                  dispatch<OnAdd_Policy_Action>({
+                    type: 'resourceAuthPage/onAdd_Policy',
+                  });
+                }}
+              />
+              <FComponentsLib.FTextBtn
+                type='primary'
+                onClick={() => {
+                  dispatch<OnAdd_Policy_Action>({
+                    type: 'resourceAuthPage/onAdd_Policy',
+                  });
+                }}
+              >添加策略</FComponentsLib.FTextBtn>
+            </Space>)}
+          >
+            <FPolicies />
+
+          </FFormLayout.FBlock>
+
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('licencee_contract')}>
+
+            <Space style={{ width: '100%' }} direction='vertical' size={20}>
+              {
+                resourceAuthPage.baseUastResources.length > 0 && (<FBasicUpcastCard
+                  dataSource={resourceAuthPage.baseUastResources.map((bur) => {
+                    return {
+                      resourceID: bur.resourceId,
+                      resourceName: bur.resourceName,
+                    };
+                  })}
+                  onClick={(resourceID) => {
+                    window.open(FUtil.LinkTo.resourceDetails({
+                      resourceID: resourceID,
+                    }));
+                  }}
+                />)
+              }
+
+              {
+                resourceAuthPage.contractsAuthorized.length > 0
+                  ? (<FAuthPanel />)
+                  : ((<FComponentsLib.FContentText type='negative' text={'暂无合约'} />))
+              }
+            </Space>
+
+          </FFormLayout.FBlock>
+
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('authorizing_contracts')}>
+
+            {
+              resourceAuthPage.contractsAuthorize?.length > 0
+                ? (<FTable
+                  columns={columns}
+                  dataSource={resourceAuthPage.contractsAuthorize}
+                  pagination={false}
+                />)
+                : (<FComponentsLib.FContentText type='negative' text={'暂无合约'} />)
+            }
+
+            <FContractDetailsDrawer
+              contractID={resourceAuthPage.detailContractID}
+              onClose={() => {
+                onChange({
+                  detailContractID: '',
                 });
               }}
             />
-            <FComponentsLib.FTextBtn
-              type='primary'
-              onClick={() => {
-                dispatch<OnAdd_Policy_Action>({
-                  type: 'resourceAuthPage/onAdd_Policy',
-                });
-              }}
-            >添加策略</FComponentsLib.FTextBtn>
-          </Space>)}
-        >
-          <FPolicies />
 
-        </FFormLayout.FBlock>
+          </FFormLayout.FBlock>
+        </FFormLayout>)
+      }
 
-        <FFormLayout.FBlock title={FI18n.i18nNext.t('licencee_contract')}>
-
-          <Space style={{ width: '100%' }} direction='vertical' size={20}>
-            {
-              resourceAuthPage.baseUastResources.length > 0 && (<FBasicUpcastCard
-                dataSource={resourceAuthPage.baseUastResources.map((bur) => {
-                  return {
-                    resourceID: bur.resourceId,
-                    resourceName: bur.resourceName,
-                  };
-                })}
-                onClick={(resourceID) => {
-                  window.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: resourceID,
-                  }));
-                }}
-              />)
-            }
-
-            {
-              resourceAuthPage.contractsAuthorized.length > 0
-                ? (<FAuthPanel />)
-                : ((<FComponentsLib.FContentText type='negative' text={'暂无合约'} />))
-            }
-          </Space>
-
-        </FFormLayout.FBlock>
-
-        <FFormLayout.FBlock title={FI18n.i18nNext.t('authorizing_contracts')}>
-
-          {
-            resourceAuthPage.contractsAuthorize?.length > 0
-              ? (<FTable
-                columns={columns}
-                dataSource={resourceAuthPage.contractsAuthorize}
-                pagination={false}
-              />)
-              : (<FComponentsLib.FContentText type='negative' text={'暂无合约'} />)
-          }
-
-          <FContractDetailsDrawer
-            contractID={resourceAuthPage.detailContractID}
-            onClose={() => {
-              onChange({
-                detailContractID: '',
-              });
-            }}
-          />
-
-        </FFormLayout.FBlock>
-      </FFormLayout>
     </FLeftSiderLayout>
     {/*<Middleware/>*/}
   </>);

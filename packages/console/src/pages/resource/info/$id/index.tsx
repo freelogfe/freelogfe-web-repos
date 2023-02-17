@@ -15,6 +15,7 @@ import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -73,50 +74,28 @@ function Info({ dispatch, resourceInfoPage, resourceInfo, user, match }: InfoPro
     >
       {
         !resourceInfo.info && (<div>
-          <Skeleton.Node style={{ width: 120, height: 22 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={120} height={22} />
           <div style={{ height: 20 }} />
-          <Skeleton.Node style={{ width: 340, height: 38 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={340} height={38} />
           <div style={{ height: 50 }} />
-          <Skeleton.Node style={{ width: 120, height: 22 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={120} height={22} />
           <div style={{ height: 20 }} />
-          <Skeleton.Node style={{ width: 340, height: 38 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={340} height={38} />
           <div style={{ height: 50 }} />
-          <Skeleton.Node style={{ width: 120, height: 22 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={120} height={22} />
           <div style={{ height: 20 }} />
-          <Skeleton.Node style={{ width: 860, height: 38 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={860} height={38} />
           <div style={{ height: 50 }} />
-          <Skeleton.Node style={{ width: 120, height: 22 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={120} height={22} />
           <div style={{ height: 20 }} />
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
-            <Skeleton.Node style={{ width: 200, height: 150 }} active>
-              <div />
-            </Skeleton.Node>
-            <Skeleton.Node style={{ width: 460, height: 40 }} active>
-              <div />
-            </Skeleton.Node>
+            <FSkeletonNode width={200} height={150} />
+            <FSkeletonNode width={460} height={40} />
           </div>
           <div style={{ height: 50 }} />
-          <Skeleton.Node style={{ width: 120, height: 22 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={120} height={22} />
           <div style={{ height: 20 }} />
-          <Skeleton.Node style={{ width: 340, height: 38 }} active>
-            <div />
-          </Skeleton.Node>
+          <FSkeletonNode width={340} height={38} />
         </div>)
       }
 

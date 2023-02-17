@@ -28,14 +28,14 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
     });
   }
 
-  function openNewVisible() {
-    dispatch<ChangeAction>({
-      type: 'resourceAuthPage/change',
-      payload: {
-        policyEditorVisible: true,
-      },
-    });
-  }
+  // function openNewVisible() {
+  //   dispatch<ChangeAction>({
+  //     type: 'resourceAuthPage/change',
+  //     payload: {
+  //       policyEditorVisible: true,
+  //     },
+  //   });
+  // }
 
   function closeNewVisible() {
     dispatch<ChangeAction>({
