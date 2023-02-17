@@ -5,18 +5,18 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import { FetchDataSourceAction, FetchDraftDataAction, OnChange_DraftData_Action } from '@/models/resourceInfo';
+import { OnChange_DraftData_Action } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-// import { getDependenciesBySha1 } from '@/components/fResourceMarkdownEditor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
 
 export interface ResourceVersionCreatorPageModelState {
+  pageState: 'loading' | 'loaded';
   resourceInfo: {
     resourceID: string;
     resourceName: string;
@@ -228,6 +228,7 @@ export interface ResourceVersionCreatorModelType {
 }
 
 const initStates: ResourceVersionCreatorPageModelState = {
+  pageState: 'loading',
   resourceInfo: null,
 
   draftSaveTime: '',
@@ -263,6 +264,12 @@ const Model: ResourceVersionCreatorModelType = {
   effects: {
     * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageState: 'loading',
+        },
+      });
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload.resourceID,
         isLoadLatestVersionInfo: 1,
@@ -366,6 +373,12 @@ const Model: ResourceVersionCreatorModelType = {
         type: '_FetchDraft',
       });
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageState: 'loaded',
+        },
+      });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;

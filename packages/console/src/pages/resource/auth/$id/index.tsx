@@ -28,7 +28,7 @@ import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
-import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import * as AHooks from 'ahooks';
 import FSkeletonNode from '@/components/FSkeletonNode';
 

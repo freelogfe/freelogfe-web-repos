@@ -41,6 +41,7 @@ import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -197,209 +198,238 @@ function VersionCreator({
           </Space>
         </div>}
       >
-        <FFormLayout>
-          <FFormLayout.FBlock
-            dot={true}
-            title={FI18n.i18nNext.t('version_number')}
-          >
-            <VersionInput
-              value={resourceVersionCreatorPage.versionInput}
-              resourceLatestVersion={resourceVersionCreatorPage.resourceInfo.latestVersion}
-              onChange={(value) => {
-                dispatch<OnChange_VersionInput_Action>({
-                  type: 'resourceVersionCreatorPage/onChange_VersionInput',
-                  payload: {
-                    value: value,
-                  },
-                });
-              }}
-            />
-          </FFormLayout.FBlock>
+        {
+          resourceVersionCreatorPage.pageState === 'loading' && (<div>
+            <FSkeletonNode width={120} height={22} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={340} height={38} />
+            <div style={{ height: 50 }} />
+            <FSkeletonNode width={120} height={22} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={860} height={38} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={340} height={38} />
+            <div style={{ height: 50 }} />
+            <FSkeletonNode width={120} height={22} />
+            <div style={{ height: 20 }} />
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
+              <FSkeletonNode width={340} height={38} />
+              <FSkeletonNode width={500} height={38} />
+            </div>
+            <div style={{ height: 20 }} />
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 180 }}>
+              <FSkeletonNode width={180} height={38} />
+              <FSkeletonNode width={220} height={38} />
+            </div>
+            <div style={{ height: 50 }} />
+            <FSkeletonNode width={120} height={22} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={860} height={38} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={340} height={38} />
+          </div>)
+        }
 
-          <FFormLayout.FBlock
-            dot={true}
-            title={FI18n.i18nNext.t('release_object')}
-          >
-            <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
-
-              <FPublishObjectFile
-                fileInfo={resourceVersionCreatorPage.selectedFileInfo}
-                onSucceed_UploadFile={(file) => {
-                  // console.log(file, 'onSucceed_UploadFile390oisjdf');
-                  dispatch<OnSucceed_UploadFile_Action>({
-                    type: 'resourceVersionCreatorPage/onSucceed_UploadFile',
+        {
+          resourceVersionCreatorPage.pageState === 'loaded' && (<FFormLayout>
+            <FFormLayout.FBlock
+              dot={true}
+              title={FI18n.i18nNext.t('version_number')}
+            >
+              <VersionInput
+                value={resourceVersionCreatorPage.versionInput}
+                resourceLatestVersion={resourceVersionCreatorPage.resourceInfo.latestVersion}
+                onChange={(value) => {
+                  dispatch<OnChange_VersionInput_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_VersionInput',
                     payload: {
-                      name: file.fileName,
-                      sha1: file.sha1,
-                      // from: '本地上传',
+                      value: value,
                     },
                   });
-                }}
-                onSucceed_ImportObject={async (obj) => {
-                  // console.log(obj, 'onSucceed_ImportObject390oisjdf');
-                  dispatch<OnSucceed_ImportObject_Action>({
-                    type: 'resourceVersionCreatorPage/onSucceed_ImportObject',
-                    payload: {
-                      name: obj.objName,
-                      sha1: obj.sha1,
-                      objID: obj.objID,
-                    },
-                  });
-
-                }}
-                onClick_DeleteBtn={() => {
-                  if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
-                    fConfirmModal({
-                      message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                      okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                      cancelText: FI18n.i18nNext.t('btn_cancel'),
-                      onOk() {
-                        dispatch<OnDelete_ObjectFile_Action>({
-                          type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                        });
-                      },
-                    });
-                  } else {
-                    dispatch<OnDelete_ObjectFile_Action>({
-                      type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                    });
-                  }
-
-                }}
-
-                showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
-                onClick_OpenMarkdownBtn={async () => {
-                  await onClick_EditMarkdownBtn();
-                }}
-                showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
-                && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
-                && resourceVersionCreatorPage.rawProperties.some((b) => {
-                  return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
-                })}
-                onClick_EditMarkdownBtn={async () => {
-                  await onClick_EditMarkdownBtn();
                 }}
               />
-            </Space>
-            <CustomOptions />
+            </FFormLayout.FBlock>
 
-          </FFormLayout.FBlock>
+            <FFormLayout.FBlock
+              dot={true}
+              title={FI18n.i18nNext.t('release_object')}
+            >
+              <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
 
-          <FFormLayout.FBlock
-            dot={false}
-            title={FI18n.i18nNext.t('rely')}
-            subtitle={<FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
-              <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
-            </FTooltip>}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 15 }}>
-              <Space size={15}>
-                <FComponentsLib.FRectBtn
-                  onClick={async () => {
-                    const p = await getProcessor('resourceVersionCreator');
-                    await fAddDependencies({
-                      existingResources: (await p.getAllTargets()).map((t) => {
-                        return {
-                          resourceID: t.id,
-                          resourceNme: t.name,
-                        };
-                      }),
-                      baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
-                        return {
-                          resourceID: r.resourceID,
-                          resourceNme: r.resourceName,
-                        };
-                      }) || [],
-                      async onSelect_Resource({ resourceID, resourceName }) {
-                        // console.log('8***********8sdflksdjlkj');
-                        const p = await getProcessor('resourceVersionCreator');
-                        await p.addTargets([{
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                          // versionRange: '^0.1.0',
-                        }]);
-                        await dispatch<OnChange_DataIsDirty_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                          payload: {
-                            value: true,
-                          },
-                        });
-                      },
-                      async onDeselect_Resource({ resourceID, resourceName }) {
-                        const p = await getProcessor('resourceVersionCreator');
-                        await p.removeTarget({
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                        });
-                        await dispatch<OnChange_DataIsDirty_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                          payload: {
-                            value: true,
-                          },
-                        });
+                <FPublishObjectFile
+                  fileInfo={resourceVersionCreatorPage.selectedFileInfo}
+                  onSucceed_UploadFile={(file) => {
+                    // console.log(file, 'onSucceed_UploadFile390oisjdf');
+                    dispatch<OnSucceed_UploadFile_Action>({
+                      type: 'resourceVersionCreatorPage/onSucceed_UploadFile',
+                      payload: {
+                        name: file.fileName,
+                        sha1: file.sha1,
+                        // from: '本地上传',
                       },
                     });
                   }}
-                  type='default'
-                >添加依赖</FComponentsLib.FRectBtn>
+                  onSucceed_ImportObject={async (obj) => {
+                    // console.log(obj, 'onSucceed_ImportObject390oisjdf');
+                    dispatch<OnSucceed_ImportObject_Action>({
+                      type: 'resourceVersionCreatorPage/onSucceed_ImportObject',
+                      payload: {
+                        name: obj.objName,
+                        sha1: obj.sha1,
+                        objID: obj.objID,
+                      },
+                    });
 
-                {
-                  resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
+                  }}
+                  onClick_DeleteBtn={() => {
+                    if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
+                      fConfirmModal({
+                        message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                        okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                        cancelText: FI18n.i18nNext.t('btn_cancel'),
+                        onOk() {
+                          dispatch<OnDelete_ObjectFile_Action>({
+                            type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                          });
+                        },
+                      });
+                    } else {
+                      dispatch<OnDelete_ObjectFile_Action>({
+                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                      });
+                    }
+
+                  }}
+
+                  showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
+                  onClick_OpenMarkdownBtn={async () => {
+                    await onClick_EditMarkdownBtn();
+                  }}
+                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                    && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
+                    && resourceVersionCreatorPage.rawProperties.some((b) => {
+                      return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
+                    })}
+                  onClick_EditMarkdownBtn={async () => {
+                    await onClick_EditMarkdownBtn();
+                  }}
+                />
+              </Space>
+              <CustomOptions />
+
+            </FFormLayout.FBlock>
+
+            <FFormLayout.FBlock
+              dot={false}
+              title={FI18n.i18nNext.t('rely')}
+              subtitle={<FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
+                <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} /></div>
+              </FTooltip>}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 15 }}>
+                <Space size={15}>
                   <FComponentsLib.FRectBtn
-                    type='default'
                     onClick={async () => {
-                      dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
-                        type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
+                      const p = await getProcessor('resourceVersionCreator');
+                      await fAddDependencies({
+                        existingResources: (await p.getAllTargets()).map((t) => {
+                          return {
+                            resourceID: t.id,
+                            resourceNme: t.name,
+                          };
+                        }),
+                        baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
+                          return {
+                            resourceID: r.resourceID,
+                            resourceNme: r.resourceName,
+                          };
+                        }) || [],
+                        async onSelect_Resource({ resourceID, resourceName }) {
+                          // console.log('8***********8sdflksdjlkj');
+                          const p = await getProcessor('resourceVersionCreator');
+                          await p.addTargets([{
+                            id: resourceID,
+                            name: resourceName,
+                            type: 'resource',
+                            // versionRange: '^0.1.0',
+                          }]);
+                          await dispatch<OnChange_DataIsDirty_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                            payload: {
+                              value: true,
+                            },
+                          });
+                        },
+                        async onDeselect_Resource({ resourceID, resourceName }) {
+                          const p = await getProcessor('resourceVersionCreator');
+                          await p.removeTarget({
+                            id: resourceID,
+                            name: resourceName,
+                            type: 'resource',
+                          });
+                          await dispatch<OnChange_DataIsDirty_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                            payload: {
+                              value: true,
+                            },
+                          });
+                        },
                       });
                     }}
-                  >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
-                }
-              </Space>
+                    type='default'
+                  >添加依赖</FComponentsLib.FRectBtn>
 
-              <FResourceAuthorizationProcessor
-                width={860}
-                height={600}
-                resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
-                processorIdentifier={'resourceVersionCreator'}
-                onChanged={() => {
-                  dispatch<OnChange_DataIsDirty_Action>({
-                    type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                  {
+                    resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
+                    <FComponentsLib.FRectBtn
+                      type='default'
+                      onClick={async () => {
+                        dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
+                          type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
+                        });
+                      }}
+                    >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
+                  }
+                </Space>
+
+                <FResourceAuthorizationProcessor
+                  width={860}
+                  height={600}
+                  resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
+                  processorIdentifier={'resourceVersionCreator'}
+                  onChanged={() => {
+                    dispatch<OnChange_DataIsDirty_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                      payload: {
+                        value: true,
+                      },
+                    });
+                  }}
+                />
+              </div>
+            </FFormLayout.FBlock>
+
+            <FFormLayout.FBlock
+              dot={false}
+              title={FI18n.i18nNext.t('version_description')}
+            >
+              <FBraftEditor
+                value={resourceVersionCreatorPage.descriptionEditorState}
+                onChange={(value: EditorState) => {
+                  dispatch<OnChange_DescriptionEditorState_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_DescriptionEditorState',
                     payload: {
-                      value: true,
+                      state: value,
                     },
                   });
                 }}
+                style={{
+                  height: 500,
+                }}
               />
-            </div>
-          </FFormLayout.FBlock>
-
-          <FFormLayout.FBlock
-            dot={false}
-            title={FI18n.i18nNext.t('version_description')}
-          >
-            <FBraftEditor
-              value={resourceVersionCreatorPage.descriptionEditorState}
-              onChange={(value: EditorState) => {
-                dispatch<OnChange_DescriptionEditorState_Action>({
-                  type: 'resourceVersionCreatorPage/onChange_DescriptionEditorState',
-                  payload: {
-                    state: value,
-                  },
-                });
-              }}
-              style={{
-                height: 500,
-              }}
-            />
-          </FFormLayout.FBlock>
-        </FFormLayout>
-        {/*<div style={{ position: 'relative' }}>*/}
-        {/*  <div style={{ position: 'absolute', right: -30, top: 60 }}>*/}
-
-        {/*  </div>*/}
-        {/*</div>*/}
+            </FFormLayout.FBlock>
+          </FFormLayout>)
+        }
       </FLeftSiderLayout>
 
       <ReleaseTip visible={resourceVersionCreatorPage.releaseTipVisible} />
