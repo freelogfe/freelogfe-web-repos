@@ -230,8 +230,8 @@ function VersionCreator({
           </div>)
         }
 
-        {
-          resourceVersionCreatorPage.pageState === 'loaded' && (<FFormLayout>
+        <div style={{ display: resourceVersionCreatorPage.pageState === 'loaded' ? 'block' : 'none' }}>
+          <FFormLayout>
             <FFormLayout.FBlock
               dot={true}
               title={FI18n.i18nNext.t('version_number')}
@@ -428,10 +428,9 @@ function VersionCreator({
                 }}
               />
             </FFormLayout.FBlock>
-          </FFormLayout>)
-        }
+          </FFormLayout>
+        </div>
       </FLeftSiderLayout>
-
       <ReleaseTip visible={resourceVersionCreatorPage.releaseTipVisible} />
     </>
   );

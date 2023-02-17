@@ -372,13 +372,6 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
       });
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          pageState: 'loaded',
-        },
-      });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
@@ -808,6 +801,12 @@ const Model: ResourceVersionCreatorModelType = {
       }));
 
       if (!resourceVersionCreatorPage.resourceInfo) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pageState: 'loaded',
+          },
+        });
         return;
       }
 
@@ -821,6 +820,7 @@ const Model: ResourceVersionCreatorModelType = {
       } = yield call(FServiceAPI.Resource.lookDraft, params);
 
       if (data_draft) {
+
         const { draftData } = data_draft;
 
         yield put<ChangeAction>({
@@ -833,6 +833,7 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
+
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -841,7 +842,6 @@ const Model: ResourceVersionCreatorModelType = {
         yield call(p.clear);
         yield call(p.addTargets, draftData.directDependencies);
         yield call(FUtil.Tool.promiseSleep);
-        // console.log(draftData.baseUpcastResources, 'draftData.baseUpcastResourcesoiskdejflkdjl');
         yield call(p.setBaseUpcastResources, draftData?.baseUpcastResources || []);
         if (draftData.selectedFileInfo) {
           yield put<_FetchRawPropsAction>({
@@ -852,6 +852,12 @@ const Model: ResourceVersionCreatorModelType = {
           });
         }
       }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageState: 'loaded',
+        },
+      });
     },
     * _SaveDraft({ payload }: _SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
@@ -928,6 +934,14 @@ const Model: ResourceVersionCreatorModelType = {
         result,
         error,
       }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageState: 'loaded',
+        },
+      });
+
       if (error !== '') {
         yield put<ChangeAction>({
           type: 'change',
@@ -961,40 +975,6 @@ const Model: ResourceVersionCreatorModelType = {
             rawPropertiesState: 'success',
           },
         });
-
-        // console.log(result[0].info.metaInfo, 'result[0].info.metaInfoiojslkfdjflkjsdlk');
-
-        // if (payload.ifMarkdownFetchDependencies && result[0].info.metaInfo['mime'] === 'text/markdown') {
-        //   const deps: string[] = yield call(getDependenciesBySha1, resourceVersionCreatorPage.selectedFileInfo.sha1);
-        //   // console.log(deps, 'depsiowejlfksjdlfkjsdlkfjlk');
-        //   if (deps.length > 0) {
-        //     const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        //       resourceNames: deps.join(','),
-        //     };
-        //     const { data: data_batchInfo }: {
-        //       data: {
-        //         resourceId: string;
-        //         resourceName: string;
-        //       }[];
-        //     } = yield call(FServiceAPI.Resource.batchInfo, params);
-        //     // console.log(data_batchInfo, 'data_batchInfoiosfjsldkjfldsjlskfjlksdj');
-        //
-        //     const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
-        //     const needAddTargets: {
-        //       id: string;
-        //       name: string;
-        //       type: 'resource';
-        //     }[] = data_batchInfo.map((bi) => {
-        //       return {
-        //         id: bi.resourceId,
-        //         name: bi.resourceName,
-        //         type: 'resource',
-        //       };
-        //     });
-        //     yield call(processor.addTargets, needAddTargets);
-        //   }
-        //
-        // }
       }
 
     },
