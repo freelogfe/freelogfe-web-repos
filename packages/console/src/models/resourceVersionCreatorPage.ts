@@ -801,12 +801,6 @@ const Model: ResourceVersionCreatorModelType = {
       }));
 
       if (!resourceVersionCreatorPage.resourceInfo) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pageState: 'loaded',
-          },
-        });
         return;
       }
 
@@ -852,6 +846,7 @@ const Model: ResourceVersionCreatorModelType = {
           });
         }
       }
+      yield call(FUtil.Tool.promiseSleep, 1000);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -934,13 +929,6 @@ const Model: ResourceVersionCreatorModelType = {
         result,
         error,
       }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params);
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          pageState: 'loaded',
-        },
-      });
 
       if (error !== '') {
         yield put<ChangeAction>({

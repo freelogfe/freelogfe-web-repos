@@ -68,6 +68,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
       payload: {},
     });
 
+    await FUtil.Tool.promiseSleep(1000);
     await dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
       payload: {

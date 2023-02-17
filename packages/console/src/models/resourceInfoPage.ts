@@ -1,13 +1,12 @@
-import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
-import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceInfo";
-// import {DiscoverPageModelState} from "@/models/discoverPage";
-import {FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
+import { FetchDataSourceAction, ResourceInfoModelState } from '@/models/resourceInfo';
+import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceInfoPageModelState {
+  pageState: 'loading' | 'loaded';
   resourceID: string;
-
   isEditing: boolean;
   editorText: string;
   introductionErrorText: string;
@@ -56,6 +55,7 @@ export interface ResourceInfoPageModelType {
 }
 
 const initStates: ResourceInfoPageModelState = {
+  pageState: 'loading',
   resourceID: '',
 
   isEditing: false,
@@ -70,7 +70,7 @@ const Model: ResourceInfoPageModelType = {
   state: initStates,
 
   effects: {
-    * onChangeInfo(action: OnChangeInfoAction, {call, put, select}: EffectsCommandMap) {
+    * onChangeInfo(action: OnChangeInfoAction, { call, put, select }: EffectsCommandMap) {
       // yield put({type: 'save'});
 
       const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
@@ -82,10 +82,8 @@ const Model: ResourceInfoPageModelType = {
         type: 'resourceInfo/fetchDataSource',
         payload: action.id,
       });
-
-
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -94,28 +92,28 @@ const Model: ResourceInfoPageModelType = {
   },
 
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
     onChangeIsEditing(state: ResourceInfoPageModelState, action: OnChangeIsEditingAction): ResourceInfoPageModelState {
       return {
         ...state,
-        isEditing: action.payload
+        isEditing: action.payload,
       };
     },
     onChangeEditor(state: ResourceInfoPageModelState, action: OnChangeEditorAction): ResourceInfoPageModelState {
       return {
         ...state,
-        editorText: action.payload
+        editorText: action.payload,
       };
     },
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
     },
   },
 
