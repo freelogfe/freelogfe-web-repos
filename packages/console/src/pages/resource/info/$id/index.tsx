@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
+import { Space, Skeleton } from 'antd';
 import FLabelEditor from '@/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
@@ -71,6 +71,55 @@ function Info({ dispatch, resourceInfoPage, resourceInfo, user, match }: InfoPro
         type='h1'
       />}
     >
+      {
+        !resourceInfo.info && (<div>
+          <Skeleton.Node style={{ width: 120, height: 22 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 20 }} />
+          <Skeleton.Node style={{ width: 340, height: 38 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 50 }} />
+          <Skeleton.Node style={{ width: 120, height: 22 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 20 }} />
+          <Skeleton.Node style={{ width: 340, height: 38 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 50 }} />
+          <Skeleton.Node style={{ width: 120, height: 22 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 20 }} />
+          <Skeleton.Node style={{ width: 860, height: 38 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 50 }} />
+          <Skeleton.Node style={{ width: 120, height: 22 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 20 }} />
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
+            <Skeleton.Node style={{ width: 200, height: 150 }} active>
+              <div />
+            </Skeleton.Node>
+            <Skeleton.Node style={{ width: 460, height: 40 }} active>
+              <div />
+            </Skeleton.Node>
+          </div>
+          <div style={{ height: 50 }} />
+          <Skeleton.Node style={{ width: 120, height: 22 }} active>
+            <div />
+          </Skeleton.Node>
+          <div style={{ height: 20 }} />
+          <Skeleton.Node style={{ width: 340, height: 38 }} active>
+            <div />
+          </Skeleton.Node>
+        </div>)
+      }
+
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
         <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')}>
