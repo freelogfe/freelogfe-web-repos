@@ -105,7 +105,7 @@ function FLabelEditor({ values = [], resourceType = '', onChange }: FLabelEditor
               <FComponentsLib.FContentText type={'additional2'} text={'推荐标签 :'} />
               {
                 recommendations.map((r) => {
-                  console.log(values, r, 'iosdjflkjsdlfjsdlkjlk');
+                  // console.log(values, r, 'iosdjflkjsdlfjsdlkjlk');
                   const disabled: boolean = values?.includes(r) || false;
                   return (<React.Fragment key={r}>
                     <div style={{ width: 15 }} />
