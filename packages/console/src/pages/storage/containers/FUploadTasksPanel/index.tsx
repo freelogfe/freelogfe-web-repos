@@ -91,7 +91,7 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
     });
   }
 
-  if (!storageHomePage.uploadPanelVisible) {
+  if (!storageHomePage.uploadPanelVisible && storageHomePage.uploadTaskQueue.length === 0) {
     return null;
   }
 
@@ -139,52 +139,54 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
     </div>
 
 
-    {
-      storageHomePage.uploadTaskQueue.length === 0
-        ? (<FLoadingTip height={370} />)
-        : (<div className={styles.body} style={{ display: storageHomePage.uploadPanelOpen ? 'block' : 'none' }}>
-          {
-            storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
-              className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
-            </div>)
-          }
+    {/*{*/}
+    {/*  storageHomePage.uploadTaskQueue.length === 0*/}
+    {/*    ? (<FLoadingTip height={370} />)*/}
+    {/*    : ()*/}
+    {/*}*/}
 
-          {
-            storageHomePage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
-              // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
-              return (<Task
-                key={f.uid}
-                file={f}
-                bucketName={storageHomePage.activatedBucket}
-                onSucceed={async ({ objectName, sha1, uid }) => {
-                  // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
-                  successUids = [
-                    ...successUids,
-                    uid,
-                  ];
-                  await dispatch<CreateObjectAction>({
-                    type: 'storageHomePage/createObject',
-                    payload: {
-                      objectName,
-                      sha1,
-                    },
-                  });
-
-                  run();
-                  run1();
-                }}
-                onFail={({ objectName, uid }) => {
-                  failedUids = [
-                    ...failedUids,
-                    uid,
-                  ];
-                  run1();
-                }}
-              />);
-            })
-          }
+    <div className={styles.body} style={{ display: storageHomePage.uploadPanelOpen ? 'block' : 'none' }}>
+      {
+        storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
+          className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
         </div>)
-    }
+      }
+
+      {
+        storageHomePage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
+          // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
+          return (<Task
+            key={f.uid}
+            file={f}
+            bucketName={storageHomePage.activatedBucket}
+            onSucceed={async ({ objectName, sha1, uid }) => {
+              // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
+              successUids = [
+                ...successUids,
+                uid,
+              ];
+              await dispatch<CreateObjectAction>({
+                type: 'storageHomePage/createObject',
+                payload: {
+                  objectName,
+                  sha1,
+                },
+              });
+
+              run();
+              run1();
+            }}
+            onFail={({ objectName, uid }) => {
+              failedUids = [
+                ...failedUids,
+                uid,
+              ];
+              run1();
+            }}
+          />);
+        })
+      }
+    </div>
 
   </div>);
 }
