@@ -151,7 +151,7 @@ const Model: ResourceInfoModelType = {
         authProblem = !data1[0].isAuth;
       }
 
-      yield call(FUtil.Tool.promiseSleep, 1000);
+      // yield call(FUtil.Tool.promiseSleep, 1000);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
