@@ -14,7 +14,8 @@ import {
   ChangeAction,
   FetchAuthorizeAction,
   FetchAuthorizedAction,
-  FetchResourceInfoAction, OnAdd_Policy_Action,
+  FetchResourceInfoAction,
+  OnAdd_Policy_Action,
 } from '@/models/resourceAuthPage';
 import { withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';

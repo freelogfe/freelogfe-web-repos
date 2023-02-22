@@ -16,7 +16,7 @@ import {
   OnClick_AddIntroductionBtn_Action,
   OnClick_EditIntroductionBtn_Action,
   OnClick_CancelEditIntroductionBtn_Action,
-  OnClick_SaveEditIntroductionBtn_Action,
+  OnClick_SaveIntroductionBtn_Action,
   OnChange_Labels_Action,
   OnChange_Cover_Action, OnChange_IntroductionEditor_Action,
 } from '@/models/resourceInfoPage';
@@ -152,7 +152,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                   >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
                   <FComponentsLib.FTextBtn
                     onClick={() => {
-                      dispatch<OnClick_SaveEditIntroductionBtn_Action>({
+                      dispatch<OnClick_SaveIntroductionBtn_Action>({
                         type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
                       });
                       // onChangeIsEditing(false);
