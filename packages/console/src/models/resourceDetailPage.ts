@@ -348,7 +348,8 @@ const Model: ResourceDetailPageModelType = {
                       };
                     });
                   return {
-                    checked: false,
+                    // checked: false,
+                    checked: true,
                     id: c.contractId,
                     name: c.contractName,
                     text: c.policyInfo.policyText,
@@ -359,6 +360,7 @@ const Model: ResourceDetailPageModelType = {
                   };
                 });
 
+              // console.log(contracts, 'contractsoisedjeflksdjlfkjsdlfkjl');
               const allContractUsedPolicyIDs: string[] = contracts
                 .filter((cp) => cp.status !== 'terminal')
                 .map<string>((cp) => cp.policyID);
