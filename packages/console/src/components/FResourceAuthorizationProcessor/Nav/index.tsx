@@ -4,10 +4,8 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
-// import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from '../types';
-import { MutableRefObject } from 'react';
 import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface NavProps {
@@ -304,44 +302,6 @@ function SmallNav({ relations, targetInfos, activatedTarget, baseUpcastResources
                 </FTooltip>
               </>}
             />
-            {/*<div className={styles.title}>*/}
-            {/*  <FTooltip title={info.targetName}><span>*/}
-            {/*    <FComponentsLib.FContentText*/}
-            {/*      className={styles.titleText}*/}
-            {/*      text={info.targetName}*/}
-            {/*      singleRow*/}
-            {/*      type='highlight'*/}
-            {/*    />*/}
-            {/*  </span></FTooltip>*/}
-            {/*  <div style={{ width: 5 }} />*/}
-            {/*  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>*/}
-            {/*    <span><FComponentsLib.FTextBtn*/}
-            {/*      type='primary'*/}
-            {/*      onClick={(e) => {*/}
-            {/*        e.stopPropagation();*/}
-            {/*        // if (i.status === 3) {*/}
-            {/*        if (info.error === 'storageObject') {*/}
-            {/*          return goToObject(info.targetID);*/}
-            {/*        }*/}
-            {/*        return window.open(FUtil.LinkTo.resourceDetails({*/}
-            {/*          resourceID: info.targetID,*/}
-            {/*        }));*/}
-            {/*      }}*/}
-            {/*    ><FComponentsLib.FIcons.FFileSearch style={{ fontSize: 16 }} /></FComponentsLib.FTextBtn></span>*/}
-            {/*  </FTooltip>*/}
-            {/*  <div style={{ width: 5 }} />*/}
-            {/*  {info.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}*/}
-            {/*  {info.error === 'cyclicDependency' && (*/}
-            {/*    <FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}*/}
-            {/*  {info.error === 'storageObject' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}*/}
-            {/*  {info.error === 'upThrow' && (<FComponentsLib.FIcons.FUpcast className={styles.titleErrorIcon} />)}*/}
-            {/*  {info.error === 'freeze' && (<FComponentsLib.FIcons.FForbid className={styles.titleErrorIcon} />)}*/}
-            {/*  {info.error === '' && info.warning === 'authException' && (*/}
-            {/*    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 14 }} /></FTooltip>)}*/}
-            {/*  {info.error === '' && info.warning === 'ownerFreeze' && (*/}
-            {/*    <FTooltip title={'该资源发行方账号因违规已被冻结'}><FComponentsLib.FIcons.FWarning*/}
-            {/*      style={{ fontSize: 14 }} /></FTooltip>)}*/}
-            {/*</div>*/}
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText type='additional2'>
               <div>{info.targetResourceType.length === 0 || '暂无类型'}</div>

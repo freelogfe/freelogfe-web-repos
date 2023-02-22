@@ -463,7 +463,7 @@ function FResourceAuthorizationProcessor({
     return get_targetInfos()
       .filter((t) => {
         return t.targetType === 'resource' && !get_baseUpcastResources().some((r) => {
-          return r.resourceID !== t.targetID && r.resourceName !== t.targetName;
+          return r.resourceID === t.targetID && r.resourceName === t.targetName;
         });
       })
       .every((t) => {
