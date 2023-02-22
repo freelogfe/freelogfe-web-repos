@@ -83,7 +83,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                 : (<>
                   {
                     resource?.error === 'offline' && (<div className={styles.noNode}>
-                      资源已下线
+                      {FI18n.i18nNext.t('alarm_resource_not_available')}
                     </div>)
                   }
                   {
@@ -109,7 +109,10 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                             <div style={{ height: 15 }} />
                             <Space size={10}>
                               <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
-                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
+                              <span style={{
+                                fontSize: 16,
+                                color: '#C78D12',
+                              }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
                             </Space>
                           </>)
                         }
