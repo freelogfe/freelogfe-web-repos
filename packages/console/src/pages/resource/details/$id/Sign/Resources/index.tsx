@@ -200,7 +200,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 </FTooltip>
               </>}
             />
-      
+
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               type='additional2'

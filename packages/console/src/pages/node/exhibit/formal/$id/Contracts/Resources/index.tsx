@@ -95,7 +95,7 @@ function Resources({ dispatch, exhibitInfoPage }: ResourcesProps) {
               right={<>
                 {r.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                 {r.error === 'unreleased' && (<FResourceStatusBadge status={'unreleased'} />)}
-                {r.error === 'freeze' && (<FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />)}
+                {r.error === 'freeze' && (<FResourceStatusBadge status={'freeze'} />)}
                 <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                   <div>
                     <FComponentsLib.FTextBtn
