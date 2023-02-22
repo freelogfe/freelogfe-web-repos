@@ -109,8 +109,8 @@ function FAddDependenciesDrawer({
             resourceId: string;
             resourceName: string;
             resourceType: string[];
-            updateDate: string;
-            status: 0 | 1 | 2 | 4;
+            resourceUpdateDate: string;
+            resourceStatus: 0 | 1 | 2 | 4;
             latestVersion: string;
           }[];
           totalItem: number;
@@ -118,29 +118,17 @@ function FAddDependenciesDrawer({
       } = await FServiceAPI.Collection.collectionResources(params);
       resourceListResult = [
         ...resourceListResult,
-        ...data_favoriteResources.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r: any) => {
-          // console.log(r, 'r20893u4oi23');
-          // let waring: FAddDependenciesDrawerStates['resourceList'][number]['waring'] = '';
-          // if () {
-          //   waring = 'upcast';
-          // }
-
-          // if (r.latestVersion === '') {
-          //   waring = 'unreleased';
-          // } else {
-          //   waring = 'offline';
-          // }
-
+        ...data_favoriteResources.dataList.map<FAddDependenciesDrawerStates['resourceList'][number]>((r) => {
           return {
             resourceID: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
-            state: r.status === 0
+            state: r.resourceStatus === 0
               ? 'unreleased'
-              : r.status === 2
+              : r.resourceStatus === 2
                 ? 'freeze'
-                : r.status === 4
+                : r.resourceStatus === 4
                   ? 'offline'
                   : '',
             waring: baseUpcastResourceIDs.includes(r.resourceId) ? 'upcast' : '',
@@ -220,6 +208,8 @@ function FAddDependenciesDrawer({
       set_resourceListMore(more);
     }
   }
+
+  console.log(resourceList, 'resourceList98iosedjflksdjflkjsdl');
 
   return (
     <FDrawer
