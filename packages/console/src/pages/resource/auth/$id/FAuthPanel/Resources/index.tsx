@@ -30,16 +30,6 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
     });
   }
 
-  // const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
-  //   id: i.id,
-  //   activated: i.activated,
-  //   title: i.title,
-  //   resourceType: i.resourceType,
-  //   version: i.version,
-  //   contracts: i.contracts,
-  //   state: i.state,
-  // }));
-
   return (<div className={styles.styles}>
     {
       resourceAuthPage.contractsAuthorized.map((i) => (
@@ -53,7 +43,7 @@ function Resources({ resourceAuthPage, dispatch }: ResourcesProps) {
               right={<>
                 {i.error === 'offline' && (<FResourceStatusBadge status={'offline'} />)}
                 {i.error === 'unreleased' && (<FResourceStatusBadge status={'unreleased'} />)}
-                {i.error === 'freeze' && (<FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />)}
+                {i.error === 'freeze' && (<FResourceStatusBadge status={'freeze'} />)}
 
                 <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
                   <div>
