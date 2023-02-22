@@ -53,7 +53,14 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
 
                 {
                   r.error === 'freeze' && (<>
-                    <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                    <FResourceStatusBadge status={'freeze'} />
+                    <div style={{ width: 5 }} />
+                  </>)
+                }
+
+                {
+                  r.error === 'unreleased' && (<>
+                    <FResourceStatusBadge status={'unreleased'} />
                     <div style={{ width: 5 }} />
                   </>)
                 }
@@ -61,7 +68,8 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 {
                   r.error === '' && r.warning === 'authException' && (<>
                     <div style={{ width: 5 }} />
-                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
+                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning
+                      style={{ fontSize: 16 }} /></FTooltip>
                   </>)
                 }
 
@@ -74,19 +82,6 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 }
               </>}
             />
-            {/*<div className={styles.title}>*/}
-            {/*  <FTooltip title={r.name}>*/}
-            {/*  <span><FComponentsLib.FContentText*/}
-            {/*    type='highlight'*/}
-            {/*    text={r.name}*/}
-            {/*    singleRow*/}
-            {/*    className={styles.titleText}*/}
-            {/*    style={{ maxWidth: r.status === 0 ? 170 : 220 }}*/}
-            {/*  /></span>*/}
-            {/*  </FTooltip>*/}
-
-
-            {/*</div>*/}
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               type='additional2'
@@ -135,7 +130,8 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
     }
 
     {
-      resourceDetailPage.sign_SignResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
+      resourceDetailPage.sign_SignResources.length > 1 && (
+        <div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
     }
 
     {
@@ -168,14 +164,15 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 {
                   r.error === 'freeze' && (<>
                     <div style={{ width: 5 }} />
-                    <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 14 }} />
+                    <FResourceStatusBadge status={'freeze'} />
                   </>)
                 }
 
                 {
                   r.error === '' && r.warning === 'authException' && (<>
                     <div style={{ width: 5 }} />
-                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>
+                    <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning
+                      style={{ fontSize: 16 }} /></FTooltip>
                   </>)
                 }
 
@@ -203,17 +200,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
                 </FTooltip>
               </>}
             />
-            {/*<div className={styles.title}>*/}
-            {/*<FTooltip title={r.name}>*/}
-            {/*  <span><FComponentsLib.FContentText*/}
-            {/*    type='highlight'*/}
-            {/*    text={r.name}*/}
-            {/*    singleRow*/}
-            {/*    className={styles.titleText}*/}
-            {/*    style={{ maxWidth: r.status === 0 ? 150 : 200 }}*/}
-            {/*  /></span>*/}
-            {/*</FTooltip>*/}
-            {/*</div>*/}
+      
             <div style={{ height: 5 }} />
             <FComponentsLib.FContentText
               type='additional2'
