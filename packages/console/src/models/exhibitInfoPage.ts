@@ -619,7 +619,16 @@ const Model: ExhibitInfoPageModelType = {
         }],
 
       };
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      const res: {
+        ret: number;
+        errCode: number;
+        msg: string;
+      } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+
+      if (res.ret !== 0 || res.errCode !== 0) {
+        fMessage(res.msg, 'error');
+        return;
+      }
 
       FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
         value: true,
