@@ -58,11 +58,13 @@ function Middleware({ title, description, okText, cancelText, onOk, onCancel, af
     className={styles.modal}
     width={490}
     onCancel={() => {
+      set_visible(false);
       onCancel && onCancel();
     }}
     afterClose={() => {
       afterClose && afterClose();
     }}
+    maskClosable={false}
   >
     <div className={styles.modelContent}>
       <FComponentsLib.FTitleText type={'popup'} text={title} />
