@@ -13,8 +13,8 @@ import {
   FetchSpaceStatisticAction,
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
-import fConfirmModal from '@/components/fConfirmModal';
-import FLoadingTip from '@/components/FLoadingTip';
+// import fConfirmModal from '@/components/fConfirmModal';
+// import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';

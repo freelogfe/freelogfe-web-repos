@@ -462,8 +462,10 @@ function FPolicyBuilder({
   }
 
   async function onClick_VerifyBtn() {
+    // console.log('****88888sdfsdfsdfsdf');
     self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '检验', '', 1]);
     setIsVerifying(true);
+
 
     if (editMode === 'code') {
       const { errors } = await compileCodeText({
@@ -487,6 +489,23 @@ function FPolicyBuilder({
         setShowView('fail');
         setFailResult({
           errorText: '当前策略已存在',
+          title: titleInput,
+          code: code_Input,
+          translation: text || '',
+          view: [],
+        });
+        return;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+        userId: FUtil.Tool.getUserIDByCookies(),
+      };
+      const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+
+      if (data.status === 0) {
+        setShowView('fail');
+        setFailResult({
+          errorText: '当前账户未激活',
           title: titleInput,
           code: code_Input,
           translation: text || '',
@@ -522,6 +541,24 @@ function FPolicyBuilder({
         });
         return;
       }
+
+      const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+        userId: FUtil.Tool.getUserIDByCookies(),
+      };
+      const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+
+      if (data.status === 0) {
+        setShowView('fail');
+        setFailResult({
+          errorText: '当前账户未激活',
+          title: titleInput,
+          code: code_Input,
+          translation: translationText || '',
+          view: [],
+        });
+        return;
+      }
+
       // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
@@ -763,6 +800,18 @@ function FPolicyBuilder({
             <div style={{ width: 20 }} />
             {/*<span>以下是错误信息</span>*/}
             <span>{failResult?.errorText}</span>
+            {
+              failResult?.errorText === '当前账户未激活' && (<>
+                <div style={{ width: 20 }} />
+                <FComponentsLib.FTextBtn onClick={() => {
+                  self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
+                  setShowView('edit');
+                  // setSuccessResult(null);
+                  setFailResult(null);
+                }}>去激活</FComponentsLib.FTextBtn>
+              </>)
+            }
+
           </div>
           <div style={{ height: 30 }} />
 
