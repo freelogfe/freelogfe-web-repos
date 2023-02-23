@@ -19,7 +19,7 @@ function FLeftSiderLayout({ children, header, sider, type, contentStyles, hasBot
 
   return (<div
     className={styles.leftRight}
-    style={{ height: 'calc(100vh - 70px)' }}
+    // style={{ height: 'calc(100vh - 70px)' }}
   >
     <div className={styles.Slider}>
       <div>
