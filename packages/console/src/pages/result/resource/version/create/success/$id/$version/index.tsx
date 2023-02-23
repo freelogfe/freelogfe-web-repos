@@ -11,8 +11,8 @@ import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
-import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
+// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+// import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -149,7 +149,7 @@ function Success({ match, dispatch }: SuccessProps) {
               }
             }}
             style={{ padding: '0 20px' }}
-          >立即上线</FComponentsLib.FRectBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')}</FComponentsLib.FRectBtn>
           {/*FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')*/}
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn

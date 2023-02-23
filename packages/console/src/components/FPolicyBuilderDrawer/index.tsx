@@ -497,22 +497,22 @@ function FPolicyBuilder({
         return;
       }
 
-      const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-        userId: FUtil.Tool.getUserIDByCookies(),
-      };
-      const { data } = await FServiceAPI.Transaction.individualAccounts(params);
-
-      if (data.status === 0) {
-        setShowView('fail');
-        setFailResult({
-          errorText: '当前账户未激活',
-          title: titleInput,
-          code: code_Input,
-          translation: text || '',
-          view: [],
-        });
-        return;
-      }
+      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+      //   userId: FUtil.Tool.getUserIDByCookies(),
+      // };
+      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+      //
+      // if (data.status === 0) {
+      //   setShowView('fail');
+      //   setFailResult({
+      //     errorText: '当前账户未激活',
+      //     title: titleInput,
+      //     code: code_Input,
+      //     translation: text || '',
+      //     view: [],
+      //   });
+      //   return;
+      // }
 
       // setIsVerifying(false);
       setShowView('success');
@@ -542,22 +542,22 @@ function FPolicyBuilder({
         return;
       }
 
-      const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-        userId: FUtil.Tool.getUserIDByCookies(),
-      };
-      const { data } = await FServiceAPI.Transaction.individualAccounts(params);
-
-      if (data.status === 0) {
-        setShowView('fail');
-        setFailResult({
-          errorText: '当前账户未激活',
-          title: titleInput,
-          code: code_Input,
-          translation: translationText || '',
-          view: [],
-        });
-        return;
-      }
+      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+      //   userId: FUtil.Tool.getUserIDByCookies(),
+      // };
+      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+      //
+      // if (data.status === 0) {
+      //   setShowView('fail');
+      //   setFailResult({
+      //     errorText: '当前账户未激活',
+      //     title: titleInput,
+      //     code: code_Input,
+      //     translation: translationText || '',
+      //     view: [],
+      //   });
+      //   return;
+      // }
 
       // setIsVerifying(false);
       setShowView('success');
