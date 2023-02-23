@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import { FI18n } from '@freelog/tools-lib';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import * as ReactDOM from 'react-dom/client';

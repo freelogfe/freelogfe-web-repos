@@ -23,14 +23,14 @@ const tasks = {
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
           target={'_blank'}
-        >资源创建教程</a>
+        >资源发行教程</a>
         &nbsp;
         <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
         &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
           target={'_blank'}
-        >节点创建教程</a>
+        >节点运营教程</a>
         &nbsp;
         <FComponentsLib.FContentText
           text={'，完整观看任一视频教程即可完成任务，并获得一个邀请名额！'}
