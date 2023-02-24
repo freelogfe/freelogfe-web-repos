@@ -10,6 +10,7 @@ import { StorageHomePageModelState } from '@/models/storageHomePage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
+import * as AHooks from 'ahooks';
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -28,28 +29,29 @@ interface TaskStates {
 let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
 function Task({
-                file, bucketName,
-                onSucceed, onFail,
+                file,
+                bucketName,
+                onSucceed,
+                onFail,
               }: TaskProps) {
 
   const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
   const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
 
   React.useEffect(() => {
-
     if (file.sameName) {
       setStatus('sameName');
       onFail && onFail({ uid: file.uid, objectName: file.name });
       return;
     }
     startUploadFile();
-
-    return () => {
-      const c = cancels.get(file.uid);
-      c && c();
-      cancels.delete(file.uid);
-    };
   }, []);
+
+  AHooks.useUnmount(() => {
+    const c = cancels.get(file.uid);
+    c && c();
+    cancels.delete(file.uid);
+  });
 
   async function verifySameName() {
     // console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
@@ -95,7 +97,7 @@ function Task({
       }
     }
 
-    const {result} = await getFilesSha1Info({
+    const { result } = await getFilesSha1Info({
       sha1: [file.sha1],
     });
 
