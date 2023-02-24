@@ -124,15 +124,6 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
           onClick={async () => {
             const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
             if (exits) {
-              // fConfirmModal({
-              //   message: FI18n.i18nNext.t('bucket_msg_cancel_all_uploading_task'),
-              //   cancelText: FI18n.i18nNext.t('bucket_btn_countinue_upload'),
-              //   okText: FI18n.i18nNext.t('bucket_btn_cancel_upload'),
-              //   onOk() {
-              //     closeAll();
-              //   },
-              // });
-
               const bool: boolean = await fPromiseModalConfirm({
                 title: '提示',
                 description: FI18n.i18nNext.t('bucket_msg_cancel_all_uploading_task'),
