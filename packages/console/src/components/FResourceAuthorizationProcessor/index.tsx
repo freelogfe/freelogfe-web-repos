@@ -9,6 +9,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from './types';
 import FComponentsLib from '@freelog/components-lib';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
+import fMessage from '@/components/fMessage';
 
 interface Target {
   id: string;
@@ -609,12 +610,16 @@ function FResourceAuthorizationProcessor({
                 })
                 .flat();
               // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
-              await FServiceAPI.Contract.batchCreateContracts({
+              const { data, ret, errCode, msg } = await FServiceAPI.Contract.batchCreateContracts({
                 subjects: subjects,
                 subjectType: 1,
                 licenseeId: get_licenseeResource()?.resourceID || '',
                 licenseeIdentityType: 1,
               });
+
+              if (ret !== 0 || errCode !== 0) {
+                return fMessage(msg, 'error');
+              }
               await _syncTargetInfo();
               onChanged && onChanged();
             }}
