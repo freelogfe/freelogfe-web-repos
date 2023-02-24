@@ -16,8 +16,8 @@ interface FBaseLayoutProps {
 
 function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
 
-  return (<Layout className={styles.Layout}>
-    <Layout.Header className={styles.Header}>
+  return (<div className={styles.Layout1}>
+    <div className={styles.Header1}>
       <FComponentsLib.FHeaderNavigation
         logoBtn={{ href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home() }}
         // showAlphaTest={true}
@@ -95,12 +95,98 @@ function FBaseLayout({ children, user, global }: FBaseLayoutProps) {
         } : null}
         UmiLinkPatch={Link}
       />
-    </Layout.Header>
+    </div>
+    <div className={styles.Content1}>
+      {/*<div></div>*/}
+      <div>{children}</div>
+    </div>
+  </div>);
 
-    <div style={{ height: 70 }} />
-
-    <Layout.Content>{children}</Layout.Content>
-  </Layout>);
+  // return (<Layout className={styles.Layout}>
+  //   <Layout.Header className={styles.Header}>
+  //     <FComponentsLib.FHeaderNavigation
+  //       logoBtn={{ href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home() }}
+  //       // showAlphaTest={true}
+  //       // showConsoleBabel={true}
+  //       menu={[
+  //         {
+  //           id: 'product',
+  //           text: FI18n.i18nNext.t('nav_product'),
+  //           href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.home(),
+  //           items: [],
+  //         },
+  //         {
+  //           id: 'discover',
+  //           text: FI18n.i18nNext.t('nav_explore'),
+  //           href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
+  //           items: [
+  //             {
+  //               id: 'myResource',
+  //               text: '发现资源',
+  //               href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
+  //             },
+  //             {
+  //               id: 'myCollection',
+  //               text: '示例节点',
+  //               href: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market(),
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           id: 'activity',
+  //           text: FI18n.i18nNext.t('nav_events'),
+  //           href: FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activities(),
+  //           items: [],
+  //         },
+  //         {
+  //           id: 'community',
+  //           text: FI18n.i18nNext.t('nav_communitiy'),
+  //           href: 'https://forum.freelog.com/',
+  //           target: '_blank',
+  //           items: [],
+  //         },
+  //         {
+  //           id: 'help',
+  //           text: FI18n.i18nNext.t('nav_docs'),
+  //           href: 'https://freelog3.freelog.com/',
+  //           target: '_blank',
+  //           items: [],
+  //         },
+  //       ]}
+  //       activeIDs={['', '']}
+  //       showGotoConsole={true}
+  //       userPanel={user.userInfo ? {
+  //         info: {
+  //           avatar: user.userInfo.headImage,
+  //           userName: user.userInfo.username,
+  //           email: user.userInfo.email,
+  //           phone: user.userInfo.mobile,
+  //         },
+  //         menu: [
+  //           // {
+  //           //   text: '个人中心',
+  //           //   onClick() {
+  //           //     console.log('####');
+  //           //   },
+  //           // },
+  //           {
+  //             text: '登出',
+  //             async onClick() {
+  //               await FServiceAPI.User.logout();
+  //               // return FUtil.LinkTo.login();
+  //               history.push(FUtil.LinkTo.login());
+  //             },
+  //           },
+  //         ],
+  //       } : null}
+  //       UmiLinkPatch={Link}
+  //     />
+  //   </Layout.Header>
+  //
+  //   <div style={{ height: 70 }} />
+  //
+  //   <Layout.Content>{children}</Layout.Content>
+  // </Layout>);
   // return (<FLayout
   //   headerLeft={
   //     <NavLink

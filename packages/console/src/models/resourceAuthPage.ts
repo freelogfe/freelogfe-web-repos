@@ -8,7 +8,6 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-// import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ResourceAuthPageModelState {
