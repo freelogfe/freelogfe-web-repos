@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-import { Layout } from 'antd';
+// import { Layout } from 'antd';
 import { connect } from 'dva';
 import { ConnectState, GlobalModelState, UserModelState } from '@/models/connect';
 import { history } from '@@/core/history';
