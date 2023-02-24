@@ -69,7 +69,7 @@ import bindSuccess from '@/assets/bind-success.png';
 import unbindSuccess from '@/assets/unbind-success.png';
 import bindWarning from '@/assets/bind-warning.png';
 import bindError from '@/assets/bind-error.png';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
 import FPasswordInput from '@/components/FPasswordInput';
@@ -1172,7 +1172,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
           <div style={{ height: 25 }} />
 
-          <FComponentsLib.FTipText text={'重新输入新密码'} type='third' />
+          <FComponentsLib.FTipText text={FI18n.i18nNext.t('account_reenter_password')} type='third' />
 
           <div style={{ height: 5 }} />
           <FPasswordInput
@@ -1192,7 +1192,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 type: 'settingPage/onBlur_ChangePassword_New2_PasswordInput',
               });
             }}
-            placeholder='请输入新密码'
+            placeholder={FI18n.i18nNext.t('account_reenter_password_hint')}
             className={styles.modalBlockInput}
             // wrapClassName={styles.modalBlockInput}
           />

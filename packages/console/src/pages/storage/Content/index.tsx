@@ -12,8 +12,6 @@ import {
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
-// import FUpload from '@/components/FUpload';
-// import { RcFile } from 'antd/lib/upload/interface';
 import FLoadingTip from '@/components/FLoadingTip';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';
@@ -135,26 +133,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       storageHomePage.total === 0 && storageHomePage.filterInput !== '' && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
-          // tipText={'当前Bucket还没有上传任何对象'}
           tipText={'无搜索结果'}
-          // btn={<FComponentsLib.FRectBtn
-          //   onClick={async () => {
-          //     const files = await fReadLocalFiles({
-          //       multiple: true,
-          //     });
-          //     if (!files) {
-          //       return;
-          //     }
-          //
-          //     dispatch<UploadFilesAction>({
-          //       type: 'storageHomePage/uploadFiles',
-          //       payload: files,
-          //     });
-          //   }}
-          //   size='large'
-          //   type='primary'
-          //   style={{ paddingLeft: 50, paddingRight: 50 }}
-          // >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>}
         />
       </>)
     }
@@ -163,7 +142,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       storageHomePage.total === 0 && storageHomePage.filterInput === '' && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
-          // tipText={'当前Bucket还没有上传任何对象'}
           tipText={FI18n.i18nNext.t('objects_list_empty')}
           btn={<FComponentsLib.FRectBtn
             onClick={async () => {

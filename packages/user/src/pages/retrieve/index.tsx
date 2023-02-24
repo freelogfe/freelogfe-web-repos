@@ -431,7 +431,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               <div className={styles.title}>
                 <i />
                 <div style={{ width: 5 }} />
-                <FComponentsLib.FTitleText type='h4' text={'验证新密码'} />
+                <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('account_reenter_password')} />
               </div>
             </div>
             <div style={{ height: 5 }} />
@@ -439,7 +439,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
               // type='password'
               className={styles.input}
               // wrapClassName={styles.input}
-              placeholder='再次输入新密码'
+              placeholder={FI18n.i18nNext.t('account_reenter_password_hint')}
               value={retrievePage.confirmPasswordInput}
               onChange={(e) => {
                 dispatch<OnChangeConfirmPasswordInputAction>({
