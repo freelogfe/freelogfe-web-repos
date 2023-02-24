@@ -299,7 +299,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               {FI18n.i18nNext.t('btn_activate_feather_account_now')}
             </FComponentsLib.FRectBtn>
           </div>
-          {moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()) && (
+          {moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).add(1, 'day').isAfter(moment()) && (
             <Activity
               inActive={true}
               goActive={async () => {
@@ -358,7 +358,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             </div>
           </div>
           {/*{console.log(moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()), '898888sdfsdf')}*/}
-          {!moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()) && (
+          {moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).add(1, 'day').isAfter(moment()) && (
             <Activity
               inActive={false}
               signSuccess={() => {
