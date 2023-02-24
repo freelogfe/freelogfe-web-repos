@@ -255,7 +255,6 @@ function VersionCreator({
               title={FI18n.i18nNext.t('release_object')}
             >
               <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
-
                 <FPublishObjectFile
                   fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                   onSucceed_UploadFile={(file) => {
@@ -315,6 +314,7 @@ function VersionCreator({
                   }}
                 />
               </Space>
+
               <CustomOptions />
 
             </FFormLayout.FBlock>
@@ -431,7 +431,11 @@ function VersionCreator({
           </FFormLayout>
         </div>
       </FLeftSiderLayout>
-      <ReleaseTip visible={resourceVersionCreatorPage.releaseTipVisible} />
+
+      <ReleaseTip
+        visible={resourceVersionCreatorPage.releaseTipVisible}
+      />
+
     </>
   );
 }

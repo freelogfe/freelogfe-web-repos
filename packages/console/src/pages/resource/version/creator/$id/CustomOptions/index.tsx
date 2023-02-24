@@ -21,6 +21,7 @@ import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
 import fEditCustomOptions from '@/components/fEditCustomOption';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -30,6 +31,15 @@ interface CustomOptionsProps {
 function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsProps) {
 
   const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
+
+  if (resourceVersionCreatorPage.rawPropertiesState === 'parsing') {
+    return (<>
+      <div style={{ height: 20 }} />
+      <FSkeletonNode width={860} height={38} />
+      <div style={{ height: 20 }} />
+      <FSkeletonNode width={340} height={38} />
+    </>);
+  }
 
   return (<>
     {
@@ -194,7 +204,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{translate: '0 -1px'}}>自定义选项（高级）</div>
+              <div style={{ translate: '0 -1px' }}>自定义选项（高级）</div>
               <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
                 <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14, fontWeight: 400 }} /></div>
               </FTooltip>

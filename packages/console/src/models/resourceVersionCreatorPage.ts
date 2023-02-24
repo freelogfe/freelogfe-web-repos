@@ -181,6 +181,9 @@ export interface OnChange_DescriptionEditorState_Action extends AnyAction {
 
 export interface _FetchDraft_Action extends AnyAction {
   type: '_FetchDraft';
+  payload: {
+    delay: boolean;
+  };
 }
 
 export interface _SaveDraft_Action extends AnyAction {
@@ -194,6 +197,7 @@ export interface _FetchRawPropsAction extends AnyAction {
   type: '_FetchRawProps';
   payload: {
     ifMarkdownFetchDependencies: boolean;
+    delay?: boolean;
   };
 }
 
@@ -371,6 +375,9 @@ const Model: ResourceVersionCreatorModelType = {
 
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
+        payload: {
+          delay: false,
+        },
       });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -743,6 +750,9 @@ const Model: ResourceVersionCreatorModelType = {
       });
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
+        payload: {
+          delay: true,
+        },
       });
     },
     * onChange_BaseProperties({ payload }: OnChange_BaseProperties_Action, { put }: EffectsCommandMap) {
@@ -842,6 +852,7 @@ const Model: ResourceVersionCreatorModelType = {
             type: '_FetchRawProps',
             payload: {
               ifMarkdownFetchDependencies: false,
+              delay: payload.delay,
             },
           });
         }
@@ -948,6 +959,10 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
         return fMessage('文件解析失败', 'error');
+      }
+
+      if (payload.delay) {
+        yield call(FUtil.Tool.promiseSleep, 1000);
       }
 
       if (result[0].state === 'success') {
