@@ -24,10 +24,10 @@ export interface FUploadTasksPanelProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-let successUids: string[] = [];
-let failedUids: string[] = [];
-
 function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps) {
+
+  const successUids = React.useRef<string[]>([]);
+  const failedUids = React.useRef<string[]>([]);
 
   const { run } = AHooks.useDebounceFn(() => {
       dispatch<FetchObjectsAction>({
@@ -52,24 +52,24 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
       payload: {
         uploadTaskQueue: storageHomePage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
           // console.log(utq.uid, uid, 'f.file.uid !== uid');
-          if (successUids.includes(utq.uid)) {
+          if (successUids.current.includes(utq.uid)) {
             return {
               ...utq,
-              state: 1,
+              state: 'success',
             };
           }
-          if (failedUids.includes(utq.uid)) {
+          if (failedUids.current.includes(utq.uid)) {
             return {
               ...utq,
-              state: -1,
+              state: 'failed',
             };
           }
           return utq;
         }),
       },
     });
-    successUids = [];
-    failedUids = [];
+    successUids.current = [];
+    failedUids.current = [];
   }, {
     wait: 300,
   });
@@ -122,8 +122,10 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
         </FComponentsLib.FTextBtn>
         <FComponentsLib.FTextBtn
           onClick={async () => {
-            const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
-            if (exits) {
+            const isExits: boolean = storageHomePage.uploadTaskQueue.some((i) => {
+              return i.state !== 'success';
+            });
+            if (isExits) {
               const bool: boolean = await fPromiseModalConfirm({
                 title: '提示',
                 description: FI18n.i18nNext.t('bucket_msg_cancel_all_uploading_task'),
@@ -151,8 +153,12 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
 
     <div className={styles.body} style={{ display: storageHomePage.uploadPanelOpen ? 'block' : 'none' }}>
       {
-        storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length > 0 && (<div
-          className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功
+        storageHomePage.uploadTaskQueue.some((utq) => {
+          return utq.state === 'success';
+        }) && (<div
+          className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => {
+          return utq.state === 'success';
+        }).length}个文件上传成功
         </div>)
       }
 
@@ -161,12 +167,12 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
           // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
           return (<Task
             key={f.uid}
-            file={f}
+            task={f}
             bucketName={storageHomePage.activatedBucket}
             onSucceed={async ({ objectName, sha1, uid }) => {
               // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
-              successUids = [
-                ...successUids,
+              successUids.current = [
+                ...successUids.current,
                 uid,
               ];
               await dispatch<CreateObjectAction>({
@@ -181,8 +187,8 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
               run1();
             }}
             onFail={({ objectName, uid }) => {
-              failedUids = [
-                ...failedUids,
+              failedUids.current = [
+                ...failedUids.current,
                 uid,
               ];
               run1();

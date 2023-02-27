@@ -13,7 +13,7 @@ import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 
 interface TaskProps {
-  file: StorageHomePageModelState['uploadTaskQueue'][number];
+  task: StorageHomePageModelState['uploadTaskQueue'][number];
   bucketName: string;
 
   onSucceed?({ uid, objectName, sha1 }: { uid: string; objectName: string; sha1: string; }): void;
@@ -22,134 +22,162 @@ interface TaskProps {
 }
 
 interface TaskStates {
-  status: 'uploading' | 'success' | 'canceled' | 'failed' | 'sameName';
+  taskState: 'loading' | 'uploading' | 'success' | 'sameName' | 'failed' | 'canceled';
   progress: number;
 }
 
-let cancels: Map<string, Canceler> = new Map<string, Canceler>();
-
 function Task({
-                file,
+                task,
                 bucketName,
                 onSucceed,
                 onFail,
               }: TaskProps) {
 
-  const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
-  const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
+  const canceler = React.useRef<Canceler | null>(null);
+  const fileSha1 = React.useRef<string>('');
 
-  React.useEffect(() => {
-    if (file.sameName) {
-      setStatus('sameName');
-      onFail && onFail({ uid: file.uid, objectName: file.name });
-      return;
-    }
-    startUploadFile();
-  }, []);
+  const [taskState, set_taskState] = React.useState<TaskStates['taskState']>('loading');
+  const [progress, set_progress] = React.useState<TaskStates['progress']>(0);
+
+  AHooks.useMount(async () => {
+    fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
+    await verifySameName();
+  });
+
+  // React.useEffect(() => {
+  //   // if (file.sameName) {
+  //   //   setStatus('sameName');
+  //   //   onFail && onFail({ uid: file.uid, objectName: file.name });
+  //   //   return;
+  //   // }
+  //   if (task.state === 'uploading') {
+  //     startUploadFile();
+  //   }
+  //
+  //   if (task.state === 'loading') {
+  //     verifySameName();
+  //   }
+  //
+  // }, [task]);
 
   AHooks.useUnmount(() => {
-    const c = cancels.get(file.uid);
-    c && c();
-    cancels.delete(file.uid);
+    // const cancel = canceler.current.get(task.uid);
+    canceler.current && canceler.current();
+    // cancels.current.delete(task.uid);
   });
 
   async function verifySameName() {
     // console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
     const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
       // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
-      fullObjectNames: bucketName + '/' + file.name,
+      fullObjectNames: bucketName + '/' + task.name,
       projection: 'objectId,objectName',
     };
     const { data: data1 } = await FServiceAPI.Storage.batchObjectList(params1);
-    // console.log(data1, 'dddd09283jadfslk');
+    console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
-      startUploadFile();
+      set_taskState('uploading');
+      await startUploadFile();
     } else {
-      setStatus('sameName');
+      set_taskState('sameName');
     }
   }
 
   // async function startUploadFile(isVerifyTypeCompatible: boolean = false) {
   async function startUploadFile() {
-    if (!file.exist) {
+
+    const params0: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
+      sha1: fileSha1.current,
+    };
+    const { data: data_fileIsExist } = await FServiceAPI.Storage.fileIsExist(params0);
+
+    if (!data_fileIsExist[0].isExisting) {
       const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
-        file: file.file,
+        file: task.file,
       };
       const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(params, {
         onUploadProgress(progressEvent) {
-          setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+          set_progress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
         },
       }, true);
 
-      cancels.set(file.uid, cancel);
-      setStatus('uploading');
-      setProgress(0);
+      // cancels.set(file.uid, cancel);
+      canceler.current = cancel;
+      // setStatus('uploading');
+      set_progress(0);
       try {
         const { data } = await promise;
         // setStatus('success');
         // onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
       } catch (e) {
-        if (status !== 'uploading') {
-          setStatus('failed');
-          onFail && onFail({ uid: file.uid, objectName: file.name });
+        if (taskState !== 'uploading') {
+          set_taskState('failed');
+          set_progress(0);
+          onFail && onFail({ uid: task.uid, objectName: task.name });
           return;
         }
       }
     }
 
     const { result } = await getFilesSha1Info({
-      sha1: [file.sha1],
+      sha1: [fileSha1.current],
     });
 
     if (result[0].state === 'success') {
-      setStatus('success');
-      onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
+      set_taskState('success');
+      set_progress(0);
+      onSucceed && onSucceed({ uid: task.uid, objectName: task.name, sha1: fileSha1.current });
       return;
     }
-    setStatus('failed');
-    onFail && onFail({ uid: file.uid, objectName: file.name });
+    set_taskState('failed');
+    set_progress(0);
+    onFail && onFail({ uid: task.uid, objectName: task.name });
   }
 
   return (<div className={styles.taskItem}>
     <div className={styles.taskInfo}>
       <FComponentsLib.FContentText
-        text={file.name}
+        text={task.name}
         singleRow={true}
       />
       <div style={{ height: 2 }} />
       <FComponentsLib.FContentText
-        text={FUtil.Format.humanizeSize(file.file.size)}
+        text={FUtil.Format.humanizeSize(task.file.size)}
       />
     </div>
+
     {
-      status === 'uploading' && (<Uploading
+      taskState === 'loading' && (<FComponentsLib.FIcons.FLoading />)
+    }
+    {
+      taskState === 'uploading' && (<Uploading
         progress={progress}
         cancel={() => {
           // console.log(name, file, cancels, '#########');
-          const c = cancels.get(file.uid);
-          c && c();
-          setStatus('canceled');
-          setProgress(0);
-          onFail && onFail({ uid: file.uid, objectName: file.name });
+          // const c = canceler.get(file.uid);
+          canceler.current && canceler.current();
+          set_taskState('canceled');
+          set_progress(0);
+          onFail && onFail({ uid: task.uid, objectName: task.name });
         }}
       />)
     }
     {
-      status === 'success' && (<UploadSuccess />)
+      taskState === 'success' && (<UploadSuccess />)
     }
     {
-      status === 'canceled' && (<UploadCancel onClick={() => {
-        verifySameName();
+      taskState === 'canceled' && (<UploadCancel onClick={async () => {
+        await verifySameName();
       }} />)
     }
     {
-      status === 'sameName' && (<UploadSameName onClick={() => {
-        startUploadFile();
+      taskState === 'sameName' && (<UploadSameName onClick={async () => {
+        await startUploadFile();
       }} />)
     }
     {
-      status === 'failed' && (<UploadFailed onClick={() => {
-        verifySameName();
+      taskState === 'failed' && (<UploadFailed onClick={async () => {
+        await verifySameName();
       }} />)
     }
   </div>);
@@ -157,10 +185,10 @@ function Task({
 
 export default Task;
 
-interface VerifyTypeCompatibleParamsType {
-  objectName: string;
-  sha1: string;
-}
+// interface VerifyTypeCompatibleParamsType {
+//   objectName: string;
+//   sha1: string;
+// }
 
 // async function verifyTypeCompatible({ objectName, sha1 }: VerifyTypeCompatibleParamsType): Promise<boolean> {
 //   const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {

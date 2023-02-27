@@ -36,9 +36,9 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     });
 
     if (ret !== 0 || errCode !== 0) {
-      console.log({
-        ret, errCode, data, msg
-      }, '09iowksdjaklfjs;oalijflskdjflsdkjflkj');
+      // console.log({
+      //   ret, errCode, data, msg
+      // }, '09iowksdjaklfjs;oalijflskdjflsdkjflkj');
       return {
         error: msg,
         result: allData,

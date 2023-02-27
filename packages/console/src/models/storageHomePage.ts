@@ -42,12 +42,13 @@ export interface StorageHomePageModelState {
 
   uploadTaskQueue: {
     uid: string;
-    sha1: string;
+    // sha1: string;
     file: RcFile
     name: string;
-    state: -1 | 0 | 1; // -1:未成功；0:进行中；1:已成功
-    exist: boolean;
-    sameName: boolean;
+    // state: -1 | 0 | 1; // -1:未成功；0:进行中；1:已成功
+    state: 'loading' | 'success' | 'failed';
+    // existSha1: boolean;
+    // sameName: boolean;
   }[];
   uploadPanelVisible: boolean;
   uploadPanelOpen: boolean;
@@ -414,34 +415,36 @@ const Model: StorageHomePageModelType = {
           uploadPanelVisible: true,
         },
       });
+      console.time('getInfo');
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
+      console.timeEnd('getInfo');
 
-      const params: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
-        sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
-      };
-      const { data } = yield call(FServiceAPI.Storage.fileIsExist, params);
-      const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
+      // const params0: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
+      //   sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
+      // };
+      // const { data: data_fileIsExist } = yield call(FServiceAPI.Storage.fileIsExist, params0);
+      // const allExistSha1: string[] = data_fileIsExist.filter((d: any) => d.isExisting).map((d: any) => {
+      //   return d.sha1;
+      // });
 
-      const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
-        fullObjectNames: payload.map((p) => {
-          // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
-          return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
-        }).join(','),
-        projection: 'objectId,objectName',
-      };
-
-      const { data: data1 } = yield call(FServiceAPI.Storage.batchObjectList, params1);
-      const allExistObjectNames: string[] = data1.map((d: any) => d.objectName);
+      // const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
+      //   fullObjectNames: payload.map((p) => {
+      //     // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
+      //     return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
+      //   }).join(','),
+      //   projection: 'objectId,objectName',
+      // };
+      //
+      // const { data: data_batchObjectList } = yield call(FServiceAPI.Storage.batchObjectList, params1);
+      // const allExistObjectNames: string[] = data_batchObjectList.map((d: any) => {
+      //   return d.objectName;
+      // });
       // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           uploadTaskQueue: [
-            ...uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => ({
-              ...utq,
-              exist: allExistSha1.includes(utq.sha1),
-              sameName: allExistObjectNames.includes(utq.name),
-            })),
+            ...uploadTaskQueue,
             ...storageHomePage.uploadTaskQueue,
           ],
           uploadPanelOpen: true,
@@ -497,12 +500,14 @@ export default Model;
 async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
   return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
     uid: fo.uid,
-    sha1: await FUtil.Tool.getSHA1Hash(fo),
+    // sha1: await FUtil.Tool.getSHA1Hash(fo),
+    // sha1: '',
     name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
     file: fo,
-    state: 0,
-    exist: false,
-    sameName: false,
+    // state: 0,
+    state: 'loading',
+    // existSha1: false,
+    // sameName: false,
   })));
 }
 

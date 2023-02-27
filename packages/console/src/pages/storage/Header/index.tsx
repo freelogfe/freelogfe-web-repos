@@ -52,9 +52,12 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
         />
         <FComponentsLib.FRectBtn
           onClick={async () => {
+            console.time('fReadLocalFiles');
             const files = await fReadLocalFiles({
               multiple: true,
             });
+            console.log('********');
+            console.timeEnd('fReadLocalFiles');
             if (!files) {
               return;
             }
