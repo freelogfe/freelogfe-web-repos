@@ -8,6 +8,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
 import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -31,6 +32,7 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
           activeResource.error === 'unreleased' && (<>
             <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
             <FComponentsLib.FTipText
+              // text={'该资源未发行，无法授权。'}
               text={'该资源未发行，无法授权。'}
               type='second'
             />
@@ -41,7 +43,8 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
           activeResource.error === 'offline' && (<>
             <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
             <FComponentsLib.FTipText
-              text={'该资源未上线，无法授权。'}
+              // text={'该资源未上线，无法授权。'}
+              text={FI18n.i18nNext.t('alarm_resource_not_available')}
               type='second'
             />
           </>)

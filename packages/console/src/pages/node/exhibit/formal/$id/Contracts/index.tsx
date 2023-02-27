@@ -58,7 +58,8 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
             selectedResource.error === 'offline' && (<>
               <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
               <FComponentsLib.FTipText
-                text={'该资源未上线，无法授权。'}
+                // text={'该资源未上线，无法授权。'}
+                text={FI18n.i18nNext.t('alarm_resource_not_available')}
                 type='second'
               />
             </>)
