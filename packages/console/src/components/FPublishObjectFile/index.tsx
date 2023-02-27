@@ -509,7 +509,7 @@ function FPublishObjectFile({
     </div>
 
     {
-      fUploadedError === 'selfTakeUp' && fUsedResource.length > 0 && (<div className={styles.tableWrap}>
+      (fUploadedError === 'selfTakeUp' || fUploadedError === 'othersTakeUp') && fUsedResource.length > 0 && (<div className={styles.tableWrap}>
         <FTable
           rowClassName={styles.tableRowClassName}
           scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
