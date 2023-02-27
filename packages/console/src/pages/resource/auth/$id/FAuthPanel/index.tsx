@@ -26,8 +26,42 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
       </div>
     </div>
 
+
     {
-      activeResource && activeResource.error !== '' && (<div className={styles.errorContent}>
+      activeResource && ((activeResource.error === '' || (activeResource.error === 'offline' && activeResource.contracts.length > 0)) ? (
+        <div className={styles.DepPanelContent}>
+          <div className={styles.contentBox}>
+            <Contracts />
+
+            {
+              activeResource && activeResource.terminatedContractIDs.length > 0 && (<>
+                <div style={{ height: 15 }} />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
+                    <FComponentsLib.FTextBtn onClick={async () => {
+                      // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                      // set_TerminatedContractIDs(activeResource.terminatedContractIDs);
+                      await fViewTerminatedContracts({
+                        terminatedContractIDs: activeResource.terminatedContractIDs,
+                      });
+                    }}>查看已终止合约</FComponentsLib.FTextBtn>
+                  </div>
+                </div>
+              </>)
+
+            }
+
+            {
+              activeResource.error === '' && (<>
+                <div style={{ height: 25 }} />
+
+                <Policies />
+              </>)
+            }
+
+          </div>
+        </div>) : (<div className={styles.errorContent}>
         {
           activeResource.error === 'unreleased' && (<>
             <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
@@ -40,7 +74,7 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
         }
 
         {
-          activeResource.error === 'offline' && (<>
+          activeResource.error === 'offline' && activeResource.contracts.length === 0 && (<>
             <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
             <FComponentsLib.FTipText
               // text={'该资源未上线，无法授权。'}
@@ -60,37 +94,7 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
           </>)
         }
 
-      </div>)
-    }
-
-    {
-      activeResource && activeResource.error === '' && (<div className={styles.DepPanelContent}>
-        <div className={styles.contentBox}>
-          <Contracts />
-
-          {
-            activeResource && activeResource.terminatedContractIDs.length > 0 && (<>
-              <div style={{ height: 15 }} />
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                  <FComponentsLib.FTextBtn onClick={async () => {
-                    // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                    // set_TerminatedContractIDs(activeResource.terminatedContractIDs);
-                    await fViewTerminatedContracts({
-                      terminatedContractIDs: activeResource.terminatedContractIDs,
-                    });
-                  }}>查看已终止合约</FComponentsLib.FTextBtn>
-                </div>
-              </div>
-            </>)
-          }
-
-          <div style={{ height: 25 }} />
-
-          <Policies />
-        </div>
-      </div>)
+      </div>))
     }
 
   </div>);
