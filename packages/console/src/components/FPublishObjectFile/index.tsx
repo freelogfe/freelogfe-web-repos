@@ -416,14 +416,6 @@ function FPublishObjectFile({
               });
             }}
           >
-            {/*<FUpload*/}
-            {/*  // accept={resourceType === 'image' ? 'image/*' : '*'}*/}
-            {/*  beforeUpload={(file, FileList) => {*/}
-            {/*    onUploadFilesLocally(file);*/}
-            {/*    return false;*/}
-            {/*  }}*/}
-            {/*  showUploadList={false}*/}
-            {/*>*/}
             <FComponentsLib.FRectBtn
               type='primary'
               onClick={async () => {
@@ -434,7 +426,6 @@ function FPublishObjectFile({
                 await onUploadFilesLocally(files[0]);
               }}
             >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-            {/*</FUpload>*/}
           </FComponentsLib.FHotspotTooltip>
 
           <FComponentsLib.FRectBtn

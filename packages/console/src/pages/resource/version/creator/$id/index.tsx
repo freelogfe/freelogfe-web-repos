@@ -42,11 +42,11 @@ import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
+import FTable from '@/components/FTable';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
-  // resourceInfo: ResourceInfoModelState;
 }
 
 function VersionCreator({
@@ -93,6 +93,7 @@ function VersionCreator({
   const hasError: boolean =
     !resourceVersionCreatorPage.versionInput ||
     !resourceVersionCreatorPage.selectedFileInfo ||
+    resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
 
   if (!resourceVersionCreatorPage.resourceInfo) {
@@ -255,6 +256,64 @@ function VersionCreator({
               title={FI18n.i18nNext.t('release_object')}
             >
               <Space size={20} direction={'vertical'} style={{ width: '100%' }}>
+                {
+                  resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 && (<>
+                    <div style={{ color: '#EE4040' }}>{FI18n.i18nNext.t('resource_exist')}</div>
+                    <FTable
+                      rowClassName={styles.tableRowClassName}
+                      scroll={{ y: resourceVersionCreatorPage.selectedFile_UsedResources.length > 5 ? 350 : undefined }}
+                      columns={[
+                        {
+                          title: '资源',
+                          dataIndex: 'resourceName',
+                          width: 400,
+                          render(value: any, record: any, index: number) {
+                            return (<FComponentsLib.FContentText
+                              text={record.resourceName}
+                              style={{ maxWidth: 370 }}
+                            />);
+                          },
+                        },
+                        {
+                          title: '类型',
+                          dataIndex: 'resourceType',
+                          width: 100,
+                          render(value: any, record: any, index: number) {
+                            return (<FComponentsLib.FContentText
+                              text={record.resourceType}
+                            />);
+                          },
+                        },
+                        {
+                          title: '版本',
+                          dataIndex: 'resourceVersion',
+                          render(value: any, record: any, index: number) {
+                            return (<FComponentsLib.FContentText
+                              text={record.resourceVersion}
+                            />);
+                          },
+                        },
+                        {
+                          title: '操作',
+                          dataIndex: 'operation',
+                          render(value: any, record: any, index: number) {
+                            return (<FComponentsLib.FTextBtn onClick={() => {
+                              window.open(record.url);
+                            }}>查看</FComponentsLib.FTextBtn>);
+                          },
+                        },
+                      ]}
+                      dataSource={resourceVersionCreatorPage.selectedFile_UsedResources.map((sfur) => {
+                        return {
+                          key: sfur.url,
+                          ...sfur,
+                        };
+                      })}
+                    />
+                  </>)
+                }
+
+
                 <FPublishObjectFile
                   fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                   onSucceed_UploadFile={(file) => {

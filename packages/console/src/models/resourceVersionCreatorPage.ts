@@ -39,6 +39,13 @@ export interface ResourceVersionCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
+  selectedFile_UsedResources: {
+    resourceID: string;
+    resourceName: string;
+    resourceType: string;
+    resourceVersion: string;
+    url: string;
+  }[];
 
   rawProperties: {
     key: string;
@@ -241,6 +248,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionInput: '',
 
   selectedFileInfo: null,
+  selectedFile_UsedResources: [],
 
   rawProperties: [],
   rawPropertiesState: 'success',
@@ -738,16 +746,23 @@ const Model: ResourceVersionCreatorModelType = {
           baseProperties: [],
           customOptionsData: [],
           dataIsDirty: true,
+          selectedFile_UsedResources: [],
         },
       });
     },
-    * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { put }: EffectsCommandMap) {
+    * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { select, call, put }: EffectsCommandMap) {
+
+      // const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+      //   resourceVersionCreatorPage,
+      // }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           dataIsDirty: false,
         },
       });
+
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
         payload: {
@@ -826,6 +841,36 @@ const Model: ResourceVersionCreatorModelType = {
       if (data_draft) {
 
         const { draftData } = data_draft;
+
+        if (!!draftData.selectedFileInfo) {
+          const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
+            fileSha1: draftData.selectedFileInfo.sha1,
+          };
+
+          const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
+          // console.log(data_ResourcesBySha1, 'data_ResourcesBySha1isdflksdjflkjlk');
+          if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
+            yield put<ChangeAction>({
+              type: 'change',
+              payload: {
+                selectedFile_UsedResources: data_ResourcesBySha1.map((d) => {
+                  return d.resourceVersions.map((v: any) => {
+                    return {
+                      resourceId: d.resourceId,
+                      resourceName: d.resourceName,
+                      resourceType: d.resourceType,
+                      resourceVersion: v.version,
+                      url: FUtil.LinkTo.resourceDetails({
+                        resourceID: d.resourceId,
+                        version: v.version,
+                      }),
+                    };
+                  });
+                }).flat(),
+              },
+            });
+          }
+        }
 
         yield put<ChangeAction>({
           type: 'change',
