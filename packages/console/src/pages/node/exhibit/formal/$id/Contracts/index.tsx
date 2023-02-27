@@ -42,52 +42,56 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
         <Resources />
       </div>
 
-      {
-        selectedResource && selectedResource.error !== '' && (<div className={styles.errorContent}>
-          {
-            selectedResource.error === 'unreleased' && (<>
-              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
-              <FComponentsLib.FTipText
-                text={'该资源未发行，无法授权。'}
-                type='second'
-              />
-            </>)
-          }
-
-          {
-            selectedResource.error === 'offline' && (<>
-              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
-              <FComponentsLib.FTipText
-                // text={'该资源未上线，无法授权。'}
-                text={FI18n.i18nNext.t('alarm_resource_not_available')}
-                type='second'
-              />
-            </>)
-          }
-
-          {
-            selectedResource.error === 'freeze' && (<>
-              <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
-              <FComponentsLib.FTipText
-                text={'该资源已封禁，无法授权。'}
-                type='second'
-              />
-            </>)
-          }
-
-        </div>)
-      }
+      {/*{*/}
+      {/*  selectedResource && selectedResource.error !== '' &&*/}
+      {/*}*/}
 
       {
-        selectedResource && selectedResource.error === '' && (<div className={styles.signRight}>
-          <Space style={{ width: '100%' }} size={15} direction='vertical'>
+        selectedResource && (selectedResource.error === '' || (selectedResource.error === 'offline' && selectedResource.contracts.length > 0) ? (
+            <div className={styles.signRight}>
+              <Space style={{ width: '100%' }} size={15} direction='vertical'>
 
-            <Contract />
+                <Contract />
 
-            <Policy />
+                {
+                  selectedResource.error === '' && (<Policy />)
+                }
+                
+              </Space>
+            </div>) : (<div className={styles.errorContent}>
+            {
+              selectedResource.error === 'unreleased' && (<>
+                <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+                <FComponentsLib.FTipText
+                  text={'该资源未发行，无法授权。'}
+                  type='second'
+                />
+              </>)
+            }
 
-          </Space>
-        </div>)
+            {
+              selectedResource.error === 'offline' && (<>
+                <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+                <FComponentsLib.FTipText
+                  // text={'该资源未上线，无法授权。'}
+                  text={FI18n.i18nNext.t('alarm_resource_not_available')}
+                  type='second'
+                />
+              </>)
+            }
+
+            {
+              selectedResource.error === 'freeze' && (<>
+                <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+                <FComponentsLib.FTipText
+                  text={'该资源已封禁，无法授权。'}
+                  type='second'
+                />
+              </>)
+            }
+
+          </div>)
+        )
       }
 
     </div>
