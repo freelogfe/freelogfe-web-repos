@@ -22,7 +22,7 @@ import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
-import FStorageUploadTasksPanel from '@/components/FStorageUploadTasksPanel';
+import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -153,10 +153,11 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
                 return;
               }
 
-              dispatch<UploadFilesAction>({
-                type: 'storageHomePage/uploadFiles',
-                payload: files,
-              });
+              // dispatch<UploadFilesAction>({
+              //   type: 'storageHomePage/uploadFiles',
+              //   payload: files,
+              // });
+              (await getStorageUploadTasksPanel()).addTask(files);
             }}
             size='large'
             type='primary'
