@@ -415,31 +415,10 @@ const Model: StorageHomePageModelType = {
           uploadPanelVisible: true,
         },
       });
-      console.time('getInfo');
+      // console.time('getInfo');
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
-      console.timeEnd('getInfo');
+      // console.timeEnd('getInfo');
 
-      // const params0: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
-      //   sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
-      // };
-      // const { data: data_fileIsExist } = yield call(FServiceAPI.Storage.fileIsExist, params0);
-      // const allExistSha1: string[] = data_fileIsExist.filter((d: any) => d.isExisting).map((d: any) => {
-      //   return d.sha1;
-      // });
-
-      // const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
-      //   fullObjectNames: payload.map((p) => {
-      //     // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
-      //     return encodeURIComponent(storageHomePage.activatedBucket + '/' + p.name);
-      //   }).join(','),
-      //   projection: 'objectId,objectName',
-      // };
-      //
-      // const { data: data_batchObjectList } = yield call(FServiceAPI.Storage.batchObjectList, params1);
-      // const allExistObjectNames: string[] = data_batchObjectList.map((d: any) => {
-      //   return d.objectName;
-      // });
-      // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -500,14 +479,9 @@ export default Model;
 async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
   return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
     uid: fo.uid,
-    // sha1: await FUtil.Tool.getSHA1Hash(fo),
-    // sha1: '',
     name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
     file: fo,
-    // state: 0,
     state: 'loading',
-    // existSha1: false,
-    // sameName: false,
   })));
 }
 

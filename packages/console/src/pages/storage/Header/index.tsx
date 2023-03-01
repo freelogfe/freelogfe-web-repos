@@ -9,6 +9,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
+import { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -52,19 +53,20 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
         />
         <FComponentsLib.FRectBtn
           onClick={async () => {
-            console.time('fReadLocalFiles');
+            // console.time('fReadLocalFiles');
             const files = await fReadLocalFiles({
               multiple: true,
             });
-            console.log('********');
-            console.timeEnd('fReadLocalFiles');
+            // console.log('********');
+            // console.timeEnd('fReadLocalFiles');
             if (!files) {
               return;
             }
-            dispatch<UploadFilesAction>({
-              type: 'storageHomePage/uploadFiles',
-              payload: files,
-            });
+            // dispatch<UploadFilesAction>({
+            //   type: 'storageHomePage/uploadFiles',
+            //   payload: files,
+            // });
+            (await getStorageUploadTasksPanel()).addTask(files);
           }}
           type='primary'
         >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>

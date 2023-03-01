@@ -144,13 +144,6 @@ function FUploadTasksPanel({ dispatch, storageHomePage }: FUploadTasksPanelProps
       </Space>
     </div>
 
-
-    {/*{*/}
-    {/*  storageHomePage.uploadTaskQueue.length === 0*/}
-    {/*    ? (<FLoadingTip height={370} />)*/}
-    {/*    : ()*/}
-    {/*}*/}
-
     <div className={styles.body} style={{ display: storageHomePage.uploadPanelOpen ? 'block' : 'none' }}>
       {
         storageHomePage.uploadTaskQueue.some((utq) => {

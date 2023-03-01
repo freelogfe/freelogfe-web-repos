@@ -8,7 +8,7 @@ import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
   UploadFilesAction,
-  FetchObjectsAction,
+  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
@@ -22,6 +22,7 @@ import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
+import FStorageUploadTasksPanel from '@/components/FStorageUploadTasksPanel';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -188,7 +189,23 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       </>)
     }
 
-    <FUploadTasksPanel />
+    {/*<FUploadTasksPanel />*/}
+    <FStorageUploadTasksPanel
+      bucketName={storageHomePage.activatedBucket}
+      availableStorageSize={storageHomePage.totalStorage - storageHomePage.usedStorage}
+      onSuccess={() => {
+        dispatch<FetchObjectsAction>({
+          type: 'storageHomePage/fetchObjects',
+          payload: 'insert',
+        });
+        dispatch<FetchSpaceStatisticAction>({
+          type: 'storageHomePage/fetchSpaceStatistic',
+        });
+        dispatch<FetchBucketsAction>({
+          type: 'storageHomePage/fetchBuckets',
+        });
+      }}
+    />
   </div>);
 }
 
