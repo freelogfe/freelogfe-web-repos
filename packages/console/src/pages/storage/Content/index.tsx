@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  UploadFilesAction,
+  // UploadFilesAction,
   FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
