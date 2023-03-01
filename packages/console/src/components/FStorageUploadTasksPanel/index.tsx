@@ -10,8 +10,6 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { useGetState } from '@/utils/hooks';
 
-// import { ChangeAction, StorageHomePageModelState } from '@/models/storageHomePage';
-
 export interface FStorageUploadTasksPanelProps {
   bucketName: string;
   availableStorageSize: number;
@@ -43,9 +41,7 @@ interface TasksPanel {
 let storageUploadTasksPanel: TasksPanel | null = null;
 
 function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess }: FStorageUploadTasksPanelProps) {
-
-  // const successUids = React.useRef<string[]>([]);
-  // const failedUids = React.useRef<string[]>([]);
+  const availableStorage = React.useRef<number>(availableStorageSize);
 
   const [uploadTaskQueue, set_uploadTaskQueue, get_uploadTaskQueue] = useGetState<FStorageUploadTasksPanelStates['uploadTaskQueue']>(initStates['uploadTaskQueue']);
   const [uploadPanelVisible, set_uploadPanelVisible] = React.useState<FStorageUploadTasksPanelStates['uploadPanelVisible']>(initStates['uploadPanelVisible']);
@@ -62,42 +58,16 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
     storageUploadTasksPanel = null;
   });
 
-  const { run } = AHooks.useDebounceFn(() => {
+  React.useEffect(() => {
+    availableStorage.current = availableStorageSize;
+  }, [availableStorageSize]);
 
+  const { run } = AHooks.useDebounceFn(() => {
       onSuccess && onSuccess();
     }, {
       wait: 300,
     },
   );
-
-  // const { run: run1 } = AHooks.useDebounceFn(async () => {
-  // console.log(successUids, failedUids, 'successUids!Q@#$@#$@!#$@#$#$');
-  // await dispatch<ChangeAction>({
-  //   type: 'storageHomePage/change',
-  //   payload: {
-  //     uploadTaskQueue: storageHomePage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
-  //       // console.log(utq.uid, uid, 'f.file.uid !== uid');
-  //       if (successUids.current.includes(utq.uid)) {
-  //         return {
-  //           ...utq,
-  //           state: 'success',
-  //         };
-  //       }
-  //       if (failedUids.current.includes(utq.uid)) {
-  //         return {
-  //           ...utq,
-  //           state: 'failed',
-  //         };
-  //       }
-  //       return utq;
-  //     }),
-  //   },
-  // });
-  // successUids.current = [];
-  // failedUids.current = [];
-  // }, {
-  //   wait: 300,
-  // });
 
   function addTask(files: RcFile[]) {
     for (const file of files) {
@@ -109,8 +79,8 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
 
 
     const totalSize: number = files.map((f) => f.size).reduce((p, c) => p + c, 0);
-    console.log(availableStorageSize, totalSize, '******88dddddddf');
-    if (availableStorageSize < totalSize) {
+    // console.log(availableStorageSize, totalSize, 'use');
+    if (availableStorage.current < totalSize) {
       fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'error');
       return;
     }
@@ -135,42 +105,18 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
   function closeAll() {
     set_uploadPanelVisible(false);
     set_uploadTaskQueue([]);
-    // dispatch<ChangeAction>({
-    //   type: 'storageHomePage/change',
-    //   payload: {
-    //     uploadPanelVisible: false,
-    //   },
-    // });
-    //
-    // setTimeout(() => {
-    //   dispatch<ChangeAction>({
-    //     type: 'storageHomePage/change',
-    //     payload: {
-    //       uploadTaskQueue: [],
-    //     },
-    //   });
-    // });
   }
 
   if (!uploadPanelVisible && uploadTaskQueue.length === 0) {
     return null;
   }
 
-  return (<div
-    className={styles.UploadingTasks}
-    // style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
-  >
+  return (<div className={styles.UploadingTasks}>
     <div className={styles.title}>
       <FComponentsLib.FContentText text={'任务列表'} />
       <Space size={20}>
         <FComponentsLib.FTextBtn
           onClick={() => {
-            // dispatch<ChangeAction>({
-            //   type: 'storageHomePage/change',
-            //   payload: {
-            //     uploadPanelOpen: !storageHomePage.uploadPanelOpen,
-            //   },
-            // });
             set_uploadPanelOpen(!uploadPanelOpen);
           }}
           type='default'
@@ -218,24 +164,11 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
 
       {
         uploadTaskQueue.map((f, index, uploadTaskQueue) => {
-          // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
           return (<Task
             key={f.uid}
             task={f}
             bucketName={bucketName}
             onSucceed={async ({ objectName, sha1, uid }) => {
-              // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
-              // successUids.current = [
-              //   ...successUids.current,
-              //   uid,
-              // ];
-              // await dispatch<CreateObjectAction>({
-              //   type: 'storageHomePage/createObject',
-              //   payload: {
-              //     objectName,
-              //     sha1,
-              //   },
-              // });
 
               set_uploadTaskQueue(get_uploadTaskQueue().map((t) => {
                 if (t.uid !== uid) {
@@ -256,14 +189,8 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
               await FServiceAPI.Storage.createObject(params);
 
               run();
-              // run1();
             }}
             onFail={({ objectName, uid }) => {
-              // failedUids.current = [
-              //   ...failedUids.current,
-              //   uid,
-              // ];
-              // run1();
               set_uploadTaskQueue(get_uploadTaskQueue().map((t) => {
                 if (t.uid !== uid) {
                   return t;
