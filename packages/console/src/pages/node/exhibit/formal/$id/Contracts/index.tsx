@@ -56,7 +56,7 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
                 {
                   selectedResource.error === '' && (<Policy />)
                 }
-                
+
               </Space>
             </div>) : (<div className={styles.errorContent}>
             {
