@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
-import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
+import Task from './Task';
 import {
   ChangeAction,
   CreateObjectAction,
