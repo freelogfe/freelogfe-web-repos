@@ -849,11 +849,18 @@ const Model: ResourceVersionCreatorModelType = {
 
           const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
           // console.log(data_ResourcesBySha1, 'data_ResourcesBySha1isdflksdjflkjlk');
-          if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
-            yield put<ChangeAction>({
-              type: 'change',
-              payload: {
-                selectedFile_UsedResources: data_ResourcesBySha1.map((d) => {
+          // if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
+          //
+          // }
+
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              selectedFile_UsedResources: data_ResourcesBySha1
+                .filter((d) => {
+                  return d.userId !== FUtil.Tool.getUserIDByCookies()
+                })
+                .map((d) => {
                   return d.resourceVersions.map((v: any) => {
                     return {
                       resourceId: d.resourceId,
@@ -867,9 +874,8 @@ const Model: ResourceVersionCreatorModelType = {
                     };
                   });
                 }).flat(),
-              },
-            });
-          }
+            },
+          });
         }
 
         yield put<ChangeAction>({
