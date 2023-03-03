@@ -167,8 +167,8 @@ function FLayout({
   // }
 
   return (
-    <Layout className={styles.Layout}>
-      <Layout.Header className={styles.header}>
+    <div className={styles.Layout1}>
+      <div className={styles.Header1}>
         <FComponentsLib.FHeaderNavigation
           UmiLinkPatch={Link}
           logoBtn={{ href: FUtil.LinkTo.dashboard() }}
@@ -284,12 +284,14 @@ function FLayout({
           }
           showHotspotTooltip
         />
-      </Layout.Header>
+      </div>
 
-      <div style={{ height: 70 }} />
+      {/*<div style={{ height: 70 }} />*/}
 
-      <Layout.Content className={styles.Content}>{children}</Layout.Content>
-    </Layout>
+      <div className={styles.Content1}>
+        <div>{children}</div>
+      </div>
+    </div>
   );
 }
 
