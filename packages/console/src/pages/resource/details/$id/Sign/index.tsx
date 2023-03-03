@@ -108,7 +108,10 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
 
                       <div style={{ height: 15 }} />
                       <Contracts />
-                      <Policies />
+                      {
+                        resource.error === '' && (<Policies />)
+                      }
+
                       <div style={{ height: 15 }} />
                     </>) : (<>
                       {
