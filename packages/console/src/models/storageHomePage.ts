@@ -323,13 +323,14 @@ const Model: StorageHomePageModelType = {
           return;
         }
         skip = storageHomePage.object_List.length;
-      } else if (payload === 'insert') {
-        const allNames: string[] = [
-          ...storageHomePage.uploadTaskQueue.map<string>((utq) => utq.name),
-          ...storageHomePage.object_List.map<string>((ol) => ol.name),
-        ];
-        limit = new Set(allNames).size;
       }
+      // else if (payload === 'insert') {
+      //   const allNames: string[] = [
+      //     ...storageHomePage.uploadTaskQueue.map<string>((utq) => utq.name),
+      //     ...storageHomePage.object_List.map<string>((ol) => ol.name),
+      //   ];
+      //   limit = new Set(allNames).size;
+      // }
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         bucketName: storageHomePage.activatedBucket,
         limit,
@@ -359,6 +360,8 @@ const Model: StorageHomePageModelType = {
       } else if (payload === 'insert') {
         objectListData = (data?.dataList || []).map(transformTableData);
       }
+
+      console.log(data, 'isjflksdjflksjdlk');
 
       yield put<ChangeAction>({
         type: 'change',
