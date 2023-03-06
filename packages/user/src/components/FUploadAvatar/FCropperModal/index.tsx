@@ -8,13 +8,14 @@ import FComponentsLib from '@freelog/components-lib';
 interface FCropperModalProps {
   uploadRef: any;
   imgSrc: string;
+  uploading: boolean;
 
   onOk?(blob: Blob | null): void;
 
   onCancel?(): void;
 }
 
-function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps) {
+function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCropperModalProps) {
   const [cropper, setCropper] = React.useState<Cropper>();
 
   return (<Modal
@@ -31,22 +32,14 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
           onOk && onOk(blob);
         })
         : (onOk && onOk(null));
-
-      // const info = cropper.getData();
-      // console.log(info, '##SDfsiodlk');
-      // onOk && onOk({
-      //   h: info.height,
-      //   w: info.width,
-      //   x: info.x,
-      //   y: info.y,
-      //   r: info.rotate,
-      // });
-      // cropper.
     }}
     onCancel={() => {
       onCancel && onCancel();
     }}
-    okText={'确认'}
+    okText={uploading ? '更换中' : '确认'}
+    okButtonProps={{
+      loading: uploading,
+    }}
     cancelText={'取消'}
   >
     <div className={styles.content}>
@@ -126,15 +119,6 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
 
         <div className={styles.previewCard}>
           <div className={styles.imgPreview} />
-          {/*<div style={{ height: 10 }} />*/}
-          {/*<FComponentsLib.FContentText text={'资源名称'} type='highlight' />*/}
-          {/*<div style={{ height: 8 }} />*/}
-          {/*<div style={{ display: 'flex', justifyContent: 'space-between' }}>*/}
-          {/*  <FComponentsLib.FContentText text={'资源类型'} type={'additional2'} />*/}
-          {/*  <FComponentsLib.FContentText text={'最新版本'} type={'additional2'} />*/}
-          {/*</div>*/}
-          {/*<div style={{ height: 12 }} />*/}
-          {/*<FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: '授权策略', dot: '' }]} />*/}
         </div>
 
         <div style={{ height: 20 }} />

@@ -3,7 +3,7 @@ import styles from './index.less';
 import { RcFile } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
 import FCropperModal from '@/components/FUploadAvatar/FCropperModal';
-import { FServiceAPI, FI18n } from '@freelog/tools-lib';
+import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
 // import FUtil1 from '@/utils';
@@ -17,19 +17,21 @@ interface FUploadAvatarProps {
 }
 
 interface FUploadAvatarStates {
-  // naturalFile: File | null;
   image: string;
+  uploading: boolean;
 }
 
 const initStates: FUploadAvatarStates = {
-  // naturalFile: null,
   image: '',
+  uploading: false,
 };
 
 function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProps) {
   const ref = React.useRef<any>(null);
   // const [naturalFile, setNaturalFile] = React.useState<FUploadAvatarStates['naturalFile']>(initStates['naturalFile']);
-  const [image, setImage] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
+  const [image, set_image] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
+  const [uploading, set_uploading] = React.useState<FUploadAvatarStates['uploading']>(initStates['uploading']);
+
 
   function beforeUpload(file: RcFile) {
     if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
@@ -46,7 +48,7 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
 
     const reader = new FileReader();
     reader.onload = () => {
-      setImage(reader.result as any);
+      set_image(reader.result as any);
     };
     reader.readAsDataURL(file);
     return false;
@@ -57,14 +59,17 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
       fMessage('文件为空', 'error');
       return;
     }
+    set_uploading(true);
     const myFile = new File([blob], 'image.jpeg', {
       type: blob.type,
     });
     const { data } = await FServiceAPI.User.uploadHeadImg({
       file: myFile,
     });
+    await FUtil.Tool.promiseSleep(1000);
     onUploadSuccess && onUploadSuccess(data);
-    setImage(initStates['image']);
+    set_image(initStates['image']);
+    set_uploading(false);
     // console.log(data, 'data900iokewflsdjflkjlk');
   }
 
@@ -82,6 +87,7 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
       </div>
     </Upload>
     <FCropperModal
+      uploading={uploading}
       uploadRef={ref}
       imgSrc={image}
       onOk={(blob) => {
@@ -89,7 +95,7 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
       }}
       onCancel={() => {
         // setNaturalFile(initStates['naturalFile']);
-        setImage(initStates['image']);
+        set_image(initStates['image']);
       }}
     />
   </div>);
