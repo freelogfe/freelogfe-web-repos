@@ -12,7 +12,7 @@ import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, message, Upload } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+// import { LoadingOutlined } from '@ant-design/icons';
 import {
   OnChange_Birthday_Action,
   OnChange_Career_Action,
@@ -28,6 +28,8 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FUploadAvatar from '@/components/FUploadAvatar';
 import fMessage from '@/components/fMessage';
+import moment from 'moment';
+import * as AHooks from 'ahooks';
 
 interface ProfileProps {
   dispatch: Dispatch;
@@ -37,6 +39,11 @@ interface ProfileProps {
 
 
 function Profile({ dispatch, user, settingPage }: ProfileProps) {
+
+  // AHooks.useMount(() => {
+  //   console.log(moment().startOf('hour').format('YYYY-MM-DD HH:mm:ss'), '******');
+  // });
+
 
   return (
     <>
@@ -205,6 +212,11 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                           value: value,
                         },
                       });
+                    }}
+                    disabledDate={(current) => {
+                      // Can not select days before today and today
+                      // return current && current >= moment().endOf('day');
+                      return current && current > moment().endOf('day');
                     }}
                   />)
                 }
