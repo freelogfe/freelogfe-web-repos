@@ -245,7 +245,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                     value={settingPage.profile_residence}
                     placeholder='常驻城市'
                     onChange={(value, selectedOptions) => {
-                      console.log(value, selectedOptions, 'selectedOptionssdfjlkfjsdlkfjlksdjljl');
+                      // console.log(value, selectedOptions, 'selectedOptionssdfjlkfjsdlkfjlksdjljl');
                       dispatch<OnChange_Residence_Action>({
                         type: 'settingPage/onChange_Residence',
                         payload: {
@@ -291,7 +291,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                       placeholder='职位名称'
                       className={styles.widthInput}
                       wrapClassName={styles.widthInput}
-                      errorText={settingPage.profile_careerError}
+                      // errorText={settingPage.profile_careerError}
+                      lengthLimit={20}
                     />
                   </>)
                 }
@@ -316,7 +317,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                     type: 'settingPage/onClick_SubmitUserInfoBtn',
                   });
                 }}
-                disabled={settingPage.profile_careerError !== ''}
+                disabled={settingPage.profile_career.length > 20 || settingPage.profile_profileText.length > 40}
               >
                 保存
               </FComponentsLib.FRectBtn>)

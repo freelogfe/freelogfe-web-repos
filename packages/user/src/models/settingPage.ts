@@ -27,7 +27,7 @@ export interface SettingPageModelState {
   profile_residence: Array<string | number>;
   profile_residenceText: string;
   profile_career: string;
-  profile_careerError: string;
+  // profile_careerError: string;
 
   username: string;
   email: string;
@@ -652,7 +652,7 @@ const initStates: SettingPageModelState = {
   profile_residence: [],
   profile_residenceText: '',
   profile_career: '',
-  profile_careerError: '',
+  // profile_careerError: '',
 
   username: '',
   email: '',
@@ -789,7 +789,7 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           profile_career: payload.value,
-          profile_careerError: payload.value.length > 20 ? '不超过20个字符' : '',
+          // profile_careerError: payload.value.length > 20 ? '不超过20个字符' : '',
         },
       });
     },

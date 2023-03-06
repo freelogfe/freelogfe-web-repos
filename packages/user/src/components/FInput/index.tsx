@@ -58,7 +58,7 @@ function FInput({
 
   const commentClass: string [] = [styles.Input, className, errorText ? styles.InputError : ''];
 
-  // console.log(errorText, 'errorText!@#$!@#$@#$');
+  // console.log(value, 'valuevaluevaluevaluevalue!@#$!@#$@#$');
   return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
     {
       theme === 'dark'
@@ -77,7 +77,7 @@ function FInput({
           style={{ height: size === 'middle' ? 38 : 32 }}
           suffix={lengthLimit > 0
             ? (<span
-              className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
+              className={[styles.FInputWordCount, lengthLimit - (debounce ? inputText.length : (value?.length || 0)) < 0 ? styles.beyond : ''].join(' ')}
             >{lengthLimit - (debounce ? inputText.length : (value?.length || 0))}</span>)
             : undefined}
           {...inputProps}
