@@ -59,7 +59,7 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                 }}
               />)
               : (<FTooltip
-                title={FI18n.i18nNext.t('msg_bucket_quantity_exceed ')}
+                title={FI18n.i18nNext.t('msg_bucket_quantity_exceed')}
                 trigger='click'
                 placement='topLeft'
               >
