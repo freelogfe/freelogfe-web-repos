@@ -27,6 +27,7 @@ export interface SettingPageModelState {
   profile_residence: Array<string | number>;
   profile_residenceText: string;
   profile_career: string;
+  profile_careerError: string;
 
   username: string;
   email: string;
@@ -38,43 +39,36 @@ export interface SettingPageModelState {
     | 'bindEmail' | 'changeEmail_VerifyPass' | 'changeEmail_Old' | 'changeEmail_New'
     | 'bindPhone' | 'changePhone_VerifyPass' | 'changePhone_Old' | 'changePhone_New'
     | 'changePassword';
-  // bindEmail_ModalVisible: boolean;
   bindEmail_EmailInput: string;
   bindEmail_EmailInput_VerifyState: VerifyState;
   bindEmail_EmailInputError: string;
   bindEmail_CaptchaInput: string;
   bindEmail_CaptchaWait: number;
 
-  // changeEmail_Old_ModalVisible: boolean;
   changeEmail_Old_CaptchaInput: string;
   changeEmail_Old_CaptchaWait: number;
 
-  // changeEmail_New_ModalVisible: boolean;
   changeEmail_New_EmailInput: string;
   changeEmail_New_EmailInput_VerifyState: VerifyState;
   changeEmail_New_EmailInputError: string;
   changeEmail_New_CaptchaInput: string;
   changeEmail_New_CaptchaWait: number;
 
-  // bindPhone_ModalVisible: boolean;
   bindPhone_PhoneInput: string;
   bindPhone_PhoneInput_VerifyState: VerifyState;
   bindPhone_PhoneInputError: string;
   bindPhone_CaptchaInput: string;
   bindPhone_CaptchaWait: number;
 
-  // changePhone_Old_ModalVisible: boolean;
   changePhone_Old_CaptchaInput: string;
   changePhone_Old_CaptchaWait: number;
 
-  // changePhone_New_ModalVisible: boolean;
   changePhone_New_PhoneInput: string;
   changePhone_New_PhoneInput_VerifyState: VerifyState;
   changePhone_New_PhoneInputError: string;
   changePhone_New_CaptchaInput: string;
   changePhone_New_CaptchaWait: number;
 
-  // changePassword_ModalVisible: boolean;
   changePassword_Old_PasswordInput: string;
   changePassword_New1_PasswordInput: string;
   changePassword_New1_PasswordInput_Error: string;
@@ -658,6 +652,7 @@ const initStates: SettingPageModelState = {
   profile_residence: [],
   profile_residenceText: '',
   profile_career: '',
+  profile_careerError: '',
 
   username: '',
   email: '',
@@ -789,10 +784,12 @@ const Model: SettingPageModelType = {
       });
     },
     * onChange_Career({ payload }: OnChange_Career_Action, { put }: EffectsCommandMap) {
+      // console.log(payload, '(***(*UOIJOIJLKJLJ');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           profile_career: payload.value,
+          profile_careerError: payload.value.length > 20 ? '不超过20个字符' : '',
         },
       });
     },

@@ -265,20 +265,23 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
               </div>
               <div className={styles.right}>
                 {
-                  settingPage.profile_state === 'editing' && (<FInput
-                    value={settingPage.profile_career}
-                    onChange={(e) => {
-                      dispatch<OnChange_Career_Action>({
-                        type: 'settingPage/onChange_Career',
-                        payload: {
-                          value: e.target.value,
-                        },
-                      });
-                    }}
-                    placeholder='职位名称'
-                    className={styles.widthInput}
-                    wrapClassName={styles.widthInput}
-                  />)
+                  settingPage.profile_state === 'editing' && (<>
+                    <FInput
+                      value={settingPage.profile_career}
+                      onChange={(e) => {
+                        dispatch<OnChange_Career_Action>({
+                          type: 'settingPage/onChange_Career',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      placeholder='职位名称'
+                      className={styles.widthInput}
+                      wrapClassName={styles.widthInput}
+                      errorText={settingPage.profile_careerError}
+                    />
+                  </>)
                 }
 
                 {
@@ -301,6 +304,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                     type: 'settingPage/onClick_SubmitUserInfoBtn',
                   });
                 }}
+                disabled={settingPage.profile_careerError !== ''}
               >
                 保存
               </FComponentsLib.FRectBtn>)
