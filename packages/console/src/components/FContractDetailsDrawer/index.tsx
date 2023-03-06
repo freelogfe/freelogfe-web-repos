@@ -117,43 +117,53 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
       isLoadPolicyInfo: 1,
     };
 
-    const { data } = await FServiceAPI.Contract.contractDetails(params);
-    set_IsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
-    set_IsSelfLicenseeOwner(data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
+    const { data: data_contractDetails } = await FServiceAPI.Contract.contractDetails(params);
+    set_IsSelfLicensorOwner(data_contractDetails.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
+    set_IsSelfLicenseeOwner(data_contractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies());
     // console.log(data, 'data90234oi');
     const baseInfoData: BaseInfo = {
-      subjectId: data.subjectId,
-      subjectName: data.subjectName,
-      subjectType: data.subjectType,
+      subjectId: data_contractDetails.subjectId,
+      subjectName: data_contractDetails.subjectName,
+      subjectType: data_contractDetails.subjectType,
       subjectCover: '',
 
-      licensorId: data.licensorId,
-      licensorName: data.licensorName,
-      licensorIdentityType: data.subjectType === 1 ? 'resource' : data.subjectType === 2 ? 'node' : 'user',
+      licensorId: data_contractDetails.licensorId,
+      licensorName: data_contractDetails.licensorName,
+      licensorIdentityType: data_contractDetails.subjectType === 1 ? 'resource' : data_contractDetails.subjectType === 2 ? 'node' : 'user',
 
-      licenseeOwnerIsCurrentUser: data.licenseeOwnerId === FUtil.Tool.getUserIDByCookies(),
-      licenseeId: data.licenseeId,
-      licenseeName: data.licenseeName,
-      licenseeIdentityType: data.licenseeIdentityType === 1 ? 'resource' : data.licenseeIdentityType === 2 ? 'node' : 'user',
+      licenseeOwnerIsCurrentUser: data_contractDetails.licenseeOwnerId === FUtil.Tool.getUserIDByCookies(),
+      licenseeId: data_contractDetails.licenseeId,
+      licenseeName: data_contractDetails.licenseeName,
+      licenseeIdentityType: data_contractDetails.licenseeIdentityType === 1 ? 'resource' : data_contractDetails.licenseeIdentityType === 2 ? 'node' : 'user',
 
-      contractId: data.contractId,
-      contractName: data.contractName,
-      contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
-      contractStatus: data.status === 1 ? 'terminal' : (data.authStatus === 1 || data.authStatus === 3) ? 'active' : data.authStatus === 2 ? 'testActive' : 'inactive',
+      contractId: data_contractDetails.contractId,
+      contractName: data_contractDetails.contractName,
+      contractCreateDate: FUtil.Format.formatDateTime(data_contractDetails.createDate, true),
+      contractStatus: data_contractDetails.status === 1 ? 'terminal' : (data_contractDetails.authStatus === 1 || data_contractDetails.authStatus === 3) ? 'active' : data_contractDetails.authStatus === 2 ? 'testActive' : 'inactive',
 
-      policyID: data.policyId,
-      policyText: data.policyInfo.policyText,
+      policyID: data_contractDetails.policyId,
+      policyText: data_contractDetails.policyInfo.policyText,
     };
 
     // console.log(data, 'data12432433333########');
 
-    if (data.subjectType === 1) {
+    if (data_contractDetails.subjectType === 1) {
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: data.subjectId,
+        resourceIdOrName: data_contractDetails.subjectId,
       };
 
       const { data: data1 } = await FServiceAPI.Resource.info(params1);
       // console.log(data1, '!@#$!@#$!@#$');
+      if (data1.coverImages.length > 0) {
+        baseInfoData.subjectCover = data1.coverImages[0];
+      }
+    } else if (data_contractDetails.subjectType === 2) {
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+        presentableId: data_contractDetails.subjectId,
+      };
+
+      const { data: data1 } = await FServiceAPI.Exhibit.presentableDetails(params1);
+      // console.log(data1, '展品详情!@#$!@#$!@#$');
       if (data1.coverImages.length > 0) {
         baseInfoData.subjectCover = data1.coverImages[0];
       }
@@ -188,7 +198,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
     if (baseInfoData.licenseeIdentityType === 'node' && baseInfoData.licenseeOwnerIsCurrentUser) {
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-        nodeId: data.licenseeId,
+        nodeId: data_contractDetails.licenseeId,
         resolveResourceIds: baseInfoData.licensorId,
       };
 
@@ -226,17 +236,17 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
     setBaseInfo(baseInfoData);
 
     const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
-      subjectIds: data.subjectId,
-      subjectType: data.subjectType,
-      licenseeIdentityType: data.licenseeIdentityType,
-      licensorId: data.licensorId,
-      licenseeId: data.licenseeId,
+      subjectIds: data_contractDetails.subjectId,
+      subjectType: data_contractDetails.subjectType,
+      licenseeIdentityType: data_contractDetails.licenseeIdentityType,
+      licensorId: data_contractDetails.licensorId,
+      licenseeId: data_contractDetails.licenseeId,
       isLoadPolicyInfo: 1,
     };
     const { data: data2 } = await FServiceAPI.Contract.batchContracts(params2);
     // console.log(data2, 'data22222222#$##$@$##$');
     const AssociateContractsResult: FContractDetailsDrawerStates['associateContracts'] = (data2 as any)
-      .filter((d: any) => d.contractId !== data.contractId)
+      .filter((d: any) => d.contractId !== data_contractDetails.contractId)
       .map((d: any) => {
         return {
           expansion: false,
@@ -276,13 +286,6 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
   }
 
   async function syncExhibitUsedContracts(value: FContractDetailsDrawerStates['exhibitAllContractIDs'][number]) {
-    // const params: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
-    //   nodeId: Number(baseInfo?.licenseeId) || 0,
-    //   resourceIds: baseInfo?.licensorId || '',
-    // };
-    //
-    // const { data } = await FServiceAPI.Exhibit.presentableList(params);
-    // console.log(data, 'FServiceAPI.Exhibit.presentableList !!!!234234');
 
     const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
       // presentableId: data[0].presentableId,
@@ -638,7 +641,8 @@ function FVersions({
                      onChangeVersionContractIDs,
                    }: FVersionsProps) {
   return (<>
-    <FComponentsLib.FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table' style={{ fontSize: 12 }} />
+    <FComponentsLib.FTitleText text={`当前合约资源 ${resourceName} 中各个版本的应用情况`} type='table'
+                               style={{ fontSize: 12 }} />
 
     <div style={{ height: 10 }} />
 

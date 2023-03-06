@@ -520,23 +520,6 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                 : (<>
                   <div className={styles.filter}>
                     <Space size={50}>
-                      {/*<Space size={2}>*/}
-                      {/*  <FContentText text={'标的物类型：'} />*/}
-                      {/*  <FDropdownMenu*/}
-                      {/*    options={nodeManager_Contract_Page.authorized_SubjectType_Options}*/}
-                      {/*    text={nodeManager_Contract_Page.authorized_SubjectType_Options.find((so) => {*/}
-                      {/*      return nodeManager_Contract_Page.authorized_SubjectType === so.value;*/}
-                      {/*    })?.text || ''}*/}
-                      {/*    onChange={(value) => {*/}
-                      {/*      dispatch<OnChange_Authorized_SubjectType_Action>({*/}
-                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorized_SubjectType',*/}
-                      {/*        payload: {*/}
-                      {/*          value: value as 'all',*/}
-                      {/*        },*/}
-                      {/*      });*/}
-                      {/*    }}*/}
-                      {/*  />*/}
-                      {/*</Space>*/}
                       <Space size={2}>
                         <FComponentsLib.FContentText text={'合约状态：'} />
                         <FDropdownMenu
