@@ -189,7 +189,7 @@ function FLayout({
                 {
                   id: 'example',
                   text: '示例节点',
-                  href: FUtil.LinkTo.market(),
+                  href: FUtil.LinkTo.exampleNodes(),
                 },
               ],
             },
