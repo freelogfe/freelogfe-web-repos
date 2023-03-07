@@ -488,7 +488,7 @@ export const MarkdownEditor = (props: EditorProps) => {
             </div>
           </div>
 
-          <div className="authorization-processor-box">
+          <div className="authorization-processor-box" style={{height: !depTargets.length ? 'auto' : '80%'}}>
             <FResourceAuthorizationProcessor
               resourceID={resourceId}
               // width={1100}
