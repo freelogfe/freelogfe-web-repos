@@ -75,13 +75,32 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put }: EffectsCommandMap) {
-      const data: null = yield call(userPermission.getUserInfo);
+      const data: {
+        createDate: string;
+        email: string;
+        headImage: string;
+        mobile: string;
+        status: number;
+        tokenSn: string;
+        userDetail: {
+          sex: 0 | 1 | 2;
+          birthday: string;
+          occupation: string;
+          areaCode: string;
+        };
+        userId: number;
+        userType: 0 | 1;
+        username: string;
+      } = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          userInfo: data,
+          userInfo: data ? {
+            ...data,
+            headImage: FUtil.Tool.getAvatarUrl(),
+          } : null,
         },
       });
     },

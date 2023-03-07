@@ -83,3 +83,11 @@ export function promiseSleep(ms: number = 300): Promise<void> {
   });
 }
 
+/**
+ * 获取用户头像URL
+ * @param userID
+ */
+export function getAvatarUrl(userID: number = 0): string {
+  // return `${completeUrlByDomain('image')}/headImage/${userID || getUserIDByCookies()}?t=${Date.now()}`;
+  return `https://image.freelog.com/headImage/${userID || getUserIDByCookies()}?t=${Date.now()}`;
+}

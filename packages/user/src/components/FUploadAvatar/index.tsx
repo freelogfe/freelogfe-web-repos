@@ -63,11 +63,15 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
     const myFile = new File([blob], 'image.jpeg', {
       type: blob.type,
     });
-    const { data } = await FServiceAPI.User.uploadHeadImg({
+    const { ret, errCode, msg, data } = await FServiceAPI.User.uploadHeadImg({
       file: myFile,
     });
     await FUtil.Tool.promiseSleep(1000);
-    onUploadSuccess && onUploadSuccess(data);
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+    } else {
+      onUploadSuccess && onUploadSuccess(FUtil.Tool.getAvatarUrl());
+    }
     set_image(initStates['image']);
     set_uploading(false);
     // console.log(data, 'data900iokewflsdjflkjlk');

@@ -644,7 +644,7 @@ const initStates: SettingPageModelState = {
   showPage: 'profile',
 
   profile_state: 'normal',
-  profile_avatar: '',
+  profile_avatar: FUtil.Tool.getAvatarUrl(),
   profile_gender: 'unknown',
   profile_profileText: '',
   profile_birthday: null,
@@ -697,7 +697,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          profile_avatar: data.headImage,
+          // profile_avatar: FUtil.,
           profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
           profile_profileText: userDetail?.intro || '',
           profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
