@@ -127,7 +127,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
         showGotoConsole={!!userInfo}
         userPanel={userInfo ? {
           info: {
-            avatar: userInfo.headImage,
+            // avatar: userInfo.headImage,
+            avatar: FUtil.Tool.getAvatarUrl(),
             userName: userInfo.username,
             email: userInfo.email,
             phone: userInfo.mobile,

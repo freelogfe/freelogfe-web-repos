@@ -1,7 +1,7 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import fConfirmModal from '@/components/fConfirmModal';
 import userPermission from '@/permissions/UserPermission';
 
@@ -76,7 +76,10 @@ const Model: MarketModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          info: data,
+          info: data ? {
+            ...data,
+            headImage: FUtil.Tool.getAvatarUrl(),
+          } : null,
         },
       });
     },
