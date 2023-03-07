@@ -11,7 +11,6 @@ import {
   FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
-// import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
 import FLoadingTip from '@/components/FLoadingTip';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';

@@ -70,6 +70,7 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
   );
 
   function addTask(files: RcFile[]) {
+    console.log(files, 'filesfilesfilesfiles#######');
     for (const file of files) {
       if (file.size > 200 * 1024 * 1024) {
         fMessage('单个文件不能大于 200 M', 'warning');

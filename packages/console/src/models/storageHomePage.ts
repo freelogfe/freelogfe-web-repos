@@ -361,7 +361,7 @@ const Model: StorageHomePageModelType = {
         objectListData = (data?.dataList || []).map(transformTableData);
       }
 
-      console.log(data, 'isjflksdjflksjdlk');
+      // console.log(data, 'isjflksdjflksjdlk');
 
       yield put<ChangeAction>({
         type: 'change',

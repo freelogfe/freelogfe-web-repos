@@ -14,7 +14,10 @@ type ReturnData = RcFile[] | null;
 
 function fReadLocalFiles({ multiple = false, accept }: FReadLocalFilesProps = {}): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
-    const root = ReactDOM.createRoot(document.getElementById('read-file-root') as HTMLDivElement);
+    const divRoot = document.getElementById('read-file-root') as HTMLDivElement;
+    const div = document.createElement('div') as HTMLDivElement;
+    divRoot.appendChild(div);
+    const root = ReactDOM.createRoot(div);
     return root.render(<ReadFiles
       multiple={multiple}
       accept={accept}
@@ -25,6 +28,7 @@ function fReadLocalFiles({ multiple = false, accept }: FReadLocalFilesProps = {}
       onClose={() => {
         resolve(null);
         root.unmount();
+        div.remove();
       }}
     />);
   });

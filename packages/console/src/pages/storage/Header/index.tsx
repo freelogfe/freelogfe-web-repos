@@ -57,6 +57,8 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
             const files = await fReadLocalFiles({
               multiple: true,
             });
+
+            console.log(files, 'filesfilesfilesfiles903i2ojsfdkfjsdlk');
             // console.log('********');
             // console.timeEnd('fReadLocalFiles');
             if (!files) {
