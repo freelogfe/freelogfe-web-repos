@@ -74,7 +74,7 @@ function Task({
       projection: 'objectId,objectName',
     };
     const { data: data1 } = await FServiceAPI.Storage.batchObjectList(params1);
-    console.log(data1, 'dddd09283jadfslk');
+    // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       set_taskState('uploading');
       await startUploadFile();
