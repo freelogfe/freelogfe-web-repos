@@ -145,6 +145,8 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         dispatch<FetchResourceInfoAction>({
           type: 'resourceAuthPage/fetchResourceInfo',
         });
+      } else {
+        setLoading(false);
       }
     } else {
       // 下架
