@@ -26,7 +26,9 @@ function fPromiseModalConfirm({ ...props }: fPromiseModalConfirmProps): Promise<
         resolve(false);
       }}
       afterClose={() => {
-        root.unmount();
+        setTimeout(() => {
+          root.unmount();
+        }, 300);
       }}
     />);
   });

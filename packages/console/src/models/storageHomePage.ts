@@ -42,13 +42,9 @@ export interface StorageHomePageModelState {
 
   uploadTaskQueue: {
     uid: string;
-    // sha1: string;
     file: RcFile
     name: string;
-    // state: -1 | 0 | 1; // -1:未成功；0:进行中；1:已成功
     state: 'loading' | 'success' | 'failed';
-    // existSha1: boolean;
-    // sameName: boolean;
   }[];
   uploadPanelVisible: boolean;
   uploadPanelOpen: boolean;

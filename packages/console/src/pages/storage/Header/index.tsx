@@ -58,7 +58,7 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
               multiple: true,
             });
 
-            console.log(files, 'filesfilesfilesfiles903i2ojsfdkfjsdlk');
+            // console.log(files, 'filesfilesfilesfiles903i2ojsfdkfjsdlk');
             // console.log('********');
             // console.timeEnd('fReadLocalFiles');
             if (!files) {

@@ -6,14 +6,20 @@ import UploadCancel from '../UploadCancel';
 import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
 import { Canceler } from 'axios';
-import { StorageHomePageModelState } from '@/models/storageHomePage';
+// import { StorageHomePageModelState } from '@/models/storageHomePage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
+import { RcFile } from 'antd/lib/upload/interface';
 
 interface TaskProps {
-  task: StorageHomePageModelState['uploadTaskQueue'][number];
+  task: {
+    uid: string;
+    file: RcFile
+    name: string;
+    state: 'loading' | 'success' | 'failed';
+  };
   bucketName: string;
 
   onSucceed?({ uid, objectName, sha1 }: { uid: string; objectName: string; sha1: string; }): void;
@@ -40,7 +46,10 @@ function Task({
   const [progress, set_progress] = React.useState<TaskStates['progress']>(0);
 
   AHooks.useMount(async () => {
+    // const startTime = Date.now();
     fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
+    // const endTime = Date.now();
+    // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
   });
 
