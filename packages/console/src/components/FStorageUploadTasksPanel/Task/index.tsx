@@ -47,7 +47,8 @@ function Task({
 
   AHooks.useMount(async () => {
     // const startTime = Date.now();
-    fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
+    fileSha1.current = await getSHA1Hash(task.file);
+    console.log(fileSha1.current, 'fileSha1.currentsdifjsldkfjlkj');
     // const endTime = Date.now();
     // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
@@ -217,3 +218,18 @@ export default Task;
 //   const { data: data1 } = await FServiceAPI.Storage.fileProperty(params1);
 //   return !!data1;
 // }
+
+function getSHA1Hash(file: File): Promise<string> {
+  // /static/banner1.1d11598d.png
+  return new Promise(async (resolve) => {
+    const worker = new Worker('/js/getSHA1Hash.js');
+    const ab: ArrayBuffer = await file.arrayBuffer();
+    worker.postMessage(ab, [ab]);
+
+    worker.addEventListener('message', (e) => {
+      resolve(e.data.sha1);
+      worker.terminate();
+    });
+  });
+
+}
