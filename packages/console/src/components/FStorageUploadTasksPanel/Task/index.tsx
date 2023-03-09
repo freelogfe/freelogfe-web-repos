@@ -13,6 +13,8 @@ import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 import { RcFile } from 'antd/lib/upload/interface';
 
+// import workerize from 'workerize';
+
 interface TaskProps {
   task: {
     uid: string;
@@ -48,7 +50,7 @@ function Task({
   AHooks.useMount(async () => {
     // const startTime = Date.now();
     fileSha1.current = await getSHA1Hash(task.file);
-    console.log(fileSha1.current, 'fileSha1.currentsdifjsldkfjlkj');
+    // console.log(fileSha1.current, 'fileSha1.currentsdifjsldkfjlkj');
     // const endTime = Date.now();
     // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
@@ -219,17 +221,26 @@ export default Task;
 //   return !!data1;
 // }
 
-function getSHA1Hash(file: File): Promise<string> {
-  // /static/banner1.1d11598d.png
-  return new Promise(async (resolve) => {
-    const worker = new Worker('/js/getSHA1Hash.js');
-    const ab: ArrayBuffer = await file.arrayBuffer();
-    worker.postMessage(ab, [ab]);
+const worker: Worker = new Worker(`/js/getSHA1Hash.js?t=${Date.now()}`);
 
-    worker.addEventListener('message', (e) => {
-      resolve(e.data.sha1);
-      worker.terminate();
-    });
+function getSHA1Hash(file: RcFile): Promise<string> {
+  // /static/banner1.1d11598d.png
+  // console.log('(((opisdfjlksdjflksdjflkjlkj');
+  // console.log(file.uid, 'filedsiflksdfjlk');
+  return new Promise(async (resolve) => {
+    const fileArrayBuffer: ArrayBuffer = await file.arrayBuffer();
+    worker.postMessage({ fileArrayBuffer, uid: file.uid }, [fileArrayBuffer]);
+
+    function li(e: any) {
+      // console.log(e.data);
+      if (e.data.uid === file.uid) {
+        resolve(e.data.sha1);
+        worker.removeEventListener('message', li);
+      }
+      // worker.terminate();
+    }
+
+    worker.addEventListener('message', li);
   });
 
 }
