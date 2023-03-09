@@ -25,3 +25,5 @@ class FWorkerPool {
     }
   }
 }
+
+export default FWorkerPool;

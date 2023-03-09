@@ -12,6 +12,8 @@ import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 import { RcFile } from 'antd/lib/upload/interface';
+import FWorkerPool from '@/utils/FWorkerPool';
+import fileSha1Queue from '@/utils/FileSha1Queue';
 
 // import workerize from 'workerize';
 
@@ -49,8 +51,8 @@ function Task({
 
   AHooks.useMount(async () => {
     // const startTime = Date.now();
-    fileSha1.current = await getSHA1Hash(task.file);
-    // console.log(fileSha1.current, 'fileSha1.currentsdifjsldkfjlkj');
+    fileSha1.current = await fileSha1Queue.getSha1(task.file);
+    console.log(fileSha1.current, task, 'fileSha1.currentsdifjsldkfjlkj');
     // const endTime = Date.now();
     // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
@@ -221,26 +223,28 @@ export default Task;
 //   return !!data1;
 // }
 
-const worker: Worker = new Worker(`/js/getSHA1Hash.js?t=${Date.now()}`);
+// const workerPool: FWorkerPool = new FWorkerPool(`/js/getSHA1Hash.js?t=${Date.now()}`);
 
-function getSHA1Hash(file: RcFile): Promise<string> {
-  // /static/banner1.1d11598d.png
-  // console.log('(((opisdfjlksdjflksdjflkjlkj');
-  // console.log(file.uid, 'filedsiflksdfjlk');
-  return new Promise(async (resolve) => {
-    const fileArrayBuffer: ArrayBuffer = await file.arrayBuffer();
-    worker.postMessage({ fileArrayBuffer, uid: file.uid }, [fileArrayBuffer]);
+// function getSHA1Hash(file: RcFile): Promise<string> {
+//   // /static/banner1.1d11598d.png
+//   // console.log('(((opisdfjlksdjflksdjflkjlkj');
+//   // console.log(file.uid, 'filedsiflksdfjlk');
+//   return new Promise(async (resolve) => {
+//     const fileArrayBuffer: ArrayBuffer = await file.arrayBuffer();
+//     const worker: Worker = new Worker('/js/getSHA1Hash.js', { name: 'main' });
+//     worker.postMessage({ fileArrayBuffer: fileArrayBuffer }, [fileArrayBuffer]);
+//
+//     worker.addEventListener('message', (e: any) => {
+//       console.log(e.data === fileArrayBuffer, 'fileArrayBuffersiodfjslkd same');
+//       if (e.data.uid === file.uid) {
+//         // resolve(e.data.sha1);
+//         // worker.removeEventListener('message', li);
+//         worker.terminate();
+//       }
+//     });
+//   });
+//
+// }
 
-    function li(e: any) {
-      // console.log(e.data);
-      if (e.data.uid === file.uid) {
-        resolve(e.data.sha1);
-        worker.removeEventListener('message', li);
-      }
-      // worker.terminate();
-    }
 
-    worker.addEventListener('message', li);
-  });
 
-}
