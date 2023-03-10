@@ -237,12 +237,10 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                       });
                     }}
                   />
-                  {retrievePage.phoneInputError && (<>
+                  {retrievePage.phoneInputError !== '' && (<>
                     <div style={{ height: 5 }} />
                     <div className={styles.errorTip}>
-                      {
-                        retrievePage.phoneInputError === ''
-                      }
+                      {retrievePage.phoneInputError}
                     </div>
                   </>)}
                 </>)
