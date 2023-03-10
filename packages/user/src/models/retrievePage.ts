@@ -454,7 +454,7 @@ const Model: RetrievePageModelType = {
 
       if (retrievePage.confirmPasswordInput !== '' && (retrievePage.confirmPasswordInput !== retrievePage.newPasswordInput)) {
         // confirmPasswordInputError = '两次输入不一致';
-        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch ');
+        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({
@@ -485,7 +485,7 @@ const Model: RetrievePageModelType = {
         confirmPasswordInputError = '请输入密码';
       } else if (retrievePage.newPasswordInput !== retrievePage.confirmPasswordInput) {
         // confirmPasswordInputError = '两次输入不一致';
-        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch ');
+        confirmPasswordInputError = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({
