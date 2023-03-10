@@ -25,7 +25,7 @@
     "@ant-design/icons": "^4.7.0",
     "@emotion/react": "^11.10.4",
     "@freelog/components-lib": "^0.1.22",
-    "@freelog/tools-lib": "^0.1.147",
+    "@freelog/tools-lib": "^0.1.148",
     "ahooks": "^3.4.1",
     "animate.css": "^4.1.1",
     "antd": "^4.23.2",
