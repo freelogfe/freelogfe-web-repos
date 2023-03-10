@@ -64,7 +64,7 @@ class I18nNext {
   }
 
   t(this: I18nNext, key: string, options?: { [key: string]: any }) {
-    return i18next.t(key, options);
+    return i18next.t(key.trim(), options);
   }
 
   changeLanguage(this: I18nNext, lng: LanguageKeyType) {
