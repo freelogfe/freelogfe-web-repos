@@ -1,8 +1,12 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { history } from '@@/core/history';
+import { FetchDraftDataAction } from '@/models/resourceInfo';
+import { ConnectState } from '@/models/connect';
 
 export type ResourceSiderModelState = {
   state: 'loading' | 'loaded';
@@ -15,7 +19,7 @@ export type ResourceSiderModelState = {
   showPage: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo';
   showVersionPage: string;
 
-  isAuthProblem: boolean;
+  hasAuthProblem: boolean;
   policies: PolicyFullInfo_Type[];
   draft: null | IResourceCreateVersionDraft;
 };
@@ -27,6 +31,9 @@ export interface ChangeAction extends AnyAction {
 
 export interface OnMount_Page_Action extends AnyAction {
   type: 'resourceSider/onMount_Page';
+  payload: {
+    resourceID: string;
+  };
 }
 
 export interface OnUnmount_Page_Action extends AnyAction {
@@ -37,6 +44,10 @@ export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
 
+export interface FetchDraftAction extends AnyAction {
+  type: 'fetchDraft';
+}
+
 interface ResourceSiderModelType {
   namespace: 'resourceSider';
   state: ResourceSiderModelState;
@@ -44,6 +55,7 @@ interface ResourceSiderModelType {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceSiderModelState, ChangeAction>;
@@ -64,7 +76,7 @@ const initStates: ResourceSiderModelState = {
   showPage: '',
   showVersionPage: '',
 
-  isAuthProblem: false,
+  hasAuthProblem: false,
   policies: [],
   draft: null,
 };
@@ -73,8 +85,19 @@ const Model: ResourceSiderModelType = {
   namespace: 'resourceSider',
   state: initStates,
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, {}: EffectsCommandMap) {
-
+    * onMount_Page({ payload }: OnMount_Page_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceID: payload.resourceID,
+        },
+      });
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+      yield put<FetchDraftAction>({
+        type: 'fetchDraft',
+      });
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -82,8 +105,73 @@ const Model: ResourceSiderModelType = {
         payload: initStates,
       });
     },
-    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
+    * fetchInfo({}: FetchInfoAction, { call, select, put }: EffectsCommandMap) {
+      const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
+        resourceSider,
+      }));
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: resourceSider.resourceID,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+      const { data: data_resourceInfo } = yield call(FServiceAPI.Resource.info, params);
 
+      if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
+        history.replace(FUtil.LinkTo.exception403());
+        return;
+      }
+
+      if (data_resourceInfo.status === 2) {
+        history.replace(FUtil.LinkTo.resourceFreeze({ resourceID: data_resourceInfo.resourceId }));
+        return;
+      }
+
+      let authProblem: boolean = false;
+      if (data_resourceInfo.latestVersion !== '') {
+        const params1: Parameters<typeof FServiceAPI.Resource.batchAuth>[0] = {
+          resourceIds: data_resourceInfo.resourceId,
+        };
+        const { data: data_batchAuth } = yield call(FServiceAPI.Resource.batchAuth, params1);
+        authProblem = !data_batchAuth[0].isAuth;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          state: 'loaded',
+          resourceName: data_resourceInfo.resourceName,
+          resourceState: data_resourceInfo.status === 0 ? 'unreleased' : data_resourceInfo.status === 4 ? 'offline' : 'online',
+          resourceCover: data_resourceInfo.coverImages[0] || '',
+          resourceType: data_resourceInfo.resourceType,
+          hasAuthProblem: authProblem,
+          policies: data_resourceInfo.policies,
+        },
+      });
+    },
+    * fetchDraft({}: FetchDraftAction, { select, put, call }: EffectsCommandMap) {
+      const { resourceInfo }: ConnectState = yield select(({ resourceInfo }: ConnectState) => ({
+        resourceInfo,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: resourceInfo.resourceID,
+      };
+      const { data_draft } = yield call(FServiceAPI.Resource.lookDraft, params);
+      if (!data_draft) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            draft: null,
+          },
+        });
+        return;
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draft: data_draft.draftData,
+        },
+      });
     },
   },
   reducers: {

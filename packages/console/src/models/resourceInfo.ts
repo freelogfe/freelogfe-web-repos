@@ -130,7 +130,6 @@ const Model: ResourceInfoModelType = {
         isTranslate: 1,
       };
       const { data } = yield call(FServiceAPI.Resource.info, params);
-      // console.log(data, 'DDDDDDDD');
 
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
