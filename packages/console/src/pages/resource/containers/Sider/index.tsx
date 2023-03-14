@@ -15,7 +15,7 @@ import { Checkbox, Modal, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
-import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
+// import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
@@ -161,53 +161,53 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   }
 
   /** 打开添加策略弹窗 */
-  async function openPolicyBuilder() {
-    // dispatch<ChangeAction>({
-    //   type: 'resourceInfo/change',
-    //   payload: {
-    //     policyEditorVisible: true,
-    //   },
-    // });
-    // setActiveDialogShow(false);
-    const policy = await fPolicyBuilder({
-      alreadyUsedTexts: resourceInfo.policies
-        .map<string>((ip) => {
-          return ip.policyText;
-        }),
-      alreadyUsedTitles: resourceInfo.policies
-        .map((ip) => {
-          return ip.policyName;
-        }),
-      targetType: 'resource',
-    });
-
-    if (!policy) {
-      return null;
-    }
-
-    await dispatch<UpdatePoliciesAction>({
-      type: 'resourceAuthPage/updatePolicies',
-      payload: {
-        addPolicies: [
-          {
-            policyName: policy.title,
-            policyText: window.encodeURIComponent(policy.text),
-          },
-        ],
-      },
-    });
-  }
+  // async function openPolicyBuilder() {
+  //   // dispatch<ChangeAction>({
+  //   //   type: 'resourceInfo/change',
+  //   //   payload: {
+  //   //     policyEditorVisible: true,
+  //   //   },
+  //   // });
+  //   // setActiveDialogShow(false);
+  //   const policy = await fPolicyBuilder({
+  //     alreadyUsedTexts: resourceInfo.policies
+  //       .map<string>((ip) => {
+  //         return ip.policyText;
+  //       }),
+  //     alreadyUsedTitles: resourceInfo.policies
+  //       .map((ip) => {
+  //         return ip.policyName;
+  //       }),
+  //     targetType: 'resource',
+  //   });
+  //
+  //   if (!policy) {
+  //     return null;
+  //   }
+  //
+  //   await dispatch<UpdatePoliciesAction>({
+  //     type: 'resourceAuthPage/updatePolicies',
+  //     payload: {
+  //       addPolicies: [
+  //         {
+  //           policyName: policy.title,
+  //           policyText: window.encodeURIComponent(policy.text),
+  //         },
+  //       ],
+  //     },
+  //   });
+  // }
 
   /** 上架 */
-  const activeResource = () => {
-    const updatePolicies = resourceInfo.policies
-      .filter((item: any) => item.checked)
-      .map((item) => {
-        return { policyId: item.policyId, status: 1 };
-      });
-    const data = { status: 1, updatePolicies };
-    operateResource(data);
-  };
+  // const activeResource = () => {
+  //   const updatePolicies = resourceInfo.policies
+  //     .filter((item: any) => item.checked)
+  //     .map((item) => {
+  //       return { policyId: item.policyId, status: 1 };
+  //     });
+  //   const data = { status: 1, updatePolicies };
+  //   operateResource(data);
+  // };
 
   /** 下架 */
   const inactiveResource = () => {
@@ -332,7 +332,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             <div style={{ cursor: 'default' }}>{FI18n.i18nNext.t('verions')}</div>
 
             {
-              // match.path === '/resource/:id/$version/creator'
               resourceInfo.showPage.creator ? (
                 <FComponentsLib.FCircleBtn
                   type='transparent'
@@ -432,23 +431,23 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         }
       />
 
-      <FPolicyOperatorDrawer
-        visible={resourceInfo.policyOperaterVisible}
-        titleText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}
-        confirmText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done')}
-        tipText={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02')}
-        policiesList={resourceInfo.policies}
-        onCancel={() => {
-          dispatch<ChangeAction>({
-            type: 'resourceInfo/change',
-            payload: {
-              policyOperaterVisible: false,
-            },
-          });
-        }}
-        onConfirm={activeResource}
-        onNewPolicy={openPolicyBuilder}
-      />
+      {/*<FPolicyOperatorDrawer*/}
+      {/*  visible={resourceInfo.policyOperaterVisible}*/}
+      {/*  titleText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}*/}
+      {/*  confirmText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done')}*/}
+      {/*  tipText={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02')}*/}
+      {/*  policiesList={resourceInfo.policies}*/}
+      {/*  onCancel={() => {*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'resourceInfo/change',*/}
+      {/*      payload: {*/}
+      {/*        policyOperaterVisible: false,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*  onConfirm={activeResource}*/}
+      {/*  onNewPolicy={openPolicyBuilder}*/}
+      {/*/>*/}
 
       {resultPopupType !== null && (
         <div className={styles['result-modal']}>
