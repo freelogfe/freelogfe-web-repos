@@ -43,13 +43,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
         // pageState: 'loading',
       },
     });
-    // await FUtil.Tool.promiseSleep(1000);
-    // await dispatch<ChangeAction>({
-    //   type: 'resourceInfoPage/change',
-    //   payload: {
-    //     pageState: 'loaded',
-    //   },
-    // });
   });
 
   AHooks.useUnmount(async () => {
