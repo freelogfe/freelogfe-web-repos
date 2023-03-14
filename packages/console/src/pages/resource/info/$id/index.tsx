@@ -6,11 +6,8 @@ import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCov
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceInfoModelState, ResourceInfoPageModelState } from '@/models/connect';
+import { ConnectState, ResourceInfoPageModelState } from '@/models/connect';
 import {
-  OnChangeInfoAction,
-  ChangeAction,
-  // InitModelStatesAction,
   OnUnmount_Page_Action,
   OnMount_Page_Action,
   OnClick_AddIntroductionBtn_Action,
@@ -32,7 +29,6 @@ import * as AHooks from 'ahooks';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
-  // resourceInfo: ResourceInfoModelState,
   resourceInfoPage: ResourceInfoPageModelState,
 }
 
@@ -61,19 +57,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
       type: 'resourceInfoPage/onUnmount_Page',
     });
   });
-
-  // function onChangeIsEditing(bool: boolean) {
-  //   // console.log(bool, '0293jdsfl;kjf;lasd');
-  //   // console.log(info?.intro, 'info?.intro');
-  //   dispatch<ChangeAction>({
-  //     type: 'resourceInfoPage/change',
-  //     payload: {
-  //       editorText: bool ? (resourceInfoPage.resourceInfo?.intro || '') : '',
-  //       isEditing: bool,
-  //       introductionErrorText: '',
-  //     },
-  //   });
-  // }
 
   return (<>
     <Helmet>
@@ -155,13 +138,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                       dispatch<OnClick_SaveIntroductionBtn_Action>({
                         type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
                       });
-                      // onChangeIsEditing(false);
-                      // dispatch<OnChangeInfoAction>({
-                      //   type: 'resourceInfoPage/onChangeInfo',
-                      //   // payload: {intro: resourceInfoPage.editor},
-                      //   payload: { intro: resourceInfoPage.editorText },
-                      //   id: resourceInfoPage.resourceID || '',
-                      // });
                     }}
                   >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
                 </>)
@@ -181,13 +157,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                         value: e.target.value,
                       },
                     });
-                    // dispatch<ChangeAction>({
-                    //   type: 'resourceInfoPage/change',
-                    //   payload: {
-                    //     editorText: e.target.value,
-                    //     introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
-                    //   },
-                    // })
                   }
 
                   }
@@ -223,12 +192,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                     value: value,
                   },
                 });
-                // dispatch<OnChangeInfoAction>({
-                //   type: 'resourceInfoPage/onChangeInfo',
-                //   payload: { coverImages: [value] },
-                //   // id: resourceInfo.info?.resourceId || '',
-                //   id: resourceInfoPage.resourceID || '',
-                // });
               }}
             />
           </FFormLayout.FBlock>
@@ -244,11 +207,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                     value: value,
                   },
                 });
-                // dispatch<OnChangeInfoAction>({
-                //   type: 'resourceInfoPage/onChangeInfo',
-                //   payload: { tags: value },
-                //   id: resourceInfoPage.resourceID || '',
-                // });
               }}
             />
           </FFormLayout.FBlock>
@@ -258,7 +216,5 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 }
 
 export default connect(({ resourceInfo, resourceInfoPage, user }: ConnectState) => ({
-  // resourceInfo: resourceInfo,
   resourceInfoPage: resourceInfoPage,
-  // user: user,
 }))(Info);
