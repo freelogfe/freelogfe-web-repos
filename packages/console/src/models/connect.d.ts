@@ -18,7 +18,7 @@ import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
 import {NodeManager_Contract_Page_ModelState} from './nodeManager_Contract_Page';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
-import {ResourceDepSelectorModelState} from './resourceDepSelector';
+// import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
 import {ResourceEditorPageModelState} from './resourceEditorPage';
@@ -47,7 +47,7 @@ export {
   NodeManagerModelState,
   NodeManager_Contract_Page_ModelState,
   ExhibitInfoPageModelState,
-  ResourceDepSelectorModelState,
+  // ResourceDepSelectorModelState,
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
   ResourceEditorPageModelState,
@@ -79,7 +79,7 @@ export interface ConnectState {
   nodeManagerPage: NodeManagerModelState;
   nodeManager_Contract_Page: NodeManager_Contract_Page_ModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;
-  resourceDepSelector: ResourceDepSelectorModelState;
+  // resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
   dashboardPage: DashboardPageModelState;

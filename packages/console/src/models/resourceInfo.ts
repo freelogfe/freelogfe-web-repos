@@ -119,10 +119,11 @@ const Model: ResourceInfoModelType = {
   state: initStates,
 
   effects: {
-    * fetchDataSource(
-      { payload }: FetchDataSourceAction,
-      { call, put, select }: EffectsCommandMap,
-    ): Generator<any, void, any> {
+    * fetchDataSource({ payload }: FetchDataSourceAction, {
+      call,
+      put,
+      select,
+    }: EffectsCommandMap): Generator<any, void, any> {
       const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
