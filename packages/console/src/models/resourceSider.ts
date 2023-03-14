@@ -5,7 +5,6 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
-import { FetchDraftDataAction } from '@/models/resourceInfo';
 import { ConnectState } from '@/models/connect';
 
 export type ResourceSiderModelState = {
