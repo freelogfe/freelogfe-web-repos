@@ -160,75 +160,26 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     }
   }
 
-  /** 打开添加策略弹窗 */
-  // async function openPolicyBuilder() {
-  //   // dispatch<ChangeAction>({
-  //   //   type: 'resourceInfo/change',
-  //   //   payload: {
-  //   //     policyEditorVisible: true,
-  //   //   },
-  //   // });
-  //   // setActiveDialogShow(false);
-  //   const policy = await fPolicyBuilder({
-  //     alreadyUsedTexts: resourceInfo.policies
-  //       .map<string>((ip) => {
-  //         return ip.policyText;
-  //       }),
-  //     alreadyUsedTitles: resourceInfo.policies
-  //       .map((ip) => {
-  //         return ip.policyName;
-  //       }),
-  //     targetType: 'resource',
-  //   });
-  //
-  //   if (!policy) {
-  //     return null;
-  //   }
-  //
-  //   await dispatch<UpdatePoliciesAction>({
-  //     type: 'resourceAuthPage/updatePolicies',
-  //     payload: {
-  //       addPolicies: [
-  //         {
-  //           policyName: policy.title,
-  //           policyText: window.encodeURIComponent(policy.text),
-  //         },
-  //       ],
-  //     },
-  //   });
-  // }
-
-  /** 上架 */
-  // const activeResource = () => {
-  //   const updatePolicies = resourceInfo.policies
-  //     .filter((item: any) => item.checked)
-  //     .map((item) => {
-  //       return { policyId: item.policyId, status: 1 };
-  //     });
-  //   const data = { status: 1, updatePolicies };
-  //   operateResource(data);
-  // };
-
   /** 下架 */
   const inactiveResource = () => {
-    if (inactiveDialogShow && noLonger) localStorage.setItem('resourceNoTip', 'true');
-
+    if (inactiveDialogShow && noLonger) {
+      self.localStorage.setItem('resourceNoTip', 'true');
+    }
     const data = { status: 4 };
     operateResource(data);
   };
 
   /** 资源上下架 */
-  const operateResource = async (data: any) => {
+  async function operateResource(data: any) {
 
     // TODO: setActiveDialogShow(false);
     setInactiveDialogShow(false);
     setLoading(true);
     setResultPopupType(data.status);
 
-    const result = await FUtil.Request({
-      method: 'PUT',
-      url: `/v2/resources/${match.params.id}`,
-      data,
+    const result = await FServiceAPI.Resource.update({
+      resourceId: match.params.id,
+      status: data.status,
     });
     if (result.errCode === 0) {
       setTimeout(() => {
@@ -258,7 +209,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       setLoading(false);
       setResultPopupType(null);
     }
-  };
+  }
 
   return (
     <div className={styles.Sider}>
@@ -266,7 +217,10 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
       <div className={styles.switcher}>
         <div className={styles['switcher-label']}>{FI18n.i18nNext.t('switch_set_resource_avaliable')}</div>
         <FSwitch
-          onClick={changeStatus}
+          // onClick={changeStatus}
+          onChange={(checked) => {
+            changeStatus(checked);
+          }}
           checked={resourceInfo.info.status === 1}
           loading={loading}
         />
