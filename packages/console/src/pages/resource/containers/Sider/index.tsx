@@ -3,10 +3,10 @@ import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceInfoModelState } from '@/models/connect';
+import { ConnectState, ResourceInfoModelState, ResourceSiderModelState } from '@/models/connect';
 import { withRouter, history } from 'umi';
 import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
-import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
+// import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
@@ -23,26 +23,32 @@ import FComponentsLib from '@freelog/components-lib';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyOperator from '@/components/fPolicyOperator';
+import { OnChange_Page_Action, OnMount_Page_Action, OnUpdate_Data_Action } from '@/models/resourceSider';
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
   version: string;
 }> {
   dispatch: Dispatch;
-  resourceInfo: ResourceInfoModelState;
+  resourceSider: ResourceSiderModelState;
 }
 
-function Sider({ resourceInfo, match, dispatch }: SilderProps) {
-  // const [activeDialogShow, setActiveDialogShow] = React.useState(false);
+function Sider({ resourceSider, match, dispatch }: SilderProps) {
+
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
   const [loading, setLoading] = React.useState(false);
-  // const [active, setActive] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
-    dispatch<ResourceAuthPage_ChangeAction>({
-      type: 'resourceAuthPage/change',
+    // dispatch<ResourceAuthPage_ChangeAction>({
+    //   type: 'resourceAuthPage/change',
+    //   payload: {
+    //     resourceID: match.params.id,
+    //   },
+    // });
+    dispatch<OnMount_Page_Action>({
+      type: 'resourceSider/onMount_Page',
       payload: {
         resourceID: match.params.id,
       },
@@ -50,66 +56,61 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   });
 
   React.useEffect(() => {
+
+    let page: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo' = '';
+
     if (match.path === '/resource/info/:id') {
-      onChange({
-        showPage: {
-          info: true,
-        },
-      });
+      page = 'info';
     } else if (match.path === '/resource/auth/:id') {
-      onChange({
-        showPage: {
-          auth: true,
-        },
-      });
+      page = 'auth';
     } else if (match.path === '/resource/version/creator/:id') {
-      onChange({
-        showPage: {
-          creator: true,
-        },
-      });
+      page = 'versionCreator';
     } else if (match.path === '/resource/version/info/:id/:version') {
-      onChange({
-        showPage: {
-          version: match.params.version,
-        },
-      });
+      page = 'versionInfo';
     }
+
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: page as 'info',
+        version: match.params.version || '',
+      },
+    });
   }, [match]);
 
-  React.useEffect(() => {
-    onChangeMatchParamsId();
-
-    return () => {
-      dispatch<InitModelStatesAction>({
-        type: 'resourceInfo/initModelStates',
-      });
-    };
-  }, [match.params.id]);
+  // React.useEffect(() => {
+  //   // onChangeMatchParamsId();
+  //
+  //   return () => {
+  //     dispatch<InitModelStatesAction>({
+  //       type: 'resourceInfo/initModelStates',
+  //     });
+  //   };
+  // }, [match.params.id]);
 
   // React.useEffect(() => {
   //   setActive(resourceInfo.info?.status === 1);
   // }, [resourceInfo.info?.status]);
 
-  async function onChange(payload: Partial<ResourceInfoModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'resourceInfo/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<ResourceInfoModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'resourceInfo/change',
+  //     payload,
+  //   });
+  // }
 
-  async function onChangeMatchParamsId() {
-    await dispatch<ChangeAction>({
-      type: 'resourceInfo/change',
-      payload: {
-        resourceID: match.params.id,
-      },
-    });
-    dispatch<FetchDataSourceAction>({
-      type: 'resourceInfo/fetchDataSource',
-      payload: match.params.id,
-    });
-  }
+  // async function onChangeMatchParamsId() {
+  //   await dispatch<ChangeAction>({
+  //     type: 'resourceInfo/change',
+  //     payload: {
+  //       resourceID: match.params.id,
+  //     },
+  //   });
+  //   dispatch<FetchDataSourceAction>({
+  //     type: 'resourceInfo/fetchDataSource',
+  //     payload: match.params.id,
+  //   });
+  // }
 
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/$version/creator`);
@@ -118,10 +119,6 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         resourceID: match.params.id,
       }),
     );
-  }
-
-  if (!resourceInfo.info) {
-    return null;
   }
 
   /** 上下架 */
@@ -138,13 +135,16 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
             setResultPopupType(null);
           }, 1000);
         }, 1000);
-        dispatch<FetchDataSourceAction>({
-          type: 'resourceInfo/fetchDataSource',
-          payload: match.params.id,
+        dispatch<OnUpdate_Data_Action>({
+          type: 'resourceSider/onUpdate_Data',
         });
-        dispatch<FetchResourceInfoAction>({
-          type: 'resourceAuthPage/fetchResourceInfo',
-        });
+        // dispatch<FetchDataSourceAction>({
+        //   type: 'resourceInfo/fetchDataSource',
+        //   payload: match.params.id,
+        // });
+        // dispatch<FetchResourceInfoAction>({
+        //   type: 'resourceAuthPage/fetchResourceInfo',
+        // });
       } else {
         setLoading(false);
       }
@@ -177,38 +177,46 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
     setLoading(true);
     setResultPopupType(data.status);
 
-    const result = await FServiceAPI.Resource.update({
+    const { ret, errCode, msg } = await FServiceAPI.Resource.update({
       resourceId: match.params.id,
       status: data.status,
     });
-    if (result.errCode === 0) {
-      setTimeout(() => {
-        setLoading(false);
-        setTimeout(() => {
-          setResultPopupType(null);
-        }, 1000);
-      }, 1000);
-      dispatch<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: match.params.id,
-      });
-      dispatch<FetchResourceInfoAction>({
-        type: 'resourceAuthPage/fetchResourceInfo',
-      });
 
-      if (data.updatePolicies) {
-        dispatch<ChangeAction>({
-          type: 'resourceInfo/change',
-          payload: {
-            policyOperaterVisible: false,
-          },
-        });
-      }
-    } else {
-      fMessage(result.msg, 'error');
+    if (ret !== 0 && errCode !== 0) {
+      fMessage(msg, 'error');
       setLoading(false);
       setResultPopupType(null);
+      return;
     }
+    setTimeout(() => {
+      setLoading(false);
+      setTimeout(() => {
+        setResultPopupType(null);
+      }, 1000);
+    }, 1000);
+    dispatch<OnUpdate_Data_Action>({
+      type: 'resourceSider/onUpdate_Data',
+    });
+    // dispatch<FetchDataSourceAction>({
+    //   type: 'resourceInfo/fetchDataSource',
+    //   payload: match.params.id,
+    // });
+    // dispatch<FetchResourceInfoAction>({
+    //   type: 'resourceAuthPage/fetchResourceInfo',
+    // });
+
+    // if (data.updatePolicies) {
+    //   dispatch<ChangeAction>({
+    //     type: 'resourceInfo/change',
+    //     payload: {
+    //       policyOperaterVisible: false,
+    //     },
+    //   });
+    // }
+  }
+
+  if (resourceSider.state === 'loading') {
+    return null;
   }
 
   return (
@@ -221,42 +229,32 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           onChange={(checked) => {
             changeStatus(checked);
           }}
-          checked={resourceInfo.info.status === 1}
+          checked={resourceSider.resourceState === 'online'}
           loading={loading}
         />
       </div>
       <div style={{ height: 30 }} />
       <div className={styles.header}>
         <FResourceCover
-          src={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
-          status={
-            (resourceInfo.info?.status & 2) === 2
-              ? 'freeze'
-              : resourceInfo.info?.status === 1
-                ? 'online'
-                : !!resourceInfo.info?.latestVersion
-                  ? 'offline'
-                  : 'unreleased'
-          }
+          src={resourceSider.resourceCover}
+          status={resourceSider.resourceState as 'online'}
         />
         <div style={{ height: 15 }} />
         <FLink
           to={FUtil.LinkTo.resourceDetails({
-            resourceID: resourceInfo.info?.resourceId || '',
+            resourceID: resourceSider.resourceID,
           })}
           className={styles.resourceName}
         >
-          {resourceInfo.info?.resourceName}
+          {resourceSider.resourceName}
         </FLink>
         <div style={{ height: 10 }} />
-        <label className={styles.label}>{resourceInfo.info.resourceType.join(' / ')}</label>
+        <label className={styles.label}>{resourceSider.resourceType.join(' / ')}</label>
       </div>
       <div style={{ height: 35 }} />
       <div className={styles.radios}>
         <FLink
-          className={[resourceInfo.showPage.info ? styles.activatedRadio : '', styles.radio].join(
-            ' ',
-          )}
+          className={[resourceSider.showPage === 'info' ? styles.activatedRadio : '', styles.radio].join(' ')}
           to={FUtil.LinkTo.resourceInfo({
             resourceID: match.params.id,
           })}
@@ -264,7 +262,7 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           {FI18n.i18nNext.t('resource_information')}
         </FLink>
         <FLink
-          className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(
+          className={[resourceSider.showPage === 'auth' ? styles.activatedRadio : '', styles.radio].join(
             ' ',
           )}
           to={FUtil.LinkTo.resourceAuth({
@@ -273,27 +271,26 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
         >
           <Space size={10}>
             <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
-            {resourceInfo.authProblem && (
+            {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
               </FTooltip>
             )}
           </Space>
-          {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot} />)}
+          {resourceSider.policies.length === 0 && (<div className={styles.redDot} />)}
         </FLink>
         <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>
             <div style={{ cursor: 'default' }}>{FI18n.i18nNext.t('verions')}</div>
-
             {
-              resourceInfo.showPage.creator ? (
+              resourceSider.showPage === 'versionCreator' ? (
                 <FComponentsLib.FCircleBtn
                   type='transparent'
                   onClick={() => {
                     fMessage('正在创建版本', 'warning');
                   }}
                 />
-              ) : resourceInfo.draftData ? (
+              ) : resourceSider.draft ? (
                 <Popconfirm
                   title={FI18n.i18nNext.t('error_unreleasedverionexisted')}
                   // icon={<FInfo/>}
@@ -316,24 +313,21 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
           </div>
 
           <div className={styles.versions}>
-            {resourceInfo.draftData ? (
+            {resourceSider.draft ? (
               <FLink
                 className={[
                   styles.version,
-                  resourceInfo.showPage.creator ? styles.activatedVersion : '',
+                  resourceSider.showPage === 'versionCreator' ? styles.activatedVersion : '',
                 ].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
               >
-                {resourceInfo.draftData?.versionInput || '未输入版本号'}（草稿）
+                {resourceSider.draft?.versionInput || '未输入版本号'}（草稿）
               </FLink>
-            ) : resourceInfo.showPage.creator ? (
+            ) : resourceSider.showPage === 'versionCreator' ? (
               <FLink
-                className={[
-                  styles.version,
-                  resourceInfo.showPage.creator ? styles.activatedVersion : '',
-                ].join(' ')}
+                className={[styles.version, styles.activatedVersion].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
@@ -342,21 +336,21 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
               </FLink>
             ) : null}
 
-            {[...resourceInfo.info?.resourceVersions].reverse().map((i) => (
+            {[...resourceSider.resourceVersions].reverse().map((i) => (
               <FLink
-                key={i.versionId}
+                key={i}
                 to={FUtil.LinkTo.resourceVersion({
-                  resourceID: match.params.id,
-                  version: i.version,
+                  resourceID: resourceSider.resourceID,
+                  version: i,
                 })}
                 className={[
                   styles.version,
-                  resourceInfo.showPage.version && match.params.version === i.version
+                  resourceSider.showPage === 'versionInfo' && match.params.version === i
                     ? styles.activatedVersion
                     : '',
                 ].join(' ')}
               >
-                {i.version}
+                {i}
               </FLink>
             ))}
           </div>
@@ -441,12 +435,9 @@ function Sider({ resourceInfo, match, dispatch }: SilderProps) {
   );
 }
 
-export default withRouter(
-  connect(({ resourceInfo, resourceVersionCreatorPage }: ConnectState) => ({
-    resourceInfo: resourceInfo,
-    resourceVersionCreatorPage: resourceVersionCreatorPage,
-  }))(Sider),
-);
+export default withRouter(connect(({ resourceSider }: ConnectState) => ({
+  resourceSider: resourceSider,
+}))(Sider));
 
 export async function resourceOnline(resourceID: string): Promise<boolean> {
 
