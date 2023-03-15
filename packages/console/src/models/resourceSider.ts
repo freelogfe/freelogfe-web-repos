@@ -100,7 +100,13 @@ const Model: ResourceSiderModelType = {
   namespace: 'resourceSider',
   state: initStates,
   effects: {
-    * onMount_Page({ payload }: OnMount_Page_Action, { put }: EffectsCommandMap) {
+    * onMount_Page({ payload }: OnMount_Page_Action, { select, put }: EffectsCommandMap) {
+      const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
+        resourceSider,
+      }));
+      if (resourceSider.resourceID !== '') {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
