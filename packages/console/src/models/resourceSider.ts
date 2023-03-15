@@ -39,6 +39,14 @@ export interface OnUnmount_Page_Action extends AnyAction {
   type: 'resourceSider/onUnmount_Page';
 }
 
+export interface OnChange_Page_Action extends AnyAction {
+  type: 'resourceSider/onChange_Page';
+  payload: {
+    page: 'info' | 'auth' | 'versionCreator' | 'versionInfo';
+    version?: string;
+  };
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
@@ -53,6 +61,7 @@ interface ResourceSiderModelType {
   effects: {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
+    onChange_Page: (action: OnChange_Page_Action, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
   };
@@ -102,6 +111,15 @@ const Model: ResourceSiderModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+      });
+    },
+    * onChange_Page({ payload }: OnChange_Page_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showPage: payload.page,
+          showVersionPage: payload.version,
+        },
       });
     },
     * fetchInfo({}: FetchInfoAction, { call, select, put }: EffectsCommandMap) {
