@@ -47,6 +47,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     //     resourceID: match.params.id,
     //   },
     // });
+    console.log('*(****(**(*(MMMMMMMM');
     dispatch<OnMount_Page_Action>({
       type: 'resourceSider/onMount_Page',
       payload: {
@@ -142,9 +143,9 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
         //   type: 'resourceInfo/fetchDataSource',
         //   payload: match.params.id,
         // });
-        // dispatch<FetchResourceInfoAction>({
-        //   type: 'resourceAuthPage/fetchResourceInfo',
-        // });
+        dispatch<FetchResourceInfoAction>({
+          type: 'resourceAuthPage/fetchResourceInfo',
+        });
       } else {
         setLoading(false);
       }
@@ -201,9 +202,9 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     //   type: 'resourceInfo/fetchDataSource',
     //   payload: match.params.id,
     // });
-    // dispatch<FetchResourceInfoAction>({
-    //   type: 'resourceAuthPage/fetchResourceInfo',
-    // });
+    dispatch<FetchResourceInfoAction>({
+      type: 'resourceAuthPage/fetchResourceInfo',
+    });
 
     // if (data.updatePolicies) {
     //   dispatch<ChangeAction>({
