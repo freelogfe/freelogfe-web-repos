@@ -65,6 +65,7 @@ export interface ExhibitInfoPageModelState {
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
   side_ExhibitInputTitle: string | null;
+  side_ExhibitInputTitle_Error: string;
   side_ExhibitTags: string[];
   side_AllVersions: string[];
   side_Version: string;
@@ -179,6 +180,12 @@ export interface UpdateContractUsedAction {
   };
 }
 
+export interface OnChange_Side_InputTitle_Action extends AnyAction {
+  type: 'exhibitInfoPage/onChange_Side_InputTitle';
+  payload: {
+    value: string | null;
+  };
+}
 
 export interface OnClick_Side_InheritOptions_ResetBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn';
@@ -278,6 +285,7 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
 
+    onChange_Side_InputTitle: (action: OnChange_Side_InputTitle_Action, effects: EffectsCommandMap) => void;
     onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_InheritOptions_ValueInput: (action: OnBlur_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
@@ -326,6 +334,7 @@ const initStates: ExhibitInfoPageModelState = {
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
   side_ExhibitInputTitle: null,
+  side_ExhibitInputTitle_Error: '',
   side_ExhibitTags: [],
   side_AllVersions: [],
   side_Version: '',
@@ -893,6 +902,15 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
+    * onChange_Side_InputTitle({ payload }: OnChange_Side_InputTitle_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_ExhibitInputTitle: payload.value,
+          side_ExhibitInputTitle_Error: (payload.value || '').length > 100 ? '不能超过100个字符' : '',
+        },
+      });
+    },
     * onClick_Side_InheritOptions_ResetBtn({ payload }: OnClick_Side_InheritOptions_ResetBtn_Action, {
       select,
       call,
