@@ -47,7 +47,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     //     resourceID: match.params.id,
     //   },
     // });
-    console.log('*(****(**(*(MMMMMMMM');
+    // console.log('*(****(**(*(MMMMMMMM');
     dispatch<OnMount_Page_Action>({
       type: 'resourceSider/onMount_Page',
       payload: {
