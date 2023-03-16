@@ -8,11 +8,10 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
 interface DescriptionProps {
-  dispatch: Dispatch;
   resourceDetailPage: ResourceDetailPageModelState;
 }
 
-function Description({ dispatch, resourceDetailPage }: DescriptionProps) {
+function Description({ resourceDetailPage }: DescriptionProps) {
 
   return (<>
     <div style={{ height: 30 }} />
