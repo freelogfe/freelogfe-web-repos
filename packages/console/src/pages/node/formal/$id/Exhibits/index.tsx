@@ -202,8 +202,27 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       <FLeftSiderLayout
         type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
         sider={<Sider />}
-        header={
-          <div className={styles.header}>
+        // header={}
+      >
+        {nodeManagerPage.exhibit_ListState === 'noData' && (
+          <FNoDataTip
+            height={'calc(100vh - 70px)'}
+            tipText={FI18n.i18nNext.t('manage_exhibits_empty')}
+            btnText={FI18n.i18nNext.t('btn_go_to_resource_market')}
+            onClick={() => {
+              dispatch<DiscoverChangeAction>({
+                type: 'discoverPage/change',
+                payload: {
+                  resourceType: '-1',
+                },
+              });
+              history.push(FUtil.LinkTo.market());
+            }}
+          />
+        )}
+
+        {
+          nodeManagerPage.exhibit_ListState !== 'noData' && (<div className={styles.header} style={{padding: '0 20px'}}>
             <FComponentsLib.FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
             <Space size={80}>
               <div>
@@ -306,26 +325,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 />
               </div>
             </Space>
-          </div>
+          </div>)
         }
-      >
-        {nodeManagerPage.exhibit_ListState === 'noData' && (
-          <FNoDataTip
-            height={'calc(100vh - 70px)'}
-            tipText={FI18n.i18nNext.t('manage_exhibits_empty')}
-            btnText={FI18n.i18nNext.t('btn_go_to_resource_market')}
-            onClick={() => {
-              dispatch<DiscoverChangeAction>({
-                type: 'discoverPage/change',
-                payload: {
-                  resourceType: '-1',
-                },
-              });
-              history.push(FUtil.LinkTo.market());
-            }}
-          />
-        )}
-
         {nodeManagerPage.exhibit_ListState === 'loading' && (
           <FLoadingTip height={'calc(100vh - 270px)'} />
         )}

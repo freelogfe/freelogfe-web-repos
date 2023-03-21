@@ -41,7 +41,7 @@ export interface NodeManagerModelState {
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showPage: 'exhibit' | 'theme' | 'contract';
+  showPage: 'exhibit' | 'theme' | 'contract' | 'setting';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
