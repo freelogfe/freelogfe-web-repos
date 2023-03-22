@@ -5,8 +5,8 @@
   }
 
   (function() {
-    var version = '0.9.1';
-    var localVersion = window.localStorage.getItem('Version');
+    const version = '0.9.3';
+    const localVersion = window.localStorage.getItem('Version');
     if (version !== localVersion) {
       window.localStorage.setItem('Version', version);
       window.localStorage.removeItem('i18nextResources');
@@ -23,12 +23,12 @@
 <!--<script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588"></script>-->
 <script>
   (function() {
-    var el = document.createElement('script');
+    const el = document.createElement('script');
     // el.type = 'text/javascript';
     // el.charset = 'utf-8';
     el.async = true;
-    var ref = document.body.getElementsByTagName('script')[0];
-    console.log(ref, 'ref');
+    const ref = document.body.getElementsByTagName('script')[0];
+    // console.log(ref, 'ref');
     ref.parentNode.insertBefore(el, ref);
     if (window.location.host.includes('.freelog.com')) {
       el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';
@@ -38,7 +38,7 @@
   })();
 
   setTimeout(() => {
-    document.querySelector(`[title = '站长统计']`)?.style.display = 'none'
+    self.document.querySelector(`[title = '站长统计']`)?.style.display = 'none'
   }, 300);
 </script>
 </body>
