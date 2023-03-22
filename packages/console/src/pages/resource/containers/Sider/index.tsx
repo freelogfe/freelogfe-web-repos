@@ -79,40 +79,6 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     });
   }, [match]);
 
-  // React.useEffect(() => {
-  //   // onChangeMatchParamsId();
-  //
-  //   return () => {
-  //     dispatch<InitModelStatesAction>({
-  //       type: 'resourceInfo/initModelStates',
-  //     });
-  //   };
-  // }, [match.params.id]);
-
-  // React.useEffect(() => {
-  //   setActive(resourceInfo.info?.status === 1);
-  // }, [resourceInfo.info?.status]);
-
-  // async function onChange(payload: Partial<ResourceInfoModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'resourceInfo/change',
-  //     payload,
-  //   });
-  // }
-
-  // async function onChangeMatchParamsId() {
-  //   await dispatch<ChangeAction>({
-  //     type: 'resourceInfo/change',
-  //     payload: {
-  //       resourceID: match.params.id,
-  //     },
-  //   });
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceInfo/fetchDataSource',
-  //     payload: match.params.id,
-  //   });
-  // }
-
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/$version/creator`);
     history.push(
@@ -139,10 +105,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
         dispatch<OnUpdate_Data_Action>({
           type: 'resourceSider/onUpdate_Data',
         });
-        // dispatch<FetchDataSourceAction>({
-        //   type: 'resourceInfo/fetchDataSource',
-        //   payload: match.params.id,
-        // });
+
         dispatch<FetchResourceInfoAction>({
           type: 'resourceAuthPage/fetchResourceInfo',
         });
@@ -198,22 +161,10 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     dispatch<OnUpdate_Data_Action>({
       type: 'resourceSider/onUpdate_Data',
     });
-    // dispatch<FetchDataSourceAction>({
-    //   type: 'resourceInfo/fetchDataSource',
-    //   payload: match.params.id,
-    // });
+
     dispatch<FetchResourceInfoAction>({
       type: 'resourceAuthPage/fetchResourceInfo',
     });
-
-    // if (data.updatePolicies) {
-    //   dispatch<ChangeAction>({
-    //     type: 'resourceInfo/change',
-    //     payload: {
-    //       policyOperaterVisible: false,
-    //     },
-    //   });
-    // }
   }
 
   if (resourceSider.state === 'loading') {
