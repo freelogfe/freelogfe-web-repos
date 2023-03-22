@@ -19,6 +19,7 @@ type ContentKey = 'header.gotoConsoleBtn'
     | 'createNodePage.createBtn'
     | 'resourceDetailPage.nodeSelector'
     | 'resourceDetailPage.checkPolicy'
+    | 'nodeManager.nodeLink'
     | 'exhibitDetailPage.onlineSwitch';
 
 type ContentValue = 'show' | 'hide';
@@ -42,6 +43,7 @@ const defaultContent: HotspotTooltip_LocalStorage_Content = {
     'policyBuilder.exhibit.policyTemplateBtn': 'show',
     'policyBuilder.exhibit.policyVerifyBtn': 'hide',
     'policyBuilder.exhibit.policyCreateBtn': 'show',
+    'nodeManager.nodeLink': 'show',
     'exhibitDetailPage.onlineSwitch': 'hide',
 };
 

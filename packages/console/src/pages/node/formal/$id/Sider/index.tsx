@@ -42,31 +42,52 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             </div>
           </FTooltip>
           <div style={{ height: 15 }} />
-          <Space size={10} className={styles.url}>
-            <a
-              onClick={() => {
-                window.open(nodeManagerPage.nodeUrl);
-              }}
-            >
-              {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
-            </a>
-            <FComponentsLib.FCopyToClipboard
-              text={nodeManagerPage.nodeUrl}
-              title={'复制节点地址'}
-              iconStyle={{ fontSize: 14 }}
-            />
-            <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
-              <FComponentsLib.FTextBtn onClick={async () => {
-                await FServiceAPI.Activity.pushMessageTask({
-                  taskConfigCode: 'TS000034',
-                });
-              }}>
-                <FTooltip title='分享节点'>
-                  <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
-                </FTooltip>
-              </FComponentsLib.FTextBtn>
-            </FShare>
-          </Space>
+          <FComponentsLib.FHotspotTooltip
+            id={'nodeManager.nodeLink'}
+            style={{ right: -42, top: -4 }}
+            // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
+            text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
+            onMount={() => {
+              // FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
+              //   value: false,
+              //   effectiveImmediately: false,
+              //   onlyNullish: true,
+              // });
+            }}
+          >
+            <Space size={10} className={styles.url}>
+
+              <a
+                onClick={() => {
+                  window.open(nodeManagerPage.nodeUrl);
+                  FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
+                    value: false,
+                    effectiveImmediately: true,
+                    onlyNullish: false,
+                  });
+                }}
+              >
+                {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
+              </a>
+
+              <FComponentsLib.FCopyToClipboard
+                text={nodeManagerPage.nodeUrl}
+                title={'复制节点地址'}
+                iconStyle={{ fontSize: 14 }}
+              />
+              <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
+                <FComponentsLib.FTextBtn onClick={async () => {
+                  await FServiceAPI.Activity.pushMessageTask({
+                    taskConfigCode: 'TS000034',
+                  });
+                }}>
+                  <FTooltip title='分享节点'>
+                    <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+                  </FTooltip>
+                </FComponentsLib.FTextBtn>
+              </FShare>
+            </Space>
+          </FComponentsLib.FHotspotTooltip>
         </div>
 
         <div style={{ height: 35 }} />
