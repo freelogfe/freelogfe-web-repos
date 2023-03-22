@@ -74,13 +74,32 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
             text={FI18n.i18nNext.t('exhibit_auth_plan_empty')}
           />
           <div style={{ height: 20 }} />
-          <FComponentsLib.FRectBtn
-            onClick={async () => {
-              self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
-              await addPolicy();
+          <FComponentsLib.FHotspotTooltip
+            id={'exhibitDetailPage.createFirstPolicy'}
+            style={{ left: '50%', marginLeft: -16, bottom: -42 }}
+            // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
+            text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
+            onMount={() => {
+              FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.createFirstPolicy', {
+                value: false,
+                effectiveImmediately: false,
+                onlyNullish: true,
+              });
             }}
-            type='primary'
-          >{FI18n.i18nNext.t('btn_create_auth_plan')}</FComponentsLib.FRectBtn>
+          >
+            <FComponentsLib.FRectBtn
+              onClick={async () => {
+                FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.createFirstPolicy', {
+                  value: false,
+                  effectiveImmediately: true,
+                  onlyNullish: false,
+                });
+                self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
+                await addPolicy();
+              }}
+              type='primary'
+            >{FI18n.i18nNext.t('btn_create_auth_plan')}</FComponentsLib.FRectBtn>
+          </FComponentsLib.FHotspotTooltip>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={exhibitInfoPage.exhibit_Online}

@@ -48,11 +48,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
             text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
             onMount={() => {
-              // FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
-              //   value: false,
-              //   effectiveImmediately: false,
-              //   onlyNullish: true,
-              // });
+              FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
+                value: false,
+                effectiveImmediately: false,
+                onlyNullish: true,
+              });
             }}
           >
             <Space size={10} className={styles.url}>
