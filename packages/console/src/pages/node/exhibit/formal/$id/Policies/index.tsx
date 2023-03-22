@@ -78,7 +78,7 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
             id={'exhibitDetailPage.createFirstPolicy'}
             style={{ left: '50%', marginLeft: -16, bottom: -42 }}
             // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
-            text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
+            text={FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_createauthplan')}
             onMount={() => {
               FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.createFirstPolicy', {
                 value: false,

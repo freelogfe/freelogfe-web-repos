@@ -70,6 +70,7 @@ interface FHotspotTooltipProps {
     children: React.ReactNode;
     text: string;
     style?: CSSProperties;
+    zIndex?: number;
 
     onMount?(): void;
 }
@@ -78,7 +79,7 @@ const set_visible_funcs: {
     [k in ContentKey]?: (value: boolean) => void;
 } = {};
 
-function FHotspotTooltip({id, children, style = {}, text, onMount}: FHotspotTooltipProps) {
+function FHotspotTooltip({id, children, style = {}, text, onMount, zIndex = 10000}: FHotspotTooltipProps) {
 
     const ref = React.useRef<any>();
 
@@ -107,12 +108,13 @@ function FHotspotTooltip({id, children, style = {}, text, onMount}: FHotspotTool
                 borderRadius: 8,
             }}
             getPopupContainer={() => ref.current}
+            zIndex={zIndex}
         >
             <div style={{
                 ...style,
                 width: 40,
                 position: 'absolute',
-                zIndex: 10000,
+                zIndex: zIndex,
                 maxWidth: 240,
             }}>
                 <div className={styles.outerRing}>
