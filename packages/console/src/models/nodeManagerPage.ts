@@ -1,8 +1,8 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import fMessage from '@/components/fMessage';
+// import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import moment, { Moment } from 'moment';
@@ -169,7 +169,7 @@ export interface OnUnmount_Page_Action extends AnyAction {
 export interface OnChange_ShowPage_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_ShowPage';
   payload: {
-    value: 'exhibit' | 'theme' | 'contract';
+    value: 'exhibit' | 'theme' | 'contract' | 'setting';
   };
 }
 
@@ -236,106 +236,6 @@ export interface OnActiveAction {
     id: string;
   };
 }
-
-/********* Contract start *********************************/
-// export interface OnChangeShowPageAction extends AnyAction {
-//   type: 'contractPage/onChangeShowPage';
-//   payload: {
-//     value: 'authorize' | 'authorized';
-//   };
-// }
-//
-// export interface OnClickViewDetailsBtnAction extends AnyAction {
-//   type: 'contractPage/onClickViewDetailsBtn';
-//   payload: {
-//     value: string;
-//   };
-// }
-//
-// export interface OnCloseContractDetailsDrawerAction extends AnyAction {
-//   type: 'contractPage/onCloseContractDetailsDrawer';
-// }
-//
-// export interface OnChange_Authorize_SubjectType_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_SubjectType';
-//   payload: {
-//     value: 'all' | Authorize_SubjectType;
-//   };
-// }
-//
-// export interface OnChange_Authorize_Status_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_Status';
-//   payload: {
-//     value: 'all' | Authorize_Status;
-//   };
-// }
-//
-// export interface OnChange_Authorize_Date_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_Date';
-//   payload: {
-//     value: [Moment, Moment] | null;
-//   };
-// }
-//
-// export interface OnChange_Authorize_KeywordsInput_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_KeywordsInput';
-//   payload: {
-//     value: string
-//   };
-// }
-//
-// export interface OnClick_Authorize_LoadMoreBtn_Action extends AnyAction {
-//   type: 'contractPage/onClick_Authorize_LoadMoreBtn';
-// }
-//
-// export interface OnChange_Authorized_SubjectType_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_SubjectType';
-//   payload: {
-//     value: 'all' | Authorized_SubjectType;
-//   };
-// }
-//
-// export interface OnChange_Authorized_Status_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_Status';
-//   payload: {
-//     value: 'all' | Authorized_Status;
-//   };
-// }
-//
-// export interface OnChange_Authorized_Date_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_Date';
-//   payload: {
-//     value: [Moment, Moment] | null;
-//   };
-// }
-//
-// export interface OnChange_Authorized_KeywordsInput_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_KeywordsInput';
-//   payload: {
-//     value: string
-//   };
-// }
-//
-// export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
-//   type: 'contractPage/onClick_Authorized_LoadMoreBtn';
-// }
-//
-// export interface Fetch_Authorize_List_Action extends AnyAction {
-//   type: 'fetch_Authorize_List';
-//   payload?: {
-//     loadMore: boolean;
-//   };
-// }
-//
-// export interface Fetch_Authorized_List_Action extends AnyAction {
-//   type: 'fetch_Authorized_List';
-//   payload?: {
-//     loadMore: boolean;
-//   };
-// }
-
-/********* Contract End *********************************/
-
 
 export interface FetchExhibitsAction extends AnyAction {
   type: 'nodeManagerPage/fetchExhibits' | 'fetchExhibits';

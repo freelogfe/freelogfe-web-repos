@@ -26,13 +26,18 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
   return (
     <div className={styles.styles}>
       <div className={styles.header}>
-        <div style={{ height: 30 }} />
+        <div style={{ height: 35 }} />
+
+        <div className={styles.cover}>
+          <img src={'https://image.freelog.com/headImage/50028'} />
+        </div>
+        <div style={{ height: 20 }} />
 
         <div className={styles.title}>
           <FTooltip title={nodeManagerPage.nodeName} placement={'top'}>
             <div style={{ display: 'inline-block' }}>
-              <FComponentsLib.FTitleText
-                type='h2'
+              <FComponentsLib.FContentText
+                type={'highlight'}
                 text={nodeManagerPage.nodeName}
                 singleRow
                 style={{
@@ -41,10 +46,25 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               />
             </div>
           </FTooltip>
-          <div style={{ height: 15 }} />
+          <div style={{ height: 10 }} />
+          <FComponentsLib.FContentText
+            type={'highlight'}
+            // style={{ fontSize: 12 }}
+            // onClick={() => {
+            //   window.open(nodeManagerPage.nodeUrl);
+            //   FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
+            //     value: false,
+            //     effectiveImmediately: true,
+            //     onlyNullish: false,
+            //   });
+            // }}
+          >
+            {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
+          </FComponentsLib.FContentText>
+          <div style={{ height: 10 }} />
           <FComponentsLib.FHotspotTooltip
             id={'nodeManager.nodeLink'}
-            style={{ right: -42, top: -4 }}
+            style={{ right: -110, top: -4 }}
             // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
             text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
             onMount={() => {
@@ -55,21 +75,16 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               });
             }}
           >
-            <Space size={10} className={styles.url}>
+            <Space size={10}>
+              <FComponentsLib.FTextBtn
+                onClick={async () => {
 
-              <a
-                onClick={() => {
-                  window.open(nodeManagerPage.nodeUrl);
-                  FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
-                    value: false,
-                    effectiveImmediately: true,
-                    onlyNullish: false,
-                  });
                 }}
               >
-                {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
-              </a>
-
+                <FTooltip title='打开节点'>
+                  <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+                </FTooltip>
+              </FComponentsLib.FTextBtn>
               <FComponentsLib.FCopyToClipboard
                 text={nodeManagerPage.nodeUrl}
                 title={'复制节点地址'}
@@ -130,11 +145,23 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               });
             }}
           >合约管理</a>
+          <a
+            className={nodeManagerPage.showPage === 'contract' ? styles.activated : ''}
+            onClick={() => {
+              dispatch<OnChange_ShowPage_Action>({
+                type: 'nodeManagerPage/onChange_ShowPage',
+                payload: {
+                  value: 'setting',
+                },
+              });
+            }}
+          >节点设置</a>
         </div>
       </div>
 
       <div className={styles.gotoTest}>
         <span>{FI18n.i18nNext.t('msg_navigate_to_test_node')}</span>
+        &nbsp;
         <FLink
           // to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
           to={FUtil.LinkTo.informNodeManagement({
@@ -145,7 +172,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         >
           {FI18n.i18nNext.t('btn_navigate_to_test_node')}
         </FLink>
-        <div style={{ height: 40 }} />
+        {/*<div style={{ height: 40 }} />*/}
       </div>
     </div>
   );

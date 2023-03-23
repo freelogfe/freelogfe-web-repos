@@ -12,30 +12,34 @@
 
   .header {
 
+    .cover {
+      display: flex;
+      justify-content: center;
+
+      & > img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+
     .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
       //.url {
-      //  font-size: 14px;
-      //  display: inline-block;
-      //  padding-right: 10px;
-      //  color: #222;
-      //
-      //  &:hover {
-      //    color: @f-primary-color;
+      //  a {
+      //    text-decoration: underline;
+      //    display: block;
+      //    max-width: 176px;
+      //    overflow: hidden;
+      //    white-space: nowrap;
+      //    text-overflow: ellipsis;
+      //    font-size: 13px;
+      //    line-height: 19px;
+      //    font-weight: 600;
       //  }
       //}
-      .url {
-        a {
-          text-decoration: underline;
-          display: block;
-          max-width: 176px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          font-size: 13px;
-          line-height: 19px;
-          font-weight: 600;
-        }
-      }
 
       padding: 0 40px;
     }
@@ -57,8 +61,11 @@
   }
 
   .gotoTest {
+    margin: 0 40px 40px;
     font-size: 12px;
-    padding: 0 40px;
+    padding: 10px 20px;
+    background: rgba(39,132,255,0.08);
+    border-radius: 10px;
 
     & > span {
       color: #7A869A;
