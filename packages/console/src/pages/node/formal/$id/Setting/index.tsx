@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { Dispatch } from 'redux';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -18,12 +19,13 @@ function Setting({ nodeManagerPage }: SettingProps) {
       <title>{`节点设置 · ${nodeManagerPage.nodeName} - Freelog`}</title>
     </Helmet>
 
-    <FLeftSiderLayout
+    <FSiderContentLayout
       // header={''}
       sider={<Sider />}
-      type='empty'
+      // type='empty'
     >
-    </FLeftSiderLayout>
+      <div></div>
+    </FSiderContentLayout>
   </>);
 }
 
