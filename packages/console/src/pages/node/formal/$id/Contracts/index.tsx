@@ -49,6 +49,12 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
     });
   });
 
+  AHooks.useUnmount(() => {
+    // dispatch<OnMountPageAction>({
+    //   type: 'nodeManager_Contract_Page/onMountPage',
+    // });
+  });
+
   const columns1: ColumnsType<typeof nodeManager_Contract_Page.authorize_List[number]> = [
     {
       title: (<FComponentsLib.FTitleText type='table' text={'标的物 | 类型 | 所签授权策略'} />),

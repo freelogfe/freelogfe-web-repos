@@ -4,6 +4,8 @@ import { connect } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { Helmet } from 'react-helmet';
 import { Dispatch } from 'redux';
+import Sider from '@/pages/node/formal/$id/Sider';
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -16,7 +18,12 @@ function Setting({ nodeManagerPage }: SettingProps) {
       <title>{`节点设置 · ${nodeManagerPage.nodeName} - Freelog`}</title>
     </Helmet>
 
-    <div></div>
+    <FLeftSiderLayout
+      // header={''}
+      sider={<Sider />}
+      type='empty'
+    >
+    </FLeftSiderLayout>
   </>);
 }
 

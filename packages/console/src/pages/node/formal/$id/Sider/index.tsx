@@ -146,7 +146,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             }}
           >合约管理</a>
           <a
-            className={nodeManagerPage.showPage === 'contract' ? styles.activated : ''}
+            className={nodeManagerPage.showPage === 'setting' ? styles.activated : ''}
             onClick={() => {
               dispatch<OnChange_ShowPage_Action>({
                 type: 'nodeManagerPage/onChange_ShowPage',

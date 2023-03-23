@@ -189,6 +189,14 @@ export interface OnUnmount_ThemePage_Action extends AnyAction {
   type: 'nodeManagerPage/onUnmount_ThemePage';
 }
 
+export interface OnMount_SettingPage_Action extends AnyAction {
+  type: 'nodeManagerPage/onMount_SettingPage';
+}
+
+export interface OnUnmount_SettingPage_Action extends AnyAction {
+  type: 'nodeManagerPage/onUnmount_SettingPage';
+}
+
 export interface OnChange_Exhibit_SelectedType_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_Exhibit_SelectedType';
   payload: {
@@ -267,6 +275,8 @@ export interface NodeManagerModelType {
     ) => void;
     onMount_ThemePage: (action: OnMount_ThemePage_Action, effects: EffectsCommandMap) => void;
     onUnmount_ThemePage: (action: OnUnmount_ThemePage_Action, effects: EffectsCommandMap) => void;
+    onMount_SettingPage: (action: OnMount_SettingPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_SettingPage: (action: OnUnmount_SettingPage_Action, effects: EffectsCommandMap) => void;
 
     onChange_Exhibit_SelectedType: (
       action: OnChange_Exhibit_SelectedType_Action,
@@ -502,65 +512,97 @@ const Model: NodeManagerModelType = {
     //
     // },
     * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
-      if (payload.value === 'exhibit') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...themeInitStates,
-          },
-        });
-        yield put<FetchExhibitsAction>({
-          type: 'fetchExhibits',
-          payload: {
-            restart: true,
-          },
-        });
-      }
-
-      if (payload.value === 'theme') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...exhibitInitStates,
-          },
-        });
-        yield put<FetchThemesAction>({
-          type: 'fetchThemes',
-          payload: {
-            restart: true,
-          },
-        });
-      }
-
-      if (payload.value === 'contract') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...exhibitInitStates,
-            ...themeInitStates,
-          },
-        });
-        // yield put<FetchThemesAction>({
-        //   type: 'fetchThemes',
-        //   payload: {
-        //     restart: true,
-        //   },
-        // });
-      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showPage: payload.value,
+        },
+      });
+      // if (payload.value === 'exhibit') {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       showPage: payload.value,
+      //       ...themeInitStates,
+      //     },
+      //   });
+      //   yield put<FetchExhibitsAction>({
+      //     type: 'fetchExhibits',
+      //     payload: {
+      //       restart: true,
+      //     },
+      //   });
+      // }
+      //
+      // if (payload.value === 'theme') {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       showPage: payload.value,
+      //       ...exhibitInitStates,
+      //     },
+      //   });
+      //   yield put<FetchThemesAction>({
+      //     type: 'fetchThemes',
+      //     payload: {
+      //       restart: true,
+      //     },
+      //   });
+      // }
+      //
+      // if (payload.value === 'contract') {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       showPage: payload.value,
+      //       ...exhibitInitStates,
+      //       ...themeInitStates,
+      //     },
+      //   });
+      // yield put<FetchThemesAction>({
+      //   type: 'fetchThemes',
+      //   payload: {
+      //     restart: true,
+      //   },
+      // });
+      // }
     },
     * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
-
+      yield put<FetchExhibitsAction>({
+        type: 'fetchExhibits',
+        payload: {
+          restart: true,
+        },
+      });
     },
     * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
-
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...exhibitInitStates,
+        },
+      });
     },
     * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+        payload: {
+          restart: true,
+        },
+      });
     },
     * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...themeInitStates,
+        },
+      });
+    },
+    * onMount_SettingPage({}: OnMount_SettingPage_Action, {}: EffectsCommandMap) {
+
+    },
+    * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, {}: EffectsCommandMap) {
 
     },
 
