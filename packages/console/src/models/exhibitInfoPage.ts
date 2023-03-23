@@ -667,7 +667,13 @@ const Model: ExhibitInfoPageModelType = {
             onlineStatus: 1,
           };
           yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
+          FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+            value: false,
+            effectiveImmediately: true,
+            onlyNullish: false,
+          });
         }
+
       }
 
       // const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {

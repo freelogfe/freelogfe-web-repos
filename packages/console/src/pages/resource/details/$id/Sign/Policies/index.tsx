@@ -78,7 +78,7 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
                 !isSignedNode && (<FComponentsLib.FHotspotTooltip
                   id={'resourceDetailPage.checkPolicy'}
                   style={{ left: -44, top: -4 }}
-                  text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
+                  text={FI18n.i18nNext.t('hotpots_createnode_selectauthplan')}
                   onMount={() => {
                     FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.checkPolicy', {
                       value: false,

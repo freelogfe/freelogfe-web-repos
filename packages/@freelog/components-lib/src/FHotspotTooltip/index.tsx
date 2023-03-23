@@ -19,7 +19,9 @@ type ContentKey = 'header.gotoConsoleBtn'
     | 'createNodePage.createBtn'
     | 'resourceDetailPage.nodeSelector'
     | 'resourceDetailPage.checkPolicy'
-    | 'exhibitDetailPage.onlineSwitch';
+    | 'nodeManager.nodeLink'
+    | 'exhibitDetailPage.onlineSwitch'
+    | 'exhibitDetailPage.createFirstPolicy';
 
 type ContentValue = 'show' | 'hide';
 
@@ -42,7 +44,9 @@ const defaultContent: HotspotTooltip_LocalStorage_Content = {
     'policyBuilder.exhibit.policyTemplateBtn': 'show',
     'policyBuilder.exhibit.policyVerifyBtn': 'hide',
     'policyBuilder.exhibit.policyCreateBtn': 'show',
+    'nodeManager.nodeLink': 'show',
     'exhibitDetailPage.onlineSwitch': 'hide',
+    'exhibitDetailPage.createFirstPolicy': 'show',
 };
 
 function getHotspotTooltip_LocalStorage_Content(key: ContentKey): ContentValue | undefined {
@@ -66,6 +70,7 @@ interface FHotspotTooltipProps {
     children: React.ReactNode;
     text: string;
     style?: CSSProperties;
+    zIndex?: number;
 
     onMount?(): void;
 }
@@ -74,7 +79,7 @@ const set_visible_funcs: {
     [k in ContentKey]?: (value: boolean) => void;
 } = {};
 
-function FHotspotTooltip({id, children, style = {}, text, onMount}: FHotspotTooltipProps) {
+function FHotspotTooltip({id, children, style = {}, text, onMount, zIndex = 10000}: FHotspotTooltipProps) {
 
     const ref = React.useRef<any>();
 
@@ -103,12 +108,13 @@ function FHotspotTooltip({id, children, style = {}, text, onMount}: FHotspotTool
                 borderRadius: 8,
             }}
             getPopupContainer={() => ref.current}
+            zIndex={zIndex}
         >
             <div style={{
                 ...style,
                 width: 40,
                 position: 'absolute',
-                zIndex: 10000,
+                zIndex: zIndex,
                 maxWidth: 240,
             }}>
                 <div className={styles.outerRing}>

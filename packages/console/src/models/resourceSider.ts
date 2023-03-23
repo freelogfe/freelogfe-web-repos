@@ -149,6 +149,7 @@ const Model: ResourceSiderModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
+
       const { data: data_resourceInfo } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
 
@@ -188,14 +189,16 @@ const Model: ResourceSiderModelType = {
       });
     },
     * fetchDraft({}: FetchDraftAction, { select, put, call }: EffectsCommandMap) {
-      const { resourceInfo }: ConnectState = yield select(({ resourceInfo }: ConnectState) => ({
-        resourceInfo,
+      const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
+        resourceSider,
       }));
 
       const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceInfo.resourceID,
+        resourceId: resourceSider.resourceID,
       };
-      const { data_draft } = yield call(FServiceAPI.Resource.lookDraft, params);
+      // console.log(params, 'params9iosdjflksjdflkjlk');
+      const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params);
+      // console.log(data_draft, 'data_draftijsdlkfjsldkfjlkdsjflkj');
       if (!data_draft) {
         yield put<ChangeAction>({
           type: 'change',

@@ -226,24 +226,24 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 type='normal'
               />
             </div>
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  marginRight: 5,
-                  backgroundColor: '#666',
-                  flexShrink: 0,
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'「基础任务」中的邀请1位好友奖励和「邀请好友」活动中的奖励可重复领取。'}
-                type='normal'
-              />
-            </div>
+            {/*<div style={{ height: 15 }} />*/}
+            {/*<div style={{ display: 'flex' }}>*/}
+            {/*  <i*/}
+            {/*    style={{*/}
+            {/*      width: 3,*/}
+            {/*      height: 3,*/}
+            {/*      borderRadius: '50%',*/}
+            {/*      marginTop: 8,*/}
+            {/*      marginRight: 5,*/}
+            {/*      backgroundColor: '#666',*/}
+            {/*      flexShrink: 0,*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*  <FComponentsLib.FContentText*/}
+            {/*    text={'「基础任务」中的邀请1位好友奖励和「邀请好友」活动中的奖励可重复领取。'}*/}
+            {/*    type='normal'*/}
+            {/*  />*/}
+            {/*</div>*/}
             <div style={{ height: 15 }} />
             <div style={{ display: 'flex' }}>
               <i
@@ -275,7 +275,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 }}
               />
               <FComponentsLib.FContentText
-                text={'完成【基础任务】中的【完善个人信息】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
+                text={'完成【基础任务】中的【查看Freelog使用教程】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
                 type='normal'
               />
             </div>

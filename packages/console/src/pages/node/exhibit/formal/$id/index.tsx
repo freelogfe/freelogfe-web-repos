@@ -85,6 +85,12 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
     await onlineExhibit(exhibitInfoPage.exhibit_ID);
 
+    FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+      value: false,
+      effectiveImmediately: true,
+      onlyNullish: false,
+    });
+
     dispatch<FetchInfoAction>({
       type: 'exhibitInfoPage/fetchInfo',
     });
@@ -156,7 +162,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
                           checked={exhibitInfoPage.exhibit_Online}
                           // loading={loading}
-                          onClick={() => {
+                          onChange={async () => {
                             activateTheme();
                           }}
                         />
@@ -175,6 +181,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     checked={exhibitInfoPage.exhibit_Online}
                     // loading={loading}
                     onChange={async (checked) => {
+                      // FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+                      //   value: false,
+                      //   effectiveImmediately: true,
+                      //   onlyNullish: false,
+                      // });
                       if (checked) {
                         await onlineExhibit(exhibitInfoPage.exhibit_ID);
                       } else {
@@ -188,6 +199,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           duration: 2,
                         });
                       }
+                      FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+                        value: false,
+                        effectiveImmediately: true,
+                        onlyNullish: false,
+                      });
                       dispatch<FetchInfoAction>({
                         type: 'exhibitInfoPage/fetchInfo',
                       });
