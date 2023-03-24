@@ -47,9 +47,9 @@ function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
           <img src={cash} alt='' className='h-100x' />
         </div>
       </div>
-      <div className='h-664 over-h'>
-        <img src={banner} alt='' className='h-100x' />
-      </div>
+      {/*<div className='h-664 over-h'>*/}
+      <img src={banner} alt='' style={{ height: 650 }} />
+      {/*</div>*/}
       <div className='profile-wrap w-100x'>
         <div className=' flex-column align-center pt-60 px-190 profile'>
           <div className='h-50 over-h mb-50'>
