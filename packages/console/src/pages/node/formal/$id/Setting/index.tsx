@@ -10,6 +10,7 @@ import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
+import FInput from '@/components/FInput';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -74,12 +75,19 @@ function Setting({ nodeManagerPage }: SettingProps) {
           <div className={styles.nodeName}>
             <FComponentsLib.FContentText text={'black'} type={'normal'} />
           </div>
+          <div className={styles.nodeName1}>
+            <FInput size='middle' style={{ width: 380 }} />
+            <FComponentsLib.FContentText text={'限制字符数量xxx'} type={'additional2'} />
+          </div>
           <div style={{ height: 40 }} />
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodeshortdesc')} />
           <div style={{ height: 20 }} />
           <div className={styles.introduction}>
             <FComponentsLib.FContentText text={'这是我的音乐节点'} type={'normal'} />
+          </div>
+          <div className={styles.introduction1}>
+
           </div>
           <div style={{ height: 40 }} />
 

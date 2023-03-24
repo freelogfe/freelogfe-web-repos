@@ -7,7 +7,8 @@ import * as AHooks from 'ahooks';
 import { RefSelectProps } from 'antd/lib/select';
 
 interface FInputProps extends InputProps {
-  onPressEnter? (value: any): void;
+  onPressEnter?(value: any): void;
+
   theme?: 'dark' | 'light';
   value?: string;
   debounce?: number;
@@ -31,8 +32,9 @@ function FInput({
                   wrapClassName,
                   lengthLimit = 0,
                   size = 'middle',
+                  style = {},
                   ...props
-                }: FInputProps,  ref: React.Ref<InputRef> | undefined) {
+                }: FInputProps, ref: React.Ref<InputRef> | undefined) {
 
   const [inputText, setInputText] = React.useState<string>(value || '');
   const { run } = AHooks.useDebounceFn(
@@ -69,22 +71,28 @@ function FInput({
           <Input
             ref={ref}
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
-            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
+            prefix={<i className={['freelog', 'fl-icon-content', styles.darkPrefix].join(' ')} />}
             className={[...commentClass, styles.dark].join(' ')}
-            onPressEnter={(e)=>{
-              onPressEnter && onPressEnter(e)
+            onPressEnter={(e) => {
+              onPressEnter && onPressEnter(e);
             }}
             allowClear={true}
-            style={{ height: size === 'middle' ? 38 : 32 }}
+            style={{
+              height: size === 'middle' ? 38 : 32,
+              ...style,
+            }}
             {...inputProps}
           />
         )
         : (<Input
           ref={ref}
           className={[...commentClass, styles.light].join(' ')}
-          style={{ height: size === 'middle' ? 38 : 32 }}
-          onPressEnter={(e)=>{
-            onPressEnter && onPressEnter(e)
+          style={{
+            height: size === 'middle' ? 38 : 32,
+            ...style,
+          }}
+          onPressEnter={(e) => {
+            onPressEnter && onPressEnter(e);
           }}
           suffix={lengthLimit > 0
             ? (<span
