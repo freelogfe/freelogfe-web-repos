@@ -36,7 +36,21 @@
       background-color: #F7F7F7;
     }
 
-    .editBtn{
+    .permission {
+      display: grid;
+      grid-template-columns: min-content min-content min-content;
+      grid-template-rows: repeat(20px);
+      row-gap: 15px;
+      column-gap: 10px;
+      justify-items: start;
+      align-items: center;
+
+      & > div:nth-child(3n + 2) {
+        padding-right: 30px;
+      }
+    }
+
+    .editBtn {
       display: flex;
       justify-content: center;
     }

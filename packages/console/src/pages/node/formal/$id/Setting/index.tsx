@@ -8,7 +8,7 @@ import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
-import { Space } from 'antd';
+import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 
 interface SettingProps {
@@ -85,13 +85,53 @@ function Setting({ nodeManagerPage }: SettingProps) {
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility')} />
           <div style={{ height: 20 }} />
-          <div className={styles.introduction}>
-            <FComponentsLib.FContentText text={'这是我的音乐节点'} type={'normal'} />
+          <div className={styles.permission}>
+            <div><Radio style={{ margin: 0 }} /></div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_public')}
+                type={'normal'}
+              />
+            </div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_public_info')}
+                type={'additional2'}
+              />
+            </div>
+
+            <div><Radio style={{ margin: 0 }} /></div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_private')}
+                type={'normal'}
+              />
+            </div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_private_info')}
+                type={'additional2'}
+              />
+            </div>
+
+            <div><Radio style={{ margin: 0 }} /></div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_hidefromvisitor')}
+                type={'normal'}
+              />
+            </div>
+            <div>
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_hidefromvisitor_info')}
+                type={'additional2'}
+              />
+            </div>
           </div>
           <div style={{ height: 40 }} />
 
           <div className={styles.editBtn}>
-            <FComponentsLib.FRectBtn>编辑</FComponentsLib.FRectBtn>
+            <FComponentsLib.FRectBtn>{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>
           </div>
         </div>
       </div>
