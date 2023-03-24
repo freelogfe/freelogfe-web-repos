@@ -237,8 +237,8 @@ function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
               <img src={New} alt='' className='h-100x' />
             </div>
             <div className='flex-column align-center w-600 mr-30'>
-              <div className='title'>二、萌新任务，完成即领&nbsp;<label
-                style={{ fontSize: 34, color: '#E9A923', fontWeight: 600 }}>20元</label>&nbsp;现金奖</div>
+              <div className='title'>二、完成新手任务，领&nbsp;<label
+                style={{ fontSize: 34, color: '#E9A923', fontWeight: 600 }}>20元</label>&nbsp;现金</div>
               <div className='content mt-30 text-break text-align-center'>
                 内测活动期间，完成萌新任务中的【基础任务】、【资源任务】、【节点任务】不仅可以快速了解“如何创建发行资源、如何通过Freelog对资源进行推广变现”，
               </div>
