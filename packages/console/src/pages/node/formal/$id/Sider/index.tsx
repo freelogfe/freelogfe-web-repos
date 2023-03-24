@@ -75,19 +75,19 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
               });
             }}
           >
-            <Space size={10}>
+            <Space size={30}>
               <FComponentsLib.FTextBtn
                 onClick={async () => {
 
                 }}
               >
-                <FTooltip title='打开节点'>
+                <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_viewnode_tooltip')}>
                   <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                 </FTooltip>
               </FComponentsLib.FTextBtn>
               <FComponentsLib.FCopyToClipboard
                 text={nodeManagerPage.nodeUrl}
-                title={'复制节点地址'}
+                title={FI18n.i18nNext.t('nodemgnt_btn_copynodeaddr_tooltip')}
                 iconStyle={{ fontSize: 14 }}
               />
               <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
@@ -96,7 +96,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                     taskConfigCode: 'TS000034',
                   });
                 }}>
-                  <FTooltip title='分享节点'>
+                  <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_sharenode_tooltip')}>
                     <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
                   </FTooltip>
                 </FComponentsLib.FTextBtn>
