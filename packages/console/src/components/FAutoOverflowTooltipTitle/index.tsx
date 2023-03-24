@@ -5,7 +5,7 @@ import FTooltip from '@/components/FTooltip';
 
 interface FAutoOverflowTooltipTitleProps {
   title: string;
-  right: React.ReactNode;
+  right?: React.ReactNode;
 }
 
 function FAutoOverflowTooltipTitle({ title, right }: FAutoOverflowTooltipTitleProps) {
@@ -27,9 +27,12 @@ function FAutoOverflowTooltipTitle({ title, right }: FAutoOverflowTooltipTitlePr
       <div ref={refTitle} className={styles.title}>{title}</div>
     </FTooltip>
 
-    <div className={styles.right}>
-      {right}
-    </div>
+    {
+      right && (<div className={styles.right}>
+        {right}
+      </div>)
+    }
+
   </div>);
 }
 
