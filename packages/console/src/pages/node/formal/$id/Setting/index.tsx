@@ -5,14 +5,14 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { Helmet } from 'react-helmet';
 import { Dispatch } from 'redux';
 import Sider from '@/pages/node/formal/$id/Sider';
-import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+// import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 // import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import { Input } from 'antd';
+// import { Input } from 'antd';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 
 interface SettingProps {
