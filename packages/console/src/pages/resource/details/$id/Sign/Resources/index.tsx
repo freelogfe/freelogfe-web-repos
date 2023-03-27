@@ -89,7 +89,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             />
             <div style={{ height: 5 }} />
             {
-              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+              resourceDetailPage.sign_SelectedNodeID !== -1 && r.error === '' && [...r.contracts, ...r.policies]
                 .filter((c) => {
                   return c.checked;
                 })
@@ -208,7 +208,7 @@ function Resources({ dispatch, resourceDetailPage }: ResourcesProps) {
             />
             <div style={{ height: 5 }} />
             {
-              resourceDetailPage.sign_SelectedNodeID !== -1 && [...r.contracts, ...r.policies]
+              resourceDetailPage.sign_SelectedNodeID !== -1 && r.error === '' && [...r.contracts, ...r.policies]
                 .filter((c) => {
                   return c.checked;
                 })
