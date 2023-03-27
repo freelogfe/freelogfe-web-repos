@@ -58,8 +58,8 @@ function FLogged({ dispatch, user, children, location }: LoggedProps) {
             />
             <div style={{ height: 20 }} />
             <FComponentsLib.FTitleText type='h3' text={user.userInfo?.username || ''} />
-            <div style={{ height: 10 }} />
-            <FComponentsLib.FContentText type='highlight' text={user.userInfo?.mobile || user.userInfo?.email || ''} />
+            {/*<div style={{ height: 10 }} />*/}
+            {/*<FComponentsLib.FContentText type='highlight' text={user.userInfo?.mobile || user.userInfo?.email || ''} />*/}
             <div style={{ height: 35 }} />
             <FLink
               to={FUtil.LinkTo.wallet()}
