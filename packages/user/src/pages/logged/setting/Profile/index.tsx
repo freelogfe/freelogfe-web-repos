@@ -139,17 +139,17 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 {
                   settingPage.profile_state === 'normal' && (<>
                     {
-                      settingPage.profile_gender === 'male' && (
+                      settingPage.profileInfo.gender === 'male' && (
                         <FComponentsLib.FContentText text={'男'} type={'highlight'} />)
                     }
 
                     {
-                      settingPage.profile_gender === 'female' && (
+                      settingPage.profileInfo.gender === 'female' && (
                         <FComponentsLib.FContentText text={'女'} type={'highlight'} />)
                     }
 
                     {
-                      settingPage.profile_gender === 'unknown' && (
+                      settingPage.profileInfo.gender === 'unknown' && (
                         <FComponentsLib.FContentText text={'未填写'} type={'negative'} />)
                     }
                   </>)
@@ -185,8 +185,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 {
                   settingPage.profile_state === 'normal' && (
                     <FComponentsLib.FContentText
-                      text={settingPage.profile_profileText || '未填写'}
-                      type={settingPage.profile_profileText === '' ? 'negative' : 'highlight'}
+                      text={settingPage.profileInfo.profileText || '未填写'}
+                      type={settingPage.profileInfo.profileText === '' ? 'negative' : 'highlight'}
                     />)
                 }
 
@@ -223,8 +223,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 {
                   settingPage.profile_state === 'normal' && (
                     <FComponentsLib.FContentText
-                      text={settingPage.profile_birthday?.format(FUtil.Predefined.momentDateFormat) || '未填写'}
-                      type={!settingPage.profile_birthday ? 'negative' : 'highlight'}
+                      text={settingPage.profileInfo.birthday?.format(FUtil.Predefined.momentDateFormat) || '未填写'}
+                      type={!settingPage.profileInfo.birthday ? 'negative' : 'highlight'}
                     />)
                 }
 
@@ -240,7 +240,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                   settingPage.profile_state === 'editing' && (<Cascader
                     allowClear={false}
                     className={styles.Cascader}
-                    options={settingPage.profile_residenceOptions}
+                    options={settingPage.profileInfo.residenceOptions}
                     value={settingPage.profile_residence}
                     placeholder='常驻城市'
                     onChange={(value, selectedOptions) => {
@@ -262,8 +262,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
                 {
                   settingPage.profile_state === 'normal' && (<FComponentsLib.FContentText
-                    text={settingPage.profile_residenceText || '未填写'}
-                    type={settingPage.profile_residenceText === '' ? 'negative' : 'highlight'}
+                    text={settingPage.profileInfo.residenceText || '未填写'}
+                    type={settingPage.profileInfo.residenceText === '' ? 'negative' : 'highlight'}
                   />)
                 }
 
@@ -298,8 +298,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
                 {
                   settingPage.profile_state === 'normal' && (<FComponentsLib.FContentText
-                    text={settingPage.profile_career || '未填写'}
-                    type={settingPage.profile_career === '' ? 'negative' : 'highlight'}
+                    text={settingPage.profileInfo.career || '未填写'}
+                    type={settingPage.profileInfo.career === '' ? 'negative' : 'highlight'}
                   />)
                 }
 
