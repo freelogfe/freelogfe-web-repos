@@ -75,26 +75,38 @@ function Policies({ dispatch, resourceDetailPage }: PoliciesProps) {
             <div className={styles.singPolicyTitle}>
               <FComponentsLib.FContentText text={p.fullInfo.policyName} type='highlight' />
               {
-                !isSignedNode && (<FComponentsLib.FHotspotTooltip
-                  id={'resourceDetailPage.checkPolicy'}
-                  style={{ left: -44, top: -4 }}
-                  text={FI18n.i18nNext.t('hotpots_createnode_selectauthplan')}
-                  onMount={() => {
-                    FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.checkPolicy', {
-                      value: false,
-                      effectiveImmediately: false,
-                      onlyNullish: true,
-                    });
-                  }}
-                >
-                  <Checkbox
-                    checked={p.checked}
-                    disabled={p.fullInfo.status === 0}
-                    onChange={(e) => {
-                      onChangeResourceChecked(p.fullInfo.policyId, e.target.checked);
-                    }}
-                  />
-                </FComponentsLib.FHotspotTooltip>)
+                !isSignedNode && <> {
+                  index === 0
+                    ? (<FComponentsLib.FHotspotTooltip
+                      id={'resourceDetailPage.checkPolicy'}
+                      style={{ left: -44, top: -4 }}
+                      text={FI18n.i18nNext.t('hotpots_createnode_selectauthplan')}
+                      onMount={() => {
+                        FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.checkPolicy', {
+                          value: false,
+                          effectiveImmediately: false,
+                          onlyNullish: true,
+                        });
+                      }}
+                    >
+                      <Checkbox
+                        checked={p.checked}
+                        disabled={p.fullInfo.status === 0}
+                        onChange={(e) => {
+                          onChangeResourceChecked(p.fullInfo.policyId, e.target.checked);
+                        }}
+                      />
+                    </FComponentsLib.FHotspotTooltip>)
+                    : (<Checkbox
+                      checked={p.checked}
+                      disabled={p.fullInfo.status === 0}
+                      onChange={(e) => {
+                        onChangeResourceChecked(p.fullInfo.policyId, e.target.checked);
+                      }}
+                    />)
+
+                }
+                </>
               }
 
             </div>
