@@ -20,10 +20,19 @@ export interface SettingPageModelState {
 
   profile_state: 'editing' | 'normal';
   profile_avatar: string;
+  profileInfo: {
+    gender: 'male' | 'female' | 'unknown';
+    profileText: string;
+    birthday: Moment | null;
+    residenceOptions: ResidenceOptions;
+    residence: Array<string | number>;
+    residenceText: string;
+    career: string;
+  };
   profile_gender: 'male' | 'female' | 'unknown';
   profile_profileText: string;
   profile_birthday: Moment | null;
-  profile_residenceOptions: ResidenceOptions;
+  // profile_residenceOptions: ResidenceOptions;
   profile_residence: Array<string | number>;
   profile_residenceText: string;
   profile_career: string;
@@ -650,14 +659,21 @@ const initStates: SettingPageModelState = {
 
   profile_state: 'normal',
   profile_avatar: FUtil.Tool.getAvatarUrl(),
+  profileInfo: {
+    gender: 'unknown',
+    profileText: '',
+    birthday: null,
+    residenceOptions: [],
+    residence: [],
+    residenceText: '',
+    career: '',
+  },
   profile_gender: 'unknown',
   profile_profileText: '',
   profile_birthday: null,
-  profile_residenceOptions: [],
   profile_residence: [],
   profile_residenceText: '',
   profile_career: '',
-  // profile_careerError: '',
 
   username: '',
   email: '',
@@ -684,7 +700,11 @@ const Model: SettingPageModelType = {
   namespace: 'settingPage',
   state: initStates,
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
+    * onMount_Page({}: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
+
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
       // console.log('onMountPage111111');
       const { data } = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(data, 'data!@#$!@#$!@#$!21111');
@@ -703,31 +723,53 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           // profile_avatar: FUtil.,
-          profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
-          profile_profileText: userDetail?.intro || '',
-          profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
-          profile_residence: userDetail?.areaCode
-            ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
-            : [],
-          profile_residenceText: userDetail?.areaName || '',
-          profile_career: userDetail?.occupation || '',
+          profileInfo: {
+            ...settingPage.profileInfo,
+            residenceOptions: data1.map((d1: any) => {
+              return {
+                value: d1.code,
+                label: d1.name,
+                children: d1.children.map((d2: any) => {
+                  return {
+                    value: d2.code,
+                    label: d2.name,
+                  };
+                }),
+              };
+            }),
+            gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
+            profileText: userDetail?.intro || '',
+            birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
+            residence: userDetail?.areaCode
+              ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
+              : [],
+            career: userDetail?.occupation || '',
+          },
+          // profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
+          // profile_profileText: userDetail?.intro || '',
+          // profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
+          // profile_residence: userDetail?.areaCode
+          //   ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
+          //   : [],
+          // profile_residenceText: userDetail?.areaName || '',
+          // profile_career: userDetail?.occupation || '',
 
           username: data.username,
           email: data.email,
           phone: data.mobile,
 
-          profile_residenceOptions: data1.map((d1: any) => {
-            return {
-              value: d1.code,
-              label: d1.name,
-              children: d1.children.map((d2: any) => {
-                return {
-                  value: d2.code,
-                  label: d2.name,
-                };
-              }),
-            };
-          }),
+          // profile_residenceOptions: data1.map((d1: any) => {
+          //   return {
+          //     value: d1.code,
+          //     label: d1.name,
+          //     children: d1.children.map((d2: any) => {
+          //       return {
+          //         value: d2.code,
+          //         label: d2.name,
+          //       };
+          //     }),
+          //   };
+          // }),
 
           nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
@@ -823,6 +865,15 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           profile_state: 'normal',
+          profileInfo: {
+            ...settingPage.profileInfo,
+            residence: settingPage.profile_residence,
+            residenceText: settingPage.profile_residenceText,
+            career: settingPage.profile_career,
+            birthday: settingPage.profile_birthday,
+            gender: settingPage.profile_gender,
+            profileText: settingPage.profile_profileText,
+          },
         },
       });
     },

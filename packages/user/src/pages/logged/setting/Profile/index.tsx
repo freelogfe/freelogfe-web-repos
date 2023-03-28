@@ -20,7 +20,7 @@ import {
   OnChange_ProfileText_Action,
   OnChange_Residence_Action,
   OnClick_SubmitUserInfoBtn_Action,
-  ChangeAction as SettingPageChangeAction, OnClick_EditUserInfoBtn_Action,
+  ChangeAction as SettingPageChangeAction, OnClick_EditUserInfoBtn_Action, OnClick_CancelEditUserInfoBtn_Action,
 } from '@/models/settingPage';
 import { ChangeAction as UserChangeAction } from '@/models/user';
 import { Moment } from 'moment';
@@ -313,8 +313,8 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                 <FComponentsLib.FTextBtn
                   type='default'
                   onClick={() => {
-                    dispatch<OnClick_SubmitUserInfoBtn_Action>({
-                      type: 'settingPage/onClick_SubmitUserInfoBtn',
+                    dispatch<OnClick_CancelEditUserInfoBtn_Action>({
+                      type: 'settingPage/onClick_CancelEditUserInfoBtn',
                     });
                   }}
                 >取消</FComponentsLib.FTextBtn>

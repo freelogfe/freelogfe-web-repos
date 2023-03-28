@@ -28,6 +28,7 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
   return (
     <div className={styles.styles}>
       {dataSource.map((ds) => {
+        // console.log(ds, 'dsfijdflksdjflkjsdlkfjsldkfjsldkjlk');
         return (
           <PolicyCard
             key={ds.policyId}
@@ -69,6 +70,7 @@ export function PolicyCard({
     // console.log('#####89sdflsdkfjlsdjl****');
     set_loading(false);
   }, [fullInfo]);
+  // console.log(fullInfo.policyName, 'fullInfo.policyNameosdjlkfjlksdjlkj');
   return (
     <div className={styles.policy}>
       <div className={styles.header}>
@@ -132,7 +134,7 @@ export function PolicyCard({
           <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
           <div style={{ width: 20 }} />
           <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
-            {FI18n.i18nNext.t('btn_activate_auth_plan') + '22222'}
+            {FI18n.i18nNext.t('btn_activate_auth_plan')}
           </label>
           <div style={{ width: 10 }} />
           <FSwitch
