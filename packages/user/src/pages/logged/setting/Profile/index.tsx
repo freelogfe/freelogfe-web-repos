@@ -309,17 +309,27 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           <div style={{ height: 40 }} />
           <div className={styles.submit}>
             {
-              settingPage.profile_state === 'editing' && (<FComponentsLib.FRectBtn
-                type='primary'
-                onClick={() => {
-                  dispatch<OnClick_SubmitUserInfoBtn_Action>({
-                    type: 'settingPage/onClick_SubmitUserInfoBtn',
-                  });
-                }}
-                disabled={settingPage.profile_career.length > 20 || settingPage.profile_profileText.length > 40}
-              >
-                保存
-              </FComponentsLib.FRectBtn>)
+              settingPage.profile_state === 'editing' && (<>
+                <FComponentsLib.FTextBtn
+                  type='default'
+                  onClick={() => {
+                    dispatch<OnClick_SubmitUserInfoBtn_Action>({
+                      type: 'settingPage/onClick_SubmitUserInfoBtn',
+                    });
+                  }}
+                >取消</FComponentsLib.FTextBtn>
+                <FComponentsLib.FRectBtn
+                  type='primary'
+                  onClick={() => {
+                    dispatch<OnClick_SubmitUserInfoBtn_Action>({
+                      type: 'settingPage/onClick_SubmitUserInfoBtn',
+                    });
+                  }}
+                  disabled={settingPage.profile_career.length > 20 || settingPage.profile_profileText.length > 40}
+                >
+                  保存
+                </FComponentsLib.FRectBtn>
+              </>)
             }
 
             {

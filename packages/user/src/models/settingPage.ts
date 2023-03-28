@@ -154,6 +154,10 @@ export interface OnClick_SubmitUserInfoBtn_Action extends AnyAction {
   type: 'settingPage/onClick_SubmitUserInfoBtn';
 }
 
+export interface OnClick_CancelEditUserInfoBtn_Action extends AnyAction {
+  type: 'settingPage/onClick_CancelEditUserInfoBtn';
+}
+
 export interface OnClick_EditUserInfoBtn_Action extends AnyAction {
   type: 'settingPage/onClick_EditUserInfoBtn';
 }
@@ -478,6 +482,7 @@ interface SettingPageModelType {
     onChange_Residence: (action: OnChange_Residence_Action, effects: EffectsCommandMap) => void;
     onChange_Career: (action: OnChange_Career_Action, effects: EffectsCommandMap) => void;
     onClick_SubmitUserInfoBtn: (action: OnClick_SubmitUserInfoBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_CancelEditUserInfoBtn: (action: OnClick_CancelEditUserInfoBtn_Action, effects: EffectsCommandMap) => void;
     onClick_EditUserInfoBtn: (action: OnClick_EditUserInfoBtn_Action, effects: EffectsCommandMap) => void;
     onClick_BindEmailBtn: (action: OnClick_BindEmailBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ReplaceEmailBtn: (action: OnClick_ReplaceEmailBtn_Action, effects: EffectsCommandMap) => void;
@@ -814,6 +819,14 @@ const Model: SettingPageModelType = {
 
       self._czc?.push(['_trackEvent', '个人中心页', '提交修改', '', 0]);
       fMessage(FI18n.i18nNext.t('msg_updated_successfully'));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          profile_state: 'normal',
+        },
+      });
+    },
+    * onClick_CancelEditUserInfoBtn({}: OnClick_CancelEditUserInfoBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
