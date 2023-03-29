@@ -9,7 +9,7 @@ import {
   OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnChangeTagsAction,
-  OnUnmountMarketPageAction,
+  OnUnmountMarketPageAction, OnMountMarketPageAction,
 } from '@/models/discoverPage';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';
@@ -95,6 +95,12 @@ function Market({ dispatch, discoverPage }: MarketProps) {
     // });
   });
 
+  AHooks.useMount(() => {
+    dispatch<OnMountMarketPageAction>({
+      type: 'discoverPage/onMountMarketPage',
+    });
+  });
+
   AHooks.useUnmount(() => {
     dispatch<OnUnmountMarketPageAction>({
       type: 'discoverPage/onUnmountMarketPage',
@@ -118,6 +124,35 @@ function Market({ dispatch, discoverPage }: MarketProps) {
             <span className={styles.text}>全部</span>
             <span className={styles.right} />
           </a>
+
+          {
+            discoverPage.operationCategories
+              .filter((operationCategory) => {
+                return operationCategory.depth === 0;
+              })
+              .map((operationCategory) => {
+              if (operationCategory.depth === 0) {
+                return (<a
+                  key={operationCategory.id}
+                  className={
+                    (category.first === index
+                      ? [0, 1].includes(index)
+                        ? styles.allSelected
+                        : styles.firstSelected
+                      : '') +
+                    ' ' +
+                    styles.first
+                    // + (index === categoryData.first.length - 1 ? '' : ' mr-30')
+                  }
+                >
+                  <span className={styles.left} />
+                  <span className={styles.text}>{item}</span>
+                  <span className={styles.right} />
+                </a>)
+              }
+            })
+          }
+
           {categoryData.first.map((item: string, index: number) => {
             return (
               <a

@@ -4,7 +4,14 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
-const marketStates = {};
+type HandledOperationCategories = {
+  id: string;
+  code: string;
+  name: string;
+  parentID: string;
+  depth: number;
+}[];
+
 
 export interface DiscoverPageModelState {
   showPage: 'market' | 'example';
@@ -14,6 +21,8 @@ export interface DiscoverPageModelState {
   }[];
 
   resourceType: string;
+  operationCategories: HandledOperationCategories;
+  selectedOperationCategoryID: string;
   inputText: string;
   dataSource: {
     id: string;
@@ -88,6 +97,7 @@ export interface OnChangeKeywordsAction extends AnyAction {
     value: string;
   };
 }
+
 export interface OnChangeTagsAction extends AnyAction {
   type: 'discoverPage/onChangeTags';
   payload: {
@@ -123,10 +133,8 @@ export interface DiscoverPageModelType {
   };
 }
 
-const marketInitStates: Pick<
-  DiscoverPageModelState,
-  'resourceTypeOptions' | 'resourceType' | 'inputText' | 'dataSource' | 'totalItem' | 'tags'
-> = {
+const marketInitStates: Pick<DiscoverPageModelState,
+  'resourceTypeOptions' | 'resourceType' | 'operationCategories' | 'selectedOperationCategoryID' | 'inputText' | 'dataSource' | 'totalItem' | 'tags'> = {
   resourceTypeOptions: [
     {
       value: '-1',
@@ -135,6 +143,9 @@ const marketInitStates: Pick<
     ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
   ],
   resourceType: '-1',
+
+  operationCategories: [],
+  selectedOperationCategoryID: '/#all',
   inputText: '',
   tags: '',
   dataSource: [],
@@ -153,7 +164,7 @@ const Model: DiscoverPageModelType = {
   state: initStates,
 
   effects: {
-    *onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
+    * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       // console.log(payload, 'payload09io3j2lksdjflkj')
       yield put<ChangeAction>({
         type: 'change',
@@ -162,23 +173,39 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    *onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {},
-    *onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {},
-    *onMountMarketPage({}: OnMountMarketPageAction, { put }: EffectsCommandMap) {
-      yield put<FetchDataSourceAction>({
-        type: 'fetchDataSource',
+    * onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {
+    },
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
+    },
+    * onMountMarketPage({}: OnMountMarketPageAction, { call, put }: EffectsCommandMap) {
+
+      console.log('****8sd8ofujoisdjflksdjlfkdsjlkfj');
+      const { data: data_operationCategories }: { data: any[] } = yield call(FServiceAPI.Operation.operationCategories);
+      console.log(data_operationCategories, 'dataoisajdeflksjdfl;jsdl;kl');
+      const payload: HandledOperationCategories = [];
+      flatOperationCategories(data_operationCategories, '', 0, payload);
+      console.log(payload, 'payload09dsiojfvslkdjflsdjflsdjlkfjlkj');
+
+      yield put<ChangeAction>({
+        type: 'change',
         payload: {
-          restart: true,
+          operationCategories: payload,
         },
       });
+      // yield put<FetchDataSourceAction>({
+      //   type: 'fetchDataSource',
+      //   payload: {
+      //     restart: true,
+      //   },
+      // });
     },
-    *onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
+    * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: marketInitStates,
       });
     },
-    *fetchDataSource(
+    * fetchDataSource(
       { payload }: FetchDataSourceAction,
       { call, put, select, take }: EffectsCommandMap,
     ) {
@@ -236,12 +263,12 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    *onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
+    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           resourceType: payload.value,
-          tags: ''
+          tags: '',
         },
       });
 
@@ -252,7 +279,7 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    *onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
+    * onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -267,7 +294,7 @@ const Model: DiscoverPageModelType = {
         },
       });
     },
-    *onChangeTags({ payload }: OnChangeTagsAction, { put }: EffectsCommandMap) {
+    * onChangeTags({ payload }: OnChangeTagsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -283,7 +310,7 @@ const Model: DiscoverPageModelType = {
       });
     },
 
-    *onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, { put }: EffectsCommandMap) {
+    * onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -303,8 +330,38 @@ const Model: DiscoverPageModelType = {
   },
 
   subscriptions: {
-    setup({ dispatch, history }: SubscriptionAPI) {},
+    setup({ dispatch, history }: SubscriptionAPI) {
+    },
   },
 };
 
 export default Model;
+
+type OperationCategories = {
+  children: OperationCategories;
+  code: string;
+  name: string;
+}[];
+
+function flatOperationCategories(operationCategories: OperationCategories, parentID: string, depth: number, payload: HandledOperationCategories) {
+  if (operationCategories.length > 0) {
+    payload.push({
+      id: `${parentID}/#all`,
+      code: '#all',
+      name: '全部',
+      parentID: parentID,
+      depth: depth,
+    });
+  }
+  for (const operationCategory of operationCategories) {
+    const currentID: string = `${parentID}/${operationCategory.code}`;
+    payload.push({
+      id: currentID,
+      code: operationCategory.code,
+      name: operationCategory.name,
+      parentID: parentID,
+      depth: depth,
+    });
+    flatOperationCategories(operationCategory.children, currentID, depth + 1, payload);
+  }
+}

@@ -15,6 +15,7 @@ import * as Statistic from './statistics';
 import * as I18n from './i18n';
 import * as Policy from './policies';
 import * as recombination from './recombinations';
+import * as Operation from './operation';
 
 const FServiceAPI = {
   Node,
@@ -34,6 +35,7 @@ const FServiceAPI = {
   I18n,
   Policy,
   recombination,
+  Operation,
 };
 
 export default FServiceAPI;
