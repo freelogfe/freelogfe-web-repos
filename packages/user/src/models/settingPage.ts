@@ -743,6 +743,7 @@ const Model: SettingPageModelType = {
             residence: userDetail?.areaCode
               ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
               : [],
+            residenceText: userDetail?.areaName || '',
             career: userDetail?.occupation || '',
           },
           // profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
