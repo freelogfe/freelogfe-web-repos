@@ -975,7 +975,6 @@ const Model: SettingPageModelType = {
           }),
         },
       });
-
     },
 
     * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, { put }: EffectsCommandMap) {
