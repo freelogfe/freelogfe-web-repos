@@ -886,11 +886,19 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_EditUserInfoBtn({}: OnClick_EditUserInfoBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_EditUserInfoBtn({}: OnClick_EditUserInfoBtn_Action, { select, put }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           profile_state: 'editing',
+          profile_gender: settingPage.profileInfo.gender,
+          profile_profileText: settingPage.profileInfo.profileText,
+          profile_birthday: settingPage.profileInfo.birthday,
+          profile_residence: settingPage.profileInfo.residence,
+          profile_career: settingPage.profileInfo.career,
         },
       });
     },
