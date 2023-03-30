@@ -29,6 +29,7 @@ export const InsertResourceDrawer = (props: Props) => {
   const resourceMapping: any = {
     image: {
       resourceType: '图片',
+      requestType: '照片,插画',
       accept: 'image/*',
       key: FI18n.i18nNext.t('insert_title_image'),
       bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_image'),
@@ -36,6 +37,7 @@ export const InsertResourceDrawer = (props: Props) => {
     },
     audio: {
       resourceType: '音频',
+      requestType: '音频',
       accept: 'audio/*',
       key: FI18n.i18nNext.t('insert_title_audio'),
       bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_audio'),
@@ -43,6 +45,7 @@ export const InsertResourceDrawer = (props: Props) => {
     },
     video: {
       resourceType: '视频',
+      requestType: '视频',
       accept: 'video/*',
       key: FI18n.i18nNext.t('insert_title_video'),
       bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_video'),
@@ -50,6 +53,7 @@ export const InsertResourceDrawer = (props: Props) => {
     },
     text: {
       resourceType: '阅读',
+      requestType: '文章',
       accept: '.md,.txt',
       key: FI18n.i18nNext.t('insert_title_post'),
       bucketTitle: FI18n.i18nNext.t('posteditor_insert_label_objectlist_post'),
@@ -163,7 +167,7 @@ export const InsertResourceDrawer = (props: Props) => {
       skip: refs.current.resourcePageIndex * 20,
       limit: 20,
       keywords: refs.current.resourceKey,
-      resourceType: resourceMapping[drawerType].resourceType,
+      resourceType: resourceMapping[drawerType].requestType,
       status: 1,
     };
     const res = await FServiceAPI.Resource.list(params);
@@ -180,7 +184,7 @@ export const InsertResourceDrawer = (props: Props) => {
       skip: refs.current.minePageIndex * 20,
       limit: 20,
       keywords: refs.current.mineKey,
-      resourceType: resourceMapping[drawerType].resourceType,
+      resourceType: resourceMapping[drawerType].requestType,
       isSelf: 1,
       status: 1,
     };
@@ -202,7 +206,7 @@ export const InsertResourceDrawer = (props: Props) => {
       skip: refs.current.collectionPageIndex * 20,
       limit: 20,
       keywords: refs.current.collectionKey,
-      resourceType: resourceMapping[drawerType].resourceType,
+      resourceType: resourceMapping[drawerType].requestType,
       resourceStatus: 2,
     };
     const collectionRes = await FServiceAPI.Collection.collectionResources(
