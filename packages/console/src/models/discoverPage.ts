@@ -179,19 +179,19 @@ const Model: DiscoverPageModelType = {
     },
     * onMountMarketPage({}: OnMountMarketPageAction, { call, put }: EffectsCommandMap) {
 
-      console.log('****8sd8ofujoisdjflksdjlfkdsjlkfj');
-      const { data: data_operationCategories }: { data: any[] } = yield call(FServiceAPI.Operation.operationCategories);
-      console.log(data_operationCategories, 'dataoisajdeflksjdfl;jsdl;kl');
-      const payload: HandledOperationCategories = [];
-      flatOperationCategories(data_operationCategories, '', 0, payload);
-      console.log(payload, 'payload09dsiojfvslkdjflsdjflsdjlkfjlkj');
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          operationCategories: payload,
-        },
-      });
+      // console.log('****8sd8ofujoisdjflksdjlfkdsjlkfj');
+      // const { data: data_operationCategories }: { data: any[] } = yield call(FServiceAPI.Operation.operationCategories);
+      // console.log(data_operationCategories, 'dataoisajdeflksjdfl;jsdl;kl');
+      // const payload: HandledOperationCategories = [];
+      // flatOperationCategories(data_operationCategories, '', 0, payload);
+      // console.log(payload, 'payload09dsiojfvslkdjflsdjflsdjlkfjlkj');
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     operationCategories: payload,
+      //   },
+      // });
       // yield put<FetchDataSourceAction>({
       //   type: 'fetchDataSource',
       //   payload: {
