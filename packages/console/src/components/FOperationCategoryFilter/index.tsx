@@ -68,7 +68,11 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
                 }
                 return (<div
                   key={d.id}
-                  className={[styles.level0Item, selectedOperationCategoryIDString.startsWith(d.id) ? styles.active : ''].join(' ')}
+                  className={[styles.level0Item,
+                    operationCategories.some((c) => {
+                      return c.parentID === d.id;
+                    }) ? styles.hasChildren : '',
+                    selectedOperationCategoryIDString.startsWith(d.id) ? styles.active : ''].join(' ')}
                   onClick={() => {
                     set_selectedOperationCategoryIDs(stringToIDs(d.id));
                   }}
