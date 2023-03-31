@@ -120,16 +120,7 @@ const Model: MarketModelType = {
               co(FI18n.i18nNext.t('msg_account_switched'));
             }
 
-            // if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
-            //   co('用户已登出');
-            // }
-
-            const url: string = self.location.pathname;
-            if (code === 'ERR_NOT_LOGIN'
-              && !document.hidden
-              && !url.startsWith(FUtil.LinkTo.login())
-              && !url.startsWith(FUtil.LinkTo.logon())
-              && !url.startsWith(FUtil.LinkTo.retrieveUserPassword())) {
+            if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
               co('用户已登出');
             }
           });
