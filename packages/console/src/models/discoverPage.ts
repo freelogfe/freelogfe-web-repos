@@ -203,12 +203,12 @@ const Model: DiscoverPageModelType = {
       //     operationCategories: payload,
       //   },
       // });
-      // yield put<FetchDataSourceAction>({
-      //   type: 'fetchDataSource',
-      //   payload: {
-      //     restart: true,
-      //   },
-      // });
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
     },
     * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -234,14 +234,18 @@ const Model: DiscoverPageModelType = {
         return ds.id;
       });
 
+      const selectedOperationCategoryIDs: string[] = discoverPage.selectedOperationCategoryIDs.filter((c) => {
+        return c !== '#all';
+      });
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         // startResourceId: dataSource[0]?.id,
         keywords: discoverPage.inputText,
-        tags: discoverPage.tags,
+        // tags: discoverPage.tags,
         resourceType: discoverPage.resourceType === '-1' ? undefined : discoverPage.resourceType,
         status: 1,
+        operationCategoryCode: selectedOperationCategoryIDs[selectedOperationCategoryIDs.length - 1],
       };
 
       const { data } = yield call(FServiceAPI.Resource.list, params);
@@ -279,6 +283,12 @@ const Model: DiscoverPageModelType = {
         type: 'change',
         payload: {
           selectedOperationCategoryIDs: payload.value,
+        },
+      });
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
         },
       });
     },
