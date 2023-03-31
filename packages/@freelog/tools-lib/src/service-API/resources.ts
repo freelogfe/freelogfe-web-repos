@@ -93,6 +93,7 @@ interface ListParamsType {
   tags?: string;
   sort?: string;
   // startResourceId?: string;
+  operationCategoryCode?: string;
 }
 
 // interface ListReturnType extends CommonReturn {
