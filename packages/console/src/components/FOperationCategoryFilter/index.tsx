@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-import { FServiceAPI } from '../../../../@freelog/tools-lib';
+import { FServiceAPI } from '@freelog/tools-lib';
+import { Fragment } from 'react';
 
 type HandledOperationCategories = {
   id: string;
@@ -12,28 +13,29 @@ type HandledOperationCategories = {
 }[];
 
 interface FOperationCategoryFilterProps {
+  value: string[];
 
+  onChange?(value: string[]): void;
 }
 
-function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
+function FOperationCategoryFilter({ value: selectedOperationCategoryIDs, onChange }: FOperationCategoryFilterProps) {
 
   const [operationCategories, set_operationCategories] = React.useState<HandledOperationCategories>([]);
-  const [selectedOperationCategoryIDs, set_selectedOperationCategoryIDs] = React.useState<string[]>(['#all']);
-
-  // const selectedArray: string[] = selectedOperationCategoryID.split('/').filter((code) => {
-  //   return code !== '';
-  // });
+  // const [selectedOperationCategoryIDs, set_selectedOperationCategoryIDs] = React.useState<string[]>(['#all']);
 
   AHooks.useMount(async () => {
     const { data: data_operationCategories }: { data: any[] } = await FServiceAPI.Operation.operationCategories();
     const payload: HandledOperationCategories = [];
     flatOperationCategories(data_operationCategories, '', 0, payload);
-    console.log(payload, 'payloadoisdlfkjsd;lkfjodsijflksdjflkjl');
+    // console.log(payload, 'payloadoisdlfkjsd;lkfjodsijflksdjflkjl');
     set_operationCategories(payload);
-
   });
 
-  function stringToIDs(str: string): string[] {
+  function onClick(str: string) {
+    const id: string = '/' + selectedOperationCategoryIDs.join('/');
+    if (str === id) {
+      return;
+    }
     const hasChildren: boolean = operationCategories.some((c) => {
       return c.parentID === str;
     });
@@ -43,7 +45,8 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
     if (hasChildren) {
       arr.push('#all');
     }
-    return arr;
+    onChange && onChange(arr);
+    // return arr;
   }
 
   return (<div className={styles.styles}>
@@ -64,6 +67,7 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
               data.map((d) => {
 
                 if (!selectedOperationCategoryIDString.startsWith(d.parentID)) {
+                  // return <React.Fragment key={d.id} />;
                   return null;
                 }
                 return (<div
@@ -74,7 +78,8 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
                     }) ? styles.hasChildren : '',
                     selectedOperationCategoryIDString.startsWith(d.id) ? styles.active : ''].join(' ')}
                   onClick={() => {
-                    set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    // set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    onClick(d.id);
                   }}
                 >
                   <span>{d.name}</span>
@@ -92,6 +97,7 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
               data.map((d) => {
 
                 if (!selectedOperationCategoryIDString.startsWith(d.parentID)) {
+                  // return (<React.Fragment key={d.id} />);
                   return null;
                 }
 
@@ -99,7 +105,9 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
                   className={[styles.level1Item, selectedOperationCategoryIDString.startsWith(d.id) ? styles.active : ''].join(' ')}
                   key={d.id}
                   onClick={() => {
-                    set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    // set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    // onChange && onChange(stringToIDs(d.id));
+                    onClick(d.id);
                   }}
                 >{d.name}</div>);
               })
@@ -112,12 +120,16 @@ function FOperationCategoryFilter({}: FOperationCategoryFilterProps) {
             {
               data.map((d) => {
                 if (!selectedOperationCategoryIDString.startsWith(d.parentID)) {
+                  // return (<React.Fragment key={d.id}/>);
                   return null;
                 }
                 return (<div
+                  key={d.id}
                   className={[styles.level2Item, selectedOperationCategoryIDString.startsWith(d.id) ? styles.active : ''].join(' ')}
                   onClick={() => {
-                    set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    // set_selectedOperationCategoryIDs(stringToIDs(d.id));
+                    // onChange && onChange(stringToIDs(d.id));
+                    onClick(d.id);
                   }}
                 >{d.name}</div>);
               })

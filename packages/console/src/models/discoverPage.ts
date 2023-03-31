@@ -21,8 +21,9 @@ export interface DiscoverPageModelState {
   }[];
 
   resourceType: string;
-  operationCategories: HandledOperationCategories;
-  selectedOperationCategoryID: string;
+  // operationCategories: HandledOperationCategories;
+  // selectedOperationCategoryID: string;
+  selectedOperationCategoryIDs: string[];
   inputText: string;
   dataSource: {
     id: string;
@@ -91,6 +92,13 @@ export interface OnChangeResourceTypeAction extends AnyAction {
   };
 }
 
+export interface OnChange_SelectedOperationCategoryIDs_Action extends AnyAction {
+  type: 'discoverPage/onChange_SelectedOperationCategoryIDs';
+  payload: {
+    value: string[]
+  };
+}
+
 export interface OnChangeKeywordsAction extends AnyAction {
   type: 'discoverPage/onChangeKeywords';
   payload: {
@@ -120,6 +128,8 @@ export interface DiscoverPageModelType {
     onUnmountMarketPage: (action: OnUnmountMarketPageAction, effects: EffectsCommandMap) => void;
     // changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+
+    onChange_SelectedOperationCategoryIDs: (action: OnChange_SelectedOperationCategoryIDs_Action, effects: EffectsCommandMap) => void;
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
     onChangeTags: (action: OnChangeTagsAction, effects: EffectsCommandMap) => void;
@@ -134,7 +144,7 @@ export interface DiscoverPageModelType {
 }
 
 const marketInitStates: Pick<DiscoverPageModelState,
-  'resourceTypeOptions' | 'resourceType' | 'operationCategories' | 'selectedOperationCategoryID' | 'inputText' | 'dataSource' | 'totalItem' | 'tags'> = {
+  'resourceTypeOptions' | 'resourceType' | 'selectedOperationCategoryIDs' | 'inputText' | 'dataSource' | 'totalItem' | 'tags'> = {
   resourceTypeOptions: [
     {
       value: '-1',
@@ -144,8 +154,9 @@ const marketInitStates: Pick<DiscoverPageModelState,
   ],
   resourceType: '-1',
 
-  operationCategories: [],
-  selectedOperationCategoryID: '/#all',
+  // operationCategories: [],
+  // selectedOperationCategoryID: '/#all',
+  selectedOperationCategoryIDs: ['#all'],
   inputText: '',
   tags: '',
   dataSource: [],
@@ -260,6 +271,14 @@ const Model: DiscoverPageModelType = {
                 };
               }),
           ],
+        },
+      });
+    },
+    * onChange_SelectedOperationCategoryIDs({ payload }: OnChange_SelectedOperationCategoryIDs_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          selectedOperationCategoryIDs: payload.value,
         },
       });
     },
