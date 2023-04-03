@@ -128,14 +128,14 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
               <FComponentsLib.FTitleText
                 type='h4'
-                text={!hideTypeSelect ? '自定义选项' : FI18n.i18nNext.t('options_textfield_value_title')}
+                text={!hideTypeSelect ? FI18n.i18nNext.t('options_textfield_default_title') : FI18n.i18nNext.t('options_textfield_value_title')}
               />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
-              placeholder={!hideTypeSelect ? '输入自定义选项' : FI18n.i18nNext.t('options_textfield_value_hint')}
+              placeholder={!hideTypeSelect ? FI18n.i18nNext.t('options_textfield_default_hint') : FI18n.i18nNext.t('options_textfield_value_hint')}
               value={data.defaultValue}
               onChange={(e) => {
                 const value: string = e.target.value;
