@@ -450,21 +450,29 @@ function FPublishObjectFile({
       </div>
 
       {
-        showOpenMarkdownEditor && (<div className={styles.selectObjectCard}>
-          <img src={img_markdown} alt={''} />
-          <FComponentsLib.FContentText
-            type={'additional2'}
-            text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
-            style={{ color: 'rgba(0,0,0,.3)' }}
-          />
+        showOpenMarkdownEditor && (
+          <div className={styles.selectObjectCard} style={{ paddingTop: 50, paddingBottom: 50 }}>
+            <img
+              src={img_markdown}
+              alt={''}
+              style={{ width: 42, height: 48 }}
+            />
+            <FComponentsLib.FContentText type={'highlight'}
+                                         text={FI18n.i18nNext.t('newversion_tool_posteditor_title')} />
+            <FComponentsLib.FContentText
+              type={'additional2'}
+              // text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
+              text={FI18n.i18nNext.t('newversion_tool_posteditor_subtitle')}
+              style={{ color: 'rgba(0,0,0,.3)' }}
+            />
 
-          <FComponentsLib.FRectBtn
-            type='primary'
-            onClick={() => {
-              onClick_OpenMarkdownBtn && onClick_OpenMarkdownBtn();
-            }}
-          >立即体验</FComponentsLib.FRectBtn>
-        </div>)
+            <FComponentsLib.FRectBtn
+              type='primary'
+              onClick={() => {
+                onClick_OpenMarkdownBtn && onClick_OpenMarkdownBtn();
+              }}
+            >立即体验</FComponentsLib.FRectBtn>
+          </div>)
       }
 
     </div>
@@ -501,59 +509,60 @@ function FPublishObjectFile({
     </div>
 
     {
-      (fUploadedError === 'selfTakeUp' || fUploadedError === 'othersTakeUp') && fUsedResource.length > 0 && (<div className={styles.tableWrap}>
-        <FTable
-          rowClassName={styles.tableRowClassName}
-          scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
-          columns={[
-            {
-              title: '资源',
-              dataIndex: 'resourceName',
-              width: 400,
-              render(value: any, record: any, index: number) {
-                return (<FComponentsLib.FContentText
-                  text={record.resourceName}
-                  style={{ maxWidth: 370 }}
-                />);
+      (fUploadedError === 'selfTakeUp' || fUploadedError === 'othersTakeUp') && fUsedResource.length > 0 && (
+        <div className={styles.tableWrap}>
+          <FTable
+            rowClassName={styles.tableRowClassName}
+            scroll={{ y: fUsedResource.length > 5 ? 350 : undefined }}
+            columns={[
+              {
+                title: '资源',
+                dataIndex: 'resourceName',
+                width: 400,
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceName}
+                    style={{ maxWidth: 370 }}
+                  />);
+                },
               },
-            },
-            {
-              title: '类型',
-              dataIndex: 'resourceType',
-              width: 100,
-              render(value: any, record: any, index: number) {
-                return (<FComponentsLib.FContentText
-                  text={record.resourceType}
-                />);
+              {
+                title: '类型',
+                dataIndex: 'resourceType',
+                width: 100,
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceType}
+                  />);
+                },
               },
-            },
-            {
-              title: '版本',
-              dataIndex: 'resourceVersion',
-              render(value: any, record: any, index: number) {
-                return (<FComponentsLib.FContentText
-                  text={record.resourceVersion}
-                />);
+              {
+                title: '版本',
+                dataIndex: 'resourceVersion',
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FContentText
+                    text={record.resourceVersion}
+                  />);
+                },
               },
-            },
-            {
-              title: '操作',
-              dataIndex: 'operation',
-              render(value: any, record: any, index: number) {
-                return (<FComponentsLib.FTextBtn onClick={() => {
-                  window.open(record.url);
-                }}>查看</FComponentsLib.FTextBtn>);
+              {
+                title: '操作',
+                dataIndex: 'operation',
+                render(value: any, record: any, index: number) {
+                  return (<FComponentsLib.FTextBtn onClick={() => {
+                    window.open(record.url);
+                  }}>查看</FComponentsLib.FTextBtn>);
+                },
               },
-            },
-          ]}
-          dataSource={fUsedResource.map((sfur) => {
-            return {
-              key: sfur.url,
-              ...sfur,
-            };
-          })}
-        />
-      </div>)
+            ]}
+            dataSource={fUsedResource.map((sfur) => {
+              return {
+                key: sfur.url,
+                ...sfur,
+              };
+            })}
+          />
+        </div>)
     }
   </Space>);
 }
