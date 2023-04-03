@@ -14,6 +14,7 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
+import { OnChange_Draft_Action } from '@/models/resourceSider';
 
 export interface ResourceVersionCreatorPageModelState {
   pageState: 'loading' | 'loaded';
@@ -858,7 +859,7 @@ const Model: ResourceVersionCreatorModelType = {
             payload: {
               selectedFile_UsedResources: data_ResourcesBySha1
                 .filter((d) => {
-                  return d.userId !== FUtil.Tool.getUserIDByCookies()
+                  return d.userId !== FUtil.Tool.getUserIDByCookies();
                 })
                 .map((d) => {
                   return d.resourceVersions.map((v: any) => {
@@ -961,12 +962,19 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<OnChange_DraftData_Action>({
-        type: 'resourceInfo/onChange_DraftData',
+      yield put<OnChange_Draft_Action>({
+        type: 'resourceSider/onChange_Draft',
         payload: {
-          draftData: draftData,
+          value: draftData,
         },
       });
+
+      // yield put<OnChange_DraftData_Action>({
+      //   type: 'resourceInfo/onChange_DraftData',
+      //   payload: {
+      //     draftData: draftData,
+      //   },
+      // });
     },
     * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({

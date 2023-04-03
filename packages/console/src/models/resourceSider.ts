@@ -60,6 +60,13 @@ export interface FetchDraftAction extends AnyAction {
   type: 'fetchDraft';
 }
 
+export interface OnChange_Draft_Action extends AnyAction {
+  type: 'resourceSider/onChange_Draft';
+  payload: {
+    value: IResourceCreateVersionDraft;
+  };
+}
+
 interface ResourceSiderModelType {
   namespace: 'resourceSider';
   state: ResourceSiderModelState;
@@ -70,6 +77,7 @@ interface ResourceSiderModelType {
     onUpdate_Data: (action: OnUpdate_Data_Action, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
+    onChange_Draft: (action: OnChange_Draft_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceSiderModelState, ChangeAction>;
@@ -212,6 +220,14 @@ const Model: ResourceSiderModelType = {
         type: 'change',
         payload: {
           draft: data_draft.draftData,
+        },
+      });
+    },
+    * onChange_Draft({ payload }: OnChange_Draft_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draft: payload.value,
         },
       });
     },
