@@ -109,14 +109,14 @@ const Model: ResourceSiderModelType = {
   state: initStates,
   effects: {
     * onMount_Page({ payload }: OnMount_Page_Action, { select, put }: EffectsCommandMap) {
-      console.log('resourceSider onMount_Page sd9f90poikwslfsdkf;lskdflsdjlfk');
+      // console.log('resourceSider onMount_Page sd9f90poikwslfsdkf;lskdflsdjlfk');
       const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
         resourceSider,
       }));
-      console.log(resourceSider.resourceID, 'resourceSider.resourceIDsdiofjlskdfjlkj');
-      if (resourceSider.resourceID !== '') {
-        return;
-      }
+      // console.log(resourceSider.resourceID, 'resourceSider.resourceIDsdiofjlskdfjlkj');
+      // if (resourceSider.resourceID !== '') {
+      //   return;
+      // }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -126,7 +126,7 @@ const Model: ResourceSiderModelType = {
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
-      console.log('*********((((((((((*7yu98uyoihkjhkjhkhkj');
+      // console.log('*********((((((((((*7yu98uyoihkjhkjhkhkj');
       yield put<FetchDraftAction>({
         type: 'fetchDraft',
       });
@@ -201,7 +201,7 @@ const Model: ResourceSiderModelType = {
       });
     },
     * fetchDraft({}: FetchDraftAction, { select, put, call }: EffectsCommandMap) {
-      console.log('FetchDraftAction ew8iojhsdklfsjdlfkjlk');
+      // console.log('FetchDraftAction ew8iojhsdklfsjdlfkjlk');
       const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
         resourceSider,
       }));
