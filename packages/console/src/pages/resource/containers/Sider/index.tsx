@@ -5,7 +5,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState, ResourceSiderModelState } from '@/models/connect';
 import { withRouter, history } from 'umi';
-import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
+// import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
 // import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
@@ -23,7 +23,12 @@ import FComponentsLib from '@freelog/components-lib';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyOperator from '@/components/fPolicyOperator';
-import { OnChange_Page_Action, OnMount_Page_Action, OnUpdate_Data_Action } from '@/models/resourceSider';
+import {
+  OnChange_Page_Action,
+  OnMount_Page_Action,
+  OnUnmount_Page_Action,
+  OnUpdate_Data_Action,
+} from '@/models/resourceSider';
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
@@ -53,6 +58,12 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
       payload: {
         resourceID: match.params.id,
       },
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceSider/onUnmount_Page',
     });
   });
 
