@@ -2,13 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import { DownOutlined } from '@ant-design/icons';
+// import { DownOutlined } from '@ant-design/icons';
 import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
-import * as AHooks from 'ahooks';
-import { ChangeAction } from '@/models/storageObjectDepSelector';
-import { FetchExhibitListAction } from '@/models/informalNodeManagerPage';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
+// import * as AHooks from 'ahooks';
+// import { ChangeAction } from '@/models/storageObjectDepSelector';
+// import { FetchExhibitListAction } from '@/models/informalNodeManagerPage';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 
 interface FObjectSelectorDrawerProps {
@@ -38,7 +38,7 @@ interface FObjectSelectorDrawerStates {
 const initStates: FObjectSelectorDrawerStates = {
   visible: true,
   selectOptions: [{
-    text: '全部Bucket',
+    text: FI18n.i18nNext.t('importobject_filter_buckets_all'),
     value: '_all',
   }],
   selected: '_all',
