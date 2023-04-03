@@ -133,10 +133,11 @@ const Model: ResourceSiderModelType = {
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       // console.log('****** OnUnmount_Page_Action 89uijoklwsfjsdlkfjlk');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-      });
+      // TODO: 需要在页面解决  mount unmount 的问题
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: initStates,
+      // });
     },
     * onChange_Page({ payload }: OnChange_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
