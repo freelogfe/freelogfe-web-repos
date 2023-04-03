@@ -34,6 +34,8 @@ interface IResourceInfo {
 export interface CreateParamsType {
   name: string;
   resourceType: string[]
+  resourceTypeCode: string;
+  resourceTypeName?: string;
   policies?: any[];
   coverImages?: string[];
   intro?: string;
@@ -541,6 +543,20 @@ export function availableTags({...params}: AvailableTagsParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/tags/availableTags`,
+    params: params,
+  });
+}
+
+// 列出资源类型分组排序
+interface ResourceTypesParamsType {
+  codeOrName?: string;
+  category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
+}
+
+export function resourceTypes({...params}: ResourceTypesParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimpleByGroup`,
     params: params,
   });
 }
