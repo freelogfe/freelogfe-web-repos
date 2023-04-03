@@ -72,7 +72,7 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
 
     set_selectOptions([
       {
-        text: '全部Bucket',
+        text: FI18n.i18nNext.t('importobject_filter_buckets_all'),
         value: '_all',
       },
       ...data_bucketList.map((bl: any) => {
