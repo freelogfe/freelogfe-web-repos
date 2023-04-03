@@ -11,7 +11,7 @@ import {
   OnMount_Page_Action,
   OnUnmount_Page_Action,
   OnChange_Resource_Type_Action,
-  OnClick_CreateBtn_Action,
+  OnClick_CreateBtn_Action, OnChange_ResourceTypeCodes_Action,
 } from '@/models/resourceCreatorPage';
 import FFormLayout from '@/components/FFormLayout';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -52,16 +52,16 @@ function ResourceCreator({
     });
   }
 
-  const resourceTypeError: boolean = resourceCreatorPage.resource_Type.some((rt) => {
-    return rt.value === '' || rt.valueError !== '';
-  });
+  // const resourceTypeError: boolean = resourceCreatorPage.resource_Type.some((rt) => {
+  //   return rt.value === '' || rt.valueError !== '';
+  // });
 
   const createBtnDisabled: boolean = resourceCreatorPage.name === '' ||
     resourceCreatorPage.nameVerify !== 2 ||
     // resourceCreatorPage.resourceTypeVerify !== 2 ||
     resourceCreatorPage.nameErrorText !== '' ||
     // !!resourceCreatorPage.resourceTypeErrorText ||
-    resourceTypeError ||
+    // resourceTypeError ||
     !!resourceCreatorPage.introductionErrorText;
 
   if (!createBtnDisabled) {
@@ -147,11 +147,11 @@ function ResourceCreator({
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <FResourceTypeInput
-                dataSource={resourceCreatorPage.resource_Type}
+                value={resourceCreatorPage.resourceTypeCodes}
                 onChange={(value) => {
                   // console.log(value, 'value9isodjflksdjflksdjflkjlkj');
-                  dispatch<OnChange_Resource_Type_Action>({
-                    type: 'resourceCreatorPage/onChange_Resource_Type',
+                  dispatch<OnChange_ResourceTypeCodes_Action>({
+                    type: 'resourceCreatorPage/onChange_ResourceTypeCodes',
                     payload: {
                       value,
                     },
@@ -160,7 +160,7 @@ function ResourceCreator({
               />
 
               {
-                !resourceTypeError && (<FComponentsLib.FIcons.FCheck />)
+                // !resourceTypeError && (<FComponentsLib.FIcons.FCheck />)
               }
 
             </div>

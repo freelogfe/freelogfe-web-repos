@@ -13,11 +13,12 @@ export interface ResourceCreatorPageModelState {
   nameVerify: 0 | 1 | 2;
   nameErrorText: string;
 
-  resource_Type: {
-    value: string;
-    valueError: string;
-    // options: string[];
-  }[];
+  // resource_Type: {
+  //   value: string;
+  //   valueError: string;
+  //   // options: string[];
+  // }[];
+  resourceTypeCodes: string[];
 
   introduction: string;
   introductionErrorText: string;
@@ -51,10 +52,10 @@ export interface OnChange_NameInput_Action extends AnyAction {
   payload: ResourceCreatorPageModelState['name'];
 }
 
-export interface OnChange_Resource_Type_Action extends AnyAction {
-  type: 'resourceCreatorPage/onChange_Resource_Type';
+export interface OnChange_ResourceTypeCodes_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_ResourceTypeCodes';
   payload: {
-    value: ResourceCreatorPageModelState['resource_Type'],
+    value: ResourceCreatorPageModelState['resourceTypeCodes'],
   };
 }
 
@@ -89,7 +90,7 @@ export interface ResourceCreatorPageModelType {
     onClick_CreateBtn: (action: OnClick_CreateBtn_Action, effects: EffectsCommandMap) => void;
 
     onChange_NameInput: (action: OnChange_NameInput_Action, effects: EffectsCommandMap) => void;
-    onChange_Resource_Type: (action: OnChange_Resource_Type_Action, effects: EffectsCommandMap) => void;
+    onChange_ResourceTypeCodes: (action: OnChange_ResourceTypeCodes_Action, effects: EffectsCommandMap) => void;
     onChange_IntroductionInput: (action: OnChange_IntroductionInput_Action, effects: EffectsCommandMap) => void;
     onChange_Cover: (action: OnChange_Cover_Action, effects: EffectsCommandMap) => void;
     onChange_Labels: (action: OnChange_Labels_Action, effects: EffectsCommandMap) => void;
@@ -107,12 +108,7 @@ export const initStates: ResourceCreatorPageModelState = {
   nameVerify: 0,
   nameErrorText: '',
 
-  resource_Type: [
-    {
-      value: '',
-      valueError: '',
-    },
-  ],
+  resourceTypeCodes: [],
 
   introduction: '',
   introductionErrorText: '',
@@ -153,9 +149,7 @@ const Model: ResourceCreatorPageModelType = {
       }));
       const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
         name: resourceCreatorPage.name,
-        resourceType: resourceCreatorPage.resource_Type.map((rt: any) => {
-          return rt.value;
-        }),
+        resourceTypeCode: resourceCreatorPage.resourceTypeCodes[resourceCreatorPage.resourceTypeCodes.length - 1],
         policies: [],
         coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
         intro: resourceCreatorPage.introduction,
@@ -227,11 +221,11 @@ const Model: ResourceCreatorPageModelType = {
       });
       self.onbeforeunload = () => true;
     },
-    * onChange_Resource_Type({ payload }: OnChange_Resource_Type_Action, { select, put }: EffectsCommandMap) {
+    * onChange_ResourceTypeCodes({ payload }: OnChange_ResourceTypeCodes_Action, { select, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_Type: payload.value,
+          resourceTypeCodes: payload.value,
           dataIsDirty: true,
         },
       });

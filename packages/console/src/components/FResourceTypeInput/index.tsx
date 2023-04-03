@@ -1,20 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Cascader } from 'antd';
-import { DefaultOptionType } from 'rc-cascader/lib/Cascader';
 import * as AHooks from 'ahooks';
-import { FServiceAPI } from '../../../../@freelog/tools-lib';
-
-type Data = {
-  value: string;
-  valueError: string;
-  // options: string[];
-}[];
+import { FServiceAPI } from '@freelog/tools-lib';
 
 interface FResourceTypeInputProps {
-  dataSource: Data;
+  value: Array<string | number> | undefined;
 
-  onChange?(value: Data): void;
+  onChange?(value: FResourceTypeInputProps['value']): void;
 }
 
 interface Option {
@@ -29,7 +22,7 @@ interface ServerData {
   children: ServerData[];
 }
 
-function FResourceTypeInput({ dataSource, onChange }: FResourceTypeInputProps) {
+function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   const [options, set_options] = React.useState<Option[]>([]);
 
@@ -47,9 +40,12 @@ function FResourceTypeInput({ dataSource, onChange }: FResourceTypeInputProps) {
   });
 
   return (<Cascader
+    allowClear={true}
+    value={value}
     options={options}
-    onChange={(value, selectedOptions) => {
-      console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
+    onChange={(value: Array<string | number> | undefined, selectedOptions) => {
+      // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
+      onChange && onChange(value);
     }}
     placeholder='Please select'
   />);
