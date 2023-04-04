@@ -142,11 +142,15 @@ const Model: ResourceListPageModelType = {
 
       // console.log(dataSource, 'dataSourcedataSource92834uoi');
 
+      const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.filter((rt) => {
+        return rt !== '#all';
+      });
+
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
-        resourceType: resourceListPage.resourceTypeCodes && String(resourceListPage.resourceTypeCodes[resourceListPage.resourceTypeCodes.length - 1]),
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
