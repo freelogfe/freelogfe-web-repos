@@ -307,10 +307,11 @@ export interface InformalNodeManagerPageModelState {
 
   replaceModal_Errors: string[];
 
-  exhibit_TypeOptions1: { value: string; text: string; }[];
-  exhibit_TypeOptions2: { value: string; text: string; }[];
-  exhibit_SelectedType1: '-1' | string;
-  exhibit_SelectedType2: '-1' | string;
+  // exhibit_TypeOptions1: { value: string; text: string; }[];
+  // exhibit_TypeOptions2: { value: string; text: string; }[];
+  // exhibit_SelectedType1: '-1' | string;
+  // exhibit_SelectedType2: '-1' | string;
+  exhibit_ResourceTypeCodes: Array<string | number>;
   exhibit_StatusOptions: { value: string; text: string; }[];
   exhibit_SelectedStatus: '0' | '1' | '2';
   exhibit_FilterKeywords: string;
@@ -452,8 +453,7 @@ export interface OnClickExhibitsReplaceBtnAction extends AnyAction {
 export interface OnChangeExhibitTypeAction extends AnyAction {
   type: 'informalNodeManagerPage/onChangeExhibitType';
   payload: {
-    value: string;
-    level: number;
+    value: InformalNodeManagerPageModelState['exhibit_ResourceTypeCodes'];
   };
 }
 
@@ -844,10 +844,11 @@ interface InformalNodeManagerPageModelType {
 }
 
 const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
-  'exhibit_TypeOptions1' |
-  'exhibit_TypeOptions2' |
-  'exhibit_SelectedType1' |
-  'exhibit_SelectedType2' |
+  // 'exhibit_TypeOptions1' |
+  // 'exhibit_TypeOptions2' |
+  // 'exhibit_SelectedType1' |
+  // 'exhibit_SelectedType2' |
+  'exhibit_ResourceTypeCodes' |
   'exhibit_StatusOptions' |
   'exhibit_SelectedStatus' |
   'exhibit_FilterKeywords' |
@@ -856,22 +857,23 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_List' |
   'exhibit_ListTotal' |
   'exhibit_PageError'> = {
-  exhibit_TypeOptions1: [
-    { text: '全部', value: '-1' },
-    ...resource_TypeData
-      .filter((rt) => {
-        return rt.parentValue === '#';
-      })
-      .map((i) => {
-        return {
-          value: i.value,
-          text: i.value,
-        };
-      }),
-  ],
-  exhibit_TypeOptions2: [],
-  exhibit_SelectedType1: '-1',
-  exhibit_SelectedType2: '-1',
+  // exhibit_TypeOptions1: [
+  //   { text: '全部', value: '-1' },
+  //   ...resource_TypeData
+  //     .filter((rt) => {
+  //       return rt.parentValue === '#';
+  //     })
+  //     .map((i) => {
+  //       return {
+  //         value: i.value,
+  //         text: i.value,
+  //       };
+  //     }),
+  // ],
+  // exhibit_TypeOptions2: [],
+  // exhibit_SelectedType1: '-1',
+  // exhibit_SelectedType2: '-1',
+  exhibit_ResourceTypeCodes: ['#all'],
   exhibit_StatusOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -1160,6 +1162,11 @@ const Model: InformalNodeManagerPageModelType = {
         ];
       }
       // console.log(informalNodeManagerPage.exhibit_SelectedType, 'informalNodeManagerPage.exhibit_SelectedTypeiosejlkfsdjlk');
+
+      const resourceTypes: Array<string | number> = informalNodeManagerPage.exhibit_ResourceTypeCodes.filter((rt) => {
+        return rt !== '#all';
+      });
+
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         skip: list.length,
         // limit: FUtil.Predefined.pageSize,
@@ -1167,12 +1174,13 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: '主题',
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         // resourceType: (informalNodeManagerPage.exhibit_SelectedType2 !== '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
-        resourceType: informalNodeManagerPage.exhibit_SelectedType2 !== '-1'
-          ? informalNodeManagerPage.exhibit_SelectedType2
-          : informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
-            ? informalNodeManagerPage.exhibit_SelectedType1
-            : undefined,
+        // resourceType: informalNodeManagerPage.exhibit_SelectedType2 !== '-1'
+        //   ? informalNodeManagerPage.exhibit_SelectedType2
+        //   : informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
+        //     ? informalNodeManagerPage.exhibit_SelectedType1
+        //     : undefined,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
@@ -1193,7 +1201,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
         total_Length: data_informalExhibits.totalItem,
-        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
+        has_FilterCriteria: informalNodeManagerPage.exhibit_ResourceTypeCodes[0] !== '#all'
           || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
           || informalNodeManagerPage.exhibit_FilterKeywords !== '',
       });
@@ -1223,35 +1231,42 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
 
-      if (payload.level === 1) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            exhibit_SelectedType1: payload.value,
-            exhibit_SelectedType2: '-1',
-            exhibit_TypeOptions2: [
-              { text: '全部', value: '-1' },
-              ...resource_TypeData
-                .filter((rt) => {
-                  return rt.parentValue === payload.value;
-                })
-                .map((i) => {
-                  return {
-                    value: i.value,
-                    text: i.value,
-                  };
-                }),
-            ],
-          },
-        });
-      } else if (payload.level === 2) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            exhibit_SelectedType2: payload.value,
-          },
-        });
-      }
+      // if (payload.level === 1) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType1: payload.value,
+      //       exhibit_SelectedType2: '-1',
+      //       exhibit_TypeOptions2: [
+      //         { text: '全部', value: '-1' },
+      //         ...resource_TypeData
+      //           .filter((rt) => {
+      //             return rt.parentValue === payload.value;
+      //           })
+      //           .map((i) => {
+      //             return {
+      //               value: i.value,
+      //               text: i.value,
+      //             };
+      //           }),
+      //       ],
+      //     },
+      //   });
+      // } else if (payload.level === 2) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType2: payload.value,
+      //     },
+      //   });
+      // }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ResourceTypeCodes: payload.value,
+        },
+      });
 
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',

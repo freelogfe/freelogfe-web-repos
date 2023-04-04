@@ -48,7 +48,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
   });
 
   return (<Cascader
-    // allowClear={true}
+    allowClear={false}
     value={value}
     options={options}
     onChange={(value: Array<string | number>, selectedOptions) => {
