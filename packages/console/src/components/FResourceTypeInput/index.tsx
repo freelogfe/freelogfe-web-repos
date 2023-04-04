@@ -5,7 +5,7 @@ import * as AHooks from 'ahooks';
 import { FServiceAPI } from '@freelog/tools-lib';
 
 interface FResourceTypeInputProps {
-  value: Array<string | number> | undefined;
+  value: Array<string | number>;
 
   onChange?(value: FResourceTypeInputProps['value']): void;
 }
@@ -45,7 +45,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     options={options}
     onChange={(value: Array<string | number> | undefined, selectedOptions) => {
       // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
-      onChange && onChange(value);
+      onChange && onChange(value || []);
     }}
     placeholder='Please select'
   />);
