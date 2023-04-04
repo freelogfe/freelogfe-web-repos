@@ -34,9 +34,9 @@ interface DetailsProps {
 function Details({ storageObjectEditor, dispatch }: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
-  const hasError: boolean = storageObjectEditor.resource_Type.some((rt, rti) => {
-    return (rti !== 0 && rt.value === '') || rt.valueError !== '';
-  });
+  // const hasError: boolean = storageObjectEditor.resourceTypeCodes.some((rt, rti) => {
+  //   return (rti !== 0 && rt.value === '') || rt.valueError !== '';
+  // });
 
   // function onChangeType(value: string) {
   //   if (value === storageObjectEditor.type) {
@@ -70,7 +70,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         type='default'
       >取消</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
-        disabled={hasError}
+        // disabled={hasError}
         onClick={async () => {
           dispatch<OnClick_SaveBtn_Action>({
             type: 'storageObjectEditor/onClick_SaveBtn',
@@ -277,7 +277,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FResourceTypeInput
-            dataSource={storageObjectEditor.resource_Type}
+            value={storageObjectEditor.resourceTypeCodes}
             onChange={(value) => {
               dispatch<OnChangeTypeAction>({
                 type: 'storageObjectEditor/onChangeType',

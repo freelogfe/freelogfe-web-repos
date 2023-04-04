@@ -38,10 +38,7 @@ export interface StorageObjectEditorModelState {
   // type: string;
   // typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
   // typeError: string;
-  resource_Type: {
-    value: string;
-    valueError: string;
-  }[];
+  resourceTypeCodes: Array<string | number>;
 
   rawProperties: {
     key: string;
@@ -151,7 +148,7 @@ export interface DeleteObjectDepOAction extends AnyAction {
 export interface OnChangeTypeAction extends AnyAction {
   type: 'storageObjectEditor/onChangeType';
   payload: {
-    value: StorageObjectEditorModelState['resource_Type'];
+    value: StorageObjectEditorModelState['resourceTypeCodes'];
   };
 }
 
@@ -188,12 +185,7 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   // typeError: '',
   size: 0,
 
-  resource_Type: [
-    {
-      value: '',
-      valueError: '',
-    },
-  ],
+  resourceTypeCodes: [],
 
   rawProperties: [],
 
@@ -291,7 +283,7 @@ const Model: StorageObjectEditorModelType = {
           }),
         }));
       }
-      // console.log(data, '#Q@#$R@#FASD');
+      console.log(data.resourceType, '#Q@#$R@#FASD');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -301,17 +293,7 @@ const Model: StorageObjectEditorModelType = {
           objectName: data.objectName,
           sha1: data.sha1,
           // type: data.resourceType,
-          resource_Type: data.resourceType.length > 0
-            ? data.resourceType.map((rt: string) => {
-              return {
-                value: rt,
-                valueError: '',
-              };
-            })
-            : [{
-              value: '',
-              valueError: '',
-            }],
+          // resourceTypeCodes: data.resourceType,
           size: data.systemProperty.fileSize,
           rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
             key: s[0],
@@ -354,9 +336,9 @@ const Model: StorageObjectEditorModelType = {
       // console.log(storageObjectEditor.resource_Type, 'storageObjectEditor.resource_Type09owpjsdlkfj');
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        resourceType: storageObjectEditor.resource_Type
+        resourceType: storageObjectEditor.resourceTypeCodes
           .map<string>((rt) => {
-            return rt.value;
+            return String(rt);
           })
           .filter((s) => {
             return s !== '';
@@ -401,8 +383,8 @@ const Model: StorageObjectEditorModelType = {
         type: 'storageHomePage/updateAObject',
         payload: {
           id: storageObjectEditor.objectId,
-          type: storageObjectEditor.resource_Type.map<string>((rt) => {
-            return rt.value;
+          type: storageObjectEditor.resourceTypeCodes.map<string>((rt) => {
+            return String(rt);
           }),
         },
       });
@@ -413,7 +395,7 @@ const Model: StorageObjectEditorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_Type: payload.value,
+          resourceTypeCodes: payload.value,
         },
       });
       // let resourceTypeErrorText = '';
