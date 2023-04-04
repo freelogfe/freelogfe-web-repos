@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
-  resourceType: string;
+  resourceTypeCodes: Array<string | number>;
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageSize: number;
@@ -50,7 +50,7 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceListPage/onChangeResourceType';
   payload: {
-    value: string;
+    value: Array<string | number> | undefined;
   };
 }
 
@@ -99,7 +99,7 @@ export interface ResourceListPageModelType {
 }
 
 const initStates: ResourceListPageModelState = {
-  resourceType: '-1',
+  resourceTypeCodes: ['#all'],
   resourceStatus: '#',
   inputText: '',
   dataSource: [],
@@ -146,7 +146,7 @@ const Model: ResourceListPageModelType = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
-        resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
+        resourceType: resourceListPage.resourceTypeCodes && String(resourceListPage.resourceTypeCodes[resourceListPage.resourceTypeCodes.length - 1]),
         // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
@@ -203,7 +203,7 @@ const Model: ResourceListPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value,
+          resourceTypeCodes: payload.value,
         },
       });
 

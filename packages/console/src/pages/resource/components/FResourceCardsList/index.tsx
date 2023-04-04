@@ -9,6 +9,7 @@ import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import categoryData from '@/utils/category';
 import FComponentsLib from '@freelog/components-lib';
+import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 
 const resourceStatusOptions = [
   { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
@@ -25,16 +26,16 @@ const resourceStatusOptions = [
 type EventFunc = (id: string | number, record: any, index: number) => void;
 
 interface FResourceCardsListProps {
-  resourceType: string;
+  resourceTypeCodes: Array<string | number>;
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
 
   dataSource: FResourceCardProps['resource'][];
   totalNum: number;
 
-  onChangeResourceType?: (value: string) => void;
-  onChangeResourceStatus?: (value: 0 | 1 | 2 | 4 | '#') => void;
-  onChangeInputText?: (value: string) => void;
+  onChangeResourceTypeCodes?: (value: FResourceCardsListProps['resourceTypeCodes']) => void;
+  onChangeResourceStatus?: (value: FResourceCardsListProps['resourceStatus']) => void;
+  onChangeInputText?: (value: FResourceCardsListProps['inputText']) => void;
 
   onloadMore?(): void;
 
@@ -49,12 +50,12 @@ interface FResourceCardsListProps {
 }
 
 function FResourceCardsList({
-                              resourceType,
+                              resourceTypeCodes,
                               resourceStatus,
                               inputText,
                               dataSource,
                               totalNum,
-                              onChangeResourceType,
+                              onChangeResourceTypeCodes,
                               onChangeResourceStatus,
                               onChangeInputText,
                               onloadMore,
@@ -68,40 +69,25 @@ function FResourceCardsList({
                             }: FResourceCardsListProps) {
   // const [typeText, setTypeText] = React.useState('');
   // const [statusText, setStatusText] = React.useState('');
-  const [category, setCategory] = React.useState<any>({
-    first: -1,
-    second: '',
-  });
-
-  React.useEffect(() => {
-    // 初始化前-1，后面选全部为字符串‘-1’
-    if (category.first === -1) {
-      return;
-    }
-    let str = categoryData.first[category.first] || '';
-    // @ts-ignore
-    if (categoryData.second[category.first] && category.second !== '-1') {
-      // @ts-ignore
-      str = categoryData.second[category.first][category.second];
-    }
-    // console.log(str, '09i8owejklsdjflaskdjflksdj')
-    onChangeResourceType && onChangeResourceType(str);
-  }, [category]);
+  // const [category, setCategory] = React.useState<any>({
+  //   first: -1,
+  //   second: '',
+  // });
 
   // React.useEffect(() => {
-  //   const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
-  //   setTypeText(selectedType?.text || selectedType?.value);
-  // }, [resourceType]);
-
-  // React.useEffect(() => {
-  //   const selectedStatus: any = resourceStatusOptions.find((i) => i.value === resourceStatus);
-  //   setStatusText(selectedStatus?.text || selectedStatus?.value);
-  // }, [resourceStatus]);
-
-  // console.log(resourceStatus, 'resourceStatus resourceStatussdefopjksdmlk');
-  // console.log(resourceStatusOptions.find((rs) => {
-  //   return rs.value === resourceStatus;
-  // }), 'resourceStatus ###09sdfujlsdkjf');
+  //   // 初始化前-1，后面选全部为字符串‘-1’
+  //   if (category.first === -1) {
+  //     return;
+  //   }
+  //   let str = categoryData.first[category.first] || '';
+  //   // @ts-ignore
+  //   if (categoryData.second[category.first] && category.second !== '-1') {
+  //     // @ts-ignore
+  //     str = categoryData.second[category.first][category.second];
+  //   }
+  //   // console.log(str, '09i8owejklsdjflaskdjflksdj')
+  //   onChangeResourceType && onChangeResourceType(str);
+  // }, [category]);
 
   return (
     <>
@@ -110,81 +96,92 @@ function FResourceCardsList({
         <div className={styles.filterLeft}>
           <div>
             <span>{FI18n.i18nNext.t('resource_type')}：</span>
-            <FComponentsLib.FDropdown
-              overlay={
-                <FMenu
-                  options={[
-                    {
-                      value: '-1',
-                      text: '全部',
-                    },
-                    ...categoryData.first.map((i, index) => {
-                      return {
-                        value: index + '',
-                        text: i,
-                      };
-                    }),
-                  ]}
-                  value={category.first}
-                  onClick={(value) => {
-                    setCategory({
-                      ...category,
-                      first: value,
-                      second: category.first === value ? category.second : '-1',
-                    });
-                    //onChangeResourceType && onChangeResourceType(value)
-                  }}
-                />
-              }
-            >
-              <span style={{ cursor: 'pointer' }}>
-                {categoryData.first[category.first] || '全部'}
-                {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
-                <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
-              </span>
-            </FComponentsLib.FDropdown>
 
-            {category.first > 1 ? (
-              <>
-                <span className='ml-30'>子类型：</span>
-                <FComponentsLib.FDropdown
-                  overlay={
-                    <FMenu
-                      // @ts-ignore
-                      options={[
-                        {
-                          value: '-1',
-                          text: '全部',
-                        },
-                        // @ts-ignore
-                        ...categoryData.second[category.first].map((i, index) => {
-                          return {
-                            value: index + '',
-                            text: i,
-                          };
-                        }),
-                      ]}
-                      onClick={(value) => {
-                        setCategory({
-                          ...category,
-                          second: value,
-                        });
-                        // onChangeResourceType && onChangeResourceType(value)
-                      }}
-                    />
-                  }
-                >
-                  <span style={{ cursor: 'pointer' }}>
-                    {
-                      // @ts-ignore
-                      categoryData.second[category.first][category.second] || '全部'
-                    }
-                    {/*<DownOutlined style={{ marginLeft: 8 }} />*/}
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
-                  </span>
-                </FComponentsLib.FDropdown>
-              </>
-            ) : null}
+            <FResourceTypeFilter
+              value={resourceTypeCodes}
+              onChange={(value) => {
+                if (!value) {
+                  return;
+                }
+                onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
+              }}
+            />
+
+            {/*<FComponentsLib.FDropdown*/}
+            {/*  overlay={*/}
+            {/*    <FMenu*/}
+            {/*      options={[*/}
+            {/*        {*/}
+            {/*          value: '-1',*/}
+            {/*          text: '全部',*/}
+            {/*        },*/}
+            {/*        ...categoryData.first.map((i, index) => {*/}
+            {/*          return {*/}
+            {/*            value: index + '',*/}
+            {/*            text: i,*/}
+            {/*          };*/}
+            {/*        }),*/}
+            {/*      ]}*/}
+            {/*      value={category.first}*/}
+            {/*      onClick={(value) => {*/}
+            {/*        setCategory({*/}
+            {/*          ...category,*/}
+            {/*          first: value,*/}
+            {/*          second: category.first === value ? category.second : '-1',*/}
+            {/*        });*/}
+            {/*        //onChangeResourceType && onChangeResourceType(value)*/}
+            {/*      }}*/}
+            {/*    />*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <span style={{ cursor: 'pointer' }}>*/}
+            {/*    {categoryData.first[category.first] || '全部'}*/}
+            {/*    /!*<DownOutlined style={{ marginLeft: 8 }} />*!/*/}
+            {/*    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
+            {/*  </span>*/}
+            {/*</FComponentsLib.FDropdown>*/}
+
+            {/*{category.first > 1 ? (*/}
+            {/*  <>*/}
+            {/*    <span className='ml-30'>子类型：</span>*/}
+            {/*    <FComponentsLib.FDropdown*/}
+            {/*      overlay={*/}
+            {/*        <FMenu*/}
+            {/*          // @ts-ignore*/}
+            {/*          options={[*/}
+            {/*            {*/}
+            {/*              value: '-1',*/}
+            {/*              text: '全部',*/}
+            {/*            },*/}
+            {/*            // @ts-ignore*/}
+            {/*            ...categoryData.second[category.first].map((i, index) => {*/}
+            {/*              return {*/}
+            {/*                value: index + '',*/}
+            {/*                text: i,*/}
+            {/*              };*/}
+            {/*            }),*/}
+            {/*          ]}*/}
+            {/*          onClick={(value) => {*/}
+            {/*            setCategory({*/}
+            {/*              ...category,*/}
+            {/*              second: value,*/}
+            {/*            });*/}
+            {/*            // onChangeResourceType && onChangeResourceType(value)*/}
+            {/*          }}*/}
+            {/*        />*/}
+            {/*      }*/}
+            {/*    >*/}
+            {/*      <span style={{ cursor: 'pointer' }}>*/}
+            {/*        {*/}
+            {/*          // @ts-ignore*/}
+            {/*          categoryData.second[category.first][category.second] || '全部'*/}
+            {/*        }*/}
+            {/*        /!*<DownOutlined style={{ marginLeft: 8 }} />*!/*/}
+            {/*        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
+            {/*      </span>*/}
+            {/*    </FComponentsLib.FDropdown>*/}
+            {/*  </>*/}
+            {/*) : null}*/}
           </div>
           <div style={{ marginLeft: 60 }}>
             <span>{FI18n.i18nNext.t('resource_state')}：</span>

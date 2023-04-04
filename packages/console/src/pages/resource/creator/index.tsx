@@ -10,7 +10,7 @@ import {
   OnChange_NameInput_Action,
   OnMount_Page_Action,
   OnUnmount_Page_Action,
-  OnChange_Resource_Type_Action,
+  // OnChange_Resource_Type_Action,
   OnClick_CreateBtn_Action, OnChange_ResourceTypeCodes_Action,
 } from '@/models/resourceCreatorPage';
 import FFormLayout from '@/components/FFormLayout';
@@ -62,6 +62,7 @@ function ResourceCreator({
     resourceCreatorPage.nameErrorText !== '' ||
     // !!resourceCreatorPage.resourceTypeErrorText ||
     // resourceTypeError ||
+    (!resourceCreatorPage.resourceTypeCodes || resourceCreatorPage.resourceTypeCodes.length === 0) ||
     !!resourceCreatorPage.introductionErrorText;
 
   if (!createBtnDisabled) {

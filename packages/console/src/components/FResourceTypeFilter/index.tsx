@@ -40,7 +40,7 @@ function FResourceTypeFilter({ value, onChange }: FResourceTypeFilterProps) {
   });
 
   return (<Cascader
-    allowClear={true}
+    // allowClear={true}
     value={value}
     options={options}
     onChange={(value: Array<string | number> | undefined, selectedOptions) => {
@@ -55,11 +55,22 @@ export default FResourceTypeFilter;
 
 
 function handledData(data: ServerData[]): Option[] {
-  return data.map((d) => {
-    return {
-      value: d.code,
-      label: d.name,
-      children: handledData(d.children),
-    };
-  });
+  if (data.length === 0) {
+    return [];
+  }
+  return [
+    {
+      value: '#all',
+      label: '全部',
+      children: [],
+    },
+    ...data.map((d) => {
+      return {
+        // value: d.code,
+        value: d.name,
+        label: d.name,
+        children: handledData(d.children),
+      };
+    }),
+  ];
 }

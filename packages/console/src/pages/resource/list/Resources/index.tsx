@@ -43,7 +43,7 @@ function Resources({ dispatch, resource }: ResourceProps) {
   if (
     resource.dataSource.length === 0 &&
     resource.inputText === '' &&
-    resource.resourceType === '-1' &&
+    (resource.resourceTypeCodes === undefined || resource.resourceTypeCodes?.length === 0) &&
     resource.resourceStatus === '#'
   ) {
     return (
@@ -58,12 +58,12 @@ function Resources({ dispatch, resource }: ResourceProps) {
 
   return (
     <FResourceCardsList
-      resourceType={resource.resourceType}
+      resourceTypeCodes={resource.resourceTypeCodes}
       resourceStatus={resource.resourceStatus}
       inputText={resource.inputText}
       dataSource={resource.dataSource}
       totalNum={resource.totalNum}
-      onChangeResourceType={(value) => {
+      onChangeResourceTypeCodes={(value) => {
         dispatch<OnChangeResourceTypeAction>({
           type: 'resourceListPage/onChangeResourceType',
           payload: {
