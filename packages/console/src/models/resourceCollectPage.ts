@@ -5,7 +5,7 @@ import { ConnectState, ResourceListPageModelState } from '@/models/connect';
 import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCollectPageModelState {
-  resourceType: string;
+  resourceTypeCodes: Array<string | number>;
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageCurrent: number;
@@ -49,7 +49,7 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceCollectPage/onChangeResourceType';
   payload: {
-    value: string;
+    value: Array<string | number>;
   };
 }
 
@@ -98,7 +98,7 @@ export interface ResourceCollectModelType {
 }
 
 const initStates: ResourceCollectPageModelState = {
-  resourceType: '-1',
+  resourceTypeCodes: ['#all'],
   resourceStatus: '#',
   inputText: '',
   dataSource: [],
@@ -154,11 +154,15 @@ const Model: ResourceCollectModelType = {
         dataSource = resourceCollectPage.dataSource;
       }
 
+      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.filter((rt) => {
+        return rt !== '#all';
+      });
+
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: dataSource.length,
         limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
-        resourceType: resourceCollectPage.resourceType === '-1' ? undefined : resourceCollectPage.resourceType,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
       };
 
@@ -209,7 +213,7 @@ const Model: ResourceCollectModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value,
+          resourceTypeCodes: payload.value,
         },
       });
 

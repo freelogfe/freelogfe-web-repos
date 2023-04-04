@@ -43,7 +43,7 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
 
   if (resource.dataSource.length === 0
     && !resource.inputText
-    && resource.resourceType === '-1'
+    && resource.resourceTypeCodes[0] === '#all'
     && resource.resourceStatus === '#') {
     return (<FNoDataTip
       height={'calc(100vh - 140px)'}
@@ -54,12 +54,12 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
   }
 
   return (<FResourceCardsList
-    resourceType={resource.resourceType}
+    resourceTypeCodes={resource.resourceTypeCodes}
     resourceStatus={resource.resourceStatus}
     inputText={resource.inputText}
     dataSource={resource.dataSource}
     totalNum={resource.totalNum}
-    onChangeResourceType={(value) => {
+    onChangeResourceTypeCodes={(value) => {
       dispatch<OnChangeResourceTypeAction>({
         type: 'resourceCollectPage/onChangeResourceType',
         payload: {

@@ -43,7 +43,7 @@ function Resources({ dispatch, resource }: ResourceProps) {
   if (
     resource.dataSource.length === 0 &&
     resource.inputText === '' &&
-    (resource.resourceTypeCodes === undefined || resource.resourceTypeCodes?.length === 0) &&
+    resource.resourceTypeCodes[0] === '#all' &&
     resource.resourceStatus === '#'
   ) {
     return (
