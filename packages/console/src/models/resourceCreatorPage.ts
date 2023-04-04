@@ -18,7 +18,7 @@ export interface ResourceCreatorPageModelState {
   //   valueError: string;
   //   // options: string[];
   // }[];
-  resourceTypeCodes: Array<string | number> | undefined;
+  resourceTypeCodes: Array<string | number>;
 
   introduction: string;
   introductionErrorText: string;
@@ -108,7 +108,7 @@ export const initStates: ResourceCreatorPageModelState = {
   nameVerify: 0,
   nameErrorText: '',
 
-  resourceTypeCodes: undefined,
+  resourceTypeCodes: [],
 
   introduction: '',
   introductionErrorText: '',
