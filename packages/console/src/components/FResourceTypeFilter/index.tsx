@@ -5,7 +5,8 @@ import * as AHooks from 'ahooks';
 import { FServiceAPI } from '@freelog/tools-lib';
 
 interface FResourceTypeFilterProps {
-  value: Array<string | number> | undefined;
+  value: Array<string | number>;
+  omitTheme?: boolean;
 
   onChange?(value: FResourceTypeFilterProps['value']): void;
 }
@@ -22,7 +23,7 @@ interface ServerData {
   children: ServerData[];
 }
 
-function FResourceTypeFilter({ value, onChange }: FResourceTypeFilterProps) {
+function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTypeFilterProps) {
 
   const [options, set_options] = React.useState<Option[]>([]);
 
@@ -31,7 +32,14 @@ function FResourceTypeFilter({ value, onChange }: FResourceTypeFilterProps) {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes();
     // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
-    const options: Option[] = handledData(data_resourceTypes);
+    let data: ServerData[] = data_resourceTypes;
+    if (omitTheme) {
+      data = data.filter((d) => {
+        return d.name !== '主题';
+      });
+    }
+    // console.log(data, 'dataiosdjflksdjfljl  dddddd');
+    const options: Option[] = handledData(data);
     set_options(options);
   });
 
@@ -43,7 +51,7 @@ function FResourceTypeFilter({ value, onChange }: FResourceTypeFilterProps) {
     // allowClear={true}
     value={value}
     options={options}
-    onChange={(value: Array<string | number> | undefined, selectedOptions) => {
+    onChange={(value: Array<string | number>, selectedOptions) => {
       // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
       onChange && onChange(value);
     }}

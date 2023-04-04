@@ -46,10 +46,11 @@ export interface NodeManagerModelState {
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  exhibit_ResourceTypeOptions1: { text: string; value: string }[];
-  exhibit_ResourceTypeOptions2: { text: string; value: string }[];
-  exhibit_SelectedType1: string;
-  exhibit_SelectedType2: string;
+  // exhibit_ResourceTypeOptions1: { text: string; value: string }[];
+  // exhibit_ResourceTypeOptions2: { text: string; value: string }[];
+  exhibit_ResourceTypeCodes: Array<string | number>;
+  // exhibit_SelectedType1: string;
+  // exhibit_SelectedType2: string;
   exhibit_ResourceStateOptions: { text: string; value: string }[];
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
@@ -200,8 +201,7 @@ export interface OnUnmount_SettingPage_Action extends AnyAction {
 export interface OnChange_Exhibit_SelectedType_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_Exhibit_SelectedType';
   payload: {
-    value: string;
-    level: number;
+    value: NodeManagerModelState['exhibit_ResourceTypeCodes'];
   };
 }
 
@@ -310,10 +310,11 @@ export interface NodeManagerModelType {
 }
 
 const exhibitInitStates: Pick<NodeManagerModelState,
-  'exhibit_ResourceTypeOptions1'
-  | 'exhibit_ResourceTypeOptions2'
-  | 'exhibit_SelectedType1'
-  | 'exhibit_SelectedType2'
+  // 'exhibit_ResourceTypeOptions1'
+  // | 'exhibit_ResourceTypeOptions2'
+  'exhibit_ResourceTypeCodes'
+  // | 'exhibit_SelectedType1'
+  // | 'exhibit_SelectedType2'
   | 'exhibit_ResourceStateOptions'
   | 'exhibit_SelectedStatus'
   | 'exhibit_InputFilter'
@@ -321,22 +322,23 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'> = {
-  exhibit_ResourceTypeOptions1: [
-    { text: '全部', value: '-1' },
-    ...resource_TypeData
-      .filter((rt) => {
-        return rt.parentValue === '#';
-      })
-      .map((i) => {
-        return {
-          value: i.value,
-          text: i.value,
-        };
-      }),
-  ],
-  exhibit_ResourceTypeOptions2: [],
-  exhibit_SelectedType1: '-1',
-  exhibit_SelectedType2: '-1',
+  // exhibit_ResourceTypeOptions1: [
+  //   { text: '全部', value: '-1' },
+  //   ...resource_TypeData
+  //     .filter((rt) => {
+  //       return rt.parentValue === '#';
+  //     })
+  //     .map((i) => {
+  //       return {
+  //         value: i.value,
+  //         text: i.value,
+  //       };
+  //     }),
+  // ],
+  // exhibit_ResourceTypeOptions2: [],
+  exhibit_ResourceTypeCodes: ['#all'],
+  // exhibit_SelectedType1: '-1',
+  // exhibit_SelectedType2: '-1',
   exhibit_ResourceStateOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -608,36 +610,42 @@ const Model: NodeManagerModelType = {
 
     * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
 
-      if (payload.level === 1) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            exhibit_SelectedType1: payload.value,
-            exhibit_SelectedType2: '-1',
-            exhibit_ResourceTypeOptions2: [
-              { text: '全部', value: '-1' },
-              ...resource_TypeData
-                .filter((rt) => {
-                  return rt.parentValue === payload.value;
-                })
-                .map((i) => {
-                  return {
-                    value: i.value,
-                    text: i.value,
-                  };
-                }),
-            ],
-          },
-        });
-      } else if (payload.level === 2) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            exhibit_SelectedType2: payload.value,
-          },
-        });
-      }
+      // if (payload.level === 1) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType1: payload.value,
+      //       exhibit_SelectedType2: '-1',
+      //       exhibit_ResourceTypeOptions2: [
+      //         { text: '全部', value: '-1' },
+      //         ...resource_TypeData
+      //           .filter((rt) => {
+      //             return rt.parentValue === payload.value;
+      //           })
+      //           .map((i) => {
+      //             return {
+      //               value: i.value,
+      //               text: i.value,
+      //             };
+      //           }),
+      //       ],
+      //     },
+      //   });
+      // } else if (payload.level === 2) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType2: payload.value,
+      //     },
+      //   });
+      // }
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ResourceTypeCodes: payload.value,
+        },
+      });
 
       yield put<FetchExhibitsAction>({
         type: 'fetchExhibits',
@@ -842,6 +850,10 @@ const Model: NodeManagerModelType = {
         });
       }
 
+      const resourceTypes: Array<string | number> = nodeManagerPage.exhibit_ResourceTypeCodes.filter((rt) => {
+        return rt !== '#all';
+      });
+
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: FUtil.Predefined.pageSize,
@@ -849,11 +861,12 @@ const Model: NodeManagerModelType = {
         skip: list.length,
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
-        resourceType: nodeManagerPage.exhibit_SelectedType2 !== '-1'
-          ? nodeManagerPage.exhibit_SelectedType2
-          : nodeManagerPage.exhibit_SelectedType1 !== '-1'
-            ? nodeManagerPage.exhibit_SelectedType1
-            : undefined,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        // resourceType: nodeManagerPage.exhibit_SelectedType2 !== '-1'
+        //   ? nodeManagerPage.exhibit_SelectedType2
+        //   : nodeManagerPage.exhibit_SelectedType1 !== '-1'
+        //     ? nodeManagerPage.exhibit_SelectedType1
+        //     : undefined,
         // nodeManagerPage.exhibit_SelectedType === '-1'
         //   ? undefined
         //   : nodeManagerPage.exhibit_SelectedType,
@@ -868,7 +881,7 @@ const Model: NodeManagerModelType = {
 
       if (data_Exhibits.dataList.length === 0) {
         if (
-          nodeManagerPage.exhibit_SelectedType1 === '-1' &&
+          nodeManagerPage.exhibit_ResourceTypeCodes[0] === '#all' &&
           nodeManagerPage.exhibit_SelectedStatus === '2' &&
           nodeManagerPage.exhibit_InputFilter === ''
         ) {
