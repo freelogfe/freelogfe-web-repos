@@ -149,6 +149,8 @@ export interface NodeManagerModelState {
 
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
+
+  setting_state: 'normal' | 'editing';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -322,23 +324,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'> = {
-  // exhibit_ResourceTypeOptions1: [
-  //   { text: '全部', value: '-1' },
-  //   ...resource_TypeData
-  //     .filter((rt) => {
-  //       return rt.parentValue === '#';
-  //     })
-  //     .map((i) => {
-  //       return {
-  //         value: i.value,
-  //         text: i.value,
-  //       };
-  //     }),
-  // ],
-  // exhibit_ResourceTypeOptions2: [],
   exhibit_ResourceTypeCodes: ['#all'],
-  // exhibit_SelectedType1: '-1',
-  // exhibit_SelectedType2: '-1',
   exhibit_ResourceStateOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -426,6 +412,10 @@ const contractInitStates: Pick<NodeManagerModelState,
   contract_ContractDetailsID: '',
 };
 
+const settingInitStates: Pick<NodeManagerModelState, 'setting_state'> = {
+  setting_state: 'normal',
+};
+
 const initStates: NodeManagerModelState = {
   nodeId: -1,
 
@@ -446,6 +436,8 @@ const initStates: NodeManagerModelState = {
 
   policyEditorVisible: false,
   policyOperaterVisible: false,
+
+  ...settingInitStates,
 };
 
 const Model: NodeManagerModelType = {
@@ -510,9 +502,6 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    // * onChange_NodeID({ payload }: OnChange_NodeID_Action, { select, call, put }: EffectsCommandMap) {
-    //
-    // },
     * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -520,54 +509,6 @@ const Model: NodeManagerModelType = {
           showPage: payload.value,
         },
       });
-      // if (payload.value === 'exhibit') {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       showPage: payload.value,
-      //       ...themeInitStates,
-      //     },
-      //   });
-      //   yield put<FetchExhibitsAction>({
-      //     type: 'fetchExhibits',
-      //     payload: {
-      //       restart: true,
-      //     },
-      //   });
-      // }
-      //
-      // if (payload.value === 'theme') {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       showPage: payload.value,
-      //       ...exhibitInitStates,
-      //     },
-      //   });
-      //   yield put<FetchThemesAction>({
-      //     type: 'fetchThemes',
-      //     payload: {
-      //       restart: true,
-      //     },
-      //   });
-      // }
-      //
-      // if (payload.value === 'contract') {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       showPage: payload.value,
-      //       ...exhibitInitStates,
-      //       ...themeInitStates,
-      //     },
-      //   });
-      // yield put<FetchThemesAction>({
-      //   type: 'fetchThemes',
-      //   payload: {
-      //     restart: true,
-      //   },
-      // });
-      // }
     },
     * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
       yield put<FetchExhibitsAction>({
@@ -609,36 +550,6 @@ const Model: NodeManagerModelType = {
     },
 
     * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
-
-      // if (payload.level === 1) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       exhibit_SelectedType1: payload.value,
-      //       exhibit_SelectedType2: '-1',
-      //       exhibit_ResourceTypeOptions2: [
-      //         { text: '全部', value: '-1' },
-      //         ...resource_TypeData
-      //           .filter((rt) => {
-      //             return rt.parentValue === payload.value;
-      //           })
-      //           .map((i) => {
-      //             return {
-      //               value: i.value,
-      //               text: i.value,
-      //             };
-      //           }),
-      //       ],
-      //     },
-      //   });
-      // } else if (payload.level === 2) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       exhibit_SelectedType2: payload.value,
-      //     },
-      //   });
-      // }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -723,18 +634,6 @@ const Model: NodeManagerModelType = {
         });
       }
 
-      // const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-      //   presentableId: payload.id,
-      //   onlineStatus: payload.onlineStatus,
-      // };
-      //
-      // const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
-
-      // if (!data) {
-      //   fMessage('上线失败', 'error');
-      //   return;
-      // }
-
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: payload.id,
         // isLoadCustomPropertyDescriptors: 1,
@@ -771,9 +670,6 @@ const Model: NodeManagerModelType = {
       });
     },
     * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
-      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-      //   nodeManagerPage,
-      // }));
 
       yield put<ChangeAction>({
         type: 'change',
@@ -784,11 +680,6 @@ const Model: NodeManagerModelType = {
 
       yield call(onlineExhibit, payload.id);
 
-      // const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-      //   presentableId: payload.id,
-      //   onlineStatus: 1,
-      // };
-      // const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -799,17 +690,6 @@ const Model: NodeManagerModelType = {
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
       });
-
-      // if (!data) {
-      //   fMessage('激活失败', 'error');
-      // } else {
-      //   fMessage(FI18n.i18nNext.t('msg_done'), 'success');
-      //
-      // }
-
-      // yield put<FetchNodeInfoAction>({
-      //   type: 'fetchNodeInfo',
-      // });
     },
     * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -862,14 +742,6 @@ const Model: NodeManagerModelType = {
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
         resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
-        // resourceType: nodeManagerPage.exhibit_SelectedType2 !== '-1'
-        //   ? nodeManagerPage.exhibit_SelectedType2
-        //   : nodeManagerPage.exhibit_SelectedType1 !== '-1'
-        //     ? nodeManagerPage.exhibit_SelectedType1
-        //     : undefined,
-        // nodeManagerPage.exhibit_SelectedType === '-1'
-        //   ? undefined
-        //   : nodeManagerPage.exhibit_SelectedType,
         omitResourceType: '主题',
         isLoadPolicyInfo: 1,
         // @ts-ignore
