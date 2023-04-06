@@ -5,22 +5,32 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { Helmet } from 'react-helmet';
 import { Dispatch } from 'redux';
 import Sider from '@/pages/node/formal/$id/Sider';
-// import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
-// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-// import { Input } from 'antd';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
+import * as AHooks from 'ahooks';
+import { OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
 
 interface SettingProps {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
 }
 
-function Setting({ nodeManagerPage }: SettingProps) {
+function Setting({ dispatch, nodeManagerPage }: SettingProps) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMount_SettingPage_Action>({
+      type: 'nodeManagerPage/onMount_SettingPage',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
+
   return (<>
     <Helmet>
       <title>{`节点设置 · ${nodeManagerPage.nodeName} - Freelog`}</title>
@@ -75,31 +85,46 @@ function Setting({ nodeManagerPage }: SettingProps) {
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodetitle')} />
           <div style={{ height: 20 }} />
-          <div className={styles.nodeName}>
-            <FComponentsLib.FContentText text={'black'} type={'normal'} />
-          </div>
-          <div className={styles.nodeName1}>
-            <FInput size='middle' style={{ width: 380 }} />
-            <FComponentsLib.FContentText text={'限制字符数量xxx'} type={'additional2'} />
-          </div>
+          {
+            nodeManagerPage.setting_state === 'normal'
+              ? (<div className={styles.nodeName}>
+                <FComponentsLib.FContentText text={'black'} type={'normal'} />
+              </div>)
+              : (<div className={styles.nodeName1}>
+                <FInput size='middle' style={{ width: 380 }} />
+                <FComponentsLib.FContentText text={'限制字符数量xxx'} type={'additional2'} />
+              </div>)
+          }
+
+
           <div style={{ height: 40 }} />
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodeshortdesc')} />
           <div style={{ height: 20 }} />
-          <div className={styles.introduction}>
-            <FComponentsLib.FContentText text={'这是我的音乐节点'} type={'normal'} />
-          </div>
-          <div className={styles.introduction1}>
-            <FIntroductionEditor
-              value={'这是我的音乐节点23423'}
-            />
-          </div>
+          {
+            nodeManagerPage.setting_state === 'normal'
+              ? (<div className={styles.introduction}>
+                <FComponentsLib.FContentText text={'这是我的音乐节点'} type={'normal'} />
+              </div>)
+              : (<div className={styles.introduction1}>
+                <FIntroductionEditor
+                  value={'这是我的音乐节点23423'}
+                />
+              </div>)
+          }
+
           <div style={{ height: 40 }} />
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility')} />
           <div style={{ height: 20 }} />
           <div className={styles.permission}>
-            <div><Radio checked={false} disabled={true} style={{ margin: 0 }} /></div>
+            <div>
+              <Radio
+                checked={nodeManagerPage.setting_nodeLimitation === 'public'}
+                disabled={nodeManagerPage.setting_state === 'normal'}
+                style={{ margin: 0 }}
+              />
+            </div>
             <div>
               <FComponentsLib.FContentText
                 text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_public')}
@@ -114,7 +139,13 @@ function Setting({ nodeManagerPage }: SettingProps) {
               />
             </div>
 
-            <div><Radio checked={false} disabled={true} style={{ margin: 0 }} /></div>
+            <div>
+              <Radio
+                checked={nodeManagerPage.setting_nodeLimitation === 'private'}
+                disabled={nodeManagerPage.setting_state === 'normal'}
+                style={{ margin: 0 }}
+              />
+            </div>
             <div>
               <FComponentsLib.FContentText
                 text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_private')}
@@ -129,7 +160,13 @@ function Setting({ nodeManagerPage }: SettingProps) {
               />
             </div>
 
-            <div><Radio checked={true} disabled={true} style={{ margin: 0 }} /></div>
+            <div>
+              <Radio
+                checked={nodeManagerPage.setting_nodeLimitation === 'pause'}
+                disabled={nodeManagerPage.setting_state === 'normal'}
+                style={{ margin: 0 }}
+              />
+            </div>
             <div>
               <FComponentsLib.FContentText
                 text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility_hidefromvisitor')}
@@ -142,30 +179,47 @@ function Setting({ nodeManagerPage }: SettingProps) {
                 type={'additional2'}
                 style={{ lineHeight: '20px' }}
               />
-              <div style={{ height: 15 }} />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <FComponentsLib.FContentText
-                  text={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_title')}
-                  type={'additional2'}
-                />
-                <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>
-                  预览
-                </FComponentsLib.FTextBtn>
-              </div>
-              <div style={{ height: 15 }} />
-              <FInput
-                style={{ width: 740 }}
-                placeholder={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')}
-              />
+              {
+                nodeManagerPage.setting_state === 'editing' && nodeManagerPage.setting_nodeLimitation === 'pause' && (<>
+                  <div style={{ height: 15 }} />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <FComponentsLib.FContentText
+                      text={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_title')}
+                      type={'additional2'}
+                    />
+                    <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>
+                      预览
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                  <div style={{ height: 15 }} />
+                  <FInput
+                    style={{ width: 740 }}
+                    placeholder={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')}
+                  />
+                </>)
+              }
+
             </div>
           </div>
           <div style={{ height: 40 }} />
 
           <div className={styles.editBtn}>
-            <FComponentsLib.FRectBtn
-              type={'primary'}>{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>
-            <FComponentsLib.FTextBtn type={'default'}>取消</FComponentsLib.FTextBtn>
-            <FComponentsLib.FRectBtn type={'primary'}>确定</FComponentsLib.FRectBtn>
+            {
+
+            }
+
+            {
+              nodeManagerPage.setting_state === 'normal' && (<FComponentsLib.FRectBtn
+                type={'primary'}>{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>)
+            }
+
+            {
+              nodeManagerPage.setting_state === 'editing' && (<>
+                <FComponentsLib.FTextBtn type={'default'}>取消</FComponentsLib.FTextBtn>
+                <FComponentsLib.FRectBtn type={'primary'}>确定</FComponentsLib.FRectBtn>
+              </>)
+            }
+
           </div>
         </div>
         <div style={{ height: 100, flexShrink: 0 }} />

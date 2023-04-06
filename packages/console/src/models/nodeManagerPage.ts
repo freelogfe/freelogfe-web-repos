@@ -9,26 +9,26 @@ import moment, { Moment } from 'moment';
 import { onlineExhibit } from '@/pages/node/utils/tools';
 import { message } from 'antd';
 
-const resource_TypeData = [
-  { value: '插件', parentValue: '#' },
-  { value: '阅读', parentValue: '#' },
-  { value: '音频', parentValue: '#' },
-  { value: '图片', parentValue: '#' },
-  { value: '视频', parentValue: '#' },
-  { value: '游戏', parentValue: '#' },
-  { value: '文章', parentValue: '阅读' },
-  { value: '演示文稿', parentValue: '阅读' },
-  { value: '音效', parentValue: '音频' },
-  { value: '音乐', parentValue: '音频' },
-  { value: '播客节目', parentValue: '音频' },
-  { value: '照片', parentValue: '图片' },
-  { value: '插画', parentValue: '图片' },
-  { value: '动态影像', parentValue: '视频' },
-  { value: '实拍片段', parentValue: '视频' },
-  { value: '短视频', parentValue: '视频' },
-  { value: '长视频', parentValue: '视频' },
-  { value: '红白机', parentValue: '游戏' },
-] as const;
+// const resource_TypeData = [
+//   { value: '插件', parentValue: '#' },
+//   { value: '阅读', parentValue: '#' },
+//   { value: '音频', parentValue: '#' },
+//   { value: '图片', parentValue: '#' },
+//   { value: '视频', parentValue: '#' },
+//   { value: '游戏', parentValue: '#' },
+//   { value: '文章', parentValue: '阅读' },
+//   { value: '演示文稿', parentValue: '阅读' },
+//   { value: '音效', parentValue: '音频' },
+//   { value: '音乐', parentValue: '音频' },
+//   { value: '播客节目', parentValue: '音频' },
+//   { value: '照片', parentValue: '图片' },
+//   { value: '插画', parentValue: '图片' },
+//   { value: '动态影像', parentValue: '视频' },
+//   { value: '实拍片段', parentValue: '视频' },
+//   { value: '短视频', parentValue: '视频' },
+//   { value: '长视频', parentValue: '视频' },
+//   { value: '红白机', parentValue: '游戏' },
+// ] as const;
 
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
@@ -151,6 +151,18 @@ export interface NodeManagerModelState {
   policyOperaterVisible: boolean;
 
   setting_state: 'normal' | 'editing';
+  setting_nodeInfo: {
+    cover: string;
+    title: string;
+    introduction: string;
+    limitation: 'public' | 'private' | 'pause';
+    limitationMessage: string;
+  };
+  setting_nodeCover: string;
+  setting_nodeTitle: string;
+  setting_nodeIntroduction: string;
+  setting_nodeLimitation: 'public' | 'private' | 'pause';
+  setting_nodeLimitationMessage: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -412,8 +424,27 @@ const contractInitStates: Pick<NodeManagerModelState,
   contract_ContractDetailsID: '',
 };
 
-const settingInitStates: Pick<NodeManagerModelState, 'setting_state'> = {
+const settingInitStates: Pick<NodeManagerModelState,
+  'setting_state'
+  | 'setting_nodeInfo'
+  | 'setting_nodeCover'
+  | 'setting_nodeTitle'
+  | 'setting_nodeIntroduction'
+  | 'setting_nodeLimitation'
+  | 'setting_nodeLimitationMessage'> = {
   setting_state: 'normal',
+  setting_nodeInfo: {
+    cover: '',
+    title: '',
+    introduction: '',
+    limitation: 'public',
+    limitationMessage: '',
+  },
+  setting_nodeCover: '',
+  setting_nodeTitle: '',
+  setting_nodeIntroduction: '',
+  setting_nodeLimitation: 'public',
+  setting_nodeLimitationMessage: '',
 };
 
 const initStates: NodeManagerModelState = {
@@ -542,7 +573,19 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onMount_SettingPage({}: OnMount_SettingPage_Action, {}: EffectsCommandMap) {
+    * onMount_SettingPage({}: OnMount_SettingPage_Action, { select, call }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+
+      const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+      };
+
+      const { data: data_nodeDetails } = yield call(FServiceAPI.Node.details, params);
+
+      console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
 
     },
     * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, {}: EffectsCommandMap) {
