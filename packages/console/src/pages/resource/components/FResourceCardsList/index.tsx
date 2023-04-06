@@ -107,81 +107,6 @@ function FResourceCardsList({
               }}
             />
 
-            {/*<FComponentsLib.FDropdown*/}
-            {/*  overlay={*/}
-            {/*    <FMenu*/}
-            {/*      options={[*/}
-            {/*        {*/}
-            {/*          value: '-1',*/}
-            {/*          text: '全部',*/}
-            {/*        },*/}
-            {/*        ...categoryData.first.map((i, index) => {*/}
-            {/*          return {*/}
-            {/*            value: index + '',*/}
-            {/*            text: i,*/}
-            {/*          };*/}
-            {/*        }),*/}
-            {/*      ]}*/}
-            {/*      value={category.first}*/}
-            {/*      onClick={(value) => {*/}
-            {/*        setCategory({*/}
-            {/*          ...category,*/}
-            {/*          first: value,*/}
-            {/*          second: category.first === value ? category.second : '-1',*/}
-            {/*        });*/}
-            {/*        //onChangeResourceType && onChangeResourceType(value)*/}
-            {/*      }}*/}
-            {/*    />*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  <span style={{ cursor: 'pointer' }}>*/}
-            {/*    {categoryData.first[category.first] || '全部'}*/}
-            {/*    /!*<DownOutlined style={{ marginLeft: 8 }} />*!/*/}
-            {/*    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
-            {/*  </span>*/}
-            {/*</FComponentsLib.FDropdown>*/}
-
-            {/*{category.first > 1 ? (*/}
-            {/*  <>*/}
-            {/*    <span className='ml-30'>子类型：</span>*/}
-            {/*    <FComponentsLib.FDropdown*/}
-            {/*      overlay={*/}
-            {/*        <FMenu*/}
-            {/*          // @ts-ignore*/}
-            {/*          options={[*/}
-            {/*            {*/}
-            {/*              value: '-1',*/}
-            {/*              text: '全部',*/}
-            {/*            },*/}
-            {/*            // @ts-ignore*/}
-            {/*            ...categoryData.second[category.first].map((i, index) => {*/}
-            {/*              return {*/}
-            {/*                value: index + '',*/}
-            {/*                text: i,*/}
-            {/*              };*/}
-            {/*            }),*/}
-            {/*          ]}*/}
-            {/*          onClick={(value) => {*/}
-            {/*            setCategory({*/}
-            {/*              ...category,*/}
-            {/*              second: value,*/}
-            {/*            });*/}
-            {/*            // onChangeResourceType && onChangeResourceType(value)*/}
-            {/*          }}*/}
-            {/*        />*/}
-            {/*      }*/}
-            {/*    >*/}
-            {/*      <span style={{ cursor: 'pointer' }}>*/}
-            {/*        {*/}
-            {/*          // @ts-ignore*/}
-            {/*          categoryData.second[category.first][category.second] || '全部'*/}
-            {/*        }*/}
-            {/*        /!*<DownOutlined style={{ marginLeft: 8 }} />*!/*/}
-            {/*        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
-            {/*      </span>*/}
-            {/*    </FComponentsLib.FDropdown>*/}
-            {/*  </>*/}
-            {/*) : null}*/}
           </div>
           <div style={{ marginLeft: 60 }}>
             <span>{FI18n.i18nNext.t('resource_state')}：</span>
@@ -267,7 +192,14 @@ function FResourceCardsList({
           <div style={{ height: 100 }} />
         </>
       ) : (
-        <FNoDataTip height={'calc(100vh - 220px)'} tipText={'没有符合条件的资源'} />
+        <FNoDataTip
+          height={'calc(100vh - 220px)'}
+          tipText={'没有符合条件的资源'}
+          btnText={'创建资源'}
+          onClick={() => {
+            self.open(FUtil.LinkTo.resourceCreator());
+          }}
+        />
       )}
 
       {totalNum > dataSource.length && (

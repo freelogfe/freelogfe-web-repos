@@ -51,7 +51,9 @@ function Resources({ dispatch, resource }: ResourceProps) {
         height={'calc(100vh - 140px)'}
         tipText={'未创建任何资源'}
         btnText={'创建资源'}
-        onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreator());
+        }}
       />
     );
   }
