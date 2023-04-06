@@ -53,13 +53,28 @@ interface NodesParamsType {
 }
 
 export function nodes(params: NodesParamsType) {
-  // return FUtil.Axios.get('/v2/nodes', {
-  //   params
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/nodes`,
     params: params,
+  });
+}
+
+// 设置节点信息
+interface SetNodeInfoParamsType {
+  nodeId: number;
+  nodeLogo: string;
+  nodeTitle: string;
+  nodeShortDescription: string;
+  nodeVisibility: 1 | 2 | 3; // 可见性 1：公开 2：私密 3：暂停
+  nodeSuspendInfo: string;
+}
+
+export function setNodeInfo(params: SetNodeInfoParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/nodes/setNodeInfo`,
+    data: params,
   });
 }
 

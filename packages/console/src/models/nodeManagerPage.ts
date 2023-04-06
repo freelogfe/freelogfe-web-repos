@@ -46,11 +46,7 @@ export interface NodeManagerModelState {
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  // exhibit_ResourceTypeOptions1: { text: string; value: string }[];
-  // exhibit_ResourceTypeOptions2: { text: string; value: string }[];
   exhibit_ResourceTypeCodes: Array<string | number>;
-  // exhibit_SelectedType1: string;
-  // exhibit_SelectedType2: string;
   exhibit_ResourceStateOptions: { text: string; value: string }[];
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
@@ -252,6 +248,13 @@ export interface OnOnlineOrOfflineAction {
   };
 }
 
+export interface OnChange_Setting_Cover_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Cover';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
@@ -311,6 +314,8 @@ export interface NodeManagerModelType {
     onOnlineOrOffline: (action: OnOnlineOrOfflineAction, effects: EffectsCommandMap) => void;
     onActive: (action: OnActiveAction, effects: EffectsCommandMap) => void;
     onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
+
+    onChange_Setting_Cover: (action: OnChange_Setting_Cover_Action, effects: EffectsCommandMap) => void;
 
     fetchExhibits: (action: FetchExhibitsAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
@@ -573,7 +578,7 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onMount_SettingPage({}: OnMount_SettingPage_Action, { select, call }: EffectsCommandMap) {
+    * onMount_SettingPage({}: OnMount_SettingPage_Action, { select, call, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
         }),
@@ -586,6 +591,14 @@ const Model: NodeManagerModelType = {
       const { data: data_nodeDetails } = yield call(FServiceAPI.Node.details, params);
 
       console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeInfo: {
+            
+          },
+        },
+      });
 
     },
     * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, {}: EffectsCommandMap) {
@@ -744,6 +757,27 @@ const Model: NodeManagerModelType = {
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
       });
+    },
+
+    * onChange_Setting_Cover({ payload }: OnChange_Setting_Cover_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+      const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+        nodeLogo: payload.value,
+        nodeTitle: nodeManagerPage.setting_nodeInfo.title,
+        nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
+        nodeVisibility: nodeManagerPage.setting_nodeInfo.limitation === 'public'
+          ? 1
+          : nodeManagerPage.setting_nodeInfo.limitation === 'private'
+            ? 2
+            : 3, // 可见性 1：公开 2：私密 3：暂停
+        nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
+      };
+
+      yield call(FServiceAPI.Node.setNodeInfo, params);
     },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {

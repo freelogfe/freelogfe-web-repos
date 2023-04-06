@@ -6,9 +6,7 @@ import FCropperModal from './FCropperModal';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
-// import FUtil1 from '@/utils';
-
-interface FUploadAvatarProps {
+interface FUploadNodeCoverProps {
   children: React.ReactNode;
 
   onUploadSuccess?(url: string): void;
@@ -26,7 +24,7 @@ const initStates: FUploadAvatarStates = {
   uploading: false,
 };
 
-function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProps) {
+function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCoverProps) {
   const ref = React.useRef<any>(null);
   // const [naturalFile, setNaturalFile] = React.useState<FUploadAvatarStates['naturalFile']>(initStates['naturalFile']);
   const [image, set_image] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
@@ -63,14 +61,22 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
     const myFile = new File([blob], 'image.jpeg', {
       type: blob.type,
     });
-    const { ret, errCode, msg, data } = await FServiceAPI.User.uploadHeadImg({
+    const { ret, errCode, msg, data: data_uploadImage }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: {
+        url: string;
+      };
+    } = await FServiceAPI.Storage.uploadImage({
       file: myFile,
     });
     await FUtil.Tool.promiseSleep(1000);
+    // console.log(data, 'datai8o9dsjflksdjflkjklj');
     if (ret !== 0 || errCode !== 0) {
       fMessage(msg, 'error');
     } else {
-      onUploadSuccess && onUploadSuccess(FUtil.Tool.getAvatarUrl());
+      onUploadSuccess && onUploadSuccess(data_uploadImage.url);
     }
     set_image(initStates['image']);
     set_uploading(false);
@@ -105,4 +111,4 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
   </div>);
 }
 
-export default FUploadAvatar;
+export default FUploadNodeCover;

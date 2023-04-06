@@ -12,7 +12,12 @@ import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import * as AHooks from 'ahooks';
-import { OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
+import { OnChange_Setting_Cover_Action, OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
+import fMessage from '@/components/fMessage';
+// import FUploadCover from '@/components/FUploadCover';
+// import FUploadAvatar from '@/components/FUploadNodeCover';
+import FUploadNodeCover from '@/components/FUploadNodeCover';
+import * as imgSrc from '@/assets/default-resource-cover.jpg';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -43,7 +48,10 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
     >
       <div className={styles.content}>
         <div className={styles.header}>
-          <FComponentsLib.FTitleText type={'h1'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_page_title')} />
+          <FComponentsLib.FTitleText
+            type={'h1'}
+            text={FI18n.i18nNext.t('nodemgnt_nodesetting_page_title')}
+          />
           <Space size={30}>
             <Space size={5}>
               <FComponentsLib.FContentText
@@ -78,9 +86,31 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           </Space>
         </div>
         <div className={styles.panel}>
-          <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo')} />
+          <FComponentsLib.FTitleText
+            type={'h3'}
+            text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo')}
+          />
           <div style={{ height: 20 }} />
-          <img style={{ height: 72, width: 72 }} src={'https://image.freelog.com/headImage/50028'} alt='' />
+          <FUploadNodeCover
+            onUploadSuccess={(url) => {
+              // console.log(url, 'sdoifjsdlkfj **(******');
+              dispatch<OnChange_Setting_Cover_Action>({
+                type: 'nodeManagerPage/onChange_Setting_Cover',
+                payload: {
+                  value: url,
+                },
+              });
+            }}
+            onError={(err) => {
+              fMessage(err, 'error');
+            }}
+          >
+            <img
+              style={{ height: 72, width: 72, borderRadius: '50%' }}
+              src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
+              alt=''
+            />
+          </FUploadNodeCover>
           <div style={{ height: 40 }} />
 
           <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodetitle')} />
