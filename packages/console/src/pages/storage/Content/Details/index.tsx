@@ -31,6 +31,84 @@ interface DetailsProps {
   storageObjectEditor: StorageObjectEditorModelState;
 }
 
+// interface DetailsStates {
+//   objectId: string;
+//   bucketName: string;
+//   objectName: string;
+//   sha1: string;
+//   size: number;
+//   // type: string;
+//   // typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
+//   // typeError: string;
+//   resourceTypeCodes: Array<string | number>;
+//   resourceTypeNames: string[];
+//
+//   rawProperties: {
+//     key: string;
+//     value: string;
+//   }[];
+//
+//   baseProperties: {
+//     key: string;
+//     value: string;
+//     description: string;
+//   }[];
+//   basePropertiesEditorVisible: boolean;
+//   basePropertiesEditorData: {
+//     key: string;
+//     keyError: string;
+//     value: string;
+//     valueError: string;
+//     description: string;
+//     descriptionError: string;
+//   }[];
+//   basePropertyEditorIndex: number;
+//   basePropertyEditorData: {
+//     key: string;
+//     keyError: string;
+//     value: string;
+//     valueError: string;
+//     description: string;
+//     descriptionError: string;
+//   } | null;
+//
+//   customOptionsDataVisible: boolean;
+//   customOptionsData: {
+//     key: string;
+//     description: string;
+//     custom: 'input' | 'select';
+//     defaultValue: string;
+//     customOption: string;
+//   }[];
+//   customOptionsEditorVisible: boolean;
+//   customOptionsEditorDataSource: {
+//     key: string;
+//     keyError: string;
+//     description: string;
+//     descriptionError: string;
+//     custom: 'input' | 'select';
+//     defaultValue: string;
+//     defaultValueError: string;
+//     customOption: string;
+//     customOptionError: string;
+//   }[];
+//   customOptionIndex: number;
+//   customOptionEditorData: {
+//     key: string;
+//     keyError: string;
+//     description: string;
+//     descriptionError: string;
+//     custom: 'input' | 'select';
+//     defaultValue: string;
+//     defaultValueError: string;
+//     customOption: string;
+//     customOptionError: string;
+//   } | null;
+//
+//   depRs: DepR[];
+//   depOs: DepO[];
+// }
+
 function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);

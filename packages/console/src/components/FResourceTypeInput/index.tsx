@@ -68,3 +68,26 @@ function handledData(data: ServerData[], useKey: 'code' | 'name'): Option[] {
     };
   });
 }
+
+export async function codeToCodes(code: string): Promise<Option[]> {
+  const { data: data_resourceTypes }: {
+    data: ServerData[];
+  } = await FServiceAPI.Resource.resourceTypes();
+  const arr: Option[] = [];
+  ha(code, data_resourceTypes, arr);
+  return arr;
+}
+
+function ha(code: string, data: ServerData[], payload: Option[]) {
+  const da: ServerData | undefined = data.find((d) => {
+    return code.startsWith(d.code);
+  });
+  if (!da) {
+    return;
+  }
+  payload.push({
+    value: da.code,
+    label: da.name,
+  });
+  ha(code, da.children, payload);
+}

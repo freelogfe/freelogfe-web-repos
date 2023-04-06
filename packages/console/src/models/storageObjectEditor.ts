@@ -7,6 +7,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { UpdateAObjectAction } from '@/models/storageHomePage';
 import { fileAttrUnits } from '@/utils/format';
+import { codeToCodes } from '@/components/FResourceTypeInput';
 
 interface DepR {
   id: string;
@@ -29,15 +30,11 @@ interface DepO {
 }
 
 export interface StorageObjectEditorModelState {
-  // visible: boolean;
   objectId: string;
   bucketName: string;
   objectName: string;
   sha1: string;
   size: number;
-  // type: string;
-  // typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
-  // typeError: string;
   resourceTypeCodes: Array<string | number>;
   resourceTypeNames: string[];
 
@@ -231,7 +228,24 @@ const Model: StorageObjectEditorModelType = {
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: storageObjectEditor.objectId,
       };
-      const { data } = yield call(FServiceAPI.Storage.objectDetails, params);
+      const { data }: {
+        data: {
+          objectId: string;
+          bucketName: string;
+          objectName: string;
+          sha1: string;
+          userId: number;
+          resourceTypeCode: string;
+          dependencies: any[];
+          customPropertyDescriptors: any[];
+          // fileSize: string;
+          systemProperty: {
+            [key: string]: string;
+          } & {
+            fileSize: number;
+          };
+        }
+      } = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'data@#Rwe90ifjsdlkfa');
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
@@ -286,17 +300,27 @@ const Model: StorageObjectEditorModelType = {
           }),
         }));
       }
-      console.log(data.resourceType, '#Q@#$R@#FASD');
+      // console.log(data.resourceType, '#Q@#$R@#FASD');
 
+      const keyValue: {
+        value: string | number;
+        label: string;
+      }[] = yield call(codeToCodes, data.resourceTypeCode || '');
+      // console.log(keyValue, 'keyValue sediofjsdlk keyValue sdoifjsdlk');
       yield put<ChangeAction>({
         type: 'change',
+
         payload: {
           objectId: data.objectId,
           bucketName: data.bucketName,
           objectName: data.objectName,
           sha1: data.sha1,
-          // type: data.resourceType,
-          // resourceTypeCodes: data.resourceType,
+          resourceTypeCodes: keyValue.map((kv) => {
+            return kv.value;
+          }),
+          resourceTypeNames: keyValue.map((kv) => {
+            return kv.label;
+          }),
           size: data.systemProperty.fileSize,
           rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
             key: s[0],
