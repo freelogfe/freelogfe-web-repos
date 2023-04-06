@@ -273,6 +273,7 @@ interface UpdateObjectParamsType {
     versionRange?: string;
   }[];
   resourceType?: string[];
+  resourceTypeCode?: string;
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
