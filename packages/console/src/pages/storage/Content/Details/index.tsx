@@ -32,21 +32,8 @@ interface DetailsProps {
 }
 
 function Details({ storageObjectEditor, dispatch }: DetailsProps) {
+
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
-
-  // const hasError: boolean = storageObjectEditor.resourceTypeCodes.some((rt, rti) => {
-  //   return (rti !== 0 && rt.value === '') || rt.valueError !== '';
-  // });
-
-  // function onChangeType(value: string) {
-  //   if (value === storageObjectEditor.type) {
-  //     return;
-  //   }
-  //   dispatch<OnChangeTypeAction>({
-  //     type: 'storageObjectEditor/onChangeType',
-  //     payload: value,
-  //   });
-  // }
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
@@ -75,17 +62,6 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           dispatch<OnClick_SaveBtn_Action>({
             type: 'storageObjectEditor/onClick_SaveBtn',
           });
-          // await dispatch<UpdateObjectInfoAction>({
-          //   type: 'storageObjectEditor/updateObjectInfo',
-          // });
-          // dispatch<UpdateAObjectAction>({
-          //   type: 'storageHomePage/updateAObject',
-          //   payload: {
-          //     id: storageObjectEditor.objectId,
-          //     type: storageObjectEditor.type,
-          //   },
-          // });
-          // router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
       >保存</FComponentsLib.FRectBtn>
     </Space>}
@@ -186,7 +162,8 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
               style={{ fontSize: 12, fontWeight: 600 }}
             >
               <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (<FComponentsLib.FIcons.FDown />)}
+              {storageObjectEditor.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (
+                <FComponentsLib.FIcons.FDown />)}
             </FComponentsLib.FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
@@ -277,12 +254,16 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FResourceTypeInput
+            // useKey={'name'}
             value={storageObjectEditor.resourceTypeCodes}
-            onChange={(value) => {
+            onChange={(value, selectedOptions) => {
               dispatch<OnChangeTypeAction>({
                 type: 'storageObjectEditor/onChangeType',
                 payload: {
                   value: value,
+                  names: selectedOptions.map((so) => {
+                    return so.label;
+                  }),
                 },
               });
             }}

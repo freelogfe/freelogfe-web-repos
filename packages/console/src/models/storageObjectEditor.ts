@@ -39,6 +39,7 @@ export interface StorageObjectEditorModelState {
   // typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
   // typeError: string;
   resourceTypeCodes: Array<string | number>;
+  resourceTypeNames: string[];
 
   rawProperties: {
     key: string;
@@ -149,6 +150,7 @@ export interface OnChangeTypeAction extends AnyAction {
   type: 'storageObjectEditor/onChangeType';
   payload: {
     value: StorageObjectEditorModelState['resourceTypeCodes'];
+    names: StorageObjectEditorModelState['resourceTypeNames'];
   };
 }
 
@@ -186,6 +188,7 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   size: 0,
 
   resourceTypeCodes: [],
+  resourceTypeNames: [],
 
   rawProperties: [],
 
@@ -334,15 +337,28 @@ const Model: StorageObjectEditorModelType = {
         storageObjectEditor,
       }));
       // console.log(storageObjectEditor.resource_Type, 'storageObjectEditor.resource_Type09owpjsdlkfj');
+
+      const resourceTypeCodes: string[] = storageObjectEditor.resourceTypeCodes
+        .filter((rt) => {
+          return rt !== '#all';
+        })
+        .map((rt) => {
+          return String(rt);
+        });
+
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        resourceType: storageObjectEditor.resourceTypeCodes
-          .map<string>((rt) => {
-            return String(rt);
-          })
-          .filter((s) => {
-            return s !== '';
-          }),
+        // resourceTypeCode: storageObjectEditor.resourceTypeCodes
+        //   .map<string>((rt) => {
+        //     return String(rt);
+        //   })
+        //   .filter((s) => {
+        //     return s !== '';
+        //   }),
+        resourceTypeCode: storageObjectEditor.resourceTypeCodes.length === 0
+          ? undefined
+          : resourceTypeCodes[resourceTypeCodes.length - 1],
+        resourceType: storageObjectEditor.resourceTypeNames,
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
@@ -383,9 +399,7 @@ const Model: StorageObjectEditorModelType = {
         type: 'storageHomePage/updateAObject',
         payload: {
           id: storageObjectEditor.objectId,
-          type: storageObjectEditor.resourceTypeCodes.map<string>((rt) => {
-            return String(rt);
-          }),
+          type: storageObjectEditor.resourceTypeNames,
         },
       });
 
@@ -396,47 +410,9 @@ const Model: StorageObjectEditorModelType = {
         type: 'change',
         payload: {
           resourceTypeCodes: payload.value,
+          resourceTypeNames: payload.names,
         },
       });
-      // let resourceTypeErrorText = '';
-      // if (payload.length < 3 && payload.length > 0) {
-      //   resourceTypeErrorText = '不少于3个字符';
-      // } else if (payload.length > 20) {
-      //   resourceTypeErrorText = '不多于20个字符';
-      // } else if (payload !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(payload)) {
-      //   resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
-      // }
-      //
-      // if (!resourceTypeErrorText && payload) {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       typeVerify: 1,
-      //     },
-      //   });
-      //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
-      //     storageObjectEditor,
-      //   }));
-      //   const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-      //     sha1: storageObjectEditor.sha1,
-      //     resourceType: payload,
-      //   };
-      //
-      //   const {data} = yield call(FServiceAPI.Storage.fileProperty, params);
-      //   if (!data) {
-      //     // resourceTypeErrorText = '不能设置为' + payload + '类型';
-      //     resourceTypeErrorText = FI18n.i18nNext.t('file_format_incorrect');
-      //   }
-      // }
-      //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     type: payload,
-      //     typeError: resourceTypeErrorText,
-      //     typeVerify: 2,
-      //   },
-      // });
     },
     * addObjectDepR({ payload }: AddObjectDepRAction, { call, put, select }: EffectsCommandMap) {
       const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({

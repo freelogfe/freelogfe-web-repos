@@ -4,12 +4,6 @@ import { Cascader } from 'antd';
 import * as AHooks from 'ahooks';
 import { FServiceAPI } from '@freelog/tools-lib';
 
-interface FResourceTypeInputProps {
-  value: Array<string | number>;
-
-  onChange?(value: FResourceTypeInputProps['value']): void;
-}
-
 interface Option {
   value: string | number;
   label: string;
@@ -22,7 +16,14 @@ interface ServerData {
   children: ServerData[];
 }
 
-function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
+interface FResourceTypeInputProps {
+  value: Array<string | number>;
+  useKey?: 'code' | 'name';
+
+  onChange?(value: FResourceTypeInputProps['value'], selectedOptions: Option[]): void;
+}
+
+function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeInputProps) {
 
   const [options, set_options] = React.useState<Option[]>([]);
 
@@ -31,7 +32,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes();
     // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
-    const options: Option[] = handledData(data_resourceTypes);
+    const options: Option[] = handledData(data_resourceTypes, useKey);
     set_options(options);
   });
 
@@ -45,7 +46,11 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     options={options}
     onChange={(value: Array<string | number> | undefined, selectedOptions) => {
       // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
-      onChange && onChange(value || []);
+      if (!value) {
+        onChange && onChange([], []);
+        return;
+      }
+      onChange && onChange(value, selectedOptions as Option[]);
     }}
     placeholder='Please select'
   />);
@@ -54,12 +59,12 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 export default FResourceTypeInput;
 
 
-function handledData(data: ServerData[]): Option[] {
+function handledData(data: ServerData[], useKey: 'code' | 'name'): Option[] {
   return data.map((d) => {
     return {
-      value: d.code,
+      value: d[useKey],
       label: d.name,
-      children: handledData(d.children),
+      children: handledData(d.children, useKey),
     };
   });
 }
