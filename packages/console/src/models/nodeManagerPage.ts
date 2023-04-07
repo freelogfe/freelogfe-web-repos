@@ -124,6 +124,9 @@ export interface NodeManagerModelState {
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
 
+  setting_nodeID: number;
+  setting_nodeName: string;
+  setting_nodeUrl: string;
   setting_state: 'normal' | 'editing';
   setting_nodeInfo: {
     cover: string;
@@ -455,13 +458,19 @@ const contractInitStates: Pick<NodeManagerModelState,
 };
 
 const settingInitStates: Pick<NodeManagerModelState,
-  'setting_state'
+  'setting_nodeID'
+  | 'setting_nodeName'
+  | 'setting_nodeUrl'
+  | 'setting_state'
   | 'setting_nodeInfo'
   // | 'setting_nodeCover'
   | 'setting_nodeTitle'
   | 'setting_nodeIntroduction'
   | 'setting_nodeLimitation'
   | 'setting_nodeLimitationMessage'> = {
+  setting_nodeID: -1,
+  setting_nodeName: '',
+  setting_nodeUrl: '',
   setting_state: 'normal',
   setting_nodeInfo: {
     cover: '',
@@ -618,13 +627,19 @@ const Model: NodeManagerModelType = {
       const { data: data_nodeDetails }: {
         data: {
           nodeLogo: string;
+          nodeId: number;
+          nodeName: string;
+          nodeDomain: string;
         }
       } = yield call(FServiceAPI.Node.details, params);
 
-      // console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
+      console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          setting_nodeID: data_nodeDetails.nodeId,
+          setting_nodeTitle: data_nodeDetails.nodeName,
+          setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
           setting_nodeInfo: {
             cover: data_nodeDetails.nodeLogo,
             title: '',

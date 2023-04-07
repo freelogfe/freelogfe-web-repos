@@ -67,11 +67,11 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 type={'additional2'}
               />
               <FComponentsLib.FContentText
-                text={'nodename.freelog.com'}
+                text={nodeManagerPage.setting_nodeUrl}
                 type={'additional2'}
               />
               <FComponentsLib.FCopyToClipboard
-                text={'nodename.freelog.com'}
+                text={nodeManagerPage.setting_nodeUrl}
                 iconStyle={{ fontSize: 14 }}
                 title={FI18n.i18nNext.t('tip_copy_node_domain')}
               />
@@ -82,11 +82,11 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 type={'additional2'}
               />
               <FComponentsLib.FContentText
-                text={'5342302'}
+                text={String(nodeManagerPage.setting_nodeID)}
                 type={'additional2'}
               />
               <FComponentsLib.FCopyToClipboard
-                text={'5342302'}
+                text={String(nodeManagerPage.setting_nodeID)}
                 iconStyle={{ fontSize: 14 }}
                 title={'复制'}
               />
@@ -179,7 +179,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                     />)
                     : (<i style={{ color: '#999' }}>暂无无内容...</i>)
                 }
-                
+
               </div>)
               : (<div className={styles.introduction1}>
                 <FIntroductionEditor
