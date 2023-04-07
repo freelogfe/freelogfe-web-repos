@@ -152,6 +152,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                       },
                     });
                   }}
+                  lengthLimit={100}
                   size='middle'
                   style={{ width: 380 }}
                   // placeholder={FI18n.i18nNext.t('form_input_singlelinetxt_error_length')}
@@ -347,6 +348,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                         },
                       });
                     }}
+                    lengthLimit={100}
                     style={{ width: 740 }}
                     placeholder={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')}
                   />
@@ -387,6 +389,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                       type: 'nodeManagerPage/onClick_Setting_SaveEditBtn',
                     });
                   }}
+                  disabled={nodeManagerPage.setting_nodeTitle.length > 100 || nodeManagerPage.setting_nodeIntroduction.length > 1000 || (nodeManagerPage.setting_nodeLimitation === 'pause' && nodeManagerPage.setting_nodeLimitationMessage.length > 100)}
                 >确定</FComponentsLib.FRectBtn>
               </>)
             }

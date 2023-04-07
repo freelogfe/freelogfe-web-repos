@@ -96,7 +96,7 @@ function FInput({
           }}
           suffix={lengthLimit > 0
             ? (<span
-              className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
+              className={[styles.FInputWordCount, lengthLimit - (debounce ? inputText.length : (value?.length || 0)) < 0 ? styles.beyond : ''].join(' ')}
             >{lengthLimit - (debounce ? inputText.length : (value?.length || 0))}</span>)
             : undefined}
           {...inputProps}
