@@ -151,11 +151,20 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           <div style={{ height: 20 }} />
           <div className={styles.permission}>
             <div>
-              <Radio
-                checked={nodeManagerPage.setting_nodeLimitation === 'public'}
-                disabled={nodeManagerPage.setting_state === 'normal'}
-                style={{ margin: 0 }}
-              />
+              {
+                nodeManagerPage.setting_state === 'normal'
+                  ? (<Radio
+                    checked={nodeManagerPage.setting_nodeInfo.limitation === 'public'}
+                    disabled={true}
+                    style={{ margin: 0 }}
+                  />)
+                  : (<Radio
+                    checked={nodeManagerPage.setting_nodeLimitation === 'public'}
+                    disabled={false}
+                    style={{ margin: 0 }}
+                  />)
+              }
+
             </div>
             <div>
               <FComponentsLib.FContentText
@@ -172,11 +181,20 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
             </div>
 
             <div>
-              <Radio
-                checked={nodeManagerPage.setting_nodeLimitation === 'private'}
-                disabled={nodeManagerPage.setting_state === 'normal'}
-                style={{ margin: 0 }}
-              />
+              {
+                nodeManagerPage.setting_state === 'normal'
+                  ? (<Radio
+                    checked={nodeManagerPage.setting_nodeInfo.limitation === 'private'}
+                    disabled={true}
+                    style={{ margin: 0 }}
+                  />)
+                  : (<Radio
+                    checked={nodeManagerPage.setting_nodeLimitation === 'private'}
+                    disabled={false}
+                    style={{ margin: 0 }}
+                  />)
+              }
+
             </div>
             <div>
               <FComponentsLib.FContentText
@@ -193,11 +211,20 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
             </div>
 
             <div>
-              <Radio
-                checked={nodeManagerPage.setting_nodeLimitation === 'pause'}
-                disabled={nodeManagerPage.setting_state === 'normal'}
-                style={{ margin: 0 }}
-              />
+              {
+                nodeManagerPage.setting_state === 'normal'
+                  ? (<Radio
+                    checked={nodeManagerPage.setting_nodeInfo.limitation === 'pause'}
+                    disabled={true}
+                    style={{ margin: 0 }}
+                  />)
+                  : (<Radio
+                    checked={nodeManagerPage.setting_nodeLimitation === 'pause'}
+                    disabled={false}
+                    style={{ margin: 0 }}
+                  />)
+              }
+
             </div>
             <div>
               <FComponentsLib.FContentText
