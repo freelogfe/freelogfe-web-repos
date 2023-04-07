@@ -107,11 +107,16 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
               fMessage(err, 'error');
             }}
           >
-            <img
-              style={{ height: 72, width: 72, borderRadius: '50%' }}
-              src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
-              alt=''
-            />
+            <div className={styles.nodeCover}>
+              <img
+                style={{ height: 72, width: 72, borderRadius: '50%' }}
+                src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
+                alt=''
+              />
+              <div className={styles.nodeCoverMask}>
+                <span>更换</span>
+              </div>
+            </div>
           </FUploadNodeCover>
           <div style={{ height: 40 }} />
 
@@ -147,6 +152,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
               </div>)
               : (<div className={styles.introduction1}>
                 <FIntroductionEditor
+                  // placeholder={FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')}
                   value={'这是我的音乐节点23423'}
                 />
               </div>)
