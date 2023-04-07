@@ -11,7 +11,7 @@ import { Space } from 'antd';
 import { FShare } from '@/components/FShare';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import * as imgSrc from '@/assets/default-node-cover.png';
 
 interface SiderProps {
   dispatch: Dispatch;

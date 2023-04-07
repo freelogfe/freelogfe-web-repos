@@ -15,7 +15,7 @@ import * as AHooks from 'ahooks';
 import { OnChange_Setting_Cover_Action, OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import * as imgSrc from '@/assets/default-node-cover.png';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -238,13 +238,27 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
 
             {
               nodeManagerPage.setting_state === 'normal' && (<FComponentsLib.FRectBtn
-                type={'primary'}>{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>)
+                type={'primary'}
+                onClick={() => {
+
+                }}
+              >{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>)
             }
 
             {
               nodeManagerPage.setting_state === 'editing' && (<>
-                <FComponentsLib.FTextBtn type={'default'}>取消</FComponentsLib.FTextBtn>
-                <FComponentsLib.FRectBtn type={'primary'}>确定</FComponentsLib.FRectBtn>
+                <FComponentsLib.FTextBtn
+                  type={'default'}
+                  onClick={() => {
+
+                  }}
+                >取消</FComponentsLib.FTextBtn>
+                <FComponentsLib.FRectBtn
+                  type={'primary'}
+                  onClick={() => {
+
+                  }}
+                >确定</FComponentsLib.FRectBtn>
               </>)
             }
 
