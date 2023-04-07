@@ -1,5 +1,6 @@
 export default [
   { exact: true, path: '/ui-example', component: '../pages/ui-example' },
+  { exact: true, path: '/nodePausePreview', component: '../pages/nodePausePreview' },
   {
     path: '/',
     component: '../layouts/FLayout',
