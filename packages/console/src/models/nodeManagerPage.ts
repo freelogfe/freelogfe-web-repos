@@ -2,7 +2,6 @@ import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-// import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import moment, { Moment } from 'moment';
@@ -63,7 +62,6 @@ export interface NodeManagerModelState {
     authErrorText: string;
     resourceId: string;
   }[];
-  // themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
 
@@ -134,7 +132,7 @@ export interface NodeManagerModelState {
     limitation: 'public' | 'private' | 'pause';
     limitationMessage: string;
   };
-  setting_nodeCover: string;
+  // setting_nodeCover: string;
   setting_nodeTitle: string;
   setting_nodeIntroduction: string;
   setting_nodeLimitation: 'public' | 'private' | 'pause';
@@ -235,6 +233,18 @@ export interface OnChange_Setting_Cover_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Setting_EditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_EditBtn';
+}
+
+export interface OnClick_Setting_CancelEditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_CancelEditBtn';
+}
+
+export interface OnClick_Setting_SaveEditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_SaveEditBtn';
+}
+
 export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
@@ -296,6 +306,9 @@ export interface NodeManagerModelType {
     onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
 
     onChange_Setting_Cover: (action: OnChange_Setting_Cover_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_EditBtn: (action: OnClick_Setting_EditBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_CancelEditBtn: (action: OnClick_Setting_CancelEditBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_SaveEditBtn: (action: OnClick_Setting_SaveEditBtn_Action, effects: EffectsCommandMap) => void;
 
     fetchExhibits: (action: FetchExhibitsAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
@@ -412,7 +425,7 @@ const contractInitStates: Pick<NodeManagerModelState,
 const settingInitStates: Pick<NodeManagerModelState,
   'setting_state'
   | 'setting_nodeInfo'
-  | 'setting_nodeCover'
+  // | 'setting_nodeCover'
   | 'setting_nodeTitle'
   | 'setting_nodeIntroduction'
   | 'setting_nodeLimitation'
@@ -425,7 +438,7 @@ const settingInitStates: Pick<NodeManagerModelState,
     limitation: 'public',
     limitationMessage: '',
   },
-  setting_nodeCover: '',
+  // setting_nodeCover: '',
   setting_nodeTitle: '',
   setting_nodeIntroduction: '',
   setting_nodeLimitation: 'public',
@@ -780,6 +793,34 @@ const Model: NodeManagerModelType = {
         },
       });
     },
+    * onClick_Setting_EditBtn({}: OnClick_Setting_EditBtn_Action, { select, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'editing',
+          setting_nodeTitle: nodeManagerPage.setting_nodeInfo.title,
+          setting_nodeIntroduction: nodeManagerPage.setting_nodeInfo.introduction,
+          setting_nodeLimitation: nodeManagerPage.setting_nodeInfo.limitation,
+          setting_nodeLimitationMessage: nodeManagerPage.setting_nodeInfo.limitationMessage,
+        },
+      });
+    },
+    * onClick_Setting_CancelEditBtn({}: OnClick_Setting_CancelEditBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'normal',
+        },
+      });
+    },
+    * onClick_Setting_SaveEditBtn({}: OnClick_Setting_SaveEditBtn_Action, {}: EffectsCommandMap) {
+
+    },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
       // console.log(payload, 'PPPPP98iwosdfjlsdkj');
@@ -987,12 +1028,6 @@ const Model: NodeManagerModelType = {
             hasPolicy: i.policies.length > 0,
             isAuth: authInfo.isAuth,
             authErrorText: authInfo.error,
-            // authErrorText:
-            //   authInfo.defaulterIdentityType === 1
-            //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-            //     : authInfo.defaulterIdentityType === 2
-            //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-            //       : authInfo.error,
             resourceId: i.resourceInfo.resourceId,
           };
         })

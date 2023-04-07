@@ -12,7 +12,11 @@ import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import * as AHooks from 'ahooks';
-import { OnChange_Setting_Cover_Action, OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
+import {
+  OnChange_Setting_Cover_Action, OnClick_Setting_CancelEditBtn_Action,
+  OnClick_Setting_EditBtn_Action, OnClick_Setting_SaveEditBtn_Action,
+  OnMount_SettingPage_Action,
+} from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
 import * as imgSrc from '@/assets/default-node-cover.png';
@@ -232,15 +236,14 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           <div style={{ height: 40 }} />
 
           <div className={styles.editBtn}>
-            {
-
-            }
 
             {
               nodeManagerPage.setting_state === 'normal' && (<FComponentsLib.FRectBtn
                 type={'primary'}
                 onClick={() => {
-
+                  dispatch<OnClick_Setting_EditBtn_Action>({
+                    type: 'nodeManagerPage/onClick_Setting_EditBtn',
+                  });
                 }}
               >{FI18n.i18nNext.t('nodemgnt_nodesetting_btn_edit')}</FComponentsLib.FRectBtn>)
             }
@@ -250,13 +253,17 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 <FComponentsLib.FTextBtn
                   type={'default'}
                   onClick={() => {
-
+                    dispatch<OnClick_Setting_CancelEditBtn_Action>({
+                      type: 'nodeManagerPage/onClick_Setting_CancelEditBtn',
+                    });
                   }}
                 >取消</FComponentsLib.FTextBtn>
                 <FComponentsLib.FRectBtn
                   type={'primary'}
                   onClick={() => {
-
+                    dispatch<OnClick_Setting_SaveEditBtn_Action>({
+                      type: 'nodeManagerPage/onClick_Setting_SaveEditBtn',
+                    });
                   }}
                 >确定</FComponentsLib.FRectBtn>
               </>)
