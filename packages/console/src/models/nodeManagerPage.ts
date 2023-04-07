@@ -245,6 +245,34 @@ export interface OnClick_Setting_SaveEditBtn_Action extends AnyAction {
   type: 'nodeManagerPage/onClick_Setting_SaveEditBtn';
 }
 
+export interface OnChange_Setting_Title_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Title';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Setting_Introduction_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Introduction';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Setting_Limitation_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Limitation';
+  payload: {
+    value: NodeManagerModelState['setting_nodeLimitation']
+  };
+}
+
+export interface OnChange_Setting_NodeLimitationMessage_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_NodeLimitationMessage';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
@@ -309,6 +337,10 @@ export interface NodeManagerModelType {
     onClick_Setting_EditBtn: (action: OnClick_Setting_EditBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Setting_CancelEditBtn: (action: OnClick_Setting_CancelEditBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Setting_SaveEditBtn: (action: OnClick_Setting_SaveEditBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Title: (action: OnChange_Setting_Title_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Introduction: (action: OnChange_Setting_Introduction_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Limitation: (action: OnChange_Setting_Limitation_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_NodeLimitationMessage: (action: OnChange_Setting_NodeLimitationMessage_Action, effects: EffectsCommandMap) => void;
 
     fetchExhibits: (action: FetchExhibitsAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
@@ -820,6 +852,38 @@ const Model: NodeManagerModelType = {
     },
     * onClick_Setting_SaveEditBtn({}: OnClick_Setting_SaveEditBtn_Action, {}: EffectsCommandMap) {
 
+    },
+    * onChange_Setting_Title({ payload }: OnChange_Setting_Title_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeTitle: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_Introduction({ payload }: OnChange_Setting_Introduction_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeIntroduction: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_Limitation({ payload }: OnChange_Setting_Limitation_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeLimitation: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_NodeLimitationMessage({ payload }: OnChange_Setting_NodeLimitationMessage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeLimitationMessage: payload.value,
+        },
+      });
     },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {

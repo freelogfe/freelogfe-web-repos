@@ -13,8 +13,14 @@ import FInput from '@/components/FInput';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import * as AHooks from 'ahooks';
 import {
-  OnChange_Setting_Cover_Action, OnClick_Setting_CancelEditBtn_Action,
-  OnClick_Setting_EditBtn_Action, OnClick_Setting_SaveEditBtn_Action,
+  OnChange_Setting_Cover_Action,
+  OnChange_Setting_Introduction_Action,
+  OnChange_Setting_Limitation_Action,
+  OnChange_Setting_NodeLimitationMessage_Action,
+  OnChange_Setting_Title_Action,
+  OnClick_Setting_CancelEditBtn_Action,
+  OnClick_Setting_EditBtn_Action,
+  OnClick_Setting_SaveEditBtn_Action,
   OnMount_SettingPage_Action,
 } from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
@@ -125,17 +131,30 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           {
             nodeManagerPage.setting_state === 'normal'
               ? (<div className={styles.nodeName}>
-                <FComponentsLib.FContentText
-                  text={nodeManagerPage.setting_nodeInfo.title}
-                  type={'normal'}
-                />
+                {
+                  nodeManagerPage.setting_nodeInfo.title
+                    ? (<FComponentsLib.FContentText
+                      text={nodeManagerPage.setting_nodeInfo.title}
+                      type={'normal'}
+                    />)
+                    : (<i style={{ color: '#999' }}>暂无无内容...</i>)
+                }
+
               </div>)
               : (<div className={styles.nodeName1}>
                 <FInput
                   value={nodeManagerPage.setting_nodeTitle}
+                  onChange={(e) => {
+                    dispatch<OnChange_Setting_Title_Action>({
+                      type: 'nodeManagerPage/onChange_Setting_Title',
+                      payload: {
+                        value: e.target.value,
+                      },
+                    });
+                  }}
                   size='middle'
                   style={{ width: 380 }}
-                  placeholder={FI18n.i18nNext.t('form_input_singlelinetxt_error_length')}
+                  // placeholder={FI18n.i18nNext.t('form_input_singlelinetxt_error_length')}
                 />
                 <FComponentsLib.FContentText
                   text={'限制字符数量100'}
@@ -152,22 +171,38 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           {
             nodeManagerPage.setting_state === 'normal'
               ? (<div className={styles.introduction}>
-                <FComponentsLib.FContentText
-                  text={nodeManagerPage.setting_nodeInfo.introduction}
-                  type={'normal'}
-                />
+                {
+                  nodeManagerPage.setting_nodeInfo.introduction
+                    ? (<FComponentsLib.FContentText
+                      text={nodeManagerPage.setting_nodeInfo.introduction}
+                      type={'normal'}
+                    />)
+                    : (<i style={{ color: '#999' }}>暂无无内容...</i>)
+                }
+                
               </div>)
               : (<div className={styles.introduction1}>
                 <FIntroductionEditor
                   // placeholder={FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')}
                   value={nodeManagerPage.setting_nodeIntroduction}
+                  onChange={(e) => {
+                    dispatch<OnChange_Setting_Introduction_Action>({
+                      type: 'nodeManagerPage/onChange_Setting_Introduction',
+                      payload: {
+                        value: e.target.value,
+                      },
+                    });
+                  }}
                 />
               </div>)
           }
 
           <div style={{ height: 40 }} />
 
-          <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility')} />
+          <FComponentsLib.FTitleText
+            type={'h3'}
+            text={FI18n.i18nNext.t('nodemgnt_nodesetting_visibility')}
+          />
           <div style={{ height: 20 }} />
           <div className={styles.permission}>
             <div>
@@ -180,6 +215,17 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   />)
                   : (<Radio
                     checked={nodeManagerPage.setting_nodeLimitation === 'public'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        dispatch<OnChange_Setting_Limitation_Action>({
+                          type: 'nodeManagerPage/onChange_Setting_Limitation',
+                          payload: {
+                            value: 'public',
+                          },
+                        });
+                      }
+
+                    }}
                     disabled={false}
                     style={{ margin: 0 }}
                   />)
@@ -210,6 +256,16 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   />)
                   : (<Radio
                     checked={nodeManagerPage.setting_nodeLimitation === 'private'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        dispatch<OnChange_Setting_Limitation_Action>({
+                          type: 'nodeManagerPage/onChange_Setting_Limitation',
+                          payload: {
+                            value: 'private',
+                          },
+                        });
+                      }
+                    }}
                     disabled={false}
                     style={{ margin: 0 }}
                   />)
@@ -240,6 +296,16 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   />)
                   : (<Radio
                     checked={nodeManagerPage.setting_nodeLimitation === 'pause'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        dispatch<OnChange_Setting_Limitation_Action>({
+                          type: 'nodeManagerPage/onChange_Setting_Limitation',
+                          payload: {
+                            value: 'pause',
+                          },
+                        });
+                      }
+                    }}
                     disabled={false}
                     style={{ margin: 0 }}
                   />)
@@ -272,6 +338,15 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   </div>
                   <div style={{ height: 15 }} />
                   <FInput
+                    value={nodeManagerPage.setting_nodeLimitationMessage}
+                    onChange={(e) => {
+                      dispatch<OnChange_Setting_NodeLimitationMessage_Action>({
+                        type: 'nodeManagerPage/onChange_Setting_NodeLimitationMessage',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
                     style={{ width: 740 }}
                     placeholder={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')}
                   />
