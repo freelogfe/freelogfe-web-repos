@@ -337,7 +337,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                       type={'primary'}
                       style={{ fontSize: 12 }}
                       onClick={() => {
-                        self.open('/nodePausePreview?tip=' + (nodeManagerPage.setting_nodeLimitationMessage || FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')));
+                        self.open('/nodePausePreview?tip=' + encodeURIComponent(nodeManagerPage.setting_nodeLimitationMessage || FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_default')));
                       }}
                     >
                       预览
