@@ -333,7 +333,13 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                       text={FI18n.i18nNext.t('nodemgnt_nodesetting_changenotice_title')}
                       type={'additional2'}
                     />
-                    <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>
+                    <FComponentsLib.FTextBtn
+                      type={'primary'}
+                      style={{ fontSize: 12 }}
+                      onClick={() => {
+                        self.open(`/nodePausePreview` + (nodeManagerPage.setting_nodeLimitationMessage ? `?tip=${nodeManagerPage.setting_nodeLimitationMessage}` : ''));
+                      }}
+                    >
                       预览
                     </FComponentsLib.FTextBtn>
                   </div>
