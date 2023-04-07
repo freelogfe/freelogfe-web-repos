@@ -916,12 +916,6 @@ const Model: NodeManagerModelType = {
               resourceId: i.resourceInfo.resourceId,
               isAuth: authInfo.isAuth,
               authErrorText: authInfo.error,
-              // authErrorText:
-              //   authInfo.defaulterIdentityType === 1
-              //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-              //     : authInfo.defaulterIdentityType === 2
-              //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-              //       : authInfo.error,
             };
           },
         ),
