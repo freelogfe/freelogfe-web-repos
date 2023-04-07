@@ -630,10 +630,14 @@ const Model: NodeManagerModelType = {
           nodeId: number;
           nodeName: string;
           nodeDomain: string;
+          nodeTitle: string;
+          nodeShortDescription: string;
+          nodeVisibility: 1 | 2 | 3;
+          nodeSuspendInfo: string;
         }
       } = yield call(FServiceAPI.Node.details, params);
 
-      console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
+      // console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -642,10 +646,10 @@ const Model: NodeManagerModelType = {
           setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
           setting_nodeInfo: {
             cover: data_nodeDetails.nodeLogo,
-            title: '',
-            introduction: '',
-            limitation: 'public',
-            limitationMessage: '',
+            title: data_nodeDetails.nodeTitle,
+            introduction: data_nodeDetails.nodeShortDescription,
+            limitation: data_nodeDetails.nodeVisibility === 1 ? 'public' : data_nodeDetails.nodeVisibility === 2 ? 'private' : 'pause',
+            limitationMessage: data_nodeDetails.nodeSuspendInfo,
           },
         },
       });
@@ -865,8 +869,41 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    * onClick_Setting_SaveEditBtn({}: OnClick_Setting_SaveEditBtn_Action, {}: EffectsCommandMap) {
+    * onClick_Setting_SaveEditBtn({}: OnClick_Setting_SaveEditBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
 
+      const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
+        nodeId: nodeManagerPage.setting_nodeID,
+        nodeLogo: nodeManagerPage.setting_nodeInfo.cover,
+        nodeTitle: nodeManagerPage.setting_nodeTitle,
+        nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
+        nodeVisibility: nodeManagerPage.setting_nodeLimitation === 'public'
+          ? 1
+          : nodeManagerPage.setting_nodeInfo.limitation === 'private'
+            ? 2
+            : 3, // 可见性 1：公开 2：私密 3：暂停
+        nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage,
+      };
+
+      const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'normal',
+          setting_nodeInfo: {
+            ...nodeManagerPage.setting_nodeInfo,
+            title: nodeManagerPage.setting_nodeTitle,
+            introduction: nodeManagerPage.setting_nodeIntroduction,
+            limitation: nodeManagerPage.setting_nodeLimitation,
+            limitationMessage: nodeManagerPage.setting_nodeLimitationMessage,
+          },
+          // nodeCover: payload.value,
+        },
+      });
     },
     * onChange_Setting_Title({ payload }: OnChange_Setting_Title_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
