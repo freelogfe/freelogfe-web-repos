@@ -37,6 +37,7 @@ type Authorized_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthor
 export interface NodeManagerModelState {
   nodeId: number;
 
+  nodeCover: string;
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
@@ -455,6 +456,7 @@ const settingInitStates: Pick<NodeManagerModelState,
 const initStates: NodeManagerModelState = {
   nodeId: -1,
 
+  nodeCover: '',
   nodeName: '',
   nodeUrl: '',
   testNodeUrl: '',
@@ -507,6 +509,7 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           nodeId: payload.nodeID,
+          nodeCover: data?.nodeLogo,
           nodeName: data?.nodeName,
           nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
           testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
@@ -588,14 +591,22 @@ const Model: NodeManagerModelType = {
         nodeId: nodeManagerPage.nodeId,
       };
 
-      const { data: data_nodeDetails } = yield call(FServiceAPI.Node.details, params);
+      const { data: data_nodeDetails }: {
+        data: {
+          nodeLogo: string;
+        }
+      } = yield call(FServiceAPI.Node.details, params);
 
       console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           setting_nodeInfo: {
-            
+            cover: data_nodeDetails.nodeLogo,
+            title: '',
+            introduction: '',
+            limitation: 'public',
+            limitationMessage: '',
           },
         },
       });

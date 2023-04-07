@@ -11,6 +11,7 @@ import { Space } from 'antd';
 import { FShare } from '@/components/FShare';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
+import * as imgSrc from '@/assets/default-resource-cover.jpg';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -29,7 +30,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 35 }} />
 
         <div className={styles.cover}>
-          <img src={'https://image.freelog.com/headImage/50028'} />
+          <img src={nodeManagerPage.nodeCover || imgSrc} />
         </div>
         <div style={{ height: 20 }} />
 
