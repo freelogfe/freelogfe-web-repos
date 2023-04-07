@@ -14,8 +14,6 @@ import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor
 import * as AHooks from 'ahooks';
 import { OnChange_Setting_Cover_Action, OnMount_SettingPage_Action } from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
-// import FUploadCover from '@/components/FUploadCover';
-// import FUploadAvatar from '@/components/FUploadNodeCover';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 

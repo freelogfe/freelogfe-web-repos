@@ -788,7 +788,18 @@ const Model: NodeManagerModelType = {
         nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
       };
 
-      yield call(FServiceAPI.Node.setNodeInfo, params);
+      const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeInfo: {
+            ...nodeManagerPage.setting_nodeInfo,
+            cover: payload.value,
+          },
+          nodeCover: payload.value,
+        },
+      });
     },
 
     * fetchExhibits({ payload }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
