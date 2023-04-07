@@ -1000,7 +1000,8 @@ const Model: WalletPageModelType = {
       });
     },
     * onChange_Table_Filter_MinAmount({ payload }: OnChange_Table_Filter_MinAmount_Action, { put }: EffectsCommandMap) {
-      if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+      // if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+      if (Number.isNaN(Number(payload.value))) {
         return;
       }
       yield put<ChangeAction>({
@@ -1024,7 +1025,8 @@ const Model: WalletPageModelType = {
       });
     },
     * onChange_Table_Filter_MaxAmount({ payload }: OnChange_Table_Filter_MaxAmount_Action, { put }: EffectsCommandMap) {
-      if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+      // if (!FUtil.Regexp.NATURAL_NUMBER.test(payload.value)) {
+      if (Number.isNaN(Number(payload.value))) {
         return;
       }
       yield put<ChangeAction>({
