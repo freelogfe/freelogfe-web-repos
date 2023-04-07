@@ -125,10 +125,14 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           {
             nodeManagerPage.setting_state === 'normal'
               ? (<div className={styles.nodeName}>
-                <FComponentsLib.FContentText text={'black'} type={'normal'} />
+                <FComponentsLib.FContentText
+                  text={nodeManagerPage.setting_nodeInfo.title}
+                  type={'normal'}
+                />
               </div>)
               : (<div className={styles.nodeName1}>
                 <FInput
+                  value={nodeManagerPage.setting_nodeTitle}
                   size='middle'
                   style={{ width: 380 }}
                   placeholder={FI18n.i18nNext.t('form_input_singlelinetxt_error_length')}
@@ -148,12 +152,15 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           {
             nodeManagerPage.setting_state === 'normal'
               ? (<div className={styles.introduction}>
-                <FComponentsLib.FContentText text={'这是我的音乐节点'} type={'normal'} />
+                <FComponentsLib.FContentText
+                  text={nodeManagerPage.setting_nodeInfo.introduction}
+                  type={'normal'}
+                />
               </div>)
               : (<div className={styles.introduction1}>
                 <FIntroductionEditor
                   // placeholder={FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')}
-                  value={'这是我的音乐节点23423'}
+                  value={nodeManagerPage.setting_nodeIntroduction}
                 />
               </div>)
           }
