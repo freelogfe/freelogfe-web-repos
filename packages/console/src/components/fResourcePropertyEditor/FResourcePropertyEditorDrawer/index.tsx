@@ -98,7 +98,10 @@ function FResourcePropertyEditorDrawer({
 
       <FComponentsLib.FRectBtn
         type='primary'
-        disabled={!!keyInputError || !!valueInputError || !!descriptionInputError}
+        disabled={nameInput === '' || nameInputError !== ''
+        || keyInput === '' || keyInputError !== ''
+        || descriptionInputError !== ''
+        || valueInput === '' || valueInputError !== ''}
         onClick={async () => {
           onOk && onOk({
             key: keyInput,
@@ -125,22 +128,24 @@ function FResourcePropertyEditorDrawer({
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
+          placeholder={'输入属性名称'}
           value={nameInput}
           className={styles.input}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
             if (value === '') {
-              errorText = '请输入';
+              errorText = '输入属性名称';
             } else if (value.length > 15) {
               errorText = '不超过30个字符';
-            } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
-              errorText = '键不能重复';
-            } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-              errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+            } else if (disabledNames.includes(value) && value !== defaultData?.name) {
+              errorText = '名称不能重复';
             }
-            set_keyInput(value);
-            set_keyInputError(errorText);
+            // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+            //   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+            // }
+            set_nameInput(value);
+            set_nameInputError(errorText);
           }}
         />
         {nameInputError && (<>
@@ -158,13 +163,14 @@ function FResourcePropertyEditorDrawer({
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
+          placeholder={'输入key'}
           value={keyInput}
           className={styles.input}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
             if (value === '') {
-              errorText = '请输入';
+              errorText = '输入key';
             } else if (value.length > 15) {
               errorText = '不超过30个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
@@ -228,7 +234,7 @@ function FResourcePropertyEditorDrawer({
             const value: string = e.target.value;
             let errorText: string = '';
             if (value === '') {
-              errorText = '请输入';
+              errorText = '输入value';
             } else if (value.length > 30) {
               errorText = '不超过30个字符';
             }
