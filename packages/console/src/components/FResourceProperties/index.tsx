@@ -13,9 +13,11 @@ interface FResourcePropertiesProps {
     value: string;
     description: string;
   }[];
+
+  onChange_alterableData?(value: FResourcePropertiesProps['alterableData']): void;
 }
 
-function FResourceProperties({ immutableData, alterableData }: FResourcePropertiesProps) {
+function FResourceProperties({ immutableData, alterableData, onChange_alterableData }: FResourcePropertiesProps) {
   return (<div className={styles.styles}>
     {
       immutableData.map((d) => {

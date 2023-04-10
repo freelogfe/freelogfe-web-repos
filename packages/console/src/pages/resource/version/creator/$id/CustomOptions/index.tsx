@@ -24,6 +24,7 @@ import fEditCustomOptions from '@/components/fEditCustomOption';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+
 // import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
@@ -59,7 +60,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={async () => {
-                    const dataSource = await fResourcePropertyEditor({
+                    const dataSource: {
+                      key: string;
+                      name: string;
+                      value: string;
+                      description: string;
+                    } | null = await fResourcePropertyEditor({
                       disabledKeys: [
                         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
@@ -79,7 +85,8 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       type: 'resourceVersionCreatorPage/onChange_BaseProperties',
                       payload: {
                         value: [
-                          // ...resourceVersionCreatorPage.baseProperties,
+                          ...resourceVersionCreatorPage.baseProperties,
+                          dataSource,
                           // ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
                           //   return {
                           //     key: ds.key,
@@ -143,6 +150,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
             alterableData={resourceVersionCreatorPage.baseProperties}
+            onChange_alterableData={() => {
+
+            }}
           />
 
           {/*<FBasePropertiesCards*/}
@@ -241,7 +251,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             <FLoadingTip height={100} />
           </div>)
         }
-
 
         <div style={{ height: 20 }} />
 
