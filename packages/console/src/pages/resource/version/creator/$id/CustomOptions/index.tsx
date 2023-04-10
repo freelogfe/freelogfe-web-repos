@@ -145,12 +145,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               </Space>
             </div>
           </div>
-          <div style={{ height: 5 }} />
+          <div style={{ height: 10 }} />
 
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
             alterableData={resourceVersionCreatorPage.baseProperties}
-            onChange_alterableData={() => {
+            onChange_alterableData={(value) => {
 
             }}
           />
@@ -178,7 +178,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           {/*    }));*/}
           {/*  }}*/}
           {/*/>*/}
-          <div style={{ height: 10 }} />
+          <div style={{ height: 15 }} />
 
         </div>
         {/*<FBaseProperties*/}

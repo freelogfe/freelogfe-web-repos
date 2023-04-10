@@ -60,7 +60,12 @@ function FResourceProperties({ immutableData, alterableData, onChange_alterableD
               style={{ fontSize: 12 }}
             />
 
-            <FComponentsLib.FTextBtn type={'default'}>
+            <FComponentsLib.FTextBtn
+              type={'default'}
+              onClick={() => {
+
+              }}
+            >
               <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
             </FComponentsLib.FTextBtn>
             <FComponentsLib.FTextBtn
