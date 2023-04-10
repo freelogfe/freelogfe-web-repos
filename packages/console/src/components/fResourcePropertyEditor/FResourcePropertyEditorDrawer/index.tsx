@@ -52,6 +52,7 @@ const initStates: FResourcePropertyEditorDrawerStates = {
 
 function FResourcePropertyEditorDrawer({
                                          disabledKeys,
+                                         disabledNames,
                                          defaultData,
                                          onOk,
                                          onClose,
@@ -74,7 +75,7 @@ function FResourcePropertyEditorDrawer({
   }
 
   return (<FDrawer
-    title={'编辑基础属性'}
+    title={defaultData ? '编辑基础属性' : '补充属性'}
     onClose={() => {
       set_visible(false);
     }}
@@ -119,7 +120,7 @@ function FResourcePropertyEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性名称'}  />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性名称'} />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -152,7 +153,7 @@ function FResourcePropertyEditorDrawer({
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'}  />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'} />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -184,8 +185,8 @@ function FResourcePropertyEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性说明'}  />
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'}  />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性说明'} />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -217,7 +218,7 @@ function FResourcePropertyEditorDrawer({
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'}  />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'} />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -245,7 +246,6 @@ function FResourcePropertyEditorDrawer({
           <div className={styles.errorTip}>{valueInputError}</div>
         </>)}
       </div>
-
 
 
     </Space>
