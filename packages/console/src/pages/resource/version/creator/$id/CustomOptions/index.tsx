@@ -393,23 +393,23 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       return;
                     }
 
-                    await dispatch<OnChange_CustomOptions_Action>({
-                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                      payload: {
-                        value: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
-                          if (ind !== i) {
-                            return cod;
-                          }
-                          return {
-                            key: data.key,
-                            description: data.description,
-                            custom: data.custom,
-                            defaultValue: data.defaultValue,
-                            customOption: data.customOption,
-                          };
-                        }),
-                      },
-                    } as const);
+                    // await dispatch<OnChange_CustomOptions_Action>({
+                    //   type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    //   payload: {
+                    //     value: resourceVersionCreatorPage.customOptionsData.map((cod, i) => {
+                    //       if (ind !== i) {
+                    //         return cod;
+                    //       }
+                    //       return {
+                    //         key: data.key,
+                    //         description: data.description,
+                    //         custom: data.custom,
+                    //         defaultValue: data.defaultValue,
+                    //         customOption: data.customOption,
+                    //       };
+                    //     }),
+                    //   },
+                    // } as const);
                   }}
                 />)
                 : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)

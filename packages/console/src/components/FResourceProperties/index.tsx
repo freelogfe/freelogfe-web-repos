@@ -60,12 +60,15 @@ function FResourceProperties({ immutableData, alterableData, onChange_alterableD
               style={{ fontSize: 12 }}
             />
 
-            <FComponentsLib.FTextBtn type={'primary'}>
-              {/*<i className={['freelog', ]}/>*/}
-              {/*<FComponentsLib.FIcons.FCircleEdit />*/}
-              <FComponentsLib.FIcons.FCheck style={{ fontSize: 14 }} />
+            <FComponentsLib.FTextBtn type={'default'}>
+              <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
             </FComponentsLib.FTextBtn>
-            <FComponentsLib.FCircleBtn style={{ fontSize: 14 }} type={'danger'} />
+            <FComponentsLib.FTextBtn
+              type={'danger'}
+            >
+              <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+            </FComponentsLib.FTextBtn>
+            {/*<FComponentsLib.FCircleBtn style={{ fontSize: 14 }} type={'danger'} />*/}
           </div>
         </React.Fragment>);
       })
