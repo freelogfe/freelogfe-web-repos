@@ -56,6 +56,7 @@ export interface ResourceVersionCreatorPageModelState {
 
   baseProperties: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
@@ -73,6 +74,7 @@ export interface ResourceVersionCreatorPageModelState {
 
   preVersionBaseProperties: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
@@ -345,6 +347,7 @@ const Model: ResourceVersionCreatorModelType = {
           .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
             return {
               key: cpd.key,
+              name: cpd.key,
               value: cpd.defaultValue,
               description: cpd.remark,
             };
@@ -630,6 +633,7 @@ const Model: ResourceVersionCreatorModelType = {
             .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
+                name: cpd.key,
                 value: cpd.defaultValue,
                 description: cpd.remark,
               };

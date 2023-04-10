@@ -22,6 +22,8 @@ import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
 import fEditCustomOptions from '@/components/fEditCustomOption';
 import FSkeletonNode from '@/components/FSkeletonNode';
+import FResourceProperties from '@/components/FResourceProperties';
+import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -42,75 +44,28 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
   }
 
   return (<>
+
     {
       !!resourceVersionCreatorPage.selectedFileInfo && (<>
         <div style={{ height: 5 }} />
-        <FBaseProperties
-          basics={resourceVersionCreatorPage.rawProperties}
-          additions={resourceVersionCreatorPage.baseProperties}
-          onChangeAdditions={async (value) => {
 
-            await dispatch<OnChange_BaseProperties_Action>({
-              type: 'resourceVersionCreatorPage/onChange_BaseProperties',
-              payload: {
-                value: value,
-              },
-            });
-          }}
-          rightTop={<Space size={20}>
-            <FComponentsLib.FTextBtn
-              style={{ fontSize: 12, fontWeight: 600 }}
-              type='primary'
-              onClick={async () => {
-                const dataSource = await fAddFileBaseProps({
-                  disabledKeys: [
-                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                    ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                    ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-                  ],
-                });
-                // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                if (!dataSource) {
-                  return;
-                }
-
-                await dispatch<OnChange_BaseProperties_Action>({
-                  type: 'resourceVersionCreatorPage/onChange_BaseProperties',
-                  payload: {
-                    value: [
-                      ...resourceVersionCreatorPage.baseProperties,
-                      ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                        return {
-                          key: ds.key,
-                          value: ds.value,
-                          description: ds.description,
-                        };
-                      }),
-                    ],
-                  },
-                });
-              }}
-            >补充属性</FComponentsLib.FTextBtn>
-            {
-              resourceVersionCreatorPage.preVersionBaseProperties.length > 0
-                ? (<FComponentsLib.FTextBtn
+        <div className={styles.attributes}>
+          <div className={styles.attributesHeader}>
+            <span>基础属性</span>
+            <div>
+              <Space size={20}>
+                <FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={async () => {
                     const dataSource = await fAddFileBaseProps({
-                      defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
                       disabledKeys: [
-                        ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                          return rp.key;
-                        }),
-                        ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-                          return pp.key;
-                        }),
-                        ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-                          return pp.key;
-                        }),
+                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
                       ],
                     });
+                    // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
                     if (!dataSource) {
                       return;
                     }
@@ -119,73 +74,163 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       type: 'resourceVersionCreatorPage/onChange_BaseProperties',
                       payload: {
                         value: [
-                          ...resourceVersionCreatorPage.baseProperties,
-                          ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                            return {
-                              key: ds.key,
-                              value: ds.value,
-                              description: ds.description,
-                            };
-                          }),
+                          // ...resourceVersionCreatorPage.baseProperties,
+                          // ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                          //   return {
+                          //     key: ds.key,
+                          //     value: ds.value,
+                          //     description: ds.description,
+                          //   };
+                          // }),
                         ],
                       },
                     });
                   }}
-                >从上个版本导入</FComponentsLib.FTextBtn>)
-                : undefined
-            }
-          </Space>}
-          onClickEdit={async (theKey) => {
-            const ind = resourceVersionCreatorPage.baseProperties.findIndex((bp) => {
-              return bp.key === theKey;
-            });
-            const cur = resourceVersionCreatorPage.baseProperties.find((bp) => {
-              return bp.key === theKey;
-            });
-            if (!cur) {
-              return;
-            }
+                >补充属性</FComponentsLib.FTextBtn>
+                {
+                  resourceVersionCreatorPage.preVersionBaseProperties.length > 0
+                    ? (<FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600 }}
+                      type='primary'
+                      onClick={async () => {
+                        const dataSource = await fAddFileBaseProps({
+                          defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
+                          disabledKeys: [
+                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                              return rp.key;
+                            }),
+                            ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                              return pp.key;
+                            }),
+                            ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                              return pp.key;
+                            }),
+                          ],
+                        });
+                        if (!dataSource) {
+                          return;
+                        }
 
-            const data = await fEditFileBaseProp({
-              disabledKeys: [
-                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => {
-                  return rp.key;
-                }),
-                ...resourceVersionCreatorPage.baseProperties.map((bp) => {
-                  return bp.key;
-                }),
-                ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => {
-                  return pp.key;
-                }),
-              ],
-              defaultData: {
-                key: cur.key,
-                value: cur.value,
-                description: cur.description,
-              },
-            });
+                        await dispatch<OnChange_BaseProperties_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                          payload: {
+                            value: [
+                              // ...resourceVersionCreatorPage.baseProperties,
+                              // ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                              //   return {
+                              //     key: ds.key,
+                              //     value: ds.value,
+                              //     description: ds.description,
+                              //   };
+                              // }),
+                            ],
+                          },
+                        });
+                      }}
+                    >从上个版本导入</FComponentsLib.FTextBtn>)
+                    : undefined
+                }
+              </Space>
+            </div>
+          </div>
+          <div style={{ height: 5 }} />
 
-            if (!data) {
-              return;
-            }
+          <FResourceProperties
+            immutableData={resourceVersionCreatorPage.rawProperties}
+            alterableData={resourceVersionCreatorPage.baseProperties}
+          />
 
-            await dispatch<OnChange_BaseProperties_Action>({
-              type: 'resourceVersionCreatorPage/onChange_BaseProperties',
-              payload: {
-                value: resourceVersionCreatorPage.baseProperties.map((bp, i) => {
-                  if (i !== ind) {
-                    return bp;
-                  }
-                  return {
-                    key: data.key,
-                    value: data.value,
-                    description: data.description,
-                  };
-                }),
-              },
-            } as const);
-          }}
-        />
+          {/*<FBasePropertiesCards*/}
+          {/*  rawProperties={basics.map((b) => {*/}
+          {/*    return {*/}
+          {/*      theKey: b.key,*/}
+          {/*      value: b.value,*/}
+          {/*    };*/}
+          {/*  })}*/}
+          {/*  baseProperties={additions.map((a) => {*/}
+          {/*    return {*/}
+          {/*      theKey: a.key,*/}
+          {/*      description: a.description,*/}
+          {/*      value: a.value,*/}
+          {/*    };*/}
+          {/*  })}*/}
+          {/*  onEdit={(theKey) => {*/}
+          {/*    onClickEdit && onClickEdit(theKey);*/}
+          {/*  }}*/}
+          {/*  onDelete={(theKey) => {*/}
+          {/*    onChangeAdditions && onChangeAdditions(additions.filter((a) => {*/}
+          {/*      return a.key !== theKey;*/}
+          {/*    }));*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <div style={{ height: 10 }} />
+
+        </div>
+        {/*<FBaseProperties*/}
+        {/*  basics={resourceVersionCreatorPage.rawProperties}*/}
+        {/*  additions={resourceVersionCreatorPage.baseProperties}*/}
+        {/*  onChangeAdditions={async (value) => {*/}
+
+        {/*    await dispatch<OnChange_BaseProperties_Action>({*/}
+        {/*      type: 'resourceVersionCreatorPage/onChange_BaseProperties',*/}
+        {/*      payload: {*/}
+        {/*        value: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  rightTop={}*/}
+        {/*  onClickEdit={async (theKey) => {*/}
+        {/*    const ind = resourceVersionCreatorPage.baseProperties.findIndex((bp) => {*/}
+        {/*      return bp.key === theKey;*/}
+        {/*    });*/}
+        {/*    const cur = resourceVersionCreatorPage.baseProperties.find((bp) => {*/}
+        {/*      return bp.key === theKey;*/}
+        {/*    });*/}
+        {/*    if (!cur) {*/}
+        {/*      return;*/}
+        {/*    }*/}
+
+        {/*    const data = await fEditFileBaseProp({*/}
+        {/*      disabledKeys: [*/}
+        {/*        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => {*/}
+        {/*          return rp.key;*/}
+        {/*        }),*/}
+        {/*        ...resourceVersionCreatorPage.baseProperties.map((bp) => {*/}
+        {/*          return bp.key;*/}
+        {/*        }),*/}
+        {/*        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => {*/}
+        {/*          return pp.key;*/}
+        {/*        }),*/}
+        {/*      ],*/}
+        {/*      defaultData: {*/}
+        {/*        key: cur.key,*/}
+        {/*        value: cur.value,*/}
+        {/*        description: cur.description,*/}
+        {/*      },*/}
+        {/*    });*/}
+
+        {/*    if (!data) {*/}
+        {/*      return;*/}
+        {/*    }*/}
+
+        {/*    await dispatch<OnChange_BaseProperties_Action>({*/}
+        {/*      type: 'resourceVersionCreatorPage/onChange_BaseProperties',*/}
+        {/*      payload: {*/}
+        {/*        value: resourceVersionCreatorPage.baseProperties.map((bp, i) => {*/}
+        {/*          if (i !== ind) {*/}
+        {/*            return bp;*/}
+        {/*          }*/}
+        {/*          return {*/}
+        {/*            key: data.key,*/}
+        {/*            name: data.key,*/}
+        {/*            value: data.value,*/}
+        {/*            description: data.description,*/}
+        {/*          };*/}
+        {/*        }),*/}
+        {/*      },*/}
+        {/*    } as const);*/}
+        {/*  }}*/}
+        {/*/>*/}
         {
           resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>
             <FLoadingTip height={100} />
