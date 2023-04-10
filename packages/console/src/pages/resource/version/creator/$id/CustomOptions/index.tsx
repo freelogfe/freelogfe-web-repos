@@ -100,7 +100,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   }}
                 >补充属性</FComponentsLib.FTextBtn>
                 {
-                  resourceVersionCreatorPage.preVersionBaseProperties.length > 0
+                  resourceVersionCreatorPage.preVersionBaseProperties.length > 0 && false
                     ? (<FComponentsLib.FTextBtn
                       style={{ fontSize: 12, fontWeight: 600 }}
                       type='primary'

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface FResourcePropertiesProps {
   immutableData: {
@@ -35,8 +36,21 @@ function FResourceProperties({ immutableData, alterableData, onChange_alterableD
     {
       alterableData.map((d) => {
         return (<React.Fragment key={d.key}>
-          <div>
-            <FComponentsLib.FContentText text={d.name} type={'additional2'} />
+          <div className={styles.gridKey}>
+            <FComponentsLib.FContentText
+              text={d.name}
+              type={'additional2'}
+              singleRow
+            />
+            {
+              d.description && (<FTooltip
+                title={d.description}
+              >
+                <FComponentsLib.FIcons.FInfo
+                  style={{ cursor: 'pointer', fontSize: 12 }}
+                />
+              </FTooltip>)
+            }
           </div>
           <div>
             <FComponentsLib.FContentText text={d.value} type={'highlight'} style={{ fontSize: 12 }} />
