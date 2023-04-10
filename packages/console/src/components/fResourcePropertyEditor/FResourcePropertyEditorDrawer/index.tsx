@@ -118,8 +118,8 @@ function FResourcePropertyEditorDrawer({
 
       <div className={styles.input}>
         <div className={styles.title}>
-          <i className={styles.dot} />
-          <FComponentsLib.FTitleText type='h4'>属性名称</FComponentsLib.FTitleText>
+          {/*<i className={styles.dot} />*/}
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性名称'}  />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -150,8 +150,9 @@ function FResourcePropertyEditorDrawer({
 
       <div className={styles.input}>
         <div className={styles.title}>
-          <i className={styles.dot} />
-          <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
+          {/*<i className={styles.dot} />*/}
+          {/*<FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'}  />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -182,8 +183,41 @@ function FResourcePropertyEditorDrawer({
 
       <div className={styles.input}>
         <div className={styles.title}>
-          <i className={styles.dot} />
-          <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
+          {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性说明'}  />
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'}  />
+        </div>
+        <div style={{ height: 5 }} />
+        <FInput
+          value={descriptionInput}
+          // errorText={resourceVersionEditorPage.basePDescriptionInputError}
+          className={styles.input}
+          onChange={(e) => {
+            const value: string = e.target.value;
+            let errorText: string = '';
+            if (value.length > 50) {
+              errorText = '不超过50个字符';
+            }
+            // onDescriptionInputChange && onDescriptionInputChange({
+            //   value,
+            //   errorText,
+            // });
+            set_descriptionInput(value);
+            set_descriptionInputError(errorText);
+          }}
+          placeholder={'输入属性说明'}
+        />
+        {descriptionInputError && (<>
+          <div style={{ height: 5 }} />
+          <div className={styles.errorTip}>{descriptionInputError}</div>
+        </>)}
+      </div>
+
+      <div className={styles.input}>
+        <div className={styles.title}>
+          {/*<i className={styles.dot} />*/}
+          {/*<FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
+          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'}  />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -212,35 +246,7 @@ function FResourcePropertyEditorDrawer({
         </>)}
       </div>
 
-      <div className={styles.input}>
-        <div className={styles.title}>
-          <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
-        </div>
-        <div style={{ height: 5 }} />
-        <FInput
-          value={descriptionInput}
-          // errorText={resourceVersionEditorPage.basePDescriptionInputError}
-          className={styles.input}
-          onChange={(e) => {
-            const value: string = e.target.value;
-            let errorText: string = '';
-            if (value.length > 50) {
-              errorText = '不超过50个字符';
-            }
-            // onDescriptionInputChange && onDescriptionInputChange({
-            //   value,
-            //   errorText,
-            // });
-            set_descriptionInput(value);
-            set_descriptionInputError(errorText);
-          }}
-          placeholder={'输入属性说明'}
-        />
-        {descriptionInputError && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{descriptionInputError}</div>
-        </>)}
-      </div>
+
 
     </Space>
   </FDrawer>);

@@ -64,6 +64,7 @@ export interface ResourceVersionCreatorPageModelState {
   customOptionsDataVisible: boolean;
   customOptionsData: {
     key: string;
+    name: string;
     description: string;
     custom: 'input' | 'select';
     defaultValue: string;

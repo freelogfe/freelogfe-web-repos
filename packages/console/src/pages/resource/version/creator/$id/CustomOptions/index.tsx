@@ -18,12 +18,13 @@ import { FI18n } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
-import fEditFileBaseProp from '@/components/fEditFileBaseProp';
+// import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
 import fEditCustomOptions from '@/components/fEditCustomOption';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FResourceProperties from '@/components/FResourceProperties';
-import FBasePropertiesCards from '@/components/FBasePropertiesCards';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+// import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -58,11 +59,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={async () => {
-                    const dataSource = await fAddFileBaseProps({
+                    const dataSource = await fResourcePropertyEditor({
                       disabledKeys: [
                         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
                         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                      ],
+                      disabledNames: [
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
                       ],
                     });
                     // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
