@@ -4,6 +4,8 @@ import FAdd from './FAdd';
 import FBinding from './FBinding';
 import FCancelCollect from './FCancelCollect';
 import FCheck from './FCheck';
+import FCircleDelete from './FCircleDelete';
+import FCircleEdit from './FCircleEdit';
 import FClose from './FClose';
 import FCloudUpload from './FCloudUpload';
 import FCode from './FCode';
@@ -68,12 +70,13 @@ import FUser from './FUser';
 import FWarning from './FWarning';
 import FWeChat from './FWeChat';
 
-
 const FIcons = {
     FAdd,
     FBinding,
     FCancelCollect,
     FCheck,
+    FCircleDelete,
+    FCircleEdit,
     FClose,
     FCloudUpload,
     FCode,
@@ -138,4 +141,5 @@ const FIcons = {
     FWarning,
     FWeChat,
 };
+
 export default FIcons;
