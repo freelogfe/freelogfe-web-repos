@@ -81,7 +81,7 @@ function FResourcePropertyEditorDrawer({
       set_visible(false);
     }}
     open={visible}
-    width={720}
+    width={580}
     afterOpenChange={(v) => {
       if (!v) {
         onClose && onClose();
