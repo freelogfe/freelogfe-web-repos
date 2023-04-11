@@ -87,13 +87,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         value: [
                           ...resourceVersionCreatorPage.baseProperties,
                           dataSource,
-                          // ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                          //   return {
-                          //     key: ds.key,
-                          //     value: ds.value,
-                          //     description: ds.description,
-                          //   };
-                          // }),
                         ],
                       },
                     });
@@ -150,11 +143,53 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
             alterableData={resourceVersionCreatorPage.baseProperties}
-            onEdit_alterableData={(value) => {
-              console.log(value, 'EEEEEE89sdiojfiksdjlkj');
+            onEdit_alterableData={async (value) => {
+              const index: number = resourceVersionCreatorPage.baseProperties.findIndex((p) => {
+                return p === value;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_BaseProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                payload: {
+                  value: resourceVersionCreatorPage.baseProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
             }}
-            onDelete_alterableData={(value) => {
-              console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
+            onDelete_alterableData={async (value) => {
+              // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
+              await dispatch<OnChange_BaseProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                payload: {
+                  value: resourceVersionCreatorPage.baseProperties.filter((v, i) => {
+                    return v.key !== value.key && v.name !== value.name;
+                  }),
+                },
+              });
             }}
           />
 

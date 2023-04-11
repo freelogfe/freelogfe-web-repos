@@ -70,6 +70,7 @@ function FResourcePropertyEditorDrawer({
 
   function initData() {
     set_keyInput(defaultData?.key || '');
+    set_nameInput(defaultData?.name || '');
     set_valueInput(defaultData?.value || '');
     set_descriptionInput(defaultData?.description || '');
   }
