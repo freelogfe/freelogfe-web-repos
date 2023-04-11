@@ -229,31 +229,31 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
       }
     </Space>
 
-    {
-      dataSource.length > 0 && (<div style={{ height: 30 }} />)
-    }
+    {/*{*/}
+    {/*  dataSource.length > 0 && (<div style={{ height: 30 }} />)*/}
+    {/*}*/}
 
-    <Space size={10}>
-      <FComponentsLib.FCircleBtn
-        size='small'
-        onClick={() => {
-          set_dataSource([
-            ...dataSource,
-            {
-              key: '',
-              keyError: '',
-              value: '',
-              valueError: '',
-              description: '',
-              descriptionError: '',
-            },
-          ]);
-        }}
-      />
-      <FComponentsLib.FContentText
-        text={'新增一项属性'}
-      />
-    </Space>
+    {/*<Space size={10}>*/}
+    {/*  <FComponentsLib.FCircleBtn*/}
+    {/*    size='small'*/}
+    {/*    onClick={() => {*/}
+    {/*      set_dataSource([*/}
+    {/*        ...dataSource,*/}
+    {/*        {*/}
+    {/*          key: '',*/}
+    {/*          keyError: '',*/}
+    {/*          value: '',*/}
+    {/*          valueError: '',*/}
+    {/*          description: '',*/}
+    {/*          descriptionError: '',*/}
+    {/*        },*/}
+    {/*      ]);*/}
+    {/*    }}*/}
+    {/*  />*/}
+    {/*  <FComponentsLib.FContentText*/}
+    {/*    text={'新增一项属性'}*/}
+    {/*  />*/}
+    {/*</Space>*/}
   </FDrawer>);
 }
 
