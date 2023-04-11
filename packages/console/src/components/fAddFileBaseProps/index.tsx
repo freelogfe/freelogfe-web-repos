@@ -7,6 +7,7 @@ interface fAddFileBasePropsProps {
   disabledKeys: string[];
   defaultData?: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
@@ -14,6 +15,7 @@ interface fAddFileBasePropsProps {
 
 type ReturnData = {
   key: string;
+  name: string;
   value: string;
   description: string;
 }[] | null;

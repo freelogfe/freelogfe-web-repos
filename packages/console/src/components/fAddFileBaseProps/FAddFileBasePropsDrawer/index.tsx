@@ -12,12 +12,14 @@ interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
   defaultData?: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
 
   onOk?(data: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[]): void;
@@ -30,6 +32,8 @@ interface FAddFileBasePropsDrawerStates {
   dataSource: {
     key: string;
     keyError: string;
+    name: string;
+    nameError: string;
     value: string;
     valueError: string;
     description: string;
@@ -42,6 +46,8 @@ const initStates: FAddFileBasePropsDrawerStates = {
   dataSource: [{
     key: '',
     keyError: '',
+    name: '',
+    nameError: '',
     value: '',
     valueError: '',
     description: '',
@@ -60,6 +66,8 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
         return {
           key: cpd.key,
           keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
+          name: cpd.name,
+          nameError: '',
           value: cpd.value,
           valueError: '',
           description: cpd.description,
@@ -117,6 +125,7 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
           onOk && onOk(dataSource.map((ds) => {
             return {
               key: ds.key,
+              name: ds.name,
               value: ds.value,
               description: ds.description,
             };
@@ -143,19 +152,24 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
-                  value={ds.description}
-                  errorText={ds.descriptionError}
+                  value={ds.name}
+                  errorText={ds.nameError}
                   className={styles.input}
                   wrapClassName={styles.input}
                   onChange={(e) => {
                     const value: string = e.target.value;
-                    let descriptionError: string = '';
-                    if (value.length > 50) {
-                      descriptionError = '不超过50个字符';
+                    let keyError: string = '';
+                    if (value === '') {
+                      keyError = '请输入名称';
+                    } else if (value.length > 15) {
+                      keyError = '不超过15个字符';
                     }
+                    // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+                    //   keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+                    // }
                     onChangeData({
-                      description: value,
-                      descriptionError: descriptionError,
+                      name: value,
+                      nameError: keyError,
                     }, index);
                   }}
                   placeholder={'输入属性说明'}
@@ -177,7 +191,7 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                     const value: string = e.target.value;
                     let keyError: string = '';
                     if (value === '') {
-                      keyError = '请输入';
+                      keyError = '请输入key';
                     } else if (value.length > 15) {
                       keyError = '不超过15个字符';
                     } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
@@ -188,7 +202,7 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                       keyError: keyError,
                     }, index);
                   }}
-                  placeholder={'输入key'}
+                  placeholder={'请输入key'}
                 />
               </div>
               <div>

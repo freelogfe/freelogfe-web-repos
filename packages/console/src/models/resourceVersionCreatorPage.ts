@@ -346,6 +346,7 @@ const Model: ResourceVersionCreatorModelType = {
         preVersionBaseProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
           .filter((cpd: any) => cpd.type === 'readonlyText')
           .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
+            console.log(cpd, 'cpdoidsjflksdjflkjkl');
             return {
               key: cpd.key,
               name: cpd.key,
