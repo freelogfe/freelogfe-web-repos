@@ -150,8 +150,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
             alterableData={resourceVersionCreatorPage.baseProperties}
-            onChange_alterableData={(value) => {
-
+            onEdit_alterableData={(value) => {
+              console.log(value, 'EEEEEE89sdiojfiksdjlkj');
+            }}
+            onDelete_alterableData={(value) => {
+              console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
             }}
           />
 

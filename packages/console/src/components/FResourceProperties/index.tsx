@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
-import FCircleEdit from '../../../../@freelog/components-lib/src/FIcons/FCircleEdit';
 
 interface FResourcePropertiesProps {
   immutableData: {
@@ -16,10 +15,17 @@ interface FResourcePropertiesProps {
     description: string;
   }[];
 
-  onChange_alterableData?(value: FResourcePropertiesProps['alterableData']): void;
+  onEdit_alterableData?(value: FResourcePropertiesProps['alterableData'][number]): void;
+
+  onDelete_alterableData?(value: FResourcePropertiesProps['alterableData'][number]): void;
 }
 
-function FResourceProperties({ immutableData, alterableData, onChange_alterableData }: FResourcePropertiesProps) {
+function FResourceProperties({
+                               immutableData,
+                               alterableData,
+                               onEdit_alterableData,
+                               onDelete_alterableData,
+                             }: FResourcePropertiesProps) {
   return (<div className={styles.styles}>
     {
       immutableData.map((d) => {
@@ -63,13 +69,16 @@ function FResourceProperties({ immutableData, alterableData, onChange_alterableD
             <FComponentsLib.FTextBtn
               type={'default'}
               onClick={() => {
-
+                onEdit_alterableData && onEdit_alterableData(d);
               }}
             >
               <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
             </FComponentsLib.FTextBtn>
             <FComponentsLib.FTextBtn
               type={'danger'}
+              onClick={() => {
+                onDelete_alterableData && onDelete_alterableData(d);
+              }}
             >
               <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
             </FComponentsLib.FTextBtn>
@@ -78,21 +87,6 @@ function FResourceProperties({ immutableData, alterableData, onChange_alterableD
         </React.Fragment>);
       })
     }
-    {/*<div>*/}
-    {/*  <FComponentsLib.FContentText text={'png'} type={'highlight'} style={{ fontSize: 12 }} />*/}
-    {/*</div>*/}
-    {/*<div>*/}
-    {/*  <FComponentsLib.FContentText text={'类型'} type={'additional2'} />*/}
-    {/*</div>*/}
-    {/*<div>*/}
-    {/*  <FComponentsLib.FContentText text={'png'} type={'highlight'} style={{ fontSize: 12 }} />*/}
-    {/*</div>*/}
-    {/*<div>*/}
-    {/*  <FComponentsLib.FContentText text={'类型'} type={'additional2'} />*/}
-    {/*</div>*/}
-    {/*<div>*/}
-    {/*  <FComponentsLib.FContentText text={'png'} type={'highlight'} style={{ fontSize: 12 }} />*/}
-    {/*</div>*/}
   </div>);
 }
 
