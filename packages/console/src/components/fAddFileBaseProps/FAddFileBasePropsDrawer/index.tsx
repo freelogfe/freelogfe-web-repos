@@ -134,82 +134,115 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
       {
         dataSource.map((ds, index) => {
           return (<Space key={index} size={10}>
-            <div className={styles.input}>
-              <div className={styles.title}>
-                <i className={styles.dot} />
-                <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
+            <div className={styles.grid}>
+
+              <div>
+                <div className={styles.title}>
+                  <i className={styles.dot} />
+                  <FComponentsLib.FTitleText type='h4'>属性名称</FComponentsLib.FTitleText>
+                </div>
+                <div style={{ height: 5 }} />
+                <FInput
+                  value={ds.description}
+                  errorText={ds.descriptionError}
+                  className={styles.input}
+                  wrapClassName={styles.input}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let descriptionError: string = '';
+                    if (value.length > 50) {
+                      descriptionError = '不超过50个字符';
+                    }
+                    onChangeData({
+                      description: value,
+                      descriptionError: descriptionError,
+                    }, index);
+                  }}
+                  placeholder={'输入属性说明'}
+                />
               </div>
-              <div style={{ height: 5 }} />
-              <FInput
-                value={ds.key}
-                errorText={ds.keyError}
-                className={styles.input}
-                onChange={(e) => {
-                  const value: string = e.target.value;
-                  let keyError: string = '';
-                  if (value === '') {
-                    keyError = '请输入';
-                  } else if (value.length > 15) {
-                    keyError = '不超过15个字符';
-                  } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-                    keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-                  }
-                  onChangeData({
-                    key: value,
-                    keyError: keyError,
-                  }, index);
-                }}
-                placeholder={'输入key'}
-              />
-            </div>
-            <div className={styles.input}>
-              <div className={styles.title}>
-                <i className={styles.dot} />
-                <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
+
+              <div>
+                <div className={styles.title}>
+                  <i className={styles.dot} />
+                  <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
+                </div>
+                <div style={{ height: 5 }} />
+                <FInput
+                  value={ds.key}
+                  errorText={ds.keyError}
+                  className={styles.input}
+                  wrapClassName={styles.input}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let keyError: string = '';
+                    if (value === '') {
+                      keyError = '请输入';
+                    } else if (value.length > 15) {
+                      keyError = '不超过15个字符';
+                    } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+                      keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+                    }
+                    onChangeData({
+                      key: value,
+                      keyError: keyError,
+                    }, index);
+                  }}
+                  placeholder={'输入key'}
+                />
               </div>
-              <div style={{ height: 5 }} />
-              <FInput
-                value={ds.value}
-                errorText={ds.valueError}
-                className={styles.input}
-                onChange={(e) => {
-                  const value: string = e.target.value;
-                  let valueError: string = '';
-                  if (value === '') {
-                    valueError = '请输入';
-                  } else if (value.length > 30) {
-                    valueError = '不超过30个字符';
-                  }
-                  onChangeData({
-                    value: value,
-                    valueError: valueError,
-                  }, index);
-                }}
-                placeholder={'输入value'}
-              />
-            </div>
-            <div className={styles.input}>
-              <div className={styles.title}>
-                <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
+              <div>
+                <div className={styles.title}>
+                  <i className={styles.dot} />
+                  <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
+                </div>
+                <div style={{ height: 5 }} />
+                <FInput
+                  value={ds.value}
+                  errorText={ds.valueError}
+                  className={styles.input}
+                  wrapClassName={styles.input}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let valueError: string = '';
+                    if (value === '') {
+                      valueError = '请输入';
+                    } else if (value.length > 30) {
+                      valueError = '不超过30个字符';
+                    }
+                    onChangeData({
+                      value: value,
+                      valueError: valueError,
+                    }, index);
+                  }}
+                  placeholder={'输入value'}
+                />
               </div>
-              <div style={{ height: 5 }} />
-              <FInput
-                value={ds.description}
-                errorText={ds.descriptionError}
-                className={styles.input}
-                onChange={(e) => {
-                  const value: string = e.target.value;
-                  let descriptionError: string = '';
-                  if (value.length > 50) {
-                    descriptionError = '不超过50个字符';
-                  }
-                  onChangeData({
-                    description: value,
-                    descriptionError: descriptionError,
-                  }, index);
-                }}
-                placeholder={'输入属性说明'}
-              />
+              <div>
+                <div className={styles.title}>
+                  <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
+                </div>
+                <div style={{ height: 5 }} />
+                <FInput
+                  value={ds.description}
+                  errorText={ds.descriptionError}
+                  className={styles.input}
+                  wrapClassName={styles.input}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let descriptionError: string = '';
+                    if (value.length > 50) {
+                      descriptionError = '不超过50个字符';
+                    }
+                    onChangeData({
+                      description: value,
+                      descriptionError: descriptionError,
+                    }, index);
+                  }}
+                  placeholder={'输入属性说明'}
+                />
+              </div>
+
             </div>
             <div>
               <div style={{ height: 22 }} />
@@ -228,32 +261,6 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
         })
       }
     </Space>
-
-    {/*{*/}
-    {/*  dataSource.length > 0 && (<div style={{ height: 30 }} />)*/}
-    {/*}*/}
-
-    {/*<Space size={10}>*/}
-    {/*  <FComponentsLib.FCircleBtn*/}
-    {/*    size='small'*/}
-    {/*    onClick={() => {*/}
-    {/*      set_dataSource([*/}
-    {/*        ...dataSource,*/}
-    {/*        {*/}
-    {/*          key: '',*/}
-    {/*          keyError: '',*/}
-    {/*          value: '',*/}
-    {/*          valueError: '',*/}
-    {/*          description: '',*/}
-    {/*          descriptionError: '',*/}
-    {/*        },*/}
-    {/*      ]);*/}
-    {/*    }}*/}
-    {/*  />*/}
-    {/*  <FComponentsLib.FContentText*/}
-    {/*    text={'新增一项属性'}*/}
-    {/*  />*/}
-    {/*</Space>*/}
   </FDrawer>);
 }
 

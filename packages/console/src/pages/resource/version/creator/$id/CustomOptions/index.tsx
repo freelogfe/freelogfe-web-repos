@@ -93,47 +93,46 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   }}
                 >补充属性</FComponentsLib.FTextBtn>
                 {
-                  resourceVersionCreatorPage.preVersionBaseProperties.length > 0 && false
-                    ? (<FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, fontWeight: 600 }}
-                      type='primary'
-                      onClick={async () => {
-                        const dataSource = await fAddFileBaseProps({
-                          defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                              return rp.key;
-                            }),
-                            ...resourceVersionCreatorPage.baseProperties.map((pp) => {
-                              return pp.key;
-                            }),
-                            ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
-                              return pp.key;
+                  resourceVersionCreatorPage.preVersionBaseProperties.length > 0 &&
+                  (<FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    type='primary'
+                    onClick={async () => {
+                      const dataSource = await fAddFileBaseProps({
+                        defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
+                        disabledKeys: [
+                          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                            return rp.key;
+                          }),
+                          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                            return pp.key;
+                          }),
+                          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                            return pp.key;
+                          }),
+                        ],
+                      });
+                      if (!dataSource) {
+                        return;
+                      }
+
+                      await dispatch<OnChange_BaseProperties_Action>({
+                        type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                        payload: {
+                          value: [
+                            ...resourceVersionCreatorPage.baseProperties,
+                            ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                              return {
+                                key: ds.key,
+                                value: ds.value,
+                                description: ds.description,
+                              };
                             }),
                           ],
-                        });
-                        if (!dataSource) {
-                          return;
-                        }
-
-                        await dispatch<OnChange_BaseProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_BaseProperties',
-                          payload: {
-                            value: [
-                              // ...resourceVersionCreatorPage.baseProperties,
-                              // ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
-                              //   return {
-                              //     key: ds.key,
-                              //     value: ds.value,
-                              //     description: ds.description,
-                              //   };
-                              // }),
-                            ],
-                          },
-                        });
-                      }}
-                    >从上个版本导入</FComponentsLib.FTextBtn>)
-                    : undefined
+                        },
+                      });
+                    }}
+                  >从上个版本导入</FComponentsLib.FTextBtn>)
                 }
               </Space>
             </div>
