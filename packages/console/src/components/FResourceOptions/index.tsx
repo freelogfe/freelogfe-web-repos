@@ -52,28 +52,36 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
             </div>
           </div>
           <div style={{ height: 5 }} />
-          <div className={styles.itemBody}>
-            {
-              d.type === 'input' && (
-                <FComponentsLib.FContentText text={d.input} type={'additional2'} style={{ color: '#222' }} />)
-            }
+          <div className={styles.itemContent}>
+            <div className={styles.itemBody}>
+              {
+                d.type === 'input' && (
+                  <FComponentsLib.FContentText text={d.input} type={'additional2'} style={{ color: '#222' }} />)
+              }
 
-            {
-              d.type === 'select' && d.select.map((s, i) => {
-                if (i !== 0) {
-                  return (<React.Fragment key={i}>
-                    <span style={{ color: '#E5E7EB' }}>|</span>
-                    <FComponentsLib.FContentText text={s} type={'additional2'} style={{ color: '#222' }} />
-                  </React.Fragment>);
-                }
-                return (<FComponentsLib.FContentText
-                  key={i}
-                  text={s}
-                  type={'additional2'}
-                  style={{ color: '#222' }}
-                />);
-              })
-            }
+              {
+                d.type === 'select' && d.select.map((s, i) => {
+                  if (i !== 0) {
+                    return (<React.Fragment key={i}>
+                      <span style={{ color: '#E5E7EB' }}>|</span>
+                      <FComponentsLib.FContentText text={s} type={'additional2'} style={{ color: '#222' }} />
+                    </React.Fragment>);
+                  }
+                  return (<FComponentsLib.FContentText
+                    key={i}
+                    text={s}
+                    type={'additional2'}
+                    style={{ color: '#222' }}
+                  />);
+                })
+              }
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FComponentsLib.FContentText
+                text={'配置方式：' + (d.type === 'select' ? '下拉选择器' : '输入框')}
+                type={'additional2'}
+              />
+            </div>
           </div>
         </div>);
       })
