@@ -93,6 +93,7 @@ export interface ResourceVersionCreatorPageModelState {
     id: string;
     name: string;
     type: 'resource' | 'object';
+
     versionRange?: string;
   }[];
 
@@ -367,7 +368,7 @@ const Model: ResourceVersionCreatorModelType = {
           .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
             return {
               key: cpd.key,
-              name: cpd.name,
+              name: 'cpd.name',
               description: cpd.remark,
               type: cpd.type === 'editableText' ? 'input' : 'select',
               input: cpd.defaultValue,
