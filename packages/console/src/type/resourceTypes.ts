@@ -13,10 +13,11 @@ export interface IResourceCreateVersionDraft {
   }[];
   customOptionsData: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
   directDependencies: {
     id: string;

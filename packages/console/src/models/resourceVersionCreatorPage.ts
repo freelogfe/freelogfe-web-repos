@@ -333,7 +333,13 @@ const Model: ResourceVersionCreatorModelType = {
         };
         const { data: data_resourceVersionInfo }: {
           data: {
-            customPropertyDescriptors: any[];
+            customPropertyDescriptors: {
+              key: string;
+              defaultValue: string;
+              type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+              candidateItems: string[];
+              remark: string;
+            }[];
             dependencies: {
               resourceId: string;
               resourceName: string;
@@ -344,10 +350,10 @@ const Model: ResourceVersionCreatorModelType = {
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
         // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo90-32iokpsdlfsdfsdlfkjl');
         descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
-        preVersionBaseProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
+        preVersionBaseProperties = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type === 'readonlyText')
           .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
-            console.log(cpd, 'cpdoidsjflksdjflkjkl');
+            // console.log(cpd, 'cpdoidsjflksdjflkjkl');
             return {
               key: cpd.key,
               name: cpd.key,
@@ -356,7 +362,7 @@ const Model: ResourceVersionCreatorModelType = {
             };
           });
 
-        preVersionOptionProperties = (data_resourceVersionInfo.customPropertyDescriptors as any[])
+        preVersionOptionProperties = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type !== 'readonlyText')
           .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
             return {
@@ -364,8 +370,8 @@ const Model: ResourceVersionCreatorModelType = {
               name: cpd.name,
               description: cpd.remark,
               type: cpd.type === 'editableText' ? 'input' : 'select',
-              defaultValue: cpd.defaultValue,
-              customOption: cpd.candidateItems.join(','),
+              input: cpd.defaultValue,
+              select: cpd.candidateItems,
             };
           });
         preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
@@ -512,13 +518,13 @@ const Model: ResourceVersionCreatorModelType = {
             };
           }),
           ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-            const isInput: boolean = i.custom === 'input';
-            const options: string[] = i.customOption.split(',');
+            const isInput: boolean = i.type === 'input';
+            const options: string[] = i.select;
             return {
               type: isInput ? 'editableText' : 'select',
               key: i.key,
               remark: i.description,
-              defaultValue: isInput ? i.defaultValue : options[0],
+              defaultValue: isInput ? i.input : options[0],
               candidateItems: isInput ? undefined : options,
             };
           }),
@@ -623,7 +629,13 @@ const Model: ResourceVersionCreatorModelType = {
             type: 'resource' | 'object';
             versionRange?: string;
           }[];
-          customPropertyDescriptors: any[],
+          customPropertyDescriptors: {
+            key: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[],
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
 
@@ -633,7 +645,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           baseProperties: data_objectDetails.customPropertyDescriptors
-            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .filter((cpd) => cpd.type === 'readonlyText')
             .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
@@ -644,16 +656,17 @@ const Model: ResourceVersionCreatorModelType = {
             }),
           customOptionsData: data_objectDetails.customPropertyDescriptors
             .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd) => {
               return {
                 key: cpd.key,
+                name: 'cpd.name',
                 // keyError: '',
                 description: cpd.remark,
                 // descriptionError: '',
-                custom: cpd.type === 'editableText' ? 'input' : 'select',
-                defaultValue: cpd.defaultValue,
+                type: cpd.type === 'editableText' ? 'input' : 'select',
+                input: cpd.defaultValue,
                 // defaultValueError: '',
-                customOption: cpd.candidateItems.join(','),
+                select: cpd.candidateItems,
                 // customOptionError: '',
               };
             }),
