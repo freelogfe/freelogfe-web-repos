@@ -25,6 +25,8 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+
 // import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
@@ -221,6 +223,19 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 <FComponentsLib.FTextBtn
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
+                  onClick={async () => {
+                    await fResourceOptionEditor({
+                      disabledKeys: [
+                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                      ],
+                      disabledNames: [
+                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                      ],
+                    });
+                  }}
                 >添加配置</FComponentsLib.FTextBtn>
 
                 {
@@ -241,7 +256,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         return;
                       }
 
-                      
+
                     }}>从上个版本导入</FComponentsLib.FTextBtn>)
                 }
               </Space>
