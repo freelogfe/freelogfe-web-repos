@@ -7,13 +7,17 @@ import FComponentsLib from '@freelog/components-lib';
 export interface Data {
   key: string;
   keyError: string;
+  name: string;
+  nameError: string;
   description: string;
   descriptionError: string;
-  custom: 'input' | 'select';
-  defaultValue: string;
-  defaultValueError: string;
-  customOption: string;
-  customOptionError: string;
+  type: 'input' | 'select';
+  input: string;
+  inputError: string;
+  select: {
+    value: string;
+    error: string;
+  }[];
 }
 
 export interface FCustomOptionsProps {

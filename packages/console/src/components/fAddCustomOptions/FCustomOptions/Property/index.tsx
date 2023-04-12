@@ -4,7 +4,7 @@ import { Col, Row, Space } from 'antd';
 import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
 import { Data } from '../index';
-import { FUtil ,FI18n} from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
 interface PropertyProps {
@@ -23,6 +23,45 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
   }
 
   return (<div className={styles.option}>
+    <Row gutter={10}>
+      <Col span={24}>
+        <Space size={5}>
+          <i className={styles.dot} />
+          <FComponentsLib.FTitleText type='h4' text={'属性名称'} />
+        </Space>
+        <div style={{ height: 5 }} />
+        <FInput
+          className={styles.input}
+          wrapClassName={styles.input}
+          placeholder={'输入属性名称'}
+          value={data.key}
+          onChange={(e) => {
+            const value: string = e.target.value;
+            let errorText: string = '';
+            if (value === '') {
+              errorText = '请输入属性名称';
+            } else if (value.length > 15) {
+              errorText = '不超过15个字符';
+            } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+              errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+            }
+
+            onChangeData({
+              name: value,
+              nameError: errorText,
+            });
+          }}
+
+        />
+
+        {
+          data.nameError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{data.nameError}</div>
+          </>)
+        }
+      </Col>
+    </Row>
     <Row gutter={10}>
       <Col span={12}>
         <Space size={5}>
@@ -95,34 +134,53 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
     <div style={{ height: 10 }} />
     <Row gutter={10}>
       {
-        !hideTypeSelect && (<Col span={6}>
+        !hideTypeSelect && (<Col span={12}>
           <Space size={5}>
             <i className={styles.dot} />
             <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />
           </Space>
           <div style={{ height: 5 }} />
-          <FSelect
-            className={styles.input}
-            dataSource={[
-              {
-                value: 'input',
-                title: '文本框',
-              },
-              {
-                value: 'select',
-                title: '下拉框',
-              },
-            ]}
-            value={data.custom}
-            onChange={(value) => {
-              onChangeData({ custom: value });
-            }}
-          />
+
+          <div className={styles.typeSelect}>
+            <div
+              className={[styles.typeSelect_option, data.type === 'input' ? styles.active : ''].join(' ')}
+              onClick={() => {
+                // set_typeSelect('input');
+              }}
+            >输入框
+            </div>
+            <div
+              className={[styles.typeSelect_option, data.type === 'select' ? styles.active : ''].join(' ')}
+              onClick={() => {
+                // set_typeSelect('select');
+              }}
+            >下拉选择器
+            </div>
+          </div>
+          {/*<FSelect*/}
+          {/*  className={styles.input}*/}
+          {/*  dataSource={[*/}
+          {/*    {*/}
+          {/*      value: 'input',*/}
+          {/*      title: '文本框',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      value: 'select',*/}
+          {/*      title: '下拉框',*/}
+          {/*    },*/}
+          {/*  ]}*/}
+          {/*  value={data.type}*/}
+          {/*  onChange={(value) => {*/}
+          {/*    onChangeData({ type: value });*/}
+          {/*  }}*/}
+          {/*/>*/}
         </Col>)
       }
-
+    </Row>
+    <div style={{ height: 10 }} />
+    <Row gutter={24}>
       {
-        data.custom === 'input' ? (<Col span={18}>
+        data.type === 'input' ? (<Col span={18}>
             <Space size={5}>
               {/*<i className={styles.dot} />*/}
               {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
@@ -133,7 +191,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               className={styles.input}
               wrapClassName={styles.input}
               placeholder={'输入自定义选项'}
-              value={data.defaultValue}
+              value={data.input}
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
@@ -144,15 +202,15 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                   errorText = '不超过140个字符';
                 }
                 onChangeData({
-                  defaultValue: value,
-                  defaultValueError: errorText,
+                  input: value,
+                  inputError: errorText,
                 });
               }}
             />
             {
-              data.defaultValueError && (<>
+              data.inputError && (<>
                 <div style={{ height: 5 }} />
-                <div className={styles.errorTip}>{data.defaultValueError}</div>
+                <div className={styles.errorTip}>{data.inputError}</div>
               </>)
             }
           </Col>)
@@ -162,47 +220,110 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               <FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
-              className={styles.input}
-              wrapClassName={styles.input}
-              // placeholder={'输入属性说明'}
-              placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}
-              value={data.customOption}
-              onChange={(e) => {
-                const value: string = e.target.value;
-                let errorText: string = '';
-                if (value === '') {
-                  errorText = '请输入';
-                } else if (value.length > 500) {
-                  errorText = '不超过500个字符';
-                } else if (value.split(',').length > 30) {
-                  errorText = '不超过30个选项';
-                }
 
-                if (!errorText) {
-                  const allOptions = value.split(',');
-                  const setS = new Set(allOptions);
-                  if (setS.size !== allOptions.length) {
-                    errorText = '选项不能重复';
-                  }
-                }
-
-                // onOptionsInputChange && onOptionsInputChange({
-                //   value,
-                //   errorText,
-                // });
-                onChangeData({
-                  customOption: e.target.value,
-                  customOptionError: errorText,
-                });
+            <Space size={8} direction={'vertical'} style={{ width: '100%' }}>
+              {
+                data.select.map((si, i) => {
+                  return (<div key={i}>
+                    <Space size={12}>
+                      <FInput
+                        value={si.value}
+                        // className={styles.input}
+                        style={{ width: 480 }}
+                        onChange={(e) => {
+                          const value: string = e.target.value;
+                          let errorText: string = '';
+                          if (value === '') {
+                            errorText = '输入配置值';
+                          } else if (value.length > 30) {
+                            errorText = '不超过30个字符';
+                          }
+                          // set_selectInputs(selectInputs.map((a, b) => {
+                          //   if (b !== i) {
+                          //     return a;
+                          //   }
+                          //   return {
+                          //     value: value,
+                          //     error: errorText,
+                          //   };
+                          // }));
+                        }}
+                        placeholder={'输入配置值'}
+                      />
+                      <FComponentsLib.FCircleBtn
+                        type={'danger'}
+                        onClick={() => {
+                          // set_selectInputs(selectInputs.filter((a, b) => {
+                          //   return b !== i;
+                          // }));
+                        }}
+                      />
+                    </Space>
+                    {si.error && (<>
+                      <div style={{ height: 5 }} />
+                      <div className={styles.errorTip}>{si.error}</div>
+                    </>)}
+                  </div>);
+                })
+              }
+            </Space>
+            <div style={{ height: 10 }} />
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+              onClick={() => {
+                // set_selectInputs([
+                //   ...selectInputs,
+                //   {
+                //     value: '',
+                //     error: '',
+                //   },
+                // ]);
               }}
-            />
-            {
-              data.customOptionError && (<>
-                <div style={{ height: 5 }} />
-                <div className={styles.errorTip}>{data.customOptionError}</div>
-              </>)
-            }
+            >
+              <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
+              <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
+            </div>
+            {/*<FInput*/}
+            {/*  className={styles.input}*/}
+            {/*  wrapClassName={styles.input}*/}
+            {/*  // placeholder={'输入属性说明'}*/}
+            {/*  placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}*/}
+            {/*  value={data.customOption}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    const value: string = e.target.value;*/}
+            {/*    let errorText: string = '';*/}
+            {/*    if (value === '') {*/}
+            {/*      errorText = '请输入';*/}
+            {/*    } else if (value.length > 500) {*/}
+            {/*      errorText = '不超过500个字符';*/}
+            {/*    } else if (value.split(',').length > 30) {*/}
+            {/*      errorText = '不超过30个选项';*/}
+            {/*    }*/}
+
+            {/*    if (!errorText) {*/}
+            {/*      const allOptions = value.split(',');*/}
+            {/*      const setS = new Set(allOptions);*/}
+            {/*      if (setS.size !== allOptions.length) {*/}
+            {/*        errorText = '选项不能重复';*/}
+            {/*      }*/}
+            {/*    }*/}
+
+            {/*    // onOptionsInputChange && onOptionsInputChange({*/}
+            {/*    //   value,*/}
+            {/*    //   errorText,*/}
+            {/*    // });*/}
+            {/*    onChangeData({*/}
+            {/*      customOption: e.target.value,*/}
+            {/*      customOptionError: errorText,*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
+            {/*{*/}
+            {/*  data.customOptionError && (<>*/}
+            {/*    <div style={{ height: 5 }} />*/}
+            {/*    <div className={styles.errorTip}>{data.customOptionError}</div>*/}
+            {/*  </>)*/}
+            {/*}*/}
           </Col>)
       }
 

@@ -7,20 +7,22 @@ interface fAddCustomOptionsProps {
   disabledKeys: string[];
   defaultData?: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
   hideTypeSelect?: boolean;
 }
 
 type ReturnData = {
   key: string;
+  name: string;
   description: string;
-  custom: 'input' | 'select';
-  defaultValue: string;
-  customOption: string;
+  type: 'input' | 'select';
+  input: string;
+  select: string[];
 }[] | null;
 
 function fAddCustomOptions({

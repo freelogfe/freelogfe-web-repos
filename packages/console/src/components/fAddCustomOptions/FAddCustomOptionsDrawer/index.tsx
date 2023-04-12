@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FCustomOptions, { Data } from '../FCustomOptions';
+import FCustomOptions  from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
+// import displayName = Drawer.displayName;
 
 interface FAddCustomOptionsDrawerProps {
 
@@ -11,18 +12,20 @@ interface FAddCustomOptionsDrawerProps {
   hideTypeSelect: boolean;
   defaultData?: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
 
   onOk?(data: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[]): void;
 
   onClose?(): void;
@@ -33,13 +36,17 @@ export interface FAddCustomOptionsDrawerStates {
   dataSource: {
     key: string;
     keyError: string;
+    name: string;
+    nameError: string;
     description: string;
     descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
+    type: 'input' | 'select';
+    input: string;
+    inputError: string;
+    select: {
+      value: string;
+      error: string;
+    }[];
   }[];
 }
 
@@ -48,13 +55,14 @@ const initStates: FAddCustomOptionsDrawerStates = {
   dataSource: [{
     key: '',
     keyError: '',
+    name: '',
+    nameError: '',
     description: '',
     descriptionError: '',
-    custom: 'input',
-    defaultValue: '',
-    defaultValueError: '',
-    customOption: '',
-    customOptionError: '',
+    type: 'input',
+    input: '',
+    inputError: '',
+    select: [],
   }],
 };
 
@@ -75,13 +83,19 @@ function FAddCustomOptionsDrawer({
         return {
           key: dd.key,
           keyError: disabledKeys.includes(dd.key) ? '键不能重复' : '',
+          name: dd.name,
+          nameError: disabledKeys.includes(dd.name) ? '名称不能重复' : '',
           description: dd.description,
           descriptionError: '',
-          custom: dd.custom,
-          defaultValue: dd.defaultValue,
-          defaultValueError: '',
-          customOption: dd.customOption,
-          customOptionError: '',
+          type: dd.type,
+          input: dd.input,
+          inputError: '',
+          select: dd.select.map((s) => {
+            return {
+              value: s,
+              error: '',
+            };
+          }),
         };
       }));
     }
@@ -93,13 +107,17 @@ function FAddCustomOptionsDrawer({
       {
         key: '',
         keyError: '',
+        name: '',
+        nameError: '',
         description: '',
         descriptionError: '',
-        custom: 'input',
-        defaultValue: '',
-        defaultValueError: '',
-        customOption: '',
-        customOptionError: '',
+        type: 'input',
+        input: '',
+        inputError: '',
+        select: [{
+          value: '',
+          error: '',
+        }],
       },
     ]);
   }
@@ -137,17 +155,24 @@ function FAddCustomOptionsDrawer({
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
-            || (eds.custom === 'select' ? (eds.customOption === '' || eds.customOptionError !== '') : eds.defaultValueError !== '')
+            || (eds.type === 'input'
+              ? (eds.input === '' || eds.inputError !== '')
+              : eds.select.some((s) => {
+                return s.value === '' || s.error !== '';
+              }))
             || eds.descriptionError !== '';
         })}
         onClick={() => {
           onOk && onOk(dataSource.map((ds) => {
             return {
               key: ds.key,
+              name: ds.name,
               description: ds.description,
-              custom: ds.custom,
-              defaultValue: ds.defaultValue,
-              customOption: ds.customOption,
+              type: ds.type,
+              input: ds.input,
+              select: ds.select.map((s) => {
+                return s.value;
+              }),
             };
           }));
           set_visible(false);
