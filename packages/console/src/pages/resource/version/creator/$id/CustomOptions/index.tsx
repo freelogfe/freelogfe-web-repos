@@ -264,7 +264,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     type='primary'
                     style={{ fontSize: 12, fontWeight: 600 }}
                     onClick={async () => {
-                      const data = await fAddCustomOptions({
+                      // console.log(resourceVersionCreatorPage.preVersionOptionProperties, 'resourceVersionCreatorPage.preVersionOptionProperties dsdf ')
+                      const data: {
+                        key: string;
+                        name: string;
+                        description: string;
+                        type: 'input' | 'select';
+                        input: string;
+                        select: string[];
+                      }[] | null = await fAddCustomOptions({
                         disabledKeys: [
                           ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                           ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
@@ -276,6 +284,16 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       if (!data) {
                         return;
                       }
+
+                      await dispatch<OnChange_CustomOptions_Action>({
+                        type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                        payload: {
+                          value: [
+                            ...resourceVersionCreatorPage.customOptionsData,
+                            ...data,
+                          ],
+                        },
+                      });
 
 
                     }}>从上个版本导入</FComponentsLib.FTextBtn>)

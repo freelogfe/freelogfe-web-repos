@@ -66,9 +66,12 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
                     <FComponentsLib.FContentText text={s} type={'additional2'} style={{ color: '#222' }} />
                   </React.Fragment>);
                 }
-                return (<>
-                  <FComponentsLib.FContentText key={i} text={s} type={'additional2'} style={{ color: '#222' }} />
-                </>);
+                return (<FComponentsLib.FContentText
+                  key={i}
+                  text={s}
+                  type={'additional2'}
+                  style={{ color: '#222' }}
+                />);
               })
             }
           </div>

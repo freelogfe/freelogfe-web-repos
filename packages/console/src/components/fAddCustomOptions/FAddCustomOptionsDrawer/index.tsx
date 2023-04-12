@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FCustomOptions  from '../FCustomOptions';
+import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
+
 // import displayName = Drawer.displayName;
 
 interface FAddCustomOptionsDrawerProps {
@@ -78,6 +79,7 @@ function FAddCustomOptionsDrawer({
   const [dataSource, set_dataSource] = React.useState<FAddCustomOptionsDrawerStates['dataSource']>(initStates['dataSource']);
 
   function initData() {
+    // console.log(defaultData, 'defaultData sdiofjsdlk jlkjl');
     if (defaultData) {
       set_dataSource(defaultData.map((dd) => {
         return {
@@ -101,26 +103,26 @@ function FAddCustomOptionsDrawer({
     }
   }
 
-  function onClick_AddNewItem() {
-    set_dataSource([
-      ...dataSource,
-      {
-        key: '',
-        keyError: '',
-        name: '',
-        nameError: '',
-        description: '',
-        descriptionError: '',
-        type: 'input',
-        input: '',
-        inputError: '',
-        select: [{
-          value: '',
-          error: '',
-        }],
-      },
-    ]);
-  }
+  // function onClick_AddNewItem() {
+  //   set_dataSource([
+  //     ...dataSource,
+  //     {
+  //       key: '',
+  //       keyError: '',
+  //       name: '',
+  //       nameError: '',
+  //       description: '',
+  //       descriptionError: '',
+  //       type: 'input',
+  //       input: '',
+  //       inputError: '',
+  //       select: [{
+  //         value: '',
+  //         error: '',
+  //       }],
+  //     },
+  //   ]);
+  // }
 
   // function onChange_DataSource(value: FCustomOptionsEditorDrawerStates['dataSource']) {
   //   setDataSource(value);

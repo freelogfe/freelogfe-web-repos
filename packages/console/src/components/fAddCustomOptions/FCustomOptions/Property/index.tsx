@@ -34,7 +34,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           className={styles.input}
           wrapClassName={styles.input}
           placeholder={'输入属性名称'}
-          value={data.key}
+          value={data.name}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
