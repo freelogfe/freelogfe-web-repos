@@ -270,7 +270,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
                           ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
                         ],
-                        // defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
+                        defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
                       });
                       // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
                       if (!data) {
