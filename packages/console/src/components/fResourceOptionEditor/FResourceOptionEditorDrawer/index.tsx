@@ -96,10 +96,6 @@ function FResourceOptionEditorDrawer({
         value: '',
         error: '',
       },
-      {
-        value: '',
-        error: '',
-      },
     ]);
     set_descriptionInput(defaultData?.description || '');
   }
@@ -171,7 +167,7 @@ function FResourceOptionEditorDrawer({
             let errorText: string = '';
             if (value === '') {
               errorText = '输入配置名称';
-            } else if (value.length > 15) {
+            } else if (value.length > 30) {
               errorText = '不超过30个字符';
             } else if (disabledNames.includes(value) && value !== defaultData?.name) {
               errorText = '名称不能重复';
@@ -207,7 +203,7 @@ function FResourceOptionEditorDrawer({
             if (value === '') {
               errorText = '输入key';
             } else if (value.length > 15) {
-              errorText = '不超过30个字符';
+              errorText = '不超过15个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
               errorText = '键不能重复';
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
@@ -240,10 +236,6 @@ function FResourceOptionEditorDrawer({
             if (value.length > 50) {
               errorText = '不超过50个字符';
             }
-            // onDescriptionInputChange && onDescriptionInputChange({
-            //   value,
-            //   errorText,
-            // });
             set_descriptionInput(value);
             set_descriptionInputError(errorText);
           }}
@@ -330,15 +322,24 @@ function FResourceOptionEditorDrawer({
                         } else if (value.length > 30) {
                           errorText = '不超过30个字符';
                         }
-                        // set_inputInput(value);
-                        // set_inputInputError(errorText);
+                        set_selectInputs(selectInputs.map((a, b) => {
+                          if (b !== i) {
+                            return a;
+                          }
+                          return {
+                            value: value,
+                            error: errorText,
+                          };
+                        }));
                       }}
                       placeholder={'输入配置值'}
                     />
                     <FComponentsLib.FCircleBtn
                       type={'danger'}
                       onClick={() => {
-
+                        set_selectInputs(selectInputs.filter((a, b) => {
+                          return b !== i;
+                        }));
                       }}
                     />
                   </Space>
@@ -350,7 +351,22 @@ function FResourceOptionEditorDrawer({
               })
             }
           </Space>
-
+          <div style={{ height: 10 }} />
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+            onClick={() => {
+              set_selectInputs([
+                ...selectInputs,
+                {
+                  value: '',
+                  error: '',
+                },
+              ]);
+            }}
+          >
+            <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
+            <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
+          </div>
         </div>)
       }
 
