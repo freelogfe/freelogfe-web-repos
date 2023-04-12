@@ -85,13 +85,22 @@ function FResourceOptionEditorDrawer({
     set_keyInput(defaultData?.key || '');
     set_nameInput(defaultData?.name || '');
     set_typeSelect(defaultData?.type || 'input');
-    set_inputInput(defaultData?.input || 'input');
+    set_inputInput(defaultData?.input || '');
     set_selectInputs(defaultData?.select.map((s) => {
       return {
         value: s,
         error: '',
       };
-    }) || []);
+    }) || [
+      {
+        value: '',
+        error: '',
+      },
+      {
+        value: '',
+        error: '',
+      },
+    ]);
     set_descriptionInput(defaultData?.description || '');
   }
 
@@ -147,9 +156,8 @@ function FResourceOptionEditorDrawer({
       style={{ width: '100%' }}
     >
 
-      <div className={styles.input}>
+      <div className={styles.optionItem}>
         <div className={styles.title}>
-          {/*<i className={styles.dot} />*/}
           <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置名称'} />
         </div>
         <div style={{ height: 5 }} />
@@ -181,7 +189,7 @@ function FResourceOptionEditorDrawer({
         </>)}
       </div>
 
-      <div className={styles.input}>
+      <div className={styles.optionItem}>
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
@@ -215,7 +223,7 @@ function FResourceOptionEditorDrawer({
         </>)}
       </div>
 
-      <div className={styles.input}>
+      <div className={styles.optionItem}>
         <div className={styles.title}>
           {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
           <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置说明'} />
@@ -247,50 +255,104 @@ function FResourceOptionEditorDrawer({
         </>)}
       </div>
 
-      <div className={styles.input}>
+      <div className={styles.optionItem}>
         <div className={styles.title}>
           <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />
         </div>
         <div style={{ height: 5 }} />
         <div className={styles.typeSelect}>
-          <div className={[styles.typeSelect_option, styles.active].join(' ')}>输入框</div>
-          <div className={[styles.typeSelect_option].join(' ')}>下拉选择器</div>
+          <div
+            className={[styles.typeSelect_option, typeSelect === 'input' ? styles.active : ''].join(' ')}
+            onClick={() => {
+              set_typeSelect('input');
+            }}
+          >输入框
+          </div>
+          <div
+            className={[styles.typeSelect_option, typeSelect === 'select' ? styles.active : ''].join(' ')}
+            onClick={() => {
+              set_typeSelect('select');
+            }}
+          >下拉选择器
+          </div>
         </div>
       </div>
 
-      <div className={styles.input}>
-        <div className={styles.title}>
-          {/*<i className={styles.dot} />*/}
-          {/*<FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'} />
-        </div>
-        <div style={{ height: 5 }} />
-        <FInput
-          value={inputInput}
-          className={styles.input}
-          onChange={(e) => {
-            const value: string = e.target.value;
-            let errorText: string = '';
-            if (value === '') {
-              errorText = '输入value';
-            } else if (value.length > 30) {
-              errorText = '不超过30个字符';
-            }
-            // onValueInputChange && onValueInputChange({
-            //   value,
-            //   errorText,
-            // });
-            set_inputInput(value);
-            set_inputInputError(errorText);
-          }}
-          placeholder={'输入value'}
-        />
-        {inputInputError && (<>
+      {
+        typeSelect === 'input' && (<div className={styles.optionItem}>
+          <div className={styles.title}>
+            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'默认值'} />
+          </div>
           <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{inputInputError}</div>
-        </>)}
-      </div>
+          <FInput
+            value={inputInput}
+            className={styles.input}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let errorText: string = '';
+              if (value === '') {
+                errorText = '输入value';
+              } else if (value.length > 30) {
+                errorText = '不超过30个字符';
+              }
+              set_inputInput(value);
+              set_inputInputError(errorText);
+            }}
+            placeholder={'输入value'}
+          />
+          {inputInputError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{inputInputError}</div>
+          </>)}
+        </div>)
+      }
 
+      {
+        typeSelect === 'select' && (<div className={styles.optionItem}>
+          <div className={styles.title}>
+            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'下拉选择器中的配置值'} />
+          </div>
+          <div style={{ height: 5 }} />
+          <Space size={8} direction={'vertical'} style={{ width: '100%' }}>
+            {
+              selectInputs.map((si, i) => {
+                return (<div key={i}>
+                  <Space size={12}>
+                    <FInput
+                      value={si.value}
+                      // className={styles.input}
+                      style={{ width: 480 }}
+                      onChange={(e) => {
+                        const value: string = e.target.value;
+                        let errorText: string = '';
+                        if (value === '') {
+                          errorText = '输入配置值';
+                        } else if (value.length > 30) {
+                          errorText = '不超过30个字符';
+                        }
+                        // set_inputInput(value);
+                        // set_inputInputError(errorText);
+                      }}
+                      placeholder={'输入配置值'}
+                    />
+                    <FComponentsLib.FCircleBtn
+                      type={'danger'}
+                      onClick={() => {
+
+                      }}
+                    />
+                  </Space>
+                  {si.error && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.errorTip}>{si.error}</div>
+                  </>)}
+                </div>);
+              })
+            }
+          </Space>
+
+        </div>)
+      }
 
     </Space>
   </FDrawer>);

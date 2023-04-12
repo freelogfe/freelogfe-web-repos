@@ -234,6 +234,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
                         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
                       ],
+                      // defaultData: {
+                      //
+                      // }
                     });
                   }}
                 >添加配置</FComponentsLib.FTextBtn>
