@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import FBaseProperties from '@/components/FBaseProperties';
+// import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
   OnChange_BaseProperties_Action,
@@ -15,7 +15,7 @@ import {
 } from '@/models/connect';
 import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { FI18n } from '@freelog/tools-lib';
-import FLoadingTip from '@/components/FLoadingTip';
+// import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 // import fEditFileBaseProp from '@/components/fEditFileBaseProp';
@@ -24,7 +24,7 @@ import fEditCustomOptions from '@/components/fEditCustomOption';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
-
+import FResourceOptions from '@/components/FResourceOptions';
 // import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
@@ -52,8 +52,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         <div style={{ height: 5 }} />
 
         <div className={styles.attributes}>
+          <div style={{ height: 20 }} />
           <div className={styles.attributesHeader}>
-            <span>基础属性</span>
+            {/*<span>基础属性</span>*/}
+            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
             <div>
               <Space size={20}>
                 <FComponentsLib.FTextBtn
@@ -98,7 +100,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     style={{ fontSize: 12, fontWeight: 600 }}
                     type='primary'
                     onClick={async () => {
-                      const dataSource = await fAddFileBaseProps({
+                      const dataSource: {
+                        key: string;
+                        name: string;
+                        value: string;
+                        description: string;
+                      }[] | null = await fAddFileBaseProps({
                         defaultData: resourceVersionCreatorPage.preVersionBaseProperties,
                         disabledKeys: [
                           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
@@ -124,6 +131,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                             ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
                               return {
                                 key: ds.key,
+                                name: ds.name,
                                 value: ds.value,
                                 description: ds.description,
                               };
@@ -137,7 +145,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               </Space>
             </div>
           </div>
-          <div style={{ height: 10 }} />
+
+          <div style={{ height: 20 }} />
+          {/*<div style={{ height: 10 }} />*/}
 
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
@@ -191,105 +201,77 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               });
             }}
           />
-
-          {/*<FBasePropertiesCards*/}
-          {/*  rawProperties={basics.map((b) => {*/}
-          {/*    return {*/}
-          {/*      theKey: b.key,*/}
-          {/*      value: b.value,*/}
-          {/*    };*/}
-          {/*  })}*/}
-          {/*  baseProperties={additions.map((a) => {*/}
-          {/*    return {*/}
-          {/*      theKey: a.key,*/}
-          {/*      description: a.description,*/}
-          {/*      value: a.value,*/}
-          {/*    };*/}
-          {/*  })}*/}
-          {/*  onEdit={(theKey) => {*/}
-          {/*    onClickEdit && onClickEdit(theKey);*/}
-          {/*  }}*/}
-          {/*  onDelete={(theKey) => {*/}
-          {/*    onChangeAdditions && onChangeAdditions(additions.filter((a) => {*/}
-          {/*      return a.key !== theKey;*/}
-          {/*    }));*/}
-          {/*  }}*/}
-          {/*/>*/}
           <div style={{ height: 15 }} />
+        </div>
+        {/*{*/}
+        {/*  resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>*/}
+        {/*    <FLoadingTip height={100} />*/}
+        {/*  </div>)*/}
+        {/*}*/}
+
+        <div style={{ height: 5 }} />
+
+        <div className={styles.options}>
+          <div style={{ height: 20 }} />
+          <div className={styles.optionsHeader}>
+            <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
+
+            <div>
+              <Space size={20}>
+                <FComponentsLib.FTextBtn
+                  style={{ fontSize: 12, fontWeight: 600 }}
+                  type='primary'
+                >添加配置</FComponentsLib.FTextBtn>
+
+                {
+                  resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
+                    type='primary'
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    onClick={async () => {
+                      const data = await fAddCustomOptions({
+                        disabledKeys: [
+                          ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                          ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+                          ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+                        ],
+                        defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
+                      });
+                      // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+                      if (!data) {
+                        return;
+                      }
+
+                      
+                    }}>从上个版本导入</FComponentsLib.FTextBtn>)
+                }
+              </Space>
+            </div>
+          </div>
+          <div style={{ height: 20 }} />
+
+          <FResourceOptions
+            // dataSource={resourceVersionCreatorPage.customOptionsData}
+            dataSource={[
+              {
+                key: 'key1',
+                name: '属性名称1',
+                description: '属性描述1',
+                type: 'input',
+                input: '自定义选项1',
+                select: [],
+              },
+              {
+                key: 'key2',
+                name: '属性名称2',
+                description: '属性描述2',
+                type: 'select',
+                input: '',
+                select: ['选择1', '选择2', '选择3'],
+              },
+            ]}
+          />
 
         </div>
-        {/*<FBaseProperties*/}
-        {/*  basics={resourceVersionCreatorPage.rawProperties}*/}
-        {/*  additions={resourceVersionCreatorPage.baseProperties}*/}
-        {/*  onChangeAdditions={async (value) => {*/}
-
-        {/*    await dispatch<OnChange_BaseProperties_Action>({*/}
-        {/*      type: 'resourceVersionCreatorPage/onChange_BaseProperties',*/}
-        {/*      payload: {*/}
-        {/*        value: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  rightTop={}*/}
-        {/*  onClickEdit={async (theKey) => {*/}
-        {/*    const ind = resourceVersionCreatorPage.baseProperties.findIndex((bp) => {*/}
-        {/*      return bp.key === theKey;*/}
-        {/*    });*/}
-        {/*    const cur = resourceVersionCreatorPage.baseProperties.find((bp) => {*/}
-        {/*      return bp.key === theKey;*/}
-        {/*    });*/}
-        {/*    if (!cur) {*/}
-        {/*      return;*/}
-        {/*    }*/}
-
-        {/*    const data = await fEditFileBaseProp({*/}
-        {/*      disabledKeys: [*/}
-        {/*        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => {*/}
-        {/*          return rp.key;*/}
-        {/*        }),*/}
-        {/*        ...resourceVersionCreatorPage.baseProperties.map((bp) => {*/}
-        {/*          return bp.key;*/}
-        {/*        }),*/}
-        {/*        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => {*/}
-        {/*          return pp.key;*/}
-        {/*        }),*/}
-        {/*      ],*/}
-        {/*      defaultData: {*/}
-        {/*        key: cur.key,*/}
-        {/*        value: cur.value,*/}
-        {/*        description: cur.description,*/}
-        {/*      },*/}
-        {/*    });*/}
-
-        {/*    if (!data) {*/}
-        {/*      return;*/}
-        {/*    }*/}
-
-        {/*    await dispatch<OnChange_BaseProperties_Action>({*/}
-        {/*      type: 'resourceVersionCreatorPage/onChange_BaseProperties',*/}
-        {/*      payload: {*/}
-        {/*        value: resourceVersionCreatorPage.baseProperties.map((bp, i) => {*/}
-        {/*          if (i !== ind) {*/}
-        {/*            return bp;*/}
-        {/*          }*/}
-        {/*          return {*/}
-        {/*            key: data.key,*/}
-        {/*            name: data.key,*/}
-        {/*            value: data.value,*/}
-        {/*            description: data.description,*/}
-        {/*          };*/}
-        {/*        }),*/}
-        {/*      },*/}
-        {/*    } as const);*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {
-          resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>
-            <FLoadingTip height={100} />
-          </div>)
-        }
-
-        <div style={{ height: 20 }} />
 
         <Space size={5}>
           <FComponentsLib.FTextBtn

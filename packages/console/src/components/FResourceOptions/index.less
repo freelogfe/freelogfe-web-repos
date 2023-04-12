@@ -1,0 +1,39 @@
+@import '../../config.less';
+
+.styles {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 0 20px;
+
+  .item {
+
+    .itemHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .itemHeaderLeft {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .itemHeaderRight {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    .itemBody {
+      background-color: white;
+      border-radius: 4px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  }
+}

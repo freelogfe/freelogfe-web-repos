@@ -66,9 +66,9 @@ export interface ResourceVersionCreatorPageModelState {
     key: string;
     name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
 
   descriptionEditorState: EditorState;
@@ -82,10 +82,11 @@ export interface ResourceVersionCreatorPageModelState {
 
   preVersionOptionProperties: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
 
   preVersionDirectDependencies: {
@@ -360,8 +361,9 @@ const Model: ResourceVersionCreatorModelType = {
           .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
             return {
               key: cpd.key,
+              name: cpd.name,
               description: cpd.remark,
-              custom: cpd.type === 'editableText' ? 'input' : 'select',
+              type: cpd.type === 'editableText' ? 'input' : 'select',
               defaultValue: cpd.defaultValue,
               customOption: cpd.candidateItems.join(','),
             };
