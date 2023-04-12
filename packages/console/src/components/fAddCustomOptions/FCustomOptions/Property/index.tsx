@@ -146,6 +146,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               className={[styles.typeSelect_option, data.type === 'input' ? styles.active : ''].join(' ')}
               onClick={() => {
                 // set_typeSelect('input');
+                onChangeData({ type: 'input' });
               }}
             >输入框
             </div>
@@ -153,6 +154,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               className={[styles.typeSelect_option, data.type === 'select' ? styles.active : ''].join(' ')}
               onClick={() => {
                 // set_typeSelect('select');
+                onChangeData({ type: 'select' });
               }}
             >下拉选择器
             </div>
@@ -238,6 +240,17 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                           } else if (value.length > 30) {
                             errorText = '不超过30个字符';
                           }
+                          onChangeData({
+                            select: data.select.map((sss, iii) => {
+                              if (iii !== i) {
+                                return sss;
+                              }
+                              return {
+                                value: value,
+                                error: errorText,
+                              };
+                            }),
+                          });
                           // set_selectInputs(selectInputs.map((a, b) => {
                           //   if (b !== i) {
                           //     return a;
@@ -253,9 +266,11 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                       <FComponentsLib.FCircleBtn
                         type={'danger'}
                         onClick={() => {
-                          // set_selectInputs(selectInputs.filter((a, b) => {
-                          //   return b !== i;
-                          // }));
+                          onChangeData({
+                            select: data.select.filter((a, b) => {
+                              return b !== i;
+                            }),
+                          });
                         }}
                       />
                     </Space>
@@ -271,13 +286,15 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <div
               style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
               onClick={() => {
-                // set_selectInputs([
-                //   ...selectInputs,
-                //   {
-                //     value: '',
-                //     error: '',
-                //   },
-                // ]);
+                onChangeData({
+                  select: [
+                    ...data.select,
+                    {
+                      value: '',
+                      error: '',
+                    },
+                  ],
+                });
               }}
             >
               <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />

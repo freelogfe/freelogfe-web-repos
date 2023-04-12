@@ -190,24 +190,24 @@ function FAddCustomOptionsDrawer({
       }}
     />
 
-    {
-      dataSource.length > 0 && (<div style={{ height: 30 }} />)
-    }
+    {/*{*/}
+    {/*  dataSource.length > 0 && (<div style={{ height: 30 }} />)*/}
+    {/*}*/}
 
-    <Space size={10}>
-      <FComponentsLib.FCircleBtn
-        size='small'
-        onClick={onClick_AddNewItem}
-      />
-      <div
-        style={{ cursor: 'pointer', display: 'inline-block' }}
-        onClick={onClick_AddNewItem}
-      >
-        <FComponentsLib.FContentText
-          text={'新增一项属性'}
-        />
-      </div>
-    </Space>
+    {/*<Space size={10}>*/}
+    {/*  <FComponentsLib.FCircleBtn*/}
+    {/*    size='small'*/}
+    {/*    onClick={onClick_AddNewItem}*/}
+    {/*  />*/}
+    {/*  <div*/}
+    {/*    style={{ cursor: 'pointer', display: 'inline-block' }}*/}
+    {/*    onClick={onClick_AddNewItem}*/}
+    {/*  >*/}
+    {/*    <FComponentsLib.FContentText*/}
+    {/*      text={'新增一项属性'}*/}
+    {/*    />*/}
+    {/*  </div>*/}
+    {/*</Space>*/}
 
   </FDrawer>);
 }
