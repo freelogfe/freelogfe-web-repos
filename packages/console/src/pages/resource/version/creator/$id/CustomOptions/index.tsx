@@ -224,7 +224,14 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   style={{ fontSize: 12, fontWeight: 600 }}
                   type='primary'
                   onClick={async () => {
-                    await fResourceOptionEditor({
+                    const dataSource: {
+                      key: string;
+                      name: string;
+                      type: 'input' | 'select';
+                      input: string;
+                      select: string[];
+                      description: string;
+                    } | null = await fResourceOptionEditor({
                       disabledKeys: [
                         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
@@ -234,9 +241,20 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
                         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
                       ],
-                      // defaultData: {
-                      //
-                      // }
+                    });
+
+                    if (!dataSource) {
+                      return;
+                    }
+
+                    await dispatch<OnChange_CustomOptions_Action>({
+                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                      payload: {
+                        value: [
+                          ...resourceVersionCreatorPage.customOptionsData,
+                          dataSource,
+                        ],
+                      },
                     });
                   }}
                 >添加配置</FComponentsLib.FTextBtn>
@@ -252,7 +270,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
                           ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
                         ],
-                        defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
+                        // defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
                       });
                       // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
                       if (!data) {
@@ -269,24 +287,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
           <FResourceOptions
             // dataSource={resourceVersionCreatorPage.customOptionsData}
-            dataSource={[
-              {
-                key: 'key1',
-                name: '属性名称1',
-                description: '属性描述1',
-                type: 'input',
-                input: '自定义选项1',
-                select: [],
-              },
-              {
-                key: 'key2',
-                name: '属性名称2',
-                description: '属性描述2',
-                type: 'select',
-                input: '',
-                select: ['选择1', '选择2', '选择3'],
-              },
-            ]}
+            dataSource={resourceVersionCreatorPage.customOptionsData}
           />
 
         </div>

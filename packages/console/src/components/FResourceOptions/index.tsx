@@ -24,7 +24,7 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
           <div className={styles.itemHeader}>
             <div className={styles.itemHeaderLeft}>
               <FComponentsLib.FContentText
-                text={d.key}
+                text={d.name}
                 type={'normal'}
               />
               <FComponentsLib.FContentText
