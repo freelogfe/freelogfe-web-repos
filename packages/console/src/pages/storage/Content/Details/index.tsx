@@ -25,7 +25,10 @@ import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
-import { OnChange_BaseProperties_Action } from '@/models/resourceVersionCreatorPage';
+import { OnChange_BaseProperties_Action, OnChange_CustomOptions_Action } from '@/models/resourceVersionCreatorPage';
+import FResourceOptions from '@/components/FResourceOptions';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -40,6 +43,38 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
     await dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
       payload,
+    });
+  }
+
+  async function onClick_addOptionBtn() {
+    const dataSource: {
+      key: string;
+      name: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+      description: string;
+    } | null = await fResourceOptionEditor({
+      disabledKeys: [
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+      ],
+      disabledNames: [
+        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+      ],
+    });
+
+    if (!dataSource) {
+      return;
+    }
+
+    await onChange({
+      customOptionsData: [
+        ...storageObjectEditor.customOptionsData,
+        dataSource,
+      ],
     });
   }
 
@@ -111,31 +146,163 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           <div style={{ height: 5 }} />
 
           <div className={styles.attributes}>
+            <div style={{ height: 20 }} />
             <div className={styles.attributesHeader}>
-              <span>基础属性</span>
-              <Space size={20}>
+              {/*<span>基础属性</span>*/}
+              <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
+              <div>
+                <Space size={20}>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    type='primary'
+                    onClick={async () => {
+                      const dataSource: {
+                        key: string;
+                        name: string;
+                        value: string;
+                        description: string;
+                      } | null = await fResourcePropertyEditor({
+                        disabledKeys: [
+                          ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
+                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+                        ],
+                        disabledNames: [
+                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
+                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+                        ],
+                      });
+                      // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                      if (!dataSource) {
+                        return;
+                      }
+
+                      onChange({
+                        baseProperties: [
+                          ...storageObjectEditor.baseProperties,
+                          dataSource,
+                        ],
+                      });
+                    }}
+                  >补充属性</FComponentsLib.FTextBtn>
+                </Space>
+              </div>
+            </div>
+
+            <div style={{ height: 20 }} />
+
+            <FResourceProperties
+              immutableData={storageObjectEditor.rawProperties}
+              alterableData={storageObjectEditor.baseProperties}
+            />
+            <div style={{ height: 15 }} />
+          </div>
+
+          {/*<div className={styles.attributes}>*/}
+          {/*  <div className={styles.attributesHeader}>*/}
+          {/*    <span>基础属性</span>*/}
+          {/*    <Space size={20}>*/}
+          {/*      <FComponentsLib.FTextBtn*/}
+          {/*        style={{ fontSize: 12, fontWeight: 600 }}*/}
+          {/*        type='primary'*/}
+          {/*        onClick={async () => {*/}
+          {/*          // onChange({*/}
+          {/*          //   // basePropertiesEditorVisible: true,*/}
+          {/*          //   basePropertiesEditorData: [{*/}
+          {/*          //     key: '',*/}
+          {/*          //     keyError: '',*/}
+          {/*          //     value: '',*/}
+          {/*          //     valueError: '',*/}
+          {/*          //     description: '',*/}
+          {/*          //     descriptionError: '',*/}
+          {/*          //   }],*/}
+          {/*          // });*/}
+
+          {/*const dataSource: {*/}
+          {/*  key: string;*/}
+          {/*  name: string;*/}
+          {/*  value: string;*/}
+          {/*  description: string;*/}
+          {/*} | null = await fResourcePropertyEditor({*/}
+          {/*  disabledKeys: [*/}
+          {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
+          {/*    ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),*/}
+          {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),*/}
+          {/*  ],*/}
+          {/*  disabledNames: [*/}
+          {/*    ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),*/}
+          {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),*/}
+          {/*  ],*/}
+          {/*});*/}
+          {/*// console.log(dataSource, 'dataSource9iojskldjflksdjflk');*/}
+          {/*if (!dataSource) {*/}
+          {/*  return;*/}
+          {/*}*/}
+
+          {/*onChange({*/}
+          {/*  baseProperties: [*/}
+          {/*    ...storageObjectEditor.baseProperties,*/}
+          {/*    dataSource,*/}
+          {/*  ],*/}
+          {/*});*/}
+          {/*        }}*/}
+          {/*      >补充属性</FComponentsLib.FTextBtn>*/}
+          {/*    </Space>*/}
+          {/*  </div>*/}
+          {/*  <div style={{ height: 5 }} />*/}
+          {/*  <FResourceProperties*/}
+          {/*    immutableData={storageObjectEditor.rawProperties}*/}
+          {/*    alterableData={storageObjectEditor.baseProperties}*/}
+          {/*  />*/}
+          {/*  <div style={{ height: 10 }} />*/}
+
+          {/*</div>*/}
+
+          <div style={{ height: 5 }} />
+
+          {
+            storageObjectEditor.customOptionsData.length === 0
+              ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
                 <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600 }}
-                  type='primary'
-                  onClick={async () => {
-                    // onChange({
-                    //   // basePropertiesEditorVisible: true,
-                    //   basePropertiesEditorData: [{
-                    //     key: '',
-                    //     keyError: '',
-                    //     value: '',
-                    //     valueError: '',
-                    //     description: '',
-                    //     descriptionError: '',
-                    //   }],
-                    // });
+                  type={'default'}
+                  style={{ fontSize: 12 }}
+                  onClick={() => {
+                    onClick_addOptionBtn();
+                  }}
+                >添加可选配置</FComponentsLib.FTextBtn>
+
+              </div>)
+              : (<div className={styles.options}>
+                <div style={{ height: 20 }} />
+                <div className={styles.optionsHeader}>
+                  <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
+
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    type='primary'
+                    onClick={async () => {
+                      onClick_addOptionBtn();
+                    }}
+                  >添加配置</FComponentsLib.FTextBtn>
+                </div>
+                <div style={{ height: 20 }} />
+
+                <FResourceOptions
+                  // dataSource={resourceVersionCreatorPage.customOptionsData}
+                  dataSource={storageObjectEditor.customOptionsData}
+                  onEdit={async (value) => {
+                    const index: number = storageObjectEditor.customOptionsData.findIndex((p) => {
+                      return p === value;
+                    });
 
                     const dataSource: {
                       key: string;
                       name: string;
-                      value: string;
+                      type: 'input' | 'select';
+                      input: string;
+                      select: string[];
                       description: string;
-                    } | null = await fResourcePropertyEditor({
+                    } | null = await fResourceOptionEditor({
                       disabledKeys: [
                         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
                         ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
@@ -145,30 +312,53 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
                         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
                       ],
+                      defaultData: value,
                     });
-                    // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+
                     if (!dataSource) {
                       return;
                     }
 
-                    onChange({
-                      baseProperties: [
-                        ...storageObjectEditor.baseProperties,
-                        dataSource,
-                      ],
+                    await onChange({
+                      customOptionsData: storageObjectEditor.customOptionsData.map((a, b) => {
+                        if (b !== index) {
+                          return a;
+                        }
+                        return dataSource;
+                      }),
                     });
-                  }}
-                >补充属性</FComponentsLib.FTextBtn>
-              </Space>
-            </div>
-            <div style={{ height: 5 }} />
-            <FResourceProperties
-              immutableData={storageObjectEditor.rawProperties}
-              alterableData={storageObjectEditor.baseProperties}
-            />
-            <div style={{ height: 10 }} />
 
-          </div>
+                    // await dispatch<OnChange_CustomOptions_Action>({
+                    //   type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    //   payload: {
+                    //     value: storageObjectEditor.customOptionsData.map((a, b) => {
+                    //       if (b !== index) {
+                    //         return a;
+                    //       }
+                    //       return dataSource;
+                    //     }),
+                    //   },
+                    // });
+                  }}
+                  onDelete={async (value) => {
+                    await onChange({
+                      customOptionsData: storageObjectEditor.customOptionsData.filter((a) => {
+                        return a.key !== value.key && a.name !== value.name;
+                      }),
+                    });
+                    // await dispatch<OnChange_CustomOptions_Action>({
+                    //   type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    //   payload: {
+                    //     value: storageObjectEditor.customOptionsData.filter((a) => {
+                    //       return a.key !== value.key && a.name !== value.name;
+                    //     }),
+                    //   },
+                    // });
+                  }}
+                />
+
+              </div>)
+          }
 
 
           {/*<FBaseProperties*/}
@@ -212,7 +402,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           {/*  </Space>}*/}
           {/*/>*/}
 
-          <div style={{ height: 20 }} />
+          {/*<div style={{ height: 20 }} />*/}
 
           {/*<Space>*/}
           {/*  <FComponentsLib.FTextBtn*/}
