@@ -6,6 +6,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
+import FResourceOptions from '@/components/FResourceOptions';
 
 interface OptionProps {
   dispatch: Dispatch;
@@ -14,7 +15,7 @@ interface OptionProps {
 
 function Option({ dispatch, resourceDetailPage }: OptionProps) {
 
-  if (resourceDetailPage.resourceVersion_Info.options.length === 0) {
+  if (resourceDetailPage.resourceVersion_Info.customOptions.length === 0) {
     return null;
   }
 
@@ -26,29 +27,31 @@ function Option({ dispatch, resourceDetailPage }: OptionProps) {
         type='h3'
       />
       <div style={{ height: 20 }} />
-      <div className={styles.content}>
-        {
-          resourceDetailPage.resourceVersion_Info.options.map((i) => {
-            return (<div key={i.key}>
-              <Space size={10}>
-                <FComponentsLib.FContentText
-                  text={i.key}
-                />
-                {
-                  i.description && (<FTooltip
-                    title={i.description}
-                    color={'#fff'}
-                  >
-                    <FComponentsLib.FIcons.FInfo
-                      style={{ cursor: 'pointer', fontSize: 14 }}
-                    />
-                  </FTooltip>)
-                }
-              </Space>
-            </div>);
-          })
-        }
-      </div>
+      <FResourceOptions dataSource={resourceDetailPage.resourceVersion_Info.customOptions} />
+      {/*<div className={styles.content}>*/}
+      {/*  */}
+      {/*  /!*{*!/*/}
+      {/*  /!*  resourceDetailPage.resourceVersion_Info.options.map((i) => {*!/*/}
+      {/*  /!*    return (<div key={i.key}>*!/*/}
+      {/*  /!*      <Space size={10}>*!/*/}
+      {/*  /!*        <FComponentsLib.FContentText*!/*/}
+      {/*  /!*          text={i.key}*!/*/}
+      {/*  /!*        />*!/*/}
+      {/*  /!*        {*!/*/}
+      {/*  /!*          i.description && (<FTooltip*!/*/}
+      {/*  /!*            title={i.description}*!/*/}
+      {/*  /!*            color={'#fff'}*!/*/}
+      {/*  /!*          >*!/*/}
+      {/*  /!*            <FComponentsLib.FIcons.FInfo*!/*/}
+      {/*  /!*              style={{ cursor: 'pointer', fontSize: 14 }}*!/*/}
+      {/*  /!*            />*!/*/}
+      {/*  /!*          </FTooltip>)*!/*/}
+      {/*  /!*        }*!/*/}
+      {/*  /!*      </Space>*!/*/}
+      {/*  /!*    </div>);*!/*/}
+      {/*  /!*  })*!/*/}
+      {/*  /!*}*!/*/}
+      {/*</div>*/}
     </div>
     <div style={{ height: 20 }} />
   </>);

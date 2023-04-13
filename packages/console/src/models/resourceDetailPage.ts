@@ -72,15 +72,33 @@ export interface ResourceDetailPageModelState {
   resourceVersion_Info: {
     releaseTime: string;
     description: string;
-    properties: {
+    // properties: {
+    //   key: string;
+    //   value: string;
+    //   description?: string;
+    // }[];
+    // options: {
+    //   key: string;
+    //   value: string;
+    //   description: string;
+    // }[];
+    rawProperties: {
       key: string;
       value: string;
-      description?: string;
     }[];
-    options: {
+    baseProperties: {
       key: string;
+      name: string;
       value: string;
       description: string;
+    }[];
+    customOptions: {
+      key: string;
+      name: string;
+      description: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
     }[];
   };
 
@@ -203,8 +221,9 @@ const initStates: ResourceDetailPageModelState = {
   resourceVersion_Info: {
     releaseTime: '',
     description: '',
-    properties: [],
-    options: [],
+    rawProperties: [],
+    baseProperties: [],
+    customOptions: [],
   },
 
   // graph_FullScreen: false,
@@ -751,7 +770,21 @@ const Model: ResourceDetailPageModelType = {
         resourceId: resourceDetailPage.resource_ID,
       };
       // console.log('resourceVersionInfo1239weiojfasdlkfjslk');
-      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
+      const { data: data_versionInfo }: {
+        data: {
+          customPropertyDescriptors: {
+            key: string;
+            name: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[],
+          systemProperty: { [key: string]: string; },
+          createDate: string;
+          description: string;
+        }
+      } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');
       // console.log(data, 'data0932jklsdjflsdk');
@@ -760,31 +793,55 @@ const Model: ResourceDetailPageModelType = {
         type: 'change',
         payload: {
           resourceVersion_Info: {
-            releaseTime: FUtil.Format.formatDateTime(data.createDate),
-            description: data.description,
-            properties: [
-              ...Object.entries(data.systemProperty as object)
-                .map((s) => ({
-                  key: s[0],
-                  value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
-                })),
-              ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
-                .map((p: any) => {
-                  // console.log(p, 'PPPPP()*UOI');
-                  return {
-                    key: p.key,
-                    value: p.defaultValue,
-                    description: p.remark,
-                  };
-                }),
-            ],
-            options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
+            releaseTime: FUtil.Format.formatDateTime(data_versionInfo.createDate),
+            description: data_versionInfo.description,
+            rawProperties: Object.entries(data_versionInfo.systemProperty as object)
+              .map((s) => ({
+                key: s[0],
+                value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+              })),
+            baseProperties: data_versionInfo.customPropertyDescriptors
+              .filter((p) => {
+                return p.type === 'readonlyText';
+              })
               .map((p: any) => {
-                // console.log(p, '@@@@@@#$#@$@#$@#');
+                // console.log(p, 'PPPPP()*UOI');
                 return {
                   key: p.key,
+                  name: p.name,
                   value: p.defaultValue,
                   description: p.remark,
+                };
+              }),
+            // properties: [
+            //   ...Object.entries(data.systemProperty as object)
+            //     .map((s) => ({
+            //       key: s[0],
+            //       value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+            //     })),
+            //   ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+            //     .map((p: any) => {
+            //       // console.log(p, 'PPPPP()*UOI');
+            //       return {
+            //         key: p.key,
+            //         value: p.defaultValue,
+            //         description: p.remark,
+            //       };
+            //     }),
+            // ],
+            customOptions: data_versionInfo.customPropertyDescriptors
+              .filter((i) => {
+                return i.type !== 'readonlyText';
+              })
+              .map((i) => {
+                // console.log(p, '@@@@@@#$#@$@#$@#');
+                return {
+                  key: i.key,
+                  name: i.name,
+                  description: i.remark,
+                  type: i.type === 'editableText' ? 'input' : 'select',
+                  input: i.defaultValue,
+                  select: i.candidateItems,
                 };
               }),
           },
