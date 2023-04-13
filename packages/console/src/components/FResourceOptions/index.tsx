@@ -14,9 +14,12 @@ interface FResourceOptionsProps {
     select: string[];
   }[];
 
+  onEdit?(value: FResourceOptionsProps['dataSource'][number]): void;
+
+  onDelete?(value: FResourceOptionsProps['dataSource'][number]): void;
 }
 
-function FResourceOptions({ dataSource }: FResourceOptionsProps) {
+function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProps) {
   return (<div className={styles.styles}>
     {
       dataSource.map((d) => {
@@ -37,6 +40,7 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
                 type={'default'}
                 onClick={() => {
                   // onEdit_alterableData && onEdit_alterableData(d);
+                  onEdit && onEdit(d);
                 }}
               >
                 <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
@@ -45,6 +49,7 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
                 type={'danger'}
                 onClick={() => {
                   // onDelete_alterableData && onDelete_alterableData(d);
+                  onDelete && onDelete(d);
                 }}
               >
                 <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
