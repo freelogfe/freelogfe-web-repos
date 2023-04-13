@@ -336,6 +336,7 @@ const Model: ResourceVersionCreatorModelType = {
           data: {
             customPropertyDescriptors: {
               key: string;
+              name: string;
               defaultValue: string;
               type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
               candidateItems: string[];
@@ -353,11 +354,11 @@ const Model: ResourceVersionCreatorModelType = {
         descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
         preVersionBaseProperties = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type === 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
+          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd) => {
             // console.log(cpd, 'cpdoidsjflksdjflkjkl');
             return {
               key: cpd.key,
-              name: cpd.key,
+              name: cpd.name,
               value: cpd.defaultValue,
               description: cpd.remark,
             };
@@ -365,10 +366,10 @@ const Model: ResourceVersionCreatorModelType = {
 
         preVersionOptionProperties = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type !== 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
+          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd) => {
             return {
               key: cpd.key,
-              name: 'cpd.name',
+              name: cpd.name,
               description: cpd.remark,
               type: cpd.type === 'editableText' ? 'input' : 'select',
               input: cpd.defaultValue,
@@ -514,6 +515,7 @@ const Model: ResourceVersionCreatorModelType = {
             return {
               type: 'readonlyText',
               key: i.key,
+              name: i.name,
               remark: i.description,
               defaultValue: i.value,
             };
@@ -524,6 +526,7 @@ const Model: ResourceVersionCreatorModelType = {
             return {
               type: isInput ? 'editableText' : 'select',
               key: i.key,
+              name: i.name,
               remark: i.description,
               defaultValue: isInput ? i.input : options[0],
               candidateItems: isInput ? undefined : options,
@@ -535,11 +538,12 @@ const Model: ResourceVersionCreatorModelType = {
           : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
       };
 
-      const { ret, errCode, data } = yield call(FServiceAPI.Resource.createVersion, params);
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.createVersion, params);
 
       if (ret !== 0 || errCode !== 0 || !data) {
         self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 0]);
-        fMessage('创建失败', 'error');
+        // fMessage('创建失败', 'error');
+        fMessage(msg, 'error');
         return;
       }
       self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 1]);
@@ -632,6 +636,7 @@ const Model: ResourceVersionCreatorModelType = {
           }[];
           customPropertyDescriptors: {
             key: string;
+            name: string;
             defaultValue: string;
             type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
             candidateItems: string[];
@@ -660,7 +665,7 @@ const Model: ResourceVersionCreatorModelType = {
             .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd) => {
               return {
                 key: cpd.key,
-                name: 'cpd.name',
+                name: cpd.name,
                 // keyError: '',
                 description: cpd.remark,
                 // descriptionError: '',
