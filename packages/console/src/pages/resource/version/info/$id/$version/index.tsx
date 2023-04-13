@@ -388,7 +388,27 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 if (!dataSource) {
                   return;
                 }
-
+                await onChange({
+                  customOptions: resourceVersionEditorPage.customOptions
+                    .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp,i) => {
+                      if (index !== i) {
+                        return bp;
+                      }
+                      return dataSource;
+                    }),
+                  // customOptionEditorVisible: false,
+                  // customOptionKey: '',
+                  // customOptionDescription: '',
+                  // customOptionDescriptionError: '',
+                  // customOptionCustom: 'input',
+                  // customOptionDefaultValue: '',
+                  // customOptionDefaultValueError: '',
+                  // customOptionCustomOption: '',
+                  // customOptionCustomOptionError: '',
+                });
+                await dispatch<SyncAllPropertiesAction>({
+                  type: 'resourceVersionEditorPage/syncAllProperties',
+                });
 
               }}
             />
@@ -398,167 +418,167 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       </FFormLayout>
     </FLeftSiderLayout>
 
-    <FDrawer
-      title={'编辑基础属性'}
-      onClose={() => {
-        onCloseBaseAttrDrawer();
-      }}
-      open={resourceVersionEditorPage.basePEditorVisible}
-      width={720}
-      topRight={<Space size={30}>
-        <FComponentsLib.FTextBtn
-          type='default'
-          onClick={() => {
-            onCloseBaseAttrDrawer();
-          }}
-        >取消</FComponentsLib.FTextBtn>
+    {/*<FDrawer*/}
+    {/*  title={'编辑基础属性'}*/}
+    {/*  onClose={() => {*/}
+    {/*    onCloseBaseAttrDrawer();*/}
+    {/*  }}*/}
+    {/*  open={resourceVersionEditorPage.basePEditorVisible}*/}
+    {/*  width={720}*/}
+    {/*  topRight={<Space size={30}>*/}
+    {/*    <FComponentsLib.FTextBtn*/}
+    {/*      type='default'*/}
+    {/*      onClick={() => {*/}
+    {/*        onCloseBaseAttrDrawer();*/}
+    {/*      }}*/}
+    {/*    >取消</FComponentsLib.FTextBtn>*/}
 
-        <FComponentsLib.FRectBtn
-          type='primary'
-          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
-          onClick={async () => {
-            await onChange({
-              baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                  return bp;
-                }
-                return {
-                  ...bp,
-                  value: resourceVersionEditorPage.basePValueInput,
-                  description: resourceVersionEditorPage.basePDescriptionInput,
-                };
-              }),
-              basePEditorVisible: false,
-              basePKeyInput: '',
-              basePValueInput: '',
-              basePDescriptionInput: '',
-              basePDescriptionInputError: '',
-            });
-            await dispatch<SyncAllPropertiesAction>({
-              type: 'resourceVersionEditorPage/syncAllProperties',
-            });
-          }}
-        >保存</FComponentsLib.FRectBtn>
-      </Space>}
-    >
-      <Space
-        size={20}
-        direction='vertical'
-        style={{ width: '100%' }}
-      >
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <i className={styles.dot} />
-            <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            disabled={true}
-            value={resourceVersionEditorPage.basePKeyInput}
-            className={styles.input}
-          />
-        </div>
+    {/*    <FComponentsLib.FRectBtn*/}
+    {/*      type='primary'*/}
+    {/*      disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}*/}
+    {/*      onClick={async () => {*/}
+    {/*        await onChange({*/}
+    {/*          baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {*/}
+    {/*            if (bp.key !== resourceVersionEditorPage.basePKeyInput) {*/}
+    {/*              return bp;*/}
+    {/*            }*/}
+    {/*            return {*/}
+    {/*              ...bp,*/}
+    {/*              value: resourceVersionEditorPage.basePValueInput,*/}
+    {/*              description: resourceVersionEditorPage.basePDescriptionInput,*/}
+    {/*            };*/}
+    {/*          }),*/}
+    {/*          basePEditorVisible: false,*/}
+    {/*          basePKeyInput: '',*/}
+    {/*          basePValueInput: '',*/}
+    {/*          basePDescriptionInput: '',*/}
+    {/*          basePDescriptionInputError: '',*/}
+    {/*        });*/}
+    {/*        await dispatch<SyncAllPropertiesAction>({*/}
+    {/*          type: 'resourceVersionEditorPage/syncAllProperties',*/}
+    {/*        });*/}
+    {/*      }}*/}
+    {/*    >保存</FComponentsLib.FRectBtn>*/}
+    {/*  </Space>}*/}
+    {/*>*/}
+    {/*  <Space*/}
+    {/*    size={20}*/}
+    {/*    direction='vertical'*/}
+    {/*    style={{ width: '100%' }}*/}
+    {/*  >*/}
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <i className={styles.dot} />*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        disabled={true}*/}
+    {/*        value={resourceVersionEditorPage.basePKeyInput}*/}
+    {/*        className={styles.input}*/}
+    {/*      />*/}
+    {/*    </div>*/}
 
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <i className={styles.dot} />
-            <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            value={resourceVersionEditorPage.basePValueInput}
-            // errorText={}
-            className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let valueError: string = '';
-              if (value === '') {
-                valueError = '请输入';
-              } else if (value.length > 30) {
-                valueError = '不超过30个字符';
-              }
-              onChange({
-                basePValueInput: value,
-                basePValueInputError: valueError,
-              });
-            }}
-            placeholder={'输入value'}
-          />
-          {resourceVersionEditorPage.basePValueInputError && (<>
-            <div style={{ height: 5 }} />
-            <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>
-          </>)}
-        </div>
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <i className={styles.dot} />*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        value={resourceVersionEditorPage.basePValueInput}*/}
+    {/*        // errorText={}*/}
+    {/*        className={styles.input}*/}
+    {/*        onChange={(e) => {*/}
+    {/*          const value: string = e.target.value;*/}
+    {/*          let valueError: string = '';*/}
+    {/*          if (value === '') {*/}
+    {/*            valueError = '请输入';*/}
+    {/*          } else if (value.length > 30) {*/}
+    {/*            valueError = '不超过30个字符';*/}
+    {/*          }*/}
+    {/*          onChange({*/}
+    {/*            basePValueInput: value,*/}
+    {/*            basePValueInputError: valueError,*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*        placeholder={'输入value'}*/}
+    {/*      />*/}
+    {/*      {resourceVersionEditorPage.basePValueInputError && (<>*/}
+    {/*        <div style={{ height: 5 }} />*/}
+    {/*        <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>*/}
+    {/*      </>)}*/}
+    {/*    </div>*/}
 
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            value={resourceVersionEditorPage.basePDescriptionInput}
-            errorText={resourceVersionEditorPage.basePDescriptionInputError}
-            className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let descriptionError: string = '';
-              if (value.length > 50) {
-                descriptionError = '不超过50个字符';
-              }
-              onChange({
-                basePDescriptionInput: value,
-                basePDescriptionInputError: descriptionError,
-              });
-            }}
-            placeholder={'输入属性说明'}
-          />
-        </div>
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        value={resourceVersionEditorPage.basePDescriptionInput}*/}
+    {/*        errorText={resourceVersionEditorPage.basePDescriptionInputError}*/}
+    {/*        className={styles.input}*/}
+    {/*        onChange={(e) => {*/}
+    {/*          const value: string = e.target.value;*/}
+    {/*          let descriptionError: string = '';*/}
+    {/*          if (value.length > 50) {*/}
+    {/*            descriptionError = '不超过50个字符';*/}
+    {/*          }*/}
+    {/*          onChange({*/}
+    {/*            basePDescriptionInput: value,*/}
+    {/*            basePDescriptionInputError: descriptionError,*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*        placeholder={'输入属性说明'}*/}
+    {/*      />*/}
+    {/*    </div>*/}
 
-      </Space>
-    </FDrawer>
+    {/*  </Space>*/}
+    {/*</FDrawer>*/}
 
-    <FCustomOptionEditorDrawer
-      disabledKeyInput
-      disabledValueTypeSelect
-      visible={resourceVersionEditorPage.customOptionEditorVisible}
-      dataSource={{
-        key: resourceVersionEditorPage.customOptionKey,
-        value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',
-        description: resourceVersionEditorPage.customOptionDescription,
-        valueType: resourceVersionEditorPage.customOptionCustom || 'input',
-      }}
-      onCancel={() => {
-        onCloseCustomOptionDrawer();
-      }}
-      onConfirm={async (value) => {
-        await onChange({
-          customOptions: resourceVersionEditorPage.customOptions
-            .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
-              if (bp.key !== resourceVersionEditorPage.customOptionKey) {
-                return bp;
-              }
-              return {
-                ...bp,
-                description: value.description,
-                defaultValue: value.value,
-                customOption: value.value,
-              };
-            }),
-          customOptionEditorVisible: false,
-          customOptionKey: '',
-          customOptionDescription: '',
-          customOptionDescriptionError: '',
-          customOptionCustom: 'input',
-          customOptionDefaultValue: '',
-          customOptionDefaultValueError: '',
-          customOptionCustomOption: '',
-          customOptionCustomOptionError: '',
-        });
-        await dispatch<SyncAllPropertiesAction>({
-          type: 'resourceVersionEditorPage/syncAllProperties',
-        });
-      }}
-    />
+    {/*<FCustomOptionEditorDrawer*/}
+    {/*  disabledKeyInput*/}
+    {/*  disabledValueTypeSelect*/}
+    {/*  visible={resourceVersionEditorPage.customOptionEditorVisible}*/}
+    {/*  dataSource={{*/}
+    {/*    key: resourceVersionEditorPage.customOptionKey,*/}
+    {/*    value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',*/}
+    {/*    description: resourceVersionEditorPage.customOptionDescription,*/}
+    {/*    valueType: resourceVersionEditorPage.customOptionCustom || 'input',*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onCloseCustomOptionDrawer();*/}
+    {/*  }}*/}
+    {/*  onConfirm={async (value) => {*/}
+    {/*    await onChange({*/}
+    {/*      customOptions: resourceVersionEditorPage.customOptions*/}
+    {/*        .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {*/}
+    {/*          if (bp.key !== resourceVersionEditorPage.customOptionKey) {*/}
+    {/*            return bp;*/}
+    {/*          }*/}
+    {/*          return {*/}
+    {/*            ...bp,*/}
+    {/*            description: value.description,*/}
+    {/*            defaultValue: value.value,*/}
+    {/*            customOption: value.value,*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      customOptionEditorVisible: false,*/}
+    {/*      customOptionKey: '',*/}
+    {/*      customOptionDescription: '',*/}
+    {/*      customOptionDescriptionError: '',*/}
+    {/*      customOptionCustom: 'input',*/}
+    {/*      customOptionDefaultValue: '',*/}
+    {/*      customOptionDefaultValueError: '',*/}
+    {/*      customOptionCustomOption: '',*/}
+    {/*      customOptionCustomOptionError: '',*/}
+    {/*    });*/}
+    {/*    await dispatch<SyncAllPropertiesAction>({*/}
+    {/*      type: 'resourceVersionEditorPage/syncAllProperties',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
     {/*<FDrawer*/}
     {/*  open={resourceVersionEditorPage.graphFullScreen}*/}
