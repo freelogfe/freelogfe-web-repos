@@ -306,6 +306,50 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <FResourceOptions
             // dataSource={resourceVersionCreatorPage.customOptionsData}
             dataSource={resourceVersionCreatorPage.customOptionsData}
+            onEdit={async (value) => {
+              const index: number = resourceVersionCreatorPage.customOptionsData.findIndex((p) => {
+                return p === value;
+              });
+
+              const dataSource: {
+                key: string;
+                name: string;
+                type: 'input' | 'select';
+                input: string;
+                select: string[];
+                description: string;
+              } | null = await fResourceOptionEditor({
+                disabledKeys: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+              });
+
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_CustomOptions_Action>({
+                type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                payload: {
+                  value: resourceVersionCreatorPage.customOptionsData.map((a, b) => {
+                    if (b !== index) {
+                      return a;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
+            }}
+            onDelete={(value) => {
+
+            }}
           />
 
         </div>
