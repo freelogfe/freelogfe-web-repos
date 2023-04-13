@@ -347,8 +347,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 },
               });
             }}
-            onDelete={(value) => {
-
+            onDelete={async (value) => {
+              await dispatch<OnChange_CustomOptions_Action>({
+                type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                payload: {
+                  value: resourceVersionCreatorPage.customOptionsData.filter((a) => {
+                    return a.key !== value.key && a.name !== value.name;
+                  }),
+                },
+              });
             }}
           />
 
