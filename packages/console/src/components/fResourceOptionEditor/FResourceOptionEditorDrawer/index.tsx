@@ -17,6 +17,7 @@ interface FResourceOptionEditorDrawerProps {
     select: string[];
     description: string;
   } | null;
+  noneEditableFields?: Array<'key' | 'name' | 'description' | 'type' | 'input' | 'select'>;
 
   onOk?(data: {
     key: string;
@@ -65,6 +66,7 @@ function FResourceOptionEditorDrawer({
                                        disabledKeys,
                                        disabledNames,
                                        defaultData,
+                                       noneEditableFields = [],
                                        onOk,
                                        onClose,
                                      }: FResourceOptionEditorDrawerProps) {
@@ -159,6 +161,7 @@ function FResourceOptionEditorDrawer({
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
+          disabled={noneEditableFields.includes('name')}
           placeholder={'输入配置名称'}
           value={nameInput}
           className={styles.input}
@@ -193,7 +196,7 @@ function FResourceOptionEditorDrawer({
         </div>
         <div style={{ height: 5 }} />
         <FInput
-          // disabled={true}
+          disabled={noneEditableFields.includes('key')}
           placeholder={'输入key'}
           value={keyInput}
           className={styles.input}
@@ -227,6 +230,7 @@ function FResourceOptionEditorDrawer({
         </div>
         <div style={{ height: 5 }} />
         <FInput
+          disabled={noneEditableFields.includes('description')}
           value={descriptionInput}
           // errorText={resourceVersionEditorPage.basePDescriptionInputError}
           className={styles.input}
@@ -252,17 +256,34 @@ function FResourceOptionEditorDrawer({
           <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />
         </div>
         <div style={{ height: 5 }} />
-        <div className={styles.typeSelect}>
+        <div
+          className={styles.typeSelect}
+          style={{
+            opacity: noneEditableFields.includes('type') ? .6 : 1,
+          }}
+        >
           <div
             className={[styles.typeSelect_option, typeSelect === 'input' ? styles.active : ''].join(' ')}
+            style={{
+              cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
+            }}
             onClick={() => {
+              if (noneEditableFields.includes('type')) {
+                return;
+              }
               set_typeSelect('input');
             }}
           >输入框
           </div>
           <div
+            style={{
+              cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
+            }}
             className={[styles.typeSelect_option, typeSelect === 'select' ? styles.active : ''].join(' ')}
             onClick={() => {
+              if (noneEditableFields.includes('type')) {
+                return;
+              }
               set_typeSelect('select');
             }}
           >下拉选择器
@@ -279,6 +300,7 @@ function FResourceOptionEditorDrawer({
           <FInput
             value={inputInput}
             className={styles.input}
+            disabled={noneEditableFields.includes('input')}
             onChange={(e) => {
               const value: string = e.target.value;
               let errorText: string = '';
@@ -311,6 +333,7 @@ function FResourceOptionEditorDrawer({
                 return (<div key={i}>
                   <Space size={12}>
                     <FInput
+                      disabled={noneEditableFields.includes('select')}
                       value={si.value}
                       // className={styles.input}
                       style={{ width: 480 }}

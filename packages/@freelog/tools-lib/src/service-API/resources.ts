@@ -294,6 +294,7 @@ interface UpdateResourceVersionInfoParamsType {
   description?: string;
   customPropertyDescriptors?: {
     key: string;
+    name: string;
     defaultValue: string;
     type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
     candidateItems?: string[];

@@ -15,6 +15,7 @@ interface FResourcePropertyEditorDrawerProps {
     value: string;
     description: string;
   } | null;
+  noneEditableFields?: Array<'key' | 'name' | 'value' | 'description'>;
 
   onOk?(data: {
     key: string;
@@ -54,6 +55,7 @@ function FResourcePropertyEditorDrawer({
                                          disabledKeys,
                                          disabledNames,
                                          defaultData,
+                                         noneEditableFields = [],
                                          onOk,
                                          onClose,
                                        }: FResourcePropertyEditorDrawerProps) {
@@ -130,6 +132,7 @@ function FResourcePropertyEditorDrawer({
         <FInput
           // disabled={true}
           placeholder={'输入属性名称'}
+          disabled={noneEditableFields.includes('name')}
           value={nameInput}
           className={styles.input}
           onChange={(e) => {
@@ -166,6 +169,7 @@ function FResourcePropertyEditorDrawer({
           // disabled={true}
           placeholder={'输入key'}
           value={keyInput}
+          disabled={noneEditableFields.includes('key')}
           className={styles.input}
           onChange={(e) => {
             const value: string = e.target.value;
@@ -200,6 +204,7 @@ function FResourcePropertyEditorDrawer({
           value={descriptionInput}
           // errorText={resourceVersionEditorPage.basePDescriptionInputError}
           className={styles.input}
+          disabled={noneEditableFields.includes('description')}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
@@ -231,6 +236,7 @@ function FResourcePropertyEditorDrawer({
         <FInput
           value={valueInput}
           className={styles.input}
+          disabled={noneEditableFields.includes('value')}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';

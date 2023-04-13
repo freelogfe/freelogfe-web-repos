@@ -15,6 +15,7 @@ interface fResourceOptionEditorProps {
     select: string[];
     description: string;
   } | null;
+  noneEditableFields?: Array<'key' | 'name' | 'description' | 'type' | 'input' | 'select'>;
 }
 
 type ReturnData = {
@@ -30,6 +31,7 @@ function fResourceOptionEditor({
                                  disabledKeys,
                                  disabledNames,
                                  defaultData,
+                                 noneEditableFields = [],
                                }: fResourceOptionEditorProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
@@ -37,6 +39,7 @@ function fResourceOptionEditor({
       defaultData={defaultData || null}
       disabledKeys={disabledKeys}
       disabledNames={disabledNames}
+      noneEditableFields={noneEditableFields}
       onOk={(obj) => {
         resolve(obj);
       }}

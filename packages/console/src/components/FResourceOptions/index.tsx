@@ -59,7 +59,7 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
                   <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
                 </FComponentsLib.FTextBtn>)
               }
-              
+
             </div>
           </div>
           <div style={{ height: 5 }} />

@@ -29,14 +29,18 @@ import { RouteComponentProps } from 'react-router';
 import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { Helmet } from 'react-helmet';
-import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
-import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
-import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
+// import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
+// import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
+// import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import FComponentsLib from '@freelog/components-lib';
-import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
-import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
-import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
+// import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
+// import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
+// import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
+import FResourceProperties from '@/components/FResourceProperties';
+import FResourceOptions from '@/components/FResourceOptions';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -241,33 +245,81 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
 
         <FFormLayout.FBlock title={'基础属性'}>
-          <FBasePropertiesCards
-            rawProperties={resourceVersionEditorPage.rawProperties.map((rp) => {
-              return {
-                theKey: rp.key,
-                value: rp.value,
-              };
-            })}
-            baseProperties={resourceVersionEditorPage.baseProperties.map((bp) => {
-              return {
-                theKey: bp.key,
-                description: bp.description,
-                value: bp.value,
-              };
-            })}
-            onEdit={(theKey) => {
-              const baseP = resourceVersionEditorPage.baseProperties.find((bp) => {
-                return bp.key === theKey;
+          {/*<FBasePropertiesCards*/}
+          {/*  rawProperties={resourceVersionEditorPage.rawProperties.map((rp) => {*/}
+          {/*    return {*/}
+          {/*      theKey: rp.key,*/}
+          {/*      value: rp.value,*/}
+          {/*    };*/}
+          {/*  })}*/}
+          {/*  baseProperties={resourceVersionEditorPage.baseProperties.map((bp) => {*/}
+          {/*    return {*/}
+          {/*      theKey: bp.key,*/}
+          {/*      description: bp.description,*/}
+          {/*      value: bp.value,*/}
+          {/*    };*/}
+          {/*  })}*/}
+          {/*  onEdit={(theKey) => {*/}
+          {/*    const baseP = resourceVersionEditorPage.baseProperties.find((bp) => {*/}
+          {/*      return bp.key === theKey;*/}
+          {/*    });*/}
+          {/*    if (!baseP) {*/}
+          {/*      return;*/}
+          {/*    }*/}
+          {/*    onChange({*/}
+          {/*      basePEditorVisible: true,*/}
+          {/*      basePKeyInput: baseP.key,*/}
+          {/*      basePValueInput: baseP.value,*/}
+          {/*      basePDescriptionInput: baseP.description,*/}
+          {/*      basePDescriptionInputError: '',*/}
+          {/*    });*/}
+          {/*  }}*/}
+          {/*/>*/}
+
+          <FResourceProperties
+            immutableData={resourceVersionEditorPage.rawProperties}
+            alterableData={resourceVersionEditorPage.baseProperties}
+            onEdit_alterableData={async (data) => {
+              const index: number = resourceVersionEditorPage.baseProperties.findIndex((p) => {
+                return p === data;
               });
-              if (!baseP) {
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                ],
+                defaultData: data,
+                noneEditableFields: ['key', 'name'],
+              });
+              if (!dataSource) {
                 return;
               }
-              onChange({
-                basePEditorVisible: true,
-                basePKeyInput: baseP.key,
-                basePValueInput: baseP.value,
-                basePDescriptionInput: baseP.description,
-                basePDescriptionInputError: '',
+
+              await onChange({
+                baseProperties: resourceVersionEditorPage.baseProperties.map((bp, i) => {
+                  if (index !== i) {
+                    return bp;
+                  }
+                  return dataSource;
+                }),
+                // basePEditorVisible: false,
+                // basePKeyInput: '',
+                // basePValueInput: '',
+                // basePDescriptionInput: '',
+                // basePDescriptionInputError: '',
+              });
+              await dispatch<SyncAllPropertiesAction>({
+                type: 'resourceVersionEditorPage/syncAllProperties',
               });
             }}
           />
@@ -275,34 +327,69 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.customOptions?.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
-            <FCustomOptionsCards
-              dataSource={resourceVersionEditorPage.customOptions.map((cos) => {
-                return {
-                  theKey: cos.key,
-                  description: cos.description,
-                  type: cos.custom,
-                  value: cos.custom === 'select' ? cos.customOption : cos.defaultValue,
-                };
-              })}
-              onEdit={(theKey) => {
-                const customOption = resourceVersionEditorPage.customOptions.find((cos) => {
-                  return cos.key === theKey;
+          resourceVersionEditorPage.customOptions.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
+            {/*<FCustomOptionsCards*/}
+            {/*  dataSource={resourceVersionEditorPage.customOptions.map((cos) => {*/}
+            {/*    return {*/}
+            {/*      theKey: cos.key,*/}
+            {/*      description: cos.description,*/}
+            {/*      type: cos.custom,*/}
+            {/*      value: cos.custom === 'select' ? cos.customOption : cos.defaultValue,*/}
+            {/*    };*/}
+            {/*  })}*/}
+            {/*  onEdit={(theKey) => {*/}
+            {/*    const customOption = resourceVersionEditorPage.customOptions.find((cos) => {*/}
+            {/*      return cos.key === theKey;*/}
+            {/*    });*/}
+            {/*    if (!customOption) {*/}
+            {/*      return;*/}
+            {/*    }*/}
+            {/*    onChange({*/}
+            {/*      customOptionEditorVisible: true,*/}
+            {/*      customOptionKey: customOption.key,*/}
+            {/*      customOptionDescription: customOption.description,*/}
+            {/*      customOptionDescriptionError: '',*/}
+            {/*      customOptionCustom: customOption.custom,*/}
+            {/*      customOptionDefaultValue: customOption.defaultValue,*/}
+            {/*      customOptionDefaultValueError: '',*/}
+            {/*      customOptionCustomOption: customOption.customOption,*/}
+            {/*      customOptionCustomOptionError: '',*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <FResourceOptions
+              dataSource={resourceVersionEditorPage.customOptions}
+              onEdit={async (data) => {
+                const index: number = resourceVersionEditorPage.customOptions.findIndex((p) => {
+                  return p === data;
                 });
-                if (!customOption) {
+
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  type: 'input' | 'select';
+                  input: string;
+                  select: string[];
+                  description: string;
+                } | null = await fResourceOptionEditor({
+                  disabledKeys: [
+                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
+                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
+                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                  ],
+                  defaultData: data,
+                  noneEditableFields: ['key', 'name', 'type'],
+                });
+
+                if (!dataSource) {
                   return;
                 }
-                onChange({
-                  customOptionEditorVisible: true,
-                  customOptionKey: customOption.key,
-                  customOptionDescription: customOption.description,
-                  customOptionDescriptionError: '',
-                  customOptionCustom: customOption.custom,
-                  customOptionDefaultValue: customOption.defaultValue,
-                  customOptionDefaultValueError: '',
-                  customOptionCustomOption: customOption.customOption,
-                  customOptionCustomOptionError: '',
-                });
+
+
               }}
             />
           </FFormLayout.FBlock>)
