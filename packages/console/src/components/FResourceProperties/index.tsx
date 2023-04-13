@@ -82,7 +82,6 @@ function FResourceProperties({
             >
               <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
             </FComponentsLib.FTextBtn>
-            {/*<FComponentsLib.FCircleBtn style={{ fontSize: 14 }} type={'danger'} />*/}
           </div>
         </React.Fragment>);
       })
