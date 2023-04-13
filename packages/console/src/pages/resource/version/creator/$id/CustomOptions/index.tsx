@@ -38,6 +38,73 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
   const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
 
+  async function onClick_addOptionBtn() {
+    const dataSource: {
+      key: string;
+      name: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+      description: string;
+    } | null = await fResourceOptionEditor({
+      disabledKeys: [
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+      ],
+      disabledNames: [
+        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+      ],
+    });
+
+    if (!dataSource) {
+      return;
+    }
+
+    await dispatch<OnChange_CustomOptions_Action>({
+      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+      payload: {
+        value: [
+          ...resourceVersionCreatorPage.customOptionsData,
+          dataSource,
+        ],
+      },
+    });
+  }
+
+  async function onClick_importPreVersionOptionBtn() {
+    const data: {
+      key: string;
+      name: string;
+      description: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+    }[] | null = await fAddCustomOptions({
+      disabledKeys: [
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+      ],
+      defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
+    });
+    // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+    if (!data) {
+      return;
+    }
+
+    await dispatch<OnChange_CustomOptions_Action>({
+      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+      payload: {
+        value: [
+          ...resourceVersionCreatorPage.customOptionsData,
+          ...data,
+        ],
+      },
+    });
+  }
+
   if (resourceVersionCreatorPage.rawPropertiesState === 'parsing') {
     return (<>
       <div style={{ height: 20 }} />
@@ -213,153 +280,115 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
         <div style={{ height: 5 }} />
 
-        <div className={styles.options}>
-          <div style={{ height: 20 }} />
-          <div className={styles.optionsHeader}>
-            <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
-
-            <div>
-              <Space size={20}>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600 }}
-                  type='primary'
-                  onClick={async () => {
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      type: 'input' | 'select';
-                      input: string;
-                      select: string[];
-                      description: string;
-                    } | null = await fResourceOptionEditor({
-                      disabledKeys: [
-                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-                      ],
-                      disabledNames: [
-                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
-                      ],
-                    });
-
-                    if (!dataSource) {
-                      return;
-                    }
-
-                    await dispatch<OnChange_CustomOptions_Action>({
-                      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                      payload: {
-                        value: [
-                          ...resourceVersionCreatorPage.customOptionsData,
-                          dataSource,
-                        ],
-                      },
-                    });
+        {
+          resourceVersionCreatorPage.customOptionsData.length === 0
+            ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
+              <FComponentsLib.FTextBtn
+                type={'default'}
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  onClick_addOptionBtn();
+                }}
+              >添加可选配置</FComponentsLib.FTextBtn>
+              {
+                resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
+                  type={'default'}
+                  style={{ fontSize: 12 }}
+                  onClick={() => {
+                    onClick_importPreVersionOptionBtn();
                   }}
-                >添加配置</FComponentsLib.FTextBtn>
-
-                {
-                  resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
-                    type='primary'
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                    onClick={async () => {
-                      // console.log(resourceVersionCreatorPage.preVersionOptionProperties, 'resourceVersionCreatorPage.preVersionOptionProperties dsdf ')
-                      const data: {
-                        key: string;
-                        name: string;
-                        description: string;
-                        type: 'input' | 'select';
-                        input: string;
-                        select: string[];
-                      }[] | null = await fAddCustomOptions({
-                        disabledKeys: [
-                          ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                          ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-                          ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
-                        ],
-                        defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
-                      });
-                      // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
-                      if (!data) {
-                        return;
-                      }
-
-                      await dispatch<OnChange_CustomOptions_Action>({
-                        type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                        payload: {
-                          value: [
-                            ...resourceVersionCreatorPage.customOptionsData,
-                            ...data,
-                          ],
-                        },
-                      });
-
-
-                    }}>从上个版本导入</FComponentsLib.FTextBtn>)
-                }
-              </Space>
-            </div>
-          </div>
-          <div style={{ height: 20 }} />
-
-          <FResourceOptions
-            // dataSource={resourceVersionCreatorPage.customOptionsData}
-            dataSource={resourceVersionCreatorPage.customOptionsData}
-            onEdit={async (value) => {
-              const index: number = resourceVersionCreatorPage.customOptionsData.findIndex((p) => {
-                return p === value;
-              });
-
-              const dataSource: {
-                key: string;
-                name: string;
-                type: 'input' | 'select';
-                input: string;
-                select: string[];
-                description: string;
-              } | null = await fResourceOptionEditor({
-                disabledKeys: [
-                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-                ],
-                disabledNames: [
-                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
-                ],
-                defaultData: value,
-              });
-
-              if (!dataSource) {
-                return;
+                >从上个版本导入</FComponentsLib.FTextBtn>)
               }
 
-              await dispatch<OnChange_CustomOptions_Action>({
-                type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                payload: {
-                  value: resourceVersionCreatorPage.customOptionsData.map((a, b) => {
-                    if (b !== index) {
-                      return a;
-                    }
-                    return dataSource;
-                  }),
-                },
-              });
-            }}
-            onDelete={async (value) => {
-              await dispatch<OnChange_CustomOptions_Action>({
-                type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                payload: {
-                  value: resourceVersionCreatorPage.customOptionsData.filter((a) => {
-                    return a.key !== value.key && a.name !== value.name;
-                  }),
-                },
-              });
-            }}
-          />
+            </div>)
+            : (<div className={styles.options}>
+              <div style={{ height: 20 }} />
+              <div className={styles.optionsHeader}>
+                <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
 
-        </div>
+                <div>
+                  <Space size={20}>
+                    <FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600 }}
+                      type='primary'
+                      onClick={async () => {
+                        onClick_addOptionBtn();
+                      }}
+                    >添加配置</FComponentsLib.FTextBtn>
+
+                    {
+                      resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
+                        type='primary'
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                        onClick={async () => {
+                          onClick_importPreVersionOptionBtn();
+
+                        }}>从上个版本导入</FComponentsLib.FTextBtn>)
+                    }
+                  </Space>
+                </div>
+              </div>
+              <div style={{ height: 20 }} />
+
+              <FResourceOptions
+                // dataSource={resourceVersionCreatorPage.customOptionsData}
+                dataSource={resourceVersionCreatorPage.customOptionsData}
+                onEdit={async (value) => {
+                  const index: number = resourceVersionCreatorPage.customOptionsData.findIndex((p) => {
+                    return p === value;
+                  });
+
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    type: 'input' | 'select';
+                    input: string;
+                    select: string[];
+                    description: string;
+                  } | null = await fResourceOptionEditor({
+                    disabledKeys: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                      ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                    ],
+                    disabledNames: [
+                      ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                    ],
+                    defaultData: value,
+                  });
+
+                  if (!dataSource) {
+                    return;
+                  }
+
+                  await dispatch<OnChange_CustomOptions_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    payload: {
+                      value: resourceVersionCreatorPage.customOptionsData.map((a, b) => {
+                        if (b !== index) {
+                          return a;
+                        }
+                        return dataSource;
+                      }),
+                    },
+                  });
+                }}
+                onDelete={async (value) => {
+                  await dispatch<OnChange_CustomOptions_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                    payload: {
+                      value: resourceVersionCreatorPage.customOptionsData.filter((a) => {
+                        return a.key !== value.key && a.name !== value.name;
+                      }),
+                    },
+                  });
+                }}
+              />
+
+            </div>)
+        }
+
 
         {/*<Space size={5}>*/}
         {/*  <FComponentsLib.FTextBtn*/}
