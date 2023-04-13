@@ -39,7 +39,7 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
                   // onEdit_alterableData && onEdit_alterableData(d);
                 }}
               >
-                <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
               </FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn
                 type={'danger'}
@@ -47,7 +47,7 @@ function FResourceOptions({ dataSource }: FResourceOptionsProps) {
                   // onDelete_alterableData && onDelete_alterableData(d);
                 }}
               >
-                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
               </FComponentsLib.FTextBtn>
             </div>
           </div>
