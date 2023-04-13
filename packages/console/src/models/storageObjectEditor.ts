@@ -426,7 +426,12 @@ const Model: StorageObjectEditorModelType = {
         ],
       };
       // console.log(params, 'params098io3wkqlsaejfdlkjfl');
-      yield call(FServiceAPI.Storage.updateObject, params);
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Storage.updateObject, params);
+
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
 
       yield put<UpdateAObjectAction>({
         type: 'storageHomePage/updateAObject',
