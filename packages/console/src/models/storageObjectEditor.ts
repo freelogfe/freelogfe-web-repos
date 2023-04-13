@@ -45,60 +45,62 @@ export interface StorageObjectEditorModelState {
 
   baseProperties: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
-  basePropertiesEditorVisible: boolean;
-  basePropertiesEditorData: {
-    key: string;
-    keyError: string;
-    value: string;
-    valueError: string;
-    description: string;
-    descriptionError: string;
-  }[];
-  basePropertyEditorIndex: number;
-  basePropertyEditorData: {
-    key: string;
-    keyError: string;
-    value: string;
-    valueError: string;
-    description: string;
-    descriptionError: string;
-  } | null;
+  // basePropertiesEditorVisible: boolean;
+  // basePropertiesEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   value: string;
+  //   valueError: string;
+  //   description: string;
+  //   descriptionError: string;
+  // }[];
+  // basePropertyEditorIndex: number;
+  // basePropertyEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   value: string;
+  //   valueError: string;
+  //   description: string;
+  //   descriptionError: string;
+  // } | null;
 
-  customOptionsDataVisible: boolean;
+  // customOptionsDataVisible: boolean;
   customOptionsData: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
-  customOptionsEditorVisible: boolean;
-  customOptionsEditorDataSource: {
-    key: string;
-    keyError: string;
-    description: string;
-    descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
-  }[];
-  customOptionIndex: number;
-  customOptionEditorData: {
-    key: string;
-    keyError: string;
-    description: string;
-    descriptionError: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    defaultValueError: string;
-    customOption: string;
-    customOptionError: string;
-  } | null;
+  // customOptionsEditorVisible: boolean;
+  // customOptionsEditorDataSource: {
+  //   key: string;
+  //   keyError: string;
+  //   description: string;
+  //   descriptionError: string;
+  //   custom: 'input' | 'select';
+  //   defaultValue: string;
+  //   defaultValueError: string;
+  //   customOption: string;
+  //   customOptionError: string;
+  // }[];
+  // customOptionIndex: number;
+  // customOptionEditorData: {
+  //   key: string;
+  //   keyError: string;
+  //   description: string;
+  //   descriptionError: string;
+  //   custom: 'input' | 'select';
+  //   defaultValue: string;
+  //   defaultValueError: string;
+  //   customOption: string;
+  //   customOptionError: string;
+  // } | null;
 
   depRs: DepR[];
   depOs: DepO[];
@@ -190,17 +192,17 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   rawProperties: [],
 
   baseProperties: [],
-  basePropertiesEditorVisible: false,
-  basePropertiesEditorData: [],
-  basePropertyEditorIndex: -1,
-  basePropertyEditorData: null,
-
-  customOptionsDataVisible: false,
+  // basePropertiesEditorVisible: false,
+  // basePropertiesEditorData: [],
+  // basePropertyEditorIndex: -1,
+  // basePropertyEditorData: null,
+  //
+  // customOptionsDataVisible: false,
   customOptionsData: [],
-  customOptionsEditorVisible: false,
-  customOptionsEditorDataSource: [],
-  customOptionIndex: -1,
-  customOptionEditorData: null,
+  // customOptionsEditorVisible: false,
+  // customOptionsEditorDataSource: [],
+  // customOptionIndex: -1,
+  // customOptionEditorData: null,
 
   depRs: [],
   depOs: [],
@@ -228,7 +230,7 @@ const Model: StorageObjectEditorModelType = {
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: storageObjectEditor.objectId,
       };
-      const { data }: {
+      const { data: data_objectDetails }: {
         data: {
           objectId: string;
           bucketName: string;
@@ -237,7 +239,14 @@ const Model: StorageObjectEditorModelType = {
           userId: number;
           resourceTypeCode: string;
           dependencies: any[];
-          customPropertyDescriptors: any[];
+          customPropertyDescriptors: {
+            key: string;
+            name: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[];
           // fileSize: string;
           systemProperty: {
             [key: string]: string;
@@ -248,13 +257,13 @@ const Model: StorageObjectEditorModelType = {
       } = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'data@#Rwe90ifjsdlkfa');
       // if (!data || data.userId !== user.cookiesUserID) {
-      if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
+      if (!data_objectDetails || data_objectDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
         return;
       }
-      const resources: any[] = data.dependencies
+      const resources: any[] = data_objectDetails.dependencies
         .filter((ro: any) => ro.type === 'resource');
-      const objects: any[] = data.dependencies
+      const objects: any[] = data_objectDetails.dependencies
         .filter((ro: any) => ro.type === 'object');
 
       let depRs: StorageObjectEditorModelState['depRs'] = [];
@@ -305,50 +314,48 @@ const Model: StorageObjectEditorModelType = {
       const keyValue: {
         value: string | number;
         label: string;
-      }[] = yield call(codeToCodes, data.resourceTypeCode || '');
+      }[] = yield call(codeToCodes, data_objectDetails.resourceTypeCode || '');
       // console.log(keyValue, 'keyValue sediofjsdlk keyValue sdoifjsdlk');
       yield put<ChangeAction>({
         type: 'change',
 
         payload: {
-          objectId: data.objectId,
-          bucketName: data.bucketName,
-          objectName: data.objectName,
-          sha1: data.sha1,
+          objectId: data_objectDetails.objectId,
+          bucketName: data_objectDetails.bucketName,
+          objectName: data_objectDetails.objectName,
+          sha1: data_objectDetails.sha1,
           resourceTypeCodes: keyValue.map((kv) => {
             return kv.value;
           }),
           resourceTypeNames: keyValue.map((kv) => {
             return kv.label;
           }),
-          size: data.systemProperty.fileSize,
-          rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
+          size: data_objectDetails.systemProperty.fileSize,
+          rawProperties: Object.entries(data_objectDetails.systemProperty).map((s) => ({
             key: s[0],
             // value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
             value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
           })),
-          baseProperties: (data.customPropertyDescriptors as any[])
+          baseProperties: (data_objectDetails.customPropertyDescriptors as any[])
             .filter((cpd: any) => cpd.type === 'readonlyText')
             .map<StorageObjectEditorModelState['baseProperties'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
+                name: cpd.name,
                 value: cpd.defaultValue,
                 description: cpd.remark,
               };
             }),
-          customOptionsData: (data.customPropertyDescriptors as any[])
+          customOptionsData: data_objectDetails.customPropertyDescriptors
             .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<StorageObjectEditorModelState['customOptionsData'][number]>((cpd: any) => {
+            .map<StorageObjectEditorModelState['customOptionsData'][number]>((cpd) => {
               return {
                 key: cpd.key,
-                // keyError: '',
+                name: cpd.name,
                 description: cpd.remark,
-                // descriptionError: '',
-                custom: cpd.type === 'editableText' ? 'input' : 'select',
-                defaultValue: cpd.defaultValue,
-                // defaultValueError: '',
-                customOption: cpd.candidateItems.join(','),
-                // customOptionError: '',
+                type: cpd.type === 'editableText' ? 'input' : 'select',
+                input: cpd.defaultValue,
+                select: cpd.candidateItems,
               };
             }),
           depRs: depRs,
@@ -399,18 +406,20 @@ const Model: StorageObjectEditorModelType = {
             return {
               type: 'readonlyText',
               key: i.key,
+              name: i.name,
               remark: i.description,
               defaultValue: i.value,
             };
           }),
           ...storageObjectEditor.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
-            const isInput: boolean = i.custom === 'input';
-            const options: string[] = i.customOption.split(',');
+            const isInput: boolean = i.type === 'input';
+            const options: string[] = i.select;
             return {
               type: isInput ? 'editableText' : 'select',
               key: i.key,
+              name: i.name,
               remark: i.description,
-              defaultValue: isInput ? i.defaultValue : options[0],
+              defaultValue: isInput ? i.input : options[0],
               candidateItems: isInput ? undefined : options,
             };
           }),
