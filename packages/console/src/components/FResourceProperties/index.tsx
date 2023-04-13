@@ -66,22 +66,28 @@ function FResourceProperties({
               style={{ fontSize: 12 }}
             />
 
-            <FComponentsLib.FTextBtn
-              type={'default'}
-              onClick={() => {
-                onEdit_alterableData && onEdit_alterableData(d);
-              }}
-            >
-              <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
-            </FComponentsLib.FTextBtn>
-            <FComponentsLib.FTextBtn
-              type={'danger'}
-              onClick={() => {
-                onDelete_alterableData && onDelete_alterableData(d);
-              }}
-            >
-              <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
-            </FComponentsLib.FTextBtn>
+            {
+              onEdit_alterableData && (<FComponentsLib.FTextBtn
+                type={'default'}
+                onClick={() => {
+                  onEdit_alterableData(d);
+                }}
+              >
+                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+              </FComponentsLib.FTextBtn>)
+            }
+
+            {
+              onDelete_alterableData && (<FComponentsLib.FTextBtn
+                type={'danger'}
+                onClick={() => {
+                  onDelete_alterableData(d);
+                }}
+              >
+                <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
+              </FComponentsLib.FTextBtn>)
+            }
+
           </div>
         </React.Fragment>);
       })

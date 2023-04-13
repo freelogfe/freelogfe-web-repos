@@ -36,24 +36,30 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
               />
             </div>
             <div className={styles.itemHeaderRight}>
-              <FComponentsLib.FTextBtn
-                type={'default'}
-                onClick={() => {
-                  // onEdit_alterableData && onEdit_alterableData(d);
-                  onEdit && onEdit(d);
-                }}
-              >
-                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
-              </FComponentsLib.FTextBtn>
-              <FComponentsLib.FTextBtn
-                type={'danger'}
-                onClick={() => {
-                  // onDelete_alterableData && onDelete_alterableData(d);
-                  onDelete && onDelete(d);
-                }}
-              >
-                <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
-              </FComponentsLib.FTextBtn>
+              {
+                onEdit && (<FComponentsLib.FTextBtn
+                  type={'default'}
+                  onClick={() => {
+                    // onEdit_alterableData && onEdit_alterableData(d);
+                    onEdit(d);
+                  }}
+                >
+                  <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+                </FComponentsLib.FTextBtn>)
+              }
+
+              {
+                onDelete && (<FComponentsLib.FTextBtn
+                  type={'danger'}
+                  onClick={() => {
+                    // onDelete_alterableData && onDelete_alterableData(d);
+                    onDelete(d);
+                  }}
+                >
+                  <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
+                </FComponentsLib.FTextBtn>)
+              }
+              
             </div>
           </div>
           <div style={{ height: 5 }} />
