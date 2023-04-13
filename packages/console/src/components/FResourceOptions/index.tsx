@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface FResourceOptionsProps {
   dataSource: {
@@ -32,6 +33,15 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
                 text={`(${d.key})`}
                 type={'additional2'}
               />
+              {
+                d.description && (<FTooltip
+                  title={d.description}
+                >
+                  <FComponentsLib.FIcons.FInfo
+                    style={{ cursor: 'pointer', fontSize: 12 }}
+                  />
+                </FTooltip>)
+              }
             </div>
             <div className={styles.itemHeaderRight}>
               {
