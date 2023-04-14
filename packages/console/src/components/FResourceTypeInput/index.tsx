@@ -1,8 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Cascader } from 'antd';
+import { Cascader, Dropdown } from 'antd';
 import * as AHooks from 'ahooks';
 import { FServiceAPI } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface Option {
   value: string | number;
@@ -40,20 +41,25 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
 
   });
 
-  return (<Cascader
-    allowClear={true}
-    value={value}
-    options={options}
-    onChange={(value: Array<string | number> | undefined, selectedOptions) => {
-      // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
-      if (!value) {
-        onChange && onChange([], []);
-        return;
-      }
-      onChange && onChange(value, selectedOptions as Option[]);
-    }}
-    placeholder='Please select'
-  />);
+  return (<div className={styles.square}>
+    <span>选择类型</span>
+    <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />
+  </div>);
+
+  // return (<Cascader
+  //   allowClear={true}
+  //   value={value}
+  //   options={options}
+  //   onChange={(value: Array<string | number> | undefined, selectedOptions) => {
+  //     // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
+  //     if (!value) {
+  //       onChange && onChange([], []);
+  //       return;
+  //     }
+  //     onChange && onChange(value, selectedOptions as Option[]);
+  //   }}
+  //   placeholder='Please select'
+  // />);
 }
 
 export default FResourceTypeInput;
