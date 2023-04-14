@@ -53,12 +53,12 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
   });
 
   return (<Dropdown
+    open={true}
     onOpenChange={(o) => {
       set_isOpen(o);
     }}
     overlayClassName={styles.overlayClassName}
-    overlay={(<div className={styles.overlay}
-    >
+    overlay={(<div className={styles.overlay}>
       <div className={styles.recommend}>
         <FComponentsLib.FContentText
           text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint2')}
@@ -74,7 +74,16 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
           <label>视频/短视频</label>
         </div>
       </div>
-    </div>)}>
+
+      <div style={{padding: '0 20px'}}>
+        <FComponentsLib.FContentText
+          text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint3')}
+          type={'additional2'}
+        />
+      </div>
+      <div style={{ height: 20 }} />
+    </div>)}
+  >
     <div className={styles.square} style={{ borderColor: isOpen ? '#2784FF' : '#D4D4D4' }}>
       <span>选择类型</span>
       {
@@ -83,11 +92,6 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
           : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
       }
     </div>
-    <FComponentsLib.FContentText
-      text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint3')}
-      type={'additional2'}
-    />
-    <div style={{ height: 20 }} />
   </Dropdown>);
 
   // return (<Cascader
