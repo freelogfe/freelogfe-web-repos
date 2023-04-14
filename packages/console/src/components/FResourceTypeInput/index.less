@@ -14,9 +14,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 
   & > span {
     color: #BEBEBE;
     font-size: 14px;
+  }
+}
+
+.overlayClassName {
+  background-color: #FFF;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.overlay {
+  width: 360px;
+  background-color: white;
+
+  .recommend {
+    padding: 20px;
+
+    .recommendResourceTypes {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      & > label {
+        padding: 3px 6px;
+        color: #666;
+        line-height: 18px;
+        font-size: 12px;
+        background-color: #EBECF0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
   }
 }
