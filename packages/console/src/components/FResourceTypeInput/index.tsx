@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Cascader, Dropdown } from 'antd';
+import { Cascader, Dropdown, Menu } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -75,13 +75,39 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
         </div>
       </div>
 
-      <div style={{padding: '0 20px'}}>
+      <div style={{ padding: '0 20px' }}>
         <FComponentsLib.FContentText
           text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint3')}
           type={'additional2'}
         />
       </div>
       <div style={{ height: 20 }} />
+      <div className={styles.FCascader}>
+        <div className={styles.item}>
+          <span>主题</span>
+        </div>
+        <div className={styles.item}>
+          <span>插件</span>
+        </div>
+        <div className={styles.item}>
+          <span>阅读</span>
+          <FComponentsLib.FIcons.FDown className={styles.itemRightIcon} />
+          <div className={styles.itemChildren}>
+            <div className={styles.item}>
+              <span>主题</span>
+            </div>
+            <div className={styles.item}>
+              <span>插件</span>
+              <FComponentsLib.FIcons.FDown className={styles.itemRightIcon} />
+              <div className={styles.itemChildren}>
+                <div className={styles.item}>
+                  <span>主题</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>)}
   >
     <div className={styles.square} style={{ borderColor: isOpen ? '#2784FF' : '#D4D4D4' }}>
@@ -92,6 +118,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
           : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
       }
     </div>
+
   </Dropdown>);
 
   // return (<Cascader
