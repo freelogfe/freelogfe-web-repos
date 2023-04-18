@@ -542,11 +542,11 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           nodeId: payload.nodeID,
-          nodeCover: data?.nodeLogo,
-          nodeName: data?.nodeName,
+          nodeCover: data?.nodeLogo || '',
+          nodeName: data?.nodeName || '',
           nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
           testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
-          nodeThemeId: data.nodeThemeId,
+          nodeThemeId: data.nodeThemeId || '',
           nodeInfoState: 'loaded',
         },
       });
@@ -642,14 +642,18 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           setting_nodeID: data_nodeDetails.nodeId,
-          setting_nodeTitle: data_nodeDetails.nodeName,
+          setting_nodeTitle: data_nodeDetails.nodeName || '',
           setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
           setting_nodeInfo: {
-            cover: data_nodeDetails.nodeLogo,
-            title: data_nodeDetails.nodeTitle,
-            introduction: data_nodeDetails.nodeShortDescription,
-            limitation: data_nodeDetails.nodeVisibility === 1 ? 'public' : data_nodeDetails.nodeVisibility === 2 ? 'private' : 'pause',
-            limitationMessage: data_nodeDetails.nodeSuspendInfo,
+            cover: data_nodeDetails.nodeLogo || '',
+            title: data_nodeDetails.nodeTitle || '',
+            introduction: data_nodeDetails.nodeShortDescription || '',
+            limitation: data_nodeDetails.nodeVisibility === 1
+              ? 'public'
+              : data_nodeDetails.nodeVisibility === 2
+                ? 'private'
+                : 'pause',
+            limitationMessage: data_nodeDetails.nodeSuspendInfo || '',
           },
         },
       });
