@@ -57,6 +57,7 @@ import FPlayer from './FPlayer';
 import FPlus from './FPlus';
 import FRedo from './FRedo';
 import FResource from './FResource';
+import FRight from './FRight';
 import FRotate from './FRotate';
 import FSafetyLock from './FSafetyLock';
 import FSina from './FSina';
@@ -128,6 +129,7 @@ const FIcons = {
     FPlus,
     FRedo,
     FResource,
+    FRight,
     FRotate,
     FSafetyLock,
     FSina,

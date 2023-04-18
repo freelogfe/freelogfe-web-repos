@@ -8,7 +8,9 @@ import FComponentsLib from '@freelog/components-lib';
 interface Option {
   value: string | number;
   label: string;
-  children?: Option[];
+  values: Array<string | number>;
+  labels: string[];
+  children: Option[];
 }
 
 interface ServerData {
@@ -18,10 +20,15 @@ interface ServerData {
 }
 
 interface FResourceTypeInputProps {
-  value: Array<string | number>;
+  value: {
+    value: string | number;
+    label: string;
+    values: Array<string | number>;
+    labels: string[];
+  } | null;
   useKey?: 'code' | 'name';
 
-  onChange?(value: FResourceTypeInputProps['value'], selectedOptions: Option[]): void;
+  onChange?(value: Option, selectedOptions: Option[]): void;
 }
 
 interface FResourceTypeInputStates {
@@ -44,7 +51,8 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes();
     // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
-    const options: Option[] = handledData(data_resourceTypes, useKey);
+    const options: Option[] = handledData(data_resourceTypes, null);
+    // console.log(options, 'options哦i圣诞节二零');
     set_options(options);
   });
 
@@ -53,7 +61,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
   });
 
   return (<Dropdown
-    open={true}
+    // open={true}
     onOpenChange={(o) => {
       set_isOpen(o);
     }}
@@ -83,35 +91,84 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
       </div>
       <div style={{ height: 20 }} />
       <div className={styles.FCascader}>
-        <div className={styles.item}>
-          <span>主题</span>
-        </div>
-        <div className={styles.item}>
-          <span>插件</span>
-        </div>
-        <div className={styles.item}>
-          <span>阅读</span>
-          <FComponentsLib.FIcons.FDown className={styles.itemRightIcon} />
-          <div className={styles.itemChildren}>
-            <div className={styles.item}>
-              <span>主题</span>
-            </div>
-            <div className={styles.item}>
-              <span>插件</span>
-              <FComponentsLib.FIcons.FDown className={styles.itemRightIcon} />
-              <div className={styles.itemChildren}>
-                <div className={styles.item}>
-                  <span>主题</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {
+          options.map((o0) => {
+            return (<div
+              className={styles.item}
+              key={o0.value}
+              onClick={() => {
+                if (o0.children.length === 0) {
+                  // console.log(o0, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
+                  onChange && onChange(o0, [o0]);
+                }
+              }}
+            >
+              <span>{o0.label}</span>
+              {
+                o0.children.length > 0 && (<>
+                  <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
+                  <div className={styles.itemChildren}>
+                    {
+                      o0.children.map((o1) => {
+                        return (<div
+                          key={o1.value}
+                          className={styles.item}
+                          onClick={() => {
+                            if (o1.children.length === 0) {
+                              // console.log(o1, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
+                              onChange && onChange(o1, [o0, o1]);
+                            }
+                          }}
+                        >
+                          <span>{o1.label}</span>
+                          {
+                            o1.children.length > 0 && (<>
+                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
+                              <div className={styles.itemChildren}>
+                                {
+                                  o1.children.map((o2) => {
+                                    return (<div
+                                      key={o2.value}
+                                      className={styles.item}
+                                      onClick={() => {
+                                        if (o2.children.length === 0) {
+                                          // console.log(2, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
+                                          onChange && onChange(o2, [o0, o1, o2]);
+                                        }
+                                      }}
+                                    >
+                                      <span>{o2.label}</span>
+                                    </div>);
+                                  })
+                                }
+
+                              </div>
+                            </>)
+                          }
+                        </div>);
+                      })
+                    }
+
+                    {/*<div className={styles.item}>*/}
+                    {/*  <span>插件</span>*/}
+                    {/*  */}
+                    {/*</div>*/}
+                  </div>
+                </>)
+              }
+            </div>);
+          })
+        }
       </div>
     </div>)}
   >
     <div className={styles.square} style={{ borderColor: isOpen ? '#2784FF' : '#D4D4D4' }}>
-      <span>选择类型</span>
+      {
+        value === null
+          ? (<span>选择类型</span>)
+          : (<FComponentsLib.FContentText text={value.labels.join(' / ')} type={'normal'} />)
+      }
+
       {
         isOpen
           ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
@@ -140,14 +197,43 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
 export default FResourceTypeInput;
 
 
-function handledData(data: ServerData[], useKey: 'code' | 'name'): Option[] {
-  return data.map((d) => {
-    return {
-      value: d[useKey],
+function handledData(data: ServerData[], parent: Option | null): Option[] {
+  const result: Option[] = data.map((d) => {
+    const res: Option = {
+      value: d.code,
       label: d.name,
-      children: handledData(d.children, useKey),
+      values: [
+        ...(parent?.values || []),
+        d.code,
+      ],
+      labels: [
+        ...(parent?.labels || []),
+        d.name,
+      ],
+      children: [],
+    };
+
+    return {
+      ...res,
+      children: handledData(d.children, res),
     };
   });
+  if (result.length === 0) {
+    return [];
+  }
+  return [
+    // {
+    //   value: '#all',
+    //   label: '全部',
+    //   children: [],
+    // },
+    ...result,
+    // {
+    //   value: '#custom',
+    //   label: '添加新类型',
+    //   children: [],
+    // },
+  ];
 }
 
 export async function codeToCodes(code: string): Promise<Option[]> {
@@ -169,6 +255,7 @@ function ha(code: string, data: ServerData[], payload: Option[]) {
   payload.push({
     value: da.code,
     label: da.name,
+    children: [],
   });
   ha(code, da.children, payload);
 }

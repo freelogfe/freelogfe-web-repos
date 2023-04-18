@@ -18,7 +18,12 @@ export interface ResourceCreatorPageModelState {
   //   valueError: string;
   //   // options: string[];
   // }[];
-  resourceTypeCodes: Array<string | number>;
+  resourceTypeCodes: {
+    value: string | number;
+    label: string;
+    values: Array<string | number>;
+    labels: string[];
+  } | null;
 
   introduction: string;
   introductionErrorText: string;
@@ -108,7 +113,7 @@ export const initStates: ResourceCreatorPageModelState = {
   nameVerify: 0,
   nameErrorText: '',
 
-  resourceTypeCodes: [],
+  resourceTypeCodes: null,
 
   introduction: '',
   introductionErrorText: '',
@@ -147,9 +152,13 @@ const Model: ResourceCreatorPageModelType = {
       const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
       }));
+      if (resourceCreatorPage.resourceTypeCodes === null) {
+        return;
+      }
       const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
         name: resourceCreatorPage.name,
-        resourceTypeCode: resourceCreatorPage.resourceTypeCodes[resourceCreatorPage.resourceTypeCodes.length - 1],
+        // resourceTypeCode: resourceCreatorPage.resourceTypeCodes[resourceCreatorPage.resourceTypeCodes.length - 1],
+        resourceTypeCode: resourceCreatorPage.resourceTypeCodes.value,
         policies: [],
         coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
         intro: resourceCreatorPage.introduction,

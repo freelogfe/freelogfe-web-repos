@@ -62,7 +62,7 @@ function ResourceCreator({
     resourceCreatorPage.nameErrorText !== '' ||
     // !!resourceCreatorPage.resourceTypeErrorText ||
     // resourceTypeError ||
-    resourceCreatorPage.resourceTypeCodes.length === 0 ||
+    resourceCreatorPage.resourceTypeCodes === null ||
     !!resourceCreatorPage.introductionErrorText;
 
   if (!createBtnDisabled) {
