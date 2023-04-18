@@ -62,6 +62,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
 
   return (<Dropdown
     // open={true}
+    open={isOpen}
     onOpenChange={(o) => {
       set_isOpen(o);
     }}
@@ -100,6 +101,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
                 if (o0.children.length === 0) {
                   // console.log(o0, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
                   onChange && onChange(o0, [o0]);
+                  set_isOpen(false);
                 }
               }}
             >
@@ -117,6 +119,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
                             if (o1.children.length === 0) {
                               // console.log(o1, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
                               onChange && onChange(o1, [o0, o1]);
+                              set_isOpen(false);
                             }
                           }}
                         >
@@ -134,6 +137,7 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
                                         if (o2.children.length === 0) {
                                           // console.log(2, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
                                           onChange && onChange(o2, [o0, o1, o2]);
+                                          set_isOpen(false);
                                         }
                                       }}
                                     >
