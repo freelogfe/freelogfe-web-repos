@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Cascader, Dropdown, Menu } from 'antd';
+import { AutoComplete, Cascader, Dropdown, Input, Menu } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FInput from '@/components/FInput';
+import { ListSimpleByParentCode } from '../../../../@freelog/tools-lib/src/service-API/resources';
 
 interface Option {
   value: string | number;
@@ -25,40 +27,117 @@ interface FResourceTypeInputProps {
     label: string;
     values: Array<string | number>;
     labels: string[];
+    customInput?: string;
   } | null;
-  useKey?: 'code' | 'name';
+
+  // useKey?: 'code' | 'name';
 
   onChange?(value: Option, selectedOptions: Option[]): void;
 }
 
 interface FResourceTypeInputStates {
+  mode: 'select' | 'input';
   options: Option[];
   isOpen: boolean;
+  selectedCache: {
+    value: string | number;
+    label: string;
+    values: Array<string | number>;
+    labels: string[];
+  } | null;
+  autoCompleteOptions: {
+    value: string;
+    label: React.ReactNode;
+  }[];
+  autoCompleteInput: string;
 }
 
 const initStates: FResourceTypeInputStates = {
+  mode: 'select',
   options: [],
   isOpen: false,
+  selectedCache: null,
+  autoCompleteOptions: [],
+  autoCompleteInput: '',
 };
 
-function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeInputProps) {
+function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
-  const [options, set_options] = React.useState<FResourceTypeInputStates['options']>(initStates['options']);
+  const [mode, set_mode] = React.useState<FResourceTypeInputStates['mode']>(initStates['mode']);
   const [isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['isOpen']>(initStates['isOpen']);
+  const [options, set_options] = React.useState<FResourceTypeInputStates['options']>(initStates['options']);
+  const [selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['selectedCache']>(initStates['selectedCache']);
+  const [autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['autoCompleteOptions']>(initStates['autoCompleteOptions']);
+  const [autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['autoCompleteInput']>(initStates['autoCompleteInput']);
 
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes();
-    // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
     const options: Option[] = handledData(data_resourceTypes, null);
-    // console.log(options, 'options哦i圣诞节二零');
     set_options(options);
   });
 
   AHooks.useUnmount(() => {
 
   });
+
+  console.log(autoCompleteInput, 'autoCompleteInput sd9ifoj;sldkfjsdlfjlkj');
+
+  function onDropdownChange(option: Option, options: Option[]) {
+    onChange && onChange(option, options);
+    set_isOpen(false);
+  }
+
+  async function onDropdownClickCustom({ value, values, label, labels }: {
+    value: string | number;
+    label: string;
+    values: Array<string | number>;
+    labels: string[];
+  }) {
+    set_mode('input');
+    set_selectedCache({
+      value,
+      values,
+      label,
+      labels,
+    });
+    set_autoCompleteInput([...labels, ''].join('/'));
+
+    const { data } = await FServiceAPI.Resource.ListSimpleByParentCode({
+      parentCode: String(value),
+    });
+
+    console.log(data, 'dataojdslkfjlksdjfl sdflkajsdlkfjksldjfl');
+  }
+
+  if (mode === 'input' && selectedCache) {
+    return (<AutoComplete
+      options={autoCompleteOptions}
+      style={{ width: 360 }}
+      // onSelect={onSelect}
+      // onSearch={onSearch}
+      value={autoCompleteInput}
+      className={styles.AutoComplete}
+      onChange={(value) => {
+        // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
+        const startStr: string = [...selectedCache.labels, ''].join('/');
+        if (!value.startsWith(startStr)) {
+          return;
+        }
+
+        set_autoCompleteInput(value);
+      }}
+      onSelect={(value: any) => {
+        console.log(value, 'value : any sdfoisdjf lskdjlkj');
+      }}
+    >
+      <FInput
+        // value={'autoCompleteInput'}
+        style={{ width: 360 }}
+      />
+    </AutoComplete>);
+  }
 
   return (<Dropdown
     // open={true}
@@ -100,8 +179,9 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
               onClick={() => {
                 if (o0.children.length === 0) {
                   // console.log(o0, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                  onChange && onChange(o0, [o0]);
-                  set_isOpen(false);
+                  // onChange && onChange(o0, [o0]);
+                  // set_isOpen(false);
+                  onDropdownChange(o0, [o0]);
                 }
               }}
             >
@@ -111,52 +191,98 @@ function FResourceTypeInput({ value, useKey = 'code', onChange }: FResourceTypeI
                   <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
                   <div className={styles.itemChildren}>
                     {
-                      o0.children.map((o1) => {
-                        return (<div
-                          key={o1.value}
-                          className={styles.item}
-                          onClick={() => {
-                            if (o1.children.length === 0) {
-                              // console.log(o1, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                              onChange && onChange(o1, [o0, o1]);
-                              set_isOpen(false);
-                            }
-                          }}
-                        >
-                          <span>{o1.label}</span>
-                          {
-                            o1.children.length > 0 && (<>
-                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                              <div className={styles.itemChildren}>
-                                {
-                                  o1.children.map((o2) => {
-                                    return (<div
-                                      key={o2.value}
-                                      className={styles.item}
-                                      onClick={() => {
-                                        if (o2.children.length === 0) {
-                                          // console.log(2, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                                          onChange && onChange(o2, [o0, o1, o2]);
-                                          set_isOpen(false);
-                                        }
-                                      }}
-                                    >
-                                      <span>{o2.label}</span>
-                                    </div>);
-                                  })
-                                }
+                      o0.children.map((o1, o1Index, data) => {
+                        return (<React.Fragment key={o1.value}>
+                          <div
+                            className={styles.item}
+                            onClick={() => {
+                              if (o1.children.length === 0) {
+                                // console.log(o1, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
+                                // onChange && onChange(o1, [o0, o1]);
+                                // set_isOpen(false);
+                                onDropdownChange(o1, [o0, o1]);
+                              }
+                            }}
+                          >
+                            <span>{o1.label}</span>
+                            {
+                              o1.children.length > 0 && (<>
+                                <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
+                                <div className={styles.itemChildren}>
+                                  {
+                                    o1.children.map((o2) => {
+                                      return (<React.Fragment key={o2.value}>
+                                        <div
+                                          className={styles.item}
+                                          onClick={() => {
+                                            if (o2.children.length === 0) {
+                                              // console.log(2, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
+                                              // onChange && onChange(o2, [o0, o1, o2]);
+                                              // set_isOpen(false);
+                                              onDropdownChange(o2, [o0, o1, o2]);
+                                            }
+                                          }}
+                                        >
+                                          <span>{o2.label}</span>
+                                        </div>
 
-                              </div>
-                            </>)
+                                        {
+                                          o1Index + 1 === data.length && (<div
+                                            className={styles.item + ' ' + styles.itemLatest}
+                                            onClick={() => {
+                                              // set_mode('input');
+                                              // set_selectedCache({
+                                              //   value: o1.value,
+                                              //   values: o1.values,
+                                              //   label: o1.label,
+                                              //   labels: o1.labels,
+                                              // });
+                                              // set_autoCompleteInput([...o1.labels, ''].join('/'));
+                                              onDropdownClickCustom({
+                                                value: o1.value,
+                                                values: o1.values,
+                                                label: o1.label,
+                                                labels: o1.labels,
+                                              });
+                                            }}
+                                          >
+                                            <span>添加新类型</span>
+                                          </div>)
+                                        }
+                                      </React.Fragment>);
+                                    })
+                                  }
+
+                                </div>
+                              </>)
+                            }
+                          </div>
+                          {
+                            o1Index + 1 === data.length && (<div
+                              className={styles.item + ' ' + styles.itemLatest}
+                              onClick={() => {
+                                // set_mode('input');
+                                // set_selectedCache({
+                                //   value: o0.value,
+                                //   values: o0.values,
+                                //   label: o0.label,
+                                //   labels: o0.labels,
+                                // });
+                                // set_autoCompleteInput([...o0.labels, ''].join('/'));
+                                onDropdownClickCustom({
+                                  value: o0.value,
+                                  values: o0.values,
+                                  label: o0.label,
+                                  labels: o0.labels,
+                                });
+                              }}
+                            >
+                              <span>添加新类型</span>
+                            </div>)
                           }
-                        </div>);
+                        </React.Fragment>);
                       })
                     }
-
-                    {/*<div className={styles.item}>*/}
-                    {/*  <span>插件</span>*/}
-                    {/*  */}
-                    {/*</div>*/}
                   </div>
                 </>)
               }

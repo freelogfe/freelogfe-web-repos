@@ -562,3 +562,18 @@ export function resourceTypes({...params}: ResourceTypesParamsType = {}) {
     params: params,
   });
 }
+
+// 简单根据父类型列出资源类型
+interface ListSimpleByParentCodeParamsType {
+  parentCode: string;
+  name?: string;
+  category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
+}
+
+export function ListSimpleByParentCode({...params}: ListSimpleByParentCodeParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimpleByParentCode`,
+    params: params,
+  });
+}
