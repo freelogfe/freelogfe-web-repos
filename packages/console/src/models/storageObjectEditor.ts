@@ -246,6 +246,7 @@ const Model: StorageObjectEditorModelType = {
           sha1: string;
           userId: number;
           resourceTypeCode: string;
+          resourceType: string[],
           dependencies: any[];
           customPropertyDescriptors: {
             key: string;
@@ -263,7 +264,7 @@ const Model: StorageObjectEditorModelType = {
           };
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
-      // console.log(data, 'data@#Rwe90ifjsdlkfa');
+      console.log(data_objectDetails, 'data@#Rwe90ifjsdlkfa');
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data_objectDetails || data_objectDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
@@ -305,7 +306,7 @@ const Model: StorageObjectEditorModelType = {
           fullObjectNames: objects.map((r: any) => r.name).join(','),
         };
         const { data } = yield call(FServiceAPI.Storage.batchObjectList, params);
-        console.log(data, 'data sdifjlsdkjlk jlfkds');
+        // console.log(data, 'data sdifjlsdkjlk jlfkds');
         depOs = (data as any[]).map<StorageObjectEditorModelState['depOs'][number]>((o: any) => ({
           id: o.objectId,
           name: o.bucketName + '/' + o.objectName,
@@ -332,7 +333,12 @@ const Model: StorageObjectEditorModelType = {
           bucketName: data_objectDetails.bucketName,
           objectName: data_objectDetails.objectName,
           sha1: data_objectDetails.sha1,
-          resourceTypeValue: null,
+          resourceTypeValue: {
+            value: data_objectDetails.resourceTypeCode,
+            values: [data_objectDetails.resourceTypeCode],
+            label: data_objectDetails.resourceType[data_objectDetails.resourceType.length - 1],
+            labels: data_objectDetails.resourceType,
+          },
           // resourceTypeCodes: keyValue.map((kv) => {
           //   return kv.value;
           // }),
@@ -463,7 +469,7 @@ const Model: StorageObjectEditorModelType = {
         payload: {
           // resourceTypeCodes: payload.value,
           // resourceTypeNames: payload.names,
-          resourceTypeValue: payload.value
+          resourceTypeValue: payload.value,
         },
       });
     },
