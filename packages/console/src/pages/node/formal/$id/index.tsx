@@ -16,7 +16,7 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
-import { Helmet } from 'react-helmet';
+// import { Helmet } from 'react-helmet';
 import useUrlState from '@ahooksjs/use-url-state';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
