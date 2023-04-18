@@ -508,15 +508,15 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         <FFormLayout.FBlock title={'资源类型'}>
           <FResourceTypeInput
             // useKey={'name'}
-            value={storageObjectEditor.resourceTypeCodes}
+            value={storageObjectEditor.resourceTypeValue}
             onChange={(value, selectedOptions) => {
               dispatch<OnChangeTypeAction>({
                 type: 'storageObjectEditor/onChangeType',
                 payload: {
                   value: value,
-                  names: selectedOptions.map((so) => {
-                    return so.label;
-                  }),
+                  // names: selectedOptions.map((so) => {
+                  //   return so.label;
+                  // }),
                 },
               });
             }}
