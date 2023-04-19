@@ -6,16 +6,21 @@ import FComponentsLib from '@freelog/components-lib';
 import { Dropdown } from 'antd';
 
 interface FResourceTypeFilterProps {
-  value: string;
+  value: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   omitTheme?: boolean;
 
   onChange?(value: FResourceTypeFilterProps['value']): void;
 }
 
 interface Option {
-  value: string | number;
+  value: string;
   label: string;
-  values: Array<string | number>;
+  values: string[];
   labels: string[];
   children: Option[];
 }
@@ -62,6 +67,11 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
 
   });
 
+  function onDropdownChange(op: Option) {
+    onChange && onChange(op);
+    set_isOpen(false);
+  }
+
   return (<Dropdown
     // open={true}
     open={_isOpen}
@@ -102,7 +112,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
               key={o0.value}
               onClick={() => {
                 if (o0.children.length === 0) {
-                  // onDropdownChange(o0, [o0]);
+                  onDropdownChange(o0);
                 }
               }}
             >
@@ -118,7 +128,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                             className={styles.item}
                             onClick={() => {
                               if (o1.children.length === 0) {
-                                // onDropdownChange(o1, [o0, o1]);
+                                onDropdownChange(o1);
                               }
                             }}
                           >
@@ -134,28 +144,28 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                                           className={styles.item}
                                           onClick={() => {
                                             if (o2.children.length === 0) {
-                                              // onDropdownChange(o2, [o0, o1, o2]);
+                                              onDropdownChange(o2);
                                             }
                                           }}
                                         >
                                           <span>{o2.label}</span>
                                         </div>
 
-                                        {
-                                          o1Index + 1 === data.length && (<div
-                                            className={styles.item + ' ' + styles.itemLatest}
-                                            onClick={() => {
-                                              // onDropdownClickCustom({
-                                              //   value: o1.value,
-                                              //   values: o1.values,
-                                              //   label: o1.label,
-                                              //   labels: o1.labels,
-                                              // });
-                                            }}
-                                          >
-                                            <span>添加新类型</span>
-                                          </div>)
-                                        }
+                                        {/*{*/}
+                                        {/*  o1Index + 1 === data.length && (<div*/}
+                                        {/*    className={styles.item + ' ' + styles.itemLatest}*/}
+                                        {/*    onClick={() => {*/}
+                                        {/*      // onDropdownClickCustom({*/}
+                                        {/*      //   value: o1.value,*/}
+                                        {/*      //   values: o1.values,*/}
+                                        {/*      //   label: o1.label,*/}
+                                        {/*      //   labels: o1.labels,*/}
+                                        {/*      // });*/}
+                                        {/*    }}*/}
+                                        {/*  >*/}
+                                        {/*    <span>添加新类型</span>*/}
+                                        {/*  </div>)*/}
+                                        {/*}*/}
                                       </React.Fragment>);
                                     })
                                   }
@@ -176,15 +186,13 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       </div>
     </div>)}
   >
-    <div className={styles.square} style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}>
-      {
-        value === null
-          ? (<span>全部</span>)
-          : (<FComponentsLib.FContentText
-            text={['全部'].join(' / ')}
-            type={'normal'}
-          />)
-      }
+    <div className={styles.square}>
+      <FComponentsLib.FContentText
+        text={value.labels.filter((l) => {
+          return l !== '全部';
+        }).join(' / ') || '全部'}
+        type={'normal'}
+      />
 
       {
         _isOpen

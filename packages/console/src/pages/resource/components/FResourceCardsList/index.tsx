@@ -26,7 +26,12 @@ const resourceStatusOptions = [
 type EventFunc = (id: string | number, record: any, index: number) => void;
 
 interface FResourceCardsListProps {
-  resourceTypeCodes: Array<string | number>;
+  resourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
 
@@ -67,27 +72,6 @@ function FResourceCardsList({
                               onClickRevision,
                               onClickMore,
                             }: FResourceCardsListProps) {
-  // const [typeText, setTypeText] = React.useState('');
-  // const [statusText, setStatusText] = React.useState('');
-  // const [category, setCategory] = React.useState<any>({
-  //   first: -1,
-  //   second: '',
-  // });
-
-  // React.useEffect(() => {
-  //   // 初始化前-1，后面选全部为字符串‘-1’
-  //   if (category.first === -1) {
-  //     return;
-  //   }
-  //   let str = categoryData.first[category.first] || '';
-  //   // @ts-ignore
-  //   if (categoryData.second[category.first] && category.second !== '-1') {
-  //     // @ts-ignore
-  //     str = categoryData.second[category.first][category.second];
-  //   }
-  //   // console.log(str, '09i8owejklsdjflaskdjflksdj')
-  //   onChangeResourceType && onChangeResourceType(str);
-  // }, [category]);
 
   return (
     <>
@@ -98,12 +82,12 @@ function FResourceCardsList({
             <span>{FI18n.i18nNext.t('resource_type')}：</span>
 
             <FResourceTypeFilter
-              value={''}
+              value={resourceTypeCodes}
               onChange={(value) => {
                 if (!value) {
                   return;
                 }
-                // onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
+                onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
               }}
             />
 

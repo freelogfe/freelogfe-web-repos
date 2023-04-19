@@ -5,7 +5,12 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
-  resourceTypeCodes: Array<string | number>;
+  resourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageSize: number;
@@ -50,7 +55,7 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceListPage/onChangeResourceType';
   payload: {
-    value: Array<string | number> | undefined;
+    value: ResourceListPageModelState['resourceTypeCodes'];
   };
 }
 
@@ -99,7 +104,12 @@ export interface ResourceListPageModelType {
 }
 
 const initStates: ResourceListPageModelState = {
-  resourceTypeCodes: ['#all'],
+  resourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   resourceStatus: '#',
   inputText: '',
   dataSource: [],
@@ -142,8 +152,8 @@ const Model: ResourceListPageModelType = {
 
       // console.log(dataSource, 'dataSourcedataSource92834uoi');
 
-      const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.filter((rt) => {
-        return rt !== '#all';
+      const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
       });
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
