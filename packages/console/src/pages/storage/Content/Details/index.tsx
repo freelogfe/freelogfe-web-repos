@@ -198,66 +198,6 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
             <div style={{ height: 15 }} />
           </div>
 
-          {/*<div className={styles.attributes}>*/}
-          {/*  <div className={styles.attributesHeader}>*/}
-          {/*    <span>基础属性</span>*/}
-          {/*    <Space size={20}>*/}
-          {/*      <FComponentsLib.FTextBtn*/}
-          {/*        style={{ fontSize: 12, fontWeight: 600 }}*/}
-          {/*        type='primary'*/}
-          {/*        onClick={async () => {*/}
-          {/*          // onChange({*/}
-          {/*          //   // basePropertiesEditorVisible: true,*/}
-          {/*          //   basePropertiesEditorData: [{*/}
-          {/*          //     key: '',*/}
-          {/*          //     keyError: '',*/}
-          {/*          //     value: '',*/}
-          {/*          //     valueError: '',*/}
-          {/*          //     description: '',*/}
-          {/*          //     descriptionError: '',*/}
-          {/*          //   }],*/}
-          {/*          // });*/}
-
-          {/*const dataSource: {*/}
-          {/*  key: string;*/}
-          {/*  name: string;*/}
-          {/*  value: string;*/}
-          {/*  description: string;*/}
-          {/*} | null = await fResourcePropertyEditor({*/}
-          {/*  disabledKeys: [*/}
-          {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
-          {/*    ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),*/}
-          {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),*/}
-          {/*  ],*/}
-          {/*  disabledNames: [*/}
-          {/*    ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),*/}
-          {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),*/}
-          {/*  ],*/}
-          {/*});*/}
-          {/*// console.log(dataSource, 'dataSource9iojskldjflksdjflk');*/}
-          {/*if (!dataSource) {*/}
-          {/*  return;*/}
-          {/*}*/}
-
-          {/*onChange({*/}
-          {/*  baseProperties: [*/}
-          {/*    ...storageObjectEditor.baseProperties,*/}
-          {/*    dataSource,*/}
-          {/*  ],*/}
-          {/*});*/}
-          {/*        }}*/}
-          {/*      >补充属性</FComponentsLib.FTextBtn>*/}
-          {/*    </Space>*/}
-          {/*  </div>*/}
-          {/*  <div style={{ height: 5 }} />*/}
-          {/*  <FResourceProperties*/}
-          {/*    immutableData={storageObjectEditor.rawProperties}*/}
-          {/*    alterableData={storageObjectEditor.baseProperties}*/}
-          {/*  />*/}
-          {/*  <div style={{ height: 10 }} />*/}
-
-          {/*</div>*/}
-
           <div style={{ height: 5 }} />
 
           {
@@ -327,18 +267,6 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         return dataSource;
                       }),
                     });
-
-                    // await dispatch<OnChange_CustomOptions_Action>({
-                    //   type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                    //   payload: {
-                    //     value: storageObjectEditor.customOptionsData.map((a, b) => {
-                    //       if (b !== index) {
-                    //         return a;
-                    //       }
-                    //       return dataSource;
-                    //     }),
-                    //   },
-                    // });
                   }}
                   onDelete={async (value) => {
                     await onChange({
@@ -346,163 +274,11 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         return a.key !== value.key && a.name !== value.name;
                       }),
                     });
-                    // await dispatch<OnChange_CustomOptions_Action>({
-                    //   type: 'resourceVersionCreatorPage/onChange_CustomOptions',
-                    //   payload: {
-                    //     value: storageObjectEditor.customOptionsData.filter((a) => {
-                    //       return a.key !== value.key && a.name !== value.name;
-                    //     }),
-                    //   },
-                    // });
                   }}
                 />
 
               </div>)
           }
-
-
-          {/*<FBaseProperties*/}
-          {/*  basics={storageObjectEditor.rawProperties}*/}
-          {/*  additions={storageObjectEditor.baseProperties}*/}
-          {/*  onChangeAdditions={(value) => {*/}
-          {/*    onChange({ baseProperties: value });*/}
-          {/*  }}*/}
-          {/*  onClickEdit={(theKey: string) => {*/}
-          {/*    const index: number = storageObjectEditor.baseProperties.findIndex((bp) => {*/}
-          {/*      return bp.key === theKey;*/}
-          {/*    });*/}
-          {/*    onChange({*/}
-          {/*      basePropertyEditorIndex: index,*/}
-          {/*      basePropertyEditorData: {*/}
-          {/*        ...storageObjectEditor.baseProperties[index],*/}
-          {/*        keyError: '',*/}
-          {/*        valueError: '',*/}
-          {/*        descriptionError: '',*/}
-          {/*      },*/}
-          {/*    });*/}
-          {/*  }}*/}
-          {/*  rightTop={<Space size={20}>*/}
-          {/*    <FComponentsLib.FTextBtn*/}
-          {/*      style={{ fontSize: 12, fontWeight: 600 }}*/}
-          {/*      type='primary'*/}
-          {/*      onClick={() => {*/}
-          {/*        onChange({*/}
-          {/*          basePropertiesEditorVisible: true,*/}
-          {/*          basePropertiesEditorData: [{*/}
-          {/*            key: '',*/}
-          {/*            keyError: '',*/}
-          {/*            value: '',*/}
-          {/*            valueError: '',*/}
-          {/*            description: '',*/}
-          {/*            descriptionError: '',*/}
-          {/*          }],*/}
-          {/*        });*/}
-          {/*      }}*/}
-          {/*    >补充属性</FComponentsLib.FTextBtn>*/}
-          {/*  </Space>}*/}
-          {/*/>*/}
-
-          {/*<div style={{ height: 20 }} />*/}
-
-          {/*<Space>*/}
-          {/*  <FComponentsLib.FTextBtn*/}
-          {/*    onClick={() => {*/}
-          {/*      onChange({*/}
-          {/*        customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,*/}
-          {/*      });*/}
-          {/*    }}*/}
-          {/*    type='default'*/}
-          {/*    style={{ fontSize: 12, fontWeight: 600 }}*/}
-          {/*  >*/}
-          {/*    <span>自定义选项（高级）</span>*/}
-          {/*    {storageObjectEditor.customOptionsDataVisible ? (<FComponentsLib.FIcons.FUp />) : (*/}
-          {/*      <FComponentsLib.FIcons.FDown />)}*/}
-          {/*  </FComponentsLib.FTextBtn>*/}
-          {/*  <FTooltip title={'自定义选项'}>*/}
-          {/*    <div>*/}
-          {/*      <FComponentsLib.FIcons.FInfo />*/}
-          {/*    </div>*/}
-          {/*  </FTooltip>*/}
-          {/*</Space>*/}
-
-          {/*{*/}
-          {/*  storageObjectEditor.customOptionsDataVisible && (<>*/}
-
-          {/*    <div style={{ height: 20 }} />*/}
-
-          {/*    <Space size={40}>*/}
-          {/*      <FComponentsLib.FTextBtn*/}
-          {/*        onClick={() => {*/}
-          {/*          dispatch<ChangeAction>({*/}
-          {/*            type: 'storageObjectEditor/change',*/}
-          {/*            payload: {*/}
-          {/*              customOptionsEditorVisible: true,*/}
-          {/*              customOptionsEditorDataSource: [{*/}
-          {/*                key: '',*/}
-          {/*                keyError: '',*/}
-          {/*                description: '',*/}
-          {/*                descriptionError: '',*/}
-          {/*                custom: 'input',*/}
-          {/*                defaultValue: '',*/}
-          {/*                defaultValueError: '',*/}
-          {/*                customOption: '',*/}
-          {/*                customOptionError: '',*/}
-          {/*              }],*/}
-          {/*            },*/}
-          {/*          });*/}
-          {/*        }}*/}
-          {/*        type='primary'*/}
-          {/*        style={{ fontSize: 12, fontWeight: 600 }}*/}
-          {/*      >添加选项</FComponentsLib.FTextBtn>*/}
-
-          {/*    </Space>*/}
-
-          {/*    <div style={{ height: 20 }} />*/}
-          {/*    {*/}
-          {/*      storageObjectEditor.customOptionsData.length > 0 ? (<FCustomOptionsCards*/}
-          {/*          dataSource={storageObjectEditor.customOptionsData.map((cod) => {*/}
-          {/*            return {*/}
-          {/*              theKey: cod.key,*/}
-          {/*              description: cod.description,*/}
-          {/*              type: cod.custom,*/}
-          {/*              value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,*/}
-          {/*            };*/}
-          {/*          })}*/}
-          {/*          onDelete={(theKey) => {*/}
-          {/*            dispatch<ChangeAction>({*/}
-          {/*              type: 'storageObjectEditor/change',*/}
-          {/*              payload: {*/}
-          {/*                customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {*/}
-          {/*                  return cod.key !== theKey;*/}
-          {/*                }),*/}
-          {/*              },*/}
-          {/*            });*/}
-          {/*          }}*/}
-          {/*          onEdit={(theKey) => {*/}
-          {/*            const index: number = storageObjectEditor.customOptionsData.findIndex((cod) => {*/}
-          {/*              return cod.key === theKey;*/}
-          {/*            });*/}
-          {/*            const customOption = storageObjectEditor.customOptionsData[index];*/}
-          {/*            onChange({*/}
-          {/*              customOptionIndex: index,*/}
-          {/*              customOptionEditorData: customOption ? {*/}
-          {/*                key: customOption.key,*/}
-          {/*                keyError: '',*/}
-          {/*                description: customOption.description,*/}
-          {/*                descriptionError: '',*/}
-          {/*                custom: customOption.custom,*/}
-          {/*                defaultValue: customOption.defaultValue,*/}
-          {/*                defaultValueError: '',*/}
-          {/*                customOption: customOption.customOption,*/}
-          {/*                customOptionError: '',*/}
-          {/*              } : null,*/}
-          {/*            });*/}
-          {/*          }}*/}
-          {/*        />)*/}
-          {/*        : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)*/}
-          {/*    }*/}
-          {/*  </>)*/}
-          {/*}*/}
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>

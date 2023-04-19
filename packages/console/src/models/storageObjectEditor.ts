@@ -43,6 +43,7 @@ export interface StorageObjectEditorModelState {
     label: string;
     values: Array<string | number>;
     labels: string[];
+    customInput?: string;
   } | null;
 
   rawProperties: {
@@ -264,7 +265,7 @@ const Model: StorageObjectEditorModelType = {
           };
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
-      console.log(data_objectDetails, 'data@#Rwe90ifjsdlkfa');
+      // console.log(data_objectDetails, 'data@#Rwe90ifjsdlkfa');
       // if (!data || data.userId !== user.cookiesUserID) {
       if (!data_objectDetails || data_objectDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
@@ -318,13 +319,6 @@ const Model: StorageObjectEditorModelType = {
           }),
         }));
       }
-      // console.log(data.resourceType, '#Q@#$R@#FASD');
-
-      // const keyValue: {
-      //   value: string | number;
-      //   label: string;
-      // }[] = yield call(codeToCodes, data_objectDetails.resourceTypeCode || '');
-      // console.log(keyValue, 'keyValue sediofjsdlk keyValue sdoifjsdlk');
       yield put<ChangeAction>({
         type: 'change',
 
@@ -339,12 +333,6 @@ const Model: StorageObjectEditorModelType = {
             label: data_objectDetails.resourceType[data_objectDetails.resourceType.length - 1],
             labels: data_objectDetails.resourceType,
           },
-          // resourceTypeCodes: keyValue.map((kv) => {
-          //   return kv.value;
-          // }),
-          // resourceTypeNames: keyValue.map((kv) => {
-          //   return kv.label;
-          // }),
           size: data_objectDetails.systemProperty.fileSize,
           rawProperties: Object.entries(data_objectDetails.systemProperty).map((s) => ({
             key: s[0],
@@ -387,28 +375,12 @@ const Model: StorageObjectEditorModelType = {
         return;
       }
 
-      // const resourceTypeCodes: string[] = storageObjectEditor.resourceTypeValue
-      //   .filter((rt) => {
-      //     return rt !== '#all';
-      //   })
-      //   .map((rt) => {
-      //     return String(rt);
-      //   });
-
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        // resourceTypeCode: storageObjectEditor.resourceTypeCodes
-        //   .map<string>((rt) => {
-        //     return String(rt);
-        //   })
-        //   .filter((s) => {
-        //     return s !== '';
-        //   }),
-        // resourceTypeCode: storageObjectEditor.resourceTypeCodes.length === 0
-        //   ? undefined
-        //   : resourceTypeCodes[resourceTypeCodes.length - 1],
         resourceTypeCode: String(storageObjectEditor.resourceTypeValue.value),
-        resourceType: storageObjectEditor.resourceTypeValue.labels,
+        resourceType: storageObjectEditor.resourceTypeValue.customInput
+          ? [...storageObjectEditor.resourceTypeValue.labels, storageObjectEditor.resourceTypeValue.customInput]
+          : storageObjectEditor.resourceTypeValue.labels,
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
@@ -447,6 +419,8 @@ const Model: StorageObjectEditorModelType = {
       // console.log(params, 'params098io3wkqlsaejfdlkjfl');
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Storage.updateObject, params);
 
+      console.log(data, 'dataiosdjlfkjsdlkfjlk sdfij;sldkjflk iosdj');
+
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
         return;
@@ -457,7 +431,7 @@ const Model: StorageObjectEditorModelType = {
         payload: {
           id: storageObjectEditor.objectId,
           // type: storageObjectEditor.resourceTypeNames,
-          type: storageObjectEditor.resourceTypeValue.labels,
+          type: data.resourceType,
         },
       });
 
