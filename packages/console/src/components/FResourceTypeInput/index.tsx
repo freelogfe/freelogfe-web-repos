@@ -204,6 +204,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         return option.data.labels.join('/').startsWith(inputValue);
       }}
       onChange={(value) => {
+        if (!value) {
+          return;
+        }
         // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
         const startStr: string = [..._selectedCache.labels, ''].join('/');
         if (!value.startsWith(startStr)) {
@@ -237,7 +240,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         init();
       }}
       onClear={() => {
-
+        onChange && onChange(null);
+        init();
       }}
     >
       <FInput
@@ -413,21 +417,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     </div>
 
   </Dropdown>);
-
-  // return (<Cascader
-  //   allowClear={true}
-  //   value={value}
-  //   options={options}
-  //   onChange={(value: Array<string | number> | undefined, selectedOptions) => {
-  //     // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
-  //     if (!value) {
-  //       onChange && onChange([], []);
-  //       return;
-  //     }
-  //     onChange && onChange(value, selectedOptions as Option[]);
-  //   }}
-  //   placeholder='Please select'
-  // />);
 }
 
 export default FResourceTypeInput;
@@ -457,41 +446,5 @@ function handledData(data: ServerData[], parent: Option | null): Option[] {
   if (result.length === 0) {
     return [];
   }
-  return [
-    // {
-    //   value: '#all',
-    //   label: '全部',
-    //   children: [],
-    // },
-    ...result,
-    // {
-    //   value: '#custom',
-    //   label: '添加新类型',
-    //   children: [],
-    // },
-  ];
+  return result;
 }
-
-// export async function codeToCodes(code: string): Promise<Option[]> {
-//   const { data: data_resourceTypes }: {
-//     data: ServerData[];
-//   } = await FServiceAPI.Resource.resourceTypes();
-//   const arr: Option[] = [];
-//   ha(code, data_resourceTypes, arr);
-//   return arr;
-// }
-//
-// function ha(code: string, data: ServerData[], payload: Option[]) {
-//   const da: ServerData | undefined = data.find((d) => {
-//     return code.startsWith(d.code);
-//   });
-//   if (!da) {
-//     return;
-//   }
-//   payload.push({
-//     value: da.code,
-//     label: da.name,
-//     children: [],
-//   });
-//   ha(code, da.children, payload);
-// }
