@@ -311,7 +311,12 @@ export interface InformalNodeManagerPageModelState {
   // exhibit_TypeOptions2: { value: string; text: string; }[];
   // exhibit_SelectedType1: '-1' | string;
   // exhibit_SelectedType2: '-1' | string;
-  exhibit_ResourceTypeCodes: Array<string | number>;
+  exhibit_ResourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   exhibit_StatusOptions: { value: string; text: string; }[];
   exhibit_SelectedStatus: '0' | '1' | '2';
   exhibit_FilterKeywords: string;
@@ -873,7 +878,12 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   // exhibit_TypeOptions2: [],
   // exhibit_SelectedType1: '-1',
   // exhibit_SelectedType2: '-1',
-  exhibit_ResourceTypeCodes: ['#all'],
+  exhibit_ResourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   exhibit_StatusOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -1163,8 +1173,8 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // console.log(informalNodeManagerPage.exhibit_SelectedType, 'informalNodeManagerPage.exhibit_SelectedTypeiosejlkfsdjlk');
 
-      const resourceTypes: Array<string | number> = informalNodeManagerPage.exhibit_ResourceTypeCodes.filter((rt) => {
-        return rt !== '#all';
+      const resourceTypes: Array<string | number> = informalNodeManagerPage.exhibit_ResourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
       });
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
@@ -1201,7 +1211,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
         total_Length: data_informalExhibits.totalItem,
-        has_FilterCriteria: informalNodeManagerPage.exhibit_ResourceTypeCodes[0] !== '#all'
+        has_FilterCriteria: informalNodeManagerPage.exhibit_ResourceTypeCodes.values[0] !== '#all'
           || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
           || informalNodeManagerPage.exhibit_FilterKeywords !== '',
       });
