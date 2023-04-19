@@ -166,7 +166,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
             value: '#new',
             label: (<div className={styles.autoCompleteOption}>
               <span>{_autoCompleteInput}</span>
-              <FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>
+              {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
+              <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
             </div>),
             data: {
               value: '#new',
@@ -182,7 +183,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
             label: (<div className={styles.autoCompleteOption}>
               <span>{aco.labels.join('/')}</span>
               <FComponentsLib.FContentText
-                text={`${aco.count}个资源`}
+                // text={`${aco.count}个资源`}
+                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                  ResourceQty: aco.count,
+                })}
                 type={'additional2'}
               />
             </div>),
@@ -351,7 +355,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                               });
                                             }}
                                           >
-                                            <span>添加新类型</span>
+                                            {/*<span>添加新类型</span>*/}
+                                            <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
                                           </div>)
                                         }
                                       </React.Fragment>);
@@ -374,7 +379,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                 });
                               }}
                             >
-                              <span>添加新类型</span>
+                              {/*<span>添加新类型</span>*/}
+                              <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
                             </div>)
                           }
                         </React.Fragment>);
@@ -392,7 +398,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     <div className={styles.square} style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}>
       {
         value === null
-          ? (<span>选择类型</span>)
+          ? (<span>{FI18n.i18nNext.t('createresource_selectresourcetype_input_hint')}</span>)
           : (<FComponentsLib.FContentText
             text={(value.customInput ? [...value.labels, value.customInput] : value.labels).join(' / ')}
             type={'normal'}
