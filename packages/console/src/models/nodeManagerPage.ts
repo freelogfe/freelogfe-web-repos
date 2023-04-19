@@ -25,7 +25,12 @@ export interface NodeManagerModelState {
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  exhibit_ResourceTypeCodes: Array<string | number>;
+  exhibit_ResourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   exhibit_ResourceStateOptions: { text: string; value: string }[];
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
@@ -369,7 +374,12 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'> = {
-  exhibit_ResourceTypeCodes: ['#all'],
+  exhibit_ResourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   exhibit_ResourceStateOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -969,8 +979,8 @@ const Model: NodeManagerModelType = {
         });
       }
 
-      const resourceTypes: Array<string | number> = nodeManagerPage.exhibit_ResourceTypeCodes.filter((rt) => {
-        return rt !== '#all';
+      const resourceTypes: Array<string | number> = nodeManagerPage.exhibit_ResourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
       });
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
@@ -992,7 +1002,7 @@ const Model: NodeManagerModelType = {
 
       if (data_Exhibits.dataList.length === 0) {
         if (
-          nodeManagerPage.exhibit_ResourceTypeCodes[0] === '#all' &&
+          nodeManagerPage.exhibit_ResourceTypeCodes.values[0] === '#all' &&
           nodeManagerPage.exhibit_SelectedStatus === '2' &&
           nodeManagerPage.exhibit_InputFilter === ''
         ) {
