@@ -457,13 +457,15 @@ function FPublishObjectFile({
               alt={''}
               style={{ width: 42, height: 48 }}
             />
-            <FComponentsLib.FContentText type={'highlight'}
-                                         text={FI18n.i18nNext.t('newversion_tool_posteditor_title')} />
+            <FComponentsLib.FContentText
+              type={'highlight'}
+              text={FI18n.i18nNext.t('newversion_tool_posteditor_title')}
+            />
             <FComponentsLib.FContentText
               type={'additional2'}
               // text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
               text={FI18n.i18nNext.t('newversion_tool_posteditor_subtitle')}
-              style={{ color: 'rgba(0,0,0,.3)' }}
+              style={{ color: 'rgba(0,0,0,.3)', width: 280 }}
             />
 
             <FComponentsLib.FRectBtn
