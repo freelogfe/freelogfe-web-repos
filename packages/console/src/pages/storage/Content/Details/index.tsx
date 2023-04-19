@@ -509,7 +509,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           <FResourceTypeInput
             // useKey={'name'}
             value={storageObjectEditor.resourceTypeValue}
-            onChange={(value, selectedOptions) => {
+            onChange={(value) => {
               dispatch<OnChangeTypeAction>({
                 type: 'storageObjectEditor/onChangeType',
                 payload: {
