@@ -83,7 +83,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     overlay={(<div className={styles.overlay}>
       <div className={styles.recommend}>
         <FComponentsLib.FContentText
-          text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint2')}
+          text={FI18n.i18nNext.t('filter_resourcetype_hint')}
           type={'additional2'}
         />
         <div style={{ height: 20 }} />
@@ -99,7 +99,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
 
       <div style={{ padding: '0 20px' }}>
         <FComponentsLib.FContentText
-          text={FI18n.i18nNext.t('createresource_selectresourcetype_input_hint3')}
+          text={FI18n.i18nNext.t('filter_resourcetype_hint2')}
           type={'additional2'}
         />
       </div>
@@ -251,9 +251,10 @@ function handledData(data: ServerData[], parent: Option | null): Option[] {
     });
     result.push({
       value: parent.value + '#other',
-      label: '其他',
+      // label: '其他',
+      label: FI18n.i18nNext.t('filter_resourcetype_type_other'),
       values: [...parent.values, parent.value + '#other'],
-      labels: [...parent.labels, '其他'],
+      labels: [...parent.labels, FI18n.i18nNext.t('filter_resourcetype_type_other')],
       children: [],
     });
   } else {
