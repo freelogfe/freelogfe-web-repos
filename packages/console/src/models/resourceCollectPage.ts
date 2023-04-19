@@ -5,7 +5,12 @@ import { ConnectState, ResourceListPageModelState } from '@/models/connect';
 import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCollectPageModelState {
-  resourceTypeCodes: Array<string | number>;
+  resourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageCurrent: number;
@@ -49,7 +54,7 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceCollectPage/onChangeResourceType';
   payload: {
-    value: Array<string | number>;
+    value: ResourceCollectPageModelState['resourceTypeCodes'];
   };
 }
 
@@ -98,7 +103,12 @@ export interface ResourceCollectModelType {
 }
 
 const initStates: ResourceCollectPageModelState = {
-  resourceTypeCodes: ['#all'],
+  resourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   resourceStatus: '#',
   inputText: '',
   dataSource: [],
@@ -154,8 +164,8 @@ const Model: ResourceCollectModelType = {
         dataSource = resourceCollectPage.dataSource;
       }
 
-      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.filter((rt) => {
-        return rt !== '#all';
+      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
       });
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {

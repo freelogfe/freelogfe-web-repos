@@ -43,7 +43,7 @@ function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
 
   if (resource.dataSource.length === 0
     && !resource.inputText
-    && resource.resourceTypeCodes[0] === '#all'
+    && resource.resourceTypeCodes.values.length === 1 && resource.resourceTypeCodes.value === '#all'
     && resource.resourceStatus === '#') {
     return (<FNoDataTip
       height={'calc(100vh - 140px)'}
