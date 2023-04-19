@@ -37,58 +37,68 @@ interface FResourceTypeInputProps {
 }
 
 interface FResourceTypeInputStates {
-  mode: 'select' | 'input';
-  options: Option[];
-  isOpen: boolean;
-  selectedCache: {
+
+  $options: Option[];
+
+  _mode: 'select' | 'input';
+  _isOpen: boolean;
+  _selectedCache: {
     value: string | number;
     label: string;
     values: Array<string | number>;
     labels: string[];
   } | null;
-  autoCompleteOptions: {
+  _autoCompleteOptions: {
     value: string;
     label: string;
     values: string[];
     labels: string[];
     count: number;
   }[];
-  autoCompleteInput: string;
+  _autoCompleteInput: string;
 }
 
 const initStates: FResourceTypeInputStates = {
-  mode: 'select',
-  options: [],
-  isOpen: false,
-  selectedCache: null,
-  autoCompleteOptions: [],
+  $options: [],
+  _mode: 'select',
+  _isOpen: false,
+  _selectedCache: null,
+  _autoCompleteOptions: [],
   // autoCompleteInputStarWith: '',
-  autoCompleteInput: '',
+  _autoCompleteInput: '',
 };
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   // const refAutoComplete = React.useRef(null);
 
-  const [mode, set_mode] = React.useState<FResourceTypeInputStates['mode']>(initStates['mode']);
-  const [isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['isOpen']>(initStates['isOpen']);
-  const [options, set_options] = React.useState<FResourceTypeInputStates['options']>(initStates['options']);
-  const [selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['selectedCache']>(initStates['selectedCache']);
-  const [autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['autoCompleteOptions']>(initStates['autoCompleteOptions']);
+  const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
+  const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
+  const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
+  const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
+  const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
   // const [autoCompleteInputStarWith, set_autoCompleteInputStarWith] = React.useState<FResourceTypeInputStates['autoCompleteInputStarWith']>(initStates['autoCompleteInputStarWith']);
-  const [autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['autoCompleteInput']>(initStates['autoCompleteInput']);
+  const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
 
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes();
     const options: Option[] = handledData(data_resourceTypes, null);
-    set_options(options);
+    set$options(options);
   });
 
   AHooks.useUnmount(() => {
 
   });
+
+  function init() {
+    set_mode(initStates['_mode']);
+    set_isOpen(initStates['_isOpen']);
+    set_selectedCache(initStates['_selectedCache']);
+    set_autoCompleteOptions(initStates['_autoCompleteOptions']);
+    set_autoCompleteInput(initStates['_autoCompleteInput']);
+  }
 
   // console.log(autoCompleteInput, 'autoCompleteInput sd9ifoj;sldkfjsdlfjlkj');
 
@@ -128,24 +138,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       // parentCode: 'RT005',
     });
 
-    // console.log(data_list, 'dataojdslkfjlksdjfl sdflkajsdlkfjksldjfl');
-    // console.log(startWidth, 'startWidth sdiofjsldkjflsdjflkjlkj');
-    //
-    // const op: FResourceTypeInputStates['autoCompleteOptions'] = [];
-    //
-    // if (!data_list.some((l) => {
-    //   return startWidth + l.name === autoCompleteInput;
-    // })) {
-    //   op.push({
-    //     value: '#input',
-    //     label: (<div className={styles.autoCompleteOption}>
-    //       <span>{startWidth}</span>
-    //       {/*<FComponentsLib.FContentText text={`${l.resourceCount}个资源`} type={'additional2'} />*/}
-    //       <FComponentsLib.FTextBtn type={'primary'}>添加新类型</FComponentsLib.FTextBtn>
-    //     </div>),
-    //   });
-    // }
-
     set_autoCompleteOptions(data_list.map((l) => {
       return {
         value: l.code,
@@ -157,13 +149,13 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     }));
   }
 
-  if (mode === 'input' && selectedCache) {
+  if (_mode === 'input' && _selectedCache) {
     return (<AutoComplete
       // ref={refAutoComplete}
       autoFocus={true}
       allowClear={true}
       defaultOpen={true}
-      options={autoCompleteOptions.map((aco) => {
+      options={_autoCompleteOptions.map((aco) => {
         return {
           value: aco.value,
           label: (<div className={styles.autoCompleteOption}>
@@ -179,7 +171,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       style={{ width: 360 }}
       // onSelect={onSelect}
       // onSearch={onSearch}
-      value={autoCompleteInput}
+      value={_autoCompleteInput}
       className={styles.AutoComplete}
       filterOption={(inputValue, option: any) => {
         // console.log(inputValue, option);
@@ -187,15 +179,14 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       }}
       onChange={(value) => {
         // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
-        const startStr: string = [...selectedCache.labels, ''].join('/');
+        const startStr: string = [..._selectedCache.labels, ''].join('/');
         if (!value.startsWith(startStr)) {
           return;
         }
-
         set_autoCompleteInput(value);
       }}
       onSelect={(value: any, op: any) => {
-        const data: FResourceTypeInputStates['autoCompleteOptions'][number] = op.data;
+        const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
         // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
         onChange && onChange({
           value: data.value,
@@ -204,8 +195,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           labels: data.labels,
           children: [],
         }, []);
-        set_mode('select');
+        // set_mode('select');
         // set_isOpen(false);
+        init();
       }}
       onClear={() => {
 
@@ -220,7 +212,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   return (<Dropdown
     // open={true}
-    open={isOpen}
+    open={_isOpen}
     onOpenChange={(o) => {
       set_isOpen(o);
     }}
@@ -252,7 +244,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       <div style={{ height: 20 }} />
       <div className={styles.FCascader}>
         {
-          options.map((o0) => {
+          $options.map((o0) => {
             return (<div
               className={styles.item}
               key={o0.value}
@@ -372,7 +364,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       </div>
     </div>)}
   >
-    <div className={styles.square} style={{ borderColor: isOpen ? '#2784FF' : '#D4D4D4' }}>
+    <div className={styles.square} style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}>
       {
         value === null
           ? (<span>选择类型</span>)
@@ -380,7 +372,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       }
 
       {
-        isOpen
+        _isOpen
           ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
           : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
       }
