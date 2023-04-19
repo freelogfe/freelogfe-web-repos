@@ -52,7 +52,7 @@ function Task({
   AHooks.useMount(async () => {
     // const startTime = Date.now();
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
-    console.log(fileSha1.current, task, 'fileSha1.currentsdifjsldkfjlkj');
+    // console.log(fileSha1.current, task, 'fileSha1.currentsdifjsldkfjlkj');
     // const endTime = Date.now();
     // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
@@ -161,7 +161,7 @@ function Task({
     </div>
 
     {
-      taskState === 'loading' && (<FComponentsLib.FIcons.FLoading />)
+      taskState === 'loading' && (<FComponentsLib.FTextBtn>加载中...</FComponentsLib.FTextBtn>)
     }
     {
       taskState === 'uploading' && (<Uploading
