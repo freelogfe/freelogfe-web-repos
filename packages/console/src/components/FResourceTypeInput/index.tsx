@@ -29,8 +29,6 @@ interface FResourceTypeInputProps {
     customInput?: string;
   } | null;
 
-  // useKey?: 'code' | 'name';
-
   onChange?(value: FResourceTypeInputProps['value']): void;
 }
 
@@ -368,14 +366,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                             o1Index + 1 === data.length && (<div
                               className={styles.item + ' ' + styles.itemLatest}
                               onClick={() => {
-                                // set_mode('input');
-                                // set_selectedCache({
-                                //   value: o0.value,
-                                //   values: o0.values,
-                                //   label: o0.label,
-                                //   labels: o0.labels,
-                                // });
-                                // set_autoCompleteInput([...o0.labels, ''].join('/'));
                                 onDropdownClickCustom({
                                   value: o0.value,
                                   values: o0.values,

@@ -98,12 +98,12 @@ function FResourceCardsList({
             <span>{FI18n.i18nNext.t('resource_type')}：</span>
 
             <FResourceTypeFilter
-              value={resourceTypeCodes}
+              value={''}
               onChange={(value) => {
                 if (!value) {
                   return;
                 }
-                onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
+                // onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
               }}
             />
 
