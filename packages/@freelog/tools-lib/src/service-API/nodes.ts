@@ -66,7 +66,8 @@ interface SetNodeInfoParamsType {
   nodeLogo: string;
   nodeTitle: string;
   nodeShortDescription: string;
-  nodeVisibility: 1 | 2 | 3; // 可见性 1：公开 2：私密 3：暂停
+  // nodeVisibility: 1 | 2 | 3; // 可见性 1：公开 2：私密 3：暂停
+  status:  1 | 2 | 8; // 可见性 1：公开 2：私密 3：暂停
   nodeSuspendInfo: string;
 }
 

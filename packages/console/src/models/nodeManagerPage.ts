@@ -7,6 +7,7 @@ import { history } from 'umi';
 import moment, { Moment } from 'moment';
 import { onlineExhibit } from '@/pages/node/utils/tools';
 import { message } from 'antd';
+import fMessage from '@/components/fMessage';
 
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
@@ -642,7 +643,7 @@ const Model: NodeManagerModelType = {
           nodeDomain: string;
           nodeTitle: string;
           nodeShortDescription: string;
-          nodeVisibility: 1 | 2 | 3;
+          status: 1 | 2 | 3;
           nodeSuspendInfo: string;
         }
       } = yield call(FServiceAPI.Node.details, params);
@@ -658,9 +659,9 @@ const Model: NodeManagerModelType = {
             cover: data_nodeDetails.nodeLogo || '',
             title: data_nodeDetails.nodeTitle || '',
             introduction: data_nodeDetails.nodeShortDescription || '',
-            limitation: data_nodeDetails.nodeVisibility === 1
+            limitation: data_nodeDetails.status === 1
               ? 'public'
-              : data_nodeDetails.nodeVisibility === 2
+              : data_nodeDetails.status === 2
                 ? 'private'
                 : 'pause',
             limitationMessage: data_nodeDetails.nodeSuspendInfo || '',
@@ -837,11 +838,11 @@ const Model: NodeManagerModelType = {
         nodeLogo: payload.value,
         nodeTitle: nodeManagerPage.setting_nodeInfo.title,
         nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
-        nodeVisibility: nodeManagerPage.setting_nodeInfo.limitation === 'public'
+        status: nodeManagerPage.setting_nodeInfo.limitation === 'public'
           ? 1
           : nodeManagerPage.setting_nodeInfo.limitation === 'private'
             ? 2
-            : 3, // 可见性 1：公开 2：私密 3：暂停
+            : 8, // 可见性 1：公开 2：私密 3：暂停
         nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
       };
 
@@ -894,15 +895,20 @@ const Model: NodeManagerModelType = {
         nodeLogo: nodeManagerPage.setting_nodeInfo.cover,
         nodeTitle: nodeManagerPage.setting_nodeTitle,
         nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
-        nodeVisibility: nodeManagerPage.setting_nodeLimitation === 'public'
+        status: nodeManagerPage.setting_nodeLimitation === 'public'
           ? 1
           : nodeManagerPage.setting_nodeInfo.limitation === 'private'
             ? 2
-            : 3, // 可见性 1：公开 2：私密 3：暂停
+            : 8, // 可见性 1：公开 2：私密 3：暂停
         nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage,
       };
 
       const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
