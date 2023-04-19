@@ -68,6 +68,8 @@ const initStates: FResourceTypeInputStates = {
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
+  // const refAutoComplete = React.useRef(null);
+
   const [mode, set_mode] = React.useState<FResourceTypeInputStates['mode']>(initStates['mode']);
   const [isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['isOpen']>(initStates['isOpen']);
   const [options, set_options] = React.useState<FResourceTypeInputStates['options']>(initStates['options']);
@@ -157,6 +159,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   if (mode === 'input' && selectedCache) {
     return (<AutoComplete
+      // ref={refAutoComplete}
+      autoFocus={true}
+      allowClear={true}
+      defaultOpen={true}
       options={autoCompleteOptions.map((aco) => {
         return {
           value: aco.value,
@@ -175,6 +181,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       // onSearch={onSearch}
       value={autoCompleteInput}
       className={styles.AutoComplete}
+      filterOption={(inputValue, option: any) => {
+        // console.log(inputValue, option);
+        return option.data.labels.join('/').startsWith(inputValue);
+      }}
       onChange={(value) => {
         // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
         const startStr: string = [...selectedCache.labels, ''].join('/');
@@ -196,6 +206,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         }, []);
         set_mode('select');
         // set_isOpen(false);
+      }}
+      onClear={() => {
+
       }}
     >
       <FInput
