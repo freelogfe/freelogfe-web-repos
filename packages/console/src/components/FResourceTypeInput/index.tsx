@@ -6,8 +6,6 @@ import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 
-// import { ListSimpleByParentCode } from '../../../../@freelog/tools-lib/src/service-API/resources';
-
 interface Option {
   value: string | number;
   label: string;
