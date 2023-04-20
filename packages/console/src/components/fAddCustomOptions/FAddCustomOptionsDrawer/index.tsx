@@ -157,6 +157,7 @@ function FAddCustomOptionsDrawer({
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
+            || eds.name === '' || eds.nameError !== ''
             || (eds.type === 'input'
               ? (eds.inputError !== '')
               : eds.select.some((s) => {
