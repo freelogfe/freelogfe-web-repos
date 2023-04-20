@@ -14,26 +14,26 @@ import fMessage from '@/components/fMessage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
-const resource_TypeData = [
-  { value: '插件', parentValue: '#' },
-  { value: '阅读', parentValue: '#' },
-  { value: '音频', parentValue: '#' },
-  { value: '图片', parentValue: '#' },
-  { value: '视频', parentValue: '#' },
-  { value: '游戏', parentValue: '#' },
-  { value: '文章', parentValue: '阅读' },
-  { value: '演示文稿', parentValue: '阅读' },
-  { value: '音效', parentValue: '音频' },
-  { value: '音乐', parentValue: '音频' },
-  { value: '播客节目', parentValue: '音频' },
-  { value: '照片', parentValue: '图片' },
-  { value: '插画', parentValue: '图片' },
-  { value: '动态影像', parentValue: '视频' },
-  { value: '实拍片段', parentValue: '视频' },
-  { value: '短视频', parentValue: '视频' },
-  { value: '长视频', parentValue: '视频' },
-  { value: '红白机', parentValue: '游戏' },
-] as const;
+// const resource_TypeData = [
+//   { value: '插件', parentValue: '#' },
+//   { value: '阅读', parentValue: '#' },
+//   { value: '音频', parentValue: '#' },
+//   { value: '图片', parentValue: '#' },
+//   { value: '视频', parentValue: '#' },
+//   { value: '游戏', parentValue: '#' },
+//   { value: '文章', parentValue: '阅读' },
+//   { value: '演示文稿', parentValue: '阅读' },
+//   { value: '音效', parentValue: '音频' },
+//   { value: '音乐', parentValue: '音频' },
+//   { value: '播客节目', parentValue: '音频' },
+//   { value: '照片', parentValue: '图片' },
+//   { value: '插画', parentValue: '图片' },
+//   { value: '动态影像', parentValue: '视频' },
+//   { value: '实拍片段', parentValue: '视频' },
+//   { value: '短视频', parentValue: '视频' },
+//   { value: '长视频', parentValue: '视频' },
+//   { value: '红白机', parentValue: '游戏' },
+// ] as const;
 
 interface ICandidate {
   name: string;
@@ -307,10 +307,6 @@ export interface InformalNodeManagerPageModelState {
 
   replaceModal_Errors: string[];
 
-  // exhibit_TypeOptions1: { value: string; text: string; }[];
-  // exhibit_TypeOptions2: { value: string; text: string; }[];
-  // exhibit_SelectedType1: '-1' | string;
-  // exhibit_SelectedType2: '-1' | string;
   exhibit_ResourceTypeCodes: {
     value: string;
     label: string;
@@ -773,9 +769,6 @@ interface InformalNodeManagerPageModelType {
     onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
     onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
     onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
-    // onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    // onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    // onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
 
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
 
@@ -849,10 +842,6 @@ interface InformalNodeManagerPageModelType {
 }
 
 const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
-  // 'exhibit_TypeOptions1' |
-  // 'exhibit_TypeOptions2' |
-  // 'exhibit_SelectedType1' |
-  // 'exhibit_SelectedType2' |
   'exhibit_ResourceTypeCodes' |
   'exhibit_StatusOptions' |
   'exhibit_SelectedStatus' |
@@ -862,22 +851,6 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_List' |
   'exhibit_ListTotal' |
   'exhibit_PageError'> = {
-  // exhibit_TypeOptions1: [
-  //   { text: '全部', value: '-1' },
-  //   ...resource_TypeData
-  //     .filter((rt) => {
-  //       return rt.parentValue === '#';
-  //     })
-  //     .map((i) => {
-  //       return {
-  //         value: i.value,
-  //         text: i.value,
-  //       };
-  //     }),
-  // ],
-  // exhibit_TypeOptions2: [],
-  // exhibit_SelectedType1: '-1',
-  // exhibit_SelectedType2: '-1',
   exhibit_ResourceTypeCodes: {
     value: '#all',
     label: '全部',
@@ -1081,30 +1054,6 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    // * onPromptRulePageLeave({ payload }: OnPromptRulePageLeaveAction, { put }: EffectsCommandMap) {
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       // rule_PromptLeavePath: payload.href,
-    //     },
-    //   });
-    //
-    // },
-    // * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, { select }: EffectsCommandMap) {
-    //   const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-    //     informalNodeManagerPage,
-    //   }));
-    //   // history.push(informalNodeManagerPage.rule_PromptLeavePath);
-    // },
-    // * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       // rule_PromptLeavePath: '',
-    //     },
-    //   });
-    // },
     * fetchNodeInfo({}: FetchNodeInfoAction, { select, put, call }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
