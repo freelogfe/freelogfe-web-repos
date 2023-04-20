@@ -577,3 +577,16 @@ export function ListSimpleByParentCode({...params}: ListSimpleByParentCodeParams
     params: params,
   });
 }
+
+// 根据编号取资源类型
+interface GetResourceTypeInfoByCodeParamsType {
+  code: string;
+}
+
+export function getResourceTypeInfoByCode({...params}: GetResourceTypeInfoByCodeParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/getInfoByCode`,
+    params: params,
+  });
+}
