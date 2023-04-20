@@ -67,30 +67,66 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           <table>
             <tbody>
             {
-              exhibitInfoPage.side_BaseAttrs.map((pb) => (<tr key={pb.key}>
-                {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
-                <td><FOverflowTooltip
-                  text={pb.key}
-                  style={{
-                    fontWeight: 400,
-                    lineHeight: '20px',
-                    color: '#222',
-                    fontSize: 14,
-                    maxWidth: 90,
-                  }}
-                /></td>
-                {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
-                <td><FOverflowTooltip
-                  text={pb.value}
-                  style={{
-                    fontWeight: 400,
-                    lineHeight: '20px',
-                    color: '#222',
-                    fontSize: 14,
-                    maxWidth: 90,
-                  }}
-                /></td>
-              </tr>))
+              exhibitInfoPage.side_RawProperties.map((rp) => {
+                return (<tr key={rp.key}>
+                  {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
+                  <td>
+                    <FOverflowTooltip
+                      text={rp.key}
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '20px',
+                        color: '#222',
+                        fontSize: 14,
+                        maxWidth: 90,
+                      }}
+                    />
+                  </td>
+                  {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
+                  <td>
+                    <FOverflowTooltip
+                      text={rp.value}
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '20px',
+                        color: '#222',
+                        fontSize: 14,
+                        maxWidth: 90,
+                      }}
+                    />
+                  </td>
+                </tr>);
+              })
+            }
+            {
+              exhibitInfoPage.side_BaseProperties.map((pb) => {
+                return (<tr key={pb.key}>
+                  {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
+                  <td>
+                    <FOverflowTooltip
+                      text={pb.name}
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '20px',
+                        color: '#222',
+                        fontSize: 14,
+                        maxWidth: 90,
+                      }}
+                    /></td>
+                  {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
+                  <td><FOverflowTooltip
+                    text={pb.value}
+                    style={{
+                      fontWeight: 400,
+                      lineHeight: '20px',
+                      color: '#222',
+                      fontSize: 14,
+                      maxWidth: 90,
+                    }}
+                  />
+                  </td>
+                </tr>);
+              })
             }
             </tbody>
           </table>
@@ -110,7 +146,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               return (<div key={io.key}>
                 <div className={styles.optionTitle}>
                   <Space size={10}>
-                    <FComponentsLib.FContentText text={io.key} />
+                    <FComponentsLib.FContentText text={io.name} />
                     {
                       io.description && (<FTooltip
                         title={io.description}
@@ -330,7 +366,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       visible={exhibitInfoPage.side_CustomOptionsDrawer_Visible}
       // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}
       disabledKeys={[
-        ...exhibitInfoPage.side_BaseAttrs.map((ba) => ba.key),
+        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
         ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
         ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
       ]}

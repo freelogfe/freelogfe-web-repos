@@ -70,12 +70,19 @@ export interface ExhibitInfoPageModelState {
   side_AllVersions: string[];
   side_Version: string;
   side_SettingUnfold: boolean;
-  side_BaseAttrs: {
+  side_RawProperties: {
     key: string;
     value: string;
   }[];
+  side_BaseProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
   side_InheritOptions: {
     key: string;
+    name: string;
     value: string;
     description: string;
     type: 'input' | 'select';
@@ -86,6 +93,7 @@ export interface ExhibitInfoPageModelState {
   }[];
   side_CustomOptions: {
     key: string;
+    name: string;
     value: string;
     description: string;
     valueInput: string;
@@ -339,7 +347,8 @@ const initStates: ExhibitInfoPageModelState = {
   side_AllVersions: [],
   side_Version: '',
   side_SettingUnfold: false,
-  side_BaseAttrs: [],
+  side_RawProperties: [],
+  side_BaseProperties: [],
   side_InheritOptions: [],
   side_CustomOptions: [],
 
@@ -400,7 +409,39 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_ID: '',
         },
       });
-      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      const { data: data_PresentableDetails }: {
+        data: {
+          nodeId: number;
+          userId: number;
+          presentableId: string;
+          presentableName: string;
+          resourceInfo: any;
+          resourceCustomPropertyDescriptors: {
+            candidateItems: string[]
+            defaultValue: string;
+            key: string;
+            name: string;
+            remark: string;
+            type: 'readonlyText' | 'select' | 'editableText';
+          }[];
+          coverImages: string[];
+          onlineStatus: number;
+          policies: any[];
+          presentableTitle: string;
+          resolveResources: any[];
+          tags: string[];
+          version: string;
+          resourceSystemProperty: {
+            [k: string]: string
+          };
+          presentableRewriteProperty: {
+            key: string;
+            remark: string;
+            value: string;
+          }[];
+        };
+      } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      console.log(data_PresentableDetails, 'data_PresentableDetailsisdflksdjlk');
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
@@ -434,7 +475,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // 要禁用的键
       const disabledRewriteKeys = [
-        ...data_PresentableDetails.resourceCustomPropertyDescriptors.map((i: any) => i.key),
+        ...data_PresentableDetails.resourceCustomPropertyDescriptors.map((i) => i.key),
       ];
 
       // console.log(data, 'data2341234');
@@ -564,28 +605,30 @@ const Model: ExhibitInfoPageModelType = {
 
           side_AllVersions: data_ResourceInfo.resourceVersions.map((d2: any) => d2.version),
           side_Version: data_PresentableDetails.version,
-
-          side_BaseAttrs: [
-            ...Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
-              key: s[0],
-              value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+          side_RawProperties: Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
+            key: s[0],
+            value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+          })),
+          side_BaseProperties: data_PresentableDetails.resourceCustomPropertyDescriptors
+            .filter((rd: any) => rd.type === 'readonlyText')
+            .map((rd: any) => ({
+              key: rd.key,
+              name: rd.name,
+              value: rd.defaultValue,
+              description: rd.remark,
             })),
-            ...data_PresentableDetails.resourceCustomPropertyDescriptors
-              .filter((rd: any) => rd.type === 'readonlyText')
-              .map((rd: any) => ({
-                key: rd.key,
-                value: rd.defaultValue,
-              })),
-          ],
-          side_InheritOptions: (data_PresentableDetails.resourceCustomPropertyDescriptors as any[])
-            .filter((rd: any) => rd.type !== 'readonlyText')
-            .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd: any) => {
-              const prp = data_PresentableDetails.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+          side_InheritOptions: data_PresentableDetails.resourceCustomPropertyDescriptors
+            .filter((rd) => {
+              return rd.type === 'editableText' || rd.type === 'select';
+            })
+            .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd) => {
+              const prp = data_PresentableDetails.presentableRewriteProperty.find((pr) => pr.key === rd.key);
               const value = prp ? prp.value : rd.defaultValue;
               // console.log(prp, 'rd1234234#####');
               // console.log(rd, 'rd1234234******');
               return {
                 key: rd?.key || '',
+                name: rd?.name || '',
                 value: value,
                 type: rd.type === 'select' ? 'select' : 'input',
                 options: rd.type === 'select' ? rd.candidateItems : [],
@@ -597,9 +640,10 @@ const Model: ExhibitInfoPageModelType = {
             }),
           side_CustomOptions: (data_PresentableDetails.presentableRewriteProperty as any[])
             .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-            .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => {
+            .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr) => {
               return {
                 key: pr.key,
+                name: pr.name,
                 value: pr.value,
                 description: pr.remark,
                 valueInput: pr.value,
@@ -1195,6 +1239,7 @@ const Model: ExhibitInfoPageModelType = {
         ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
           return {
             key: v.key,
+            name: v.name,
             value: v.defaultValue,
             description: v.description,
             option: [],
@@ -1254,6 +1299,7 @@ const Model: ExhibitInfoPageModelType = {
         }
         return {
           key: co.key,
+          name: co.name,
           value: payload.value.value,
           description: payload.value.description,
           valueInput: payload.value.value,
