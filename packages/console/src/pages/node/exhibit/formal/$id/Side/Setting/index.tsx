@@ -8,13 +8,13 @@ import {
   ExhibitInfoPageModelState,
   OnBlur_Side_CustomOptions_ValueInput_Action,
   OnBlur_Side_InheritOptions_ValueInput_Action,
-  OnCancel_AddCustomOptionsDrawer_Action,
-  OnCancel_CustomOptionDrawer_Action,
+  // OnCancel_AddCustomOptionsDrawer_Action,
+  // OnCancel_CustomOptionDrawer_Action,
   OnChange_Side_CustomOptions_ValueInput_Action,
   OnChange_Side_InheritOptions_ValueInput_Action,
-  OnClick_Side_AddCustomOptionsBtn_Action,
+  // OnClick_Side_AddCustomOptionsBtn_Action,
   OnClick_Side_CustomOptions_DeleteBtn_Action,
-  OnClick_Side_CustomOptions_EditBtn_Action,
+  // OnClick_Side_CustomOptions_EditBtn_Action,
   OnClick_Side_InheritOptions_ResetBtn_Action,
   OnConfirm_AddCustomOptionsDrawer_Action, OnConfirm_CustomOptionDrawer_Action,
 } from '@/models/exhibitInfoPage';
@@ -24,13 +24,14 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
-import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+// import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+// import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -258,11 +259,59 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                       <div>
                         <FComponentsLib.FTextBtn
                           // theme="primary"
-                          onClick={() => {
-                            dispatch<OnClick_Side_CustomOptions_EditBtn_Action>({
-                              type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn',
+                          onClick={async () => {
+                            // dispatch<OnClick_Side_CustomOptions_EditBtn_Action>({
+                            //   type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn',
+                            //   payload: {
+                            //     index: index,
+                            //   },
+                            // });
+
+                            const dataSource: {
+                              key: string;
+                              name: string;
+                              type: 'input' | 'select';
+                              input: string;
+                              select: string[];
+                              description: string;
+                            } | null = await fResourceOptionEditor({
+                              disabledKeys: [
+                                ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                                ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                                ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
+                              ],
+                              disabledNames: [
+                                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                                ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                                ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+                              ],
+                              //co
+                              defaultData: {
+                                key: co.key,
+                                name: co.name,
+                                type: 'input',
+                                input: co.value,
+                                select: [],
+                                description: co.description,
+                              },
+                              hideTypeSelect: true,
+                            });
+
+                            if (!dataSource) {
+                              return;
+                            }
+
+                            dispatch<OnConfirm_CustomOptionDrawer_Action>({
+                              type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
                               payload: {
-                                index: index,
+                                value: {
+                                  key: dataSource.key,
+                                  name: dataSource.name,
+                                  value: dataSource.input,
+                                  description: dataSource.description,
+                                  valueType: 'input',
+                                },
                               },
                             });
                           }}
@@ -342,17 +391,12 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 description: string;
               } | null = await fResourceOptionEditor({
                 disabledKeys: [
-                  // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                  // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                  // ...resourceVer|sionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
                   ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
                   ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
                   ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
                   ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                 ],
                 disabledNames: [
-                  // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                  // ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
                   ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
                   ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
                   ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
@@ -431,31 +475,31 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
     {/*  }}*/}
     {/*/>*/}
 
-    <FCustomOptionEditorDrawer
-      visible={exhibitInfoPage.side_CustomOptionDrawer_Visible}
-      disabledKeyInput
-      disabledValueTypeSelect
-      hideValueTypeSelect
-      dataSource={{
-        key: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.key || '',
-        value: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.value || '',
-        description: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.description || '',
-        valueType: 'input',
-      }}
-      onConfirm={(value) => {
-        dispatch<OnConfirm_CustomOptionDrawer_Action>({
-          type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
-          payload: {
-            value: value,
-          },
-        });
-      }}
-      onCancel={() => {
-        dispatch<OnCancel_CustomOptionDrawer_Action>({
-          type: 'exhibitInfoPage/onCancel_CustomOptionDrawer',
-        });
-      }}
-    />
+    {/*<FCustomOptionEditorDrawer*/}
+    {/*  visible={exhibitInfoPage.side_CustomOptionDrawer_Visible}*/}
+    {/*  disabledKeyInput*/}
+    {/*  disabledValueTypeSelect*/}
+    {/*  hideValueTypeSelect*/}
+    {/*  dataSource={{*/}
+    {/*    key: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.key || '',*/}
+    {/*    value: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.value || '',*/}
+    {/*    description: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.description || '',*/}
+    {/*    valueType: 'input',*/}
+    {/*  }}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    dispatch<OnConfirm_CustomOptionDrawer_Action>({*/}
+    {/*      type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',*/}
+    {/*      payload: {*/}
+    {/*        value: value,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    dispatch<OnCancel_CustomOptionDrawer_Action>({*/}
+    {/*      type: 'exhibitInfoPage/onCancel_CustomOptionDrawer',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
   </>);
 }

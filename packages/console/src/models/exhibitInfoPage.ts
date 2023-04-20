@@ -99,13 +99,13 @@ export interface ExhibitInfoPageModelState {
     valueInput: string;
     valueInputError: string;
   }[];
-  side_CustomOptionsDrawer_Visible: boolean;
-  side_CustomOptionDrawer_Visible: boolean;
-  side_CustomOptionDrawer_DataSource: {
-    key: string;
-    value: string;
-    description: string;
-  } | null;
+  // side_CustomOptionsDrawer_Visible: boolean;
+  // side_CustomOptionDrawer_Visible: boolean;
+  // side_CustomOptionDrawer_DataSource: {
+  //   key: string;
+  //   value: string;
+  //   description: string;
+  // } | null;
   side_ResourceID: string;
   side_ResourceName: string;
   side_ResourceType: string[];
@@ -217,12 +217,12 @@ export interface OnBlur_Side_InheritOptions_ValueInput_Action extends AnyAction 
   };
 }
 
-export interface OnClick_Side_CustomOptions_EditBtn_Action extends AnyAction {
-  type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn';
-  payload: {
-    index: number;
-  };
-}
+// export interface OnClick_Side_CustomOptions_EditBtn_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn';
+//   payload: {
+//     index: number;
+//   };
+// }
 
 export interface OnClick_Side_CustomOptions_DeleteBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn';
@@ -264,15 +264,16 @@ export interface OnConfirm_AddCustomOptionsDrawer_Action extends AnyAction {
   };
 }
 
-export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
-  type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
-}
+// export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
+// }
 
 export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer';
   payload: {
     value: {
       key: string;
+      name: string;
       value: string;
       description: string;
       valueType: 'input' | 'select';
@@ -280,9 +281,9 @@ export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
   };
 }
 
-export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
-  type: 'exhibitInfoPage/onCancel_CustomOptionDrawer';
-}
+// export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onCancel_CustomOptionDrawer';
+// }
 
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
@@ -304,15 +305,15 @@ export interface ExhibitInfoPageModelType {
     onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_InheritOptions_ValueInput: (action: OnBlur_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Side_CustomOptions_DeleteBtn: (action: OnClick_Side_CustomOptions_DeleteBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_CustomOptions_ValueInput: (action: OnChange_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_CustomOptions_ValueInput: (action: OnBlur_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     // onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
-    onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    // onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
-    onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
+    // onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -359,9 +360,9 @@ const initStates: ExhibitInfoPageModelState = {
   side_InheritOptions: [],
   side_CustomOptions: [],
 
-  side_CustomOptionsDrawer_Visible: false,
-  side_CustomOptionDrawer_Visible: false,
-  side_CustomOptionDrawer_DataSource: null,
+  // side_CustomOptionsDrawer_Visible: false,
+  // side_CustomOptionDrawer_Visible: false,
+  // side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',
   side_ResourceName: '',
   side_ResourceType: [],
@@ -1091,28 +1092,28 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已更新');
     },
-    * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
-      select,
-      put,
-    }: EffectsCommandMap) {
-      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
-        exhibitInfoPage,
-      }));
-
-      const currentData = exhibitInfoPage.side_CustomOptions[payload.index];
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionDrawer_Visible: true,
-          side_CustomOptionDrawer_DataSource: {
-            key: currentData.key,
-            value: currentData.valueInput,
-            description: currentData.description,
-          },
-        },
-      });
-    },
+    // * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
+    //   select,
+    //   put,
+    // }: EffectsCommandMap) {
+    //   const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+    //     exhibitInfoPage,
+    //   }));
+    //
+    //   const currentData = exhibitInfoPage.side_CustomOptions[payload.index];
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionDrawer_Visible: true,
+    //       side_CustomOptionDrawer_DataSource: {
+    //         key: currentData.key,
+    //         value: currentData.valueInput,
+    //         description: currentData.description,
+    //       },
+    //     },
+    //   });
+    // },
     * onClick_Side_CustomOptions_DeleteBtn({ payload }: OnClick_Side_CustomOptions_DeleteBtn_Action, {
       select,
       call,
@@ -1285,14 +1286,14 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已添加');
     },
-    * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionsDrawer_Visible: false,
-        },
-      });
-    },
+    // * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionsDrawer_Visible: false,
+    //     },
+    //   });
+    // },
     * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
       select,
       call,
@@ -1319,8 +1320,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           side_CustomOptions: side_CustomOptions,
-          side_CustomOptionDrawer_Visible: false,
-          side_CustomOptionDrawer_DataSource: null,
+          // side_CustomOptionDrawer_Visible: false,
+          // side_CustomOptionDrawer_DataSource: null,
         },
       });
 
@@ -1340,15 +1341,15 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已更新');
     },
-    * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionDrawer_Visible: false,
-          side_CustomOptionDrawer_DataSource: null,
-        },
-      });
-    },
+    // * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionDrawer_Visible: false,
+    //       side_CustomOptionDrawer_DataSource: null,
+    //     },
+    //   });
+    // },
   },
   reducers: {
     change(state, { payload }) {
@@ -1592,7 +1593,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
-            // name: io.name,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };
@@ -1601,7 +1602,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
-            // name: io.name,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };
