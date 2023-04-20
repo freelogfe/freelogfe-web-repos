@@ -15,6 +15,7 @@ interface fResourceOptionEditorProps {
     select: string[];
     description: string;
   } | null;
+  hideTypeSelect?: boolean;
   noneEditableFields?: Array<'key' | 'name' | 'description' | 'type' | 'input' | 'select'>;
 }
 
@@ -31,6 +32,7 @@ function fResourceOptionEditor({
                                  disabledKeys,
                                  disabledNames,
                                  defaultData,
+                                 hideTypeSelect = false,
                                  noneEditableFields = [],
                                }: fResourceOptionEditorProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
@@ -40,6 +42,7 @@ function fResourceOptionEditor({
       disabledKeys={disabledKeys}
       disabledNames={disabledNames}
       noneEditableFields={noneEditableFields}
+      hideTypeSelect={hideTypeSelect}
       onOk={(obj) => {
         resolve(obj);
       }}

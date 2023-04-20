@@ -30,6 +30,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -327,10 +328,34 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           <FComponentsLib.FCircleBtn
             // theme="text"
             size='small'
-            onClick={() => {
-              dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
-                type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
+            onClick={async () => {
+              // dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
+              //   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
+              // });
+
+              const dataSource: {
+                key: string;
+                name: string;
+                type: 'input' | 'select';
+                input: string;
+                select: string[];
+                description: string;
+              } | null = await fResourceOptionEditor({
+                disabledKeys: [
+                  // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                  // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                  // ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                  // ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                ],
+                hideTypeSelect: true,
               });
+
+              if (!dataSource) {
+                return;
+              }
             }}
           />
           <span

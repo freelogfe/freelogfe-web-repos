@@ -9,6 +9,7 @@ import { FUtil } from '@freelog/tools-lib';
 interface FResourceOptionEditorDrawerProps {
   disabledKeys: string[];
   disabledNames: string[];
+  hideTypeSelect?: boolean;
   defaultData: {
     key: string;
     name: string;
@@ -66,6 +67,7 @@ function FResourceOptionEditorDrawer({
                                        disabledKeys,
                                        disabledNames,
                                        defaultData,
+                                       hideTypeSelect = false,
                                        noneEditableFields = [],
                                        onOk,
                                        onClose,
@@ -251,50 +253,53 @@ function FResourceOptionEditorDrawer({
         </>)}
       </div>
 
-      <div className={styles.optionItem}>
-        <div className={styles.title}>
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />
-        </div>
-        <div style={{ height: 5 }} />
-        <div
-          className={styles.typeSelect}
-          style={{
-            opacity: noneEditableFields.includes('type') ? .6 : 1,
-          }}
-        >
-          <div
-            className={[styles.typeSelect_option, typeSelect === 'input' ? styles.active : ''].join(' ')}
-            style={{
-              cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
-            }}
-            onClick={() => {
-              if (noneEditableFields.includes('type')) {
-                return;
-              }
-              set_typeSelect('input');
-            }}
-          >输入框
+      {
+        !hideTypeSelect && (<div className={styles.optionItem}>
+          <div className={styles.title}>
+            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />
           </div>
+          <div style={{ height: 5 }} />
           <div
+            className={styles.typeSelect}
             style={{
-              cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
+              opacity: noneEditableFields.includes('type') ? .6 : 1,
             }}
-            className={[styles.typeSelect_option, typeSelect === 'select' ? styles.active : ''].join(' ')}
-            onClick={() => {
-              if (noneEditableFields.includes('type')) {
-                return;
-              }
-              set_typeSelect('select');
-            }}
-          >下拉选择器
+          >
+            <div
+              className={[styles.typeSelect_option, typeSelect === 'input' ? styles.active : ''].join(' ')}
+              style={{
+                cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
+              }}
+              onClick={() => {
+                if (noneEditableFields.includes('type')) {
+                  return;
+                }
+                set_typeSelect('input');
+              }}
+            >输入框
+            </div>
+            <div
+              style={{
+                cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
+              }}
+              className={[styles.typeSelect_option, typeSelect === 'select' ? styles.active : ''].join(' ')}
+              onClick={() => {
+                if (noneEditableFields.includes('type')) {
+                  return;
+                }
+                set_typeSelect('select');
+              }}
+            >下拉选择器
+            </div>
           </div>
-        </div>
-      </div>
-
+        </div>)
+      }
+      
       {
         typeSelect === 'input' && (<div className={styles.optionItem}>
           <div className={styles.title}>
             <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'默认值'} />
+            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />
           </div>
           <div style={{ height: 5 }} />
           <FInput

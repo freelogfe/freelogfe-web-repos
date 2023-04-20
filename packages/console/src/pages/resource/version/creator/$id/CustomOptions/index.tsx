@@ -2,32 +2,23 @@ import * as React from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-// import FBaseProperties from '@/components/FBaseProperties';
 import { Space } from 'antd';
 import {
   OnChange_BaseProperties_Action,
   OnChange_CustomOptions_Action,
   ResourceVersionCreatorPageModelState,
 } from '@/models/resourceVersionCreatorPage';
-import FTooltip from '@/components/FTooltip';
 import {
   ConnectState,
 } from '@/models/connect';
-import FCustomOptionsCards from '@/components/FCustomOptionsCards';
-import { FI18n } from '@freelog/tools-lib';
-// import FLoadingTip from '@/components/FLoadingTip';
 import FComponentsLib from '@freelog/components-lib';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
-// import fEditFileBaseProp from '@/components/fEditFileBaseProp';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
-import fEditCustomOptions from '@/components/fEditCustomOption';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-
-// import FBasePropertiesCards from '@/components/FBasePropertiesCards';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -36,7 +27,7 @@ interface CustomOptionsProps {
 
 function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsProps) {
 
-  const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
+  // const [customOptionsDataVisible, set_customOptionsDataVisible] = React.useState<boolean>(false);
 
   async function onClick_addOptionBtn() {
     const dataSource: {
