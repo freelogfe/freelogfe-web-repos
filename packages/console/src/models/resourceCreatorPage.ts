@@ -23,6 +23,7 @@ export interface ResourceCreatorPageModelState {
     label: string;
     values: Array<string | number>;
     labels: string[];
+    customInput?: string;
   } | null;
 
   introduction: string;
@@ -159,6 +160,7 @@ const Model: ResourceCreatorPageModelType = {
         name: resourceCreatorPage.name,
         // resourceTypeCode: resourceCreatorPage.resourceTypeCodes[resourceCreatorPage.resourceTypeCodes.length - 1],
         resourceTypeCode: resourceCreatorPage.resourceTypeCodes.value,
+        resourceTypeName: resourceCreatorPage.resourceTypeCodes.customInput || undefined,
         policies: [],
         coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
         intro: resourceCreatorPage.introduction,

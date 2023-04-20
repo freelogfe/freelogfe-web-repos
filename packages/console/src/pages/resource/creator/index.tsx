@@ -160,10 +160,6 @@ function ResourceCreator({
                 }}
               />
 
-              {
-                // !resourceTypeError && (<FComponentsLib.FIcons.FCheck />)
-              }
-
             </div>
           </FFormLayout.FBlock>
 
