@@ -90,7 +90,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               keyError: errorText,
             });
           }}
-
         />
 
         {
@@ -136,7 +135,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       {
         !hideTypeSelect && (<Col span={12}>
           <Space size={5}>
-            <i className={styles.dot} />
+            {/*<i className={styles.dot} />*/}
             <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />
           </Space>
           <div style={{ height: 5 }} />

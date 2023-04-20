@@ -158,7 +158,7 @@ function FAddCustomOptionsDrawer({
         || dataSource.some((eds) => {
           return eds.key === '' || eds.keyError !== ''
             || (eds.type === 'input'
-              ? (eds.input === '' || eds.inputError !== '')
+              ? (eds.inputError !== '')
               : eds.select.some((s) => {
                 return s.value === '' || s.error !== '';
               }))
