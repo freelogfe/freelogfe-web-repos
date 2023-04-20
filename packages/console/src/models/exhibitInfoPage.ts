@@ -246,9 +246,9 @@ export interface OnBlur_Side_CustomOptions_ValueInput_Action extends AnyAction {
   };
 }
 
-export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
-  type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
-}
+// export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
+// }
 
 export interface OnConfirm_AddCustomOptionsDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer';
@@ -308,7 +308,7 @@ export interface ExhibitInfoPageModelType {
     onClick_Side_CustomOptions_DeleteBtn: (action: OnClick_Side_CustomOptions_DeleteBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_CustomOptions_ValueInput: (action: OnChange_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_CustomOptions_ValueInput: (action: OnBlur_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
@@ -1224,14 +1224,14 @@ const Model: ExhibitInfoPageModelType = {
       fMessage('自定义选项已更新');
 
     },
-    * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionsDrawer_Visible: true,
-        },
-      });
-    },
+    // * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionsDrawer_Visible: true,
+    //     },
+    //   });
+    // },
     * onConfirm_AddCustomOptionsDrawer({ payload }: OnConfirm_AddCustomOptionsDrawer_Action, {
       select,
       call,
@@ -1592,7 +1592,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
-            name: io.name,
+            // name: io.name,
             value: io.value,
             remark: io.description,
           };
@@ -1601,7 +1601,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
-            name: io.name,
+            // name: io.name,
             value: io.value,
             remark: io.description,
           };

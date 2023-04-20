@@ -344,11 +344,18 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 disabledKeys: [
                   // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                   // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                  // ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                  // ...resourceVer|sionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                  ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                 ],
                 disabledNames: [
                   // ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
                   // ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
                 ],
                 hideTypeSelect: true,
               });
@@ -400,29 +407,29 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
         <FComponentsLib.FIcons.FDoubleUp /></> : <>更多 <FComponentsLib.FIcons.FDoubleDown /></>}</FComponentsLib.FTextBtn>
     </div>
 
-    <FCustomOptionsEditorDrawer
-      hideTypeSelect
-      visible={exhibitInfoPage.side_CustomOptionsDrawer_Visible}
-      // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}
-      disabledKeys={[
-        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
-        ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
-        ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
-      ]}
-      onConfirm={(value) => {
-        dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
-          type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
-          payload: {
-            value: value,
-          },
-        });
-      }}
-      onCancel={() => {
-        dispatch<OnCancel_AddCustomOptionsDrawer_Action>({
-          type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer',
-        });
-      }}
-    />
+    {/*<FCustomOptionsEditorDrawer*/}
+    {/*  hideTypeSelect*/}
+    {/*  visible={exhibitInfoPage.side_CustomOptionsDrawer_Visible}*/}
+    {/*  // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),*/}
+    {/*    ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),*/}
+    {/*    ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),*/}
+    {/*  ]}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({*/}
+    {/*      type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',*/}
+    {/*      payload: {*/}
+    {/*        value: value,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    dispatch<OnCancel_AddCustomOptionsDrawer_Action>({*/}
+    {/*      type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
     <FCustomOptionEditorDrawer
       visible={exhibitInfoPage.side_CustomOptionDrawer_Visible}
