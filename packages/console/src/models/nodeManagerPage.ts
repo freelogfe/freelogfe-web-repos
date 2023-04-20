@@ -897,7 +897,7 @@ const Model: NodeManagerModelType = {
         nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
         status: nodeManagerPage.setting_nodeLimitation === 'public'
           ? 1
-          : nodeManagerPage.setting_nodeInfo.limitation === 'private'
+          : nodeManagerPage.setting_nodeLimitation === 'private'
             ? 2
             : 8, // 可见性 1：公开 2：私密 3：暂停
         nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage,
