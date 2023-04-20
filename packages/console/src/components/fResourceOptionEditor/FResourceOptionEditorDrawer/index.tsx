@@ -131,7 +131,7 @@ function FResourceOptionEditorDrawer({
         disabled={nameInput === '' || nameInputError !== ''
         || keyInput === '' || keyInputError !== ''
         || descriptionInputError !== ''
-        || (typeSelect === 'input' ? (inputInput === '' || inputInputError !== '') : (selectInputs.some((si) => {
+        || (typeSelect === 'input' ? (inputInputError !== '') : (selectInputs.some((si) => {
           return si.value === '' || si.error !== '';
         })))}
         onClick={async () => {
@@ -294,7 +294,7 @@ function FResourceOptionEditorDrawer({
           </div>
         </div>)
       }
-      
+
       {
         typeSelect === 'input' && (<div className={styles.optionItem}>
           <div className={styles.title}>
