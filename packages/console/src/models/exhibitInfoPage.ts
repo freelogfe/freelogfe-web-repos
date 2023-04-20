@@ -253,7 +253,14 @@ export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
 export interface OnConfirm_AddCustomOptionsDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer';
   payload: {
-    value: FCustomOptionsEditorDrawerStates['dataSource'];
+    value: {
+      key: string;
+      name: string;
+      // type: 'input' | 'select';
+      input: string;
+      // select: string[];
+      description: string;
+    };
   };
 }
 
@@ -1236,24 +1243,25 @@ const Model: ExhibitInfoPageModelType = {
 
       const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = [
         ...exhibitInfoPage.side_CustomOptions,
-        ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
-          return {
-            key: v.key,
-            name: v.name,
-            value: v.defaultValue,
-            description: v.description,
-            option: [],
-            valueInput: v.defaultValue,
-            valueInputError: '',
-          };
-        }),
+        {
+          key: payload.value.key,
+          name: payload.value.name,
+          value: payload.value.input,
+          description: payload.value.description,
+          // option: [],
+          valueInput: payload.value.input,
+          valueInputError: '',
+        },
+        // ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
+        //   return
+        // }),
       ];
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           side_CustomOptions: side_CustomOptions,
-          side_CustomOptionsDrawer_Visible: false,
+          // side_CustomOptionsDrawer_Visible: false,
         },
       });
 
@@ -1584,6 +1592,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };
@@ -1592,6 +1601,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };

@@ -241,7 +241,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               return (<div key={co.key}>
                 <div className={styles.optionTitle}>
                   <Space size={10}>
-                    <FComponentsLib.FContentText text={co.key} />
+                    <FComponentsLib.FContentText text={co.name} />
                     {
                       co.description && (<FTooltip
                         title={co.description}
@@ -356,14 +356,28 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               if (!dataSource) {
                 return;
               }
+
+              dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
+                type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
+                payload: {
+                  value: {
+                    key: dataSource.key,
+                    name: dataSource.name,
+                    // type: 'input' | 'select';
+                    input: dataSource.input,
+                    // select: string[];
+                    description: dataSource.description,
+                  },
+                },
+              });
             }}
           />
           <span
             style={{ cursor: 'pointer', display: 'inline-block' }}
             onClick={() => {
-              dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
-                type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
-              });
+              // dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
+              //   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
+              // });
             }}
           >添加自定义选项</span>
         </Space>

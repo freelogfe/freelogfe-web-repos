@@ -17,7 +17,17 @@ interface FCustomOptionsEditorDrawerProps {
 }
 
 export interface FCustomOptionsEditorDrawerStates {
-  dataSource: Data[];
+  dataSource: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  }[];
 }
 
 const initDataSource: FCustomOptionsEditorDrawerStates['dataSource'] = [{
