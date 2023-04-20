@@ -12,6 +12,11 @@ import img_markdown from '@/assets/createVersion_markdown.png';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface FPublishObjectFileProps {
+  resourceType: {
+    code: string;
+    names: string[];
+  };
+
   fileInfo: {
     name: string;
     sha1: string;
@@ -42,6 +47,8 @@ interface FPublishObjectFileProps {
 }
 
 interface FPublishObjectFileStates {
+  _uploadFileAccept: string;
+
   fInfo: {
     name: string;
     sha1: string;
@@ -60,6 +67,7 @@ interface FPublishObjectFileStates {
 }
 
 const initStates: FPublishObjectFileStates = {
+  _uploadFileAccept: '',
   fInfo: null,
   fState: 'unsuccessful',
   fUploadedError: '',
@@ -68,6 +76,7 @@ const initStates: FPublishObjectFileStates = {
 };
 
 function FPublishObjectFile({
+                              resourceType,
                               fileInfo,
                               onSucceed_ImportObject,
                               onSucceed_UploadFile,
@@ -77,6 +86,7 @@ function FPublishObjectFile({
                               onClick_OpenMarkdownBtn,
                               onClick_EditMarkdownBtn,
                             }: FPublishObjectFileProps) {
+  const [_uploadFileAccept, set_uploadFileAccept] = React.useState<FPublishObjectFileStates['_uploadFileAccept']>(initStates['_uploadFileAccept']);
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
   const [fState, set_fState] = React.useState<FPublishObjectFileStates['fState']>(initStates['fState']);
   const [fUploadedError, set_fUploadedError] = React.useState<FPublishObjectFileStates['fUploadedError']>(initStates['fUploadedError']);
@@ -95,6 +105,22 @@ function FPublishObjectFile({
     objName: string;
     sha1: string;
   } | null>(null);
+
+  React.useEffect(() => {
+    handleResourceType();
+  }, [resourceType]);
+
+  async function handleResourceType() {
+    const { data }: {
+      data: {
+        formats: string[];
+      }
+    } = await FServiceAPI.Resource.getResourceTypeInfoByCode({
+      code: resourceType.code,
+    });
+    set_uploadFileAccept(data.formats.join(','));
+    // console.log(data, 'dlikajlsdkfjlksdjlfkjsdlkfjlksdjflkasdjlkfjlk');
+  }
 
   React.useEffect(() => {
     set_fInfo(null);
@@ -420,7 +446,9 @@ function FPublishObjectFile({
             <FComponentsLib.FRectBtn
               type='primary'
               onClick={async () => {
-                const files = await fReadLocalFiles();
+                const files = await fReadLocalFiles({
+                  accept: _uploadFileAccept,
+                });
                 if (!files) {
                   return;
                 }

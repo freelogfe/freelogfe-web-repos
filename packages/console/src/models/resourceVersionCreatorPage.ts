@@ -22,6 +22,7 @@ export interface ResourceVersionCreatorPageModelState {
     resourceID: string;
     resourceName: string;
     latestVersion: string;
+    resourceTypeCode: string;
     resourceType: string[];
     baseUpcastResources: {
       resourceID: string;
@@ -297,6 +298,7 @@ const Model: ResourceVersionCreatorModelType = {
           resourceId: string;
           resourceName: string;
           resourceType: string[];
+          resourceTypeCode: string;
           latestVersion: string;
           baseUpcastResources: {
             resourceId: string;
@@ -313,6 +315,7 @@ const Model: ResourceVersionCreatorModelType = {
             resourceName: data_resourceInfo.resourceName,
             latestVersion: data_resourceInfo.latestVersion,
             resourceType: data_resourceInfo.resourceType,
+            resourceTypeCode: data_resourceInfo.resourceTypeCode,
             baseUpcastResources: data_resourceInfo.baseUpcastResources.map((bur) => {
               return {
                 resourceID: bur.resourceId,

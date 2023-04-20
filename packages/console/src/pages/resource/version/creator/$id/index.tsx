@@ -315,6 +315,10 @@ function VersionCreator({
 
 
                 <FPublishObjectFile
+                  resourceType={{
+                    code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
+                    names: resourceVersionCreatorPage.resourceInfo.resourceType,
+                  }}
                   fileInfo={resourceVersionCreatorPage.selectedFileInfo}
                   onSucceed_UploadFile={(file) => {
                     // console.log(file, 'onSucceed_UploadFile390oisjdf');
@@ -364,10 +368,10 @@ function VersionCreator({
                     await onClick_EditMarkdownBtn();
                   }}
                   showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
-                    && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
-                    && resourceVersionCreatorPage.rawProperties.some((b) => {
-                      return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
-                    })}
+                  && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
+                  && resourceVersionCreatorPage.rawProperties.some((b) => {
+                    return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
+                  })}
                   onClick_EditMarkdownBtn={async () => {
                     await onClick_EditMarkdownBtn();
                   }}
