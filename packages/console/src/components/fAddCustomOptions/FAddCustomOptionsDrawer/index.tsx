@@ -5,8 +5,6 @@ import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
 
-// import displayName = Drawer.displayName;
-
 interface FAddCustomOptionsDrawerProps {
 
   disabledKeys: string[];
