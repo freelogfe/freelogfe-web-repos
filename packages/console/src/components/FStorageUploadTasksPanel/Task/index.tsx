@@ -12,7 +12,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 import { RcFile } from 'antd/lib/upload/interface';
-import FWorkerPool from '@/utils/FWorkerPool';
+// import FWorkerPool from '@/utils/FWorkerPool';
 import fileSha1Queue from '@/utils/FileSha1Queue';
 
 // import workerize from 'workerize';
