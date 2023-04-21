@@ -22,7 +22,7 @@ interface TaskProps {
     uid: string;
     file: RcFile
     name: string;
-    state: 'loading' | 'success' | 'failed';
+    state: 'loading' | 'success' | 'failed' | 'cancel';
   };
   bucketName: string;
 
@@ -51,10 +51,12 @@ function Task({
 
   AHooks.useMount(async () => {
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
+    // console.log('useMount sdiofjsd;lkfjsldkfjlksdjflksdjlkfjdslkjflksdjflkjlk');
     await verifySameName();
   });
 
   AHooks.useUnmount(() => {
+    // console.log('(*(**((*(((((( CCCCCCCCCCCC');
     canceler.current && canceler.current();
   });
 
@@ -67,6 +69,7 @@ function Task({
     // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       set_taskState('uploading');
+      // console.log('startUploadFile sdfu0-9w3284uroijsedflksdjflksdjlkj');
       await startUploadFile();
     } else {
       set_taskState('sameName');
@@ -93,11 +96,14 @@ function Task({
       canceler.current = cancel;
       set_progress(0);
       try {
+        // console.log( 'promise sdf09opijweklfjsdlkafjlskdjflksdjflksjdflkjl');
         const { data } = await promise;
+        // console.log(data, 'promise sdf09opijweklfjsdlkafjlskdjflksdjflksjdflkjl');
       } catch (e) {
         if (taskState !== 'uploading') {
-          set_taskState('failed');
-          set_progress(0);
+          // console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;43wetf3w2rfWEDSFASDF');
+          // set_taskState('failed');
+          // set_progress(0);
           onFail && onFail({ uid: task.uid, objectName: task.name });
           return;
         }
@@ -114,6 +120,7 @@ function Task({
       onSucceed && onSucceed({ uid: task.uid, objectName: task.name, sha1: fileSha1.current });
       return;
     }
+    console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;lksdjflsdjflkjsdlkj');
     set_taskState('failed');
     set_progress(0);
     onFail && onFail({ uid: task.uid, objectName: task.name });
@@ -149,10 +156,10 @@ function Task({
     {
       taskState === 'success' && (<UploadSuccess />)
     }
-    {console.log(taskState, 'taskStateisodjlkfjl;skd jlksdjflk')}
     {
       taskState === 'canceled' && (<UploadCancel
         onClick={async () => {
+          console.log('的尺寸的方式打发士大夫');
           await verifySameName();
         }}
       />)
@@ -160,6 +167,7 @@ function Task({
     {
       taskState === 'sameName' && (<UploadSameName
         onClick={async () => {
+          console.log('startUploadFile we9oifjsdkifjsdl;fjlksdjflk');
           await startUploadFile();
         }}
       />)
@@ -175,53 +183,3 @@ function Task({
 }
 
 export default Task;
-
-// interface VerifyTypeCompatibleParamsType {
-//   objectName: string;
-//   sha1: string;
-// }
-
-// async function verifyTypeCompatible({ objectName, sha1 }: VerifyTypeCompatibleParamsType): Promise<boolean> {
-//   const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
-//     objectIdOrName: objectName,
-//   };
-//
-//   const { data } = await FServiceAPI.Storage.objectDetails(params);
-//   if (!data.resourceType) {
-//     return true;
-//   }
-//
-//   const params1: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
-//     sha1: sha1,
-//     resourceType: data.resourceType,
-//   };
-//
-//   const { data: data1 } = await FServiceAPI.Storage.fileProperty(params1);
-//   return !!data1;
-// }
-
-// const workerPool: FWorkerPool = new FWorkerPool(`/js/getSHA1Hash.js?t=${Date.now()}`);
-
-// function getSHA1Hash(file: RcFile): Promise<string> {
-//   // /static/banner1.1d11598d.png
-//   // console.log('(((opisdfjlksdjflksdjflkjlkj');
-//   // console.log(file.uid, 'filedsiflksdfjlk');
-//   return new Promise(async (resolve) => {
-//     const fileArrayBuffer: ArrayBuffer = await file.arrayBuffer();
-//     const worker: Worker = new Worker('/js/getSHA1Hash.js', { name: 'main' });
-//     worker.postMessage({ fileArrayBuffer: fileArrayBuffer }, [fileArrayBuffer]);
-//
-//     worker.addEventListener('message', (e: any) => {
-//       console.log(e.data === fileArrayBuffer, 'fileArrayBuffersiodfjslkd same');
-//       if (e.data.uid === file.uid) {
-//         // resolve(e.data.sha1);
-//         // worker.removeEventListener('message', li);
-//         worker.terminate();
-//       }
-//     });
-//   });
-//
-// }
-
-
-
