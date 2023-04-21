@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import FObjectSelectorDrawer from './FObjectSelectorDrawer';
 
 interface fObjectSelectorDrawerProps {
-  resourceType: string[];
+  resourceTypeCode: string;
 }
 
 type ReturnData = {
@@ -15,11 +15,11 @@ type ReturnData = {
   sha1: string
 } | null;
 
-function fObjectSelectorDrawer({ resourceType }: fObjectSelectorDrawerProps): Promise<ReturnData> {
+function fObjectSelectorDrawer({ resourceTypeCode }: fObjectSelectorDrawerProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render((<FObjectSelectorDrawer
-      resourceType={resourceType}
+      resourceTypeCode={resourceTypeCode}
       onSelect={(obj) => {
         resolve(obj);
       }}

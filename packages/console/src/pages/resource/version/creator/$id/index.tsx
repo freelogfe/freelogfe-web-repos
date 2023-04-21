@@ -313,7 +313,6 @@ function VersionCreator({
                   </>)
                 }
 
-
                 <FPublishObjectFile
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,

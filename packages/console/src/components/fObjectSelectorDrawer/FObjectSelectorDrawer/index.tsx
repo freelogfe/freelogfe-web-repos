@@ -8,7 +8,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 
 interface FObjectSelectorDrawerProps {
-  resourceType: string[];
+  resourceTypeCode: string;
 
   onSelect?(obj: { bucketID: string; bucketName: string; objID: string; objName: string; sha1: string }): void;
 
@@ -46,7 +46,7 @@ const initStates: FObjectSelectorDrawerStates = {
   objListMore: 'loading',
 };
 
-function FObjectSelectorDrawer({ resourceType, onSelect, onClose }: FObjectSelectorDrawerProps) {
+function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectSelectorDrawerProps) {
 
   const [visible, set_visible] = React.useState<FObjectSelectorDrawerStates['visible']>(initStates['visible']);
   const [selectOptions, set_selectOptions] = React.useState<FObjectSelectorDrawerStates['selectOptions']>(initStates['selectOptions']);
@@ -87,7 +87,8 @@ function FObjectSelectorDrawer({ resourceType, onSelect, onClose }: FObjectSelec
   async function loadData() {
     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
       bucketName: selected,
-      resourceType: resourceType[resourceType.length - 1],
+      // resourceType: resourceType[resourceType.length - 1],
+      resourceTypeCode: resourceTypeCode,
       isLoadingTypeless: 1,
       keywords: inputValue,
       skip: 0,

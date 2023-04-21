@@ -20,6 +20,7 @@ interface CollectionResourcesParamsType {
   limit?: number;
   keywords?: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   omitResourceType?: string;
   resourceStatus?: 0 | 1 | 2 | 4;
 }

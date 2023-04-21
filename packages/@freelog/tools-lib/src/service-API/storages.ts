@@ -71,6 +71,7 @@ interface ObjectListParamsType {
   skip?: number;
   bucketName: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   isLoadingTypeless?: 0 | 1;
   keywords?: string;
   projection?: string;

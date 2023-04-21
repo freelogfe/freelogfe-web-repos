@@ -82,6 +82,7 @@ interface ListParamsType {
   limit?: number;
   keywords?: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   omitResourceType?: string;
   isSelf?: 0 | 1;
   userId?: number;

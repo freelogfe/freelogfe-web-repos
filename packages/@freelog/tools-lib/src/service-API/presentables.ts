@@ -131,6 +131,7 @@ interface PresentablesParamsType {
   skip?: number;
   limit?: number;
   resourceType?: string;
+  resourceTypeCode?: string;
   omitResourceType?: string;
   onlineStatus?: number;
   tags?: string;

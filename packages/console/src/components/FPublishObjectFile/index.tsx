@@ -461,7 +461,7 @@ function FPublishObjectFile({
             type='primary'
             onClick={async () => {
               const obj = await fObjectSelectorDrawer({
-                resourceType: resourceType.names,
+                resourceTypeCode: resourceType.code,
               });
               if (!obj) {
                 return;
