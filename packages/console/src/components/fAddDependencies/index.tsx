@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import FAddDependenciesDrawer from './FAddDependenciesDrawer';
 
 interface fAddDependenciesProps {
+  resourceTypeCode: string;
   existingResources: {
     resourceID: string;
     resourceNme: string;
@@ -25,6 +26,7 @@ interface fAddDependenciesProps {
 }
 
 async function fAddDependencies({
+                                  resourceTypeCode,
                                   existingResources,
                                   baseUpcastResources,
                                   onSelect_Resource,
@@ -33,6 +35,7 @@ async function fAddDependencies({
   return new Promise<void>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render(<FAddDependenciesDrawer
+      resourceTypeCode={resourceTypeCode}
       existingResourceIDs={existingResources.map<string>((r) => {
         return r.resourceID;
       })}

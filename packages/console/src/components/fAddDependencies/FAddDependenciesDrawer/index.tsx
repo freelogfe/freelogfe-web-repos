@@ -12,6 +12,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
 
 interface FAddDependenciesDrawerProps {
+  resourceTypeCode: string;
   existingResourceIDs: string[];
   baseUpcastResourceIDs: string[];
 
@@ -63,6 +64,7 @@ const initStates: FAddDependenciesDrawerStates = {
 };
 
 function FAddDependenciesDrawer({
+                                  resourceTypeCode,
                                   existingResourceIDs,
                                   baseUpcastResourceIDs,
                                   onSelect_Resource,
@@ -100,6 +102,7 @@ function FAddDependenciesDrawer({
         skip: resourceListResult.length,
         limit: FUtil.Predefined.pageSize,
         keywords: searchInput,
+        resourceTypeCode: resourceTypeCode,
       };
       const {
         data: data_favoriteResources,
@@ -151,6 +154,7 @@ function FAddDependenciesDrawer({
         keywords: searchInput,
         status: resourceFrom === 'my' ? undefined : 1,
         isSelf: resourceFrom === 'my' ? 1 : undefined,
+        resourceTypeCode: resourceTypeCode,
       };
       const {
         data: data_list,
@@ -271,102 +275,102 @@ function FAddDependenciesDrawer({
         )}
         {/*{console.log(resourceList, 'resourceListiosdjflksdjflkj')}*/}
         {resourceListState === 'loaded' &&
-          resourceList.map((resource) => {
-            return (
-              <div className={styles.bucket} key={resource.resourceID}>
-                <div>
-                  <div className={styles.title}>
-                    <div>
-                      <FComponentsLib.FContentText
-                        singleRow={true}
-                        text={resource.resourceName}
-                      />
-                    </div>
-                    {
-                      resource.state === 'offline' && (<FResourceStatusBadge
-                        status={'offline'}
-                      />)
-                    }
-                    {
-                      resource.state === 'unreleased' && (<FResourceStatusBadge
-                        status={'unreleased'}
-                      />)
-                    }
-                    {
-                      resource.state === 'freeze' && (<FResourceStatusBadge
-                        status={'freeze'}
-                      />)
-                    }
-                    {
-                      resource.waring === 'upcast' && (<label
-                        style={{
-                          color: '#EE4040',
-                          backgroundColor: '#FDEBEC',
-                          // border: '1px solid #F2C9CC',
-                          fontSize: 12,
-                          fontWeight: 600,
-                          lineHeight: '17px',
-                          padding: '3px 5px',
-                          borderRadius: 4,
-                        }}
-                      >{FI18n.i18nNext.t('addrely_label_basicupcast')}</label>)
-                    }
+        resourceList.map((resource) => {
+          return (
+            <div className={styles.bucket} key={resource.resourceID}>
+              <div>
+                <div className={styles.title}>
+                  <div>
+                    <FComponentsLib.FContentText
+                      singleRow={true}
+                      text={resource.resourceName}
+                    />
                   </div>
-                  <div style={{ height: 2 }} />
-                  <FComponentsLib.FContentText
-                    type={'additional2'}
-                    text={
-                      (resource.resourceType.length > 0
-                        ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
-                          resource.resourceType,
-                        )}`
-                        : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
-                    }
-                  />
+                  {
+                    resource.state === 'offline' && (<FResourceStatusBadge
+                      status={'offline'}
+                    />)
+                  }
+                  {
+                    resource.state === 'unreleased' && (<FResourceStatusBadge
+                      status={'unreleased'}
+                    />)
+                  }
+                  {
+                    resource.state === 'freeze' && (<FResourceStatusBadge
+                      status={'freeze'}
+                    />)
+                  }
+                  {
+                    resource.waring === 'upcast' && (<label
+                      style={{
+                        color: '#EE4040',
+                        backgroundColor: '#FDEBEC',
+                        // border: '1px solid #F2C9CC',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        lineHeight: '17px',
+                        padding: '3px 5px',
+                        borderRadius: 4,
+                      }}
+                    >{FI18n.i18nNext.t('addrely_label_basicupcast')}</label>)
+                  }
                 </div>
-                {!selectedResourceIDs.includes(resource.resourceID) ? (
-                  <FComponentsLib.FRectBtn
-                    type='secondary'
-                    size='small'
-                    onClick={() => {
-                      onSelect_Resource &&
-                      onSelect_Resource({
-                        resourceID: resource.resourceID,
-                        resourceName: resource.resourceName,
-                      });
-                      set_selectedResourceIDs([
-                        ...selectedResourceIDs,
-                        resource.resourceID,
-                      ]);
-                    }}
-                    // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-                  >
-                    选择
-                  </FComponentsLib.FRectBtn>
-                ) : (
-                  <FComponentsLib.FRectBtn
-                    type='danger2'
-                    size='small'
-                    onClick={() => {
-                      onDeselect_Resource &&
-                      onDeselect_Resource({
-                        resourceID: resource.resourceID,
-                        resourceName: resource.resourceName,
-                      });
-                      set_selectedResourceIDs(
-                        selectedResourceIDs.filter((rid) => {
-                          return rid !== resource.resourceID;
-                        }),
-                      );
-                    }}
-                    // disabled={selectedResourceIDs.includes(resource.resourceID)}
-                  >
-                    移除
-                  </FComponentsLib.FRectBtn>
-                )}
+                <div style={{ height: 2 }} />
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  text={
+                    (resource.resourceType.length > 0
+                      ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(
+                        resource.resourceType,
+                      )}`
+                      : '未设置类型') + ` | 更新时间 ${resource.updateDate}`
+                  }
+                />
               </div>
-            );
-          })}
+              {!selectedResourceIDs.includes(resource.resourceID) ? (
+                <FComponentsLib.FRectBtn
+                  type='secondary'
+                  size='small'
+                  onClick={() => {
+                    onSelect_Resource &&
+                    onSelect_Resource({
+                      resourceID: resource.resourceID,
+                      resourceName: resource.resourceName,
+                    });
+                    set_selectedResourceIDs([
+                      ...selectedResourceIDs,
+                      resource.resourceID,
+                    ]);
+                  }}
+                  // disabled={!resource.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
+                >
+                  选择
+                </FComponentsLib.FRectBtn>
+              ) : (
+                <FComponentsLib.FRectBtn
+                  type='danger2'
+                  size='small'
+                  onClick={() => {
+                    onDeselect_Resource &&
+                    onDeselect_Resource({
+                      resourceID: resource.resourceID,
+                      resourceName: resource.resourceName,
+                    });
+                    set_selectedResourceIDs(
+                      selectedResourceIDs.filter((rid) => {
+                        return rid !== resource.resourceID;
+                      }),
+                    );
+                  }}
+                  // disabled={selectedResourceIDs.includes(resource.resourceID)}
+                >
+                  移除
+                </FComponentsLib.FRectBtn>
+              )}
+            </div>
+          );
+        })}
       </div>
       <FListFooter
         state={resourceListMore}
