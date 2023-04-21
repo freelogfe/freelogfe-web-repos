@@ -50,40 +50,16 @@ function Task({
   const [progress, set_progress] = React.useState<TaskStates['progress']>(0);
 
   AHooks.useMount(async () => {
-    // const startTime = Date.now();
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
-    // console.log(fileSha1.current, task, 'fileSha1.currentsdifjsldkfjlkj');
-    // const endTime = Date.now();
-    // console.log(endTime - startTime, '*(**(*(***********(9999999');
     await verifySameName();
   });
 
-  // React.useEffect(() => {
-  //   // if (file.sameName) {
-  //   //   setStatus('sameName');
-  //   //   onFail && onFail({ uid: file.uid, objectName: file.name });
-  //   //   return;
-  //   // }
-  //   if (task.state === 'uploading') {
-  //     startUploadFile();
-  //   }
-  //
-  //   if (task.state === 'loading') {
-  //     verifySameName();
-  //   }
-  //
-  // }, [task]);
-
   AHooks.useUnmount(() => {
-    // const cancel = canceler.current.get(task.uid);
     canceler.current && canceler.current();
-    // cancels.current.delete(task.uid);
   });
 
   async function verifySameName() {
-    // console.log(file, 'file9iojslkfjdslfkjsdlfkjsdlkfjl');
     const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
-      // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
       fullObjectNames: bucketName + '/' + task.name,
       projection: 'objectId,objectName',
     };
@@ -97,9 +73,8 @@ function Task({
     }
   }
 
-  // async function startUploadFile(isVerifyTypeCompatible: boolean = false) {
   async function startUploadFile() {
-
+    // console.log('startUploadFile dsff sdf sdfsdf');
     const params0: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
       sha1: fileSha1.current,
     };
@@ -115,14 +90,10 @@ function Task({
         },
       }, true);
 
-      // cancels.set(file.uid, cancel);
       canceler.current = cancel;
-      // setStatus('uploading');
       set_progress(0);
       try {
         const { data } = await promise;
-        // setStatus('success');
-        // onSucceed && onSucceed({ uid: file.uid, objectName: file.name, sha1: file.sha1 });
       } catch (e) {
         if (taskState !== 'uploading') {
           set_taskState('failed');
@@ -167,8 +138,7 @@ function Task({
       taskState === 'uploading' && (<Uploading
         progress={progress}
         cancel={() => {
-          // console.log(name, file, cancels, '#########');
-          // const c = canceler.get(file.uid);
+          console.log('CCCCCCCsdijflksdjalkaasoidfj;lksdjlk ;lasdkjf;lksjd klj');
           canceler.current && canceler.current();
           set_taskState('canceled');
           set_progress(0);
@@ -179,20 +149,27 @@ function Task({
     {
       taskState === 'success' && (<UploadSuccess />)
     }
+    {console.log(taskState, 'taskStateisodjlkfjl;skd jlksdjflk')}
     {
-      taskState === 'canceled' && (<UploadCancel onClick={async () => {
-        await verifySameName();
-      }} />)
+      taskState === 'canceled' && (<UploadCancel
+        onClick={async () => {
+          await verifySameName();
+        }}
+      />)
     }
     {
-      taskState === 'sameName' && (<UploadSameName onClick={async () => {
-        await startUploadFile();
-      }} />)
+      taskState === 'sameName' && (<UploadSameName
+        onClick={async () => {
+          await startUploadFile();
+        }}
+      />)
     }
     {
-      taskState === 'failed' && (<UploadFailed onClick={async () => {
-        await verifySameName();
-      }} />)
+      taskState === 'failed' && (<UploadFailed
+        onClick={async () => {
+          await verifySameName();
+        }}
+      />)
     }
   </div>);
 }
