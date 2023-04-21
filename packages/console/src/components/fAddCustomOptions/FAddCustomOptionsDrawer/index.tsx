@@ -103,35 +103,6 @@ function FAddCustomOptionsDrawer({
     }
   }
 
-  // function onClick_AddNewItem() {
-  //   set_dataSource([
-  //     ...dataSource,
-  //     {
-  //       key: '',
-  //       keyError: '',
-  //       name: '',
-  //       nameError: '',
-  //       description: '',
-  //       descriptionError: '',
-  //       type: 'input',
-  //       input: '',
-  //       inputError: '',
-  //       select: [{
-  //         value: '',
-  //         error: '',
-  //       }],
-  //     },
-  //   ]);
-  // }
-
-  // function onChange_DataSource(value: FCustomOptionsEditorDrawerStates['dataSource']) {
-  //   setDataSource(value);
-  // }
-
-  // function onClick_ConfirmBtn() {
-  //   onConfirm && onConfirm(dataSource);
-  // }
-
   return (<FDrawer
     title={'添加自定义选项'}
     open={visible}
