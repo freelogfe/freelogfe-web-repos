@@ -394,7 +394,7 @@ function VersionCreator({
                     onClick={async () => {
                       const p = await getProcessor('resourceVersionCreator');
                       await fAddDependencies({
-                        resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+                        // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
                         existingResources: (await p.getAllTargets()).map((t) => {
                           return {
                             resourceID: t.id,

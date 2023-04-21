@@ -12,7 +12,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
 
 interface FAddDependenciesDrawerProps {
-  resourceTypeCode: string;
+  // resourceTypeCode: string;
   existingResourceIDs: string[];
   baseUpcastResourceIDs: string[];
 
@@ -64,7 +64,7 @@ const initStates: FAddDependenciesDrawerStates = {
 };
 
 function FAddDependenciesDrawer({
-                                  resourceTypeCode,
+                                  // resourceTypeCode,
                                   existingResourceIDs,
                                   baseUpcastResourceIDs,
                                   onSelect_Resource,
@@ -102,7 +102,7 @@ function FAddDependenciesDrawer({
         skip: resourceListResult.length,
         limit: FUtil.Predefined.pageSize,
         keywords: searchInput,
-        resourceTypeCode: resourceTypeCode,
+        // resourceTypeCode: resourceTypeCode,
       };
       const {
         data: data_favoriteResources,
@@ -154,7 +154,7 @@ function FAddDependenciesDrawer({
         keywords: searchInput,
         status: resourceFrom === 'my' ? undefined : 1,
         isSelf: resourceFrom === 'my' ? 1 : undefined,
-        resourceTypeCode: resourceTypeCode,
+        // resourceTypeCode: resourceTypeCode,
       };
       const {
         data: data_list,
