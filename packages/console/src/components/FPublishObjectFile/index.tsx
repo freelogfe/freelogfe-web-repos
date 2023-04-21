@@ -460,7 +460,9 @@ function FPublishObjectFile({
           <FComponentsLib.FRectBtn
             type='primary'
             onClick={async () => {
-              const obj = await fObjectSelectorDrawer();
+              const obj = await fObjectSelectorDrawer({
+                resourceType: resourceType.names,
+              });
               if (!obj) {
                 return;
               }

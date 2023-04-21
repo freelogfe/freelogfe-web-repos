@@ -2,16 +2,14 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import FDropdownMenu from '@/components/FDropdownMenu';
-// import { DownOutlined } from '@ant-design/icons';
 import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-// import * as AHooks from 'ahooks';
-// import { ChangeAction } from '@/models/storageObjectDepSelector';
-// import { FetchExhibitListAction } from '@/models/informalNodeManagerPage';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 
 interface FObjectSelectorDrawerProps {
+  resourceType: string[];
+
   onSelect?(obj: { bucketID: string; bucketName: string; objID: string; objName: string; sha1: string }): void;
 
   onClose?(): void;
@@ -48,7 +46,7 @@ const initStates: FObjectSelectorDrawerStates = {
   objListMore: 'loading',
 };
 
-function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps) {
+function FObjectSelectorDrawer({ resourceType, onSelect, onClose }: FObjectSelectorDrawerProps) {
 
   const [visible, set_visible] = React.useState<FObjectSelectorDrawerStates['visible']>(initStates['visible']);
   const [selectOptions, set_selectOptions] = React.useState<FObjectSelectorDrawerStates['selectOptions']>(initStates['selectOptions']);
@@ -89,7 +87,7 @@ function FObjectSelectorDrawer({ onSelect, onClose }: FObjectSelectorDrawerProps
   async function loadData() {
     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
       bucketName: selected,
-      // resourceType: selector.visibleOResourceType || undefined,
+      resourceType: resourceType[resourceType.length - 1],
       isLoadingTypeless: 1,
       keywords: inputValue,
       skip: 0,
