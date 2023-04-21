@@ -6,7 +6,9 @@ import FTooltip from '@/components/FTooltip';
 interface FResourcePropertiesProps {
   immutableData: {
     key: string;
+    name: string;
     value: string;
+    description: string;
   }[];
   alterableData: {
     key: string;
@@ -30,11 +32,25 @@ function FResourceProperties({
     {
       immutableData.map((d) => {
         return (<React.Fragment key={d.key}>
-          <div>
-            <FComponentsLib.FContentText text={d.key} type={'additional2'} />
+          <div className={styles.grid1}>
+            <FComponentsLib.FContentText text={d.name || d.key} type={'additional2'} />
+
+            {
+              d.description && (<FTooltip
+                title={d.description}
+              >
+                <FComponentsLib.FIcons.FInfo
+                  style={{ cursor: 'pointer', fontSize: 12 }}
+                />
+              </FTooltip>)
+            }
           </div>
           <div>
-            <FComponentsLib.FContentText text={d.value} type={'highlight'} style={{ fontSize: 12 }} />
+            <FComponentsLib.FContentText
+              text={d.value}
+              type={'highlight'}
+              style={{ fontSize: 12 }}
+            />
           </div>
         </React.Fragment>);
       })

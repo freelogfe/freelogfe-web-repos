@@ -590,3 +590,16 @@ export function getResourceTypeInfoByCode({...params}: GetResourceTypeInfoByCode
     params: params,
   });
 }
+
+//
+interface GetResourceAttrListSimple {
+
+}
+
+export function getResourceAttrListSimple({...params}: GetResourceAttrListSimple) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/attrs/listSimple`,
+    params: params,
+  });
+}
