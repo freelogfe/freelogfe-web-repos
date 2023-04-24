@@ -183,3 +183,14 @@ function Task({
 }
 
 export default Task;
+
+const data = [
+  {
+    key: 'fileSize',
+    name: '文件大小',
+    description: '文件占用的存储',
+    value: 1024,
+    valueUnit: 'b',
+    valueDisplay: '1kb',
+  },
+];
