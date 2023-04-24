@@ -14,7 +14,9 @@ import {
   OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnChangeTagsAction,
-  OnUnmountMarketPageAction, OnMountMarketPageAction, OnChange_SelectedOperationCategoryIDs_Action,
+  OnUnmountMarketPageAction,
+  OnMountMarketPageAction,
+  OnChange_SelectedOperationCategoryIDs_Action,
 } from '@/models/discoverPage';
 interface SearchProps {}
 
@@ -36,7 +38,8 @@ function Search({}: SearchProps) {
   const [resourcesListPure, setResourcesListPure] = useState<any[]>([]);
   const [userResourcesList, setUserResourcesList] = useState<any[]>([]);
   const [userResourcesListPure, setUserResourcesListPure] = useState<any[]>([]);
-  const [selectedOperationCategoryIDs, setSelectedOperationCategoryIDs] = useState<any[]>(['#all']);
+  const [selectedOperationCategoryIDs, setSelectedOperationCategoryIDs] =
+    useState<any[]>(['#all']);
   const [pageData, setPageData] = useState({
     skip: 0,
     limit: 40,
@@ -53,14 +56,16 @@ function Search({}: SearchProps) {
     totalItem: -1,
   });
   const getResources = () => {
-    console.log(selectedOperationCategoryIDs)
+    console.log(selectedOperationCategoryIDs);
     return FServiceAPI.Resource.list({
       keywords: keywords,
       // resourceType: selectedTags[0],
       status: 1,
       limit: pageData.limit,
       skip: pageData.skip,
-      operationCategoryCode: selectedOperationCategoryIDs.filter((c)=>c !== '#all').shift(),
+      operationCategoryCode: selectedOperationCategoryIDs
+        .filter((c) => c !== '#all')
+        .shift(),
     });
   };
   const getUsers = () => {
@@ -100,7 +105,7 @@ function Search({}: SearchProps) {
   //   if (keywords) run();
   // }, [keywords]);
   useEffect(() => {
-     run();
+    run();
   }, [selectedOperationCategoryIDs]);
   useEffect(() => {
     if (userPageData.skip > 0) {
@@ -385,14 +390,6 @@ function Search({}: SearchProps) {
           </div>
         ) : (
           <div className="w-100x h-100x   px-115 flex-column-center">
-            <div>
-              <FOperationCategoryFilter
-                value={selectedOperationCategoryIDs}
-                onChange={(value) => {
-                  setSelectedOperationCategoryIDs(value)
-                }}
-              />
-            </div>
             <div
               className={
                 'h-100x   pt-40  flex-column-center ' + styles.rContainer
@@ -410,6 +407,14 @@ function Search({}: SearchProps) {
                 <>
                   <div className={styles.tip + ' mb-20 w-100x ml-18'}>
                     以下是{' ' + keywords + ' '}相关结果（{pageData.totalItem}）
+                  </div>
+                  <div>
+                    <FOperationCategoryFilter
+                      value={selectedOperationCategoryIDs}
+                      onChange={(value) => {
+                        setSelectedOperationCategoryIDs(value);
+                      }}
+                    />
                   </div>
                   <div
                     className={
