@@ -309,9 +309,10 @@ function FResourceOptionEditorDrawer({
             onChange={(e) => {
               const value: string = e.target.value;
               let errorText: string = '';
-              if (value === '') {
-                errorText = '输入value';
-              } else if (value.length > 30) {
+              // if (value === '') {
+              //   errorText = '输入value';
+              // } else
+              if (value.length > 30) {
                 errorText = '不超过30个字符';
               }
               set_inputInput(value);
