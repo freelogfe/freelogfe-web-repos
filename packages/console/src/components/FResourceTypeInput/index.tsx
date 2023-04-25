@@ -228,7 +228,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       className={styles.AutoComplete}
       filterOption={(inputValue, option: any) => {
         // console.log(inputValue, option);
-        return option.data.labels.join('/').startsWith(inputValue);
+        return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
       }}
       onChange={(value) => {
         if (!value) {
@@ -240,9 +240,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           return;
         }
         // console.log(value, startStr, 'asiodjf;lkwejl;kfjlsk;djflk;jsdlfkjsdlkfjsdlkfj');
-        if (value.length > startStr.length + 40) {
-          return;
-        }
+        // if (value.length > startStr.length + 40) {
+        //   return;
+        // }
         set_autoCompleteInput(value);
         set_autoCompleteInputIsNew(value !== startStr && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;
