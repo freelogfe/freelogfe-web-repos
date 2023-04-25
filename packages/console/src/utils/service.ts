@@ -5,14 +5,19 @@ interface FileInfo {
   state: 'success' | 'fail' | 'nonentity';
   info: {
     [key: string]: any;
-  }
+  };
 }
 
 interface GetFileInfosBySha1Params {
   sha1: string[];
+  resourceTypeCode: string;
 }
 
-export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<{
+export async function getFilesSha1Info({
+                                         sha1,
+                                         resourceTypeCode,
+                                       }: GetFileInfosBySha1Params,
+                                       cdPartially: (s: any[]) => void = () => undefined): Promise<{
   error: string;
   result: FileInfo[],
 }> {
@@ -31,8 +36,9 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
 
   while (true) {
     // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
-    const {ret, errCode, data, msg}: any = await FServiceAPI.Storage.filesListInfo({
+    const { ret, errCode, data, msg }: any = await FServiceAPI.Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
+      resourceTypeCode: resourceTypeCode,
     });
 
     if (ret !== 0 || errCode !== 0) {

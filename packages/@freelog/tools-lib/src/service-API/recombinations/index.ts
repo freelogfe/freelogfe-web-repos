@@ -11,9 +11,13 @@ interface FileInfo {
 
 interface GetFileInfosBySha1Params {
   sha1: string[];
+  resourceTypeCode: string;
 }
 
-export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<{
+export async function getFilesSha1Info({
+                                         sha1,
+                                         resourceTypeCode
+                                       }: GetFileInfosBySha1Params, cdPartially: (s: any[]) => void = () => undefined): Promise<{
   error: string;
   result: FileInfo[],
 }> {
@@ -34,6 +38,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
     // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
     const {ret, errCode, data, msg}: any = await Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
+      resourceTypeCode: resourceTypeCode,
     });
 
     if (ret !== 0 || errCode !== 0) {
@@ -66,7 +71,7 @@ export async function getFilesSha1Info({sha1}: GetFileInfosBySha1Params, cdParti
         } else if (d.metaAnalyzeStatus === 3) {
           state = 'fail';
         }
-        console.log(d, '90wieojiksdjf;lkasdjf;lksdjflksjdflkjsdlfkjsdlkj');
+        // console.log(d, '90wieojiksdjf;lkasdjf;lksdjflksjdflkjsdlfkjsdlkj');
         return {
           sha1: d.sha1,
           state,

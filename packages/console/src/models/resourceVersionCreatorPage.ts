@@ -1026,6 +1026,7 @@ const Model: ResourceVersionCreatorModelType = {
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
+        resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
       };
       const {
         result,
