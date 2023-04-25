@@ -1070,7 +1070,7 @@ const Model: ResourceVersionCreatorModelType = {
             rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
               return {
                 key: rp[0],
-                name: rp[0] + '11',
+                name: rp[0],
                 value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
                 description: rp[0],
               };
