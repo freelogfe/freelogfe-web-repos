@@ -604,3 +604,15 @@ export function getResourceAttrListSimple({...params}: GetResourceAttrListSimple
     params: params,
   });
 }
+
+interface ListSimple4RecentlySimple {
+
+}
+
+export function listSimple4Recently({...params}: ListSimple4RecentlySimple = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimple4Recently`,
+    params: params,
+  });
+}

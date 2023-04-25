@@ -35,6 +35,10 @@ interface FResourceTypeInputProps {
 interface FResourceTypeInputStates {
 
   $options: Option[];
+  $recommend: {
+    value: string;
+    labels: string[];
+  }[];
 
   _mode: 'select' | 'input';
   _isOpen: boolean;
@@ -57,6 +61,7 @@ interface FResourceTypeInputStates {
 
 const initStates: FResourceTypeInputStates = {
   $options: [],
+  $recommend: [],
   _mode: 'select',
   _isOpen: false,
   _selectedCache: null,
@@ -71,6 +76,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   // const refAutoComplete = React.useRef(null);
 
   const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
+  const [$recommend, set$recommend] = React.useState<FResourceTypeInputStates['$recommend']>(initStates['$recommend']);
   const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
   const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
   const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
@@ -85,6 +91,27 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     } = await FServiceAPI.Resource.resourceTypes();
     const options: Option[] = handledData(data_resourceTypes, null);
     set$options(options);
+  });
+
+  AHooks.useMount(async () => {
+    const { data: data_recently }: {
+      data: {
+        code: string;
+        name: string;
+        resourceCount: number;
+      }[];
+    } = await FServiceAPI.Resource.listSimple4Recently({});
+    // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
+    set$recommend(data_recently
+      .filter((r, i) => {
+        return i < 6;
+      })
+      .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
+        return {
+          value: r.code,
+          labels: [r.name],
+        };
+      }));
   });
 
   AHooks.useUnmount(() => {
@@ -212,6 +239,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         if (!value.startsWith(startStr)) {
           return;
         }
+        // console.log(value, startStr, 'asiodjf;lkwejl;kfjlsk;djflk;jsdlfkjsdlkfjsdlkfj');
+        if (value.length > startStr.length + 41) {
+          return;
+        }
         set_autoCompleteInput(value);
         set_autoCompleteInputIsNew(value !== startStr && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;
@@ -267,12 +298,17 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         />
         <div style={{ height: 20 }} />
         <div className={styles.recommendResourceTypes}>
-          <label>阅读/文本</label>
-          <label>阅读/演示文稿</label>
-          <label>音频/有声书</label>
-          <label>音频/播客</label>
-          <label>视频/长视频</label>
-          <label>视频/短视频</label>
+          {
+            $recommend.map((r) => {
+              return (<label key={r.value}>{r.labels.join('/')}</label>);
+            })
+          }
+
+          {/*<label>阅读/演示文稿</label>*/}
+          {/*<label>音频/有声书</label>*/}
+          {/*<label>音频/播客</label>*/}
+          {/*<label>视频/长视频</label>*/}
+          {/*<label>视频/短视频</label>*/}
         </div>
       </div>
 
