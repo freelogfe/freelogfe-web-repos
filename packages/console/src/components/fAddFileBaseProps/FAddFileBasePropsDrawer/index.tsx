@@ -3,13 +3,16 @@ import styles from './index.less';
 import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
 import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FDrawer from '@/components/FDrawer';
-import { Space } from 'antd';
+import { Drawer, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import { FUtil } from '@freelog/tools-lib';
 
+// import displayName = Drawer.displayName;
+
 interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
+  disabledNames: string[];
   defaultData?: {
     key: string;
     name: string;
@@ -55,7 +58,13 @@ const initStates: FAddFileBasePropsDrawerStates = {
   }],
 };
 
-function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: FAddFileBasePropsDrawerProps) {
+function FAddFileBasePropsDrawer({
+                                   defaultData,
+                                   disabledKeys,
+                                   disabledNames,
+                                   onOk,
+                                   onClose,
+                                 }: FAddFileBasePropsDrawerProps) {
 
   const [visible, set_visible] = React.useState<FAddFileBasePropsDrawerStates['visible']>(initStates['visible']);
   const [dataSource, set_dataSource] = React.useState<FAddFileBasePropsDrawerStates['dataSource']>(initStates['dataSource']);
@@ -87,7 +96,7 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
         ...value,
       };
     });
-    set_dataSource(verifyDuplication(dd, disabledKeys));
+    set_dataSource(verifyDuplication(dd, disabledKeys, disabledNames));
   }
 
   // console.log(dataSource, 'dataSourceoikdsfldfjlk');
@@ -116,10 +125,11 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
       >取消</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
-        disabled={dataSource.length === 0 || !!dataSource.find((eds) => {
-          return !eds.key || !!eds.keyError
-            || !eds.value || !!eds.valueError
-            || !!eds.descriptionError;
+        disabled={dataSource.length === 0 || dataSource.some((eds) => {
+          return eds.key === '' || eds.keyError !== ''
+            || eds.name === '' || eds.nameError !== ''
+            || eds.value === '' || eds.valueError !== ''
+            || eds.descriptionError !== '';
         })}
         onClick={() => {
           onOk && onOk(dataSource.map((ds) => {
@@ -280,30 +290,60 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
 
 export default FAddFileBasePropsDrawer;
 
-function verifyDuplication(data: FAddFileBasePropsDrawerStates['dataSource'], disabledKeys: string[]) {
-  const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+function verifyDuplication(data: FAddFileBasePropsDrawerStates['dataSource'], disabledKeys: string[], disabledNames: string[]) {
+  const keyMap: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
     return [dk, 1];
   }));
+
+  const nameMap: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+    return [dk, 1];
+  }));
+
   for (const item of data) {
     if (item.key === '') {
       continue;
     }
-    if (map.has(item.key)) {
-      map.set(item.key, map.get(item.key) as number + 1);
+    if (keyMap.has(item.key)) {
+      keyMap.set(item.key, keyMap.get(item.key) as number + 1);
     } else {
-      map.set(item.key, 1);
+      keyMap.set(item.key, 1);
     }
   }
-  const errorText: string = '键不能重复';
 
-  return data.map((d) => {
-    if (d.keyError && d.keyError !== errorText) {
-      return d;
+  for (const item of data) {
+    if (item.name === '') {
+      continue;
     }
-    // console.log(d.key, map.get(d.key), '9812347928137');
-    return {
-      ...d,
-      keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
-    };
-  });
+    if (nameMap.has(item.name)) {
+      nameMap.set(item.name, nameMap.get(item.name) as number + 1);
+    } else {
+      nameMap.set(item.name, 1);
+    }
+  }
+
+  const keyErrorText: string = '键不能重复';
+  const nameErrorText: string = '名称不能重复';
+
+  return data
+    .map((d) => {
+      if (d.keyError && d.keyError !== keyErrorText) {
+        return d;
+      }
+      // console.log(d.key, map.get(d.key), '9812347928137');
+      return {
+        ...d,
+        keyError: (keyMap.has(d.key) && keyMap.get(d.key) !== 1) ? keyErrorText : '',
+      };
+    })
+    .map((d) => {
+      if (d.nameError && d.nameError !== nameErrorText) {
+        return d;
+      }
+      // console.log(d.key, map.get(d.key), '9812347928137');
+      return {
+        ...d,
+        nameError: (nameMap.has(d.name) && nameMap.get(d.name) !== 1) ? nameErrorText : '',
+      };
+    });
 }
+

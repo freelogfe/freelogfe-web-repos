@@ -178,6 +178,17 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                             return pp.key;
                           }),
                         ],
+                        disabledNames: [
+                          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                            return rp.name;
+                          }),
+                          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                            return pp.name;
+                          }),
+                          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                            return pp.name;
+                          }),
+                        ]
                       });
                       if (!dataSource) {
                         return;

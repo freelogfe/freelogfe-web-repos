@@ -5,6 +5,7 @@ import FAddFileBasePropsDrawer from './FAddFileBasePropsDrawer';
 
 interface fAddFileBasePropsProps {
   disabledKeys: string[];
+  disabledNames: string[];
   defaultData?: {
     key: string;
     name: string;
@@ -20,11 +21,12 @@ type ReturnData = {
   description: string;
 }[] | null;
 
-function fAddFileBaseProps({ disabledKeys, defaultData }: fAddFileBasePropsProps): Promise<ReturnData> {
+function fAddFileBaseProps({ disabledKeys, disabledNames, defaultData }: fAddFileBasePropsProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render(<FAddFileBasePropsDrawer
       defaultData={defaultData}
+      disabledNames={disabledNames}
       disabledKeys={disabledKeys}
       onOk={(obj) => {
         resolve(obj);

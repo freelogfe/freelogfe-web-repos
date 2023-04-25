@@ -1032,7 +1032,7 @@ const Model: ResourceVersionCreatorModelType = {
         error,
       }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params0);
 
-      console.log(result, 'result sfdaiofjasldkfj awsedifojasd;lkfj lk');
+      // console.log(result, 'result sfdaiofjasldkfj awsedifojasd;lkfj lk');
 
       // const params1: Parameters<typeof FServiceAPI.Resource.getResourceAttrListSimple> = {};
 
