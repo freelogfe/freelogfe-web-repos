@@ -32,17 +32,23 @@ interface ServerData {
 }
 
 interface FResourceTypeFilterStates {
+  $recommend: {
+    value: string;
+    labels: string[];
+  }[];
   $options: Option[];
   _isOpen: boolean;
 }
 
 const initStates: FResourceTypeFilterStates = {
+  $recommend: [],
   $options: [],
   _isOpen: false,
 };
 
 function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTypeFilterProps) {
 
+  const [$recommend, set$recommend] = React.useState<FResourceTypeFilterStates['$recommend']>(initStates['$recommend']);
   const [$options, set$options] = React.useState<Option[]>(initStates['$options']);
   const [_isOpen, set_isOpen] = React.useState<FResourceTypeFilterStates['_isOpen']>(initStates['_isOpen']);
 
@@ -61,6 +67,27 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     // console.log(data, 'dataiosdjflksdjfljl  dddddd');
     const options: Option[] = handledData(data, null);
     set$options(options);
+  });
+
+  AHooks.useMount(async () => {
+    const { data: data_recently }: {
+      data: {
+        code: string;
+        name: string;
+        resourceCount: number;
+      }[];
+    } = await FServiceAPI.Resource.listSimple4Recently({});
+    // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
+    set$recommend(data_recently
+      .filter((r, i) => {
+        return i < 6;
+      })
+      .map<FResourceTypeFilterStates['$recommend'][number]>((r) => {
+        return {
+          value: r.code,
+          labels: [r.name],
+        };
+      }));
   });
 
   AHooks.useUnmount(() => {
@@ -88,12 +115,17 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
         />
         <div style={{ height: 20 }} />
         <div className={styles.recommendResourceTypes}>
-          <label>阅读/文本</label>
-          <label>阅读/演示文稿</label>
-          <label>音频/有声书</label>
-          <label>音频/播客</label>
-          <label>视频/长视频</label>
-          <label>视频/短视频</label>
+          {
+            $recommend.map((r) => {
+              return (<label key={r.value}>{r.labels.join('/')}</label>);
+            })
+          }
+          {/*<label>阅读/文本</label>*/}
+          {/*<label>阅读/演示文稿</label>*/}
+          {/*<label>音频/有声书</label>*/}
+          {/*<label>音频/播客</label>*/}
+          {/*<label>视频/长视频</label>*/}
+          {/*<label>视频/短视频</label>*/}
         </div>
       </div>
 
