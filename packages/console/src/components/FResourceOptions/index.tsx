@@ -75,8 +75,19 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
             <div className={styles.itemBody}>
               {
                 d.type === 'input' && (
-                  <FComponentsLib.FContentText text={d.input} type={'additional2'} style={{ color: '#222' }} />)
+                  <div
+                    style={{ color: '#222', fontSize: 12, flexShrink: 1, overflowWrap: 'break-word', maxWidth: 650 }}>
+                    {d.input}
+                  </div>
+                )
               }
+
+              {/*<FComponentsLib.FContentText*/}
+              {/*  text={}*/}
+              {/*  type={'additional2'}*/}
+              {/*  style={{ color: '#222', flexShrink: 1 }}*/}
+              {/*  singleRow*/}
+              {/*/>*/}
 
               {
                 d.type === 'select' && d.select.map((s, i) => {
