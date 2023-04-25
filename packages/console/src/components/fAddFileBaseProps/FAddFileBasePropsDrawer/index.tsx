@@ -221,8 +221,8 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                     let valueError: string = '';
                     if (value === '') {
                       valueError = '请输入';
-                    } else if (value.length > 30) {
-                      valueError = '不超过30个字符';
+                    } else if (value.length > 140) {
+                      valueError = '不超过140个字符';
                     }
                     onChangeData({
                       value: value,
