@@ -23,12 +23,19 @@ export interface Data {
 export interface FCustomOptionsProps {
   dataSource: Data[];
   disabledKeys: string[];
+  disabledNames: string[];
   hideTypeSelect?: boolean;
 
   onChange?(dataSource: FCustomOptionsProps['dataSource']): void;
 }
 
-function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onChange }: FCustomOptionsProps) {
+function FCustomOptions({
+                          dataSource,
+                          disabledKeys,
+                          disabledNames,
+                          hideTypeSelect = false,
+                          onChange,
+                        }: FCustomOptionsProps) {
 
   function onChangeProperty(value: Data, index: number) {
     // console.log(value, 'value38920jdskfj');
@@ -39,7 +46,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
       return value;
     });
 
-    return onChange && onChange(verifyDuplication(data, disabledKeys));
+    return onChange && onChange(verifyDuplication(data, disabledKeys, disabledNames));
   }
 
   return (<>
@@ -66,7 +73,7 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
               type='danger'
               onClick={() => {
                 const data: Data[] = dataSource.filter((ds, index) => index !== j);
-                onChange && onChange(verifyDuplication(data, disabledKeys));
+                onChange && onChange(verifyDuplication(data, disabledKeys, disabledNames));
               }}
             />
           </div>))
@@ -77,30 +84,59 @@ function FCustomOptions({ dataSource, disabledKeys, hideTypeSelect = false, onCh
 
 export default FCustomOptions;
 
-function verifyDuplication(data: Data[], disabledKeys: string[]) {
-  const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+function verifyDuplication(data: Data[], disabledKeys: string[], disabledNames: string[]) {
+  const keyMap: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
     return [dk, 1];
   }));
+
+  const nameMap: Map<string, number> = new Map<string, number>(disabledNames.map((dk) => {
+    return [dk, 1];
+  }));
+
   for (const item of data) {
     if (item.key === '') {
       continue;
     }
-    if (map.has(item.key)) {
-      map.set(item.key, map.get(item.key) as number + 1);
+    if (keyMap.has(item.key)) {
+      keyMap.set(item.key, keyMap.get(item.key) as number + 1);
     } else {
-      map.set(item.key, 1);
+      keyMap.set(item.key, 1);
     }
   }
-  const errorText: string = '键不能重复';
 
-  return data.map<Data>((d) => {
-    if (d.keyError && d.keyError !== errorText) {
-      return d;
+  for (const item of data) {
+    if (item.name === '') {
+      continue;
     }
-    // console.log(d.key, map.get(d.key), '9812347928137');
-    return {
-      ...d,
-      keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
-    };
-  });
+    if (nameMap.has(item.name)) {
+      nameMap.set(item.name, nameMap.get(item.name) as number + 1);
+    } else {
+      nameMap.set(item.name, 1);
+    }
+  }
+
+  const keyErrorText: string = '键不能重复';
+  const nameErrorText: string = '名称不能重复';
+
+  return data
+    .map<Data>((d) => {
+      if (d.keyError && d.keyError !== keyErrorText) {
+        return d;
+      }
+      // console.log(d.key, map.get(d.key), '9812347928137');
+      return {
+        ...d,
+        keyError: (keyMap.has(d.key) && keyMap.get(d.key) !== 1) ? keyErrorText : '',
+      };
+    })
+    .map<Data>((d) => {
+      if (d.nameError && d.nameError !== nameErrorText) {
+        return d;
+      }
+      // console.log(d.key, map.get(d.key), '9812347928137');
+      return {
+        ...d,
+        nameError: (nameMap.has(d.name) && nameMap.get(d.name) !== 1) ? nameErrorText : '',
+      };
+    });
 }

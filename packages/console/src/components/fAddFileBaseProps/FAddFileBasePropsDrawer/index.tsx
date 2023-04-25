@@ -295,7 +295,7 @@ function verifyDuplication(data: FAddFileBasePropsDrawerStates['dataSource'], di
     return [dk, 1];
   }));
 
-  const nameMap: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+  const nameMap: Map<string, number> = new Map<string, number>(disabledNames.map((dk) => {
     return [dk, 1];
   }));
 

@@ -40,11 +40,12 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             let errorText: string = '';
             if (value === '') {
               errorText = '请输入属性名称';
-            } else if (value.length > 15) {
-              errorText = '不超过15个字符';
-            } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-              errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+            } else if (value.length > 50) {
+              errorText = '不超过50个字符';
             }
+            // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+            //   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+            // }
 
             onChangeData({
               name: value,

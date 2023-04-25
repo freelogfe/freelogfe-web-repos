@@ -78,6 +78,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
         ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
       ],
+      disabledNames: [
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.name),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.name),
+      ],
       defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
     });
     // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
@@ -188,7 +193,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
                             return pp.name;
                           }),
-                        ]
+                        ],
                       });
                       if (!dataSource) {
                         return;

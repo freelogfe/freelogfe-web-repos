@@ -7,6 +7,7 @@ import FComponentsLib from '@freelog/components-lib';
 
 interface FAddCustomOptionsDrawerProps {
 
+  disabledNames: string[];
   disabledKeys: string[];
   hideTypeSelect: boolean;
   defaultData?: {
@@ -66,6 +67,7 @@ const initStates: FAddCustomOptionsDrawerStates = {
 };
 
 function FAddCustomOptionsDrawer({
+                                   disabledNames,
                                    disabledKeys,
                                    hideTypeSelect,
                                    defaultData,
@@ -154,6 +156,7 @@ function FAddCustomOptionsDrawer({
   >
 
     <FCustomOptions
+      disabledNames={disabledNames}
       hideTypeSelect={hideTypeSelect}
       dataSource={dataSource}
       disabledKeys={disabledKeys}

@@ -5,6 +5,7 @@ import FAddCustomOptionsDrawer from './FAddCustomOptionsDrawer';
 
 interface fAddCustomOptionsProps {
   disabledKeys: string[];
+  disabledNames: string[];
   defaultData?: {
     key: string;
     name: string;
@@ -26,6 +27,7 @@ type ReturnData = {
 }[] | null;
 
 function fAddCustomOptions({
+                             disabledNames,
                              disabledKeys,
                              defaultData,
                              hideTypeSelect = false,
@@ -35,6 +37,7 @@ function fAddCustomOptions({
     return root.render(<FAddCustomOptionsDrawer
       defaultData={defaultData}
       disabledKeys={disabledKeys}
+      disabledNames={disabledNames}
       onOk={(obj) => {
         resolve(obj);
       }}
