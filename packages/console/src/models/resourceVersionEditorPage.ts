@@ -25,7 +25,9 @@ export interface ResourceVersionEditorPageModelState {
 
   rawProperties: {
     key: string;
+    name: string;
     value: string;
+    description: string;
   }[];
 
   baseProperties: {
@@ -163,7 +165,7 @@ const Model: ResourceVersionEditorModelType = {
           }
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data, 'data902q3jrlkasdfasdf');
+      console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
       if (!data_versionInfo) {
         history.replace(FUtil.LinkTo.exception403({}));
         return;
@@ -177,13 +179,13 @@ const Model: ResourceVersionEditorModelType = {
         payload: {
           signingDate: moment(data_versionInfo.createDate).format('YYYY-MM-DD'),
           description: data_versionInfo.description,
-          rawProperties: Object.entries(data_versionInfo.systemProperty).map((sp) => {
-            // console.log(sp, 'SSSSSSppppPPPPP90j');
-            return {
-              key: sp[0],
-              value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
-            };
-          }),
+          // rawProperties: Object.entries(data_versionInfo.systemProperty).map((sp) => {
+          //   // console.log(sp, 'SSSSSSppppPPPPP90j');
+          //   return {
+          //     key: sp[0],
+          //     value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
+          //   };
+          // }),
           baseProperties: base.map((b) => {
             return {
               key: b.key,

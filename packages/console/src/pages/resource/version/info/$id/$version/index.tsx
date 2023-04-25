@@ -19,23 +19,11 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import {
-  FViewportTabs,
-} from '@/components/FAntvG6';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
-import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { RouteComponentProps } from 'react-router';
-import FBasePropertiesCards from '@/components/FBasePropertiesCards';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { Helmet } from 'react-helmet';
-// import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
-// import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
-// import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import FComponentsLib from '@freelog/components-lib';
-// import fGraphTree_Relationship_Resource from '@/components/FAntvG6/fGraphTree_Relationship_Resource';
-// import fGraphTree_Dependency_Resource from '@/components/FAntvG6/fGraphTree_Dependency_Resource';
-// import fGraphTree_Authorization_Resource from '@/components/FAntvG6/fGraphTree_Authorization_Resource';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 import FResourceProperties from '@/components/FResourceProperties';
 import FResourceOptions from '@/components/FResourceOptions';
@@ -245,37 +233,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
 
         <FFormLayout.FBlock title={'基础属性'}>
-          {/*<FBasePropertiesCards*/}
-          {/*  rawProperties={resourceVersionEditorPage.rawProperties.map((rp) => {*/}
-          {/*    return {*/}
-          {/*      theKey: rp.key,*/}
-          {/*      value: rp.value,*/}
-          {/*    };*/}
-          {/*  })}*/}
-          {/*  baseProperties={resourceVersionEditorPage.baseProperties.map((bp) => {*/}
-          {/*    return {*/}
-          {/*      theKey: bp.key,*/}
-          {/*      description: bp.description,*/}
-          {/*      value: bp.value,*/}
-          {/*    };*/}
-          {/*  })}*/}
-          {/*  onEdit={(theKey) => {*/}
-          {/*    const baseP = resourceVersionEditorPage.baseProperties.find((bp) => {*/}
-          {/*      return bp.key === theKey;*/}
-          {/*    });*/}
-          {/*    if (!baseP) {*/}
-          {/*      return;*/}
-          {/*    }*/}
-          {/*    onChange({*/}
-          {/*      basePEditorVisible: true,*/}
-          {/*      basePKeyInput: baseP.key,*/}
-          {/*      basePValueInput: baseP.value,*/}
-          {/*      basePDescriptionInput: baseP.description,*/}
-          {/*      basePDescriptionInputError: '',*/}
-          {/*    });*/}
-          {/*  }}*/}
-          {/*/>*/}
-
           <FResourceProperties
             immutableData={resourceVersionEditorPage.rawProperties}
             alterableData={resourceVersionEditorPage.baseProperties}

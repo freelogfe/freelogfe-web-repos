@@ -1125,68 +1125,68 @@ const Model: ResourceVersionCreatorModelType = {
 };
 
 export default Model;
-
-async function formattingRawProperties(obj: { [k: string]: string }): Promise<{
-  key: string;
-  name: string;
-  value: string;
-  description: string;
-}[]> {
-
-  // 值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间
-  // '1': (value: string): string => {
-  //   return value;
-  // },
-  // '2': {},
-  // '3': (value: number): string => {
-  //   return String(value);
-  // },
-  // '4': (value: number): string => {
-  //   return String(value);
-  // },
-  // '5': (value: number): string => {
-  //   return String(value);
-  // },
-  return [];
-}
-
-const fileAttrNumberUnits = {
-  // fileSize(value: number): string {
-  'byte/b': (value: number, transform: boolean): string => {
-    if (!transform) {
-      return value + 'b';
-    }
-    return FUtil.Format.humanizeSize(value);
-  },
-  // imageWidth(value: number): string {
-  'pixel/px': (value: number): string => {
-    return value + 'px';
-  },
-  // imageHeight(value: number): string {
-  //   return value + 'px';
-  // },
-  // duration(value: number): string {
-  'millisecond/ms': (value: number): string => {
-    const time = Math.ceil(value / 1000);
-    const h = Math.floor(time / 3600);
-    const minute = Math.floor(time / 60 % 60);
-    const second = Math.floor(time % 60);
-
-    const hours = h < 10 ? '0' + h : h;
-    return `${hours > 0 ? `${hours}:` : ''}${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`;
-  },
-  'Pixels Per Inch/ppi': (value: number): string => {
-    return value + 'ppi';
-  },
-  // frameRate(value: number): string {
-  'frame per second/fps': (value: number): string => {
-    return value + 'fps';
-  },
-  'beats per minute/bpm': (value: number): string => {
-    return value + 'bpm';
-  },
-  // bitRate(value: number): string {
-  'bits per second/bps': (value: number): string => {
-    return value + 'bps';
-  },
-};
+//
+// async function formattingRawProperties(obj: { [k: string]: string }): Promise<{
+//   key: string;
+//   name: string;
+//   value: string;
+//   description: string;
+// }[]> {
+//
+//   // 值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间
+//   // '1': (value: string): string => {
+//   //   return value;
+//   // },
+//   // '2': {},
+//   // '3': (value: number): string => {
+//   //   return String(value);
+//   // },
+//   // '4': (value: number): string => {
+//   //   return String(value);
+//   // },
+//   // '5': (value: number): string => {
+//   //   return String(value);
+//   // },
+//   return [];
+// }
+//
+// const fileAttrNumberUnits = {
+//   // fileSize(value: number): string {
+//   'byte/b': (value: number, transform: boolean): string => {
+//     if (!transform) {
+//       return value + 'b';
+//     }
+//     return FUtil.Format.humanizeSize(value);
+//   },
+//   // imageWidth(value: number): string {
+//   'pixel/px': (value: number): string => {
+//     return value + 'px';
+//   },
+//   // imageHeight(value: number): string {
+//   //   return value + 'px';
+//   // },
+//   // duration(value: number): string {
+//   'millisecond/ms': (value: number): string => {
+//     const time = Math.ceil(value / 1000);
+//     const h = Math.floor(time / 3600);
+//     const minute = Math.floor(time / 60 % 60);
+//     const second = Math.floor(time % 60);
+//
+//     const hours = h < 10 ? '0' + h : h;
+//     return `${hours > 0 ? `${hours}:` : ''}${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`;
+//   },
+//   'Pixels Per Inch/ppi': (value: number): string => {
+//     return value + 'ppi';
+//   },
+//   // frameRate(value: number): string {
+//   'frame per second/fps': (value: number): string => {
+//     return value + 'fps';
+//   },
+//   'beats per minute/bpm': (value: number): string => {
+//     return value + 'bpm';
+//   },
+//   // bitRate(value: number): string {
+//   'bits per second/bps': (value: number): string => {
+//     return value + 'bps';
+//   },
+// };
