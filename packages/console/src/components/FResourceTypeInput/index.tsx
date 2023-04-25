@@ -240,7 +240,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           return;
         }
         // console.log(value, startStr, 'asiodjf;lkwejl;kfjlsk;djflk;jsdlfkjsdlkfjsdlkfj');
-        if (value.length > startStr.length + 41) {
+        if (value.length > startStr.length + 40) {
           return;
         }
         set_autoCompleteInput(value);

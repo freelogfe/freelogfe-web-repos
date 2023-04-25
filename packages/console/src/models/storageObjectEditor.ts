@@ -48,6 +48,7 @@ export interface StorageObjectEditorModelState {
 
   rawProperties: {
     key: string;
+    // name
     value: string;
   }[];
 
