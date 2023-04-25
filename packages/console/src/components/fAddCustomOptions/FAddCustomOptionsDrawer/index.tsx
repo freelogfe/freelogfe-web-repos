@@ -4,6 +4,7 @@ import { Space } from 'antd';
 import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fMessage from '@/components/fMessage';
 
 interface FAddCustomOptionsDrawerProps {
 
@@ -137,6 +138,12 @@ function FAddCustomOptionsDrawer({
             || eds.descriptionError !== '';
         })}
         onClick={() => {
+          if (dataSource.some((ds) => {
+            return ds.select.join(',').length > 500;
+          })) {
+            fMessage('存在可配置项超过500个字符');
+            return;
+          }
           onOk && onOk(dataSource.map((ds) => {
             return {
               key: ds.key,
