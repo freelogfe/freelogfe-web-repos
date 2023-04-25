@@ -4,8 +4,13 @@ interface FileInfo {
   sha1: string;
   state: 'success' | 'fail' | 'nonentity';
   info: {
-    [key: string]: any;
-  };
+    key: string;
+    name: string;
+    remark: string;
+    value: string | number;
+    valueDisplay: string;
+    valueUnit: string;
+  }[];
 }
 
 interface GetFileInfosBySha1Params {
@@ -36,10 +41,28 @@ export async function getFilesSha1Info({
 
   while (true) {
     // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
-    const { ret, errCode, data, msg }: any = await FServiceAPI.Storage.filesListInfo({
+    const { ret, errCode, data, msg }: {
+      ret: number,
+      errCode: number,
+      msg: string;
+      data: {
+        sha1: string;
+        metaAnalyzeStatus: number;
+        metaInfoArray: {
+          key: string;
+          name: string;
+          remark: string;
+          value: string | number;
+          valueDisplay: string;
+          valueUnit: string;
+        }[];
+      }[];
+    } = await FServiceAPI.Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
       resourceTypeCode: resourceTypeCode,
     });
+
+    // console.log(data, 'dataiosdjflksjdflk;jsdlkfjlksdjflksdjlkfj');
 
     if (ret !== 0 || errCode !== 0) {
       // console.log({
@@ -52,17 +75,17 @@ export async function getFilesSha1Info({
     }
 
     needHandleSha1 = data
-      .filter((d: any) => {
+      .filter((d) => {
         return d.metaAnalyzeStatus === 0 || d.metaAnalyzeStatus === 1;
       })
-      .map((d: any) => {
+      .map((d) => {
         return d.sha1;
       });
     const finishedInfo: FileInfo[] = data
-      .filter((d: any) => {
+      .filter((d) => {
         return d.metaAnalyzeStatus !== 0 && d.metaAnalyzeStatus !== 1;
       })
-      .map((d: any) => {
+      .map((d) => {
         let state: 'success' | 'fail' | 'nonentity' = 'fail';
         if (!d.metaAnalyzeStatus) {
           state = 'nonentity';
@@ -75,7 +98,7 @@ export async function getFilesSha1Info({
         return {
           sha1: d.sha1,
           state,
-          info: d,
+          info: d.metaInfoArray,
         };
       });
     cdPartially && cdPartially(finishedInfo);

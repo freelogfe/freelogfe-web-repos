@@ -1031,8 +1031,22 @@ const Model: ResourceVersionCreatorModelType = {
       const {
         result,
         error,
-      }: { result: any[]; error: string; } = yield call(getFilesSha1Info, params0);
+      }: {
+        result: {
+          sha1: string;
+          state: 'success' | 'fail' | 'nonentity';
+          info: {
+            key: string;
+            name: string;
+            remark: string;
+            value: string | number;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
+        }[]; error: string;
+      } = yield call(getFilesSha1Info, params0);
 
+      // console.log(result, error, 'resultisdjf;olksdjfl;ksjdlkfjsdlkfjlk');
       // console.log(result, 'result sfdaiofjasldkfj awsedifojasd;lkfj lk');
 
       // const params1: Parameters<typeof FServiceAPI.Resource.getResourceAttrListSimple> = {};
@@ -1068,12 +1082,20 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+            // rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
+            //   return {
+            //     key: rp[0],
+            //     name: rp[0],
+            //     value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
+            //     description: rp[0],
+            //   };
+            // }),
+            rawProperties: result[0].info.map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
               return {
-                key: rp[0],
-                name: rp[0],
-                value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-                description: rp[0],
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
               };
             }),
             rawPropertiesState: 'success',
