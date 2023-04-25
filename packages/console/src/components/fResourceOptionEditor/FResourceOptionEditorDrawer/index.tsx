@@ -319,8 +319,8 @@ function FResourceOptionEditorDrawer({
               // if (value === '') {
               //   errorText = '输入value';
               // } else
-              if (value.length > 30) {
-                errorText = '不超过30个字符';
+              if (value.length > 140) {
+                errorText = '不超过140个字符';
               }
               set_inputInput(value);
               set_inputInputError(errorText);
