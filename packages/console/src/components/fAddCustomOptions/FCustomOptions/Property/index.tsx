@@ -237,8 +237,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                           let errorText: string = '';
                           if (value === '') {
                             errorText = '输入配置值';
-                          } else if (value.length > 30) {
-                            errorText = '不超过30个字符';
+                          } else if (value.length > 500) {
+                            errorText = '不超过500个字符';
                           }
                           onChangeData({
                             select: data.select.map((sss, iii) => {
