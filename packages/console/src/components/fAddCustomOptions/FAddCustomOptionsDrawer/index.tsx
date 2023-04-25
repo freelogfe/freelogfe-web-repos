@@ -86,7 +86,7 @@ function FAddCustomOptionsDrawer({
           key: dd.key,
           keyError: disabledKeys.includes(dd.key) ? '键不能重复' : '',
           name: dd.name,
-          nameError: disabledKeys.includes(dd.name) ? '名称不能重复' : '',
+          nameError: disabledNames.includes(dd.name) ? '名称不能重复' : '',
           description: dd.description,
           descriptionError: '',
           type: dd.type,

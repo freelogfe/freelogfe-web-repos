@@ -76,7 +76,7 @@ function FAddFileBasePropsDrawer({
           key: cpd.key,
           keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
           name: cpd.name,
-          nameError: '',
+          nameError: disabledNames.includes(cpd.name) ? '名称不能重复' : '',
           value: cpd.value,
           valueError: '',
           description: cpd.description,
