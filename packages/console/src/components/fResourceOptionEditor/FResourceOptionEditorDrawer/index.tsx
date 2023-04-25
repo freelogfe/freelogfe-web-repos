@@ -179,8 +179,8 @@ function FResourceOptionEditorDrawer({
             let errorText: string = '';
             if (value === '') {
               errorText = '输入配置名称';
-            } else if (value.length > 30) {
-              errorText = '不超过30个字符';
+            } else if (value.length > 50) {
+              errorText = '不超过50个字符';
             } else if (disabledNames.includes(value) && value !== defaultData?.name) {
               errorText = '名称不能重复';
             }

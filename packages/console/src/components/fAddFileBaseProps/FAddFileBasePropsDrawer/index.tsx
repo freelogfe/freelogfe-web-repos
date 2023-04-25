@@ -161,8 +161,8 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                     let keyError: string = '';
                     if (value === '') {
                       keyError = '请输入名称';
-                    } else if (value.length > 15) {
-                      keyError = '不超过15个字符';
+                    } else if (value.length > 50) {
+                      keyError = '不超过50个字符';
                     }
                     // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
                     //   keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
@@ -192,8 +192,8 @@ function FAddFileBasePropsDrawer({ defaultData, disabledKeys, onOk, onClose }: F
                     let keyError: string = '';
                     if (value === '') {
                       keyError = '请输入key';
-                    } else if (value.length > 15) {
-                      keyError = '不超过15个字符';
+                    } else if (value.length > 20) {
+                      keyError = '不超过20个字符';
                     } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
                       keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
                     }
