@@ -176,8 +176,8 @@ function FResourcePropertyEditorDrawer({
             let errorText: string = '';
             if (value === '') {
               errorText = '输入key';
-            } else if (value.length > 15) {
-              errorText = '不超过30个字符';
+            } else if (value.length > 20) {
+              errorText = '不超过20个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
               errorText = '键不能重复';
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
