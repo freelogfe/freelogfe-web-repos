@@ -5,6 +5,7 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import { FUtil } from '@freelog/tools-lib';
+import fMessage from '@/components/fMessage';
 
 interface FResourceOptionEditorDrawerProps {
   disabledKeys: string[];
@@ -135,6 +136,12 @@ function FResourceOptionEditorDrawer({
           return si.value === '' || si.error !== '';
         })))}
         onClick={async () => {
+
+          if (typeSelect === 'select' && selectInputs.join(',').length > 500) {
+            fMessage('自定义选项总长度不超过500个字符', 'error');
+            return;
+          }
+
           onOk && onOk({
             key: keyInput,
             name: nameInput,
@@ -380,22 +387,27 @@ function FResourceOptionEditorDrawer({
               })
             }
           </Space>
-          <div style={{ height: 10 }} />
-          <div
-            style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
-            onClick={() => {
-              set_selectInputs([
-                ...selectInputs,
-                {
-                  value: '',
-                  error: '',
-                },
-              ]);
-            }}
-          >
-            <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
-            <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
-          </div>
+          {
+            selectInputs.length < 30 && (<>
+              <div style={{ height: 10 }} />
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+                onClick={() => {
+                  set_selectInputs([
+                    ...selectInputs,
+                    {
+                      value: '',
+                      error: '',
+                    },
+                  ]);
+                }}
+              >
+                <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
+                <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
+              </div>
+            </>)
+          }
+
         </div>)
       }
 
