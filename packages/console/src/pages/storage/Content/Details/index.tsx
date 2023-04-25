@@ -61,6 +61,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
       ],
       disabledNames: [
+        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
         ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
       ],
@@ -249,6 +250,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
                       ],
                       disabledNames: [
+                        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
                         ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
                         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
                       ],

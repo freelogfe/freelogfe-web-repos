@@ -378,6 +378,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                     ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
                   ],
                   disabledNames: [
+                    // ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
                     ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
                     ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
                   ],

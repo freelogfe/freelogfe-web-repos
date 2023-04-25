@@ -282,6 +282,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                                 ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                               ],
                               disabledNames: [
+                                // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
                                 ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
                                 ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
                                 ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
@@ -397,6 +398,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                 ],
                 disabledNames: [
+                  // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
                   ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
                   ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
                   ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),

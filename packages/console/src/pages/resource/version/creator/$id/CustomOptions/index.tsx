@@ -44,6 +44,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
       ],
       disabledNames: [
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
         ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
       ],
@@ -359,6 +360,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                       ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
                     ],
                     disabledNames: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
                       ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
                       ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
                     ],
