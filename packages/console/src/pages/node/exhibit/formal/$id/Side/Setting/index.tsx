@@ -31,6 +31,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+
 // import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 
 interface SettingProps {
@@ -39,6 +40,8 @@ interface SettingProps {
 }
 
 function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
+
+  const ref = React.useRef<any>(null);
 
   return (<>
     <FComponentsLib.FContentText text={FI18n.i18nNext.t('advanced_setting')} type='highlight' />
@@ -142,7 +145,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
 
         <div style={{ height: 15 }} />
 
-        <div className={styles.options}>
+        <div className={styles.options} ref={ref}>
           {
             exhibitInfoPage.side_InheritOptions.map((io, index) => {
               return (<div key={io.key}>
@@ -182,6 +185,10 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   io.type === 'select'
                     ? (<FSelect
                       className={styles.FSelect}
+                      getPopupContainer={() => {
+                        // console.log(ref.current, 'ref.currentiosdjflksdjflksjdklf sdaoifj;sldkfjlkj');
+                        return ref.current;
+                      }}
                       value={io.valueInput}
                       dataSource={io.options.map((d) => ({ value: d, title: d }))}
                       onChange={(value: string) => {
@@ -260,12 +267,6 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         <FComponentsLib.FTextBtn
                           // theme="primary"
                           onClick={async () => {
-                            // dispatch<OnClick_Side_CustomOptions_EditBtn_Action>({
-                            //   type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn',
-                            //   payload: {
-                            //     index: index,
-                            //   },
-                            // });
 
                             const dataSource: {
                               key: string;
@@ -379,9 +380,6 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             // theme="text"
             size='small'
             onClick={async () => {
-              // dispatch<OnClick_Side_AddCustomOptionsBtn_Action>({
-              //   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
-              // });
 
               const dataSource: {
                 key: string;
@@ -452,57 +450,6 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
       >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
         <FComponentsLib.FIcons.FDoubleUp /></> : <>更多 <FComponentsLib.FIcons.FDoubleDown /></>}</FComponentsLib.FTextBtn>
     </div>
-
-    {/*<FCustomOptionsEditorDrawer*/}
-    {/*  hideTypeSelect*/}
-    {/*  visible={exhibitInfoPage.side_CustomOptionsDrawer_Visible}*/}
-    {/*  // dataSource={exhibitInfoPage.side_CustomOptionsDrawer_DataSource}*/}
-    {/*  disabledKeys={[*/}
-    {/*    ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),*/}
-    {/*    ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),*/}
-    {/*    ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),*/}
-    {/*  ]}*/}
-    {/*  onConfirm={(value) => {*/}
-    {/*    dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({*/}
-    {/*      type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',*/}
-    {/*      payload: {*/}
-    {/*        value: value,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  onCancel={() => {*/}
-    {/*    dispatch<OnCancel_AddCustomOptionsDrawer_Action>({*/}
-    {/*      type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer',*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
-
-    {/*<FCustomOptionEditorDrawer*/}
-    {/*  visible={exhibitInfoPage.side_CustomOptionDrawer_Visible}*/}
-    {/*  disabledKeyInput*/}
-    {/*  disabledValueTypeSelect*/}
-    {/*  hideValueTypeSelect*/}
-    {/*  dataSource={{*/}
-    {/*    key: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.key || '',*/}
-    {/*    value: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.value || '',*/}
-    {/*    description: exhibitInfoPage.side_CustomOptionDrawer_DataSource?.description || '',*/}
-    {/*    valueType: 'input',*/}
-    {/*  }}*/}
-    {/*  onConfirm={(value) => {*/}
-    {/*    dispatch<OnConfirm_CustomOptionDrawer_Action>({*/}
-    {/*      type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',*/}
-    {/*      payload: {*/}
-    {/*        value: value,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  onCancel={() => {*/}
-    {/*    dispatch<OnCancel_CustomOptionDrawer_Action>({*/}
-    {/*      type: 'exhibitInfoPage/onCancel_CustomOptionDrawer',*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
-
   </>);
 }
 
