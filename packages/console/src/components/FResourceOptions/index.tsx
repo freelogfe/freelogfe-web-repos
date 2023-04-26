@@ -82,26 +82,25 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
                 )
               }
 
-              {/*<FComponentsLib.FContentText*/}
-              {/*  text={}*/}
-              {/*  type={'additional2'}*/}
-              {/*  style={{ color: '#222', flexShrink: 1 }}*/}
-              {/*  singleRow*/}
-              {/*/>*/}
-
               {
                 d.type === 'select' && d.select.map((s, i) => {
                   if (i !== 0) {
                     return (<React.Fragment key={i}>
                       <span style={{ color: '#E5E7EB' }}>|</span>
-                      <FComponentsLib.FContentText text={s} type={'additional2'} style={{ color: '#222' }} />
+                      <FComponentsLib.FContentText
+                        text={s}
+                        type={'additional2'}
+                        style={{ color: '#222', maxWidth: 650 }}
+                        singleRow
+                      />
                     </React.Fragment>);
                   }
                   return (<FComponentsLib.FContentText
                     key={i}
                     text={s}
                     type={'additional2'}
-                    style={{ color: '#222' }}
+                    style={{ color: '#222', maxWidth: 650 }}
+                    singleRow
                   />);
                 })
               }
