@@ -4,7 +4,7 @@ import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourcePropertyEditorDrawerProps {
   disabledKeys: string[];
@@ -141,7 +141,8 @@ function FResourcePropertyEditorDrawer({
             if (value === '') {
               errorText = '输入属性名称';
             } else if (value.length > 50) {
-              errorText = '不超过50个字符';
+              // errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_naming_convention_attribute_name');
             } else if (disabledNames.includes(value) && value !== defaultData?.name) {
               errorText = '名称不能重复';
             }
@@ -178,10 +179,13 @@ function FResourcePropertyEditorDrawer({
               errorText = '输入key';
             } else if (value.length > 20) {
               errorText = '不超过20个字符';
+              // errorText = FI18n.i18nNext.t('alert_key_convention_key');
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
-              errorText = '键不能重复';
+              // errorText = '键不能重复';
+              errorText = FI18n.i18nNext.t('alert_key_exist');
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-              errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+              // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+              errorText = FI18n.i18nNext.t('alert_key_convention_key');
             }
             set_keyInput(value);
             set_keyInputError(errorText);
@@ -209,7 +213,8 @@ function FResourcePropertyEditorDrawer({
             const value: string = e.target.value;
             let errorText: string = '';
             if (value.length > 50) {
-              errorText = '不超过50个字符';
+              // errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_key_remark_length');
             }
             // onDescriptionInputChange && onDescriptionInputChange({
             //   value,
@@ -243,7 +248,8 @@ function FResourcePropertyEditorDrawer({
             if (value === '') {
               errorText = '输入value';
             } else if (value.length > 140) {
-              errorText = '不超过140个字符';
+              // errorText = '不超过140个字符';
+              errorText = FI18n.i18nNext.t('alert_custom_option_field');
             }
             // onValueInputChange && onValueInputChange({
             //   value,

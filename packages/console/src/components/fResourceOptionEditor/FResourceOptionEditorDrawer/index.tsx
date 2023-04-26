@@ -4,7 +4,7 @@ import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
 interface FResourceOptionEditorDrawerProps {
@@ -136,8 +136,10 @@ function FResourceOptionEditorDrawer({
           return si.value === '' || si.error !== '';
         })))}
         onClick={async () => {
-
-          if (typeSelect === 'select' && selectInputs.join(',').length > 500) {
+          // console.log(selectInputs, 'selectInputsopisdjfl;ksdjflkjlk');
+          if (typeSelect === 'select' && selectInputs.map((s) => {
+            return s.value;
+          }).join(',').length > 500) {
             fMessage('自定义选项总长度不超过500个字符', 'error');
             return;
           }
@@ -180,7 +182,8 @@ function FResourceOptionEditorDrawer({
             if (value === '') {
               errorText = '请输入配置名称';
             } else if (value.length > 50) {
-              errorText = '不超过50个字符';
+              // errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_naming_convention_attribute_name');
             } else if (disabledNames.includes(value) && value !== defaultData?.name) {
               errorText = '名称不能重复';
             }
@@ -219,11 +222,14 @@ function FResourceOptionEditorDrawer({
             if (value === '') {
               errorText = '请输入key';
             } else if (value.length > 20) {
+              // errorText = FI18n.i18nNext.t('alert_key_convention_key');
               errorText = '不超过20个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
-              errorText = '键不能重复';
+              // errorText = '键不能重复';
+              errorText = FI18n.i18nNext.t('alert_key_exist');
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-              errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+              // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+              errorText = FI18n.i18nNext.t('alert_key_convention_key');
             }
             set_keyInput(value);
             set_keyInputError(errorText);
@@ -251,7 +257,8 @@ function FResourceOptionEditorDrawer({
             const value: string = e.target.value;
             let errorText: string = '';
             if (value.length > 50) {
-              errorText = '不超过50个字符';
+              // errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_key_remark_length');
             }
             set_descriptionInput(value);
             set_descriptionInputError(errorText);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Col, Row, Space } from 'antd';
 import FInput from '../../../FInput';
-import FSelect from '../../../FSelect';
+// import FSelect from '../../../FSelect';
 import { Data } from '../index';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
