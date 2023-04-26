@@ -112,6 +112,7 @@ function Task({
 
     const { result } = await getFilesSha1Info({
       sha1: [fileSha1.current],
+      resourceTypeCode: '',
     });
 
     if (result[0].state === 'success') {
@@ -120,7 +121,7 @@ function Task({
       onSucceed && onSucceed({ uid: task.uid, objectName: task.name, sha1: fileSha1.current });
       return;
     }
-    console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;lksdjflsdjflkjsdlkj');
+    // console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;lksdjflsdjflkjsdlkj');
     set_taskState('failed');
     set_progress(0);
     onFail && onFail({ uid: task.uid, objectName: task.name });
