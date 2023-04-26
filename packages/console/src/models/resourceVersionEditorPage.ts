@@ -160,12 +160,20 @@ const Model: ResourceVersionEditorModelType = {
           }[],
           createDate: string;
           description: string;
-          systemProperty: {
-            [k: string]: string;
-          }
+          // systemProperty: {
+          //   [k: string]: string;
+          // }
+          systemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
+      // console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
       if (!data_versionInfo) {
         history.replace(FUtil.LinkTo.exception403({}));
         return;
@@ -186,6 +194,14 @@ const Model: ResourceVersionEditorModelType = {
           //     value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
           //   };
           // }),
+          rawProperties: data_versionInfo.systemPropertyDescriptors.map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
+            return {
+              key: spd.key,
+              name: spd.name,
+              value: spd.valueDisplay,
+              description: spd.remark,
+            };
+          }),
           baseProperties: base.map((b) => {
             return {
               key: b.key,
